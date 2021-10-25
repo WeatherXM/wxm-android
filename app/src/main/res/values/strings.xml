@@ -1,0 +1,135 @@
+<resources>
+    <string name="app_name">WeatherXM</string>
+
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_first_name">First Name</string>
+    <string name="hint_last_name">Last Name</string>
+
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_email">Not a valid email</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">Login failed</string>
+    <string name="signup_failed">Could not signup</string>
+    <string name="prompt_signup"><![CDATA[Don\'t have an account? <span style=\"color: #2599df\">SIGN UP</span>]]></string>
+    <string name="title_home">Home</string>
+    <string name="prompt_login"><![CDATA[Already a user? <span style=\"color: #00c853\">LOGIN</span>]]></string>
+    <string name="action_signup">Sign Up</string>
+    <string name="title_signup">Create Account</string>
+    <string name="title_login">Login</string>
+    <string name="settings">Settings</string>
+
+    <!-- TODO Remove them when we remove the relevant XMLs -->
+    <string name="hint_field_name">Field Name</string>
+    <string name="hint_field_description">Field Description</string>
+    <string name="hint_crop_name">Crop Name</string>
+    <string name="hint_crop_description">Crop Description</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="warn_cancelled">Cancelled!</string>
+    <string name="permission_permanently_denied_title">Permission permanently denied</string>
+    <string name="permission_permanently_denied_rationale">Go to the app settings to give the required permissions.</string>
+
+    <!-- Weather Stations -->
+    <string name="no_added_weather_stations_yet">You haven\'t added any weather stations yet.</string>
+    <string name="add_weather_station">Add your weather station by clicking the + button</string>
+
+
+    <!-- Weather Data & Units -->
+    <string name="updated_on">Updated on</string>
+    <string name="weather_units">Weather Units</string>
+    <string translatable="false" name="key_temperature_preference">temperature_unit</string>
+    <string translatable="false" name="key_precipitation_preference">precipitation_unit</string>
+    <string translatable="false" name="key_wind_speed_preference">wind_speed_unit</string>
+    <string translatable="false" name="key_wind_direction_preference">wind_direction_unit</string>
+    <string translatable="false" name="key_pressure_preference">pressure_unit</string>
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Humidity</string>
+    <string name="precipitation">Precipitation</string>
+    <string name="precipitation_intensity">Precipitation</string>
+    <string name="precipitation_probability">Precipitation. %</string>
+    <string name="wind">Wind</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="wind_direction">Wind Direction</string>
+    <string name="pressure">Pressure</string>
+    <string name="uv_index">UV Index</string>
+    <string name="cloud_cover">Cloud Cover</string>
+    <string name="temperature_celsius">°C</string>
+    <string name="temperature_fahrenheit">°F</string>
+    <string name="precipitation_mm">mm</string>
+    <string name="precipitation_in">in</string>
+    <string name="wind_speed_kmh">km/h</string>
+    <string name="wind_speed_ms">m/s</string>
+    <string name="wind_speed_knots">kn</string>
+    <string name="wind_speed_beaufort">bf</string>
+    <string name="wind_direction_cardinal">Cardinal</string>
+    <string name="wind_direction_degrees">Degrees</string>
+    <string name="wind_direction_degrees_mark">°</string>
+    <string name="pressure_hpa">hPa</string>
+    <string name="pressure_inHg">inHg</string>
+
+    <string name="choose_temperature_summary">Choose between <b>Celsius (°C)</b> or <b>Fahrenheit (°F)</b></string>
+    <string name="choose_precipitation_summary">Choose between <b>mm</b> or <b>in</b></string>
+    <string name="choose_wind_speed_summary">Choose between <b>km/h</b> or <b>m/s</b> or <b>Knots (kn)</b> or <b>Beaufort (bf)</b></string>
+    <string name="choose_wind_direction_summary">Choose between <b>cardinal</b> or <b>degrees</b></string>
+    <string name="choose_pressure_summary">Choose between <b>hPa</b> or <b>inHg</b></string>
+
+    <string-array name="temperature_entries">
+        <item>Celsius</item>
+        <item>Fahrenheit</item>
+    </string-array>
+    <string-array name="precipitation_entries">
+        <item>Millimeters (mm)</item>
+        <item>Inches (in)</item>
+    </string-array>
+    <string-array name="wind_speed_entries">
+        <item>Kilometers per hour (km/h)</item>
+        <item>Meters per second (m/s)</item>
+        <item>Knots (kn)</item>
+        <item>Beaufort (bf)</item>
+    </string-array>
+    <string-array name="wind_direction_entries">
+        <item>Cardinal (e.g. N, SW, NE, etc)</item>
+        <item>Degrees</item>
+    </string-array>
+    <string-array name="pressure_entries">
+        <item>Hectopascal (hPa)</item>
+        <item>Inch of mercury (inHg)</item>
+    </string-array>
+
+    <string-array name="temperature_values">
+        <item>@string/temperature_celsius</item>
+        <item>@string/temperature_fahrenheit</item>
+    </string-array>
+    <string-array name="precipitation_values">
+        <item>@string/precipitation_mm</item>
+        <item>@string/precipitation_in</item>
+    </string-array>
+    <string-array name="wind_speed_values">
+        <item>@string/wind_speed_kmh</item>
+        <item>@string/wind_speed_ms</item>
+        <item>@string/wind_speed_knots</item>
+        <item>@string/wind_speed_beaufort</item>
+    </string-array>
+    <string-array name="wind_direction_values">
+        <item>@string/wind_direction_cardinal</item>
+        <item>@string/wind_direction_degrees</item>
+    </string-array>
+    <string-array name="pressure_values">
+        <item>@string/pressure_hpa</item>
+        <item>@string/pressure_inHg</item>
+    </string-array>
+
+    <!-- Error messages -->
+    <string name="no_weather_stations_found">"Oops! Could not find any weather stations."</string>
+    <string name="network_error">Failed to get devices: Network Error</string>
+    <string name="server_error">Failed to get devices: Server Error</string>
+    <string name="unknown_error_public_devices">Failed to get devices: Unknown Error</string>
+    <string name="no_data_error_device_details">Failed to get the details of the device: No Data</string>
+    <string name="name_not_found_error">Failed to get the name of the device</string>
+
+</resources>

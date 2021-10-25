@@ -1,0 +1,15 @@
+*.iml
+.gradle
+.idea/
+.DS_Store
+build/
+captures/
+.externalNativeBuild
+.cxx
+
+
+.env
+local.properties
+google-services.json
+com_crashlytics_build_id.xml
+publishing/

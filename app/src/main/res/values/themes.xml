@@ -1,0 +1,78 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.WeatherXM" parent="@style/Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+
+        <!-- Status bar color -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+
+        <!-- Style overrides -->
+        <item name="materialButtonStyle">@style/Widget.WeatherXM.Button</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button.Subtle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button.Subtle</item>
+    </style>
+
+    <style name="Theme.WeatherXM.Splash" parent="@style/Theme.WeatherXM.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <style name="Theme.WeatherXM.Explorer" parent="@style/Theme.WeatherXM.NoActionBar">
+        <!-- System UI styles -->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.WeatherXM.BottomSheetDialog</item>
+    </style>
+
+    <style name="Theme.WeatherXM.NoActionBar" parent="@style/Theme.WeatherXM">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Widget.WeatherXM.Button" parent="@style/Widget.MaterialComponents.Button">
+        <item name="android:minHeight">54dp</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherXM.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.WeatherXM.BottomSheet.Dialog</item>
+    </style>
+
+    <style name="Widget.WeatherXM.Button.Subtle" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="Widget.WeatherXM.ButtonBar.Button" parent="@style/Widget.MaterialComponents.Button">
+        <item name="android:minHeight">54dp</item>
+    </style>
+
+    <style name="Widget.WeatherXM.ButtonBar.Button.Subtle" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:minHeight">54dp</item>
+    </style>
+
+    <style name="Widget.WeatherXM.BottomSheet.Dialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearance">@style/ShapeAppearance.WeatherXM.LargeComponent</item>
+    </style>
+
+    <style name="ShapeAppearance.WeatherXM.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Dialog.Title" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">?colorOnSecondary</item>
+        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+</resources>

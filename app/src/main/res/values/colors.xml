@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#00000000</color>
+
+    <color name="black">#FF000000</color>
+    <color name="natural_black">#FF212121</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="blue">#3388ff</color>
+
+    <color name="black_translucent">#88000000</color>
+    <color name="white_translucent">#DDFFFFFF</color>
+
+    <color name="colorPrimary">#116295</color>
+    <color name="colorPrimaryVariant">#003b77</color>
+    <color name="colorOnPrimary">@color/white</color>
+
+    <color name="colorSecondary">#2599df</color>
+    <color name="colorSecondaryVariant">#70c4ec</color>
+    <color name="colorOnSecondary">@color/natural_black</color>
+
+    <color name="chart_line_color">@color/colorPrimary</color>
+    <color name="chart_point_color">@color/white</color>
+    <color name="chart_point_hole_color">@color/colorPrimaryVariant</color>
+    <color name="chart_highlight_color">@color/colorSecondary</color>
+
+    <color name="status_bar_color">#80003b77</color>
+
+    <color name="ic_launcher_background">@color/colorPrimary</color>
+
+    <color name="subtitle">#E4E4E4</color>
+    <color name="hexFillColor">@color/blue</color>
+    <color name="hexFillOutlineColor">@color/white</color>
+</resources>
