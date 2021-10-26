@@ -25,7 +25,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 31
         versionCode 1
-        versionName "0.1.1-alpha"
+        versionName "3.0.0-alpha"
 
         // BuildConfig fields
         buildConfigField("String", "API_URL", "\"$API_URL\"")
@@ -126,8 +126,10 @@ dependencies {
     // HTTP client
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-    implementation "com.squareup.okhttp3:okhttp:4.9.1"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.9.1"
+
+    implementation platform("com.squareup.okhttp3:okhttp-bom:4.9.2")
+    implementation "com.squareup.okhttp3:okhttp"
+    implementation "com.squareup.okhttp3:logging-interceptor"
 
     // Network response wrapper
     implementation "com.github.haroldadmin:NetworkResponseAdapter:4.2.2"
@@ -148,7 +150,7 @@ dependencies {
     implementation "io.insert-koin:koin-android:3.1.2"
 
     // Data types and more
-    implementation platform("io.arrow-kt:arrow-stack:0.13.2")
+    implementation platform("io.arrow-kt:arrow-stack:1.0.0")
     implementation "io.arrow-kt:arrow-core"
     implementation "io.arrow-kt:arrow-fx-coroutines"
 
@@ -156,7 +158,7 @@ dependencies {
     implementation "com.mapbox.maps:android:10.0.0"
 
     // Insetter
-    implementation"dev.chrisbanes.insetter:insetter:0.6.0"
+    implementation "dev.chrisbanes.insetter:insetter:0.6.0"
 
     // Import the Firebase BoM
     implementation platform("com.google.firebase:firebase-bom:28.4.2")
