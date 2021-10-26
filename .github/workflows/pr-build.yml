@@ -1,0 +1,37 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Pull Request Code Analysis
+
+# Controls when the workflow will run
+on:
+  pull_request
+env:
+  ORG_GRADLE_PROJECT_API_URL: ${{ secrets.API_URL }}
+  ORG_GRADLE_PROJECT_AUTH_URL: ${{ secrets.AUTH_URL }}
+  ORG_GRADLE_PROJECT_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+  ORG_GRADLE_PROJECT_SIGNING_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
+  ORG_GRADLE_PROJECT_SIGNING_KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
+  ORG_GRADLE_PROJECT_SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+  ORG_GRADLE_PROJECT_SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+  GRADLE_USER_HOME: ${GITHUB_WORKSPACE}/.gradle
+  GLOBAL_GRADLE_CACHE: gradle-cache-${GITHUB_REPOSITORY}
+jobs:
+  codeanalysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Gradle package cache
+        uses: actions/cache@v2
+        with:
+          key: ${{ env.GLOBAL_GRADLE_CACHE }}
+          path: ${{ env.GRADLE_USER_HOME }}
+      - name: Decode keystore
+        run: |
+          mkdir -p publishing
+          echo "${{ secrets.ENCODED_SIGNING_KEYSTORE }}" > keystore.asc
+          gpg -d --passphrase "${{ secrets.ENCODED_SIGNING_KEYSTORE_PASSPHRASE }}" --batch keystore.asc > publishing/keystore.jks
+      - name: Detekt
+        run: ./gradlew :app:detekt
