@@ -15,6 +15,9 @@ object Weather : KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val sharedPref: SharedPreferences by inject()
 
+    private const val DECIMALS_WIND_SPEED = 1
+    private const val DECIMALS_PRECIPITATION_INCHES = 4
+
     @RawRes
     fun getWeatherAnimation(icon: String?): Int {
         return when (icon) {
@@ -41,6 +44,10 @@ object Weather : KoinComponent {
 
     fun getFormattedPrecipitation(value: Float?) = getFormattedValueOrEmpty(
         convertValuePrecipitation(value), getPreferredUnit(
+            resHelper.getString(R.string.key_precipitation_preference),
+            resHelper.getString(R.string.precipitation_mm)
+        ),
+        getDecimalsPrecipitation(
             resHelper.getString(R.string.key_precipitation_preference),
             resHelper.getString(R.string.precipitation_mm)
         )
@@ -122,7 +129,7 @@ object Weather : KoinComponent {
             sharedPref.getString(resHelper.getString(R.string.key_temperature_preference), "")
         val defaultUnit = resHelper.getString(R.string.temperature_celsius)
         // We need to convert the value as different preference than default is used
-        if (!savedUnit.isNullOrEmpty() || savedUnit != defaultUnit) {
+        if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
             valueToReturn = UnitConverter.celsiusToFahrenheit(value.toFloat())
         }
         return valueToReturn
@@ -141,7 +148,7 @@ object Weather : KoinComponent {
             sharedPref.getString(resHelper.getString(R.string.key_precipitation_preference), "")
         val defaultUnit = resHelper.getString(R.string.precipitation_mm)
         // We need to convert the value as different preference than default is used
-        if (!savedUnit.isNullOrEmpty() || savedUnit != defaultUnit) {
+        if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
             valueToReturn = UnitConverter.millimetersToInches(value.toFloat())
         }
         return valueToReturn
@@ -159,7 +166,7 @@ object Weather : KoinComponent {
             sharedPref.getString(resHelper.getString(R.string.key_wind_speed_preference), "")
         val defaultUnit = resHelper.getString(R.string.wind_speed_kmh)
         // We need to convert the value as different preference than default is used
-        if (!savedUnit.isNullOrEmpty() || savedUnit != defaultUnit) {
+        if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
             when (savedUnit) {
                 resHelper.getString(R.string.wind_speed_knots) -> {
                     valueToReturn = UnitConverter.kmhToKnots(value.toFloat())
@@ -190,7 +197,7 @@ object Weather : KoinComponent {
             sharedPref.getString(resHelper.getString(R.string.key_pressure_preference), "")
         val defaultUnit = resHelper.getString(R.string.pressure_hpa)
         // We need to convert the value as different preference than default is used
-        if (!savedUnit.isNullOrEmpty() || savedUnit != defaultUnit) {
+        if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
             valueToReturn = UnitConverter.hpaToInHg(value.toFloat())
         }
         return valueToReturn
@@ -212,6 +219,17 @@ object Weather : KoinComponent {
             return null
         }
 
-        return 1
+        return DECIMALS_WIND_SPEED
+    }
+
+    private fun getDecimalsPrecipitation(keyOnSharedPref: String, defaultUnit: String): Int? {
+        val unit = getPreferredUnit(keyOnSharedPref, defaultUnit)
+
+        if (unit == resHelper.getString(R.string.precipitation_mm)) {
+            // Return null when mm units are used so we show show the value as is.
+            return null
+        }
+
+        return DECIMALS_PRECIPITATION_INCHES
     }
 }
