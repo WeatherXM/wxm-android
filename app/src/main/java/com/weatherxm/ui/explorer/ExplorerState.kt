@@ -1,5 +1,6 @@
 package com.weatherxm.ui.explorer
 
+import androidx.annotation.Keep
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -13,6 +14,7 @@ data class ExplorerState(
     var errorMessage: String?
 )
 
+@Keep
 @JsonClass(generateAdapter = true)
 data class DeviceWithResolution(
     var device: PublicDevice,

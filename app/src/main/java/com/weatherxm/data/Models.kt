@@ -1,10 +1,12 @@
 package com.weatherxm.data
 
 import android.os.Parcelable
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 
+@Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class EntityId(
@@ -12,6 +14,7 @@ data class EntityId(
     val entityType: String
 ) : Parcelable
 
+@Keep
 @Parcelize
 enum class Authority(
     val authority: String
@@ -23,6 +26,7 @@ enum class Authority(
     ANONYMOUS("ANONYMOUS")
 }
 
+@Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class User(
@@ -37,6 +41,7 @@ data class User(
     val customerId: EntityId
 ) : Parcelable
 
+@Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class Location(
@@ -62,6 +67,7 @@ data class Device(
     val location: Location?,
 ) : Parcelable
 
+@Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class PublicDevice(
@@ -73,6 +79,7 @@ data class PublicDevice(
     val timeseries: Timeseries?
 ) : Parcelable
 
+@Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class Attributes(
@@ -80,6 +87,7 @@ data class Attributes(
     val hex7: Hex,
 ) : Parcelable
 
+@Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class Timeseries(
@@ -112,6 +120,7 @@ data class Timeseries(
     val hourlyPrecipType: String?
 ) : Parcelable
 
+@Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class Hex(
