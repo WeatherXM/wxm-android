@@ -5,11 +5,10 @@ import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.mapbox.geojson.Point
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
-import com.squareup.moshi.Moshi
 import com.weatherxm.R
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
-import com.weatherxm.data.PublicDevice
+import com.weatherxm.data.Device
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.ui.explorer.DeviceWithResolution
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
@@ -25,14 +24,13 @@ interface ExplorerUseCase {
     fun polygonPointsToLatLng(pointsOfPolygon: Array<Location>): List<MutableList<Point>>
     suspend fun getPointsFromPublicDevices(zoom: Double): Either<Failure, List<PolygonAnnotationOptions>>
     fun getCenterOfHex3(deviceWithResolution: DeviceWithResolution?): Point?
-    fun deviceWithResToJson(device: PublicDevice, resolution: Int): JsonElement
-    suspend fun saveDevicesPoints(devices: List<PublicDevice>)
+    fun deviceWithResToJson(device: Device, resolution: Int): JsonElement
+    suspend fun saveDevicesPoints(devices: List<Device>)
 }
 
 class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
 
     private val deviceRepository: DeviceRepository by inject()
-    private val moshi: Moshi by inject()
     private val gson: Gson by inject()
     private val resourcesHelper: ResourcesHelper by inject()
 
@@ -91,12 +89,12 @@ class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
         return null
     }
 
-    override fun deviceWithResToJson(device: PublicDevice, resolution: Int): JsonElement {
+    override fun deviceWithResToJson(device: Device, resolution: Int): JsonElement {
         return gson.toJsonTree(DeviceWithResolution(device, resolution))
     }
 
     // Save the points of the devices so we can serve them immediately when needed
-    override suspend fun saveDevicesPoints(devices: List<PublicDevice>) {
+    override suspend fun saveDevicesPoints(devices: List<Device>) {
         if (devices.isNullOrEmpty()) {
             Timber.d("No devices found. Skipping saving their points.")
             return
@@ -128,7 +126,7 @@ class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
         }
     }
 
-    private fun isHex3Used(device: PublicDevice): Boolean {
+    private fun isHex3Used(device: Device): Boolean {
         return currentH3Hexes.contains(device.attributes?.hex3?.index)
     }
 }

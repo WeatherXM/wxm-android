@@ -7,47 +7,114 @@
     android:layout_marginHorizontal="@dimen/card_side_margin"
     android:layout_marginTop="@dimen/card_top_margin"
     android:layout_marginBottom="@dimen/card_bottom_margin"
-    android:background="?selectableItemBackground"
     app:cardElevation="@dimen/card_elevation"
     app:cardPreventCornerOverlap="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:padding="@dimen/padding_large">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            app:layout_constraintEnd_toStartOf="@id/selected"
+            style="@style/TextAppearance.WeatherXM.Devices.List.Name"
+            android:layout_marginEnd="@dimen/margin_normal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tokensLastDayTitle"
+            app:layout_constraintEnd_toStartOf="@id/icon"
             tools:text="My Weather Station" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/location"
+            android:id="@+id/tokensLastDayTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            app:layout_constraintStart_toStartOf="parent"
+            style="@style/TextAppearance.WeatherXM.Devices.List.TokensTitle"
+            android:text="@string/tokens_24h"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_normal"
             app:layout_constraintTop_toBottomOf="@id/name"
-            tools:text="Location Info" />
+            app:layout_constraintStart_toStartOf="@id/name"
+            app:layout_constraintBottom_toTopOf="@id/tokensTotalTitle" />
 
-        <ImageView
-            android:id="@+id/selected"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tokensLastDay"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.WeatherXM.Devices.List.Tokens"
+            android:layout_marginHorizontal="@dimen/margin_small"
+            app:layout_constraintStart_toEndOf="@id/tokensLastDayTitle"
+            app:layout_constraintEnd_toStartOf="@id/icon"
+            app:layout_constraintBaseline_toBaselineOf="@id/tokensLastDayTitle"
+            tools:text="100 WXM" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tokensTotalTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.WeatherXM.Devices.List.TokensTitle"
+            android:text="@string/tokens_total"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_normal"
+            app:layout_constraintTop_toBottomOf="@id/tokensLastDayTitle"
+            app:layout_constraintStart_toStartOf="@id/tokensLastDayTitle"
+            app:layout_constraintBottom_toTopOf="@id/statusChip" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tokensTotal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.WeatherXM.Devices.List.Tokens"
+            android:layout_marginHorizontal="@dimen/margin_small"
+            app:layout_constraintStart_toEndOf="@id/tokensTotalTitle"
+            app:layout_constraintEnd_toStartOf="@id/icon"
+            app:layout_constraintBaseline_toBaselineOf="@id/tokensTotalTitle"
+            tools:text="100 WXM" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/statusChip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_check"
-            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/Widget.WeatherXM.Status.Chip"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tokensTotalTitle"
+            android:text="@string/offline" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/icon"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            tools:background="#88212121"
+            android:layout_marginEnd="@dimen/margin_normal"
+            tools:lottie_rawRes="@raw/anim_weather_clear_day"
+            app:layout_constraintEnd_toStartOf="@id/temperature"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/colorPrimary"
-            tools:ignore="ContentDescription" />
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/TextAppearance.WeatherXM.Devices.List.WeatherData"
+            tools:text="26°C" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/lastSeen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.WeatherXM.Updated.On"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/statusChip"
+            tools:text="5 minutes ago" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </com.google.android.material.card.MaterialCardView>

@@ -12,14 +12,16 @@ import com.google.gson.GsonBuilder
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
+import com.weatherxm.data.datasource.UserDataSource
+import com.weatherxm.data.datasource.UserDataSourceImpl
 import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSourceImpl
-import com.weatherxm.data.datasource.CredentialsDataSource
-import com.weatherxm.data.datasource.CredentialsDataSourceImpl
-import com.weatherxm.data.datasource.DeviceDataSource
-import com.weatherxm.data.datasource.DeviceDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
+import com.weatherxm.data.datasource.DeviceDataSource
+import com.weatherxm.data.datasource.DeviceDataSourceImpl
+import com.weatherxm.data.datasource.CredentialsDataSource
+import com.weatherxm.data.datasource.CredentialsDataSourceImpl
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.AuthService
 import com.weatherxm.data.network.AuthTokenJsonAdapter
@@ -29,8 +31,8 @@ import com.weatherxm.data.network.interceptor.AuthTokenAuthenticator
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
 import com.weatherxm.data.repository.DeviceRepository
-import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.data.repository.UserRepository
+import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.explorer.DeviceWithResolutionJsonAdapter
 import com.weatherxm.usecases.ExplorerUseCase
@@ -78,6 +80,10 @@ private val datasources = module {
         DeviceDataSourceImpl(get())
     }
 
+    single<UserDataSource> {
+        UserDataSourceImpl(get())
+    }
+
     single<AuthTokenDataSource> {
         AuthTokenDataSourceImpl(get(named(PREFERENCE_AUTH_TOKEN)))
     }
@@ -95,7 +101,7 @@ private val repositories = module {
         LocationRepository()
     }
     single<UserRepository> {
-        UserRepository()
+        UserRepository(get())
     }
     single<DeviceRepository> {
         DeviceRepository(get())

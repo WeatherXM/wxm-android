@@ -6,6 +6,10 @@
     <color name="natural_black">#FF212121</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#3388ff</color>
+    <color name="red">#F44336</color>
+    <color name="light_grey">#E4E4E4</color>
+    <color name="green">#2BB331</color>
+    <color name="grey">#888888</color>
 
     <color name="black_translucent">#88000000</color>
     <color name="white_translucent">#DDFFFFFF</color>
@@ -27,7 +31,7 @@
 
     <color name="ic_launcher_background">@color/colorPrimary</color>
 
-    <color name="subtitle">#E4E4E4</color>
+    <color name="subtitle">@color/light_grey</color>
     <color name="hexFillColor">@color/blue</color>
     <color name="hexFillOutlineColor">@color/white</color>
 </resources>

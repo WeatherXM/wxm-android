@@ -9,36 +9,21 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class EntityId(
+data class User(
     val id: String,
-    val entityType: String
+    val email: String,
+    val name: String?,
+    val firstName: String?,
+    val lastName: String?,
+    val wallet: Wallet?,
 ) : Parcelable
-
-@Keep
-@Parcelize
-enum class Authority(
-    val authority: String
-) : Parcelable {
-    SYS_ADMIN("SYS_ADMIN"),
-    TENANT_ADMIN("TENANT_ADMIN"),
-    CUSTOMER_USER("CUSTOMER_USER"),
-    REFRESH_TOKEN("REFRESH_TOKEN"),
-    ANONYMOUS("ANONYMOUS")
-}
 
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class User(
-    val id: EntityId,
-    val email: String,
-    val authority: Authority,
-    val name: String?,
-    val firstName: String?,
-    val lastName: String?,
-    val createdTime: Long,
-    val tenantId: EntityId,
-    val customerId: EntityId
+data class Wallet(
+    val address: String?,
+    val updatedAt: Long?,
 ) : Parcelable
 
 @Keep
@@ -55,34 +40,25 @@ data class Location(
     fun isEmpty() = this.lat == 0.0 && this.lon == 0.0
 }
 
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class Device(
-    val id: EntityId,
-    val createdTime: Long,
-    val name: String,
-    val type: String,
-    val label: String?,
-    val deviceProfileId: EntityId,
-    val location: Location?,
-) : Parcelable
-
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class PublicDevice(
+data class Device(
     val id: String,
     val name: String,
     val label: String?,
     val location: Location?,
     val attributes: Attributes?,
-    val timeseries: Timeseries?
+    val timeseries: Timeseries?,
+    val address: String?
 ) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class Attributes(
+    val isActive: Boolean?,
+    val lastActiveAt: Long?,
     val hex3: Hex,
     val hex7: Hex,
 ) : Parcelable

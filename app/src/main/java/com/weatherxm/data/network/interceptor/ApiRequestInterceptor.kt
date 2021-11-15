@@ -19,7 +19,7 @@ import timber.log.Timber
 class ApiRequestInterceptor : Interceptor, KoinComponent {
 
     companion object {
-        const val AUTH_HEADER = "X-Authorization"
+        const val AUTH_HEADER = "Authorization"
         const val NO_AUTH_HEADER_KEY = "No-Authorization"
         const val NO_AUTH_HEADER_VALUE = "true"
         const val NO_AUTH_HEADER = "$NO_AUTH_HEADER_KEY: $NO_AUTH_HEADER_VALUE"
@@ -31,9 +31,7 @@ class ApiRequestInterceptor : Interceptor, KoinComponent {
         // Original request
         val request: Request = chain.request()
         if (request.headers[NO_AUTH_HEADER_KEY] != null && request.headers[NO_AUTH_HEADER_KEY].equals(
-                NO_AUTH_HEADER_VALUE
-            )
-        ) {
+                NO_AUTH_HEADER_VALUE)) {
             return chain.proceed(request)
         }
 

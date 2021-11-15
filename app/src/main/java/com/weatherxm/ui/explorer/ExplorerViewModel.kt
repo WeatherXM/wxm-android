@@ -7,7 +7,7 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.weatherxm.R
 import com.weatherxm.data.Failure
-import com.weatherxm.data.PublicDevice
+import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.ServerError
 import com.weatherxm.usecases.ExplorerUseCase
@@ -42,7 +42,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     }
 
     // The details/data of a device
-    private val onDeviceSelected = MutableLiveData<PublicDevice>()
+    private val onDeviceSelected = MutableLiveData<Device>()
 
     private val onZoomChange = MutableLiveData<Point?>()
 
@@ -51,7 +51,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
 
     fun showMapOverlayViews() = showMapOverlayViews
     fun explorerState(): LiveData<Resource<ExplorerState>> = state
-    fun onDeviceSelected(): LiveData<PublicDevice> = onDeviceSelected
+    fun onDeviceSelected(): LiveData<Device> = onDeviceSelected
     fun onZoomChange(): LiveData<Point?> = onZoomChange
 
     fun fetch() {
@@ -62,32 +62,22 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
                 .map { polygonPoints ->
                     Timber.d("Got Polygon Points: $polygonPoints")
                     currentExplorerState.polygonPoints = polygonPoints
-                    state.postValue(
-                        Resource.success(currentExplorerState)
-                    )
+                    state.postValue(Resource.success(currentExplorerState))
                 }
                 .mapLeft {
                     Timber.d("Got error: $it")
                     when (it) {
                         is Failure.NetworkError -> state.postValue(
-                            Resource.error(
-                                resourcesHelper.getString(R.string.network_error)
-                            )
+                            Resource.error(resourcesHelper.getString(R.string.network_error))
                         )
                         is ServerError -> state.postValue(
-                            Resource.error(
-                                resourcesHelper.getString(R.string.server_error)
-                            )
+                            Resource.error(resourcesHelper.getString(R.string.server_error))
                         )
                         is Failure.UnknownError -> state.postValue(
-                            Resource.error(
-                                resourcesHelper.getString(R.string.unknown_error_public_devices)
-                            )
+                            Resource.error(resourcesHelper.getString(R.string.unknown_error))
                         )
                         else -> state.postValue(
-                            Resource.error(
-                                resourcesHelper.getString(R.string.unknown_error_public_devices)
-                            )
+                            Resource.error(resourcesHelper.getString(R.string.unknown_error))
                         )
                     }
                 }
@@ -109,8 +99,8 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
         showMapOverlayViews.postValue(!current)
     }
 
-    private fun onDeviceClick(publicDevice: PublicDevice) {
-        onDeviceSelected.postValue(publicDevice)
+    private fun onDeviceClick(device: Device) {
+        onDeviceSelected.postValue(device)
     }
 
     /**

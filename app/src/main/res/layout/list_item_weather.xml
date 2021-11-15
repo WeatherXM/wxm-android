@@ -75,7 +75,6 @@
             app:layout_constraintTop_toTopOf="parent"
             android:text="2bf NW" />
 
-
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/humidity"
             android:layout_width="0dp"

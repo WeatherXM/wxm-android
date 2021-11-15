@@ -25,3 +25,9 @@ data class RegistrationBody(
 data class RefreshBody(
     val refreshToken: String
 ) : Parcelable
+
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class AddressBody(
+    val address: String
+) : Parcelable

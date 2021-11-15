@@ -7,6 +7,7 @@ import com.weatherxm.data.network.AuthService
 import com.weatherxm.data.network.Credentials
 import com.weatherxm.data.network.LoginBody
 import com.weatherxm.data.network.RefreshBody
+import com.weatherxm.data.network.interceptor.ApiRequestInterceptor.Companion.AUTH_HEADER
 import com.weatherxm.data.path
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
@@ -106,7 +107,7 @@ class AuthTokenAuthenticator : Authenticator, KoinComponent {
     private fun retryWithAccessToken(request: Request, accessToken: String): Request {
         Timber.d("[${request.path()}] Retrying with access token")
         return request.newBuilder()
-            .header("X-Authorization", "Bearer $accessToken")
+            .header(AUTH_HEADER, "Bearer $accessToken")
             .build()
     }
 }

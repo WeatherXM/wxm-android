@@ -37,3 +37,7 @@ fun fromMillis(millis: Long): LocalDateTime {
 fun LocalDateTime.formatDefault(): String {
     return format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
 }
+
+fun LocalDateTime.formatOnlyTime(): String {
+    return format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))
+}

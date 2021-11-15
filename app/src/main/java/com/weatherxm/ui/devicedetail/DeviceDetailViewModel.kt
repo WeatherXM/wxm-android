@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import arrow.core.Either
 import com.weatherxm.R
-import com.weatherxm.data.PublicDevice
+import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.util.ResourcesHelper
@@ -15,16 +15,16 @@ import timber.log.Timber
 
 class DeviceDetailViewModel : ViewModel(), KoinComponent {
 
-    private val onDeviceDetailsUpdate = MutableLiveData<Resource<PublicDevice>>().apply {
+    private val onDeviceDetailsUpdate = MutableLiveData<Resource<Device>>().apply {
         value = Resource.loading()
     }
 
-    fun onDeviceDetailsUpdate(): LiveData<Resource<PublicDevice>> = onDeviceDetailsUpdate
+    fun onDeviceDetailsUpdate(): LiveData<Resource<Device>> = onDeviceDetailsUpdate
 
     private val deviceRepository: DeviceRepository by inject()
     private val resourcesHelper: ResourcesHelper by inject()
 
-    fun fetch(device: PublicDevice?) {
+    fun fetch(device: Device?) {
         if (device == null) {
             this@DeviceDetailViewModel.onDeviceDetailsUpdate.postValue(
                 Resource.error(resourcesHelper.getString(R.string.no_data_error_device_details))

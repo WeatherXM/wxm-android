@@ -57,11 +57,24 @@
             android:name="com.weatherxm.ui.home.HomeActivity"
             android:label="@string/title_home"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM.NoActionBar" />
+            android:theme="@style/Theme.WeatherXM.Home" />
         <activity
             android:name="com.weatherxm.ui.preferences.PreferenceActivity"
             android:screenOrientation="portrait"
             android:label="@string/settings"/>
+        <activity
+            android:name="com.weatherxm.ui.connectwallet.ConnectWalletActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_connect_wallet"
+            android:theme="@style/Theme.WeatherXM.Home"/>
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="portrait"
+            tools:replace="screenOrientation" />
+        <activity
+            android:name="com.weatherxm.ui.userdevice.UserDeviceActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM.Home"/>
 
         <!-- Services -->
 

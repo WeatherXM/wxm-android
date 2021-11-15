@@ -10,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weatherxm.R
-import com.weatherxm.data.PublicDevice
+import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.data.Timeseries
@@ -30,14 +30,14 @@ class DeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
     */
     private val deviceDetailModel: DeviceDetailViewModel by activityViewModels()
     private lateinit var binding: FragmentDeviceDetailsBinding
-    private var device: PublicDevice? = null
+    private var device: Device? = null
 
     companion object {
         const val TAG = "DeviceDetailFragment"
         private const val ARG_DEVICE = "device"
 
-        fun newInstance(publicDevice: PublicDevice) = DeviceDetailFragment().apply {
-            arguments = Bundle().apply { putParcelable(ARG_DEVICE, publicDevice) }
+        fun newInstance(device: Device) = DeviceDetailFragment().apply {
+            arguments = Bundle().apply { putParcelable(ARG_DEVICE, device) }
         }
     }
 
@@ -69,7 +69,7 @@ class DeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
         deviceDetailModel.fetch(device)
     }
 
-    private fun updateUI(resource: Resource<PublicDevice>) {
+    private fun updateUI(resource: Resource<Device>) {
         when (resource.status) {
             Status.SUCCESS -> {
 

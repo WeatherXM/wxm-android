@@ -4,12 +4,12 @@ import androidx.annotation.Keep
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.weatherxm.data.PublicDevice
+import com.weatherxm.data.Device
 
 data class ExplorerState(
     var polygonPoints: List<PolygonAnnotationOptions>?,
     // Not sure if needed
-    var currentDevices: List<PublicDevice>?,
+    var currentDevices: List<Device>?,
     // Not sure if needed
     var errorMessage: String?
 )
@@ -17,7 +17,7 @@ data class ExplorerState(
 @Keep
 @JsonClass(generateAdapter = true)
 data class DeviceWithResolution(
-    var device: PublicDevice,
+    var device: Device,
     @Json(name = "current_resolution")
     var currentResolution: Int
 )

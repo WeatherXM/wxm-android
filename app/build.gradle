@@ -5,6 +5,7 @@ plugins {
     id "kotlin-parcelize"
     id "com.google.gms.google-services"
     id "com.google.firebase.crashlytics"
+    id "com.google.firebase.firebase-perf"
 }
 
 def getGitCommitHash = { ->
@@ -115,6 +116,8 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "com.google.android.material:material:1.4.0"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
 
     // Google Play Services for Location & Maps
     implementation "com.google.android.gms:play-services-location:18.0.0"
@@ -159,12 +162,16 @@ dependencies {
     implementation "io.arrow-kt:arrow-fx-coroutines"
 
     // Mapbox
-    implementation "com.mapbox.maps:android:10.0.0"
+    implementation "com.mapbox.maps:android:10.1.0"
 
     // Insetter
     implementation "dev.chrisbanes.insetter:insetter:0.6.0"
 
     // Import the Firebase BoM
-    implementation platform("com.google.firebase:firebase-bom:28.4.2")
+    implementation platform("com.google.firebase:firebase-bom:29.0.0")
     implementation "com.google.firebase:firebase-crashlytics-ktx"
+    implementation "com.google.firebase:firebase-perf-ktx"
+
+    // QR Code Scanner
+    implementation "com.journeyapps:zxing-android-embedded:4.3.0"
 }

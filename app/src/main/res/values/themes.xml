@@ -35,6 +35,16 @@
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.WeatherXM.BottomSheetDialog</item>
     </style>
 
+    <style name="Theme.WeatherXM.Home" parent="@style/Theme.WeatherXM.NoActionBar">
+        <!-- System UI styles -->
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="toolbarStyle">@style/Widget.WeatherXM.ToolBar</item>
+        <item name="appBarLayoutStyle">@style/Widget.WeatherXM.AppBar</item>
+        <item name="progressBarStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
+    </style>
+
     <style name="Theme.WeatherXM.NoActionBar" parent="@style/Theme.WeatherXM">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -74,5 +84,130 @@
         <item name="android:textColor">?colorOnSecondary</item>
         <item name="android:textSize">20sp</item>
         <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.TemperatureOnCard" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="android:textColor">?colorOnSecondary</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Title.Headline_4" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Title.Headline_6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Profile.UserInfo" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">?colorOnSurface</item>
+    </style>
+
+    <style name="Widget.WeatherXM.Profile.Elements" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:minHeight">?listPreferredItemHeightLarge</item>
+        <item name="drawableTint">@color/colorSecondary</item>
+        <item name="android:textColor">?colorOnSurface</item>
+        <item name="android:gravity">start|center</item>
+        <item name="android:drawableEnd">@drawable/ic_next</item>
+        <!--<item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body2</item>
+        <item name="android:textSize">14sp</item>-->
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Logout" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/red</item>
+        <item name="drawableTint">@color/red</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.WeatherDataOnCard" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.WeatherDataOnHourlyCard" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.HourHourlyCard" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">@color/subtitle</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.WeatherDataOnCard.Subtitle" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Updated.On" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Devices.List.Name" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Devices.List.TokensTitle" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Devices.List.Tokens" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Devices.List.WeatherData" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">20sp</item>
+        <item name="drawableTint">@color/colorOnSecondary</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Widget.WeatherXM.ToolBar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.WeatherXM.Toolbar</item>
+        <item name="titleTextAppearance">@style/TextAppearance.WeatherXM.Toolbar.Title</item>
+        <item name="android:paddingTop">@dimen/padding_normal</item>
+        <item name="android:paddingBottom">@dimen/padding_normal</item>
+        <item name="contentInsetStart">@dimen/padding_large</item>
+        <item name="contentInsetStartWithNavigation">@dimen/padding_large</item>
+        <item name="contentInsetEnd">@dimen/padding_large</item>
+        <item name="contentInsetEndWithActions">@dimen/padding_large</item>
+        <item name="elevation">0dp</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+
+    <style name="Widget.WeatherXM.AppBar" parent="Widget.MaterialComponents.AppBarLayout.Surface">
+        <item name="elevation">0dp</item>
+        <item name="android:elevation">0dp</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherXM.Toolbar" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/natural_black</item>
+        <item name="navigationIconTint">@color/natural_black</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Toolbar.Title" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">?colorOnSurface</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Widget.WeatherXM.ProgressBar.Horizontal" parent="Widget.MaterialComponents.LinearProgressIndicator">
+        <item name="progressBarStyle">?android:progressBarStyleHorizontal</item>
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:indeterminateOnly">true</item>
+        <item name="android:indeterminate">true</item>
+        <item name="minHeight">8dp</item>
+    </style>
+
+    <style name="Widget.WeatherXM.Status.Chip" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="chipMinTouchTargetSize">0dp</item>
     </style>
 </resources>

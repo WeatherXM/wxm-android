@@ -20,8 +20,7 @@
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
             android:layout_marginTop="48dp"
             android:text="@string/title_signup"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
-            android:textColor="@color/colorPrimary"
+            style="@style/TextAppearance.WeatherXM.Title.Headline_4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
