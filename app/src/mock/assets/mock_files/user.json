@@ -1,0 +1,11 @@
+{
+  "id": "e75064f0-1fb5-11ec-b635-87cd76025017",
+  "email": "customer@test.com",
+  "name": "customer@test.com",
+  "firstName": "Customer",
+  "lastName": "Test",
+  "wallet": {
+    "address": "0x0000000000000000000000000000000000000000",
+    "updatedAt": 1636040692905
+  }
+}

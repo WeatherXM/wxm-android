@@ -45,6 +45,18 @@ android {
         }
     }
 
+
+    flavorDimensions "mode"
+
+    productFlavors {
+        mock {
+            dimension "mode"
+        }
+        remote {
+            dimension "mode"
+        }
+    }
+
     buildTypes {
         release {
             signingConfig signingConfigs.release
@@ -61,7 +73,17 @@ android {
         viewBinding true
     }
 
-    // Flavor-specific version name & apk file name
+    // Filter out specific build variants
+    variantFilter { variant ->
+        def names = variant.flavors*.name
+        if (names.contains("remote") && names.contains("mock")) {
+            variant.setIgnore(true)
+        } else if (variant.buildType.name != "debug" && names.contains("mock")) {
+            variant.setIgnore(true)
+        }
+    }
+
+    // Flavor-specific version name & apk file name, also delete mock files on release APK flavor
     applicationVariants.all { variant ->
         def version = "${variant.getVersionName()}-$getGitCommitHash-${variant.buildType.name}"
         variant.resValue "string", "app_version", "$version"
@@ -69,6 +91,11 @@ android {
         variant.outputs.all { output ->
             output.versionNameOverride = version
             outputFileName = "weatherxm-${version}.apk"
+        }
+        if (variant.buildType.name.contains('release')) {
+            variant.mergeAssetsProvider.get().doLast {
+                delete(fileTree(dir: variant.mergeAssetsProvider.get().outputDir, includes: ['**/mock/*']))
+            }
         }
     }
 
@@ -174,4 +201,7 @@ dependencies {
 
     // QR Code Scanner
     implementation "com.journeyapps:zxing-android-embedded:4.3.0"
+
+    // Retromock for mocking responses
+    implementation "co.infinum:retromock:1.1.1"
 }

@@ -22,7 +22,6 @@ import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
 import com.weatherxm.data.datasource.CredentialsDataSource
 import com.weatherxm.data.datasource.CredentialsDataSourceImpl
-import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.AuthService
 import com.weatherxm.data.network.AuthTokenJsonAdapter
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
@@ -50,6 +49,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
+const val RETROFIT_CLIENT = "RETROFIT_CLIENT"
 private const val PREFERENCE_AUTH_TOKEN = "PREFS_AUTH_TOKEN"
 private const val PREFERENCE_CREDENTIALS = "PREFS_CREDENTIALS"
 private const val NETWORK_CACHE_SIZE = 50L * 1024L * 1024L // 50MB
@@ -155,7 +155,7 @@ private val network = module {
         retrofit.create(AuthService::class.java)
     }
 
-    single<ApiService> {
+    single(named(RETROFIT_CLIENT)) {
         // Install HTTP cache
         val cache = Cache(androidContext().cacheDir, NETWORK_CACHE_SIZE)
 
@@ -171,15 +171,12 @@ private val network = module {
             .build()
 
         // Create retrofit instance
-        val retrofit: Retrofit = Retrofit.Builder()
+        Retrofit.Builder()
             .baseUrl(BuildConfig.API_URL)
             .addConverterFactory(get() as MoshiConverterFactory)
             .addCallAdapterFactory(NetworkResponseAdapterFactory())
             .client(client)
             .build()
-
-        // Create service
-        retrofit.create(ApiService::class.java)
     }
 }
 
@@ -232,5 +229,6 @@ val modules = listOf(
     validator,
     usecases,
     resourcesHelper,
+    apiServiceModule,
     utilities
 )

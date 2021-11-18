@@ -1,0 +1,374 @@
+[
+  {
+    "id": "68f90f60-10e9-11ec-877e-63751227e9ec",
+    "name": "Lamia DSH",
+    "label": null,
+    "location": {
+      "lat": 38.90402406186525,
+      "lon": 22.429473128603995
+    },
+    "attributes": {
+      "hex3": {
+        "index": "831edefffffffff",
+        "polygon": [
+          {
+            "lat": 39.64734581905387,
+            "lon": 22.078458720052645
+          },
+          {
+            "lat": 38.99088586392546,
+            "lon": 22.053163375299736
+          },
+          {
+            "lat": 38.644236094151005,
+            "lon": 22.784148869958848
+          },
+          {
+            "lat": 38.951438520683396,
+            "lon": 23.545178032093393
+          },
+          {
+            "lat": 39.60772959082356,
+            "lon": 23.581130772585002
+          },
+          {
+            "lat": 39.95703932706291,
+            "lon": 22.84541358216476
+          }
+        ],
+        "center": {
+          "lat": 39.30212000243279,
+          "lon": 22.814562948832872
+        }
+      },
+      "hex7": {
+        "index": "871ede4f1ffffff",
+        "polygon": [
+          {
+            "lat": 38.91583404247776,
+            "lon": 22.41581016913318
+          },
+          {
+            "lat": 38.90240049355811,
+            "lon": 22.4152455193994
+          },
+          {
+            "lat": 38.89532935176061,
+            "lon": 22.430176457882
+          },
+          {
+            "lat": 38.90169066262745,
+            "lon": 22.445674069031686
+          },
+          {
+            "lat": 38.91512417974801,
+            "lon": 22.446243125136547
+          },
+          {
+            "lat": 38.9221964182422,
+            "lon": 22.431310163834972
+          }
+        ],
+        "center": {
+          "lat": 38.908763482473326,
+          "lon": 22.43074322873852
+        }
+      }
+    },
+    "timeseries": {
+      "timestamp": 1636668000000,
+      "hourly_precip_intensity": 0,
+      "hourly_temperature": 6.7,
+      "hourly_wind_direction": 336,
+      "hourly_humidity": 81,
+      "hourly_wind_speed": 3.7,
+      "hourly_icon": "cloudy",
+      "hourly_dew_point": 3.7,
+      "hourly_precip_probability": 0,
+      "hourly_uv_index": 0,
+      "hourly_pressure": 1024.9,
+      "hourly_cloud_cover": 98,
+      "hourly_wind_gust": 4.2,
+      "hourly_precip_type": "rain"
+    }
+  },
+  {
+    "id": "6fe907d0-10e9-11ec-877e-63751227e9ec",
+    "name": "Ermoypoli DSH",
+    "label": null,
+    "location": {
+      "lat": 37.442430072377526,
+      "lon": 24.940125388382246
+    },
+    "attributes": {
+      "hex3": {
+        "index": "833f75fffffffff",
+        "polygon": [
+          {
+            "lat": 37.57297251266519,
+            "lon": 24.944016723457533
+          },
+          {
+            "lat": 36.90900443103989,
+            "lon": 24.899403736763958
+          },
+          {
+            "lat": 36.54121237304375,
+            "lon": 25.60310163681032
+          },
+          {
+            "lat": 36.834408979614466,
+            "lon": 26.354771311728218
+          },
+          {
+            "lat": 37.49749535386634,
+            "lon": 26.4094216127777
+          },
+          {
+            "lat": 37.86831585468273,
+            "lon": 25.702400888627096
+          }
+        ],
+        "center": {
+          "lat": 37.206011328579606,
+          "lon": 25.652407255410786
+        }
+      },
+      "hex7": {
+        "index": "873f75da1ffffff",
+        "polygon": [
+          {
+            "lat": 37.45120742794087,
+            "lon": 24.935775948473474
+          },
+          {
+            "lat": 37.437672654190514,
+            "lon": 24.93486160707749
+          },
+          {
+            "lat": 37.43022737440094,
+            "lon": 24.94935803978769
+          },
+          {
+            "lat": 37.436315638072664,
+            "lon": 24.964770331635883
+          },
+          {
+            "lat": 37.44985011813299,
+            "lon": 24.965688896258346
+          },
+          {
+            "lat": 37.457296628634246,
+            "lon": 24.951190946071595
+          }
+        ],
+        "center": {
+          "lat": 37.44376253130437,
+          "lon": 24.950274362783095
+        }
+      }
+    },
+    "timeseries": {
+      "timestamp": 1636668000000,
+      "hourly_precip_intensity": 0,
+      "hourly_temperature": 14.8,
+      "hourly_wind_direction": 356,
+      "hourly_humidity": 65,
+      "hourly_wind_speed": 35.2,
+      "hourly_icon": "partly-cloudy-night",
+      "hourly_dew_point": 8.2,
+      "hourly_precip_probability": 0,
+      "hourly_uv_index": 0,
+      "hourly_pressure": 1019.2,
+      "hourly_cloud_cover": 37,
+      "hourly_wind_gust": 43.6,
+      "hourly_precip_type": "rain"
+    }
+  },
+  {
+    "id": "76d13810-10e9-11ec-877e-63751227e9ec",
+    "name": "Hania DSH",
+    "label": null,
+    "location": {
+      "lat": 35.51622463589852,
+      "lon": 24.01903666307378
+    },
+    "attributes": {
+      "hex3": {
+        "index": "833f72fffffffff",
+        "polygon": [
+          {
+            "lat": 35.62983463943738,
+            "lon": 23.372801364962505
+          },
+          {
+            "lat": 34.958641140481404,
+            "lon": 23.339733257269025
+          },
+          {
+            "lat": 34.59685782123658,
+            "lon": 24.035997744251496
+          },
+          {
+            "lat": 34.903320885355384,
+            "lon": 24.76919455347358
+          },
+          {
+            "lat": 35.574007582813174,
+            "lon": 24.81200499077942
+          },
+          {
+            "lat": 35.938786456658356,
+            "lon": 24.11189955457401
+          }
+        ],
+        "center": {
+          "lat": 35.26881139814333,
+          "lon": 24.073689952216043
+        }
+      },
+      "hex7": {
+        "index": "873f728d0ffffff",
+        "polygon": [
+          {
+            "lat": 35.52482636074315,
+            "lon": 24.014679947948405
+          },
+          {
+            "lat": 35.51114716956354,
+            "lon": 24.01391178034676
+          },
+          {
+            "lat": 35.50374631403231,
+            "lon": 24.02820018964633
+          },
+          {
+            "lat": 35.51002341064811,
+            "lon": 24.043258382501087
+          },
+          {
+            "lat": 35.52370239640629,
+            "lon": 24.044030629840638
+          },
+          {
+            "lat": 35.53110449138368,
+            "lon": 24.02974060478422
+          }
+        ],
+        "center": {
+          "lat": 35.517425828183185,
+          "lon": 24.028970289786937
+        }
+      }
+    },
+    "timeseries": {
+      "timestamp": 1636668000000,
+      "hourly_precip_intensity": 0.03,
+      "hourly_temperature": 15.7,
+      "hourly_wind_direction": 54,
+      "hourly_humidity": 81,
+      "hourly_wind_speed": 11.5,
+      "hourly_icon": "partly-cloudy-night",
+      "hourly_dew_point": 12.5,
+      "hourly_precip_probability": 1,
+      "hourly_uv_index": 0,
+      "hourly_pressure": 1019.9,
+      "hourly_cloud_cover": 85,
+      "hourly_wind_gust": 17.4,
+      "hourly_precip_type": "rain"
+    }
+  },
+  {
+    "id": "76869a80-10e9-11ec-877e-63751227e9ec",
+    "name": "Hrakleio DSH",
+    "label": null,
+    "location": {
+      "lat": 35.33868503220863,
+      "lon": 25.131309775605438
+    },
+    "attributes": {
+      "hex3": {
+        "index": "833f73fffffffff",
+        "polygon": [
+          {
+            "lat": 35.574007582813174,
+            "lon": 24.81200499077942
+          },
+          {
+            "lat": 34.903320885355384,
+            "lon": 24.76919455347358
+          },
+          {
+            "lat": 34.53354037478217,
+            "lon": 25.459174400829244
+          },
+          {
+            "lat": 34.83135743754204,
+            "lon": 26.195246251947374
+          },
+          {
+            "lat": 35.50116915684023,
+            "lon": 26.247698574978315
+          },
+          {
+            "lat": 35.874086323200885,
+            "lon": 25.55446999869705
+          }
+        ],
+        "center": {
+          "lat": 35.20480418020705,
+          "lon": 25.506498684129213
+        }
+      },
+      "hex7": {
+        "index": "873f73c54ffffff",
+        "polygon": [
+          {
+            "lat": 35.35408062111689,
+            "lon": 25.12083693938654
+          },
+          {
+            "lat": 35.34040383208313,
+            "lon": 25.11991659282971
+          },
+          {
+            "lat": 35.332871234212085,
+            "lon": 25.134085315482423
+          },
+          {
+            "lat": 35.339014137044884,
+            "lon": 25.14917580622905
+          },
+          {
+            "lat": 35.35269060189008,
+            "lon": 25.150100191560945
+          },
+          {
+            "lat": 35.36022448849828,
+            "lon": 25.135930047630428
+          }
+        ],
+        "center": {
+          "lat": 35.34654828066226,
+          "lon": 25.135007553440364
+        }
+      }
+    },
+    "timeseries": {
+      "timestamp": 1636668000000,
+      "hourly_precip_intensity": 0,
+      "hourly_temperature": 15.1,
+      "hourly_wind_direction": 338,
+      "hourly_humidity": 81,
+      "hourly_wind_speed": 17.7,
+      "hourly_icon": "partly-cloudy-night",
+      "hourly_dew_point": 11.9,
+      "hourly_precip_probability": 0,
+      "hourly_uv_index": 0,
+      "hourly_pressure": 1018.9,
+      "hourly_cloud_cover": 76,
+      "hourly_wind_gust": 26.5,
+      "hourly_precip_type": "rain"
+    }
+  }
+]
