@@ -43,6 +43,7 @@
         <item name="toolbarStyle">@style/Widget.WeatherXM.ToolBar</item>
         <item name="appBarLayoutStyle">@style/Widget.WeatherXM.AppBar</item>
         <item name="progressBarStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
+        <item name="linearProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
     </style>
 
     <style name="Theme.WeatherXM.NoActionBar" parent="@style/Theme.WeatherXM">
@@ -69,6 +70,10 @@
 
     <style name="Widget.WeatherXM.ButtonBar.Button.Subtle" parent="@style/Widget.MaterialComponents.Button.TextButton">
         <item name="android:minHeight">54dp</item>
+    </style>
+
+    <style name="Widget.WeatherXM.TextButton.Subtle" parent="@style/Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="Widget.WeatherXM.BottomSheet.Dialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
@@ -209,5 +214,10 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">12sp</item>
         <item name="chipMinTouchTargetSize">0dp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Paragraph.Title" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">?colorOnSurface</item>
+        <item name="fontFamily">sans-serif-medium</item>
     </style>
 </resources>

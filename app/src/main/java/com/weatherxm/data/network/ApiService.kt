@@ -38,4 +38,9 @@ interface ApiService {
     suspend fun saveAddress(
         @Body address: AddressBody,
     ): NetworkResponse<Unit, ErrorResponse>
+
+    @POST("/api/auth/resetPassword")
+    suspend fun resetPassword(
+        @Body refresh: ResetPasswordBody,
+    ): NetworkResponse<Unit, ErrorResponse>
 }

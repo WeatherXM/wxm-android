@@ -1,14 +1,16 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        app:title="@string/weather_units">
+        app:title="@string/weather_units"
+        app:iconSpaceReserved="false">
         <ListPreference
             app:key="@string/key_temperature_preference"
             app:title="@string/temperature"
             app:summary="@string/choose_temperature_summary"
             app:entries="@array/temperature_entries"
             app:entryValues="@array/temperature_values"
-            app:defaultValue="@string/temperature_celsius"/>
+            app:defaultValue="@string/temperature_celsius"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             app:key="@string/key_precipitation_preference"
@@ -16,7 +18,8 @@
             app:summary="@string/choose_precipitation_summary"
             app:entries="@array/precipitation_entries"
             app:entryValues="@array/precipitation_values"
-            app:defaultValue="@string/precipitation_mm"/>
+            app:defaultValue="@string/precipitation_mm"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             app:key="@string/key_wind_speed_preference"
@@ -24,7 +27,8 @@
             app:summary="@string/choose_wind_speed_summary"
             app:entries="@array/wind_speed_entries"
             app:entryValues="@array/wind_speed_values"
-            app:defaultValue="@string/wind_speed_kmh"/>
+            app:defaultValue="@string/wind_speed_kmh"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             app:key="@string/key_wind_direction_preference"
@@ -32,7 +36,8 @@
             app:summary="@string/choose_wind_direction_summary"
             app:entries="@array/wind_direction_entries"
             app:entryValues="@array/wind_direction_values"
-            app:defaultValue="@string/wind_direction_cardinal"/>
+            app:defaultValue="@string/wind_direction_cardinal"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             app:key="@string/key_pressure_preference"
@@ -40,13 +45,31 @@
             app:summary="@string/choose_pressure_summary"
             app:entries="@array/pressure_entries"
             app:entryValues="@array/pressure_values"
-            app:defaultValue="@string/pressure_hpa"/>
+            app:defaultValue="@string/pressure_hpa"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:title="@string/account">
+        app:key="@string/account"
+        app:title="@string/account"
+        app:iconSpaceReserved="false">
+        <Preference
+            app:key="@string/change_password"
+            app:title="@string/change_password"
+            app:summary="@string/request_reset_password_desc"
+            app:iconSpaceReserved="false" />
         <Preference
             app:key="@string/action_logout"
-            app:title="@string/action_logout" />
+            app:title="@string/action_logout"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/about"
+        app:iconSpaceReserved="false">
+        <Preference
+            app:title="@string/title_app_version"
+            app:summary="@string/app_version"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

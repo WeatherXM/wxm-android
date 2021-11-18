@@ -13,6 +13,7 @@ import java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
 import java.net.HttpURLConnection.HTTP_NOT_FOUND
 import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
 import java.net.HttpURLConnection.HTTP_UNAVAILABLE
+import java.net.HttpURLConnection.HTTP_BAD_REQUEST
 
 fun Request.path(): String = this.url.encodedPath
 
@@ -38,6 +39,7 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
                     HTTP_INTERNAL_ERROR -> Either.Left(ServerError.InternalError(this.body?.message))
                     HTTP_UNAVAILABLE -> Either.Left(ServerError.Unavailable)
                     HTTP_GATEWAY_TIMEOUT -> Either.Left(ServerError.Timeout)
+                    HTTP_BAD_REQUEST -> Either.Left(ServerError.BadRequest)
                     else -> Either.Left(ServerError.GenericError(this.body?.message))
                 }
             }

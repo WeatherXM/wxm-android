@@ -31,3 +31,9 @@ data class RefreshBody(
 data class AddressBody(
     val address: String
 ) : Parcelable
+
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class ResetPasswordBody(
+    val email: String
+) : Parcelable

@@ -27,7 +27,7 @@ class PreferenceActivity : AppCompatActivity(), KoinComponent {
 
         model.onLogout().observe(this, { hasLoggedOut ->
             if (hasLoggedOut) {
-                navigator.showExplorer(this)
+                navigator.showSplash(this)
                 finish()
             }
         })

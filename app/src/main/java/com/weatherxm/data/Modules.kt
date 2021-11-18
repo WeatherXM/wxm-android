@@ -12,16 +12,18 @@ import com.google.gson.GsonBuilder
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
-import com.weatherxm.data.datasource.UserDataSource
-import com.weatherxm.data.datasource.UserDataSourceImpl
+import com.weatherxm.data.datasource.AuthDataSource
+import com.weatherxm.data.datasource.AuthDataSourceImpl
 import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
+import com.weatherxm.data.datasource.CredentialsDataSourceImpl
+import com.weatherxm.data.datasource.CredentialsDataSource
 import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
-import com.weatherxm.data.datasource.CredentialsDataSource
-import com.weatherxm.data.datasource.CredentialsDataSourceImpl
+import com.weatherxm.data.datasource.UserDataSource
+import com.weatherxm.data.datasource.UserDataSourceImpl
 import com.weatherxm.data.network.AuthService
 import com.weatherxm.data.network.AuthTokenJsonAdapter
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
@@ -84,6 +86,10 @@ private val datasources = module {
         UserDataSourceImpl(get())
     }
 
+    single<AuthDataSource> {
+        AuthDataSourceImpl(get(), get(), get())
+    }
+
     single<AuthTokenDataSource> {
         AuthTokenDataSourceImpl(get(named(PREFERENCE_AUTH_TOKEN)))
     }
@@ -95,7 +101,7 @@ private val datasources = module {
 
 private val repositories = module {
     single<AuthRepository> {
-        AuthRepositoryImpl(get(), get())
+        AuthRepositoryImpl(get(), get(), get())
     }
     single<LocationRepository> {
         LocationRepository()

@@ -45,7 +45,6 @@ android {
         }
     }
 
-
     flavorDimensions "mode"
 
     productFlavors {

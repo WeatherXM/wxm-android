@@ -21,6 +21,7 @@ sealed class ServerError(val message: String? = null) : Failure() {
     object Unavailable : ServerError()
     object Timeout : ServerError()
     object JsonError : ServerError()
+    object BadRequest : ServerError()
 }
 
 @Keep

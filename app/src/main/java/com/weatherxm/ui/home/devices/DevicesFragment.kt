@@ -9,7 +9,6 @@ import androidx.fragment.app.activityViewModels
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Status
-import com.weatherxm.data.navigator
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.Navigator
 import dev.chrisbanes.insetter.applyInsetter

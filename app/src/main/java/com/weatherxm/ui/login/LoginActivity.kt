@@ -45,6 +45,10 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
                 !binding.username.text.isNullOrEmpty() && !binding.password.text.isNullOrEmpty()
         }
 
+        binding.forgotPassword.setOnClickListener {
+            navigator.showResetPassword(this)
+        }
+
         binding.signupPrompt.text = HtmlCompat.fromHtml(
             resourcesHelper.getString(R.string.prompt_signup),
             HtmlCompat.FROM_HTML_MODE_COMPACT

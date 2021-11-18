@@ -15,11 +15,14 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">Login failed</string>
     <string name="signup_failed">Could not signup</string>
+    <string name="forgot_password">Forgot Password?</string>
     <string name="prompt_signup"><![CDATA[Don\'t have an account? <span style=\"color: #2599df\">SIGN UP</span>]]></string>
     <string name="title_home">Home</string>
     <string name="prompt_login"><![CDATA[Already a user? <span style=\"color: #00c853\">LOGIN</span>]]></string>
     <string name="action_signup">Sign Up</string>
     <string name="title_signup">Create Account</string>
+    <string name="password_reset">Reset Password</string>
+    <string name="title_password_reset">Password Reset</string>
     <string name="title_login">Login</string>
     <string name="settings">Settings</string>
     <string name="title_explorer">Explorer</string>
@@ -39,6 +42,11 @@
     <string name="ownership_wallet">I acknowledge that I have ownership and full access to this wallet.</string>
     <string name="terms">I have read and accept the terms.</string>
     <string name="oops_something_wrong">Oops! Something went wrong.</string>
+    <string name="send">Send Email</string>
+    <string name="success">Success</string>
+    <string name="success_title">Email has been sent!</string>
+    <string name="success_text">We have sent instructions for resetting your password to your email.</string>
+    <string name="send_email_instructions">Enter the email associated with your account and we will send you an email with instructions to reset your password.</string>
 
     <!-- TODO Remove them when we remove the relevant XMLs -->
     <string name="hint_field_name">Field Name</string>
@@ -70,6 +78,10 @@
     <!-- Settings -->
     <string name="change_weather_units">Change weather units</string>
     <string name="account">Account</string>
+    <string name="about">About</string>
+    <string name="title_app_version">App Version</string>
+    <string name="change_password">Change Password</string>
+    <string name="request_reset_password_desc">Request a password reset email to change your password.</string>
 
     <!-- Weather Data & Units -->
     <string name="updated_on">Updated on</string>
@@ -162,9 +174,9 @@
 
     <!-- Error messages -->
     <string name="no_weather_stations_found">"Oops! Could not find any weather stations."</string>
-    <string name="network_error">Failed to get the devices: Network Error</string>
-    <string name="server_error">Failed to get the devices: Server Error</string>
-    <string name="unknown_error">Failed: Unknown Error</string>
+    <string name="network_error">Something went wrong: Network Error</string>
+    <string name="server_error">Something went wrong: Server Error</string>
+    <string name="unknown_error">Something went wrong: Unknown Error</string>
     <string name="no_data_error_device_details">Failed to get the details of the device: No Data</string>
     <string name="name_not_found_error">Failed to get the name of the device</string>
     <string name="user_info_error">Failed to get your data. Please try again.</string>
