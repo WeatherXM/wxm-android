@@ -1,8 +1,11 @@
 package com.weatherxm.data
 
-import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionScheme
+import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme
+import androidx.security.crypto.MasterKeys
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.SettingsClient
@@ -16,12 +19,12 @@ import com.weatherxm.data.datasource.AuthDataSource
 import com.weatherxm.data.datasource.AuthDataSourceImpl
 import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSourceImpl
-import com.weatherxm.data.datasource.LocationDataSource
-import com.weatherxm.data.datasource.LocationDataSourceImpl
-import com.weatherxm.data.datasource.CredentialsDataSourceImpl
 import com.weatherxm.data.datasource.CredentialsDataSource
+import com.weatherxm.data.datasource.CredentialsDataSourceImpl
 import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
+import com.weatherxm.data.datasource.LocationDataSource
+import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.UserDataSource
 import com.weatherxm.data.datasource.UserDataSourceImpl
 import com.weatherxm.data.network.AuthService
@@ -32,8 +35,8 @@ import com.weatherxm.data.network.interceptor.AuthTokenAuthenticator
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
 import com.weatherxm.data.repository.DeviceRepository
-import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.data.repository.LocationRepository
+import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.explorer.DeviceWithResolutionJsonAdapter
 import com.weatherxm.usecases.ExplorerUseCase
@@ -51,9 +54,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
-const val RETROFIT_CLIENT = "RETROFIT_CLIENT"
-private const val PREFERENCE_AUTH_TOKEN = "PREFS_AUTH_TOKEN"
-private const val PREFERENCE_CREDENTIALS = "PREFS_CREDENTIALS"
+private const val ENCRYPTED_PREFERENCES_KEY = "ENCRYPTED_PREFERENCES_KEY"
+private const val PREFERENCES_AUTH_TOKEN = "PREFERENCES_AUTH_TOKEN"
+private const val PREFERENCES_AUTH_TOKEN_FILE = "auth_token"
+private const val PREFERENCES_CREDENTIALS = "PREFERENCES_CREDENTIALS"
+private const val PREFERENCES_CREDENTIALS_FILE = "credentials"
 private const val NETWORK_CACHE_SIZE = 50L * 1024L * 1024L // 50MB
 private const val CONNECT_TIMEOUT = 30L
 private const val READ_TIMEOUT = 30L
@@ -64,12 +69,31 @@ private val preferences = module {
         PreferenceManager.getDefaultSharedPreferences(androidContext())
     }
 
-    single<SharedPreferences>(named(PREFERENCE_AUTH_TOKEN)) {
-        androidContext().getSharedPreferences(PREFERENCE_AUTH_TOKEN, Context.MODE_PRIVATE)
+    // Encrypted SharedPreferences key
+    single<String>(named(ENCRYPTED_PREFERENCES_KEY)) {
+        MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
     }
 
-    single<SharedPreferences>(named(PREFERENCE_CREDENTIALS)) {
-        androidContext().getSharedPreferences(PREFERENCE_CREDENTIALS, Context.MODE_PRIVATE)
+    // Encrypted SharedPreferences for storing auth token
+    single<SharedPreferences>(named(PREFERENCES_AUTH_TOKEN)) {
+        EncryptedSharedPreferences.create(
+            PREFERENCES_AUTH_TOKEN_FILE,
+            get(named(ENCRYPTED_PREFERENCES_KEY)),
+            androidContext(),
+            PrefKeyEncryptionScheme.AES256_SIV,
+            PrefValueEncryptionScheme.AES256_GCM
+        )
+    }
+
+    // Encrypted SharedPreferences for storing user credentials
+    single<SharedPreferences>(named(PREFERENCES_CREDENTIALS)) {
+        EncryptedSharedPreferences.create(
+            PREFERENCES_CREDENTIALS_FILE,
+            get(named(ENCRYPTED_PREFERENCES_KEY)),
+            androidContext(),
+            PrefKeyEncryptionScheme.AES256_SIV,
+            PrefValueEncryptionScheme.AES256_GCM
+        )
     }
 }
 
@@ -91,11 +115,11 @@ private val datasources = module {
     }
 
     single<AuthTokenDataSource> {
-        AuthTokenDataSourceImpl(get(named(PREFERENCE_AUTH_TOKEN)))
+        AuthTokenDataSourceImpl(get(named(PREFERENCES_AUTH_TOKEN)))
     }
 
     single<CredentialsDataSource> {
-        CredentialsDataSourceImpl(get(named(PREFERENCE_CREDENTIALS)))
+        CredentialsDataSourceImpl(get(named(PREFERENCES_CREDENTIALS)))
     }
 }
 
@@ -161,7 +185,7 @@ private val network = module {
         retrofit.create(AuthService::class.java)
     }
 
-    single(named(RETROFIT_CLIENT)) {
+    single<Retrofit> {
         // Install HTTP cache
         val cache = Cache(androidContext().cacheDir, NETWORK_CACHE_SIZE)
 

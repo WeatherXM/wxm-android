@@ -48,7 +48,7 @@ class Navigator {
         context.startActivity(
             Intent(
                 context, HomeActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK  or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
     }
 
