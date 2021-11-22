@@ -5,6 +5,7 @@ plugins {
     id "kotlin-parcelize"
     id "com.google.gms.google-services"
     id "com.google.firebase.crashlytics"
+    id "com.google.firebase.appdistribution"
     id "com.google.firebase.firebase-perf"
 }
 
@@ -28,16 +29,12 @@ android {
         versionCode 1
         versionName "3.0.0-alpha"
 
-        // BuildConfig fields
-        buildConfigField("String", "API_URL", "\"$API_URL\"")
-        buildConfigField("String", "AUTH_URL", "\"$AUTH_URL\"")
-
         // Resource value fields
         resValue("string", "mapbox_access_token", "$MAPBOX_ACCESS_TOKEN")
     }
 
     signingConfigs {
-        release {
+        base {
             storeFile file("$SIGNING_KEYSTORE")
             storePassword "$SIGNING_KEYSTORE_PASSWORD"
             keyAlias "$SIGNING_KEY_ALIAS"
@@ -45,26 +42,59 @@ android {
         }
     }
 
-    flavorDimensions "mode"
+    flavorDimensions "mode", "server"
 
     productFlavors {
-        mock {
+        local {
             dimension "mode"
         }
         remote {
             dimension "mode"
         }
+        mock {
+            dimension "server"
+            resValue "string", "app_name", "WXM Mock"
+            buildConfigField("String", "API_URL", "\"https://api-dev.weatherxm.com\"")
+            buildConfigField("String", "AUTH_URL", "\"https://api-dev.weatherxm.com\"")
+        }
+        dev {
+            dimension "server"
+            resValue "string", "app_name", "WXM Dev"
+            buildConfigField("String", "API_URL", "\"https://api-dev.weatherxm.com\"")
+            buildConfigField("String", "AUTH_URL", "\"https://api-dev.weatherxm.com\"")
+        }
+        prod {
+            dimension "server"
+            resValue "string", "app_name", "WeatherXM"
+            buildConfigField("String", "API_URL", "\"https://api.weatherxm.com\"")
+            buildConfigField("String", "AUTH_URL", "\"https://api.weatherxm.com\"")
+        }
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.base
             minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            firebaseAppDistribution {
+                artifactType = "APK"
+                releaseNotes = "Release notes for development version"
+                serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
+                groups = "$FIREBASE_PUBLIC_TEST_GROUP"
+            }
         }
         debug {
-            minifyEnabled false // change it to true if you want to test the obfuscation on debug mode
+            applicationIdSuffix = ".debug"
+            signingConfig signingConfigs.base
+            minifyEnabled false
+            // change it to true if you want to test the obfuscation on debug mode
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            firebaseAppDistribution {
+                artifactType = "APK"
+                releaseNotes = "Release notes for development version"
+                serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
+                groups = "$FIREBASE_INTERNAL_TEST_GROUP"
+            }
         }
     }
 
@@ -75,22 +105,41 @@ android {
     // Filter out specific build variants
     variantFilter { variant ->
         def names = variant.flavors*.name
-        if (names.contains("remote") && names.contains("mock")) {
+        if (names.contains("local") && !names.contains("mock")) {
+            variant.setIgnore(true)
+        } else if (names.contains("remote") && names.contains("mock")) {
             variant.setIgnore(true)
         } else if (variant.buildType.name != "debug" && names.contains("mock")) {
             variant.setIgnore(true)
         }
     }
 
-    // Flavor-specific version name & apk file name, also delete mock files on release APK flavor
+    // Flavor-specific version name & apk file name, also
     applicationVariants.all { variant ->
-        def version = "${variant.getVersionName()}-$getGitCommitHash-${variant.buildType.name}"
+        // Base version
+        def version = "${variant.getVersionName()}-$getGitCommitHash"
+
+        // Add flavor in version, if mock or dev
+        def flavor = variant.getFlavorName().toLowerCase()
+        if (flavor.contains("mock")) {
+            version = "$version-mock"
+        } else if (flavor.contains("dev")) {
+            version = "$version-dev"
+        }
+
+        // Add build type in version
+        version = "$version-${variant.buildType.name}"
+
+        // Create app_version res string
         variant.resValue "string", "app_version", "$version"
 
+        // Proper apk file name
         variant.outputs.all { output ->
             output.versionNameOverride = version
             outputFileName = "weatherxm-${version}.apk"
         }
+
+        // Delete mock files on release APK flavor
         if (variant.buildType.name.contains("release")) {
             variant.mergeAssetsProvider.get().doLast {
                 delete(fileTree(dir: variant.mergeAssetsProvider.get().outputDir, includes: ["**/mock/*"]))

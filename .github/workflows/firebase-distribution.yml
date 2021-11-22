@@ -1,12 +1,10 @@
-# This is a basic workflow to help you get started with Actions
-
-name: Pull Request Code Analysis
-
-# Controls when the workflow will run
+name: Build & Firebase Distribution
 on:
-  pull_request
+  push:
+    branches: [ develop ]
 env:
   ORG_GRADLE_PROJECT_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+  ORG_GRADLE_PROJECT_MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
   ORG_GRADLE_PROJECT_SIGNING_KEYSTORE: ${{ secrets.SIGNING_KEYSTORE }}
   ORG_GRADLE_PROJECT_SIGNING_KEYSTORE_PASSWORD: ${{ secrets.SIGNING_KEYSTORE_PASSWORD }}
   ORG_GRADLE_PROJECT_SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
@@ -16,7 +14,7 @@ env:
   GRADLE_USER_HOME: ${GITHUB_WORKSPACE}/.gradle
   GLOBAL_GRADLE_CACHE: gradle-cache-${GITHUB_REPOSITORY}
 jobs:
-  codeanalysis:
+  debug_distribution:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,10 +26,12 @@ jobs:
         with:
           key: ${{ env.GLOBAL_GRADLE_CACHE }}
           path: ${{ env.GRADLE_USER_HOME }}
-      - name: Decode keystore
+      - name: Build && Release Debug distribution
         run: |
+          echo "${{ secrets.ENCODED_GOOGLE_SERVICES }}" | base64 -d > ./app/google-services.json
           mkdir -p publishing
-          echo "${{ secrets.ENCODED_SIGNING_KEYSTORE }}" > keystore.asc
-          gpg -d --passphrase "${{ secrets.ENCODED_SIGNING_KEYSTORE_PASSPHRASE }}" --batch keystore.asc > publishing/keystore.jks
-      - name: Detekt
-        run: ./gradlew :app:detekt
+          echo "${{ secrets.ENCODED_SIGNING_KEYSTORE }}" > debug.keystore.asc
+          gpg -d --passphrase "${{ secrets.ENCODED_SIGNING_KEYSTORE_PASSPHRASE }}" --batch debug.keystore.asc > app/debug.keystore
+          echo "${{ secrets.ENCODED_SERVICE_ACCOUNT }}" | base64 -d > ./ci-service-account.json
+          ./gradlew :app:assembleRemoteDevRelease :app:appDistributionUploadRemoteDevRelease
+          rm ./ci-service-account.json

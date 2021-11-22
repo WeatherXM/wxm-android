@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">WeatherXM</string>
-
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="hint_first_name">First Name</string>

@@ -1,18 +1,11 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
-import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.AuthDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.CredentialsDataSource
-import com.weatherxm.data.network.AuthService
-import com.weatherxm.data.network.Credentials
-import com.weatherxm.data.network.LoginBody
-import com.weatherxm.data.network.RegistrationBody
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import timber.log.Timber
 
 interface AuthRepository {
     suspend fun login(username: String, password: String): Either<Error, String>
@@ -24,7 +17,8 @@ interface AuthRepository {
         firstName: String?,
         lastName: String?
     ): Either<Error, String>
-    suspend fun resetPassword(email: String): Either<Failure,Unit>
+
+    suspend fun resetPassword(email: String): Either<Failure, Unit>
 }
 
 class AuthRepositoryImpl(

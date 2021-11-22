@@ -27,7 +27,6 @@ import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.UserDataSource
 import com.weatherxm.data.datasource.UserDataSourceImpl
-import com.weatherxm.data.network.AuthService
 import com.weatherxm.data.network.AuthTokenJsonAdapter
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthRequestInterceptor
@@ -53,6 +52,9 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
+
+const val RETROFIT_API = "RETROFIT_API"
+const val RETROFIT_AUTH = "RETROFIT_AUTH"
 
 private const val ENCRYPTED_PREFERENCES_KEY = "ENCRYPTED_PREFERENCES_KEY"
 private const val PREFERENCES_AUTH_TOKEN = "PREFERENCES_AUTH_TOKEN"
@@ -163,7 +165,7 @@ private val network = module {
         MoshiConverterFactory.create(Moshi.Builder().build()).asLenient()
     }
 
-    single<AuthService> {
+    single<Retrofit>(named(RETROFIT_AUTH)) {
         // Create client
         val client: OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(get() as HttpLoggingInterceptor)
@@ -174,18 +176,15 @@ private val network = module {
             .build()
 
         // Create retrofit instance
-        val retrofit: Retrofit = Retrofit.Builder()
+        Retrofit.Builder()
             .baseUrl(BuildConfig.AUTH_URL)
             .addConverterFactory(get() as MoshiConverterFactory)
             .addCallAdapterFactory(NetworkResponseAdapterFactory())
             .client(client)
             .build()
-
-        // Create service
-        retrofit.create(AuthService::class.java)
     }
 
-    single<Retrofit> {
+    single<Retrofit>(named(RETROFIT_API)) {
         // Install HTTP cache
         val cache = Cache(androidContext().cacheDir, NETWORK_CACHE_SIZE)
 
