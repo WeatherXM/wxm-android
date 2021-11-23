@@ -33,5 +33,5 @@ jobs:
           echo "${{ secrets.ENCODED_SIGNING_KEYSTORE }}" > debug.keystore.asc
           gpg -d --passphrase "${{ secrets.ENCODED_SIGNING_KEYSTORE_PASSPHRASE }}" --batch debug.keystore.asc > app/debug.keystore
           echo "${{ secrets.ENCODED_SERVICE_ACCOUNT }}" | base64 -d > ./ci-service-account.json
-          ./gradlew :app:assembleRemoteDevRelease :app:appDistributionUploadRemoteDevRelease
+          ./gradlew :app:assembleRemoteDevDebug :app:appDistributionUploadRemoteDevDebug
           rm ./ci-service-account.json
