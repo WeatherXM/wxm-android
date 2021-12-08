@@ -31,7 +31,8 @@ class ApiRequestInterceptor : Interceptor, KoinComponent {
         // Original request
         val request: Request = chain.request()
         if (request.headers[NO_AUTH_HEADER_KEY] != null && request.headers[NO_AUTH_HEADER_KEY].equals(
-                NO_AUTH_HEADER_VALUE)) {
+                NO_AUTH_HEADER_VALUE)
+        ) {
             return chain.proceed(request)
         }
 

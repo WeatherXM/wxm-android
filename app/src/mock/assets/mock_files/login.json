@@ -1,4 +1,4 @@
 {
-  "token": "customToken",
-  "refreshToken": "customRefreshToken"
+    "token": "customToken",
+    "refreshToken": "customRefreshToken"
 }

@@ -7,7 +7,7 @@ import com.weatherxm.databinding.ListItemHourlyWeatherBinding
 import org.koin.core.component.KoinComponent
 
 class HourlyAdapter(private val hourlyCards: Array<HourlyCard>) :
-    RecyclerView.Adapter<HourlyAdapter.HourlyViewHolder>(),  KoinComponent {
+    RecyclerView.Adapter<HourlyAdapter.HourlyViewHolder>(), KoinComponent {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyViewHolder {
         val binding =

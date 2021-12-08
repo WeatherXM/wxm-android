@@ -41,7 +41,7 @@
                 android:padding="@dimen/padding_normal"
                 android:text="@string/current_weather"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/updatedOn"

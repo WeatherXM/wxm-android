@@ -17,8 +17,10 @@
         <!-- Style overrides -->
         <item name="materialButtonStyle">@style/Widget.WeatherXM.Button</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button</item>
-        <item name="buttonBarNeutralButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button.Subtle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button.Subtle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button.Subtle
+        </item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button.Subtle
+        </item>
     </style>
 
     <style name="Theme.WeatherXM.Splash" parent="@style/Theme.WeatherXM.NoActionBar">
@@ -43,7 +45,8 @@
         <item name="toolbarStyle">@style/Widget.WeatherXM.ToolBar</item>
         <item name="appBarLayoutStyle">@style/Widget.WeatherXM.AppBar</item>
         <item name="progressBarStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
-        <item name="linearProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
+        <item name="linearProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal
+        </item>
     </style>
 
     <style name="Theme.WeatherXM.NoActionBar" parent="@style/Theme.WeatherXM">

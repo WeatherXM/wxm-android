@@ -14,7 +14,6 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.util.ResourcesHelper
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.android.ext.android.inject
-import org.koin.core.component.inject
 import timber.log.Timber
 
 class ProfileFragment : Fragment() {
@@ -80,7 +79,7 @@ class ProfileFragment : Fragment() {
             binding.nameOrEmail.visibility = View.GONE
         }
 
-        if(!user?.wallet?.address.isNullOrEmpty()) {
+        if (!user?.wallet?.address.isNullOrEmpty()) {
             binding.connectWallet.text = resHelper.getString(R.string.title_change_wallet)
         } else {
             binding.connectWallet.text = resHelper.getString(R.string.title_connect_wallet)

@@ -2,8 +2,8 @@ package com.weatherxm.app
 
 import android.app.Application
 import com.weatherxm.BuildConfig
-import com.weatherxm.util.CrashReportingTree
 import com.weatherxm.data.modules
+import com.weatherxm.util.CrashReportingTree
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin

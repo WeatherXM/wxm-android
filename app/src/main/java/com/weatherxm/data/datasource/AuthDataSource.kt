@@ -7,9 +7,9 @@ import com.weatherxm.data.map
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.AuthService
 import com.weatherxm.data.network.Credentials
-import com.weatherxm.data.network.ResetPasswordBody
 import com.weatherxm.data.network.LoginBody
 import com.weatherxm.data.network.RegistrationBody
+import com.weatherxm.data.network.ResetPasswordBody
 import timber.log.Timber
 
 interface AuthDataSource {

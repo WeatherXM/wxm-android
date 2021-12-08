@@ -90,10 +90,10 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
 
         override fun areContentsTheSame(oldItem: Device, newItem: Device): Boolean {
             return oldItem.name == newItem.name &&
-                    oldItem.timeseries?.hourlyIcon == newItem.timeseries?.hourlyIcon &&
-                    oldItem.timeseries?.hourlyTemperature == newItem.timeseries?.hourlyTemperature &&
-                    oldItem.timeseries?.timestamp == newItem.timeseries?.timestamp &&
-                    oldItem.attributes?.isActive == newItem.attributes?.isActive
+                oldItem.timeseries?.hourlyIcon == newItem.timeseries?.hourlyIcon &&
+                oldItem.timeseries?.hourlyTemperature == newItem.timeseries?.hourlyTemperature &&
+                oldItem.timeseries?.timestamp == newItem.timeseries?.timestamp &&
+                oldItem.attributes?.isActive == newItem.attributes?.isActive
         }
     }
 }

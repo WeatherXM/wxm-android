@@ -1,10 +1,10 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
-import org.koin.core.component.KoinComponent
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.DeviceDataSource
+import org.koin.core.component.KoinComponent
 
 class DeviceRepository(
     private val deviceDataSource: DeviceDataSource

@@ -1,11 +1,18 @@
 # Detekt configuration override
 
 complexity:
-  LongMethod:
-    threshold: 80
-  TooManyFunctions:
-    thresholdInFiles: 15
-    thresholdInClasses: 15
-    thresholdInInterfaces: 15
-    thresholdInObjects: 15
-    thresholdInEnums: 15
+    LongMethod:
+        threshold: 80
+    TooManyFunctions:
+        thresholdInFiles: 15
+        thresholdInClasses: 15
+        thresholdInInterfaces: 15
+        thresholdInObjects: 15
+        thresholdInEnums: 15
+
+formatting:
+    MaximumLineLength:
+        maxLineLength: 100
+
+
+

@@ -6,9 +6,9 @@ import com.google.gson.JsonElement
 import com.mapbox.geojson.Point
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.weatherxm.R
+import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
-import com.weatherxm.data.Device
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.ui.explorer.DeviceWithResolution
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS

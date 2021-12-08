@@ -48,7 +48,7 @@ class Navigator {
         context.startActivity(
             Intent(
                 context, HomeActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK  or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
     }
 
@@ -121,7 +121,7 @@ class Navigator {
         context.startActivity(
             Intent(
                 context, SplashActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK  or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
     }
 }

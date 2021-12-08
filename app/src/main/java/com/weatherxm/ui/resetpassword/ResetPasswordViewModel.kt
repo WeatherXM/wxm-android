@@ -1,10 +1,7 @@
 package com.weatherxm.ui.resetpassword
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import arrow.core.Either
 import com.weatherxm.R
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource

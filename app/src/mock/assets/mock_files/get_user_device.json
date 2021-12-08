@@ -1,96 +1,96 @@
 {
-  "id": "76d13810-10e9-11ec-877e-63751227e9ec",
-  "name": "Hania DSH",
-  "label": null,
-  "location": {
-    "lat": 35.51622463589852,
-    "lon": 24.01903666307378
-  },
-  "attributes": {
-    "isActive": true,
-    "lastActiveAt": 1636668344623,
-    "hex3": {
-      "index": "833f72fffffffff",
-      "polygon": [
-        {
-          "lat": 35.62983463943738,
-          "lon": 23.372801364962505
-        },
-        {
-          "lat": 34.958641140481404,
-          "lon": 23.339733257269025
-        },
-        {
-          "lat": 34.59685782123658,
-          "lon": 24.035997744251496
-        },
-        {
-          "lat": 34.903320885355384,
-          "lon": 24.76919455347358
-        },
-        {
-          "lat": 35.574007582813174,
-          "lon": 24.81200499077942
-        },
-        {
-          "lat": 35.938786456658356,
-          "lon": 24.11189955457401
-        }
-      ],
-      "center": {
-        "lat": 35.26881139814333,
-        "lon": 24.073689952216043
-      }
+    "id": "76d13810-10e9-11ec-877e-63751227e9ec",
+    "name": "Hania DSH",
+    "label": null,
+    "location": {
+        "lat": 35.51622463589852,
+        "lon": 24.01903666307378
     },
-    "hex7": {
-      "index": "873f728d0ffffff",
-      "polygon": [
-        {
-          "lat": 35.52482636074315,
-          "lon": 24.014679947948405
+    "attributes": {
+        "isActive": true,
+        "lastActiveAt": 1636668344623,
+        "hex3": {
+            "index": "833f72fffffffff",
+            "polygon": [
+                {
+                    "lat": 35.62983463943738,
+                    "lon": 23.372801364962505
+                },
+                {
+                    "lat": 34.958641140481404,
+                    "lon": 23.339733257269025
+                },
+                {
+                    "lat": 34.59685782123658,
+                    "lon": 24.035997744251496
+                },
+                {
+                    "lat": 34.903320885355384,
+                    "lon": 24.76919455347358
+                },
+                {
+                    "lat": 35.574007582813174,
+                    "lon": 24.81200499077942
+                },
+                {
+                    "lat": 35.938786456658356,
+                    "lon": 24.11189955457401
+                }
+            ],
+            "center": {
+                "lat": 35.26881139814333,
+                "lon": 24.073689952216043
+            }
         },
-        {
-          "lat": 35.51114716956354,
-          "lon": 24.01391178034676
-        },
-        {
-          "lat": 35.50374631403231,
-          "lon": 24.02820018964633
-        },
-        {
-          "lat": 35.51002341064811,
-          "lon": 24.043258382501087
-        },
-        {
-          "lat": 35.52370239640629,
-          "lon": 24.044030629840638
-        },
-        {
-          "lat": 35.53110449138368,
-          "lon": 24.02974060478422
+        "hex7": {
+            "index": "873f728d0ffffff",
+            "polygon": [
+                {
+                    "lat": 35.52482636074315,
+                    "lon": 24.014679947948405
+                },
+                {
+                    "lat": 35.51114716956354,
+                    "lon": 24.01391178034676
+                },
+                {
+                    "lat": 35.50374631403231,
+                    "lon": 24.02820018964633
+                },
+                {
+                    "lat": 35.51002341064811,
+                    "lon": 24.043258382501087
+                },
+                {
+                    "lat": 35.52370239640629,
+                    "lon": 24.044030629840638
+                },
+                {
+                    "lat": 35.53110449138368,
+                    "lon": 24.02974060478422
+                }
+            ],
+            "center": {
+                "lat": 35.517425828183185,
+                "lon": 24.028970289786937
+            }
         }
-      ],
-      "center": {
-        "lat": 35.517425828183185,
-        "lon": 24.028970289786937
-      }
-    }
-  },
-  "timeseries": {
-    "timestamp": 1636668000000,
-    "hourly_precip_intensity": 0.03,
-    "hourly_temperature": 15.7,
-    "hourly_wind_direction": 54,
-    "hourly_humidity": 81,
-    "hourly_wind_speed": 11.5,
-    "hourly_icon": "partly-cloudy-night",
-    "hourly_dew_point": 12.5,
-    "hourly_precip_probability": 1,
-    "hourly_uv_index": 0,
-    "hourly_pressure": 1019.9,
-    "hourly_cloud_cover": 85,
-    "hourly_wind_gust": 17.4,
-    "hourly_precip_type": "rain"
-  },
-  "address": "Chania, GR"
+    },
+    "timeseries": {
+        "timestamp": 1636668000000,
+        "hourly_precip_intensity": 0.03,
+        "hourly_temperature": 15.7,
+        "hourly_wind_direction": 54,
+        "hourly_humidity": 81,
+        "hourly_wind_speed": 11.5,
+        "hourly_icon": "partly-cloudy-night",
+        "hourly_dew_point": 12.5,
+        "hourly_precip_probability": 1,
+        "hourly_uv_index": 0,
+        "hourly_pressure": 1019.9,
+        "hourly_cloud_cover": 85,
+        "hourly_wind_gust": 17.4,
+        "hourly_precip_type": "rain"
+    },
+    "address": "Chania, GR"
 }

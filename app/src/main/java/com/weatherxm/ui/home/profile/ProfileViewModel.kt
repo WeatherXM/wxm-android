@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.User
-import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.CoroutineScope

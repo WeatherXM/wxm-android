@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weatherxm.R
-import com.weatherxm.data.Failure
-import com.weatherxm.data.ServerError
 import com.weatherxm.data.Device
+import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
+import com.weatherxm.data.ServerError
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.CoroutineScope
