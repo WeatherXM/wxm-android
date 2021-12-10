@@ -14,5 +14,8 @@ formatting:
     MaximumLineLength:
         maxLineLength: 100
 
-
-
+style:
+    MandatoryBracesIfStatements:
+        active: true
+    MandatoryBracesLoops:
+        active: true
