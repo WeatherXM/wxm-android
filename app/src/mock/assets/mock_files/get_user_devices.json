@@ -190,5 +190,197 @@
       "hourly_precip_type": "rain"
     },
     "address": "Chania, GR"
+  },
+  {
+    "id": "702d3cc0-10e9-11ec-877e-63751227e9ec",
+    "name": "Blah blah blah",
+    "label": null,
+    "location": {
+      "lat": 37.97521056577561,
+      "lon": 23.726247807017884
+    },
+    "attributes": {
+      "isActive": true,
+      "lastActiveAt": 1636668104158,
+      "hex3": {
+        "index": "831edafffffffff",
+        "polygon": [
+          {
+            "lat": 38.644236094151005,
+            "lon": 22.784148869958848
+          },
+          {
+            "lat": 37.983542598121375,
+            "lon": 22.754162161175188
+          },
+          {
+            "lat": 37.6303425743379,
+            "lon": 23.47478087300285
+          },
+          {
+            "lat": 37.93511272705379,
+            "lon": 24.22974113863726
+          },
+          {
+            "lat": 38.5954640496184,
+            "lon": 24.270130249021037
+          },
+          {
+            "lat": 38.951438520683396,
+            "lon": 23.545178032093393
+          }
+        ],
+        "center": {
+          "lat": 38.29225710202074,
+          "lon": 23.50973159680952
+        }
+      },
+      "hex7": {
+        "index": "871eda743ffffff",
+        "polygon": [
+          {
+            "lat": 37.98828968731341,
+            "lon": 23.70484184504139
+          },
+          {
+            "lat": 37.97478437055734,
+            "lon": 23.704098041651715
+          },
+          {
+            "lat": 37.9675091738512,
+            "lon": 23.718782971283527
+          },
+          {
+            "lat": 37.97373812382335,
+            "lon": 23.734213460493823
+          },
+          {
+            "lat": 37.98724327569994,
+            "lon": 23.73496156456418
+          },
+          {
+            "lat": 37.99451964291557,
+            "lon": 23.72027487893645
+          }
+        ],
+        "center": {
+          "lat": 37.98101496243056,
+          "lon": 23.719528818303196
+        }
+      }
+    },
+    "timeseries": {
+      "timestamp": 1636668000000,
+      "hourly_precip_intensity": 0,
+      "hourly_temperature": 10.8,
+      "hourly_wind_direction": 355,
+      "hourly_humidity": 74,
+      "hourly_wind_speed": 13.7,
+      "hourly_icon": "partly-cloudy-night",
+      "hourly_dew_point": 6.3,
+      "hourly_precip_probability": 0,
+      "hourly_uv_index": 0,
+      "hourly_pressure": 1021.6,
+      "hourly_cloud_cover": 59,
+      "hourly_wind_gust": 20.4,
+      "hourly_precip_type": "rain"
+    },
+    "address": "Athens, GR"
+  },
+  {
+    "id": "702d3cc0-10e9-11ec-877e-63751227e9ec",
+    "name": "Potentially very very long name zavarakatranemia",
+    "label": null,
+    "location": {
+      "lat": 37.97521056577561,
+      "lon": 23.726247807017884
+    },
+    "attributes": {
+      "isActive": true,
+      "lastActiveAt": 1636668104158,
+      "hex3": {
+        "index": "831edafffffffff",
+        "polygon": [
+          {
+            "lat": 38.644236094151005,
+            "lon": 22.784148869958848
+          },
+          {
+            "lat": 37.983542598121375,
+            "lon": 22.754162161175188
+          },
+          {
+            "lat": 37.6303425743379,
+            "lon": 23.47478087300285
+          },
+          {
+            "lat": 37.93511272705379,
+            "lon": 24.22974113863726
+          },
+          {
+            "lat": 38.5954640496184,
+            "lon": 24.270130249021037
+          },
+          {
+            "lat": 38.951438520683396,
+            "lon": 23.545178032093393
+          }
+        ],
+        "center": {
+          "lat": 38.29225710202074,
+          "lon": 23.50973159680952
+        }
+      },
+      "hex7": {
+        "index": "871eda743ffffff",
+        "polygon": [
+          {
+            "lat": 37.98828968731341,
+            "lon": 23.70484184504139
+          },
+          {
+            "lat": 37.97478437055734,
+            "lon": 23.704098041651715
+          },
+          {
+            "lat": 37.9675091738512,
+            "lon": 23.718782971283527
+          },
+          {
+            "lat": 37.97373812382335,
+            "lon": 23.734213460493823
+          },
+          {
+            "lat": 37.98724327569994,
+            "lon": 23.73496156456418
+          },
+          {
+            "lat": 37.99451964291557,
+            "lon": 23.72027487893645
+          }
+        ],
+        "center": {
+          "lat": 37.98101496243056,
+          "lon": 23.719528818303196
+        }
+      }
+    },
+    "timeseries": {
+      "timestamp": 1636668000000,
+      "hourly_precip_intensity": 0,
+      "hourly_temperature": 10.8,
+      "hourly_wind_direction": 355,
+      "hourly_humidity": 74,
+      "hourly_wind_speed": 13.7,
+      "hourly_icon": "partly-cloudy-night",
+      "hourly_dew_point": 6.3,
+      "hourly_precip_probability": 0,
+      "hourly_uv_index": 0,
+      "hourly_pressure": 1021.6,
+      "hourly_cloud_cover": 59,
+      "hourly_wind_gust": 20.4,
+      "hourly_precip_type": "rain"
+    },
+    "address": "Athens, GR"
   }
 ]

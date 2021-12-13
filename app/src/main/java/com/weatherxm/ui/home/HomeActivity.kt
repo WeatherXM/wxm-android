@@ -12,8 +12,8 @@ import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.explorer.ExplorerViewModel
-import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
+import dev.chrisbanes.insetter.applyInsetter
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -50,5 +50,14 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         })
 
         binding.navView.setupWithNavController(findNavController(R.id.nav_host_fragment))
+
+        // Disable BottomNavigationView bottom padding, added by default, and add margin
+        // https://github.com/material-components/material-components-android/commit/276bec8385ec877548fc84994c0a016de2428567
+        binding.navView.applyInsetter {
+            type(navigationBars = true) {
+                padding(horizontal = false, vertical = false)
+                margin(bottom = true)
+            }
+        }
     }
 }
