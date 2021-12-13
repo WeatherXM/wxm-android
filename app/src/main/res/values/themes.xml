@@ -255,6 +255,11 @@
         <item name="chipBackgroundColor">@color/token_chip_background_list</item>
     </style>
 
+    <style name="Widget.WeatherXM.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">@drawable/bottom_navigation_shape</item>
+        <item name="labelVisibilityMode">unlabeled</item>
+    </style>
+
     <style name="TextAppearance.WeatherXM.Paragraph.Title" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="android:textColor">?colorOnSurface</item>
         <item name="fontFamily">sans-serif-medium</item>
