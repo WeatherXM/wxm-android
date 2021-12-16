@@ -78,7 +78,9 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
                         )
                     }
                 }.map {
-                    isAddressSaved.postValue(Resource.success(resourcesHelper.getString(R.string.address_saved)))
+                    isAddressSaved.postValue(
+                        Resource.success(resourcesHelper.getString(R.string.address_saved))
+                    )
                 }
         }
     }

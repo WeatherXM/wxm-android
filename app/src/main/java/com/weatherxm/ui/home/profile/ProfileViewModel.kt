@@ -35,7 +35,9 @@ class ProfileViewModel : ViewModel(), KoinComponent {
                 }
                 .mapLeft {
                     Timber.d("Got error: $it")
-                    user.postValue(Resource.error(resourcesHelper.getString(R.string.user_info_error)))
+                    user.postValue(
+                        Resource.error(resourcesHelper.getString(R.string.user_info_error))
+                    )
                 }
         }
     }

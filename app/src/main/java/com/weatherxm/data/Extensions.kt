@@ -36,7 +36,9 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
                     HTTP_UNAUTHORIZED -> Either.Left(ServerError.Unauthorized)
                     HTTP_FORBIDDEN -> Either.Left(ServerError.Forbidden)
                     HTTP_NOT_FOUND -> Either.Left(ServerError.NotFound)
-                    HTTP_INTERNAL_ERROR -> Either.Left(ServerError.InternalError(this.body?.message))
+                    HTTP_INTERNAL_ERROR -> {
+                        Either.Left(ServerError.InternalError(this.body?.message))
+                    }
                     HTTP_UNAVAILABLE -> Either.Left(ServerError.Unavailable)
                     HTTP_GATEWAY_TIMEOUT -> Either.Left(ServerError.Timeout)
                     HTTP_BAD_REQUEST -> Either.Left(ServerError.BadRequest)
