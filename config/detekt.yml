@@ -10,12 +10,10 @@ complexity:
         thresholdInObjects: 15
         thresholdInEnums: 15
 
-formatting:
-    MaximumLineLength:
-        maxLineLength: 100
-
 style:
     MandatoryBracesIfStatements:
         active: true
     MandatoryBracesLoops:
         active: true
+    MaxLineLength:
+        maxLineLength: 100
