@@ -14,7 +14,7 @@
     <color name="black_translucent">#88000000</color>
     <color name="white_translucent">#DDFFFFFF</color>
 
-    <color name="colorPrimary">#116295</color>
+    <color name="colorPrimary">#1B75BA</color>
     <color name="colorPrimaryVariant">#003b77</color>
     <color name="colorOnPrimary">@color/white</color>
 
@@ -29,7 +29,7 @@
 
     <color name="status_bar_color">#80003b77</color>
 
-    <color name="ic_launcher_background">@color/colorPrimary</color>
+    <color name="ic_launcher_background">#1B75BA</color>
 
     <color name="subtitle">@color/light_grey</color>
     <color name="hexFillColor">@color/blue</color>
