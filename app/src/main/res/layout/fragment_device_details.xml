@@ -132,6 +132,7 @@
                                 android:text="@string/wind"
                                 style="@style/TextAppearance.WeatherXM.WeatherDataOnCard.Subtitle" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"

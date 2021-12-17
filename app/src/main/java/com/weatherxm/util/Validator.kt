@@ -16,10 +16,9 @@ class Validator {
     }
 
     fun validateEthAddress(address: String?): Boolean {
-        if(address.isNullOrEmpty() || address.length < MINIMUM_ADDRESS_LENGTH)
-             return false
-
+        if (address.isNullOrEmpty() || address.length < MINIMUM_ADDRESS_LENGTH) {
+            return false
+        }
         return address.matches(Regex(REGEX_ETH_ADDRESS))
     }
-
 }

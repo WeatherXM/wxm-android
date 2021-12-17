@@ -5,8 +5,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -17,7 +15,6 @@ import com.weatherxm.util.onTextChanged
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
-import timber.log.Timber
 
 class ResetPasswordActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityResetPasswordBinding

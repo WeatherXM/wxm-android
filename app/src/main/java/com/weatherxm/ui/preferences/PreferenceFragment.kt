@@ -25,21 +25,25 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
             result
                 .mapLeft {
                     Timber.d("Not logged in. Hide account preferences.")
-                    val accountCategory: PreferenceCategory? = findPreference(resHelper.getString(R.string.account))
+                    val accountCategory: PreferenceCategory? =
+                        findPreference(resHelper.getString(R.string.account))
                     accountCategory?.isVisible = false
                 }
                 .map {
                     Timber.d("Logged in. Handle button clicks")
-                    val logoutButton: Preference? = findPreference(resHelper.getString(R.string.action_logout))
-                    val resetPassButton: Preference? = findPreference(resHelper.getString(R.string.change_password))
+                    val logoutButton: Preference? =
+                        findPreference(resHelper.getString(R.string.action_logout))
+                    val resetPassButton: Preference? =
+                        findPreference(resHelper.getString(R.string.change_password))
                     logoutButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                         showLogoutDialog()
                         true
                     }
-                    resetPassButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        navigator.showResetPassword(this)
-                        true
-                    }
+                    resetPassButton?.onPreferenceClickListener =
+                        Preference.OnPreferenceClickListener {
+                            navigator.showResetPassword(this)
+                            true
+                        }
                 }
         }
     }

@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.mapbox.geojson.Point
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.weatherxm.R
-import com.weatherxm.data.Failure
 import com.weatherxm.data.Device
+import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.data.ServerError
 import com.weatherxm.usecases.ExplorerUseCase

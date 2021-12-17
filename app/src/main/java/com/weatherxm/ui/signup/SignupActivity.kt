@@ -99,7 +99,7 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
                 binding.username.isEnabled = true
                 binding.password.isEnabled = true
                 binding.loading.visibility = View.INVISIBLE
-                showError("${resourcesHelper.getString(R.string.signup_failed)}. ${result.message}.")
+                showError("${resourcesHelper.getString(R.string.signup_failed)}. ${result.message}")
             }
             Status.LOADING -> {
                 binding.firstName.isEnabled = false
@@ -112,7 +112,7 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
     }
 
     private fun showError(message: String) {
-        if (snackbar?.isShown == true) {
+        if (snackbar?.isShown==true) {
             snackbar?.dismiss()
         }
         snackbar = Snackbar.make(findViewById(R.id.root), message, Snackbar.LENGTH_LONG)

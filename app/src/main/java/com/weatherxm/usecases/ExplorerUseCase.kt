@@ -6,9 +6,9 @@ import com.google.gson.JsonElement
 import com.mapbox.geojson.Point
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.weatherxm.R
+import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
-import com.weatherxm.data.Device
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.ui.explorer.DeviceWithResolution
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
@@ -22,7 +22,10 @@ import timber.log.Timber
 
 interface ExplorerUseCase {
     fun polygonPointsToLatLng(pointsOfPolygon: Array<Location>): List<MutableList<Point>>
-    suspend fun getPointsFromPublicDevices(zoom: Double): Either<Failure, List<PolygonAnnotationOptions>>
+    suspend fun getPointsFromPublicDevices(
+        zoom: Double
+    ): Either<Failure, List<PolygonAnnotationOptions>>
+
     fun getCenterOfHex3(deviceWithResolution: DeviceWithResolution?): Point?
     fun deviceWithResToJson(device: Device, resolution: Int): JsonElement
     suspend fun saveDevicesPoints(devices: List<Device>)
@@ -58,7 +61,9 @@ class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
 
         Send the List of points back so we can show them on the explorer
     */
-    override suspend fun getPointsFromPublicDevices(zoom: Double): Either<Failure, List<PolygonAnnotationOptions>> {
+    override suspend fun getPointsFromPublicDevices(
+        zoom: Double
+    ): Either<Failure, List<PolygonAnnotationOptions>> {
         val pointsToReturn: MutableList<PolygonAnnotationOptions>
 
         if (zoom <= ZOOM_LEVEL_CHANGE_HEX) {
@@ -101,7 +106,7 @@ class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
         }
 
         devices.forEach { device ->
-            if (device.attributes?.hex3?.polygon != null && !isHex3Used(device)) {
+            if (device.attributes?.hex3?.polygon!=null && !isHex3Used(device)) {
                 val polygonAnnotationOptions: PolygonAnnotationOptions = PolygonAnnotationOptions()
                     .withFillColor(resourcesHelper.getColor(R.color.hexFillColor))
                     .withFillOpacity(FILL_OPACITY_HEXAGONS)
@@ -113,7 +118,7 @@ class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
                 pointsHex3.add(polygonAnnotationOptions)
             }
 
-            if (device.attributes?.hex7?.polygon != null) {
+            if (device.attributes?.hex7?.polygon!=null) {
                 val polygonAnnotationOptions: PolygonAnnotationOptions = PolygonAnnotationOptions()
                     .withFillColor(resourcesHelper.getColor(R.color.hexFillColor))
                     .withFillOpacity(FILL_OPACITY_HEXAGONS)

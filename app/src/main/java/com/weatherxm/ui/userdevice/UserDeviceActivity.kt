@@ -43,8 +43,8 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent {
     }
 
     private fun updateHourlyUI() {
-       // val adapter = HourlyAdapter(hourlyCardsData)
-       // binding.recycler.adapter = adapter
+        // val adapter = HourlyAdapter(hourlyCardsData)
+        // binding.recycler.adapter = adapter
     }
 
     private fun updateCurrentWeatherUI(weather: Timeseries?) {

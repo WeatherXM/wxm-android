@@ -7,7 +7,7 @@ import androidx.annotation.StringRes
 import androidx.core.content.res.ResourcesCompat
 import org.koin.core.component.KoinComponent
 
-class ResourcesHelper (private val resources: Resources) : KoinComponent {
+class ResourcesHelper(private val resources: Resources) : KoinComponent {
 
     @ColorInt
     fun getColor(@ColorRes colorResId: Int): Int {

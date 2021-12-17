@@ -43,8 +43,8 @@ class ExplorerMapFragment : BaseMapFragment(), BaseMapFragment.MapListener {
                     onPolygonPointsUpdated(resource.data?.polygonPoints)
                     binding.mapView.visibility = View.VISIBLE
                 }
-                Status.ERROR -> { }
-                Status.LOADING -> { }
+                Status.ERROR -> {}
+                Status.LOADING -> {}
             }
         })
 

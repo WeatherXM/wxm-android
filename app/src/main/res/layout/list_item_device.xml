@@ -95,7 +95,7 @@
             tools:lottie_rawRes="@raw/anim_weather_clear_day"
             app:layout_constraintEnd_toStartOf="@id/temperature"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/temperature"

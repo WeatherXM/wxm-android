@@ -1,194 +1,194 @@
 [
-  {
-    "id": "702d3cc0-10e9-11ec-877e-63751227e9ec",
-    "name": "Athens DSH",
-    "label": null,
-    "location": {
-      "lat": 37.97521056577561,
-      "lon": 23.726247807017884
+    {
+        "id": "702d3cc0-10e9-11ec-877e-63751227e9ec",
+        "name": "Athens DSH",
+        "label": null,
+        "location": {
+            "lat": 37.97521056577561,
+            "lon": 23.726247807017884
+        },
+        "attributes": {
+            "isActive": true,
+            "lastActiveAt": 1636668104158,
+            "hex3": {
+                "index": "831edafffffffff",
+                "polygon": [
+                    {
+                        "lat": 38.644236094151005,
+                        "lon": 22.784148869958848
+                    },
+                    {
+                        "lat": 37.983542598121375,
+                        "lon": 22.754162161175188
+                    },
+                    {
+                        "lat": 37.6303425743379,
+                        "lon": 23.47478087300285
+                    },
+                    {
+                        "lat": 37.93511272705379,
+                        "lon": 24.22974113863726
+                    },
+                    {
+                        "lat": 38.5954640496184,
+                        "lon": 24.270130249021037
+                    },
+                    {
+                        "lat": 38.951438520683396,
+                        "lon": 23.545178032093393
+                    }
+                ],
+                "center": {
+                    "lat": 38.29225710202074,
+                    "lon": 23.50973159680952
+                }
+            },
+            "hex7": {
+                "index": "871eda743ffffff",
+                "polygon": [
+                    {
+                        "lat": 37.98828968731341,
+                        "lon": 23.70484184504139
+                    },
+                    {
+                        "lat": 37.97478437055734,
+                        "lon": 23.704098041651715
+                    },
+                    {
+                        "lat": 37.9675091738512,
+                        "lon": 23.718782971283527
+                    },
+                    {
+                        "lat": 37.97373812382335,
+                        "lon": 23.734213460493823
+                    },
+                    {
+                        "lat": 37.98724327569994,
+                        "lon": 23.73496156456418
+                    },
+                    {
+                        "lat": 37.99451964291557,
+                        "lon": 23.72027487893645
+                    }
+                ],
+                "center": {
+                    "lat": 37.98101496243056,
+                    "lon": 23.719528818303196
+                }
+            }
+        },
+        "timeseries": {
+            "timestamp": 1636668000000,
+            "hourly_precip_intensity": 0,
+            "hourly_temperature": 10.8,
+            "hourly_wind_direction": 355,
+            "hourly_humidity": 74,
+            "hourly_wind_speed": 13.7,
+            "hourly_icon": "partly-cloudy-night",
+            "hourly_dew_point": 6.3,
+            "hourly_precip_probability": 0,
+            "hourly_uv_index": 0,
+            "hourly_pressure": 1021.6,
+            "hourly_cloud_cover": 59,
+            "hourly_wind_gust": 20.4,
+            "hourly_precip_type": "rain"
+        },
+        "address": "Athens, GR"
     },
-    "attributes": {
-      "isActive": true,
-      "lastActiveAt": 1636668104158,
-      "hex3": {
-        "index": "831edafffffffff",
-        "polygon": [
-          {
-            "lat": 38.644236094151005,
-            "lon": 22.784148869958848
-          },
-          {
-            "lat": 37.983542598121375,
-            "lon": 22.754162161175188
-          },
-          {
-            "lat": 37.6303425743379,
-            "lon": 23.47478087300285
-          },
-          {
-            "lat": 37.93511272705379,
-            "lon": 24.22974113863726
-          },
-          {
-            "lat": 38.5954640496184,
-            "lon": 24.270130249021037
-          },
-          {
-            "lat": 38.951438520683396,
-            "lon": 23.545178032093393
-          }
-        ],
-        "center": {
-          "lat": 38.29225710202074,
-          "lon": 23.50973159680952
-        }
-      },
-      "hex7": {
-        "index": "871eda743ffffff",
-        "polygon": [
-          {
-            "lat": 37.98828968731341,
-            "lon": 23.70484184504139
-          },
-          {
-            "lat": 37.97478437055734,
-            "lon": 23.704098041651715
-          },
-          {
-            "lat": 37.9675091738512,
-            "lon": 23.718782971283527
-          },
-          {
-            "lat": 37.97373812382335,
-            "lon": 23.734213460493823
-          },
-          {
-            "lat": 37.98724327569994,
-            "lon": 23.73496156456418
-          },
-          {
-            "lat": 37.99451964291557,
-            "lon": 23.72027487893645
-          }
-        ],
-        "center": {
-          "lat": 37.98101496243056,
-          "lon": 23.719528818303196
-        }
-      }
-    },
-    "timeseries": {
-      "timestamp": 1636668000000,
-      "hourly_precip_intensity": 0,
-      "hourly_temperature": 10.8,
-      "hourly_wind_direction": 355,
-      "hourly_humidity": 74,
-      "hourly_wind_speed": 13.7,
-      "hourly_icon": "partly-cloudy-night",
-      "hourly_dew_point": 6.3,
-      "hourly_precip_probability": 0,
-      "hourly_uv_index": 0,
-      "hourly_pressure": 1021.6,
-      "hourly_cloud_cover": 59,
-      "hourly_wind_gust": 20.4,
-      "hourly_precip_type": "rain"
-    },
-    "address": "Athens, GR"
-  },
-  {
-    "id": "76d13810-10e9-11ec-877e-63751227e9ec",
-    "name": "Hania DSH",
-    "label": null,
-    "location": {
-      "lat": 35.51622463589852,
-      "lon": 24.01903666307378
-    },
-    "attributes": {
-      "isActive": true,
-      "lastActiveAt": 1636668344623,
-      "hex3": {
-        "index": "833f72fffffffff",
-        "polygon": [
-          {
-            "lat": 35.62983463943738,
-            "lon": 23.372801364962505
-          },
-          {
-            "lat": 34.958641140481404,
-            "lon": 23.339733257269025
-          },
-          {
-            "lat": 34.59685782123658,
-            "lon": 24.035997744251496
-          },
-          {
-            "lat": 34.903320885355384,
-            "lon": 24.76919455347358
-          },
-          {
-            "lat": 35.574007582813174,
-            "lon": 24.81200499077942
-          },
-          {
-            "lat": 35.938786456658356,
-            "lon": 24.11189955457401
-          }
-        ],
-        "center": {
-          "lat": 35.26881139814333,
-          "lon": 24.073689952216043
-        }
-      },
-      "hex7": {
-        "index": "873f728d0ffffff",
-        "polygon": [
-          {
-            "lat": 35.52482636074315,
-            "lon": 24.014679947948405
-          },
-          {
-            "lat": 35.51114716956354,
-            "lon": 24.01391178034676
-          },
-          {
-            "lat": 35.50374631403231,
-            "lon": 24.02820018964633
-          },
-          {
-            "lat": 35.51002341064811,
-            "lon": 24.043258382501087
-          },
-          {
-            "lat": 35.52370239640629,
-            "lon": 24.044030629840638
-          },
-          {
-            "lat": 35.53110449138368,
-            "lon": 24.02974060478422
-          }
-        ],
-        "center": {
-          "lat": 35.517425828183185,
-          "lon": 24.028970289786937
-        }
-      }
-    },
-    "timeseries": {
-      "timestamp": 1636668000000,
-      "hourly_precip_intensity": 0.03,
-      "hourly_temperature": 15.7,
-      "hourly_wind_direction": 54,
-      "hourly_humidity": 81,
-      "hourly_wind_speed": 11.5,
-      "hourly_icon": "partly-cloudy-night",
-      "hourly_dew_point": 12.5,
-      "hourly_precip_probability": 1,
-      "hourly_uv_index": 0,
-      "hourly_pressure": 1019.9,
-      "hourly_cloud_cover": 85,
-      "hourly_wind_gust": 17.4,
-      "hourly_precip_type": "rain"
-    },
-    "address": "Chania, GR"
-  }
+    {
+        "id": "76d13810-10e9-11ec-877e-63751227e9ec",
+        "name": "Hania DSH",
+        "label": null,
+        "location": {
+            "lat": 35.51622463589852,
+            "lon": 24.01903666307378
+        },
+        "attributes": {
+            "isActive": true,
+            "lastActiveAt": 1636668344623,
+            "hex3": {
+                "index": "833f72fffffffff",
+                "polygon": [
+                    {
+                        "lat": 35.62983463943738,
+                        "lon": 23.372801364962505
+                    },
+                    {
+                        "lat": 34.958641140481404,
+                        "lon": 23.339733257269025
+                    },
+                    {
+                        "lat": 34.59685782123658,
+                        "lon": 24.035997744251496
+                    },
+                    {
+                        "lat": 34.903320885355384,
+                        "lon": 24.76919455347358
+                    },
+                    {
+                        "lat": 35.574007582813174,
+                        "lon": 24.81200499077942
+                    },
+                    {
+                        "lat": 35.938786456658356,
+                        "lon": 24.11189955457401
+                    }
+                ],
+                "center": {
+                    "lat": 35.26881139814333,
+                    "lon": 24.073689952216043
+                }
+            },
+            "hex7": {
+                "index": "873f728d0ffffff",
+                "polygon": [
+                    {
+                        "lat": 35.52482636074315,
+                        "lon": 24.014679947948405
+                    },
+                    {
+                        "lat": 35.51114716956354,
+                        "lon": 24.01391178034676
+                    },
+                    {
+                        "lat": 35.50374631403231,
+                        "lon": 24.02820018964633
+                    },
+                    {
+                        "lat": 35.51002341064811,
+                        "lon": 24.043258382501087
+                    },
+                    {
+                        "lat": 35.52370239640629,
+                        "lon": 24.044030629840638
+                    },
+                    {
+                        "lat": 35.53110449138368,
+                        "lon": 24.02974060478422
+                    }
+                ],
+                "center": {
+                    "lat": 35.517425828183185,
+                    "lon": 24.028970289786937
+                }
+            }
+        },
+        "timeseries": {
+            "timestamp": 1636668000000,
+            "hourly_precip_intensity": 0.03,
+            "hourly_temperature": 15.7,
+            "hourly_wind_direction": 54,
+            "hourly_humidity": 81,
+            "hourly_wind_speed": 11.5,
+            "hourly_icon": "partly-cloudy-night",
+            "hourly_dew_point": 12.5,
+            "hourly_precip_probability": 1,
+            "hourly_uv_index": 0,
+            "hourly_pressure": 1019.9,
+            "hourly_cloud_cover": 85,
+            "hourly_wind_gust": 17.4,
+            "hourly_precip_type": "rain"
+        },
+        "address": "Chania, GR"
+    }
 ]
