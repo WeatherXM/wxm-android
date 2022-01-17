@@ -193,7 +193,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
     implementation "androidx.security:security-crypto:1.0.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation "com.google.android.material:material:1.4.0"
+    implementation "com.google.android.material:material:1.5.0"
 
     // Google Play Services for Location & Maps
     implementation "com.google.android.gms:play-services-location:18.0.0"
