@@ -16,7 +16,6 @@ object Measurements {
             Hourly.Pressure,
             Hourly.Icon,
             Hourly.Cloud,
-            Hourly.DewPoint,
             Hourly.PrecipProbability,
             Hourly.PrecipType,
             Hourly.UV
@@ -26,17 +25,16 @@ object Measurements {
         companion object {
             const val Temperature = "hourly_temperature"
             const val Precipitation = "hourly_precip_intensity"
-            const val Humidity = "hourly_humidity"
-            const val WindSpeed = "hourly_wind_speed"
-            const val WindGust = "hourly_wind_gust"
-            const val WindDirection = "hourly_wind_direction"
-            const val Pressure = "hourly_pressure"
-            const val Cloud = "hourly_cloud_cover"
-            const val UV = "hourly_uv_index"
-            const val Icon = "hourly_icon"
-            const val PrecipType = "hourly_precip_type"
-            const val PrecipProbability = "hourly_precip_probability"
-            const val DewPoint = "hourly_dew_point"
+            const val Humidity = "humidity"
+            const val WindSpeed = "wind_speed"
+            const val WindGust = "wind_gust"
+            const val WindDirection = "wind_direction"
+            const val Pressure = "pressure"
+            const val Cloud = "cloud_cover"
+            const val UV = "uv_index"
+            const val Icon = "icon"
+            const val PrecipType = "precip_type"
+            const val PrecipProbability = "precip_probability"
         }
     }
 
@@ -51,7 +49,6 @@ object Measurements {
             Hourly.Pressure,
             Hourly.Icon,
             Hourly.Cloud,
-            Hourly.DewPoint,
             Hourly.PrecipProbability,
             Hourly.PrecipType,
             Hourly.UV

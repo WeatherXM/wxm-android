@@ -6,7 +6,6 @@ import com.weatherxm.R
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import kotlin.math.roundToInt
 
 @Suppress("TooManyFunctions")
 object Weather : KoinComponent {
@@ -70,11 +69,11 @@ object Weather : KoinComponent {
         convertValueWindSpeed(value),
         getPreferredUnit(
             resHelper.getString(R.string.key_wind_speed_preference),
-            resHelper.getString(R.string.wind_speed_kmh)
+            resHelper.getString(R.string.wind_speed_ms)
         ),
         getDecimalsWindSpeed(
             resHelper.getString(R.string.key_wind_speed_preference),
-            resHelper.getString(R.string.wind_speed_kmh)
+            resHelper.getString(R.string.wind_speed_ms)
         )
     )
 
@@ -164,20 +163,20 @@ object Weather : KoinComponent {
         var valueToReturn: Number = value
         val savedUnit =
             sharedPref.getString(resHelper.getString(R.string.key_wind_speed_preference), "")
-        val defaultUnit = resHelper.getString(R.string.wind_speed_kmh)
+        val defaultUnit = resHelper.getString(R.string.wind_speed_ms)
         // We need to convert the value as different preference than default is used
         if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
             when (savedUnit) {
                 resHelper.getString(R.string.wind_speed_knots) -> {
-                    valueToReturn = UnitConverter.kmhToKnots(value.toFloat())
+                    valueToReturn = UnitConverter.msToKnots(value.toFloat())
 
                 }
                 resHelper.getString(R.string.wind_speed_beaufort) -> {
-                    valueToReturn = UnitConverter.kmhToBeaufort(value.toFloat().roundToInt())
+                    valueToReturn = UnitConverter.msToBeaufort(value.toFloat())
 
                 }
-                resHelper.getString(R.string.wind_speed_ms) -> {
-                    valueToReturn = UnitConverter.kmhToMs(value.toFloat())
+                resHelper.getString(R.string.wind_speed_kmh) -> {
+                    valueToReturn = UnitConverter.msToKmh(value.toFloat())
                 }
             }
         }

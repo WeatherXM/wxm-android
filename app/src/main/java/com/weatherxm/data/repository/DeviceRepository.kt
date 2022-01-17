@@ -21,12 +21,4 @@ class DeviceRepository(
     suspend fun getPublicDevices(): Either<Failure, List<Device>> {
         return deviceDataSource.getPublicDevices()
     }
-
-    fun getNameOrLabel(name: String, label: String?): Either<Failure, String> {
-        return if (!label.isNullOrEmpty()) {
-            Either.Right("$label ($name)")
-        } else {
-            Either.Right(name)
-        }
-    }
 }

@@ -16,8 +16,8 @@ import com.weatherxm.data.Wallet
 import com.weatherxm.databinding.ActivityConnectWalletBinding
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.applyTopBottomInsets
 import com.weatherxm.util.onTextChanged
-import dev.chrisbanes.insetter.applyInsetter
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
@@ -42,7 +42,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         binding = ActivityConnectWalletBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        applyMapInsets()
+        binding.root.applyTopBottomInsets()
 
         val wallet = intent?.extras?.getParcelable<Wallet>(ARG_WALLET)
         wallet?.address?.let {
@@ -63,28 +63,18 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.saveBtn.setOnClickListener {
-            val addressValidationResp = model.validateAddress(binding.address.text.toString())
-
-            if (addressValidationResp.status == Status.ERROR) {
-                binding.addressContainer.error = addressValidationResp.message
+            if (!model.isAddressValid(binding.address.text.toString())) {
+                binding.addressContainer.error = getString(R.string.invalid_address)
                 return@setOnClickListener
             }
 
-            val termsChecked = model.validateTermsCheckbox(binding.termsCheckbox.isChecked)
-            val ownerChecked = model.validateOwnershipCheckbox(binding.ownershipCheckbox.isChecked)
-
-            if (termsChecked.status == Status.ERROR) {
-                toast(termsChecked.message!!, Toast.LENGTH_LONG)
-                return@setOnClickListener
-            }
-
-            if (ownerChecked.status == Status.ERROR) {
-                toast(ownerChecked.message!!, Toast.LENGTH_LONG)
+            if (!binding.termsCheckbox.isChecked || !binding.ownershipCheckbox.isChecked) {
+                toast(R.string.checkbox_not_checked, Toast.LENGTH_LONG)
                 return@setOnClickListener
             }
 
             binding.loading.visibility = View.VISIBLE
-            changeButtonState(false)
+            binding.saveBtn.isEnabled = false
             model.saveAddress(binding.address.text.toString())
         }
 
@@ -104,51 +94,38 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
     private fun onAddressSaved(result: Resource<String>) {
         when (result.status) {
             Status.SUCCESS -> {
-                changeButtonState(true)
-                changeAddressInputState(true)
+                updateUI(true)
                 Timber.d("Address saved.")
-                result.data?.let { showSnackBarMessage(it) }
+                result.data?.let {
+                    showSnackbarMessage(it)
+                }
                 showCurrentAddress(binding.address.text.toString())
             }
             Status.ERROR -> {
-                changeButtonState(true)
-                changeAddressInputState(true)
+                updateUI(true)
                 binding.loading.visibility = View.INVISIBLE
-                result.message?.let { showSnackBarMessage(it) }
+                result.message?.let {
+                    showSnackbarMessage(it)
+                }
             }
             Status.LOADING -> {
-                changeButtonState(false)
-                changeAddressInputState(false)
+                updateUI(false)
                 binding.loading.visibility = View.VISIBLE
             }
         }
     }
 
-    private fun showSnackBarMessage(message: String) {
+    private fun updateUI(buttonAddressEnabled: Boolean) {
+        binding.saveBtn.isEnabled = buttonAddressEnabled
+        binding.address.isEnabled = buttonAddressEnabled
+    }
+
+    private fun showSnackbarMessage(message: String) {
         if (snackbar?.isShown == true) {
             snackbar?.dismiss()
         }
         snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
         snackbar?.show()
-    }
-
-    private fun changeButtonState(enabled: Boolean) {
-        binding.saveBtn.isEnabled = enabled
-    }
-
-    private fun changeAddressInputState(enabled: Boolean) {
-        binding.address.isEnabled = enabled
-    }
-
-    private fun applyMapInsets() {
-        binding.root.applyInsetter {
-            type(statusBars = true) {
-                padding(left = false, top = true, right = false, bottom = false)
-            }
-            type(navigationBars = true) {
-                padding(left = false, top = false, right = false, bottom = true)
-            }
-        }
     }
 
     companion object {

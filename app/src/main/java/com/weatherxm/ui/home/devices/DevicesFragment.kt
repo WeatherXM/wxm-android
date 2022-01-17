@@ -11,7 +11,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.Navigator
-import dev.chrisbanes.insetter.applyInsetter
+import com.weatherxm.util.applyTopInset
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -28,11 +28,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
     ): View {
         binding = FragmentDevicesBinding.inflate(inflater, container, false)
 
-        binding.root.applyInsetter {
-            type(statusBars = true) {
-                margin(left = false, top = true, right = false, bottom = false)
-            }
-        }
+        binding.root.applyTopInset()
         val adapter = DeviceAdapter(this)
         binding.recycler.adapter = adapter
 
@@ -51,12 +47,8 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                         binding.progress.visibility = View.GONE
                     } else {
                         binding.empty.visibility = View.VISIBLE
-                        binding.empty.title(
-                            model.resHelper().getString(R.string.no_weather_stations)
-                        )
-                        binding.empty.subtitle(
-                            model.resHelper().getString(R.string.add_weather_station)
-                        )
+                        binding.empty.title(getString(R.string.no_weather_stations))
+                        binding.empty.subtitle(getString(R.string.add_weather_station))
                         binding.empty.listener(null)
                         binding.recycler.visibility = View.GONE
                         binding.progress.visibility = View.GONE
@@ -64,9 +56,9 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                 }
                 Status.ERROR -> {
                     binding.swiperefresh.isRefreshing = false
-                    binding.empty.title(model.resHelper().getString(R.string.oops_something_wrong))
+                    binding.empty.title(getString(R.string.oops_something_wrong))
                     binding.empty.subtitle(devicesResource.message)
-                    binding.empty.action(model.resHelper().getString(R.string.action_retry))
+                    binding.empty.action(getString(R.string.action_retry))
                     binding.empty.listener { model.fetch() }
                     binding.empty.visibility = View.VISIBLE
                     binding.recycler.visibility = View.GONE

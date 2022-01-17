@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:orientation="vertical"
+    tools:parentTag="LinearLayout">
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.WeatherXM.MaterialCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/tokenChartBackground"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/titleAndValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/earningsTitle"
+                    style="@style/TextAppearance.WeatherXM.TokenCard.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/earnings"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/wxmValue"
+                    style="@style/TextAppearance.WeatherXM.TokenCard.TokenValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/earningsTitle"
+                    tools:text="2.165" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/wxmName"
+                    style="@style/TextAppearance.WeatherXM.TokenCard.TokenName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wxm"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/wxmValue" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_normal"
+                android:layout_weight="2">
+
+                <com.db.williamchart.view.BarChartView
+                    android:id="@+id/tokenChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    app:chart_axis="none"
+                    app:chart_barsColor="@color/colorOnPrimary"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/tokenOptions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    app:checkedChip="@id/token24h"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tokenChart"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/token24h"
+                        style="@style/Widget.WeatherXM.Token.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/button_24h" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/token7d"
+                        style="@style/Widget.WeatherXM.Token.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/button_7d" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/token30d"
+                        style="@style/Widget.WeatherXM.Token.Chip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/button_30d" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</merge>

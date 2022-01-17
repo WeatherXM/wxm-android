@@ -17,3 +17,7 @@ style:
         active: true
     MaxLineLength:
         maxLineLength: 100
+    ForbiddenComment:
+        values:
+            - FIXME
+            - STOPSHIP

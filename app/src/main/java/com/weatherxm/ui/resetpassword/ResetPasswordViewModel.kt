@@ -23,9 +23,6 @@ class ResetPasswordViewModel : ViewModel(), KoinComponent {
     private val isEmailSent = MutableLiveData<Resource<Unit>>()
     fun isEmailSent() = isEmailSent
 
-    // So the activity can use it instead of injecting it again
-    fun resHelper() = resHelper
-
     fun resetPassword(email: String) {
         isEmailSent.postValue(Resource.loading())
         CoroutineScope(Dispatchers.IO).launch {

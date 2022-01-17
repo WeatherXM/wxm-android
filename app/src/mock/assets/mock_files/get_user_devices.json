@@ -9,7 +9,7 @@
         },
         "attributes": {
             "isActive": true,
-            "lastActiveAt": 1636668104158,
+            "lastActiveAt": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "831edafffffffff",
                 "polygon": [
@@ -77,21 +77,20 @@
                 }
             }
         },
-        "timeseries": {
-            "timestamp": 1636668000000,
-            "hourly_precip_intensity": 0,
-            "hourly_temperature": 10.8,
-            "hourly_wind_direction": 355,
-            "hourly_humidity": 74,
-            "hourly_wind_speed": 13.7,
-            "hourly_icon": "partly-cloudy-night",
-            "hourly_dew_point": 6.3,
-            "hourly_precip_probability": 0,
-            "hourly_uv_index": 0,
-            "hourly_pressure": 1021.6,
-            "hourly_cloud_cover": 59,
-            "hourly_wind_gust": 20.4,
-            "hourly_precip_type": "rain"
+        "current_weather": {
+            "timestamp": "2022-01-13T22:00:00+02:00",
+            "precip_intensity": 0,
+            "temperature": 15.8,
+            "wind_direction": 321,
+            "humidity": 55,
+            "wind_speed": 3.1,
+            "icon": "partly-cloudy-night",
+            "precip_probability": 15,
+            "uv_index": 0,
+            "pressure": 1019.6,
+            "cloud_cover": 89,
+            "wind_gust": 5.4,
+            "precipitation_type": "rain"
         },
         "address": "Athens, GR"
     },
@@ -105,7 +104,7 @@
         },
         "attributes": {
             "isActive": true,
-            "lastActiveAt": 1636668344623,
+            "lastActiveAt": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f72fffffffff",
                 "polygon": [
@@ -173,21 +172,20 @@
                 }
             }
         },
-        "timeseries": {
-            "timestamp": 1636668000000,
-            "hourly_precip_intensity": 0.03,
-            "hourly_temperature": 15.7,
-            "hourly_wind_direction": 54,
-            "hourly_humidity": 81,
-            "hourly_wind_speed": 11.5,
-            "hourly_icon": "partly-cloudy-night",
-            "hourly_dew_point": 12.5,
-            "hourly_precip_probability": 1,
-            "hourly_uv_index": 0,
-            "hourly_pressure": 1019.9,
-            "hourly_cloud_cover": 85,
-            "hourly_wind_gust": 17.4,
-            "hourly_precip_type": "rain"
+        "current_weather": {
+            "timestamp": "2022-01-13T22:00:00+02:00",
+            "precip_intensity": 0,
+            "temperature": 10.8,
+            "wind_direction": 355,
+            "humidity": 74,
+            "wind_speed": 13.7,
+            "icon": "partly-cloudy-night",
+            "precip_probability": 0,
+            "uv_index": 0,
+            "pressure": 1021.6,
+            "cloud_cover": 59,
+            "wind_gust": 20.4,
+            "precipitation_type": "rain"
         },
         "address": "Chania, GR"
     }

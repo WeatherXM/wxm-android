@@ -75,21 +75,20 @@
                 }
             }
         },
-        "timeseries": {
-            "timestamp": 1636668000000,
-            "hourly_precip_intensity": 0,
-            "hourly_temperature": 6.7,
-            "hourly_wind_direction": 336,
-            "hourly_humidity": 81,
-            "hourly_wind_speed": 3.7,
-            "hourly_icon": "cloudy",
-            "hourly_dew_point": 3.7,
-            "hourly_precip_probability": 0,
-            "hourly_uv_index": 0,
-            "hourly_pressure": 1024.9,
-            "hourly_cloud_cover": 98,
-            "hourly_wind_gust": 4.2,
-            "hourly_precip_type": "rain"
+        "current_weather": {
+            "timestamp": "2021-12-10T13:00:00+02:00",
+            "precip_intensity": 0,
+            "temperature": 6.7,
+            "wind_direction": 336,
+            "humidity": 81,
+            "wind_speed": 3.7,
+            "icon": "cloudy",
+            "precip_probability": 0,
+            "uv_index": 0,
+            "pressure": 1024.9,
+            "cloud_cover": 98,
+            "wind_gust": 4.2,
+            "precip_type": "rain"
         }
     },
     {
@@ -168,21 +167,20 @@
                 }
             }
         },
-        "timeseries": {
-            "timestamp": 1636668000000,
-            "hourly_precip_intensity": 0,
-            "hourly_temperature": 14.8,
-            "hourly_wind_direction": 356,
-            "hourly_humidity": 65,
-            "hourly_wind_speed": 35.2,
-            "hourly_icon": "partly-cloudy-night",
-            "hourly_dew_point": 8.2,
-            "hourly_precip_probability": 0,
-            "hourly_uv_index": 0,
-            "hourly_pressure": 1019.2,
-            "hourly_cloud_cover": 37,
-            "hourly_wind_gust": 43.6,
-            "hourly_precip_type": "rain"
+        "current_weather": {
+            "timestamp": "2021-12-10T13:00:00+02:00",
+            "precip_intensity": 0,
+            "temperature": 14.8,
+            "wind_direction": 356,
+            "humidity": 65,
+            "wind_speed": 35.2,
+            "icon": "partly-cloudy-night",
+            "precip_probability": 0,
+            "uv_index": 0,
+            "pressure": 1019.2,
+            "cloud_cover": 37,
+            "wind_gust": 43.6,
+            "precip_type": "rain"
         }
     },
     {
@@ -261,21 +259,20 @@
                 }
             }
         },
-        "timeseries": {
-            "timestamp": 1636668000000,
-            "hourly_precip_intensity": 0.03,
-            "hourly_temperature": 15.7,
-            "hourly_wind_direction": 54,
-            "hourly_humidity": 81,
-            "hourly_wind_speed": 11.5,
-            "hourly_icon": "partly-cloudy-night",
-            "hourly_dew_point": 12.5,
-            "hourly_precip_probability": 1,
-            "hourly_uv_index": 0,
-            "hourly_pressure": 1019.9,
-            "hourly_cloud_cover": 85,
-            "hourly_wind_gust": 17.4,
-            "hourly_precip_type": "rain"
+        "current_weather": {
+            "timestamp": "2021-12-10T13:00:00+02:00",
+            "precip_intensity": 0.03,
+            "temperature": 15.7,
+            "wind_direction": 54,
+            "humidity": 81,
+            "wind_speed": 11.5,
+            "icon": "partly-cloudy-night",
+            "precip_probability": 1,
+            "uv_index": 0,
+            "pressure": 1019.9,
+            "cloud_cover": 85,
+            "wind_gust": 17.4,
+            "precip_type": "rain"
         }
     },
     {
@@ -354,21 +351,20 @@
                 }
             }
         },
-        "timeseries": {
-            "timestamp": 1636668000000,
-            "hourly_precip_intensity": 0,
-            "hourly_temperature": 15.1,
-            "hourly_wind_direction": 338,
-            "hourly_humidity": 81,
-            "hourly_wind_speed": 17.7,
-            "hourly_icon": "partly-cloudy-night",
-            "hourly_dew_point": 11.9,
-            "hourly_precip_probability": 0,
-            "hourly_uv_index": 0,
-            "hourly_pressure": 1018.9,
-            "hourly_cloud_cover": 76,
-            "hourly_wind_gust": 26.5,
-            "hourly_precip_type": "rain"
+        "current_weather": {
+            "timestamp": "2021-12-10T13:00:00+02:00",
+            "precip_intensity": 0,
+            "temperature": 15.1,
+            "wind_direction": 338,
+            "humidity": 81,
+            "wind_speed": 17.7,
+            "icon": "partly-cloudy-night",
+            "precip_probability": 0,
+            "uv_index": 0,
+            "pressure": 1018.9,
+            "cloud_cover": 76,
+            "wind_gust": 26.5,
+            "precip_type": "rain"
         }
     }
 ]

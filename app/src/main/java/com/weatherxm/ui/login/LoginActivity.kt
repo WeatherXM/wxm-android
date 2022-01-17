@@ -98,7 +98,9 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
                 binding.username.isEnabled = true
                 binding.password.isEnabled = true
                 binding.loading.visibility = View.INVISIBLE
-                showError("${resourcesHelper.getString(R.string.login_failed)} ${result.message}.")
+                showSnackbarMessage(
+                    "${resourcesHelper.getString(R.string.login_failed)} ${result.message}."
+                )
             }
             Status.LOADING -> {
                 binding.username.isEnabled = false
@@ -108,11 +110,11 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
         }
     }
 
-    private fun showError(message: String) {
+    private fun showSnackbarMessage(message: String) {
         if (snackbar?.isShown == true) {
             snackbar?.dismiss()
         }
-        snackbar = Snackbar.make(findViewById(R.id.root), message, Snackbar.LENGTH_LONG)
+        snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
         snackbar?.show()
     }
 }

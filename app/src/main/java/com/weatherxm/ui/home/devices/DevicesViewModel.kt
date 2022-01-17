@@ -8,7 +8,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.data.ServerError
-import com.weatherxm.data.repository.DeviceRepository
+import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +19,7 @@ import timber.log.Timber
 
 class DevicesViewModel : ViewModel(), KoinComponent {
 
-    private val deviceRepository: DeviceRepository by inject()
+    private val userDeviceUseCase: UserDeviceUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
 
     private val devices = MutableLiveData<Resource<List<Device>>>().apply {
@@ -27,11 +27,10 @@ class DevicesViewModel : ViewModel(), KoinComponent {
     }
 
     fun devices(): LiveData<Resource<List<Device>>> = devices
-    fun resHelper(): ResourcesHelper = resHelper
 
     fun fetch() {
         CoroutineScope(Dispatchers.IO).launch {
-            deviceRepository.getUserDevices()
+            userDeviceUseCase.getUserDevices()
                 .map { devices ->
                     Timber.d("Got devices: $devices")
                     this@DevicesViewModel.devices.postValue(Resource.success(devices))

@@ -22,31 +22,15 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
     fun isAddressSaved() = isAddressSaved
 
     private val userRepository: UserRepository by inject()
-    private val resourcesHelper: ResourcesHelper by inject()
+    private val resHelper: ResourcesHelper by inject()
     private val validator: Validator by inject()
 
-    fun validateAddress(address: String?): Resource<Unit> {
+    fun isAddressValid(address: String?): Boolean {
         if (address.isNullOrEmpty() || !validator.validateEthAddress(address)) {
-            return Resource.error(resourcesHelper.getString(R.string.invalid_address))
+            return false
         }
 
-        return Resource.success(Unit)
-    }
-
-    fun validateOwnershipCheckbox(checked: Boolean): Resource<Unit> {
-        return if (!checked) {
-            Resource.error(resourcesHelper.getString(R.string.checkbox_not_checked))
-        } else {
-            Resource.success(Unit)
-        }
-    }
-
-    fun validateTermsCheckbox(checked: Boolean): Resource<Unit> {
-        return if (!checked) {
-            Resource.error(resourcesHelper.getString(R.string.checkbox_not_checked))
-        } else {
-            Resource.success(Unit)
-        }
+        return true
     }
 
     fun saveAddress(address: String) {
@@ -58,28 +42,28 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
                     when (it) {
                         is Failure.NetworkError -> isAddressSaved.postValue(
                             Resource.error(
-                                resourcesHelper.getString(R.string.address_save_network_error)
+                                resHelper.getString(R.string.address_save_network_error)
                             )
                         )
                         is ServerError -> isAddressSaved.postValue(
                             Resource.error(
-                                resourcesHelper.getString(R.string.address_save_server_error)
+                                resHelper.getString(R.string.address_save_server_error)
                             )
                         )
                         is Failure.UnknownError -> isAddressSaved.postValue(
                             Resource.error(
-                                resourcesHelper.getString(R.string.unknown_error)
+                                resHelper.getString(R.string.unknown_error)
                             )
                         )
                         else -> isAddressSaved.postValue(
                             Resource.error(
-                                resourcesHelper.getString(R.string.unknown_error)
+                                resHelper.getString(R.string.unknown_error)
                             )
                         )
                     }
                 }.map {
                     isAddressSaved.postValue(
-                        Resource.success(resourcesHelper.getString(R.string.address_saved))
+                        Resource.success(resHelper.getString(R.string.address_saved))
                     )
                 }
         }

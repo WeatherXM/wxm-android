@@ -21,8 +21,6 @@ import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSourceImpl
 import com.weatherxm.data.datasource.CredentialsDataSource
 import com.weatherxm.data.datasource.CredentialsDataSourceImpl
-import com.weatherxm.data.datasource.DeviceDataSource
-import com.weatherxm.data.datasource.DeviceDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.UserDataSource
@@ -35,11 +33,15 @@ import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.LocationRepository
+import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.UserRepository
+import com.weatherxm.data.repository.WeatherRepository
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.explorer.DeviceWithResolutionJsonAdapter
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.ExplorerUseCaseImpl
+import com.weatherxm.usecases.UserDeviceUseCase
+import com.weatherxm.usecases.UserDeviceUseCaseImpl
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Validator
 import okhttp3.Cache
@@ -104,10 +106,6 @@ private val datasources = module {
         LocationDataSourceImpl()
     }
 
-    single<DeviceDataSource> {
-        DeviceDataSourceImpl(get())
-    }
-
     single<UserDataSource> {
         UserDataSourceImpl(get())
     }
@@ -138,11 +136,20 @@ private val repositories = module {
     single<DeviceRepository> {
         DeviceRepository(get())
     }
+    single<TokenRepository> {
+        TokenRepository(get())
+    }
+    single<WeatherRepository> {
+        WeatherRepository(get())
+    }
 }
 
 private val usecases = module {
     single<ExplorerUseCase> {
         ExplorerUseCaseImpl()
+    }
+    single<UserDeviceUseCase> {
+        UserDeviceUseCaseImpl()
     }
 }
 

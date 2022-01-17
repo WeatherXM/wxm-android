@@ -23,8 +23,3 @@ sealed class ServerError(val message: String? = null) : Failure() {
     object JsonError : ServerError()
     object BadRequest : ServerError()
 }
-
-@Keep
-sealed class DeviceFailure : Failure() {
-    object NoData : DeviceFailure()
-}

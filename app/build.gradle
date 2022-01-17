@@ -225,6 +225,7 @@ dependencies {
 
     // Charts
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
+    implementation "com.diogobernardino:williamchart:3.10.1"
 
     // Permissions
     implementation "com.github.fondesa:kpermissions:3.2.1"

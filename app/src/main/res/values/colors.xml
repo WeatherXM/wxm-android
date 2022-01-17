@@ -10,9 +10,11 @@
     <color name="light_grey">#E4E4E4</color>
     <color name="green">#2BB331</color>
     <color name="grey">#888888</color>
+    <color name="purple">#9D1F63</color>
 
     <color name="black_translucent">#88000000</color>
     <color name="white_translucent">#DDFFFFFF</color>
+    <color name="white_transparent">#65FFFFFF</color>
 
     <color name="colorPrimary">#1B75BA</color>
     <color name="colorPrimaryVariant">#003b77</color>
@@ -32,6 +34,15 @@
     <color name="ic_launcher_background">#1B75BA</color>
 
     <color name="subtitle">@color/light_grey</color>
+    <color name="lastActiveColor">@color/grey</color>
     <color name="hexFillColor">@color/blue</color>
     <color name="hexFillOutlineColor">@color/white</color>
+
+    <color name="tokenChartBackground">@color/purple</color>
+    <color name="tokenChipColorNormal">@color/transparent</color>
+    <color name="tokenChipColorSelected">#44FFFFFF</color>
+    <color name="tokenChipStrokeColor">#22FFFFFF</color>
+
+    <color name="dateTabNormalTextColor">#40116295</color>
+    <color name="dateTabSelectedTextColor">#116295</color>
 </resources>

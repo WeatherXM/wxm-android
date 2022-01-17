@@ -17,28 +17,28 @@ object UnitConverter {
         return hpa * 0.0295F
     }
 
-    fun kmhToMs(kmh: Float): Float {
-        return kmh / 3.6F
+    fun msToKmh(ms: Float): Float {
+        return ms * 3.6F
     }
 
-    fun kmhToKnots(kmh: Float): Float {
-        return kmh / 1.852F
+    fun msToKnots(ms: Float): Float {
+        return ms * 1.944F
     }
 
-    fun kmhToBeaufort(kmh: Int): Int {
+    fun msToBeaufort(ms: Float): Int {
         return when {
-            kmh < 2 -> 0
-            kmh < 6 -> 1
-            kmh < 12 -> 2
-            kmh < 20 -> 3
-            kmh < 29 -> 4
-            kmh < 39 -> 5
-            kmh < 50 -> 6
-            kmh < 62 -> 7
-            kmh < 75 -> 8
-            kmh < 89 -> 9
-            kmh < 103 -> 10
-            kmh < 118 -> 11
+            ms < 0.2 -> 0
+            ms < 1.5 -> 1
+            ms < 3.3 -> 2
+            ms < 5.4 -> 3
+            ms < 7.9 -> 4
+            ms < 10.7 -> 5
+            ms < 13.8 -> 6
+            ms < 17.1 -> 7
+            ms < 20.7 -> 8
+            ms < 24.4 -> 9
+            ms < 28.4 -> 10
+            ms < 32.6 -> 11
             else -> 12
         }
     }

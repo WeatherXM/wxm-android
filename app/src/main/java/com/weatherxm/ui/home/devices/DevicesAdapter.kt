@@ -1,6 +1,5 @@
 package com.weatherxm.ui.home.devices
 
-import android.text.format.DateUtils.getRelativeTimeSpanString
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,19 +8,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.ListItemDeviceBinding
-import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
+import com.weatherxm.util.getRelativeTimeFromISO
+import com.weatherxm.util.setTextAndColor
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class DeviceAdapter(private val deviceListener: DeviceListener) :
     ListAdapter<Device, DeviceAdapter.DeviceViewHolder>(DeviceDiffCallback()), KoinComponent {
-    private val resHelper: ResourcesHelper by inject()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
         val binding =
             ListItemDeviceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return DeviceViewHolder(binding, resHelper, deviceListener)
+        return DeviceViewHolder(binding, deviceListener)
     }
 
     override fun onBindViewHolder(holder: DeviceViewHolder, position: Int) {
@@ -30,7 +28,6 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
 
     class DeviceViewHolder(
         private val binding: ListItemDeviceBinding,
-        private val resHelper: ResourcesHelper,
         listener: DeviceListener,
     ) :
         RecyclerView.ViewHolder(binding.root) {
@@ -46,39 +43,25 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
         fun bind(item: Device) {
             this.device = item
             binding.name.text = item.name
-            binding.icon.setAnimation(Weather.getWeatherAnimation(item.timeseries?.hourlyIcon))
+            binding.icon.setAnimation(Weather.getWeatherAnimation(item.currentWeather?.icon))
             binding.temperature.text =
-                Weather.getFormattedTemperature(item.timeseries?.hourlyTemperature)
+                Weather.getFormattedTemperature(item.currentWeather?.temperature)
 
-            item.timeseries?.timestamp?.let {
-                binding.lastSeen.text = getRelativeTimeSpanString(it, System.currentTimeMillis(), 0)
+            item.currentWeather?.timestamp?.let {
+                binding.lastSeen.text = getRelativeTimeFromISO(it)
             }
 
             when {
                 item.attributes?.isActive == null -> {
-                    setStatusChip(
-                        resHelper.getString(R.string.unknown),
-                        R.color.grey
-                    )
+                    binding.statusChip.setTextAndColor(R.string.unknown, R.color.grey)
                 }
                 item.attributes.isActive -> {
-                    setStatusChip(
-                        resHelper.getString(R.string.online),
-                        R.color.green
-                    )
+                    binding.statusChip.setTextAndColor(R.string.online, R.color.green)
                 }
                 else -> {
-                    setStatusChip(
-                        resHelper.getString(R.string.offline),
-                        R.color.red
-                    )
+                    binding.statusChip.setTextAndColor(R.string.offline, R.color.red)
                 }
             }
-        }
-
-        private fun setStatusChip(text: String, color: Int) {
-            binding.statusChip.setChipBackgroundColorResource(color)
-            binding.statusChip.text = text
         }
     }
 
@@ -90,9 +73,9 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
 
         override fun areContentsTheSame(oldItem: Device, newItem: Device): Boolean {
             return oldItem.name == newItem.name &&
-                oldItem.timeseries?.hourlyIcon == newItem.timeseries?.hourlyIcon &&
-                oldItem.timeseries?.hourlyTemperature == newItem.timeseries?.hourlyTemperature &&
-                oldItem.timeseries?.timestamp == newItem.timeseries?.timestamp &&
+                oldItem.currentWeather?.icon == newItem.currentWeather?.icon &&
+                oldItem.currentWeather?.temperature == newItem.currentWeather?.temperature &&
+                oldItem.currentWeather?.timestamp == newItem.currentWeather?.timestamp &&
                 oldItem.attributes?.isActive == newItem.attributes?.isActive
         }
     }

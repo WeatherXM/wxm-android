@@ -37,6 +37,16 @@
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.WeatherXM.BottomSheetDialog</item>
     </style>
 
+    <style name="Widget.WeatherXM.AppBar.Transparent" parent="Widget.MaterialComponents.AppBarLayout.Primary">
+        <!-- Make App Bar's background transparent -->
+        <item name="android:background">@color/transparent</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.WeatherXM.Toolbar.Light</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherXM.Toolbar.Light" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface">
+        <item name="colorControlNormal">@color/white</item>
+    </style>
+
     <style name="Theme.WeatherXM.Home" parent="@style/Theme.WeatherXM.NoActionBar">
         <!-- System UI styles -->
         <item name="android:windowTranslucentStatus">true</item>
@@ -67,6 +77,13 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="Widget.WeatherXM.Button.Subtle.Colored" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="cornerRadius">@dimen/card_corner_radius</item>
+    </style>
+
     <style name="Widget.WeatherXM.ButtonBar.Button" parent="@style/Widget.MaterialComponents.Button">
         <item name="android:minHeight">54dp</item>
     </style>
@@ -77,6 +94,12 @@
 
     <style name="Widget.WeatherXM.TextButton.Subtle" parent="@style/Widget.MaterialComponents.Button.TextButton">
         <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="Widget.WeatherXM.TextButton.Subtle.Arrow" parent="@style/Widget.WeatherXM.TextButton.Subtle">
+        <item name="android:textAllCaps">false</item>
+        <item name="icon">@drawable/ic_next</item>
+        <item name="iconGravity">end</item>
     </style>
 
     <style name="Widget.WeatherXM.BottomSheet.Dialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
@@ -91,6 +114,11 @@
     <style name="TextAppearance.WeatherXM.Dialog.Title" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
         <item name="android:textColor">?colorOnSecondary</item>
         <item name="android:textSize">20sp</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Dialog.Subtitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">@color/lastActiveColor</item>
         <item name="fontFamily">sans-serif-medium</item>
     </style>
 
@@ -126,25 +154,15 @@
         <item name="drawableTint">@color/red</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.WeatherDataOnCard" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="android:textColor">@color/colorOnPrimary</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.WeatherDataOnHourlyCard" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textColor">@color/colorOnPrimary</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.HourHourlyCard" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="android:textColor">@color/subtitle</item>
+    <style name="TextAppearance.WeatherXM.HourlyCard.Data" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/hourly_forecast_texts_list</item>
         <item name="android:textSize">12sp</item>
+        <item name="android:maxLines">1</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.WeatherDataOnCard.Subtitle" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="android:textColor">?android:textColorSecondary</item>
-        <item name="android:textSize">12sp</item>
+    <style name="TextAppearance.WeatherXM.HourlyCard.Data.Time" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/hourly_forecast_texts_list</item>
+        <item name="android:textSize">11sp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Updated.On" parent="TextAppearance.MaterialComponents.Body1">
@@ -179,12 +197,13 @@
     <style name="Widget.WeatherXM.ToolBar" parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="materialThemeOverlay">@style/ThemeOverlay.WeatherXM.Toolbar</item>
         <item name="titleTextAppearance">@style/TextAppearance.WeatherXM.Toolbar.Title</item>
+        <item name="subtitleTextAppearance">@style/TextAppearance.WeatherXM.Toolbar.Subtitle</item>
         <item name="android:paddingTop">@dimen/padding_normal</item>
         <item name="android:paddingBottom">@dimen/padding_normal</item>
-        <item name="contentInsetStart">@dimen/padding_large</item>
-        <item name="contentInsetStartWithNavigation">@dimen/padding_large</item>
-        <item name="contentInsetEnd">@dimen/padding_large</item>
-        <item name="contentInsetEndWithActions">@dimen/padding_large</item>
+        <item name="contentInsetStart">@dimen/padding_normal</item>
+        <item name="contentInsetStartWithNavigation">@dimen/padding_normal</item>
+        <item name="contentInsetEnd">@dimen/padding_normal</item>
+        <item name="contentInsetEndWithActions">@dimen/padding_normal</item>
         <item name="elevation">0dp</item>
         <item name="android:elevation">0dp</item>
     </style>
@@ -205,6 +224,10 @@
         <item name="fontFamily">sans-serif-medium</item>
     </style>
 
+    <style name="TextAppearance.WeatherXM.Toolbar.Subtitle" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="Widget.WeatherXM.ProgressBar.Horizontal" parent="Widget.MaterialComponents.LinearProgressIndicator">
         <item name="progressBarStyle">?android:progressBarStyleHorizontal</item>
         <item name="android:backgroundTint">@color/colorPrimary</item>
@@ -219,8 +242,95 @@
         <item name="chipMinTouchTargetSize">0dp</item>
     </style>
 
+    <style name="Widget.WeatherXM.Token.Chip" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="ensureMinTouchTargetSize">true</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:checkable">true</item>
+        <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="chipStrokeColor">@color/tokenChipStrokeColor</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipCornerRadius">@dimen/token_chip_corner_radius</item>
+        <item name="chipSurfaceColor">@color/tokenChartBackground</item>
+        <item name="chipBackgroundColor">@color/token_chip_background_list</item>
+    </style>
+
     <style name="TextAppearance.WeatherXM.Paragraph.Title" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="android:textColor">?colorOnSurface</item>
         <item name="fontFamily">sans-serif-medium</item>
     </style>
+
+    <style name="TextAppearance.WeatherXM.WeatherCard" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.WeatherCard.Temperature" parent="TextAppearance.WeatherXM.WeatherCard">
+        <item name="android:textSize">48sp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.WeatherCard.Data" parent="TextAppearance.WeatherXM.WeatherCard">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.WeatherCard.Data.Subtitle" parent="TextAppearance.WeatherXM.WeatherCard">
+        <item name="android:textColor">@color/subtitle</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Device.Details.Time" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Widget.WeatherXM.Device.Details.TabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="tabMode">scrollable</item>
+        <item name="tabTextAppearance">@style/TextAppearance.WeatherXM.Device.Details.Time</item>
+        <item name="tabTextColor">@color/dateTabNormalTextColor</item>
+        <item name="tabSelectedTextColor">@color/dateTabSelectedTextColor</item>
+        <item name="tabPadding">@dimen/padding_extra_small</item>
+        <item name="tabIndicatorHeight">0dp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Device.Details.Active" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/lastActiveColor</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.TokenCard" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.TokenCard.Title" parent="TextAppearance.WeatherXM.TokenCard">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.TokenCard.TokenValue" parent="TextAppearance.WeatherXM.TokenCard">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.TokenCard.TokenName" parent="TextAppearance.WeatherXM.TokenCard">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard" parent="Widget.MaterialComponents.CardView">
+        <item name="android:clipChildren">false</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="cardPreventCornerOverlap">false</item>
+        <item name="contentPadding">@dimen/padding_normal</item>
+        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
+        <item name="cardElevation">@dimen/card_elevation</item>
+        <item name="cardMaxElevation">@dimen/card_elevation</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.Small">
+        <item name="contentPadding">@dimen/padding_small</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.HourlyForecast" parent="Widget.WeatherXM.MaterialCard.Small">
+        <item name="cardBackgroundColor">@color/hourly_forecast_background_list</item>
+        <item name="cardElevation">@dimen/card_elevation</item>
+    </style>
+
 </resources>

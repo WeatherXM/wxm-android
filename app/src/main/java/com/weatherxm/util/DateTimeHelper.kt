@@ -1,43 +1,110 @@
 package com.weatherxm.util
 
-import java.time.Instant
-import java.time.LocalDateTime
+import android.content.Context
+import android.text.format.DateFormat
+import android.text.format.DateUtils
+import com.weatherxm.R
 import java.time.ZoneId
-import java.time.ZoneOffset
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
-import java.util.concurrent.TimeUnit
 
-fun LocalDateTime.startOfHour(): LocalDateTime {
-    return this.withMinute(0).withSecond(0).withNano(0)
+fun getNowInTimezone(timezone: String?): ZonedDateTime {
+    if (timezone == null) {
+        return ZonedDateTime.now()
+    }
+    val tz = ZoneId.of(timezone)
+    return ZonedDateTime.now(tz)
 }
 
-fun LocalDateTime.endOfHour(): LocalDateTime {
-    return this.plusHours(1).startOfHour()
+fun getFormattedDate(timeInISO: String?): String {
+    return ZonedDateTime.parse(timeInISO).toLocalDate().toString()
 }
 
-fun LocalDateTime.endOfDay(): LocalDateTime {
-    return this.apply {
-        plusDays(1)
-        withHour(0)
-        withMinute(0)
-        withSecond(0)
-        withNano(0)
+fun getRelativeDayFromISO(
+    resHelper: ResourcesHelper,
+    timeInISO: String,
+    includeDate: Boolean
+): String {
+    val zonedDateTime = ZonedDateTime.parse(timeInISO)
+
+    val textToReturn = when {
+        isToday(timeInISO) -> {
+            resHelper.getString(R.string.today)
+        }
+        isTomorrow(timeInISO) -> {
+            resHelper.getString(R.string.tomorrow)
+        }
+        isYesterday(timeInISO) -> {
+            resHelper.getString(R.string.yesterday)
+        }
+        else -> {
+            val nameOfDay = getNameOfDayOfWeek(resHelper, zonedDateTime.dayOfWeek.value)
+            if (!includeDate) {
+                nameOfDay
+            } else {
+                "$nameOfDay ${zonedDateTime.dayOfMonth}/${zonedDateTime.monthValue}"
+            }
+        }
+    }
+
+    return textToReturn
+}
+
+fun getRelativeTimeFromISO(timeInISO: String): String {
+    val zonedDateTime = ZonedDateTime.parse(timeInISO)
+    val now = ZonedDateTime.now(zonedDateTime.zone)
+
+    val oldTimeInMillis = zonedDateTime.toInstant().toEpochMilli()
+    val nowInMillis = now.toInstant().toEpochMilli()
+
+    return DateUtils.getRelativeTimeSpanString(
+        oldTimeInMillis,
+        nowInMillis,
+        DateUtils.MINUTE_IN_MILLIS
+    ).toString()
+}
+
+// TODO: Maybe inject this. Also check if multiple instances are being created each time
+fun getHourMinutesFromISO(context: Context, timeInISO: String): String {
+    val zonedDateTime = ZonedDateTime.parse(timeInISO)
+    return if (DateFormat.is24HourFormat(context)) {
+        zonedDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+    } else {
+        zonedDateTime.format(DateTimeFormatter.ofPattern("hh:mm a"))
     }
 }
 
-fun LocalDateTime.millis(): Long {
-    return TimeUnit.SECONDS.toMillis(this.atZone(ZoneOffset.systemDefault()).toEpochSecond())
+fun isYesterday(timeInISO: String): Boolean {
+    val zonedDateTime = ZonedDateTime.parse(timeInISO)
+    val now = ZonedDateTime.now(zonedDateTime.zone)
+
+    return now.minusDays(1).dayOfYear == zonedDateTime.dayOfYear
 }
 
-fun fromMillis(millis: Long): LocalDateTime {
-    return LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault())
+fun isToday(timeInISO: String): Boolean {
+    val zonedDateTime = ZonedDateTime.parse(timeInISO)
+    val now = ZonedDateTime.now(zonedDateTime.zone)
+
+    return now.dayOfYear == zonedDateTime.dayOfYear
 }
 
-fun LocalDateTime.formatDefault(): String {
-    return format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+fun isTomorrow(timeInISO: String): Boolean {
+    val zonedDateTime = ZonedDateTime.parse(timeInISO)
+    val now = ZonedDateTime.now(zonedDateTime.zone)
+
+    return now.dayOfYear == zonedDateTime.minusDays(1).dayOfYear
 }
 
-fun LocalDateTime.formatOnlyTime(): String {
-    return format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))
+@Suppress("MagicNumber")
+fun getNameOfDayOfWeek(resHelper: ResourcesHelper, dayOfWeek: Int): String {
+    return when (dayOfWeek) {
+        1 -> resHelper.getString(R.string.monday)
+        2 -> resHelper.getString(R.string.tuesday)
+        3 -> resHelper.getString(R.string.wednesday)
+        4 -> resHelper.getString(R.string.thursday)
+        5 -> resHelper.getString(R.string.friday)
+        6 -> resHelper.getString(R.string.saturday)
+        7 -> resHelper.getString(R.string.sunday)
+        else -> ""
+    }
 }

@@ -11,8 +11,8 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityResetPasswordBinding
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Validator
+import com.weatherxm.util.applyTopBottomInsets
 import com.weatherxm.util.onTextChanged
-import dev.chrisbanes.insetter.applyInsetter
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 
@@ -26,7 +26,7 @@ class ResetPasswordActivity : AppCompatActivity(), KoinComponent {
         binding = ActivityResetPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        applyMapInsets()
+        binding.root.applyTopBottomInsets()
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
@@ -40,7 +40,7 @@ class ResetPasswordActivity : AppCompatActivity(), KoinComponent {
             val email = binding.email.text.toString()
 
             if (validator.validateUsername(email)) {
-                binding.emailContainer.error = model.resHelper().getString(R.string.invalid_email)
+                binding.emailContainer.error = getString(R.string.invalid_email)
                 return@setOnClickListener
             }
 
@@ -68,17 +68,6 @@ class ResetPasswordActivity : AppCompatActivity(), KoinComponent {
             Status.LOADING -> {
                 binding.sendBtn.isEnabled = false
                 binding.progress.visibility = View.VISIBLE
-            }
-        }
-    }
-
-    private fun applyMapInsets() {
-        binding.root.applyInsetter {
-            type(statusBars = true) {
-                padding(left = false, top = true, right = false, bottom = false)
-            }
-            type(navigationBars = true) {
-                padding(left = false, top = false, right = false, bottom = true)
             }
         }
     }

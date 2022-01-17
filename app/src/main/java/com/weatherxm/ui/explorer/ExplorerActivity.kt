@@ -63,19 +63,13 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent {
 
         model.showMapOverlayViews().observe(this, { shouldShow ->
             if (shouldShow) {
-                binding.logo.show(SlideInFromTop)
-                binding.settings.show(SlideInFromTop)
+                binding.appBar.show(SlideInFromTop)
                 binding.loginSignupView.show(SlideInFromBottom)
             } else {
-                binding.logo.hide(SlideOutToTop)
-                binding.settings.hide(SlideOutToTop)
+                binding.appBar.hide(SlideOutToTop)
                 binding.loginSignupView.hide(SlideOutToBottom)
             }
         })
-
-        binding.settings.setOnClickListener {
-            navigator.showPreferences(this)
-        }
 
         binding.login.setOnClickListener {
             navigator.showLogin(this)
@@ -88,6 +82,16 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent {
 
         binding.signupPrompt.setOnClickListener {
             navigator.showSignup(this)
+        }
+
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.settings -> {
+                    navigator.showPreferences(this)
+                    true
+                }
+                else -> false
+            }
         }
     }
 
@@ -104,13 +108,7 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent {
     }
 
     private fun applyMapInsets() {
-        binding.logo.applyInsetter {
-            type(statusBars = true) {
-                margin(left = false, top = true, right = false, bottom = false)
-            }
-        }
-
-        binding.settings.applyInsetter {
+        binding.appBar.applyInsetter {
             type(statusBars = true) {
                 margin(left = false, top = true, right = false, bottom = false)
             }

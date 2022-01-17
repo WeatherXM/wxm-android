@@ -7,8 +7,10 @@
     <dimen name="card_top_margin">12dp</dimen>
     <dimen name="card_bottom_margin">12dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
+    <dimen name="card_selected_elevation">8dp</dimen>
     <dimen name="card_corner_radius">12dp</dimen>
 
+    <dimen name="margin_extra_extra_large">62dp</dimen>
     <dimen name="margin_extra_large">48dp</dimen>
     <dimen name="margin_large">24dp</dimen>
     <dimen name="margin_normal">16dp</dimen>
@@ -25,4 +27,6 @@
 
     <dimen name="chart_point_radius">4dp</dimen>
     <dimen name="chart_point_hole_radius">3dp</dimen>
+    <dimen name="chart_line_thickness">3dp</dimen>
+    <dimen name="token_chip_corner_radius">5dp</dimen>
 </resources>

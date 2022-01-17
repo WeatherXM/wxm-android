@@ -9,16 +9,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
-import com.weatherxm.data.Timeseries
 import com.weatherxm.databinding.FragmentDeviceDetailsBinding
 import com.weatherxm.ui.common.toast
-import com.weatherxm.util.Weather
-import com.weatherxm.util.formatDefault
-import com.weatherxm.util.fromMillis
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
@@ -74,24 +69,14 @@ class DeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
             Status.SUCCESS -> {
 
                 // First get the weather data
-                resource.data?.timeseries.let { weather ->
-                    updateWeatherUI(weather)
+                resource.data?.currentWeather.let { weather ->
+                    binding.currentWeatherCard.setWeatherData(weather)
                 }
 
-                // Then get the name/label of the device
+                // Then get the name/label of the device and its location
                 resource.data?.let {
-                    val nameOrLabelOfDevice = deviceDetailModel.getNameOrLabel(it.name, it.label)
-                    when (nameOrLabelOfDevice.status) {
-                        Status.SUCCESS -> {
-                            binding.name.text = nameOrLabelOfDevice.data
-                        }
-                        Status.ERROR -> {
-                            binding.name.visibility = View.GONE
-                            toast(getString(R.string.name_not_found_error), Toast.LENGTH_LONG)
-                        }
-                        Status.LOADING -> {
-                        }
-                    }
+                    binding.name.text = it.getNameOrLabel()
+                    binding.location.text = it.address
                 }
             }
             Status.ERROR -> {
@@ -101,27 +86,6 @@ class DeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
             Status.LOADING -> {
                 // TODO Do something??
             }
-        }
-    }
-
-    private fun updateWeatherUI(weather: Timeseries?) {
-        with(FragmentDeviceDetailsBinding.bind(binding.root)) {
-            icon.setAnimation(Weather.getWeatherAnimation(weather?.hourlyIcon))
-            temperature.text =
-                Weather.getFormattedTemperature(weather?.hourlyTemperature)
-            precipitationIntensity.text =
-                Weather.getFormattedPrecipitation(weather?.hourlyPrecipIntensity)
-            pressure.text = Weather.getFormattedPressure(weather?.hourlyPressure)
-            humidity.text = Weather.getFormattedHumidity(weather?.hourlyHumidity)
-            wind.text = Weather.getFormattedWind(
-                weather?.hourlyWindSpeed,
-                weather?.hourlyWindDirection
-            )
-            cloud.text = Weather.getFormattedCloud(weather?.hourlyCloudCover)
-            solar.text = Weather.getFormattedUV(weather?.hourlyUvIndex)
-            updated.text = weather?.timestamp?.let {
-                "Updated on ${fromMillis(it).formatDefault()}"
-            } ?: ""
         }
     }
 }

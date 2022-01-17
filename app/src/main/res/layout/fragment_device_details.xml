@@ -9,10 +9,9 @@
     android:fitsSystemWindows="false"
     tools:context=".ui.devicedetail.DeviceDetailFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:padding="@dimen/padding_normal">
 
         <com.google.android.material.textview.MaterialTextView
@@ -20,254 +19,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.WeatherXM.Dialog.Title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="ExMachina HQ" />
 
-        <LinearLayout
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:textAppearance="@style/TextAppearance.WeatherXM.Dialog.Subtitle"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            tools:text="Athens, Greece" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
-                android:orientation="horizontal">
-
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/icon"
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1"
-                    app:lottie_autoPlay="true"
-                    app:lottie_loop="true"
-                    tools:background="#88212121"
-                    tools:lottie_rawRes="@raw/anim_weather_clear_day" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/temperature"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    style="@style/TextAppearance.WeatherXM.TemperatureOnCard"
-                    tools:text="26°C" />
-
-            </LinearLayout>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
-                app:cardBackgroundColor="@color/colorSecondary"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="0dp"
-                app:cardMaxElevation="0dp"
-                app:cardPreventCornerOverlap="false"
-                app:contentPadding="@dimen/padding_large">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:baselineAligned="false"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawableStart="@drawable/ic_weather_precipitation"
-                                android:drawablePadding="@dimen/drawable_padding_small" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/precipitation_intensity"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                style="@style/TextAppearance.WeatherXM.WeatherDataOnCard"
-                                tools:text="1.0 mm" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:text="@string/precipitation_intensity"
-                                style="@style/TextAppearance.WeatherXM.WeatherDataOnCard.Subtitle" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawableStart="@drawable/ic_weather_wind"
-                                android:drawablePadding="@dimen/drawable_padding_small" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/wind"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/TextAppearance.WeatherXM.WeatherDataOnCard"
-                                tools:text="2bf NW" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:text="@string/wind"
-                                style="@style/TextAppearance.WeatherXM.WeatherDataOnCard.Subtitle" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawableStart="@drawable/ic_weather_humidity"
-                                android:drawablePadding="@dimen/drawable_padding_small" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/humidity"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                style="@style/TextAppearance.WeatherXM.WeatherDataOnCard"
-                                tools:text="45%" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:text="@string/humidity"
-                                style="@style/TextAppearance.WeatherXM.WeatherDataOnCard.Subtitle" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_large"
-                        android:baselineAligned="false"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawableStart="@drawable/ic_weather_pressure"
-                                android:drawablePadding="@dimen/drawable_padding_small" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/pressure"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                style="@style/TextAppearance.WeatherXM.WeatherDataOnCard"
-                                tools:text="10 hpa" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:text="@string/pressure"
-                                style="@style/TextAppearance.WeatherXM.WeatherDataOnCard.Subtitle" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawableStart="@drawable/ic_weather_cloud"
-                                android:drawablePadding="@dimen/drawable_padding_small" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/cloud"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                style="@style/TextAppearance.WeatherXM.WeatherDataOnCard"
-                                tools:text="20%" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:text="@string/cloud_cover"
-                                style="@style/TextAppearance.WeatherXM.WeatherDataOnCard.Subtitle" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawableStart="@drawable/ic_weather_solar"
-                                android:drawablePadding="@dimen/drawable_padding_small" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/solar"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                style="@style/TextAppearance.WeatherXM.WeatherDataOnCard"
-                                tools:text="7" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:text="@string/uv_index"
-                                style="@style/TextAppearance.WeatherXM.WeatherDataOnCard.Subtitle" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/updated"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
-                style="@style/TextAppearance.WeatherXM.Updated.On"
-                tools:text="Updated on May the 4th" />
-        </LinearLayout>
-    </LinearLayout>
+        <com.weatherxm.ui.widget.WeatherCardView
+            android:id="@+id/currentWeatherCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            app:layout_constraintTop_toBottomOf="@id/location" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

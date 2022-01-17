@@ -39,12 +39,19 @@
     <string name="hello">Hello</string>
     <string name="ownership_wallet">I acknowledge that I have ownership and full access to this wallet.</string>
     <string name="terms">I have read and accept the terms.</string>
-    <string name="oops_something_wrong">Oops! Something went wrong.</string>
     <string name="send">Send Email</string>
     <string name="success">Success</string>
     <string name="success_title">Email has been sent!</string>
     <string name="success_text">We have sent instructions for resetting your password to your email.</string>
     <string name="send_email_instructions">Enter the email associated with your account and we will send you an email with instructions to reset your password.</string>
+    <string name="next_7_days">Next 7 Days</string>
+    <string name="see_historical_charts">See Historical Charts</string>
+    <string name="earnings">Earnings</string>
+    <string name="wxm">WXM</string>
+    <string name="button_24h">24H</string>
+    <string name="button_7d">7D</string>
+    <string name="button_30d">30D</string>
+    <string name="last_active">Last active %s</string>
 
     <!-- TODO Remove them when we remove the relevant XMLs -->
     <string name="hint_field_name">Field Name</string>
@@ -59,6 +66,19 @@
     <string name="permission_permanently_denied_title">Permission permanently denied</string>
     <string name="permission_permanently_denied_rationale">Go to the app settings to give the required permissions.</string>
 
+    <!-- Dates/Days -->
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+
+
     <!-- Weather Stations -->
     <string name="no_added_weather_stations_yet">You haven\'t added any weather stations yet.</string>
     <string name="add_weather_station">Add your weather station by clicking the + button</string>
@@ -67,7 +87,6 @@
     <string name="unknown">Unknown</string>
     <string name="no_weather_stations">You haven\'t added any weather stations yet.</string>
     <string name="current_weather">Current Weather</string>
-    <string name="today">Today</string>
     <string name="title_dialog_logout">Logout?</string>
     <string name="message_dialog_logout">Are you sure you want to logout?</string>
     <string name="yes">Yes</string>
@@ -84,11 +103,11 @@
     <!-- Weather Data & Units -->
     <string name="updated_on">Updated on</string>
     <string name="weather_units">Weather Units</string>
-    <string translatable="false" name="key_temperature_preference">temperature_unit</string>
-    <string translatable="false" name="key_precipitation_preference">precipitation_unit</string>
-    <string translatable="false" name="key_wind_speed_preference">wind_speed_unit</string>
-    <string translatable="false" name="key_wind_direction_preference">wind_direction_unit</string>
-    <string translatable="false" name="key_pressure_preference">pressure_unit</string>
+    <string name="key_temperature_preference" translatable="false">temperature_unit</string>
+    <string name="key_precipitation_preference" translatable="false">precipitation_unit</string>
+    <string name="key_wind_speed_preference" translatable="false">wind_speed_unit</string>
+    <string name="key_wind_direction_preference" translatable="false">wind_direction_unit</string>
+    <string name="key_pressure_preference" translatable="false">pressure_unit</string>
     <string name="temperature">Temperature</string>
     <string name="humidity">Humidity</string>
     <string name="precipitation">Precipitation</string>
@@ -180,5 +199,8 @@
     <string name="user_info_error">Failed to get your data. Please try again.</string>
     <string name="address_save_network_error">Failed to save your address. Network Error.</string>
     <string name="address_save_server_error">Failed to save your address. Server Error.</string>
+    <string name="forecast_failed">Getting weather forecast data failed.</string>
+    <string name="token_failed">Getting token data failed.</string>
+    <string name="oops_something_wrong">Oops! Something went wrong.</string>
 
 </resources>
