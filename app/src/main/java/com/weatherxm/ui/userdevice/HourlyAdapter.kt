@@ -44,13 +44,13 @@ class HourlyAdapter(
         if (holder.itemView.isSelected) {
             selectedPos = holder.adapterPosition
             holder.itemView.isActivated = true
-            holder.getBinding().card.cardElevation =
-                context.resources.getDimension(R.dimen.card_selected_elevation)
+            /*holder.getBinding().card.cardElevation =
+                context.resources.getDimension(R.dimen.card_selected_elevation)*/
             onForecastClick.invoke(getItem(selectedPos))
         } else {
             holder.itemView.isActivated = false
-            holder.getBinding().card.cardElevation =
-                context.resources.getDimension(R.dimen.card_elevation)
+            /*holder.getBinding().card.cardElevation =
+                context.resources.getDimension(R.dimen.card_elevation)*/
         }
     }
 
@@ -69,7 +69,7 @@ class HourlyAdapter(
             item.timestamp?.let {
                 binding.time.text = getHourMinutesFromISO(context, it)
                 binding.icon.setAnimation(Weather.getWeatherAnimation(item.icon))
-                binding.icon.playAnimation()
+                // TODO binding.icon.playAnimation()
                 binding.temperature.text = Weather.getFormattedTemperature(item.temperature)
             }
         }

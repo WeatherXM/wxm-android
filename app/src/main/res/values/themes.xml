@@ -335,7 +335,8 @@
 
     <style name="Widget.WeatherXM.MaterialCard.HourlyForecast" parent="Widget.WeatherXM.MaterialCard.Small">
         <item name="cardBackgroundColor">@color/hourly_forecast_background_list</item>
-        <item name="cardElevation">@dimen/card_elevation</item>
+        <item name="android:stateListAnimator">@animator/weather_forecast_tile_elevation</item>
+        <!--<item name="cardElevation">@dimen/card_elevation</item>-->
     </style>
 
 </resources>

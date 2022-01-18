@@ -64,15 +64,18 @@
         android:layout_height="match_parent"
         android:clipChildren="false"
         android:clipToPadding="false"
+        android:clipToOutline="false"
         android:fillViewport="true"
         android:paddingBottom="@dimen/margin_large"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        tools:targetApi="s">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipChildren="false"
             android:clipToPadding="false"
+            android:clipToOutline="false"
             android:paddingHorizontal="@dimen/margin_normal">
 
             <com.weatherxm.ui.widget.WeatherCardView
@@ -121,6 +124,7 @@
                 android:layout_marginTop="@dimen/margin_normal"
                 android:clipChildren="false"
                 android:clipToPadding="false"
+                android:clipToOutline="false"
                 android:nestedScrollingEnabled="false"
                 android:orientation="horizontal"
                 android:overScrollMode="never"
