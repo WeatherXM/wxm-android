@@ -6,6 +6,7 @@ import android.widget.EditText
 import androidx.annotation.StringRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.chip.Chip
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import dev.chrisbanes.insetter.applyInsetter
 
@@ -54,5 +55,17 @@ fun CoordinatorLayout.applyTopBottomInsets() {
         type(navigationBars = true) {
             padding(left = false, top = false, right = false, bottom = true)
         }
+    }
+}
+
+fun FloatingActionButton.showIfNot() {
+    if (this.isOrWillBeHidden) {
+        this.show()
+    }
+}
+
+fun FloatingActionButton.hideIfNot() {
+    if (this.isOrWillBeShown) {
+        this.hide()
     }
 }
