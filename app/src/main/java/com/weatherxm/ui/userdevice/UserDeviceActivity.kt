@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.data.Device
-import com.weatherxm.data.HourlyWeather
 import com.weatherxm.databinding.ActivityUserDeviceBinding
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.widget.TokenCardView
@@ -22,8 +22,8 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
 
     private val model: UserDeviceViewModel by viewModels()
     private lateinit var binding: ActivityUserDeviceBinding
+    private lateinit var hourlyAdapter: HourlyAdapter
     private var snackbar: Snackbar? = null
-    private var hourlyAdapter: HourlyAdapter? = null
 
     companion object {
         const val ARG_DEVICE = "device"
@@ -47,10 +47,13 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
         }
 
         // Initialize the adapter with empty data and its listener when an item is clicked
-        hourlyAdapter = HourlyAdapter(this) {
+        hourlyAdapter = HourlyAdapter {
             binding.currentWeatherCard.setWeatherData(it)
         }
         binding.recycler.adapter = hourlyAdapter
+
+        // Fix flickering on item selection
+        (binding.recycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
@@ -75,7 +78,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
         }
 
         model.onForecast().observe(this) {
-            updateAdapter(device.currentWeather, it)
+            hourlyAdapter.submitList(it)
         }
 
         model.onTokens().observe(this) {
@@ -93,12 +96,6 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
         // Fetch data
         model.setDevice(device)
         model.getUserDeviceData()
-    }
-
-    private fun updateAdapter(currentWeather: HourlyWeather?, forecast: List<HourlyWeather>?) {
-        val listAdapter = model.addCurrentToForecast(currentWeather, forecast)
-        hourlyAdapter?.resetSelected()
-        hourlyAdapter?.submitList(listAdapter)
     }
 
     private fun updateToolbar(device: Device) {

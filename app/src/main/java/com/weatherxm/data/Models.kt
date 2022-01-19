@@ -155,7 +155,7 @@ data class WeatherData(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class HourlyWeather(
-    var timestamp: String?,
+    var timestamp: String,
     val precipitation: Float?,
     val temperature: Float?,
     @Json(name = "wind_direction")
