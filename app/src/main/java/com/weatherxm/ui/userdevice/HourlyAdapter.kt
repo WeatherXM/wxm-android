@@ -1,81 +1,77 @@
 package com.weatherxm.ui.userdevice
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.weatherxm.R
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.databinding.ListItemHourlyWeatherBinding
+import com.weatherxm.ui.userdevice.HourlyAdapter.HourlyViewHolder
 import com.weatherxm.util.Weather
 import com.weatherxm.util.getHourMinutesFromISO
 import org.koin.core.component.KoinComponent
 
 class HourlyAdapter(
-    private val context: Context,
-    private val onForecastClick: (HourlyWeather) -> Unit,
-) :
-    ListAdapter<HourlyWeather, HourlyAdapter.HourlyViewHolder>(HourlyDiffCallback()),
-    KoinComponent {
-    private var selectedPos = RecyclerView.NO_POSITION
+    private val onHourlyForecastSelected: (HourlyWeather) -> Unit
+) : ListAdapter<HourlyWeather, HourlyViewHolder>(HourlyDiffCallback()), KoinComponent {
+
+    private var selectedPosition = RecyclerView.NO_POSITION
+
+    override fun submitList(list: List<HourlyWeather>?) {
+        // Reset selected position
+        selectedPosition = if (list.isNullOrEmpty()) RecyclerView.NO_POSITION else 0
+        // Update data
+        super.submitList(list)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyViewHolder {
-        val binding =
-            ListItemHourlyWeatherBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
-        val holder = HourlyViewHolder(binding)
-
-        holder.itemView.setOnClickListener {
-            val lastSelectedItem = selectedPos
-            selectedPos = holder.adapterPosition
-            holder.itemView.isActivated = true
-            notifyItemChanged(lastSelectedItem)
-            notifyItemChanged(selectedPos)
-        }
-        return holder
+        val binding = ListItemHourlyWeatherBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return HourlyViewHolder(binding, onHourlyForecastSelected)
     }
 
     override fun onBindViewHolder(holder: HourlyViewHolder, position: Int) {
-        holder.bind(getItem(position))
-        holder.itemView.isSelected = isSelected(position)
-
-        if (holder.itemView.isSelected) {
-            selectedPos = holder.adapterPosition
-            holder.itemView.isActivated = true
-            /*holder.getBinding().card.cardElevation =
-                context.resources.getDimension(R.dimen.card_selected_elevation)*/
-            onForecastClick.invoke(getItem(selectedPos))
-        } else {
-            holder.itemView.isActivated = false
-            /*holder.getBinding().card.cardElevation =
-                context.resources.getDimension(R.dimen.card_elevation)*/
-        }
-    }
-
-    fun resetSelected() {
-        selectedPos = RecyclerView.NO_POSITION
+        val item = getItem(position)
+        holder.bind(item, isSelected(position))
     }
 
     private fun isSelected(position: Int): Boolean {
-        return selectedPos == position || (selectedPos == RecyclerView.NO_POSITION && position == 0)
+        return selectedPosition == position
+            || (selectedPosition == RecyclerView.NO_POSITION && position == 0)
     }
 
-    inner class HourlyViewHolder(private val binding: ListItemHourlyWeatherBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class HourlyViewHolder(
+        private val binding: ListItemHourlyWeatherBinding,
+        private val onHourlyForecastSelected: (HourlyWeather) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: HourlyWeather) {
-            item.timestamp?.let {
-                binding.time.text = getHourMinutesFromISO(context, it)
-                binding.icon.setAnimation(Weather.getWeatherAnimation(item.icon))
-                // TODO binding.icon.playAnimation()
-                binding.temperature.text = Weather.getFormattedTemperature(item.temperature)
+        init {
+            itemView.setOnClickListener {
+                // Invoke listener
+                onHourlyForecastSelected(getItem(adapterPosition))
+
+                // Change the selected state
+                val lastSelectedItem = selectedPosition
+                selectedPosition = adapterPosition
+
+                // Notify unselected & selected items, to force UI update
+                notifyItemChanged(lastSelectedItem)
+                notifyItemChanged(selectedPosition)
             }
         }
 
-        fun getBinding(): ListItemHourlyWeatherBinding {
-            return binding
+        fun bind(item: HourlyWeather, isSelected: Boolean) {
+            binding.root.isActivated = isSelected
+            binding.time.text = getHourMinutesFromISO(itemView.context, item.timestamp)
+            binding.temperature.text = Weather.getFormattedTemperature(item.temperature)
+            binding.icon.apply {
+                setAnimation(Weather.getWeatherAnimation(item.icon))
+                playAnimation()
+            }
         }
     }
 

@@ -95,7 +95,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             val forecast = forecastDeferred.await()
             forecast
                 .map {
-                    onForecast.postValue(it)
+                    onForecast.postValue(addCurrentToForecast(device.currentWeather, it))
                 }
                 .mapLeft {
                     Timber.d("Got error when fetching weather forecast: $it")
@@ -150,7 +150,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     userDeviceUseCase.getTodayForecast(device)
                         .map {
                             Timber.d("Got Short Term Forecast: $it")
-                            onForecast.postValue(it)
+                            onForecast.postValue(addCurrentToForecast(device.currentWeather, it))
                         }
                         .mapLeft {
                             Timber.d("Got error: $it")
@@ -177,7 +177,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     userDeviceUseCase.getTomorrowForecast(device)
                         .map {
                             Timber.d("Got Short Term Forecast: $it")
-                            onForecast.postValue(it)
+                            onForecast.postValue(addCurrentToForecast(device.currentWeather, it))
                         }
                         .mapLeft {
                             Timber.d("Got error: $it")
@@ -257,7 +257,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         onError.postValue(uiError)
     }
 
-    fun addCurrentToForecast(
+    private fun addCurrentToForecast(
         currentWeather: HourlyWeather?,
         forecastTimeseries: List<HourlyWeather>?
     ): List<HourlyWeather> {
