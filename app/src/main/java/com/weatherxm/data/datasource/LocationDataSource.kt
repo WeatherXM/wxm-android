@@ -91,9 +91,9 @@ class LocationDataSourceImpl : LocationDataSource, KoinComponent {
     private fun FusedLocationProviderClient.locationFlow() = callbackFlow {
         // Create callback for sending location updates to the flow
         val callback = object : LocationCallback() {
-            override fun onLocationResult(result: LocationResult?) {
+            override fun onLocationResult(result: LocationResult) {
                 // Ignore null responses
-                if (result == null || result.locations.isNullOrEmpty()) {
+                if (result.locations.isNullOrEmpty()) {
                     Timber.d("Skipping null location")
                     return
                 }
