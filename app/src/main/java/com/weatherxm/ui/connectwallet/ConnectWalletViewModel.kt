@@ -8,7 +8,6 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.ServerError
 import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.util.ResourcesHelper
-import com.weatherxm.util.Validator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,15 +22,9 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
 
     private val userRepository: UserRepository by inject()
     private val resHelper: ResourcesHelper by inject()
-    private val validator: Validator by inject()
 
-    fun isAddressValid(address: String?): Boolean {
-        if (address.isNullOrEmpty() || !validator.validateEthAddress(address)) {
-            return false
-        }
-
-        return true
-    }
+    private var currentAddress = MutableLiveData<String>()
+    fun currentAddress() = currentAddress
 
     fun saveAddress(address: String) {
         isAddressSaved.postValue(Resource.loading())
@@ -55,17 +48,17 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
                                 resHelper.getString(R.string.unknown_error)
                             )
                         )
-                        else -> isAddressSaved.postValue(
-                            Resource.error(
-                                resHelper.getString(R.string.unknown_error)
-                            )
-                        )
                     }
                 }.map {
                     isAddressSaved.postValue(
                         Resource.success(resHelper.getString(R.string.address_saved))
                     )
+                    setCurrentAddress(address)
                 }
         }
+    }
+
+    fun setCurrentAddress(address: String) {
+        currentAddress.postValue(address)
     }
 }

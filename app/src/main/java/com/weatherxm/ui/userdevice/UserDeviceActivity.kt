@@ -11,7 +11,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.databinding.ActivityUserDeviceBinding
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.widget.TokenCardView
-import com.weatherxm.util.applyTopBottomInsets
+import com.weatherxm.util.applyInsets
 import com.weatherxm.util.getRelativeTimeFromISO
 import com.weatherxm.util.onTabSelected
 import com.weatherxm.util.setTextAndColor
@@ -36,7 +36,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
         binding = ActivityUserDeviceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.root.applyTopBottomInsets()
+        binding.root.applyInsets()
 
         val device = intent?.extras?.getParcelable<Device>(ARG_DEVICE)
         if (device == null) {

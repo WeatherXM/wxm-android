@@ -12,7 +12,7 @@ import com.weatherxm.data.User
 import com.weatherxm.databinding.FragmentProfileBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
-import com.weatherxm.util.applyTopInset
+import com.weatherxm.util.applyInsets
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -30,7 +30,7 @@ class ProfileFragment : Fragment() {
     ): View {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
 
-        binding.root.applyTopInset()
+        binding.root.applyInsets()
 
         binding.connectWallet.setOnClickListener {
             navigator.showConnectWallet(this, user?.wallet)
@@ -69,21 +69,16 @@ class ProfileFragment : Fragment() {
 
     private fun updateUI(user: User?, showProgressBar: Boolean) {
         user?.let {
-            if (!it.name.isNullOrEmpty()) {
-                binding.nameOrEmail.text = it.name
-                binding.nameOrEmail.visibility = View.VISIBLE
-            } else if (!it.firstName.isNullOrEmpty() && !it.lastName.isNullOrEmpty()) {
-                val nameAndLastname = "${it.firstName} ${it.lastName}"
-                binding.nameOrEmail.text = nameAndLastname
-                binding.nameOrEmail.visibility = View.VISIBLE
+            binding.toolbar.title = if (it.name == it.email) {
+                getString(R.string.hello)
             } else {
-                binding.nameOrEmail.visibility = View.GONE
+                getString(R.string.hello_user, it.name)
             }
-
-            if (!it.wallet?.address.isNullOrEmpty()) {
-                binding.connectWallet.text = getString(R.string.title_change_wallet)
+            if (it.email.isEmpty()) {
+                binding.email.visibility = View.GONE
             } else {
-                binding.connectWallet.text = getString(R.string.title_connect_wallet)
+                binding.email.text = it.email
+                binding.email.visibility = View.VISIBLE
             }
             this.user = user
         }
@@ -91,7 +86,7 @@ class ProfileFragment : Fragment() {
         if (showProgressBar) {
             binding.progress.visibility = View.VISIBLE
         } else {
-            binding.progress.visibility = View.GONE
+            binding.progress.visibility = View.INVISIBLE
         }
 
     }

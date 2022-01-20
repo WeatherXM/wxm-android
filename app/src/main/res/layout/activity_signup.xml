@@ -15,12 +15,12 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/header"
+            style="@style/TextAppearance.WeatherXM.Title.Headline_4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
             android:layout_marginTop="48dp"
             android:text="@string/title_signup"
-            style="@style/TextAppearance.WeatherXM.Title.Headline_4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -126,7 +126,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/loginPrompt"
-            style="@style/Widget.WeatherXM.Button.Subtle"
+            style="@style/Widget.WeatherXM.Button.Link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
@@ -139,14 +139,12 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ProgressBar
+    <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/loading"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        style="@style/Widget.WeatherXM.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="8dp"
-        android:indeterminate="true"
-        android:indeterminateOnly="true"
-        android:indeterminateTint="@color/colorPrimary"
+        android:paddingHorizontal="@dimen/padding_normal"
         android:visibility="gone"
         tools:visibility="visible" />
 

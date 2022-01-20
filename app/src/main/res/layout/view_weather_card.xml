@@ -9,10 +9,9 @@
     tools:parentTag="LinearLayout">
 
     <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.WeatherXM.MaterialCard.Weather"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.WeatherXM.MaterialCard"
-        app:cardBackgroundColor="@color/colorSecondary">
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -293,7 +292,9 @@
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
 </merge>

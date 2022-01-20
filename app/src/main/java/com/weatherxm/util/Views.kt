@@ -2,6 +2,8 @@ package com.weatherxm.util
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import androidx.annotation.StringRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -39,20 +41,12 @@ fun Chip.setTextAndColor(@StringRes text: Int, color: Int) {
     this.text = this.resources.getString(text)
 }
 
-fun CoordinatorLayout.applyTopInset() {
+fun ViewGroup.applyInsets(top: Boolean = true, bottom: Boolean = true) {
     this.applyInsetter {
-        type(statusBars = true) {
+        type(statusBars = top) {
             padding(left = false, top = true, right = false, bottom = false)
         }
-    }
-}
-
-fun CoordinatorLayout.applyTopBottomInsets() {
-    this.applyInsetter {
-        type(statusBars = true) {
-            padding(left = false, top = true, right = false, bottom = false)
-        }
-        type(navigationBars = true) {
+        type(navigationBars = bottom) {
             padding(left = false, top = false, right = false, bottom = true)
         }
     }

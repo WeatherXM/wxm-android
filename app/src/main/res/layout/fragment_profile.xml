@@ -18,11 +18,12 @@
             tools:title="Hello, crypto!" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/nameOrEmail"
+            android:id="@+id/email"
             style="@style/TextAppearance.WeatherXM.Profile.UserInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/activity_horizontal_margin"
+            android:layout_marginHorizontal="@dimen/margin_normal"
+            android:layout_marginBottom="@dimen/margin_normal"
             tools:text="customer@test.com" />
 
         <!-- Progress -->
@@ -31,7 +32,7 @@
             android:id="@+id/progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="invisible"
             tools:visibility="visible" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -39,33 +40,41 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_extra_large"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingHorizontal="@dimen/padding_normal"
+        android:paddingVertical="@dimen/padding_normal"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/addressCard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="?dividerHorizontal"
-            android:orientation="vertical"
-            android:showDividers="beginning|middle|end">
+            android:layout_height="wrap_content">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/connect_wallet"
-                style="@style/Widget.WeatherXM.Profile.Elements"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableEnd="@drawable/ic_next"
-                android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                android:text="@string/title_connect_wallet" />
+                android:orientation="vertical">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/settings"
-                style="@style/Widget.WeatherXM.Profile.Elements"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="@dimen/activity_horizontal_margin"
-                android:text="@string/settings" />
-        </LinearLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/connect_wallet"
+                    style="@style/Widget.WeatherXM.Profile.Elements"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_connect_wallet"
+                    app:icon="@drawable/wallet" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/settings"
+                    style="@style/Widget.WeatherXM.Profile.Elements"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings"
+                    app:icon="@drawable/outline_settings" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.core.widget.NestedScrollView>
 

@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityPreferencesBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.addFragment
+import com.weatherxm.ui.preferences.PreferenceFragment.Companion.TAG
+import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -19,11 +22,12 @@ class PreferenceActivity : AppCompatActivity(), KoinComponent {
         super.onCreate(savedInstanceState)
         binding = ActivityPreferencesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.preference_root, PreferenceFragment())
-            .commit()
+        binding.root.applyInsets()
+        addFragment(PreferenceFragment(), TAG, R.id.preferencesFragment)
+
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
 
         model.onLogout().observe(this, { hasLoggedOut ->
             if (hasLoggedOut) {

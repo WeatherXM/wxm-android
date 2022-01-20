@@ -11,7 +11,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.util.applyTopInset
+import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -28,7 +28,8 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
     ): View {
         binding = FragmentDevicesBinding.inflate(inflater, container, false)
 
-        binding.root.applyTopInset()
+        binding.root.applyInsets()
+
         val adapter = DeviceAdapter(this)
         binding.recycler.adapter = adapter
 

@@ -6,7 +6,7 @@
         <ListPreference
             app:key="@string/key_temperature_preference"
             app:title="@string/temperature"
-            app:summary="@string/choose_temperature_summary"
+            app:summary="%s"
             app:entries="@array/temperature_entries"
             app:entryValues="@array/temperature_values"
             app:defaultValue="@string/temperature_celsius"
@@ -15,7 +15,7 @@
         <ListPreference
             app:key="@string/key_precipitation_preference"
             app:title="@string/precipitation"
-            app:summary="@string/choose_precipitation_summary"
+            app:summary="%s"
             app:entries="@array/precipitation_entries"
             app:entryValues="@array/precipitation_values"
             app:defaultValue="@string/precipitation_mm"
@@ -24,7 +24,7 @@
         <ListPreference
             app:key="@string/key_wind_speed_preference"
             app:title="@string/wind_speed"
-            app:summary="@string/choose_wind_speed_summary"
+            app:summary="%s"
             app:entries="@array/wind_speed_entries"
             app:entryValues="@array/wind_speed_values"
             app:defaultValue="@string/wind_speed_kmh"
@@ -33,7 +33,7 @@
         <ListPreference
             app:key="@string/key_wind_direction_preference"
             app:title="@string/wind_direction"
-            app:summary="@string/choose_wind_direction_summary"
+            app:summary="%s"
             app:entries="@array/wind_direction_entries"
             app:entryValues="@array/wind_direction_values"
             app:defaultValue="@string/wind_direction_cardinal"
@@ -42,7 +42,7 @@
         <ListPreference
             app:key="@string/key_pressure_preference"
             app:title="@string/pressure"
-            app:summary="@string/choose_pressure_summary"
+            app:summary="%s"
             app:entries="@array/pressure_entries"
             app:entryValues="@array/pressure_values"
             app:defaultValue="@string/pressure_hpa"

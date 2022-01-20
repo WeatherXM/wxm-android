@@ -6,16 +6,19 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="false">
 
-    <!--
-        There is an elevation issue of the AppBar causing
-        a shadow at its bounds. Having elevation=0 removes the entire app bar.
-        Somehow the fragment container view below causes that.
-        If removed, the issue is fixed with elevation=0.
-        To be fixed.
-    -->
+    <!-- Content -->
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/mapView"
+        android:name="com.weatherxm.ui.explorer.ExplorerMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_map" />
+
+    <!-- Header -->
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
-        style="@style/Widget.WeatherXM.AppBar.Transparent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -34,18 +37,10 @@
                 android:contentDescription="@string/app_name"
                 android:scaleType="fitStart"
                 android:src="@drawable/app_logo_wide" />
+
         </com.google.android.material.appbar.MaterialToolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- Content -->
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/mapView"
-        android:name="com.weatherxm.ui.explorer.ExplorerMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_map" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/login_signup_view"
@@ -56,8 +51,7 @@
         app:cardBackgroundColor="@color/white_translucent"
         app:cardElevation="@dimen/card_elevation"
         app:cardMaxElevation="@dimen/card_elevation"
-        app:contentPadding="@dimen/padding_normal"
-        app:layout_dodgeInsetEdges="bottom">
+        app:contentPadding="@dimen/padding_normal">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -75,7 +69,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/signupPrompt"
-                style="@style/Widget.WeatherXM.Button.Subtle"
+                style="@style/Widget.WeatherXM.Button.Link"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/prompt_signup"
@@ -89,9 +83,9 @@
 
     <!-- Progress -->
 
-    <ProgressBar
+    <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress"
-        style="@android:style/Widget.Material.ProgressBar.Horizontal"
+        style="@style/Widget.WeatherXM.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"

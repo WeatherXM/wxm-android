@@ -42,6 +42,7 @@ import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.ExplorerUseCaseImpl
 import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.usecases.UserDeviceUseCaseImpl
+import com.weatherxm.util.Mask
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Validator
 import okhttp3.Cache
@@ -252,6 +253,10 @@ private val utilities = module {
 
     single<AuthTokenJsonAdapter> {
         AuthTokenJsonAdapter(get())
+    }
+
+    single<Mask> {
+        Mask()
     }
 }
 

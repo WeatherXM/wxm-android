@@ -11,7 +11,7 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityResetPasswordBinding
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Validator
-import com.weatherxm.util.applyTopBottomInsets
+import com.weatherxm.util.applyInsets
 import com.weatherxm.util.onTextChanged
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
@@ -26,7 +26,7 @@ class ResetPasswordActivity : AppCompatActivity(), KoinComponent {
         binding = ActivityResetPasswordBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.root.applyTopBottomInsets()
+        binding.root.applyInsets()
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()

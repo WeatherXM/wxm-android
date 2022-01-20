@@ -48,11 +48,11 @@
         <activity
             android:name="com.weatherxm.ui.login.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM.NoActionBar" />
+            android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.signup.SignupActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM.NoActionBar" />
+            android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.home.HomeActivity"
             android:label="@string/title_home"
@@ -61,7 +61,8 @@
         <activity
             android:name="com.weatherxm.ui.preferences.PreferenceActivity"
             android:label="@string/settings"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM.Home" />
         <activity
             android:name="com.weatherxm.ui.connectwallet.ConnectWalletActivity"
             android:label="@string/title_connect_wallet"

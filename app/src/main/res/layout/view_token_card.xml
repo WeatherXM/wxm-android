@@ -9,10 +9,9 @@
     tools:parentTag="LinearLayout">
 
     <com.google.android.material.card.MaterialCardView
-        style="@style/Widget.WeatherXM.MaterialCard"
+        style="@style/Widget.WeatherXM.MaterialCard.Tokens"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/tokenChartBackground"
         app:cardUseCompatPadding="true">
 
         <LinearLayout

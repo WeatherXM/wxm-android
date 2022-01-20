@@ -8,15 +8,17 @@ import androidx.preference.PreferenceFragmentCompat
 import com.weatherxm.R
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.AlertDialogFragment
-import com.weatherxm.util.ResourcesHelper
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
 class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
     private val model: PreferenceViewModel by activityViewModels()
-    private val resHelper: ResourcesHelper by inject()
     private val navigator: Navigator by inject()
+
+    companion object {
+        const val TAG = "PreferenceFragment"
+    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
@@ -26,15 +28,15 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
                 .mapLeft {
                     Timber.d("Not logged in. Hide account preferences.")
                     val accountCategory: PreferenceCategory? =
-                        findPreference(resHelper.getString(R.string.account))
+                        findPreference(getString(R.string.account))
                     accountCategory?.isVisible = false
                 }
                 .map {
                     Timber.d("Logged in. Handle button clicks")
                     val logoutButton: Preference? =
-                        findPreference(resHelper.getString(R.string.action_logout))
+                        findPreference(getString(R.string.action_logout))
                     val resetPassButton: Preference? =
-                        findPreference(resHelper.getString(R.string.change_password))
+                        findPreference(getString(R.string.change_password))
                     logoutButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                         showLogoutDialog()
                         true
@@ -50,11 +52,11 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
 
     private fun showLogoutDialog() {
         AlertDialogFragment.Builder(
-            title = resHelper.getString(R.string.title_dialog_logout),
-            message = resHelper.getString(R.string.message_dialog_logout),
-            negative = resHelper.getString(R.string.no)
+            title = getString(R.string.title_dialog_logout),
+            message = getString(R.string.message_dialog_logout),
+            negative = getString(R.string.no)
         )
-            .onPositiveClick(resHelper.getString(R.string.yes)) {
+            .onPositiveClick(getString(R.string.yes)) {
                 model.logout()
             }
             .build()

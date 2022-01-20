@@ -46,6 +46,7 @@
                     android:layout_gravity="end"
                     android:layout_marginTop="@dimen/margin_extra_small"
                     tools:text="Last Active: 2h ago" />
+
             </LinearLayout>
 
         </com.google.android.material.appbar.MaterialToolbar>
@@ -88,7 +89,6 @@
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/date_tabs"
-                style="@style/Widget.WeatherXM.Device.Details.TabLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"

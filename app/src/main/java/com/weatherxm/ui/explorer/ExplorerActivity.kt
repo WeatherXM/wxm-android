@@ -114,6 +114,12 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
+        binding.progress.applyInsetter {
+            type(statusBars = true) {
+                margin(left = false, top = true, right = false, bottom = false)
+            }
+        }
+
         binding.loginSignupView.applyInsetter {
             type(navigationBars = true) {
                 margin(left = false, top = false, right = false, bottom = true)

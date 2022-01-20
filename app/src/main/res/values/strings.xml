@@ -7,8 +7,9 @@
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="invalid_username">Not a valid username</string>
-    <string name="invalid_address">Not a valid WXM Address</string>
-    <string name="checkbox_not_checked">Checkboxes are not checked. Please check them and try again.</string>
+    <string name="warn_invalid_address">Invalid WXM Address</string>
+    <string name="warn_wallet_terms_not_accepted">Please accept the terms to proceed.</string>
+    <string name="warn_wallet_access_not_acknowledged">Please confirm that you have access to the wallet to proceed.</string>
     <string name="invalid_email">Not a valid email</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">Login failed</string>
@@ -16,7 +17,7 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="prompt_signup"><![CDATA[Don\'t have an account? <span style=\"color: #2599df\">SIGN UP</span>]]></string>
     <string name="title_home">Home</string>
-    <string name="prompt_login"><![CDATA[Already a user? <span style=\"color: #00c853\">LOGIN</span>]]></string>
+    <string name="prompt_login"><![CDATA[Already a user? <span style=\"color: #2599df\">SIGN IN</span>]]></string>
     <string name="action_signup">Sign Up</string>
     <string name="title_signup">Create Account</string>
     <string name="password_reset">Reset Password</string>
@@ -28,15 +29,13 @@
     <string name="title_profile">Profile</string>
     <string name="weather_stations">Weather Stations</string>
     <string name="wxm_address">New WXM Address</string>
-    <string name="hint_wxm_address">Enter your new WXM wallet address</string>
+    <string name="hint_wxm_address">Enter or scan WXM wallet address</string>
     <string name="save">Save</string>
-    <string name="or">or</string>
     <string name="title_connect_wallet">Connect Wallet</string>
-    <string name="title_change_wallet">Change Wallet</string>
     <string name="current_address">Current Address</string>
     <string name="address_saved">Success: Address Saved.</string>
-    <string name="total_tokens">Total Rewards</string>
     <string name="hello">Hello</string>
+    <string name="hello_user">Hello, %s</string>
     <string name="ownership_wallet">I acknowledge that I have ownership and full access to this wallet.</string>
     <string name="terms">I have read and accept the terms.</string>
     <string name="send">Send Email</string>
@@ -52,12 +51,7 @@
     <string name="button_7d">7D</string>
     <string name="button_30d">30D</string>
     <string name="last_active">Last active %s</string>
-
-    <!-- TODO Remove them when we remove the relevant XMLs -->
-    <string name="hint_field_name">Field Name</string>
-    <string name="hint_field_description">Field Description</string>
-    <string name="hint_crop_name">Crop Name</string>
-    <string name="hint_crop_description">Crop Description</string>
+    <string name="title_share_wallet">Share WXM wallet address</string>
     <string name="action_logout">Logout</string>
     <string name="action_retry">Retry</string>
     <string name="action_ok">OK</string>
@@ -80,7 +74,6 @@
 
 
     <!-- Weather Stations -->
-    <string name="no_added_weather_stations_yet">You haven\'t added any weather stations yet.</string>
     <string name="add_weather_station">Add your weather station by clicking the + button</string>
     <string name="online">Online</string>
     <string name="offline">Offline</string>
@@ -93,7 +86,6 @@
     <string name="no">No</string>
 
     <!-- Settings -->
-    <string name="change_weather_units">Change weather units</string>
     <string name="account">Account</string>
     <string name="about">About</string>
     <string name="title_app_version">App Version</string>
@@ -101,7 +93,6 @@
     <string name="request_reset_password_desc">Request a password reset email to change your password.</string>
 
     <!-- Weather Data & Units -->
-    <string name="updated_on">Updated on</string>
     <string name="weather_units">Weather Units</string>
     <string name="key_temperature_preference" translatable="false">temperature_unit</string>
     <string name="key_precipitation_preference" translatable="false">precipitation_unit</string>
@@ -133,15 +124,9 @@
     <string name="pressure_hpa">hPa</string>
     <string name="pressure_inHg">inHg</string>
 
-    <string name="choose_temperature_summary">Choose between <b>Celsius (°C)</b> or <b>Fahrenheit (°F)</b></string>
-    <string name="choose_precipitation_summary">Choose between <b>mm</b> or <b>in</b></string>
-    <string name="choose_wind_speed_summary">Choose between <b>km/h</b> or <b>m/s</b> or <b>Knots (kn)</b> or <b>Beaufort (bf)</b></string>
-    <string name="choose_wind_direction_summary">Choose between <b>cardinal</b> or <b>degrees</b></string>
-    <string name="choose_pressure_summary">Choose between <b>hPa</b> or <b>inHg</b></string>
-
     <string-array name="temperature_entries">
-        <item>Celsius</item>
-        <item>Fahrenheit</item>
+        <item>Celsius (°C)</item>
+        <item>Fahrenheit (°F)</item>
     </string-array>
     <string-array name="precipitation_entries">
         <item>Millimeters (mm)</item>
@@ -190,12 +175,10 @@
     <string name="tokens_total">Total:</string>
 
     <!-- Error messages -->
-    <string name="no_weather_stations_found">"Oops! Could not find any weather stations."</string>
     <string name="network_error">Something went wrong: Network Error</string>
     <string name="server_error">Something went wrong: Server Error</string>
     <string name="unknown_error">Something went wrong: Unknown Error</string>
     <string name="no_data_error_device_details">Failed to get the details of the device: No Data</string>
-    <string name="name_not_found_error">Failed to get the name of the device</string>
     <string name="user_info_error">Failed to get your data. Please try again.</string>
     <string name="address_save_network_error">Failed to save your address. Network Error.</string>
     <string name="address_save_server_error">Failed to save your address. Server Error.</string>
