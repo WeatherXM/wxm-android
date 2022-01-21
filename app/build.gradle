@@ -245,7 +245,7 @@ dependencies {
     implementation "dev.chrisbanes.insetter:insetter:0.6.1"
 
     // Import the Firebase BoM
-    implementation platform("com.google.firebase:firebase-bom:29.0.3")
+    implementation platform("com.google.firebase:firebase-bom:29.0.4")
     implementation "com.google.firebase:firebase-crashlytics-ktx"
     implementation "com.google.firebase:firebase-perf-ktx"
 
