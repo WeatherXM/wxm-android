@@ -6,4 +6,10 @@
         <attr name="empty_action" format="string" />
         <attr name="empty_animation" format="reference" />
     </declare-styleable>
+    <declare-styleable name="LineChartView">
+        <attr name="line_chart_title" format="string" />
+    </declare-styleable>
+    <declare-styleable name="BarChartView">
+        <attr name="bar_chart_title" format="string" />
+    </declare-styleable>
 </resources>

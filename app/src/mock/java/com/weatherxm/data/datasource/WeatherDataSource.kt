@@ -1,9 +1,7 @@
 package com.weatherxm.data.datasource
 
 import arrow.core.Either
-import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
-import com.weatherxm.data.Tokens
 import com.weatherxm.data.WeatherData
 import com.weatherxm.data.map
 import com.weatherxm.data.network.ApiService
@@ -13,6 +11,13 @@ import java.time.ZonedDateTime
 
 interface WeatherDataSource {
     suspend fun getForecast(
+        deviceId: String,
+        fromDate: String,
+        toDate: String,
+        exclude: String?
+    ): Either<Failure, List<WeatherData>>
+
+    suspend fun getWeatherHistory(
         deviceId: String,
         fromDate: String,
         toDate: String,
@@ -52,5 +57,14 @@ class WeatherDataSourceImpl(
             }
         }
         return response
+    }
+
+    override suspend fun getWeatherHistory(
+        deviceId: String,
+        fromDate: String,
+        toDate: String,
+        exclude: String?
+    ): Either<Failure, List<WeatherData>> {
+        return apiService.getWeatherHistory(deviceId, fromDate, toDate, exclude).map()
     }
 }

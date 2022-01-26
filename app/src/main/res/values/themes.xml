@@ -70,7 +70,8 @@
         <item name="toolbarStyle">@style/Widget.WeatherXM.ToolBar</item>
         <item name="appBarLayoutStyle">@style/Widget.WeatherXM.AppBar</item>
         <item name="progressBarStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
-        <item name="linearProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
+        <item name="linearProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal
+        </item>
         <item name="bottomNavigationStyle">@style/Widget.WeatherXM.BottomNavigationView</item>
     </style>
 
@@ -345,16 +346,16 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard" parent="Widget.Material3.CardView.Elevated">
+    <style name="Widget.WeatherXM.MaterialCard" parent="Widget.Material3.CardView.Filled">
         <item name="cardBackgroundColor">@color/white</item>
         <item name="cardCornerRadius">@dimen/card_corner_radius</item>
-        <item name="cardElevation">@dimen/card_elevation</item>
-        <item name="cardMaxElevation">@dimen/card_elevation</item>
+        <!--<item name="cardElevation">@dimen/card_elevation</item>
+        <item name="cardMaxElevation">@dimen/card_elevation</item>-->
         <item name="cardPreventCornerOverlap">false</item>
         <item name="contentPadding">@dimen/padding_large</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.Small">
+    <style name="Widget.WeatherXM.MaterialCard.Small" parent="Widget.Material3.CardView.Filled">
         <item name="contentPadding">@dimen/padding_small</item>
     </style>
 
@@ -372,8 +373,28 @@
         <!--<item name="cardElevation">@dimen/card_elevation</item>-->
     </style>
 
+    <style name="Widget.WeatherXM.MaterialCard.ChartMarker" parent="Widget.WeatherXM.MaterialCard.Small">
+        <item name="cardBackgroundColor">@color/colorSecondary</item>
+    </style>
+
     <style name="TextAppearance.WeatherXM.ConnectWallet.Card.Title" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="android:textColor">@color/connect_wallet_card_titles</item>
     </style>
 
+    <style name="TextAppearance.WeatherXM.Chart.Title" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/colorOnSecondary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Chart.MarkerView.Time" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Chart.MarkerView.Value" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/colorOnPrimary</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 </resources>

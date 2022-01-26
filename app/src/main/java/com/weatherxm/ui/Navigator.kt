@@ -4,10 +4,13 @@ import android.content.Context
 import android.content.Intent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Wallet
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.devicedetail.DeviceDetailFragment
+import com.weatherxm.ui.devicehistory.HistoryActivity
+import com.weatherxm.ui.devicehistory.HistoryChartsFragment
 import com.weatherxm.ui.explorer.ExplorerActivity
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
@@ -16,7 +19,6 @@ import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.splash.SplashActivity
 import com.weatherxm.ui.userdevice.UserDeviceActivity
-
 
 class Navigator {
 
@@ -123,5 +125,20 @@ class Navigator {
                 context, SplashActivity::class.java
             ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
+    }
+
+    fun showHistoryActivity(context: Context, device: Device?) {
+        context.startActivity(
+            Intent(context, HistoryActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(HistoryActivity.ARG_DEVICE, device)
+        )
+    }
+
+    fun showHistoryCharts(fragmentManager: FragmentManager, device: Device) {
+        fragmentManager
+            .beginTransaction()
+            .replace(R.id.historyView, HistoryChartsFragment.newInstance(device))
+            .commit()
     }
 }

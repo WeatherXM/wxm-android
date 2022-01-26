@@ -9,6 +9,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.ActivityUserDeviceBinding
+import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.widget.TokenCardView
 import com.weatherxm.util.applyInsets
@@ -16,6 +17,7 @@ import com.weatherxm.util.getRelativeTimeFromISO
 import com.weatherxm.util.onTabSelected
 import com.weatherxm.util.setTextAndColor
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import timber.log.Timber
 
 class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.TokenOptionListener {
@@ -23,6 +25,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
     private val model: UserDeviceViewModel by viewModels()
     private lateinit var binding: ActivityUserDeviceBinding
     private lateinit var hourlyAdapter: HourlyAdapter
+    private val navigator: Navigator by inject()
     private var snackbar: Snackbar? = null
 
     companion object {
@@ -57,6 +60,10 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
+        }
+
+        binding.historicalCharts.setOnClickListener {
+            navigator.showHistoryActivity(this, device)
         }
 
         binding.tokenCard.optionListener = this

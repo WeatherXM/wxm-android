@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:layout_height="200dp"
+    tools:orientation="vertical"
+    tools:parentTag="LinearLayout">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/chart_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/chart_title"
+                style="@style/TextAppearance.WeatherXM.Chart.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Chart Title" />
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</merge>

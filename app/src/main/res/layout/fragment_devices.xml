@@ -57,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:padding="48dp"
+        android:padding="@dimen/padding_extra_large"
         android:visibility="gone"
         app:empty_animation="@raw/anim_empty_fields"
         app:empty_subtitle="How are you?"

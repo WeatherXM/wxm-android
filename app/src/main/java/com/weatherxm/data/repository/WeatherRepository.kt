@@ -31,4 +31,20 @@ class WeatherRepository(private val weatherDataSource: WeatherDataSource) : Koin
     ): Either<Failure, List<WeatherData>> {
         return weatherDataSource.getForecast(deviceId, fromDate, toDate, "hourly")
     }
+
+    suspend fun getHourlyWeatherHistory(
+        deviceId: String,
+        fromDate: String,
+        toDate: String
+    ): Either<Failure, List<WeatherData>> {
+        return weatherDataSource.getWeatherHistory(deviceId, fromDate, toDate, "daily")
+    }
+
+    suspend fun getDailyWeatherHistory(
+        deviceId: String,
+        fromDate: String,
+        toDate: String
+    ): Either<Failure, List<WeatherData>> {
+        return weatherDataSource.getWeatherHistory(deviceId, fromDate, toDate, "hourly")
+    }
 }

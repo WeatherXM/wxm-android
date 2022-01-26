@@ -80,6 +80,10 @@
             android:name="com.weatherxm.ui.resetpassword.ResetPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM.Home" />
+        <activity
+            android:name="com.weatherxm.ui.devicehistory.HistoryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM.Home" />
 
         <!-- Services -->
 

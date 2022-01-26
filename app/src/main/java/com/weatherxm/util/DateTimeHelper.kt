@@ -23,7 +23,8 @@ fun getFormattedDate(timeInISO: String?): String {
 fun getRelativeDayFromISO(
     resHelper: ResourcesHelper,
     timeInISO: String,
-    includeDate: Boolean
+    includeDate: Boolean,
+    fullName: Boolean
 ): String {
     val zonedDateTime = ZonedDateTime.parse(timeInISO)
 
@@ -38,7 +39,12 @@ fun getRelativeDayFromISO(
             resHelper.getString(R.string.yesterday)
         }
         else -> {
-            val nameOfDay = getNameOfDayOfWeek(resHelper, zonedDateTime.dayOfWeek.value)
+            val nameOfDay = if (fullName) {
+                getNameOfDayOfWeek(resHelper, zonedDateTime.dayOfWeek.value)
+            } else {
+                getShortNameOfDayOfWeek(resHelper, zonedDateTime.dayOfWeek.value)
+            }
+
             if (!includeDate) {
                 nameOfDay
             } else {
@@ -50,10 +56,27 @@ fun getRelativeDayFromISO(
     return textToReturn
 }
 
+@Suppress("MagicNumber")
+fun getLast7Days(resHelper: ResourcesHelper): List<String> {
+    val last7days = mutableListOf<String>()
+
+    val zonedDateTime = ZonedDateTime.now()
+    for (i in 7 downTo 0) {
+        last7days.add(
+            getRelativeDayFromISO(
+                resHelper,
+                zonedDateTime.minusDays(i.toLong()).toString(),
+                includeDate = true,
+                fullName = false
+            )
+        )
+    }
+    return last7days
+}
+
 fun getRelativeTimeFromISO(timeInISO: String): String {
     val zonedDateTime = ZonedDateTime.parse(timeInISO)
     val now = ZonedDateTime.now(zonedDateTime.zone)
-
     val oldTimeInMillis = zonedDateTime.toInstant().toEpochMilli()
     val nowInMillis = now.toInstant().toEpochMilli()
 
@@ -105,6 +128,20 @@ fun getNameOfDayOfWeek(resHelper: ResourcesHelper, dayOfWeek: Int): String {
         5 -> resHelper.getString(R.string.friday)
         6 -> resHelper.getString(R.string.saturday)
         7 -> resHelper.getString(R.string.sunday)
+        else -> ""
+    }
+}
+
+@Suppress("MagicNumber")
+fun getShortNameOfDayOfWeek(resHelper: ResourcesHelper, dayOfWeek: Int): String {
+    return when (dayOfWeek) {
+        1 -> resHelper.getString(R.string.mon)
+        2 -> resHelper.getString(R.string.tue)
+        3 -> resHelper.getString(R.string.wed)
+        4 -> resHelper.getString(R.string.thu)
+        5 -> resHelper.getString(R.string.fri)
+        6 -> resHelper.getString(R.string.sat)
+        7 -> resHelper.getString(R.string.sun)
         else -> ""
     }
 }

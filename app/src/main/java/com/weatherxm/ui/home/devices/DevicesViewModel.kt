@@ -29,6 +29,7 @@ class DevicesViewModel : ViewModel(), KoinComponent {
     fun devices(): LiveData<Resource<List<Device>>> = devices
 
     fun fetch() {
+        this@DevicesViewModel.devices.postValue(Resource.loading())
         CoroutineScope(Dispatchers.IO).launch {
             userDeviceUseCase.getUserDevices()
                 .map { devices ->

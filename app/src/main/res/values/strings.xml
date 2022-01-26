@@ -3,7 +3,7 @@
     <string name="hint_password">Password</string>
     <string name="hint_first_name">First Name</string>
     <string name="hint_last_name">Last Name</string>
-
+    <string name="history">History</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="invalid_username">Not a valid username</string>
@@ -45,6 +45,7 @@
     <string name="send_email_instructions">Enter the email associated with your account and we will send you an email with instructions to reset your password.</string>
     <string name="next_7_days">Next 7 Days</string>
     <string name="see_historical_charts">See Historical Charts</string>
+    <string name="forecast_empty">Forecast is empty. Please try again.</string>
     <string name="earnings">Earnings</string>
     <string name="wxm">WXM</string>
     <string name="button_24h">24H</string>
@@ -71,6 +72,13 @@
     <string name="friday">Friday</string>
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+    <string name="sun">Sun</string>
 
 
     <!-- Weather Stations -->
@@ -103,9 +111,10 @@
     <string name="humidity">Humidity</string>
     <string name="precipitation">Precipitation</string>
     <string name="precipitation_intensity">Precipitation</string>
-    <string name="precipitation_probability">Precipitation. %</string>
+    <string name="precipitation_probability">Precipitation %</string>
     <string name="wind">Wind</string>
     <string name="wind_speed">Wind Speed</string>
+    <string name="wind_gust">Wind Gust</string>
     <string name="wind_direction">Wind Direction</string>
     <string name="pressure">Pressure</string>
     <string name="uv_index">UV Index</string>
@@ -123,6 +132,8 @@
     <string name="wind_direction_degrees_mark">°</string>
     <string name="pressure_hpa">hPa</string>
     <string name="pressure_inHg">inHg</string>
+    <string name="percent" translatable="false">%</string>
+    <string name="uv_index_unit" translatable="false">UV</string>
 
     <string-array name="temperature_entries">
         <item>Celsius (°C)</item>
@@ -146,7 +157,6 @@
         <item>Hectopascal (hPa)</item>
         <item>Inch of mercury (inHg)</item>
     </string-array>
-
     <string-array name="temperature_values">
         <item>@string/temperature_celsius</item>
         <item>@string/temperature_fahrenheit</item>
@@ -175,6 +185,9 @@
     <string name="tokens_total">Total:</string>
 
     <!-- Error messages -->
+    <string name="no_weather_stations_found">"Oops! Could not find any weather stations."</string>
+    <string name="no_charts_found">"Oops! Charts could not be loaded."</string>
+    <string name="no_data_chart_found">"Oops! No valid data found. Chart cannot be shown."</string>
     <string name="network_error">Something went wrong: Network Error</string>
     <string name="server_error">Something went wrong: Server Error</string>
     <string name="unknown_error">Something went wrong: Unknown Error</string>
@@ -185,5 +198,4 @@
     <string name="forecast_failed">Getting weather forecast data failed.</string>
     <string name="token_failed">Getting token data failed.</string>
     <string name="oops_something_wrong">Oops! Something went wrong.</string>
-
 </resources>

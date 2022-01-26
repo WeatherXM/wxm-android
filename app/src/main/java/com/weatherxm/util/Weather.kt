@@ -16,6 +16,7 @@ object Weather : KoinComponent {
 
     private const val DECIMALS_WIND_SPEED = 1
     private const val DECIMALS_PRECIPITATION_INCHES = 4
+    private const val DECIMALS_PRECIPITATION_MILLIMETERS = 2
 
     @RawRes
     fun getWeatherAnimation(icon: String?): Int {
@@ -35,27 +36,24 @@ object Weather : KoinComponent {
     }
 
     fun getFormattedTemperature(value: Float?) = getFormattedValueOrEmpty(
-        convertValueTemp(value), getPreferredUnit(
+        convertTemp(value), getPreferredUnit(
             resHelper.getString(R.string.key_temperature_preference),
             resHelper.getString(R.string.temperature_celsius)
         ), 0
     )
 
     fun getFormattedPrecipitation(value: Float?) = getFormattedValueOrEmpty(
-        convertValuePrecipitation(value), getPreferredUnit(
+        convertPrecipitation(value), getPreferredUnit(
             resHelper.getString(R.string.key_precipitation_preference),
             resHelper.getString(R.string.precipitation_mm)
         ),
-        getDecimalsPrecipitation(
-            resHelper.getString(R.string.key_precipitation_preference),
-            resHelper.getString(R.string.precipitation_mm)
-        )
+        getDecimalsPrecipitation()
     )
 
     fun getFormattedHumidity(value: Int?) = getFormattedValueOrEmpty(value, "%")
 
     fun getFormattedPressure(value: Float?) = getFormattedValueOrEmpty(
-        convertValuePressure(value), getPreferredUnit(
+        convertPressure(value), getPreferredUnit(
             resHelper.getString(R.string.key_pressure_preference),
             resHelper.getString(R.string.pressure_hpa)
         ), 1
@@ -66,18 +64,15 @@ object Weather : KoinComponent {
     fun getFormattedUV(value: Int?) = getFormattedValueOrEmpty(value, "UV")
 
     private fun getFormattedWindSpeed(value: Float?) = getFormattedValueOrEmpty(
-        convertValueWindSpeed(value),
+        convertWindSpeed(value),
         getPreferredUnit(
             resHelper.getString(R.string.key_wind_speed_preference),
             resHelper.getString(R.string.wind_speed_ms)
         ),
-        getDecimalsWindSpeed(
-            resHelper.getString(R.string.key_wind_speed_preference),
-            resHelper.getString(R.string.wind_speed_ms)
-        )
+        getDecimalsWindSpeed()
     )
 
-    private fun getFormattedWindDirection(value: Int): String {
+    fun getFormattedWindDirection(value: Int): String {
         val windPreferenceKey = resHelper.getString(R.string.key_wind_direction_preference)
         val windPreferenceDefValue = resHelper.getString(R.string.wind_direction_cardinal)
         val savedPreferenceUnit = sharedPref.getString(windPreferenceKey, "")
@@ -96,7 +91,7 @@ object Weather : KoinComponent {
         } else EMPTY_VALUE
     }
 
-    private fun getFormattedValueOrEmpty(
+    fun getFormattedValueOrEmpty(
         value: Number?,
         units: String,
         decimals: Int? = null
@@ -115,7 +110,7 @@ object Weather : KoinComponent {
         return valueToReturn
     }
 
-    private fun convertValueTemp(value: Number?): Number? {
+    fun convertTemp(value: Number?): Number? {
         if (value == null) {
             Timber.w("Temperature value is null!")
             // Return null when value is null, so we catch it later on and show it as EMPTY
@@ -134,7 +129,7 @@ object Weather : KoinComponent {
         return valueToReturn
     }
 
-    private fun convertValuePrecipitation(value: Number?): Number? {
+    fun convertPrecipitation(value: Number?): Number? {
         if (value == null) {
             Timber.w("Precipitation value is null!")
             // Return null when value is null, so we catch it later on and show it as EMPTY
@@ -153,7 +148,7 @@ object Weather : KoinComponent {
         return valueToReturn
     }
 
-    private fun convertValueWindSpeed(value: Number?): Number? {
+    fun convertWindSpeed(value: Number?): Number? {
         if (value == null) {
             Timber.w("Wind speed value is null!")
             // Return null when value is null, so we catch it later on and show it as EMPTY
@@ -183,7 +178,7 @@ object Weather : KoinComponent {
         return valueToReturn
     }
 
-    private fun convertValuePressure(value: Number?): Number? {
+    fun convertPressure(value: Number?): Number? {
         if (value == null) {
             Timber.w("Pressure value is null!")
             // Return null when value is null, so we catch it later on and show it as EMPTY
@@ -202,7 +197,7 @@ object Weather : KoinComponent {
         return valueToReturn
     }
 
-    private fun getPreferredUnit(keyOnSharedPref: String, defaultUnit: String): String {
+    fun getPreferredUnit(keyOnSharedPref: String, defaultUnit: String): String {
         val savedUnit = sharedPref.getString(keyOnSharedPref, "")
         if (!savedUnit.isNullOrEmpty()) {
             return savedUnit
@@ -210,7 +205,10 @@ object Weather : KoinComponent {
         return defaultUnit
     }
 
-    private fun getDecimalsWindSpeed(keyOnSharedPref: String, defaultUnit: String): Int? {
+    fun getDecimalsWindSpeed(): Int? {
+        val keyOnSharedPref = resHelper.getString(R.string.key_wind_speed_preference)
+        val defaultUnit = resHelper.getString(R.string.wind_speed_ms)
+
         val unit = getPreferredUnit(keyOnSharedPref, defaultUnit)
 
         if (unit == resHelper.getString(R.string.wind_speed_beaufort)) {
@@ -221,14 +219,17 @@ object Weather : KoinComponent {
         return DECIMALS_WIND_SPEED
     }
 
-    private fun getDecimalsPrecipitation(keyOnSharedPref: String, defaultUnit: String): Int? {
+    fun getDecimalsPrecipitation(): Int? {
+        val keyOnSharedPref = resHelper.getString(R.string.key_precipitation_preference)
+        val defaultUnit = resHelper.getString(R.string.precipitation_mm)
+
         val unit = getPreferredUnit(keyOnSharedPref, defaultUnit)
 
-        if (unit == resHelper.getString(R.string.precipitation_mm)) {
-            // Return null when mm units are used so we show show the value as is.
-            return null
+        return if (unit == resHelper.getString(R.string.precipitation_mm)) {
+            DECIMALS_PRECIPITATION_MILLIMETERS
+        } else {
+            DECIMALS_PRECIPITATION_INCHES
         }
 
-        return DECIMALS_PRECIPITATION_INCHES
     }
 }

@@ -63,4 +63,14 @@ interface ApiService {
     suspend fun getTokensSummary(
         @Path("deviceId") deviceId: String,
     ): NetworkResponse<Tokens, ErrorResponse>
+
+    @Mock
+    @MockResponse(body = "mock_files/get_user_device_weather_history.json")
+    @GET("/api/me/devices/{deviceId}/history")
+    suspend fun getWeatherHistory(
+        @Path("deviceId") deviceId: String,
+        @Query("fromDate") fromDate: String,
+        @Query("toDate") toDate: String,
+        @Query("exclude") exclude: String? = null,
+    ): NetworkResponse<List<WeatherData>, ErrorResponse>
 }

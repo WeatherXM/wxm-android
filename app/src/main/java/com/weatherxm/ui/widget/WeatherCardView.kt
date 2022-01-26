@@ -55,7 +55,7 @@ class WeatherCardView : LinearLayout, KoinComponent {
             cloud.text = Weather.getFormattedCloud(weatherData?.cloudCover)
             solar.text = Weather.getFormattedUV(weatherData?.uvIndex)
             updatedOn.text = weatherData?.timestamp?.let {
-                val day = getRelativeDayFromISO(resHelper, it, true)
+                val day = getRelativeDayFromISO(resHelper, it, includeDate = true, fullName = true)
                 val time = getHourMinutesFromISO(context, it)
                 "$day, $time"
             } ?: ""

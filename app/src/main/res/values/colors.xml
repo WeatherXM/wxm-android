@@ -11,7 +11,8 @@
     <color name="green">#2BB331</color>
     <color name="grey">#888888</color>
     <color name="purple">#9D1F63</color>
-    <color name="white_blue">#F4F7FF</color>
+    <color name="off_white">#EEEEEE</color>
+    <color name="white_blue">#F0F4FF</color>
 
     <color name="black_translucent">#88000000</color>
     <color name="white_translucent">#DDFFFFFF</color>
@@ -29,6 +30,7 @@
     <color name="chart_point_color">@color/white</color>
     <color name="chart_point_hole_color">@color/colorPrimaryVariant</color>
     <color name="chart_highlight_color">@color/colorSecondary</color>
+    <color name="chart_grid_color">@color/off_white</color>
 
     <color name="status_bar_color">#80003b77</color>
 
@@ -38,6 +40,7 @@
     <color name="lastActiveColor">@color/grey</color>
     <color name="hexFillColor">#3388ff</color>
     <color name="hexFillOutlineColor">@color/white</color>
+    <color name="highlighter">@color/black</color>
 
     <color name="tokenChartBackground">@color/purple</color>
     <color name="tokenChipColorNormal">@color/transparent</color>
@@ -49,4 +52,15 @@
 
     <color name="profile_background">@color/white_blue</color>
     <color name="connect_wallet_card_titles">#23395D</color>
+
+    <!-- Weather Data colors -->
+    <color name="temperature">#084D6A</color>
+    <color name="precipIntensity">#48BEC5</color>
+    <color name="precipProbability">#97D779</color>
+    <color name="windSpeed">#4FE0B6</color>
+    <color name="windGust">#3E54D3</color>
+    <color name="pressure">#4F80E2</color>
+    <color name="humidity">#48BEC5</color>
+    <color name="cloudCover">#6C6C8C</color>
+    <color name="uvIndex">#FFCE49</color>
 </resources>

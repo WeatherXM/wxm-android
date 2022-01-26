@@ -5,6 +5,11 @@ import kotlin.math.floor
 @Suppress("MagicNumber")
 object UnitConverter {
 
+    private val CARDINAL_VALUES = listOf(
+        "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
+        "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"
+    )
+
     fun celsiusToFahrenheit(celsius: Float): Float {
         return celsius * 9 / 5 + 32
     }
@@ -44,12 +49,13 @@ object UnitConverter {
     }
 
     fun degreesToCardinal(value: Int): String {
+        return CARDINAL_VALUES[getIndexOfCardinal(value)]
+    }
+
+    // Get the index of the cardinal
+    fun getIndexOfCardinal(value: Int): Int {
         val normalized = floor((value / 22.5) + 0.5).toInt()
-        val cardinal = listOf(
-            "N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
-            "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"
-        )
-        return cardinal[normalized.mod(16)]
+        return normalized.mod(16)
     }
 }
 

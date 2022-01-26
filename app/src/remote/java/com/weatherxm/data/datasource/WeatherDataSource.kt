@@ -13,6 +13,13 @@ interface WeatherDataSource {
         toDate: String,
         exclude: String?
     ): Either<Failure, List<WeatherData>>
+
+    suspend fun getWeatherHistory(
+        deviceId: String,
+        fromDate: String,
+        toDate: String,
+        exclude: String?
+    ): Either<Failure, List<WeatherData>>
 }
 
 class WeatherDataSourceImpl(
@@ -26,5 +33,14 @@ class WeatherDataSourceImpl(
         exclude: String?
     ): Either<Failure, List<WeatherData>> {
         return apiService.getForecast(deviceId, fromDate, toDate, exclude).map()
+    }
+
+    override suspend fun getWeatherHistory(
+        deviceId: String,
+        fromDate: String,
+        toDate: String,
+        exclude: String?
+    ): Either<Failure, List<WeatherData>> {
+        return apiService.getWeatherHistory(deviceId, fromDate, toDate, exclude).map()
     }
 }
