@@ -17,7 +17,7 @@ class App : Application() {
 
         // Setup DI
         startKoin {
-            androidLogger(if (BuildConfig.DEBUG) Level.DEBUG else Level.NONE)
+            androidLogger(if (BuildConfig.DEBUG) Level.ERROR else Level.NONE)
             androidContext(this@App)
             modules(modules)
         }
