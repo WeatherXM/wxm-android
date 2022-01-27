@@ -66,6 +66,10 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
             navigator.showHistoryActivity(this, device)
         }
 
+        binding.forecastNextDays.setOnClickListener {
+            navigator.showForecast(this, device)
+        }
+
         binding.tokenCard.optionListener = this
 
         binding.dateTabs.onTabSelected {

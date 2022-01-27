@@ -8,6 +8,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.ServerError
+import com.weatherxm.ui.TokenSummary
 import com.weatherxm.ui.UIError
 import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.util.ResourcesHelper

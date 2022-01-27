@@ -9,6 +9,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Wallet
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.devicedetail.DeviceDetailFragment
+import com.weatherxm.ui.deviceforecast.ForecastActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.devicehistory.HistoryChartsFragment
 import com.weatherxm.ui.explorer.ExplorerActivity
@@ -20,6 +21,7 @@ import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.splash.SplashActivity
 import com.weatherxm.ui.userdevice.UserDeviceActivity
 
+@Suppress("TooManyFunctions")
 class Navigator {
 
     fun showExplorer(context: Context) {
@@ -140,5 +142,13 @@ class Navigator {
             .beginTransaction()
             .replace(R.id.historyView, HistoryChartsFragment.newInstance(device))
             .commit()
+    }
+
+    fun showForecast(context: Context, device: Device?) {
+        context.startActivity(
+            Intent(context, ForecastActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ForecastActivity.ARG_DEVICE, device)
+        )
     }
 }

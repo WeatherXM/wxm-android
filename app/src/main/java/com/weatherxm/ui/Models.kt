@@ -46,3 +46,36 @@ data class BarChartData(
     var timestamps: MutableList<String>,
     var entries: MutableList<BarEntry>
 )
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class TokenData(
+    var tokens24h: TokenSummary,
+    var tokens7d: TokenSummary,
+    var tokens30d: TokenSummary
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class TokenSummary(
+    var total: Float,
+    var values: MutableList<Pair<String, Float>>
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class ForecastData(
+    var minTemp: Float?,
+    var maxTemp: Float?,
+    var dailyForecasts: List<DailyForecast>
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class DailyForecast(
+    var nameOfDay: String,
+    var dateOfDay: String,
+    var icon: String?,
+    var minTemp: Float?,
+    var maxTemp: Float?
+)

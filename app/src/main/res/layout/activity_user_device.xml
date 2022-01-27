@@ -64,8 +64,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
-        android:clipToPadding="false"
         android:clipToOutline="false"
+        android:clipToPadding="false"
         android:fillViewport="true"
         android:paddingBottom="@dimen/margin_large"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
@@ -75,8 +75,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipChildren="false"
-            android:clipToPadding="false"
             android:clipToOutline="false"
+            android:clipToPadding="false"
             android:paddingHorizontal="@dimen/margin_normal">
 
             <com.weatherxm.ui.widget.WeatherCardView
@@ -92,7 +92,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
-                app:layout_constraintEnd_toStartOf="@id/nextDays"
+                app:layout_constraintEnd_toStartOf="@id/forecastNextDays"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/currentWeatherCard">
 
@@ -109,7 +109,7 @@
             </com.google.android.material.tabs.TabLayout>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/nextDays"
+                android:id="@+id/forecastNextDays"
                 style="@style/Widget.WeatherXM.TextButton.Subtle.Arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -123,15 +123,15 @@
                 android:layout_height="120dp"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:clipChildren="false"
-                android:clipToPadding="false"
                 android:clipToOutline="false"
+                android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
                 android:orientation="horizontal"
                 android:overScrollMode="never"
                 android:scrollbars="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/nextDays"
+                app:layout_constraintTop_toBottomOf="@id/forecastNextDays"
                 tools:listitem="@layout/list_item_hourly_weather" />
 
             <com.google.android.material.button.MaterialButton

@@ -8,14 +8,6 @@ import org.koin.core.component.KoinComponent
 
 class WeatherRepository(private val weatherDataSource: WeatherDataSource) : KoinComponent {
 
-    suspend fun getForecast(
-        deviceId: String,
-        fromDate: String,
-        toDate: String
-    ): Either<Failure, List<WeatherData>> {
-        return weatherDataSource.getForecast(deviceId, fromDate, toDate, null)
-    }
-
     suspend fun getHourlyForecast(
         deviceId: String,
         fromDate: String,

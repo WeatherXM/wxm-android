@@ -4,8 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.weatherxm.ui.userdevice.TokenData
-import com.weatherxm.ui.userdevice.TokenSummary
+import com.weatherxm.ui.TokenSummary
 import kotlinx.parcelize.Parcelize
 
 @Keep
@@ -94,21 +93,7 @@ data class Tokens(
     val token7days: TokensSummaryResponse,
     @Json(name = "30d")
     val token30days: TokensSummaryResponse
-) : Parcelable {
-    fun toTokenData(): TokenData {
-        val tokenData = TokenData(
-            TokenSummary(0F, mutableListOf()),
-            TokenSummary(0F, mutableListOf()),
-            TokenSummary(0F, mutableListOf())
-        )
-
-        tokenData.tokens24h = token24hour.toTokenSummary()
-        tokenData.tokens7d = token7days.toTokenSummary()
-        tokenData.tokens30d = token30days.toTokenSummary()
-
-        return tokenData
-    }
-}
+) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)
