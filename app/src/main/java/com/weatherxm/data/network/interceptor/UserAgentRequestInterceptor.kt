@@ -32,6 +32,7 @@ class UserAgentRequestInterceptor(val context: Context) : Interceptor {
             }
             "(${context.applicationInfo.packageName}) $appName $name ($code)"
         } catch (e: PackageManager.NameNotFoundException) {
+            Timber.d("Could not resolve application info: $e")
             "${context.applicationInfo.packageName} N/A (N/A)"
         }
     }
