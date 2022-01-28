@@ -29,6 +29,7 @@ import com.weatherxm.data.network.AuthTokenJsonAdapter
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthTokenAuthenticator
+import com.weatherxm.data.network.interceptor.UserAgentRequestInterceptor
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
 import com.weatherxm.data.repository.DeviceRepository
@@ -171,7 +172,11 @@ private val location = module {
 
 private val network = module {
     single<HttpLoggingInterceptor> {
-        HttpLoggingInterceptor().setLevel(if (BuildConfig.DEBUG) Level.BASIC else Level.NONE)
+        HttpLoggingInterceptor().setLevel(if (BuildConfig.DEBUG) Level.BODY else Level.NONE)
+    }
+
+    single<UserAgentRequestInterceptor> {
+        UserAgentRequestInterceptor(androidContext())
     }
 
     single<MoshiConverterFactory> {
@@ -182,6 +187,7 @@ private val network = module {
         // Create client
         val client: OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(get() as HttpLoggingInterceptor)
+            .addInterceptor(get() as UserAgentRequestInterceptor)
             .addInterceptor(AuthRequestInterceptor())
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
@@ -203,9 +209,10 @@ private val network = module {
 
         // Create client
         val client: OkHttpClient = OkHttpClient.Builder()
-            .authenticator(AuthTokenAuthenticator())
-            .addInterceptor(ApiRequestInterceptor())
             .addInterceptor(get() as HttpLoggingInterceptor)
+            .addInterceptor(get() as UserAgentRequestInterceptor)
+            .addInterceptor(ApiRequestInterceptor())
+            .authenticator(AuthTokenAuthenticator())
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
