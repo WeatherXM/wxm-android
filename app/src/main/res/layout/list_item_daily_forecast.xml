@@ -1,48 +1,83 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/margin_extra_large">
+    android:layout_margin="@dimen/margin_large"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/dayInfoContainer"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/nameOfDay"
-            style="@style/TextAppearance.WeatherXM.Forecast.NameOfDay"
-            android:layout_width="wrap_content"
+            android:id="@+id/day"
+            style="@style/TextAppearance.WeatherXM.Forecast.Day"
+            android:layout_width="48dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="MON" />
+            tools:text="TUE" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/dateOfDay"
-            style="@style/TextAppearance.WeatherXM.Forecast.DateOfDay"
+            android:id="@+id/date"
+            style="@style/TextAppearance.WeatherXM.Forecast.Date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/nameOfDay"
-            tools:text="14/3" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            tools:text="13/12" />
+
+    </LinearLayout>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_marginStart="@dimen/margin_normal"
         android:scaleType="centerInside"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/dayInfoContainer"
-        app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="false"
         app:lottie_loop="true"
         tools:background="#88212121"
         tools:lottie_rawRes="@raw/anim_weather_clear_day" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/min_temperature"
+        android:layout_width="36dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_normal"
+        android:gravity="end"
+        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
+        android:textColor="@color/grey"
+        tools:text="-30°C" />
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/temperature"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="2dp"
+        android:layout_weight="1"
+        android:enabled="false"
+        android:stepSize="0"
+        app:haloRadius="0dp"
+        app:labelBehavior="gone"
+        app:thumbElevation="0dp"
+        app:thumbRadius="0dp"
+        app:tickVisible="false"
+        app:trackColorActive="@color/colorPrimary"
+        app:trackColorInactive="@color/transparent"
+        app:trackHeight="16dp"
+        app:values="@array/temperature_slider_default_values"
+        tools:valueFrom="10"
+        tools:valueTo="25" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/max_temperature"
+        android:layout_width="36dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        tools:text="24°C" />
+
+</LinearLayout>

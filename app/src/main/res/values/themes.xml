@@ -398,15 +398,15 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.Forecast.NameOfDay" parent="TextAppearance.MaterialComponents.Body1">
+    <style name="TextAppearance.WeatherXM.Forecast.Day" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/colorPrimaryVariant</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.Forecast.DateOfDay" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textColor">@color/grey</item>
+    <style name="TextAppearance.WeatherXM.Forecast.Date" parent="TextAppearance.MaterialComponents.Body1">
+        <!--<item name="android:textColor">@color/colorPrimary</item>-->
         <item name="android:textSize">12sp</item>
     </style>
 </resources>

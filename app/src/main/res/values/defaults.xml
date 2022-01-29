@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="temperature_slider_default_values">
+        <item>13</item>
+        <item>19</item>
+    </array>
+</resources>

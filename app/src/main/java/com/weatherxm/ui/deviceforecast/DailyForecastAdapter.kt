@@ -16,7 +16,13 @@ class DailyForecastAdapter :
     ),
     KoinComponent {
 
+    private var minTemperature: Float? = Float.MIN_VALUE
+    private var maxTemperature: Float? = Float.MAX_VALUE
+
     override fun submitList(list: List<DailyForecast>?) {
+        minTemperature = list?.minOfOrNull { it.minTemp ?: Float.MIN_VALUE }
+        maxTemperature = list?.maxOfOrNull { it.maxTemp ?: Float.MAX_VALUE }
+
         // Update data
         super.submitList(list)
     }
@@ -38,12 +44,19 @@ class DailyForecastAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: DailyForecast) {
-            binding.dateOfDay.text = item.dateOfDay
-            binding.nameOfDay.text = item.nameOfDay
+            binding.date.text = item.dateOfDay
+            binding.day.text = item.nameOfDay
             binding.icon.apply {
                 setAnimation(Weather.getWeatherAnimation(item.icon))
                 playAnimation()
             }
+            binding.temperature.apply {
+                valueFrom = minTemperature ?: 0F
+                valueTo = maxTemperature ?: 0F
+                values = listOf(item.minTemp ?: 0F, item.maxTemp ?: 0F)
+            }
+            binding.minTemperature.text = Weather.getFormattedTemperature(item.minTemp)
+            binding.maxTemperature.text = Weather.getFormattedTemperature(item.maxTemp)
         }
     }
 
