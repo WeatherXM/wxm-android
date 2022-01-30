@@ -15,8 +15,8 @@ object Weather : KoinComponent {
     private val sharedPref: SharedPreferences by inject()
 
     private const val DECIMALS_WIND_SPEED = 1
-    private const val DECIMALS_PRECIPITATION_INCHES = 4
-    private const val DECIMALS_PRECIPITATION_MILLIMETERS = 2
+    private const val DECIMALS_PRECIPITATION_INCHES = 2
+    private const val DECIMALS_PRECIPITATION_MILLIMETERS = 1
 
     @RawRes
     fun getWeatherAnimation(icon: String?): Int {
