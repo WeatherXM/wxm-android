@@ -42,42 +42,31 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/min_temperature"
+        style="@style/TextAppearance.WeatherXM.Forecast.Temperature.Min"
         android:layout_width="36dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_normal"
         android:gravity="end"
-        android:textAppearance="@style/TextAppearance.Material3.BodySmall"
-        android:textColor="@color/grey"
         tools:text="-30°C" />
 
     <com.google.android.material.slider.RangeSlider
         android:id="@+id/temperature"
+        style="@style/Widget.WeatherXM.Forecast.Temperature.Slider"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="2dp"
         android:layout_weight="1"
         android:enabled="false"
-        android:stepSize="0"
-        app:haloRadius="0dp"
-        app:labelBehavior="gone"
-        app:thumbElevation="0dp"
-        app:thumbRadius="0dp"
-        app:tickVisible="false"
-        app:trackColorActive="@color/colorPrimary"
-        app:trackColorInactive="@color/transparent"
-        app:trackHeight="16dp"
         app:values="@array/temperature_slider_default_values"
         tools:valueFrom="10"
         tools:valueTo="25" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/max_temperature"
+        style="@style/TextAppearance.WeatherXM.Forecast.Temperature.Max"
         android:layout_width="36dp"
         android:layout_height="wrap_content"
         android:gravity="start"
-        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-        android:textColor="@color/black"
-        android:textStyle="bold"
         tools:text="24°C" />
 
 </LinearLayout>

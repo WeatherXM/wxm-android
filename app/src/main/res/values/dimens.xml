@@ -30,4 +30,9 @@
     <dimen name="chart_point_hole_radius">3dp</dimen>
     <dimen name="chart_line_thickness">3dp</dimen>
     <dimen name="token_chip_corner_radius">5dp</dimen>
+
+    <dimen name="temperature_slider_halo_radius">0dp</dimen>
+    <dimen name="temperature_slider_thumb_elevation">0dp</dimen>
+    <dimen name="temperature_slider_thumb_radius">0dp</dimen>
+    <dimen name="temperature_slider_track_height">16dp</dimen>
 </resources>
