@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewTokenCardBinding
-import com.weatherxm.ui.userdevice.TokenSummary
+import com.weatherxm.ui.TokenSummary
 import com.weatherxm.ui.userdevice.UserDeviceViewModel
 
 open class TokenCardView : LinearLayout {

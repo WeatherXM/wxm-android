@@ -4,6 +4,7 @@
     <string name="hint_first_name">First Name</string>
     <string name="hint_last_name">Last Name</string>
     <string name="history">History</string>
+    <string name="forecast_7_days">7 Days Forecast</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="invalid_username">Not a valid username</string>
@@ -187,6 +188,7 @@
     <!-- Error messages -->
     <string name="no_weather_stations_found">"Oops! Could not find any weather stations."</string>
     <string name="no_charts_found">"Oops! Charts could not be loaded."</string>
+    <string name="no_forecast_data">"Oops! Forecast could not be fetched."</string>
     <string name="no_data_chart_found">"Oops! No valid data found. Chart cannot be shown."</string>
     <string name="network_error">Something went wrong: Network Error</string>
     <string name="server_error">Something went wrong: Server Error</string>

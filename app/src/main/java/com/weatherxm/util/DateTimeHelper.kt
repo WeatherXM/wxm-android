@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.format.DateFormat
 import android.text.format.DateUtils
 import com.weatherxm.R
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -95,6 +96,16 @@ fun getHourMinutesFromISO(context: Context, timeInISO: String): String {
     } else {
         zonedDateTime.format(DateTimeFormatter.ofPattern("hh:mm a"))
     }
+}
+
+fun getSimplifiedDate(fullDate: String): String {
+    val localDate = LocalDate.parse(fullDate)
+    return "${localDate.dayOfMonth}/${localDate.monthValue}"
+}
+
+fun getShortNameOfDayFromLocalDate(resHelper: ResourcesHelper, fullDate: String): String {
+    val localDate = LocalDate.parse(fullDate)
+    return getShortNameOfDayOfWeek(resHelper, localDate.dayOfWeek.value)
 }
 
 fun isYesterday(timeInISO: String): Boolean {

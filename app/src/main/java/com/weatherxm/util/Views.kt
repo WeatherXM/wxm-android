@@ -31,7 +31,7 @@ private const val MINIMUM_VISIBLE_POINTS = 5F
 private const val LINE_WIDTH = 2F
 private const val POINT_SIZE = 2F
 private const val MAXIMUMS_GRID_LINES_Y_AXIS = 4
-private const val PRECIP_GRANULARITY_Y_AXIS = 0.01F
+private const val PRECIP_GRANULARITY_Y_AXIS = 0.1F
 private const val TIME_GRANULARITY_X_AXIS = 3F
 
 @Suppress("EmptyFunctionBlock")
