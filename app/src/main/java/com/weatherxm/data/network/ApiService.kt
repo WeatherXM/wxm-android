@@ -18,38 +18,38 @@ import retrofit2.http.Query
 interface ApiService {
     @Mock
     @MockResponse(body = "mock_files/user.json")
-    @GET("/api/me")
+    @GET("/api/v1/me")
     suspend fun getUser(): NetworkResponse<User, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/get_user_devices.json")
-    @GET("/api/me/devices")
+    @GET("/api/v1/me/devices")
     suspend fun getUserDevices(): NetworkResponse<List<Device>, ErrorResponse>
 
-    @GET("/api/me/devices/{deviceId}")
+    @GET("/api/v1/me/devices/{deviceId}")
     suspend fun getUserDevice(
         @Path("deviceId") deviceId: String,
     ): NetworkResponse<Device, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/public_devices.json")
-    @GET("/api/devices/")
+    @GET("/api/v1/devices/")
     @Headers(NO_AUTH_HEADER)
     suspend fun getPublicDevices(): NetworkResponse<List<Device>, ErrorResponse>
 
-    @POST("/api/me/wallet")
+    @POST("/api/v1/me/wallet")
     suspend fun saveAddress(
         @Body address: AddressBody,
     ): NetworkResponse<Unit, ErrorResponse>
 
-    @POST("/api/auth/resetPassword")
+    @POST("/api/v1/auth/resetPassword")
     suspend fun resetPassword(
         @Body refresh: ResetPasswordBody,
     ): NetworkResponse<Unit, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/get_user_device_weather_current_forecast_short_term.json")
-    @GET("/api/me/devices/{deviceId}/forecast")
+    @GET("/api/v1/me/devices/{deviceId}/forecast")
     suspend fun getForecast(
         @Path("deviceId") deviceId: String,
         @Query("fromDate") fromDate: String,
@@ -59,14 +59,14 @@ interface ApiService {
 
     @Mock
     @MockResponse(body = "mock_files/get_user_device_tokens.json")
-    @GET("/api/me/devices/{deviceId}/tokens/summary")
+    @GET("/api/v1/me/devices/{deviceId}/tokens/summary")
     suspend fun getTokensSummary(
         @Path("deviceId") deviceId: String,
     ): NetworkResponse<Tokens, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/get_user_device_weather_history.json")
-    @GET("/api/me/devices/{deviceId}/history")
+    @GET("/api/v1/me/devices/{deviceId}/history")
     suspend fun getWeatherHistory(
         @Path("deviceId") deviceId: String,
         @Query("fromDate") fromDate: String,
