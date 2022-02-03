@@ -16,7 +16,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/day"
             style="@style/TextAppearance.WeatherXM.Forecast.Day"
-            android:layout_width="48dp"
+            android:layout_width="42dp"
             android:layout_height="wrap_content"
             tools:text="TUE" />
 
@@ -41,6 +41,15 @@
         tools:lottie_rawRes="@raw/anim_weather_clear_day" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/precipitation_probability"
+        style="@style/TextAppearance.WeatherXM.Forecast.Precipitation"
+        android:layout_width="42dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_normal"
+        android:gravity="center_vertical|end"
+        tools:text="50%" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/min_temperature"
         style="@style/TextAppearance.WeatherXM.Forecast.Temperature.Min"
         android:layout_width="36dp"
@@ -58,6 +67,7 @@
         android:layout_weight="1"
         android:enabled="false"
         app:values="@array/temperature_slider_default_values"
+        tools:trackColorInactive="@color/light_grey"
         tools:valueFrom="10"
         tools:valueTo="25" />
 

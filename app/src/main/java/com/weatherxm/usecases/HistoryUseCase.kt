@@ -192,6 +192,8 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
         )
     }
 
+    //todo investigate if this suppress should be removed or not.
+    @Suppress("ComplexMethod")
     private fun createHourlyChart(
         context: Context,
         weatherData: WeatherData
@@ -229,7 +231,10 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
 
                 // Get the wind speed and direction formatted
                 val windSpeed = Weather.convertWindSpeed(hourlyWeather.windSpeed)
-                if (windSpeed != null && hourlyWeather.windDirection != null) {
+                if (windSpeed != null &&
+                    hourlyWeather.windDirection != null &&
+                    windSpeed.toFloat() > 0
+                ) {
                     val index = UnitConverter.getIndexOfCardinal(hourlyWeather.windDirection)
                     val windDirection = resHelper.getWindDirectionDrawable(index)
 

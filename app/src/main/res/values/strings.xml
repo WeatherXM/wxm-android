@@ -189,7 +189,7 @@
     <string name="no_weather_stations_found">"Oops! Could not find any weather stations."</string>
     <string name="no_charts_found">"Oops! Charts could not be loaded."</string>
     <string name="no_forecast_data">"Oops! Forecast could not be fetched."</string>
-    <string name="no_data_chart_found">"Oops! No valid data found. Chart cannot be shown."</string>
+    <string name="no_data_chart_found">"No data found"</string>
     <string name="network_error">Something went wrong: Network Error</string>
     <string name="server_error">Something went wrong: Server Error</string>
     <string name="unknown_error">Something went wrong: Unknown Error</string>

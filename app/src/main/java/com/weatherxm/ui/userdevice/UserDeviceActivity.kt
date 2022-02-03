@@ -138,7 +138,6 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
         }
     }
 
-    // TODO: Explore weird animation of snackbar when coming in and out of the screen
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {
         if (snackbar?.isShown == true) {
             snackbar?.dismiss()

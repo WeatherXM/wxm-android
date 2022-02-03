@@ -63,4 +63,7 @@
     <color name="humidity">#48BEC5</color>
     <color name="cloudCover">#6C6C8C</color>
     <color name="uvIndex">#FFCE49</color>
+
+    <color name="daily_forecast_precip_prob_some">@color/colorPrimary</color>
+    <color name="daily_forecast_precip_prob_none">@color/light_grey</color>
 </resources>

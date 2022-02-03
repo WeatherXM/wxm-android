@@ -23,7 +23,14 @@ data class HistoryCharts(
     var cloudCover: LineChartData,
     var pressure: LineChartData,
     var uvIndex: BarChartData
-)
+) {
+    fun isEmpty(): Boolean {
+        return temperature.isNullOrEmpty() && precipitation.isNullOrEmpty()
+            && windSpeed.isNullOrEmpty() && windGust.isNullOrEmpty()
+            && windDirection.isNullOrEmpty() && humidity.isNullOrEmpty()
+            && cloudCover.isNullOrEmpty() && pressure.isNullOrEmpty() && uvIndex.isNullOrEmpty()
+    }
+}
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -34,7 +41,11 @@ data class LineChartData(
     var showDecimals: Boolean,
     var timestamps: MutableList<String>,
     var entries: MutableList<Entry>
-)
+) {
+    fun isNullOrEmpty(): Boolean {
+        return timestamps.isNullOrEmpty() && entries.isNullOrEmpty()
+    }
+}
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -45,7 +56,11 @@ data class BarChartData(
     var showDecimals: Boolean,
     var timestamps: MutableList<String>,
     var entries: MutableList<BarEntry>
-)
+) {
+    fun isNullOrEmpty(): Boolean {
+        return timestamps.isNullOrEmpty() && entries.isNullOrEmpty()
+    }
+}
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -73,9 +88,10 @@ data class ForecastData(
 @Keep
 @JsonClass(generateAdapter = true)
 data class DailyForecast(
-    var nameOfDay: String,
-    var dateOfDay: String,
-    var icon: String?,
-    var minTemp: Float?,
-    var maxTemp: Float?
+    var nameOfDay: String = "",
+    var dateOfDay: String = "",
+    var icon: String? = null,
+    var minTemp: Float? = null,
+    var maxTemp: Float? = null,
+    var precipProbability: Int? = null
 )

@@ -17,12 +17,14 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
 import com.weatherxm.ui.BarChartData
 import com.weatherxm.ui.LineChartData
+import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.show
 import dev.chrisbanes.insetter.applyInsetter
 
@@ -309,11 +311,10 @@ fun BarChart.initializeDefault24hChart(data: BarChartData) {
     xAxis.setDrawAxisLine(false)
     xAxis.setDrawGridLines(false)
     xAxis.valueFormatter = CustomXAxisFormatter(data.timestamps)
-    xAxis.granularity = 1F
+    xAxis.granularity = TIME_GRANULARITY_X_AXIS
     show()
     notifyDataSetChanged()
 }
-
 
 fun FloatingActionButton.showIfNot() {
     if (this.isOrWillBeHidden) {
@@ -323,6 +324,18 @@ fun FloatingActionButton.showIfNot() {
 
 fun FloatingActionButton.hideIfNot() {
     if (this.isOrWillBeShown) {
+        this.hide()
+    }
+}
+
+fun BottomNavigationView.showIfNot() {
+    if (!this.isShown) {
+        this.show()
+    }
+}
+
+fun BottomNavigationView.hideIfNot() {
+    if (this.isShown) {
         this.hide()
     }
 }

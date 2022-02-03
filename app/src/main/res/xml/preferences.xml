@@ -70,6 +70,7 @@
         <Preference
             app:title="@string/title_app_version"
             app:summary="@string/app_version"
+            app:enableCopying="true"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -172,8 +172,12 @@ class CustomWindMarkerView(
             windGust, windSpeedUnit, Weather.getDecimalsWindSpeed()
         )
 
-        // Customize the text for the marker view
-        valueView.text = "$windSpeedTitle: $formattedWindSpeed ($formattedWindDirection)"
+        // Customize the text for the marker view (if wind speed is zero, then hide direction)
+        valueView.text = if (entryClicked.y == 0F) {
+            "$windSpeedTitle: $formattedWindSpeed"
+        } else {
+            "$windSpeedTitle: $formattedWindSpeed ($formattedWindDirection)"
+        }
         secondValueView.text = "$windGustTitle: $formattedWindGust"
 
         // this will perform necessary layouting

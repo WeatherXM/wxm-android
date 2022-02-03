@@ -54,14 +54,12 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
     ): View {
         binding = FragmentHistoryChartsBinding.inflate(inflater, container, false)
 
-        model.onCharts().observe(viewLifecycleOwner, { resource ->
+        model.onCharts().observe(viewLifecycleOwner) { resource ->
             Timber.d("Charts updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
                     resource.data?.let { updateUI(it) }
                     binding.progress.visibility = View.GONE
-                    binding.chartsView.visibility = View.VISIBLE
-                    binding.empty.visibility = View.GONE
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
@@ -79,7 +77,7 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
                     binding.empty.visibility = View.GONE
                 }
             }
-        })
+        }
 
         return binding.root
     }
@@ -111,6 +109,18 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
     private fun updateUI(historyCharts: HistoryCharts) {
         clearCharts()
 
+        if (historyCharts.isEmpty()) {
+            binding.chartsView.visibility = View.GONE
+            binding.empty.title(getString(R.string.no_charts_found))
+            binding.empty.subtitle(getString(R.string.no_data_chart_found))
+            binding.empty.action(getString(R.string.action_retry))
+            binding.empty.listener { getWeatherHistory() }
+            binding.empty.visibility = View.VISIBLE
+            return
+        } else {
+            binding.empty.visibility = View.GONE
+        }
+
         // Init Temperature Chart
         initDefaultChart(binding.chartTemperature.getChart(), historyCharts.temperature, null)
 
@@ -134,6 +144,8 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
 
         // Init Uv Index Char
         initUvChart(binding.chartUvIndex.getChart(), historyCharts.uvIndex)
+
+        binding.chartsView.visibility = View.VISIBLE
     }
 
     private fun initDefaultChart(lineChart: LineChart, data: LineChartData, yMinValue: Float?) {
@@ -149,7 +161,7 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
             barChart.initializeDefault24hChart(data)
         } else {
             barChart.setNoDataText(getString(R.string.no_data_chart_found))
-            context?.getColor(R.color.red)?.let { barChart.setNoDataTextColor(it) }
+            context?.getColor(R.color.black)?.let { barChart.setNoDataTextColor(it) }
             barChart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
         }
     }
@@ -182,7 +194,7 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
 
     private fun showNoDataText(lineChart: LineChart) {
         lineChart.setNoDataText(getString(R.string.no_data_chart_found))
-        context?.getColor(R.color.red)?.let { lineChart.setNoDataTextColor(it) }
+        context?.getColor(R.color.black)?.let { lineChart.setNoDataTextColor(it) }
         lineChart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
     }
 }

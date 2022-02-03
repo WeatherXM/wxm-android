@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             app:navigationIcon="@drawable/ic_back"
             app:title="@string/settings" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -30,6 +31,7 @@
             android:name="com.weatherxm.ui.preferences.PreferenceFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

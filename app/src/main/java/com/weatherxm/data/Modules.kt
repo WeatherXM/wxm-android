@@ -113,7 +113,7 @@ private val datasources = module {
     }
 
     single<UserDataSource> {
-        UserDataSourceImpl(get())
+        UserDataSourceImpl(get(), get())
     }
 
     single<AuthDataSource> {
@@ -131,7 +131,7 @@ private val datasources = module {
 
 private val repositories = module {
     single<AuthRepository> {
-        AuthRepositoryImpl(get(), get(), get())
+        AuthRepositoryImpl(get(), get(), get(), get())
     }
     single<LocationRepository> {
         LocationRepository()

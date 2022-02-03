@@ -423,6 +423,16 @@
         <item name="android:lines">1</item>
     </style>
 
+    <style name="TextAppearance.WeatherXM.Forecast.Precipitation" parent="TextAppearance.Material3.BodyMedium">
+        <item name="drawableStartCompat">@drawable/ic_weather_precip_prob_small</item>
+        <item name="android:drawablePadding">2dp</item>
+        <item name="drawableTint">@color/daily_forecast_precipitation_probability</item>
+        <item name="android:textColor">@color/daily_forecast_precipitation_probability</item>
+        <item name="android:textStyle">bold</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="android:lines">1</item>
+    </style>
+
     <style name="Widget.WeatherXM.Forecast.Temperature.Slider" parent="Widget.Material3.Slider">
         <item name="android:stepSize">0</item>
         <item name="haloRadius">@dimen/temperature_slider_halo_radius</item>

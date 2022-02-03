@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Status
@@ -37,7 +38,13 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
             model.fetch()
         }
 
-        model.devices().observe(viewLifecycleOwner, { devicesResource ->
+        binding.recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                model.onScroll(dy)
+            }
+        })
+
+        model.devices().observe(viewLifecycleOwner) { devicesResource ->
             when (devicesResource.status) {
                 Status.SUCCESS -> {
                     binding.swiperefresh.isRefreshing = false
@@ -71,7 +78,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                     binding.empty.visibility = View.GONE
                 }
             }
-        })
+        }
 
         return binding.root
     }

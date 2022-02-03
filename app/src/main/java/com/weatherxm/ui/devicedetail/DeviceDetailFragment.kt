@@ -56,10 +56,10 @@ class DeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        deviceDetailModel.onDeviceDetailsUpdate().observe(this, { resource ->
+        deviceDetailModel.onDeviceDetailsUpdate().observe(this) { resource ->
             Timber.d("Data updated: ${resource.status}")
             updateUI(resource)
-        })
+        }
 
         deviceDetailModel.fetch(device)
     }
@@ -83,9 +83,7 @@ class DeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
                 Timber.d(resource.message, resource.message)
                 resource.message?.let { toast(it, Toast.LENGTH_LONG) }
             }
-            Status.LOADING -> {
-                // TODO Do something??
-            }
+            Status.LOADING -> {}
         }
     }
 }

@@ -1,7 +1,7 @@
 [
     {
         "id": "68f90f60-10e9-11ec-877e-63751227e9ec",
-        "name": "Lamia DSH",
+        "name": "Proud Orange Snow",
         "label": null,
         "location": {
             "lat": 38.90402406186525,
@@ -77,7 +77,7 @@
         },
         "current_weather": {
             "timestamp": "2021-12-10T13:00:00+02:00",
-            "precip_intensity": 0,
+            "precipitation": 0,
             "temperature": 6.7,
             "wind_direction": 336,
             "humidity": 81,
@@ -93,7 +93,7 @@
     },
     {
         "id": "6fe907d0-10e9-11ec-877e-63751227e9ec",
-        "name": "Ermoypoli DSH",
+        "name": "Special Purple Water",
         "label": null,
         "location": {
             "lat": 37.442430072377526,
@@ -169,7 +169,7 @@
         },
         "current_weather": {
             "timestamp": "2021-12-10T13:00:00+02:00",
-            "precip_intensity": 0,
+            "precipitation": 0,
             "temperature": 14.8,
             "wind_direction": 356,
             "humidity": 65,
@@ -185,7 +185,7 @@
     },
     {
         "id": "76d13810-10e9-11ec-877e-63751227e9ec",
-        "name": "Hania DSH",
+        "name": "Exotic Pecan Aurora",
         "label": null,
         "location": {
             "lat": 35.51622463589852,
@@ -261,7 +261,7 @@
         },
         "current_weather": {
             "timestamp": "2021-12-10T13:00:00+02:00",
-            "precip_intensity": 0.03,
+            "precipitation": 0.03,
             "temperature": 15.7,
             "wind_direction": 54,
             "humidity": 81,
@@ -277,7 +277,7 @@
     },
     {
         "id": "76869a80-10e9-11ec-877e-63751227e9ec",
-        "name": "Hrakleio DSH",
+        "name": "Bad Brown Cloud",
         "label": null,
         "location": {
             "lat": 35.33868503220863,
@@ -353,7 +353,7 @@
         },
         "current_weather": {
             "timestamp": "2021-12-10T13:00:00+02:00",
-            "precip_intensity": 0,
+            "precipitation": 0,
             "temperature": 15.1,
             "wind_direction": 338,
             "humidity": 81,

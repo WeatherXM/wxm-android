@@ -1,6 +1,7 @@
 package com.weatherxm.ui.deviceforecast
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -57,6 +58,21 @@ class DailyForecastAdapter :
             }
             binding.minTemperature.text = Weather.getFormattedTemperature(item.minTemp)
             binding.maxTemperature.text = Weather.getFormattedTemperature(item.maxTemp)
+
+            with(binding.precipitationProbability) {
+                when (item.precipProbability) {
+                    null -> visibility = View.INVISIBLE
+                    0 -> {
+                        visibility = View.VISIBLE
+                        isActivated = false
+                    }
+                    else -> {
+                        visibility = View.VISIBLE
+                        isActivated = true
+                    }
+                }
+                text = Weather.getFormattedPrecipitationProbability(item.precipProbability)
+            }
         }
     }
 

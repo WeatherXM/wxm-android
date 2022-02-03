@@ -26,7 +26,12 @@ class DevicesViewModel : ViewModel(), KoinComponent {
         value = Resource.loading()
     }
 
+    // Needed for passing info to the activity to show/hide elements when scrolling on the list
+    private val showOverlayViews = MutableLiveData(true)
+
     fun devices(): LiveData<Resource<List<Device>>> = devices
+
+    fun showOverlayViews() = showOverlayViews
 
     fun fetch() {
         this@DevicesViewModel.devices.postValue(Resource.loading())
@@ -48,11 +53,12 @@ class DevicesViewModel : ViewModel(), KoinComponent {
                         is Failure.UnknownError -> devices.postValue(
                             Resource.error(resHelper.getString(R.string.unknown_error))
                         )
-                        else -> devices.postValue(
-                            Resource.error(resHelper.getString(R.string.unknown_error))
-                        )
                     }
                 }
         }
+    }
+
+    fun onScroll(dy: Int) {
+        showOverlayViews.postValue(dy <= 0)
     }
 }

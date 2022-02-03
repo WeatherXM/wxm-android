@@ -58,7 +58,7 @@ class ForecastUseCaseImpl : ForecastUseCase, KoinComponent {
     }
 
     private fun createDailyForecast(weatherData: WeatherData): DailyForecast {
-        val dailyForecast = DailyForecast("", "", null, null, null)
+        val dailyForecast = DailyForecast()
 
         weatherData.date?.let {
             dailyForecast.nameOfDay = getShortNameOfDayFromLocalDate(resourcesHelper, it)
@@ -68,6 +68,7 @@ class ForecastUseCaseImpl : ForecastUseCase, KoinComponent {
         dailyForecast.icon = weatherData.daily?.icon
         dailyForecast.maxTemp = weatherData.daily?.temperatureMax
         dailyForecast.minTemp = weatherData.daily?.temperatureMin
+        dailyForecast.precipProbability = weatherData.daily?.precipProbability
 
         return dailyForecast
     }

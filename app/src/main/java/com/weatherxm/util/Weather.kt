@@ -50,6 +50,8 @@ object Weather : KoinComponent {
         getDecimalsPrecipitation()
     )
 
+    fun getFormattedPrecipitationProbability(value: Int?) = getFormattedValueOrEmpty(value, "%")
+
     fun getFormattedHumidity(value: Int?) = getFormattedValueOrEmpty(value, "%")
 
     fun getFormattedPressure(value: Float?) = getFormattedValueOrEmpty(
@@ -96,18 +98,14 @@ object Weather : KoinComponent {
         units: String,
         decimals: Int? = null
     ): String {
-        var valueToReturn: String = EMPTY_VALUE
         if (value == null) {
-            return valueToReturn
+            return EMPTY_VALUE
         }
-
-        valueToReturn = if (decimals == null) {
-            "$value $units"
+        return if (decimals == null) {
+            "$value$units"
         } else {
-            "%.${decimals}f $units".format(value)
+            "%.${decimals}f$units".format(value)
         }
-
-        return valueToReturn
     }
 
     fun convertTemp(value: Number?): Number? {
@@ -219,7 +217,7 @@ object Weather : KoinComponent {
         return DECIMALS_WIND_SPEED
     }
 
-    fun getDecimalsPrecipitation(): Int? {
+    fun getDecimalsPrecipitation(): Int {
         val keyOnSharedPref = resHelper.getString(R.string.key_precipitation_preference)
         val defaultUnit = resHelper.getString(R.string.precipitation_mm)
 

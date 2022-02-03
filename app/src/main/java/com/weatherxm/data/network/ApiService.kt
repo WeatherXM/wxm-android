@@ -48,7 +48,7 @@ interface ApiService {
     ): NetworkResponse<Unit, ErrorResponse>
 
     @Mock
-    @MockResponse(body = "mock_files/get_user_device_weather_current_forecast_short_term.json")
+    @MockResponse(body = "mock_files/get_user_device_weather_forecast.json")
     @GET("/api/v1/me/devices/{deviceId}/forecast")
     suspend fun getForecast(
         @Path("deviceId") deviceId: String,
