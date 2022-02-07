@@ -22,7 +22,7 @@ android {
     buildToolsVersion "31.0.0"
 
     defaultConfig {
-        applicationId "com.weatherxm.android"
+        applicationId "com.weatherxm.app"
         minSdkVersion 23
         targetSdkVersion 32
         versionCode 1
