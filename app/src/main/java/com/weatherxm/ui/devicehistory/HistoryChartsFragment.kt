@@ -59,12 +59,13 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
             when (resource.status) {
                 Status.SUCCESS -> {
                     resource.data?.let { updateUI(it) }
-                    binding.progress.visibility = View.GONE
+                    binding.chartsView.visibility = View.VISIBLE
+                    binding.empty.visibility = View.GONE
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
-                    binding.progress.visibility = View.GONE
                     binding.chartsView.visibility = View.GONE
+                    binding.empty.animation(R.raw.anim_error)
                     binding.empty.title(getString(R.string.no_charts_found))
                     binding.empty.subtitle(resource.message)
                     binding.empty.action(getString(R.string.action_retry))
@@ -72,9 +73,10 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
                     binding.empty.visibility = View.VISIBLE
                 }
                 Status.LOADING -> {
-                    binding.progress.visibility = View.VISIBLE
                     binding.chartsView.visibility = View.GONE
-                    binding.empty.visibility = View.GONE
+                    binding.empty.clear()
+                    binding.empty.animation(R.raw.anim_loading)
+                    binding.empty.visibility = View.VISIBLE
                 }
             }
         }

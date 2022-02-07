@@ -1,12 +1,16 @@
 package com.weatherxm.ui
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Wallet
+import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.devicedetail.DeviceDetailFragment
 import com.weatherxm.ui.deviceforecast.ForecastActivity
@@ -20,6 +24,8 @@ import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.splash.SplashActivity
 import com.weatherxm.ui.userdevice.UserDeviceActivity
+import timber.log.Timber
+
 
 @Suppress("TooManyFunctions")
 class Navigator {
@@ -150,5 +156,45 @@ class Navigator {
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ForecastActivity.ARG_DEVICE, device)
         )
+    }
+
+    fun sendSupportEmail(
+        fragment: Fragment,
+        recipient: String? = null,
+        subject: String? = null,
+        body: String? = null
+    ) {
+        fragment.context?.let {
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("mailto:") // Only email apps should handle this
+            intent.putExtra(
+                Intent.EXTRA_EMAIL, arrayOf(
+                    if (recipient.isNullOrEmpty()) {
+                        fragment.getString(R.string.support_email_recipient)
+                    } else recipient
+                )
+            )
+            subject?.let { subject -> intent.putExtra(Intent.EXTRA_SUBJECT, subject) }
+            body?.let { body -> intent.putExtra(Intent.EXTRA_TEXT, body) }
+            try {
+                it.startActivity(Intent.createChooser(intent, "Send mail..."))
+            } catch (e: ActivityNotFoundException) {
+                Timber.d("Email client not found: $e")
+                fragment.toast(R.string.error_cannot_send_email)
+            }
+        }
+    }
+
+    fun openWebsite(fragment: Fragment, url: String) {
+        fragment.context?.let {
+            try {
+                CustomTabsIntent.Builder()
+                    .build()
+                    .launchUrl(it, Uri.parse(url))
+            } catch (e: ActivityNotFoundException) {
+                Timber.d(e, "Could not load url: $url")
+                fragment.toast(R.string.error_cannot_open_url, url)
+            }
+        }
     }
 }

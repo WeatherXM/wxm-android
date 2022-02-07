@@ -377,8 +377,12 @@
         <item name="cardBackgroundColor">@color/colorSecondary</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.ConnectWallet.Card.Title" parent="TextAppearance.MaterialComponents.Headline6">
-        <item name="android:textColor">@color/connect_wallet_card_titles</item>
+    <style name="TextAppearance.WeatherXM.Card.Title" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/colorPrimaryVariant</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Card.Body" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Chart.Title" parent="TextAppearance.MaterialComponents.Headline6">

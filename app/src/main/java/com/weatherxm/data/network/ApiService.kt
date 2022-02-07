@@ -1,6 +1,7 @@
 package com.weatherxm.data.network
 
 import co.infinum.retromock.meta.Mock
+import co.infinum.retromock.meta.MockBehavior
 import co.infinum.retromock.meta.MockResponse
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.data.Device
@@ -23,6 +24,7 @@ interface ApiService {
 
     @Mock
     @MockResponse(body = "mock_files/get_user_devices.json")
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @GET("/api/v1/me/devices")
     suspend fun getUserDevices(): NetworkResponse<List<Device>, ErrorResponse>
 
@@ -73,4 +75,12 @@ interface ApiService {
         @Query("toDate") toDate: String,
         @Query("exclude") exclude: String? = null,
     ): NetworkResponse<List<WeatherData>, ErrorResponse>
+
+    @Mock
+    @MockResponse(body = "mock_files/claim_device.json")
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @POST("/api/v1/me/devices/claim")
+    suspend fun claimDevice(
+        @Body address: ClaimDeviceBody,
+    ): NetworkResponse<Device, ErrorResponse>
 }

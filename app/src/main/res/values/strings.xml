@@ -12,6 +12,7 @@
     <string name="warn_wallet_terms_not_accepted">Please accept the terms to proceed.</string>
     <string name="warn_wallet_access_not_acknowledged">Please confirm that you have access to the wallet to proceed.</string>
     <string name="invalid_email">Not a valid email</string>
+    <string name="invalid_serial_number">Invalid serial number</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">Login failed</string>
     <string name="signup_failed">Could not signup</string>
@@ -30,19 +31,27 @@
     <string name="title_profile">Profile</string>
     <string name="weather_stations">Weather Stations</string>
     <string name="wxm_address">New WXM Address</string>
+    <string name="device_serial_number_title">Device Serial Number</string>
+    <string name="device_serial_number_hint">Enter the device\'s serial number</string>
+    <string name="device_serial_number_helper">%d / 18</string>
+    <string name="device_serial_number_instructions">The S/N is 18 characters long and looks like this: &lt;strong&gt;12:34:56:78:9A:BC:DE:F1:34&lt;/strong&gt;. You  can find it on your M5 miner\'s screen. Please type only the letters and numbers.</string>
+    <string name="description_set_location">Please set your location in the map so you can proceed with claiming the device.</string>
+    <string name="success_claim_device">You claimed the device: %s</string>
     <string name="hint_wxm_address">Enter or scan WXM wallet address</string>
     <string name="save">Save</string>
     <string name="title_connect_wallet">Connect Wallet</string>
+    <string name="title_claim_device">Claim Device</string>
     <string name="current_address">Current Address</string>
     <string name="address_saved">Success: Address Saved.</string>
     <string name="hello">Hello</string>
     <string name="hello_user">Hello, %s</string>
     <string name="ownership_wallet">I acknowledge that I have ownership and full access to this wallet.</string>
+    <string name="acknowledge_location">I acknowledge that this location is the one I will deploy the device.</string>
     <string name="terms">I have read and accept the terms.</string>
     <string name="send">Send Email</string>
     <string name="success">Success</string>
-    <string name="success_title">Email has been sent!</string>
-    <string name="success_text">We have sent instructions for resetting your password to your email.</string>
+    <string name="success_reset_password_title">Email has been sent!</string>
+    <string name="success_reset_password_text">We have sent instructions for resetting your password to your email.</string>
     <string name="send_email_instructions">Enter the email associated with your account and we will send you an email with instructions to reset your password.</string>
     <string name="next_7_days">Next 7 Days</string>
     <string name="see_historical_charts">See Historical Charts</string>
@@ -58,7 +67,16 @@
     <string name="action_retry">Retry</string>
     <string name="action_ok">OK</string>
     <string name="action_cancel">Cancel</string>
+    <string name="action_next">Next</string>
+    <string name="action_claim">Claim</string>
+    <string name="action_set_location">Set Location</string>
+    <string name="action_use_gps">Use GPS</string>
+    <string name="info_claim_contact_support">Trouble claiming your device? Contact our support team.</string>
+    <string name="info_claim_buy_miner">Don\'t have a WXM device yet?\nGet one on weatherxm.com.</string>
+    <string name="action_devices_list">View device list</string>
     <string name="warn_cancelled">Cancelled!</string>
+    <string name="permission_location_title">Access to your location?</string>
+    <string name="permission_location_rationale">Location permission is needed to verify your miner\'s location.</string>
     <string name="permission_permanently_denied_title">Permission permanently denied</string>
     <string name="permission_permanently_denied_rationale">Go to the app settings to give the required permissions.</string>
 
@@ -83,11 +101,11 @@
 
 
     <!-- Weather Stations -->
-    <string name="add_weather_station">Add your weather station by clicking the + button</string>
+    <string name="add_weather_station">Claim your miner and weather station by clicking the + button.</string>
     <string name="online">Online</string>
     <string name="offline">Offline</string>
     <string name="unknown">Unknown</string>
-    <string name="no_weather_stations">You haven\'t added any weather stations yet.</string>
+    <string name="no_weather_stations">Oh, no! No miners yet?</string>
     <string name="current_weather">Current Weather</string>
     <string name="title_dialog_logout">Logout?</string>
     <string name="message_dialog_logout">Are you sure you want to logout?</string>
@@ -97,7 +115,10 @@
     <!-- Settings -->
     <string name="account">Account</string>
     <string name="about">About</string>
+    <string name="help">Help</string>
     <string name="title_app_version">App Version</string>
+    <string name="title_contact_support">Contact Support</string>
+    <string name="desc_contact_support">Send us an email and we\'ll get back to you as soon as possible.</string>
     <string name="change_password">Change Password</string>
     <string name="request_reset_password_desc">Request a password reset email to change your password.</string>
 
@@ -185,6 +206,15 @@
     <string name="tokens_24h">24h:</string>
     <string name="tokens_total">Total:</string>
 
+    <!-- Support Email -->
+    <string name="support_email_recipient">support@weatherxm.com</string>
+    <string name="support_email_intent_title">Send email</string>
+    <string name="support_email_body_user_and_device_info">User account email: %1$s\nDevice S/N: %2$s\n</string>
+
+    <!-- Claim device -->
+    <string name="claim_device_info_text">Configure your miner with your WiFi credentials using the \"Configure WiFi\" button which can be found by swiping left on the miner\'s screen.</string>
+    <string name="support_email_subject_cannot_claim">Cannot claim device</string>
+
     <!-- Error messages -->
     <string name="no_weather_stations_found">"Oops! Could not find any weather stations."</string>
     <string name="no_charts_found">"Oops! Charts could not be loaded."</string>
@@ -200,4 +230,6 @@
     <string name="forecast_failed">Getting weather forecast data failed.</string>
     <string name="token_failed">Getting token data failed.</string>
     <string name="oops_something_wrong">Oops! Something went wrong.</string>
+    <string name="error_cannot_send_email">Oops! Could not send email!</string>
+    <string name="error_cannot_open_url">Oops! Could not open %s</string>
 </resources>

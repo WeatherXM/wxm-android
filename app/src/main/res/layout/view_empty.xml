@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
+    tools:gravity="center"
     tools:orientation="vertical"
     tools:padding="24dp"
     tools:parentTag="LinearLayout">
@@ -26,7 +27,6 @@
         android:layout_marginTop="24dp"
         android:gravity="center_horizontal"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        android:textSize="16sp"
         android:textStyle="bold"
         tools:text="Nothing here!" />
 
@@ -38,7 +38,6 @@
         android:layout_marginTop="4dp"
         android:gravity="center_horizontal"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-        android:textSize="14sp"
         android:textStyle="normal"
         tools:text="Honestly, something is wrong" />
 

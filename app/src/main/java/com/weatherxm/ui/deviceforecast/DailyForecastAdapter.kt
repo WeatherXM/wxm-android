@@ -72,6 +72,7 @@ class DailyForecastAdapter :
                     }
                 }
                 text = Weather.getFormattedPrecipitationProbability(item.precipProbability)
+                isActivated = true
             }
         }
     }

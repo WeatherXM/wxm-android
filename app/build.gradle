@@ -76,6 +76,7 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             firebaseAppDistribution {
+                appId = "$RELEASE_APP_ID"
                 artifactType = "APK"
                 releaseNotes = "Release notes for development version"
                 serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
@@ -89,6 +90,7 @@ android {
             // change it to true if you want to test the obfuscation on debug mode
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             firebaseAppDistribution {
+                appId = "$DEBUG_APP_ID"
                 artifactType = "APK"
                 releaseNotes = "Release notes for development version"
                 serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
@@ -179,6 +181,7 @@ dependencies {
     implementation "androidx.activity:activity-ktx:1.4.0"
     implementation "androidx.annotation:annotation:1.3.0"
     implementation "androidx.appcompat:appcompat:1.4.1"
+    implementation "androidx.browser:browser:1.4.0"
     implementation "androidx.collection:collection-ktx:1.2.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.3"
     implementation "androidx.core:core-ktx:1.7.0"
@@ -252,4 +255,7 @@ dependencies {
 
     // Retromock for mocking responses
     implementation "co.infinum:retromock:1.1.1"
+
+    // Viewpager
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 }

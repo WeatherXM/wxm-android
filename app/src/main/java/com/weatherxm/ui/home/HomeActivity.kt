@@ -1,6 +1,10 @@
 package com.weatherxm.ui.home
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -10,6 +14,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.claimdevice.ClaimDeviceActivity
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
@@ -27,6 +32,15 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
     private val devicesViewModel: DevicesViewModel by viewModels()
 
     private var snackbar: Snackbar? = null
+
+    // Register the launcher for the claim device activity and wait for a possible result
+    private val claimDeviceLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+        { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                devicesViewModel.fetch()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +91,10 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
+        binding.addDevice.setOnClickListener {
+            claimDeviceLauncher.launch(Intent(this, ClaimDeviceActivity::class.java))
+        }
+
         // Disable BottomNavigationView bottom padding, added by default, and add margin
         // https://github.com/material-components/material-components-android/commit/276bec8385ec877548fc84994c0a016de2428567
         binding.navView.applyInsetter {
@@ -85,5 +103,8 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 margin(bottom = true)
             }
         }
+
+        // Fetch user's devices
+        devicesViewModel.fetch()
     }
 }

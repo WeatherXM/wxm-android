@@ -1,3 +1,4 @@
+@file:Suppress("TooManyFunctions")
 package com.weatherxm.util
 
 import android.content.Context
@@ -6,7 +7,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import androidx.annotation.StringRes
+import androidx.core.text.HtmlCompat
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
@@ -338,4 +341,9 @@ fun BottomNavigationView.hideIfNot() {
     if (this.isShown) {
         this.hide()
     }
+}
+
+fun TextView.setHtml(@StringRes resId: Int, flags: Int = HtmlCompat.FROM_HTML_MODE_LEGACY) {
+    val html = resources.getText(resId).toString()
+    setText(HtmlCompat.fromHtml(html, flags), TextView.BufferType.SPANNABLE)
 }

@@ -34,21 +34,21 @@ class ForecastUseCaseImpl : ForecastUseCase, KoinComponent {
             var minTemp: Float? = null
             var maxTemp: Float? = null
 
-            for(weatherData in it) {
+            for (weatherData in it) {
                 dailyForecasts.add(createDailyForecast(weatherData))
 
                 val dayTempMin = weatherData.daily?.temperatureMin
                 val dayTempMax = weatherData.daily?.temperatureMax
 
-                if(minTemp == null && dayTempMin != null) {
+                if (minTemp == null && dayTempMin != null) {
                     minTemp = dayTempMin
-                } else if(dayTempMin != null && minTemp != null && minTemp > dayTempMin) {
+                } else if (dayTempMin != null && minTemp != null && minTemp > dayTempMin) {
                     minTemp = dayTempMin
                 }
 
-                if(maxTemp == null && dayTempMax != null) {
+                if (maxTemp == null && dayTempMax != null) {
                     maxTemp = dayTempMax
-                } else if(dayTempMax != null && maxTemp != null && maxTemp < dayTempMax) {
+                } else if (dayTempMax != null && maxTemp != null && maxTemp < dayTempMax) {
                     maxTemp = dayTempMax
                 }
             }

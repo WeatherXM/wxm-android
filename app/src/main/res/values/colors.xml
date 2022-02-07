@@ -14,6 +14,9 @@
     <color name="off_white">#EEEEEE</color>
     <color name="white_blue">#F0F4FF</color>
 
+    <color name="success">#00e676</color>
+    <color name="error">#ff1744</color>
+
     <color name="black_translucent">#88000000</color>
     <color name="white_translucent">#DDFFFFFF</color>
     <color name="white_transparent">#65FFFFFF</color>
@@ -51,7 +54,6 @@
     <color name="dateTabSelectedTextColor">#116295</color>
 
     <color name="profile_background">@color/white_blue</color>
-    <color name="connect_wallet_card_titles">#23395D</color>
 
     <!-- Weather Data colors -->
     <color name="temperature">#084D6A</color>

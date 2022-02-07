@@ -55,12 +55,9 @@ data class Device(
     val currentWeather: HourlyWeather?,
     val address: String?
 ) : Parcelable {
+    // TODO: When we have the new field for the "label" of the device use it here
     fun getNameOrLabel(): String {
-        return if (!label.isNullOrEmpty()) {
-            "$label ($name)"
-        } else {
-            name
-        }
+        return name
     }
 }
 

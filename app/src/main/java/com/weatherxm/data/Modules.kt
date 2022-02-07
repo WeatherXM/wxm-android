@@ -39,6 +39,8 @@ import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.data.repository.WeatherRepository
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.explorer.DeviceWithResolutionJsonAdapter
+import com.weatherxm.usecases.ClaimDeviceUseCase
+import com.weatherxm.usecases.ClaimDeviceUseCaseImpl
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.ExplorerUseCaseImpl
 import com.weatherxm.usecases.ForecastUseCase
@@ -162,6 +164,9 @@ private val usecases = module {
     }
     single<ForecastUseCase> {
         ForecastUseCaseImpl()
+    }
+    single<ClaimDeviceUseCase> {
+        ClaimDeviceUseCaseImpl()
     }
 }
 

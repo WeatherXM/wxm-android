@@ -37,6 +37,8 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
                         findPreference(getString(R.string.action_logout))
                     val resetPassButton: Preference? =
                         findPreference(getString(R.string.change_password))
+                    val contactSupportButton: Preference? =
+                        findPreference(getString(R.string.title_contact_support))
                     logoutButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                         showLogoutDialog()
                         true
@@ -46,16 +48,22 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
                             navigator.showResetPassword(this)
                             true
                         }
+                    contactSupportButton?.onPreferenceClickListener =
+                        Preference.OnPreferenceClickListener {
+                            navigator.sendSupportEmail(this)
+                            true
+                        }
                 }
         }
     }
 
     private fun showLogoutDialog() {
-        AlertDialogFragment.Builder(
-            title = getString(R.string.title_dialog_logout),
-            message = getString(R.string.message_dialog_logout),
-            negative = getString(R.string.no)
-        )
+        AlertDialogFragment
+            .Builder(
+                title = getString(R.string.title_dialog_logout),
+                message = getString(R.string.message_dialog_logout),
+                negative = getString(R.string.no)
+            )
             .onPositiveClick(getString(R.string.yes)) {
                 model.logout()
             }

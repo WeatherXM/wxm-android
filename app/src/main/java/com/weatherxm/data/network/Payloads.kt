@@ -2,6 +2,7 @@ package com.weatherxm.data.network
 
 import android.os.Parcelable
 import com.squareup.moshi.JsonClass
+import com.weatherxm.data.Location
 import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)
@@ -36,4 +37,11 @@ data class AddressBody(
 @Parcelize
 data class ResetPasswordBody(
     val email: String
+) : Parcelable
+
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class ClaimDeviceBody(
+    val serialNumber: String,
+    val location: Location
 ) : Parcelable

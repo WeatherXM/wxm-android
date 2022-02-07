@@ -22,15 +22,6 @@
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:title="@string/weather_stations" />
 
-        <!-- Progress -->
-
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/progress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -59,7 +50,7 @@
         android:layout_gravity="center"
         android:padding="@dimen/padding_extra_large"
         android:visibility="gone"
-        app:empty_animation="@raw/anim_empty_fields"
+        app:empty_animation="@raw/anim_empty_devices"
         app:empty_subtitle="How are you?"
         app:empty_title="Nothing here"
         tools:visibility="visible" />

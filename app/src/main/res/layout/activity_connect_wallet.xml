@@ -51,7 +51,7 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/currentAddressTitle"
-                    style="@style/TextAppearance.WeatherXM.ConnectWallet.Card.Title"
+                    style="@style/TextAppearance.WeatherXM.Card.Title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/current_address"
@@ -84,7 +84,7 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/addressInfo"
-                    style="@style/TextAppearance.WeatherXM.ConnectWallet.Card.Title"
+                    style="@style/TextAppearance.WeatherXM.Card.Title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_large"

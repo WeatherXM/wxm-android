@@ -3,18 +3,16 @@ package com.weatherxm.data.datasource
 import arrow.core.Either
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
-import com.weatherxm.data.Tokens
-import com.weatherxm.data.WeatherData
+import com.weatherxm.data.Location
 import com.weatherxm.data.map
 import com.weatherxm.data.network.ApiService
-import com.weatherxm.util.getFormattedDate
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import com.weatherxm.data.network.ClaimDeviceBody
 
 interface DeviceDataSource {
     suspend fun getPublicDevices(): Either<Failure, List<Device>>
     suspend fun getUserDevices(): Either<Failure, List<Device>>
     suspend fun getUserDevice(deviceId: String): Either<Failure, Device>
+    suspend fun claimDevice(serialNumber: String, location: Location): Either<Failure, Device>
 }
 
 class DeviceDataSourceImpl(
@@ -31,5 +29,12 @@ class DeviceDataSourceImpl(
 
     override suspend fun getUserDevice(deviceId: String): Either<Failure, Device> {
         return apiService.getUserDevice(deviceId).map()
+    }
+
+    override suspend fun claimDevice(
+        serialNumber: String,
+        location: Location
+    ): Either<Failure, Device> {
+        return apiService.claimDevice(ClaimDeviceBody(serialNumber, location)).map()
     }
 }

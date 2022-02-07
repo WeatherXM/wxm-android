@@ -21,6 +21,10 @@ class ResourcesHelper(private val resources: Resources) : KoinComponent {
         return resources.getString(stringRes)
     }
 
+    fun getString(@StringRes stringRes: Int, concatenatedString: String): String {
+        return resources.getString(stringRes, concatenatedString)
+    }
+
     fun getWindDirectionDrawable(index: Int): Drawable {
         val windDirectionDrawables: LayerDrawable = ResourcesCompat.getDrawable(
             resources,

@@ -4,10 +4,13 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
+import com.airbnb.lottie.LottieDrawable.INFINITE
 import com.weatherxm.R
+import com.weatherxm.R.styleable.EmptyView_empty_action
 import com.weatherxm.databinding.ViewEmptyBinding
 
 class EmptyView : LinearLayout {
@@ -39,7 +42,7 @@ class EmptyView : LinearLayout {
             try {
                 title(getString(R.styleable.EmptyView_empty_title))
                 subtitle(getString(R.styleable.EmptyView_empty_subtitle))
-                action(getString(R.styleable.EmptyView_empty_action))
+                action(getString(EmptyView_empty_action))
                 animation(getResourceId(R.styleable.EmptyView_empty_animation, 0))
             } finally {
                 recycle()
@@ -47,23 +50,38 @@ class EmptyView : LinearLayout {
         }
     }
 
-    fun title(@StringRes res: Int): EmptyView {
-        binding.title.text = resources.getString(res)
+    fun title(@StringRes resId: Int): EmptyView {
+        title(resources.getString(resId))
         return this
     }
 
     fun title(title: String?): EmptyView {
-        binding.title.text = title
+        binding.title.apply {
+            text = title
+            visibility = if (title != null) View.VISIBLE else View.GONE
+        }
+        return this
+    }
+
+    fun subtitle(@StringRes resId: Int): EmptyView {
+        subtitle(resources.getString(resId))
         return this
     }
 
     fun subtitle(subtitle: String?): EmptyView {
-        binding.subtitle.text = subtitle
+        binding.subtitle.apply {
+            text = subtitle
+            visibility = if (subtitle != null) View.VISIBLE else View.GONE
+        }
         return this
     }
 
-    private fun animation(@RawRes res: Int): EmptyView {
-        binding.animation.setAnimation(res)
+    fun animation(@RawRes res: Int, loop: Boolean = true): EmptyView {
+        binding.animation.apply {
+            setAnimation(res)
+            repeatCount = if (loop) INFINITE else 0
+            playAnimation()
+        }
         return this
     }
 
@@ -84,5 +102,12 @@ class EmptyView : LinearLayout {
 
     fun hide() {
         visibility = GONE
+    }
+
+    fun clear() {
+        title(null)
+        subtitle(null)
+        action(null)
+        listener(null)
     }
 }

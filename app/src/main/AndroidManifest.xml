@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.weatherxm">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -85,6 +85,10 @@
             android:theme="@style/Theme.WeatherXM.Home" />
         <activity
             android:name="com.weatherxm.ui.deviceforecast.ForecastActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM.Home" />
+        <activity
+            android:name="com.weatherxm.ui.claimdevice.ClaimDeviceActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM.Home" />
 

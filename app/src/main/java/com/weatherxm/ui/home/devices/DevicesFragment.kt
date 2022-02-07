@@ -52,42 +52,40 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                         adapter.submitList(devicesResource.data)
                         binding.recycler.visibility = View.VISIBLE
                         binding.empty.visibility = View.GONE
-                        binding.progress.visibility = View.GONE
                     } else {
-                        binding.empty.visibility = View.VISIBLE
+                        binding.empty.animation(R.raw.anim_empty_devices, false)
                         binding.empty.title(getString(R.string.no_weather_stations))
                         binding.empty.subtitle(getString(R.string.add_weather_station))
                         binding.empty.listener(null)
+                        binding.empty.visibility = View.VISIBLE
                         binding.recycler.visibility = View.GONE
-                        binding.progress.visibility = View.GONE
                     }
                 }
                 Status.ERROR -> {
                     binding.swiperefresh.isRefreshing = false
+                    binding.empty.animation(R.raw.anim_error, false)
                     binding.empty.title(getString(R.string.oops_something_wrong))
                     binding.empty.subtitle(devicesResource.message)
                     binding.empty.action(getString(R.string.action_retry))
                     binding.empty.listener { model.fetch() }
                     binding.empty.visibility = View.VISIBLE
                     binding.recycler.visibility = View.GONE
-                    binding.progress.visibility = View.GONE
                 }
                 Status.LOADING -> {
-                    binding.progress.visibility =
-                        if (binding.swiperefresh.isRefreshing) View.GONE else View.VISIBLE
-                    binding.empty.visibility = View.GONE
+                    if (binding.swiperefresh.isRefreshing) {
+                        binding.empty.clear()
+                        binding.empty.visibility = View.GONE
+                    } else {
+                        binding.recycler.visibility = View.GONE
+                        binding.empty.clear()
+                        binding.empty.animation(R.raw.anim_loading)
+                        binding.empty.visibility = View.VISIBLE
+                    }
                 }
             }
         }
 
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        // Fetch user's devices
-        model.fetch()
     }
 
     override fun onDeviceClicked(device: Device) {

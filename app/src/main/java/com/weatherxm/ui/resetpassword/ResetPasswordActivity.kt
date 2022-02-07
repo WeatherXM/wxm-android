@@ -55,6 +55,7 @@ class ResetPasswordActivity : AppCompatActivity(), KoinComponent {
     private fun onEmailSentResult(result: Resource<Unit>) {
         when (result.status) {
             Status.SUCCESS -> {
+                binding.successIcon.setAnimation(R.raw.anim_success)
                 binding.successIcon.visibility = View.VISIBLE
                 binding.successTitle.visibility = View.VISIBLE
                 binding.successText.visibility = View.VISIBLE

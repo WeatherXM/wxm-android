@@ -96,17 +96,6 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Progress -->
-
-    <ProgressBar
-        android:id="@+id/progress"
-        style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        tools:visibility="gone" />
-
     <!-- Empty -->
 
     <com.weatherxm.ui.widget.EmptyView
@@ -116,7 +105,7 @@
         android:layout_gravity="center"
         android:padding="@dimen/padding_extra_large"
         android:visibility="gone"
-        app:empty_animation="@raw/anim_empty_fields"
+        app:empty_animation="@raw/anim_loading"
         app:empty_subtitle="How are you?"
         app:empty_title="Nothing here"
         tools:visibility="visible" />

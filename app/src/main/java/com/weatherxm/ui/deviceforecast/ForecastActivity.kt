@@ -53,9 +53,9 @@ class ForecastActivity : AppCompatActivity(), KoinComponent {
         adapter = DailyForecastAdapter()
         binding.recycler.adapter = adapter
 
-        model.onForecast().observe(this, {
+        model.onForecast().observe(this) {
             updateUI(it)
-        })
+        }
 
         model.getWeatherForecast(deviceId)
     }
@@ -64,14 +64,13 @@ class ForecastActivity : AppCompatActivity(), KoinComponent {
         when (resource.status) {
             Status.SUCCESS -> {
                 resource.data?.let { adapter.submitList(it.dailyForecasts) }
-                binding.progress.visibility = View.GONE
                 binding.empty.visibility = View.GONE
                 binding.recycler.visibility = View.VISIBLE
             }
             Status.ERROR -> {
                 Timber.d("Got error: $resource.message")
-                binding.progress.visibility = View.GONE
                 binding.recycler.visibility = View.GONE
+                binding.empty.animation(R.raw.anim_error)
                 binding.empty.title(getString(R.string.no_forecast_data))
                 binding.empty.subtitle(resource.message)
                 binding.empty.action(getString(R.string.action_retry))
@@ -79,9 +78,10 @@ class ForecastActivity : AppCompatActivity(), KoinComponent {
                 binding.empty.visibility = View.VISIBLE
             }
             Status.LOADING -> {
-                binding.progress.visibility = View.VISIBLE
                 binding.recycler.visibility = View.GONE
-                binding.empty.visibility = View.GONE
+                binding.empty.clear()
+                binding.empty.animation(R.raw.anim_loading)
+                binding.empty.visibility = View.VISIBLE
             }
         }
     }
