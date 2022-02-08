@@ -51,7 +51,8 @@
         app:cardBackgroundColor="@color/white_translucent"
         app:cardElevation="@dimen/card_elevation"
         app:cardMaxElevation="@dimen/card_elevation"
-        app:contentPadding="@dimen/padding_normal">
+        app:contentPadding="@dimen/padding_normal"
+        app:layout_dodgeInsetEdges="bottom">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

@@ -1,6 +1,8 @@
 package com.weatherxm.ui.claimdevice
 
 import android.graphics.BitmapFactory
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.activityViewModels
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
@@ -10,7 +12,6 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.delegates.listeners.OnCameraChangeListener
 import com.weatherxm.R
 import com.weatherxm.ui.BaseMapFragment
-import com.weatherxm.ui.claimdevice.ClaimDeviceViewModel.Companion.ICON_SIZE
 import com.weatherxm.ui.claimdevice.ClaimDeviceViewModel.Companion.ZOOM_LEVEL
 
 class ClaimDeviceMapFragment : BaseMapFragment() {
@@ -21,14 +22,19 @@ class ClaimDeviceMapFragment : BaseMapFragment() {
     private lateinit var listener: OnCameraChangeListener
 
     override fun onMapReady(map: MapboxMap) {
-        val icon = BitmapFactory.decodeResource(resources, R.drawable.red_marker)
-        val options = PointAnnotationOptions()
-            .withIconImage(icon)
-            .withIconSize(ICON_SIZE)
-            .withPoint(map.cameraState.center)
+        if (context == null) {
+            // No point executing if in the meanwhile the activity is dead
+            return
+        }
 
         // Create default center marker
-        marker = pointManager.create(options)
+        val icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_marker)?.toBitmap()
+            ?: BitmapFactory.decodeResource(resources, R.drawable.ic_marker_default)
+        marker = pointManager.create(
+            PointAnnotationOptions()
+                .withIconImage(icon)
+                .withPoint(map.cameraState.center)
+        )
 
         // Add map camera change listener
         listener = OnCameraChangeListener {
