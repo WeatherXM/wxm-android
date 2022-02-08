@@ -1,0 +1,51 @@
+name: Build Production & Firebase Distribution
+on:
+    push:
+        branches: [ main ]
+env:
+    # Firebase release & development app ids. Required due to a known issue with Firebase distribution.
+    # https://github.com/firebase/firebase-android-sdk/issues/3403
+    ORG_GRADLE_PROJECT_FIREBASE_PRODUCTION_APP_ID: ${{ secrets.FIREBASE_PRODUCTION_APP_ID }}
+    ORG_GRADLE_PROJECT_FIREBASE_DEVELOPMENT_APP_ID: ${{ secrets.FIREBASE_DEVELOPMENT_APP_ID }}
+    # Mapbox SDK secrets
+    ORG_GRADLE_PROJECT_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+    ORG_GRADLE_PROJECT_MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
+    # Debug key information
+    ORG_GRADLE_PROJECT_DEBUG_KEYSTORE: ${{ secrets.DEBUG_KEYSTORE }}
+    ORG_GRADLE_PROJECT_DEBUG_KEYSTORE_PASSWORD: ${{ secrets.DEBUG_KEYSTORE_PASSWORD }}
+    ORG_GRADLE_PROJECT_DEBUG_KEY_ALIAS: ${{ secrets.DEBUG_KEY_ALIAS }}
+    ORG_GRADLE_PROJECT_DEBUG_KEY_PASSWORD: ${{ secrets.DEBUG_KEY_PASSWORD }}
+    # Release key information
+    ORG_GRADLE_PROJECT_RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+    ORG_GRADLE_PROJECT_RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+    ORG_GRADLE_PROJECT_RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+    ORG_GRADLE_PROJECT_RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+    # Firebase distribution test groups
+    ORG_GRADLE_PROJECT_FIREBASE_PUBLIC_TEST_GROUP: ${{ secrets.FIREBASE_PUBLIC_TEST_GROUP }}
+    ORG_GRADLE_PROJECT_FIREBASE_INTERNAL_TEST_GROUP: ${{ secrets.FIREBASE_INTERNAL_TEST_GROUP }}
+    # Gradle config
+    GRADLE_USER_HOME: ${GITHUB_WORKSPACE}/.gradle
+    GLOBAL_GRADLE_CACHE: gradle-cache-${GITHUB_REPOSITORY}
+jobs:
+    development_distribution:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v2
+                with:
+                    fetch-depth: 0
+            -   name: Gradle package cache
+                uses: actions/cache@v2
+                with:
+                    key: ${{ env.GLOBAL_GRADLE_CACHE }}
+                    path: ${{ env.GRADLE_USER_HOME }}
+            -   name: Decode secrets
+                run: |
+                    echo "${{ secrets.ENCODED_GOOGLE_SERVICES }}" | base64 -d > ./app/google-services.json
+                    echo "${{ secrets.ENCODED_SERVICE_ACCOUNT }}" | base64 -d > ./ci-service-account.json
+                    echo "${{ secrets.ENCODED_RELEASE_KEYSTORE }}" > release-keystore.asc
+                    gpg -d --passphrase "${{ secrets.ENCODED_RELEASE_KEYSTORE_PASSPHRASE }}" --batch release-keystore.asc > ./${{ secrets.RELEASE_KEYSTORE }}
+            -   name: Build development release build and distribute on Firebase
+                run: |
+                    ./gradlew :app:assembleRemoteProdRelease :app:appDistributionUploadRemoteProdRelease
+                    rm ./ci-service-account.json
