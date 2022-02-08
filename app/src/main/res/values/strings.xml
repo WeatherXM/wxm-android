@@ -212,7 +212,7 @@
     <string name="support_email_body_user_and_device_info">User account email: %1$s\nDevice S/N: %2$s\n</string>
 
     <!-- Claim device -->
-    <string name="claim_device_info_text">Configure your miner with your WiFi credentials using the \"Configure WiFi\" button which can be found by swiping left on the miner\'s screen.</string>
+    <string name="claim_device_info_text">Configure your WeatherXM device with your WiFi credentials using the \"Configure WiFi\" button which can be found by swiping left on the miner\'s screen.</string>
     <string name="support_email_subject_cannot_claim">Cannot claim device</string>
 
     <!-- Error messages -->

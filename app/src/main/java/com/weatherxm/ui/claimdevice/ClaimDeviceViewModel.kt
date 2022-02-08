@@ -22,7 +22,6 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     // Current arbitrary values for the viewpager and the map
     companion object {
         const val ZOOM_LEVEL: Double = 15.0
-        const val ICON_SIZE: Double = 0.35
     }
 
     private val claimDeviceUseCase: ClaimDeviceUseCase by inject()
