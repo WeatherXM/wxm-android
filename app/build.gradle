@@ -22,22 +22,28 @@ android {
     buildToolsVersion "31.0.0"
 
     defaultConfig {
-        applicationId "com.weatherxm.android"
+        applicationId "com.weatherxm.app"
         minSdkVersion 23
         targetSdkVersion 32
         versionCode 1
-        versionName "3.0.0-alpha"
+        versionName "3.0.0"
 
         // Resource value fields
         resValue("string", "mapbox_access_token", "$MAPBOX_ACCESS_TOKEN")
     }
 
     signingConfigs {
-        base {
-            storeFile file("$SIGNING_KEYSTORE")
-            storePassword "$SIGNING_KEYSTORE_PASSWORD"
-            keyAlias "$SIGNING_KEY_ALIAS"
-            keyPassword "$SIGNING_KEY_PASSWORD"
+        debug {
+            storeFile file("$DEBUG_KEYSTORE")
+            storePassword "$DEBUG_KEYSTORE_PASSWORD"
+            keyAlias "$DEBUG_KEY_ALIAS"
+            keyPassword "$DEBUG_KEY_PASSWORD"
+        }
+        release {
+            storeFile file("$RELEASE_KEYSTORE")
+            storePassword "$RELEASE_KEYSTORE_PASSWORD"
+            keyAlias "$RELEASE_KEY_ALIAS"
+            keyPassword "$RELEASE_KEY_PASSWORD"
         }
     }
 
@@ -72,11 +78,11 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.base
+            signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             firebaseAppDistribution {
-                appId = "$RELEASE_APP_ID"
+                appId = "$FIREBASE_RELEASE_APP_ID"
                 artifactType = "APK"
                 releaseNotes = "Release notes for development version"
                 serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
@@ -85,12 +91,12 @@ android {
         }
         debug {
             applicationIdSuffix = ".debug"
-            signingConfig signingConfigs.base
+            signingConfig signingConfigs.debug
             minifyEnabled false
             // change it to true if you want to test the obfuscation on debug mode
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             firebaseAppDistribution {
-                appId = "$DEBUG_APP_ID"
+                appId = "$FIREBASE_DEBUG_APP_ID"
                 artifactType = "APK"
                 releaseNotes = "Release notes for development version"
                 serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"

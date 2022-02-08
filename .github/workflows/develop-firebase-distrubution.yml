@@ -1,10 +1,7 @@
-# This is a basic workflow to help you get started with Actions
-
-name: Pull Request Code Analysis
-
-# Controls when the workflow will run
+name: Build Develop & Firebase Distribution
 on:
-    pull_request
+    push:
+        branches: [ develop ]
 env:
     # Firebase release & debug app ids. Required due to a known issue with Firebase distribution.
     # https://github.com/firebase/firebase-android-sdk/issues/3403
@@ -30,7 +27,7 @@ env:
     GRADLE_USER_HOME: ${GITHUB_WORKSPACE}/.gradle
     GLOBAL_GRADLE_CACHE: gradle-cache-${GITHUB_REPOSITORY}
 jobs:
-    codeanalysis:
+    debug_distribution:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
@@ -48,5 +45,7 @@ jobs:
                     echo "${{ secrets.ENCODED_SERVICE_ACCOUNT }}" | base64 -d > ./ci-service-account.json
                     echo "${{ secrets.ENCODED_DEBUG_KEYSTORE }}" > debug-keystore.asc
                     gpg -d --passphrase "${{ secrets.ENCODED_DEBUG_KEYSTORE_PASSPHRASE }}" --batch debug-keystore.asc > ${{ secrets.DEBUG_KEYSTORE }}
-            -   name: Detekt
-                run: ./gradlew :app:detekt
+            -   name: Build debug build and distribute on Firebase
+                run: |
+                    ./gradlew :app:assembleRemoteDevDebug :app:appDistributionUploadRemoteDevDebug
+                    rm ./ci-service-account.json
