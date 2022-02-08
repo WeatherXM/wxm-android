@@ -33,12 +33,6 @@ android {
     }
 
     signingConfigs {
-        debug {
-            storeFile file("${rootDir.path}/$DEBUG_KEYSTORE")
-            storePassword "$DEBUG_KEYSTORE_PASSWORD"
-            keyAlias "$DEBUG_KEY_ALIAS"
-            keyPassword "$DEBUG_KEY_PASSWORD"
-        }
         release {
             storeFile file("${rootDir.path}/$RELEASE_KEYSTORE")
             storePassword "$RELEASE_KEYSTORE_PASSWORD"
@@ -99,9 +93,8 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
         debug {
-            signingConfig signingConfigs.debug
+            // Change minifyEnabled to true if you want to test code obfuscation in debug mode
             minifyEnabled false
-            // change it to true if you want to test code obfuscation in debug mode
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
