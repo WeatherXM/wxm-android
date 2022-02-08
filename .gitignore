@@ -13,5 +13,6 @@ captures/
 .env
 local.properties
 google-services.json
+ci-service-account.json
 com_crashlytics_build_id.xml
 publishing/

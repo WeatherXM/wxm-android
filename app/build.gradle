@@ -34,13 +34,13 @@ android {
 
     signingConfigs {
         debug {
-            storeFile file("$DEBUG_KEYSTORE")
+            storeFile file("${rootDir.path}/$DEBUG_KEYSTORE")
             storePassword "$DEBUG_KEYSTORE_PASSWORD"
             keyAlias "$DEBUG_KEY_ALIAS"
             keyPassword "$DEBUG_KEY_PASSWORD"
         }
         release {
-            storeFile file("$RELEASE_KEYSTORE")
+            storeFile file("${rootDir.path}/$RELEASE_KEYSTORE")
             storePassword "$RELEASE_KEYSTORE_PASSWORD"
             keyAlias "$RELEASE_KEY_ALIAS"
             keyPassword "$RELEASE_KEY_PASSWORD"
@@ -58,21 +58,37 @@ android {
         }
         mock {
             dimension "server"
+            applicationIdSuffix ".dev"
             resValue "string", "app_name", "WXM Mock"
             buildConfigField("String", "API_URL", "\"https://api-dev.weatherxm.com\"")
             buildConfigField("String", "AUTH_URL", "\"https://api-dev.weatherxm.com\"")
         }
         dev {
             dimension "server"
+            applicationIdSuffix ".dev"
             resValue "string", "app_name", "WXM Dev"
             buildConfigField("String", "API_URL", "\"https://api-dev.weatherxm.com\"")
             buildConfigField("String", "AUTH_URL", "\"https://api-dev.weatherxm.com\"")
+            firebaseAppDistribution {
+                appId = "$FIREBASE_DEVELOPMENT_APP_ID"
+                artifactType = "APK"
+                releaseNotes = "Release notes for development version"
+                serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
+                groups = "$FIREBASE_INTERNAL_TEST_GROUP"
+            }
         }
         prod {
             dimension "server"
             resValue "string", "app_name", "WeatherXM"
             buildConfigField("String", "API_URL", "\"https://api.weatherxm.com\"")
             buildConfigField("String", "AUTH_URL", "\"https://api.weatherxm.com\"")
+            firebaseAppDistribution {
+                appId = "$FIREBASE_PRODUCTION_APP_ID"
+                artifactType = "APK"
+                releaseNotes = "Release notes for production version"
+                serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
+                groups = "$FIREBASE_PUBLIC_TEST_GROUP"
+            }
         }
     }
 
@@ -81,27 +97,12 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-            firebaseAppDistribution {
-                appId = "$FIREBASE_RELEASE_APP_ID"
-                artifactType = "APK"
-                releaseNotes = "Release notes for development version"
-                serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
-                groups = "$FIREBASE_PUBLIC_TEST_GROUP"
-            }
         }
         debug {
-            applicationIdSuffix = ".debug"
             signingConfig signingConfigs.debug
             minifyEnabled false
-            // change it to true if you want to test the obfuscation on debug mode
+            // change it to true if you want to test code obfuscation in debug mode
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-            firebaseAppDistribution {
-                appId = "$FIREBASE_DEBUG_APP_ID"
-                artifactType = "APK"
-                releaseNotes = "Release notes for development version"
-                serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
-                groups = "$FIREBASE_INTERNAL_TEST_GROUP"
-            }
         }
     }
 
