@@ -195,6 +195,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
     implementation "androidx.security:security-crypto:1.0.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation "com.google.android.material:material:1.5.0"
 
     // Google Play Services for Location & Maps
@@ -256,6 +257,6 @@ dependencies {
     // Retromock for mocking responses
     implementation "co.infinum:retromock:1.1.1"
 
-    // Viewpager
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    // Input masking (for Serial Number input)
+    implementation "com.github.RedMadRobot:input-mask-android:6.1.0"
 }

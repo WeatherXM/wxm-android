@@ -45,8 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:hint="@string/device_serial_number_hint"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="18"
+                    app:helperTextEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/serial_number_title">
@@ -55,7 +54,7 @@
                         android:id="@+id/serial_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="0123456789ABCDEFabcdef"
+                        android:digits="0123456789ABCDEFabcdef:"
                         android:imeOptions="actionNext"
                         android:inputType="text|textCapCharacters"
                         android:singleLine="true"
