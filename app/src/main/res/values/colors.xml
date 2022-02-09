@@ -35,8 +35,8 @@
     <color name="chart_highlight_color">@color/colorSecondary</color>
     <color name="chart_grid_color">@color/off_white</color>
 
+    <color name="background_color">@color/white_blue</color>
     <color name="status_bar_color">#80003b77</color>
-
     <color name="ic_launcher_background">#1B75BA</color>
 
     <color name="subtitle">@color/light_grey</color>

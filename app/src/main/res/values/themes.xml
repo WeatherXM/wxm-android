@@ -2,7 +2,7 @@
 
     <style name="Theme.WeatherXM" parent="@style/Theme.Material3.Light.NoActionBar">
         <!-- Default background color -->
-        <item name="android:windowBackground">@color/white_blue</item>
+        <item name="android:windowBackground">@color/background_color</item>
 
         <!-- Brand colors -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -17,7 +17,9 @@
         <item name="colorOnSecondary">@color/colorOnSecondary</item>
 
         <!-- System UI styles -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:windowTranslucentStatus">@bool/use_transparent_status_bar</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:statusBarColor">@color/status_bar_color</item>
 
         <!-- Style overrides -->
         <item name="materialButtonStyle">@style/Widget.WeatherXM.Button</item>
@@ -48,7 +50,7 @@
         <item name="colorOnSurface">@color/natural_black</item>
 
         <!-- System UI styles -->
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentStatus">@bool/use_transparent_status_bar</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@color/status_bar_color</item>
 
@@ -64,7 +66,7 @@
 
     <style name="Theme.WeatherXM.Home">
         <!-- System UI styles -->
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentStatus">@bool/use_transparent_status_bar</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:statusBarColor">@color/status_bar_color</item>
         <item name="toolbarStyle">@style/Widget.WeatherXM.ToolBar</item>
