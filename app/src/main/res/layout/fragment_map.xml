@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:indeterminate="true"
-        android:paddingHorizontal="@dimen/padding_normal" />
+        android:paddingHorizontal="@dimen/padding_normal"
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
