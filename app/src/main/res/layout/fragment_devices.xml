@@ -51,8 +51,8 @@
         android:padding="@dimen/padding_extra_large"
         android:visibility="gone"
         app:empty_animation="@raw/anim_empty_devices"
-        app:empty_subtitle="How are you?"
-        app:empty_title="Nothing here"
+        tools:empty_subtitle="How are you?"
+        tools:empty_title="Nothing here"
         tools:visibility="visible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

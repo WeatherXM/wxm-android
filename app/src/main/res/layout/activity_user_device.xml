@@ -149,6 +149,19 @@
                 android:layout_marginTop="@dimen/margin_normal"
                 app:layout_constraintTop_toBottomOf="@id/historicalCharts" />
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tokenNotice"
+                style="@style/TextAppearance.WeatherXM.Device.Details.Active"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:padding="@dimen/padding_extra_small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tokenCard"
+                app:layout_goneMarginTop="@dimen/margin_normal"
+                tools:text="@string/device_detail_token_notice" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

@@ -15,6 +15,7 @@ import com.weatherxm.ui.widget.TokenCardView
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.getRelativeTimeFromISO
 import com.weatherxm.util.onTabSelected
+import com.weatherxm.util.setHtml
 import com.weatherxm.util.setTextAndColor
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -71,6 +72,8 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
         }
 
         binding.tokenCard.optionListener = this
+
+        binding.tokenNotice.setHtml(R.string.device_detail_token_notice)
 
         binding.dateTabs.onTabSelected {
             when (it.position) {

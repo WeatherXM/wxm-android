@@ -43,9 +43,14 @@ class ExplorerMapFragment : BaseMapFragment() {
                 Status.SUCCESS -> {
                     onPolygonPointsUpdated(resource.data?.polygonPoints)
                     binding.mapView.visibility = View.VISIBLE
+                    binding.progress.hide()
                 }
-                Status.ERROR -> {}
-                Status.LOADING -> {}
+                Status.ERROR -> {
+                    binding.progress.hide()
+                }
+                Status.LOADING -> {
+                    binding.progress.show()
+                }
             }
         }
 

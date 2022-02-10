@@ -38,30 +38,27 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent {
 
         applyMapInsets()
 
-        model.explorerState().observe(this, { resource ->
+        model.explorerState().observe(this) { resource ->
             Timber.d("Status updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
                     snackbar?.dismiss()
-                    binding.progress.hide()
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
-                    binding.progress.hide()
                     resource.message?.let { showErrorOnMapLoading(it) }
                 }
                 Status.LOADING -> {
                     snackbar?.dismiss()
-                    binding.progress.show()
                 }
             }
-        })
+        }
 
-        model.onDeviceSelected().observe(this, { device ->
+        model.onDeviceSelected().observe(this) { device ->
             navigator.showDeviceDetails(supportFragmentManager, device)
-        })
+        }
 
-        model.showMapOverlayViews().observe(this, { shouldShow ->
+        model.showMapOverlayViews().observe(this) { shouldShow ->
             if (shouldShow) {
                 binding.appBar.show(SlideInFromTop)
                 binding.loginSignupView.show(SlideInFromBottom)
@@ -69,7 +66,7 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent {
                 binding.appBar.hide(SlideOutToTop)
                 binding.loginSignupView.hide(SlideOutToBottom)
             }
-        })
+        }
 
         binding.login.setOnClickListener {
             navigator.showLogin(this)
@@ -109,12 +106,6 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent {
 
     private fun applyMapInsets() {
         binding.appBar.applyInsetter {
-            type(statusBars = true) {
-                margin(left = false, top = true, right = false, bottom = false)
-            }
-        }
-
-        binding.progress.applyInsetter {
             type(statusBars = true) {
                 margin(left = false, top = true, right = false, bottom = false)
             }

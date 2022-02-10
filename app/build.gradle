@@ -125,11 +125,13 @@ android {
         if (flavor.contains("mock")) {
             version = "$version-mock"
         } else if (flavor.contains("dev")) {
-            version = "$version-dev"
+            version = "$version-development"
         }
 
-        // Add build type in version
-        version = "$version-${variant.buildType.name}"
+        // Add debug build type in version
+        if (variant.buildType.name.contains("debug")) {
+            version = "$version-${variant.buildType.name}"
+        }
 
         // Create app_version res string
         variant.resValue "string", "app_version", "$version"

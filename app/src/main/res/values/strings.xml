@@ -34,7 +34,7 @@
     <string name="device_serial_number_title">Device Serial Number</string>
     <string name="device_serial_number_hint">Enter the device\'s serial number</string>
     <string name="device_serial_number_helper">%d / 18</string>
-    <string name="device_serial_number_instructions">The S/N is 18 characters long and looks like this: &lt;strong&gt;12:34:56:78:9A:BC:DE:F1:34&lt;/strong&gt;. You  can find it on your M5 miner\'s screen. Please type only the letters and numbers.</string>
+    <string name="device_serial_number_instructions">The S/N is 18 characters long and looks like this: &lt;strong&gt;12:34:56:78:9A:BC:DE:F0:12&lt;/strong&gt;. You  can find it on your M5 device\'s screen. Please type only the letters and numbers.</string>
     <string name="description_set_location">Please set your location in the map so you can proceed with claiming the device.</string>
     <string name="success_claim_device">You claimed the device: %s</string>
     <string name="hint_wxm_address">Enter or scan WXM wallet address</string>
@@ -76,9 +76,10 @@
     <string name="action_devices_list">View device list</string>
     <string name="warn_cancelled">Cancelled!</string>
     <string name="permission_location_title">Access to your location?</string>
-    <string name="permission_location_rationale">Location permission is needed to verify your miner\'s location.</string>
+    <string name="permission_location_rationale">Location permission is needed to verify your WXM device\'s location.</string>
     <string name="permission_permanently_denied_title">Permission permanently denied</string>
     <string name="permission_permanently_denied_rationale">Go to the app settings to give the required permissions.</string>
+    <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after WXM mainnet token launch. Actual rewards may differ from the ones you see in the chart above.]]></string>
 
     <!-- Dates/Days -->
     <string name="today">Today</string>
@@ -101,11 +102,11 @@
 
 
     <!-- Weather Stations -->
-    <string name="add_weather_station">Claim your miner and weather station by clicking the + button.</string>
+    <string name="add_weather_station">Claim your WXM device by clicking the + button.</string>
     <string name="online">Online</string>
     <string name="offline">Offline</string>
     <string name="unknown">Unknown</string>
-    <string name="no_weather_stations">Oh, no! No miners yet?</string>
+    <string name="no_weather_stations">Oh, no! No WXM devices yet?</string>
     <string name="current_weather">Current Weather</string>
     <string name="title_dialog_logout">Logout?</string>
     <string name="message_dialog_logout">Are you sure you want to logout?</string>
@@ -212,7 +213,7 @@
     <string name="support_email_body_user_and_device_info">User account email: %1$s\nDevice S/N: %2$s\n</string>
 
     <!-- Claim device -->
-    <string name="claim_device_info_text">Configure your WeatherXM device with your WiFi credentials using the \"Configure WiFi\" button which can be found by swiping left on the miner\'s screen.</string>
+    <string name="claim_device_info_text"><![CDATA[<h5>Step 1</h5>Plug the GPS antenna into your WXM device, place the antenna near a window and power up the device via USB.<h5>Step 2</h5>Swipe left on your WXM device\'s screen and press \"Configure WiFi\" to connect the device to your home WiFi.<h5>Step 3</h5>Press <b>NEXT</b> to claim your device.<br/><br/>Don\'t have a WXM device yet? Get one on <a href=\"https://weatherxm.com\">weatherxm.com</a>.]]></string>
     <string name="support_email_subject_cannot_claim">Cannot claim device</string>
 
     <!-- Error messages -->

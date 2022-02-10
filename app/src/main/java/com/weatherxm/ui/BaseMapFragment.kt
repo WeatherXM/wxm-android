@@ -26,7 +26,7 @@ open class BaseMapFragment : Fragment(), KoinComponent {
     protected lateinit var pointManager: PointAnnotationManager
 
     protected var mapStyle: String = Style.MAPBOX_STREETS
-    protected var defaultStartingZoomLevel: Double = 1.0
+    private var defaultStartingZoomLevel: Double = 1.0
 
     override fun onCreateView(
         inflater: LayoutInflater,

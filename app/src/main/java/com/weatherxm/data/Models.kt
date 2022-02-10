@@ -179,7 +179,7 @@ data class DailyData(
     val windGust: Float?,
     @Json(name = "icon")
     val icon: String?,
-    @Json(name = "precip_probability")
+    @Json(name = "precipitation_probability")
     val precipProbability: Int?,
     @Json(name = "uv_index")
     val uvIndex: Int?,

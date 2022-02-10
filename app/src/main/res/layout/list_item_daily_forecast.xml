@@ -43,8 +43,9 @@
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/precipitation_probability"
         style="@style/TextAppearance.WeatherXM.Forecast.Precipitation"
-        android:layout_width="42dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_marginStart="@dimen/margin_normal"
         android:gravity="center_vertical|end"
         tools:text="50%" />
@@ -64,7 +65,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="2dp"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:enabled="false"
         app:values="@array/temperature_slider_default_values"
         tools:trackColorInactive="@color/light_grey"

@@ -1,10 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-<com.mapbox.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mapView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:mapbox_resourcesAccessToken="@string/mapbox_access_token"
-    tools:background="@color/natural_black"
-    tools:context=".ui.BaseMapFragment" />
+    android:layout_height="match_parent">
+
+    <com.mapbox.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:mapbox_resourcesAccessToken="@string/mapbox_access_token"
+        tools:background="@color/natural_black"
+        tools:context=".ui.BaseMapFragment" />
+
+    <!-- Progress -->
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress"
+        style="@style/Widget.WeatherXM.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:indeterminate="true"
+        android:paddingHorizontal="@dimen/padding_normal" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
