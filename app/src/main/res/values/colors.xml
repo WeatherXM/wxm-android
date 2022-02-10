@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#00000000</color>
+
+    <color name="black">#FF000000</color>
+    <color name="natural_black">#FF212121</color>
+    <color name="white">#FFFFFF</color>
+    <color name="blue">#1B75BA</color>
+    <color name="red">#F44336</color>
+    <color name="light_grey">#E4E4E4</color>
+    <color name="green">#2BB331</color>
+    <color name="grey">#888888</color>
+    <color name="purple">#9D1F63</color>
+    <color name="off_white">#EEEEEE</color>
+    <color name="white_blue">#F0F4FF</color>
+
+    <color name="success">#00e676</color>
+    <color name="error">#ff1744</color>
+
+    <color name="black_translucent">#88000000</color>
+    <color name="white_translucent">#DDFFFFFF</color>
+    <color name="white_transparent">#65FFFFFF</color>
+
+    <color name="colorPrimary">#1B75BA</color>
+    <color name="colorPrimaryVariant">#003b77</color>
+    <color name="colorOnPrimary">@color/white</color>
+
+    <color name="colorSecondary">#2599df</color>
+    <color name="colorSecondaryVariant">#70c4ec</color>
+    <color name="colorOnSecondary">@color/natural_black</color>
+
+    <color name="chart_line_color">@color/colorPrimary</color>
+    <color name="chart_point_color">@color/white</color>
+    <color name="chart_point_hole_color">@color/colorPrimaryVariant</color>
+    <color name="chart_highlight_color">@color/colorSecondary</color>
+    <color name="chart_grid_color">@color/off_white</color>
+
+    <color name="background_color">@color/white_blue</color>
+    <color name="status_bar_color">#80003b77</color>
+    <color name="ic_launcher_background">#1B75BA</color>
+
+    <color name="subtitle">@color/light_grey</color>
+    <color name="lastActiveColor">@color/grey</color>
+    <color name="hexFillColor">#3388ff</color>
+    <color name="hexFillOutlineColor">@color/white</color>
+    <color name="highlighter">@color/black</color>
+
+    <color name="tokenChartBackground">@color/purple</color>
+    <color name="tokenChipColorNormal">@color/transparent</color>
+    <color name="tokenChipColorSelected">#44FFFFFF</color>
+    <color name="tokenChipStrokeColor">#22FFFFFF</color>
+
+    <color name="dateTabNormalTextColor">#40116295</color>
+    <color name="dateTabSelectedTextColor">#116295</color>
+
+    <color name="profile_background">@color/white_blue</color>
+
+    <!-- Weather Data colors -->
+    <color name="temperature">#084D6A</color>
+    <color name="precipIntensity">#48BEC5</color>
+    <color name="precipProbability">#97D779</color>
+    <color name="windSpeed">#4FE0B6</color>
+    <color name="windGust">#3E54D3</color>
+    <color name="pressure">#4F80E2</color>
+    <color name="humidity">#48BEC5</color>
+    <color name="cloudCover">#6C6C8C</color>
+    <color name="uvIndex">#FFCE49</color>
+
+    <color name="daily_forecast_precip_prob_some">@color/colorPrimary</color>
+    <color name="daily_forecast_precip_prob_none">@color/light_grey</color>
+</resources>

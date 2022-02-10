@@ -1,0 +1,23 @@
+# Detekt configuration override
+
+complexity:
+    LongMethod:
+        threshold: 80
+    TooManyFunctions:
+        thresholdInFiles: 15
+        thresholdInClasses: 15
+        thresholdInInterfaces: 15
+        thresholdInObjects: 15
+        thresholdInEnums: 15
+
+style:
+    MandatoryBracesIfStatements:
+        active: true
+    MandatoryBracesLoops:
+        active: true
+    MaxLineLength:
+        maxLineLength: 100
+    ForbiddenComment:
+        values:
+            - FIXME
+            - STOPSHIP

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EmptyView">
+        <attr name="empty_title" format="string" />
+        <attr name="empty_subtitle" format="string" />
+        <attr name="empty_action" format="string" />
+        <attr name="empty_animation" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="StatusView">
+        <attr name="status_title" format="string" />
+        <attr name="status_subtitle" format="string" />
+        <attr name="status_action" format="string" />
+        <attr name="status_animation" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="LineChartView">
+        <attr name="line_chart_title" format="string" />
+    </declare-styleable>
+    <declare-styleable name="BarChartView">
+        <attr name="bar_chart_title" format="string" />
+    </declare-styleable>
+</resources>

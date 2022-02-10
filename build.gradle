@@ -1,0 +1,63 @@
+/**
+ * Load key-values from ".env" properties file into extension properties (ext)
+ */
+if (file(".env").exists()) {
+    def env = new Properties()
+    env.load(new FileInputStream(".env"))
+    env.each { key, value -> ext[key] = value }
+}
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:7.1.1"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+        classpath "com.google.gms:google-services:4.3.10"
+        classpath "com.google.firebase:firebase-crashlytics-gradle:2.8.1"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.19.0"
+        classpath "com.google.firebase:firebase-appdistribution-gradle:3.0.0"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+
+        maven {
+            url "https://api.mapbox.com/downloads/v2/releases/maven"
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = "mapbox"
+                password = project.properties["MAPBOX_DOWNLOADS_TOKEN"] ?: ""
+            }
+        }
+    }
+
+    apply {
+        plugin "io.gitlab.arturbosch.detekt"
+    }
+
+    detekt {
+        config = rootProject.files("config/detekt.yml")
+        buildUponDefaultConfig = true
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+/**
+ * Configures gradle wrapper for this project
+ */
+wrapper {
+    gradleVersion = "7.3.3"
+    distributionUrl "https://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
+}
