@@ -1,11 +1,15 @@
 @file:Suppress("TooManyFunctions")
+
 package com.weatherxm.util
 
 import android.content.Context
 import android.content.res.Resources
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MotionEvent
+import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.StringRes
@@ -32,7 +36,6 @@ import com.weatherxm.ui.common.show
 import dev.chrisbanes.insetter.applyInsetter
 
 private const val CHART_BOTTOM_OFFSET = 20F
-private const val MINIMUM_VISIBLE_POINTS = 5F
 private const val LINE_WIDTH = 2F
 private const val POINT_SIZE = 2F
 private const val MAXIMUMS_GRID_LINES_Y_AXIS = 4
@@ -82,7 +85,6 @@ fun ViewGroup.applyInsets(top: Boolean = true, bottom: Boolean = true) {
 private fun LineChart.setDefaultSettings() {
     // General Chart Settings
     description.isEnabled = false
-    setVisibleXRangeMinimum(MINIMUM_VISIBLE_POINTS)
     extraBottomOffset = CHART_BOTTOM_OFFSET
     legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
 
@@ -101,6 +103,15 @@ private fun LineChart.setDefaultSettings() {
     xAxis.setDrawAxisLine(false)
     xAxis.granularity = TIME_GRANULARITY_X_AXIS
     xAxis.gridColor = resources.getColor(R.color.chart_grid_color, context.theme)
+
+    setOnTouchListener { _, event ->
+        when (event.action) {
+            MotionEvent.ACTION_UP -> {
+                highlightValue(null)
+            }
+        }
+        this.performClick()
+    }
 }
 
 private fun LineDataSet.setDefaultSettings(context: Context, resources: Resources) {
@@ -294,7 +305,6 @@ fun BarChart.initializeDefault24hChart(data: BarChartData) {
     legend.isEnabled = false
     marker =
         CustomDefaultMarkerView(context, data.timestamps, data.name, data.unit, data.showDecimals)
-    setVisibleXRangeMinimum(MINIMUM_VISIBLE_POINTS)
     extraBottomOffset = CHART_BOTTOM_OFFSET
 
     // Bar and highlight Settings
@@ -302,7 +312,17 @@ fun BarChart.initializeDefault24hChart(data: BarChartData) {
     dataSet.color = resources.getColor(R.color.uvIndex, context.theme)
     dataSet.highLightColor = resources.getColor(R.color.highlighter, context.theme)
 
+    setOnTouchListener { _, event ->
+        when (event.action) {
+            MotionEvent.ACTION_UP -> {
+                highlightValue(null)
+            }
+        }
+        this.performClick()
+    }
+
     // Y Axis settings
+    axisLeft.axisMinimum = 0F
     axisLeft.isGranularityEnabled = true
     axisLeft.granularity = 1F
     axisLeft.valueFormatter = CustomYAxisFormatter(data.unit, false, 0)
@@ -346,4 +366,15 @@ fun BottomNavigationView.hideIfNot() {
 fun TextView.setHtml(@StringRes resId: Int, flags: Int = HtmlCompat.FROM_HTML_MODE_LEGACY) {
     val html = resources.getText(resId).toString()
     setText(HtmlCompat.fromHtml(html, flags), TextView.BufferType.SPANNABLE)
+}
+
+fun View.applyOnGlobalLayout(listener: () -> Unit) {
+    viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+        override fun onGlobalLayout() {
+            // Remove listener so that it doesn't run again
+            viewTreeObserver.removeOnGlobalLayoutListener(this)
+            // Invoke listener
+            listener()
+        }
+    })
 }

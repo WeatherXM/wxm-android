@@ -17,9 +17,8 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="@string/history"
             app:navigationIcon="@drawable/ic_back"
-            tools:title="History"
+            app:title="@string/history"
             tools:subtitle="Athens, GR" />
 
         <com.google.android.material.tabs.TabLayout
@@ -27,11 +26,11 @@
             style="@style/Widget.WeatherXM.TabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/historyView"
-        android:name="com.weatherxm.ui.devicehistory.HistoryChartsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"

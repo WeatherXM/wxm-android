@@ -14,6 +14,7 @@ data class UIError(
 @Keep
 @JsonClass(generateAdapter = true)
 data class HistoryCharts(
+    var date: String?,
     var temperature: LineChartData,
     var precipitation: LineChartData,
     var windSpeed: LineChartData,

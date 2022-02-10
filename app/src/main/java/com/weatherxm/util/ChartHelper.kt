@@ -204,9 +204,9 @@ class CustomWindMarkerView(
     }
 }
 
-class CustomXAxisFormatter(private val time: MutableList<String>?) : ValueFormatter() {
+class CustomXAxisFormatter(private val times: MutableList<String>?) : ValueFormatter() {
     override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-        return time?.getOrNull(value.toInt()) ?: value.toString()
+        return times?.getOrNull(value.toInt()) ?: value.toString()
     }
 }
 

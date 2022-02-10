@@ -270,6 +270,7 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
         }
 
         return HistoryCharts(
+            weatherData.date,
             createTemperatureLineChartData(time, temperatureEntries),
             createPrecipitationLineChartData(time, precipEntries),
             createWindSpeedLineChartData(time, windSpeedEntries),

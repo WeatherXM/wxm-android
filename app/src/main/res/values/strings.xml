@@ -216,11 +216,17 @@
     <string name="claim_device_info_text"><![CDATA[<h5>Step 1</h5>Plug the GPS antenna into your WXM device, place the antenna near a window and power up the device via USB.<h5>Step 2</h5>Swipe left on your WXM device\'s screen and press \"Configure WiFi\" to connect the device to your home WiFi.<h5>Step 3</h5>Press <b>NEXT</b> to claim your device.<br/><br/>Don\'t have a WXM device yet? Get one on <a href=\"https://weatherxm.com\">weatherxm.com</a>.]]></string>
     <string name="support_email_subject_cannot_claim">Cannot claim device</string>
 
+    <!-- Device History -->
+    <string name="device_history_day_empty_title">Oops! No weather data.</string>
+    <string name="device_history_day_empty_subtitle">No weather data found for your device for this day.</string>
+    <string name="device_history_day_empty_subtitle_with_day">No weather data found for your device for %s.</string>
+    <string name="device_history_day_error_title">Oops! Could not load data from network.</string>
+
     <!-- Error messages -->
     <string name="no_weather_stations_found">"Oops! Could not find any weather stations."</string>
     <string name="no_charts_found">"Oops! Charts could not be loaded."</string>
     <string name="no_forecast_data">"Oops! Forecast could not be fetched."</string>
-    <string name="no_data_chart_found">"No data found"</string>
+    <string name="no_data_chart_found">"No historical weather data could not be found for this day."</string>
     <string name="network_error">Something went wrong: Network Error</string>
     <string name="server_error">Something went wrong: Server Error</string>
     <string name="unknown_error">Something went wrong: Unknown Error</string>

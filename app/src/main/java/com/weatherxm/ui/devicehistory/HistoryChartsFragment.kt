@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenCreated
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.weatherxm.R
@@ -21,30 +19,31 @@ import com.weatherxm.ui.LineChartData
 import com.weatherxm.util.initializeDefault24hChart
 import com.weatherxm.util.initializePrecipitation24hChart
 import com.weatherxm.util.initializeWind24hChart
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 class HistoryChartsFragment : Fragment(), KoinComponent {
 
     private val model: HistoryChartsViewModel by activityViewModels()
     private lateinit var binding: FragmentHistoryChartsBinding
-    private var device: Device? = null
+    private lateinit var device: Device
 
     companion object {
         const val ARG_DEVICE = "device"
 
-        fun newInstance(device: Device?) = HistoryChartsFragment().apply {
-            arguments = Bundle().apply { putParcelable(ARG_DEVICE, device) }
+        fun newInstance(device: Device) = HistoryChartsFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(ARG_DEVICE, device)
+            }
         }
     }
 
-    init {
-        lifecycleScope.launch {
-            whenCreated {
-                device = arguments?.getParcelable(ARG_DEVICE)
-            }
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        device = requireNotNull(requireArguments().getParcelable(ARG_DEVICE))
     }
 
     override fun onCreateView(
@@ -59,14 +58,13 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
             when (resource.status) {
                 Status.SUCCESS -> {
                     resource.data?.let { updateUI(it) }
-                    binding.chartsView.visibility = View.VISIBLE
-                    binding.empty.visibility = View.GONE
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
                     binding.chartsView.visibility = View.GONE
+                    binding.empty.clear()
                     binding.empty.animation(R.raw.anim_error)
-                    binding.empty.title(getString(R.string.no_charts_found))
+                    binding.empty.title(getString(R.string.device_history_day_error_title))
                     binding.empty.subtitle(resource.message)
                     binding.empty.action(getString(R.string.action_retry))
                     binding.empty.listener { getWeatherHistory() }
@@ -85,10 +83,8 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
     }
 
     private fun getWeatherHistory() {
-        device?.let { deviceNonNull ->
-            context?.let { contextNonNull ->
-                model.getWeatherHistory(deviceNonNull, contextNonNull)
-            }
+        context?.let {
+            model.getWeatherHistory(device, it)
         }
     }
 
@@ -113,14 +109,24 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
 
         if (historyCharts.isEmpty()) {
             binding.chartsView.visibility = View.GONE
-            binding.empty.title(getString(R.string.no_charts_found))
-            binding.empty.subtitle(getString(R.string.no_data_chart_found))
-            binding.empty.action(getString(R.string.action_retry))
-            binding.empty.listener { getWeatherHistory() }
+            binding.empty.clear()
+            binding.empty.title(getString(R.string.device_history_day_empty_title))
+            binding.empty.subtitle(
+                historyCharts.date?.let {
+                    getString(
+                        R.string.device_history_day_empty_subtitle_with_day,
+                        LocalDate.parse(it).format(
+                            DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
+                        )
+                    )
+                } ?: getString(R.string.device_history_day_empty_subtitle)
+            )
+            binding.empty.animation(R.raw.anim_empty_generic)
             binding.empty.visibility = View.VISIBLE
             return
         } else {
             binding.empty.visibility = View.GONE
+            binding.chartsView.visibility = View.VISIBLE
         }
 
         // Init Temperature Chart
@@ -138,8 +144,10 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
         /*
             Init Cloud Cover Chart, we use yMinValue so the Y Axis starts from 0
             and not going negative when cloud cover is 0%
+
+            Hide it for now as we do not have cloud cover data.
         */
-        initDefaultChart(binding.chartCloudCover.getChart(), historyCharts.cloudCover, 0F)
+        // initDefaultChart(binding.chartCloudCover.getChart(), historyCharts.cloudCover, 0F)
 
         // Init Pressure Char
         initDefaultChart(binding.chartPressure.getChart(), historyCharts.pressure, null)
