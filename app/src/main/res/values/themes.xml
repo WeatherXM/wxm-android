@@ -175,7 +175,7 @@
     </style>
 
     <style name="Widget.WeatherXM.Profile.Elements" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <item name="android:minHeight">?listPreferredItemHeightLarge</item>
+        <item name="android:minHeight">?listPreferredItemHeight</item>
         <item name="iconTint">@color/colorOnSecondary</item>
         <item name="android:textColor">?colorOnSurface</item>
         <item name="android:gravity">start|center</item>
@@ -449,5 +449,14 @@
         <item name="trackColorActive">@color/colorPrimary</item>
         <item name="trackColorInactive">@color/transparent</item>
         <item name="trackHeight">@dimen/temperature_slider_track_height</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Notice" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/white_translucent</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.Notice" parent="Widget.WeatherXM.MaterialCard">
+        <item name="cardBackgroundColor">@color/error</item>
     </style>
 </resources>

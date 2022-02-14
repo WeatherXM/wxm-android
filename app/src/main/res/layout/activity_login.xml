@@ -125,8 +125,7 @@
         android:id="@+id/loading"
         style="@style/Widget.WeatherXM.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:paddingHorizontal="@dimen/padding_normal"
+        android:layout_height="wrap_content"
         android:visibility="gone"
         tools:visibility="visible" />
 

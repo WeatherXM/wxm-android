@@ -3,7 +3,7 @@ package com.weatherxm.util
 class Validator {
     companion object {
         const val MINIMUM_PASSWORD_LENGTH = 6
-        const val MINIMUM_ADDRESS_LENGTH = 40
+        const val ADDRESS_LENGTH = 42
         const val SERIAL_NUMBER_LENGTH = 18
         const val REGEX_ETH_ADDRESS = "^0x[a-fA-F0-9]{40}\$"
         const val REGEX_SERIAL_NUMBER = "^[a-fA-F0-9]{18}\$"
@@ -18,7 +18,7 @@ class Validator {
     }
 
     fun validateEthAddress(address: String?): Boolean {
-        if (address.isNullOrEmpty() || address.length < MINIMUM_ADDRESS_LENGTH) {
+        if (address.isNullOrEmpty() || address.length != ADDRESS_LENGTH) {
             return false
         }
         return address.matches(Regex(REGEX_ETH_ADDRESS))

@@ -1,5 +1,6 @@
 package com.weatherxm.ui.connectwallet
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -15,6 +16,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.data.Wallet
 import com.weatherxm.databinding.ActivityConnectWalletBinding
+import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Mask
 import com.weatherxm.util.Validator
@@ -23,14 +25,15 @@ import com.weatherxm.util.onTextChanged
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
-import java.util.*
 
 class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityConnectWalletBinding
     private val model: ConnectWalletViewModel by viewModels()
     private val mask: Mask by inject()
     private val validator: Validator by inject()
+    private val navigator: Navigator by inject()
     private var snackbar: Snackbar? = null
+    private var onBackGoHome = false
 
     // Register the launcher and result handler for QR code scanner
     private val barcodeLauncher =
@@ -47,10 +50,11 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
 
         binding.root.applyInsets()
 
-        // Set current address from intent extras, if any
-        intent?.extras?.getParcelable<Wallet>(ARG_WALLET)?.address?.let { address ->
-            model.setCurrentAddress(address)
-        }
+        // Set current address from intent extras
+        val currentAddress = intent?.extras?.getParcelable<Wallet>(ARG_WALLET)
+        model.setCurrentAddress(currentAddress?.address)
+
+        onBackGoHome = intent?.extras?.getBoolean(ARG_ON_BACK_GO_HOME) ?: false
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
@@ -67,11 +71,20 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
 
         // Listen to current address for UI update
         model.currentAddress().observe(this) { address ->
-            binding.currentAddress.setText(mask.maskWalletAddress(address))
-            binding.currentAddressContainer.setEndIconOnClickListener {
-                shareAddress(address)
+            if (address.isNullOrEmpty()) {
+                binding.notice.visibility = View.VISIBLE
+                binding.currentAddressContainer.visibility = View.GONE
+                binding.currentAddressTitle.visibility = View.GONE
+                binding.newAddress.setText("")
+            } else {
+                binding.notice.visibility = View.GONE
+                binding.currentAddressContainer.visibility = View.VISIBLE
+                binding.currentAddressTitle.visibility = View.VISIBLE
+                binding.currentAddress.setText(mask.maskWalletAddress(address))
+                binding.currentAddressContainer.setEndIconOnClickListener {
+                    shareAddress(address)
+                }
             }
-            binding.newAddress.setText("")
         }
 
         // TODO Ideally this code should be moved to the ViewModel
@@ -104,6 +117,15 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         }
     }
 
+    override fun onBackPressed() {
+        if (onBackGoHome) {
+            navigator.showHome(this)
+            finish()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     private fun scanWallet() {
         barcodeLauncher.launch(
             ScanOptions().setBeepEnabled(false)
@@ -128,6 +150,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
                 }
                 setProgressEnabled(false)
                 setInputEnabled(true)
+                setResult(Activity.RESULT_OK)
             }
             Status.ERROR -> {
                 result.message?.let {
@@ -164,5 +187,6 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
 
     companion object {
         const val ARG_WALLET = "wallet"
+        const val ARG_ON_BACK_GO_HOME = "on_back_go_home"
     }
 }

@@ -1,6 +1,7 @@
 package com.weatherxm.usecases
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import arrow.core.Either
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
@@ -231,14 +232,13 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
 
                 // Get the wind speed and direction formatted
                 val windSpeed = Weather.convertWindSpeed(hourlyWeather.windSpeed)
-                if (windSpeed != null &&
-                    hourlyWeather.windDirection != null &&
-                    windSpeed.toFloat() > 0
-                ) {
+                var windDirection: Drawable? = null
+                if (hourlyWeather.windDirection != null) {
                     val index = UnitConverter.getIndexOfCardinal(hourlyWeather.windDirection)
-                    val windDirection = resHelper.getWindDirectionDrawable(index)
-
+                    windDirection = resHelper.getWindDirectionDrawable(index)
                     windDirectionEntries.add(Entry(counter, hourlyWeather.windDirection.toFloat()))
+                }
+                if (windSpeed != null && windDirection != null && windSpeed.toFloat() > 0) {
                     windSpeedEntries.add(Entry(counter, windSpeed.toFloat(), windDirection))
                 } else if (windSpeed != null) {
                     windSpeedEntries.add(Entry(counter, windSpeed.toFloat()))

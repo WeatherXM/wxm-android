@@ -38,11 +38,52 @@
         app:layout_constraintVertical_chainStyle="packed">
 
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/notice"
+            style="@style/Widget.WeatherXM.MaterialCard.Notice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:cardUseCompatPadding="false"
+            app:contentPadding="@dimen/padding_normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/notice_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_error"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/notice_text"
+                    style="@style/TextAppearance.WeatherXM.Notice"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:text="@string/wallet_prompt"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/notice_icon"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/addressCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/notice">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -65,6 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:hint="@string/current_address"
+                    android:paddingBottom="@dimen/margin_extra_large"
                     app:endIconDrawable="@drawable/ic_share"
                     app:endIconMode="custom"
                     app:hintEnabled="false"
@@ -87,7 +129,6 @@
                     style="@style/TextAppearance.WeatherXM.Card.Title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_extra_large"
                     android:text="@string/wxm_address"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -102,6 +143,9 @@
                     android:hint="@string/hint_wxm_address"
                     app:endIconDrawable="@drawable/ic_scan_wallet"
                     app:endIconMode="custom"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="42"
+                    app:helperText="@string/suggested_wallets"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/addressInfo">
@@ -110,6 +154,7 @@
                         android:id="@+id/new_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:digits="xX0123456789ABCDEFabcdef"
                         android:inputType="text" />
 
                 </com.google.android.material.textfield.TextInputLayout>

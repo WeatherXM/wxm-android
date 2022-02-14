@@ -26,6 +26,9 @@ class ProfileViewModel : ViewModel(), KoinComponent {
 
     fun user(): LiveData<Resource<User>> = user
 
+    private val hasWallet = MutableLiveData(true)
+    fun hasWallet(): LiveData<Boolean> = hasWallet
+
     fun fetch() {
         CoroutineScope(Dispatchers.IO).launch {
             userRepository.getUser()
@@ -40,5 +43,22 @@ class ProfileViewModel : ViewModel(), KoinComponent {
                     )
                 }
         }
+    }
+
+    fun getWallet() {
+        CoroutineScope(Dispatchers.IO).launch {
+            userRepository.getUser()
+                .map { user ->
+                    Timber.d("Has wallet: ${user.wallet?.address.isNullOrEmpty()}")
+                    hasWallet.postValue(!user.wallet?.address.isNullOrEmpty())
+                }
+                .mapLeft {
+                    // TODO: how to handle this? ideas?
+                }
+        }
+    }
+
+    fun walletConnected() {
+        hasWallet.postValue(true)
     }
 }

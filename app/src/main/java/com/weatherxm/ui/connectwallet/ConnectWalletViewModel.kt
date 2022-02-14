@@ -23,7 +23,7 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
     private val userRepository: UserRepository by inject()
     private val resHelper: ResourcesHelper by inject()
 
-    private var currentAddress = MutableLiveData<String>()
+    private var currentAddress = MutableLiveData<String?>(null)
     fun currentAddress() = currentAddress
 
     fun saveAddress(address: String) {
@@ -58,7 +58,7 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun setCurrentAddress(address: String) {
+    fun setCurrentAddress(address: String?) {
         currentAddress.postValue(address)
     }
 }

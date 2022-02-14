@@ -13,6 +13,7 @@ import com.weatherxm.databinding.ActivityLoginBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Validator
+import com.weatherxm.util.applyInsets
 import com.weatherxm.util.onTextChanged
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -32,6 +33,8 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.root.applyInsets()
 
         binding.username.onTextChanged {
             binding.usernameContainer.error = null
@@ -76,7 +79,6 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
 
             binding.username.isEnabled = false
             binding.password.isEnabled = false
-            binding.loading.visibility = View.VISIBLE
 
             model.login(username, password)
         }
@@ -85,14 +87,19 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
         model.isLoggedIn().observe(this) { result ->
             onLoginResult(result)
         }
+
+        // Listen for user's wallet existence
+        model.hasWallet().observe(this) { hasWallet ->
+            onHasWallet(hasWallet)
+        }
     }
 
     private fun onLoginResult(result: Resource<Unit>) {
         when (result.status) {
             Status.SUCCESS -> {
-                Timber.d("Login success. Starting main app flow.")
-                navigator.showHome(this)
-                finish()
+                Timber.d("Login success. Get user to check if he has a wallet")
+                model.getUser()
+                binding.loading.visibility = View.INVISIBLE
             }
             Status.ERROR -> {
                 binding.username.isEnabled = true
@@ -105,6 +112,28 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
             Status.LOADING -> {
                 binding.username.isEnabled = false
                 binding.password.isEnabled = false
+                binding.loading.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun onHasWallet(hasWallet: Resource<Boolean>) {
+        when (hasWallet.status) {
+            Status.SUCCESS -> {
+                Timber.d("User hasWallet: ${hasWallet.data == true}")
+                binding.loading.visibility = View.INVISIBLE
+                if (hasWallet.data == true) {
+                    navigator.showHome(this)
+                } else {
+                    navigator.showConnectWallet(this, null, true)
+                }
+                finish()
+            }
+            Status.ERROR -> {
+                binding.loading.visibility = View.INVISIBLE
+                showSnackbarMessage("${hasWallet.message}.")
+            }
+            Status.LOADING -> {
                 binding.loading.visibility = View.VISIBLE
             }
         }

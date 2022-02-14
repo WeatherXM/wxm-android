@@ -30,6 +30,8 @@
     <string name="title_devices">Devices</string>
     <string name="title_profile">Profile</string>
     <string name="weather_stations">Weather Stations</string>
+    <string name="wallet_prompt">Connecting a wallet is mandatory for getting rewards. If you do not connect your wallet, the rewards of your WXM Devices will be lost.</string>
+    <string name="suggested_wallets">It is highly recommended to use MetaMask, as the most compatible wallet.</string>
     <string name="wxm_address">New WXM Address</string>
     <string name="device_serial_number_title">Device Serial Number</string>
     <string name="device_serial_number_hint">Enter the device\'s serial number</string>
