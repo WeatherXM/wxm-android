@@ -11,11 +11,24 @@ import org.koin.core.component.inject
 interface AuthUseCase {
     suspend fun login(username: String, password: String): Either<Error, String>
     suspend fun getUser(): Either<Failure, User>
+    suspend fun signup(
+        username: String,
+        firstName: String?,
+        lastName: String?
+    ): Either<Error, String>
 }
 
 class AuthUseCaseImpl : AuthUseCase, KoinComponent {
     private val authRepository: AuthRepository by inject()
     private val userRepository: UserRepository by inject()
+
+    override suspend fun signup(
+        username: String,
+        firstName: String?,
+        lastName: String?
+    ): Either<Error, String> {
+        return authRepository.signup(username, firstName, lastName)
+    }
 
     override suspend fun login(username: String, password: String): Either<Error, String> {
         return authRepository.login(username, password)

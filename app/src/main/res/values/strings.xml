@@ -1,8 +1,9 @@
 <resources>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
-    <string name="hint_first_name">First Name</string>
-    <string name="hint_last_name">Last Name</string>
+    <string name="signup_hint_email">Email *</string>
+    <string name="signup_hint_first_name">First Name</string>
+    <string name="signup_hint_last_name">Last Name</string>
     <string name="history">History</string>
     <string name="forecast_7_days">7 Days Forecast</string>
     <string name="action_sign_in">Sign in</string>
@@ -15,7 +16,6 @@
     <string name="invalid_serial_number">Invalid serial number</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">Login failed</string>
-    <string name="signup_failed">Could not signup</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="prompt_signup"><![CDATA[Don\'t have an account? <span style=\"color: #2599df\">SIGN UP</span>]]></string>
     <string name="title_home">Home</string>
@@ -54,7 +54,9 @@
     <string name="success">Success</string>
     <string name="success_reset_password_title">Email has been sent!</string>
     <string name="success_reset_password_text">We have sent instructions for resetting your password to your email.</string>
+    <string name="success_signup_text">We have sent instructions for setting a password and completing registration to %s. Please set a password and then try to sign in.</string>
     <string name="send_email_instructions">Enter the email associated with your account and we will send you an email with instructions to reset your password.</string>
+    <string name="signup_instructions">Signup with your email and your account will be created shortly.</string>
     <string name="next_7_days">Next 7 Days</string>
     <string name="see_historical_charts">See Historical Charts</string>
     <string name="forecast_empty">Forecast is empty. Please try again.</string>
@@ -82,6 +84,7 @@
     <string name="permission_permanently_denied_title">Permission permanently denied</string>
     <string name="permission_permanently_denied_rationale">Go to the app settings to give the required permissions.</string>
     <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after WXM mainnet token launch. Actual rewards may differ from the ones you see in the chart above.]]></string>
+    <string name="optional">Optional</string>
 
     <!-- Dates/Days -->
     <string name="today">Today</string>

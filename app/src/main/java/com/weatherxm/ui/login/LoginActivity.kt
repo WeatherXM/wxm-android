@@ -9,11 +9,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
+import com.weatherxm.data.User
 import com.weatherxm.databinding.ActivityLoginBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Validator
 import com.weatherxm.util.applyInsets
+import com.weatherxm.util.hideKeyboard
 import com.weatherxm.util.onTextChanged
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -24,7 +25,6 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
     private val navigator: Navigator by inject()
     private val validator: Validator by inject()
     private val model: LoginViewModel by viewModels()
-    private val resourcesHelper: ResourcesHelper by inject()
     private lateinit var binding: ActivityLoginBinding
 
     private var snackbar: Snackbar? = null
@@ -53,44 +53,47 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.signupPrompt.text = HtmlCompat.fromHtml(
-            resourcesHelper.getString(R.string.prompt_signup),
+            getString(R.string.prompt_signup),
             HtmlCompat.FROM_HTML_MODE_COMPACT
         )
 
         binding.signupPrompt.setOnClickListener {
             navigator.showSignup(this)
+            finish()
         }
 
         binding.login.setOnClickListener {
             val username = binding.username.text.toString()
             val password = binding.password.text.toString()
 
-            if (validator.validateUsername(username)) {
-                binding.usernameContainer.error =
-                    resourcesHelper.getString(R.string.invalid_username)
+            if (!validator.validateUsername(username)) {
+                binding.usernameContainer.error = getString(R.string.invalid_username)
                 return@setOnClickListener
             }
 
-            if (validator.validatePassword(password)) {
-                binding.passwordContainer.error =
-                    resourcesHelper.getString(R.string.invalid_password)
+            if (!validator.validatePassword(password)) {
+                binding.passwordContainer.error = getString(R.string.invalid_password)
                 return@setOnClickListener
             }
 
-            binding.username.isEnabled = false
-            binding.password.isEnabled = false
+            // Hide keyboard, if showing
+            hideKeyboard()
 
+            // Disable input
+            setInputEnabled(false)
+
+            // Perform login
             model.login(username, password)
         }
 
         // Listen for login state change
-        model.isLoggedIn().observe(this) { result ->
-            onLoginResult(result)
+        model.isLoggedIn().observe(this) {
+            onLoginResult(it)
         }
 
         // Listen for user's wallet existence
-        model.hasWallet().observe(this) { hasWallet ->
-            onHasWallet(hasWallet)
+        model.user().observe(this) {
+            onUserResult(it)
         }
     }
 
@@ -98,31 +101,29 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
         when (result.status) {
             Status.SUCCESS -> {
                 Timber.d("Login success. Get user to check if he has a wallet")
-                model.getUser()
+                setInputEnabled(false)
                 binding.loading.visibility = View.INVISIBLE
             }
             Status.ERROR -> {
-                binding.username.isEnabled = true
-                binding.password.isEnabled = true
+                setInputEnabled(true)
                 binding.loading.visibility = View.INVISIBLE
-                showSnackbarMessage(
-                    "${resourcesHelper.getString(R.string.login_failed)} ${result.message}."
-                )
+                showSnackbarMessage("${getString(R.string.login_failed)} ${result.message}.")
             }
             Status.LOADING -> {
-                binding.username.isEnabled = false
-                binding.password.isEnabled = false
+                setInputEnabled(false)
                 binding.loading.visibility = View.VISIBLE
             }
         }
     }
 
-    private fun onHasWallet(hasWallet: Resource<Boolean>) {
-        when (hasWallet.status) {
+    private fun onUserResult(result: Resource<User>) {
+        when (result.status) {
             Status.SUCCESS -> {
-                Timber.d("User hasWallet: ${hasWallet.data == true}")
+                setInputEnabled(false)
                 binding.loading.visibility = View.INVISIBLE
-                if (hasWallet.data == true) {
+                val user = result.data
+                Timber.d("User: $user")
+                if (user?.hasWallet() == true) {
                     navigator.showHome(this)
                 } else {
                     navigator.showConnectWallet(this, null, true)
@@ -131,10 +132,12 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
             }
             Status.ERROR -> {
                 binding.loading.visibility = View.INVISIBLE
-                showSnackbarMessage("${hasWallet.message}.")
+                showSnackbarMessage("${result.message}.")
+                setInputEnabled(true)
             }
             Status.LOADING -> {
                 binding.loading.visibility = View.VISIBLE
+                setInputEnabled(false)
             }
         }
     }
@@ -145,5 +148,13 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
         }
         snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
         snackbar?.show()
+    }
+
+    private fun setInputEnabled(enable: Boolean) {
+        binding.username.isEnabled = enable
+        binding.password.isEnabled = enable
+        binding.login.isEnabled = enable
+        binding.forgotPassword.isEnabled = enable
+        binding.signupPrompt.isEnabled = enable
     }
 }

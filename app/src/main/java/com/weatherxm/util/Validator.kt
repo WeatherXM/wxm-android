@@ -1,5 +1,7 @@
 package com.weatherxm.util
 
+import android.util.Patterns
+
 class Validator {
     companion object {
         const val MINIMUM_PASSWORD_LENGTH = 6
@@ -9,12 +11,12 @@ class Validator {
         const val REGEX_SERIAL_NUMBER = "^[a-fA-F0-9]{18}\$"
     }
 
-    fun validateUsername(username: String?): Boolean {
-        return username.isNullOrEmpty() || !username.contains("@")
+    fun validateUsername(username: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(username).matches()
     }
 
-    fun validatePassword(password: String?): Boolean {
-        return password.isNullOrEmpty() || password.length < MINIMUM_PASSWORD_LENGTH
+    fun validatePassword(password: String): Boolean {
+        return password.length >= MINIMUM_PASSWORD_LENGTH
     }
 
     fun validateEthAddress(address: String?): Boolean {

@@ -13,11 +13,17 @@ import com.weatherxm.data.network.ResetPasswordBody
 import timber.log.Timber
 
 interface AuthDataSource {
-    suspend fun resetPassword(email: String): Either<Failure, Unit>
-    suspend fun login(username: String, password: String): Either<Error, String>
+    suspend fun resetPassword(
+        email: String
+    ): Either<Failure, Unit>
+
+    suspend fun login(
+        username: String,
+        password: String
+    ): Either<Error, String>
+
     suspend fun signup(
         username: String,
-        password: String,
         firstName: String?,
         lastName: String?
     ): Either<Error, String>
@@ -55,20 +61,13 @@ class AuthDataSourceImpl(
 
     override suspend fun signup(
         username: String,
-        password: String,
         firstName: String?,
         lastName: String?
     ): Either<Error, String> {
-        val registration = RegistrationBody(
-            username = username,
-            password = password,
-            firstName = firstName,
-            lastName = lastName
-        )
-        return when (val response = authService.register(registration)) {
+        return when (val response =
+            authService.register(RegistrationBody(username, firstName, lastName))) {
             is NetworkResponse.Success -> {
-                Timber.d("Signup success. Saving credentials.")
-                credentialsDatasource.setCredentials(Credentials(username, password))
+                Timber.d("Signup success. Email sent to user: $username")
                 Either.Right(username)
             }
             is NetworkResponse.ServerError -> {

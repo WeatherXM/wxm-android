@@ -56,17 +56,17 @@
             android:name="com.weatherxm.ui.home.HomeActivity"
             android:label="@string/title_home"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM.Home" />
+            android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.preferences.PreferenceActivity"
             android:label="@string/settings"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM.Home" />
+            android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.connectwallet.ConnectWalletActivity"
             android:label="@string/title_connect_wallet"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM.Home" />
+            android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
@@ -74,23 +74,23 @@
         <activity
             android:name="com.weatherxm.ui.userdevice.UserDeviceActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM.Home" />
+            android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.resetpassword.ResetPasswordActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM.Home" />
+            android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.devicehistory.HistoryActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM.Home" />
+            android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.deviceforecast.ForecastActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM.Home" />
+            android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.claimdevice.ClaimDeviceActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM.Home" />
+            android:theme="@style/Theme.WeatherXM" />
 
         <!-- Services -->
 
