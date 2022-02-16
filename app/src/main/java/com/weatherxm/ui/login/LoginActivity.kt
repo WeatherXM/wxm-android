@@ -63,8 +63,8 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.login.setOnClickListener {
-            val username = binding.username.text.toString()
-            val password = binding.password.text.toString()
+            val username = binding.username.text.toString().trim()
+            val password = binding.password.text.toString().trim()
 
             if (!validator.validateUsername(username)) {
                 binding.usernameContainer.error = getString(R.string.invalid_username)

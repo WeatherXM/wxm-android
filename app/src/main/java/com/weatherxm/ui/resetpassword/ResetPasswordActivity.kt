@@ -2,14 +2,12 @@ package com.weatherxm.ui.resetpassword
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityResetPasswordBinding
-import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Validator
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.onTextChanged
@@ -37,9 +35,9 @@ class ResetPasswordActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.sendBtn.setOnClickListener {
-            val email = binding.email.text.toString()
+            val email = binding.email.text.toString().trim()
 
-            if (validator.validateUsername(email)) {
+            if (!validator.validateUsername(email)) {
                 binding.emailContainer.error = getString(R.string.invalid_email)
                 return@setOnClickListener
             }
@@ -55,20 +53,32 @@ class ResetPasswordActivity : AppCompatActivity(), KoinComponent {
     private fun onEmailSentResult(result: Resource<Unit>) {
         when (result.status) {
             Status.SUCCESS -> {
-                binding.successIcon.setAnimation(R.raw.anim_success)
-                binding.successIcon.visibility = View.VISIBLE
-                binding.successTitle.visibility = View.VISIBLE
-                binding.successText.visibility = View.VISIBLE
-                binding.progress.visibility = View.INVISIBLE
+                binding.statusView
+                    .clear()
+                    .animation(R.raw.anim_success, false)
+                    .title(getString(R.string.success_reset_password_title))
+                    .subtitle(getString(R.string.success_reset_password_text))
+                binding.form.visibility = View.GONE
+                binding.status.visibility = View.VISIBLE
             }
             Status.ERROR -> {
-                binding.sendBtn.isEnabled = true
-                binding.progress.visibility = View.INVISIBLE
-                result.message?.let { toast(it, Toast.LENGTH_LONG) }
+                binding.statusView
+                    .clear()
+                    .animation(R.raw.anim_error, false)
+                    .title(getString(R.string.oops_something_wrong))
+                    .subtitle("${result.message}")
+                    .action(getString(R.string.action_retry))
+                    .listener {
+                        binding.form.visibility = View.VISIBLE
+                        binding.status.visibility = View.GONE
+                    }
             }
             Status.LOADING -> {
-                binding.sendBtn.isEnabled = false
-                binding.progress.visibility = View.VISIBLE
+                binding.statusView
+                    .clear()
+                    .animation(R.raw.anim_loading)
+                binding.form.visibility = View.GONE
+                binding.status.visibility = View.VISIBLE
             }
         }
     }
