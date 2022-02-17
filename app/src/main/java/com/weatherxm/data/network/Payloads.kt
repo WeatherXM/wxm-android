@@ -15,10 +15,9 @@ data class LoginBody(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class RegistrationBody(
-    val username: String,
-    val password: String,
-    val firstName: String? = "",
-    val lastName: String? = ""
+    val email: String,
+    val firstName: String? = null,
+    val lastName: String? = null
 ) : Parcelable
 
 @JsonClass(generateAdapter = true)

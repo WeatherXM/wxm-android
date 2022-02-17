@@ -22,12 +22,15 @@
         <item name="android:statusBarColor">@color/status_bar_color</item>
 
         <!-- Style overrides -->
+        <item name="appBarLayoutStyle">@style/Widget.WeatherXM.AppBar</item>
+        <item name="toolbarStyle">@style/Widget.WeatherXM.ToolBar</item>
+        <item name="progressBarStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
+        <item name="linearProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
+        <item name="bottomNavigationStyle">@style/Widget.WeatherXM.BottomNavigationView</item>
         <item name="materialButtonStyle">@style/Widget.WeatherXM.Button</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button</item>
-        <item name="buttonBarNeutralButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button.Subtle
-        </item>
-        <item name="buttonBarNegativeButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button.Subtle
-        </item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button.Subtle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button.Subtle</item>
         <item name="materialCardViewElevatedStyle">@style/Widget.WeatherXM.MaterialCard</item>
         <item name="materialCardViewStyle">?materialCardViewElevatedStyle</item>
         <item name="elevationOverlayEnabled">false</item>
@@ -62,19 +65,6 @@
         <item name="bottomSheetDialogTheme">@style/ThemeOverlay.WeatherXM.BottomSheetDialog</item>
         <item name="toolbarStyle">@style/Widget.WeatherXM.ToolBar.Explorer</item>
         <item name="appBarLayoutStyle">@style/Widget.WeatherXM.AppBar</item>
-    </style>
-
-    <style name="Theme.WeatherXM.Home">
-        <!-- System UI styles -->
-        <item name="android:windowTranslucentStatus">@bool/use_transparent_status_bar</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">@color/status_bar_color</item>
-        <item name="toolbarStyle">@style/Widget.WeatherXM.ToolBar</item>
-        <item name="appBarLayoutStyle">@style/Widget.WeatherXM.AppBar</item>
-        <item name="progressBarStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
-        <item name="linearProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal
-        </item>
-        <item name="bottomNavigationStyle">@style/Widget.WeatherXM.BottomNavigationView</item>
     </style>
 
     <style name="ThemeOverlay.WeatherXM.Toolbar.Light" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface">
@@ -175,7 +165,7 @@
     </style>
 
     <style name="Widget.WeatherXM.Profile.Elements" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <item name="android:minHeight">?listPreferredItemHeightLarge</item>
+        <item name="android:minHeight">?listPreferredItemHeight</item>
         <item name="iconTint">@color/colorOnSecondary</item>
         <item name="android:textColor">?colorOnSurface</item>
         <item name="android:gravity">start|center</item>
@@ -449,5 +439,14 @@
         <item name="trackColorActive">@color/colorPrimary</item>
         <item name="trackColorInactive">@color/transparent</item>
         <item name="trackHeight">@dimen/temperature_slider_track_height</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Notice" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/white_translucent</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.Notice" parent="Widget.WeatherXM.MaterialCard">
+        <item name="cardBackgroundColor">@color/error</item>
     </style>
 </resources>

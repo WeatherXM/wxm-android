@@ -14,7 +14,6 @@ interface AuthRepository {
     suspend fun isLoggedIn(): Either<Error, String>
     suspend fun signup(
         username: String,
-        password: String,
         firstName: String?,
         lastName: String?
     ): Either<Error, String>
@@ -45,11 +44,10 @@ class AuthRepositoryImpl(
 
     override suspend fun signup(
         username: String,
-        password: String,
         firstName: String?,
         lastName: String?
     ): Either<Error, String> {
-        return authDataSource.signup(username, password, firstName, lastName)
+        return authDataSource.signup(username, firstName, lastName)
     }
 
     override suspend fun resetPassword(email: String): Either<Failure, Unit> {

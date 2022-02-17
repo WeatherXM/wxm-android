@@ -97,6 +97,15 @@ class Navigator {
         }
     }
 
+    fun showConnectWallet(context: Context, wallet: Wallet?, onBackGoHome: Boolean) {
+        context.startActivity(
+            Intent(context, ConnectWalletActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ConnectWalletActivity.ARG_WALLET, wallet)
+                .putExtra(ConnectWalletActivity.ARG_ON_BACK_GO_HOME, onBackGoHome)
+        )
+    }
+
     fun showUserDevice(fragment: Fragment, device: Device) {
         fragment.context?.let {
             it.startActivity(

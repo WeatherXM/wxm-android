@@ -17,7 +17,9 @@ data class User(
     val firstName: String?,
     val lastName: String?,
     val wallet: Wallet?,
-) : Parcelable
+) : Parcelable {
+    fun hasWallet() = wallet?.address?.isNotEmpty() == true
+}
 
 @Keep
 @JsonClass(generateAdapter = true)

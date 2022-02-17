@@ -39,11 +39,17 @@ interface ApiService {
     @Headers(NO_AUTH_HEADER)
     suspend fun getPublicDevices(): NetworkResponse<List<Device>, ErrorResponse>
 
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 200, body = "mock_files/empty_response.json")
     @POST("/api/v1/me/wallet")
     suspend fun saveAddress(
         @Body address: AddressBody,
     ): NetworkResponse<Unit, ErrorResponse>
 
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 200, body = "mock_files/empty_response.json")
     @POST("/api/v1/auth/resetPassword")
     suspend fun resetPassword(
         @Body refresh: ResetPasswordBody,

@@ -36,7 +36,8 @@
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/app_name"
                 android:scaleType="fitStart"
-                android:src="@drawable/app_logo_wide" />
+                android:src="@drawable/app_logo_wide_no_tagline"
+                app:tint="@color/white" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
@@ -74,7 +75,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/prompt_signup"
-                android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintLeft_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/login" />

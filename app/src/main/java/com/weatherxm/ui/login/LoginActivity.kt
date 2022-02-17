@@ -9,10 +9,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
+import com.weatherxm.data.User
 import com.weatherxm.databinding.ActivityLoginBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Validator
+import com.weatherxm.util.applyInsets
+import com.weatherxm.util.hideKeyboard
 import com.weatherxm.util.onTextChanged
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -23,7 +25,6 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
     private val navigator: Navigator by inject()
     private val validator: Validator by inject()
     private val model: LoginViewModel by viewModels()
-    private val resourcesHelper: ResourcesHelper by inject()
     private lateinit var binding: ActivityLoginBinding
 
     private var snackbar: Snackbar? = null
@@ -32,6 +33,8 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.root.applyInsets()
 
         binding.username.onTextChanged {
             binding.usernameContainer.error = null
@@ -50,62 +53,91 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.signupPrompt.text = HtmlCompat.fromHtml(
-            resourcesHelper.getString(R.string.prompt_signup),
+            getString(R.string.prompt_signup),
             HtmlCompat.FROM_HTML_MODE_COMPACT
         )
 
         binding.signupPrompt.setOnClickListener {
             navigator.showSignup(this)
+            finish()
         }
 
         binding.login.setOnClickListener {
-            val username = binding.username.text.toString()
-            val password = binding.password.text.toString()
+            val username = binding.username.text.toString().trim()
+            val password = binding.password.text.toString().trim()
 
-            if (validator.validateUsername(username)) {
-                binding.usernameContainer.error =
-                    resourcesHelper.getString(R.string.invalid_username)
+            if (!validator.validateUsername(username)) {
+                binding.usernameContainer.error = getString(R.string.invalid_username)
                 return@setOnClickListener
             }
 
-            if (validator.validatePassword(password)) {
-                binding.passwordContainer.error =
-                    resourcesHelper.getString(R.string.invalid_password)
+            if (!validator.validatePassword(password)) {
+                binding.passwordContainer.error = getString(R.string.invalid_password)
                 return@setOnClickListener
             }
 
-            binding.username.isEnabled = false
-            binding.password.isEnabled = false
-            binding.loading.visibility = View.VISIBLE
+            // Hide keyboard, if showing
+            hideKeyboard()
 
+            // Disable input
+            setInputEnabled(false)
+
+            // Perform login
             model.login(username, password)
         }
 
         // Listen for login state change
-        model.isLoggedIn().observe(this) { result ->
-            onLoginResult(result)
+        model.isLoggedIn().observe(this) {
+            onLoginResult(it)
+        }
+
+        // Listen for user's wallet existence
+        model.user().observe(this) {
+            onUserResult(it)
         }
     }
 
     private fun onLoginResult(result: Resource<Unit>) {
         when (result.status) {
             Status.SUCCESS -> {
-                Timber.d("Login success. Starting main app flow.")
-                navigator.showHome(this)
+                Timber.d("Login success. Get user to check if he has a wallet")
+                setInputEnabled(false)
+                binding.loading.visibility = View.INVISIBLE
+            }
+            Status.ERROR -> {
+                setInputEnabled(true)
+                binding.loading.visibility = View.INVISIBLE
+                showSnackbarMessage("${getString(R.string.login_failed)} ${result.message}.")
+            }
+            Status.LOADING -> {
+                setInputEnabled(false)
+                binding.loading.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun onUserResult(result: Resource<User>) {
+        when (result.status) {
+            Status.SUCCESS -> {
+                setInputEnabled(false)
+                binding.loading.visibility = View.INVISIBLE
+                val user = result.data
+                Timber.d("User: $user")
+                if (user?.hasWallet() == true) {
+                    navigator.showHome(this)
+                } else {
+                    navigator.showConnectWallet(this, null, true)
+                }
                 finish()
             }
             Status.ERROR -> {
-                binding.username.isEnabled = true
-                binding.password.isEnabled = true
                 binding.loading.visibility = View.INVISIBLE
-                showSnackbarMessage(
-                    "${resourcesHelper.getString(R.string.login_failed)} ${result.message}."
-                )
+                showSnackbarMessage("${result.message}.")
+                setInputEnabled(true)
             }
             Status.LOADING -> {
-                binding.username.isEnabled = false
-                binding.password.isEnabled = false
                 binding.loading.visibility = View.VISIBLE
+                setInputEnabled(false)
             }
         }
     }
@@ -116,5 +148,13 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
         }
         snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
         snackbar?.show()
+    }
+
+    private fun setInputEnabled(enable: Boolean) {
+        binding.username.isEnabled = enable
+        binding.password.isEnabled = enable
+        binding.login.isEnabled = enable
+        binding.forgotPassword.isEnabled = enable
+        binding.signupPrompt.isEnabled = enable
     }
 }

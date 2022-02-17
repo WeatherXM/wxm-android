@@ -104,10 +104,11 @@ class EmptyView : LinearLayout {
         visibility = GONE
     }
 
-    fun clear() {
+    fun clear(): EmptyView {
         title(null)
         subtitle(null)
         action(null)
         listener(null)
+        return this
     }
 }

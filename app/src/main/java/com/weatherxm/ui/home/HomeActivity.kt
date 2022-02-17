@@ -1,5 +1,6 @@
 package com.weatherxm.ui.home
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -18,6 +19,7 @@ import com.weatherxm.ui.claimdevice.ClaimDeviceActivity
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
+import com.weatherxm.ui.home.profile.ProfileViewModel
 import com.weatherxm.util.hideIfNot
 import com.weatherxm.util.showIfNot
 import dev.chrisbanes.insetter.applyInsetter
@@ -25,11 +27,13 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
+
 class HomeActivity : AppCompatActivity(), KoinComponent {
     private val navigator: Navigator by inject()
     private lateinit var binding: ActivityHomeBinding
     private val explorerModel: ExplorerViewModel by viewModels()
     private val devicesViewModel: DevicesViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
 
     private var snackbar: Snackbar? = null
 
@@ -42,6 +46,7 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
+    @SuppressLint("UnsafeOptInUsageError")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
@@ -95,6 +100,10 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             claimDeviceLauncher.launch(Intent(this, ClaimDeviceActivity::class.java))
         }
 
+        profileViewModel.hasWallet().observe(this) {
+            handleBadge(it)
+        }
+
         // Disable BottomNavigationView bottom padding, added by default, and add margin
         // https://github.com/material-components/material-components-android/commit/276bec8385ec877548fc84994c0a016de2428567
         binding.navView.applyInsetter {
@@ -106,5 +115,18 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
 
         // Fetch user's devices
         devicesViewModel.fetch()
+
+        // Get user's wallet here
+        profileViewModel.getWallet()
+
+        binding.navView.getOrCreateBadge(R.id.navigation_profile)
+    }
+
+    private fun handleBadge(hasWallet: Boolean) {
+        if (!hasWallet) {
+            binding.navView.getOrCreateBadge(R.id.navigation_profile)
+        } else {
+            binding.navView.removeBadge(R.id.navigation_profile)
+        }
     }
 }
