@@ -59,7 +59,6 @@
     <string name="signup_instructions">Signup with your email and your account will be created shortly.</string>
     <string name="next_7_days">Next 7 Days</string>
     <string name="see_historical_charts">See Historical Charts</string>
-    <string name="forecast_empty">Forecast is empty. Please try again.</string>
     <string name="earnings">Earnings</string>
     <string name="wxm">WXM</string>
     <string name="button_24h">24H</string>
@@ -244,4 +243,5 @@
     <string name="oops_something_wrong">Oops! Something went wrong.</string>
     <string name="error_cannot_send_email">Oops! Could not send email!</string>
     <string name="error_cannot_open_url">Oops! Could not open %s</string>
+    <string name="forecast_empty">Oops! No forecast weather data could not be found.</string>
 </resources>

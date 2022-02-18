@@ -178,7 +178,16 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     userDeviceUseCase.getTomorrowForecast(device)
                         .map {
                             Timber.d("Got Short Term Forecast: $it")
-                            onForecast.postValue(addCurrentToForecast(device.currentWeather, it))
+                            if (it.isEmpty()) {
+                                onError.postValue(
+                                    UIError(resHelper.getString(R.string.forecast_empty), null)
+                                )
+                                onForecast.postValue(it)
+                            } else {
+                                onForecast.postValue(
+                                    addCurrentToForecast(device.currentWeather, it)
+                                )
+                            }
                         }
                         .mapLeft {
                             Timber.d("Got error: $it")

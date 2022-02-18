@@ -764,7 +764,7 @@
     },
     {
         "tz": "Europe/Athens",
-        "date": "2021-12-22",
+        "date": "2021-12-20",
         "hourly": [
             {
                 "precipitation": 0,
@@ -1128,10 +1128,10 @@
             }
         ],
         "daily": {
-            "temperature_max": 15.56,
-            "temperature_min": 10.15,
+            "temperature_max": 5,
+            "temperature_min": -4.0,
             "precipitation": 0,
-            "precipitation_probability": 10,
+            "precipitation_probability": 47,
             "icon": "partly-cloudy-night",
             "precip_type": "rain",
             "pressure": 1020,
@@ -1141,7 +1141,7 @@
             "cloud_cover": 50,
             "humidity": 74,
             "uv_index": 2,
-            "timestamp": "2021-12-22T00:00:00+02:00"
+            "timestamp": "2021-12-20T00:00:00+02:00"
         }
     },
     {
