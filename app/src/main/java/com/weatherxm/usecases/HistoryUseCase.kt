@@ -203,7 +203,6 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
 
         val temperatureEntries = mutableListOf<Entry>()
         val precipEntries = mutableListOf<Entry>()
-        val precipProbabilityEntries = mutableListOf<Entry>()
         val windSpeedEntries = mutableListOf<Entry>()
         val windGustEntries = mutableListOf<Entry>()
         val windDirectionEntries = mutableListOf<Entry>()
@@ -226,10 +225,6 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
 
                 hourlyWeather.precipitation?.let {
                     precipEntries.add(Entry(counter, Weather.convertPrecipitation(it) as Float))
-                }
-
-                hourlyWeather.precipProbability?.let {
-                    precipProbabilityEntries.add(Entry(counter, it.toFloat()))
                 }
 
                 // Get the wind speed and direction formatted

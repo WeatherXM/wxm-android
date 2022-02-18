@@ -6,7 +6,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 9.5,
+                "temperature": 10,
                 "icon": "clear-night",
                 "wind_speed": 6.1,
                 "wind_direction": 305,
@@ -20,7 +20,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 9.2,
+                "temperature": 8.1,
                 "icon": "clear-night",
                 "wind_speed": 5.8,
                 "wind_direction": 310,
@@ -34,7 +34,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 9.2,
+                "temperature": 9.3,
                 "icon": "clear-night",
                 "wind_speed": 5.5,
                 "wind_direction": 321,
@@ -48,7 +48,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 8.8,
+                "temperature": 9.5,
                 "icon": "clear-night",
                 "wind_speed": 5.6,
                 "wind_direction": 319,
@@ -62,7 +62,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 8.4,
+                "temperature": 9.4,
                 "icon": "clear-night",
                 "wind_speed": 5.5,
                 "wind_direction": 321,
@@ -76,7 +76,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 8,
+                "temperature": 9.4,
                 "icon": "clear-night",
                 "wind_speed": 5.4,
                 "wind_direction": 328,
@@ -90,7 +90,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 7.3,
+                "temperature": 9.5,
                 "icon": "clear-night",
                 "wind_speed": 5.5,
                 "wind_direction": 337,
@@ -104,7 +104,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 7.3,
+                "temperature": 9.4,
                 "icon": "clear-night",
                 "wind_speed": 5.2,
                 "wind_direction": 340,
@@ -118,7 +118,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 7.5,
+                "temperature": 9.3,
                 "icon": "clear-day",
                 "wind_speed": 5,
                 "wind_direction": 345,
@@ -132,7 +132,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 8.8,
+                "temperature": 9.4,
                 "icon": "clear-day",
                 "wind_speed": 4.4,
                 "wind_direction": 15,
@@ -146,7 +146,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 11.3,
+                "temperature": 9.4,
                 "icon": "clear-day",
                 "wind_speed": 4.1,
                 "wind_direction": 163,
@@ -160,7 +160,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 13.7,
+                "temperature": 9.5,
                 "icon": "clear-day",
                 "wind_speed": 4.7,
                 "wind_direction": 185,
@@ -174,7 +174,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 15.1,
+                "temperature": 9.3,
                 "icon": "clear-day",
                 "wind_speed": 5.6,
                 "wind_direction": 193,
@@ -188,7 +188,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 15.9,
+                "temperature": 9.4,
                 "icon": "clear-day",
                 "wind_speed": 6.8,
                 "wind_direction": 200,
@@ -202,7 +202,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 15.8,
+                "temperature": 9.3,
                 "icon": "clear-day",
                 "wind_speed": 7.4,
                 "wind_direction": 213,
@@ -216,7 +216,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 16.5,
+                "temperature": 9.4,
                 "icon": "clear-day",
                 "wind_speed": 7.7,
                 "wind_direction": 218,
@@ -230,7 +230,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 15.4,
+                "temperature": 9.5,
                 "icon": "partly-cloudy-day",
                 "wind_speed": 7.9,
                 "wind_direction": 212,
@@ -244,7 +244,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 14.2,
+                "temperature": 9.3,
                 "icon": "clear-day",
                 "wind_speed": 7.5,
                 "wind_direction": 208,
@@ -258,7 +258,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 12.8,
+                "temperature": 9.4,
                 "icon": "partly-cloudy-night",
                 "wind_speed": 7.1,
                 "wind_direction": 215,
@@ -272,7 +272,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 11.9,
+                "temperature": 9.4,
                 "icon": "partly-cloudy-night",
                 "wind_speed": 6.5,
                 "wind_direction": 239,
@@ -286,7 +286,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 11.5,
+                "temperature": 9.4,
                 "icon": "clear-night",
                 "wind_speed": 6.3,
                 "wind_direction": 239,
@@ -300,7 +300,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 11.1,
+                "temperature": 9.3,
                 "icon": "clear-night",
                 "wind_speed": 5.7,
                 "wind_direction": 213,
@@ -314,7 +314,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 10.7,
+                "temperature": 9.5,
                 "icon": "clear-night",
                 "wind_speed": 5.5,
                 "wind_direction": 284,
@@ -328,7 +328,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 10.3,
+                "temperature": 9.3,
                 "icon": "clear-night",
                 "wind_speed": 5.3,
                 "wind_direction": 284,

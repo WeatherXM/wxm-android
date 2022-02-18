@@ -150,7 +150,16 @@ fun LineChart.initializeDefault24hChart(chartData: LineChartData, yMinValue: Flo
     dataSet.setCircleColor(resources.getColor(chartData.lineColor, context.theme))
 
     // Y Axis settings
-    axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit, false, 0)
+
+    // If max - min < 2 that means that the values are probably too close together.
+    // Which causes a bug not showing labels on Y axis because granularity is set 1.
+    // So this is a custom fix to change that granularity and show decimals at the Y labels
+    if (dataSet.yMax - dataSet.yMin < 2) {
+        axisLeft.granularity = 0.1F
+        axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit, true, 1)
+    } else {
+        axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit, false, 0)
+    }
     yMinValue?.let { axisLeft.axisMinimum = it }
 
     // X axis settings
@@ -163,10 +172,7 @@ fun LineChart.initializeDefault24hChart(chartData: LineChartData, yMinValue: Flo
     precipProbabilityData is nullable because we have that data only on Forecast Charts.
     On history chart this is null
 */
-fun LineChart.initializePrecipitation24hChart(
-    precipIntensityData: LineChartData,
-    precipProbabilityData: LineChartData?
-) {
+fun LineChart.initializePrecipitation24hChart(precipIntensityData: LineChartData) {
     val dataSetPrecipIntensity = LineDataSet(precipIntensityData.entries, precipIntensityData.name)
     dataSetPrecipIntensity.axisDependency = AxisDependency.LEFT
 
@@ -174,18 +180,6 @@ fun LineChart.initializePrecipitation24hChart(
     val dataSets = mutableListOf<ILineDataSet>()
 
     dataSets.add(dataSetPrecipIntensity)
-    // Precipitation Probability setting up - only if we have the data (i.e. Forecast charts)
-    precipProbabilityData?.let {
-        val dataSetPrecipProbability = LineDataSet(it.entries, it.name)
-
-        dataSetPrecipProbability.axisDependency = AxisDependency.RIGHT
-        dataSetPrecipProbability.setDefaultSettings(context, resources)
-        dataSetPrecipProbability.isHighlightEnabled = false
-        dataSetPrecipProbability.color = resources.getColor(it.lineColor, context.theme)
-        dataSetPrecipProbability.setCircleColor(resources.getColor(it.lineColor, context.theme))
-
-        dataSets.add(dataSetPrecipProbability)
-    }
 
     val lineData = LineData(dataSets)
     data = lineData
@@ -193,26 +187,14 @@ fun LineChart.initializePrecipitation24hChart(
     // Set the default settings we want to all LineCharts
     setDefaultSettings()
 
-    // Marker view initialization based on if we will show precipitation probability data or not
-    marker = if (precipProbabilityData == null) {
-        CustomPrecipitationMarkerView(
+    // Marker view initialization
+    marker = CustomDefaultMarkerView(
             context,
             precipIntensityData.timestamps,
-            null,
             precipIntensityData.name,
-            null,
-            precipIntensityData.unit
-        )
-    } else {
-        CustomPrecipitationMarkerView(
-            context,
-            precipIntensityData.timestamps,
-            precipProbabilityData.entries,
-            precipIntensityData.name,
-            precipProbabilityData.name,
-            precipIntensityData.unit
-        )
-    }
+            precipIntensityData.unit,
+            true,
+            isPrecipitation = true)
 
     // Precipitation Intensity Settings
     dataSetPrecipIntensity.setDefaultSettings(context, resources)
@@ -232,13 +214,6 @@ fun LineChart.initializePrecipitation24hChart(
             precipIntensityData.showDecimals,
             Weather.getDecimalsPrecipitation()
         )
-    // Precipitation Probability Y Axis Settings
-    precipProbabilityData?.let {
-        axisRight.isEnabled = true
-        axisRight.valueFormatter = CustomYAxisFormatter(it.unit, it.showDecimals, 0)
-        axisRight.setDrawGridLines(false)
-        axisRight.axisMinimum = 0F
-    }
 
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(precipIntensityData.timestamps)
