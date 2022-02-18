@@ -39,7 +39,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
     private val barcodeLauncher =
         registerForActivityResult(ScanContract()) { result: ScanIntentResult ->
             result.contents.let { address ->
-                binding.newAddress.setText(address)
+                binding.newAddress.setText(model.fixQrAddressScanned(address))
             }
         }
 

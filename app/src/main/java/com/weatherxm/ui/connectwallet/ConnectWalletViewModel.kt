@@ -61,4 +61,13 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
     fun setCurrentAddress(address: String?) {
         currentAddress.postValue(address)
     }
+
+    // Custom fix because scanning the address in Metamask adds the "ethereum:" prefix
+    fun fixQrAddressScanned(scannedAddress: String): String {
+        return if (scannedAddress.startsWith("0x")) {
+            scannedAddress
+        } else {
+            scannedAddress.substring(scannedAddress.indexOf("0x"))
+        }
+    }
 }
