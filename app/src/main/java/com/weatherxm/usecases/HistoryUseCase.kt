@@ -216,7 +216,9 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
         weatherData.hourly?.forEach { hourlyWeather ->
 
             hourlyWeather.timestamp.let { timestampNonNull ->
-                time.add(getHourMinutesFromISO(context, timestampNonNull))
+                // Set showMinutes12Format as false
+                // on hourly data they don't matter and they cause UI issues
+                time.add(getHourMinutesFromISO(context, timestampNonNull, false))
 
                 hourlyWeather.temperature?.let {
                     temperatureEntries.add(Entry(counter, Weather.convertTemp(it) as Float))
