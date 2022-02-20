@@ -26,6 +26,10 @@ object UnitConverter {
         return ms * 3.6F
     }
 
+    fun msToMph(ms: Float): Float {
+        return ms * 2.237F
+    }
+
     fun msToKnots(ms: Float): Float {
         return ms * 1.944F
     }

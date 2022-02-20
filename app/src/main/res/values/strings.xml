@@ -151,6 +151,7 @@
     <string name="precipitation_mm">mm</string>
     <string name="precipitation_in">in</string>
     <string name="wind_speed_kmh">km/h</string>
+    <string name="wind_speed_mph">mph</string>
     <string name="wind_speed_ms">m/s</string>
     <string name="wind_speed_knots">kn</string>
     <string name="wind_speed_beaufort">bf</string>
@@ -172,6 +173,7 @@
     </string-array>
     <string-array name="wind_speed_entries">
         <item>Kilometers per hour (km/h)</item>
+        <item>Miles per hour (mph)</item>
         <item>Meters per second (m/s)</item>
         <item>Knots (kn)</item>
         <item>Beaufort (bf)</item>
@@ -194,6 +196,7 @@
     </string-array>
     <string-array name="wind_speed_values">
         <item>@string/wind_speed_kmh</item>
+        <item>@string/wind_speed_mph</item>
         <item>@string/wind_speed_ms</item>
         <item>@string/wind_speed_knots</item>
         <item>@string/wind_speed_beaufort</item>
