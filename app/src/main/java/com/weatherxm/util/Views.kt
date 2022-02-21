@@ -43,6 +43,7 @@ private const val LINE_WIDTH = 2F
 private const val POINT_SIZE = 2F
 private const val MAXIMUMS_GRID_LINES_Y_AXIS = 4
 private const val PRECIP_GRANULARITY_Y_AXIS = 0.1F
+private const val DEFAULT_GRANULARITY_Y_AXIS = 0.1F
 private const val TIME_GRANULARITY_X_AXIS = 3F
 
 @Suppress("EmptyFunctionBlock")
@@ -155,7 +156,7 @@ fun LineChart.initializeDefault24hChart(chartData: LineChartData, yMinValue: Flo
     // Which causes a bug not showing labels on Y axis because granularity is set 1.
     // So this is a custom fix to change that granularity and show decimals at the Y labels
     if (dataSet.yMax - dataSet.yMin < 2) {
-        axisLeft.granularity = 0.1F
+        axisLeft.granularity = DEFAULT_GRANULARITY_Y_AXIS
         axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit, true, 1)
     } else {
         axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit, false, 0)
@@ -189,12 +190,13 @@ fun LineChart.initializePrecipitation24hChart(precipIntensityData: LineChartData
 
     // Marker view initialization
     marker = CustomDefaultMarkerView(
-            context,
-            precipIntensityData.timestamps,
-            precipIntensityData.name,
-            precipIntensityData.unit,
-            true,
-            isPrecipitation = true)
+        context,
+        precipIntensityData.timestamps,
+        precipIntensityData.name,
+        precipIntensityData.unit,
+        true,
+        isPrecipitation = true
+    )
 
     // Precipitation Intensity Settings
     dataSetPrecipIntensity.setDefaultSettings(context, resources)
