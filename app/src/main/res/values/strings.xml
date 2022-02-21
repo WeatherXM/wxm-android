@@ -54,7 +54,7 @@
     <string name="success">Success</string>
     <string name="success_reset_password_title">Email has been sent!</string>
     <string name="success_reset_password_text">We have sent instructions for resetting your password to your email.</string>
-    <string name="success_signup_text">We have sent instructions for setting a password and completing registration to %s. Please set a password and then try to sign in.</string>
+    <string name="success_signup_text">Thanks for joining WeatherXM! We have sent you an account activation link to %s. Please, set a password and then try to sign in.</string>
     <string name="send_email_instructions">Enter the email associated with your WeatherXM account and we will send you a password reset link.</string>
     <string name="signup_instructions">Signup with your email and your account will be created shortly.</string>
     <string name="next_7_days">Next 7 Days</string>
