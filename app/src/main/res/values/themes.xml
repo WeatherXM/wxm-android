@@ -196,8 +196,6 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">end</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Devices.List.TokensTitle" parent="TextAppearance.MaterialComponents.Body1">
@@ -219,8 +217,6 @@
         <item name="materialThemeOverlay">@style/ThemeOverlay.WeatherXM.Toolbar</item>
         <item name="titleTextAppearance">@style/TextAppearance.WeatherXM.Toolbar.Title</item>
         <item name="subtitleTextAppearance">@style/TextAppearance.WeatherXM.Toolbar.Subtitle</item>
-        <item name="android:paddingTop">@dimen/padding_normal</item>
-        <item name="android:paddingBottom">@dimen/padding_normal</item>
         <item name="contentInsetStart">@dimen/padding_normal</item>
         <item name="contentInsetStartWithNavigation">@dimen/padding_normal</item>
         <item name="contentInsetEnd">@dimen/padding_normal</item>
@@ -300,6 +296,12 @@
         <item name="android:textColor">@color/subtitle</item>
         <item name="android:textSize">12sp</item>
     </style>
+
+    <style name="TextAppearance.WeatherXM.Device.Details.Title" parent="@style/TextAppearance.WeatherXM.Toolbar.Title">
+        <item name="android:textColor">@color/colorPrimaryVariant</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Device.Details.Subtitle" parent="@style/TextAppearance.WeatherXM.Toolbar.Subtitle" />
 
     <style name="TextAppearance.WeatherXM.Device.Details.Time" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="android:textColor">@color/colorPrimary</item>

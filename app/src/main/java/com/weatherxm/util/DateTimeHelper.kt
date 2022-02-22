@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.format.DateFormat
 import android.text.format.DateUtils
 import com.weatherxm.R
+import java.time.Duration
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -75,16 +76,22 @@ fun getLast7Days(resHelper: ResourcesHelper): List<String> {
     return last7days
 }
 
-fun getRelativeTimeFromISO(timeInISO: String): String {
-    val zonedDateTime = ZonedDateTime.parse(timeInISO)
-    val now = ZonedDateTime.now(zonedDateTime.zone)
-    val oldTimeInMillis = zonedDateTime.toInstant().toEpochMilli()
-    val nowInMillis = now.toInstant().toEpochMilli()
+fun getRelativeTimeFromISO(
+    date: ZonedDateTime,
+    defaultIfTooSoon: String? = null
+): String {
+    val now = ZonedDateTime.now(date.zone)
+
+    // Too soon?
+    if (Duration.between(now, date).toMinutes() < 1 && defaultIfTooSoon != null) {
+        return defaultIfTooSoon
+    }
 
     return DateUtils.getRelativeTimeSpanString(
-        oldTimeInMillis,
-        nowInMillis,
-        DateUtils.MINUTE_IN_MILLIS
+        date.toInstant().toEpochMilli(),
+        now.toInstant().toEpochMilli(),
+        DateUtils.MINUTE_IN_MILLIS,
+        DateUtils.FORMAT_ABBREV_RELATIVE
     ).toString()
 }
 

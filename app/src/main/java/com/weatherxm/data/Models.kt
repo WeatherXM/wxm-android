@@ -6,6 +6,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.weatherxm.ui.TokenSummary
 import kotlinx.parcelize.Parcelize
+import java.time.ZonedDateTime
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -68,7 +69,7 @@ data class Device(
 @Parcelize
 data class Attributes(
     val isActive: Boolean?,
-    val lastActiveAt: String?,
+    val lastActiveAt: ZonedDateTime?,
     val hex3: Hex,
     val hex7: Hex,
 ) : Parcelable
