@@ -31,7 +31,7 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
         CoroutineScope(Dispatchers.IO).launch {
             userRepository.saveAddress(address)
                 .mapLeft {
-                    Timber.d("Got error: $it")
+                    Timber.w("Connecting wallet failed: $it")
                     when (it) {
                         is Failure.NetworkError -> isAddressSaved.postValue(
                             Resource.error(

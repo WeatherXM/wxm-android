@@ -42,7 +42,7 @@ class DevicesViewModel : ViewModel(), KoinComponent {
                     this@DevicesViewModel.devices.postValue(Resource.success(devices))
                 }
                 .mapLeft {
-                    Timber.d("Got error: $it")
+                    Timber.w("Getting user devices list failed: $it")
                     when (it) {
                         is Failure.NetworkError -> devices.postValue(
                             Resource.error(resHelper.getString(R.string.network_error))

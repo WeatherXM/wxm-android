@@ -23,6 +23,7 @@ class DeviceDetailViewModel : ViewModel(), KoinComponent {
 
     fun fetch(device: Device?) {
         if (device == null) {
+            Timber.w("Getting public device details failed: null")
             this@DeviceDetailViewModel.onDeviceDetailsUpdate.postValue(
                 Resource.error(resourcesHelper.getString(R.string.no_data_error_device_details))
             )

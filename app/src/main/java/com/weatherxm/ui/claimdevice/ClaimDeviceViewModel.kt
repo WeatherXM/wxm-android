@@ -101,7 +101,7 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
                         )
                     }
                     .mapLeft {
-                        Timber.d("Got error: $it")
+                        Timber.w("Claiming device failed: $it")
                         when (it) {
                             is Failure.NetworkError -> onClaimResult.postValue(
                                 Resource.error(resHelper.getString(R.string.network_error))

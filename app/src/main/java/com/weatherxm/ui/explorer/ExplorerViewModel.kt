@@ -65,7 +65,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
                     state.postValue(Resource.success(currentExplorerState))
                 }
                 .mapLeft {
-                    Timber.d("Got error: $it")
+                    Timber.w("Getting public devices on explorer failed: $it")
                     when (it) {
                         is Failure.NetworkError -> state.postValue(
                             Resource.error(resourcesHelper.getString(R.string.network_error))

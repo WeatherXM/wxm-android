@@ -95,7 +95,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     setDevice(it)
                 }
                 .mapLeft {
-                    Timber.d("Got error when fetching the user's device: $it")
+                    Timber.w("Fetching user's device with ID (${device.id}) failed: $it")
                     if (it == Failure.NetworkError) {
                         shouldRetry = true
                     }
@@ -109,7 +109,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     onTokens.postValue(it)
                 }
                 .mapLeft {
-                    Timber.d("Got error when fetching tokens: $it")
+                    Timber.w("Fetching tokens failed: $it")
                     if (it == Failure.NetworkError) {
                         shouldRetry = true
                     }
@@ -122,7 +122,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     onForecast.postValue(addCurrentToForecast(device.currentWeather, it))
                 }
                 .mapLeft {
-                    Timber.d("Got error when fetching weather forecast: $it")
+                    Timber.w("Fetching hourly forecast failed: $it")
                     if (it == Failure.NetworkError) {
                         shouldRetry = true
                     }
@@ -146,7 +146,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                             onForecast.postValue(addCurrentToForecast(device.currentWeather, it))
                         }
                         .mapLeft {
-                            Timber.d("Got error: $it")
+                            Timber.w("Fetching today hourly forecast failed: $it")
                             val uiError = UIError("", null)
                             when (it) {
                                 is Failure.NetworkError -> {
@@ -174,7 +174,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                             onForecast.postValue(addCurrentToForecast(device.currentWeather, it))
                         }
                         .mapLeft {
-                            Timber.d("Got error: $it")
+                            Timber.w("Fetching tomorrow hourly forecast failed: $it")
                             val uiError = UIError("", null)
                             when (it) {
                                 is Failure.NetworkError -> {
@@ -234,7 +234,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     setDevice(it)
                 }
                 .mapLeft {
-                    Timber.d("Got error: $it")
+                    Timber.w("Fetching user's device with ID (${device.id}) failed: $it")
                     val uiError = UIError("", null)
                     when (it) {
                         is Failure.NetworkError -> {
@@ -303,7 +303,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     }
 
     private fun handleTokenFailure(failure: Failure) {
-        Timber.d("Got error: $failure")
+        Timber.w("Fetching tokens failed: $failure")
         val uiError = UIError("", null)
         when (failure) {
             is Failure.NetworkError -> {

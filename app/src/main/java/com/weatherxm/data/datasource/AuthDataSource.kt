@@ -43,6 +43,10 @@ class AuthDataSourceImpl(
                 Either.Right(username)
             }
             is NetworkResponse.ServerError -> {
+                Timber.w(
+                    response.error,
+                    "Login failed with Server Error: ${response.body?.message}"
+                )
                 Either.Left(
                     Error(
                         response.body?.message ?: response.error.message,
@@ -51,9 +55,11 @@ class AuthDataSourceImpl(
                 )
             }
             is NetworkResponse.NetworkError -> {
+                Timber.w(response.error, "Login failed with Network Error.")
                 Either.Left(Error("Network Error", response.error))
             }
             is NetworkResponse.UnknownError -> {
+                Timber.w(response.error, "Login failed with Unknown Error.")
                 Either.Left(Error("Unknown Error", response.error))
             }
         }
@@ -71,6 +77,10 @@ class AuthDataSourceImpl(
                 Either.Right(username)
             }
             is NetworkResponse.ServerError -> {
+                Timber.w(
+                    response.error,
+                    "Signup failed with Server Error: ${response.body?.message}"
+                )
                 Either.Left(
                     Error(
                         response.body?.message ?: response.error.message,
@@ -79,9 +89,11 @@ class AuthDataSourceImpl(
                 )
             }
             is NetworkResponse.NetworkError -> {
+                Timber.w(response.error, "Signup failed with Network Error.")
                 Either.Left(Error("Network Error", response.error))
             }
             is NetworkResponse.UnknownError -> {
+                Timber.w(response.error, "Signup failed with Unknown Error.")
                 Either.Left(Error("Unknown Error", response.error))
             }
         }

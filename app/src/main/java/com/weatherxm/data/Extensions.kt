@@ -31,7 +31,7 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
                 Either.Right(this.body)
             }
             is NetworkResponse.ServerError -> {
-                Timber.d("Network response: ServerError: ", this.error)
+                Timber.d(this.error, "Network response: ServerError")
                 when (this.code) {
                     HTTP_UNAUTHORIZED -> Either.Left(ServerError.Unauthorized)
                     HTTP_FORBIDDEN -> Either.Left(ServerError.Forbidden)
@@ -46,11 +46,11 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
                 }
             }
             is NetworkResponse.NetworkError -> {
-                Timber.d("Network response: NetworkError: ", this.error)
+                Timber.d(this.error, "Network response: NetworkError")
                 Either.Left(Failure.NetworkError)
             }
             is NetworkResponse.UnknownError -> {
-                Timber.d("Network response: UnknownError: ", this.error)
+                Timber.d(this.error, "Network response: UnknownError")
                 Either.Left(Failure.UnknownError)
             }
         }

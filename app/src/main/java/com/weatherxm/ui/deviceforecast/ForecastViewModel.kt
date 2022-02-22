@@ -46,7 +46,7 @@ class ForecastViewModel : ViewModel(), KoinComponent {
                     onForecast.postValue(Resource.success(forecast))
                 }
                 .mapLeft {
-                    Timber.d("Got error: $it")
+                    Timber.w("Getting daily forecast failed: $it")
                     when (it) {
                         is Failure.NetworkError -> onForecast.postValue(
                             Resource.error(resHelper.getString(R.string.network_error))

@@ -110,7 +110,7 @@ object Weather : KoinComponent {
 
     fun convertTemp(value: Number?): Number? {
         if (value == null) {
-            Timber.w("Temperature value is null!")
+            Timber.d("Temperature value is null!")
             // Return null when value is null, so we catch it later on and show it as EMPTY
             return null
         }
@@ -129,7 +129,7 @@ object Weather : KoinComponent {
 
     fun convertPrecipitation(value: Number?): Number? {
         if (value == null) {
-            Timber.w("Precipitation value is null!")
+            Timber.d("Precipitation value is null!")
             // Return null when value is null, so we catch it later on and show it as EMPTY
             return null
         }
@@ -148,7 +148,7 @@ object Weather : KoinComponent {
 
     fun convertWindSpeed(value: Number?): Number? {
         if (value == null) {
-            Timber.w("Wind speed value is null!")
+            Timber.d("Wind speed value is null!")
             // Return null when value is null, so we catch it later on and show it as EMPTY
             return null
         }
@@ -178,7 +178,7 @@ object Weather : KoinComponent {
 
     fun convertPressure(value: Number?): Number? {
         if (value == null) {
-            Timber.w("Pressure value is null!")
+            Timber.d("Pressure value is null!")
             // Return null when value is null, so we catch it later on and show it as EMPTY
             return null
         }
