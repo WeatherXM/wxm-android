@@ -54,12 +54,11 @@
     <string name="success">Success</string>
     <string name="success_reset_password_title">Email has been sent!</string>
     <string name="success_reset_password_text">We have sent instructions for resetting your password to your email.</string>
-    <string name="success_signup_text">We have sent instructions for setting a password and completing registration to %s. Please set a password and then try to sign in.</string>
+    <string name="success_signup_text">Thanks for joining WeatherXM! We have sent you an account activation link to %s. Please, set a password and then try to sign in.</string>
     <string name="send_email_instructions">Enter the email associated with your WeatherXM account and we will send you a password reset link.</string>
     <string name="signup_instructions">Signup with your email and your account will be created shortly.</string>
     <string name="next_7_days">Next 7 Days</string>
     <string name="see_historical_charts">See Historical Charts</string>
-    <string name="forecast_empty">Forecast is empty. Please try again.</string>
     <string name="earnings">Earnings</string>
     <string name="wxm">WXM</string>
     <string name="button_24h">24H</string>
@@ -153,6 +152,7 @@
     <string name="precipitation_mm">mm</string>
     <string name="precipitation_in">in</string>
     <string name="wind_speed_kmh">km/h</string>
+    <string name="wind_speed_mph">mph</string>
     <string name="wind_speed_ms">m/s</string>
     <string name="wind_speed_knots">kn</string>
     <string name="wind_speed_beaufort">bf</string>
@@ -174,6 +174,7 @@
     </string-array>
     <string-array name="wind_speed_entries">
         <item>Kilometers per hour (km/h)</item>
+        <item>Miles per hour (mph)</item>
         <item>Meters per second (m/s)</item>
         <item>Knots (kn)</item>
         <item>Beaufort (bf)</item>
@@ -196,6 +197,7 @@
     </string-array>
     <string-array name="wind_speed_values">
         <item>@string/wind_speed_kmh</item>
+        <item>@string/wind_speed_mph</item>
         <item>@string/wind_speed_ms</item>
         <item>@string/wind_speed_knots</item>
         <item>@string/wind_speed_beaufort</item>
@@ -247,4 +249,5 @@
     <string name="oops_something_wrong">Oops! Something went wrong.</string>
     <string name="error_cannot_send_email">Oops! Could not send email!</string>
     <string name="error_cannot_open_url">Oops! Could not open %s</string>
+    <string name="forecast_empty">Oops! No forecast weather data could not be found.</string>
 </resources>

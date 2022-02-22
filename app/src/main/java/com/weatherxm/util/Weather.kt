@@ -171,6 +171,9 @@ object Weather : KoinComponent {
                 resHelper.getString(R.string.wind_speed_kmh) -> {
                     valueToReturn = UnitConverter.msToKmh(value.toFloat())
                 }
+                resHelper.getString(R.string.wind_speed_mph) -> {
+                    valueToReturn = UnitConverter.msToMph(value.toFloat())
+                }
             }
         }
         return valueToReturn

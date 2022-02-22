@@ -96,12 +96,20 @@ fun getRelativeTimeFromISO(
 }
 
 // TODO: Maybe inject this. Also check if multiple instances are being created each time
-fun getHourMinutesFromISO(context: Context, timeInISO: String): String {
+fun getHourMinutesFromISO(
+    context: Context,
+    timeInISO: String,
+    showMinutes12HourFormat: Boolean = true
+): String {
     val zonedDateTime = ZonedDateTime.parse(timeInISO)
     return if (DateFormat.is24HourFormat(context)) {
         zonedDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
     } else {
-        zonedDateTime.format(DateTimeFormatter.ofPattern("hh:mm a"))
+        if (showMinutes12HourFormat) {
+            zonedDateTime.format(DateTimeFormatter.ofPattern("h:mm a"))
+        } else {
+            zonedDateTime.format(DateTimeFormatter.ofPattern("h a"))
+        }
     }
 }
 
