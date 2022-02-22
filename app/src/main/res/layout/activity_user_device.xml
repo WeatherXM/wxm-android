@@ -16,37 +16,19 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/ic_close"
-            tools:subtitle="Athens, GR"
-            tools:title="ExMachina HQ">
+            android:layout_height="?actionBarSize"
+            app:layout_scrollFlags="scroll"
+            app:navigationIcon="@drawable/ic_close">
 
-            <LinearLayout
+            <com.google.android.material.chip.Chip
+                android:id="@+id/statusChip"
+                style="@style/Widget.WeatherXM.Status.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:orientation="vertical">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/statusChip"
-                    style="@style/Widget.WeatherXM.Status.Chip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    tools:chipBackgroundColor="@color/green"
-                    tools:ignore="TouchTargetSizeCheck"
-                    tools:text="Online" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/lastActive"
-                    style="@style/TextAppearance.WeatherXM.Device.Details.Active"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    tools:text="Last Active: 2h ago" />
-
-            </LinearLayout>
+                tools:chipBackgroundColor="@color/green"
+                tools:ignore="TouchTargetSizeCheck"
+                tools:text="Online" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
@@ -54,116 +36,147 @@
             android:id="@+id/progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll"
             android:visibility="invisible"
             tools:visibility="visible" />
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:clipToOutline="false"
-        android:clipToPadding="false"
-        android:fillViewport="true"
-        android:paddingBottom="@dimen/margin_large"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        tools:targetApi="s">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.WeatherXM.Device.Details.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_scrollFlags="scroll"
+            app:layout_constraintTop_toBottomOf="@id/statusChip"
+            tools:text="Weatherwise Wintergreen Stratocumulus" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/subtitle"
+            style="@style/TextAppearance.WeatherXM.Device.Details.Subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginHorizontal="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            app:layout_scrollFlags="scroll"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            tools:text="Athens, GR · Last active 39m ago" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clipChildren="false"
             android:clipToOutline="false"
             android:clipToPadding="false"
-            android:paddingHorizontal="@dimen/margin_normal">
+            android:fillViewport="true"
+            android:paddingBottom="@dimen/margin_large"
+            tools:targetApi="s">
 
-            <com.weatherxm.ui.widget.WeatherCardView
-                android:id="@+id/currentWeatherCard"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/date_tabs"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                app:layout_constraintEnd_toStartOf="@id/forecastNextDays"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/currentWeatherCard">
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/today" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tomorrow" />
-
-            </com.google.android.material.tabs.TabLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/forecastNextDays"
-                style="@style/Widget.WeatherXM.TextButton.Subtle.Arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/next_7_days"
-                app:layout_constraintBottom_toBottomOf="@id/date_tabs"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler"
-                android:layout_width="wrap_content"
-                android:layout_height="120dp"
-                android:layout_marginTop="@dimen/margin_normal"
                 android:clipChildren="false"
                 android:clipToOutline="false"
                 android:clipToPadding="false"
-                android:nestedScrollingEnabled="false"
-                android:orientation="horizontal"
-                android:overScrollMode="never"
-                android:scrollbars="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/forecastNextDays"
-                tools:listitem="@layout/list_item_hourly_weather" />
+                android:paddingHorizontal="@dimen/margin_normal">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/historicalCharts"
-                style="@style/Widget.WeatherXM.Button.Subtle.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/see_historical_charts"
-                app:layout_constraintTop_toBottomOf="@id/recycler" />
+                <com.weatherxm.ui.widget.WeatherCardView
+                    android:id="@+id/currentWeatherCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <com.weatherxm.ui.widget.TokenCardView
-                android:id="@+id/tokenCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                app:layout_constraintTop_toBottomOf="@id/historicalCharts" />
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/date_tabs"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    app:layout_constraintEnd_toStartOf="@id/forecastNextDays"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/currentWeatherCard">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tokenNotice"
-                style="@style/TextAppearance.WeatherXM.Device.Details.Active"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
-                android:padding="@dimen/padding_extra_small"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tokenCard"
-                app:layout_goneMarginTop="@dimen/margin_normal"
-                tools:text="@string/device_detail_token_notice" />
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/today" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tomorrow" />
 
-    </androidx.core.widget.NestedScrollView>
+                </com.google.android.material.tabs.TabLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/forecastNextDays"
+                    style="@style/Widget.WeatherXM.TextButton.Subtle.Arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/next_7_days"
+                    app:layout_constraintBottom_toBottomOf="@id/date_tabs"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler"
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:clipChildren="false"
+                    android:clipToOutline="false"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="horizontal"
+                    android:overScrollMode="never"
+                    android:scrollbars="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/forecastNextDays"
+                    tools:listitem="@layout/list_item_hourly_weather" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/historicalCharts"
+                    style="@style/Widget.WeatherXM.Button.Subtle.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/see_historical_charts"
+                    app:layout_constraintTop_toBottomOf="@id/recycler" />
+
+                <com.weatherxm.ui.widget.TokenCardView
+                    android:id="@+id/tokenCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    app:layout_constraintTop_toBottomOf="@id/historicalCharts" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/tokenNotice"
+                    style="@style/TextAppearance.WeatherXM.Device.Details.Active"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:padding="@dimen/padding_extra_small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tokenCard"
+                    app:layout_goneMarginTop="@dimen/margin_normal"
+                    tools:text="@string/device_detail_token_notice" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

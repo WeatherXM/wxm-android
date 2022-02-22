@@ -65,7 +65,8 @@
     <string name="button_24h">24H</string>
     <string name="button_7d">7D</string>
     <string name="button_30d">30D</string>
-    <string name="last_active">Last active %s</string>
+    <string name="last_active">Last seen %s</string>
+    <string name="last_active_just_now">just now</string>
     <string name="title_share_wallet">Share WXM wallet address</string>
     <string name="action_logout">Logout</string>
     <string name="action_retry">Retry</string>
@@ -239,6 +240,8 @@
     <string name="user_info_error">Failed to get your data. Please try again.</string>
     <string name="address_save_network_error">Failed to save your address. Network Error.</string>
     <string name="address_save_server_error">Failed to save your address. Server Error.</string>
+    <string name="device_data_failed">Getting data for this device failed.</string>
+    <string name="device_current_weather_failed">Getting the current weather for this device failed.</string>
     <string name="forecast_failed">Getting weather forecast data failed.</string>
     <string name="token_failed">Getting token data failed.</string>
     <string name="oops_something_wrong">Oops! Something went wrong.</string>

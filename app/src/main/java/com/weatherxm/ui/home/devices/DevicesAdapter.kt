@@ -47,8 +47,14 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             binding.temperature.text =
                 Weather.getFormattedTemperature(item.currentWeather?.temperature)
 
-            item.currentWeather?.timestamp?.let {
-                binding.lastSeen.text = getRelativeTimeFromISO(it)
+            device.attributes?.lastActiveAt?.let {
+                binding.lastSeen.text = itemView.resources.getString(
+                    R.string.last_active,
+                    getRelativeTimeFromISO(
+                        it,
+                        itemView.resources.getString(R.string.last_active_just_now)
+                    )
+                )
             }
 
             when {
