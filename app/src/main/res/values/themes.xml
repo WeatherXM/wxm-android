@@ -397,19 +397,26 @@
     <style name="TextAppearance.WeatherXM.Forecast.Day" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/colorPrimaryVariant</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">16sp</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:lines">1</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMaxTextSize">16sp</item>
+        <item name="autoSizeMinTextSize">8sp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Forecast.Date" parent="TextAppearance.MaterialComponents.Body1">
         <!--<item name="android:textColor">@color/colorPrimary</item>-->
-        <item name="android:textSize">12sp</item>
+        <item name="android:lines">1</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMaxTextSize">12sp</item>
+        <item name="autoSizeMinTextSize">8sp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Forecast.Temperature.Min" parent="TextAppearance.Material3.BodySmall">
         <item name="android:textColor">@color/grey</item>
         <item name="autoSizeTextType">uniform</item>
         <item name="android:lines">1</item>
+        <item name="autoSizeMinTextSize">8sp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Forecast.Temperature.Max" parent="TextAppearance.Material3.BodyMedium">
@@ -417,6 +424,7 @@
         <item name="android:textStyle">bold</item>
         <item name="autoSizeTextType">uniform</item>
         <item name="android:lines">1</item>
+        <item name="autoSizeMinTextSize">8sp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Forecast.Precipitation" parent="TextAppearance.Material3.BodyMedium">
@@ -426,6 +434,7 @@
         <item name="android:textColor">@color/daily_forecast_precipitation_probability</item>
         <item name="android:textStyle">bold</item>
         <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">8sp</item>
         <item name="android:lines">1</item>
     </style>
 
