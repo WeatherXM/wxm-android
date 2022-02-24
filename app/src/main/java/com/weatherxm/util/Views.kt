@@ -155,11 +155,19 @@ fun LineChart.initializeDefault24hChart(chartData: LineChartData, yMinValue: Flo
     // If max - min < 2 that means that the values are probably too close together.
     // Which causes a bug not showing labels on Y axis because granularity is set 1.
     // So this is a custom fix to change that granularity and show decimals at the Y labels
-    if (dataSet.yMax - dataSet.yMin < 2) {
+    if (dataSet.yMax - dataSet.yMin < 2 && chartData.showDecimals) {
         axisLeft.granularity = DEFAULT_GRANULARITY_Y_AXIS
-        axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit, true, 1)
+        axisLeft.valueFormatter = CustomYAxisFormatter(
+            chartData.unit,
+            showDecimals = true,
+            decimals = 1
+        )
     } else {
-        axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit, false, 0)
+        axisLeft.valueFormatter = CustomYAxisFormatter(
+            chartData.unit,
+            showDecimals = false,
+            decimals = 0
+        )
     }
     yMinValue?.let { axisLeft.axisMinimum = it }
 
@@ -267,7 +275,11 @@ fun LineChart.initializeWind24hChart(
     // Y Axis settings
     axisLeft.axisMinimum = dataSetWindSpeed.yMin
     axisLeft.valueFormatter =
-        CustomYAxisFormatter(windSpeedData.unit, windSpeedData.showDecimals, 0)
+        CustomYAxisFormatter(
+            windSpeedData.unit,
+            windSpeedData.showDecimals,
+            0
+        )
 
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(windGustData.timestamps)
@@ -305,7 +317,8 @@ fun BarChart.initializeDefault24hChart(data: BarChartData) {
     axisLeft.axisMinimum = 0F
     axisLeft.isGranularityEnabled = true
     axisLeft.granularity = 1F
-    axisLeft.valueFormatter = CustomYAxisFormatter(data.unit, false, 0)
+    axisLeft.valueFormatter =
+        CustomYAxisFormatter(data.unit, showDecimals = false, decimals = 0)
     axisRight.isEnabled = false
     isScaleYEnabled = false
 

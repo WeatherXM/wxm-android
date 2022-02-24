@@ -40,7 +40,9 @@ class CustomDefaultMarkerView(
             isPrecipitation -> {
                 // Get the correct precipitation intensity formatted with the correct decimals
                 val precipitationIntensity = Weather.getFormattedValueOrEmpty(
-                    entryClicked.y, valueUnit, Weather.getDecimalsPrecipitation()
+                    entryClicked.y,
+                    valueUnit,
+                    Weather.getDecimalsPrecipitation()
                 )
 
                 // Customize the text for the marker view
@@ -52,10 +54,10 @@ class CustomDefaultMarkerView(
                     to have '.' for decimal separator instead of ','
                 */
                 val value = "%.1f".format(Locale.US, entryClicked.y)
-                "$valueName: $value $valueUnit"
+                "$valueName: $value$valueUnit"
             }
             else -> {
-                "$valueName: ${entryClicked.y.roundToInt()} $valueUnit"
+                "$valueName: ${entryClicked.y.roundToInt()}$valueUnit"
             }
         }
         // this will perform necessary layouting
@@ -162,17 +164,19 @@ class CustomXAxisFormatter(private val times: MutableList<String>?) : ValueForma
 }
 
 class CustomYAxisFormatter(
-    private val weatherUnit: String, private val showDecimals: Boolean, private val decimals: Int?
+    private val weatherUnit: String,
+    private val showDecimals: Boolean,
+    private val decimals: Int?
 ) : ValueFormatter() {
     override fun getAxisLabel(value: Float, axis: AxisBase?): String {
         return if (showDecimals) {
             if (decimals == null) {
-                "$value $weatherUnit"
+                "$value$weatherUnit"
             } else {
-                "%.${decimals}f $weatherUnit".format(value)
+                "%.${decimals}f$weatherUnit".format(value)
             }
         } else {
-            "${value.roundToInt()} $weatherUnit"
+            "${value.roundToInt()}$weatherUnit"
         }
     }
 }

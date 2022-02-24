@@ -60,9 +60,9 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_temperature_preference),
                 resHelper.getString(R.string.temperature_celsius)
             ),
-            true,
-            time,
-            entries
+            showDecimals = true,
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -77,9 +77,9 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_precipitation_preference),
                 resHelper.getString(R.string.precipitation_mm)
             ),
-            true,
-            time,
-            entries
+            showDecimals = true,
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -94,9 +94,8 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_wind_speed_preference),
                 resHelper.getString(R.string.wind_speed_ms)
             ),
-            false,
-            time,
-            entries
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -111,9 +110,8 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_wind_speed_preference),
                 resHelper.getString(R.string.wind_speed_ms)
             ),
-            false,
-            time,
-            entries
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -128,9 +126,8 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_wind_direction_preference),
                 resHelper.getString(R.string.wind_direction_cardinal)
             ),
-            false,
-            time,
-            entries
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -142,9 +139,8 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
             resHelper.getString(R.string.humidity),
             R.color.humidity,
             resHelper.getString(R.string.percent),
-            false,
-            time,
-            entries
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -156,9 +152,8 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
             resHelper.getString(R.string.cloud_cover),
             R.color.cloudCover,
             resHelper.getString(R.string.percent),
-            false,
-            time,
-            entries
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -173,9 +168,9 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_pressure_preference),
                 resHelper.getString(R.string.pressure_hpa)
             ),
-            true,
-            time,
-            entries
+            showDecimals = true,
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -187,9 +182,8 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
             resHelper.getString(R.string.uv_index),
             R.color.uvIndex,
             resHelper.getString(R.string.uv_index_unit),
-            false,
-            time,
-            entries
+            timestamps = time,
+            entries = entries
         )
     }
 

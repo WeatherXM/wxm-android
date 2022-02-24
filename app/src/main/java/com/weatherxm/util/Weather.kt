@@ -50,20 +50,25 @@ object Weather : KoinComponent {
         getDecimalsPrecipitation()
     )
 
-    fun getFormattedPrecipitationProbability(value: Int?) = getFormattedValueOrEmpty(value, "%")
+    fun getFormattedPrecipitationProbability(value: Int?) =
+        getFormattedValueOrEmpty(value, "%")
 
-    fun getFormattedHumidity(value: Int?) = getFormattedValueOrEmpty(value, "%")
+    fun getFormattedHumidity(value: Int?) =
+        getFormattedValueOrEmpty(value, "%")
 
     fun getFormattedPressure(value: Float?) = getFormattedValueOrEmpty(
         convertPressure(value), getPreferredUnit(
             resHelper.getString(R.string.key_pressure_preference),
             resHelper.getString(R.string.pressure_hpa)
-        ), 1
+        ),
+        decimals = 1
     )
 
-    fun getFormattedCloud(value: Int?) = getFormattedValueOrEmpty(value, "%")
+    fun getFormattedCloud(value: Int?) =
+        getFormattedValueOrEmpty(value, "%")
 
-    fun getFormattedUV(value: Int?) = getFormattedValueOrEmpty(value, "UV")
+    fun getFormattedUV(value: Int?) =
+        getFormattedValueOrEmpty(value, resHelper.getString(R.string.uv_index_unit))
 
     private fun getFormattedWindSpeed(value: Float?) = getFormattedValueOrEmpty(
         convertWindSpeed(value),
@@ -81,7 +86,7 @@ object Weather : KoinComponent {
 
         if (!savedPreferenceUnit.isNullOrEmpty() && savedPreferenceUnit != windPreferenceDefValue) {
             val windDegreesMark = resHelper.getString(R.string.wind_direction_degrees_mark)
-            return "$value $windDegreesMark"
+            return "$value$windDegreesMark"
         }
 
         return UnitConverter.degreesToCardinal(value)
@@ -95,16 +100,17 @@ object Weather : KoinComponent {
 
     fun getFormattedValueOrEmpty(
         value: Number?,
-        units: String,
+        unit: String,
         decimals: Int? = null
     ): String {
         if (value == null) {
             return EMPTY_VALUE
         }
+
         return if (decimals == null) {
-            "$value$units"
+            "$value$unit"
         } else {
-            "%.${decimals}f$units".format(value)
+            "%.${decimals}f$unit".format(value)
         }
     }
 

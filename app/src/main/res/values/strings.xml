@@ -149,20 +149,20 @@
     <string name="cloud_cover">Cloud Cover</string>
     <string name="temperature_celsius">°C</string>
     <string name="temperature_fahrenheit">°F</string>
-    <string name="precipitation_mm">mm</string>
-    <string name="precipitation_in">in</string>
-    <string name="wind_speed_kmh">km/h</string>
-    <string name="wind_speed_mph">mph</string>
-    <string name="wind_speed_ms">m/s</string>
-    <string name="wind_speed_knots">kn</string>
-    <string name="wind_speed_beaufort">bf</string>
+    <string name="precipitation_mm">&#160;mm</string>
+    <string name="precipitation_in">&#160;in</string>
+    <string name="wind_speed_kmh">&#160;km/h</string>
+    <string name="wind_speed_mph">&#160;mph</string>
+    <string name="wind_speed_ms">&#160;m/s</string>
+    <string name="wind_speed_knots">&#160;kn</string>
+    <string name="wind_speed_beaufort">&#160;bf</string>
     <string name="wind_direction_cardinal">Cardinal</string>
     <string name="wind_direction_degrees">Degrees</string>
     <string name="wind_direction_degrees_mark">°</string>
-    <string name="pressure_hpa">hPa</string>
-    <string name="pressure_inHg">inHg</string>
+    <string name="pressure_hpa">&#160;hPa</string>
+    <string name="pressure_inHg">&#160;inHg</string>
     <string name="percent" translatable="false">%</string>
-    <string name="uv_index_unit" translatable="false">UV</string>
+    <string name="uv_index_unit" translatable="false">&#160;UV</string>
 
     <string-array name="temperature_entries">
         <item>Celsius (°C)</item>
