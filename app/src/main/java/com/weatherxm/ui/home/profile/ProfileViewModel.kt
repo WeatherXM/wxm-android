@@ -37,7 +37,7 @@ class ProfileViewModel : ViewModel(), KoinComponent {
                     this@ProfileViewModel.user.postValue(Resource.success(user))
                 }
                 .mapLeft {
-                    Timber.d("Got error: $it")
+                    Timber.w("Getting user profile info failed: $it")
                     user.postValue(
                         Resource.error(resourcesHelper.getString(R.string.user_info_error))
                     )
@@ -53,6 +53,7 @@ class ProfileViewModel : ViewModel(), KoinComponent {
                     hasWallet.postValue(!user.wallet?.address.isNullOrEmpty())
                 }
                 .mapLeft {
+                    Timber.w("Getting user profile info failed: $it")
                     // TODO: how to handle this? ideas?
                 }
         }

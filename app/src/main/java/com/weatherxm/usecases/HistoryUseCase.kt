@@ -60,9 +60,9 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_temperature_preference),
                 resHelper.getString(R.string.temperature_celsius)
             ),
-            true,
-            time,
-            entries
+            showDecimals = true,
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -77,9 +77,9 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_precipitation_preference),
                 resHelper.getString(R.string.precipitation_mm)
             ),
-            true,
-            time,
-            entries
+            showDecimals = true,
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -94,9 +94,8 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_wind_speed_preference),
                 resHelper.getString(R.string.wind_speed_ms)
             ),
-            false,
-            time,
-            entries
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -111,9 +110,8 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_wind_speed_preference),
                 resHelper.getString(R.string.wind_speed_ms)
             ),
-            false,
-            time,
-            entries
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -128,9 +126,8 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_wind_direction_preference),
                 resHelper.getString(R.string.wind_direction_cardinal)
             ),
-            false,
-            time,
-            entries
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -142,9 +139,8 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
             resHelper.getString(R.string.humidity),
             R.color.humidity,
             resHelper.getString(R.string.percent),
-            false,
-            time,
-            entries
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -156,9 +152,8 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
             resHelper.getString(R.string.cloud_cover),
             R.color.cloudCover,
             resHelper.getString(R.string.percent),
-            false,
-            time,
-            entries
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -173,9 +168,9 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_pressure_preference),
                 resHelper.getString(R.string.pressure_hpa)
             ),
-            true,
-            time,
-            entries
+            showDecimals = true,
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -187,9 +182,8 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
             resHelper.getString(R.string.uv_index),
             R.color.uvIndex,
             resHelper.getString(R.string.uv_index_unit),
-            false,
-            time,
-            entries
+            timestamps = time,
+            entries = entries
         )
     }
 
@@ -203,7 +197,6 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
 
         val temperatureEntries = mutableListOf<Entry>()
         val precipEntries = mutableListOf<Entry>()
-        val precipProbabilityEntries = mutableListOf<Entry>()
         val windSpeedEntries = mutableListOf<Entry>()
         val windGustEntries = mutableListOf<Entry>()
         val windDirectionEntries = mutableListOf<Entry>()
@@ -216,7 +209,9 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
         weatherData.hourly?.forEach { hourlyWeather ->
 
             hourlyWeather.timestamp.let { timestampNonNull ->
-                time.add(getHourMinutesFromISO(context, timestampNonNull))
+                // Set showMinutes12Format as false
+                // on hourly data they don't matter and they cause UI issues
+                time.add(getHourMinutesFromISO(context, timestampNonNull, false))
 
                 hourlyWeather.temperature?.let {
                     temperatureEntries.add(Entry(counter, Weather.convertTemp(it) as Float))
@@ -224,10 +219,6 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
 
                 hourlyWeather.precipitation?.let {
                     precipEntries.add(Entry(counter, Weather.convertPrecipitation(it) as Float))
-                }
-
-                hourlyWeather.precipProbability?.let {
-                    precipProbabilityEntries.add(Entry(counter, it.toFloat()))
                 }
 
                 // Get the wind speed and direction formatted

@@ -16,6 +16,7 @@ import org.koin.core.component.inject
 
 interface UserDeviceUseCase {
     suspend fun getUserDevices(): Either<Failure, List<Device>>
+    suspend fun getUserDevice(deviceId: String): Either<Failure, Device>
     suspend fun getTodayForecast(device: Device): Either<Failure, List<HourlyWeather>>
     suspend fun getTomorrowForecast(device: Device): Either<Failure, List<HourlyWeather>>
     suspend fun getTokensSummary24H(deviceId: String): Either<Failure, TokenSummary>
@@ -30,6 +31,10 @@ class UserDeviceUseCaseImpl : UserDeviceUseCase, KoinComponent {
 
     override suspend fun getUserDevices(): Either<Failure, List<Device>> {
         return deviceRepository.getUserDevices()
+    }
+
+    override suspend fun getUserDevice(deviceId: String): Either<Failure, Device> {
+        return deviceRepository.getUserDevice(deviceId)
     }
 
     override suspend fun getTokensSummary24H(deviceId: String): Either<Failure, TokenSummary> {

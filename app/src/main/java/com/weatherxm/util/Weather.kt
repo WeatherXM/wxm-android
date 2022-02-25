@@ -50,20 +50,25 @@ object Weather : KoinComponent {
         getDecimalsPrecipitation()
     )
 
-    fun getFormattedPrecipitationProbability(value: Int?) = getFormattedValueOrEmpty(value, "%")
+    fun getFormattedPrecipitationProbability(value: Int?) =
+        getFormattedValueOrEmpty(value, "%")
 
-    fun getFormattedHumidity(value: Int?) = getFormattedValueOrEmpty(value, "%")
+    fun getFormattedHumidity(value: Int?) =
+        getFormattedValueOrEmpty(value, "%")
 
     fun getFormattedPressure(value: Float?) = getFormattedValueOrEmpty(
         convertPressure(value), getPreferredUnit(
             resHelper.getString(R.string.key_pressure_preference),
             resHelper.getString(R.string.pressure_hpa)
-        ), 1
+        ),
+        decimals = 1
     )
 
-    fun getFormattedCloud(value: Int?) = getFormattedValueOrEmpty(value, "%")
+    fun getFormattedCloud(value: Int?) =
+        getFormattedValueOrEmpty(value, "%")
 
-    fun getFormattedUV(value: Int?) = getFormattedValueOrEmpty(value, "UV")
+    fun getFormattedUV(value: Int?) =
+        getFormattedValueOrEmpty(value, resHelper.getString(R.string.uv_index_unit))
 
     private fun getFormattedWindSpeed(value: Float?) = getFormattedValueOrEmpty(
         convertWindSpeed(value),
@@ -81,7 +86,7 @@ object Weather : KoinComponent {
 
         if (!savedPreferenceUnit.isNullOrEmpty() && savedPreferenceUnit != windPreferenceDefValue) {
             val windDegreesMark = resHelper.getString(R.string.wind_direction_degrees_mark)
-            return "$value $windDegreesMark"
+            return "$value$windDegreesMark"
         }
 
         return UnitConverter.degreesToCardinal(value)
@@ -95,22 +100,23 @@ object Weather : KoinComponent {
 
     fun getFormattedValueOrEmpty(
         value: Number?,
-        units: String,
+        unit: String,
         decimals: Int? = null
     ): String {
         if (value == null) {
             return EMPTY_VALUE
         }
+
         return if (decimals == null) {
-            "$value$units"
+            "$value$unit"
         } else {
-            "%.${decimals}f$units".format(value)
+            "%.${decimals}f$unit".format(value)
         }
     }
 
     fun convertTemp(value: Number?): Number? {
         if (value == null) {
-            Timber.w("Temperature value is null!")
+            Timber.d("Temperature value is null!")
             // Return null when value is null, so we catch it later on and show it as EMPTY
             return null
         }
@@ -129,7 +135,7 @@ object Weather : KoinComponent {
 
     fun convertPrecipitation(value: Number?): Number? {
         if (value == null) {
-            Timber.w("Precipitation value is null!")
+            Timber.d("Precipitation value is null!")
             // Return null when value is null, so we catch it later on and show it as EMPTY
             return null
         }
@@ -148,7 +154,7 @@ object Weather : KoinComponent {
 
     fun convertWindSpeed(value: Number?): Number? {
         if (value == null) {
-            Timber.w("Wind speed value is null!")
+            Timber.d("Wind speed value is null!")
             // Return null when value is null, so we catch it later on and show it as EMPTY
             return null
         }
@@ -171,6 +177,9 @@ object Weather : KoinComponent {
                 resHelper.getString(R.string.wind_speed_kmh) -> {
                     valueToReturn = UnitConverter.msToKmh(value.toFloat())
                 }
+                resHelper.getString(R.string.wind_speed_mph) -> {
+                    valueToReturn = UnitConverter.msToMph(value.toFloat())
+                }
             }
         }
         return valueToReturn
@@ -178,7 +187,7 @@ object Weather : KoinComponent {
 
     fun convertPressure(value: Number?): Number? {
         if (value == null) {
-            Timber.w("Pressure value is null!")
+            Timber.d("Pressure value is null!")
             // Return null when value is null, so we catch it later on and show it as EMPTY
             return null
         }

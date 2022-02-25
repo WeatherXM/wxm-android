@@ -28,7 +28,7 @@ class ResetPasswordViewModel : ViewModel(), KoinComponent {
         CoroutineScope(Dispatchers.IO).launch {
             repository.resetPassword(email)
                 .mapLeft {
-                    Timber.d("Got error: $it")
+                    Timber.w("Reset password failed: $it")
                     when (it) {
                         is Failure.NetworkError -> isEmailSent.postValue(
                             Resource.error(resHelper.getString(R.string.network_error))

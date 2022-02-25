@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
+import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
 import com.weatherxm.data.datasource.AuthDataSource
 import com.weatherxm.data.datasource.AuthDataSourceImpl
 import com.weatherxm.data.datasource.AuthTokenDataSource
@@ -38,7 +39,7 @@ import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.data.repository.WeatherRepository
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.explorer.DeviceWithResolutionJsonAdapter
+import com.weatherxm.ui.explorer.HexWithResolutionJsonAdapter
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.AuthUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase
@@ -63,6 +64,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 
 const val RETROFIT_API = "RETROFIT_API"
@@ -195,7 +197,7 @@ private val network = module {
     }
 
     single<MoshiConverterFactory> {
-        MoshiConverterFactory.create(Moshi.Builder().build()).asLenient()
+        MoshiConverterFactory.create(get()).asLenient()
     }
 
     single<Retrofit>(named(RETROFIT_AUTH)) {
@@ -264,7 +266,9 @@ val resourcesHelper = module {
 
 private val utilities = module {
     single<Moshi> {
-        Moshi.Builder().build()
+        Moshi.Builder()
+            .add(ZonedDateTime::class.java, ZonedDateTimeJsonAdapter())
+            .build()
     }
 
     single<Gson> {
@@ -274,8 +278,8 @@ private val utilities = module {
             .create()
     }
 
-    single<DeviceWithResolutionJsonAdapter> {
-        DeviceWithResolutionJsonAdapter(get())
+    single<HexWithResolutionJsonAdapter> {
+        HexWithResolutionJsonAdapter(get())
     }
 
     single<AuthTokenJsonAdapter> {

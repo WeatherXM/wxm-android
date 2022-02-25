@@ -58,7 +58,7 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
                     onCharts.postValue(Resource.success(posToData.get(historyCharts.size - 1)))
                 }
                 .mapLeft {
-                    Timber.d("Got error: $it")
+                    Timber.w("Getting history failed: $it")
                     when (it) {
                         is Failure.NetworkError -> onCharts.postValue(
                             Resource.error(resHelper.getString(R.string.network_error))

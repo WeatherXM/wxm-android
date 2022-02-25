@@ -80,6 +80,10 @@
         <item name="bottomSheetStyle">@style/Widget.WeatherXM.BottomSheet.Dialog</item>
     </style>
 
+    <style name="ThemeOverlay.WeatherXM.BottomSheetDialog.Explorer.Devices" parent="ThemeOverlay.WeatherXM.BottomSheetDialog">
+        <item name="colorSurface">@color/white_blue</item>
+    </style>
+
     <style name="ThemeOverlay.WeatherXM.Toolbar" parent="ThemeOverlay.Material3.Toolbar.Surface">
         <!--<item name="colorPrimary">@color/white</item>-->
         <item name="colorSurface">@color/transparent</item>
@@ -137,23 +141,15 @@
     </style>
 
     <style name="Widget.WeatherXM.BottomSheet.Dialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
-        <item name="shapeAppearance">@style/ShapeAppearance.WeatherXM.LargeComponent</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.WeatherXM.BottomSheet.Dialog</item>
     </style>
 
-    <style name="ShapeAppearance.WeatherXM.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+    <style name="ShapeAppearance.WeatherXM.BottomSheet.Dialog" parent="ShapeAppearance.MaterialComponents.LargeComponent">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">24dp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Dialog.Title" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
-        <item name="android:textColor">?colorOnSecondary</item>
-        <item name="android:textSize">20sp</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Dialog.Subtitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textColor">@color/lastActiveColor</item>
-        <item name="fontFamily">sans-serif-medium</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Title.Headline_4" parent="TextAppearance.MaterialComponents.Headline4">
@@ -196,8 +192,6 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">end</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Devices.List.TokensTitle" parent="TextAppearance.MaterialComponents.Body1">
@@ -219,8 +213,6 @@
         <item name="materialThemeOverlay">@style/ThemeOverlay.WeatherXM.Toolbar</item>
         <item name="titleTextAppearance">@style/TextAppearance.WeatherXM.Toolbar.Title</item>
         <item name="subtitleTextAppearance">@style/TextAppearance.WeatherXM.Toolbar.Subtitle</item>
-        <item name="android:paddingTop">@dimen/padding_normal</item>
-        <item name="android:paddingBottom">@dimen/padding_normal</item>
         <item name="contentInsetStart">@dimen/padding_normal</item>
         <item name="contentInsetStartWithNavigation">@dimen/padding_normal</item>
         <item name="contentInsetEnd">@dimen/padding_normal</item>
@@ -258,6 +250,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">12sp</item>
         <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="android:clickable">false</item>
     </style>
 
     <style name="Widget.WeatherXM.Token.Chip" parent="Widget.MaterialComponents.Chip.Choice">
@@ -299,6 +292,14 @@
     <style name="TextAppearance.WeatherXM.WeatherCard.Data.Subtitle" parent="TextAppearance.WeatherXM.WeatherCard">
         <item name="android:textColor">@color/subtitle</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Device.Details.Title" parent="@style/TextAppearance.WeatherXM.Toolbar.Title">
+        <item name="android:textColor">@color/colorPrimaryVariant</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Device.Details.Subtitle" parent="@style/TextAppearance.WeatherXM.Toolbar.Subtitle">
+        <item name="android:textColor">@color/colorOnSecondary</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Device.Details.Time" parent="TextAppearance.MaterialComponents.Headline6">
@@ -397,19 +398,26 @@
     <style name="TextAppearance.WeatherXM.Forecast.Day" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/colorPrimaryVariant</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">16sp</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:lines">1</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMaxTextSize">16sp</item>
+        <item name="autoSizeMinTextSize">8sp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Forecast.Date" parent="TextAppearance.MaterialComponents.Body1">
         <!--<item name="android:textColor">@color/colorPrimary</item>-->
-        <item name="android:textSize">12sp</item>
+        <item name="android:lines">1</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMaxTextSize">12sp</item>
+        <item name="autoSizeMinTextSize">8sp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Forecast.Temperature.Min" parent="TextAppearance.Material3.BodySmall">
         <item name="android:textColor">@color/grey</item>
         <item name="autoSizeTextType">uniform</item>
         <item name="android:lines">1</item>
+        <item name="autoSizeMinTextSize">8sp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Forecast.Temperature.Max" parent="TextAppearance.Material3.BodyMedium">
@@ -417,6 +425,7 @@
         <item name="android:textStyle">bold</item>
         <item name="autoSizeTextType">uniform</item>
         <item name="android:lines">1</item>
+        <item name="autoSizeMinTextSize">8sp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Forecast.Precipitation" parent="TextAppearance.Material3.BodyMedium">
@@ -426,6 +435,7 @@
         <item name="android:textColor">@color/daily_forecast_precipitation_probability</item>
         <item name="android:textStyle">bold</item>
         <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">8sp</item>
         <item name="android:lines">1</item>
     </style>
 

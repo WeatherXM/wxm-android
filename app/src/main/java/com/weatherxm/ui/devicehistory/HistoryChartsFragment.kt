@@ -180,9 +180,8 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
         precipIntensityData: LineChartData
     ) {
         if (model.isDataValid(precipIntensityData)) {
-            // precipProbabilityData = null because we don't have that data on History charts
             binding.chartPrecipitation.getChart()
-                .initializePrecipitation24hChart(precipIntensityData, null)
+                .initializePrecipitation24hChart(precipIntensityData)
         } else {
             showNoDataText(binding.chartPrecipitation.getChart())
         }

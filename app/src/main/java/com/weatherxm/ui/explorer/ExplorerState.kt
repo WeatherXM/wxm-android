@@ -16,8 +16,10 @@ data class ExplorerState(
 
 @Keep
 @JsonClass(generateAdapter = true)
-data class DeviceWithResolution(
-    var device: Device,
+data class HexWithResolution(
+    var index: String,
+    var lat: Double,
+    var lon: Double,
     @Json(name = "current_resolution")
     var currentResolution: Int
 )

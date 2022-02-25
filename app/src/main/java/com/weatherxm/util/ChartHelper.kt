@@ -3,7 +3,6 @@ package com.weatherxm.util
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
-import android.view.View
 import android.widget.TextView
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.MarkerView
@@ -20,7 +19,8 @@ class CustomDefaultMarkerView(
     private val times: MutableList<String>?,
     private val valueName: String,
     private val valueUnit: String,
-    private val showDecimals: Boolean
+    private val showDecimals: Boolean,
+    private val isPrecipitation: Boolean = false
 ) : MarkerView(context, R.layout.view_default_chart_marker) {
     private var timeView: TextView = findViewById(R.id.time)
     private var valueView: TextView = findViewById(R.id.value)
@@ -36,15 +36,29 @@ class CustomDefaultMarkerView(
         timeView.text = times?.get(entryClicked.x.toInt()) ?: ""
 
         // Customize the text for the marker view
-        valueView.text = if (showDecimals) {
-            /*
-                Format to show only one decimal point, we use Locale.US
-                to have '.' for decimal separator instead of ','
-            */
-            val value = "%.1f".format(Locale.US, entryClicked.y)
-            "$valueName: $value $valueUnit"
-        } else {
-            "$valueName: ${entryClicked.y.roundToInt()} $valueUnit"
+        valueView.text = when {
+            isPrecipitation -> {
+                // Get the correct precipitation intensity formatted with the correct decimals
+                val precipitationIntensity = Weather.getFormattedValueOrEmpty(
+                    entryClicked.y,
+                    valueUnit,
+                    Weather.getDecimalsPrecipitation()
+                )
+
+                // Customize the text for the marker view
+                "$valueName: $precipitationIntensity"
+            }
+            showDecimals -> {
+                /*
+                    Format to show only one decimal point, we use Locale.US
+                    to have '.' for decimal separator instead of ','
+                */
+                val value = "%.1f".format(Locale.US, entryClicked.y)
+                "$valueName: $value$valueUnit"
+            }
+            else -> {
+                "$valueName: ${entryClicked.y.roundToInt()}$valueUnit"
+            }
         }
         // this will perform necessary layouting
         super.refreshContent(entryClicked, highlight)
@@ -66,67 +80,6 @@ class CustomDefaultMarkerView(
         }
 
         // Add 10 to posy so that the marker view isn't over the point selected but a bit lower
-        canvas.translate(newPosX, newPosY)
-        draw(canvas)
-    }
-}
-
-// Custom implementation of https://weeklycoding.com/mpandroidchart-documentation/markerview/
-class CustomPrecipitationMarkerView(
-    context: Context,
-    private val times: MutableList<String>?,
-    private val probabilities: MutableList<Entry>?,
-    private val precipitationTitle: String,
-    private val precipitationProbabilityTitle: String?,
-    private val precipitationUnit: String
-) : MarkerView(context, R.layout.view_two_values_chart_marker) {
-    private var timeView: TextView = findViewById(R.id.time)
-    private var valueView: TextView = findViewById(R.id.value)
-    private var secondValueView: TextView = findViewById(R.id.secondValue)
-
-    // callbacks everytime the MarkerView is redrawn, can be used to update the
-    // content (user-interface)
-    @SuppressLint("SetTextI18n")
-    override fun refreshContent(entryClicked: Entry, highlight: Highlight?) {
-        /*
-            We find the relevant timestamp and precipitation probability by
-            using the same index as the wind speed to get the value in the relevant list
-         */
-        timeView.text = times?.get(entryClicked.x.toInt()) ?: ""
-
-        // Get the correct precipitation intensity formatted with the correct decimals
-        val precipitationIntensity = Weather.getFormattedValueOrEmpty(
-            entryClicked.y, precipitationUnit, Weather.getDecimalsPrecipitation()
-        )
-
-        // Customize the text for the marker view
-        valueView.text = "$precipitationTitle: $precipitationIntensity"
-        if (!probabilities.isNullOrEmpty() && precipitationProbabilityTitle != null) {
-            val probability = probabilities[entryClicked.x.toInt()].y.roundToInt().toString()
-            secondValueView.text = "$precipitationProbabilityTitle: $probability %"
-        } else {
-            secondValueView.visibility = View.GONE
-        }
-
-        // this will perform necessary layouting
-        super.refreshContent(entryClicked, highlight)
-    }
-
-    @Suppress("MagicNumber")
-    override fun draw(canvas: Canvas, posx: Float, posy: Float) {
-        // translate to the correct position and draw
-        var newPosX = posx
-        var newPosY = posy
-        // Prevent overflow to the right
-        if (posx > canvas.width / 2) {
-            newPosX = ((canvas.width / 2).toFloat())
-        }
-
-        // We do this as for continuous 0 values on intensity the marker view hides those values
-        if (posy > canvas.height / 2) {
-            newPosY = 0F
-        }
-
         canvas.translate(newPosX, newPosY)
         draw(canvas)
     }
@@ -211,17 +164,19 @@ class CustomXAxisFormatter(private val times: MutableList<String>?) : ValueForma
 }
 
 class CustomYAxisFormatter(
-    private val weatherUnit: String, private val showDecimals: Boolean, private val decimals: Int?
+    private val weatherUnit: String,
+    private val showDecimals: Boolean,
+    private val decimals: Int?
 ) : ValueFormatter() {
     override fun getAxisLabel(value: Float, axis: AxisBase?): String {
         return if (showDecimals) {
             if (decimals == null) {
-                "$value $weatherUnit"
+                "$value$weatherUnit"
             } else {
-                "%.${decimals}f $weatherUnit".format(value)
+                "%.${decimals}f$weatherUnit".format(value)
             }
         } else {
-            "${value.roundToInt()} $weatherUnit"
+            "${value.roundToInt()}$weatherUnit"
         }
     }
 }

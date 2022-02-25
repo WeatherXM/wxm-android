@@ -63,6 +63,10 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
             onBackPressed()
         }
 
+        binding.swiperefresh.setOnRefreshListener {
+            model.fetchUserDeviceAllData()
+        }
+
         binding.historicalCharts.setOnClickListener {
             navigator.showHistoryActivity(this, device)
         }
@@ -78,10 +82,10 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
         binding.dateTabs.onTabSelected {
             when (it.position) {
                 TAB_TODAY -> {
-                    model.setForecastCurrentState(UserDeviceViewModel.ForecastState.TODAY)
+                    model.fetchForecast(UserDeviceViewModel.ForecastState.TODAY)
                 }
                 TAB_TOMORROW -> {
-                    model.setForecastCurrentState(UserDeviceViewModel.ForecastState.TOMORROW)
+                    model.fetchForecast(UserDeviceViewModel.ForecastState.TOMORROW)
                 }
             }
         }
@@ -100,7 +104,14 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
         }
 
         model.onLoading().observe(this) {
-            binding.progress.visibility = if (it) View.VISIBLE else View.INVISIBLE
+            if (it && binding.swiperefresh.isRefreshing) {
+                binding.progress.visibility = View.INVISIBLE
+            } else if (it) {
+                binding.progress.visibility = View.VISIBLE
+            } else {
+                binding.swiperefresh.isRefreshing = false
+                binding.progress.visibility = View.INVISIBLE
+            }
         }
 
         model.onError().observe(this) {
@@ -109,36 +120,28 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
 
         // Fetch data
         model.setDevice(device)
-        model.getUserDeviceData()
+        model.fetchUserDeviceAllData()
     }
 
     private fun updateToolbar(device: Device) {
-        binding.toolbar.title = device.name
-        device.address?.let {
-            binding.toolbar.subtitle = it
-        }
+        binding.title.text = device.name
 
-        when (device.attributes?.isActive) {
-            null -> {
-                binding.statusChip.setTextAndColor(R.string.unknown, R.color.grey)
-            }
-            true -> {
-                binding.statusChip.setTextAndColor(R.string.online, R.color.green)
-            }
-            else -> {
-                binding.statusChip.setTextAndColor(R.string.offline, R.color.red)
+        binding.statusChip.apply {
+            when (device.attributes?.isActive) {
+                true -> setTextAndColor(R.string.online, R.color.green)
+                false -> setTextAndColor(R.string.offline, R.color.red)
+                null -> setTextAndColor(R.string.unknown, R.color.grey)
             }
         }
 
         val lastActive = device.attributes?.lastActiveAt?.let {
-            getRelativeTimeFromISO(it)
-        } ?: ""
-        if (lastActive.isNotEmpty()) {
-            binding.lastActive.text = getString(R.string.last_active, lastActive)
-            binding.lastActive.visibility = View.VISIBLE
-        } else {
-            binding.lastActive.visibility = View.GONE
+            getString(
+                R.string.last_active,
+                getRelativeTimeFromISO(it, getString(R.string.last_active_just_now))
+            )
         }
+        binding.subtitle.text = listOf(device.address, lastActive)
+            .joinToString(" · ")
     }
 
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {
@@ -158,6 +161,6 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
     }
 
     override fun onOptionClick(tokenOption: UserDeviceViewModel.TokensState) {
-        model.setTokenCurrentState(tokenOption)
+        model.fetchTokenDetails(tokenOption)
     }
 }

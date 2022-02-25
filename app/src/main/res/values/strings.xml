@@ -54,18 +54,18 @@
     <string name="success">Success</string>
     <string name="success_reset_password_title">Email has been sent!</string>
     <string name="success_reset_password_text">We have sent instructions for resetting your password to your email.</string>
-    <string name="success_signup_text">We have sent instructions for setting a password and completing registration to %s. Please set a password and then try to sign in.</string>
+    <string name="success_signup_text">Thanks for joining WeatherXM! We have sent you an account activation link to %s. Please, set a password and then try to sign in.</string>
     <string name="send_email_instructions">Enter the email associated with your WeatherXM account and we will send you a password reset link.</string>
     <string name="signup_instructions">Signup with your email and your account will be created shortly.</string>
     <string name="next_7_days">Next 7 Days</string>
     <string name="see_historical_charts">See Historical Charts</string>
-    <string name="forecast_empty">Forecast is empty. Please try again.</string>
     <string name="earnings">Earnings</string>
     <string name="wxm">WXM</string>
     <string name="button_24h">24H</string>
     <string name="button_7d">7D</string>
     <string name="button_30d">30D</string>
-    <string name="last_active">Last active %s</string>
+    <string name="last_active">Last seen %s</string>
+    <string name="last_active_just_now">just now</string>
     <string name="title_share_wallet">Share WXM wallet address</string>
     <string name="action_logout">Logout</string>
     <string name="action_retry">Retry</string>
@@ -149,19 +149,20 @@
     <string name="cloud_cover">Cloud Cover</string>
     <string name="temperature_celsius">°C</string>
     <string name="temperature_fahrenheit">°F</string>
-    <string name="precipitation_mm">mm</string>
-    <string name="precipitation_in">in</string>
-    <string name="wind_speed_kmh">km/h</string>
-    <string name="wind_speed_ms">m/s</string>
-    <string name="wind_speed_knots">kn</string>
-    <string name="wind_speed_beaufort">bf</string>
+    <string name="precipitation_mm">&#160;mm</string>
+    <string name="precipitation_in">&#160;in</string>
+    <string name="wind_speed_kmh">&#160;km/h</string>
+    <string name="wind_speed_mph">&#160;mph</string>
+    <string name="wind_speed_ms">&#160;m/s</string>
+    <string name="wind_speed_knots">&#160;kn</string>
+    <string name="wind_speed_beaufort">&#160;bf</string>
     <string name="wind_direction_cardinal">Cardinal</string>
     <string name="wind_direction_degrees">Degrees</string>
     <string name="wind_direction_degrees_mark">°</string>
-    <string name="pressure_hpa">hPa</string>
-    <string name="pressure_inHg">inHg</string>
+    <string name="pressure_hpa">&#160;hPa</string>
+    <string name="pressure_inHg">&#160;inHg</string>
     <string name="percent" translatable="false">%</string>
-    <string name="uv_index_unit" translatable="false">UV</string>
+    <string name="uv_index_unit" translatable="false">&#160;UV</string>
 
     <string-array name="temperature_entries">
         <item>Celsius (°C)</item>
@@ -173,6 +174,7 @@
     </string-array>
     <string-array name="wind_speed_entries">
         <item>Kilometers per hour (km/h)</item>
+        <item>Miles per hour (mph)</item>
         <item>Meters per second (m/s)</item>
         <item>Knots (kn)</item>
         <item>Beaufort (bf)</item>
@@ -195,6 +197,7 @@
     </string-array>
     <string-array name="wind_speed_values">
         <item>@string/wind_speed_kmh</item>
+        <item>@string/wind_speed_mph</item>
         <item>@string/wind_speed_ms</item>
         <item>@string/wind_speed_knots</item>
         <item>@string/wind_speed_beaufort</item>
@@ -236,12 +239,16 @@
     <string name="server_error">Something went wrong: Server Error</string>
     <string name="unknown_error">Something went wrong: Unknown Error</string>
     <string name="no_data_error_device_details">Failed to get the details of the device: No Data</string>
+    <string name="no_data_error_public_devices">Failed to get the public devices.</string>
     <string name="user_info_error">Failed to get your data. Please try again.</string>
     <string name="address_save_network_error">Failed to save your address. Network Error.</string>
     <string name="address_save_server_error">Failed to save your address. Server Error.</string>
+    <string name="device_data_failed">Getting data for this device failed.</string>
+    <string name="device_current_weather_failed">Getting the current weather for this device failed.</string>
     <string name="forecast_failed">Getting weather forecast data failed.</string>
     <string name="token_failed">Getting token data failed.</string>
     <string name="oops_something_wrong">Oops! Something went wrong.</string>
     <string name="error_cannot_send_email">Oops! Could not send email!</string>
     <string name="error_cannot_open_url">Oops! Could not open %s</string>
+    <string name="forecast_empty">Oops! No forecast weather data could not be found.</string>
 </resources>

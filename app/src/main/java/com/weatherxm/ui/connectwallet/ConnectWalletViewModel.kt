@@ -31,7 +31,7 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
         CoroutineScope(Dispatchers.IO).launch {
             userRepository.saveAddress(address)
                 .mapLeft {
-                    Timber.d("Got error: $it")
+                    Timber.w("Connecting wallet failed: $it")
                     when (it) {
                         is Failure.NetworkError -> isAddressSaved.postValue(
                             Resource.error(
@@ -60,5 +60,14 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
 
     fun setCurrentAddress(address: String?) {
         currentAddress.postValue(address)
+    }
+
+    // Custom fix because scanning the address in Metamask adds the "ethereum:" prefix
+    fun fixQrAddressScanned(scannedAddress: String): String {
+        return if (scannedAddress.startsWith("0x")) {
+            scannedAddress
+        } else {
+            scannedAddress.substring(scannedAddress.indexOf("0x"))
+        }
     }
 }

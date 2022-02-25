@@ -10,11 +10,11 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 import com.weatherxm.data.repository.DeviceRepository
-import com.weatherxm.ui.explorer.DeviceWithResolution
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.H3_RESOLUTION
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.H7_RESOLUTION
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.ZOOM_LEVEL_CHANGE_HEX
+import com.weatherxm.ui.explorer.HexWithResolution
 import com.weatherxm.util.ResourcesHelper
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -26,22 +26,21 @@ interface ExplorerUseCase {
         zoom: Double
     ): Either<Failure, List<PolygonAnnotationOptions>>
 
-    fun getCenterOfHex3(deviceWithResolution: DeviceWithResolution?): Point?
-    fun deviceWithResToJson(device: Device, resolution: Int): JsonElement
+    fun getCenterOfHex3AsPoint(hexCenterWithResolution: HexWithResolution?): Point?
+    fun hexWithResToJson(index: String, center: Location, resolution: Int): JsonElement
     suspend fun saveDevicesPoints(devices: List<Device>)
+    fun getDevicesOfH7(hexIndex: String?): MutableList<Device>?
 }
 
 class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
 
     private val deviceRepository: DeviceRepository by inject()
     private val gson: Gson by inject()
-    private val resourcesHelper: ResourcesHelper by inject()
+    private val resHelper: ResourcesHelper by inject()
 
+    // Points to paint
     private var pointsHex7: MutableList<PolygonAnnotationOptions> = mutableListOf()
     private var pointsHex3: MutableList<PolygonAnnotationOptions> = mutableListOf()
-
-    // Already painted H3 hexes, their indexes are saved here
-    private val currentH3Hexes: MutableList<String> = mutableListOf()
 
     override fun polygonPointsToLatLng(pointsOfPolygon: Array<Location>): List<MutableList<Point>> {
         val latLongs = listOf(pointsOfPolygon.map { coordinates ->
@@ -64,38 +63,37 @@ class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
     override suspend fun getPointsFromPublicDevices(
         zoom: Double
     ): Either<Failure, List<PolygonAnnotationOptions>> {
-        val pointsToReturn: MutableList<PolygonAnnotationOptions>
-
-        if (zoom <= ZOOM_LEVEL_CHANGE_HEX) {
-            if (pointsHex3.isNullOrEmpty()) {
-                deviceRepository.getPublicDevices()
-                    .mapLeft {
-                        return Either.Left(it)
-                    }
-                    .map {
-                        saveDevicesPoints(it)
-                    }
+        val pointsToReturn: MutableList<PolygonAnnotationOptions> =
+            if (zoom <= ZOOM_LEVEL_CHANGE_HEX) {
+                if (pointsHex3.isNullOrEmpty()) {
+                    deviceRepository.getPublicDevices()
+                        .mapLeft {
+                            return Either.Left(it)
+                        }
+                        .map {
+                            saveDevicesPoints(it)
+                        }
+                }
+                pointsHex3
+            } else {
+                // We start with H3 so pointsHex7 should be initialized and filled by now
+                pointsHex7
             }
-            pointsToReturn = pointsHex3
-        } else {
-            // We start with H3 so pointsHex7 should be initialized and filled by now
-            pointsToReturn = pointsHex7
-        }
 
         return Either.Right(pointsToReturn)
     }
 
     // Get the center of Hex3 of a device. Used for zooming in when clicked.
-    override fun getCenterOfHex3(deviceWithResolution: DeviceWithResolution?): Point? {
-        deviceWithResolution?.device?.attributes?.hex3?.center?.let { center ->
-            return Point.fromLngLat(center.lon, center.lat)
+    override fun getCenterOfHex3AsPoint(hexCenterWithResolution: HexWithResolution?): Point? {
+        hexCenterWithResolution?.let {
+            return Point.fromLngLat(it.lon, it.lat)
         }
 
         return null
     }
 
-    override fun deviceWithResToJson(device: Device, resolution: Int): JsonElement {
-        return gson.toJsonTree(DeviceWithResolution(device, resolution))
+    override fun hexWithResToJson(index: String, center: Location, resolution: Int): JsonElement {
+        return gson.toJsonTree(HexWithResolution(index, center.lat, center.lon, resolution))
     }
 
     // Save the points of the devices so we can serve them immediately when needed
@@ -105,34 +103,43 @@ class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
             return
         }
 
+        // Needed lists to not save duplicate points of H3-H7 so they are being painted only once
+        val alreadySetH3 = mutableListOf<String>()
+        val alreadySetH7 = mutableListOf<String>()
         devices.forEach { device ->
-            if (device.attributes?.hex3?.polygon!=null && !isHex3Used(device)) {
-                val polygonAnnotationOptions: PolygonAnnotationOptions = PolygonAnnotationOptions()
-                    .withFillColor(resourcesHelper.getColor(R.color.hexFillColor))
-                    .withFillOpacity(FILL_OPACITY_HEXAGONS)
-                    .withFillOutlineColor(resourcesHelper.getColor(R.color.hexFillOutlineColor))
-                    .withData(deviceWithResToJson(device, H3_RESOLUTION))
-                    .withPoints(polygonPointsToLatLng(device.attributes.hex3.polygon))
+            device.attributes?.hex3?.let {
+                if (!alreadySetH3.contains(it.index)) {
+                    val polygonAnnotationOptions: PolygonAnnotationOptions =
+                        PolygonAnnotationOptions()
+                            .withFillColor(resHelper.getColor(R.color.hexFillColor))
+                            .withFillOpacity(FILL_OPACITY_HEXAGONS)
+                            .withFillOutlineColor(resHelper.getColor(R.color.hexFillOutlineColor))
+                            .withData(hexWithResToJson(it.index, it.center, H3_RESOLUTION))
+                            .withPoints(polygonPointsToLatLng(it.polygon))
 
-                device.attributes.hex3.let { currentH3Hexes.add(it.index) }
-                pointsHex3.add(polygonAnnotationOptions)
+                    pointsHex3.add(polygonAnnotationOptions)
+                    alreadySetH3.add(it.index)
+                }
             }
 
-            if (device.attributes?.hex7?.polygon!=null) {
-                val polygonAnnotationOptions: PolygonAnnotationOptions = PolygonAnnotationOptions()
-                    .withFillColor(resourcesHelper.getColor(R.color.hexFillColor))
-                    .withFillOpacity(FILL_OPACITY_HEXAGONS)
-                    .withFillOutlineColor(resourcesHelper.getColor(R.color.hexFillOutlineColor))
-                    .withData(deviceWithResToJson(device, H7_RESOLUTION))
-                    .withPoints(polygonPointsToLatLng(device.attributes.hex7.polygon))
+            device.attributes?.hex7?.let {
+                if (!alreadySetH7.contains(it.index)) {
+                    val polygonAnnotationOptions = PolygonAnnotationOptions()
+                        .withFillColor(resHelper.getColor(R.color.hexFillColor))
+                        .withFillOpacity(FILL_OPACITY_HEXAGONS)
+                        .withFillOutlineColor(resHelper.getColor(R.color.hexFillOutlineColor))
+                        .withData(hexWithResToJson(it.index, it.center, H7_RESOLUTION))
+                        .withPoints(polygonPointsToLatLng(it.polygon))
 
-                pointsHex7.add(polygonAnnotationOptions)
+                    pointsHex7.add(polygonAnnotationOptions)
+                    alreadySetH7.add(it.index)
+                }
             }
         }
     }
 
-    private fun isHex3Used(device: Device): Boolean {
-        return currentH3Hexes.contains(device.attributes?.hex3?.index)
+    override fun getDevicesOfH7(hexIndex: String?): MutableList<Device>? {
+        return deviceRepository.getDevicesOfH7(hexIndex)
     }
 }
 

@@ -21,8 +21,14 @@ class HourlyAdapter(
     override fun submitList(list: List<HourlyWeather>?) {
         // Reset selected position
         selectedPosition = if (list.isNullOrEmpty()) RecyclerView.NO_POSITION else 0
+
         // Update data
         super.submitList(list)
+
+        // Invoke callback for newly selected position
+        list?.let {
+            onHourlyForecastSelected(it[selectedPosition])
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyViewHolder {
