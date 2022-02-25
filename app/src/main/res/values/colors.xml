@@ -54,6 +54,7 @@
     <color name="dateTabSelectedTextColor">#116295</color>
 
     <color name="profile_background">@color/white_blue</color>
+    <color name="device_details_dialog_background">@color/white_blue</color>
 
     <!-- Weather Data colors -->
     <color name="temperature">#084D6A</color>

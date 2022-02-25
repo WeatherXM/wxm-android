@@ -52,8 +52,12 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        explorerModel.onDeviceSelected().observe(this) { device ->
-            navigator.showDeviceDetails(supportFragmentManager, device)
+        explorerModel.onHexSelected().observe(this) {
+            navigator.showPublicDevicesList(supportFragmentManager, it)
+        }
+
+        explorerModel.onDeviceSelected().observe(this) {
+            navigator.showDeviceDetails(supportFragmentManager, it)
         }
 
         // todo: Find a way to use snackbar here instead of a toast

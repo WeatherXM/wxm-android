@@ -54,8 +54,12 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
-        model.onDeviceSelected().observe(this) { device ->
-            navigator.showDeviceDetails(supportFragmentManager, device)
+        model.onHexSelected().observe(this) {
+            navigator.showPublicDevicesList(supportFragmentManager, it)
+        }
+
+        model.onDeviceSelected().observe(this) {
+            navigator.showDeviceDetails(supportFragmentManager, it)
         }
 
         model.showMapOverlayViews().observe(this) { shouldShow ->

@@ -80,6 +80,10 @@
         <item name="bottomSheetStyle">@style/Widget.WeatherXM.BottomSheet.Dialog</item>
     </style>
 
+    <style name="ThemeOverlay.WeatherXM.BottomSheetDialog.Explorer.Devices" parent="ThemeOverlay.WeatherXM.BottomSheetDialog">
+        <item name="colorSurface">@color/white_blue</item>
+    </style>
+
     <style name="ThemeOverlay.WeatherXM.Toolbar" parent="ThemeOverlay.Material3.Toolbar.Surface">
         <!--<item name="colorPrimary">@color/white</item>-->
         <item name="colorSurface">@color/transparent</item>
@@ -137,23 +141,15 @@
     </style>
 
     <style name="Widget.WeatherXM.BottomSheet.Dialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
-        <item name="shapeAppearance">@style/ShapeAppearance.WeatherXM.LargeComponent</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.WeatherXM.BottomSheet.Dialog</item>
     </style>
 
-    <style name="ShapeAppearance.WeatherXM.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+    <style name="ShapeAppearance.WeatherXM.BottomSheet.Dialog" parent="ShapeAppearance.MaterialComponents.LargeComponent">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">24dp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Dialog.Title" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
-        <item name="android:textColor">?colorOnSecondary</item>
-        <item name="android:textSize">20sp</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Dialog.Subtitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textColor">@color/lastActiveColor</item>
-        <item name="fontFamily">sans-serif-medium</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Title.Headline_4" parent="TextAppearance.MaterialComponents.Headline4">
@@ -254,6 +250,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">12sp</item>
         <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="android:clickable">false</item>
     </style>
 
     <style name="Widget.WeatherXM.Token.Chip" parent="Widget.MaterialComponents.Chip.Choice">
@@ -301,7 +298,9 @@
         <item name="android:textColor">@color/colorPrimaryVariant</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.Device.Details.Subtitle" parent="@style/TextAppearance.WeatherXM.Toolbar.Subtitle" />
+    <style name="TextAppearance.WeatherXM.Device.Details.Subtitle" parent="@style/TextAppearance.WeatherXM.Toolbar.Subtitle">
+        <item name="android:textColor">@color/colorOnSecondary</item>
+    </style>
 
     <style name="TextAppearance.WeatherXM.Device.Details.Time" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="android:textColor">@color/colorPrimary</item>

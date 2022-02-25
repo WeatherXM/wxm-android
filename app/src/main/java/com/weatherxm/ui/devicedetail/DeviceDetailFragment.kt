@@ -3,27 +3,30 @@ package com.weatherxm.ui.devicedetail
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsBinding
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.explorer.ExplorerViewModel
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
+// TODO: Use a more proper name for this fragment/class. Check android:background on XML.
 class DeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
-    /*
-        Use activityViewModels because we use this model to communicate with the parent activity
-        so it needs to be the same model as the parent's one.
-    */
-    private val deviceDetailModel: DeviceDetailViewModel by activityViewModels()
+    private val explorerModel: ExplorerViewModel by activityViewModels()
+    private val model: DeviceDetailViewModel by viewModels()
     private lateinit var binding: FragmentDeviceDetailsBinding
     private var device: Device? = null
 
@@ -44,6 +47,10 @@ class DeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
         }
     }
 
+    override fun getTheme(): Int {
+        return R.style.ThemeOverlay_WeatherXM_BottomSheetDialog
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -56,28 +63,27 @@ class DeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        deviceDetailModel.onDeviceDetailsUpdate().observe(this) { resource ->
-            Timber.d("Data updated: ${resource.status}")
-            updateUI(resource)
+        binding.toolbar.setNavigationOnClickListener {
+            explorerModel.openListOfDevicesOfHex()
+            dismiss()
         }
 
-        deviceDetailModel.fetch(device)
+        model.device().observe(this) {
+            updateUI(it)
+        }
+
+        model.setDevice(device)
     }
 
     private fun updateUI(resource: Resource<Device>) {
         when (resource.status) {
             Status.SUCCESS -> {
-
-                // First get the weather data
-                resource.data?.currentWeather.let { weather ->
-                    binding.currentWeatherCard.setWeatherData(weather)
+                binding.title.text = resource.data?.getNameOrLabel()
+                with(binding.subtitle) {
+                    text = resource.data?.address
+                    visibility = if (resource.data?.address.isNullOrEmpty()) GONE else VISIBLE
                 }
-
-                // Then get the name/label of the device and its location
-                resource.data?.let {
-                    binding.name.text = it.getNameOrLabel()
-                    binding.location.text = it.address
-                }
+                binding.currentWeatherCard.setWeatherData(resource.data?.currentWeather)
             }
             Status.ERROR -> {
                 Timber.d(resource.message, resource.message)

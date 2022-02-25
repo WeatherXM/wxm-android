@@ -13,23 +13,20 @@ import timber.log.Timber
 
 class DeviceDetailViewModel : ViewModel(), KoinComponent {
 
-    private val onDeviceDetailsUpdate = MutableLiveData<Resource<Device>>().apply {
-        value = Resource.loading()
-    }
+    private val resHelper: ResourcesHelper by inject()
+    private val device = MutableLiveData<Resource<Device>>(Resource.loading())
 
-    fun onDeviceDetailsUpdate(): LiveData<Resource<Device>> = onDeviceDetailsUpdate
+    fun device(): LiveData<Resource<Device>> = device
 
-    private val resourcesHelper: ResourcesHelper by inject()
-
-    fun fetch(device: Device?) {
-        if (device == null) {
-            Timber.w("Getting public device details failed: null")
-            this@DeviceDetailViewModel.onDeviceDetailsUpdate.postValue(
-                Resource.error(resourcesHelper.getString(R.string.no_data_error_device_details))
-            )
-        } else {
-            Timber.d("Got Public Device: $device")
-            this@DeviceDetailViewModel.onDeviceDetailsUpdate.postValue(Resource.success(device))
-        }
+    fun setDevice(device: Device?) {
+        this@DeviceDetailViewModel.device.postValue(
+            if (device == null) {
+                Timber.w("Getting public device details failed: null")
+                Resource.error(resHelper.getString(R.string.no_data_error_device_details))
+            } else {
+                Timber.d("Got Public Device: $device")
+                Resource.success(device)
+            }
+        )
     }
 }

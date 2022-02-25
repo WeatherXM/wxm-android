@@ -20,6 +20,7 @@ import com.weatherxm.ui.explorer.ExplorerActivity
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.preferences.PreferenceActivity
+import com.weatherxm.ui.publicdeviceslist.PublicDevicesListFragment
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.splash.SplashActivity
@@ -62,6 +63,11 @@ class Navigator {
         )
     }
 
+    fun showPublicDevicesList(fragmentManager: FragmentManager, hexIndex: String?) {
+        val modalBottomSheet = PublicDevicesListFragment.newInstance(hexIndex)
+        modalBottomSheet.show(fragmentManager, PublicDevicesListFragment.TAG)
+    }
+
     fun showDeviceDetails(fragmentManager: FragmentManager, device: Device) {
         val modalBottomSheet = DeviceDetailFragment.newInstance(device)
         modalBottomSheet.show(fragmentManager, DeviceDetailFragment.TAG)
@@ -81,18 +87,6 @@ class Navigator {
                 Intent(
                     it, PreferenceActivity::class.java
                 ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            )
-        }
-    }
-
-    fun showConnectWallet(fragment: Fragment, wallet: Wallet?) {
-        fragment.context?.let {
-            it.startActivity(
-                Intent(
-                    it, ConnectWalletActivity::class.java
-                )
-                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(ConnectWalletActivity.ARG_WALLET, wallet)
             )
         }
     }

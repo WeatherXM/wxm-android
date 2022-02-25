@@ -239,6 +239,7 @@
     <string name="server_error">Something went wrong: Server Error</string>
     <string name="unknown_error">Something went wrong: Unknown Error</string>
     <string name="no_data_error_device_details">Failed to get the details of the device: No Data</string>
+    <string name="no_data_error_public_devices">Failed to get the public devices.</string>
     <string name="user_info_error">Failed to get your data. Please try again.</string>
     <string name="address_save_network_error">Failed to save your address. Network Error.</string>
     <string name="address_save_server_error">Failed to save your address. Server Error.</string>

@@ -41,6 +41,9 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
         value = Resource.loading()
     }
 
+    // The list of a devices in a hex
+    private val onHexSelected = MutableLiveData<String>()
+
     // The details/data of a device
     private val onDeviceSelected = MutableLiveData<Device>()
 
@@ -49,8 +52,12 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     // Needed for passing info to the activity to show/hide elements when onMapClick
     private val showMapOverlayViews = MutableLiveData(true)
 
+    // Current Hex clicked as it's needed to pass it as an argument in the device details
+    private var currentHexSelected: String? = null
+
     fun showMapOverlayViews() = showMapOverlayViews
     fun explorerState(): LiveData<Resource<ExplorerState>> = state
+    fun onHexSelected(): LiveData<String> = onHexSelected
     fun onDeviceSelected(): LiveData<Device> = onDeviceSelected
     fun onZoomChange(): LiveData<Point?> = onZoomChange
 
@@ -76,9 +83,6 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
                         is Failure.UnknownError -> state.postValue(
                             Resource.error(resourcesHelper.getString(R.string.unknown_error))
                         )
-                        else -> state.postValue(
-                            Resource.error(resourcesHelper.getString(R.string.unknown_error))
-                        )
                     }
                 }
         }
@@ -99,21 +103,32 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
         showMapOverlayViews.postValue(!current)
     }
 
-    private fun onDeviceClick(device: Device) {
+    /**
+     * Handler for polygon clicks. If camera level is at H7, then show devices list for that hex
+     * otherwise zoom in.
+     */
+    fun onPolygonClick(polygon: PolygonAnnotation) {
+        val hexWithResolution: HexWithResolution? = MapboxUtils.getCustomData(polygon)
+        if (hexWithResolution?.currentResolution == H7_RESOLUTION) {
+            currentHexSelected = hexWithResolution.index
+            onHexSelected.postValue(hexWithResolution.index)
+        } else {
+            val centerOfHex = explorerUseCase.getCenterOfHex3AsPoint(hexWithResolution)
+            centerOfHex?.let { onZoomChange.postValue(centerOfHex) }
+        }
+    }
+
+    fun onDeviceClicked(device: Device) {
         onDeviceSelected.postValue(device)
     }
 
-    /**
-     * Handler for polygon clicks. If camera level is at H7, then show weather
-     * station details  (weather data card, etc.), otherwise zoom in.
-     */
-    fun onPolygonClick(polygon: PolygonAnnotation) {
-        val deviceWithRes: DeviceWithResolution? = MapboxUtils.getCustomData(polygon)
-        if (deviceWithRes?.currentResolution == H7_RESOLUTION) {
-            onDeviceClick(deviceWithRes.device)
-        } else {
-            val centerOfHex = explorerUseCase.getCenterOfHex3(deviceWithRes)
-            centerOfHex?.let { onZoomChange.postValue(centerOfHex) }
+    fun openListOfDevicesOfHex() {
+        currentHexSelected?.let {
+            onHexSelected.postValue(it)
         }
+    }
+
+    fun getHexSelected(): String? {
+        return currentHexSelected
     }
 }

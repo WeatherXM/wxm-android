@@ -39,7 +39,7 @@ import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.data.repository.WeatherRepository
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.explorer.DeviceWithResolutionJsonAdapter
+import com.weatherxm.ui.explorer.HexWithResolutionJsonAdapter
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.AuthUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase
@@ -278,8 +278,8 @@ private val utilities = module {
             .create()
     }
 
-    single<DeviceWithResolutionJsonAdapter> {
-        DeviceWithResolutionJsonAdapter(get())
+    single<HexWithResolutionJsonAdapter> {
+        HexWithResolutionJsonAdapter(get())
     }
 
     single<AuthTokenJsonAdapter> {
