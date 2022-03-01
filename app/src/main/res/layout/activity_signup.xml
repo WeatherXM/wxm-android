@@ -160,16 +160,26 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 app:empty_animation="@raw/anim_loading"
-                app:layout_constraintBottom_toTopOf="@id/done"
+                app:layout_constraintBottom_toTopOf="@id/contact_support"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:empty_subtitle="How are you?"
                 tools:empty_title="Nothing here" />
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/contact_support"
+                style="@style/Widget.WeatherXM.Button.Link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_normal"
+                android:text="@string/info_registration_contact_support"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@id/done"
+                tools:visibility="visible" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/done"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
                 android:text="@string/action_sign_in"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -69,6 +69,17 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
             model.signup(username, firstName, lastName)
         }
 
+        binding.contactSupport.setOnClickListener {
+            navigator.sendSupportEmail(
+                context = this,
+                subject = getString(R.string.support_email_subject_no_activation),
+                body = getString(
+                    R.string.support_email_body_user,
+                    binding.username.text.toString().trim()
+                )
+            )
+        }
+
         // Listen for login state change
         model.isSignedUp().observe(this) { result ->
             onSignupResult(result)
@@ -86,6 +97,7 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
                     .subtitle(result.data)
                 binding.form.visibility = View.GONE
                 binding.status.visibility = View.VISIBLE
+                binding.contactSupport.visibility = View.VISIBLE
                 binding.done.visibility = View.VISIBLE
             }
             Status.ERROR -> {
@@ -102,6 +114,7 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
                     }
                 binding.form.visibility = View.GONE
                 binding.status.visibility = View.VISIBLE
+                binding.contactSupport.visibility = View.INVISIBLE
                 binding.done.visibility = View.INVISIBLE
             }
             Status.LOADING -> {
@@ -110,6 +123,7 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
                     .animation(R.raw.anim_loading)
                 binding.form.visibility = View.GONE
                 binding.status.visibility = View.VISIBLE
+                binding.contactSupport.visibility = View.INVISIBLE
                 binding.done.visibility = View.INVISIBLE
             }
         }

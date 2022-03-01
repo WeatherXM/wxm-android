@@ -90,12 +90,12 @@ class PublicDevicesListFragment : BottomSheetDialogFragment(), KoinComponent {
                     adapter.submitList(devices.data)
                     binding.recycler.visibility = View.VISIBLE
                 } else {
-                    toast(getString(R.string.oops_something_wrong), Toast.LENGTH_LONG)
+                    context.toast(getString(R.string.oops_something_wrong), Toast.LENGTH_LONG)
                 }
             }
             Status.ERROR -> {
                 Timber.d(devices.message, devices.message)
-                devices.message?.let { toast(it, Toast.LENGTH_LONG) }
+                devices.message?.let { context.toast(it, Toast.LENGTH_LONG) }
             }
             Status.LOADING -> {}
         }

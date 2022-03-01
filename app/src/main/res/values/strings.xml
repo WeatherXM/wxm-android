@@ -1,9 +1,6 @@
 <resources>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
-    <string name="signup_hint_email">Email *</string>
-    <string name="signup_hint_first_name">First Name</string>
-    <string name="signup_hint_last_name">Last Name</string>
     <string name="history">History</string>
     <string name="forecast_7_days">7 Days Forecast</string>
     <string name="action_sign_in">Sign in</string>
@@ -17,11 +14,8 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">Login failed</string>
     <string name="forgot_password">Forgot Password?</string>
-    <string name="prompt_signup"><![CDATA[Don\'t have an account? <span style=\"color: #2599df\">SIGN UP</span>]]></string>
     <string name="title_home">Home</string>
     <string name="prompt_login"><![CDATA[Already a user? <span style=\"color: #2599df\">SIGN IN</span>]]></string>
-    <string name="action_signup">Sign Up</string>
-    <string name="title_signup">Create Account</string>
     <string name="password_reset">Reset Password</string>
     <string name="title_password_reset">Password Reset</string>
     <string name="title_login">Login</string>
@@ -54,9 +48,7 @@
     <string name="success">Success</string>
     <string name="success_reset_password_title">Email has been sent!</string>
     <string name="success_reset_password_text">We have sent instructions for resetting your password to your email.</string>
-    <string name="success_signup_text">Thanks for joining WeatherXM! We have sent you an account activation link to %s. Please, set a password and then try to sign in.</string>
     <string name="send_email_instructions">Enter the email associated with your WeatherXM account and we will send you a password reset link.</string>
-    <string name="signup_instructions">Signup with your email and your account will be created shortly.</string>
     <string name="next_7_days">Next 7 Days</string>
     <string name="see_historical_charts">See Historical Charts</string>
     <string name="earnings">Earnings</string>
@@ -211,6 +203,18 @@
         <item>@string/pressure_inHg</item>
     </string-array>
 
+    <!-- Registration -->
+    <string name="action_signup">Sign Up</string>
+    <string name="title_signup">Create Account</string>
+    <string name="signup_hint_email">Email *</string>
+    <string name="signup_hint_first_name">First Name</string>
+    <string name="signup_hint_last_name">Last Name</string>
+    <string name="prompt_signup"><![CDATA[Don\'t have an account? <span style=\"color: #2599df\">SIGN UP</span>]]></string>
+    <string name="signup_instructions">Signup with your email and your account will be created shortly.</string>
+    <string name="success_signup_text">Thanks for joining WeatherXM! We have sent you an account activation link to %s. Please, set a password and then try to sign in.</string>
+    <string name="info_registration_contact_support">Not receiving an activation email? Contact our support team.</string>
+    <string name="support_email_subject_no_activation">No activation email</string>
+
     <!-- Tokens -->
     <string name="tokens_24h">24h:</string>
     <string name="tokens_total">Total:</string>
@@ -218,6 +222,7 @@
     <!-- Support Email -->
     <string name="support_email_recipient">support@weatherxm.com</string>
     <string name="support_email_intent_title">Send email</string>
+    <string name="support_email_body_user">User account email: %1$s</string>
     <string name="support_email_body_user_and_device_info">User account email: %1$s\nDevice S/N: %2$s\n</string>
 
     <!-- Claim device -->

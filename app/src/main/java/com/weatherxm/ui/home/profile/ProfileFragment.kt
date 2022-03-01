@@ -74,7 +74,7 @@ class ProfileFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
-                    resource.message?.let { toast(it) }
+                    resource.message?.let { context.toast(it) }
                     updateUI(null, false)
                 }
                 Status.LOADING -> {

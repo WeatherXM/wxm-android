@@ -87,7 +87,7 @@ class DeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
             }
             Status.ERROR -> {
                 Timber.d(resource.message, resource.message)
-                resource.message?.let { toast(it, Toast.LENGTH_LONG) }
+                resource.message?.let { context.toast(it, Toast.LENGTH_LONG) }
             }
             Status.LOADING -> {}
         }

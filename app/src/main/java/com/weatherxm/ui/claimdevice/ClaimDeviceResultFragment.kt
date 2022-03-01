@@ -33,7 +33,7 @@ class ClaimDeviceResultFragment : Fragment(), KoinComponent {
 
         binding.contactSupport.setOnClickListener {
             navigator.sendSupportEmail(
-                fragment = this,
+                context = context,
                 subject = getString(R.string.support_email_subject_cannot_claim),
                 body = getString(
                     R.string.support_email_body_user_and_device_info,

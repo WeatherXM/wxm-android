@@ -18,6 +18,7 @@ import com.weatherxm.ui.HistoryCharts
 import com.weatherxm.ui.LineChartData
 import com.weatherxm.util.initializeDefault24hChart
 import com.weatherxm.util.initializePrecipitation24hChart
+import com.weatherxm.util.initializePressure24hChart
 import com.weatherxm.util.initializeWind24hChart
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
@@ -150,7 +151,7 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
         // initDefaultChart(binding.chartCloudCover.getChart(), historyCharts.cloudCover, 0F)
 
         // Init Pressure Char
-        initDefaultChart(binding.chartPressure.getChart(), historyCharts.pressure, null)
+        initPressureChart(binding.chartPressure.getChart(), historyCharts.pressure, null)
 
         // Init Uv Index Char
         initUvChart(binding.chartUvIndex.getChart(), historyCharts.uvIndex)
@@ -161,6 +162,14 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
     private fun initDefaultChart(lineChart: LineChart, data: LineChartData, yMinValue: Float?) {
         if (model.isDataValid(data)) {
             lineChart.initializeDefault24hChart(data, yMinValue)
+        } else {
+            showNoDataText(lineChart)
+        }
+    }
+
+    private fun initPressureChart(lineChart: LineChart, data: LineChartData, yMinValue: Float?) {
+        if (model.isDataValid(data)) {
+            lineChart.initializePressure24hChart(data, yMinValue)
         } else {
             showNoDataText(lineChart)
         }

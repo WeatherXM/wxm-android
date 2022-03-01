@@ -162,28 +162,33 @@ class Navigator {
     }
 
     fun sendSupportEmail(
-        fragment: Fragment,
+        context: Context?,
         recipient: String? = null,
         subject: String? = null,
         body: String? = null
     ) {
-        fragment.context?.let {
+        context?.let {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:") // Only email apps should handle this
             intent.putExtra(
                 Intent.EXTRA_EMAIL, arrayOf(
                     if (recipient.isNullOrEmpty()) {
-                        fragment.getString(R.string.support_email_recipient)
+                        it.getString(R.string.support_email_recipient)
                     } else recipient
                 )
             )
             subject?.let { subject -> intent.putExtra(Intent.EXTRA_SUBJECT, subject) }
             body?.let { body -> intent.putExtra(Intent.EXTRA_TEXT, body) }
             try {
-                it.startActivity(Intent.createChooser(intent, "Send mail..."))
+                it.startActivity(
+                    Intent.createChooser(
+                        intent,
+                        it.getString(R.string.support_email_intent_title)
+                    )
+                )
             } catch (e: ActivityNotFoundException) {
                 Timber.d("Email client not found: $e")
-                fragment.toast(R.string.error_cannot_send_email)
+                it.toast(R.string.error_cannot_send_email)
             }
         }
     }
@@ -196,7 +201,7 @@ class Navigator {
                     .launchUrl(it, Uri.parse(url))
             } catch (e: ActivityNotFoundException) {
                 Timber.d(e, "Could not load url: $url")
-                fragment.toast(R.string.error_cannot_open_url, url)
+                it.toast(R.string.error_cannot_open_url, url)
             }
         }
     }
