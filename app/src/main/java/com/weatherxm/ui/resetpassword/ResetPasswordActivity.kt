@@ -35,7 +35,7 @@ class ResetPasswordActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.sendBtn.setOnClickListener {
-            val email = binding.email.text.toString().trim()
+            val email = binding.email.text.toString().trim().lowercase()
 
             if (!validator.validateUsername(email)) {
                 binding.emailContainer.error = getString(R.string.invalid_email)

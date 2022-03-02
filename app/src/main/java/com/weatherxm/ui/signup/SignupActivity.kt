@@ -52,7 +52,7 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.signup.setOnClickListener {
-            val username = binding.username.text.toString().trim()
+            val username = binding.username.text.toString().trim().lowercase()
             val firstName = binding.firstName.text.toString().trim()
             val lastName = binding.lastName.text.toString().trim()
 
