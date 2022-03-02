@@ -34,23 +34,31 @@ data class AuthToken(
 }
 
 @JsonClass(generateAdapter = true)
-data class AuthError(
-    @Json(name = "status") val status: Int,
-    @Json(name = "message") val message: String,
-    @Json(name = "error") val errorCode: String,
-    @Json(name = "timestamp") val timestamp: String
-)
-
-@JsonClass(generateAdapter = true)
 data class ErrorResponse(
-    @Json(name = "error") val error: String,
-    @Json(name = "message") val message: String
-)
+    @Json(name = "code") val code: String,
+    @Json(name = "message") val message: String,
+    @Json(name = "id") val id: String,
+    @Json(name = "path") val path: String
+) {
+    companion object {
+        const val INVALID_USERNAME = "InvalidUsername"
+        const val INVALID_PASSWORD = "InvalidPassword"
+        const val INVALID_CREDENTIALS = "InvalidCredentials"
+        const val USER_ALREADY_EXISTS = "UserAlreadyExists"
+        const val INVALID_ACCESS_TOKEN = "InvalidAccessToken"
+        const val DEVICE_NOT_FOUND = "DeviceNotFound"
+        const val INVALID_WALLET_ADDRESS = "InvalidWalletAddress"
+        const val INVALID_FROM_DATE = "InvalidFromDate"
+        const val INVALID_TO_DATE = "InvalidToDate"
+        const val INVALID_CLAIM_ID = "InvalidClaimId"
+        const val INVALID_CLAIM_LOCATION = "InvalidClaimLocation"
+        const val UNAUTHORIZED = "Unauthorized"
+        const val FORBIDDEN = "Forbidden"
+        const val VALIDATION = "Validation"
+        const val NOT_FOUND = "NotFound"
+    }
 
-@JsonClass(generateAdapter = true)
-data class PagedResponse<T>(
-    val data: T,
-    val totalPages: Int,
-    val totalElements: Int,
-    val hasNext: Boolean
-)
+    override fun toString(): String {
+        return "[$path] [$id] $code: $message"
+    }
+}

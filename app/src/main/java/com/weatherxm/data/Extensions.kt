@@ -3,17 +3,41 @@ package com.weatherxm.data
 import arrow.core.Either
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.squareup.moshi.JsonDataException
+import com.weatherxm.data.ApiError.AuthError.InvalidAccessToken
+import com.weatherxm.data.ApiError.AuthError.InvalidUsername
+import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidCredentials
+import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidPassword
+import com.weatherxm.data.ApiError.AuthError.SignupError.UserAlreadyExists
+import com.weatherxm.data.ApiError.DeviceNotFound
+import com.weatherxm.data.ApiError.GenericError.JWTError.ForbiddenError
+import com.weatherxm.data.ApiError.GenericError.JWTError.UnauthorizedError
+import com.weatherxm.data.ApiError.GenericError.NotFoundError
+import com.weatherxm.data.ApiError.GenericError.UnknownError
+import com.weatherxm.data.ApiError.GenericError.ValidationError
+import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
+import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
+import com.weatherxm.data.ApiError.UserError.InvalidFromDate
+import com.weatherxm.data.ApiError.UserError.InvalidToDate
+import com.weatherxm.data.ApiError.UserError.WalletError.InvalidWalletAddress
 import com.weatherxm.data.network.ErrorResponse
+import com.weatherxm.data.network.ErrorResponse.Companion.DEVICE_NOT_FOUND
+import com.weatherxm.data.network.ErrorResponse.Companion.FORBIDDEN
+import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_ACCESS_TOKEN
+import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_CLAIM_ID
+import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_CLAIM_LOCATION
+import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_CREDENTIALS
+import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_FROM_DATE
+import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_PASSWORD
+import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_TO_DATE
+import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_USERNAME
+import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_WALLET_ADDRESS
+import com.weatherxm.data.network.ErrorResponse.Companion.NOT_FOUND
+import com.weatherxm.data.network.ErrorResponse.Companion.UNAUTHORIZED
+import com.weatherxm.data.network.ErrorResponse.Companion.USER_ALREADY_EXISTS
+import com.weatherxm.data.network.ErrorResponse.Companion.VALIDATION
 import okhttp3.Request
 import okhttp3.Response
 import timber.log.Timber
-import java.net.HttpURLConnection.HTTP_BAD_REQUEST
-import java.net.HttpURLConnection.HTTP_FORBIDDEN
-import java.net.HttpURLConnection.HTTP_GATEWAY_TIMEOUT
-import java.net.HttpURLConnection.HTTP_INTERNAL_ERROR
-import java.net.HttpURLConnection.HTTP_NOT_FOUND
-import java.net.HttpURLConnection.HTTP_UNAUTHORIZED
-import java.net.HttpURLConnection.HTTP_UNAVAILABLE
 
 fun Request.path(): String = this.url.encodedPath
 
@@ -21,7 +45,9 @@ fun Response.path(): String = this.request.path()
 
 /**
  * Map a NetworkResponse to Either using Failure sealed classes.
+ * Suppress ComplexMethod because it is just a bunch of "when statements"
  */
+@Suppress("ComplexMethod")
 fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
     Timber.d("Mapping network response")
     return try {
@@ -32,18 +58,27 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
             }
             is NetworkResponse.ServerError -> {
                 Timber.d(this.error, "Network response: ServerError")
-                when (this.code) {
-                    HTTP_UNAUTHORIZED -> Either.Left(ServerError.Unauthorized)
-                    HTTP_FORBIDDEN -> Either.Left(ServerError.Forbidden)
-                    HTTP_NOT_FOUND -> Either.Left(ServerError.NotFound)
-                    HTTP_INTERNAL_ERROR -> {
-                        Either.Left(ServerError.InternalError(this.body?.message))
+                Timber.w(this.error, this.body.toString())
+                Either.Left(
+                    when (this.body?.code) {
+                        INVALID_USERNAME -> InvalidUsername(this.body?.message)
+                        INVALID_PASSWORD -> InvalidPassword(this.body?.message)
+                        INVALID_CREDENTIALS -> InvalidCredentials(this.body?.message)
+                        USER_ALREADY_EXISTS -> UserAlreadyExists(this.body?.message)
+                        INVALID_ACCESS_TOKEN -> InvalidAccessToken(this.body?.message)
+                        DEVICE_NOT_FOUND -> DeviceNotFound(this.body?.message)
+                        INVALID_WALLET_ADDRESS -> InvalidWalletAddress(this.body?.message)
+                        INVALID_FROM_DATE -> InvalidFromDate(this.body?.message)
+                        INVALID_TO_DATE -> InvalidToDate(this.body?.message)
+                        INVALID_CLAIM_ID -> InvalidClaimId(this.body?.message)
+                        INVALID_CLAIM_LOCATION -> InvalidClaimLocation(this.body?.message)
+                        UNAUTHORIZED -> UnauthorizedError(this.body?.message)
+                        FORBIDDEN -> ForbiddenError(this.body?.message)
+                        VALIDATION -> ValidationError(this.body?.message)
+                        NOT_FOUND -> NotFoundError(this.body?.message)
+                        else -> UnknownError(this.body?.message)
                     }
-                    HTTP_UNAVAILABLE -> Either.Left(ServerError.Unavailable)
-                    HTTP_GATEWAY_TIMEOUT -> Either.Left(ServerError.Timeout)
-                    HTTP_BAD_REQUEST -> Either.Left(ServerError.BadRequest)
-                    else -> Either.Left(ServerError.GenericError(this.body?.message))
-                }
+                )
             }
             is NetworkResponse.NetworkError -> {
                 Timber.d(this.error, "Network response: NetworkError")
@@ -55,7 +90,7 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
             }
         }
     } catch (exception: JsonDataException) {
-        Timber.d(exception, "Could not parse json response")
-        Either.Left(ServerError.JsonError)
+        Timber.w(exception, "Could not parse json response")
+        Either.Left(Failure.JsonError)
     }
 }

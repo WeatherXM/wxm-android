@@ -3,9 +3,10 @@ package com.weatherxm.ui.connectwallet
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weatherxm.R
+import com.weatherxm.data.ApiError.UserError.WalletError.InvalidWalletAddress
 import com.weatherxm.data.Failure
+import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
-import com.weatherxm.data.ServerError
 import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.CoroutineScope
@@ -13,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import timber.log.Timber
 
 class ConnectWalletViewModel : ViewModel(), KoinComponent {
 
@@ -31,24 +31,7 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
         CoroutineScope(Dispatchers.IO).launch {
             userRepository.saveAddress(address)
                 .mapLeft {
-                    Timber.w("Connecting wallet failed: $it")
-                    when (it) {
-                        is Failure.NetworkError -> isAddressSaved.postValue(
-                            Resource.error(
-                                resHelper.getString(R.string.address_save_network_error)
-                            )
-                        )
-                        is ServerError -> isAddressSaved.postValue(
-                            Resource.error(
-                                resHelper.getString(R.string.address_save_server_error)
-                            )
-                        )
-                        is Failure.UnknownError -> isAddressSaved.postValue(
-                            Resource.error(
-                                resHelper.getString(R.string.unknown_error)
-                            )
-                        )
-                    }
+                    handleFailure(it)
                 }.map {
                     isAddressSaved.postValue(
                         Resource.success(resHelper.getString(R.string.address_saved))
@@ -56,6 +39,20 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
                     setCurrentAddress(address)
                 }
         }
+    }
+
+    private fun handleFailure(failure: Failure) {
+        isAddressSaved.postValue(
+            Resource.error(
+                resHelper.getString(
+                    when (failure) {
+                        is InvalidWalletAddress -> R.string.connect_wallet_invalid_address
+                        is NetworkError -> R.string.network_error
+                        else -> R.string.unknown_error
+                    }
+                )
+            )
+        )
     }
 
     fun setCurrentAddress(address: String?) {

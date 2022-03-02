@@ -9,14 +9,14 @@ import com.weatherxm.data.datasource.UserDataSource
 import org.koin.core.component.KoinComponent
 
 interface AuthRepository {
-    suspend fun login(username: String, password: String): Either<Error, String>
+    suspend fun login(username: String, password: String): Either<Failure, String>
     suspend fun logout()
     suspend fun isLoggedIn(): Either<Error, String>
     suspend fun signup(
         username: String,
         firstName: String?,
         lastName: String?
-    ): Either<Error, String>
+    ): Either<Failure, String>
 
     suspend fun resetPassword(email: String): Either<Failure, Unit>
 }
@@ -28,7 +28,7 @@ class AuthRepositoryImpl(
     private val userDataSource: UserDataSource
 ) : AuthRepository, KoinComponent {
 
-    override suspend fun login(username: String, password: String): Either<Error, String> {
+    override suspend fun login(username: String, password: String): Either<Failure, String> {
         return authDataSource.login(username, password)
     }
 
@@ -46,7 +46,7 @@ class AuthRepositoryImpl(
         username: String,
         firstName: String?,
         lastName: String?
-    ): Either<Error, String> {
+    ): Either<Failure, String> {
         return authDataSource.signup(username, firstName, lastName)
     }
 

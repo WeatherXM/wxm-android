@@ -18,9 +18,7 @@
         style="@style/Widget.WeatherXM.ProgressBar.Horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:indeterminate="true"
-        android:paddingHorizontal="@dimen/padding_normal"
-        android:visibility="gone" />
+        android:visibility="invisible"
+        tools:visibility="visible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

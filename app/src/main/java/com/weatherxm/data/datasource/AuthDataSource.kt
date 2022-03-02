@@ -1,7 +1,6 @@
 package com.weatherxm.data.datasource
 
 import arrow.core.Either
-import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.data.Failure
 import com.weatherxm.data.map
 import com.weatherxm.data.network.ApiService
@@ -20,13 +19,13 @@ interface AuthDataSource {
     suspend fun login(
         username: String,
         password: String
-    ): Either<Error, String>
+    ): Either<Failure, String>
 
     suspend fun signup(
         username: String,
         firstName: String?,
         lastName: String?
-    ): Either<Error, String>
+    ): Either<Failure, String>
 }
 
 class AuthDataSourceImpl(
@@ -35,33 +34,12 @@ class AuthDataSourceImpl(
     private val authService: AuthService
 ) : AuthDataSource {
 
-    override suspend fun login(username: String, password: String): Either<Error, String> {
-        return when (val response = authService.login(LoginBody(username, password))) {
-            is NetworkResponse.Success -> {
-                Timber.d("Login success. Saving credentials.")
-                credentialsDatasource.setCredentials(Credentials(username, password))
-                Either.Right(username)
-            }
-            is NetworkResponse.ServerError -> {
-                Timber.w(
-                    response.error,
-                    "Login failed with Server Error: ${response.body?.message}"
-                )
-                Either.Left(
-                    Error(
-                        response.body?.message ?: response.error.message,
-                        response.error
-                    )
-                )
-            }
-            is NetworkResponse.NetworkError -> {
-                Timber.w(response.error, "Login failed with Network Error.")
-                Either.Left(Error("Network Error", response.error))
-            }
-            is NetworkResponse.UnknownError -> {
-                Timber.w(response.error, "Login failed with Unknown Error.")
-                Either.Left(Error("Unknown Error", response.error))
-            }
+    override suspend fun login(username: String, password: String): Either<Failure, String> {
+        val response = authService.login(LoginBody(username, password)).map()
+        return response.map {
+            Timber.d("Login success. Saving credentials.")
+            credentialsDatasource.setCredentials(Credentials(username, password))
+            username
         }
     }
 
@@ -69,33 +47,11 @@ class AuthDataSourceImpl(
         username: String,
         firstName: String?,
         lastName: String?
-    ): Either<Error, String> {
-        return when (val response =
-            authService.register(RegistrationBody(username, firstName, lastName))) {
-            is NetworkResponse.Success -> {
-                Timber.d("Signup success. Email sent to user: $username")
-                Either.Right(username)
-            }
-            is NetworkResponse.ServerError -> {
-                Timber.w(
-                    response.error,
-                    "Signup failed with Server Error: ${response.body?.message}"
-                )
-                Either.Left(
-                    Error(
-                        response.body?.message ?: response.error.message,
-                        response.error
-                    )
-                )
-            }
-            is NetworkResponse.NetworkError -> {
-                Timber.w(response.error, "Signup failed with Network Error.")
-                Either.Left(Error("Network Error", response.error))
-            }
-            is NetworkResponse.UnknownError -> {
-                Timber.w(response.error, "Signup failed with Unknown Error.")
-                Either.Left(Error("Unknown Error", response.error))
-            }
+    ): Either<Failure, String> {
+        val response = authService.register(RegistrationBody(username, firstName, lastName)).map()
+        return response.map {
+            Timber.d("Signup success. Email sent to user: $username")
+            username
         }
     }
 
