@@ -16,6 +16,9 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class ConnectWalletViewModel : ViewModel(), KoinComponent {
+    companion object {
+        const val ETH_ADDR_PREFIX: String = "0x"
+    }
 
     private val isAddressSaved = MutableLiveData<Resource<String>>()
     fun isAddressSaved() = isAddressSaved
@@ -24,7 +27,10 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
 
     private var currentAddress = MutableLiveData<String?>(null)
+    private var newAddress = MutableLiveData<String?>(null)
     fun currentAddress() = currentAddress
+    fun newAddress() = newAddress
+
 
     fun saveAddress(address: String) {
         isAddressSaved.postValue(Resource.loading())
@@ -59,12 +65,19 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
         currentAddress.postValue(address)
     }
 
-    // Custom fix because scanning the address in Metamask adds the "ethereum:" prefix
-    fun fixQrAddressScanned(scannedAddress: String): String {
-        return if (scannedAddress.startsWith("0x")) {
-            scannedAddress
+    /*
+    * Custom fix because scanning the address in Metamask adds the "ethereum:" prefix
+    * Also fix if the QR scanned is not an ETH address (or is null) to return null and not proceed
+    */
+    fun onNewAddress(scannedAddress: String?) {
+        if (scannedAddress.isNullOrEmpty() || !scannedAddress.contains(ETH_ADDR_PREFIX)) {
+            return
+        }
+
+        if (scannedAddress.startsWith("0x")) {
+            newAddress.postValue(scannedAddress)
         } else {
-            scannedAddress.substring(scannedAddress.indexOf("0x"))
+            newAddress.postValue(scannedAddress.substring(scannedAddress.indexOf(ETH_ADDR_PREFIX)))
         }
     }
 }

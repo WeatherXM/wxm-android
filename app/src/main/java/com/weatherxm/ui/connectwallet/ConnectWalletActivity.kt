@@ -38,8 +38,8 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
     // Register the launcher and result handler for QR code scanner
     private val barcodeLauncher =
         registerForActivityResult(ScanContract()) { result: ScanIntentResult ->
-            result.contents.let { address ->
-                binding.newAddress.setText(model.fixQrAddressScanned(address))
+            result.contents.let {
+                model.onNewAddress(it)
             }
         }
 
@@ -67,6 +67,12 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         binding.newAddress.onTextChanged {
             binding.newAddressContainer.error = null
             binding.saveBtn.isEnabled = !binding.newAddress.text.isNullOrEmpty()
+        }
+
+        model.newAddress().observe(this) { address ->
+            address?.let {
+                binding.newAddress.setText(it)
+            }
         }
 
         // Listen to current address for UI update
