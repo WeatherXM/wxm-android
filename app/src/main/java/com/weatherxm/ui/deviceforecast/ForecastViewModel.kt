@@ -4,9 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weatherxm.R
+import com.weatherxm.data.ApiError.UserError.InvalidFromDate
+import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.Failure
+import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
-import com.weatherxm.data.ServerError
 import com.weatherxm.ui.ForecastData
 import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.util.ResourcesHelper
@@ -46,19 +48,22 @@ class ForecastViewModel : ViewModel(), KoinComponent {
                     onForecast.postValue(Resource.success(forecast))
                 }
                 .mapLeft {
-                    Timber.w("Getting daily forecast failed: $it")
-                    when (it) {
-                        is Failure.NetworkError -> onForecast.postValue(
-                            Resource.error(resHelper.getString(R.string.network_error))
-                        )
-                        is ServerError -> onForecast.postValue(
-                            Resource.error(resHelper.getString(R.string.server_error))
-                        )
-                        is Failure.UnknownError -> onForecast.postValue(
-                            Resource.error(resHelper.getString(R.string.unknown_error))
-                        )
-                    }
+                    handleFailure(it)
                 }
         }
+    }
+
+    private fun handleFailure(failure: Failure) {
+        onForecast.postValue(
+            Resource.error(
+                resHelper.getString(
+                    when (failure) {
+                        is InvalidFromDate, is InvalidToDate -> R.string.forecast_invalid_dates
+                        is NetworkError -> R.string.network_error
+                        else -> R.string.unknown_error
+                    }
+                )
+            )
+        )
     }
 }

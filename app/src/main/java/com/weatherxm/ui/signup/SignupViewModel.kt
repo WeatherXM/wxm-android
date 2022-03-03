@@ -3,6 +3,10 @@ package com.weatherxm.ui.signup
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weatherxm.R
+import com.weatherxm.data.ApiError.AuthError.InvalidUsername
+import com.weatherxm.data.ApiError.AuthError.SignupError.UserAlreadyExists
+import com.weatherxm.data.Failure
+import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.util.ResourcesHelper
@@ -28,13 +32,29 @@ class SignupViewModel : ViewModel(), KoinComponent {
             val last = if (lastName.isNullOrEmpty()) null else lastName
             authUseCase.signup(username, first, last)
                 .mapLeft {
-                    Timber.d(it, "Signup Error")
-                    isSignedUp.postValue(Resource.error("Signup Error. ${it.message}"))
+                    Timber.d("Signup Error: $it")
+                    handleFailure(it, username)
                 }.map {
                     isSignedUp.postValue(
                         Resource.success(resHelper.getString(R.string.success_signup_text, it))
                     )
                 }
         }
+    }
+
+    private fun handleFailure(failure: Failure, username: String) {
+        isSignedUp.postValue(
+            Resource.error(
+                when (failure) {
+                    is InvalidUsername -> resHelper.getString(R.string.signup_invalid_username)
+                    is UserAlreadyExists -> resHelper.getString(
+                        R.string.signup_user_already_exists,
+                        username
+                    )
+                    is NetworkError -> resHelper.getString(R.string.network_error)
+                    else -> resHelper.getString(R.string.unknown_error)
+                }
+            )
+        )
     }
 }

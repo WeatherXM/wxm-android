@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weatherxm.R
+import com.weatherxm.data.ApiError
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
-import com.weatherxm.data.ServerError
 import com.weatherxm.ui.TokenSummary
 import com.weatherxm.ui.UIError
 import com.weatherxm.usecases.UserDeviceUseCase
@@ -95,7 +95,6 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     setDevice(it)
                 }
                 .mapLeft {
-                    Timber.w("Fetching user's device with ID (${device.id}) failed: $it")
                     if (it == Failure.NetworkError) {
                         shouldRetry = true
                     }
@@ -109,7 +108,6 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     onTokens.postValue(it)
                 }
                 .mapLeft {
-                    Timber.w("Fetching tokens failed: $it")
                     if (it == Failure.NetworkError) {
                         shouldRetry = true
                     }
@@ -122,7 +120,6 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     onForecast.postValue(addCurrentToForecast(device.currentWeather, it))
                 }
                 .mapLeft {
-                    Timber.w("Fetching hourly forecast failed: $it")
                     if (it == Failure.NetworkError) {
                         shouldRetry = true
                     }
@@ -146,25 +143,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                             onForecast.postValue(addCurrentToForecast(device.currentWeather, it))
                         }
                         .mapLeft {
-                            Timber.w("Fetching today hourly forecast failed: $it")
-                            val uiError = UIError("", null)
-                            when (it) {
-                                is Failure.NetworkError -> {
-                                    uiError.errorMessage =
-                                        resHelper.getString(R.string.network_error)
-                                    uiError.retryFunction =
-                                        { (::fetchForecast)(forecastCurrentState) }
-                                }
-                                is ServerError -> {
-                                    uiError.errorMessage =
-                                        resHelper.getString(R.string.server_error)
-                                }
-                                is Failure.UnknownError -> {
-                                    uiError.errorMessage =
-                                        resHelper.getString(R.string.unknown_error)
-                                }
-                            }
-                            onError.postValue(uiError)
+                            handleForecastFailure(it)
                         }
                 }
                 ForecastState.TOMORROW -> {
@@ -183,30 +162,29 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                             }
                         }
                         .mapLeft {
-                            Timber.w("Fetching tomorrow hourly forecast failed: $it")
-                            val uiError = UIError("", null)
-                            when (it) {
-                                is Failure.NetworkError -> {
-                                    uiError.errorMessage =
-                                        resHelper.getString(R.string.network_error)
-                                    uiError.retryFunction =
-                                        { (::fetchForecast)(forecastCurrentState) }
-                                }
-                                is ServerError -> {
-                                    uiError.errorMessage =
-                                        resHelper.getString(R.string.server_error)
-                                }
-                                is Failure.UnknownError -> {
-                                    uiError.errorMessage =
-                                        resHelper.getString(R.string.unknown_error)
-                                }
-                            }
-                            onError.postValue(uiError)
+                            handleForecastFailure(it)
                         }
                 }
             }
             onLoading.postValue(false)
         }
+    }
+
+    private fun handleForecastFailure(failure: Failure) {
+        val uiError = UIError("", null)
+        when (failure) {
+            is ApiError.UserError.InvalidFromDate, is ApiError.UserError.InvalidToDate -> {
+                uiError.errorMessage = resHelper.getString(R.string.forecast_invalid_dates)
+            }
+            is Failure.NetworkError -> {
+                uiError.errorMessage = resHelper.getString(R.string.network_error)
+                uiError.retryFunction = { (::fetchForecast)(forecastCurrentState) }
+            }
+            else -> {
+                uiError.errorMessage = resHelper.getString(R.string.unknown_error)
+            }
+        }
+        onError.postValue(uiError)
     }
 
     fun fetchTokenDetails(newState: TokensState) {
@@ -216,17 +194,17 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             when (tokensCurrentState) {
                 TokensState.HOUR24 -> {
                     userDeviceUseCase.getTokensSummary24H(device.id)
-                        .map { handleTokenSuccess(it) }
+                        .map { onTokens.postValue(it) }
                         .mapLeft { handleTokenFailure(it) }
                 }
                 TokensState.DAYS7 -> {
                     userDeviceUseCase.getTokensSummary7D(device.id)
-                        .map { handleTokenSuccess(it) }
+                        .map { onTokens.postValue(it) }
                         .mapLeft { handleTokenFailure(it) }
                 }
                 TokensState.DAYS30 -> {
                     userDeviceUseCase.getTokensSummary30D(device.id)
-                        .map { handleTokenSuccess(it) }
+                        .map { onTokens.postValue(it) }
                         .mapLeft { handleTokenFailure(it) }
                 }
             }
@@ -243,17 +221,16 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     setDevice(it)
                 }
                 .mapLeft {
-                    Timber.w("Fetching user's device with ID (${device.id}) failed: $it")
                     val uiError = UIError("", null)
                     when (it) {
+                        is ApiError.DeviceNotFound -> {
+                            uiError.errorMessage = resHelper.getString(R.string.device_not_found)
+                        }
                         is Failure.NetworkError -> {
                             uiError.errorMessage = resHelper.getString(R.string.network_error)
                             uiError.retryFunction = ::fetchUserDevice
                         }
-                        is ServerError -> {
-                            uiError.errorMessage = resHelper.getString(R.string.server_error)
-                        }
-                        is Failure.UnknownError -> {
+                        else -> {
                             uiError.errorMessage = resHelper.getString(R.string.unknown_error)
                         }
                     }
@@ -306,23 +283,18 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    private fun handleTokenSuccess(tokenSummary: TokenSummary) {
-        Timber.d("Got Tokens: $tokenSummary")
-        onTokens.postValue(tokenSummary)
-    }
-
     private fun handleTokenFailure(failure: Failure) {
-        Timber.w("Fetching tokens failed: $failure")
         val uiError = UIError("", null)
         when (failure) {
+            is ApiError.GenericError -> {
+                uiError.errorMessage =
+                    failure.message ?: resHelper.getString(R.string.unknown_error)
+            }
             is Failure.NetworkError -> {
                 uiError.errorMessage = resHelper.getString(R.string.network_error)
                 uiError.retryFunction = { (::fetchTokenDetails)(tokensCurrentState) }
             }
-            is ServerError -> {
-                uiError.errorMessage = resHelper.getString(R.string.server_error)
-            }
-            is Failure.UnknownError -> {
+            else -> {
                 uiError.errorMessage = resHelper.getString(R.string.unknown_error)
             }
         }

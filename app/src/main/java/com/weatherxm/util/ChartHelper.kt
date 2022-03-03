@@ -10,17 +10,19 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.weatherxm.R
-import java.util.*
 import kotlin.math.roundToInt
 
+// TODO: Explore whether that suppress can be removed 
 // Custom implementation of https://weeklycoding.com/mpandroidchart-documentation/markerview/
+@Suppress("LongParameterList")
 class CustomDefaultMarkerView(
     context: Context,
     private val times: MutableList<String>?,
     private val valueName: String,
     private val valueUnit: String,
     private val showDecimals: Boolean,
-    private val isPrecipitation: Boolean = false
+    private val isPrecipitation: Boolean = false,
+    private val decimals: Int = 0
 ) : MarkerView(context, R.layout.view_default_chart_marker) {
     private var timeView: TextView = findViewById(R.id.time)
     private var valueView: TextView = findViewById(R.id.value)
@@ -49,11 +51,7 @@ class CustomDefaultMarkerView(
                 "$valueName: $precipitationIntensity"
             }
             showDecimals -> {
-                /*
-                    Format to show only one decimal point, we use Locale.US
-                    to have '.' for decimal separator instead of ','
-                */
-                val value = "%.1f".format(Locale.US, entryClicked.y)
+                val value = "%.${decimals}f".format(entryClicked.y)
                 "$valueName: $value$valueUnit"
             }
             else -> {

@@ -8,18 +8,50 @@ import androidx.annotation.Keep
 @Keep
 sealed class Failure {
     object NetworkError : Failure()
+    object JsonError : Failure()
     object UnknownError : Failure()
 }
 
 @Keep
-sealed class ServerError(val message: String? = null) : Failure() {
-    class GenericError(message: String? = null) : ServerError(message)
-    class InternalError(message: String? = null) : ServerError(message)
-    object Unauthorized : ServerError(null)
-    object Forbidden : ServerError()
-    object NotFound : ServerError()
-    object Unavailable : ServerError()
-    object Timeout : ServerError()
-    object JsonError : ServerError()
-    object BadRequest : ServerError()
+sealed class ApiError(val message: String? = null) : Failure() {
+    sealed class AuthError(message: String? = null) : ApiError(message) {
+        sealed class LoginError(message: String? = null) : AuthError(message) {
+            class InvalidPassword(message: String? = null) : AuthError(message)
+            class InvalidCredentials(message: String? = null) : AuthError(message)
+        }
+
+        sealed class SignupError(message: String? = null) : AuthError(message) {
+            class UserAlreadyExists(message: String? = null) : AuthError(message)
+        }
+
+        class InvalidUsername(message: String? = null) : AuthError(message)
+        class InvalidAccessToken(message: String? = null) : AuthError(message)
+    }
+
+    class DeviceNotFound(message: String? = null) : ApiError(message)
+
+    sealed class UserError(message: String? = null) : ApiError(message) {
+        sealed class WalletError(message: String? = null) : UserError(message) {
+            class InvalidWalletAddress(message: String? = null) : WalletError(message)
+        }
+
+        sealed class ClaimError(message: String? = null) : UserError(message) {
+            class InvalidClaimId(message: String? = null) : ClaimError(message)
+            class InvalidClaimLocation(message: String? = null) : ClaimError(message)
+        }
+
+        class InvalidFromDate(message: String? = null) : UserError(message)
+        class InvalidToDate(message: String? = null) : UserError(message)
+    }
+
+    sealed class GenericError(message: String? = null) : ApiError(message) {
+        sealed class JWTError(message: String? = null) : GenericError(message) {
+            class UnauthorizedError(message: String? = null) : JWTError(message)
+            class ForbiddenError(message: String? = null) : JWTError(message)
+        }
+        class ValidationError(message: String? = null) : GenericError(message)
+        class UnknownError(message: String? = null) : GenericError(message)
+        class NotFoundError(message: String? = null) : GenericError(message)
+    }
 }
+

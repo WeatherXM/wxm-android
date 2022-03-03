@@ -9,13 +9,15 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 interface AuthUseCase {
-    suspend fun login(username: String, password: String): Either<Error, String>
+    suspend fun login(username: String, password: String): Either<Failure, String>
     suspend fun getUser(): Either<Failure, User>
     suspend fun signup(
         username: String,
         firstName: String?,
         lastName: String?
-    ): Either<Error, String>
+    ): Either<Failure, String>
+
+    suspend fun resetPassword(email: String): Either<Failure, Unit>
 }
 
 class AuthUseCaseImpl : AuthUseCase, KoinComponent {
@@ -26,15 +28,19 @@ class AuthUseCaseImpl : AuthUseCase, KoinComponent {
         username: String,
         firstName: String?,
         lastName: String?
-    ): Either<Error, String> {
+    ): Either<Failure, String> {
         return authRepository.signup(username, firstName, lastName)
     }
 
-    override suspend fun login(username: String, password: String): Either<Error, String> {
+    override suspend fun login(username: String, password: String): Either<Failure, String> {
         return authRepository.login(username, password)
     }
 
     override suspend fun getUser(): Either<Failure, User> {
         return userRepository.getUser()
+    }
+
+    override suspend fun resetPassword(email: String): Either<Failure, Unit> {
+        return authRepository.resetPassword(email)
     }
 }

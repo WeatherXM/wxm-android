@@ -52,7 +52,7 @@ interface ApiService {
     @MockResponse(code = 200, body = "mock_files/empty_response.json")
     @POST("/api/v1/auth/resetPassword")
     suspend fun resetPassword(
-        @Body refresh: ResetPasswordBody,
+        @Body resetPasswordBody: ResetPasswordBody,
     ): NetworkResponse<Unit, ErrorResponse>
 
     @Mock

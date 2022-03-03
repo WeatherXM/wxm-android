@@ -7,10 +7,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weatherxm.R
+import com.weatherxm.data.ApiError.UserError.InvalidFromDate
+import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
+import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
-import com.weatherxm.data.ServerError
 import com.weatherxm.ui.BarChartData
 import com.weatherxm.ui.HistoryCharts
 import com.weatherxm.ui.LineChartData
@@ -58,20 +60,23 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
                     onCharts.postValue(Resource.success(posToData.get(historyCharts.size - 1)))
                 }
                 .mapLeft {
-                    Timber.w("Getting history failed: $it")
-                    when (it) {
-                        is Failure.NetworkError -> onCharts.postValue(
-                            Resource.error(resHelper.getString(R.string.network_error))
-                        )
-                        is ServerError -> onCharts.postValue(
-                            Resource.error(resHelper.getString(R.string.server_error))
-                        )
-                        is Failure.UnknownError -> onCharts.postValue(
-                            Resource.error(resHelper.getString(R.string.unknown_error))
-                        )
-                    }
+                    handleFailure(it)
                 }
         }
+    }
+
+    private fun handleFailure(failure: Failure) {
+        onCharts.postValue(
+            Resource.error(
+                resHelper.getString(
+                    when (failure) {
+                        is InvalidFromDate, is InvalidToDate -> R.string.history_invalid_dates
+                        is NetworkError -> R.string.network_error
+                        else -> R.string.unknown_error
+                    }
+                )
+            )
+        )
     }
 
     private fun mapPositionToData(allCharts: List<HistoryCharts>) {

@@ -1,6 +1,6 @@
 package com.weatherxm.ui.common
 
-import android.app.Activity
+import android.content.Context
 import android.widget.Toast
 import androidx.annotation.IntDef
 import androidx.annotation.StringRes
@@ -13,7 +13,7 @@ import androidx.fragment.app.FragmentTransaction
 @Retention(AnnotationRetention.SOURCE)
 private annotation class Duration
 
-fun Activity?.toast(
+fun Context?.toast(
     @StringRes message: Int,
     vararg args: Any = emptyArray(),
     @Duration duration: Int = Toast.LENGTH_SHORT
@@ -21,25 +21,13 @@ fun Activity?.toast(
     this?.toast(this.getString(message, *args), duration)
 }
 
-fun Activity?.toast(
+fun Context?.toast(
     message: String,
     @Duration duration: Int = Toast.LENGTH_SHORT
 ) {
     this?.let {
         Toast.makeText(it, message, duration).show()
     }
-}
-
-fun Fragment?.toast(
-    @StringRes message: Int,
-    vararg args: Any = emptyArray(),
-    @Duration duration: Int = Toast.LENGTH_SHORT
-) {
-    this?.toast(this.getString(message, *args), duration)
-}
-
-fun Fragment?.toast(message: String, @Duration duration: Int = Toast.LENGTH_SHORT) {
-    this?.let { it.activity.toast(message, duration) }
 }
 
 fun AppCompatActivity.addFragment(

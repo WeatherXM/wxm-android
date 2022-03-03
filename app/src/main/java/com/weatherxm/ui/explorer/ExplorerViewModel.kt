@@ -7,9 +7,8 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.weatherxm.R
 import com.weatherxm.data.Device
-import com.weatherxm.data.Failure
+import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
-import com.weatherxm.data.ServerError
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.MapboxUtils
 import com.weatherxm.util.ResourcesHelper
@@ -31,7 +30,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     }
 
     private val explorerUseCase: ExplorerUseCase by inject()
-    private val resourcesHelper: ResourcesHelper by inject()
+    private val resHelper: ResourcesHelper by inject()
 
     private var currentZoom: Double = 0.0
     private var currentExplorerState = ExplorerState(null, null, null)
@@ -62,7 +61,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     fun onZoomChange(): LiveData<Point?> = onZoomChange
 
     fun fetch() {
-        state.postValue(Resource.loading(currentExplorerState))
+        state.postValue(Resource.loading())
 
         CoroutineScope(Dispatchers.IO).launch {
             explorerUseCase.getPointsFromPublicDevices(currentZoom)
@@ -72,18 +71,16 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
                     state.postValue(Resource.success(currentExplorerState))
                 }
                 .mapLeft {
-                    Timber.w("Getting public devices on explorer failed: $it")
-                    when (it) {
-                        is Failure.NetworkError -> state.postValue(
-                            Resource.error(resourcesHelper.getString(R.string.network_error))
+                    state.postValue(
+                        Resource.error(
+                            resHelper.getString(
+                                when (it) {
+                                    is NetworkError -> R.string.network_error
+                                    else -> R.string.unknown_error
+                                }
+                            )
                         )
-                        is ServerError -> state.postValue(
-                            Resource.error(resourcesHelper.getString(R.string.server_error))
-                        )
-                        is Failure.UnknownError -> state.postValue(
-                            Resource.error(resourcesHelper.getString(R.string.unknown_error))
-                        )
-                    }
+                    )
                 }
         }
     }
@@ -126,9 +123,5 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
         currentHexSelected?.let {
             onHexSelected.postValue(it)
         }
-    }
-
-    fun getHexSelected(): String? {
-        return currentHexSelected
     }
 }

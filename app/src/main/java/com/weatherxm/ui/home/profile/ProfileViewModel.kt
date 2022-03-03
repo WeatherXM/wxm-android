@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weatherxm.R
+import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.data.User
 import com.weatherxm.data.repository.UserRepository
@@ -18,7 +19,7 @@ import timber.log.Timber
 class ProfileViewModel : ViewModel(), KoinComponent {
 
     private val userRepository: UserRepository by inject()
-    private val resourcesHelper: ResourcesHelper by inject()
+    private val resHelper: ResourcesHelper by inject()
 
     private val user = MutableLiveData<Resource<User>>().apply {
         value = Resource.loading()
@@ -37,10 +38,7 @@ class ProfileViewModel : ViewModel(), KoinComponent {
                     this@ProfileViewModel.user.postValue(Resource.success(user))
                 }
                 .mapLeft {
-                    Timber.w("Getting user profile info failed: $it")
-                    user.postValue(
-                        Resource.error(resourcesHelper.getString(R.string.user_info_error))
-                    )
+                    handleFailure(it)
                 }
         }
     }
@@ -53,7 +51,6 @@ class ProfileViewModel : ViewModel(), KoinComponent {
                     hasWallet.postValue(!user.wallet?.address.isNullOrEmpty())
                 }
                 .mapLeft {
-                    Timber.w("Getting user profile info failed: $it")
                     // TODO: how to handle this? ideas?
                 }
         }
@@ -61,5 +58,18 @@ class ProfileViewModel : ViewModel(), KoinComponent {
 
     fun walletConnected() {
         hasWallet.postValue(true)
+    }
+
+    private fun handleFailure(failure: Failure) {
+        user.postValue(
+            Resource.error(
+                resHelper.getString(
+                    when (failure) {
+                        is Failure.NetworkError -> R.string.network_error
+                        else -> R.string.unknown_error
+                    }
+                )
+            )
+        )
     }
 }

@@ -14,7 +14,7 @@ interface AuthService {
     @POST("/api/v1/auth/login")
     suspend fun login(
         @Body credentials: LoginBody,
-    ): NetworkResponse<AuthToken, AuthError>
+    ): NetworkResponse<AuthToken, ErrorResponse>
 
     @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
@@ -22,12 +22,12 @@ interface AuthService {
     @POST("/api/v1/auth/register")
     suspend fun register(
         @Body registration: RegistrationBody,
-    ): NetworkResponse<Unit, AuthError>
+    ): NetworkResponse<Unit, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/refresh.json")
     @POST("/api/v1/auth/refresh")
     suspend fun refresh(
         @Body refresh: RefreshBody,
-    ): NetworkResponse<AuthToken, AuthError>
+    ): NetworkResponse<AuthToken, ErrorResponse>
 }

@@ -63,7 +63,7 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.login.setOnClickListener {
-            val username = binding.username.text.toString().trim()
+            val username = binding.username.text.toString().trim().lowercase()
             val password = binding.password.text.toString().trim()
 
             if (!validator.validateUsername(username)) {

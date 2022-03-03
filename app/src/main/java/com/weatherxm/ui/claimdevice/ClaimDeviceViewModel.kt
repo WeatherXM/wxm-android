@@ -4,9 +4,11 @@ import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weatherxm.R
+import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
+import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.Failure
+import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
-import com.weatherxm.data.ServerError
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.CoroutineScope
@@ -49,8 +51,6 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     fun onClaimResult() = onClaimResult
 
     fun next() = onStep.postValue(1)
-
-    fun previous() = onStep.postValue(-1)
 
     fun setSerialNumber(serialNumber: String) {
         currentSerialNumber = serialNumber
@@ -101,21 +101,25 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
                         )
                     }
                     .mapLeft {
-                        Timber.w("Claiming device failed: $it")
-                        when (it) {
-                            is Failure.NetworkError -> onClaimResult.postValue(
-                                Resource.error(resHelper.getString(R.string.network_error))
-                            )
-                            is ServerError -> onClaimResult.postValue(
-                                Resource.error(resHelper.getString(R.string.server_error))
-                            )
-                            is Failure.UnknownError -> onClaimResult.postValue(
-                                Resource.error(resHelper.getString(R.string.unknown_error))
-                            )
-                        }
+                        handleFailure(it)
                     }
             }
         }
+    }
+
+    private fun handleFailure(failure: Failure) {
+        onClaimResult.postValue(
+            Resource.error(
+                resHelper.getString(
+                    when (failure) {
+                        is InvalidClaimId -> R.string.claim_invalid_serial
+                        is InvalidClaimLocation -> R.string.claim_invalid_location
+                        is NetworkError -> R.string.network_error
+                        else -> R.string.unknown_error
+                    }
+                )
+            )
+        )
     }
 
     fun fetchUserEmail() {

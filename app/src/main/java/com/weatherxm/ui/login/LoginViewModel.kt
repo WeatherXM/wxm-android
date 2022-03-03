@@ -5,6 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import arrow.core.flatMap
 import com.weatherxm.R
+import com.weatherxm.data.ApiError.AuthError.InvalidUsername
+import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidCredentials
+import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidPassword
+import com.weatherxm.data.Failure
+import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
 import com.weatherxm.data.User
 import com.weatherxm.usecases.AuthUseCase
@@ -32,8 +37,8 @@ class LoginViewModel : ViewModel(), KoinComponent {
         CoroutineScope(Dispatchers.IO).launch {
             authUseCase.login(username, password)
                 .mapLeft {
-                    Timber.d(it, "Login Error")
-                    isLoggedIn.postValue(Resource.error("Login Error. ${it.message}"))
+                    handleLoginFailure(it)
+                    return@launch
                 }
                 .flatMap {
                     isLoggedIn.postValue(Resource.success(Unit))
@@ -41,13 +46,40 @@ class LoginViewModel : ViewModel(), KoinComponent {
                 }
                 .mapLeft {
                     Timber.d("Got error when fetching the user on Login Screen: $it")
-                    user.postValue(
-                        Resource.error(resHelper.getString(R.string.user_info_error))
-                    )
+                    handleUserFailure(it)
                 }
                 .map {
                     user.postValue(Resource.success(it))
                 }
         }
+    }
+
+    private fun handleLoginFailure(failure: Failure) {
+        isLoggedIn.postValue(
+            Resource.error(
+                resHelper.getString(
+                    when (failure) {
+                        is InvalidUsername -> R.string.login_invalid_username
+                        is InvalidPassword -> R.string.login_invalid_password
+                        is InvalidCredentials -> R.string.login_invalid_credentials
+                        is NetworkError -> R.string.network_error
+                        else -> R.string.unknown_error
+                    }
+                )
+            )
+        )
+    }
+
+    private fun handleUserFailure(failure: Failure) {
+        user.postValue(
+            Resource.error(
+                resHelper.getString(
+                    when (failure) {
+                        is NetworkError -> R.string.network_error
+                        else -> R.string.unknown_error
+                    }
+                )
+            )
+        )
     }
 }

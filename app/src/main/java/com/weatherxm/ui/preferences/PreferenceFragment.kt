@@ -50,7 +50,7 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
                         }
                     contactSupportButton?.onPreferenceClickListener =
                         Preference.OnPreferenceClickListener {
-                            navigator.sendSupportEmail(this)
+                            navigator.sendSupportEmail(context)
                             true
                         }
                 }
