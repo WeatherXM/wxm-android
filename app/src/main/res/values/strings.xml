@@ -216,8 +216,12 @@
     <string name="support_email_subject_no_activation">No activation email</string>
 
     <!-- Tokens -->
+    <string name="advanced_token_rewards">Advanced Token Rewards</string>
     <string name="tokens_24h">24h:</string>
     <string name="tokens_total">Total:</string>
+    <string name="reward">Reward: %s WXM</string>
+    <string name="max_reward">Reward at full scale: %s WXM</string>
+    <string name="transaction_hash">Transaction hash: %s</string>
 
     <!-- Support Email -->
     <string name="support_email_recipient">support@weatherxm.com</string>
