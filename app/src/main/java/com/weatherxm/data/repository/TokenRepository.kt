@@ -11,7 +11,7 @@ class TokenRepository(private val tokenDataSource: TokenDataSource) : KoinCompon
 
     suspend fun getTokens24H(deviceId: String): Either<Failure, Float?> {
         return tokenDataSource.getTokens(deviceId).map {
-            it.last_day_actual_reward
+            it.lastDayActualReward
         }
     }
 

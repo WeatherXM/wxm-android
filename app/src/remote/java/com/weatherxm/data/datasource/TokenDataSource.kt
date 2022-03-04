@@ -20,7 +20,7 @@ class TokenDataSourceImpl(
         // return apiService.getTokens(deviceId).map()
         return Either.Right(
             Tokens(
-                last_day_actual_reward = 1.0F,
+                lastDayActualReward = 1.0F,
                 weekly = TokensSummaryResponse(7F, List(7) { TokenEntry("", 1F) }),
                 monthly = TokensSummaryResponse(30F, List(30) { TokenEntry("", 1F) })
             )

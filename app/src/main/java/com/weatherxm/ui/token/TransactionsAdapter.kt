@@ -19,6 +19,12 @@ import org.koin.core.component.inject
 class TransactionsAdapter(private val transactionListener: (Transaction) -> Unit) :
     ListAdapter<Transaction, TransactionsAdapter.TransactionsViewHolder>(TransactionDiffCallback()),
     KoinComponent {
+    companion object {
+        const val BAD_SCORE = 0.25
+        const val OK_SCORE = 0.5
+        const val GOOD_SCORE = 0.75
+    }
+
     val resHelper: ResourcesHelper by inject()
     val mask: Mask by inject()
 
@@ -66,24 +72,24 @@ class TransactionsAdapter(private val transactionListener: (Transaction) -> Unit
                     )
                 }
             binding.txHash.text =
-                item.tx_hash?.let {
+                item.txHash?.let {
                     resHelper.getString(R.string.transaction_hash, mask.maskHash(it))
                 }
             binding.reward.text = resHelper.getString(
                 R.string.reward,
-                item.actual_reward.toString()
+                item.actualReward.toString()
             )
             binding.maxReward.text = resHelper.getString(
                 R.string.max_reward,
-                item.daily_reward.toString()
+                item.dailyReward.toString()
             )
 
-            item.validation_score?.let {
+            item.validationScore?.let {
                 when {
-                    it >= 0.75 -> binding.statusChip.setTextAndColor(it.toString(), R.color.green)
-                    it >= 0.5 -> binding.statusChip.setTextAndColor(it.toString(), R.color.yellow)
-                    it >= 0.25 -> binding.statusChip.setTextAndColor(it.toString(), R.color.orange)
-                    else -> binding.statusChip.setTextAndColor(it.toString(), R.color.red)
+                    it >= GOOD_SCORE -> binding.scale.setTextAndColor(it.toString(), R.color.green)
+                    it >= OK_SCORE -> binding.scale.setTextAndColor(it.toString(), R.color.yellow)
+                    it >= BAD_SCORE -> binding.scale.setTextAndColor(it.toString(), R.color.orange)
+                    else -> binding.scale.setTextAndColor(it.toString(), R.color.red)
                 }
             }
         }
@@ -92,18 +98,18 @@ class TransactionsAdapter(private val transactionListener: (Transaction) -> Unit
     class TransactionDiffCallback : DiffUtil.ItemCallback<Transaction>() {
 
         override fun areItemsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
-            return oldItem.tx_hash == newItem.tx_hash
+            return oldItem.txHash == newItem.txHash
         }
 
         override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction): Boolean {
-            return oldItem.tx_hash == newItem.tx_hash &&
+            return oldItem.txHash == newItem.txHash &&
                 oldItem.timestamp == newItem.timestamp &&
-                oldItem.validation_score == newItem.validation_score &&
-                oldItem.daily_reward == newItem.daily_reward &&
-                oldItem.actual_reward == newItem.actual_reward &&
-                oldItem.total_rewards == newItem.total_rewards &&
-                oldItem.lost_rewards == newItem.lost_rewards &&
-                oldItem.wxm_balance == newItem.wxm_balance
+                oldItem.validationScore == newItem.validationScore &&
+                oldItem.dailyReward == newItem.dailyReward &&
+                oldItem.actualReward == newItem.actualReward &&
+                oldItem.totalRewards == newItem.totalRewards &&
+                oldItem.lostRewards == newItem.lostRewards &&
+                oldItem.wxmBalance == newItem.wxmBalance
         }
     }
 }

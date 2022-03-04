@@ -20,6 +20,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
+@Suppress("TooManyFunctions")
 class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     private val resHelper: ResourcesHelper by inject()

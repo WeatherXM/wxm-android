@@ -88,7 +88,7 @@
                 tools:text="Reward: 100 WXM" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/statusChip"
+                android:id="@+id/scale"
                 style="@style/Widget.WeatherXM.Status.Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/max_reward"
-                app:layout_constraintBaseline_toBaselineOf="@id/statusChip"
+                app:layout_constraintBaseline_toBaselineOf="@id/scale"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:text="Reward at full scale: 1000 WXM" />
         </androidx.constraintlayout.widget.ConstraintLayout>

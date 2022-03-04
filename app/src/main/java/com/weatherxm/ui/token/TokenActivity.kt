@@ -55,7 +55,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
 
         // Initialize the adapter with empty data
         adapter = TransactionsAdapter {
-            it.tx_hash?.let { hash ->
+            it.txHash?.let { hash ->
                 navigator.openWebsite(this, "$TransactionExplorer$hash")
             }
         }
