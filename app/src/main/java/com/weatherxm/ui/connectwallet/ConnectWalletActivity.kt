@@ -86,7 +86,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
                 binding.notice.visibility = View.GONE
                 binding.currentAddressContainer.visibility = View.VISIBLE
                 binding.currentAddressTitle.visibility = View.VISIBLE
-                binding.currentAddress.setText(mask.maskWalletAddress(address))
+                binding.currentAddress.setText(mask.maskHash(address))
                 binding.currentAddressContainer.setEndIconOnClickListener {
                     shareAddress(address)
                 }

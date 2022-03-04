@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:navigationIcon="@drawable/ic_back"
-            app:title="@string/advanced_token_rewards"
+            app:title="@string/advanced_wxm_earnings"
             tools:subtitle="Weatherwise Wintergreen Stratocumulus" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -34,6 +34,8 @@
             android:layout_height="match_parent"
             android:overScrollMode="never"
             android:scrollbars="vertical"
+            android:paddingTop="@dimen/padding_normal"
+            android:paddingBottom="@dimen/padding_normal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/list_item_token_transaction_card" />
     </androidx.constraintlayout.widget.ConstraintLayout>

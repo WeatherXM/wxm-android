@@ -1,0 +1,42 @@
+[
+    {
+        "timestamp": "2022-03-04T00:00:00+02:00",
+        "tx_hash": "0xc5faeafac03e11276e8fdfdfbfa90577d429f9dd598ef3d30003cb6b9578ed82",
+        "validation_score": "1.0",
+        "daily_reward": "1.0",
+        "actual_reward": "1.0",
+        "total_rewards": "100.0",
+        "lost_rewards": "0.0",
+        "wxm_balance": "2.3"
+    },
+    {
+        "timestamp": "2022-03-03T00:00:00+02:00",
+        "tx_hash": "0xc5faeafac03e11276e8fdfdfbfa90577d429f9dd598ef3d30003cb6b9578ed82",
+        "validation_score": "0.7",
+        "daily_reward": "1.0",
+        "actual_reward": "0.7",
+        "total_rewards": "100.0",
+        "lost_rewards": "0.3",
+        "wxm_balance": "1.3"
+    },
+    {
+        "timestamp": "2022-03-02T00:00:00+02:00",
+        "tx_hash": "0xc5faeafac03e11276e8fdfdfbfa90577d429f9dd598ef3d30003cb6b9578ed82",
+        "validation_score": "0.4",
+        "daily_reward": "1.0",
+        "actual_reward": "0.5",
+        "total_rewards": "100.0",
+        "lost_rewards": "0.5",
+        "wxm_balance": "0.6"
+    },
+    {
+        "timestamp": "2022-03-01T00:00:00+02:00",
+        "tx_hash": "0xc5faeafac03e11276e8fdfdfbfa90577d429f9dd598ef3d30003cb6b9578ed82",
+        "validation_score": "0.2",
+        "daily_reward": "1.0",
+        "actual_reward": "0.2",
+        "total_rewards": "100.0",
+        "lost_rewards": "0.8",
+        "wxm_balance": "0.2"
+    }
+]

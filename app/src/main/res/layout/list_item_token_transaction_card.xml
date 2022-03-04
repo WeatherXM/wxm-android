@@ -12,42 +12,39 @@
     <View
         android:id="@+id/next_line"
         android:layout_width="2dp"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:background="@color/colorPrimary"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.4"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/current_line"
         android:layout_width="2dp"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         android:background="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@id/next_line"
         app:layout_constraintBottom_toTopOf="@id/prev_line"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.5"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/next_line" />
 
     <View
         android:id="@+id/prev_line"
         android:layout_width="2dp"
-        android:layout_height="30dp"
+        android:layout_height="50dp"
         android:background="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.1"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/date_point"
         android:layout_width="18dp"
         android:layout_height="18dp"
         android:background="@drawable/token_transaction_date_icon"
+        app:layout_constraintEnd_toEndOf="@id/current_line"
         app:layout_constraintStart_toStartOf="@id/current_line"
         app:layout_constraintTop_toTopOf="@id/current_line"
-        app:layout_constraintEnd_toEndOf="@id/current_line"
         tools:ignore="ContentDescription" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -56,9 +53,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_normal"
+        app:layout_constraintBottom_toBottomOf="@id/date_point"
         app:layout_constraintStart_toEndOf="@id/date_point"
         app:layout_constraintTop_toTopOf="@id/date_point"
-        app:layout_constraintBottom_toBottomOf="@id/date_point"
         tools:text="MON 31/12" />
 
     <com.google.android.material.card.MaterialCardView
@@ -72,7 +69,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/txid"
+                android:id="@+id/tx_hash"
                 style="@style/TextAppearance.WeatherXM.Transaction.Hash"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -87,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:text="@string/reward"
-                app:layout_constraintTop_toBottomOf="@id/txid"
+                app:layout_constraintTop_toBottomOf="@id/tx_hash"
                 tools:text="Reward: 100 WXM" />
 
             <com.google.android.material.chip.Chip
@@ -106,8 +103,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/max_reward"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBaseline_toBaselineOf="@id/statusChip"
+                app:layout_constraintEnd_toEndOf="parent"
                 tools:text="Reward at full scale: 1000 WXM" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

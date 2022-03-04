@@ -52,6 +52,11 @@ fun Chip.setTextAndColor(@StringRes text: Int, color: Int) {
     this.text = this.resources.getString(text)
 }
 
+fun Chip.setTextAndColor(text: String, color: Int) {
+    this.setChipBackgroundColorResource(color)
+    this.text = text
+}
+
 fun ViewGroup.applyInsets(top: Boolean = true, bottom: Boolean = true) {
     this.applyInsetter {
         type(statusBars = top) {

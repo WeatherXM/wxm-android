@@ -24,6 +24,7 @@ import com.weatherxm.ui.publicdeviceslist.PublicDevicesListFragment
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.splash.SplashActivity
+import com.weatherxm.ui.token.TokenActivity
 import com.weatherxm.ui.userdevice.UserDeviceActivity
 import timber.log.Timber
 
@@ -161,6 +162,14 @@ class Navigator {
         )
     }
 
+    fun showTokenScreen(context: Context, device: Device?) {
+        context.startActivity(
+            Intent(context, TokenActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(TokenActivity.ARG_DEVICE, device)
+        )
+    }
+
     fun sendSupportEmail(
         context: Context?,
         recipient: String? = null,
@@ -193,8 +202,8 @@ class Navigator {
         }
     }
 
-    fun openWebsite(fragment: Fragment, url: String) {
-        fragment.context?.let {
+    fun openWebsite(context: Context?, url: String) {
+        context?.let {
             try {
                 CustomTabsIntent.Builder()
                     .build()

@@ -19,9 +19,9 @@ interface UserDeviceUseCase {
     suspend fun getUserDevice(deviceId: String): Either<Failure, Device>
     suspend fun getTodayForecast(device: Device): Either<Failure, List<HourlyWeather>>
     suspend fun getTomorrowForecast(device: Device): Either<Failure, List<HourlyWeather>>
-    suspend fun getTokensSummary24H(deviceId: String): Either<Failure, TokenSummary>
-    suspend fun getTokensSummary7D(deviceId: String): Either<Failure, TokenSummary>
-    suspend fun getTokensSummary30D(deviceId: String): Either<Failure, TokenSummary>
+    suspend fun getTokens24H(deviceId: String): Either<Failure, Float?>
+    suspend fun getTokens7D(deviceId: String): Either<Failure, TokenSummary>
+    suspend fun getTokens30D(deviceId: String): Either<Failure, TokenSummary>
 }
 
 class UserDeviceUseCaseImpl : UserDeviceUseCase, KoinComponent {
@@ -37,20 +37,18 @@ class UserDeviceUseCaseImpl : UserDeviceUseCase, KoinComponent {
         return deviceRepository.getUserDevice(deviceId)
     }
 
-    override suspend fun getTokensSummary24H(deviceId: String): Either<Failure, TokenSummary> {
-        return tokenRepository.getTokensSummary24H(deviceId).map {
+    override suspend fun getTokens24H(deviceId: String): Either<Failure, Float?> {
+        return tokenRepository.getTokens24H(deviceId)
+    }
+
+    override suspend fun getTokens7D(deviceId: String): Either<Failure, TokenSummary> {
+        return tokenRepository.getTokens7D(deviceId).map {
             it.toTokenSummary()
         }
     }
 
-    override suspend fun getTokensSummary7D(deviceId: String): Either<Failure, TokenSummary> {
-        return tokenRepository.getTokensSummary7D(deviceId).map {
-            it.toTokenSummary()
-        }
-    }
-
-    override suspend fun getTokensSummary30D(deviceId: String): Either<Failure, TokenSummary> {
-        return tokenRepository.getTokensSummary30D(deviceId).map {
+    override suspend fun getTokens30D(deviceId: String): Either<Failure, TokenSummary> {
+        return tokenRepository.getTokens30D(deviceId).map {
             it.toTokenSummary()
         }
     }

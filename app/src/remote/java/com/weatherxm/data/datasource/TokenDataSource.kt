@@ -8,21 +8,21 @@ import com.weatherxm.data.TokensSummaryResponse
 import com.weatherxm.data.network.ApiService
 
 interface TokenDataSource {
-    suspend fun getTokensSummary(deviceId: String): Either<Failure, Tokens>
+    suspend fun getTokens(deviceId: String): Either<Failure, Tokens>
 }
 
 class TokenDataSourceImpl(
     private val apiService: ApiService
 ) : TokenDataSource {
 
-    override suspend fun getTokensSummary(deviceId: String): Either<Failure, Tokens> {
+    override suspend fun getTokens(deviceId: String): Either<Failure, Tokens> {
         // TODO Perform actual network call here when we have a working endpoint
-        // return apiService.getTokensSummary(deviceId).map()
+        // return apiService.getTokens(deviceId).map()
         return Either.Right(
             Tokens(
-                token24hour = TokensSummaryResponse(1F, List(24) { TokenEntry("", 1F / 24F) }),
-                token7days = TokensSummaryResponse(7F, List(7) { TokenEntry("", 1F) }),
-                token30days = TokensSummaryResponse(30F, List(30) { TokenEntry("", 1F) })
+                last_day_actual_reward = 1.0F,
+                weekly = TokensSummaryResponse(7F, List(7) { TokenEntry("", 1F) }),
+                monthly = TokensSummaryResponse(30F, List(30) { TokenEntry("", 1F) })
             )
         )
     }

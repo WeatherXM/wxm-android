@@ -50,6 +50,8 @@ import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.usecases.ForecastUseCaseImpl
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
+import com.weatherxm.usecases.TokenUseCase
+import com.weatherxm.usecases.TokenUseCaseImpl
 import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.usecases.UserDeviceUseCaseImpl
 import com.weatherxm.util.Mask
@@ -171,6 +173,9 @@ private val usecases = module {
     }
     single<ClaimDeviceUseCase> {
         ClaimDeviceUseCaseImpl()
+    }
+    single<TokenUseCase> {
+        TokenUseCaseImpl()
     }
     single<AuthUseCase> {
         AuthUseCaseImpl()

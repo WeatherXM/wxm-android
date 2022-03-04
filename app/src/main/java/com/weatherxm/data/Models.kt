@@ -87,12 +87,9 @@ data class Hex(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class Tokens(
-    @Json(name = "24h")
-    val token24hour: TokensSummaryResponse,
-    @Json(name = "7d")
-    val token7days: TokensSummaryResponse,
-    @Json(name = "30d")
-    val token30days: TokensSummaryResponse
+    val last_day_actual_reward: Float?,
+    val weekly: TokensSummaryResponse,
+    val monthly: TokensSummaryResponse
 ) : Parcelable
 
 @Keep
@@ -100,7 +97,7 @@ data class Tokens(
 @Parcelize
 data class TokensSummaryResponse(
     val total: Float?,
-    val values: List<TokenEntry>
+    val tokens: List<TokenEntry>
 ) : Parcelable {
     fun toTokenSummary(): TokenSummary {
         val summary = TokenSummary(0F, mutableListOf())
@@ -109,9 +106,9 @@ data class TokensSummaryResponse(
             summary.total = it
         }
 
-        values.forEach {
-            if (it.timestamp != null && it.value != null) {
-                summary.values.add(Pair(it.timestamp, it.value))
+        tokens.forEach {
+            if (it.timestamp != null && it.actual_reward != null) {
+                summary.values.add(Pair(it.timestamp, it.actual_reward))
             }
         }
         return summary
@@ -123,7 +120,21 @@ data class TokensSummaryResponse(
 @Parcelize
 data class TokenEntry(
     val timestamp: String?,
-    val value: Float?
+    val actual_reward: Float?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class Transaction(
+    val timestamp: String?,
+    val tx_hash: String?,
+    val validation_score: Float?,
+    val daily_reward: Float?,
+    val actual_reward: Float?,
+    val total_rewards: Float?,
+    val lost_rewards: Float?,
+    val wxm_balance: Float?
 ) : Parcelable
 
 @Keep
