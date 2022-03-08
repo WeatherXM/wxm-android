@@ -231,7 +231,7 @@ dependencies {
     implementation "com.auth0.android:jwtdecode:2.0.1"
 
     // Animations
-    implementation 'com.airbnb.android:lottie:5.0.1'
+    implementation 'com.airbnb.android:lottie:5.0.3'
 
     // Charts
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
