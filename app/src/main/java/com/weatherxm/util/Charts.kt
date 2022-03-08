@@ -31,10 +31,11 @@ private fun LineChart.setDefaultSettings() {
     // General Chart Settings
     description.isEnabled = false
     extraBottomOffset = CHART_BOTTOM_OFFSET
-    legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+    legend.isEnabled = false
 
     // Line and highlight Settings
     lineData.setDrawValues(false)
+    // General Chart Settings
 
     // Y Axis settings
     axisLeft.isGranularityEnabled = true
@@ -67,7 +68,7 @@ private fun LineDataSet.setDefaultSettings(context: Context, resources: Resource
     highLightColor = resources.getColor(R.color.highlighter, context.theme)
 }
 
-fun LineChart.initializeDefault24hChart(chartData: LineChartData, yMinValue: Float?) {
+fun LineChart.initializeTemperature24hChart(chartData: LineChartData) {
     val dataSet = LineDataSet(chartData.entries, chartData.name)
     val lineData = LineData(dataSet)
     data = lineData
@@ -76,7 +77,56 @@ fun LineChart.initializeDefault24hChart(chartData: LineChartData, yMinValue: Flo
     setDefaultSettings()
 
     // General Chart Settings
-    legend.isEnabled = false
+    marker =
+        CustomDefaultMarkerView(
+            context,
+            chartData.timestamps,
+            chartData.name,
+            chartData.unit,
+            chartData.showDecimals,
+            decimals = 1
+        )
+
+    // Line and highlight Settings
+    dataSet.setDefaultSettings(context, resources)
+    dataSet.color = resources.getColor(chartData.lineColor, context.theme)
+    dataSet.setCircleColor(resources.getColor(chartData.lineColor, context.theme))
+
+    // Y Axis settings
+
+    // If max - min < 2 that means that the values are probably too close together.
+    // Which causes a bug not showing labels on Y axis because granularity is set 1.
+    // So this is a custom fix to change that granularity and show decimals at the Y labels
+    if (dataSet.yMax - dataSet.yMin < 2 && chartData.showDecimals) {
+        axisLeft.granularity = DEFAULT_GRANULARITY_Y_AXIS
+        axisLeft.valueFormatter = CustomYAxisFormatter(
+            chartData.unit,
+            showDecimals = true,
+            decimals = 1
+        )
+    } else {
+        axisLeft.valueFormatter = CustomYAxisFormatter(
+            chartData.unit,
+            showDecimals = false,
+            decimals = 0
+        )
+    }
+
+    // X axis settings
+    xAxis.valueFormatter = CustomXAxisFormatter(chartData.timestamps)
+    show()
+    notifyDataSetChanged()
+}
+
+fun LineChart.initializeHumidity24hChart(chartData: LineChartData) {
+    val dataSet = LineDataSet(chartData.entries, chartData.name)
+    val lineData = LineData(dataSet)
+    data = lineData
+
+    // Set the default settings we want to all LineCharts
+    setDefaultSettings()
+
+    // General Chart Settings
     marker =
         CustomDefaultMarkerView(
             context,
@@ -111,15 +161,13 @@ fun LineChart.initializeDefault24hChart(chartData: LineChartData, yMinValue: Flo
         )
     }
 
-    yMinValue?.let { axisLeft.axisMinimum = it }
-
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(chartData.timestamps)
     show()
     notifyDataSetChanged()
 }
 
-fun LineChart.initializePressure24hChart(chartData: LineChartData, yMinValue: Float?) {
+fun LineChart.initializePressure24hChart(chartData: LineChartData) {
     val dataSet = LineDataSet(chartData.entries, chartData.name)
     val lineData = LineData(dataSet)
     data = lineData
@@ -134,7 +182,6 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData, yMinValue: Fl
     ) == resources.getString(R.string.pressure_inHg)
 
     // General Chart Settings
-    legend.isEnabled = false
     val decimalsOnMarkerView = if (inHgUsed) 2 else 1
     marker =
         CustomDefaultMarkerView(
@@ -180,8 +227,6 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData, yMinValue: Fl
             decimals = 0
         )
     }
-
-    yMinValue?.let { axisLeft.axisMinimum = it }
 
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(chartData.timestamps)
@@ -262,6 +307,8 @@ fun LineChart.initializeWind24hChart(
     setDefaultSettings()
 
     // General Chart Settings
+    legend.isEnabled = true
+    legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
     marker = CustomWindMarkerView(
         context,
         windSpeedData.timestamps,
@@ -299,7 +346,7 @@ fun LineChart.initializeWind24hChart(
     notifyDataSetChanged()
 }
 
-fun BarChart.initializeDefault24hChart(data: BarChartData) {
+fun BarChart.initializeUV24hChart(data: BarChartData) {
     val dataSet = BarDataSet(data.entries, data.name)
     val barData = BarData(dataSet)
     setData(barData)

@@ -6,7 +6,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 10,
+                "temperature": -0.4,
                 "icon": "clear-night",
                 "wind_speed": 6.1,
                 "wind_direction": 305,
@@ -20,7 +20,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 8.1,
+                "temperature": -0.5,
                 "icon": "clear-night",
                 "wind_speed": 5.8,
                 "wind_direction": 310,
@@ -34,7 +34,7 @@
             {
                 "precipitation": 0,
                 "precipitation_probability": 0,
-                "temperature": 9.3,
+                "temperature": -0.8,
                 "icon": "clear-night",
                 "wind_speed": 5.5,
                 "wind_direction": 321,
