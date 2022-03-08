@@ -8,16 +8,19 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.Transaction
-import com.weatherxm.databinding.ListItemTokenTransactionCardBinding
+import com.weatherxm.databinding.ListItemTokenTransactionBinding
 import com.weatherxm.util.Mask
 import com.weatherxm.util.ResourcesHelper
-import com.weatherxm.util.getRelativeDayFromISO
 import com.weatherxm.util.setTextAndColor
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle.MEDIUM
 
-class TransactionsAdapter(private val transactionListener: (Transaction) -> Unit) :
-    ListAdapter<Transaction, TransactionsAdapter.TransactionsViewHolder>(TransactionDiffCallback()),
+class TransactionsAdapter(
+    private val transactionListener: (Transaction) -> Unit
+) : ListAdapter<Transaction, TransactionsAdapter.TransactionsViewHolder>(TransactionDiffCallback()),
     KoinComponent {
     companion object {
         const val BAD_SCORE = 0.25
@@ -29,7 +32,7 @@ class TransactionsAdapter(private val transactionListener: (Transaction) -> Unit
     val mask: Mask by inject()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionsViewHolder {
-        val binding = ListItemTokenTransactionCardBinding.inflate(
+        val binding = ListItemTokenTransactionBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -42,14 +45,15 @@ class TransactionsAdapter(private val transactionListener: (Transaction) -> Unit
     }
 
     inner class TransactionsViewHolder(
-        private val binding: ListItemTokenTransactionCardBinding,
+        private val binding: ListItemTokenTransactionBinding,
         private val listener: (Transaction) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private lateinit var transaction: Transaction
+        private val dateFormat: DateTimeFormatter = DateTimeFormatter.ofLocalizedDate(MEDIUM)
 
         init {
-            binding.root.setOnClickListener {
+            binding.card.setOnClickListener {
                 listener(transaction)
             }
         }
@@ -57,24 +61,14 @@ class TransactionsAdapter(private val transactionListener: (Transaction) -> Unit
         fun bind(item: Transaction, position: Int) {
             transaction = item
 
-            if (position == itemCount - 1) {
-                binding.prevLine.visibility = View.GONE
-            } else if (position == 0) {
-                binding.nextLine.visibility = View.GONE
-            }
+            binding.prevLine.visibility = if (position == 0) View.GONE else View.VISIBLE
 
-            binding.date.text =
-                item.timestamp?.let {
-                    getRelativeDayFromISO(
-                        resHelper, it,
-                        includeDate = true,
-                        fullName = false
-                    )
-                }
-            binding.txHash.text =
-                item.txHash?.let {
-                    resHelper.getString(R.string.transaction_hash, mask.maskHash(it))
-                }
+            binding.date.text = item.timestamp?.let {
+                ZonedDateTime.parse(it).format(dateFormat)
+            }
+            binding.txHash.text = item.txHash?.let {
+                mask.maskHash(hash = it, offsetStart = 8, offsetEnd = 8, maxMaskedChars = 6)
+            }
             binding.reward.text = resHelper.getString(
                 R.string.reward,
                 item.actualReward.toString()

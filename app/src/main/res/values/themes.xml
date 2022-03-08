@@ -461,18 +461,30 @@
     </style>
 
     <style name="TextAppearance.WeatherXM.Transaction.Date" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.Transaction.Hash" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textSize">14sp</item>
+    <style name="Widget.WeatherXM.Transaction.Hash" parent="Widget.Material3.Chip.Filter">
+        <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/black_translucent</item>
+        <item name="chipBackgroundColor">@color/light_grey_translucent</item>
+        <item name="fontFamily">monospace</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="android:clickable">false</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.Transaction.Reward" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textSize">20sp</item>
+    <style name="Widget.WeatherXM.Transaction.Validation" parent="Widget.Material3.Chip.Filter">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="android:clickable">false</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Transaction.Reward" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>

@@ -10,42 +10,31 @@
     android:paddingHorizontal="@dimen/padding_normal">
 
     <View
-        android:id="@+id/next_line"
+        android:id="@+id/prev_line"
         android:layout_width="2dp"
-        android:layout_height="50dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="48dp"
         android:background="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <View
-        android:id="@+id/current_line"
-        android:layout_width="2dp"
-        android:layout_height="250dp"
-        android:background="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@id/prev_line"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/date_point"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:layout_marginStart="45dp"
+        android:background="@drawable/token_transaction_date_icon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/next_line" />
+        app:layout_constraintTop_toBottomOf="@id/prev_line" />
 
     <View
-        android:id="@+id/prev_line"
+        android:id="@+id/current_line"
         android:layout_width="2dp"
-        android:layout_height="50dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="48dp"
         android:background="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/date_point"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:background="@drawable/token_transaction_date_icon"
-        app:layout_constraintEnd_toEndOf="@id/current_line"
-        app:layout_constraintStart_toStartOf="@id/current_line"
-        app:layout_constraintTop_toTopOf="@id/current_line"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date_point" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/date"
@@ -56,26 +45,31 @@
         app:layout_constraintBottom_toBottomOf="@id/date_point"
         app:layout_constraintStart_toEndOf="@id/date_point"
         app:layout_constraintTop_toTopOf="@id/date_point"
-        tools:text="MON 31/12" />
+        tools:text="Tue, 01/02 2022" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/prev_line"
-        app:layout_constraintHeight_percent="0.6">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/current_line">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.textview.MaterialTextView
+            <com.google.android.material.chip.Chip
                 android:id="@+id/tx_hash"
-                style="@style/TextAppearance.WeatherXM.Transaction.Hash"
-                android:layout_width="match_parent"
+                style="@style/Widget.WeatherXM.Transaction.Hash"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/transaction_hash"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Transaction hash: 0x00000...0000" />
+                tools:text="0x00000...0000" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/reward"
@@ -85,16 +79,19 @@
                 android:layout_marginTop="@dimen/margin_normal"
                 android:text="@string/reward"
                 app:layout_constraintTop_toBottomOf="@id/tx_hash"
-                tools:text="Reward: 100 WXM" />
+                tools:text="100 WXM rewarded" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/scale"
-                style="@style/Widget.WeatherXM.Status.Chip"
+                style="@style/Widget.WeatherXM.Transaction.Validation"
                 android:layout_width="wrap_content"
+                app:chipIcon="@drawable/ic_validation"
+                app:chipIconEnabled="true"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/reward"
+                tools:chipBackgroundColor="@color/green"
                 tools:text="0.5" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -106,6 +103,7 @@
                 app:layout_constraintBaseline_toBaselineOf="@id/scale"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:text="Reward at full scale: 1000 WXM" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

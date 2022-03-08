@@ -36,8 +36,8 @@
             android:id="@+id/progress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll"
             android:visibility="invisible"
+            app:layout_scrollFlags="scroll"
             tools:visibility="visible" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -47,8 +47,8 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_normal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_scrollFlags="scroll"
             app:layout_constraintTop_toBottomOf="@id/statusChip"
+            app:layout_scrollFlags="scroll"
             tools:text="Weatherwise Wintergreen Stratocumulus" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -56,11 +56,11 @@
             style="@style/TextAppearance.WeatherXM.Device.Details.Subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginHorizontal="@dimen/margin_normal"
             android:layout_marginTop="@dimen/margin_extra_small"
-            app:layout_scrollFlags="scroll"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title"
+            app:layout_scrollFlags="scroll"
             tools:text="Athens, GR · Last active 39m ago" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -157,17 +157,19 @@
                     android:id="@+id/tokenCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_large"
                     app:layout_constraintTop_toBottomOf="@id/historicalCharts" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/advancedWxmEarnings"
-                    style="@style/Widget.WeatherXM.TextButton.Subtle.Arrow"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tokenEarnings"
+                    style="@style/Widget.WeatherXM.Button.Subtle.Colored"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/advanced_wxm_earnings"
-                    app:layout_constraintTop_toBottomOf="@id/tokenCard"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/see_wxm_earnings"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tokenCard" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/tokenNotice"
@@ -176,7 +178,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
                     android:padding="@dimen/padding_extra_small"
-                    app:layout_constraintTop_toBottomOf="@id/advancedWxmEarnings"
+                    app:layout_constraintTop_toBottomOf="@id/tokenEarnings"
                     app:layout_goneMarginTop="@dimen/margin_normal"
                     tools:text="@string/device_detail_token_notice" />
 

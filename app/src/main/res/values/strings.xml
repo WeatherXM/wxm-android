@@ -23,6 +23,7 @@
     <string name="title_explorer">Explorer</string>
     <string name="title_devices">Devices</string>
     <string name="title_profile">Profile</string>
+    <string name="title_device_earnings">Detailed WXM Earnings</string>
     <string name="weather_stations">Weather Stations</string>
     <string name="wallet_prompt">Connecting a wallet is mandatory for getting rewards. If you do not connect your wallet, the rewards of your WXM Devices will be lost.</string>
     <string name="suggested_wallets">It is highly recommended to use MetaMask, as the most compatible wallet.</string>
@@ -217,7 +218,7 @@
     <string name="come_back_later">Please come back later!</string>
 
     <!-- Tokens -->
-    <string name="advanced_wxm_earnings">Advanced WXM Earnings</string>
+    <string name="see_wxm_earnings">See Detailed WXM Earnings</string>
     <string name="no_transactions">Oh, no! No transactions yet?</string>
     <string name="tokens_24h">24h:</string>
     <string name="tokens_total">Total:</string>
