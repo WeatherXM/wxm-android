@@ -6,6 +6,7 @@ plugins {
     id "com.google.gms.google-services"
     id "com.google.firebase.crashlytics"
     id "com.google.firebase.appdistribution"
+    id "com.google.firebase.firebase-perf"
 }
 
 def getGitCommitHash = { ->
@@ -257,6 +258,7 @@ dependencies {
     // Import the Firebase BoM
     implementation platform("com.google.firebase:firebase-bom:29.1.0")
     implementation "com.google.firebase:firebase-crashlytics-ktx"
+    implementation "com.google.firebase:firebase-perf-ktx"
 
     // QR Code Scanner
     implementation "com.journeyapps:zxing-android-embedded:4.3.0"
