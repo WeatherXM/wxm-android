@@ -16,9 +16,11 @@ import com.weatherxm.databinding.FragmentHistoryChartsBinding
 import com.weatherxm.ui.BarChartData
 import com.weatherxm.ui.HistoryCharts
 import com.weatherxm.ui.LineChartData
-import com.weatherxm.util.initializeDefault24hChart
+import com.weatherxm.util.initializeHumidity24hChart
 import com.weatherxm.util.initializePrecipitation24hChart
 import com.weatherxm.util.initializePressure24hChart
+import com.weatherxm.util.initializeTemperature24hChart
+import com.weatherxm.util.initializeUV24hChart
 import com.weatherxm.util.initializeWind24hChart
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
@@ -131,7 +133,7 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
         }
 
         // Init Temperature Chart
-        initDefaultChart(binding.chartTemperature.getChart(), historyCharts.temperature, null)
+        initTemperatureChart(binding.chartTemperature.getChart(), historyCharts.temperature)
 
         // Init Wind Chart
         initWindChart(historyCharts.windSpeed, historyCharts.windGust, historyCharts.windDirection)
@@ -140,18 +142,10 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
         initPrecipitationChart(historyCharts.precipitation)
 
         // Init Humidity Chart
-        initDefaultChart(binding.chartHumidity.getChart(), historyCharts.humidity, null)
-
-        /*
-            Init Cloud Cover Chart, we use yMinValue so the Y Axis starts from 0
-            and not going negative when cloud cover is 0%
-
-            Hide it for now as we do not have cloud cover data.
-        */
-        // initDefaultChart(binding.chartCloudCover.getChart(), historyCharts.cloudCover, 0F)
+        initHumidityChart(binding.chartHumidity.getChart(), historyCharts.humidity)
 
         // Init Pressure Char
-        initPressureChart(binding.chartPressure.getChart(), historyCharts.pressure, null)
+        initPressureChart(binding.chartPressure.getChart(), historyCharts.pressure)
 
         // Init Uv Index Char
         initUvChart(binding.chartUvIndex.getChart(), historyCharts.uvIndex)
@@ -159,17 +153,25 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
         binding.chartsView.visibility = View.VISIBLE
     }
 
-    private fun initDefaultChart(lineChart: LineChart, data: LineChartData, yMinValue: Float?) {
+    private fun initTemperatureChart(lineChart: LineChart, data: LineChartData) {
         if (model.isDataValid(data)) {
-            lineChart.initializeDefault24hChart(data, yMinValue)
+            lineChart.initializeTemperature24hChart(data)
         } else {
             showNoDataText(lineChart)
         }
     }
 
-    private fun initPressureChart(lineChart: LineChart, data: LineChartData, yMinValue: Float?) {
+    private fun initHumidityChart(lineChart: LineChart, data: LineChartData) {
         if (model.isDataValid(data)) {
-            lineChart.initializePressure24hChart(data, yMinValue)
+            lineChart.initializeHumidity24hChart(data)
+        } else {
+            showNoDataText(lineChart)
+        }
+    }
+
+    private fun initPressureChart(lineChart: LineChart, data: LineChartData) {
+        if (model.isDataValid(data)) {
+            lineChart.initializePressure24hChart(data)
         } else {
             showNoDataText(lineChart)
         }
@@ -177,7 +179,7 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
 
     private fun initUvChart(barChart: BarChart, data: BarChartData) {
         if (model.isDataValid(data)) {
-            barChart.initializeDefault24hChart(data)
+            barChart.initializeUV24hChart(data)
         } else {
             barChart.setNoDataText(getString(R.string.no_data_chart_found))
             context?.getColor(R.color.black)?.let { barChart.setNoDataTextColor(it) }
