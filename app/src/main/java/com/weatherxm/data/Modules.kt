@@ -20,6 +20,8 @@ import com.weatherxm.data.datasource.AuthDataSource
 import com.weatherxm.data.datasource.AuthDataSourceImpl
 import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSourceImpl
+import com.weatherxm.data.datasource.CacheUserDataSource
+import com.weatherxm.data.datasource.CacheUserDataSourceImpl
 import com.weatherxm.data.datasource.CredentialsDataSource
 import com.weatherxm.data.datasource.CredentialsDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
@@ -52,6 +54,8 @@ import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
 import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.usecases.UserDeviceUseCaseImpl
+import com.weatherxm.usecases.UserUseCase
+import com.weatherxm.usecases.UserUseCaseImpl
 import com.weatherxm.util.Mask
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Validator
@@ -122,6 +126,10 @@ private val datasources = module {
         UserDataSourceImpl(get(), get())
     }
 
+    single<CacheUserDataSource> {
+        CacheUserDataSourceImpl()
+    }
+
     single<AuthDataSource> {
         AuthDataSourceImpl(get(), get(), get())
     }
@@ -143,7 +151,7 @@ private val repositories = module {
         LocationRepository()
     }
     single<UserRepository> {
-        UserRepository(get())
+        UserRepository(get(), get())
     }
     single<DeviceRepository> {
         DeviceRepository(get())
@@ -174,6 +182,9 @@ private val usecases = module {
     }
     single<AuthUseCase> {
         AuthUseCaseImpl()
+    }
+    single<UserUseCase> {
+        UserUseCaseImpl()
     }
 }
 

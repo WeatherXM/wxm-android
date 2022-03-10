@@ -12,11 +12,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.weatherxm.R
 import com.weatherxm.data.Status
-import com.weatherxm.data.User
 import com.weatherxm.databinding.FragmentProfileBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.ProfileInfo
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
+import com.weatherxm.ui.connectwallet.ConnectWalletActivity.Companion.ARG_WALLET
 import com.weatherxm.util.applyInsets
 import org.koin.android.ext.android.inject
 import timber.log.Timber
@@ -26,7 +27,7 @@ class ProfileFragment : Fragment() {
     private val model: ProfileViewModel by activityViewModels()
     private val navigator: Navigator by inject()
 
-    private var user: User? = null
+    private var profileInfo: ProfileInfo? = null
 
     // Register the launcher for the connect wallet activity and wait for a possible result
     private val connectWalletLauncher =
@@ -34,6 +35,7 @@ class ProfileFragment : Fragment() {
         { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 model.walletConnected()
+                profileInfo?.walletAddress = model.getWalletAddressFromCache()
             }
         }
 
@@ -50,7 +52,7 @@ class ProfileFragment : Fragment() {
             this.context?.let {
                 val intent = Intent(it, ConnectWalletActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(ConnectWalletActivity.ARG_WALLET, user?.wallet)
+                    .putExtra(ARG_WALLET, profileInfo?.walletAddress)
 
                 connectWalletLauncher.launch(intent)
             }
@@ -66,7 +68,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        model.user().observe(viewLifecycleOwner) { resource ->
+        model.profileInfo().observe(viewLifecycleOwner) { resource ->
             Timber.d("Data updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
@@ -83,8 +85,8 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        // Fetch user's data
-        model.fetch()
+        // Fetch profile's info
+        model.fetchProfileInfo()
 
         model.hasWallet().observe(viewLifecycleOwner) {
             if (it) {
@@ -93,8 +95,8 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun updateUI(user: User?, showProgressBar: Boolean) {
-        user?.let {
+    private fun updateUI(profileInfo: ProfileInfo?, showProgressBar: Boolean) {
+        profileInfo?.let {
             binding.toolbar.title = if (it.name == it.email) {
                 getString(R.string.hello)
             } else {
@@ -106,7 +108,7 @@ class ProfileFragment : Fragment() {
                 binding.email.text = it.email
                 binding.email.visibility = View.VISIBLE
             }
-            this.user = user
+            this.profileInfo = profileInfo
         }
 
         if (showProgressBar) {
@@ -115,7 +117,7 @@ class ProfileFragment : Fragment() {
             binding.progress.visibility = View.INVISIBLE
         }
 
-        if (user?.wallet?.address.isNullOrEmpty()) {
+        if (profileInfo?.walletAddress.isNullOrEmpty()) {
             binding.connectWalletNotification.visibility = View.VISIBLE
         }
     }

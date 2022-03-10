@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import com.weatherxm.R
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
-import com.weatherxm.data.User
-import com.weatherxm.data.repository.UserRepository
+import com.weatherxm.ui.ProfileInfo
+import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,24 +18,29 @@ import timber.log.Timber
 
 class ProfileViewModel : ViewModel(), KoinComponent {
 
-    private val userRepository: UserRepository by inject()
+    private val userUseCase: UserUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
 
-    private val user = MutableLiveData<Resource<User>>().apply {
+    private val profileInfo = MutableLiveData<Resource<ProfileInfo>>().apply {
         value = Resource.loading()
     }
 
-    fun user(): LiveData<Resource<User>> = user
+    fun profileInfo(): LiveData<Resource<ProfileInfo>> = profileInfo
 
     private val hasWallet = MutableLiveData(true)
     fun hasWallet(): LiveData<Boolean> = hasWallet
 
-    fun fetch() {
+    /*
+     * We use this function to fetch the user and cache the result for future use
+     * as also to use the hasWallet LiveData to push some needed data
+     * to the HomeActivity that called this fetch function
+     */
+    fun fetchUser() {
         CoroutineScope(Dispatchers.IO).launch {
-            userRepository.getUser()
+            userUseCase.getUser()
                 .map { user ->
                     Timber.d("Got user: $user")
-                    this@ProfileViewModel.user.postValue(Resource.success(user))
+                    hasWallet.postValue(!user.wallet?.address.isNullOrEmpty())
                 }
                 .mapLeft {
                     handleFailure(it)
@@ -43,17 +48,26 @@ class ProfileViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun getWallet() {
+    /*
+     * We use this function to fetch the user and cache the result for future use
+     * as also to use the hasWallet LiveData to push some needed data
+     * to the HomeActivity that called this fetch function
+     */
+    fun fetchProfileInfo() {
         CoroutineScope(Dispatchers.IO).launch {
-            userRepository.getUser()
-                .map { user ->
-                    Timber.d("Has wallet: ${user.wallet?.address.isNullOrEmpty()}")
-                    hasWallet.postValue(!user.wallet?.address.isNullOrEmpty())
+            userUseCase.getProfileInfo()
+                .map {
+                    Timber.d("Got profile info: $it")
+                    profileInfo.postValue(Resource.success(it))
                 }
                 .mapLeft {
-                    // TODO: how to handle this? ideas?
+                    handleFailure(it)
                 }
         }
+    }
+
+    fun getWalletAddressFromCache(): String? {
+        return userUseCase.getWalletAddressFromCache()
     }
 
     fun walletConnected() {
@@ -61,7 +75,7 @@ class ProfileViewModel : ViewModel(), KoinComponent {
     }
 
     private fun handleFailure(failure: Failure) {
-        user.postValue(
+        profileInfo.postValue(
             Resource.error(
                 resHelper.getString(
                     when (failure) {

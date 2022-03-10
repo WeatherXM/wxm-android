@@ -14,7 +14,6 @@ import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
-import com.weatherxm.data.Wallet
 import com.weatherxm.databinding.ActivityConnectWalletBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
@@ -51,8 +50,8 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         binding.root.applyInsets()
 
         // Set current address from intent extras
-        val currentAddress = intent?.extras?.getParcelable<Wallet>(ARG_WALLET)
-        model.setCurrentAddress(currentAddress?.address)
+        val currentAddress = intent?.extras?.getString(ARG_WALLET)
+        model.setCurrentAddress(currentAddress)
 
         onBackGoHome = intent?.extras?.getBoolean(ARG_ON_BACK_GO_HOME) ?: false
 
@@ -192,7 +191,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
     }
 
     companion object {
-        const val ARG_WALLET = "wallet"
+        const val ARG_WALLET = "wallet_address"
         const val ARG_ON_BACK_GO_HOME = "on_back_go_home"
     }
 }

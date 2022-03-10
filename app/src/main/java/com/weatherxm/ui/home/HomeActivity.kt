@@ -120,8 +120,8 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         // Fetch user's devices
         devicesViewModel.fetch()
 
-        // Get user's wallet here
-        profileViewModel.getWallet()
+        // Fetch User
+        profileViewModel.fetchUser()
 
         binding.navView.getOrCreateBadge(R.id.navigation_profile)
     }

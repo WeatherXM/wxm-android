@@ -96,3 +96,11 @@ data class DailyForecast(
     var maxTemp: Float? = null,
     var precipProbability: Int? = null
 )
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class ProfileInfo(
+    var email: String = "",
+    var name: String? = null,
+    var walletAddress: String? = null,
+)
