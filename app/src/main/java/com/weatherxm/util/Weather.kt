@@ -110,8 +110,26 @@ object Weather : KoinComponent {
         return if (decimals == null) {
             "$value$unit"
         } else {
-            "%.${decimals}f$unit".format(value)
+            /*
+            * Numbers in the range of -0.5..0 with 0 decimals show as -0.
+            * So this is a custom fix to remove the "-" char and show them as 0.
+             */
+            if (willProduceNegativeZero(decimals, value)) {
+                "%.${decimals}f$unit".format(value).replace("-", "")
+            } else {
+                "%.${decimals}f$unit".format(value)
+            }
         }
+    }
+
+    /*
+    * By using the .format() function with 0 decimals the numbers in the range of -0.5f..0f
+    * display as -0 so we have this function to catch this case and act accordingly    *
+     */
+    @Suppress("MagicNumber")
+    private fun willProduceNegativeZero(decimals: Int, value: Number): Boolean {
+        val rangeOfNegativeZero = -0.5f..0f
+        return decimals == 0 && value.toFloat() in rangeOfNegativeZero
     }
 
     fun convertTemp(value: Number?): Number? {

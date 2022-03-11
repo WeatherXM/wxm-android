@@ -6,7 +6,7 @@
             {
                 "precipitation": 0,
                 "precip_type": "rain",
-                "temperature": 10.4,
+                "temperature": -0.2,
                 "icon": "partly-cloudy-night",
                 "wind_speed": 7.49,
                 "wind_gust": 7.49,
@@ -21,7 +21,7 @@
             {
                 "precipitation": 0,
                 "precip_type": "rain",
-                "temperature": 10.17,
+                "temperature": -0.9,
                 "icon": "partly-cloudy-night",
                 "wind_speed": 7.2,
                 "wind_gust": 7.49,
@@ -36,7 +36,7 @@
             {
                 "precipitation": 0.5,
                 "precip_type": "rain",
-                "temperature": 9.7,
+                "temperature": -0.5,
                 "icon": "partly-cloudy-night",
                 "wind_speed": 6.46,
                 "wind_gust": 7.49,
@@ -365,8 +365,8 @@
             }
         ],
         "daily": {
-            "temperature_max": 15,
-            "temperature_min": 8,
+            "temperature_max": -0.2,
+            "temperature_min": -0.9,
             "precipitation": 0.5,
             "precipitation_probability": 38,
             "icon": "partly-cloudy-night",

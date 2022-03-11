@@ -19,6 +19,11 @@ class HourlyAdapter(
     private var selectedPosition = RecyclerView.NO_POSITION
 
     override fun submitList(list: List<HourlyWeather>?) {
+        if(selectedPosition != RecyclerView.NO_POSITION && selectedPosition != 0) {
+            // Reset list as we need to reset the selected item also
+            super.submitList(null)
+        }
+
         // Reset selected position
         selectedPosition = if (list.isNullOrEmpty()) RecyclerView.NO_POSITION else 0
 
