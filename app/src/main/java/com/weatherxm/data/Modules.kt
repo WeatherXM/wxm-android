@@ -24,6 +24,8 @@ import com.weatherxm.data.datasource.CredentialsDataSource
 import com.weatherxm.data.datasource.CredentialsDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
+import com.weatherxm.data.datasource.TokenDataSource
+import com.weatherxm.data.datasource.TokenDataSourceImpl
 import com.weatherxm.data.datasource.UserDataSource
 import com.weatherxm.data.datasource.UserDataSourceImpl
 import com.weatherxm.data.network.AuthTokenJsonAdapter
@@ -122,6 +124,10 @@ private val datasources = module {
 
     single<UserDataSource> {
         UserDataSourceImpl(get(), get())
+    }
+
+    single<TokenDataSource> {
+        TokenDataSourceImpl(get())
     }
 
     single<AuthDataSource> {

@@ -34,7 +34,7 @@ class TokenViewModel : ViewModel(), KoinComponent {
     fun fetchTransactions(deviceId: String) {
         onTransactions.postValue(Resource.loading())
         CoroutineScope(Dispatchers.IO).launch {
-            tokenUseCase.getTransactions(deviceId)
+            tokenUseCase.getTransactions(deviceId, 1, 10)
                 .map { transactions ->
                     Timber.d("Got Transactions: $transactions")
                     onTransactions.postValue(Resource.success(transactions))

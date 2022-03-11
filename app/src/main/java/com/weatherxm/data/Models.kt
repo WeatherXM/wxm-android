@@ -87,8 +87,7 @@ data class Hex(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class Tokens(
-    @Json(name = "last_day_actual_reward")
-    val lastDayActualReward: Float?,
+    val daily: TokensSummaryResponse,
     val weekly: TokensSummaryResponse,
     val monthly: TokensSummaryResponse
 ) : Parcelable
@@ -98,7 +97,7 @@ data class Tokens(
 @Parcelize
 data class TokensSummaryResponse(
     val total: Float?,
-    val tokens: List<TokenEntry>
+    val tokens: List<TokenEntry>?
 ) : Parcelable {
     fun toTokenSummary(): TokenSummary {
         val summary = TokenSummary(0F, mutableListOf())
@@ -107,9 +106,11 @@ data class TokensSummaryResponse(
             summary.total = it
         }
 
-        tokens.forEach {
-            if (it.timestamp != null && it.actualReward != null) {
-                summary.values.add(Pair(it.timestamp, it.actualReward))
+        tokens?.let {
+            it.forEach { tokenEntry ->
+                if (tokenEntry.timestamp != null && tokenEntry.actualReward != null) {
+                    summary.values.add(Pair(tokenEntry.timestamp, tokenEntry.actualReward))
+                }
             }
         }
         return summary
@@ -123,6 +124,17 @@ data class TokenEntry(
     val timestamp: String?,
     @Json(name = "actual_reward")
     val actualReward: Float?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class TransactionsResponse(
+    val data: List<Transaction>,
+    @Json(name = "total_pages")
+    val totalPages: Int,
+    @Json(name = "has_next_page")
+    val hasNextPage: Boolean
 ) : Parcelable
 
 @Keep

@@ -11,7 +11,7 @@ class TokenRepository(private val tokenDataSource: TokenDataSource) : KoinCompon
 
     suspend fun getTokens24H(deviceId: String): Either<Failure, Float?> {
         return tokenDataSource.getTokens(deviceId).map {
-            it.lastDayActualReward
+            it.daily.total
         }
     }
 
@@ -27,7 +27,14 @@ class TokenRepository(private val tokenDataSource: TokenDataSource) : KoinCompon
         }
     }
 
-    suspend fun getTransactions(deviceId: String): Either<Failure, List<Transaction>> {
-        return tokenDataSource.getTransactions(deviceId)
+    suspend fun getTransactions(
+        deviceId: String,
+        page: Int?,
+        pageSize: Int?
+    ): Either<Failure, List<Transaction>> {
+        return tokenDataSource.getTransactions(deviceId, page, pageSize)
+            .map {
+                it.data
+            }
     }
 }

@@ -6,7 +6,7 @@ import co.infinum.retromock.meta.MockResponse
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.data.Device
 import com.weatherxm.data.Tokens
-import com.weatherxm.data.Transaction
+import com.weatherxm.data.TransactionsResponse
 import com.weatherxm.data.User
 import com.weatherxm.data.WeatherData
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor.Companion.NO_AUTH_HEADER
@@ -81,7 +81,9 @@ interface ApiService {
     @GET("/api/v1/me/devices/{deviceId}/tokens/transactions")
     suspend fun getTransactions(
         @Path("deviceId") deviceId: String,
-    ): NetworkResponse<List<Transaction>, ErrorResponse>
+        @Query("page") page: Int? = null,
+        @Query("pageSize") pageSize: Int? = null,
+    ): NetworkResponse<TransactionsResponse, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/get_user_device_weather_history.json")
