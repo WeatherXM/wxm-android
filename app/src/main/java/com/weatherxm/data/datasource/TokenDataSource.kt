@@ -9,11 +9,7 @@ import com.weatherxm.data.network.ApiService
 
 interface TokenDataSource {
     suspend fun getTokens(deviceId: String): Either<Failure, Tokens>
-    suspend fun getTransactions(
-        deviceId: String,
-        page: Int?,
-        pageSize: Int?
-    ): Either<Failure, TransactionsResponse>
+    suspend fun getTransactions(deviceId: String, page: Int?): Either<Failure, TransactionsResponse>
 }
 
 class TokenDataSourceImpl(
@@ -26,9 +22,8 @@ class TokenDataSourceImpl(
 
     override suspend fun getTransactions(
         deviceId: String,
-        page: Int?,
-        pageSize: Int?
+        page: Int?
     ): Either<Failure, TransactionsResponse> {
-        return apiService.getTransactions(deviceId, page, pageSize).map()
+        return apiService.getTransactions(deviceId, page).map()
     }
 }

@@ -19,7 +19,8 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle.MEDIUM
 
 class TransactionsAdapter(
-    private val transactionListener: (Transaction) -> Unit
+    private val transactionListener: (Transaction) -> Unit,
+    private val endOfDataListener: () -> Unit
 ) : ListAdapter<Transaction, TransactionsAdapter.TransactionsViewHolder>(TransactionDiffCallback()),
     KoinComponent {
     companion object {
@@ -37,7 +38,7 @@ class TransactionsAdapter(
             parent,
             false
         )
-        return TransactionsViewHolder(binding, transactionListener)
+        return TransactionsViewHolder(binding, transactionListener, endOfDataListener)
     }
 
     override fun onBindViewHolder(holder: TransactionsViewHolder, position: Int) {
@@ -46,7 +47,8 @@ class TransactionsAdapter(
 
     inner class TransactionsViewHolder(
         private val binding: ListItemTokenTransactionBinding,
-        private val listener: (Transaction) -> Unit
+        private val listener: (Transaction) -> Unit,
+        private val endOfDataListener: () -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private lateinit var transaction: Transaction
@@ -59,6 +61,7 @@ class TransactionsAdapter(
         }
 
         fun bind(item: Transaction, position: Int) {
+            if (position == currentList.size - 1) endOfDataListener()
             transaction = item
 
             binding.prevLine.visibility = if (position == 0) View.GONE else View.VISIBLE

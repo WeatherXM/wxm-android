@@ -24,20 +24,30 @@ class TokenViewModel : ViewModel(), KoinComponent {
     private val tokenUseCase: TokenUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
 
-    // All charts currently visible
-    private val onTransactions = MutableLiveData<Resource<List<Transaction>>>().apply {
+    private var currentPage = 0
+    private var hasNextPage = false
+    private var blockNewPageRequest = false
+    private val currentShownTransactions = mutableListOf<Transaction>()
+
+    private val onFirstPageTransactions = MutableLiveData<Resource<List<Transaction>>>().apply {
         value = Resource.loading()
     }
 
-    fun onTransactions(): LiveData<Resource<List<Transaction>>> = onTransactions
+    private val onNewTransactionsPage = MutableLiveData<Resource<List<Transaction>>>()
 
-    fun fetchTransactions(deviceId: String) {
-        onTransactions.postValue(Resource.loading())
+    fun onFirstPageTransactions(): LiveData<Resource<List<Transaction>>> = onFirstPageTransactions
+
+    fun onNewTransactionsPage(): LiveData<Resource<List<Transaction>>> = onNewTransactionsPage
+
+    fun fetchFirstPageTransactions(deviceId: String) {
+        onFirstPageTransactions.postValue(Resource.loading())
         CoroutineScope(Dispatchers.IO).launch {
-            tokenUseCase.getTransactions(deviceId, 1, 10)
-                .map { transactions ->
-                    Timber.d("Got Transactions: $transactions")
-                    onTransactions.postValue(Resource.success(transactions))
+            tokenUseCase.getTransactions(deviceId, currentPage)
+                .map {
+                    Timber.d("Got Transactions: ${it.transactions}")
+                    hasNextPage = it.hasNextPage
+                    currentShownTransactions.addAll(it.transactions)
+                    onFirstPageTransactions.postValue(Resource.success(currentShownTransactions))
                 }
                 .mapLeft {
                     handleFailure(it)
@@ -45,8 +55,26 @@ class TokenViewModel : ViewModel(), KoinComponent {
         }
     }
 
+    fun fetchNewPageTransactions(deviceId: String) {
+        if (hasNextPage && !blockNewPageRequest) {
+            onNewTransactionsPage.postValue(Resource.loading())
+            CoroutineScope(Dispatchers.IO).launch {
+                currentPage++
+                blockNewPageRequest = true
+                tokenUseCase.getTransactions(deviceId, currentPage)
+                    .map {
+                        Timber.d("Got Transactions: ${it.transactions}")
+                        hasNextPage = it.hasNextPage
+                        currentShownTransactions.addAll(it.transactions)
+                        onNewTransactionsPage.postValue(Resource.success(currentShownTransactions))
+                    }
+                blockNewPageRequest = false
+            }
+        }
+    }
+
     private fun handleFailure(failure: Failure) {
-        onTransactions.postValue(
+        onFirstPageTransactions.postValue(
             Resource.error(
                 resHelper.getString(
                     when (failure) {

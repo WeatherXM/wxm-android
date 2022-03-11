@@ -54,21 +54,21 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
         binding.toolbar.subtitle = device.name
 
         // Initialize the adapter with empty data
-        adapter = TransactionsAdapter {
-            it.txHash?.let { hash ->
-                navigator.openWebsite(this, "$TransactionExplorer$hash")
-            }
-        }
+        adapter = TransactionsAdapter({ transactionListener(it) }) { endOfDataListener() }
         binding.recycler.adapter = adapter
 
-        model.onTransactions().observe(this) {
-            updateUI(it)
+        model.onFirstPageTransactions().observe(this) {
+            updateUIFirstPage(it)
         }
 
-        model.fetchTransactions(deviceId)
+        model.onNewTransactionsPage().observe(this) {
+            updateUINewPage(it)
+        }
+
+        model.fetchFirstPageTransactions(deviceId)
     }
 
-    private fun updateUI(resource: Resource<List<Transaction>>) {
+    private fun updateUIFirstPage(resource: Resource<List<Transaction>>) {
         when (resource.status) {
             Status.SUCCESS -> {
                 if (!resource.data.isNullOrEmpty()) {
@@ -91,7 +91,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
                 binding.empty.title(getString(R.string.no_transactions_data))
                 binding.empty.subtitle(resource.message)
                 binding.empty.action(getString(R.string.action_retry))
-                binding.empty.listener { model.fetchTransactions(deviceId) }
+                binding.empty.listener { model.fetchFirstPageTransactions(deviceId) }
                 binding.empty.visibility = View.VISIBLE
             }
             Status.LOADING -> {
@@ -101,6 +101,35 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
                 binding.empty.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun updateUINewPage(resource: Resource<List<Transaction>>) {
+        when (resource.status) {
+            Status.SUCCESS -> {
+                if (!resource.data.isNullOrEmpty()) {
+                    adapter.submitList(resource.data)
+                    adapter.notifyDataSetChanged()
+                    binding.progress.visibility = View.INVISIBLE
+                }
+            }
+            Status.ERROR -> {
+                Timber.d("Got error: $resource.message")
+                binding.progress.visibility = View.INVISIBLE
+            }
+            Status.LOADING -> {
+                binding.progress.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun transactionListener(transaction: Transaction) {
+        transaction.txHash?.let { hash ->
+            navigator.openWebsite(this, "$TransactionExplorer$hash")
+        }
+    }
+
+    private fun endOfDataListener() {
+        model.fetchNewPageTransactions(deviceId)
     }
 }
 
