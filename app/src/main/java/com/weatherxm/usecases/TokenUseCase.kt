@@ -14,7 +14,10 @@ interface TokenUseCase {
 class TokenUseCaseImpl : TokenUseCase, KoinComponent {
     private val tokenRepository: TokenRepository by inject()
 
-    override suspend fun getTransactions(deviceId: String, page: Int?): Either<Failure, UITransactions> {
+    override suspend fun getTransactions(
+        deviceId: String,
+        page: Int?
+    ): Either<Failure, UITransactions> {
         return tokenRepository.getTransactions(deviceId, page)
             .map {
                 UITransactions(it.data, it.hasNextPage)
