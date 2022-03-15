@@ -32,7 +32,7 @@ class ClaimDeviceInformationFragment : Fragment(), KoinComponent {
         }
 
         binding.buyMiner.setOnClickListener {
-            navigator.openWebsite(this, "https://weatherxm.com")
+            navigator.openWebsite(context, getString(R.string.website))
         }
 
         return binding.root

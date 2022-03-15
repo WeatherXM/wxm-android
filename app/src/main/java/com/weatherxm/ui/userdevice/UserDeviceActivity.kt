@@ -140,7 +140,9 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
                 getRelativeTimeFromISO(it, getString(R.string.last_active_just_now))
             )
         }
+
         binding.subtitle.text = listOf(device.address, lastActive)
+            .filterNot { it.isNullOrEmpty() }
             .joinToString(" · ")
     }
 

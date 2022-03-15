@@ -193,8 +193,8 @@ class Navigator {
         }
     }
 
-    fun openWebsite(fragment: Fragment, url: String) {
-        fragment.context?.let {
+    fun openWebsite(context: Context?, url: String) {
+        context?.let {
             try {
                 CustomTabsIntent.Builder()
                     .build()

@@ -34,6 +34,7 @@
     <string name="description_set_location">Please set your location in the map so you can proceed with claiming the device.</string>
     <string name="success_claim_device">You claimed the device: %s</string>
     <string name="hint_wxm_address">Enter or scan WXM wallet address</string>
+    <string name="how_to_create_wallet">You don\'t have a WXM wallet?\n Read here how you can create one.</string>
     <string name="save">Save</string>
     <string name="title_connect_wallet">Connect Wallet</string>
     <string name="title_claim_device">Claim Device</string>
@@ -47,7 +48,7 @@
     <string name="send">Send Email</string>
     <string name="success">Success</string>
     <string name="success_reset_password_title">Email has been sent!</string>
-    <string name="success_reset_password_text">We have sent instructions for resetting your password to your email.</string>
+    <string name="success_reset_password_text">If your e-mail is registered with us you will receive instructions for resetting your password.</string>
     <string name="send_email_instructions">Enter the email associated with your WeatherXM account and we will send you a password reset link.</string>
     <string name="next_7_days">Next 7 Days</string>
     <string name="see_historical_charts">See Historical Charts</string>
@@ -219,8 +220,7 @@
     <string name="tokens_24h">24h:</string>
     <string name="tokens_total">Total:</string>
 
-    <!-- Support Email -->
-    <string name="support_email_recipient">support@weatherxm.com</string>
+    <!-- Support Email -->4
     <string name="support_email_intent_title">Send email</string>
     <string name="support_email_body_user">User account email: %1$s</string>
     <string name="support_email_body_user_and_device_info">User account email: %1$s\nDevice S/N: %2$s\n</string>
