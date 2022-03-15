@@ -47,7 +47,7 @@
     <string name="send">Send Email</string>
     <string name="success">Success</string>
     <string name="success_reset_password_title">Email has been sent!</string>
-    <string name="success_reset_password_text">We have sent instructions for resetting your password to your email.</string>
+    <string name="success_reset_password_text">If your e-mail is registered with us you will receive instructions for resetting your password.</string>
     <string name="send_email_instructions">Enter the email associated with your WeatherXM account and we will send you a password reset link.</string>
     <string name="next_7_days">Next 7 Days</string>
     <string name="see_historical_charts">See Historical Charts</string>
