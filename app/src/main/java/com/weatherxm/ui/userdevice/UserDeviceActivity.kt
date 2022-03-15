@@ -140,8 +140,12 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
                 getRelativeTimeFromISO(it, getString(R.string.last_active_just_now))
             )
         }
-        binding.subtitle.text = listOf(device.address, lastActive)
-            .joinToString(" · ")
+
+        if(device.address.isNullOrEmpty()) {
+            binding.subtitle.text = lastActive
+        } else {
+            binding.subtitle.text = listOf(device.address, lastActive).joinToString(" · ")
+        }
     }
 
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {
