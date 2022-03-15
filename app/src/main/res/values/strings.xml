@@ -34,6 +34,7 @@
     <string name="description_set_location">Please set your location in the map so you can proceed with claiming the device.</string>
     <string name="success_claim_device">You claimed the device: %s</string>
     <string name="hint_wxm_address">Enter or scan WXM wallet address</string>
+    <string name="how_to_create_wallet">How to create a WXM wallet?</string>
     <string name="save">Save</string>
     <string name="title_connect_wallet">Connect Wallet</string>
     <string name="title_claim_device">Claim Device</string>

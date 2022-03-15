@@ -163,14 +163,23 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/openDocumentation"
+            style="@style/Widget.WeatherXM.Button.Subtle.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/how_to_create_wallet"
+            app:layout_constraintStart_toStartOf="@id/addressCard"
+            app:layout_constraintTop_toBottomOf="@id/addressCard" />
+
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/termsCheckbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
             android:text="@string/terms"
-            app:layout_constraintStart_toStartOf="@id/addressCard"
-            app:layout_constraintTop_toBottomOf="@id/addressCard" />
+            app:layout_constraintStart_toStartOf="@id/openDocumentation"
+            app:layout_constraintTop_toBottomOf="@id/openDocumentation" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/ownershipCheckbox"

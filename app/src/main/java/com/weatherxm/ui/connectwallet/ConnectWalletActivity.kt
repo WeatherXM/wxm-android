@@ -75,6 +75,10 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
+        binding.openDocumentation.setOnClickListener {
+            navigator.openWebsite(this, "https://docs.weatherxm.com/suggested-wallet")
+        }
+
         // Listen to current address for UI update
         model.currentAddress().observe(this) { address ->
             if (address.isNullOrEmpty()) {
