@@ -141,11 +141,9 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
             )
         }
 
-        if(device.address.isNullOrEmpty()) {
-            binding.subtitle.text = lastActive
-        } else {
-            binding.subtitle.text = listOf(device.address, lastActive).joinToString(" · ")
-        }
+        binding.subtitle.text = listOf(device.address, lastActive)
+            .filterNot { it.isNullOrEmpty() }
+            .joinToString(" · ")
     }
 
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {

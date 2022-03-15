@@ -76,7 +76,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.openDocumentation.setOnClickListener {
-            navigator.openWebsite(this, "https://docs.weatherxm.com/suggested-wallet")
+            navigator.openWebsite(this, getString(R.string.suggested_wallets_documentation))
         }
 
         // Listen to current address for UI update

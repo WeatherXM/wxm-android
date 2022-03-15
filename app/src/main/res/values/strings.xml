@@ -220,8 +220,7 @@
     <string name="tokens_24h">24h:</string>
     <string name="tokens_total">Total:</string>
 
-    <!-- Support Email -->
-    <string name="support_email_recipient">support@weatherxm.com</string>
+    <!-- Support Email -->4
     <string name="support_email_intent_title">Send email</string>
     <string name="support_email_body_user">User account email: %1$s</string>
     <string name="support_email_body_user_and_device_info">User account email: %1$s\nDevice S/N: %2$s\n</string>
