@@ -5,7 +5,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.AuthDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.CredentialsDataSource
-import com.weatherxm.data.datasource.UserDataSource
+import com.weatherxm.data.datasource.NetworkUserDataSource
 import org.koin.core.component.KoinComponent
 
 interface AuthRepository {
@@ -25,7 +25,7 @@ class AuthRepositoryImpl(
     private val authTokenDatasource: AuthTokenDataSource,
     private val credentialsDatasource: CredentialsDataSource,
     private val authDataSource: AuthDataSource,
-    private val userDataSource: UserDataSource
+    private val networkUserDataSource: NetworkUserDataSource
 ) : AuthRepository, KoinComponent {
 
     override suspend fun login(username: String, password: String): Either<Failure, String> {
@@ -35,7 +35,7 @@ class AuthRepositoryImpl(
     override suspend fun logout() {
         authTokenDatasource.clear()
         credentialsDatasource.clear()
-        userDataSource.clear()
+        networkUserDataSource.clear()
     }
 
     override suspend fun isLoggedIn(): Either<Error, String> {

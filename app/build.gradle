@@ -65,7 +65,6 @@ android {
             buildConfigField("String", "API_URL", "\"https://api-dev.weatherxm.com\"")
             buildConfigField("String", "AUTH_URL", "\"https://api-dev.weatherxm.com\"")
             firebaseAppDistribution {
-                appId = "$FIREBASE_DEVELOPMENT_APP_ID"
                 artifactType = "APK"
                 releaseNotes = "Release notes for development version"
                 serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
@@ -78,7 +77,6 @@ android {
             buildConfigField("String", "API_URL", "\"https://api.weatherxm.com\"")
             buildConfigField("String", "AUTH_URL", "\"https://api.weatherxm.com\"")
             firebaseAppDistribution {
-                appId = "$FIREBASE_PRODUCTION_APP_ID"
                 artifactType = "APK"
                 releaseNotes = "Release notes for production version"
                 serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"

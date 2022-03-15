@@ -22,22 +22,7 @@ class UserUseCaseImpl : UserUseCase, KoinComponent {
     }
 
     override suspend fun getProfileInfo(): Either<Failure, ProfileInfo> {
-        val profileInfo = ProfileInfo()
-
-        return if (userRepository.hasDataInCache()) {
-            profileInfo.email = userRepository.getEmail()
-            profileInfo.name = userRepository.getName()
-            profileInfo.walletAddress = userRepository.getWalletAddress()
-            Either.Right(profileInfo)
-        } else {
-            userRepository.getUser()
-                .map {
-                    profileInfo.email = it.email
-                    profileInfo.name = it.name
-                    profileInfo.walletAddress = it.wallet?.address
-                    profileInfo
-                }
-        }
+        return userRepository.getProfileInfo()
     }
 
     override fun getWalletAddressFromCache(): String? {

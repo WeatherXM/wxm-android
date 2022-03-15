@@ -21,13 +21,11 @@ import com.weatherxm.data.datasource.AuthDataSourceImpl
 import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSourceImpl
 import com.weatherxm.data.datasource.CacheUserDataSource
-import com.weatherxm.data.datasource.CacheUserDataSourceImpl
 import com.weatherxm.data.datasource.CredentialsDataSource
 import com.weatherxm.data.datasource.CredentialsDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
-import com.weatherxm.data.datasource.UserDataSource
-import com.weatherxm.data.datasource.UserDataSourceImpl
+import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.network.AuthTokenJsonAdapter
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthRequestInterceptor
@@ -122,12 +120,12 @@ private val datasources = module {
         LocationDataSourceImpl()
     }
 
-    single<UserDataSource> {
-        UserDataSourceImpl(get(), get())
+    single<NetworkUserDataSource> {
+        NetworkUserDataSource(get(), get())
     }
 
     single<CacheUserDataSource> {
-        CacheUserDataSourceImpl()
+        CacheUserDataSource()
     }
 
     single<AuthDataSource> {
