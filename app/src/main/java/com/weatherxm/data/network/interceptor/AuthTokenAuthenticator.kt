@@ -30,11 +30,17 @@ class AuthTokenAuthenticator : Authenticator, KoinComponent {
 
         Timber.d("[${request.path()}] Status: ${response.code}. Invoking authenticator.")
 
+        var newRequest: Request? = null
+
         // Try with refresh token
         runBlocking { authTokenRepository.getAuthToken() }.map { authToken ->
             if (authToken.isRefreshTokenValid()) {
-                return refreshAndRetry(request, authToken.refresh)
+                newRequest = refreshAndRetry(request, authToken.refresh)
             }
+        }
+
+        if (newRequest != null) {
+            return newRequest
         }
 
         Timber.d("[${request.path()}] Invalid refresh token. Trying with credentials.")
@@ -42,13 +48,17 @@ class AuthTokenAuthenticator : Authenticator, KoinComponent {
         // Try with credentials
         runBlocking { credentialsRepository.getCredentials() }.map { credentials ->
             if (credentials.isValid()) {
-                retryWithCredentials(request, credentials)
+                newRequest = retryWithCredentials(request, credentials)
             }
         }
 
-        // Failed to authenticate
-        Timber.d("[${request.path()}] Failed to authenticate with all possible ways.")
-        return null
+        return if (newRequest != null) {
+            newRequest
+        } else {
+            // Failed to authenticate
+            Timber.w("[${request.path()}] Failed to authenticate with all possible ways.")
+            null
+        }
     }
 
     private fun refreshAndRetry(request: Request, refreshToken: String): Request? {
@@ -96,10 +106,10 @@ class AuthTokenAuthenticator : Authenticator, KoinComponent {
                 // Proceed with original request, adding token
                 return retryWithAccessToken(request, newAuthToken.access)
             }
-            else -> Timber.w("[${request.path()}] Login failed")
+            else -> Timber.d("[${request.path()}] Login failed")
         }
 
-        Timber.d("[${request.path()}] Could not login and retry")
+        Timber.w("[${request.path()}] Could not login and retry")
 
         return null
     }
