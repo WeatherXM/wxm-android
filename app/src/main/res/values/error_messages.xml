@@ -1,0 +1,29 @@
+<resources>
+    <string name="device_history_day_error_title">Oops! Could not load data from network.</string>
+    <string name="login_invalid_username">"Login failed: Invalid email"</string>
+    <string name="login_invalid_password">"Login failed: Invalid password"</string>
+    <string name="login_invalid_credentials">"Login failed: Invalid email or password"</string>
+    <string name="signup_invalid_username">"Signup failed: Invalid email"</string>
+    <string name="signup_user_already_exists">"Signup failed: User with email %1$s already exists"</string>
+    <string name="password_reset_invalid_username">"Password Reset failed: Invalid email"</string>
+    <string name="device_not_found">"Could not find the requested device"</string>
+    <string name="connect_wallet_invalid_address">"Invalid wallet address"</string>
+    <string name="history_invalid_dates">"Fetching history failed"</string>
+    <string name="forecast_invalid_dates">"Fetching forecast failed"</string>
+    <string name="claim_invalid_serial">"Claiming device failed: The serial number is invalid"</string>
+    <string name="claim_invalid_location">"Claiming device failed: The location provided is invalid"</string>
+    <string name="unknown_error">"Something went wrong: Unknown Error"</string>
+    <string name="network_error">Something went wrong: Network Error - check your internet connection</string>
+    <string name="no_charts_found">"Oops! Charts could not be loaded."</string>
+    <string name="no_forecast_data">"Oops! Forecast could not be fetched."</string>
+    <string name="no_data_chart_found">"No historical weather data could not be found for this day."</string>
+    <string name="no_data_error_device_details">Failed to get the details of the device: No Data</string>
+    <string name="no_data_error_public_devices">Failed to get the public devices.</string>
+    <string name="device_data_failed">Getting data for this device failed.</string>
+    <string name="device_current_weather_failed">Getting the current weather for this device failed.</string>
+    <string name="forecast_failed">Getting weather forecast data failed.</string>
+    <string name="token_failed">Getting token data failed.</string>
+    <string name="oops_something_wrong">Oops! Something went wrong.</string>
+    <string name="error_cannot_send_email">Oops! Could not send email!</string>
+    <string name="error_cannot_open_url">Oops! Could not open %s</string>
+</resources>

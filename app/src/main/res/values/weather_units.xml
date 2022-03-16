@@ -1,0 +1,84 @@
+<resources>
+    <!-- Weather Data & Units -->
+    <string name="weather_units">Weather Units</string>
+    <string name="key_temperature_preference" translatable="false">temperature_unit</string>
+    <string name="key_precipitation_preference" translatable="false">precipitation_unit</string>
+    <string name="key_wind_speed_preference" translatable="false">wind_speed_unit</string>
+    <string name="key_wind_direction_preference" translatable="false">wind_direction_unit</string>
+    <string name="key_pressure_preference" translatable="false">pressure_unit</string>
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Humidity</string>
+    <string name="precipitation">Precipitation</string>
+    <string name="precipitation_intensity">Precipitation</string>
+    <string name="precipitation_probability">Precipitation %</string>
+    <string name="wind">Wind</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="wind_gust">Wind Gust</string>
+    <string name="wind_direction">Wind Direction</string>
+    <string name="pressure">Pressure</string>
+    <string name="uv_index">UV Index</string>
+    <string name="cloud_cover">Cloud Cover</string>
+    <string name="temperature_celsius">°C</string>
+    <string name="temperature_fahrenheit">°F</string>
+    <string name="precipitation_mm">&#160;mm</string>
+    <string name="precipitation_in">&#160;in</string>
+    <string name="wind_speed_kmh">&#160;km/h</string>
+    <string name="wind_speed_mph">&#160;mph</string>
+    <string name="wind_speed_ms">&#160;m/s</string>
+    <string name="wind_speed_knots">&#160;kn</string>
+    <string name="wind_speed_beaufort">&#160;bf</string>
+    <string name="wind_direction_cardinal">Cardinal</string>
+    <string name="wind_direction_degrees">Degrees</string>
+    <string name="wind_direction_degrees_mark">°</string>
+    <string name="pressure_hpa">&#160;hPa</string>
+    <string name="pressure_inHg">&#160;inHg</string>
+    <string name="percent" translatable="false">%</string>
+    <string name="uv_index_unit" translatable="false">&#160;UV</string>
+
+    <string-array name="temperature_entries">
+        <item>Celsius (°C)</item>
+        <item>Fahrenheit (°F)</item>
+    </string-array>
+    <string-array name="precipitation_entries">
+        <item>Millimeters (mm)</item>
+        <item>Inches (in)</item>
+    </string-array>
+    <string-array name="wind_speed_entries">
+        <item>Kilometers per hour (km/h)</item>
+        <item>Miles per hour (mph)</item>
+        <item>Meters per second (m/s)</item>
+        <item>Knots (kn)</item>
+        <item>Beaufort (bf)</item>
+    </string-array>
+    <string-array name="wind_direction_entries">
+        <item>Cardinal (e.g. N, SW, NE, etc)</item>
+        <item>Degrees</item>
+    </string-array>
+    <string-array name="pressure_entries">
+        <item>Hectopascal (hPa)</item>
+        <item>Inch of mercury (inHg)</item>
+    </string-array>
+    <string-array name="temperature_values">
+        <item>@string/temperature_celsius</item>
+        <item>@string/temperature_fahrenheit</item>
+    </string-array>
+    <string-array name="precipitation_values">
+        <item>@string/precipitation_mm</item>
+        <item>@string/precipitation_in</item>
+    </string-array>
+    <string-array name="wind_speed_values">
+        <item>@string/wind_speed_kmh</item>
+        <item>@string/wind_speed_mph</item>
+        <item>@string/wind_speed_ms</item>
+        <item>@string/wind_speed_knots</item>
+        <item>@string/wind_speed_beaufort</item>
+    </string-array>
+    <string-array name="wind_direction_values">
+        <item>@string/wind_direction_cardinal</item>
+        <item>@string/wind_direction_degrees</item>
+    </string-array>
+    <string-array name="pressure_values">
+        <item>@string/pressure_hpa</item>
+        <item>@string/pressure_inHg</item>
+    </string-array>
+</resources>

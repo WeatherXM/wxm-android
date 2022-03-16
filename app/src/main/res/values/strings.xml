@@ -1,117 +1,73 @@
 <resources>
+    <string name="title_home">Home</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
-    <string name="history">History</string>
-    <string name="forecast_7_day">7 Day Forecast</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="invalid_username">Not a valid username</string>
-    <string name="warn_invalid_address">Invalid WXM Address</string>
-    <string name="warn_wallet_terms_not_accepted">Please accept the terms to proceed.</string>
-    <string name="warn_wallet_access_not_acknowledged">Please confirm that you have access to the wallet to proceed.</string>
-    <string name="invalid_email">Not a valid email</string>
-    <string name="invalid_serial_number">Invalid serial number</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">Login failed</string>
-    <string name="forgot_password">Forgot Password?</string>
-    <string name="title_home">Home</string>
-    <string name="prompt_login"><![CDATA[Already a user? <span style=\"color: #2599df\">SIGN IN</span>]]></string>
-    <string name="password_reset">Reset Password</string>
-    <string name="title_password_reset">Password Reset</string>
-    <string name="title_login">Login</string>
-    <string name="settings">Settings</string>
-    <string name="title_explorer">Explorer</string>
-    <string name="title_devices">Devices</string>
-    <string name="title_profile">Profile</string>
-    <string name="weather_stations">Weather Stations</string>
-    <string name="wallet_prompt">Connecting a wallet is mandatory for getting rewards. If you do not connect your wallet, the rewards of your WXM Devices will be lost.</string>
-    <string name="suggested_wallets">It is highly recommended to use MetaMask, as the most compatible wallet.</string>
-    <string name="wxm_address">New WXM Address</string>
-    <string name="device_serial_number_title">Device Serial Number</string>
-    <string name="device_serial_number_hint">Enter the device\'s serial number</string>
-    <string name="device_serial_number_helper">%d / 18</string>
-    <string name="device_serial_number_instructions">The S/N is 18 characters long and looks like this: &lt;strong&gt;12:34:56:78:9A:BC:DE:F0:12&lt;/strong&gt;. You  can find it on your M5 device\'s screen. Please type only the letters and numbers.</string>
-    <string name="description_set_location">Please set your location in the map so you can proceed with claiming the device.</string>
-    <string name="success_claim_device">You claimed the device: %s</string>
-    <string name="hint_wxm_address">Enter or scan WXM wallet address</string>
-    <string name="how_to_create_wallet">You don\'t have a WXM wallet?\n Read here how you can create one.</string>
-    <string name="save">Save</string>
-    <string name="title_connect_wallet">Connect Wallet</string>
-    <string name="title_claim_device">Claim Device</string>
-    <string name="current_address">Current Address</string>
-    <string name="address_saved">Success: Address Saved.</string>
-    <string name="hello">Hello</string>
-    <string name="hello_user">Hello, %s</string>
-    <string name="ownership_wallet">I acknowledge that I have ownership and full access to this wallet.</string>
-    <string name="acknowledge_location">I acknowledge that this location is the one I will deploy the device.</string>
-    <string name="terms">I have read and accept the terms.</string>
-    <string name="send">Send Email</string>
     <string name="success">Success</string>
-    <string name="success_reset_password_title">Email has been sent!</string>
-    <string name="success_reset_password_text">If your e-mail is registered with us you will receive instructions for resetting your password.</string>
-    <string name="send_email_instructions">Enter the email associated with your WeatherXM account and we will send you a password reset link.</string>
-    <string name="next_7_days">Next 7 Days</string>
-    <string name="see_historical_charts">See Historical Charts</string>
-    <string name="earnings">Earnings</string>
-    <string name="wxm">WXM</string>
-    <string name="button_24h">24H</string>
-    <string name="button_7d">7D</string>
-    <string name="button_30d">30D</string>
-    <string name="last_active">Last seen %s</string>
-    <string name="last_active_just_now">just now</string>
-    <string name="title_share_wallet">Share WXM wallet address</string>
-    <string name="action_logout">Logout</string>
+    <string name="action_save">Save</string>
+    <string name="action_sign_in">Sign in</string>
     <string name="action_retry">Retry</string>
     <string name="action_ok">OK</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_next">Next</string>
-    <string name="action_claim">Claim</string>
-    <string name="action_set_location">Set Location</string>
-    <string name="action_use_gps">Use GPS</string>
-    <string name="info_claim_contact_support">Trouble claiming your device? Contact our support team.</string>
-    <string name="info_claim_buy_miner">Don\'t have a WXM device yet?\nGet one on weatherxm.com.</string>
-    <string name="action_devices_list">View device list</string>
-    <string name="warn_cancelled">Cancelled!</string>
+    <string name="action_logout">Logout</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <!-- Permissions -->
     <string name="permission_location_title">Access to your location?</string>
     <string name="permission_location_rationale">Location permission is needed to verify your WXM device\'s location.</string>
     <string name="permission_permanently_denied_title">Permission permanently denied</string>
     <string name="permission_permanently_denied_rationale">Go to the app settings to give the required permissions.</string>
-    <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after WXM mainnet token launch. Actual rewards may differ from the ones you see in the chart above.]]></string>
-    <string name="optional">Optional</string>
+    <string name="warn_cancelled">Cancelled!</string>
 
-    <!-- Dates/Days -->
-    <string name="today">Today</string>
-    <string name="tomorrow">Tomorrow</string>
-    <string name="yesterday">Yesterday</string>
-    <string name="monday">Monday</string>
-    <string name="tuesday">Tuesday</string>
-    <string name="wednesday">Wednesday</string>
-    <string name="thursday">Thursday</string>
-    <string name="friday">Friday</string>
-    <string name="saturday">Saturday</string>
-    <string name="sunday">Sunday</string>
-    <string name="mon">Mon</string>
-    <string name="tue">Tue</string>
-    <string name="wed">Wed</string>
-    <string name="thu">Thu</string>
-    <string name="fri">Fri</string>
-    <string name="sat">Sat</string>
-    <string name="sun">Sun</string>
+    <!-- Login -->
+    <string name="title_login">Login</string>
+    <string name="forgot_password">Forgot Password?</string>
 
+    <!-- Bottom Navigation Menu -->
+    <string name="title_explorer">Explorer</string>
+    <string name="title_devices">Devices</string>
+    <string name="title_profile">Profile</string>
 
-    <!-- Weather Stations -->
+    <!-- Profile -->
+    <string name="hello">Hello</string>
+    <string name="hello_user">Hello, %s</string>
+
+    <!-- Weather Station(s) -->
+    <string name="weather_stations">Weather Stations</string>
     <string name="add_weather_station">Claim your WXM device by clicking the + button.</string>
+    <string name="last_active">Last seen %s</string>
+    <string name="last_active_just_now">just now</string>
     <string name="online">Online</string>
     <string name="offline">Offline</string>
     <string name="unknown">Unknown</string>
     <string name="no_weather_stations">Oh, no! No WXM devices yet?</string>
-    <string name="current_weather">Current Weather</string>
-    <string name="title_dialog_logout">Logout?</string>
-    <string name="message_dialog_logout">Are you sure you want to logout?</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
+
+    <!-- Reset Password -->
+    <string name="title_password_reset">Password Reset</string>
+    <string name="send_email">Send Email</string>
+    <string name="success_reset_password_title">Email has been sent!</string>
+    <string name="success_reset_password_text">If your e-mail is registered with us you will receive instructions for resetting your password.</string>
+    <string name="send_email_instructions">Enter the email associated with your WeatherXM account and we will send you a password reset link.</string>
+
+    <!-- Connect Wallet -->
+    <string name="wallet_prompt">Connecting a wallet is mandatory for getting rewards. If you do not connect your wallet, the rewards of your WXM Devices will be lost.</string>
+    <string name="suggested_wallets">It is highly recommended to use MetaMask, as the most compatible wallet.</string>
+    <string name="title_connect_wallet">Connect Wallet</string>
+    <string name="wxm_address">New WXM Address</string>
+    <string name="hint_wxm_address">Enter or scan WXM wallet address</string>
+    <string name="how_to_create_wallet">You don\'t have a WXM wallet?\n Read here how you can create one.</string>
+    <string name="ownership_wallet">I acknowledge that I have ownership and full access to this wallet.</string>
+    <string name="acknowledge_location">I acknowledge that this location is the one I will deploy the device.</string>
+    <string name="terms">I have read and accept the terms.</string>
+    <string name="title_share_wallet">Share WXM wallet address</string>
+    <string name="current_address">Current Address</string>
+    <string name="address_saved">Success: Address Saved.</string>
+    <string name="warn_wallet_terms_not_accepted">Please accept the terms to proceed.</string>
+    <string name="warn_wallet_access_not_acknowledged">Please confirm that you have access to the wallet to proceed.</string>
 
     <!-- Settings -->
+    <string name="settings">Settings</string>
     <string name="account">Account</string>
     <string name="about">About</string>
     <string name="help">Help</string>
@@ -120,89 +76,8 @@
     <string name="desc_contact_support">Send us an email and we\'ll get back to you as soon as possible.</string>
     <string name="change_password">Change Password</string>
     <string name="request_reset_password_desc">Request a password reset email to change your password.</string>
-
-    <!-- Weather Data & Units -->
-    <string name="weather_units">Weather Units</string>
-    <string name="key_temperature_preference" translatable="false">temperature_unit</string>
-    <string name="key_precipitation_preference" translatable="false">precipitation_unit</string>
-    <string name="key_wind_speed_preference" translatable="false">wind_speed_unit</string>
-    <string name="key_wind_direction_preference" translatable="false">wind_direction_unit</string>
-    <string name="key_pressure_preference" translatable="false">pressure_unit</string>
-    <string name="temperature">Temperature</string>
-    <string name="humidity">Humidity</string>
-    <string name="precipitation">Precipitation</string>
-    <string name="precipitation_intensity">Precipitation</string>
-    <string name="precipitation_probability">Precipitation %</string>
-    <string name="wind">Wind</string>
-    <string name="wind_speed">Wind Speed</string>
-    <string name="wind_gust">Wind Gust</string>
-    <string name="wind_direction">Wind Direction</string>
-    <string name="pressure">Pressure</string>
-    <string name="uv_index">UV Index</string>
-    <string name="cloud_cover">Cloud Cover</string>
-    <string name="temperature_celsius">°C</string>
-    <string name="temperature_fahrenheit">°F</string>
-    <string name="precipitation_mm">&#160;mm</string>
-    <string name="precipitation_in">&#160;in</string>
-    <string name="wind_speed_kmh">&#160;km/h</string>
-    <string name="wind_speed_mph">&#160;mph</string>
-    <string name="wind_speed_ms">&#160;m/s</string>
-    <string name="wind_speed_knots">&#160;kn</string>
-    <string name="wind_speed_beaufort">&#160;bf</string>
-    <string name="wind_direction_cardinal">Cardinal</string>
-    <string name="wind_direction_degrees">Degrees</string>
-    <string name="wind_direction_degrees_mark">°</string>
-    <string name="pressure_hpa">&#160;hPa</string>
-    <string name="pressure_inHg">&#160;inHg</string>
-    <string name="percent" translatable="false">%</string>
-    <string name="uv_index_unit" translatable="false">&#160;UV</string>
-
-    <string-array name="temperature_entries">
-        <item>Celsius (°C)</item>
-        <item>Fahrenheit (°F)</item>
-    </string-array>
-    <string-array name="precipitation_entries">
-        <item>Millimeters (mm)</item>
-        <item>Inches (in)</item>
-    </string-array>
-    <string-array name="wind_speed_entries">
-        <item>Kilometers per hour (km/h)</item>
-        <item>Miles per hour (mph)</item>
-        <item>Meters per second (m/s)</item>
-        <item>Knots (kn)</item>
-        <item>Beaufort (bf)</item>
-    </string-array>
-    <string-array name="wind_direction_entries">
-        <item>Cardinal (e.g. N, SW, NE, etc)</item>
-        <item>Degrees</item>
-    </string-array>
-    <string-array name="pressure_entries">
-        <item>Hectopascal (hPa)</item>
-        <item>Inch of mercury (inHg)</item>
-    </string-array>
-    <string-array name="temperature_values">
-        <item>@string/temperature_celsius</item>
-        <item>@string/temperature_fahrenheit</item>
-    </string-array>
-    <string-array name="precipitation_values">
-        <item>@string/precipitation_mm</item>
-        <item>@string/precipitation_in</item>
-    </string-array>
-    <string-array name="wind_speed_values">
-        <item>@string/wind_speed_kmh</item>
-        <item>@string/wind_speed_mph</item>
-        <item>@string/wind_speed_ms</item>
-        <item>@string/wind_speed_knots</item>
-        <item>@string/wind_speed_beaufort</item>
-    </string-array>
-    <string-array name="wind_direction_values">
-        <item>@string/wind_direction_cardinal</item>
-        <item>@string/wind_direction_degrees</item>
-    </string-array>
-    <string-array name="pressure_values">
-        <item>@string/pressure_hpa</item>
-        <item>@string/pressure_inHg</item>
-    </string-array>
+    <string name="title_dialog_logout">Logout?</string>
+    <string name="message_dialog_logout">Are you sure you want to logout?</string>
 
     <!-- Registration -->
     <string name="action_signup">Sign Up</string>
@@ -214,56 +89,40 @@
     <string name="signup_instructions">Signup with your email and your account will be created shortly.</string>
     <string name="success_signup_text">Thanks for joining WeatherXM! We have sent you an account activation link to %s. Please, set a password and then try to sign in.</string>
     <string name="info_registration_contact_support">Not receiving an activation email? Contact our support team.</string>
-    <string name="support_email_subject_no_activation">No activation email</string>
+    <string name="prompt_login"><![CDATA[Already a user? <span style=\"color: #2599df\">SIGN IN</span>]]></string>
 
     <!-- Tokens -->
+    <string name="earnings">Earnings</string>
+    <string name="wxm">WXM</string>
     <string name="tokens_24h">24h:</string>
     <string name="tokens_total">Total:</string>
-
-    <!-- Support Email -->4
-    <string name="support_email_intent_title">Send email</string>
-    <string name="support_email_body_user">User account email: %1$s</string>
-    <string name="support_email_body_user_and_device_info">User account email: %1$s\nDevice S/N: %2$s\n</string>
+    <string name="button_24h">24H</string>
+    <string name="button_7d">7D</string>
+    <string name="button_30d">30D</string>
+    <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after WXM mainnet token launch. Actual rewards may differ from the ones you see in the chart above.]]></string>
 
     <!-- Claim device -->
+    <string name="title_claim_device">Claim Device</string>
     <string name="claim_device_info_text"><![CDATA[<h5>Step 1</h5>Plug the GPS antenna into your WXM device, place the antenna near a window and power up the device via USB.<h5>Step 2</h5>Swipe left on your WXM device\'s screen and press \"Configure WiFi\" to connect the device to your home WiFi.<h5>Step 3</h5>Press <b>NEXT</b> to claim your device.<br/><br/>Don\'t have a WXM device yet? Get one on <a href=\"https://weatherxm.com\">weatherxm.com</a>.]]></string>
-    <string name="support_email_subject_cannot_claim">Cannot claim device</string>
+    <string name="action_claim">Claim</string>
+    <string name="info_claim_contact_support">Trouble claiming your device? Contact our support team.</string>
+    <string name="info_claim_buy_miner">Don\'t have a WXM device yet?\nGet one on weatherxm.com.</string>
+    <string name="device_serial_number_title">Device Serial Number</string>
+    <string name="device_serial_number_hint">Enter the device\'s serial number</string>
+    <string name="device_serial_number_instructions">The S/N is 18 characters long and looks like this: &lt;strong&gt;12:34:56:78:9A:BC:DE:F0:12&lt;/strong&gt;. You  can find it on your M5 device\'s screen. Please type only the letters and numbers.</string>
+    <string name="description_set_location">Please set your location in the map so you can proceed with claiming the device.</string>
+    <string name="success_claim_device">You claimed the device: %s</string>
+    <string name="action_devices_list">View device list</string>
+
+    <!-- Forecast -->
+    <string name="forecast_7_day">7 Day Forecast</string>
+    <string name="next_7_days">Next 7 Days</string>
+    <string name="forecast_empty">Oops! No forecast weather data could not be found.</string>
 
     <!-- Device History -->
+    <string name="history">History</string>
+    <string name="see_historical_charts">See Historical Charts</string>
     <string name="device_history_day_empty_title">Oops! No weather data.</string>
     <string name="device_history_day_empty_subtitle">No weather data found for your device for this day.</string>
     <string name="device_history_day_empty_subtitle_with_day">No weather data found for your device for %s.</string>
-    <string name="device_history_day_error_title">Oops! Could not load data from network.</string>
-
-    <!-- Error messages -->
-    <string name="login_invalid_username">"Login failed: Invalid email"</string>
-    <string name="login_invalid_password">"Login failed: Invalid password"</string>
-    <string name="login_invalid_credentials">"Login failed: Invalid email or password"</string>
-    <string name="signup_invalid_username">"Signup failed: Invalid email"</string>
-    <string name="signup_user_already_exists">"Signup failed: User with email %1$s already exists"</string>
-    <string name="token_refresh_invalid_access_token">"Token Refresh failed: Invalid access token"</string>
-    <string name="password_reset_invalid_username">"Password Reset failed: Invalid email"</string>
-    <string name="logout_invalid_access_token">"Logout failed: Invalid access token"</string>
-    <string name="device_not_found">"Could not find the requested device"</string>
-    <string name="connect_wallet_invalid_address">"Invalid wallet address"</string>
-    <string name="history_invalid_dates">"Fetching history failed"</string>
-    <string name="forecast_invalid_dates">"Fetching forecast failed"</string>
-    <string name="claim_invalid_serial">"Claiming device failed: The serial number is invalid"</string>
-    <string name="claim_invalid_location">"Claiming device failed: The location provided is invalid"</string>
-    <string name="claim_not_found">"Claiming device failed: Could not find a device with the requested serial number"</string>
-    <string name="unknown_error">"Something went wrong: Unknown Error"</string>
-    <string name="network_error">Something went wrong: Network Error - check your internet connection</string>
-    <string name="no_charts_found">"Oops! Charts could not be loaded."</string>
-    <string name="no_forecast_data">"Oops! Forecast could not be fetched."</string>
-    <string name="no_data_chart_found">"No historical weather data could not be found for this day."</string>
-    <string name="no_data_error_device_details">Failed to get the details of the device: No Data</string>
-    <string name="no_data_error_public_devices">Failed to get the public devices.</string>
-    <string name="device_data_failed">Getting data for this device failed.</string>
-    <string name="device_current_weather_failed">Getting the current weather for this device failed.</string>
-    <string name="forecast_failed">Getting weather forecast data failed.</string>
-    <string name="token_failed">Getting token data failed.</string>
-    <string name="oops_something_wrong">Oops! Something went wrong.</string>
-    <string name="error_cannot_send_email">Oops! Could not send email!</string>
-    <string name="error_cannot_open_url">Oops! Could not open %s</string>
-    <string name="forecast_empty">Oops! No forecast weather data could not be found.</string>
 </resources>

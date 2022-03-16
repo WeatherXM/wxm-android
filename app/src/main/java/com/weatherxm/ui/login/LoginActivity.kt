@@ -67,7 +67,7 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
             val password = binding.password.text.toString().trim()
 
             if (!validator.validateUsername(username)) {
-                binding.usernameContainer.error = getString(R.string.invalid_username)
+                binding.usernameContainer.error = getString(R.string.invalid_email)
                 return@setOnClickListener
             }
 
@@ -107,7 +107,7 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
             Status.ERROR -> {
                 setInputEnabled(true)
                 binding.loading.visibility = View.INVISIBLE
-                showSnackbarMessage("${getString(R.string.login_failed)} ${result.message}.")
+                result.message?.let { showSnackbarMessage(it) }
             }
             Status.LOADING -> {
                 setInputEnabled(false)
