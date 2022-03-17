@@ -1,8 +1,19 @@
 package com.weatherxm.ui.claimdevice
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Looper
+import androidx.annotation.RequiresPermission
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.weatherxm.R
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
@@ -17,8 +28,12 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
-// TODO: Find an implementation with less functions??
+/*
+* This suppress is needed because of the complexity of the claiming process where a lot of
+* fragments and an activity are involved and communication is needed between them
+*/
 @Suppress("TooManyFunctions")
 class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     // Current arbitrary values for the viewpager and the map
@@ -29,11 +44,14 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     private val claimDeviceUseCase: ClaimDeviceUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
 
+    private lateinit var locationClient: FusedLocationProviderClient
+
     private lateinit var currentSerialNumber: String
     private var userEmail: String? = null
     private var isLocationSet = false
     private var currentLon: Double = 0.0
     private var currentLat: Double = 0.0
+    private var askedForGPSPermission = false
 
     // Needed for passing info to the activity to move to the next page in the view pager or use gps
     private val onStep = MutableLiveData(0)
@@ -65,7 +83,10 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     }
 
     fun useGps() {
-        onGPS.postValue(true)
+        if(!askedForGPSPermission) {
+            onGPS.postValue(true)
+            askedForGPSPermission = true
+        }
     }
 
     fun updateLocationOnMap(location: Location) {
@@ -130,6 +151,52 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
                 }
                 .mapLeft {
                     userEmail = null
+                }
+        }
+    }
+
+    @Suppress("MagicNumber")
+    @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
+    fun getLocationAndThen(context: Context, onLocation: (location: Location?) -> Unit) {
+        locationClient = LocationServices.getFusedLocationProviderClient(context)
+        val priority = when (PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                LocationRequest.PRIORITY_HIGH_ACCURACY
+            }
+            ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) -> {
+                LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+            }
+            else -> {
+                null
+            }
+        }
+        priority?.let { it ->
+            locationClient.lastLocation
+                .addOnSuccessListener { location ->
+                    if (location == null) {
+                        Timber.d("Current location is null. Requesting fresh location.")
+                        locationClient.requestLocationUpdates(
+                            LocationRequest.create()
+                                .setNumUpdates(1)
+                                .setInterval(TimeUnit.SECONDS.toMillis(2))
+                                .setFastestInterval(0)
+                                .setMaxWaitTime(TimeUnit.SECONDS.toMillis(3))
+                                .setPriority(it),
+                            object : LocationCallback() {
+                                override fun onLocationResult(result: LocationResult) {
+                                    onLocation.invoke(result.lastLocation)
+                                }
+                            },
+                            Looper.getMainLooper()
+                        )
+                    } else {
+                        Timber.d("Got current location: $location")
+                        onLocation.invoke(location)
+                    }
+                }
+                .addOnFailureListener {
+                    Timber.d(it, "Could not get current location.")
+                    onLocation.invoke(null)
                 }
         }
     }

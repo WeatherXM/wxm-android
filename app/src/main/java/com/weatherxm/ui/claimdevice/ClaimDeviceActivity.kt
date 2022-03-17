@@ -3,33 +3,22 @@ package com.weatherxm.ui.claimdevice
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
-import android.os.Looper
 import androidx.activity.viewModels
-import androidx.annotation.RequiresPermission
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
-import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_INFORMATION
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.common.checkPermissionsAndThen
+import com.weatherxm.ui.common.hasPermission
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
 
@@ -65,21 +54,42 @@ class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
 
         model.onGPS().observe(this) { useGPS ->
             if (useGPS) {
-                locationClient = LocationServices.getFusedLocationProviderClient(this)
-
                 checkPermissionsAndThen(
                     permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
                     rationaleTitle = getString(R.string.permission_location_title),
                     rationaleMessage = getString(R.string.permission_location_rationale),
+                    /*
+                    * onGranted runs only when ACCESS_FINE_LOCATION has been given
+                    * (as this is the first permission asked)
+                     */
                     onGranted = {
                         // Get last location
-                        getLocationAndThen { location ->
+                        model.getLocationAndThen(this) { location ->
                             Timber.d("Got user location: $location")
-                            model.updateLocationOnMap(location)
+                            if(location == null) {
+                                toast(R.string.gps_location_failed)
+                            } else {
+                                model.updateLocationOnMap(location)
+                            }
                         }
                     },
+                    /*
+                    * onDenied runs when
+                    * 1. ACCESS_COARSE_LOCATION has been given and ACCESS_FINE_LOCATION has not
+                    * 2. none of them has been given
+                     */
                     onDenied = {
-                        // TODO Check if we have at least coarse location permission
+                        if(hasPermission(ACCESS_COARSE_LOCATION)) {
+                            // Get last location
+                            model.getLocationAndThen(this) { location ->
+                                Timber.d("Got user location: $location")
+                                if(location == null) {
+                                    toast(R.string.gps_location_failed)
+                                } else {
+                                    model.updateLocationOnMap(location)
+                                }
+                            }
+                        }
                     }
                 )
             }
@@ -101,52 +111,6 @@ class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
                 // Otherwise, select the previous step.
                 binding.pager.currentItem = binding.pager.currentItem - 1
             }
-        }
-    }
-
-    // TODO: Check whether we can move this code to view model
-    @Suppress("MagicNumber")
-    @RequiresPermission(anyOf = [ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION])
-    private fun getLocationAndThen(onLocation: (location: Location) -> Unit) {
-        val priority = when (PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) -> {
-                PRIORITY_HIGH_ACCURACY
-            }
-            ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) -> {
-                PRIORITY_BALANCED_POWER_ACCURACY
-            }
-            else -> {
-                null
-            }
-        }
-        priority?.let { it ->
-            locationClient.lastLocation
-                .addOnSuccessListener { location ->
-                    if (location == null) {
-                        Timber.d("Current location is null. Requesting fresh location.")
-                        locationClient.requestLocationUpdates(
-                            LocationRequest.create()
-                                .setNumUpdates(1)
-                                .setInterval(TimeUnit.SECONDS.toMillis(2))
-                                .setFastestInterval(0)
-                                .setMaxWaitTime(TimeUnit.SECONDS.toMillis(3))
-                                .setPriority(it),
-                            object : LocationCallback() {
-                                override fun onLocationResult(result: LocationResult) {
-                                    onLocation.invoke(result.lastLocation)
-                                }
-                            },
-                            Looper.getMainLooper()
-                        )
-                    } else {
-                        Timber.d("Got current location: $location")
-                        onLocation.invoke(location)
-                    }
-                }
-                .addOnFailureListener {
-                    Timber.d(it, "Could not get current location.")
-                    toast("Could not get current location.")
-                }
         }
     }
 

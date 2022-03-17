@@ -8,7 +8,6 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.fondesa.kpermissions.allGranted
-import com.fondesa.kpermissions.anyDenied
 import com.fondesa.kpermissions.anyPermanentlyDenied
 import com.fondesa.kpermissions.anyShouldShowRationale
 import com.fondesa.kpermissions.builder.PermissionRequestBuilder
@@ -101,8 +100,10 @@ fun FragmentActivity.checkPermissionsAndThen(
         when {
             result.allGranted() -> onGranted()
             result.anyShouldShowRationale() -> onShowRationale()
-            result.anyPermanentlyDenied() -> onPermanentlyDenied()
-            result.anyDenied() -> onDenied()
+            result.anyPermanentlyDenied() -> {
+                onPermanentlyDenied()
+                onDenied()
+            }
         }
     }
 }
