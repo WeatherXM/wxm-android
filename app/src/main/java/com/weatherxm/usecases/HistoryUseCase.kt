@@ -171,9 +171,7 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
         )
     }
 
-    //todo investigate if this suppress should be removed or not.
-    @Suppress("ComplexMethod")
-    private fun createHourlyChart(
+    private fun createHourlyCharts(
         context: Context,
         weatherData: WeatherData
     ): HistoryCharts {
@@ -259,7 +257,7 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
         val charts = mutableListOf<HistoryCharts>()
 
         data.forEach { weatherData ->
-            charts.add(createHourlyChart(context, weatherData))
+            charts.add(createHourlyCharts(context, weatherData))
         }
 
         return charts

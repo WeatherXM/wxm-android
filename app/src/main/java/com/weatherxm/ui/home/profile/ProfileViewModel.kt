@@ -50,9 +50,6 @@ class ProfileViewModel : ViewModel(), KoinComponent {
                     Timber.d("Has wallet: ${user.wallet?.address.isNullOrEmpty()}")
                     hasWallet.postValue(!user.wallet?.address.isNullOrEmpty())
                 }
-                .mapLeft {
-                    // TODO: how to handle this? ideas?
-                }
         }
     }
 
