@@ -16,7 +16,6 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity
-import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
@@ -60,7 +59,6 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             navigator.showDeviceDetails(supportFragmentManager, it)
         }
 
-        // todo: Find a way to use snackbar here instead of a toast
         explorerModel.explorerState().observe(this) { resource ->
             Timber.d("Status updated: ${resource.status}")
             when (resource.status) {
@@ -69,7 +67,7 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
-                    resource.message?.let { toast(it) }
+                    resource.message?.let { showErrorOnMapLoading(it) }
                 }
                 Status.LOADING -> {
                     snackbar?.dismiss()
@@ -92,8 +90,11 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         // Setup navigation view
         binding.navView.setupWithNavController(navController)
 
-        // Show/hide FAB based on selected navigation item
+        // Show/hide FAB based on selected navigation item and dismiss snackbar if shown
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (snackbar?.isShown == true) {
+                snackbar?.dismiss()
+            }
             when (destination.id) {
                 R.id.navigation_devices -> binding.addDevice.showIfNot()
                 else -> binding.addDevice.hideIfNot()
@@ -132,5 +133,17 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         } else {
             binding.navView.removeBadge(R.id.navigation_profile)
         }
+    }
+
+    private fun showErrorOnMapLoading(message: String) {
+        if (snackbar?.isShown == true) {
+            snackbar?.dismiss()
+        }
+        snackbar = Snackbar
+            .make(binding.root, message, Snackbar.LENGTH_INDEFINITE)
+            .setAction(R.string.action_retry) {
+                explorerModel.fetch()
+            }
+        snackbar?.show()
     }
 }

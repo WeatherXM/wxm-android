@@ -34,6 +34,7 @@
         android:layout_gravity="bottom|center"
         android:layout_marginVertical="@dimen/margin_normal"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        app:layout_dodgeInsetEdges="bottom"
         app:menu="@menu/bottom_nav_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
