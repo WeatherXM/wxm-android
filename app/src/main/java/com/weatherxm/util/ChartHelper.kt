@@ -12,16 +12,12 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.weatherxm.R
 import kotlin.math.roundToInt
 
-// TODO: Explore whether that suppress can be removed 
 // Custom implementation of https://weeklycoding.com/mpandroidchart-documentation/markerview/
-@Suppress("LongParameterList")
 class CustomDefaultMarkerView(
     context: Context,
     private val times: MutableList<String>?,
     private val valueName: String,
     private val valueUnit: String,
-    private val showDecimals: Boolean,
-    private val isPrecipitation: Boolean = false,
     private val decimals: Int = 0
 ) : MarkerView(context, R.layout.view_default_chart_marker) {
     private var timeView: TextView = findViewById(R.id.time)
@@ -39,18 +35,7 @@ class CustomDefaultMarkerView(
 
         // Customize the text for the marker view
         valueView.text = when {
-            isPrecipitation -> {
-                // Get the correct precipitation intensity formatted with the correct decimals
-                val precipitationIntensity = Weather.getFormattedValueOrEmpty(
-                    entryClicked.y,
-                    valueUnit,
-                    Weather.getDecimalsPrecipitation()
-                )
-
-                // Customize the text for the marker view
-                "$valueName: $precipitationIntensity"
-            }
-            showDecimals -> {
+            decimals > 0 -> {
                 val value = "%.${decimals}f".format(entryClicked.y)
                 "$valueName: $value$valueUnit"
             }
@@ -163,16 +148,11 @@ class CustomXAxisFormatter(private val times: MutableList<String>?) : ValueForma
 
 class CustomYAxisFormatter(
     private val weatherUnit: String,
-    private val showDecimals: Boolean,
-    private val decimals: Int?
+    private val decimals: Int = 0
 ) : ValueFormatter() {
     override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-        return if (showDecimals) {
-            if (decimals == null) {
-                "$value$weatherUnit"
-            } else {
-                "%.${decimals}f$weatherUnit".format(value)
-            }
+        return if (decimals > 0) {
+            "%.${decimals}f$weatherUnit".format(value)
         } else {
             "${value.roundToInt()}$weatherUnit"
         }

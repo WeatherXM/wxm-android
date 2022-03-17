@@ -21,7 +21,6 @@ data class HistoryCharts(
     var windGust: LineChartData,
     var windDirection: LineChartData,
     var humidity: LineChartData,
-    var cloudCover: LineChartData,
     var pressure: LineChartData,
     var uvIndex: BarChartData
 ) {
@@ -29,7 +28,7 @@ data class HistoryCharts(
         return temperature.isNullOrEmpty() && precipitation.isNullOrEmpty()
             && windSpeed.isNullOrEmpty() && windGust.isNullOrEmpty()
             && windDirection.isNullOrEmpty() && humidity.isNullOrEmpty()
-            && cloudCover.isNullOrEmpty() && pressure.isNullOrEmpty() && uvIndex.isNullOrEmpty()
+            && pressure.isNullOrEmpty() && uvIndex.isNullOrEmpty()
     }
 }
 
@@ -39,7 +38,6 @@ data class LineChartData(
     var name: String,
     var lineColor: Int,
     var unit: String,
-    var showDecimals: Boolean = false,
     var timestamps: MutableList<String>,
     var entries: MutableList<Entry>
 ) {
@@ -54,7 +52,6 @@ data class BarChartData(
     var name: String,
     var lineColor: Int,
     var unit: String,
-    var showDecimals: Boolean = false,
     var timestamps: MutableList<String>,
     var entries: MutableList<BarEntry>
 ) {

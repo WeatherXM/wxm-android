@@ -60,7 +60,6 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_temperature_preference),
                 resHelper.getString(R.string.temperature_celsius)
             ),
-            showDecimals = true,
             timestamps = time,
             entries = entries
         )
@@ -77,7 +76,6 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_precipitation_preference),
                 resHelper.getString(R.string.precipitation_mm)
             ),
-            showDecimals = true,
             timestamps = time,
             entries = entries
         )
@@ -144,19 +142,6 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
         )
     }
 
-    private fun createCloudCoverLineChartData(
-        time: MutableList<String>,
-        entries: MutableList<Entry>
-    ): LineChartData {
-        return LineChartData(
-            resHelper.getString(R.string.cloud_cover),
-            R.color.cloudCover,
-            resHelper.getString(R.string.percent),
-            timestamps = time,
-            entries = entries
-        )
-    }
-
     private fun createPressureLineChartData(
         time: MutableList<String>,
         entries: MutableList<Entry>
@@ -168,7 +153,6 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_pressure_preference),
                 resHelper.getString(R.string.pressure_hpa)
             ),
-            showDecimals = true,
             timestamps = time,
             entries = entries
         )
@@ -201,7 +185,6 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
         val windGustEntries = mutableListOf<Entry>()
         val windDirectionEntries = mutableListOf<Entry>()
         val humidityEntries = mutableListOf<Entry>()
-        val cloudCoverEntries = mutableListOf<Entry>()
         val pressureEntries = mutableListOf<Entry>()
         val uvIndexEntries = mutableListOf<BarEntry>()
         val time = mutableListOf<String>()
@@ -248,10 +231,6 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                     humidityEntries.add(Entry(counter, it.toFloat()))
                 }
 
-                hourlyWeather.cloudCover?.let {
-                    cloudCoverEntries.add(Entry(counter, it.toFloat()))
-                }
-
                 hourlyWeather.uvIndex?.let {
                     uvIndexEntries.add(BarEntry(counter, it.toFloat()))
                 }
@@ -268,7 +247,6 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
             createWindGustLineChartData(time, windGustEntries),
             createWindDirectionLineChartData(time, windDirectionEntries),
             createHumidityLineChartData(time, humidityEntries),
-            createCloudCoverLineChartData(time, cloudCoverEntries),
             createPressureLineChartData(time, pressureEntries),
             createUvIndexBarChartData(time, uvIndexEntries)
         )

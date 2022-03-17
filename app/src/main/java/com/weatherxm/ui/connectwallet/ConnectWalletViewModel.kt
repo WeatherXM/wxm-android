@@ -57,10 +57,6 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun validateAddress(address: String) {
-
-    }
-
     private fun handleFailure(failure: Failure) {
         isAddressSaved.postValue(
             Resource.error(
