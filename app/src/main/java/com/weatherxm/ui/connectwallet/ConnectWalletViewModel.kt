@@ -32,19 +32,33 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
     fun newAddress() = newAddress
 
 
-    fun saveAddress(address: String) {
+    fun saveAddress(address: String, termsChecked: Boolean, ownershipChecked: Boolean) {
         isAddressSaved.postValue(Resource.loading())
-        CoroutineScope(Dispatchers.IO).launch {
-            userRepository.saveAddress(address)
-                .mapLeft {
-                    handleFailure(it)
-                }.map {
-                    isAddressSaved.postValue(
-                        Resource.success(resHelper.getString(R.string.address_saved))
-                    )
-                    setCurrentAddress(address)
-                }
+        if (termsChecked && ownershipChecked) {
+            CoroutineScope(Dispatchers.IO).launch {
+                userRepository.saveAddress(address)
+                    .mapLeft {
+                        handleFailure(it)
+                    }.map {
+                        isAddressSaved.postValue(
+                            Resource.success(resHelper.getString(R.string.address_saved))
+                        )
+                        setCurrentAddress(address)
+                    }
+            }
+        } else if (ownershipChecked) {
+            isAddressSaved.postValue(
+                Resource.error(resHelper.getString(R.string.warn_wallet_terms_not_accepted))
+            )
+        } else {
+            isAddressSaved.postValue(
+                Resource.error(resHelper.getString(R.string.warn_wallet_access_not_acknowledged))
+            )
         }
+    }
+
+    fun validateAddress(address: String) {
+
     }
 
     private fun handleFailure(failure: Failure) {

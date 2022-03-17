@@ -1,4 +1,4 @@
-package com.weatherxm.ui.devicedetail
+package com.weatherxm.ui.publicdevicedetail
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,18 +23,17 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
-// TODO: Use a more proper name for this fragment/class. Check android:background on XML.
-class DeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
+class PublicDeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
     private val explorerModel: ExplorerViewModel by activityViewModels()
-    private val model: DeviceDetailViewModel by viewModels()
+    private val model: PublicDeviceDetailViewModel by viewModels()
     private lateinit var binding: FragmentDeviceDetailsBinding
     private var device: Device? = null
 
     companion object {
-        const val TAG = "DeviceDetailFragment"
+        const val TAG = "PublicDeviceDetailFragment"
         private const val ARG_DEVICE = "device"
 
-        fun newInstance(device: Device) = DeviceDetailFragment().apply {
+        fun newInstance(device: Device) = PublicDeviceDetailFragment().apply {
             arguments = Bundle().apply { putParcelable(ARG_DEVICE, device) }
         }
     }

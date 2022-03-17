@@ -9,7 +9,7 @@
     android:fitsSystemWindows="false"
     android:orientation="vertical"
     android:paddingBottom="@dimen/padding_normal"
-    tools:context=".ui.devicedetail.DeviceDetailFragment">
+    tools:context=".ui.publicdevicedetail.PublicDeviceDetailFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
