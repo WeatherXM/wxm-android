@@ -8,7 +8,6 @@ import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_INFORMATION
@@ -24,8 +23,6 @@ class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
 
     private val model: ClaimDeviceViewModel by viewModels()
     private lateinit var binding: ActivityClaimDeviceBinding
-
-    private lateinit var locationClient: FusedLocationProviderClient
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {

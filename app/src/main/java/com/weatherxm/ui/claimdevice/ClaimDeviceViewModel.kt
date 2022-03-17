@@ -1,6 +1,7 @@
 package com.weatherxm.ui.claimdevice
 
-import android.Manifest
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
@@ -83,7 +84,7 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     }
 
     fun useGps() {
-        if(!askedForGPSPermission) {
+        if (!askedForGPSPermission) {
             onGPS.postValue(true)
             askedForGPSPermission = true
         }
@@ -156,14 +157,14 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     }
 
     @Suppress("MagicNumber")
-    @RequiresPermission(anyOf = [Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION])
+    @RequiresPermission(anyOf = [ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION])
     fun getLocationAndThen(context: Context, onLocation: (location: Location?) -> Unit) {
         locationClient = LocationServices.getFusedLocationProviderClient(context)
         val priority = when (PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) -> {
+            ActivityCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) -> {
                 LocationRequest.PRIORITY_HIGH_ACCURACY
             }
-            ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) -> {
+            ActivityCompat.checkSelfPermission(context, ACCESS_COARSE_LOCATION) -> {
                 LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
             }
             else -> {
