@@ -40,8 +40,6 @@ data class Location(
     companion object {
         fun empty() = Location(0.0, 0.0)
     }
-
-    fun isEmpty() = this.lat == 0.0 && this.lon == 0.0
 }
 
 @Keep
@@ -191,31 +189,3 @@ data class DailyData(
     val pressure: Float?
 ) : Parcelable
 
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class HistoryDaily(
-    val timestamp: Long?,
-    @Json(name = "precip_intensity")
-    val precipitationIntensity: Float?,
-    @Json(name = "min_temperature")
-    val minTemperature: Float?,
-    @Json(name = "max_temperature")
-    val maxTemperature: Float?,
-    @Json(name = "wind_direction")
-    val windDirection: Int?,
-    val humidity: Int?,
-    @Json(name = "wind_speed")
-    val windSpeed: Float?,
-    val icon: String?,
-    @Json(name = "dew_point")
-    val dewPoint: Float?,
-    @Json(name = "uv_index")
-    val uvIndex: Int?,
-    @Json(name = "pressure")
-    val pressure: Float?,
-    @Json(name = "cloud_cover")
-    val cloudCover: Int?,
-    @Json(name = "wind_gust")
-    val windGust: Float?
-) : Parcelable
