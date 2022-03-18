@@ -46,7 +46,7 @@ class WeatherCardView : LinearLayout, KoinComponent {
         with(binding) {
             icon.setAnimation(Weather.getWeatherAnimation(weatherData?.icon))
             icon.playAnimation()
-            temperature.text = Weather.getFormattedTemperature(weatherData?.temperature)
+            temperature.text = Weather.getFormattedTemperature(weatherData?.temperature, 1)
             precipitationIntensity.text =
                 Weather.getFormattedPrecipitation(weatherData?.precipitation)
             pressure.text = Weather.getFormattedPressure(weatherData?.pressure)
