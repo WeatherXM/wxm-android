@@ -20,14 +20,6 @@
             app:navigationIcon="@drawable/ic_back"
             app:title="@string/title_device_earnings"
             tools:subtitle="Weatherwise Wintergreen Stratocumulus" />
-
-        <com.google.android.material.progressindicator.LinearProgressIndicator
-            android:id="@+id/progress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            app:layout_scrollFlags="scroll"
-            tools:visibility="visible" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,6 +41,16 @@
             tools:listitem="@layout/list_item_token_transaction" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Progress -->
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:visibility="invisible"
+        tools:visibility="visible" />
 
     <!-- Empty -->
 
