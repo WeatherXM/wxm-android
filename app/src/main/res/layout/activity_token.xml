@@ -30,27 +30,28 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:paddingVertical="@dimen/padding_normal"
             android:clipChildren="false"
             android:clipToPadding="false"
             android:overScrollMode="never"
-            android:paddingTop="@dimen/padding_normal"
-            android:paddingBottom="@dimen/padding_normal"
             android:scrollbars="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/loadingNewPage"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/list_item_token_transaction" />
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loadingNewPage"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recycler"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- Progress -->
-
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:visibility="invisible"
-        tools:visibility="visible" />
 
     <!-- Empty -->
 

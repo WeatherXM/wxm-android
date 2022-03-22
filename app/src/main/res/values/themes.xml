@@ -26,6 +26,7 @@
         <item name="toolbarStyle">@style/Widget.WeatherXM.ToolBar</item>
         <item name="progressBarStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
         <item name="linearProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
+        <item name="circularProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Circular</item>
         <item name="bottomNavigationStyle">@style/Widget.WeatherXM.BottomNavigationView</item>
         <item name="materialButtonStyle">@style/Widget.WeatherXM.Button</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button</item>
@@ -240,6 +241,14 @@
 
     <style name="Widget.WeatherXM.ProgressBar.Horizontal" parent="Widget.MaterialComponents.LinearProgressIndicator">
         <item name="progressBarStyle">?android:progressBarStyleHorizontal</item>
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:indeterminateOnly">true</item>
+        <item name="android:indeterminate">true</item>
+        <item name="minHeight">8dp</item>
+    </style>
+
+    <style name="Widget.WeatherXM.ProgressBar.Circular" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="progressBarStyle">?android:progressBarStyle</item>
         <item name="android:backgroundTint">@color/colorPrimary</item>
         <item name="android:indeterminateOnly">true</item>
         <item name="android:indeterminate">true</item>
