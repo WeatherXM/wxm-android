@@ -18,7 +18,7 @@ import timber.log.Timber
 
 class TokenViewModel : ViewModel(), KoinComponent {
     companion object {
-        const val TransactionExplorer = "https://polygonscan.com/tx/"
+        const val TransactionExplorer = "https://mumbai.polygonscan.com/tx/"
     }
 
     private val tokenUseCase: TokenUseCase by inject()
