@@ -52,7 +52,10 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
 
         // Initialize the adapter with empty data and its listener when an item is clicked
         hourlyAdapter = HourlyAdapter {
-            binding.currentWeatherCard.setWeatherData(it)
+            binding.currentWeatherCard.setWeatherData(
+                it.hourlyWeather,
+                model.temperatureDecimalsToShow(it.selectedPosition)
+            )
         }
         binding.recycler.adapter = hourlyAdapter
 
@@ -92,7 +95,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
 
         model.onDeviceSet().observe(this) {
             updateToolbar(it)
-            binding.currentWeatherCard.setWeatherData(it.currentWeather)
+            binding.currentWeatherCard.setWeatherData(it.currentWeather, 1)
         }
 
         model.onForecast().observe(this) {
