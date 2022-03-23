@@ -9,20 +9,20 @@ import org.koin.core.component.KoinComponent
 
 class TokenRepository(private val tokenDataSource: TokenDataSource) : KoinComponent {
 
-    suspend fun getTokens24H(deviceId: String): Either<Failure, Float?> {
-        return tokenDataSource.getTokens(deviceId).map {
+    suspend fun getTokens24H(deviceId: String, forceRefresh: Boolean): Either<Failure, Float?> {
+        return tokenDataSource.getTokens(deviceId, forceRefresh).map {
             it.daily.total
         }
     }
 
-    suspend fun getTokens7D(deviceId: String): Either<Failure, TokensSummaryResponse> {
-        return tokenDataSource.getTokens(deviceId).map {
+    suspend fun getTokens7D(deviceId: String, forceRefresh: Boolean): Either<Failure, TokensSummaryResponse> {
+        return tokenDataSource.getTokens(deviceId, forceRefresh).map {
             it.weekly
         }
     }
 
-    suspend fun getTokens30D(deviceId: String): Either<Failure, TokensSummaryResponse> {
-        return tokenDataSource.getTokens(deviceId).map {
+    suspend fun getTokens30D(deviceId: String, forceRefresh: Boolean): Either<Failure, TokensSummaryResponse> {
+        return tokenDataSource.getTokens(deviceId, forceRefresh).map {
             it.monthly
         }
     }

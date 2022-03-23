@@ -19,9 +19,9 @@ interface UserDeviceUseCase {
     suspend fun getUserDevice(deviceId: String): Either<Failure, Device>
     suspend fun getTodayForecast(device: Device): Either<Failure, List<HourlyWeather>>
     suspend fun getTomorrowForecast(device: Device): Either<Failure, List<HourlyWeather>>
-    suspend fun getTokens24H(deviceId: String): Either<Failure, Float?>
-    suspend fun getTokens7D(deviceId: String): Either<Failure, TokenSummary>
-    suspend fun getTokens30D(deviceId: String): Either<Failure, TokenSummary>
+    suspend fun getTokens24H(deviceId: String, forceRefresh: Boolean = false): Either<Failure, Float?>
+    suspend fun getTokens7D(deviceId: String, forceRefresh: Boolean = false): Either<Failure, TokenSummary>
+    suspend fun getTokens30D(deviceId: String, forceRefresh: Boolean = false): Either<Failure, TokenSummary>
 }
 
 class UserDeviceUseCaseImpl : UserDeviceUseCase, KoinComponent {
@@ -37,18 +37,18 @@ class UserDeviceUseCaseImpl : UserDeviceUseCase, KoinComponent {
         return deviceRepository.getUserDevice(deviceId)
     }
 
-    override suspend fun getTokens24H(deviceId: String): Either<Failure, Float?> {
-        return tokenRepository.getTokens24H(deviceId)
+    override suspend fun getTokens24H(deviceId: String, forceRefresh: Boolean): Either<Failure, Float?> {
+        return tokenRepository.getTokens24H(deviceId, forceRefresh)
     }
 
-    override suspend fun getTokens7D(deviceId: String): Either<Failure, TokenSummary> {
-        return tokenRepository.getTokens7D(deviceId).map {
+    override suspend fun getTokens7D(deviceId: String, forceRefresh: Boolean): Either<Failure, TokenSummary> {
+        return tokenRepository.getTokens7D(deviceId, forceRefresh).map {
             it.toTokenSummary()
         }
     }
 
-    override suspend fun getTokens30D(deviceId: String): Either<Failure, TokenSummary> {
-        return tokenRepository.getTokens30D(deviceId).map {
+    override suspend fun getTokens30D(deviceId: String, forceRefresh: Boolean): Either<Failure, TokenSummary> {
+        return tokenRepository.getTokens30D(deviceId, forceRefresh).map {
             it.toTokenSummary()
         }
     }

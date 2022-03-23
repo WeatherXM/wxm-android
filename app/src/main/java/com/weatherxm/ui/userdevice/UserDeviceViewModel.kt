@@ -77,8 +77,9 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                 userDeviceUseCase.getUserDevice(device.id)
             }
 
+            // This function runs only on onCreate/onSwipeRefresh so we forceRefresh the getTokens
             val tokensDeferred = async {
-                userDeviceUseCase.getTokens24H(device.id)
+                userDeviceUseCase.getTokens24H(device.id, true)
             }
 
             val forecastDeferred = async {
