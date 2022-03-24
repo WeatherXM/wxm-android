@@ -4,6 +4,8 @@ import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.weatherxm.R
+import com.weatherxm.data.ApiError.DeviceNotFound
+import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceAlreadyClaimed
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.Failure
@@ -115,6 +117,8 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
                         is InvalidClaimId -> R.string.error_claim_invalid_serial
                         is InvalidClaimLocation -> R.string.error_claim_invalid_location
                         is NetworkError -> R.string.error_network
+                        is DeviceAlreadyClaimed -> R.string.claim_device_already_claimed
+                        is DeviceNotFound -> R.string.claim_not_found
                         else -> R.string.error_unknown
                     }
                 )

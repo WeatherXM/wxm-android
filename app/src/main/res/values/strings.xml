@@ -98,6 +98,7 @@
     <string name="description_set_location">Please set your location in the map so you can proceed with claiming the device.</string>
     <string name="success_claim_device">You claimed the device: %s</string>
     <string name="action_devices_list">View device list</string>
+    <string name="claim_device_already_claimed">"Claiming device failed: This device is already claimed"</string>
 
     <!-- Forecast -->
     <string name="forecast_7_day">7 Day Forecast</string>

@@ -45,7 +45,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             binding.name.text = item.name
             binding.icon.setAnimation(Weather.getWeatherAnimation(item.currentWeather?.icon))
             binding.temperature.text =
-                Weather.getFormattedTemperature(item.currentWeather?.temperature)
+                Weather.getFormattedTemperature(item.currentWeather?.temperature, 1)
 
             device.attributes?.lastActiveAt?.let {
                 binding.lastSeen.text = itemView.resources.getString(
