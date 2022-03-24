@@ -79,11 +79,11 @@ class DeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
         when (resource.status) {
             Status.SUCCESS -> {
                 binding.title.text = resource.data?.getNameOrLabel()
-                with(binding.subtitle) {
-                    text = resource.data?.address
+                with(binding.subtitle) {                    text = resource.data?.address
+
                     visibility = if (resource.data?.address.isNullOrEmpty()) GONE else VISIBLE
                 }
-                binding.currentWeatherCard.setWeatherData(resource.data?.currentWeather)
+                binding.currentWeatherCard.setWeatherData(resource.data?.currentWeather, 1)
             }
             Status.ERROR -> {
                 Timber.d(resource.message, resource.message)
