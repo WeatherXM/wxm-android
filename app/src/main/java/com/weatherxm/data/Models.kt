@@ -152,8 +152,6 @@ data class Transaction(
     val actualReward: Float?,
     @Json(name = "total_rewards")
     val totalRewards: Float?,
-    @Json(name = "lost_rewards")
-    val lostRewards: Float?,
     @Json(name = "wxm_balance")
     val wxmBalance: Float?
 ) : Parcelable
