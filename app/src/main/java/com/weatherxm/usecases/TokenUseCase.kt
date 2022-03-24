@@ -20,7 +20,8 @@ class TokenUseCaseImpl : TokenUseCase, KoinComponent {
     ): Either<Failure, UITransactions> {
         return tokenRepository.getTransactions(deviceId, page)
             .map {
-                UITransactions(it.data, it.hasNextPage)
+                val filteredTxs = it.data.filter { transaction -> transaction.actualReward != null }
+                UITransactions(filteredTxs, it.hasNextPage)
             }
     }
 }
