@@ -41,7 +41,7 @@
     <string name="online">Online</string>
     <string name="offline">Offline</string>
     <string name="unknown">Unknown</string>
-    <string name="no_weather_stations">Oh, no! No WXM devices yet?</string>
+    <string name="empty_weather_stations">Oh, no! No WXM devices yet?</string>
 
     <!-- Reset Password -->
     <string name="title_password_reset">Password Reset</string>
@@ -63,21 +63,6 @@
     <string name="title_share_wallet">Share WXM wallet address</string>
     <string name="current_address">Current Address</string>
     <string name="address_saved">Success: Address Saved.</string>
-    <string name="warn_wallet_terms_not_accepted">Please accept the terms to proceed.</string>
-    <string name="warn_wallet_access_not_acknowledged">Please confirm that you have access to the wallet to proceed.</string>
-
-    <!-- Settings -->
-    <string name="settings">Settings</string>
-    <string name="account">Account</string>
-    <string name="about">About</string>
-    <string name="help">Help</string>
-    <string name="title_app_version">App Version</string>
-    <string name="title_contact_support">Contact Support</string>
-    <string name="desc_contact_support">Send us an email and we\'ll get back to you as soon as possible.</string>
-    <string name="change_password">Change Password</string>
-    <string name="request_reset_password_desc">Request a password reset email to change your password.</string>
-    <string name="title_dialog_logout">Logout?</string>
-    <string name="message_dialog_logout">Are you sure you want to logout?</string>
 
     <!-- Registration -->
     <string name="action_signup">Sign Up</string>
@@ -122,7 +107,7 @@
     <!-- Device History -->
     <string name="history">History</string>
     <string name="see_historical_charts">See Historical Charts</string>
-    <string name="device_history_day_empty_title">Oops! No weather data.</string>
-    <string name="device_history_day_empty_subtitle">No weather data found for your device for this day.</string>
-    <string name="device_history_day_empty_subtitle_with_day">No weather data found for your device for %s.</string>
+    <string name="empty_history_day_title">Oops! No weather data.</string>
+    <string name="empty_history_day_subtitle">No weather data found for your device for this day.</string>
+    <string name="empty_history_day_subtitle_with_day">No weather data found for your device for %s.</string>
 </resources>

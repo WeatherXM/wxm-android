@@ -1,6 +1,0 @@
-<resources>
-    <string name="invalid_email">Not a valid email</string>
-    <string name="invalid_serial_number">Invalid serial number</string>
-    <string name="invalid_password">Password must be >5 characters</string>
-    <string name="warn_invalid_address">Invalid WXM Address</string>
-</resources>

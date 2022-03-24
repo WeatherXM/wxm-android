@@ -1,0 +1,35 @@
+<resources>
+    <string name="error_generic_message">Oops! Something went wrong.</string>
+    <string name="error_unknown">"Something went wrong: Unknown Error"</string>
+    <string name="error_network">Something went wrong: Network Error - check your internet connection</string>
+    <string name="error_history_no_data_on_day">Oops! Could not load data from network.</string>
+    <string name="error_history_generic_message">"Fetching history failed"</string>
+    <string name="error_history_no_charts_found">"Oops! Charts could not be loaded."</string>
+    <string name="error_history_no_data_chart_found">"No historical weather data could not be found for this day."</string>
+    <string name="error_login_invalid_username">"Login failed: Invalid email"</string>
+    <string name="error_login_invalid_password">"Login failed: Invalid password"</string>
+    <string name="error_login_invalid_credentials">"Login failed: Invalid email or password"</string>
+    <string name="error_signup_invalid_username">"Signup failed: Invalid email"</string>
+    <string name="error_signup_user_already_exists">"Signup failed: User with email %1$s already exists"</string>
+    <string name="error_password_reset_invalid_username">"Password Reset failed: Invalid email"</string>
+    <string name="error_user_device_not_found">"Could not find the requested device"</string>
+    <string name="error_user_device_data_failed">Getting data for this device failed.</string>
+    <string name="error_user_device_current_weather_failed">Getting the current weather for this device failed.</string>
+    <string name="error_user_device_forecast_failed">Getting weather forecast data failed.</string>
+    <string name="error_user_device_token_failed">Getting token data failed.</string>
+    <string name="error_connect_wallet_invalid_address">"Invalid wallet address"</string>
+    <string name="error_forecast_generic_message">"Fetching forecast failed"</string>
+    <string name="error_forecast_no_data">"Oops! Forecast could not be fetched."</string>
+    <string name="error_claim_invalid_serial">"Claiming device failed: The serial number is invalid"</string>
+    <string name="error_claim_invalid_location">"Claiming device failed: The location provided is invalid"</string>
+    <string name="error_public_device_no_data">Failed to get the details of the device: No Data</string>
+    <string name="error_public_devices_no_data">Failed to get the public devices.</string>
+    <string name="error_support_cannot_send_email">Oops! Could not send email!</string>
+    <string name="error_open_website_support_cannot_open_url">Oops! Could not open %s</string>
+    <string name="warn_validation_invalid_email">Not a valid email</string>
+    <string name="warn_validation_invalid_serial_number">Invalid serial number</string>
+    <string name="warn_validation_invalid_password">Password must be >5 characters</string>
+    <string name="warn_validation_invalid_address">Invalid WXM Address</string>
+    <string name="warn_connect_wallet_terms_not_accepted">Please accept the terms to proceed.</string>
+    <string name="warn_connect_wallet_access_not_acknowledged">Please confirm that you have access to the wallet to proceed.</string>
+</resources>

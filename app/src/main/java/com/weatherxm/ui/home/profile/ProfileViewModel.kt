@@ -65,8 +65,8 @@ class ProfileViewModel : ViewModel(), KoinComponent {
             Resource.error(
                 resHelper.getString(
                     when (failure) {
-                        is Failure.NetworkError -> R.string.network_error
-                        else -> R.string.unknown_error
+                        is Failure.NetworkError -> R.string.error_network
+                        else -> R.string.error_unknown
                     }
                 )
             )

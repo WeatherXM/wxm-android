@@ -188,7 +188,7 @@ class Navigator {
                 )
             } catch (e: ActivityNotFoundException) {
                 Timber.d("Email client not found: $e")
-                it.toast(R.string.error_cannot_send_email)
+                it.toast(R.string.error_support_cannot_send_email)
             }
         }
     }
@@ -201,7 +201,7 @@ class Navigator {
                     .launchUrl(it, Uri.parse(url))
             } catch (e: ActivityNotFoundException) {
                 Timber.d(e, "Could not load url: $url")
-                it.toast(R.string.error_cannot_open_url, url)
+                it.toast(R.string.error_open_website_support_cannot_open_url, url)
             }
         }
     }

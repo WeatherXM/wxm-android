@@ -67,12 +67,13 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
             val password = binding.password.text.toString().trim()
 
             if (!validator.validateUsername(username)) {
-                binding.usernameContainer.error = getString(R.string.invalid_email)
+                binding.usernameContainer.error = getString(R.string.warn_validation_invalid_email)
                 return@setOnClickListener
             }
 
             if (!validator.validatePassword(password)) {
-                binding.passwordContainer.error = getString(R.string.invalid_password)
+                binding.passwordContainer.error =
+                    getString(R.string.warn_validation_invalid_password)
                 return@setOnClickListener
             }
 

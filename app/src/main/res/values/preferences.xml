@@ -1,39 +1,29 @@
 <resources>
-    <!-- Weather Data & Units -->
+    <string name="settings">Settings</string>
+
+    <!-- Account -->
+    <string name="account">Account</string>
+    <string name="change_password">Change Password</string>
+    <string name="request_reset_password_desc">Request a password reset email to change your password.</string>
+    <string name="title_dialog_logout">Logout?</string>
+    <string name="message_dialog_logout">Are you sure you want to logout?</string>
+
+    <!-- Help -->
+    <string name="help">Help</string>
+    <string name="title_contact_support">Contact Support</string>
+    <string name="desc_contact_support">Send us an email and we\'ll get back to you as soon as possible.</string>
+
+    <!-- About -->
+    <string name="about">About</string>
+    <string name="title_app_version">App Version</string>
+
+    <!-- Weather Units -->
     <string name="weather_units">Weather Units</string>
     <string name="key_temperature_preference" translatable="false">temperature_unit</string>
     <string name="key_precipitation_preference" translatable="false">precipitation_unit</string>
     <string name="key_wind_speed_preference" translatable="false">wind_speed_unit</string>
     <string name="key_wind_direction_preference" translatable="false">wind_direction_unit</string>
     <string name="key_pressure_preference" translatable="false">pressure_unit</string>
-    <string name="temperature">Temperature</string>
-    <string name="humidity">Humidity</string>
-    <string name="precipitation">Precipitation</string>
-    <string name="precipitation_intensity">Precipitation</string>
-    <string name="precipitation_probability">Precipitation %</string>
-    <string name="wind">Wind</string>
-    <string name="wind_speed">Wind Speed</string>
-    <string name="wind_gust">Wind Gust</string>
-    <string name="wind_direction">Wind Direction</string>
-    <string name="pressure">Pressure</string>
-    <string name="uv_index">UV Index</string>
-    <string name="cloud_cover">Cloud Cover</string>
-    <string name="temperature_celsius">°C</string>
-    <string name="temperature_fahrenheit">°F</string>
-    <string name="precipitation_mm">&#160;mm</string>
-    <string name="precipitation_in">&#160;in</string>
-    <string name="wind_speed_kmh">&#160;km/h</string>
-    <string name="wind_speed_mph">&#160;mph</string>
-    <string name="wind_speed_ms">&#160;m/s</string>
-    <string name="wind_speed_knots">&#160;kn</string>
-    <string name="wind_speed_beaufort">&#160;bf</string>
-    <string name="wind_direction_cardinal">Cardinal</string>
-    <string name="wind_direction_degrees">Degrees</string>
-    <string name="wind_direction_degrees_mark">°</string>
-    <string name="pressure_hpa">&#160;hPa</string>
-    <string name="pressure_inHg">&#160;inHg</string>
-    <string name="percent" translatable="false">%</string>
-    <string name="uv_index_unit" translatable="false">&#160;UV</string>
 
     <string-array name="temperature_entries">
         <item>Celsius (°C)</item>

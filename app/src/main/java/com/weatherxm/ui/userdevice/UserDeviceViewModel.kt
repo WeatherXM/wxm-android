@@ -174,14 +174,14 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         val uiError = UIError("", null)
         when (failure) {
             is ApiError.UserError.InvalidFromDate, is ApiError.UserError.InvalidToDate -> {
-                uiError.errorMessage = resHelper.getString(R.string.forecast_invalid_dates)
+                uiError.errorMessage = resHelper.getString(R.string.error_forecast_generic_message)
             }
             is Failure.NetworkError -> {
-                uiError.errorMessage = resHelper.getString(R.string.network_error)
+                uiError.errorMessage = resHelper.getString(R.string.error_network)
                 uiError.retryFunction = { (::fetchForecast)(forecastCurrentState) }
             }
             else -> {
-                uiError.errorMessage = resHelper.getString(R.string.unknown_error)
+                uiError.errorMessage = resHelper.getString(R.string.error_unknown)
             }
         }
         onError.postValue(uiError)
@@ -224,14 +224,15 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     val uiError = UIError("", null)
                     when (it) {
                         is ApiError.DeviceNotFound -> {
-                            uiError.errorMessage = resHelper.getString(R.string.device_not_found)
+                            uiError.errorMessage =
+                                resHelper.getString(R.string.error_user_device_not_found)
                         }
                         is Failure.NetworkError -> {
-                            uiError.errorMessage = resHelper.getString(R.string.network_error)
+                            uiError.errorMessage = resHelper.getString(R.string.error_network)
                             uiError.retryFunction = ::fetchUserDevice
                         }
                         else -> {
-                            uiError.errorMessage = resHelper.getString(R.string.unknown_error)
+                            uiError.errorMessage = resHelper.getString(R.string.error_unknown)
                         }
                     }
                     onError.postValue(uiError)
@@ -253,25 +254,26 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         // Otherwise we have either 0/3 or 1/3 error states so just check them one by one
         @Suppress("ComplexCondition")
         if ((errorDevice && (errorToken || errorForecast)) || (errorToken && errorForecast)) {
-            uiError.errorMessage = resHelper.getString(R.string.device_data_failed)
+            uiError.errorMessage = resHelper.getString(R.string.error_user_device_data_failed)
 
             if (shouldRetry) {
                 uiError.retryFunction = ::fetchUserDeviceAllData
             }
         } else if (errorDevice) {
-            uiError.errorMessage = resHelper.getString(R.string.device_current_weather_failed)
+            uiError.errorMessage =
+                resHelper.getString(R.string.error_user_device_current_weather_failed)
 
             if (shouldRetry) {
                 uiError.retryFunction = ::fetchUserDevice
             }
         } else if (errorToken) {
-            uiError.errorMessage = resHelper.getString(R.string.token_failed)
+            uiError.errorMessage = resHelper.getString(R.string.error_user_device_token_failed)
 
             if (shouldRetry) {
                 uiError.retryFunction = { (::fetchTokenDetails)(tokensCurrentState) }
             }
         } else if (errorForecast) {
-            uiError.errorMessage = resHelper.getString(R.string.forecast_failed)
+            uiError.errorMessage = resHelper.getString(R.string.error_user_device_forecast_failed)
 
             if (shouldRetry) {
                 uiError.retryFunction = { (::fetchForecast)(forecastCurrentState) }
@@ -288,14 +290,14 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         when (failure) {
             is ApiError.GenericError -> {
                 uiError.errorMessage =
-                    failure.message ?: resHelper.getString(R.string.unknown_error)
+                    failure.message ?: resHelper.getString(R.string.error_unknown)
             }
             is Failure.NetworkError -> {
-                uiError.errorMessage = resHelper.getString(R.string.network_error)
+                uiError.errorMessage = resHelper.getString(R.string.error_network)
                 uiError.retryFunction = { (::fetchTokenDetails)(tokensCurrentState) }
             }
             else -> {
-                uiError.errorMessage = resHelper.getString(R.string.unknown_error)
+                uiError.errorMessage = resHelper.getString(R.string.error_unknown)
             }
         }
         onError.postValue(uiError)

@@ -112,10 +112,10 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
             Resource.error(
                 resHelper.getString(
                     when (failure) {
-                        is InvalidClaimId -> R.string.claim_invalid_serial
-                        is InvalidClaimLocation -> R.string.claim_invalid_location
-                        is NetworkError -> R.string.network_error
-                        else -> R.string.unknown_error
+                        is InvalidClaimId -> R.string.error_claim_invalid_serial
+                        is InvalidClaimLocation -> R.string.error_claim_invalid_location
+                        is NetworkError -> R.string.error_network
+                        else -> R.string.error_unknown
                     }
                 )
             )
