@@ -341,7 +341,10 @@
     </style>
 
     <style name="TextAppearance.WeatherXM.TokenCard.TokenValue" parent="TextAppearance.WeatherXM.TokenCard">
-        <item name="android:textSize">24sp</item>
+        <item name="android:lines">1</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMaxTextSize">24sp</item>
+        <item name="autoSizeMinTextSize">8sp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.TokenCard.TokenName" parent="TextAppearance.WeatherXM.TokenCard">
