@@ -8,6 +8,9 @@ import android.widget.LinearLayout
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.databinding.ViewWeatherCardBinding
 import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.Weather
+import com.weatherxm.util.getHourMinutesFromISO
+import com.weatherxm.util.getRelativeDayFromISO
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
