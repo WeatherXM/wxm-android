@@ -22,6 +22,8 @@
     <string name="error_forecast_no_data">"Oops! Forecast could not be fetched."</string>
     <string name="error_claim_invalid_serial">"Claiming device failed: The serial number is invalid"</string>
     <string name="error_claim_invalid_location">"Claiming device failed: The location provided is invalid"</string>
+    <string name="error_claim_device_already_claimed">"Claiming device failed: This device is already claimed"</string>
+    <string name="error_claim_not_found">"Claiming device failed: Could not find a device with the requested serial number"</string>
     <string name="error_public_device_no_data">Failed to get the details of the device: No Data</string>
     <string name="error_public_devices_no_data">Failed to get the public devices.</string>
     <string name="error_support_cannot_send_email">Oops! Could not send email!</string>

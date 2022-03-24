@@ -117,8 +117,8 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
                         is InvalidClaimId -> R.string.error_claim_invalid_serial
                         is InvalidClaimLocation -> R.string.error_claim_invalid_location
                         is NetworkError -> R.string.error_network
-                        is DeviceAlreadyClaimed -> R.string.claim_device_already_claimed
-                        is DeviceNotFound -> R.string.claim_not_found
+                        is DeviceAlreadyClaimed -> R.string.error_claim_device_already_claimed
+                        is DeviceNotFound -> R.string.error_claim_not_found
                         else -> R.string.error_unknown
                     }
                 )
