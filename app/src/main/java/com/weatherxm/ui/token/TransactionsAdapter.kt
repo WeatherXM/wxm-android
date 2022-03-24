@@ -105,7 +105,6 @@ class TransactionsAdapter(
                 oldItem.dailyReward == newItem.dailyReward &&
                 oldItem.actualReward == newItem.actualReward &&
                 oldItem.totalRewards == newItem.totalRewards &&
-                oldItem.lostRewards == newItem.lostRewards &&
                 oldItem.wxmBalance == newItem.wxmBalance
         }
     }
