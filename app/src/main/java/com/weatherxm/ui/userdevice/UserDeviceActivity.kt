@@ -86,9 +86,11 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
             when (it.position) {
                 TAB_TODAY -> {
                     model.fetchForecast(UserDeviceViewModel.ForecastState.TODAY)
+                    hourlyAdapter.setForecastState(UserDeviceViewModel.ForecastState.TODAY)
                 }
                 TAB_TOMORROW -> {
                     model.fetchForecast(UserDeviceViewModel.ForecastState.TOMORROW)
+                    hourlyAdapter.setForecastState(UserDeviceViewModel.ForecastState.TOMORROW)
                 }
             }
         }

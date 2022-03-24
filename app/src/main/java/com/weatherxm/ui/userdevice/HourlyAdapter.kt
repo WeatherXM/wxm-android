@@ -9,6 +9,7 @@ import com.weatherxm.data.HourlyWeather
 import com.weatherxm.databinding.ListItemHourlyWeatherBinding
 import com.weatherxm.ui.SelectedHourlyForecast
 import com.weatherxm.ui.userdevice.HourlyAdapter.HourlyViewHolder
+import com.weatherxm.ui.userdevice.UserDeviceViewModel.ForecastState
 import com.weatherxm.util.Weather
 import com.weatherxm.util.getHourMinutesFromISO
 import org.koin.core.component.KoinComponent
@@ -18,6 +19,11 @@ class HourlyAdapter(
 ) : ListAdapter<HourlyWeather, HourlyViewHolder>(HourlyDiffCallback()), KoinComponent {
 
     private var selectedPosition = RecyclerView.NO_POSITION
+    private var forecastState: ForecastState = ForecastState.TODAY
+
+    fun setForecastState(newState: ForecastState) {
+        forecastState = newState
+    }
 
     override fun submitList(list: List<HourlyWeather>?) {
         if (selectedPosition != RecyclerView.NO_POSITION && selectedPosition != 0) {
@@ -81,7 +87,11 @@ class HourlyAdapter(
         fun bind(item: HourlyWeather, isSelected: Boolean) {
             binding.root.isActivated = isSelected
             binding.time.text = getHourMinutesFromISO(itemView.context, item.timestamp)
-            binding.temperature.text = Weather.getFormattedTemperature(item.temperature)
+            if(forecastState == ForecastState.TODAY && adapterPosition == 0) {
+                binding.temperature.text = Weather.getFormattedTemperature(item.temperature, 1)
+            } else {
+                binding.temperature.text = Weather.getFormattedTemperature(item.temperature)
+            }
             binding.icon.apply {
                 setAnimation(Weather.getWeatherAnimation(item.icon))
                 playAnimation()
