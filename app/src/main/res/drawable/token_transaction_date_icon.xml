@@ -4,6 +4,6 @@
     android:opacity="opaque"
     android:shape="oval">
 
-    <solid android:color="@color/colorPrimary" />
+    <solid android:color="@color/purple" />
 
 </shape>

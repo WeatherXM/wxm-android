@@ -15,13 +15,19 @@ class TokenRepository(private val tokenDataSource: TokenDataSource) : KoinCompon
         }
     }
 
-    suspend fun getTokens7D(deviceId: String, forceRefresh: Boolean): Either<Failure, TokensSummaryResponse> {
+    suspend fun getTokens7D(
+        deviceId: String,
+        forceRefresh: Boolean
+    ): Either<Failure, TokensSummaryResponse> {
         return tokenDataSource.getTokens(deviceId, forceRefresh).map {
             it.weekly
         }
     }
 
-    suspend fun getTokens30D(deviceId: String, forceRefresh: Boolean): Either<Failure, TokensSummaryResponse> {
+    suspend fun getTokens30D(
+        deviceId: String,
+        forceRefresh: Boolean
+    ): Either<Failure, TokensSummaryResponse> {
         return tokenDataSource.getTokens(deviceId, forceRefresh).map {
             it.monthly
         }

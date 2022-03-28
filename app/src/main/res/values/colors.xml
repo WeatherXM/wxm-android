@@ -10,6 +10,8 @@
     <color name="orange">#FF9800</color>
     <color name="yellow">#FFEB3B</color>
     <color name="light_grey">#E4E4E4</color>
+    <color name="grey_blue">#BAC7CBF2</color>
+    <color name="darker_grey_blue">#BAC7CB</color>
     <color name="green">#2BB331</color>
     <color name="grey">#888888</color>
     <color name="purple">#9D1F63</color>
@@ -52,6 +54,7 @@
     <color name="tokenChipColorNormal">@color/transparent</color>
     <color name="tokenChipColorSelected">#44FFFFFF</color>
     <color name="tokenChipStrokeColor">#22FFFFFF</color>
+    <color name="tokenMaxRewardIconAndSlider">@color/darker_grey_blue</color>
 
     <color name="dateTabNormalTextColor">#40116295</color>
     <color name="dateTabSelectedTextColor">#116295</color>

@@ -222,8 +222,10 @@
     <string name="no_transactions">Oh, no! No transactions yet?</string>
     <string name="tokens_24h">24h:</string>
     <string name="tokens_total">Total:</string>
-    <string name="reward">Reward: %s WXM</string>
-    <string name="max_reward">Reward at full scale: %s WXM</string>
+    <string name="reward">+ %s WXM</string>
+    <string name="score">%s\%%</string>
+    <string name="validation_score">Validation Score</string>
+    <string name="max_reward">Max 24H Rewards</string>
     <string name="transaction_hash">Transaction hash: %s</string>
 
     <!-- Support Email -->
