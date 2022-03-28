@@ -21,11 +21,13 @@ import com.weatherxm.data.datasource.AuthDataSourceImpl
 import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSourceImpl
 import com.weatherxm.data.datasource.CacheUserDataSource
+import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.CredentialsDataSource
 import com.weatherxm.data.datasource.CredentialsDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkUserDataSource
+import com.weatherxm.data.datasource.NetworkWalletDataSource
 import com.weatherxm.data.network.AuthTokenJsonAdapter
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthRequestInterceptor
@@ -37,6 +39,7 @@ import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.UserRepository
+import com.weatherxm.data.repository.WalletRepository
 import com.weatherxm.data.repository.WeatherRepository
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.explorer.HexWithResolutionJsonAdapter
@@ -44,6 +47,7 @@ import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.AuthUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCaseImpl
+import com.weatherxm.usecases.ConnectWalletUseCase
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.ExplorerUseCaseImpl
 import com.weatherxm.usecases.ForecastUseCase
@@ -53,6 +57,7 @@ import com.weatherxm.usecases.HistoryUseCaseImpl
 import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.usecases.UserDeviceUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
+import com.weatherxm.usecases.ConnectWalletUseCaseImpl
 import com.weatherxm.usecases.UserUseCaseImpl
 import com.weatherxm.util.Mask
 import com.weatherxm.util.ResourcesHelper
@@ -128,6 +133,14 @@ private val datasources = module {
         CacheUserDataSource()
     }
 
+    single<NetworkWalletDataSource> {
+        NetworkWalletDataSource(get())
+    }
+
+    single<CacheWalletDataSource> {
+        CacheWalletDataSource()
+    }
+
     single<AuthDataSource> {
         AuthDataSourceImpl(get(), get(), get())
     }
@@ -150,6 +163,9 @@ private val repositories = module {
     }
     single<UserRepository> {
         UserRepository(get(), get())
+    }
+    single<WalletRepository> {
+        WalletRepository(get(), get())
     }
     single<DeviceRepository> {
         DeviceRepository(get())
@@ -182,7 +198,10 @@ private val usecases = module {
         AuthUseCaseImpl()
     }
     single<UserUseCase> {
-        UserUseCaseImpl()
+        UserUseCaseImpl(get(), get())
+    }
+    single<ConnectWalletUseCase> {
+        ConnectWalletUseCaseImpl(get())
     }
 }
 

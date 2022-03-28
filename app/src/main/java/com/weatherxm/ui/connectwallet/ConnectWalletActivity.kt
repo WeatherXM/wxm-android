@@ -20,6 +20,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Mask
 import com.weatherxm.util.Validator
 import com.weatherxm.util.applyInsets
+import com.weatherxm.util.clear
 import com.weatherxm.util.onTextChanged
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
@@ -38,7 +39,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
     private val barcodeLauncher =
         registerForActivityResult(ScanContract()) { result: ScanIntentResult ->
             result.contents.let {
-                model.onNewAddress(it)
+                model.onScanAddress(it)
             }
         }
 
@@ -48,10 +49,6 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         setContentView(binding.root)
 
         binding.root.applyInsets()
-
-        // Set current address from intent extras
-        val currentAddress = intent?.extras?.getString(ARG_WALLET)
-        model.setCurrentAddress(currentAddress)
 
         onBackGoHome = intent?.extras?.getBoolean(ARG_ON_BACK_GO_HOME) ?: false
 
@@ -150,6 +147,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         when (result.status) {
             Status.SUCCESS -> {
                 Timber.d("Address saved.")
+                binding.newAddress.clear()
                 result.data?.let {
                     showSnackbarMessage(it)
                 }
@@ -191,7 +189,6 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
     }
 
     companion object {
-        const val ARG_WALLET = "wallet_address"
         const val ARG_ON_BACK_GO_HOME = "on_back_go_home"
     }
 }

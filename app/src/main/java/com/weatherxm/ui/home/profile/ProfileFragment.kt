@@ -5,19 +5,20 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.weatherxm.R
 import com.weatherxm.data.Status
+import com.weatherxm.data.User
 import com.weatherxm.databinding.FragmentProfileBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.ProfileInfo
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
-import com.weatherxm.ui.connectwallet.ConnectWalletActivity.Companion.ARG_WALLET
 import com.weatherxm.util.applyInsets
 import org.koin.android.ext.android.inject
 import timber.log.Timber
@@ -27,15 +28,11 @@ class ProfileFragment : Fragment() {
     private val model: ProfileViewModel by activityViewModels()
     private val navigator: Navigator by inject()
 
-    private var profileInfo: ProfileInfo? = null
-
     // Register the launcher for the connect wallet activity and wait for a possible result
     private val connectWalletLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        { result: ActivityResult ->
+        registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                model.walletConnected()
-                profileInfo?.walletAddress = model.getWalletAddressFromCache()
+                // TODO Remove this?
             }
         }
 
@@ -52,8 +49,6 @@ class ProfileFragment : Fragment() {
             this.context?.let {
                 val intent = Intent(it, ConnectWalletActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(ARG_WALLET, profileInfo?.walletAddress)
-
                 connectWalletLauncher.launch(intent)
             }
         }
@@ -68,7 +63,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        model.profileInfo().observe(viewLifecycleOwner) { resource ->
+        model.user().observe(viewLifecycleOwner) { resource ->
             Timber.d("Data updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
@@ -85,40 +80,31 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        // Fetch profile's info
-        model.fetchProfileInfo()
-
-        model.hasWallet().observe(viewLifecycleOwner) {
-            if (it) {
-                binding.connectWalletNotification.visibility = View.GONE
-            }
+        // Hide/show badge if user has connected a wallet or not
+        model.wallet().observe(viewLifecycleOwner) {
+            binding.connectWalletNotification.visibility = if (it.isNullOrEmpty()) VISIBLE else GONE
         }
     }
 
-    private fun updateUI(profileInfo: ProfileInfo?, showProgressBar: Boolean) {
-        profileInfo?.let {
+    private fun updateUI(user: User?, showProgressBar: Boolean) {
+        user?.let {
             binding.toolbar.title = if (it.name == it.email) {
                 getString(R.string.hello)
             } else {
                 getString(R.string.hello_user, it.name)
             }
             if (it.email.isEmpty()) {
-                binding.email.visibility = View.GONE
+                binding.email.visibility = GONE
             } else {
                 binding.email.text = it.email
-                binding.email.visibility = View.VISIBLE
+                binding.email.visibility = VISIBLE
             }
-            this.profileInfo = profileInfo
         }
 
         if (showProgressBar) {
-            binding.progress.visibility = View.VISIBLE
+            binding.progress.visibility = VISIBLE
         } else {
             binding.progress.visibility = View.INVISIBLE
-        }
-
-        if (profileInfo?.walletAddress.isNullOrEmpty()) {
-            binding.connectWalletNotification.visibility = View.VISIBLE
         }
     }
 }

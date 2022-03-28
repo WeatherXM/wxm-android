@@ -5,49 +5,27 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.User
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.NetworkUserDataSource
-import com.weatherxm.ui.ProfileInfo
 import org.koin.core.component.KoinComponent
+import timber.log.Timber
 
 class UserRepository(
     private val networkUserDataSource: NetworkUserDataSource,
     private val cacheUserDataSource: CacheUserDataSource
 ) : KoinComponent {
 
+    /**
+     * Gets user from cache or network, combining the underlying data sources
+     */
     suspend fun getUser(): Either<Failure, User> {
-        return networkUserDataSource.getUser()
-            .map {
-                cacheUserDataSource.setEmail(it.email)
-                cacheUserDataSource.setName(it.name)
-                cacheUserDataSource.setWalletAddress(it.wallet?.address)
-                it
+        return cacheUserDataSource.getUser()
+            .tap {
+                Timber.d("Got user from cache [${it.email}].")
             }
-    }
-
-    fun getWalletAddress(): String? {
-        return cacheUserDataSource.getWalletAddress()
-    }
-
-    suspend fun saveAddress(address: String): Either<Failure, Unit> {
-        cacheUserDataSource.setWalletAddress(address)
-        return networkUserDataSource.saveAddress(address)
-    }
-
-    suspend fun getProfileInfo(): Either<Failure, ProfileInfo>  {
-        val profileInfo = ProfileInfo()
-
-        return if (cacheUserDataSource.hasDataInCache()) {
-            profileInfo.email = cacheUserDataSource.getEmail()
-            profileInfo.name = cacheUserDataSource.getName()
-            profileInfo.walletAddress = cacheUserDataSource.getWalletAddress()
-            Either.Right(profileInfo)
-        } else {
-            getUser()
-                .map {
-                    profileInfo.email = it.email
-                    profileInfo.name = it.name
-                    profileInfo.walletAddress = it.wallet?.address
-                    profileInfo
+            .mapLeft {
+                return networkUserDataSource.getUser().tap {
+                    Timber.d("Got user from network [${it.email}].")
+                    cacheUserDataSource.setUser(it)
                 }
-        }
+            }
     }
 }
