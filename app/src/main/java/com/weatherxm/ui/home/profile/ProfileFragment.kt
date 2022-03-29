@@ -32,7 +32,7 @@ class ProfileFragment : Fragment() {
     private val connectWalletLauncher =
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                // TODO Remove this?
+                model.refreshWallet()
             }
         }
 

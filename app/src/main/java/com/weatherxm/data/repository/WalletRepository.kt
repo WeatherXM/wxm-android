@@ -36,7 +36,7 @@ class WalletRepository(
     suspend fun setWalletAddress(address: String): Either<Failure, Unit> {
         return networkWalletDataSource.setWalletAddress(address)
             .tap {
-                Timber.d("Saved new wallet address [$it].")
+                Timber.d("Saved new wallet address [$address].")
                 // Save also in cache, if network operation was successful
                 cacheWalletDataSource.setWalletAddress(address)
             }
