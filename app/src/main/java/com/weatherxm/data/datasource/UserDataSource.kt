@@ -1,6 +1,5 @@
 package com.weatherxm.data.datasource
 
-import android.content.SharedPreferences
 import arrow.core.Either
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
@@ -14,10 +13,7 @@ interface UserDataSource {
     suspend fun clear()
 }
 
-class NetworkUserDataSource(
-    private val apiService: ApiService,
-    private val preferences: SharedPreferences
-) : UserDataSource {
+class NetworkUserDataSource(private val apiService: ApiService) : UserDataSource {
     override suspend fun getUser(): Either<Failure, User> {
         return apiService.getUser().map()
     }
@@ -27,7 +23,7 @@ class NetworkUserDataSource(
     }
 
     override suspend fun clear() {
-        preferences.edit().clear().apply()
+        // No-op
     }
 }
 

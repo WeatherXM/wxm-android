@@ -13,9 +13,7 @@ interface WalletDataSource {
     suspend fun clear()
 }
 
-class NetworkWalletDataSource(
-    private val apiService: ApiService
-) : WalletDataSource {
+class NetworkWalletDataSource(private val apiService: ApiService) : WalletDataSource {
 
     override suspend fun getWalletAddress(): Either<Failure, String?> {
         return apiService.getWallet().map().map { it.address }
