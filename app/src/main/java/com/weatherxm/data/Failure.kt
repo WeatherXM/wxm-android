@@ -38,6 +38,7 @@ sealed class ApiError(val message: String? = null) : Failure() {
         sealed class ClaimError(message: String? = null) : UserError(message) {
             class InvalidClaimId(message: String? = null) : ClaimError(message)
             class InvalidClaimLocation(message: String? = null) : ClaimError(message)
+            class DeviceAlreadyClaimed(message: String? = null) : ClaimError(message)
         }
 
         class InvalidFromDate(message: String? = null) : UserError(message)
