@@ -99,6 +99,14 @@ data class TokensSummaryResponse(
     val total: Float?,
     val tokens: List<TokenEntry>?
 ) : Parcelable {
+    companion object {
+        /*
+        * Have this very small number to use when a day is null or zero,
+        * in order to have a bar in the chart in the token card view
+         */
+        const val VERY_SMALL_NUMBER_FOR_CHART = 0.001F
+    }
+
     fun toTokenSummary(): TokenSummary {
         val summary = TokenSummary(0F, mutableListOf())
 
@@ -108,8 +116,11 @@ data class TokensSummaryResponse(
 
         tokens?.let {
             it.forEach { tokenEntry ->
-                if (tokenEntry.timestamp != null && tokenEntry.actualReward != null) {
-                    summary.values.add(Pair(tokenEntry.timestamp, tokenEntry.actualReward))
+                val reward = tokenEntry.actualReward
+                if (tokenEntry.timestamp != null && reward != null && reward > 0.0) {
+                    summary.values.add(Pair(tokenEntry.timestamp, reward))
+                } else if (tokenEntry.timestamp != null) {
+                    summary.values.add(Pair(tokenEntry.timestamp, VERY_SMALL_NUMBER_FOR_CHART))
                 }
             }
         }
