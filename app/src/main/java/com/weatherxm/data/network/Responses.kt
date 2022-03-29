@@ -52,6 +52,7 @@ data class ErrorResponse(
         const val INVALID_TO_DATE = "InvalidToDate"
         const val INVALID_CLAIM_ID = "InvalidClaimId"
         const val INVALID_CLAIM_LOCATION = "InvalidClaimLocation"
+        const val DEVICE_ALREADY_CLAIMED = "DeviceAlreadyClaimed"
         const val UNAUTHORIZED = "Unauthorized"
         const val FORBIDDEN = "Forbidden"
         const val VALIDATION = "Validation"

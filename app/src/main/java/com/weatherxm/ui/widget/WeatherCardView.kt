@@ -42,11 +42,12 @@ class WeatherCardView : LinearLayout, KoinComponent {
         gravity = Gravity.CENTER
     }
 
-    private fun updateCurrentWeatherUI() {
+    private fun updateCurrentWeatherUI(decimalsOnTemp: Int) {
         with(binding) {
             icon.setAnimation(Weather.getWeatherAnimation(weatherData?.icon))
             icon.playAnimation()
-            temperature.text = Weather.getFormattedTemperature(weatherData?.temperature)
+            temperature.text =
+                Weather.getFormattedTemperature(weatherData?.temperature, decimalsOnTemp)
             precipitationIntensity.text =
                 Weather.getFormattedPrecipitation(weatherData?.precipitation)
             pressure.text = Weather.getFormattedPressure(weatherData?.pressure)
@@ -62,9 +63,9 @@ class WeatherCardView : LinearLayout, KoinComponent {
         }
     }
 
-    fun setWeatherData(data: HourlyWeather?) {
+    fun setWeatherData(data: HourlyWeather?, decimalsOnTemp: Int = 0) {
         weatherData = data
-        updateCurrentWeatherUI()
+        updateCurrentWeatherUI(decimalsOnTemp)
     }
 
     fun show() {

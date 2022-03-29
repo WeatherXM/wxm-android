@@ -5,6 +5,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.squareup.moshi.JsonClass
 import com.weatherxm.data.Transaction
+import com.weatherxm.data.HourlyWeather
 
 @Keep
 data class UIError(
@@ -103,4 +104,11 @@ data class DailyForecast(
 data class UITransactions(
     var transactions: List<Transaction>,
     var hasNextPage: Boolean
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class SelectedHourlyForecast(
+    var hourlyWeather: HourlyWeather,
+    var selectedPosition: Int
 )
