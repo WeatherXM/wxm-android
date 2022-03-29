@@ -21,7 +21,6 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
 
     companion object {
         const val ETH_ADDR_PREFIX: String = "0x"
-        const val ETH_SCAN_PREFIX: String = "eth:"
     }
 
     private val connectWalletUseCase: ConnectWalletUseCase by inject()
@@ -84,7 +83,6 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
 
     private fun sanitize(address: String): String {
         return Validated.Valid(address)
-            .map { it.removePrefix(ETH_SCAN_PREFIX) }
             .map { it.substring(it.indexOf(ETH_ADDR_PREFIX)) }
             .valueOr { "" }
     }
