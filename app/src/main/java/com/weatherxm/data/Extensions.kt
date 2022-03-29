@@ -14,12 +14,14 @@ import com.weatherxm.data.ApiError.GenericError.JWTError.UnauthorizedError
 import com.weatherxm.data.ApiError.GenericError.NotFoundError
 import com.weatherxm.data.ApiError.GenericError.UnknownError
 import com.weatherxm.data.ApiError.GenericError.ValidationError
+import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceAlreadyClaimed
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.ApiError.UserError.WalletError.InvalidWalletAddress
 import com.weatherxm.data.network.ErrorResponse
+import com.weatherxm.data.network.ErrorResponse.Companion.DEVICE_ALREADY_CLAIMED
 import com.weatherxm.data.network.ErrorResponse.Companion.DEVICE_NOT_FOUND
 import com.weatherxm.data.network.ErrorResponse.Companion.FORBIDDEN
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_ACCESS_TOKEN
@@ -72,6 +74,7 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
                         INVALID_TO_DATE -> InvalidToDate(this.body?.message)
                         INVALID_CLAIM_ID -> InvalidClaimId(this.body?.message)
                         INVALID_CLAIM_LOCATION -> InvalidClaimLocation(this.body?.message)
+                        DEVICE_ALREADY_CLAIMED -> DeviceAlreadyClaimed(this.body?.message)
                         UNAUTHORIZED -> UnauthorizedError(this.body?.message)
                         FORBIDDEN -> ForbiddenError(this.body?.message)
                         VALIDATION -> ValidationError(this.body?.message)

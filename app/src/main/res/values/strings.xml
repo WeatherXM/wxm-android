@@ -250,6 +250,7 @@
     <string name="forecast_invalid_dates">"Fetching forecast failed"</string>
     <string name="claim_invalid_serial">"Claiming device failed: The serial number is invalid"</string>
     <string name="claim_invalid_location">"Claiming device failed: The location provided is invalid"</string>
+    <string name="claim_device_already_claimed">"Claiming device failed: This device is already claimed"</string>
     <string name="claim_not_found">"Claiming device failed: Could not find a device with the requested serial number"</string>
     <string name="unknown_error">"Something went wrong: Unknown Error"</string>
     <string name="network_error">Something went wrong: Network Error - check your internet connection</string>

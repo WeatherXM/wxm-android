@@ -16,6 +16,8 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.weatherxm.R
+import com.weatherxm.data.ApiError.DeviceNotFound
+import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceAlreadyClaimed
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.Failure
@@ -136,6 +138,8 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
                     when (failure) {
                         is InvalidClaimId -> R.string.claim_invalid_serial
                         is InvalidClaimLocation -> R.string.claim_invalid_location
+                        is DeviceAlreadyClaimed -> R.string.claim_device_already_claimed
+                        is DeviceNotFound -> R.string.claim_not_found
                         is NetworkError -> R.string.network_error
                         else -> R.string.unknown_error
                     }
