@@ -20,6 +20,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
+@Suppress("TooManyFunctions")
 class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     private val resHelper: ResourcesHelper by inject()
@@ -209,6 +210,19 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                 }
             }
             onLoading.postValue(false)
+        }
+    }
+
+    /*
+    * Needed to show 1 decimal point at temperature only if the first tile on the "Today" state
+    * is selected - which means only on current weather.
+    * On forecast tiles show 0 decimal points.
+     */
+    fun temperatureDecimalsToShow(selectedPosition: Int): Int {
+        return if (selectedPosition == 0 && forecastCurrentState == ForecastState.TODAY) {
+            1
+        } else {
+            0
         }
     }
 

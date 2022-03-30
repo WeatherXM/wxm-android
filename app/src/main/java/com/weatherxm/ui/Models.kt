@@ -4,6 +4,7 @@ import androidx.annotation.Keep
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.squareup.moshi.JsonClass
+import com.weatherxm.data.HourlyWeather
 
 @Keep
 data class UIError(
@@ -103,4 +104,11 @@ data class ProfileInfo(
     var email: String = "",
     var name: String? = null,
     var walletAddress: String? = null,
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class SelectedHourlyForecast(
+    var hourlyWeather: HourlyWeather,
+    var selectedPosition: Int
 )

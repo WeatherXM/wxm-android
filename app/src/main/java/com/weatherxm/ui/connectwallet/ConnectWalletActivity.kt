@@ -71,6 +71,10 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
+        binding.openDocumentation.setOnClickListener {
+            navigator.openWebsite(this, getString(R.string.suggested_wallets_documentation))
+        }
+
         // Listen to current address for UI update
         model.currentAddress().observe(this) { address ->
             if (address.isNullOrEmpty()) {

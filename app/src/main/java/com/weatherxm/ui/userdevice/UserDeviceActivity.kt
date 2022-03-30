@@ -52,7 +52,10 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
 
         // Initialize the adapter with empty data and its listener when an item is clicked
         hourlyAdapter = HourlyAdapter {
-            binding.currentWeatherCard.setWeatherData(it)
+            binding.currentWeatherCard.setWeatherData(
+                it.hourlyWeather,
+                model.temperatureDecimalsToShow(it.selectedPosition)
+            )
         }
         binding.recycler.adapter = hourlyAdapter
 
@@ -83,16 +86,18 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
             when (it.position) {
                 TAB_TODAY -> {
                     model.fetchForecast(UserDeviceViewModel.ForecastState.TODAY)
+                    hourlyAdapter.setForecastState(UserDeviceViewModel.ForecastState.TODAY)
                 }
                 TAB_TOMORROW -> {
                     model.fetchForecast(UserDeviceViewModel.ForecastState.TOMORROW)
+                    hourlyAdapter.setForecastState(UserDeviceViewModel.ForecastState.TOMORROW)
                 }
             }
         }
 
         model.onDeviceSet().observe(this) {
             updateToolbar(it)
-            binding.currentWeatherCard.setWeatherData(it.currentWeather)
+            binding.currentWeatherCard.setWeatherData(it.currentWeather, 1)
         }
 
         model.onForecast().observe(this) {
@@ -140,7 +145,9 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
                 getRelativeTimeFromISO(it, getString(R.string.last_active_just_now))
             )
         }
+
         binding.subtitle.text = listOf(device.address, lastActive)
+            .filterNot { it.isNullOrEmpty() }
             .joinToString(" · ")
     }
 

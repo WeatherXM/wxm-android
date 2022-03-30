@@ -35,11 +35,11 @@ object Weather : KoinComponent {
         }
     }
 
-    fun getFormattedTemperature(value: Float?) = getFormattedValueOrEmpty(
+    fun getFormattedTemperature(value: Float?, decimals: Int = 0) = getFormattedValueOrEmpty(
         convertTemp(value), getPreferredUnit(
             resHelper.getString(R.string.key_temperature_preference),
             resHelper.getString(R.string.temperature_celsius)
-        ), 0
+        ), decimals
     )
 
     fun getFormattedPrecipitation(value: Float?) = getFormattedValueOrEmpty(
