@@ -35,6 +35,10 @@ fun EditText.onTextChanged(callback: (String) -> Unit) {
     })
 }
 
+fun EditText.clear() {
+    this.setText("")
+}
+
 @Suppress("EmptyFunctionBlock")
 fun TabLayout.onTabSelected(callback: (TabLayout.Tab) -> Unit) {
     this.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

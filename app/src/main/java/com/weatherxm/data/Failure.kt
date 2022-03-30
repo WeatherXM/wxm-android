@@ -50,9 +50,15 @@ sealed class ApiError(val message: String? = null) : Failure() {
             class UnauthorizedError(message: String? = null) : JWTError(message)
             class ForbiddenError(message: String? = null) : JWTError(message)
         }
+
         class ValidationError(message: String? = null) : GenericError(message)
         class UnknownError(message: String? = null) : GenericError(message)
         class NotFoundError(message: String? = null) : GenericError(message)
     }
 }
 
+@Keep
+sealed class DataError : Failure() {
+    object CacheMissError : DataError()
+    object NoWalletAddressError: DataError()
+}

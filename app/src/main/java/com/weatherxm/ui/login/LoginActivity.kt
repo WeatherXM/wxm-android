@@ -127,7 +127,7 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
                 if (user?.hasWallet() == true) {
                     navigator.showHome(this)
                 } else {
-                    navigator.showConnectWallet(this, null, true)
+                    navigator.showConnectWallet(this,true)
                 }
                 finish()
             }

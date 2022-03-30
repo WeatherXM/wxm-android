@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.weatherxm.R
 import com.weatherxm.data.Device
-import com.weatherxm.data.Wallet
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.devicedetail.DeviceDetailFragment
@@ -91,11 +90,10 @@ class Navigator {
         }
     }
 
-    fun showConnectWallet(context: Context, wallet: Wallet?, onBackGoHome: Boolean) {
+    fun showConnectWallet(context: Context, onBackGoHome: Boolean) {
         context.startActivity(
             Intent(context, ConnectWalletActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(ConnectWalletActivity.ARG_WALLET, wallet)
                 .putExtra(ConnectWalletActivity.ARG_ON_BACK_GO_HOME, onBackGoHome)
         )
     }
