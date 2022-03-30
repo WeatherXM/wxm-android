@@ -63,7 +63,7 @@ class ClaimDeviceResultFragment : Fragment(), KoinComponent {
             }
             Status.ERROR -> {
                 binding.statusView.animation(R.raw.anim_error, false)
-                binding.statusView.title(getString(R.string.oops_something_wrong))
+                binding.statusView.title(getString(R.string.error_generic_message))
                 binding.statusView.subtitle(resource.message)
                 binding.statusView.action(getString(R.string.action_retry))
                 binding.statusView.listener { model.claimDevice() }

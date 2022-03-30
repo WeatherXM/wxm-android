@@ -1,86 +1,86 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
-        app:title="@string/weather_units"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        app:title="@string/weather_units">
         <ListPreference
-            app:key="@string/key_temperature_preference"
-            app:title="@string/temperature"
-            app:summary="%s"
+            app:defaultValue="@string/temperature_celsius"
             app:entries="@array/temperature_entries"
             app:entryValues="@array/temperature_values"
-            app:defaultValue="@string/temperature_celsius"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"
+            app:key="@string/key_temperature_preference"
+            app:summary="%s"
+            app:title="@string/temperature" />
 
         <ListPreference
-            app:key="@string/key_precipitation_preference"
-            app:title="@string/precipitation"
-            app:summary="%s"
+            app:defaultValue="@string/precipitation_mm"
             app:entries="@array/precipitation_entries"
             app:entryValues="@array/precipitation_values"
-            app:defaultValue="@string/precipitation_mm"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"
+            app:key="@string/key_precipitation_preference"
+            app:summary="%s"
+            app:title="@string/precipitation" />
 
         <ListPreference
-            app:key="@string/key_wind_speed_preference"
-            app:title="@string/wind_speed"
-            app:summary="%s"
+            app:defaultValue="@string/wind_speed_kmh"
             app:entries="@array/wind_speed_entries"
             app:entryValues="@array/wind_speed_values"
-            app:defaultValue="@string/wind_speed_kmh"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"
+            app:key="@string/key_wind_speed_preference"
+            app:summary="%s"
+            app:title="@string/wind_speed" />
 
         <ListPreference
-            app:key="@string/key_wind_direction_preference"
-            app:title="@string/wind_direction"
-            app:summary="%s"
+            app:defaultValue="@string/wind_direction_cardinal"
             app:entries="@array/wind_direction_entries"
             app:entryValues="@array/wind_direction_values"
-            app:defaultValue="@string/wind_direction_cardinal"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"
+            app:key="@string/key_wind_direction_preference"
+            app:summary="%s"
+            app:title="@string/wind_direction" />
 
         <ListPreference
-            app:key="@string/key_pressure_preference"
-            app:title="@string/pressure"
-            app:summary="%s"
+            app:defaultValue="@string/pressure_hpa"
             app:entries="@array/pressure_entries"
             app:entryValues="@array/pressure_values"
-            app:defaultValue="@string/pressure_hpa"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"
+            app:key="@string/key_pressure_preference"
+            app:summary="%s"
+            app:title="@string/pressure" />
     </PreferenceCategory>
 
     <PreferenceCategory
+        app:iconSpaceReserved="false"
         app:key="@string/account"
-        app:title="@string/account"
-        app:iconSpaceReserved="false">
+        app:title="@string/account">
         <Preference
+            app:iconSpaceReserved="false"
             app:key="@string/change_password"
-            app:title="@string/change_password"
             app:summary="@string/request_reset_password_desc"
-            app:iconSpaceReserved="false" />
+            app:title="@string/change_password" />
         <Preference
+            app:iconSpaceReserved="false"
             app:key="@string/action_logout"
-            app:title="@string/action_logout"
-            app:iconSpaceReserved="false" />
+            app:title="@string/action_logout" />
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:title="@string/help"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        app:title="@string/help">
         <Preference
+            app:iconSpaceReserved="false"
             app:key="@string/title_contact_support"
-            app:title="@string/title_contact_support"
             app:summary="@string/desc_contact_support"
-            app:iconSpaceReserved="false" />
+            app:title="@string/title_contact_support" />
     </PreferenceCategory>
 
     <PreferenceCategory
-        app:title="@string/about"
-        app:iconSpaceReserved="false">
+        app:iconSpaceReserved="false"
+        app:title="@string/about">
         <Preference
-            app:title="@string/title_app_version"
-            app:summary="@string/app_version"
             app:enableCopying="true"
-            app:iconSpaceReserved="false" />
+            app:iconSpaceReserved="false"
+            app:summary="@string/app_version"
+            app:title="@string/title_app_version" />
     </PreferenceCategory>
 </PreferenceScreen>

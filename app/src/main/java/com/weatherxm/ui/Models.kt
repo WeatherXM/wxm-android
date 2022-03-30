@@ -108,6 +108,14 @@ data class UITransactions(
 
 @Keep
 @JsonClass(generateAdapter = true)
+data class ProfileInfo(
+    var email: String = "",
+    var name: String? = null,
+    var walletAddress: String? = null,
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
 data class SelectedHourlyForecast(
     var hourlyWeather: HourlyWeather,
     var selectedPosition: Int

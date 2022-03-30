@@ -8,6 +8,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Tokens
 import com.weatherxm.data.TransactionsResponse
 import com.weatherxm.data.User
+import com.weatherxm.data.Wallet
 import com.weatherxm.data.WeatherData
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor.Companion.NO_AUTH_HEADER
 import retrofit2.http.Body
@@ -44,10 +45,16 @@ interface ApiService {
     suspend fun getPublicDevices(): NetworkResponse<List<Device>, ErrorResponse>
 
     @Mock
+    @MockBehavior(durationDeviation = 300, durationMillis = 1000)
+    @MockResponse(code = 200, body = "mock_files/get_wallet.json")
+    @GET("/api/v1/me/wallet")
+    suspend fun getWallet(): NetworkResponse<Wallet, ErrorResponse>
+
+    @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @MockResponse(code = 200, body = "mock_files/empty_response.json")
     @POST("/api/v1/me/wallet")
-    suspend fun saveAddress(
+    suspend fun setWallet(
         @Body address: AddressBody,
     ): NetworkResponse<Unit, ErrorResponse>
 
