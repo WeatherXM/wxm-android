@@ -6,6 +6,7 @@ import org.koin.core.component.KoinComponent
 
 object Tokens : KoinComponent {
 
+    @Suppress("MagicNumber")
     @ColorRes
     fun getRewardScoreColor(score: Float?): Int {
         return score?.let {
