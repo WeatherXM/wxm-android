@@ -11,7 +11,7 @@
 
     <View
         android:id="@+id/prev_line"
-        android:layout_width="2dp"
+        android:layout_width="4dp"
         android:layout_height="24dp"
         android:layout_marginStart="48dp"
         android:background="@color/purple"
@@ -20,16 +20,16 @@
 
     <View
         android:id="@+id/date_point"
-        android:layout_width="8dp"
-        android:layout_height="8dp"
-        android:layout_marginStart="45dp"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="44dp"
         android:background="@drawable/token_transaction_date_icon"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/prev_line" />
 
     <View
         android:id="@+id/current_line"
-        android:layout_width="2dp"
+        android:layout_width="4dp"
         android:layout_height="24dp"
         android:layout_marginStart="48dp"
         android:background="@color/purple"
@@ -69,7 +69,7 @@
                 android:text="@string/transaction_hash"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="0x00000...0000" />
+                tools:text="0x123456 ... ABCDEF" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/relative_date"
@@ -77,6 +77,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
+                android:visibility="invisible"
                 app:layout_constraintBaseline_toBaselineOf="@id/tx_hash"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:text="Yesterday" />
@@ -93,32 +94,25 @@
 
             <com.google.android.material.slider.RangeSlider
                 android:id="@+id/reward_slider"
-                style="@style/Widget.WeatherXM.Forecast.Transaction.Slider"
-                android:layout_width="wrap_content"
+                style="@style/Widget.WeatherXM.Transaction.Slider"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
+                android:layout_marginTop="@dimen/margin_small"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/reward"
-                tools:trackColorInactive="@color/tokenMaxRewardIconAndSlider" />
-
-            <com.google.android.material.slider.RangeSlider
-                android:id="@+id/max_reward_slider"
-                style="@style/Widget.WeatherXM.Forecast.Transaction.Max_Reward_Slider"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/reward_slider"
-                tools:trackColorInactive="@color/tokenMaxRewardIconAndSlider" />
+                tools:valueFrom="0"
+                tools:valueTo="2000"
+                tools:values="@array/reward_slider_default_values" />
 
             <ImageView
                 android:id="@+id/score_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_reward_scale"
                 android:layout_marginTop="@dimen/margin_normal"
+                android:src="@drawable/ic_reward_scale"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/max_reward_slider"
+                app:layout_constraintTop_toBottomOf="@id/reward_slider"
                 tools:ignore="ContentDescription" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -127,50 +121,52 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_extra_small"
                 android:text="@string/max_reward"
+                app:layout_constraintBottom_toBottomOf="@id/score_icon"
                 app:layout_constraintStart_toEndOf="@id/score_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:text="75%" />
+                app:layout_constraintTop_toTopOf="@id/score_icon"
+                tools:text="0.69" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/score_desc"
+                android:id="@+id/score_description"
                 style="@style/TextAppearance.WeatherXM.Transaction.Descriptions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_extra_small"
                 android:text="@string/validation_score"
-                app:layout_constraintStart_toEndOf="@id/score"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintStart_toStartOf="@id/score"
+                app:layout_constraintTop_toBottomOf="@id/score" />
 
             <ImageView
                 android:id="@+id/max_reward_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_reward_scale"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:layout_marginTop="@dimen/margin_normal"
-                app:layout_constraintStart_toEndOf="@id/score_desc"
-                app:layout_constraintTop_toBottomOf="@id/max_reward_slider"
+                android:src="@drawable/ic_reward_scale"
+                app:layout_constraintStart_toEndOf="@id/score_description"
+                app:layout_constraintTop_toBottomOf="@id/reward_slider"
                 app:tint="@color/tokenMaxRewardIconAndSlider"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/max_reward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_extra_small"
+                app:layout_constraintBottom_toBottomOf="@id/max_reward_icon"
                 app:layout_constraintStart_toEndOf="@id/max_reward_icon"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@id/max_reward_icon"
                 tools:text="2000 WXM" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/max_reward_desc"
+                android:id="@+id/max_reward_description"
                 style="@style/TextAppearance.WeatherXM.Transaction.Descriptions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_extra_small"
                 android:text="@string/max_reward"
-                app:layout_constraintStart_toEndOf="@id/max_reward"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintStart_toStartOf="@id/max_reward"
+                app:layout_constraintTop_toBottomOf="@id/max_reward" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

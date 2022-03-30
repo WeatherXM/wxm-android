@@ -479,30 +479,34 @@
     </style>
 
     <style name="Widget.WeatherXM.Transaction.Hash" parent="Widget.Material3.Chip.Filter">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/black_translucent</item>
-        <item name="chipBackgroundColor">@color/light_grey_translucent</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/token_transaction_hash_foreground</item>
+        <item name="chipBackgroundColor">@color/token_transaction_hash_background</item>
         <item name="fontFamily">monospace</item>
         <item name="chipStrokeWidth">0dp</item>
         <item name="chipMinTouchTargetSize">0dp</item>
         <item name="android:clickable">false</item>
     </style>
 
+    <style name="Widget.WeatherXM.Transaction.Slider" parent="Widget.Material3.Slider">
+        <item name="android:stepSize">0</item>
+        <item name="haloRadius">@dimen/reward_slider_halo_radius</item>
+        <item name="labelBehavior">gone</item>
+        <item name="thumbElevation">@dimen/reward_slider_thumb_elevation</item>
+        <item name="thumbRadius">@dimen/reward_slider_thumb_radius</item>
+        <item name="tickVisible">false</item>
+        <item name="trackColorActive">@color/green</item>
+        <item name="trackColorInactive">@color/light_grey</item>
+        <item name="trackHeight">@dimen/reward_slider_track_height</item>
+    </style>
+
     <style name="TextAppearance.WeatherXM.Transaction.Reward" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/natural_black</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Transaction.Descriptions" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/grey_blue</item>
-    </style>
-
-    <style name="Widget.WeatherXM.Forecast.Transaction.Slider" parent="Widget.WeatherXM.Forecast.Temperature.Slider">
-        <item name="trackHeight">@dimen/transaction_slider_track_height</item>
-    </style>
-
-    <style name="Widget.WeatherXM.Forecast.Transaction.Max_Reward_Slider" parent="Widget.WeatherXM.Forecast.Transaction.Slider">
-        <item name="trackColorActive">@color/tokenMaxRewardIconAndSlider</item>
+        <item name="android:textColor">@color/grey</item>
     </style>
 </resources>

@@ -4,4 +4,8 @@
         <item>13</item>
         <item>19</item>
     </array>
+    <array name="reward_slider_default_values">
+        <item>0</item>
+        <item>1500</item>
+    </array>
 </resources>

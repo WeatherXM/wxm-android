@@ -24,7 +24,6 @@
     <color name="black_translucent">#88000000</color>
     <color name="white_translucent">#DDFFFFFF</color>
     <color name="white_transparent">#65FFFFFF</color>
-    <color name="light_grey_translucent">#88E4E4E4</color>
 
     <color name="colorPrimary">#1B75BA</color>
     <color name="colorPrimaryVariant">#003b77</color>
@@ -56,6 +55,9 @@
     <color name="tokenChipStrokeColor">#22FFFFFF</color>
     <color name="tokenMaxRewardIconAndSlider">@color/darker_grey_blue</color>
 
+    <color name="token_transaction_hash_background">#66E4E4E4</color>
+    <color name="token_transaction_hash_foreground">#66000000</color>
+
     <color name="dateTabNormalTextColor">#40116295</color>
     <color name="dateTabSelectedTextColor">#116295</color>
 
@@ -75,4 +77,11 @@
 
     <color name="daily_forecast_precip_prob_some">@color/colorPrimary</color>
     <color name="daily_forecast_precip_prob_none">@color/light_grey</color>
+
+    <color name="reward_score_very_high">#46D163</color>
+    <color name="reward_score_high">#E1CA60</color>
+    <color name="reward_score_average">#F3AD4E</color>
+    <color name="reward_score_low">#EF8B4F</color>
+    <color name="reward_score_very_low">#F6736D</color>
+    <color name="reward_score_unknown">#BAC7CB</color>
 </resources>

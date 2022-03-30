@@ -12,25 +12,20 @@ import com.weatherxm.data.Transaction
 import com.weatherxm.databinding.ListItemTokenTransactionBinding
 import com.weatherxm.util.Mask
 import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.Tokens
 import com.weatherxm.util.getRelativeDayFromISO
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle.MEDIUM
-import kotlin.math.roundToInt
 
 class TransactionsAdapter(
     private val transactionListener: (Transaction) -> Unit,
     private val endOfDataListener: () -> Unit
-) : ListAdapter<Transaction, TransactionsAdapter.TransactionsViewHolder>(TransactionDiffCallback()),
+) : ListAdapter<Transaction,
+    TransactionsAdapter.TransactionsViewHolder>(TransactionDiffCallback()),
     KoinComponent {
-    companion object {
-        const val BAD_SCORE = 0.25
-        const val OK_SCORE = 0.5
-        const val GOOD_SCORE = 0.75
-        const val MULTIPLY_WITH_FOR_PERCENT = 100
-    }
 
     val resHelper: ResourcesHelper by inject()
     val mask: Mask by inject()
@@ -64,7 +59,10 @@ class TransactionsAdapter(
         }
 
         fun bind(item: Transaction, position: Int) {
-            if (position == currentList.size - 1) endOfDataListener()
+            if (position == currentList.size - 1) {
+                endOfDataListener()
+            }
+
             transaction = item
 
             binding.prevLine.visibility = if (position == 0) View.GONE else View.VISIBLE
@@ -80,53 +78,29 @@ class TransactionsAdapter(
             binding.txHash.text = item.txHash?.let {
                 mask.maskHash(hash = it, offsetStart = 8, offsetEnd = 8, maxMaskedChars = 6)
             }
+
             binding.reward.text = resHelper.getString(
                 R.string.reward,
                 item.actualReward.toString()
             )
-            item.actualReward?.let {
-                binding.rewardSlider.apply {
-                    valueFrom = 0F
-                    valueTo = it
-                    values = listOf(0F, it)
-                }
-            }
 
             item.dailyReward?.let {
                 binding.maxReward.text = it.toString()
-                binding.maxRewardSlider.apply {
-                    valueFrom = 0F
+
+                with(binding.rewardSlider) {
+                    valueFrom = 0.0F
                     valueTo = it
-                    values = listOf(0F, it)
+                    values = listOf(0.0F, item.actualReward)
                 }
             }
 
-            item.validationScore?.let {
-                val percentage = (it * MULTIPLY_WITH_FOR_PERCENT).roundToInt().toString()
-                binding.score.text = resHelper.getString(R.string.score, percentage)
-                when {
-                    it >= GOOD_SCORE -> {
-                        binding.scoreIcon.setColorFilter(resHelper.getColor(R.color.green))
-                        binding.rewardSlider.trackActiveTintList =
-                            ColorStateList.valueOf(resHelper.getColor(R.color.green))
-                    }
-                    it >= OK_SCORE -> {
-                        binding.scoreIcon.setColorFilter(resHelper.getColor(R.color.yellow))
-                        binding.rewardSlider.trackActiveTintList =
-                            ColorStateList.valueOf(resHelper.getColor(R.color.yellow))
-                    }
-                    it >= BAD_SCORE -> {
-                        binding.scoreIcon.setColorFilter(resHelper.getColor(R.color.orange))
-                        binding.rewardSlider.trackActiveTintList =
-                            ColorStateList.valueOf(resHelper.getColor(R.color.orange))
-                    }
-                    else -> {
-                        binding.scoreIcon.setColorFilter(resHelper.getColor(R.color.red))
-                        binding.rewardSlider.trackActiveTintList =
-                            ColorStateList.valueOf(resHelper.getColor(R.color.red))
-                    }
-                }
-            }
+            binding.score.text = item.validationScore?.let {
+                itemView.resources.getString(R.string.score, it)
+            } ?: itemView.resources.getString(R.string.score_unknown)
+
+            val color = resHelper.getColor(Tokens.getRewardScoreColor(item.validationScore))
+            binding.scoreIcon.setColorFilter(color)
+            binding.rewardSlider.trackActiveTintList = ColorStateList.valueOf(color)
         }
     }
 
