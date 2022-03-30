@@ -5,9 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.weatherxm.R
@@ -26,14 +28,11 @@ class ProfileFragment : Fragment() {
     private val model: ProfileViewModel by activityViewModels()
     private val navigator: Navigator by inject()
 
-    private var user: User? = null
-
     // Register the launcher for the connect wallet activity and wait for a possible result
     private val connectWalletLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        { result: ActivityResult ->
+        registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                model.walletConnected()
+                model.refreshWallet()
             }
         }
 
@@ -50,8 +49,6 @@ class ProfileFragment : Fragment() {
             this.context?.let {
                 val intent = Intent(it, ConnectWalletActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(ConnectWalletActivity.ARG_WALLET, user?.wallet)
-
                 connectWalletLauncher.launch(intent)
             }
         }
@@ -83,13 +80,9 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        // Fetch user's data
-        model.fetch()
-
-        model.hasWallet().observe(viewLifecycleOwner) {
-            if (it) {
-                binding.connectWalletNotification.visibility = View.GONE
-            }
+        // Hide/show badge if user has connected a wallet or not
+        model.wallet().observe(viewLifecycleOwner) {
+            binding.connectWalletNotification.visibility = if (it.isNullOrEmpty()) VISIBLE else GONE
         }
     }
 
@@ -101,22 +94,17 @@ class ProfileFragment : Fragment() {
                 getString(R.string.hello_user, it.name)
             }
             if (it.email.isEmpty()) {
-                binding.email.visibility = View.GONE
+                binding.email.visibility = GONE
             } else {
                 binding.email.text = it.email
-                binding.email.visibility = View.VISIBLE
+                binding.email.visibility = VISIBLE
             }
-            this.user = user
         }
 
         if (showProgressBar) {
-            binding.progress.visibility = View.VISIBLE
+            binding.progress.visibility = VISIBLE
         } else {
             binding.progress.visibility = View.INVISIBLE
-        }
-
-        if (user?.wallet?.address.isNullOrEmpty()) {
-            binding.connectWalletNotification.visibility = View.VISIBLE
         }
     }
 }
