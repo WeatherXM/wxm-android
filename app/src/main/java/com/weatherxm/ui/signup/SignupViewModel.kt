@@ -46,13 +46,15 @@ class SignupViewModel : ViewModel(), KoinComponent {
         isSignedUp.postValue(
             Resource.error(
                 when (failure) {
-                    is InvalidUsername -> resHelper.getString(R.string.signup_invalid_username)
+                    is InvalidUsername -> resHelper.getString(
+                        R.string.error_signup_invalid_username
+                    )
                     is UserAlreadyExists -> resHelper.getString(
-                        R.string.signup_user_already_exists,
+                        R.string.error_signup_user_already_exists,
                         username
                     )
-                    is NetworkError -> resHelper.getString(R.string.network_error)
-                    else -> resHelper.getString(R.string.unknown_error)
+                    is NetworkError -> resHelper.getString(R.string.error_network)
+                    else -> resHelper.getString(R.string.error_unknown)
                 }
             )
         )

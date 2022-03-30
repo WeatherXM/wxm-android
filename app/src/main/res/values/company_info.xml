@@ -1,0 +1,10 @@
+<resources>
+    <string name="support_email_intent_title">Send email</string>
+    <string name="support_email_subject_cannot_claim">Cannot claim device</string>
+    <string name="support_email_subject_no_activation">No activation email</string>
+    <string name="support_email_body_user">User account email: %1$s</string>
+    <string name="support_email_body_user_and_device_info">User account email: %1$s\nDevice S/N: %2$s\n</string>
+    <string name="support_email_recipient">support@weatherxm.com</string>
+    <string name="website">https://weatherxm.com</string>
+    <string name="suggested_wallets_documentation">https://docs.weatherxm.com/suggested-wallet</string>
+</resources>

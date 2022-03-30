@@ -3,7 +3,6 @@ package com.weatherxm.ui.claimdevice
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,7 +63,8 @@ class ClaimDeviceSerialNumberFragment : Fragment() {
             val serialNumber = binding.serialNumber.text.unmask()
 
             if (!validator.validateSerialNumber(serialNumber)) {
-                binding.serialNumberContainer.error = getString(R.string.invalid_serial_number)
+                binding.serialNumberContainer.error =
+                    getString(R.string.warn_validation_invalid_serial_number)
                 return@setOnClickListener
             }
 

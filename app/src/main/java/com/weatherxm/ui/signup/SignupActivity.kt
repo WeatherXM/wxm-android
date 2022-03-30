@@ -58,7 +58,7 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
 
             // Validate input
             if (!validator.validateUsername(username)) {
-                binding.usernameContainer.error = getString(R.string.invalid_email)
+                binding.usernameContainer.error = getString(R.string.warn_validation_invalid_email)
                 return@setOnClickListener
             }
 
@@ -104,7 +104,7 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
                 binding.statusView
                     .clear()
                     .animation(R.raw.anim_error, false)
-                    .title(getString(R.string.oops_something_wrong))
+                    .title(getString(R.string.error_generic_message))
                     .subtitle("${result.message}")
                     .action(getString(R.string.action_retry))
                     .listener {
