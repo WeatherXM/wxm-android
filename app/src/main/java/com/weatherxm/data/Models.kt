@@ -143,6 +143,8 @@ data class HourlyWeather(
     var timestamp: String,
     val precipitation: Float?,
     val temperature: Float?,
+    @Json(name = "feels_like")
+    val feelsLike: Float?,
     @Json(name = "wind_direction")
     val windDirection: Int?,
     val humidity: Int?,
