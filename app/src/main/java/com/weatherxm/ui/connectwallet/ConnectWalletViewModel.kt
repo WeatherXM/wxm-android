@@ -57,11 +57,15 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
             }
         } else if (ownershipChecked) {
             isAddressSaved.postValue(
-                Resource.error(resHelper.getString(R.string.warn_wallet_terms_not_accepted))
+                Resource.error(
+                    resHelper.getString(R.string.warn_connect_wallet_terms_not_accepted)
+                )
             )
         } else {
             isAddressSaved.postValue(
-                Resource.error(resHelper.getString(R.string.warn_wallet_access_not_acknowledged))
+                Resource.error(
+                    resHelper.getString(R.string.warn_connect_wallet_access_not_acknowledged)
+                )
             )
         }
     }

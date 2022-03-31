@@ -64,7 +64,7 @@ class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
                         model.getLocationAndThen(this) { location ->
                             Timber.d("Got user location: $location")
                             if(location == null) {
-                                toast(R.string.gps_location_failed)
+                                toast(R.string.error_claim_gps_failed)
                             } else {
                                 model.updateLocationOnMap(location)
                             }
@@ -81,7 +81,7 @@ class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
                             model.getLocationAndThen(this) { location ->
                                 Timber.d("Got user location: $location")
                                 if(location == null) {
-                                    toast(R.string.gps_location_failed)
+                                    toast(R.string.error_claim_gps_failed)
                                 } else {
                                     model.updateLocationOnMap(location)
                                 }
