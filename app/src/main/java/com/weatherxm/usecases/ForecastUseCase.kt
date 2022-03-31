@@ -6,9 +6,9 @@ import com.weatherxm.data.WeatherData
 import com.weatherxm.data.repository.WeatherRepository
 import com.weatherxm.ui.DailyForecast
 import com.weatherxm.ui.ForecastData
+import com.weatherxm.util.DateTimeHelper.getShortNameOfDayFromLocalDate
+import com.weatherxm.util.DateTimeHelper.getSimplifiedDate
 import com.weatherxm.util.ResourcesHelper
-import com.weatherxm.util.getShortNameOfDayFromLocalDate
-import com.weatherxm.util.getSimplifiedDate
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

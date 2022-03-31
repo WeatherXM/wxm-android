@@ -76,11 +76,15 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 
 const val RETROFIT_API = "RETROFIT_API"
 const val RETROFIT_AUTH = "RETROFIT_AUTH"
 
+const val HOUR_FORMAT_24H = "HH:mm"
+const val HOUR_FORMAT_12H_FULL = "h:mm a"
+const val HOUR_FORMAT_12H_HOUR_ONLY = "h a"
 private const val ENCRYPTED_PREFERENCES_KEY = "ENCRYPTED_PREFERENCES_KEY"
 private const val PREFERENCES_AUTH_TOKEN = "PREFERENCES_AUTH_TOKEN"
 private const val PREFERENCES_AUTH_TOKEN_FILE = "auth_token"
@@ -327,6 +331,15 @@ private val utilities = module {
 
     single<Mask> {
         Mask()
+    }
+    single<DateTimeFormatter>(named(HOUR_FORMAT_24H)) {
+        DateTimeFormatter.ofPattern(HOUR_FORMAT_24H)
+    }
+    single<DateTimeFormatter>(named(HOUR_FORMAT_12H_FULL)) {
+        DateTimeFormatter.ofPattern(HOUR_FORMAT_12H_FULL)
+    }
+    single<DateTimeFormatter>(named(HOUR_FORMAT_12H_HOUR_ONLY)) {
+        DateTimeFormatter.ofPattern(HOUR_FORMAT_12H_HOUR_ONLY)
     }
 }
 

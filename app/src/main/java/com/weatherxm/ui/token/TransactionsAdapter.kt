@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.Transaction
 import com.weatherxm.databinding.ListItemTokenTransactionBinding
+import com.weatherxm.util.DateTimeHelper.getRelativeDayFromISO
 import com.weatherxm.util.Mask
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Tokens
-import com.weatherxm.util.getRelativeDayFromISO
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.time.ZonedDateTime

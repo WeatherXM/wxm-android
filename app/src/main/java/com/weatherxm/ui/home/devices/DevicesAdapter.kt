@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.ListItemDeviceBinding
+import com.weatherxm.util.DateTimeHelper.getRelativeTimeFromISO
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
-import com.weatherxm.util.getRelativeTimeFromISO
 import com.weatherxm.util.setTextAndColor
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

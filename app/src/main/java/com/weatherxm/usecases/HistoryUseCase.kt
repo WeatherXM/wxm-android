@@ -13,10 +13,10 @@ import com.weatherxm.data.repository.WeatherRepository
 import com.weatherxm.ui.BarChartData
 import com.weatherxm.ui.HistoryCharts
 import com.weatherxm.ui.LineChartData
+import com.weatherxm.util.DateTimeHelper.getHourMinutesFromISO
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UnitConverter
 import com.weatherxm.util.Weather
-import com.weatherxm.util.getHourMinutesFromISO
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

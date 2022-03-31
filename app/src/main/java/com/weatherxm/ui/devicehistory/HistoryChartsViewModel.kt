@@ -17,9 +17,9 @@ import com.weatherxm.ui.BarChartData
 import com.weatherxm.ui.HistoryCharts
 import com.weatherxm.ui.LineChartData
 import com.weatherxm.usecases.HistoryUseCase
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
+import com.weatherxm.util.DateTimeHelper.getLast7Days
 import com.weatherxm.util.ResourcesHelper
-import com.weatherxm.util.getFormattedDate
-import com.weatherxm.util.getLast7Days
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
