@@ -35,6 +35,10 @@ fun EditText.onTextChanged(callback: (String) -> Unit) {
     })
 }
 
+fun EditText.clear() {
+    this.setText("")
+}
+
 @Suppress("EmptyFunctionBlock")
 fun TabLayout.onTabSelected(callback: (TabLayout.Tab) -> Unit) {
     this.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -50,6 +54,11 @@ fun TabLayout.onTabSelected(callback: (TabLayout.Tab) -> Unit) {
 fun Chip.setTextAndColor(@StringRes text: Int, color: Int) {
     this.setChipBackgroundColorResource(color)
     this.text = this.resources.getString(text)
+}
+
+fun Chip.setTextAndColor(text: String, color: Int) {
+    this.setChipBackgroundColorResource(color)
+    this.text = text
 }
 
 fun ViewGroup.applyInsets(top: Boolean = true, bottom: Boolean = true) {

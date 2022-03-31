@@ -8,13 +8,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.ListItemDeviceBinding
+import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
 import com.weatherxm.util.getRelativeTimeFromISO
 import com.weatherxm.util.setTextAndColor
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import java.text.DecimalFormat
 
 class DeviceAdapter(private val deviceListener: DeviceListener) :
     ListAdapter<Device, DeviceAdapter.DeviceViewHolder>(DeviceDiffCallback()), KoinComponent {
+
+    val resHelper: ResourcesHelper by inject()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
         val binding =
@@ -26,7 +31,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
         holder.bind(getItem(position))
     }
 
-    class DeviceViewHolder(
+    inner class DeviceViewHolder(
         private val binding: ListItemDeviceBinding,
         listener: DeviceListener,
     ) :
@@ -55,6 +60,18 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                         itemView.resources.getString(R.string.last_active_just_now)
                     )
                 )
+            }
+
+            device.rewards?.totalRewards?.let {
+                val formattedTotal = DecimalFormat("#.##").format(it.toBigDecimal())
+                val total = resHelper.getString(R.string.wxm_amount, formattedTotal)
+                binding.tokensTotal.text = total
+            }
+
+            device.rewards?.actualReward?.let {
+                val formattedLastReward = DecimalFormat("#.##").format(it.toBigDecimal())
+                val lastReward = resHelper.getString(R.string.wxm_amount, formattedLastReward)
+                binding.tokensLastDay.text = lastReward
             }
 
             when {

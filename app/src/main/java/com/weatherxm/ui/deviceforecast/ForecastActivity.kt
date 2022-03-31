@@ -41,7 +41,7 @@ class ForecastActivity : AppCompatActivity(), KoinComponent {
         val device = intent?.extras?.getParcelable<Device>(ARG_DEVICE)
         if (device == null) {
             Timber.d("Could not start ForecastActivity. Device is null.")
-            toast(R.string.unknown_error)
+            toast(R.string.error_unknown)
             finish()
             return
         }
@@ -71,7 +71,7 @@ class ForecastActivity : AppCompatActivity(), KoinComponent {
                 Timber.d("Got error: $resource.message")
                 binding.recycler.visibility = View.GONE
                 binding.empty.animation(R.raw.anim_error)
-                binding.empty.title(getString(R.string.no_forecast_data))
+                binding.empty.title(getString(R.string.error_forecast_no_data))
                 binding.empty.subtitle(resource.message)
                 binding.empty.action(getString(R.string.action_retry))
                 binding.empty.listener { model.getWeatherForecast(deviceId) }

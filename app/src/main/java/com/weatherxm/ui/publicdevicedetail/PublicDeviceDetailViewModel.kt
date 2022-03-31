@@ -22,7 +22,7 @@ class PublicDeviceDetailViewModel : ViewModel(), KoinComponent {
         this@PublicDeviceDetailViewModel.device.postValue(
             if (device == null) {
                 Timber.w("Getting public device details failed: null")
-                Resource.error(resHelper.getString(R.string.no_data_error_device_details))
+                Resource.error(resHelper.getString(R.string.error_public_device_no_data))
             } else {
                 Timber.d("Got Public Device: $device")
                 Resource.success(device)

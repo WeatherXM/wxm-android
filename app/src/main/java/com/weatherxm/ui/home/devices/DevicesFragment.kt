@@ -54,7 +54,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                         binding.empty.visibility = View.GONE
                     } else {
                         binding.empty.animation(R.raw.anim_empty_devices, false)
-                        binding.empty.title(getString(R.string.no_weather_stations))
+                        binding.empty.title(getString(R.string.empty_weather_stations))
                         binding.empty.subtitle(getString(R.string.add_weather_station))
                         binding.empty.listener(null)
                         binding.empty.visibility = View.VISIBLE
@@ -64,7 +64,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                 Status.ERROR -> {
                     binding.swiperefresh.isRefreshing = false
                     binding.empty.animation(R.raw.anim_error, false)
-                    binding.empty.title(getString(R.string.oops_something_wrong))
+                    binding.empty.title(getString(R.string.error_generic_message))
                     binding.empty.subtitle(devicesResource.message)
                     binding.empty.action(getString(R.string.action_retry))
                     binding.empty.listener { model.fetch() }

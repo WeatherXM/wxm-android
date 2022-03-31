@@ -58,9 +58,11 @@ class ForecastViewModel : ViewModel(), KoinComponent {
             Resource.error(
                 resHelper.getString(
                     when (failure) {
-                        is InvalidFromDate, is InvalidToDate -> R.string.forecast_invalid_dates
-                        is NetworkError -> R.string.network_error
-                        else -> R.string.unknown_error
+                        is InvalidFromDate, is InvalidToDate -> {
+                            R.string.error_forecast_generic_message
+                        }
+                        is NetworkError -> R.string.error_network
+                        else -> R.string.error_unknown
                     }
                 )
             )

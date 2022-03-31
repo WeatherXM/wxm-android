@@ -54,7 +54,8 @@ data class Device(
     val attributes: Attributes?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
-    val address: String?
+    val address: String?,
+    val rewards: Rewards?
 ) : Parcelable {
     // TODO: When we have the new field for the "label" of the device use it here
     fun getNameOrLabel(): String {
@@ -84,13 +85,20 @@ data class Hex(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
+data class Rewards(
+    @Json(name = "total_rewards")
+    val totalRewards: Float?,
+    @Json(name = "actual_reward")
+    val actualReward: Float?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
 data class Tokens(
-    @Json(name = "24h")
-    val token24hour: TokensSummaryResponse,
-    @Json(name = "7d")
-    val token7days: TokensSummaryResponse,
-    @Json(name = "30d")
-    val token30days: TokensSummaryResponse
+    val daily: TokensSummaryResponse,
+    val weekly: TokensSummaryResponse,
+    val monthly: TokensSummaryResponse
 ) : Parcelable
 
 @Keep
@@ -98,8 +106,16 @@ data class Tokens(
 @Parcelize
 data class TokensSummaryResponse(
     val total: Float?,
-    val values: List<TokenEntry>
+    val tokens: List<TokenEntry>?
 ) : Parcelable {
+    companion object {
+        /*
+        * Have this very small number to use when a day is null or zero,
+        * in order to have a bar in the chart in the token card view
+         */
+        const val VERY_SMALL_NUMBER_FOR_CHART = 0.001F
+    }
+
     fun toTokenSummary(): TokenSummary {
         val summary = TokenSummary(0F, mutableListOf())
 
@@ -107,9 +123,14 @@ data class TokensSummaryResponse(
             summary.total = it
         }
 
-        values.forEach {
-            if (it.timestamp != null && it.value != null) {
-                summary.values.add(Pair(it.timestamp, it.value))
+        tokens?.let {
+            it.forEach { tokenEntry ->
+                val reward = tokenEntry.actualReward
+                if (tokenEntry.timestamp != null && reward != null && reward > 0.0) {
+                    summary.values.add(Pair(tokenEntry.timestamp, reward))
+                } else if (tokenEntry.timestamp != null) {
+                    summary.values.add(Pair(tokenEntry.timestamp, VERY_SMALL_NUMBER_FOR_CHART))
+                }
             }
         }
         return summary
@@ -121,7 +142,36 @@ data class TokensSummaryResponse(
 @Parcelize
 data class TokenEntry(
     val timestamp: String?,
-    val value: Float?
+    @Json(name = "actual_reward")
+    val actualReward: Float?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class TransactionsResponse(
+    val data: List<Transaction>,
+    @Json(name = "total_pages")
+    val totalPages: Int,
+    @Json(name = "has_next_page")
+    val hasNextPage: Boolean
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class Transaction(
+    val timestamp: String?,
+    @Json(name = "tx_hash")
+    val txHash: String?,
+    @Json(name = "validation_score")
+    val validationScore: Float?,
+    @Json(name = "daily_reward")
+    val dailyReward: Float?,
+    @Json(name = "actual_reward")
+    val actualReward: Float?,
+    @Json(name = "total_rewards")
+    val totalRewards: Float?,
 ) : Parcelable
 
 @Keep

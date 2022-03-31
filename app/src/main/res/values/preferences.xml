@@ -1,0 +1,74 @@
+<resources>
+    <string name="settings">Settings</string>
+
+    <!-- Account -->
+    <string name="account">Account</string>
+    <string name="change_password">Change Password</string>
+    <string name="request_reset_password_desc">Request a password reset email to change your password.</string>
+    <string name="title_dialog_logout">Logout?</string>
+    <string name="message_dialog_logout">Are you sure you want to logout?</string>
+
+    <!-- Help -->
+    <string name="help">Help</string>
+    <string name="title_contact_support">Contact Support</string>
+    <string name="desc_contact_support">Send us an email and we\'ll get back to you as soon as possible.</string>
+
+    <!-- About -->
+    <string name="about">About</string>
+    <string name="title_app_version">App Version</string>
+
+    <!-- Weather Units -->
+    <string name="weather_units">Weather Units</string>
+    <string name="key_temperature_preference" translatable="false">temperature_unit</string>
+    <string name="key_precipitation_preference" translatable="false">precipitation_unit</string>
+    <string name="key_wind_speed_preference" translatable="false">wind_speed_unit</string>
+    <string name="key_wind_direction_preference" translatable="false">wind_direction_unit</string>
+    <string name="key_pressure_preference" translatable="false">pressure_unit</string>
+
+    <string-array name="temperature_entries">
+        <item>Celsius (°C)</item>
+        <item>Fahrenheit (°F)</item>
+    </string-array>
+    <string-array name="precipitation_entries">
+        <item>Millimeters (mm)</item>
+        <item>Inches (in)</item>
+    </string-array>
+    <string-array name="wind_speed_entries">
+        <item>Kilometers per hour (km/h)</item>
+        <item>Miles per hour (mph)</item>
+        <item>Meters per second (m/s)</item>
+        <item>Knots (kn)</item>
+        <item>Beaufort (bf)</item>
+    </string-array>
+    <string-array name="wind_direction_entries">
+        <item>Cardinal (e.g. N, SW, NE, etc)</item>
+        <item>Degrees</item>
+    </string-array>
+    <string-array name="pressure_entries">
+        <item>Hectopascal (hPa)</item>
+        <item>Inch of mercury (inHg)</item>
+    </string-array>
+    <string-array name="temperature_values">
+        <item>@string/temperature_celsius</item>
+        <item>@string/temperature_fahrenheit</item>
+    </string-array>
+    <string-array name="precipitation_values">
+        <item>@string/precipitation_mm</item>
+        <item>@string/precipitation_in</item>
+    </string-array>
+    <string-array name="wind_speed_values">
+        <item>@string/wind_speed_kmh</item>
+        <item>@string/wind_speed_mph</item>
+        <item>@string/wind_speed_ms</item>
+        <item>@string/wind_speed_knots</item>
+        <item>@string/wind_speed_beaufort</item>
+    </string-array>
+    <string-array name="wind_direction_values">
+        <item>@string/wind_direction_cardinal</item>
+        <item>@string/wind_direction_degrees</item>
+    </string-array>
+    <string-array name="pressure_values">
+        <item>@string/pressure_hpa</item>
+        <item>@string/pressure_inHg</item>
+    </string-array>
+</resources>

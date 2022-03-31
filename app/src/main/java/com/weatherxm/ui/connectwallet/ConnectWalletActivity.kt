@@ -13,12 +13,12 @@ import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
-import com.weatherxm.data.Wallet
 import com.weatherxm.databinding.ActivityConnectWalletBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.util.Mask
 import com.weatherxm.util.Validator
 import com.weatherxm.util.applyInsets
+import com.weatherxm.util.clear
 import com.weatherxm.util.onTextChanged
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
@@ -37,7 +37,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
     private val barcodeLauncher =
         registerForActivityResult(ScanContract()) { result: ScanIntentResult ->
             result.contents.let {
-                model.onNewAddress(it)
+                model.onScanAddress(it)
             }
         }
 
@@ -47,10 +47,6 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         setContentView(binding.root)
 
         binding.root.applyInsets()
-
-        // Set current address from intent extras
-        val currentAddress = intent?.extras?.getParcelable<Wallet>(ARG_WALLET)
-        model.setCurrentAddress(currentAddress?.address)
 
         onBackGoHome = intent?.extras?.getBoolean(ARG_ON_BACK_GO_HOME) ?: false
 
@@ -88,7 +84,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
                 binding.notice.visibility = View.GONE
                 binding.currentAddressContainer.visibility = View.VISIBLE
                 binding.currentAddressTitle.visibility = View.VISIBLE
-                binding.currentAddress.setText(mask.maskWalletAddress(address))
+                binding.currentAddress.setText(mask.maskHash(address))
                 binding.currentAddressContainer.setEndIconOnClickListener {
                     shareAddress(address)
                 }
@@ -101,7 +97,8 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             val address = binding.newAddress.text.toString()
 
             if (!validator.validateEthAddress(address)) {
-                binding.newAddressContainer.error = getString(R.string.warn_invalid_address)
+                binding.newAddressContainer.error =
+                    getString(R.string.warn_validation_invalid_address)
                 return@setOnClickListener
             }
 
@@ -146,6 +143,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         when (result.status) {
             Status.SUCCESS -> {
                 Timber.d("Address saved.")
+                binding.newAddress.clear()
                 result.data?.let {
                     showSnackbarMessage(it)
                 }
@@ -187,7 +185,6 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
     }
 
     companion object {
-        const val ARG_WALLET = "wallet"
         const val ARG_ON_BACK_GO_HOME = "on_back_go_home"
     }
 }

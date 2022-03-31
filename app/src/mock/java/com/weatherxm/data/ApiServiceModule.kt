@@ -34,10 +34,6 @@ val apiServiceModule = module {
         DeviceDataSourceImpl(get())
     }
 
-    single<TokenDataSource> {
-        TokenDataSourceImpl(get())
-    }
-
     single<WeatherDataSource> {
         WeatherDataSourceImpl(get())
     }

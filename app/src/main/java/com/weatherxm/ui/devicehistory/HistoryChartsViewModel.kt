@@ -70,9 +70,11 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
             Resource.error(
                 resHelper.getString(
                     when (failure) {
-                        is InvalidFromDate, is InvalidToDate -> R.string.history_invalid_dates
-                        is NetworkError -> R.string.network_error
-                        else -> R.string.unknown_error
+                        is InvalidFromDate, is InvalidToDate -> {
+                            R.string.error_history_generic_message
+                        }
+                        is NetworkError -> R.string.error_network
+                        else -> R.string.error_unknown
                     }
                 )
             )
@@ -91,7 +93,9 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
             onCharts.postValue(Resource.loading())
             val data = posToData.get(position, null)
             if (data == null) {
-                onCharts.postValue(Resource.error(resHelper.getString(R.string.no_charts_found)))
+                onCharts.postValue(
+                    Resource.error(resHelper.getString(R.string.error_history_no_charts_found))
+                )
             } else {
                 onCharts.postValue(Resource.success(data))
             }

@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.weatherxm.R
 import com.weatherxm.data.Device
-import com.weatherxm.data.Wallet
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.publicdevicedetail.PublicDeviceDetailFragment
@@ -24,6 +23,7 @@ import com.weatherxm.ui.publicdeviceslist.PublicDevicesListFragment
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.splash.SplashActivity
+import com.weatherxm.ui.token.TokenActivity
 import com.weatherxm.ui.userdevice.UserDeviceActivity
 import timber.log.Timber
 
@@ -91,11 +91,10 @@ class Navigator {
         }
     }
 
-    fun showConnectWallet(context: Context, wallet: Wallet?, onBackGoHome: Boolean) {
+    fun showConnectWallet(context: Context, onBackGoHome: Boolean) {
         context.startActivity(
             Intent(context, ConnectWalletActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(ConnectWalletActivity.ARG_WALLET, wallet)
                 .putExtra(ConnectWalletActivity.ARG_ON_BACK_GO_HOME, onBackGoHome)
         )
     }
@@ -161,6 +160,14 @@ class Navigator {
         )
     }
 
+    fun showTokenScreen(context: Context, device: Device?) {
+        context.startActivity(
+            Intent(context, TokenActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(TokenActivity.ARG_DEVICE, device)
+        )
+    }
+
     fun sendSupportEmail(
         context: Context?,
         recipient: String? = null,
@@ -188,7 +195,7 @@ class Navigator {
                 )
             } catch (e: ActivityNotFoundException) {
                 Timber.d("Email client not found: $e")
-                it.toast(R.string.error_cannot_send_email)
+                it.toast(R.string.error_support_cannot_send_email)
             }
         }
     }
@@ -201,7 +208,7 @@ class Navigator {
                     .launchUrl(it, Uri.parse(url))
             } catch (e: ActivityNotFoundException) {
                 Timber.d(e, "Could not load url: $url")
-                it.toast(R.string.error_cannot_open_url, url)
+                it.toast(R.string.error_open_website_support_cannot_open_url, url)
             }
         }
     }
