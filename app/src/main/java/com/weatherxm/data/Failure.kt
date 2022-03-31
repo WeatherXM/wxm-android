@@ -13,6 +13,14 @@ sealed class Failure {
 }
 
 @Keep
+sealed class AuthError : Failure() {
+    object InvalidAuthTokenError: AuthError()
+    object InvalidAccessTokenError: AuthError()
+    object InvalidRefreshTokenError: AuthError()
+    object InvalidCredentialsError: AuthError()
+}
+
+@Keep
 sealed class ApiError(val message: String? = null) : Failure() {
     sealed class AuthError(message: String? = null) : ApiError(message) {
         sealed class LoginError(message: String? = null) : AuthError(message) {

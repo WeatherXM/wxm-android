@@ -1,9 +1,18 @@
 package com.weatherxm.data.network.interceptor
 
-import com.haroldadmin.cnradapter.NetworkResponse
+import arrow.core.Either
+import arrow.core.flatMap
+import arrow.core.handleErrorWith
+import com.weatherxm.data.AuthError
+import com.weatherxm.data.AuthError.InvalidAuthTokenError
+import com.weatherxm.data.AuthError.InvalidCredentialsError
+import com.weatherxm.data.AuthError.InvalidRefreshTokenError
+import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.CredentialsDataSource
+import com.weatherxm.data.map
 import com.weatherxm.data.network.AuthService
+import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.network.Credentials
 import com.weatherxm.data.network.LoginBody
 import com.weatherxm.data.network.RefreshBody
@@ -30,92 +39,84 @@ class AuthTokenAuthenticator : Authenticator, KoinComponent {
 
         Timber.d("[${request.path()}] Status: ${response.code}. Invoking authenticator.")
 
-        var newRequest: Request? = null
-
-        // Try with refresh token
-        runBlocking { authTokenRepository.getAuthToken() }.map { authToken ->
-            if (authToken.isRefreshTokenValid()) {
-                newRequest = refreshAndRetry(request, authToken.refresh)
-            }
-        }
-
-        if (newRequest != null) {
-            return newRequest
-        }
-
-        Timber.d("[${request.path()}] Invalid refresh token. Trying with credentials.")
-
-        // Try with credentials
-        runBlocking { credentialsRepository.getCredentials() }.map { credentials ->
-            if (credentials.isValid()) {
-                newRequest = retryWithCredentials(request, credentials)
-            }
-        }
-
-        return if (newRequest != null) {
-            newRequest
-        } else {
-            // Failed to authenticate
-            Timber.w("[${request.path()}] Failed to authenticate with all possible ways.")
-            null
-        }
+        return refreshAndRetry(request)
+            .handleErrorWith { loginAndRetry(request) }
+            .tapLeft { Timber.w("[${request.path()}] Failed to authenticate. Giving up.") }
+            .orNull()
     }
 
-    private fun refreshAndRetry(request: Request, refreshToken: String): Request? {
-        Timber.d("[${request.path()}] Trying to refresh token")
-
-        val response = runBlocking {
-            authService.refresh(RefreshBody(refreshToken))
-        }
-
-        when (response) {
-            is NetworkResponse.Success -> {
-                Timber.d("[${request.path()}] Token refresh success.")
-
-                // Get token from response body
-                val newAuthToken = response.body
-
-                // Proceed with original request, adding token
-                return retryWithAccessToken(request, newAuthToken.access)
+    private fun getAuthToken(): Either<AuthError, AuthToken> = runBlocking {
+        authTokenRepository.getAuthToken()
+            .mapLeft {
+                InvalidAuthTokenError
             }
-            else -> Timber.d("[${request.path()}] Token refresh failed")
-        }
-
-        Timber.w("[${request.path()}] Could not retry with refresh")
-
-        return null
+            .flatMap { authToken ->
+                if (!authToken.isRefreshTokenValid()) {
+                    Either.Left(InvalidRefreshTokenError)
+                } else {
+                    Either.Right(authToken)
+                }
+            }
     }
 
-    private fun retryWithCredentials(
-        request: Request,
-        credentials: Credentials,
-    ): Request? {
-        Timber.d("[${request.path()}] Trying to login with credentials")
-
-        val response = runBlocking {
-            authService.login(LoginBody(credentials.username, credentials.password))
-        }
-
-        when (response) {
-            is NetworkResponse.Success -> {
-                // Get token from response body
-                val newAuthToken = response.body
-
-                Timber.d("[${request.path()}] Login success.")
-
-                // Proceed with original request, adding token
-                return retryWithAccessToken(request, newAuthToken.access)
+    private fun getCredentials(): Either<AuthError, Credentials> = runBlocking {
+        credentialsRepository.getCredentials()
+            .mapLeft {
+                InvalidCredentialsError
             }
-            else -> Timber.d("[${request.path()}] Login failed")
-        }
+            .flatMap { credentials ->
+                if (!credentials.isValid()) {
+                    Either.Left(InvalidCredentialsError)
+                } else {
+                    Either.Right(credentials)
+                }
+            }
+    }
 
-        Timber.w("[${request.path()}] Could not login and retry")
+    private fun refreshAndRetry(request: Request): Either<Failure, Request?> {
+        Timber.d("[${request.path()}] Trying refresh & retry.")
+        return getAuthToken()
+            .tapLeft {
+                Timber.d("[${request.path()}] Invalid refresh token. Cannot refresh.")
+            }
+            .flatMap { authToken ->
+                Timber.d("[${request.path()}] Trying to refresh token.")
+                runBlocking {
+                    authService.refresh(RefreshBody(authToken.refresh)).map()
+                        .tapLeft {
+                            Timber.d("[${request.path()}] Token refresh failed.")
+                        }
+                        .map {
+                            Timber.d("[${request.path()}] Token refresh success.")
+                            retryWithAccessToken(request, it.access)
+                        }
+                }
+            }
+    }
 
-        return null
+    private fun loginAndRetry(request: Request): Either<Failure, Request?> {
+        Timber.d("[${request.path()}] Trying login & retry.")
+        return getCredentials()
+            .tapLeft {
+                Timber.d("[${request.path()}] Invalid credentials. Cannot login.")
+            }
+            .flatMap { credentials ->
+                Timber.d("[${request.path()}] Trying to login.")
+                runBlocking {
+                    authService.login(LoginBody(credentials.username, credentials.password)).map()
+                        .tapLeft {
+                            Timber.d("[${request.path()}] Login failed.")
+                        }
+                        .map {
+                            Timber.d("[${request.path()}] Login success.")
+                            retryWithAccessToken(request, it.access)
+                        }
+                }
+            }
     }
 
     private fun retryWithAccessToken(request: Request, accessToken: String): Request {
-        Timber.d("[${request.path()}] Retrying with access token")
+        Timber.d("[${request.path()}] Retrying with new access token.")
         return request.newBuilder()
             .header(AUTH_HEADER, "Bearer $accessToken")
             .build()
