@@ -45,7 +45,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
         val device = intent?.extras?.getParcelable<Device>(ARG_DEVICE)
         if (device == null) {
             Timber.d("Could not start TokenActivity. Device is null.")
-            toast(R.string.unknown_error)
+            toast(R.string.error_unknown)
             finish()
             return
         }
@@ -78,7 +78,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
                 } else {
                     binding.empty.animation(R.raw.anim_empty_devices, false)
                     binding.empty.title(getString(R.string.no_transactions))
-                    binding.empty.subtitle(getString(R.string.come_back_later))
+                    binding.empty.subtitle(getString(R.string.info_come_back_later))
                     binding.empty.listener(null)
                     binding.empty.visibility = View.VISIBLE
                     binding.recycler.visibility = View.GONE
@@ -88,7 +88,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
                 Timber.d("Got error: $resource.message")
                 binding.recycler.visibility = View.GONE
                 binding.empty.animation(R.raw.anim_error)
-                binding.empty.title(getString(R.string.no_transactions_data))
+                binding.empty.title(getString(R.string.error_transactions_no_data))
                 binding.empty.subtitle(resource.message)
                 binding.empty.action(getString(R.string.action_retry))
                 binding.empty.listener { model.fetchFirstPageTransactions(deviceId) }

@@ -56,7 +56,8 @@ data class Device(
     val attributes: Attributes?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
-    val address: String?
+    val address: String?,
+    val rewards: Rewards?
 ) : Parcelable {
     // TODO: When we have the new field for the "label" of the device use it here
     fun getNameOrLabel(): String {
@@ -81,6 +82,16 @@ data class Hex(
     val index: String,
     val polygon: Array<Location>,
     val center: Location
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class Rewards(
+    @Json(name = "total_rewards")
+    val totalRewards: Float?,
+    @Json(name = "actual_reward")
+    val actualReward: Float?
 ) : Parcelable
 
 @Keep
@@ -163,8 +174,6 @@ data class Transaction(
     val actualReward: Float?,
     @Json(name = "total_rewards")
     val totalRewards: Float?,
-    @Json(name = "wxm_balance")
-    val wxmBalance: Float?
 ) : Parcelable
 
 @Keep

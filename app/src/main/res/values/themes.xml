@@ -200,7 +200,10 @@
     </style>
 
     <style name="TextAppearance.WeatherXM.Devices.List.Tokens" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textSize">12sp</item>
+        <item name="android:lines">1</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">8sp</item>
+        <item name="autoSizeMaxTextSize">12sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 

@@ -116,8 +116,7 @@ class TransactionsAdapter(
                 oldItem.validationScore == newItem.validationScore &&
                 oldItem.dailyReward == newItem.dailyReward &&
                 oldItem.actualReward == newItem.actualReward &&
-                oldItem.totalRewards == newItem.totalRewards &&
-                oldItem.wxmBalance == newItem.wxmBalance
+                oldItem.totalRewards == newItem.totalRewards
         }
     }
 }
