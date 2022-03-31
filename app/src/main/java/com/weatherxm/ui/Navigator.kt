@@ -23,6 +23,7 @@ import com.weatherxm.ui.publicdeviceslist.PublicDevicesListFragment
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.splash.SplashActivity
+import com.weatherxm.ui.token.TokenActivity
 import com.weatherxm.ui.userdevice.UserDeviceActivity
 import timber.log.Timber
 
@@ -156,6 +157,14 @@ class Navigator {
             Intent(context, ForecastActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ForecastActivity.ARG_DEVICE, device)
+        )
+    }
+
+    fun showTokenScreen(context: Context, device: Device?) {
+        context.startActivity(
+            Intent(context, TokenActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(TokenActivity.ARG_DEVICE, device)
         )
     }
 

@@ -51,6 +51,8 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     private val onTokens = MutableLiveData<TokenSummary>()
 
+    private val onLastRewardTokens = MutableLiveData<Float>()
+
     fun onDeviceSet(): LiveData<Device> = onDeviceSet
 
     fun onLoading(): LiveData<Boolean> = onLoading
@@ -60,6 +62,8 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     fun onForecast(): LiveData<List<HourlyWeather>> = onForecast
 
     fun onTokens(): LiveData<TokenSummary> = onTokens
+
+    fun onLastRewardTokens(): LiveData<Float> = onLastRewardTokens
 
     fun setDevice(device: Device) {
         this.device = device
@@ -73,8 +77,9 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                 userDeviceUseCase.getUserDevice(device.id)
             }
 
+            // This function runs only on onCreate/onSwipeRefresh so we forceRefresh the getTokens
             val tokensDeferred = async {
-                userDeviceUseCase.getTokensSummary24H(device.id)
+                userDeviceUseCase.getTokens24H(device.id, true)
             }
 
             val forecastDeferred = async {
@@ -102,11 +107,10 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     errorOnUserDevice = true
                 }
 
-
             val tokens = tokensDeferred.await()
             tokens
                 .map {
-                    onTokens.postValue(it)
+                    onLastRewardTokens.postValue(it)
                 }
                 .mapLeft {
                     if (it == Failure.NetworkError) {
@@ -194,17 +198,17 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         CoroutineScope(Dispatchers.IO).launch {
             when (tokensCurrentState) {
                 TokensState.HOUR24 -> {
-                    userDeviceUseCase.getTokensSummary24H(device.id)
-                        .map { onTokens.postValue(it) }
+                    userDeviceUseCase.getTokens24H(device.id)
+                        .map { onLastRewardTokens.postValue(it) }
                         .mapLeft { handleTokenFailure(it) }
                 }
                 TokensState.DAYS7 -> {
-                    userDeviceUseCase.getTokensSummary7D(device.id)
+                    userDeviceUseCase.getTokens7D(device.id)
                         .map { onTokens.postValue(it) }
                         .mapLeft { handleTokenFailure(it) }
                 }
                 TokensState.DAYS30 -> {
-                    userDeviceUseCase.getTokensSummary30D(device.id)
+                    userDeviceUseCase.getTokens30D(device.id)
                         .map { onTokens.postValue(it) }
                         .mapLeft { handleTokenFailure(it) }
                 }

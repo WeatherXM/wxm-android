@@ -26,6 +26,7 @@
         <item name="toolbarStyle">@style/Widget.WeatherXM.ToolBar</item>
         <item name="progressBarStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
         <item name="linearProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
+        <item name="circularProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Circular</item>
         <item name="bottomNavigationStyle">@style/Widget.WeatherXM.BottomNavigationView</item>
         <item name="materialButtonStyle">@style/Widget.WeatherXM.Button</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button</item>
@@ -199,7 +200,10 @@
     </style>
 
     <style name="TextAppearance.WeatherXM.Devices.List.Tokens" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textSize">12sp</item>
+        <item name="android:lines">1</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">8sp</item>
+        <item name="autoSizeMaxTextSize">12sp</item>
         <item name="android:textStyle">bold</item>
     </style>
 
@@ -240,6 +244,14 @@
 
     <style name="Widget.WeatherXM.ProgressBar.Horizontal" parent="Widget.MaterialComponents.LinearProgressIndicator">
         <item name="progressBarStyle">?android:progressBarStyleHorizontal</item>
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:indeterminateOnly">true</item>
+        <item name="android:indeterminate">true</item>
+        <item name="minHeight">8dp</item>
+    </style>
+
+    <style name="Widget.WeatherXM.ProgressBar.Circular" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="progressBarStyle">?android:progressBarStyle</item>
         <item name="android:backgroundTint">@color/colorPrimary</item>
         <item name="android:indeterminateOnly">true</item>
         <item name="android:indeterminate">true</item>
@@ -332,7 +344,10 @@
     </style>
 
     <style name="TextAppearance.WeatherXM.TokenCard.TokenValue" parent="TextAppearance.WeatherXM.TokenCard">
-        <item name="android:textSize">24sp</item>
+        <item name="android:lines">1</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMaxTextSize">24sp</item>
+        <item name="autoSizeMinTextSize">8sp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.TokenCard.TokenName" parent="TextAppearance.WeatherXM.TokenCard">
@@ -458,5 +473,43 @@
 
     <style name="Widget.WeatherXM.MaterialCard.Notice" parent="Widget.WeatherXM.MaterialCard">
         <item name="cardBackgroundColor">@color/error</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Transaction.Date" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Widget.WeatherXM.Transaction.Hash" parent="Widget.Material3.Chip.Filter">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/token_transaction_hash_foreground</item>
+        <item name="chipBackgroundColor">@color/token_transaction_hash_background</item>
+        <item name="fontFamily">monospace</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="android:clickable">false</item>
+    </style>
+
+    <style name="Widget.WeatherXM.Transaction.Slider" parent="Widget.Material3.Slider">
+        <item name="android:stepSize">0</item>
+        <item name="haloRadius">@dimen/reward_slider_halo_radius</item>
+        <item name="labelBehavior">gone</item>
+        <item name="thumbElevation">@dimen/reward_slider_thumb_elevation</item>
+        <item name="thumbRadius">@dimen/reward_slider_thumb_radius</item>
+        <item name="tickVisible">false</item>
+        <item name="trackColorActive">@color/green</item>
+        <item name="trackColorInactive">@color/light_grey</item>
+        <item name="trackHeight">@dimen/reward_slider_track_height</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Transaction.Reward" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/natural_black</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Transaction.Descriptions" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/grey</item>
     </style>
 </resources>

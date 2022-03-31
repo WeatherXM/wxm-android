@@ -2,8 +2,6 @@ package com.weatherxm.data
 
 import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
-import com.weatherxm.data.datasource.TokenDataSource
-import com.weatherxm.data.datasource.TokenDataSourceImpl
 import com.weatherxm.data.datasource.WeatherDataSource
 import com.weatherxm.data.datasource.WeatherDataSourceImpl
 import com.weatherxm.data.network.ApiService
@@ -25,10 +23,6 @@ val apiServiceModule = module {
 
     single<DeviceDataSource> {
         DeviceDataSourceImpl(get())
-    }
-
-    single<TokenDataSource> {
-        TokenDataSourceImpl(get())
     }
 
     single<WeatherDataSource> {

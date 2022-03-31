@@ -78,6 +78,10 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
             navigator.showForecast(this, device)
         }
 
+        binding.tokenEarnings.setOnClickListener {
+            navigator.showTokenScreen(this, device)
+        }
+
         binding.tokenCard.optionListener = this
 
         binding.tokenNotice.setHtml(R.string.device_detail_token_notice)
@@ -106,6 +110,10 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
 
         model.onTokens().observe(this) {
             binding.tokenCard.setTokenData(it)
+        }
+
+        model.onLastRewardTokens().observe(this) {
+            binding.tokenCard.setLastRewardOnly(it)
         }
 
         model.onLoading().observe(this) {

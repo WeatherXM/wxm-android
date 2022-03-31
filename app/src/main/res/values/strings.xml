@@ -77,14 +77,25 @@
     <string name="prompt_login"><![CDATA[Already a user? <span style=\"color: #2599df\">SIGN IN</span>]]></string>
 
     <!-- Tokens -->
+    <string name="title_device_earnings">Detailed WXM Earnings</string>
+    <string name="see_wxm_earnings">See Detailed WXM Earnings</string>
+    <string name="no_transactions">Oh, no! No transactions yet?</string>
     <string name="earnings">Earnings</string>
     <string name="wxm">WXM</string>
-    <string name="tokens_24h">24h:</string>
+    <string name="tokens_last">Last:</string>
     <string name="tokens_total">Total:</string>
     <string name="button_24h">24H</string>
     <string name="button_7d">7D</string>
     <string name="button_30d">30D</string>
     <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after WXM mainnet token launch. Actual rewards may differ from the ones you see in the chart above.]]></string>
+    <string name="wxm_amount">%s WXM</string>
+    <string name="reward">+ %s WXM</string>
+    <string name="score">%.2f</string>
+    <string name="score_unknown">N/A</string>
+    <string name="validation_score">Reward Score</string>
+    <string name="max_reward">24H Max Reward</string>
+    <string name="transaction_hash">Transaction hash: %s</string>
+
 
     <!-- Claim device -->
     <string name="title_claim_device">Claim Device</string>
