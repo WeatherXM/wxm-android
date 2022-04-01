@@ -77,10 +77,10 @@
     <string name="prompt_login"><![CDATA[Already a user? <span style=\"color: #2599df\">SIGN IN</span>]]></string>
 
     <!-- Tokens -->
-    <string name="title_device_earnings">Detailed WXM Earnings</string>
-    <string name="see_wxm_earnings">See Detailed WXM Earnings</string>
+    <string name="title_device_rewards">Detailed WXM Rewards</string>
+    <string name="see_wxm_rewards">See Detailed WXM Rewards</string>
     <string name="no_transactions">Oh, no! No transactions yet?</string>
-    <string name="earnings">Earnings</string>
+    <string name="rewards">Rewards</string>
     <string name="wxm">WXM</string>
     <string name="tokens_last">Last:</string>
     <string name="tokens_total">Total:</string>
@@ -93,7 +93,7 @@
     <string name="score">%.2f</string>
     <string name="score_unknown">N/A</string>
     <string name="validation_score">Reward Score</string>
-    <string name="max_reward">24H Max Reward</string>
+    <string name="network_max_reward">Network Max</string>
     <string name="transaction_hash">Transaction hash: %s</string>
 
 
