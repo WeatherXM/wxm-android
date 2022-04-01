@@ -48,10 +48,7 @@ class WeatherCardView : LinearLayout, KoinComponent {
             icon.playAnimation()
             temperature.text =
                 Weather.getFormattedTemperature(weatherData?.temperature, decimalsOnTemp)
-            // TODO: Replace "0.0" with the actual algorithm calculating feels_like temperature 
-            feelsLike.text = weatherData?.feelsLike?.let {
-                Weather.getFormattedTemperature(it, decimalsOnTemp)
-            } ?: "0.0"
+            feelsLike.text = Weather.getFormattedTemperature(weatherData?.feelsLike, decimalsOnTemp)
             precipitationIntensity.text =
                 Weather.getFormattedPrecipitation(weatherData?.precipitation)
             pressure.text = Weather.getFormattedPressure(weatherData?.pressure)
