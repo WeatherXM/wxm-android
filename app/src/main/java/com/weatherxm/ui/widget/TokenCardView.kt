@@ -4,11 +4,13 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewTokenCardBinding
 import com.weatherxm.ui.TokenSummary
 import com.weatherxm.ui.userdevice.UserDeviceViewModel
+import java.text.DecimalFormat
 
 open class TokenCardView : LinearLayout {
 
@@ -59,18 +61,27 @@ open class TokenCardView : LinearLayout {
         total(data.total)
     }
 
+    fun setLastRewardOnly(data: Float) {
+        total(data)
+        chart(null)
+    }
+
     private fun chart(data: List<Pair<String, Float>>?) {
         if (!data.isNullOrEmpty()) {
             //  Necessary fix for a crash, found the fix on library's BarChartView.kt line 85
             binding.tokenChart.barsColorsList =
                 List(data.size) { binding.tokenChart.barsColor }.toList()
             binding.tokenChart.show(data)
+            binding.tokenChart.visibility = View.VISIBLE
+        } else {
+            binding.tokenChart.visibility = View.INVISIBLE
         }
     }
 
     private fun total(total: Float?) {
         total?.let {
-            binding.wxmValue.text = it.toString()
+            val formattedTotal = DecimalFormat("#.##").format(total.toBigDecimal())
+            binding.wxmValue.text = formattedTotal
         }
     }
 

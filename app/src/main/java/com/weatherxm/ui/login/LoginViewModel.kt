@@ -59,11 +59,11 @@ class LoginViewModel : ViewModel(), KoinComponent {
             Resource.error(
                 resHelper.getString(
                     when (failure) {
-                        is InvalidUsername -> R.string.login_invalid_username
-                        is InvalidPassword -> R.string.login_invalid_password
-                        is InvalidCredentials -> R.string.login_invalid_credentials
-                        is NetworkError -> R.string.network_error
-                        else -> R.string.unknown_error
+                        is InvalidUsername -> R.string.error_login_invalid_username
+                        is InvalidPassword -> R.string.error_login_invalid_password
+                        is InvalidCredentials -> R.string.error_login_invalid_credentials
+                        is NetworkError -> R.string.error_network
+                        else -> R.string.error_unknown
                     }
                 )
             )
@@ -75,8 +75,8 @@ class LoginViewModel : ViewModel(), KoinComponent {
             Resource.error(
                 resHelper.getString(
                     when (failure) {
-                        is NetworkError -> R.string.network_error
-                        else -> R.string.unknown_error
+                        is NetworkError -> R.string.error_network
+                        else -> R.string.error_unknown
                     }
                 )
             )

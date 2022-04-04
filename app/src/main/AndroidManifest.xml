@@ -91,6 +91,10 @@
             android:name="com.weatherxm.ui.claimdevice.ClaimDeviceActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.token.TokenActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
 
         <!-- Services -->
 

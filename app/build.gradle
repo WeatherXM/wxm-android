@@ -202,6 +202,7 @@ dependencies {
     implementation "androidx.security:security-crypto:1.0.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation "androidx.paging:paging-runtime:3.1.1"
     implementation "com.google.android.material:material:1.5.0"
 
     // Google Play Services for Location & Maps

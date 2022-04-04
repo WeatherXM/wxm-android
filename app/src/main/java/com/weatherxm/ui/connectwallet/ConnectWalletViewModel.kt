@@ -61,9 +61,9 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
             Resource.error(
                 resHelper.getString(
                     when (failure) {
-                        is InvalidWalletAddress -> R.string.connect_wallet_invalid_address
-                        is NetworkError -> R.string.network_error
-                        else -> R.string.unknown_error
+                        is InvalidWalletAddress -> R.string.error_connect_wallet_invalid_address
+                        is NetworkError -> R.string.error_network
+                        else -> R.string.error_unknown
                     }
                 )
             )

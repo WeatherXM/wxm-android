@@ -4,6 +4,7 @@ import androidx.annotation.Keep
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.squareup.moshi.JsonClass
+import com.weatherxm.data.Transaction
 import com.weatherxm.data.HourlyWeather
 
 @Keep
@@ -95,6 +96,13 @@ data class DailyForecast(
     var minTemp: Float? = null,
     var maxTemp: Float? = null,
     var precipProbability: Int? = null
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class UITransactions(
+    var transactions: List<Transaction>,
+    var hasNextPage: Boolean
 )
 
 @Keep

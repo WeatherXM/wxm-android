@@ -8,8 +8,8 @@ class Mask {
         const val DEFAULT_MASK_CHARACTER = '*'
     }
 
-    fun maskWalletAddress(
-        address: String,
+    fun maskHash(
+        hash: String,
         offsetStart: Int = DEFAULT_OFFSET_START,
         offsetEnd: Int = DEFAULT_OFFSET_END,
         maxMaskedChars: Int = DEFAULT_MASKED_CHARACTERS_TO_SHOW,
@@ -18,8 +18,8 @@ class Mask {
         var addressToShow = ""
         var counter = 0
         var maskedCharacters = 0
-        address.forEach {
-            if (counter <= offsetStart || counter > address.length - offsetEnd) {
+        hash.forEach {
+            if (counter <= offsetStart || counter > hash.length - offsetEnd) {
                 addressToShow += it
             } else if (maskedCharacters++ < maxMaskedChars) {
                 addressToShow += maskCharacter

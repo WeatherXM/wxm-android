@@ -86,7 +86,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
                 binding.notice.visibility = View.GONE
                 binding.currentAddressContainer.visibility = View.VISIBLE
                 binding.currentAddressTitle.visibility = View.VISIBLE
-                binding.currentAddress.setText(mask.maskWalletAddress(address))
+                binding.currentAddress.setText(mask.maskHash(address))
                 binding.currentAddressContainer.setEndIconOnClickListener {
                     shareAddress(address)
                 }
@@ -100,17 +100,18 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             val address = binding.newAddress.text.toString()
 
             if (!validator.validateEthAddress(address)) {
-                binding.newAddressContainer.error = getString(R.string.warn_invalid_address)
+                binding.newAddressContainer.error =
+                    getString(R.string.warn_validation_invalid_address)
                 return@setOnClickListener
             }
 
             if (!binding.termsCheckbox.isChecked) {
-                toast(R.string.warn_wallet_terms_not_accepted, Toast.LENGTH_LONG)
+                toast(R.string.warn_connect_wallet_terms_not_accepted, Toast.LENGTH_LONG)
                 return@setOnClickListener
             }
 
             if (!binding.ownershipCheckbox.isChecked) {
-                toast(R.string.warn_wallet_access_not_acknowledged, Toast.LENGTH_LONG)
+                toast(R.string.warn_connect_wallet_access_not_acknowledged, Toast.LENGTH_LONG)
                 return@setOnClickListener
             }
 

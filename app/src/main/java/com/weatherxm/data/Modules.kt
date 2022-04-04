@@ -28,6 +28,8 @@ import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
+import com.weatherxm.data.datasource.TokenDataSource
+import com.weatherxm.data.datasource.TokenDataSourceImpl
 import com.weatherxm.data.network.AuthTokenJsonAdapter
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthRequestInterceptor
@@ -55,6 +57,8 @@ import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.usecases.ForecastUseCaseImpl
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
+import com.weatherxm.usecases.TokenUseCase
+import com.weatherxm.usecases.TokenUseCaseImpl
 import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.usecases.UserDeviceUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
@@ -141,6 +145,10 @@ private val datasources = module {
         CacheWalletDataSource()
     }
 
+    single<TokenDataSource> {
+        TokenDataSourceImpl(get())
+    }
+
     single<AuthDataSource> {
         AuthDataSourceImpl(get(), get(), get())
     }
@@ -193,6 +201,9 @@ private val usecases = module {
     }
     single<ClaimDeviceUseCase> {
         ClaimDeviceUseCaseImpl()
+    }
+    single<TokenUseCase> {
+        TokenUseCaseImpl()
     }
     single<AuthUseCase> {
         AuthUseCaseImpl()
