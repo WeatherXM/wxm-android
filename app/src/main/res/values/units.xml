@@ -29,6 +29,7 @@
     <string name="wind_gust">Wind Gust</string>
     <string name="wind_direction">Wind Direction</string>
     <string name="pressure">Pressure</string>
+    <string name="feels_like">Feels Like</string>
     <string name="uv_index">UV Index</string>
     <string name="cloud_cover">Cloud Cover</string>
     <string name="temperature_celsius">°C</string>

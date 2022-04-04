@@ -23,7 +23,6 @@ data class HistoryCharts(
     var windGust: LineChartData,
     var windDirection: LineChartData,
     var humidity: LineChartData,
-    var cloudCover: LineChartData,
     var pressure: LineChartData,
     var uvIndex: BarChartData
 ) {
@@ -31,7 +30,7 @@ data class HistoryCharts(
         return temperature.isNullOrEmpty() && precipitation.isNullOrEmpty()
             && windSpeed.isNullOrEmpty() && windGust.isNullOrEmpty()
             && windDirection.isNullOrEmpty() && humidity.isNullOrEmpty()
-            && cloudCover.isNullOrEmpty() && pressure.isNullOrEmpty() && uvIndex.isNullOrEmpty()
+            && pressure.isNullOrEmpty() && uvIndex.isNullOrEmpty()
     }
 }
 

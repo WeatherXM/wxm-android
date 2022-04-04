@@ -63,24 +63,13 @@
                 app:line_chart_title="@string/humidity" />
 
             <com.weatherxm.ui.widget.LineChartView
-                android:id="@+id/chart_cloud_cover"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/chart_humidity"
-                app:line_chart_title="@string/cloud_cover" />
-
-            <com.weatherxm.ui.widget.LineChartView
                 android:id="@+id/chart_pressure"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginTop="@dimen/margin_normal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/chart_cloud_cover"
+                app:layout_constraintTop_toBottomOf="@id/chart_humidity"
                 app:line_chart_title="@string/pressure" />
 
             <com.weatherxm.ui.widget.BarChartView
