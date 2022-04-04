@@ -10,6 +10,7 @@ import com.weatherxm.data.HOUR_FORMAT_24H
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
+import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
 import java.time.ZoneId
@@ -17,6 +18,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 object DateTimeHelper : KoinComponent {
+
     private val formatter24h: DateTimeFormatter by inject(named(HOUR_FORMAT_24H))
     private val formatter12hFull: DateTimeFormatter by inject(named(HOUR_FORMAT_12H_FULL))
     private val formatter12hHourOnly: DateTimeFormatter by inject(named(HOUR_FORMAT_12H_HOUR_ONLY))
@@ -40,24 +42,16 @@ object DateTimeHelper : KoinComponent {
         fullName: Boolean
     ): String {
         val zonedDateTime = ZonedDateTime.parse(timeInISO)
-
-        val textToReturn = when {
-            isToday(timeInISO) -> {
-                resHelper.getString(R.string.today)
-            }
-            isTomorrow(timeInISO) -> {
-                resHelper.getString(R.string.tomorrow)
-            }
-            isYesterday(timeInISO) -> {
-                resHelper.getString(R.string.yesterday)
-            }
+        return when {
+            zonedDateTime.isToday() -> resHelper.getString(R.string.today)
+            zonedDateTime.isTomorrow() -> resHelper.getString(R.string.tomorrow)
+            zonedDateTime.isYesterday() -> resHelper.getString(R.string.yesterday)
             else -> {
                 val nameOfDay = if (fullName) {
-                    getNameOfDayOfWeek(resHelper, zonedDateTime.dayOfWeek.value)
+                    zonedDateTime.dayOfWeek.getName(resHelper)
                 } else {
-                    getShortNameOfDayOfWeek(resHelper, zonedDateTime.dayOfWeek.value)
+                    zonedDateTime.dayOfWeek.getShortName(resHelper)
                 }
-
                 if (!includeDate) {
                     nameOfDay
                 } else {
@@ -65,8 +59,6 @@ object DateTimeHelper : KoinComponent {
                 }
             }
         }
-
-        return textToReturn
     }
 
     @Suppress("MagicNumber")
@@ -130,55 +122,45 @@ object DateTimeHelper : KoinComponent {
 
     fun getShortNameOfDayFromLocalDate(resHelper: ResourcesHelper, fullDate: String): String {
         val localDate = LocalDate.parse(fullDate)
-        return getShortNameOfDayOfWeek(resHelper, localDate.dayOfWeek.value)
+        return localDate.dayOfWeek.getShortName(resHelper)
     }
 
-    fun isYesterday(timeInISO: String): Boolean {
-        val zonedDateTime = ZonedDateTime.parse(timeInISO)
-        val now = ZonedDateTime.now(zonedDateTime.zone)
-
-        return now.minusDays(1).dayOfYear == zonedDateTime.dayOfYear
+    private fun ZonedDateTime.isYesterday(): Boolean {
+        val now = ZonedDateTime.now(this.zone)
+        return now.minusDays(1).dayOfYear == this.dayOfYear
     }
 
-    fun isToday(timeInISO: String): Boolean {
-        val zonedDateTime = ZonedDateTime.parse(timeInISO)
-        val now = ZonedDateTime.now(zonedDateTime.zone)
-
-        return now.dayOfYear == zonedDateTime.dayOfYear
+    private fun ZonedDateTime.isToday(): Boolean {
+        val now = ZonedDateTime.now(this.zone)
+        return now.dayOfYear == this.dayOfYear
     }
 
-    fun isTomorrow(timeInISO: String): Boolean {
-        val zonedDateTime = ZonedDateTime.parse(timeInISO)
-        val now = ZonedDateTime.now(zonedDateTime.zone)
-
-        return now.dayOfYear == zonedDateTime.minusDays(1).dayOfYear
+    private fun ZonedDateTime.isTomorrow(): Boolean {
+        val now = ZonedDateTime.now(this.zone)
+        return now.dayOfYear == this.minusDays(1).dayOfYear
     }
 
-    @Suppress("MagicNumber")
-    fun getNameOfDayOfWeek(resHelper: ResourcesHelper, dayOfWeek: Int): String {
-        return when (dayOfWeek) {
-            1 -> resHelper.getString(R.string.monday)
-            2 -> resHelper.getString(R.string.tuesday)
-            3 -> resHelper.getString(R.string.wednesday)
-            4 -> resHelper.getString(R.string.thursday)
-            5 -> resHelper.getString(R.string.friday)
-            6 -> resHelper.getString(R.string.saturday)
-            7 -> resHelper.getString(R.string.sunday)
-            else -> ""
+    private fun DayOfWeek.getName(resHelper: ResourcesHelper): String {
+        return when (this) {
+            DayOfWeek.MONDAY -> resHelper.getString(R.string.monday)
+            DayOfWeek.TUESDAY -> resHelper.getString(R.string.tuesday)
+            DayOfWeek.WEDNESDAY -> resHelper.getString(R.string.wednesday)
+            DayOfWeek.THURSDAY -> resHelper.getString(R.string.thursday)
+            DayOfWeek.FRIDAY -> resHelper.getString(R.string.friday)
+            DayOfWeek.SATURDAY -> resHelper.getString(R.string.saturday)
+            DayOfWeek.SUNDAY -> resHelper.getString(R.string.sunday)
         }
     }
 
-    @Suppress("MagicNumber")
-    fun getShortNameOfDayOfWeek(resHelper: ResourcesHelper, dayOfWeek: Int): String {
-        return when (dayOfWeek) {
-            1 -> resHelper.getString(R.string.mon)
-            2 -> resHelper.getString(R.string.tue)
-            3 -> resHelper.getString(R.string.wed)
-            4 -> resHelper.getString(R.string.thu)
-            5 -> resHelper.getString(R.string.fri)
-            6 -> resHelper.getString(R.string.sat)
-            7 -> resHelper.getString(R.string.sun)
-            else -> ""
+    private fun DayOfWeek.getShortName(resHelper: ResourcesHelper): String {
+        return when (this) {
+            DayOfWeek.MONDAY -> resHelper.getString(R.string.mon)
+            DayOfWeek.TUESDAY -> resHelper.getString(R.string.tue)
+            DayOfWeek.WEDNESDAY -> resHelper.getString(R.string.wed)
+            DayOfWeek.THURSDAY -> resHelper.getString(R.string.thu)
+            DayOfWeek.FRIDAY -> resHelper.getString(R.string.fri)
+            DayOfWeek.SATURDAY -> resHelper.getString(R.string.sat)
+            DayOfWeek.SUNDAY -> resHelper.getString(R.string.sun)
         }
     }
 }
