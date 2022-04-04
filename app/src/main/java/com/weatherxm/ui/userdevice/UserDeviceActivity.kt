@@ -78,7 +78,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
             navigator.showForecast(this, device)
         }
 
-        binding.tokenEarnings.setOnClickListener {
+        binding.tokenRewards.setOnClickListener {
             navigator.showTokenScreen(this, device)
         }
 

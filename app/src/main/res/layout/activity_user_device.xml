@@ -161,12 +161,12 @@
                     app:layout_constraintTop_toBottomOf="@id/historicalCharts" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/tokenEarnings"
+                    android:id="@+id/tokenRewards"
                     style="@style/Widget.WeatherXM.Button.Subtle.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
-                    android:text="@string/see_wxm_earnings"
+                    android:text="@string/see_wxm_rewards"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tokenCard" />
@@ -178,7 +178,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
                     android:padding="@dimen/padding_extra_small"
-                    app:layout_constraintTop_toBottomOf="@id/tokenEarnings"
+                    app:layout_constraintTop_toBottomOf="@id/tokenRewards"
                     app:layout_goneMarginTop="@dimen/margin_normal"
                     tools:text="@string/device_detail_token_notice" />
 
