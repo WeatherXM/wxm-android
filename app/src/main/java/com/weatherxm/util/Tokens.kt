@@ -3,6 +3,7 @@ package com.weatherxm.util
 import androidx.annotation.ColorRes
 import com.weatherxm.R
 import org.koin.core.component.KoinComponent
+import java.text.DecimalFormat
 
 object Tokens : KoinComponent {
 
@@ -19,5 +20,9 @@ object Tokens : KoinComponent {
                 else -> R.color.reward_score_unknown
             }
         } ?: R.color.reward_score_unknown
+    }
+
+    fun formatTokens(amount: Float?): String {
+        return DecimalFormat("0.00").format(amount?.toBigDecimal())
     }
 }

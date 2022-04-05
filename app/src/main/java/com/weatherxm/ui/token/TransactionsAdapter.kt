@@ -13,10 +13,10 @@ import com.weatherxm.databinding.ListItemTokenTransactionBinding
 import com.weatherxm.util.Mask
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Tokens
+import com.weatherxm.util.Tokens.formatTokens
 import com.weatherxm.util.getRelativeDayFromISO
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.text.DecimalFormat
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle.MEDIUM
@@ -80,12 +80,11 @@ class TransactionsAdapter(
                 mask.maskHash(hash = it, offsetStart = 8, offsetEnd = 8, maxMaskedChars = 6)
             }
 
-            val formattedActualReward =
-                DecimalFormat("#.##").format(item.actualReward?.toBigDecimal())
-            binding.reward.text = resHelper.getString(R.string.reward, formattedActualReward)
+            binding.reward.text =
+                resHelper.getString(R.string.reward, formatTokens(item.actualReward))
 
             item.dailyReward?.let {
-                binding.maxReward.text = DecimalFormat("#.##").format(it.toBigDecimal())
+                binding.maxReward.text = formatTokens(it)
 
                 with(binding.rewardSlider) {
                     valueFrom = 0.0F
