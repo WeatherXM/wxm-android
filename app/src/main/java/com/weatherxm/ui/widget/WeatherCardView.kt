@@ -42,17 +42,18 @@ class WeatherCardView : LinearLayout, KoinComponent {
         gravity = Gravity.CENTER
     }
 
-    private fun updateCurrentWeatherUI() {
+    private fun updateCurrentWeatherUI(decimalsOnTemp: Int) {
         with(binding) {
             icon.setAnimation(Weather.getWeatherAnimation(weatherData?.icon))
             icon.playAnimation()
-            temperature.text = Weather.getFormattedTemperature(weatherData?.temperature)
+            temperature.text =
+                Weather.getFormattedTemperature(weatherData?.temperature, decimalsOnTemp)
+            feelsLike.text = Weather.getFormattedTemperature(weatherData?.feelsLike, decimalsOnTemp)
             precipitationIntensity.text =
                 Weather.getFormattedPrecipitation(weatherData?.precipitation)
             pressure.text = Weather.getFormattedPressure(weatherData?.pressure)
             humidity.text = Weather.getFormattedHumidity(weatherData?.humidity)
             wind.text = Weather.getFormattedWind(weatherData?.windSpeed, weatherData?.windDirection)
-            cloud.text = Weather.getFormattedCloud(weatherData?.cloudCover)
             solar.text = Weather.getFormattedUV(weatherData?.uvIndex)
             updatedOn.text = weatherData?.timestamp?.let {
                 val day = getRelativeDayFromISO(resHelper, it, includeDate = true, fullName = true)
@@ -62,9 +63,9 @@ class WeatherCardView : LinearLayout, KoinComponent {
         }
     }
 
-    fun setWeatherData(data: HourlyWeather?) {
+    fun setWeatherData(data: HourlyWeather?, decimalsOnTemp: Int = 0) {
         weatherData = data
-        updateCurrentWeatherUI()
+        updateCurrentWeatherUI(decimalsOnTemp)
     }
 
     fun show() {

@@ -81,6 +81,7 @@
             "timestamp": "2022-01-13T22:00:00+02:00",
             "precipitation": 0,
             "temperature": 15.8,
+            "feels_like": 16.0,
             "wind_direction": 321,
             "humidity": 55,
             "wind_speed": 3.1,
@@ -92,7 +93,11 @@
             "wind_gust": 5.4,
             "precipitation_type": "rain"
         },
-        "address": "Athens, GR"
+        "address": "Athens, GR",
+        "rewards": {
+            "total_rewards": 30523.65,
+            "actual_reward": 156.6
+        }
     },
     {
         "id": "76d13810-10e9-11ec-877e-63751227e9ec",
@@ -176,6 +181,7 @@
             "timestamp": "2022-01-13T22:00:00+02:00",
             "precipitation": 0,
             "temperature": 10.8,
+            "feels_like": 12.0,
             "wind_direction": 355,
             "humidity": 74,
             "wind_speed": 13.7,
@@ -187,7 +193,11 @@
             "wind_gust": 20.4,
             "precipitation_type": "rain"
         },
-        "address": "Chania, GR"
+        "address": "Chania, GR",
+        "rewards": {
+            "total_rewards": 30523.65,
+            "actual_reward": 156.6
+        }
     },
     {
         "id": "76d13810-10e9-11ec-877e-63751227e9ea",
@@ -271,6 +281,7 @@
             "timestamp": "2022-01-13T22:00:00+02:00",
             "precipitation": 0,
             "temperature": 10.8,
+            "feels_like": 11.0,
             "wind_direction": 355,
             "humidity": 74,
             "wind_speed": 13.7,
@@ -282,7 +293,11 @@
             "wind_gust": 20.4,
             "precipitation_type": "rain"
         },
-        "address": "Paris, FR"
+        "address": "Paris, FR",
+        "rewards": {
+            "total_rewards": 0.0,
+            "actual_reward": 0.0
+        }
     },
     {
         "id": "76d13810-00e9-11ec-877e-63751227e9ec",
@@ -366,6 +381,7 @@
             "timestamp": "2022-01-13T22:00:00+02:00",
             "precipitation": 0,
             "temperature": 10.8,
+            "feels_like": 11.0,
             "wind_direction": 355,
             "humidity": 74,
             "wind_speed": 13.7,
@@ -377,7 +393,11 @@
             "wind_gust": 20.4,
             "precipitation_type": "rain"
         },
-        "address": "Kalampaka, GR"
+        "address": "Kalampaka, GR",
+        "rewards": {
+            "total_rewards": 30523.65,
+            "actual_reward": 156.6
+        }
     },
     {
         "id": "76113810-10e9-11ec-877e-63751227e9ec",
@@ -461,6 +481,7 @@
             "timestamp": "2022-01-13T22:00:00+02:00",
             "precipitation": 0,
             "temperature": 10.8,
+            "feels_like": 11.0,
             "wind_direction": 355,
             "humidity": 74,
             "wind_speed": 13.7,
@@ -472,6 +493,10 @@
             "wind_gust": 20.4,
             "precipitation_type": "rain"
         },
-        "address": "Athens, GR"
+        "address": "Athens, GR",
+        "rewards": {
+            "total_rewards": 30000.1,
+            "actual_reward": 156.0
+        }
     }
 ]

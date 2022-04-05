@@ -13,6 +13,14 @@ sealed class Failure {
 }
 
 @Keep
+sealed class AuthError : Failure() {
+    object InvalidAuthTokenError: AuthError()
+    object InvalidAccessTokenError: AuthError()
+    object InvalidRefreshTokenError: AuthError()
+    object InvalidCredentialsError: AuthError()
+}
+
+@Keep
 sealed class ApiError(val message: String? = null) : Failure() {
     sealed class AuthError(message: String? = null) : ApiError(message) {
         sealed class LoginError(message: String? = null) : AuthError(message) {
@@ -38,6 +46,7 @@ sealed class ApiError(val message: String? = null) : Failure() {
         sealed class ClaimError(message: String? = null) : UserError(message) {
             class InvalidClaimId(message: String? = null) : ClaimError(message)
             class InvalidClaimLocation(message: String? = null) : ClaimError(message)
+            class DeviceAlreadyClaimed(message: String? = null) : ClaimError(message)
         }
 
         class InvalidFromDate(message: String? = null) : UserError(message)
@@ -49,9 +58,15 @@ sealed class ApiError(val message: String? = null) : Failure() {
             class UnauthorizedError(message: String? = null) : JWTError(message)
             class ForbiddenError(message: String? = null) : JWTError(message)
         }
+
         class ValidationError(message: String? = null) : GenericError(message)
         class UnknownError(message: String? = null) : GenericError(message)
         class NotFoundError(message: String? = null) : GenericError(message)
     }
 }
 
+@Keep
+sealed class DataError : Failure() {
+    object CacheMissError : DataError()
+    object NoWalletAddressError: DataError()
+}

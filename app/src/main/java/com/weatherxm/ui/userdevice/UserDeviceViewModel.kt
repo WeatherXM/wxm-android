@@ -20,6 +20,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
+@Suppress("TooManyFunctions")
 class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     private val resHelper: ResourcesHelper by inject()
@@ -50,6 +51,8 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     private val onTokens = MutableLiveData<TokenSummary>()
 
+    private val onLastRewardTokens = MutableLiveData<Float>()
+
     fun onDeviceSet(): LiveData<Device> = onDeviceSet
 
     fun onLoading(): LiveData<Boolean> = onLoading
@@ -59,6 +62,8 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     fun onForecast(): LiveData<List<HourlyWeather>> = onForecast
 
     fun onTokens(): LiveData<TokenSummary> = onTokens
+
+    fun onLastRewardTokens(): LiveData<Float> = onLastRewardTokens
 
     fun setDevice(device: Device) {
         this.device = device
@@ -72,8 +77,9 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                 userDeviceUseCase.getUserDevice(device.id)
             }
 
+            // This function runs only on onCreate/onSwipeRefresh so we forceRefresh the getTokens
             val tokensDeferred = async {
-                userDeviceUseCase.getTokensSummary24H(device.id)
+                userDeviceUseCase.getTokens24H(device.id, true)
             }
 
             val forecastDeferred = async {
@@ -101,11 +107,10 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     errorOnUserDevice = true
                 }
 
-
             val tokens = tokensDeferred.await()
             tokens
                 .map {
-                    onTokens.postValue(it)
+                    onLastRewardTokens.postValue(it)
                 }
                 .mapLeft {
                     if (it == Failure.NetworkError) {
@@ -174,14 +179,14 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         val uiError = UIError("", null)
         when (failure) {
             is ApiError.UserError.InvalidFromDate, is ApiError.UserError.InvalidToDate -> {
-                uiError.errorMessage = resHelper.getString(R.string.forecast_invalid_dates)
+                uiError.errorMessage = resHelper.getString(R.string.error_forecast_generic_message)
             }
             is Failure.NetworkError -> {
-                uiError.errorMessage = resHelper.getString(R.string.network_error)
+                uiError.errorMessage = resHelper.getString(R.string.error_network)
                 uiError.retryFunction = { (::fetchForecast)(forecastCurrentState) }
             }
             else -> {
-                uiError.errorMessage = resHelper.getString(R.string.unknown_error)
+                uiError.errorMessage = resHelper.getString(R.string.error_unknown)
             }
         }
         onError.postValue(uiError)
@@ -193,22 +198,35 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         CoroutineScope(Dispatchers.IO).launch {
             when (tokensCurrentState) {
                 TokensState.HOUR24 -> {
-                    userDeviceUseCase.getTokensSummary24H(device.id)
-                        .map { onTokens.postValue(it) }
+                    userDeviceUseCase.getTokens24H(device.id)
+                        .map { onLastRewardTokens.postValue(it) }
                         .mapLeft { handleTokenFailure(it) }
                 }
                 TokensState.DAYS7 -> {
-                    userDeviceUseCase.getTokensSummary7D(device.id)
+                    userDeviceUseCase.getTokens7D(device.id)
                         .map { onTokens.postValue(it) }
                         .mapLeft { handleTokenFailure(it) }
                 }
                 TokensState.DAYS30 -> {
-                    userDeviceUseCase.getTokensSummary30D(device.id)
+                    userDeviceUseCase.getTokens30D(device.id)
                         .map { onTokens.postValue(it) }
                         .mapLeft { handleTokenFailure(it) }
                 }
             }
             onLoading.postValue(false)
+        }
+    }
+
+    /*
+    * Needed to show 1 decimal point at temperature only if the first tile on the "Today" state
+    * is selected - which means only on current weather.
+    * On forecast tiles show 0 decimal points.
+     */
+    fun temperatureDecimalsToShow(selectedPosition: Int): Int {
+        return if (selectedPosition == 0 && forecastCurrentState == ForecastState.TODAY) {
+            1
+        } else {
+            0
         }
     }
 
@@ -224,14 +242,15 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     val uiError = UIError("", null)
                     when (it) {
                         is ApiError.DeviceNotFound -> {
-                            uiError.errorMessage = resHelper.getString(R.string.device_not_found)
+                            uiError.errorMessage =
+                                resHelper.getString(R.string.error_user_device_not_found)
                         }
                         is Failure.NetworkError -> {
-                            uiError.errorMessage = resHelper.getString(R.string.network_error)
+                            uiError.errorMessage = resHelper.getString(R.string.error_network)
                             uiError.retryFunction = ::fetchUserDevice
                         }
                         else -> {
-                            uiError.errorMessage = resHelper.getString(R.string.unknown_error)
+                            uiError.errorMessage = resHelper.getString(R.string.error_unknown)
                         }
                     }
                     onError.postValue(uiError)
@@ -253,25 +272,26 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         // Otherwise we have either 0/3 or 1/3 error states so just check them one by one
         @Suppress("ComplexCondition")
         if ((errorDevice && (errorToken || errorForecast)) || (errorToken && errorForecast)) {
-            uiError.errorMessage = resHelper.getString(R.string.device_data_failed)
+            uiError.errorMessage = resHelper.getString(R.string.error_user_device_data_failed)
 
             if (shouldRetry) {
                 uiError.retryFunction = ::fetchUserDeviceAllData
             }
         } else if (errorDevice) {
-            uiError.errorMessage = resHelper.getString(R.string.device_current_weather_failed)
+            uiError.errorMessage =
+                resHelper.getString(R.string.error_user_device_current_weather_failed)
 
             if (shouldRetry) {
                 uiError.retryFunction = ::fetchUserDevice
             }
         } else if (errorToken) {
-            uiError.errorMessage = resHelper.getString(R.string.token_failed)
+            uiError.errorMessage = resHelper.getString(R.string.error_user_device_token_failed)
 
             if (shouldRetry) {
                 uiError.retryFunction = { (::fetchTokenDetails)(tokensCurrentState) }
             }
         } else if (errorForecast) {
-            uiError.errorMessage = resHelper.getString(R.string.forecast_failed)
+            uiError.errorMessage = resHelper.getString(R.string.error_user_device_forecast_failed)
 
             if (shouldRetry) {
                 uiError.retryFunction = { (::fetchForecast)(forecastCurrentState) }
@@ -288,14 +308,14 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         when (failure) {
             is ApiError.GenericError -> {
                 uiError.errorMessage =
-                    failure.message ?: resHelper.getString(R.string.unknown_error)
+                    failure.message ?: resHelper.getString(R.string.error_unknown)
             }
             is Failure.NetworkError -> {
-                uiError.errorMessage = resHelper.getString(R.string.network_error)
+                uiError.errorMessage = resHelper.getString(R.string.error_network)
                 uiError.retryFunction = { (::fetchTokenDetails)(tokensCurrentState) }
             }
             else -> {
-                uiError.errorMessage = resHelper.getString(R.string.unknown_error)
+                uiError.errorMessage = resHelper.getString(R.string.error_unknown)
             }
         }
         onError.postValue(uiError)

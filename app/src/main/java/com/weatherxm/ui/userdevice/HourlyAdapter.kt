@@ -7,19 +7,26 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.databinding.ListItemHourlyWeatherBinding
+import com.weatherxm.ui.SelectedHourlyForecast
 import com.weatherxm.ui.userdevice.HourlyAdapter.HourlyViewHolder
+import com.weatherxm.ui.userdevice.UserDeviceViewModel.ForecastState
 import com.weatherxm.util.Weather
 import com.weatherxm.util.getHourMinutesFromISO
 import org.koin.core.component.KoinComponent
 
 class HourlyAdapter(
-    private val onHourlyForecastSelected: (HourlyWeather) -> Unit
+    private val onHourlyForecastSelected: (SelectedHourlyForecast) -> Unit
 ) : ListAdapter<HourlyWeather, HourlyViewHolder>(HourlyDiffCallback()), KoinComponent {
 
     private var selectedPosition = RecyclerView.NO_POSITION
+    private var forecastState: ForecastState = ForecastState.TODAY
+
+    fun setForecastState(newState: ForecastState) {
+        forecastState = newState
+    }
 
     override fun submitList(list: List<HourlyWeather>?) {
-        if(selectedPosition != RecyclerView.NO_POSITION && selectedPosition != 0) {
+        if (selectedPosition != RecyclerView.NO_POSITION && selectedPosition != 0) {
             // Reset list as we need to reset the selected item also
             super.submitList(null)
         }
@@ -32,7 +39,7 @@ class HourlyAdapter(
 
         // Invoke callback for newly selected position
         list?.let {
-            onHourlyForecastSelected(it[selectedPosition])
+            onHourlyForecastSelected(SelectedHourlyForecast(it[selectedPosition], selectedPosition))
         }
     }
 
@@ -57,13 +64,15 @@ class HourlyAdapter(
 
     inner class HourlyViewHolder(
         private val binding: ListItemHourlyWeatherBinding,
-        private val onHourlyForecastSelected: (HourlyWeather) -> Unit
+        private val onHourlyForecastSelected: (SelectedHourlyForecast) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             itemView.setOnClickListener {
                 // Invoke listener
-                onHourlyForecastSelected(getItem(adapterPosition))
+                onHourlyForecastSelected(
+                    SelectedHourlyForecast(getItem(adapterPosition), adapterPosition)
+                )
 
                 // Change the selected state
                 val lastSelectedItem = selectedPosition
@@ -78,7 +87,11 @@ class HourlyAdapter(
         fun bind(item: HourlyWeather, isSelected: Boolean) {
             binding.root.isActivated = isSelected
             binding.time.text = getHourMinutesFromISO(itemView.context, item.timestamp)
-            binding.temperature.text = Weather.getFormattedTemperature(item.temperature)
+            if(forecastState == ForecastState.TODAY && adapterPosition == 0) {
+                binding.temperature.text = Weather.getFormattedTemperature(item.temperature, 1)
+            } else {
+                binding.temperature.text = Weather.getFormattedTemperature(item.temperature)
+            }
             binding.icon.apply {
                 setAnimation(Weather.getWeatherAnimation(item.icon))
                 playAnimation()
@@ -96,7 +109,6 @@ class HourlyAdapter(
             return oldItem.timestamp == newItem.timestamp &&
                 oldItem.icon == newItem.icon &&
                 oldItem.temperature == newItem.temperature &&
-                oldItem.cloudCover == newItem.cloudCover &&
                 oldItem.humidity == newItem.humidity &&
                 oldItem.precipProbability == newItem.precipProbability &&
                 oldItem.precipitation == newItem.precipitation &&

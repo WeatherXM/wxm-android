@@ -5,7 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -39,8 +39,7 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
 
     // Register the launcher for the claim device activity and wait for a possible result
     private val claimDeviceLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-        { result: ActivityResult ->
+        registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 devicesViewModel.fetch()
             }
@@ -60,7 +59,6 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             navigator.showDeviceDetails(supportFragmentManager, it)
         }
 
-        // todo: Find a way to use snackbar here instead of a toast
         explorerModel.explorerState().observe(this) { resource ->
             Timber.d("Status updated: ${resource.status}")
             when (resource.status) {
@@ -104,8 +102,8 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             claimDeviceLauncher.launch(Intent(this, ClaimDeviceActivity::class.java))
         }
 
-        profileViewModel.hasWallet().observe(this) {
-            handleBadge(it)
+        profileViewModel.wallet().observe(this) {
+            handleBadge(!it.isNullOrEmpty())
         }
 
         // Disable BottomNavigationView bottom padding, added by default, and add margin
@@ -119,11 +117,6 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
 
         // Fetch user's devices
         devicesViewModel.fetch()
-
-        // Get user's wallet here
-        profileViewModel.getWallet()
-
-        binding.navView.getOrCreateBadge(R.id.navigation_profile)
     }
 
     private fun handleBadge(hasWallet: Boolean) {

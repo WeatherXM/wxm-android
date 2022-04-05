@@ -8,13 +8,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.ListItemDeviceBinding
+import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.Tokens.formatTokens
 import com.weatherxm.util.Weather
 import com.weatherxm.util.getRelativeTimeFromISO
 import com.weatherxm.util.setTextAndColor
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class DeviceAdapter(private val deviceListener: DeviceListener) :
     ListAdapter<Device, DeviceAdapter.DeviceViewHolder>(DeviceDiffCallback()), KoinComponent {
+
+    val resHelper: ResourcesHelper by inject()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
         val binding =
@@ -26,7 +31,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
         holder.bind(getItem(position))
     }
 
-    class DeviceViewHolder(
+    inner class DeviceViewHolder(
         private val binding: ListItemDeviceBinding,
         listener: DeviceListener,
     ) :
@@ -45,7 +50,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             binding.name.text = item.name
             binding.icon.setAnimation(Weather.getWeatherAnimation(item.currentWeather?.icon))
             binding.temperature.text =
-                Weather.getFormattedTemperature(item.currentWeather?.temperature)
+                Weather.getFormattedTemperature(item.currentWeather?.temperature, 1)
 
             device.attributes?.lastActiveAt?.let {
                 binding.lastSeen.text = itemView.resources.getString(
@@ -55,6 +60,16 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                         itemView.resources.getString(R.string.last_active_just_now)
                     )
                 )
+            }
+
+            device.rewards?.totalRewards?.let {
+                val total = resHelper.getString(R.string.wxm_amount, formatTokens(it))
+                binding.tokensTotal.text = total
+            }
+
+            device.rewards?.actualReward?.let {
+                val lastReward = resHelper.getString(R.string.wxm_amount, formatTokens(it))
+                binding.tokensLastDay.text = lastReward
             }
 
             when {

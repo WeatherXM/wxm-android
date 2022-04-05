@@ -26,7 +26,7 @@ class PublicDevicesListViewModel : ViewModel(), KoinComponent {
         this@PublicDevicesListViewModel.devices.postValue(
             if (devicesOfH7.isNullOrEmpty()) {
                 Timber.w("Getting public devices failed: null")
-                Resource.error(resHelper.getString(R.string.no_data_error_public_devices))
+                Resource.error(resHelper.getString(R.string.error_public_devices_no_data))
             } else {
                 Timber.d("Got Public Devices: $devices")
                 Resource.success(devicesOfH7.sortedByDescending { it.attributes?.isActive })

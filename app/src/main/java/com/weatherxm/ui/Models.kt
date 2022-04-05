@@ -4,6 +4,8 @@ import androidx.annotation.Keep
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.squareup.moshi.JsonClass
+import com.weatherxm.data.Transaction
+import com.weatherxm.data.HourlyWeather
 
 @Keep
 data class UIError(
@@ -21,7 +23,6 @@ data class HistoryCharts(
     var windGust: LineChartData,
     var windDirection: LineChartData,
     var humidity: LineChartData,
-    var cloudCover: LineChartData,
     var pressure: LineChartData,
     var uvIndex: BarChartData
 ) {
@@ -29,7 +30,7 @@ data class HistoryCharts(
         return temperature.isNullOrEmpty() && precipitation.isNullOrEmpty()
             && windSpeed.isNullOrEmpty() && windGust.isNullOrEmpty()
             && windDirection.isNullOrEmpty() && humidity.isNullOrEmpty()
-            && cloudCover.isNullOrEmpty() && pressure.isNullOrEmpty() && uvIndex.isNullOrEmpty()
+            && pressure.isNullOrEmpty() && uvIndex.isNullOrEmpty()
     }
 }
 
@@ -95,4 +96,26 @@ data class DailyForecast(
     var minTemp: Float? = null,
     var maxTemp: Float? = null,
     var precipProbability: Int? = null
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class UITransactions(
+    var transactions: List<Transaction>,
+    var hasNextPage: Boolean
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class ProfileInfo(
+    var email: String = "",
+    var name: String? = null,
+    var walletAddress: String? = null,
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class SelectedHourlyForecast(
+    var hourlyWeather: HourlyWeather,
+    var selectedPosition: Int
 )

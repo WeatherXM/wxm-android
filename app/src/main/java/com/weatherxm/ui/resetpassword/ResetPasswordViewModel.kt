@@ -41,9 +41,9 @@ class ResetPasswordViewModel : ViewModel(), KoinComponent {
             Resource.error(
                 resHelper.getString(
                     when (failure) {
-                        is InvalidUsername -> R.string.password_reset_invalid_username
-                        is NetworkError -> R.string.network_error
-                        else -> R.string.unknown_error
+                        is InvalidUsername -> R.string.error_password_reset_invalid_username
+                        is NetworkError -> R.string.error_network
+                        else -> R.string.error_unknown
                     }
                 )
             )

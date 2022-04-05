@@ -141,10 +141,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:hint="@string/hint_wxm_address"
-                    app:endIconDrawable="@drawable/ic_scan_wallet"
-                    app:endIconMode="custom"
                     app:counterEnabled="true"
                     app:counterMaxLength="42"
+                    app:endIconDrawable="@drawable/ic_scan_wallet"
+                    app:endIconMode="custom"
                     app:helperText="@string/suggested_wallets"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -163,14 +163,24 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/openDocumentation"
+            style="@style/Widget.WeatherXM.TextButton.Subtle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="@string/how_to_create_wallet"
+            app:layout_constraintStart_toStartOf="@id/addressCard"
+            app:layout_constraintTop_toBottomOf="@id/addressCard" />
+
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/termsCheckbox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
             android:text="@string/terms"
-            app:layout_constraintStart_toStartOf="@id/addressCard"
-            app:layout_constraintTop_toBottomOf="@id/addressCard" />
+            app:layout_constraintStart_toStartOf="@id/openDocumentation"
+            app:layout_constraintTop_toBottomOf="@id/openDocumentation" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/ownershipCheckbox"
@@ -186,7 +196,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:enabled="false"
-            android:text="@string/save"
+            android:text="@string/action_save"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

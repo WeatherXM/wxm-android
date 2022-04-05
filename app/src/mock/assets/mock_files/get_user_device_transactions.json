@@ -1,0 +1,60 @@
+{
+    "data": [
+        {
+            "timestamp": "2022-03-05T00:00:00+02:00",
+            "tx_hash": "0xa01f5fab82632244d7a554ccbc9617a13ca64c201e1f34d9920a35cb3a450ce1",
+            "validation_score": 1.0,
+            "daily_reward": 2567.89,
+            "actual_reward": 2567.89,
+            "total_rewards": 100.0,
+            "lost_rewards": 0.0
+        },
+        {
+            "timestamp": "2022-03-04T00:00:00+02:00",
+            "tx_hash": "0xa01f5fab82632244d7a554ccbc9617a13ca64c201e1f34d9920a35cb3a450ce1",
+            "validation_score": 0.5,
+            "daily_reward": 3000.026,
+            "actual_reward": 1500.013,
+            "total_rewards": 100.0,
+            "lost_rewards": 0.0
+        },
+        {
+            "timestamp": "2022-03-04T00:00:00+02:00",
+            "tx_hash": "0xa01f5fab82632244d7a554ccbc9617a13ca64c201e1f34d9920a35cb3a450ce1",
+            "validation_score": 0.3,
+            "daily_reward": 1000.9,
+            "actual_reward": 300.3,
+            "total_rewards": 100.0,
+            "lost_rewards": 0.0
+        },
+        {
+            "timestamp": "2022-03-03T00:00:00+02:00",
+            "tx_hash": "0x42450f4aba6bfcca99cdf2095eeef2e045ceea10c16139d73b76938eff6f2980",
+            "validation_score": 0.9,
+            "daily_reward": 2000,
+            "actual_reward": 1800,
+            "total_rewards": 100.0,
+            "lost_rewards": 0.3
+        },
+        {
+            "timestamp": "2022-03-02T00:00:00+02:00",
+            "tx_hash": "0x5e7925bc4f9c85a5dee695fdb695cffcc86a9656d3e92ad1f51001fbec9977a1",
+            "validation_score": 0.75,
+            "daily_reward": 1000,
+            "actual_reward": 750,
+            "total_rewards": 100.0,
+            "lost_rewards": 0.5
+        },
+        {
+            "timestamp": "2022-03-01T00:00:00+02:00",
+            "tx_hash": "0x57d11e4668ac0a94ad096c9bc394e12e6b86148758e525694be39dac6181c5e0",
+            "validation_score": 0.1,
+            "daily_reward": 123.456,
+            "actual_reward": 0.123456,
+            "total_rewards": 100.0,
+            "lost_rewards": 0.8
+        }
+    ],
+    "total_pages": 1,
+    "has_next_page": false
+}

@@ -67,7 +67,7 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
                     binding.chartsView.visibility = View.GONE
                     binding.empty.clear()
                     binding.empty.animation(R.raw.anim_error)
-                    binding.empty.title(getString(R.string.device_history_day_error_title))
+                    binding.empty.title(getString(R.string.error_history_no_data_on_day))
                     binding.empty.subtitle(resource.message)
                     binding.empty.action(getString(R.string.action_retry))
                     binding.empty.listener { getWeatherHistory() }
@@ -102,7 +102,6 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
         binding.chartPrecipitation.getChart().clear()
         binding.chartWind.getChart().clear()
         binding.chartHumidity.getChart().clear()
-        binding.chartCloudCover.getChart().clear()
         binding.chartPressure.getChart().clear()
         binding.chartUvIndex.getChart().clear()
     }
@@ -113,16 +112,16 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
         if (historyCharts.isEmpty()) {
             binding.chartsView.visibility = View.GONE
             binding.empty.clear()
-            binding.empty.title(getString(R.string.device_history_day_empty_title))
+            binding.empty.title(getString(R.string.empty_history_day_title))
             binding.empty.subtitle(
                 historyCharts.date?.let {
                     getString(
-                        R.string.device_history_day_empty_subtitle_with_day,
+                        R.string.empty_history_day_subtitle_with_day,
                         LocalDate.parse(it).format(
                             DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
                         )
                     )
-                } ?: getString(R.string.device_history_day_empty_subtitle)
+                } ?: getString(R.string.empty_history_day_subtitle)
             )
             binding.empty.animation(R.raw.anim_empty_generic)
             binding.empty.visibility = View.VISIBLE
@@ -181,7 +180,7 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
         if (model.isDataValid(data)) {
             barChart.initializeUV24hChart(data)
         } else {
-            barChart.setNoDataText(getString(R.string.no_data_chart_found))
+            barChart.setNoDataText(getString(R.string.error_history_no_data_chart_found))
             context?.getColor(R.color.black)?.let { barChart.setNoDataTextColor(it) }
             barChart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
         }
@@ -213,7 +212,7 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
     }
 
     private fun showNoDataText(lineChart: LineChart) {
-        lineChart.setNoDataText(getString(R.string.no_data_chart_found))
+        lineChart.setNoDataText(getString(R.string.error_history_no_data_chart_found))
         context?.getColor(R.color.black)?.let { lineChart.setNoDataTextColor(it) }
         lineChart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
     }
