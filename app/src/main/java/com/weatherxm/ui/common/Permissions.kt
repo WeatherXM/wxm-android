@@ -7,8 +7,8 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.fondesa.kpermissions.allGranted
-import com.fondesa.kpermissions.anyPermanentlyDenied
+import com.fondesa.kpermissions.allPermanentlyDenied
+import com.fondesa.kpermissions.anyGranted
 import com.fondesa.kpermissions.anyShouldShowRationale
 import com.fondesa.kpermissions.builder.PermissionRequestBuilder
 import com.fondesa.kpermissions.extension.permissionsBuilder
@@ -40,8 +40,7 @@ fun Fragment.checkPermissionsAndThen(
         permissions = permissions,
         rationaleTitle = rationaleTitle,
         rationaleMessage = rationaleMessage,
-        onGranted = onGranted,
-        onDenied = onDenied
+        onGranted = onGranted
     )
 }
 
@@ -49,8 +48,7 @@ fun FragmentActivity.checkPermissionsAndThen(
     vararg permissions: String,
     rationaleTitle: String,
     rationaleMessage: String,
-    onGranted: () -> Unit,
-    onDenied: () -> Unit
+    onGranted: () -> Unit
 ) {
     // Show rationale dialog
     fun onShowRationale() {
@@ -63,8 +61,7 @@ fun FragmentActivity.checkPermissionsAndThen(
                     permissions = permissions,
                     rationaleTitle = rationaleTitle,
                     rationaleMessage = rationaleMessage,
-                    onGranted = onGranted,
-                    onDenied = onDenied
+                    onGranted = onGranted
                 )
             }
             .onNegativeClick(getString(R.string.action_cancel)) {
@@ -98,12 +95,9 @@ fun FragmentActivity.checkPermissionsAndThen(
         permissions = permissions
     ).build().send { result ->
         when {
-            result.allGranted() -> onGranted()
+            result.anyGranted() -> onGranted()
             result.anyShouldShowRationale() -> onShowRationale()
-            result.anyPermanentlyDenied() -> {
-                onPermanentlyDenied()
-                onDenied()
-            }
+            result.allPermanentlyDenied() -> onPermanentlyDenied()
         }
     }
 }

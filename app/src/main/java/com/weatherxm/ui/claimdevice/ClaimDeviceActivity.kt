@@ -13,7 +13,6 @@ import com.weatherxm.databinding.ActivityClaimDeviceBinding
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_INFORMATION
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.common.checkPermissionsAndThen
-import com.weatherxm.ui.common.hasPermission
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
@@ -55,10 +54,6 @@ class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
                     permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
                     rationaleTitle = getString(R.string.permission_location_title),
                     rationaleMessage = getString(R.string.permission_location_rationale),
-                    /*
-                    * onGranted runs only when ACCESS_FINE_LOCATION has been given
-                    * (as this is the first permission asked)
-                     */
                     onGranted = {
                         // Get last location
                         model.getLocationAndThen(this) { location ->
@@ -67,24 +62,6 @@ class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
                                 toast(R.string.error_claim_gps_failed)
                             } else {
                                 model.updateLocationOnMap(location)
-                            }
-                        }
-                    },
-                    /*
-                    * onDenied runs when
-                    * 1. ACCESS_COARSE_LOCATION has been given and ACCESS_FINE_LOCATION has not
-                    * 2. none of them has been given
-                     */
-                    onDenied = {
-                        if(hasPermission(ACCESS_COARSE_LOCATION)) {
-                            // Get last location
-                            model.getLocationAndThen(this) { location ->
-                                Timber.d("Got user location: $location")
-                                if(location == null) {
-                                    toast(R.string.error_claim_gps_failed)
-                                } else {
-                                    model.updateLocationOnMap(location)
-                                }
                             }
                         }
                     }
