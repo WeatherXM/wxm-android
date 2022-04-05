@@ -22,7 +22,7 @@ object Tokens : KoinComponent {
         } ?: R.color.reward_score_unknown
     }
 
-    fun formatTokens(amount: Float?): String {
-        return DecimalFormat("0.00").format(amount?.toBigDecimal())
+    fun formatTokens(amount: Float): String {
+        return DecimalFormat("0.00").format(amount.toBigDecimal())
     }
 }

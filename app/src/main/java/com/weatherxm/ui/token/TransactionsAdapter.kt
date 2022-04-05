@@ -80,8 +80,9 @@ class TransactionsAdapter(
                 mask.maskHash(hash = it, offsetStart = 8, offsetEnd = 8, maxMaskedChars = 6)
             }
 
-            binding.reward.text =
-                resHelper.getString(R.string.reward, formatTokens(item.actualReward))
+            item.actualReward?.let {
+                binding.reward.text = resHelper.getString(R.string.reward, formatTokens(it))
+            }
 
             item.dailyReward?.let {
                 binding.maxReward.text = formatTokens(it)
