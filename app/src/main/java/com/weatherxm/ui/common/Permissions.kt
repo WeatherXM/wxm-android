@@ -33,8 +33,7 @@ fun Fragment.checkPermissionsAndThen(
     vararg permissions: String,
     rationaleTitle: String,
     rationaleMessage: String,
-    onGranted: () -> Unit,
-    onDenied: () -> Unit
+    onGranted: () -> Unit
 ) {
     activity?.checkPermissionsAndThen(
         permissions = permissions,
