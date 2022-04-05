@@ -13,6 +13,7 @@ import com.weatherxm.databinding.ListItemTokenTransactionBinding
 import com.weatherxm.util.Mask
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Tokens
+import com.weatherxm.util.Tokens.formatTokens
 import com.weatherxm.util.getRelativeDayFromISO
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -79,13 +80,12 @@ class TransactionsAdapter(
                 mask.maskHash(hash = it, offsetStart = 8, offsetEnd = 8, maxMaskedChars = 6)
             }
 
-            binding.reward.text = resHelper.getString(
-                R.string.reward,
-                item.actualReward.toString()
-            )
+            item.actualReward?.let {
+                binding.reward.text = resHelper.getString(R.string.reward, formatTokens(it))
+            }
 
             item.dailyReward?.let {
-                binding.maxReward.text = it.toString()
+                binding.maxReward.text = formatTokens(it)
 
                 with(binding.rewardSlider) {
                     valueFrom = 0.0F

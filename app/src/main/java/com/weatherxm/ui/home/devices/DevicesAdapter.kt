@@ -9,12 +9,12 @@ import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.ListItemDeviceBinding
 import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.Tokens.formatTokens
 import com.weatherxm.util.Weather
 import com.weatherxm.util.getRelativeTimeFromISO
 import com.weatherxm.util.setTextAndColor
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.text.DecimalFormat
 
 class DeviceAdapter(private val deviceListener: DeviceListener) :
     ListAdapter<Device, DeviceAdapter.DeviceViewHolder>(DeviceDiffCallback()), KoinComponent {
@@ -63,14 +63,12 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             }
 
             device.rewards?.totalRewards?.let {
-                val formattedTotal = DecimalFormat("#.##").format(it.toBigDecimal())
-                val total = resHelper.getString(R.string.wxm_amount, formattedTotal)
+                val total = resHelper.getString(R.string.wxm_amount, formatTokens(it))
                 binding.tokensTotal.text = total
             }
 
             device.rewards?.actualReward?.let {
-                val formattedLastReward = DecimalFormat("#.##").format(it.toBigDecimal())
-                val lastReward = resHelper.getString(R.string.wxm_amount, formattedLastReward)
+                val lastReward = resHelper.getString(R.string.wxm_amount, formatTokens(it))
                 binding.tokensLastDay.text = lastReward
             }
 

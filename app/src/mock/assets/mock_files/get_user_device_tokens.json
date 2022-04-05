@@ -1,160 +1,159 @@
 {
-    "last_day_actual_reward": 1.0,
+    "daily": {
+        "total": 0
+    },
     "weekly": {
-        "total": 672.0,
+        "total": 12524.395604395606,
         "tokens": [
             {
-                "timestamp": "2021-12-07T00:00:00+02:00",
-                "actual_reward": 96.0
+                "timestamp": "2022-03-30T00:00:00+03:00",
+                "actual_reward": 2191.769230769231
             },
             {
-                "timestamp": "2021-12-08T00:00:00+02:00",
-                "actual_reward": 94.0
+                "timestamp": "2022-03-31T00:00:00+03:00",
+                "actual_reward": 2191.769230769231
             },
             {
-                "timestamp": "2021-12-09T00:00:00+02:00",
-                "actual_reward": 98.0
+                "timestamp": "2022-04-01T00:00:00+03:00",
+                "actual_reward": 2035.2142857142858
             },
             {
-                "timestamp": "2021-12-10T00:00:00+02:00",
-                "actual_reward": 90.0
+                "timestamp": "2022-04-02T00:00:00+03:00",
+                "actual_reward": 2035.2142857142858
             },
             {
-                "timestamp": "2021-12-11T00:00:00+02:00",
-                "actual_reward": 102.0
+                "timestamp": "2022-04-03T00:00:00+03:00",
+                "actual_reward": 2035.2142857142858
             },
             {
-                "timestamp": "2021-12-12T00:00:00+02:00",
-                "actual_reward": 92.0
+                "timestamp": "2022-04-04T00:00:00+03:00",
+                "actual_reward": 2035.2142857142858
             },
             {
-                "timestamp": "2021-12-13T00:00:00+02:00",
-                "actual_reward": 100.0
+                "timestamp": "2022-04-05T00:00:00+03:00"
             }
         ]
     },
     "monthly": {
-        "total": 2975.0,
+        "total": 42214.63019714997,
         "tokens": [
             {
-                "timestamp": "2021-11-14T00:00:00+02:00",
-                "actual_reward": 80.0
+                "timestamp": "2022-03-07T00:00:00+02:00"
             },
             {
-                "timestamp": "2021-11-15T00:00:00+02:00",
-                "actual_reward": 81.0
+                "timestamp": "2022-03-08T00:00:00+02:00",
+                "actual_reward": 0.96
             },
             {
-                "timestamp": "2021-11-16T00:00:00+02:00",
-                "actual_reward": 82.0
+                "timestamp": "2022-03-09T00:00:00+02:00",
+                "actual_reward": 0.96
             },
             {
-                "timestamp": "2021-11-17T00:00:00+02:00",
-                "actual_reward": 84.0
+                "timestamp": "2022-03-10T00:00:00+02:00",
+                "actual_reward": 0.96
             },
             {
-                "timestamp": "2021-11-18T00:00:00+02:00",
-                "actual_reward": 85.0
+                "timestamp": "2022-03-11T00:00:00+02:00",
+                "actual_reward": 0.96
             },
             {
-                "timestamp": "2021-11-19T00:00:00+02:00",
-                "actual_reward": 87.0
+                "timestamp": "2022-03-12T00:00:00+02:00",
+                "actual_reward": 0.96
             },
             {
-                "timestamp": "2021-11-20T00:00:00+02:00",
-                "actual_reward": 89.0
+                "timestamp": "2022-03-13T00:00:00+02:00",
+                "actual_reward": 0.96
             },
             {
-                "timestamp": "2021-11-21T00:00:00+02:00",
-                "actual_reward": 90.0
+                "timestamp": "2022-03-14T00:00:00+02:00",
+                "actual_reward": 0.96
             },
             {
-                "timestamp": "2021-11-22T00:00:00+02:00",
-                "actual_reward": 91.0
+                "timestamp": "2022-03-15T00:00:00+02:00",
+                "actual_reward": 0.96
             },
             {
-                "timestamp": "2021-11-23T00:00:00+02:00",
-                "actual_reward": 92.0
+                "timestamp": "2022-03-16T00:00:00+02:00",
+                "actual_reward": 0.83
             },
             {
-                "timestamp": "2021-11-24T00:00:00+02:00",
-                "actual_reward": 93.0
+                "timestamp": "2022-03-17T00:00:00+02:00",
+                "actual_reward": 0
             },
             {
-                "timestamp": "2021-11-25T00:00:00+02:00",
-                "actual_reward": 94.0
+                "timestamp": "2022-03-18T00:00:00+02:00",
+                "actual_reward": 0
             },
             {
-                "timestamp": "2021-11-26T00:00:00+02:00",
-                "actual_reward": 95.0
+                "timestamp": "2022-03-19T00:00:00+02:00",
+                "actual_reward": 0
             },
             {
-                "timestamp": "2021-11-27T00:00:00+02:00",
-                "actual_reward": 98.0
+                "timestamp": "2022-03-20T00:00:00+02:00",
+                "actual_reward": 0
             },
             {
-                "timestamp": "2021-11-28T00:00:00+02:00",
-                "actual_reward": 99.0
+                "timestamp": "2022-03-21T00:00:00+02:00",
+                "actual_reward": 0
             },
             {
-                "timestamp": "2021-11-29T00:00:00+02:00",
-                "actual_reward": 100.0
+                "timestamp": "2022-03-22T00:00:00+02:00",
+                "actual_reward": 0
             },
             {
-                "timestamp": "2021-11-30T00:00:00+02:00",
-                "actual_reward": 101.0
+                "timestamp": "2022-03-23T00:00:00+02:00",
+                "actual_reward": 6686.55280024457
             },
             {
-                "timestamp": "2021-12-01T00:00:00+02:00",
-                "actual_reward": 102.0
+                "timestamp": "2022-03-24T00:00:00+02:00",
+                "actual_reward": 11576.054100202107
             },
             {
-                "timestamp": "2021-12-02T00:00:00+02:00",
-                "actual_reward": 103.0
+                "timestamp": "2022-03-25T00:00:00+02:00",
+                "actual_reward": 2374.4166666666665
             },
             {
-                "timestamp": "2021-12-03T00:00:00+02:00",
-                "actual_reward": 104.0
+                "timestamp": "2022-03-26T00:00:00+02:00",
+                "actual_reward": 2374.4166666666665
             },
             {
-                "timestamp": "2021-12-04T00:00:00+02:00",
-                "actual_reward": 105.0
+                "timestamp": "2022-03-27T00:00:00+02:00",
+                "actual_reward": 2374.4166666666665
             },
             {
-                "timestamp": "2021-12-05T00:00:00+02:00",
-                "actual_reward": 106.0
+                "timestamp": "2022-03-28T00:00:00+03:00",
+                "actual_reward": 2191.769230769231
             },
             {
-                "timestamp": "2021-12-06T00:00:00+02:00",
-                "actual_reward": 108.0
+                "timestamp": "2022-03-29T00:00:00+03:00",
+                "actual_reward": 2104.098461538462
             },
             {
-                "timestamp": "2021-12-08T00:00:00+02:00",
-                "actual_reward": 110.0
+                "timestamp": "2022-03-30T00:00:00+03:00",
+                "actual_reward": 2191.769230769231
             },
             {
-                "timestamp": "2021-12-09T00:00:00+02:00",
-                "actual_reward": 112.0
+                "timestamp": "2022-03-31T00:00:00+03:00",
+                "actual_reward": 2191.769230769231
             },
             {
-                "timestamp": "2021-12-10T00:00:00+02:00",
-                "actual_reward": 113.0
+                "timestamp": "2022-04-01T00:00:00+03:00",
+                "actual_reward": 2035.2142857142858
             },
             {
-                "timestamp": "2021-12-11T00:00:00+02:00",
-                "actual_reward": 114.0
+                "timestamp": "2022-04-02T00:00:00+03:00",
+                "actual_reward": 2035.2142857142858
             },
             {
-                "timestamp": "2021-12-12T00:00:00+02:00",
-                "actual_reward": 115.0
+                "timestamp": "2022-04-03T00:00:00+03:00",
+                "actual_reward": 2035.2142857142858
             },
             {
-                "timestamp": "2021-12-13T00:00:00+02:00",
-                "actual_reward": 120.0
+                "timestamp": "2022-04-04T00:00:00+03:00",
+                "actual_reward": 2035.2142857142858
             },
             {
-                "timestamp": "2021-12-14T00:00:00+02:00",
-                "actual_reward": 122.0
+                "timestamp": "2022-04-05T00:00:00+03:00"
             }
         ]
     }
