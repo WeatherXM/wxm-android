@@ -64,9 +64,6 @@ object Weather : KoinComponent {
         decimals = 1
     )
 
-    fun getFormattedCloud(value: Int?) =
-        getFormattedValueOrEmpty(value, "%")
-
     fun getFormattedUV(value: Int?) =
         getFormattedValueOrEmpty(value, resHelper.getString(R.string.uv_index_unit))
 

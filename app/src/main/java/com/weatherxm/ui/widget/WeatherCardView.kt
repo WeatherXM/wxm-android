@@ -48,12 +48,12 @@ class WeatherCardView : LinearLayout, KoinComponent {
             icon.playAnimation()
             temperature.text =
                 Weather.getFormattedTemperature(weatherData?.temperature, decimalsOnTemp)
+            feelsLike.text = Weather.getFormattedTemperature(weatherData?.feelsLike, decimalsOnTemp)
             precipitationIntensity.text =
                 Weather.getFormattedPrecipitation(weatherData?.precipitation)
             pressure.text = Weather.getFormattedPressure(weatherData?.pressure)
             humidity.text = Weather.getFormattedHumidity(weatherData?.humidity)
             wind.text = Weather.getFormattedWind(weatherData?.windSpeed, weatherData?.windDirection)
-            cloud.text = Weather.getFormattedCloud(weatherData?.cloudCover)
             solar.text = Weather.getFormattedUV(weatherData?.uvIndex)
             updatedOn.text = weatherData?.timestamp?.let {
                 val day = getRelativeDayFromISO(resHelper, it, includeDate = true, fullName = true)

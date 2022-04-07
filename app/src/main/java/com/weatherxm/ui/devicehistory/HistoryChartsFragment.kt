@@ -102,7 +102,6 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
         binding.chartPrecipitation.getChart().clear()
         binding.chartWind.getChart().clear()
         binding.chartHumidity.getChart().clear()
-        binding.chartCloudCover.getChart().clear()
         binding.chartPressure.getChart().clear()
         binding.chartUvIndex.getChart().clear()
     }

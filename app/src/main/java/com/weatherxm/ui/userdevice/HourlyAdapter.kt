@@ -109,7 +109,6 @@ class HourlyAdapter(
             return oldItem.timestamp == newItem.timestamp &&
                 oldItem.icon == newItem.icon &&
                 oldItem.temperature == newItem.temperature &&
-                oldItem.cloudCover == newItem.cloudCover &&
                 oldItem.humidity == newItem.humidity &&
                 oldItem.precipProbability == newItem.precipProbability &&
                 oldItem.precipitation == newItem.precipitation &&

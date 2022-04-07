@@ -10,7 +10,7 @@ import com.weatherxm.R
 import com.weatherxm.databinding.ViewTokenCardBinding
 import com.weatherxm.ui.TokenSummary
 import com.weatherxm.ui.userdevice.UserDeviceViewModel
-import java.text.DecimalFormat
+import com.weatherxm.util.Tokens.formatTokens
 
 open class TokenCardView : LinearLayout {
 
@@ -80,8 +80,7 @@ open class TokenCardView : LinearLayout {
 
     private fun total(total: Float?) {
         total?.let {
-            val formattedTotal = DecimalFormat("#.##").format(total.toBigDecimal())
-            binding.wxmValue.text = formattedTotal
+            binding.wxmValue.text = formatTokens(total)
         }
     }
 

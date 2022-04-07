@@ -13,7 +13,8 @@ import com.weatherxm.databinding.ListItemTokenTransactionBinding
 import com.weatherxm.util.DateTimeHelper.getRelativeDayFromISO
 import com.weatherxm.util.Mask
 import com.weatherxm.util.ResourcesHelper
-import com.weatherxm.util.Tokens
+import com.weatherxm.util.Tokens.getRewardScoreColor
+import com.weatherxm.util.Tokens.formatTokens
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.time.ZonedDateTime
@@ -79,13 +80,12 @@ class TransactionsAdapter(
                 mask.maskHash(hash = it, offsetStart = 8, offsetEnd = 8, maxMaskedChars = 6)
             }
 
-            binding.reward.text = resHelper.getString(
-                R.string.reward,
-                item.actualReward.toString()
-            )
+            item.actualReward?.let {
+                binding.reward.text = resHelper.getString(R.string.reward, formatTokens(it))
+            }
 
             item.dailyReward?.let {
-                binding.maxReward.text = it.toString()
+                binding.maxReward.text = formatTokens(it)
 
                 with(binding.rewardSlider) {
                     valueFrom = 0.0F
@@ -98,7 +98,7 @@ class TransactionsAdapter(
                 itemView.resources.getString(R.string.score, it)
             } ?: itemView.resources.getString(R.string.score_unknown)
 
-            val color = resHelper.getColor(Tokens.getRewardScoreColor(item.validationScore))
+            val color = resHelper.getColor(getRewardScoreColor(item.validationScore))
             binding.scoreIcon.setColorFilter(color)
             binding.rewardSlider.trackActiveTintList = ColorStateList.valueOf(color)
         }
