@@ -185,13 +185,13 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData) {
     On history chart this is null
 */
 fun LineChart.initializePrecipitation24hChart(precipIntensityData: LineChartData) {
-    val dataSetPrecipIntensity = LineDataSet(precipIntensityData.entries, precipIntensityData.name)
-    dataSetPrecipIntensity.axisDependency = YAxis.AxisDependency.LEFT
+    val dataSet = LineDataSet(precipIntensityData.entries, precipIntensityData.name)
+    dataSet.axisDependency = YAxis.AxisDependency.LEFT
 
     // use ILineDataSet to have multiple lines in a chart (in case we have probability)
     val dataSets = mutableListOf<ILineDataSet>()
 
-    dataSets.add(dataSetPrecipIntensity)
+    dataSets.add(dataSet)
 
     val lineData = LineData(dataSets)
     data = lineData
@@ -199,33 +199,55 @@ fun LineChart.initializePrecipitation24hChart(precipIntensityData: LineChartData
     // Set the default settings we want to all LineCharts
     setDefaultSettings()
 
-    // Marker view initialization
-    val decimals = Weather.getDecimalsPrecipitation()
-    marker = CustomDefaultMarkerView(
-        context,
-        precipIntensityData.timestamps,
-        precipIntensityData.name,
-        precipIntensityData.unit,
-        decimals
-    )
+    val inchesUsed = precipIntensityData.unit == resources.getString(R.string.precipitation_in)
+
+    /*
+    * If max - min < 0.01 on inches OR max - min < 0.1 on millimeters
+    * we need an extra decimal of detail on marker view
+    * And also set the maximum of axisLeft so we can have at least 2 visible labels on the Y axis
+    */
+    marker = if (dataSet.yMax - dataSet.yMin < 0.01 && inchesUsed) {
+        axisLeft.axisMaximum = 0.01F
+        CustomDefaultMarkerView(
+            context,
+            precipIntensityData.timestamps,
+            precipIntensityData.name,
+            precipIntensityData.unit,
+            decimals = 3
+        )
+    } else if (dataSet.yMax - dataSet.yMin < 0.1 && !inchesUsed) {
+        axisLeft.axisMaximum = 0.1F
+        CustomDefaultMarkerView(
+            context,
+            precipIntensityData.timestamps,
+            precipIntensityData.name,
+            precipIntensityData.unit,
+            decimals = 2
+        )
+    } else {
+        CustomDefaultMarkerView(
+            context,
+            precipIntensityData.timestamps,
+            precipIntensityData.name,
+            precipIntensityData.unit,
+            decimals = Weather.getDecimalsPrecipitation()
+        )
+    }
 
     // Precipitation Intensity Settings
-    dataSetPrecipIntensity.setDefaultSettings(context, resources)
-    dataSetPrecipIntensity.mode = LineDataSet.Mode.STEPPED
-    dataSetPrecipIntensity.setDrawFilled(true)
-    dataSetPrecipIntensity.color = resources.getColor(precipIntensityData.lineColor, context.theme)
-    dataSetPrecipIntensity.setCircleColor(
-        resources.getColor(precipIntensityData.lineColor, context.theme)
-    )
+    dataSet.setDefaultSettings(context, resources)
+    dataSet.mode = LineDataSet.Mode.STEPPED
+    dataSet.setDrawFilled(true)
+    dataSet.color = resources.getColor(precipIntensityData.lineColor, context.theme)
+    dataSet.setCircleColor(resources.getColor(precipIntensityData.lineColor, context.theme))
 
     // Y Axis settings
-    axisLeft.granularity =
-        if (precipIntensityData.unit == resources.getString(R.string.precipitation_in)) {
-            PRECIP_INCHES_GRANULARITY_Y_AXIS
-        } else {
-            DEFAULT_GRANULARITY_Y_AXIS
-        }
-    axisLeft.axisMinimum = dataSetPrecipIntensity.yMin
+    axisLeft.granularity = if (inchesUsed) {
+        PRECIP_INCHES_GRANULARITY_Y_AXIS
+    } else {
+        DEFAULT_GRANULARITY_Y_AXIS
+    }
+    axisLeft.axisMinimum = dataSet.yMin
     axisLeft.valueFormatter =
         CustomYAxisFormatter(precipIntensityData.unit, Weather.getDecimalsPrecipitation())
 
