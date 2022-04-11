@@ -180,10 +180,7 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData) {
     notifyDataSetChanged()
 }
 
-/*
-    precipProbabilityData is nullable because we have that data only on Forecast Charts.
-    On history chart this is null
-*/
+@Suppress("MagicNumber")
 fun LineChart.initializePrecipitation24hChart(precipIntensityData: LineChartData) {
     val dataSet = LineDataSet(precipIntensityData.entries, precipIntensityData.name)
     dataSet.axisDependency = YAxis.AxisDependency.LEFT
