@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.format.DateFormat
 import android.text.format.DateUtils
 import com.weatherxm.R
+import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
 import com.weatherxm.data.HOUR_FORMAT_12H_FULL
 import com.weatherxm.data.HOUR_FORMAT_12H_HOUR_ONLY
 import com.weatherxm.data.HOUR_FORMAT_24H
@@ -22,6 +23,7 @@ object DateTimeHelper : KoinComponent {
     private val formatter24h: DateTimeFormatter by inject(named(HOUR_FORMAT_24H))
     private val formatter12hFull: DateTimeFormatter by inject(named(HOUR_FORMAT_12H_FULL))
     private val formatter12hHourOnly: DateTimeFormatter by inject(named(HOUR_FORMAT_12H_HOUR_ONLY))
+    private val formatterMonthDay: DateTimeFormatter by inject(named(DATE_FORMAT_MONTH_DAY))
 
     fun getNowInTimezone(timezone: String?): ZonedDateTime {
         if (timezone == null) {
@@ -55,7 +57,7 @@ object DateTimeHelper : KoinComponent {
                 if (!includeDate) {
                     nameOfDay
                 } else {
-                    "$nameOfDay ${zonedDateTime.dayOfMonth}/${zonedDateTime.monthValue}"
+                    "$nameOfDay ${zonedDateTime.format(formatterMonthDay)}"
                 }
             }
         }
@@ -117,7 +119,7 @@ object DateTimeHelper : KoinComponent {
 
     fun getSimplifiedDate(fullDate: String): String {
         val localDate = LocalDate.parse(fullDate)
-        return "${localDate.dayOfMonth}/${localDate.monthValue}"
+        return localDate.format(formatterMonthDay)
     }
 
     fun getShortNameOfDayFromLocalDate(resHelper: ResourcesHelper, fullDate: String): String {
