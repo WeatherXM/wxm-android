@@ -294,10 +294,9 @@
     </style>
 
     <style name="TextAppearance.WeatherXM.WeatherCard.Temperature" parent="TextAppearance.WeatherXM.WeatherCard">
-        <item name="android:lines">1</item>
         <item name="autoSizeTextType">uniform</item>
         <item name="autoSizeMaxTextSize">48sp</item>
-        <item name="autoSizeMinTextSize">36sp</item>
+        <item name="autoSizeMinTextSize">24sp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.WeatherCard.Data" parent="TextAppearance.WeatherXM.WeatherCard">

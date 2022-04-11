@@ -159,10 +159,10 @@ android {
 
     packagingOptions {
         jniLibs {
-            excludes += ['META-INF/*']
+            excludes += ["META-INF/*"]
         }
         resources {
-            excludes += ['META-INF/*']
+            excludes += ["META-INF/*"]
         }
     }
 
@@ -195,14 +195,14 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
-    implementation "androidx.navigation:navigation-fragment-ktx:2.4.1"
-    implementation "androidx.navigation:navigation-ui-ktx:2.4.1"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.4.2"
+    implementation "androidx.navigation:navigation-ui-ktx:2.4.2"
     implementation "androidx.preference:preference-ktx:1.2.0"
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
     implementation "androidx.security:security-crypto:1.0.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.viewpager2:viewpager2:1.0.0"
-    implementation "androidx.paging:paging-runtime:3.1.1"
+    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
     implementation "com.google.android.material:material:1.5.0"
 
     // Google Play Services for Location & Maps
@@ -241,7 +241,7 @@ dependencies {
     implementation "com.github.fondesa:kpermissions:3.3.0"
 
     // Dependency Injection
-    implementation "io.insert-koin:koin-android:3.1.5"
+    implementation "io.insert-koin:koin-android:3.1.6"
 
     // Data types and more
     implementation platform("io.arrow-kt:arrow-stack:1.0.1")
@@ -249,13 +249,13 @@ dependencies {
     implementation "io.arrow-kt:arrow-fx-coroutines"
 
     // Mapbox
-    implementation "com.mapbox.maps:android:10.3.0"
+    implementation "com.mapbox.maps:android:10.4.0"
 
     // Insetter
     implementation "dev.chrisbanes.insetter:insetter:0.6.1"
 
     // Import the Firebase BoM
-    implementation platform("com.google.firebase:firebase-bom:29.2.0")
+    implementation platform("com.google.firebase:firebase-bom:29.3.0")
     implementation "com.google.firebase:firebase-crashlytics-ktx"
     implementation "com.google.firebase:firebase-perf-ktx"
 
