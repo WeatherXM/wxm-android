@@ -11,6 +11,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_INFORMATION
+import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
@@ -41,32 +42,30 @@ class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
                 onBackPressed()
             } else if (step > 0) {
                 binding.pager.currentItem += 1
+
+                if(binding.pager.currentItem == PAGE_LOCATION) {
+                    checkPermissionsAndThen(
+                        permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
+                        rationaleTitle = getString(R.string.permission_location_title),
+                        rationaleMessage = getString(R.string.permission_location_rationale),
+                        onGranted = {
+                            // Get last location
+                            model.getLocationAndThen(this) { location ->
+                                Timber.d("Got user location: $location")
+                                if(location == null) {
+                                    toast(R.string.error_claim_gps_failed)
+                                } else {
+                                    model.updateLocationOnMap(location)
+                                }
+                            }
+                        }
+                    )
+                }
             }
         }
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
-        }
-
-        model.onGPS().observe(this) { useGPS ->
-            if (useGPS) {
-                checkPermissionsAndThen(
-                    permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
-                    rationaleTitle = getString(R.string.permission_location_title),
-                    rationaleMessage = getString(R.string.permission_location_rationale),
-                    onGranted = {
-                        // Get last location
-                        model.getLocationAndThen(this) { location ->
-                            Timber.d("Got user location: $location")
-                            if(location == null) {
-                                toast(R.string.error_claim_gps_failed)
-                            } else {
-                                model.updateLocationOnMap(location)
-                            }
-                        }
-                    }
-                )
-            }
         }
 
         model.fetchUserEmail()

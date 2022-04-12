@@ -54,11 +54,9 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     private var isLocationSet = false
     private var currentLon: Double = 0.0
     private var currentLat: Double = 0.0
-    private var askedForGPSPermission = false
 
     // Needed for passing info to the activity to move to the next page in the view pager or use gps
     private val onStep = MutableLiveData(0)
-    private val onGPS = MutableLiveData(false)
     private val onDeviceLocation = MutableLiveData<Location>()
     private val onLocationSet = MutableLiveData(false)
     private val onClaimResult = MutableLiveData<Resource<String>>().apply {
@@ -66,7 +64,6 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     }
 
     fun onStep() = onStep
-    fun onGPS() = onGPS
     fun onDeviceLocation() = onDeviceLocation
     fun onLocationSet() = onLocationSet
     fun onClaimResult() = onClaimResult
@@ -83,13 +80,6 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
 
     fun getUserEmail(): String? {
         return userEmail
-    }
-
-    fun useGps() {
-        if (!askedForGPSPermission) {
-            onGPS.postValue(true)
-            askedForGPSPermission = true
-        }
     }
 
     fun updateLocationOnMap(location: Location) {

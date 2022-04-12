@@ -67,11 +67,6 @@ class ClaimDeviceMapFragment : BaseMapFragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        model.useGps()
-    }
-
     override fun onDestroy() {
         getMap().removeOnCameraChangeListener(listener)
         super.onDestroy()
