@@ -1,4 +1,4 @@
-package com.weatherxm.ui.devicedetail
+package com.weatherxm.ui.publicdevicedetail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +11,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
-class DeviceDetailViewModel : ViewModel(), KoinComponent {
+class PublicDeviceDetailViewModel : ViewModel(), KoinComponent {
 
     private val resHelper: ResourcesHelper by inject()
     private val device = MutableLiveData<Resource<Device>>(Resource.loading())
@@ -19,7 +19,7 @@ class DeviceDetailViewModel : ViewModel(), KoinComponent {
     fun device(): LiveData<Resource<Device>> = device
 
     fun setDevice(device: Device?) {
-        this@DeviceDetailViewModel.device.postValue(
+        this@PublicDeviceDetailViewModel.device.postValue(
             if (device == null) {
                 Timber.w("Getting public device details failed: null")
                 Resource.error(resHelper.getString(R.string.error_public_device_no_data))

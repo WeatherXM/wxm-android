@@ -5,7 +5,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.WeatherData
 import com.weatherxm.data.map
 import com.weatherxm.data.network.ApiService
-import com.weatherxm.util.getFormattedDate
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 

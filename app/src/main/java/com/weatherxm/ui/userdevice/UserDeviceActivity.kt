@@ -12,8 +12,8 @@ import com.weatherxm.databinding.ActivityUserDeviceBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.widget.TokenCardView
+import com.weatherxm.util.DateTimeHelper.getRelativeTimeFromISO
 import com.weatherxm.util.applyInsets
-import com.weatherxm.util.getRelativeTimeFromISO
 import com.weatherxm.util.onTabSelected
 import com.weatherxm.util.setHtml
 import com.weatherxm.util.setTextAndColor

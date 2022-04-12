@@ -13,10 +13,10 @@ import com.weatherxm.data.repository.WeatherRepository
 import com.weatherxm.ui.BarChartData
 import com.weatherxm.ui.HistoryCharts
 import com.weatherxm.ui.LineChartData
+import com.weatherxm.util.DateTimeHelper.getHourMinutesFromISO
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UnitConverter
 import com.weatherxm.util.Weather
-import com.weatherxm.util.getHourMinutesFromISO
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -60,7 +60,6 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_temperature_preference),
                 resHelper.getString(R.string.temperature_celsius)
             ),
-            showDecimals = true,
             timestamps = time,
             entries = entries
         )
@@ -77,7 +76,6 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_precipitation_preference),
                 resHelper.getString(R.string.precipitation_mm)
             ),
-            showDecimals = true,
             timestamps = time,
             entries = entries
         )
@@ -155,7 +153,6 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 resHelper.getString(R.string.key_pressure_preference),
                 resHelper.getString(R.string.pressure_hpa)
             ),
-            showDecimals = true,
             timestamps = time,
             entries = entries
         )
@@ -174,9 +171,7 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
         )
     }
 
-    //todo investigate if this suppress should be removed or not.
-    @Suppress("ComplexMethod")
-    private fun createHourlyChart(
+    private fun createHourlyCharts(
         context: Context,
         weatherData: WeatherData
     ): HistoryCharts {
@@ -262,7 +257,7 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
         val charts = mutableListOf<HistoryCharts>()
 
         data.forEach { weatherData ->
-            charts.add(createHourlyChart(context, weatherData))
+            charts.add(createHourlyCharts(context, weatherData))
         }
 
         return charts

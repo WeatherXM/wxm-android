@@ -9,8 +9,8 @@ import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.WeatherRepository
 import com.weatherxm.ui.TokenSummary
-import com.weatherxm.util.getFormattedDate
-import com.weatherxm.util.getNowInTimezone
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
+import com.weatherxm.util.DateTimeHelper.getNowInTimezone
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

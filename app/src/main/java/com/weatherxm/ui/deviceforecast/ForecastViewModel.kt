@@ -11,8 +11,8 @@ import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.ForecastData
 import com.weatherxm.usecases.ForecastUseCase
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.ResourcesHelper
-import com.weatherxm.util.getFormattedDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

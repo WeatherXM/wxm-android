@@ -40,7 +40,6 @@ data class LineChartData(
     var name: String,
     var lineColor: Int,
     var unit: String,
-    var showDecimals: Boolean = false,
     var timestamps: MutableList<String>,
     var entries: MutableList<Entry>
 ) {
@@ -55,7 +54,6 @@ data class BarChartData(
     var name: String,
     var lineColor: Int,
     var unit: String,
-    var showDecimals: Boolean = false,
     var timestamps: MutableList<String>,
     var entries: MutableList<BarEntry>
 ) {
