@@ -30,8 +30,7 @@ object Weather : KoinComponent {
             "overcast-night" -> R.raw.anim_weather_overcast_night
             "drizzle" -> R.raw.anim_weather_drizzle
             "rain" -> R.raw.anim_weather_rain
-            "thunderstorms_day" -> R.raw.anim_weather_thunderstorms_day
-            "thunderstorms_night" -> R.raw.anim_weather_thunderstorms_night
+            "thunderstorms-rain" -> R.raw.anim_weather_thunderstorms_rain
             "snow" -> R.raw.anim_weather_snow
             "sleet" -> R.raw.anim_weather_snow
             else -> R.raw.anim_not_available
