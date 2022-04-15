@@ -22,12 +22,11 @@ class App : Application() {
             modules(modules)
         }
 
-        // Setup debug logs
+        // Setup debug logs or crash reporting depending on the build type
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+        } else {
+            Timber.plant(CrashReportingTree())
         }
-
-        // Setup crash reporting
-        Timber.plant(CrashReportingTree())
     }
 }
