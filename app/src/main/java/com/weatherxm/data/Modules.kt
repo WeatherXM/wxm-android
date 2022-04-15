@@ -171,7 +171,7 @@ private val datasources = module {
 
 private val repositories = module {
     single<AuthRepository> {
-        AuthRepositoryImpl(get(), get(), get(), get(), get())
+        AuthRepositoryImpl(get(), get(), get())
     }
     single<LocationRepository> {
         LocationRepository()
@@ -189,7 +189,7 @@ private val repositories = module {
         TokenRepository(get())
     }
     single<WeatherRepository> {
-        WeatherRepository(get())
+        WeatherRepository(get(), get())
     }
 }
 

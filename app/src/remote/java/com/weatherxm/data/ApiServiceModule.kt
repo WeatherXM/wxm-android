@@ -1,9 +1,9 @@
 package com.weatherxm.data
 
+import com.weatherxm.data.datasource.CacheWeatherDataSource
 import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
-import com.weatherxm.data.datasource.WeatherDataSource
-import com.weatherxm.data.datasource.WeatherDataSourceImpl
+import com.weatherxm.data.datasource.NetworkWeatherDataSource
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.AuthService
 import org.koin.core.qualifier.named
@@ -25,7 +25,11 @@ val apiServiceModule = module {
         DeviceDataSourceImpl(get())
     }
 
-    single<WeatherDataSource> {
-        WeatherDataSourceImpl(get())
+    single<NetworkWeatherDataSource> {
+        NetworkWeatherDataSource(get())
+    }
+
+    single<CacheWeatherDataSource> {
+        CacheWeatherDataSource()
     }
 }

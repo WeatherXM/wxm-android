@@ -14,10 +14,10 @@ sealed class Failure {
 
 @Keep
 sealed class AuthError : Failure() {
-    object InvalidAuthTokenError: AuthError()
-    object InvalidAccessTokenError: AuthError()
-    object InvalidRefreshTokenError: AuthError()
-    object InvalidCredentialsError: AuthError()
+    object InvalidAuthTokenError : AuthError()
+    object InvalidAccessTokenError : AuthError()
+    object InvalidRefreshTokenError : AuthError()
+    object InvalidCredentialsError : AuthError()
 }
 
 @Keep
@@ -68,5 +68,6 @@ sealed class ApiError(val message: String? = null) : Failure() {
 @Keep
 sealed class DataError : Failure() {
     object CacheMissError : DataError()
-    object NoWalletAddressError: DataError()
+    object CacheExpiredError : DataError()
+    object NoWalletAddressError : DataError()
 }

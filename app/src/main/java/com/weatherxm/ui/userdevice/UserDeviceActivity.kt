@@ -67,7 +67,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
         }
 
         binding.swiperefresh.setOnRefreshListener {
-            model.fetchUserDeviceAllData()
+            model.fetchUserDeviceAllData(forceRefresh = true)
         }
 
         binding.historicalCharts.setOnClickListener {

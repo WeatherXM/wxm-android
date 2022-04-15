@@ -11,12 +11,13 @@ import com.weatherxm.util.DateTimeHelper.getSimplifiedDate
 import com.weatherxm.util.ResourcesHelper
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.time.ZonedDateTime
 
 interface ForecastUseCase {
     suspend fun getDailyForecast(
         deviceId: String,
-        fromDate: String,
-        toDate: String
+        fromDate: ZonedDateTime,
+        toDate: ZonedDateTime
     ): Either<Failure, ForecastData>
 }
 
@@ -26,10 +27,10 @@ class ForecastUseCaseImpl : ForecastUseCase, KoinComponent {
 
     override suspend fun getDailyForecast(
         deviceId: String,
-        fromDate: String,
-        toDate: String
+        fromDate: ZonedDateTime,
+        toDate: ZonedDateTime
     ): Either<Failure, ForecastData> {
-        return weatherRepository.getDailyForecast(deviceId, fromDate, toDate).map {
+        return weatherRepository.getDeviceForecast(deviceId, fromDate, toDate, false).map {
             val dailyForecasts = mutableListOf<DailyForecast>()
             var minTemp: Float? = null
             var maxTemp: Float? = null

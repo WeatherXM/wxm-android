@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
-import com.weatherxm.data.repository.AuthRepository
+import com.weatherxm.usecases.AuthUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,7 +14,7 @@ import org.koin.core.component.inject
 import timber.log.Timber
 
 class PreferenceViewModel : ViewModel(), KoinComponent {
-    private val authRepository: AuthRepository by inject()
+    private val authUseCase: AuthUseCase by inject()
 
     // Needed for passing info to the activity to when logging out
     private val onLogout = MutableLiveData(false)
@@ -25,13 +25,13 @@ class PreferenceViewModel : ViewModel(), KoinComponent {
     private val isLoggedIn = MutableLiveData<Either<Error, String>>().apply {
         Timber.d("Getting credentials in the background")
         viewModelScope.launch(Dispatchers.IO) {
-            postValue(authRepository.isLoggedIn())
+            postValue(authUseCase.isLoggedIn())
         }
     }
 
     fun logout() {
         CoroutineScope(Dispatchers.IO).launch {
-            authRepository.logout()
+            authUseCase.logout()
             onLogout.postValue(true)
         }
     }

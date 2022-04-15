@@ -1,12 +1,10 @@
 package com.weatherxm.data
 
 import co.infinum.retromock.Retromock
+import com.weatherxm.data.datasource.CacheWeatherDataSource
 import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
-import com.weatherxm.data.datasource.TokenDataSource
-import com.weatherxm.data.datasource.TokenDataSourceImpl
-import com.weatherxm.data.datasource.WeatherDataSource
-import com.weatherxm.data.datasource.WeatherDataSourceImpl
+import com.weatherxm.data.datasource.NetworkWeatherDataSource
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.AuthService
 import org.koin.android.ext.koin.androidContext
@@ -34,7 +32,11 @@ val apiServiceModule = module {
         DeviceDataSourceImpl(get())
     }
 
-    single<WeatherDataSource> {
-        WeatherDataSourceImpl(get())
+    single<NetworkWeatherDataSource> {
+        NetworkWeatherDataSource(get())
+    }
+
+    single<CacheWeatherDataSource> {
+        CacheWeatherDataSource()
     }
 }

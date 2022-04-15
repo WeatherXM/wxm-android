@@ -28,4 +28,8 @@ class UserRepository(
                 }
             }
     }
+
+    suspend fun clearCache() {
+        cacheUserDataSource.clear()
+    }
 }

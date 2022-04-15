@@ -70,8 +70,9 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         onDeviceSet.postValue(this.device)
     }
 
-    fun fetchUserDeviceAllData() {
+    fun fetchUserDeviceAllData(forceRefresh: Boolean = false) {
         onLoading.postValue(true)
+
         CoroutineScope(Dispatchers.IO).launch {
             val userDevice = async {
                 userDeviceUseCase.getUserDevice(device.id)
@@ -84,9 +85,9 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
             val forecastDeferred = async {
                 if (forecastCurrentState == ForecastState.TODAY) {
-                    userDeviceUseCase.getTodayForecast(device)
+                    userDeviceUseCase.getTodayForecast(device, forceRefresh)
                 } else {
-                    userDeviceUseCase.getTomorrowForecast(device)
+                    userDeviceUseCase.getTomorrowForecast(device, forceRefresh)
                 }
             }
 
@@ -144,7 +145,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                 ForecastState.TODAY -> {
                     userDeviceUseCase.getTodayForecast(device)
                         .map {
-                            Timber.d("Got Short Term Forecast: $it")
+                            Timber.d("Got short term forecast for TODAY")
                             onForecast.postValue(addCurrentToForecast(device.currentWeather, it))
                         }
                         .mapLeft {
@@ -154,7 +155,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                 ForecastState.TOMORROW -> {
                     userDeviceUseCase.getTomorrowForecast(device)
                         .map {
-                            Timber.d("Got Short Term Forecast: $it")
+                            Timber.d("Got short term forecast for TOMORROW")
                             if (it.isEmpty()) {
                                 onError.postValue(
                                     UIError(resHelper.getString(R.string.forecast_empty), null)
@@ -275,7 +276,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             uiError.errorMessage = resHelper.getString(R.string.error_user_device_data_failed)
 
             if (shouldRetry) {
-                uiError.retryFunction = ::fetchUserDeviceAllData
+                uiError.retryFunction = { fetchUserDeviceAllData() }
             }
         } else if (errorDevice) {
             uiError.errorMessage =
