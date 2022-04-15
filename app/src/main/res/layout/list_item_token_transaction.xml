@@ -72,17 +72,6 @@
                 tools:text="0x123456 ... ABCDEF" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/relative_date"
-                style="@style/TextAppearance.WeatherXM.Updated.On"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:visibility="invisible"
-                app:layout_constraintBaseline_toBaselineOf="@id/tx_hash"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="Yesterday" />
-
-            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/reward"
                 style="@style/TextAppearance.WeatherXM.Transaction.Reward"
                 android:layout_width="match_parent"

@@ -10,11 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.Transaction
 import com.weatherxm.databinding.ListItemTokenTransactionBinding
-import com.weatherxm.util.DateTimeHelper.getRelativeDayFromISO
 import com.weatherxm.util.Mask
 import com.weatherxm.util.ResourcesHelper
-import com.weatherxm.util.Tokens.getRewardScoreColor
 import com.weatherxm.util.Tokens.formatTokens
+import com.weatherxm.util.Tokens.getRewardScoreColor
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.time.ZonedDateTime
@@ -69,11 +68,6 @@ class TransactionsAdapter(
             binding.prevLine.visibility = if (position == 0) View.GONE else View.VISIBLE
 
             item.timestamp?.let {
-                binding.relativeDate.text = getRelativeDayFromISO(
-                    resHelper, it,
-                    includeDate = false,
-                    fullName = false
-                )
                 binding.date.text = ZonedDateTime.parse(it).format(dateFormat)
             }
             binding.txHash.text = item.txHash?.let {

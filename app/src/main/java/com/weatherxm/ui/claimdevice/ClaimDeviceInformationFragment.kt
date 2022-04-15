@@ -8,14 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimDeviceInstructionsBinding
-import com.weatherxm.ui.Navigator
 import com.weatherxm.util.setHtml
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class ClaimDeviceInformationFragment : Fragment(), KoinComponent {
     private val model: ClaimDeviceViewModel by activityViewModels()
-    private val navigator: Navigator by inject()
     private lateinit var binding: FragmentClaimDeviceInstructionsBinding
 
     override fun onCreateView(
@@ -29,10 +26,6 @@ class ClaimDeviceInformationFragment : Fragment(), KoinComponent {
 
         binding.next.setOnClickListener {
             model.next()
-        }
-
-        binding.buyMiner.setOnClickListener {
-            navigator.openWebsite(context, getString(R.string.website))
         }
 
         return binding.root

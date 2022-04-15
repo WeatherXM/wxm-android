@@ -59,17 +59,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/info_icon" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/buy_miner"
-                        style="@style/Widget.WeatherXM.Button.Link"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/info_claim_buy_miner"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.core.widget.NestedScrollView>
