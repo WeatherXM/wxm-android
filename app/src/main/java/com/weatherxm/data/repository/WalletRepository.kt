@@ -41,4 +41,8 @@ class WalletRepository(
                 cacheWalletDataSource.setWalletAddress(address)
             }
     }
+
+    suspend fun clearCache() {
+        cacheWalletDataSource.clear()
+    }
 }

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
@@ -16,7 +15,6 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityConnectWalletBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Mask
 import com.weatherxm.util.Validator
 import com.weatherxm.util.applyInsets
@@ -93,7 +91,6 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
-        // TODO Ideally this code should be moved to the ViewModel
         // Changing the newAddress field should update the form's state in the view model
         // and then the form as a whole (address + checkboxes) should be validated there
         binding.saveBtn.setOnClickListener {
@@ -105,17 +102,11 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
                 return@setOnClickListener
             }
 
-            if (!binding.termsCheckbox.isChecked) {
-                toast(R.string.warn_connect_wallet_terms_not_accepted, Toast.LENGTH_LONG)
-                return@setOnClickListener
-            }
-
-            if (!binding.ownershipCheckbox.isChecked) {
-                toast(R.string.warn_connect_wallet_access_not_acknowledged, Toast.LENGTH_LONG)
-                return@setOnClickListener
-            }
-
-            model.saveAddress(address)
+            model.saveAddress(
+                address,
+                binding.termsCheckbox.isChecked,
+                binding.ownershipCheckbox.isChecked
+            )
         }
 
         // Listen for newly saved address state change

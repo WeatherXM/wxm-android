@@ -11,7 +11,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
-import com.weatherxm.ui.devicedetail.DeviceDetailFragment
+import com.weatherxm.ui.publicdevicedetail.PublicDeviceDetailFragment
 import com.weatherxm.ui.deviceforecast.ForecastActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.devicehistory.HistoryChartsFragment
@@ -69,8 +69,8 @@ class Navigator {
     }
 
     fun showDeviceDetails(fragmentManager: FragmentManager, device: Device) {
-        val modalBottomSheet = DeviceDetailFragment.newInstance(device)
-        modalBottomSheet.show(fragmentManager, DeviceDetailFragment.TAG)
+        val modalBottomSheet = PublicDeviceDetailFragment.newInstance(device)
+        modalBottomSheet.show(fragmentManager, PublicDeviceDetailFragment.TAG)
     }
 
     fun showPreferences(context: Context) {

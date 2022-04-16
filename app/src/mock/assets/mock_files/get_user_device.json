@@ -79,7 +79,7 @@
     "current_weather": {
         "timestamp": "2022-01-13T22:00:00+02:00",
         "precipitation": 0.03,
-        "temperature": 15.7,
+        "temperature": -108.8,
         "feels_like": 16.0,
         "wind_direction": 54,
         "humidity": 81,

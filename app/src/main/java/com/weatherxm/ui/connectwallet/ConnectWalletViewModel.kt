@@ -41,18 +41,32 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
     private val isAddressSaved = MutableLiveData<Resource<String>>()
     fun isAddressSaved() = isAddressSaved
 
-    fun saveAddress(address: String) {
+    fun saveAddress(address: String, termsChecked: Boolean, ownershipChecked: Boolean) {
         isAddressSaved.postValue(Resource.loading())
-        CoroutineScope(Dispatchers.IO).launch {
-            connectWalletUseCase.setWalletAddress(address)
-                .mapLeft {
-                    handleFailure(it)
-                }.map {
-                    isAddressSaved.postValue(
-                        Resource.success(resHelper.getString(R.string.address_saved))
-                    )
-                    currentAddress.postValue(address)
-                }
+        if (termsChecked && ownershipChecked) {
+            CoroutineScope(Dispatchers.IO).launch {
+                connectWalletUseCase.setWalletAddress(address)
+                    .mapLeft {
+                        handleFailure(it)
+                    }.map {
+                        isAddressSaved.postValue(
+                            Resource.success(resHelper.getString(R.string.address_saved))
+                        )
+                        currentAddress.postValue(address)
+                    }
+            }
+        } else if (ownershipChecked) {
+            isAddressSaved.postValue(
+                Resource.error(
+                    resHelper.getString(R.string.warn_connect_wallet_terms_not_accepted)
+                )
+            )
+        } else {
+            isAddressSaved.postValue(
+                Resource.error(
+                    resHelper.getString(R.string.warn_connect_wallet_access_not_acknowledged)
+                )
+            )
         }
     }
 

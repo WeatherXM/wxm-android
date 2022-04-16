@@ -9,10 +9,10 @@ import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
+import com.weatherxm.data.repository.WeatherRepository.Companion.PREFETCH_DAYS
 import com.weatherxm.ui.ForecastData
 import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.util.ResourcesHelper
-import com.weatherxm.util.getFormattedDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,10 +22,6 @@ import timber.log.Timber
 import java.time.ZonedDateTime
 
 class ForecastViewModel : ViewModel(), KoinComponent {
-
-    companion object {
-        private const val DAYS_TO_FETCH = 7L
-    }
 
     private val forecastUseCase: ForecastUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
@@ -40,11 +36,11 @@ class ForecastViewModel : ViewModel(), KoinComponent {
     fun getWeatherForecast(deviceId: String) {
         onForecast.postValue(Resource.loading())
         CoroutineScope(Dispatchers.IO).launch {
-            val fromDate = getFormattedDate(ZonedDateTime.now().toString())
-            val toDate = getFormattedDate(ZonedDateTime.now().plusDays(DAYS_TO_FETCH).toString())
+            val fromDate = ZonedDateTime.now()
+            val toDate = ZonedDateTime.now().plusDays(PREFETCH_DAYS)
             forecastUseCase.getDailyForecast(deviceId, fromDate, toDate)
                 .map { forecast ->
-                    Timber.d("Got Forecast: $forecast")
+                    Timber.d("Got daily forecast from $fromDate to $toDate")
                     onForecast.postValue(Resource.success(forecast))
                 }
                 .mapLeft {

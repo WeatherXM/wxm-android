@@ -9,16 +9,24 @@ import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.WeatherRepository
 import com.weatherxm.ui.TokenSummary
-import com.weatherxm.util.getFormattedDate
-import com.weatherxm.util.getNowInTimezone
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
+import com.weatherxm.util.DateTimeHelper.getNowInTimezone
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 interface UserDeviceUseCase {
     suspend fun getUserDevices(): Either<Failure, List<Device>>
     suspend fun getUserDevice(deviceId: String): Either<Failure, Device>
-    suspend fun getTodayForecast(device: Device): Either<Failure, List<HourlyWeather>>
-    suspend fun getTomorrowForecast(device: Device): Either<Failure, List<HourlyWeather>>
+    suspend fun getTodayForecast(
+        device: Device,
+        forceRefresh: Boolean = false
+    ): Either<Failure, List<HourlyWeather>>
+
+    suspend fun getTomorrowForecast(
+        device: Device,
+        forceRefresh: Boolean = false
+    ): Either<Failure, List<HourlyWeather>>
+
     suspend fun getTokens24H(
         deviceId: String,
         forceRefresh: Boolean = false
@@ -73,21 +81,27 @@ class UserDeviceUseCaseImpl : UserDeviceUseCase, KoinComponent {
         }
     }
 
-    override suspend fun getTodayForecast(device: Device): Either<Failure, List<HourlyWeather>> {
+    override suspend fun getTodayForecast(
+        device: Device,
+        forceRefresh: Boolean
+    ): Either<Failure, List<HourlyWeather>> {
         val now = getNowInTimezone(device.timezone)
         val today = getFormattedDate(now.toString())
 
-        return weatherRepository.getHourlyForecast(device.id, today, today)
+        return weatherRepository.getDeviceForecast(device.id, now, now, forceRefresh)
             .map {
                 getHourlyWeatherFromData(it, today)
             }
     }
 
-    override suspend fun getTomorrowForecast(device: Device): Either<Failure, List<HourlyWeather>> {
+    override suspend fun getTomorrowForecast(
+        device: Device,
+        forceRefresh: Boolean
+    ): Either<Failure, List<HourlyWeather>> {
         val now = getNowInTimezone(device.timezone)
         val tomorrow = getFormattedDate(now.plusDays(1).toString())
 
-        return weatherRepository.getHourlyForecast(device.id, tomorrow, tomorrow)
+        return weatherRepository.getDeviceForecast(device.id, now, now.plusDays(1), forceRefresh)
             .map {
                 getHourlyWeatherFromData(it, tomorrow)
             }

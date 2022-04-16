@@ -3,25 +3,54 @@ package com.weatherxm.data.repository
 import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.WeatherData
-import com.weatherxm.data.datasource.WeatherDataSource
+import com.weatherxm.data.datasource.CacheWeatherDataSource
+import com.weatherxm.data.datasource.NetworkWeatherDataSource
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import org.koin.core.component.KoinComponent
+import timber.log.Timber
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 
-class WeatherRepository(private val weatherDataSource: WeatherDataSource) : KoinComponent {
+class WeatherRepository(
+    private val networkWeatherDataSource: NetworkWeatherDataSource,
+    private val cacheWeatherDataSource: CacheWeatherDataSource
+) : KoinComponent {
 
-    suspend fun getHourlyForecast(
-        deviceId: String,
-        fromDate: String,
-        toDate: String
-    ): Either<Failure, List<WeatherData>> {
-        return weatherDataSource.getForecast(deviceId, fromDate, toDate, "daily")
+    companion object {
+        const val PREFETCH_DAYS = 7L
     }
 
-    suspend fun getDailyForecast(
+    suspend fun getDeviceForecast(
         deviceId: String,
-        fromDate: String,
-        toDate: String
+        fromDate: ZonedDateTime,
+        toDate: ZonedDateTime,
+        forceRefresh: Boolean
     ): Either<Failure, List<WeatherData>> {
-        return weatherDataSource.getForecast(deviceId, fromDate, toDate, "hourly")
+        if (forceRefresh) {
+            clearCache()
+        }
+
+        val from = getFormattedDate(fromDate.toString())
+        val to = if (ChronoUnit.DAYS.between(fromDate, toDate) < PREFETCH_DAYS) {
+            getFormattedDate(fromDate.plusDays(PREFETCH_DAYS).toString())
+        } else {
+            getFormattedDate(toDate.toString())
+        }
+
+        return cacheWeatherDataSource.getForecast(deviceId, from, to)
+            .tap {
+                Timber.d("Got forecast from cache [$from to $to].")
+            }
+            .mapLeft {
+                return networkWeatherDataSource.getForecast(deviceId, from, to).tap {
+                    Timber.d("Got forecast from network [$from to $to].")
+                    cacheWeatherDataSource.setForecast(deviceId, it)
+                }
+            }
+    }
+
+    suspend fun clearCache() {
+        cacheWeatherDataSource.clear()
     }
 
     suspend fun getHourlyWeatherHistory(
@@ -29,14 +58,6 @@ class WeatherRepository(private val weatherDataSource: WeatherDataSource) : Koin
         fromDate: String,
         toDate: String
     ): Either<Failure, List<WeatherData>> {
-        return weatherDataSource.getWeatherHistory(deviceId, fromDate, toDate, "daily")
-    }
-
-    suspend fun getDailyWeatherHistory(
-        deviceId: String,
-        fromDate: String,
-        toDate: String
-    ): Either<Failure, List<WeatherData>> {
-        return weatherDataSource.getWeatherHistory(deviceId, fromDate, toDate, "hourly")
+        return networkWeatherDataSource.getWeatherHistory(deviceId, fromDate, toDate, "daily")
     }
 }
