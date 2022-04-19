@@ -15,8 +15,8 @@ object Weather : KoinComponent {
     private val sharedPref: SharedPreferences by inject()
 
     private const val DECIMALS_WIND_SPEED = 1
-    private const val DECIMALS_PRECIPITATION_INCHES = 2
-    private const val DECIMALS_PRECIPITATION_MILLIMETERS = 1
+    const val DECIMALS_PRECIPITATION_INCHES = 2
+    const val DECIMALS_PRECIPITATION_MILLIMETERS = 1
 
     @RawRes
     fun getWeatherAnimation(icon: String?): Int {
@@ -162,7 +162,8 @@ object Weather : KoinComponent {
         val defaultUnit = resHelper.getString(R.string.precipitation_mm)
         // We need to convert the value as different preference than default is used
         if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
-            valueToReturn = UnitConverter.millimetersToInches(value.toFloat())
+            valueToReturn =
+                UnitConverter.millimetersToInches(value.toFloat(), getDecimalsPrecipitation())
         }
         return valueToReturn
     }

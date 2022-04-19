@@ -1,5 +1,6 @@
 package com.weatherxm.util
 
+import java.text.DecimalFormat
 import kotlin.math.floor
 
 @Suppress("MagicNumber")
@@ -14,8 +15,18 @@ object UnitConverter {
         return celsius * 9 / 5 + 32
     }
 
-    fun millimetersToInches(mm: Float): Float {
-        return mm / 25.4F
+    /*
+     * Unexpected numbers show up on History Charts
+     * because of this math expression leading to results like
+     * {0.001in} or {0.0005in}, therefore we format and round the numbers here as we want
+     * maximum 2 decimals on inches and maximum 1 decimal at millimeters
+     */
+    fun millimetersToInches(mm: Float, roundToDecimals: Int): Float {
+        return if (roundToDecimals == Weather.DECIMALS_PRECIPITATION_INCHES) {
+            DecimalFormat("0.00").format((mm / 25.4F)).toFloat()
+        } else {
+            DecimalFormat("0.0").format((mm / 25.4F)).toFloat()
+        }
     }
 
     fun hpaToInHg(hpa: Float): Float {
