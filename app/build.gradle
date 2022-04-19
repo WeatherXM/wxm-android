@@ -258,6 +258,8 @@ dependencies {
     implementation platform("com.google.firebase:firebase-bom:29.3.0")
     implementation "com.google.firebase:firebase-crashlytics-ktx"
     implementation "com.google.firebase:firebase-perf-ktx"
+    implementation "com.google.firebase:firebase-config-ktx"
+
 
     // QR Code Scanner
     implementation "com.journeyapps:zxing-android-embedded:4.3.0"

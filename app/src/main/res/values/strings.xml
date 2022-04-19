@@ -43,6 +43,13 @@
     <string name="unknown">Unknown</string>
     <string name="empty_weather_stations">Oh, no! No WXM devices yet?</string>
 
+    <!-- Update Prompt -->
+    <string name="title_update_prompt">New Update</string>
+    <string name="desc_update_prompt"><![CDATA[A new update of this app has been released. Please click the button below to go to Play Store and update the app.<br><br>After updating please restart the app.]]></string>
+    <string name="continue_no_update">Continue without updating</string>
+    <string name="update">Update</string>
+    <string name="whats_new">What\'s New:</string>
+
     <!-- Reset Password -->
     <string name="title_password_reset">Password Reset</string>
     <string name="send_email">Send Email</string>

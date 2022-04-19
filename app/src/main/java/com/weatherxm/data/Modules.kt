@@ -10,6 +10,10 @@ import androidx.security.crypto.MasterKeys
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.SettingsClient
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -17,6 +21,8 @@ import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
+import com.weatherxm.data.datasource.AppConfigDataSource
+import com.weatherxm.data.datasource.AppConfigDataSourceImpl
 import com.weatherxm.data.datasource.AuthDataSource
 import com.weatherxm.data.datasource.AuthDataSourceImpl
 import com.weatherxm.data.datasource.AuthTokenDataSource
@@ -36,6 +42,7 @@ import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthTokenAuthenticator
 import com.weatherxm.data.network.interceptor.UserAgentRequestInterceptor
+import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
 import com.weatherxm.data.repository.DeviceRepository
@@ -97,6 +104,8 @@ private const val NETWORK_CACHE_SIZE = 50L * 1024L * 1024L // 50MB
 private const val CONNECT_TIMEOUT = 30L
 private const val READ_TIMEOUT = 30L
 private const val WRITE_TIMEOUT = 60L
+private const val FIREBASE_CONFIG_FETCH_INTERVAL_DEBUG = 30L
+private const val FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE = 3600L
 
 private val preferences = module {
     single<SharedPreferences> {
@@ -167,6 +176,10 @@ private val datasources = module {
     single<CredentialsDataSource> {
         CredentialsDataSourceImpl(get(named(PREFERENCES_CREDENTIALS)))
     }
+
+    single<AppConfigDataSource> {
+        AppConfigDataSourceImpl(get(), get())
+    }
 }
 
 private val repositories = module {
@@ -190,6 +203,9 @@ private val repositories = module {
     }
     single<WeatherRepository> {
         WeatherRepository(get(), get())
+    }
+    single<AppConfigRepository> {
+        AppConfigRepository(get())
     }
 }
 
@@ -298,6 +314,23 @@ val validator = module {
     }
 }
 
+val firebaseRemoteConfig = module {
+    single<FirebaseRemoteConfig> {
+        // Init Firebase config
+        Firebase.remoteConfig.apply {
+            setConfigSettingsAsync(
+                remoteConfigSettings {
+                    minimumFetchIntervalInSeconds = if (BuildConfig.DEBUG) {
+                        FIREBASE_CONFIG_FETCH_INTERVAL_DEBUG
+                    } else {
+                        FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE
+                    }
+                }
+            )
+        }
+    }
+}
+
 val navigator = module {
     single {
         Navigator()
@@ -361,6 +394,7 @@ val modules = listOf(
     validator,
     usecases,
     resourcesHelper,
+    firebaseRemoteConfig,
     apiServiceModule,
     utilities
 )
