@@ -8,7 +8,8 @@ class AppConfigRepository(private val appConfigDataSource: AppConfigDataSource) 
     fun shouldUpdate(): Boolean {
         val lastRemindedVersion = appConfigDataSource.getLastRemindedVersion()
         val lastRemoteVersion = appConfigDataSource.getLastRemoteVersionCode()
-        return appConfigDataSource.shouldUpdate() && lastRemindedVersion < lastRemoteVersion
+        return appConfigDataSource.shouldUpdate() &&
+            (lastRemindedVersion < lastRemoteVersion || isUpdateMandatory())
     }
 
     fun isUpdateMandatory(): Boolean {
