@@ -16,6 +16,24 @@ class SplashActivity : AppCompatActivity(), KoinComponent {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        model.getFirebaseRemoteConfig().fetchAndActivate()
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    model.shouldPromptUpdate()
+                } else {
+                    Timber.w(task.exception, "Firebase Fetch And Activate Failed")
+                    model.checkIfLoggedIn()
+                }
+            }
+
+        model.shouldUpdate().observe(this) {
+            if (it) {
+                navigator.showUpdatePrompt(this)
+                finish()
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+        }
+
         model.isLoggedIn().observe(this) { result ->
             result.mapLeft {
                 Timber.d("Not logged in. Show explorer.")

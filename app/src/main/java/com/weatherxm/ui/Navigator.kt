@@ -24,6 +24,7 @@ import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.splash.SplashActivity
 import com.weatherxm.ui.token.TokenActivity
+import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.ui.userdevice.UserDeviceActivity
 import timber.log.Timber
 
@@ -59,6 +60,14 @@ class Navigator {
         context.startActivity(
             Intent(
                 context, HomeActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        )
+    }
+
+    fun showUpdatePrompt(context: Context) {
+        context.startActivity(
+            Intent(
+                context, UpdatePromptActivity::class.java
             ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
     }
@@ -209,6 +218,17 @@ class Navigator {
             } catch (e: ActivityNotFoundException) {
                 Timber.d(e, "Could not load url: $url")
                 it.toast(R.string.error_open_website_support_cannot_open_url, url)
+            }
+        }
+    }
+
+    fun openPlayStore(context: Context?, url: String) {
+        context?.let {
+            try {
+                it.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            } catch (e: ActivityNotFoundException) {
+                Timber.d(e, "Could not open play store.")
+                it.toast(R.string.error_cannot_open_play_store)
             }
         }
     }

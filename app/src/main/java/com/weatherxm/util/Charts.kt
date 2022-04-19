@@ -180,7 +180,6 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData) {
     notifyDataSetChanged()
 }
 
-@Suppress("MagicNumber")
 fun LineChart.initializePrecipitation24hChart(precipIntensityData: LineChartData) {
     val dataSet = LineDataSet(precipIntensityData.entries, precipIntensityData.name)
     dataSet.axisDependency = YAxis.AxisDependency.LEFT
@@ -198,38 +197,13 @@ fun LineChart.initializePrecipitation24hChart(precipIntensityData: LineChartData
 
     val inchesUsed = precipIntensityData.unit == resources.getString(R.string.precipitation_in)
 
-    /*
-    * If max - min < 0.01 on inches OR max - min < 0.1 on millimeters
-    * we need an extra decimal of detail on marker view
-    * And also set the maximum of axisLeft so we can have at least 2 visible labels on the Y axis
-    */
-    marker = if (dataSet.yMax - dataSet.yMin < 0.01 && inchesUsed) {
-        axisLeft.axisMaximum = 0.01F
-        CustomDefaultMarkerView(
-            context,
-            precipIntensityData.timestamps,
-            precipIntensityData.name,
-            precipIntensityData.unit,
-            decimals = 3
-        )
-    } else if (dataSet.yMax - dataSet.yMin < 0.1 && !inchesUsed) {
-        axisLeft.axisMaximum = 0.1F
-        CustomDefaultMarkerView(
-            context,
-            precipIntensityData.timestamps,
-            precipIntensityData.name,
-            precipIntensityData.unit,
-            decimals = 2
-        )
-    } else {
-        CustomDefaultMarkerView(
-            context,
-            precipIntensityData.timestamps,
-            precipIntensityData.name,
-            precipIntensityData.unit,
-            decimals = Weather.getDecimalsPrecipitation()
-        )
-    }
+    marker = CustomDefaultMarkerView(
+        context,
+        precipIntensityData.timestamps,
+        precipIntensityData.name,
+        precipIntensityData.unit,
+        decimals = Weather.getDecimalsPrecipitation()
+    )
 
     // Precipitation Intensity Settings
     dataSet.setDefaultSettings(context, resources)
