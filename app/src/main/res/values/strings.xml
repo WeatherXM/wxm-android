@@ -99,7 +99,7 @@
 
     <!-- Claim device -->
     <string name="title_claim_device">Claim Device</string>
-    <string name="claim_device_info_text"><![CDATA[<h5>Step 1</h5>Plug the GPS antenna into your WXM device, place the antenna near a window and power up the device via USB.<h5>Step 2</h5>Swipe left on your WXM device\'s screen and press \"Configure WiFi\" to connect the device to your home WiFi.<h5>Step 3</h5>Press <b>NEXT</b> to claim your device.<br/><br/>Don\'t have a WXM device yet? Get one on <a href=\"https://weatherxm.com\">weatherxm.com</a>.]]></string>
+    <string name="claim_device_info_text"><![CDATA[<h5>Step 1</h5>Swipe left on your WXM device\'s screen and press \"Configure WiFi\" to connect the device to your home WiFi.<h5>Step 2</h5>Plug the GPS antenna into your WXM device, place the antenna near a window and power up the device via USB.<h5>Step 3</h5>Press <b>NEXT</b> to claim your device.<br/><br/>Don\'t have a WXM device yet? Get one on <a href=\"https://weatherxm.com\">weatherxm.com</a>.]]></string>
     <string name="action_claim">Claim</string>
     <string name="info_claim_contact_support">Trouble claiming your device? Contact our support team.</string>
     <string name="info_claim_buy_miner">Don\'t have a WXM device yet?\nGet one on weatherxm.com.</string>
