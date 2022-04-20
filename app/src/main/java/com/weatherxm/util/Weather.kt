@@ -15,9 +15,13 @@ object Weather : KoinComponent {
     private val sharedPref: SharedPreferences by inject()
 
     private const val DECIMALS_WIND_SPEED = 1
-    const val DECIMALS_PRECIPITATION_INCHES = 2
-    const val DECIMALS_PRECIPITATION_MILLIMETERS = 1
+    private const val DECIMALS_PRECIPITATION_INCHES = 2
+    private const val DECIMALS_PRECIPITATION_MILLIMETERS = 1
 
+    /*
+     * Suppress ComplexMethod because it is just a bunch of "when statements"
+     */
+    @Suppress("ComplexMethod")
     @RawRes
     fun getWeatherAnimation(icon: String?): Int {
         return when (icon) {
@@ -33,6 +37,10 @@ object Weather : KoinComponent {
             "thunderstorms-rain" -> R.raw.anim_weather_thunderstorms_rain
             "snow" -> R.raw.anim_weather_snow
             "sleet" -> R.raw.anim_weather_snow
+            // The 3 following cases are for backward compatibility
+            "wind" -> R.raw.anim_weather_wind
+            "fog" -> R.raw.anim_weather_fog
+            "cloudy" -> R.raw.anim_weather_cloudy
             else -> R.raw.anim_not_available
         }
     }
