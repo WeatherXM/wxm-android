@@ -21,17 +21,19 @@ object Weather : KoinComponent {
     @RawRes
     fun getWeatherAnimation(icon: String?): Int {
         return when (icon) {
+            "not-available" -> R.raw.anim_not_available
             "clear-day" -> R.raw.anim_weather_clear_day
             "clear-night" -> R.raw.anim_weather_clear_night
-            "rain" -> R.raw.anim_weather_rain
-            "snow" -> R.raw.anim_weather_snow
-            "sleet" -> R.raw.anim_weather_snow
-            "wind" -> R.raw.anim_weather_wind
-            "fog" -> R.raw.anim_weather_fog
-            "cloudy" -> R.raw.anim_weather_cloudy
             "partly-cloudy-day" -> R.raw.anim_weather_partly_cloudy_day
             "partly-cloudy-night" -> R.raw.anim_weather_partly_cloudy_night
-            else -> R.raw.anim_weather_none
+            "overcast-day" -> R.raw.anim_weather_overcast_day
+            "overcast-night" -> R.raw.anim_weather_overcast_night
+            "drizzle" -> R.raw.anim_weather_drizzle
+            "rain" -> R.raw.anim_weather_rain
+            "thunderstorms-rain" -> R.raw.anim_weather_thunderstorms_rain
+            "snow" -> R.raw.anim_weather_snow
+            "sleet" -> R.raw.anim_weather_snow
+            else -> R.raw.anim_not_available
         }
     }
 
