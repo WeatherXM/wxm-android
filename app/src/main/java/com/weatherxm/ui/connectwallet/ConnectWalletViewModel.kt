@@ -2,6 +2,7 @@ package com.weatherxm.ui.connectwallet
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import arrow.core.Validated
 import arrow.core.valueOr
 import com.weatherxm.R
@@ -11,8 +12,6 @@ import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.ConnectWalletUseCase
 import com.weatherxm.util.ResourcesHelper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -29,7 +28,7 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
     private var currentAddress = MutableLiveData<String?>(null)
     fun currentAddress() = currentAddress.apply {
         // Get initial value from repository
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             connectWalletUseCase.getWalletAddress()
                 .map { postValue(it) }
         }
@@ -44,7 +43,7 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
     fun saveAddress(address: String, termsChecked: Boolean, ownershipChecked: Boolean) {
         isAddressSaved.postValue(Resource.loading())
         if (termsChecked && ownershipChecked) {
-            CoroutineScope(Dispatchers.IO).launch {
+            viewModelScope.launch {
                 connectWalletUseCase.setWalletAddress(address)
                     .mapLeft {
                         handleFailure(it)

@@ -3,6 +3,7 @@ package com.weatherxm.ui.deviceforecast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
@@ -13,8 +14,6 @@ import com.weatherxm.data.repository.WeatherRepository.Companion.PREFETCH_DAYS
 import com.weatherxm.ui.ForecastData
 import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.util.ResourcesHelper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -35,7 +34,7 @@ class ForecastViewModel : ViewModel(), KoinComponent {
 
     fun getWeatherForecast(deviceId: String) {
         onForecast.postValue(Resource.loading())
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             val fromDate = ZonedDateTime.now()
             val toDate = ZonedDateTime.now().plusDays(PREFETCH_DAYS)
             forecastUseCase.getDailyForecast(deviceId, fromDate, toDate)

@@ -10,6 +10,7 @@ import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -25,8 +26,6 @@ import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.ResourcesHelper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -101,7 +100,7 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     fun claimDevice() {
         if (isLocationSet) {
             onClaimResult.postValue(Resource.loading())
-            CoroutineScope(Dispatchers.IO).launch {
+            viewModelScope.launch {
                 claimDeviceUseCase.claimDevice(currentSerialNumber, currentLat, currentLon)
                     .map {
                         Timber.d("Claimed device: $it")
@@ -139,7 +138,7 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     }
 
     fun fetchUserEmail() {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             claimDeviceUseCase.fetchUserEmail()
                 .map {
                     userEmail = it

@@ -16,7 +16,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
-import com.weatherxm.databinding.FragmentDeviceDetailsBinding
+import com.weatherxm.databinding.FragmentPublicDeviceDetailsBinding
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ import timber.log.Timber
 class PublicDeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
     private val explorerModel: ExplorerViewModel by activityViewModels()
     private val model: PublicDeviceDetailViewModel by viewModels()
-    private lateinit var binding: FragmentDeviceDetailsBinding
+    private lateinit var binding: FragmentPublicDeviceDetailsBinding
     private var device: Device? = null
 
     companion object {
@@ -55,7 +55,7 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDeviceDetailsBinding.inflate(inflater, container, false)
+        binding = FragmentPublicDeviceDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -78,7 +78,8 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
         when (resource.status) {
             Status.SUCCESS -> {
                 binding.title.text = resource.data?.getNameOrLabel()
-                with(binding.subtitle) {                    text = resource.data?.address
+                with(binding.subtitle) {
+                    text = resource.data?.address
 
                     visibility = if (resource.data?.address.isNullOrEmpty()) GONE else VISIBLE
                 }

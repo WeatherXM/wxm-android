@@ -6,6 +6,7 @@ import androidx.core.util.isNotEmpty
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
@@ -20,8 +21,6 @@ import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getLast7Days
 import com.weatherxm.util.ResourcesHelper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -50,7 +49,7 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
     fun getWeatherHistory(device: Device, context: Context) {
         onCharts.postValue(Resource.loading())
 
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             val fromDate = getFormattedDate(ZonedDateTime.now().minusDays(DAYS_TO_FETCH).toString())
             val toDate = getFormattedDate(ZonedDateTime.now().toString())
             historyUseCase.getWeatherHistory(device, fromDate, toDate, context)
