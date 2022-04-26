@@ -15,23 +15,33 @@ object Weather : KoinComponent {
     private val sharedPref: SharedPreferences by inject()
 
     private const val DECIMALS_WIND_SPEED = 1
-    const val DECIMALS_PRECIPITATION_INCHES = 2
-    const val DECIMALS_PRECIPITATION_MILLIMETERS = 1
+    private const val DECIMALS_PRECIPITATION_INCHES = 2
+    private const val DECIMALS_PRECIPITATION_MILLIMETERS = 1
 
+    /*
+     * Suppress ComplexMethod because it is just a bunch of "when statements"
+     */
+    @Suppress("ComplexMethod")
     @RawRes
     fun getWeatherAnimation(icon: String?): Int {
         return when (icon) {
+            "not-available" -> R.raw.anim_not_available
             "clear-day" -> R.raw.anim_weather_clear_day
             "clear-night" -> R.raw.anim_weather_clear_night
+            "partly-cloudy-day" -> R.raw.anim_weather_partly_cloudy_day
+            "partly-cloudy-night" -> R.raw.anim_weather_partly_cloudy_night
+            "overcast-day" -> R.raw.anim_weather_overcast_day
+            "overcast-night" -> R.raw.anim_weather_overcast_night
+            "drizzle" -> R.raw.anim_weather_drizzle
             "rain" -> R.raw.anim_weather_rain
+            "thunderstorms-rain" -> R.raw.anim_weather_thunderstorms_rain
             "snow" -> R.raw.anim_weather_snow
             "sleet" -> R.raw.anim_weather_snow
+            // The 3 following cases are for backward compatibility
             "wind" -> R.raw.anim_weather_wind
             "fog" -> R.raw.anim_weather_fog
             "cloudy" -> R.raw.anim_weather_cloudy
-            "partly-cloudy-day" -> R.raw.anim_weather_partly_cloudy_day
-            "partly-cloudy-night" -> R.raw.anim_weather_partly_cloudy_night
-            else -> R.raw.anim_weather_none
+            else -> R.raw.anim_not_available
         }
     }
 
