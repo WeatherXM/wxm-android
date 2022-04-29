@@ -44,6 +44,10 @@
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
+    <style name="Theme.WeatherXM.Forecast" parent="@style/Theme.WeatherXM">
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
     <style name="Theme.WeatherXM.Explorer" parent="@style/Theme.Material3.Dark.NoActionBar">
         <!-- Brand colors -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -90,12 +94,6 @@
         <item name="colorSurface">@color/transparent</item>
         <item name="colorOnSurface">@color/natural_black</item>
         <item name="navigationIconTint">@color/natural_black</item>
-    </style>
-
-    <style name="Widget.WeatherXM.AppBar.Transparent" parent="Widget.MaterialComponents.AppBarLayout.Primary">
-        <!-- Make App Bar's background transparent -->
-        <item name="android:background">@color/transparent</item>
-        <item name="materialThemeOverlay">@style/ThemeOverlay.WeatherXM.Toolbar.Light</item>
     </style>
 
     <style name="Widget.WeatherXM.Button" parent="@style/Widget.MaterialComponents.Button">

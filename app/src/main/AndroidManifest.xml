@@ -86,7 +86,7 @@
         <activity
             android:name="com.weatherxm.ui.deviceforecast.ForecastActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM" />
+            android:theme="@style/Theme.WeatherXM.Forecast" />
         <activity
             android:name="com.weatherxm.ui.claimdevice.ClaimDeviceActivity"
             android:screenOrientation="portrait"
