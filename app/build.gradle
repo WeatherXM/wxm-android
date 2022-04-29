@@ -269,4 +269,7 @@ dependencies {
 
     // Input masking (for Serial Number input)
     implementation "com.github.RedMadRobot:input-mask-android:6.1.0"
+
+    // Better link handling in text views
+    implementation "me.saket:better-link-movement-method:2.2.0"
 }

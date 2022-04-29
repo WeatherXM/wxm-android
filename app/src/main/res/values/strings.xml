@@ -66,7 +66,7 @@
     <string name="how_to_create_wallet">You don\'t have a WXM wallet?\n Read here how you can create one.</string>
     <string name="ownership_wallet">I acknowledge that I have ownership and full access to this wallet.</string>
     <string name="acknowledge_location">I acknowledge that this location is the one I will deploy the device.</string>
-    <string name="terms">I have read and accept the terms.</string>
+    <string name="accept_terms"><![CDATA[I have read and accept the <a href=\"%1$s\">Terms of Service</a>.]]></string>
     <string name="title_share_wallet">Share WXM wallet address</string>
     <string name="current_address">Current Address</string>
     <string name="address_saved">Success: Address Saved.</string>

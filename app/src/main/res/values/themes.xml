@@ -135,6 +135,10 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="Widget.WeatherXM.TextButton.Subtle.Subtitle" parent="@style/Widget.WeatherXM.TextButton.Subtle">
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="Widget.WeatherXM.TextButton.Subtle.Arrow" parent="@style/Widget.WeatherXM.TextButton.Subtle">
         <item name="android:textAllCaps">false</item>
         <item name="icon">@drawable/ic_next</item>

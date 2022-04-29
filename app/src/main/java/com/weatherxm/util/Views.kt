@@ -96,8 +96,12 @@ fun BottomNavigationView.hideIfNot() {
     }
 }
 
-fun TextView.setHtml(@StringRes resId: Int, flags: Int = HtmlCompat.FROM_HTML_MODE_LEGACY) {
-    val html = resources.getText(resId).toString()
+fun TextView.setHtml(
+    @StringRes resId: Int,
+    vararg args: Any = emptyArray(),
+    flags: Int = HtmlCompat.FROM_HTML_MODE_LEGACY
+) {
+    val html = resources.getText(resId).toString().format(*args)
     setText(HtmlCompat.fromHtml(html, flags), TextView.BufferType.SPANNABLE)
 }
 
