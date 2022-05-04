@@ -90,11 +90,13 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            manifestPlaceholders = [crashlyticsEnabled:"true"]
         }
         debug {
             // Change minifyEnabled to true if you want to test code obfuscation in debug mode
             minifyEnabled false
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            manifestPlaceholders = [crashlyticsEnabled:"false"]
         }
     }
 
