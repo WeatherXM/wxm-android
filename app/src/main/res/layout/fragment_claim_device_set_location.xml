@@ -73,6 +73,7 @@
             style="@style/Widget.WeatherXM.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text="@string/action_claim"
             app:layout_constraintBottom_toBottomOf="parent" />
 
