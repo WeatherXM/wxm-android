@@ -50,8 +50,6 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     private val onTokens = MutableLiveData<TokenSummary>()
 
-    private val onLastRewardTokens = MutableLiveData<Float>()
-
     fun onDeviceSet(): LiveData<Device> = onDeviceSet
 
     fun onLoading(): LiveData<Boolean> = onLoading
@@ -61,8 +59,6 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     fun onForecast(): LiveData<List<HourlyWeather>> = onForecast
 
     fun onTokens(): LiveData<TokenSummary> = onTokens
-
-    fun onLastRewardTokens(): LiveData<Float> = onLastRewardTokens
 
     fun setDevice(device: Device) {
         this.device = device
@@ -79,7 +75,17 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
             // This function runs only on onCreate/onSwipeRefresh so we forceRefresh the getTokens
             val tokensDeferred = async {
-                userDeviceUseCase.getTokens24H(device.id, true)
+                when (tokensCurrentState) {
+                    TokensState.HOUR24 -> {
+                        userDeviceUseCase.getTokens24H(device.id, true)
+                    }
+                    TokensState.DAYS7 -> {
+                        userDeviceUseCase.getTokens7D(device.id, true)
+                    }
+                    TokensState.DAYS30 -> {
+                        userDeviceUseCase.getTokens30D(device.id, true)
+                    }
+                }
             }
 
             val forecastDeferred = async {
@@ -110,7 +116,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             val tokens = tokensDeferred.await()
             tokens
                 .map {
-                    onLastRewardTokens.postValue(it)
+                    onTokens.postValue(it)
                 }
                 .mapLeft {
                     if (it == Failure.NetworkError) {
@@ -199,7 +205,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             when (tokensCurrentState) {
                 TokensState.HOUR24 -> {
                     userDeviceUseCase.getTokens24H(device.id)
-                        .map { onLastRewardTokens.postValue(it) }
+                        .map { onTokens.postValue(it) }
                         .mapLeft { handleTokenFailure(it) }
                 }
                 TokensState.DAYS7 -> {

@@ -61,13 +61,8 @@ open class TokenCardView : LinearLayout {
         total(data.total)
     }
 
-    fun setLastRewardOnly(data: Float) {
-        total(data)
-        chart(null)
-    }
-
-    private fun chart(data: List<Pair<String, Float>>?) {
-        if (!data.isNullOrEmpty()) {
+    private fun chart(data: List<Pair<String, Float>>) {
+        if (data.isNotEmpty()) {
             //  Necessary fix for a crash, found the fix on library's BarChartView.kt line 85
             binding.tokenChart.barsColorsList =
                 List(data.size) { binding.tokenChart.barsColor }.toList()

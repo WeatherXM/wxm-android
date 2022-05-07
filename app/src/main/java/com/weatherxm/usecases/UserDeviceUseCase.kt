@@ -30,7 +30,7 @@ interface UserDeviceUseCase {
     suspend fun getTokens24H(
         deviceId: String,
         forceRefresh: Boolean = false
-    ): Either<Failure, Float?>
+    ): Either<Failure, TokenSummary>
 
     suspend fun getTokens7D(
         deviceId: String,
@@ -59,8 +59,12 @@ class UserDeviceUseCaseImpl : UserDeviceUseCase, KoinComponent {
     override suspend fun getTokens24H(
         deviceId: String,
         forceRefresh: Boolean
-    ): Either<Failure, Float?> {
-        return tokenRepository.getTokens24H(deviceId, forceRefresh)
+    ): Either<Failure, TokenSummary> {
+        return tokenRepository.getTokens24H(deviceId, forceRefresh).map { lastReward ->
+            lastReward?.let {
+                TokenSummary(it, mutableListOf())
+            } ?: TokenSummary(0F, mutableListOf())
+        }
     }
 
     override suspend fun getTokens7D(
