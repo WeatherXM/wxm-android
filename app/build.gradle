@@ -53,7 +53,7 @@ android {
         }
         mock {
             dimension "server"
-            applicationIdSuffix ".dev"
+            applicationIdSuffix ".mock"
             resValue "string", "app_name", "WXM Mock"
             buildConfigField("String", "API_URL", "\"https://api-dev.weatherxm.com\"")
             buildConfigField("String", "AUTH_URL", "\"https://api-dev.weatherxm.com\"")
