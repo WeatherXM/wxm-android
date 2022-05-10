@@ -9,7 +9,7 @@ import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.ClaimDeviceBody
 
 interface DeviceDataSource {
-    suspend fun getPublicDevices(): Either<Failure, List<Device>>
+    suspend fun getPublicDevices(forceRefresh: Boolean): Either<Failure, List<Device>>
     suspend fun getUserDevices(): Either<Failure, List<Device>>
     suspend fun getUserDevice(deviceId: String): Either<Failure, Device>
     suspend fun claimDevice(serialNumber: String, location: Location): Either<Failure, Device>
@@ -18,9 +18,16 @@ interface DeviceDataSource {
 class DeviceDataSourceImpl(
     private val apiService: ApiService
 ) : DeviceDataSource {
+    private lateinit var publicDevices: List<Device>
 
-    override suspend fun getPublicDevices(): Either<Failure, List<Device>> {
-        return apiService.getPublicDevices().map()
+    override suspend fun getPublicDevices(forceRefresh: Boolean): Either<Failure, List<Device>> {
+        return if (this::publicDevices.isInitialized && !forceRefresh) {
+            Either.Right(publicDevices)
+        } else {
+            apiService.getPublicDevices().map().tap {
+                publicDevices = it
+            }
+        }
     }
 
     override suspend fun getUserDevices(): Either<Failure, List<Device>> {

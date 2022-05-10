@@ -13,6 +13,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.MapboxUtils
 import com.weatherxm.util.ResourcesHelper
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -32,7 +33,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
 
     private var currentZoom: Double = 0.0
-    private var currentExplorerState = ExplorerState(null, null, null)
+    private var currentExplorerState = ExplorerState(null)
 
     // All public devices shown on map
     private val state = MutableLiveData<Resource<ExplorerState>>().apply {
@@ -53,34 +54,40 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     // Current Hex clicked as it's needed to pass it as an argument in the device details
     private var currentHexSelected: String? = null
 
+    // To observe the state of the fetching process, in order to not make multiple same calls
+    private var fetchingJob: Job? = null
+
     fun showMapOverlayViews() = showMapOverlayViews
     fun explorerState(): LiveData<Resource<ExplorerState>> = state
     fun onHexSelected(): LiveData<String> = onHexSelected
     fun onDeviceSelected(): LiveData<Device> = onDeviceSelected
     fun onZoomChange(): LiveData<Point?> = onZoomChange
 
-    fun fetch() {
-        state.postValue(Resource.loading())
+    fun fetch(forceRefresh: Boolean = false) {
+        if (fetchingJob == null || fetchingJob?.isActive == false) {
+            state.postValue(Resource.loading())
 
-        viewModelScope.launch {
-            explorerUseCase.getPointsFromPublicDevices(currentZoom)
-                .map { polygonPoints ->
-                    Timber.d("Got Polygon Points: $polygonPoints")
-                    currentExplorerState.polygonPoints = polygonPoints
-                    state.postValue(Resource.success(currentExplorerState))
-                }
-                .mapLeft {
-                    state.postValue(
-                        Resource.error(
-                            resHelper.getString(
-                                when (it) {
-                                    is NetworkError -> R.string.error_network
-                                    else -> R.string.error_unknown
-                                }
+            fetchingJob = viewModelScope.launch {
+                explorerUseCase.getPublicDevices(forceRefresh)
+                    .map {
+                        val polygonPoints = explorerUseCase.getPointsFromPublicDevices(currentZoom)
+                        Timber.d("Got Polygon Points: $polygonPoints")
+                        currentExplorerState.polygonPoints = polygonPoints
+                        state.postValue(Resource.success(currentExplorerState))
+                    }
+                    .mapLeft {
+                        state.postValue(
+                            Resource.error(
+                                resHelper.getString(
+                                    when (it) {
+                                        is NetworkError -> R.string.error_network
+                                        else -> R.string.error_unknown
+                                    }
+                                )
                             )
                         )
-                    )
-                }
+                    }
+            }
         }
     }
 
