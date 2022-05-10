@@ -9,6 +9,7 @@
     <string name="action_ok">OK</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_next">Next</string>
+    <string name="action_back">Back</string>
     <string name="action_logout">Logout</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>

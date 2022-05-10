@@ -276,4 +276,7 @@ dependencies {
 
     // Better link handling in text views
     implementation "me.saket:better-link-movement-method:2.2.0"
+
+    // Page Indicator
+    implementation "com.tbuonomo:dotsindicator:4.3"
 }

@@ -71,7 +71,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/signupPrompt"
-                style="@style/Widget.WeatherXM.Button.Link"
+                style="@style/Widget.WeatherXM.TextButton.Subtle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/prompt_signup"
