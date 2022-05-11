@@ -6,6 +6,7 @@ import com.weatherxm.R
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
+import java.math.BigDecimal
 
 @Suppress("TooManyFunctions")
 object Weather : KoinComponent {
@@ -14,7 +15,6 @@ object Weather : KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val sharedPref: SharedPreferences by inject()
 
-    private const val DECIMALS_WIND_SPEED = 1
     private const val DECIMALS_PRECIPITATION_INCHES = 2
     private const val DECIMALS_PRECIPITATION_MILLIMETERS = 1
 
@@ -45,53 +45,94 @@ object Weather : KoinComponent {
         }
     }
 
-    fun getFormattedTemperature(value: Float?, decimals: Int = 0) = getFormattedValueOrEmpty(
-        convertTemp(value), getPreferredUnit(
+    fun getFormattedTemperature(value: Float?, decimals: Int = 0): String {
+        if (value == null) {
+            return EMPTY_VALUE
+        }
+
+        val valueToReturn = convertTemp(value, decimals)
+        val unit = getPreferredUnit(
             resHelper.getString(R.string.key_temperature_preference),
             resHelper.getString(R.string.temperature_celsius)
-        ), decimals
-    )
+        )
 
-    fun getFormattedPrecipitation(value: Float?) = getFormattedValueOrEmpty(
-        convertPrecipitation(value), getPreferredUnit(
+        return "$valueToReturn$unit"
+    }
+
+    fun getFormattedPrecipitation(value: Float?): String {
+        if (value == null) {
+            return EMPTY_VALUE
+        }
+
+        val valueToReturn = convertPrecipitation(value)
+        val unit = getPreferredUnit(
             resHelper.getString(R.string.key_precipitation_preference),
             resHelper.getString(R.string.precipitation_mm)
-        ),
-        getDecimalsPrecipitation()
-    )
+        )
 
-    fun getFormattedPrecipitationProbability(value: Int?) =
-        getFormattedValueOrEmpty(value, "%")
+        return "$valueToReturn$unit"
+    }
 
-    fun getFormattedHumidity(value: Int?) =
-        getFormattedValueOrEmpty(value, "%")
+    fun getFormattedPrecipitationProbability(value: Int?): String {
+        if (value == null) {
+            return EMPTY_VALUE
+        }
 
-    fun getFormattedPressure(value: Float?) = getFormattedValueOrEmpty(
-        convertPressure(value), getPreferredUnit(
+        return "$value%"
+    }
+
+    fun getFormattedHumidity(value: Int?): String {
+        if (value == null) {
+            return EMPTY_VALUE
+        }
+
+        return "$value%"
+    }
+
+    fun getFormattedUV(value: Int?): String {
+        if (value == null) {
+            return EMPTY_VALUE
+        }
+
+        val unit = resHelper.getString(R.string.uv_index_unit)
+
+        return "$value$unit"
+    }
+
+    fun getFormattedPressure(value: Float?): String {
+        if (value == null) {
+            return EMPTY_VALUE
+        }
+
+        val valueToReturn = convertPressure(value)
+        val unit = getPreferredUnit(
             resHelper.getString(R.string.key_pressure_preference),
             resHelper.getString(R.string.pressure_hpa)
-        ),
-        decimals = 1
-    )
+        )
 
-    fun getFormattedUV(value: Int?) =
-        getFormattedValueOrEmpty(value, resHelper.getString(R.string.uv_index_unit))
+        return "$valueToReturn$unit"
+    }
 
-    private fun getFormattedWindSpeed(value: Float?) = getFormattedValueOrEmpty(
-        convertWindSpeed(value),
-        getPreferredUnit(
+    private fun getFormattedWindSpeed(value: Float?): String {
+        if (value == null) {
+            return EMPTY_VALUE
+        }
+
+        val valueToReturn = convertWindSpeed(value)
+        val unit = getPreferredUnit(
             resHelper.getString(R.string.key_wind_speed_preference),
             resHelper.getString(R.string.wind_speed_ms)
-        ),
-        getDecimalsWindSpeed()
-    )
+        )
+
+        return "$valueToReturn$unit"
+    }
 
     fun getFormattedWindDirection(value: Int): String {
-        val windPreferenceKey = resHelper.getString(R.string.key_wind_direction_preference)
-        val windPreferenceDefValue = resHelper.getString(R.string.wind_direction_cardinal)
-        val savedPreferenceUnit = sharedPref.getString(windPreferenceKey, "")
+        val savedUnit =
+            sharedPref.getString(resHelper.getString(R.string.key_wind_direction_preference), "")
+        val defaultUnit = resHelper.getString(R.string.wind_direction_cardinal)
 
-        if (!savedPreferenceUnit.isNullOrEmpty() && savedPreferenceUnit != windPreferenceDefValue) {
+        if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
             val windDegreesMark = resHelper.getString(R.string.wind_direction_degrees_mark)
             return "$value$windDegreesMark"
         }
@@ -105,57 +146,29 @@ object Weather : KoinComponent {
         } else EMPTY_VALUE
     }
 
-    fun getFormattedValueOrEmpty(
-        value: Number?,
-        unit: String,
-        decimals: Int? = null
-    ): String {
-        if (value == null) {
-            return EMPTY_VALUE
-        }
-
-        return if (decimals == null) {
-            "$value$unit"
-        } else {
-            /*
-            * Numbers in the range of -0.5..0 with 0 decimals show as -0.
-            * So this is a custom fix to remove the "-" char and show them as 0.
-             */
-            if (willProduceNegativeZero(decimals, value)) {
-                "%.${decimals}f$unit".format(value).replace("-", "")
-            } else {
-                "%.${decimals}f$unit".format(value)
-            }
-        }
-    }
-
-    /*
-    * By using the .format() function with 0 decimals the numbers in the range of -0.5f..0f
-    * display as -0 so we have this function to catch this case and act accordingly    *
-     */
-    @Suppress("MagicNumber")
-    private fun willProduceNegativeZero(decimals: Int, value: Number): Boolean {
-        val rangeOfNegativeZero = -0.5f..0f
-        return decimals == 0 && value.toFloat() in rangeOfNegativeZero
-    }
-
-    fun convertTemp(value: Number?): Number? {
+    fun convertTemp(value: Number?, decimals: Int = 0): Number? {
         if (value == null) {
             Timber.d("Temperature value is null!")
             // Return null when value is null, so we catch it later on and show it as EMPTY
             return null
         }
 
-        // Default value
-        var valueToReturn: Number = value
         val savedUnit =
             sharedPref.getString(resHelper.getString(R.string.key_temperature_preference), "")
         val defaultUnit = resHelper.getString(R.string.temperature_celsius)
-        // We need to convert the value as different preference than default is used
-        if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
-            valueToReturn = UnitConverter.celsiusToFahrenheit(value.toFloat())
+
+        // Return the value based on the weather unit the user wants
+        val valueToReturn = if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
+            UnitConverter.celsiusToFahrenheit(value.toFloat())
+        } else {
+            value
         }
-        return valueToReturn
+
+        return if (decimals == 0) {
+            valueToReturn.toInt()
+        } else {
+            roundToDecimals(valueToReturn)
+        }
     }
 
     fun convertPrecipitation(value: Number?): Number? {
@@ -165,16 +178,18 @@ object Weather : KoinComponent {
             return null
         }
 
-        // Default value
-        var valueToReturn: Number = value
         val savedUnit =
             sharedPref.getString(resHelper.getString(R.string.key_precipitation_preference), "")
         val defaultUnit = resHelper.getString(R.string.precipitation_mm)
-        // We need to convert the value as different preference than default is used
-        if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
-            valueToReturn = UnitConverter.millimetersToInches(value.toFloat())
+
+        // Return the value based on the weather unit the user wants
+        return if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
+            // On inches we use 2 decimals
+            roundToDecimals(UnitConverter.millimetersToInches(value.toFloat()), decimals = 2)
+        } else {
+            // This is the default value - millimeters - so we show 1 decimal
+            roundToDecimals(value)
         }
-        return valueToReturn
     }
 
     fun convertWindSpeed(value: Number?): Number? {
@@ -184,30 +199,33 @@ object Weather : KoinComponent {
             return null
         }
 
-        var valueToReturn: Number = value
         val savedUnit =
             sharedPref.getString(resHelper.getString(R.string.key_wind_speed_preference), "")
         val defaultUnit = resHelper.getString(R.string.wind_speed_ms)
-        // We need to convert the value as different preference than default is used
-        if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
+
+        // Return the value based on the weather unit the user wants
+        return if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
             when (savedUnit) {
                 resHelper.getString(R.string.wind_speed_knots) -> {
-                    valueToReturn = UnitConverter.msToKnots(value.toFloat())
-
+                    roundToDecimals(UnitConverter.msToKnots(value.toFloat()))
                 }
                 resHelper.getString(R.string.wind_speed_beaufort) -> {
-                    valueToReturn = UnitConverter.msToBeaufort(value.toFloat())
-
+                    UnitConverter.msToBeaufort(value.toFloat())
                 }
                 resHelper.getString(R.string.wind_speed_kmh) -> {
-                    valueToReturn = UnitConverter.msToKmh(value.toFloat())
+                    roundToDecimals(UnitConverter.msToKmh(value.toFloat()))
                 }
                 resHelper.getString(R.string.wind_speed_mph) -> {
-                    valueToReturn = UnitConverter.msToMph(value.toFloat())
+                    roundToDecimals(UnitConverter.msToMph(value.toFloat()))
+                }
+                else -> {
+                    null
                 }
             }
+        } else {
+            // This is the default value - m/s - so we show 1 decimal
+            roundToDecimals(value)
         }
-        return valueToReturn
     }
 
     fun convertPressure(value: Number?): Number? {
@@ -217,16 +235,17 @@ object Weather : KoinComponent {
             return null
         }
 
-        // Default value
-        var valueToReturn: Number = value
         val savedUnit =
             sharedPref.getString(resHelper.getString(R.string.key_pressure_preference), "")
         val defaultUnit = resHelper.getString(R.string.pressure_hpa)
-        // We need to convert the value as different preference than default is used
-        if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
-            valueToReturn = UnitConverter.hpaToInHg(value.toFloat())
-        }
-        return valueToReturn
+        // Return the value based on the weather unit the user wants, also round to 1 decimal
+        return roundToDecimals(
+            if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
+                UnitConverter.hpaToInHg(value.toFloat())
+            } else {
+                value
+            }
+        )
     }
 
     fun getPreferredUnit(keyOnSharedPref: String, defaultUnit: String): String {
@@ -235,20 +254,6 @@ object Weather : KoinComponent {
             return savedUnit
         }
         return defaultUnit
-    }
-
-    fun getDecimalsWindSpeed(): Int? {
-        val keyOnSharedPref = resHelper.getString(R.string.key_wind_speed_preference)
-        val defaultUnit = resHelper.getString(R.string.wind_speed_ms)
-
-        val unit = getPreferredUnit(keyOnSharedPref, defaultUnit)
-
-        if (unit == resHelper.getString(R.string.wind_speed_beaufort)) {
-            // Return null when bf units are used so we show no decimals at all.
-            return null
-        }
-
-        return DECIMALS_WIND_SPEED
     }
 
     fun getDecimalsPrecipitation(): Int {
@@ -262,6 +267,9 @@ object Weather : KoinComponent {
         } else {
             DECIMALS_PRECIPITATION_INCHES
         }
+    }
 
+    private fun roundToDecimals(value: Number, decimals: Int = 1): Float {
+        return value.toFloat().toBigDecimal().setScale(decimals, BigDecimal.ROUND_HALF_UP).toFloat()
     }
 }

@@ -10,6 +10,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.weatherxm.R
+import com.weatherxm.R.string.wind_speed_beaufort
 import kotlin.math.roundToInt
 
 // Custom implementation of https://weeklycoding.com/mpandroidchart-documentation/markerview/
@@ -69,19 +70,17 @@ class CustomDefaultMarkerView(
 }
 
 // Custom implementation of https://weeklycoding.com/mpandroidchart-documentation/markerview/
-@Suppress("LongParameterList")
 class CustomWindMarkerView(
     context: Context,
     private val times: MutableList<String>?,
     private val windGusts: MutableList<Entry>?,
     private val windDirections: MutableList<Entry>?,
     private val windSpeedTitle: String,
-    private val windGustTitle: String,
-    private val windSpeedUnit: String
+    private val windGustTitle: String
 ) : MarkerView(context, R.layout.view_two_values_chart_marker) {
     private var timeView: TextView = findViewById(R.id.time)
-    private var valueView: TextView = findViewById(R.id.value)
-    private var secondValueView: TextView = findViewById(R.id.secondValue)
+    private var windSpeedView: TextView = findViewById(R.id.value)
+    private var windGustView: TextView = findViewById(R.id.secondValue)
 
     // callbacks everytime the MarkerView is redrawn, can be used to update the
     // content (user-interface)
@@ -92,29 +91,35 @@ class CustomWindMarkerView(
             using the same index as the wind speed to get the value in the relevant list
          */
         timeView.text = times?.get(entryClicked.x.toInt()) ?: ""
-        val windGust = windGusts?.get(entryClicked.x.toInt())?.y
         val windDirectionAsFloat = windDirections?.get(entryClicked.x.toInt())?.y
-        var formattedWindDirection: String? = ""
-        if (windDirectionAsFloat != null) {
-            formattedWindDirection = Weather.getFormattedWindDirection(windDirectionAsFloat.toInt())
+        val formattedWindDirection = if (windDirectionAsFloat != null) {
+            Weather.getFormattedWindDirection(windDirectionAsFloat.toInt())
+        } else {
+            ""
         }
 
-        // Get the correct wind speed and gust formatted with the correct decimals
-        val formattedWindSpeed = Weather.getFormattedValueOrEmpty(
-            entryClicked.y, windSpeedUnit, Weather.getDecimalsWindSpeed()
+        // Get the correct wind unit
+        val windUnit = Weather.getPreferredUnit(
+            resources.getString(R.string.key_wind_speed_preference),
+            resources.getString(R.string.wind_speed_ms)
         )
 
-        val formattedWindGust = Weather.getFormattedValueOrEmpty(
-            windGust, windSpeedUnit, Weather.getDecimalsWindSpeed()
-        )
+        // Get the correct decimals to show
+        val beaufortUsed = windUnit == resources.getString(wind_speed_beaufort)
+        val decimalsToShow = if (beaufortUsed) 0 else 1
+
+        // Get the correct wind speed and gust formatted with the correct decimal separator
+        val formattedWindSpeed = "%.${decimalsToShow}f".format(entryClicked.y)
+        val formattedWindGust =
+            "%.${decimalsToShow}f".format(windGusts?.get(entryClicked.x.toInt())?.y)
 
         // Customize the text for the marker view (if wind speed is zero, then hide direction)
-        valueView.text = if (entryClicked.y == 0F) {
-            "$windSpeedTitle: $formattedWindSpeed"
+        windSpeedView.text = if (entryClicked.y == 0F) {
+            "$windSpeedTitle: $formattedWindSpeed$windUnit"
         } else {
-            "$windSpeedTitle: $formattedWindSpeed ($formattedWindDirection)"
+            "$windSpeedTitle: $formattedWindSpeed$windUnit $formattedWindDirection"
         }
-        secondValueView.text = "$windGustTitle: $formattedWindGust"
+        windGustView.text = "$windGustTitle: $formattedWindGust$windUnit"
 
         // this will perform necessary layouting
         super.refreshContent(entryClicked, highlight)
