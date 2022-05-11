@@ -39,6 +39,13 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
     // A sparse array that maps positions of the dates tabs with their HistoryCharts
     private var posToData = SparseArray<HistoryCharts>()
 
+    /*
+     * The selected tab.
+     * Need to save it in case the user picks another day before the data is fetched
+     * so we have this info to show him the correct charts
+     */
+    private var selectedTab: Int = 0
+
     // All charts currently visible
     private val onCharts = MutableLiveData<Resource<HistoryCharts>>().apply {
         value = Resource.loading()
@@ -56,7 +63,7 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
                 .map { historyCharts ->
                     Timber.d("Got History Charts: $historyCharts")
                     mapPositionToData(historyCharts)
-                    onCharts.postValue(Resource.success(posToData.get(historyCharts.size - 1)))
+                    getDataForSelectedTab()
                 }
                 .mapLeft {
                     handleFailure(it)
@@ -87,10 +94,15 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun getDataFromPosition(position: Int) {
+    fun setSelectedTab(position: Int) {
+        selectedTab = position
+        getDataForSelectedTab()
+    }
+
+    private fun getDataForSelectedTab() {
         if (posToData.isNotEmpty()) {
             onCharts.postValue(Resource.loading())
-            val data = posToData.get(position, null)
+            val data = posToData.get(selectedTab, null)
             if (data == null) {
                 onCharts.postValue(
                     Resource.error(resHelper.getString(R.string.error_history_no_charts_found))

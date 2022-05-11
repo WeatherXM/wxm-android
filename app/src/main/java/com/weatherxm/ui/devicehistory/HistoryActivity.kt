@@ -47,7 +47,7 @@ class HistoryActivity : AppCompatActivity(), KoinComponent {
         binding.toolbar.subtitle = device.address ?: device.name
 
         binding.dateTabs.onTabSelected {
-            model.getDataFromPosition(it.position)
+            model.setSelectedTab(it.position)
         }
 
         updateDates()
