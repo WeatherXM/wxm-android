@@ -6,76 +6,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/info_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        app:layout_constraintVertical_chainStyle="packed">
+        android:layout_marginBottom="@dimen/margin_normal"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/info_container"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/margin_normal"
-            app:layout_constraintBottom_toTopOf="@id/claim"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/descSetLocation"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+                android:layout_height="wrap_content"
+                android:text="@string/description_set_location"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/descSetLocation"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:cardUseCompatPadding="false"
+                app:contentPadding="0dp"
+                app:layout_constraintBottom_toTopOf="@id/locationCheckbox"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/descSetLocation">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/mapView"
+                    android:name="com.weatherxm.ui.claimdevice.ClaimDeviceMapFragment"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/description_set_location"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:layout_height="match_parent"
+                    tools:layout="@layout/fragment_map" />
 
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    app:cardUseCompatPadding="false"
-                    app:contentPadding="0dp"
-                    app:layout_constraintBottom_toTopOf="@id/locationCheckbox"
-                    app:layout_constraintDimensionRatio="1:1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/descSetLocation">
+            </com.google.android.material.card.MaterialCardView>
 
-                    <androidx.fragment.app.FragmentContainerView
-                        android:id="@+id/mapView"
-                        android:name="com.weatherxm.ui.claimdevice.ClaimDeviceMapFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        tools:layout="@layout/fragment_map" />
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/locationCheckbox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/acknowledge_location"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
-                </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/locationCheckbox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/acknowledge_location"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/claim"
-            style="@style/Widget.WeatherXM.Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/action_claim"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

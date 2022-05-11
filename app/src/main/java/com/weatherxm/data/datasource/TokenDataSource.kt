@@ -24,9 +24,8 @@ class TokenDataSourceImpl(
         return if (this::tokens.isInitialized && !forceRefresh) {
             Either.Right(tokens)
         } else {
-            apiService.getTokens(deviceId).map().map {
+            apiService.getTokens(deviceId).map().tap {
                 tokens = it
-                it
             }
         }
     }

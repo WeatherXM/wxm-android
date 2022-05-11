@@ -20,6 +20,8 @@ import com.weatherxm.util.Validator
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.clear
 import com.weatherxm.util.onTextChanged
+import com.weatherxm.util.setHtml
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
@@ -67,6 +69,16 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             address?.let {
                 binding.newAddress.setText(it)
             }
+        }
+
+        with(binding.termsCheckbox) {
+            movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                setOnLinkClickListener { _, url ->
+                    navigator.openWebsite(this@ConnectWalletActivity, url)
+                    return@setOnLinkClickListener true
+                }
+            }
+            setHtml(R.string.accept_terms, getString(R.string.terms_of_service_url))
         }
 
         binding.openDocumentation.setOnClickListener {

@@ -44,6 +44,10 @@
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
+    <style name="Theme.WeatherXM.Forecast" parent="@style/Theme.WeatherXM">
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
     <style name="Theme.WeatherXM.Explorer" parent="@style/Theme.Material3.Dark.NoActionBar">
         <!-- Brand colors -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -92,23 +96,12 @@
         <item name="navigationIconTint">@color/natural_black</item>
     </style>
 
-    <style name="Widget.WeatherXM.AppBar.Transparent" parent="Widget.MaterialComponents.AppBarLayout.Primary">
-        <!-- Make App Bar's background transparent -->
-        <item name="android:background">@color/transparent</item>
-        <item name="materialThemeOverlay">@style/ThemeOverlay.WeatherXM.Toolbar.Light</item>
-    </style>
-
     <style name="Widget.WeatherXM.Button" parent="@style/Widget.MaterialComponents.Button">
         <item name="android:minHeight">54dp</item>
     </style>
 
     <style name="Widget.WeatherXM.Button.Purple" parent="@style/Widget.WeatherXM.Button">
         <item name="backgroundTint">@color/purple</item>
-    </style>
-
-    <style name="Widget.WeatherXM.Button.Link" parent="@style/Widget.MaterialComponents.Button.TextButton">
-        <!--<item name="android:textColor">?android:textColorSecondary</item>-->
-        <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="Widget.WeatherXM.Button.Subtle" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
@@ -135,10 +128,18 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="Widget.WeatherXM.TextButton.Subtle.Arrow" parent="@style/Widget.WeatherXM.TextButton.Subtle">
-        <item name="android:textAllCaps">false</item>
+    <style name="Widget.WeatherXM.TextButton.Subtle.Subtitle" parent="@style/Widget.WeatherXM.TextButton.Subtle">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Widget.WeatherXM.TextButton.Subtle.Arrow.Next" parent="@style/Widget.WeatherXM.TextButton.Subtle">
         <item name="icon">@drawable/ic_next</item>
         <item name="iconGravity">end</item>
+    </style>
+
+    <style name="Widget.WeatherXM.TextButton.Subtle.Arrow.Back" parent="@style/Widget.WeatherXM.TextButton.Subtle">
+        <item name="icon">@drawable/ic_navigate_back</item>
+        <item name="iconGravity">start</item>
     </style>
 
     <style name="Widget.WeatherXM.BottomSheet.Dialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
@@ -176,6 +177,17 @@
         <item name="android:textColor">@color/hourly_forecast_texts_list</item>
         <item name="android:textSize">12sp</item>
         <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.HourlyCard.Data.Precipitation" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/hourly_forecast_precipitation</item>
+        <item name="drawableStartCompat">@drawable/ic_weather_precip_prob_extra_small</item>
+        <item name="drawableTint">@color/hourly_forecast_precipitation</item>
+        <item name="android:drawablePadding">2dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">10sp</item>
+        <item name="autoSizeMaxTextSize">12sp</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.HourlyCard.Data.Time" parent="TextAppearance.MaterialComponents.Body1">

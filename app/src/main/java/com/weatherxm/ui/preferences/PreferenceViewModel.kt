@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
 import com.weatherxm.usecases.AuthUseCase
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -30,7 +29,7 @@ class PreferenceViewModel : ViewModel(), KoinComponent {
     }
 
     fun logout() {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             authUseCase.logout()
             onLogout.postValue(true)
         }

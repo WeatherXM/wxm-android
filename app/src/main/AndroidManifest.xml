@@ -22,6 +22,11 @@
             android:name="google_analytics_adid_collection_enabled"
             android:value="false" />
 
+        <!-- Enable/Disable crashlytics reporting -->
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="${crashlyticsEnabled}" />
+
         <!-- Alias for the launcher activity so that we may change it in the future without problems -->
         <activity-alias
             android:name="Home"
@@ -86,7 +91,7 @@
         <activity
             android:name="com.weatherxm.ui.deviceforecast.ForecastActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM" />
+            android:theme="@style/Theme.WeatherXM.Forecast" />
         <activity
             android:name="com.weatherxm.ui.claimdevice.ClaimDeviceActivity"
             android:screenOrientation="portrait"

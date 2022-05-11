@@ -22,14 +22,16 @@ import timber.log.Timber
 
 interface ExplorerUseCase {
     fun polygonPointsToLatLng(pointsOfPolygon: Array<Location>): List<MutableList<Point>>
-    suspend fun getPointsFromPublicDevices(
+    fun getPointsFromPublicDevices(
         zoom: Double
-    ): Either<Failure, List<PolygonAnnotationOptions>>
+    ): List<PolygonAnnotationOptions>
 
     fun getCenterOfHex3AsPoint(hexCenterWithResolution: HexWithResolution?): Point?
     fun hexWithResToJson(index: String, center: Location, resolution: Int): JsonElement
-    suspend fun saveDevicesPoints(devices: List<Device>)
     fun getDevicesOfH7(hexIndex: String?): MutableList<Device>?
+    suspend fun getPublicDevices(forceRefresh: Boolean = false): Either<Failure, List<Device>>
+    suspend fun saveDevicesPointsH3(devices: List<Device>)
+    suspend fun saveDevicesPointsH7(devices: List<Device>)
 }
 
 class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
@@ -55,32 +57,30 @@ class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
     }
 
     /*
-        At the first time, we get the devices from the API
-        then save their points both on H3 and H7 so they can be served immediately afterwards
-
-        Send the List of points back so we can show them on the explorer
+    * On the first or a forceRefresh run (when pointsHex3 and pointsHex7 are or should get empty)
+    * save their points both on H3 and H7 so they can be served immediately afterwards
     */
-    override suspend fun getPointsFromPublicDevices(
-        zoom: Double
-    ): Either<Failure, List<PolygonAnnotationOptions>> {
-        val pointsToReturn: MutableList<PolygonAnnotationOptions> =
-            if (zoom <= ZOOM_LEVEL_CHANGE_HEX) {
-                if (pointsHex3.isNullOrEmpty()) {
-                    deviceRepository.getPublicDevices()
-                        .mapLeft {
-                            return Either.Left(it)
-                        }
-                        .map {
-                            saveDevicesPoints(it)
-                        }
-                }
-                pointsHex3
-            } else {
-                // We start with H3 so pointsHex7 should be initialized and filled by now
-                pointsHex7
+    override suspend fun getPublicDevices(forceRefresh: Boolean): Either<Failure, List<Device>> {
+        if(forceRefresh) {
+            pointsHex3.clear()
+            pointsHex7.clear()
+        }
+        return deviceRepository.getPublicDevices(forceRefresh).tap {
+            if(pointsHex3.isEmpty()) {
+                saveDevicesPointsH3(it)
             }
+            if(pointsHex7.isEmpty()) {
+                saveDevicesPointsH7(it)
+            }
+        }
+    }
 
-        return Either.Right(pointsToReturn)
+    override fun getPointsFromPublicDevices(zoom: Double): List<PolygonAnnotationOptions> {
+        return if (zoom <= ZOOM_LEVEL_CHANGE_HEX) {
+            pointsHex3
+        } else {
+            pointsHex7
+        }
     }
 
     // Get the center of Hex3 of a device. Used for zooming in when clicked.
@@ -96,16 +96,15 @@ class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
         return gson.toJsonTree(HexWithResolution(index, center.lat, center.lon, resolution))
     }
 
-    // Save the points of the devices so we can serve them immediately when needed
-    override suspend fun saveDevicesPoints(devices: List<Device>) {
-        if (devices.isNullOrEmpty()) {
+    // Save the points of the devices in H3 so we can serve them immediately when needed
+    override suspend fun saveDevicesPointsH3(devices: List<Device>) {
+        if (devices.isEmpty()) {
             Timber.d("No devices found. Skipping saving their points.")
             return
         }
 
-        // Needed lists to not save duplicate points of H3-H7 so they are being painted only once
+        // Needed lists to not save duplicate points of H3 so they are being painted only once
         val alreadySetH3 = mutableListOf<String>()
-        val alreadySetH7 = mutableListOf<String>()
         devices.forEach { device ->
             device.attributes?.hex3?.let {
                 if (!alreadySetH3.contains(it.index)) {
@@ -121,7 +120,19 @@ class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
                     alreadySetH3.add(it.index)
                 }
             }
+        }
+    }
 
+    // Save the points of the devices in H7 so we can serve them immediately when needed
+    override suspend fun saveDevicesPointsH7(devices: List<Device>) {
+        if (devices.isEmpty()) {
+            Timber.d("No devices found. Skipping saving their points.")
+            return
+        }
+
+        // Needed lists to not save duplicate points of H7 so they are being painted only once
+        val alreadySetH7 = mutableListOf<String>()
+        devices.forEach { device ->
             device.attributes?.hex7?.let {
                 if (!alreadySetH7.contains(it.index)) {
                     val polygonAnnotationOptions = PolygonAnnotationOptions()
@@ -138,7 +149,7 @@ class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
         }
     }
 
-    override fun getDevicesOfH7(hexIndex: String?): MutableList<Device>? {
+    override fun getDevicesOfH7(hexIndex: String?): MutableList<Device> {
         return deviceRepository.getDevicesOfH7(hexIndex)
     }
 }

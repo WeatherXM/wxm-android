@@ -195,7 +195,7 @@ class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
                 time.add(getHourMinutesFromISO(context, timestampNonNull, false))
 
                 hourlyWeather.temperature?.let {
-                    temperatureEntries.add(Entry(counter, Weather.convertTemp(it) as Float))
+                    temperatureEntries.add(Entry(counter, Weather.convertTemp(it, 1) as Float))
                 }
 
                 hourlyWeather.precipitation?.let {

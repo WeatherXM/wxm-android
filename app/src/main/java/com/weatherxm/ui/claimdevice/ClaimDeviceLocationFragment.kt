@@ -20,17 +20,12 @@ class ClaimDeviceLocationFragment : Fragment() {
         binding = FragmentClaimDeviceSetLocationBinding.inflate(inflater, container, false)
 
         binding.locationCheckbox.setOnCheckedChangeListener { _, checked ->
+            model.nextButtonStatus(checked)
             if (checked) {
                 model.setLocationInvoke()
-                binding.claim.isEnabled = true
             } else {
-                binding.claim.isEnabled = false
+                model.setLocationSet(false)
             }
-        }
-
-        binding.claim.setOnClickListener {
-            model.next()
-            model.claimDevice()
         }
 
         return binding.root

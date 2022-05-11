@@ -10,8 +10,7 @@ import org.koin.core.component.KoinComponent
 class DeviceRepository(
     private val deviceDataSource: DeviceDataSource
 ) : KoinComponent {
-    // Devices on H3 and H7 hexes, the key is the hex index, and the value the contained devices
-    private val devicesH3Hexes: MutableMap<String, MutableList<Device>> = mutableMapOf()
+    // Devices on H7 hexes, the key is the hex index, and the value the contained devices
     private val devicesH7Hexes: MutableMap<String, MutableList<Device>> = mutableMapOf()
 
     suspend fun getUserDevices(): Either<Failure, List<Device>> {
@@ -22,30 +21,17 @@ class DeviceRepository(
         return deviceDataSource.getUserDevice(deviceId)
     }
 
-    suspend fun getPublicDevices(): Either<Failure, List<Device>> {
-        return deviceDataSource.getPublicDevices().map {
-            it.forEach { device ->
-                device.attributes?.hex3?.let { hex ->
-                    val deviceListForHex = devicesH3Hexes[hex.index]
-                    devicesH3Hexes[hex.index] = if (deviceListForHex != null) {
-                        deviceListForHex.add(device)
-                        deviceListForHex
-                    } else {
-                        mutableListOf(device)
-                    }
-                }
-
+    suspend fun getPublicDevices(forceRefresh: Boolean): Either<Failure, List<Device>> {
+        return deviceDataSource.getPublicDevices(forceRefresh).tap {
+            devicesH7Hexes.clear()
+            it.onEach { device ->
                 device.attributes?.hex7?.let { hex ->
                     val deviceListForHex = devicesH7Hexes[hex.index]
-                    devicesH7Hexes[hex.index] = if (deviceListForHex != null) {
-                        deviceListForHex.add(device)
-                        deviceListForHex
-                    } else {
-                        mutableListOf(device)
-                    }
+                    devicesH7Hexes[hex.index] = deviceListForHex?.apply {
+                        add(device)
+                    } ?: mutableListOf(device)
                 }
             }
-            it
         }
     }
 
@@ -53,11 +39,11 @@ class DeviceRepository(
         return deviceDataSource.claimDevice(serialNumber, location)
     }
 
-    fun getDevicesOfH7(hexIndex: String?): MutableList<Device>? {
+    fun getDevicesOfH7(hexIndex: String?): MutableList<Device> {
         return if (hexIndex == null) {
             mutableListOf()
         } else {
-            return devicesH7Hexes[hexIndex]
+            return devicesH7Hexes.getOrDefault(hexIndex, mutableListOf())
         }
     }
 }

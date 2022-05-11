@@ -12,13 +12,10 @@ import androidx.fragment.app.activityViewModels
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimDeviceBySerialBinding
-import com.weatherxm.util.Validator
 import com.weatherxm.util.setHtml
-import org.koin.android.ext.android.inject
 
 class ClaimDeviceSerialNumberFragment : Fragment() {
     private val model: ClaimDeviceViewModel by activityViewModels()
-    private val validator: Validator by inject()
     private lateinit var binding: FragmentClaimDeviceBySerialBinding
 
     override fun onCreateView(
@@ -48,28 +45,24 @@ class ClaimDeviceSerialNumberFragment : Fragment() {
                     binding.serialNumberContainer.error = null
                     binding.serialNumberContainer.helperText =
                         "${extractedValue.length}/$SERIAL_NUMBER_MAX_LENGTH"
-                    binding.next.isEnabled = extractedValue.isNotEmpty()
+                    model.nextButtonStatus(extractedValue.isNotEmpty())
                 }
             })
 
         binding.serialNumber.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                binding.next.performClick()
+                model.nextButtonClick()
             }
             true
         }
 
-        binding.next.setOnClickListener {
-            val serialNumber = binding.serialNumber.text.unmask()
-
-            if (!validator.validateSerialNumber(serialNumber)) {
-                binding.serialNumberContainer.error =
-                    getString(R.string.warn_validation_invalid_serial_number)
-                return@setOnClickListener
+        model.onCheckSerialAndContinue().observe(viewLifecycleOwner) { shouldCheckSerial ->
+            if (shouldCheckSerial) {
+                if (!model.validateAndSetSerial(binding.serialNumber.text.unmask())) {
+                    binding.serialNumberContainer.error =
+                        getString(R.string.warn_validation_invalid_serial_number)
+                }
             }
-
-            model.setSerialNumber(serialNumber)
-            model.next()
         }
 
         return binding.root

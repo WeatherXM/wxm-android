@@ -5,14 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimDeviceInstructionsBinding
 import com.weatherxm.util.setHtml
 import org.koin.core.component.KoinComponent
 
 class ClaimDeviceInformationFragment : Fragment(), KoinComponent {
-    private val model: ClaimDeviceViewModel by activityViewModels()
     private lateinit var binding: FragmentClaimDeviceInstructionsBinding
 
     override fun onCreateView(
@@ -23,10 +21,6 @@ class ClaimDeviceInformationFragment : Fragment(), KoinComponent {
         binding = FragmentClaimDeviceInstructionsBinding.inflate(inflater, container, false)
 
         binding.infoText.setHtml(R.string.claim_device_info_text)
-
-        binding.next.setOnClickListener {
-            model.next()
-        }
 
         return binding.root
     }

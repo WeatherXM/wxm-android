@@ -4,6 +4,7 @@ import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -13,6 +14,7 @@ import com.weatherxm.databinding.ActivityClaimDeviceBinding
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_INFORMATION
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
+import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_SERIAL_NUMBER
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
@@ -24,7 +26,6 @@ class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
     private val model: ClaimDeviceViewModel by viewModels()
     private lateinit var binding: ActivityClaimDeviceBinding
 
-    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClaimDeviceBinding.inflate(layoutInflater)
@@ -37,38 +38,64 @@ class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
         binding.pager.adapter = pagerAdapter
         binding.pager.isUserInputEnabled = false
 
-        model.onStep().observe(this) { step ->
-            if (step < 0) {
-                onBackPressed()
-            } else if (step > 0) {
-                binding.pager.currentItem += 1
+        val pagerIndicator = binding.pagerIndicator
+        pagerIndicator.attachTo(binding.pager)
 
-                if(binding.pager.currentItem == PAGE_LOCATION) {
-                    checkPermissionsAndThen(
-                        permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
-                        rationaleTitle = getString(R.string.permission_location_title),
-                        rationaleMessage = getString(R.string.permission_location_rationale),
-                        onGranted = {
-                            // Get last location
-                            model.getLocationAndThen(this) { location ->
-                                Timber.d("Got user location: $location")
-                                if(location == null) {
-                                    toast(R.string.error_claim_gps_failed)
-                                } else {
-                                    model.updateLocationOnMap(location)
-                                }
-                            }
-                        }
-                    )
-                }
+        model.onNextButtonEnabledStatus().observe(this) { enabled ->
+            binding.nextBtn.isEnabled = enabled
+        }
+
+        model.onNextButtonClick().observe(this) { shouldClick ->
+            if (shouldClick) binding.nextBtn.performClick()
+        }
+
+        binding.nextBtn.setOnClickListener {
+            if(binding.pager.currentItem == PAGE_SERIAL_NUMBER && !model.isSerialSet()) {
+                model.checkSerialAndContinue()
+            } else {
+                onNextPressed()
             }
         }
 
-        binding.toolbar.setNavigationOnClickListener {
+        binding.prevBtn.setOnClickListener {
             onBackPressed()
         }
 
+        binding.toolbar.setNavigationOnClickListener {
+            super.onBackPressed()
+            finish()
+        }
+
         model.fetchUserEmail()
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun onNextPressed() {
+        binding.pager.currentItem += 1
+
+        if(binding.pager.currentItem == PAGE_RESULT) {
+            model.claimDevice()
+        }
+
+        if (binding.pager.currentItem == PAGE_LOCATION) {
+            checkPermissionsAndThen(
+                permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
+                rationaleTitle = getString(R.string.permission_location_title),
+                rationaleMessage = getString(R.string.permission_location_rationale),
+                onGranted = {
+                    // Get last location
+                    model.getLocationAndThen(this) { location ->
+                        Timber.d("Got user location: $location")
+                        if (location == null) {
+                            toast(R.string.error_claim_gps_failed)
+                        } else {
+                            model.updateLocationOnMap(location)
+                        }
+                    }
+                }
+            )
+        }
+        updateUI()
     }
 
     override fun onBackPressed() {
@@ -83,6 +110,29 @@ class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
             else -> {
                 // Otherwise, select the previous step.
                 binding.pager.currentItem = binding.pager.currentItem - 1
+            }
+        }
+        updateUI()
+    }
+
+    private fun updateUI() {
+        when (binding.pager.currentItem) {
+            PAGE_INFORMATION -> {
+                binding.nextBtn.isEnabled = true
+                binding.nextBtn.text = getString(R.string.action_next)
+            }
+            PAGE_SERIAL_NUMBER -> {
+                binding.nextBtn.isEnabled = model.isSerialSet()
+                binding.nextBtn.text = getString(R.string.action_next)
+            }
+            PAGE_LOCATION -> {
+                binding.nextBtn.isEnabled = model.getLocationSet()
+                binding.nextBtn.text = getString(R.string.action_claim)
+            }
+            PAGE_RESULT -> {
+                binding.prevBtn.visibility = View.GONE
+                binding.pagerIndicator.visibility = View.GONE
+                binding.nextBtn.visibility = View.GONE
             }
         }
     }

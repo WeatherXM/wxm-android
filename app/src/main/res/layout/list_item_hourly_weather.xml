@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     android:layout_marginEnd="@dimen/margin_normal"
     android:clipChildren="false"
-    android:clipToPadding="false"
     android:clipToOutline="false"
-    tools:layout_height="120dp"
+    android:clipToPadding="false"
+    tools:layout_height="128dp"
     tools:targetApi="s">
 
     <com.google.android.material.card.MaterialCardView
@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="H,3:2"
+        app:layout_constraintDimensionRatio="H,5:3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -41,12 +41,24 @@
                 android:id="@+id/icon"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:scaleType="centerInside"
                 app:lottie_autoPlay="false"
                 app:lottie_loop="true"
                 tools:background="#88212121"
                 tools:lottie_rawRes="@raw/anim_weather_clear_day" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/precipitation"
+                style="@style/TextAppearance.WeatherXM.HourlyCard.Data.Precipitation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_small"
+                android:gravity="center"
+                android:lines="1"
+                tools:text="50%" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/time"

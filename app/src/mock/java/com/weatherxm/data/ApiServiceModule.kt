@@ -27,11 +27,6 @@ val apiServiceModule = module {
             .build()
             .create(AuthService::class.java)
     }
-
-    single<DeviceDataSource> {
-        DeviceDataSourceImpl(get())
-    }
-
     single<NetworkWeatherDataSource> {
         NetworkWeatherDataSource(get())
     }

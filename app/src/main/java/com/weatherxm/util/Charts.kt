@@ -22,12 +22,13 @@ private const val CHART_BOTTOM_OFFSET = 20F
 private const val LINE_WIDTH = 2F
 private const val POINT_SIZE = 2F
 private const val MAXIMUMS_GRID_LINES_Y_AXIS = 4
-private const val PRECIP_INCHES_GRANULARITY_Y_AXIS = 0.01F
-private const val DEFAULT_GRANULARITY_Y_AXIS = 0.1F
-private const val INHG_GRANULARITY_Y_AXIS = 0.01F
-private const val TIME_GRANULARITY_X_AXIS = 3F
+private const val Y_AXIS_DEFAULT_GRANULARITY = 0.1F
+private const val Y_AXIS_PRECIP_INCHES_GRANULARITY = 0.01F
+private const val X_AXIS_DEFAULT_TIME_GRANULARITY = 3F
+private const val X_AXIS_GRANULARITY_1_HOUR = 1F
 
-private fun LineChart.setDefaultSettings() {
+@Suppress("MagicNumber")
+private fun LineChart.setDefaultSettings(chartData: LineChartData) {
     // General Chart Settings
     description.isEnabled = false
     extraBottomOffset = CHART_BOTTOM_OFFSET
@@ -43,11 +44,17 @@ private fun LineChart.setDefaultSettings() {
     axisRight.isEnabled = false
     axisLeft.gridColor = resources.getColor(R.color.chart_grid_color, context.theme)
     axisLeft.setLabelCount(MAXIMUMS_GRID_LINES_Y_AXIS, false)
+    axisLeft.resetAxisMinimum()
+    axisLeft.resetAxisMaximum()
 
     // X axis settings
     xAxis.position = XAxis.XAxisPosition.BOTTOM
     xAxis.setDrawAxisLine(false)
-    xAxis.granularity = TIME_GRANULARITY_X_AXIS
+    xAxis.granularity = if (chartData.entries.size in 2..3) {
+        X_AXIS_GRANULARITY_1_HOUR
+    } else {
+        X_AXIS_DEFAULT_TIME_GRANULARITY
+    }
     xAxis.gridColor = resources.getColor(R.color.chart_grid_color, context.theme)
 
     setOnTouchListener { _, event ->
@@ -74,7 +81,7 @@ fun LineChart.initializeTemperature24hChart(chartData: LineChartData) {
     data = lineData
 
     // Set the default settings we want to all LineCharts
-    setDefaultSettings()
+    setDefaultSettings(chartData)
 
     // General Chart Settings
     marker =
@@ -87,15 +94,16 @@ fun LineChart.initializeTemperature24hChart(chartData: LineChartData) {
 
     // Y Axis settings
 
-    // If max - min < 2 that means that the values are probably too close together.
-    // Which causes a bug not showing labels on Y axis because granularity is set 1.
-    // So this is a custom fix to change that granularity and show decimals at the Y labels
+    /*
+    * If max - min < 2 that means that the values are probably too close together.
+    * Which causes a bug not showing labels on Y axis because granularity is set 1.
+    * So this is a custom fix to add custom minimum and maximum values on the Y Axis
+    */
     if (dataSet.yMax - dataSet.yMin < 2) {
-        axisLeft.granularity = DEFAULT_GRANULARITY_Y_AXIS
-        axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit, 1)
-    } else {
-        axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit)
+        axisLeft.axisMinimum = dataSet.yMin - 1
+        axisLeft.axisMaximum = dataSet.yMax + 1
     }
+    axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit)
 
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(chartData.timestamps)
@@ -109,7 +117,7 @@ fun LineChart.initializeHumidity24hChart(chartData: LineChartData) {
     data = lineData
 
     // Set the default settings we want to all LineCharts
-    setDefaultSettings()
+    setDefaultSettings(chartData)
 
     // General Chart Settings
     marker =
@@ -135,21 +143,10 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData) {
     data = lineData
 
     // Set the default settings we want to all LineCharts
-    setDefaultSettings()
+    setDefaultSettings(chartData)
 
-    // In History, if hPa show 1 decimal, if inHg show 2, so we need this variable for such cases
-    val inHgUsed = chartData.unit == resources.getString(R.string.pressure_inHg)
-
-    // General Chart Settings
-    val decimalsOnMarkerView = if (inHgUsed) 2 else 1
     marker =
-        CustomDefaultMarkerView(
-            context,
-            chartData.timestamps,
-            chartData.name,
-            chartData.unit,
-            decimalsOnMarkerView
-        )
+        CustomDefaultMarkerView(context, chartData.timestamps, chartData.name, chartData.unit, 1)
 
     // Line and highlight Settings
     dataSet.setDefaultSettings(context, resources)
@@ -161,18 +158,13 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData) {
     /*
     * If max - min < 2 that means that the values are probably too close together.
     * Which causes a bug not showing labels on Y axis because granularity is set 1.
-    * So this is a custom fix to change that granularity and show decimals at the Y labels.
-    * Also custom fix if inHg is used to show 2 decimals instead of one, for the same reason
+    * So this is a custom fix to add custom minimum and maximum values on the Y Axis
     */
-    if (dataSet.yMax - dataSet.yMin < 2 && !inHgUsed) {
-        axisLeft.granularity = DEFAULT_GRANULARITY_Y_AXIS
-        axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit, 1)
-    } else if (inHgUsed) {
-        axisLeft.granularity = INHG_GRANULARITY_Y_AXIS
-        axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit, 2)
-    } else {
-        axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit)
+    if (dataSet.yMax - dataSet.yMin < 2) {
+        axisLeft.axisMinimum = dataSet.yMin - 1
+        axisLeft.axisMaximum = dataSet.yMax + 1
     }
+    axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit)
 
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(chartData.timestamps)
@@ -180,8 +172,9 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData) {
     notifyDataSetChanged()
 }
 
-fun LineChart.initializePrecipitation24hChart(precipIntensityData: LineChartData) {
-    val dataSet = LineDataSet(precipIntensityData.entries, precipIntensityData.name)
+@Suppress("MagicNumber")
+fun LineChart.initializePrecipitation24hChart(chartData: LineChartData) {
+    val dataSet = LineDataSet(chartData.entries, chartData.name)
     dataSet.axisDependency = YAxis.AxisDependency.LEFT
 
     // use ILineDataSet to have multiple lines in a chart (in case we have probability)
@@ -193,15 +186,15 @@ fun LineChart.initializePrecipitation24hChart(precipIntensityData: LineChartData
     data = lineData
 
     // Set the default settings we want to all LineCharts
-    setDefaultSettings()
+    setDefaultSettings(chartData)
 
-    val inchesUsed = precipIntensityData.unit == resources.getString(R.string.precipitation_in)
+    val inchesUsed = chartData.unit == resources.getString(R.string.precipitation_in)
 
     marker = CustomDefaultMarkerView(
         context,
-        precipIntensityData.timestamps,
-        precipIntensityData.name,
-        precipIntensityData.unit,
+        chartData.timestamps,
+        chartData.name,
+        chartData.unit,
         decimals = Weather.getDecimalsPrecipitation()
     )
 
@@ -209,21 +202,40 @@ fun LineChart.initializePrecipitation24hChart(precipIntensityData: LineChartData
     dataSet.setDefaultSettings(context, resources)
     dataSet.mode = LineDataSet.Mode.STEPPED
     dataSet.setDrawFilled(true)
-    dataSet.color = resources.getColor(precipIntensityData.lineColor, context.theme)
-    dataSet.setCircleColor(resources.getColor(precipIntensityData.lineColor, context.theme))
+    dataSet.color = resources.getColor(chartData.lineColor, context.theme)
+    dataSet.setCircleColor(resources.getColor(chartData.lineColor, context.theme))
 
     // Y Axis settings
     axisLeft.granularity = if (inchesUsed) {
-        PRECIP_INCHES_GRANULARITY_Y_AXIS
+        Y_AXIS_PRECIP_INCHES_GRANULARITY
     } else {
-        DEFAULT_GRANULARITY_Y_AXIS
+        Y_AXIS_DEFAULT_GRANULARITY
     }
-    axisLeft.axisMinimum = dataSet.yMin
+
+    /*
+    * If max - min < 0.1 that means that the values are probably too close together.
+    * Which causes a bug not showing labels on Y axis or hiding the precip line behind the
+    * X axis line.
+    * That's why we set custom minimum and maximum values.
+    */
+    val customNumberForMinMax = if (inchesUsed) 0.01F else 0.1F
+    if (dataSet.yMax - dataSet.yMin < customNumberForMinMax) {
+        if (dataSet.yMin < customNumberForMinMax) {
+            axisLeft.axisMinimum = 0F
+            axisLeft.axisMaximum = dataSet.yMax + customNumberForMinMax
+        } else {
+            axisLeft.axisMinimum = dataSet.yMin - customNumberForMinMax
+            axisLeft.axisMaximum = dataSet.yMax + customNumberForMinMax
+        }
+    } else {
+        axisLeft.axisMinimum = dataSet.yMin
+    }
+
     axisLeft.valueFormatter =
-        CustomYAxisFormatter(precipIntensityData.unit, Weather.getDecimalsPrecipitation())
+        CustomYAxisFormatter(chartData.unit, Weather.getDecimalsPrecipitation())
 
     // X axis settings
-    xAxis.valueFormatter = CustomXAxisFormatter(precipIntensityData.timestamps)
+    xAxis.valueFormatter = CustomXAxisFormatter(chartData.timestamps)
     show()
     notifyDataSetChanged()
 }
@@ -244,7 +256,7 @@ fun LineChart.initializeWind24hChart(
     data = lineData
 
     // Set the default settings we want to all LineCharts
-    setDefaultSettings()
+    setDefaultSettings(windSpeedData)
 
     // General Chart Settings
     legend.isEnabled = true
@@ -255,8 +267,7 @@ fun LineChart.initializeWind24hChart(
         windGustData.entries,
         windDirectionData.entries,
         windSpeedData.name,
-        windGustData.name,
-        windSpeedData.unit
+        windGustData.name
     )
 
     // Wind Speed
@@ -272,7 +283,20 @@ fun LineChart.initializeWind24hChart(
     dataSetWindGust.setCircleColor(resources.getColor(windGustData.lineColor, context.theme))
 
     // Y Axis settings
-    axisLeft.axisMinimum = dataSetWindSpeed.yMin
+    /*
+    * If max - min < 2 that means that the values are probably too close together.
+    * Which causes a bug not showing labels on Y axis because granularity is set 1.
+    * So this is a custom fix to add custom minimum and maximum values on the Y Axis
+    */
+    if (dataSetWindSpeed.yMax - dataSetWindSpeed.yMin < 2) {
+        if (dataSetWindSpeed.yMin < 1) {
+            axisLeft.axisMinimum = 0F
+            axisLeft.axisMaximum = dataSetWindSpeed.yMax + 2
+        } else {
+            axisLeft.axisMinimum = dataSetWindSpeed.yMin - 1
+            axisLeft.axisMaximum = dataSetWindSpeed.yMax + 1
+        }
+    }
     axisLeft.valueFormatter = CustomYAxisFormatter(windSpeedData.unit)
 
     // X axis settings
@@ -281,6 +305,7 @@ fun LineChart.initializeWind24hChart(
     notifyDataSetChanged()
 }
 
+@Suppress("MagicNumber")
 fun BarChart.initializeUV24hChart(data: BarChartData) {
     val dataSet = BarDataSet(data.entries, data.name)
     val barData = BarData(dataSet)
@@ -319,7 +344,11 @@ fun BarChart.initializeUV24hChart(data: BarChartData) {
     xAxis.setDrawAxisLine(false)
     xAxis.setDrawGridLines(false)
     xAxis.valueFormatter = CustomXAxisFormatter(data.timestamps)
-    xAxis.granularity = TIME_GRANULARITY_X_AXIS
+    xAxis.granularity = if (data.entries.size in 2..3) {
+        X_AXIS_GRANULARITY_1_HOUR
+    } else {
+        X_AXIS_DEFAULT_TIME_GRANULARITY
+    }
     show()
     notifyDataSetChanged()
 }

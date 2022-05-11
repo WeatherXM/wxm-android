@@ -10,6 +10,7 @@ import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -25,8 +26,7 @@ import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.ResourcesHelper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.weatherxm.util.Validator
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -46,32 +46,41 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
 
     private val claimDeviceUseCase: ClaimDeviceUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
+    private val validator: Validator by inject()
 
     private lateinit var locationClient: FusedLocationProviderClient
 
     private lateinit var currentSerialNumber: String
+    private var isSerialSet = false
     private var userEmail: String? = null
     private var isLocationSet = false
     private var currentLon: Double = 0.0
     private var currentLat: Double = 0.0
 
-    // Needed for passing info to the activity to move to the next page in the view pager or use gps
-    private val onStep = MutableLiveData(0)
     private val onDeviceLocation = MutableLiveData<Location>()
     private val onLocationSet = MutableLiveData(false)
+    private val onNextButtonEnabledStatus = MutableLiveData(true)
+    private val onNextButtonClick = MutableLiveData(false)
+    private val onCheckSerialAndContinue = MutableLiveData(false)
     private val onClaimResult = MutableLiveData<Resource<String>>().apply {
         value = Resource.loading()
     }
 
-    fun onStep() = onStep
+    fun onNextButtonEnabledStatus() = onNextButtonEnabledStatus
+    fun onNextButtonClick() = onNextButtonClick
+    fun onCheckSerialAndContinue() = onCheckSerialAndContinue
     fun onDeviceLocation() = onDeviceLocation
     fun onLocationSet() = onLocationSet
     fun onClaimResult() = onClaimResult
 
-    fun next() = onStep.postValue(1)
-
-    fun setSerialNumber(serialNumber: String) {
+    private fun setSerialNumber(serialNumber: String) {
         currentSerialNumber = serialNumber
+        setSerialSet(true)
+        nextButtonClick()
+    }
+
+    private fun setSerialSet(isSet: Boolean) {
+        isSerialSet = isSet
     }
 
     fun getSerialNumber(): String {
@@ -94,14 +103,22 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
         if (lon != null && lat != null) {
             currentLon = lon
             currentLat = lat
-            isLocationSet = true
+            setLocationSet(true)
         }
+    }
+
+    fun setLocationSet(locationSet: Boolean) {
+        isLocationSet = locationSet
+    }
+
+    fun getLocationSet(): Boolean {
+        return isLocationSet
     }
 
     fun claimDevice() {
         if (isLocationSet) {
             onClaimResult.postValue(Resource.loading())
-            CoroutineScope(Dispatchers.IO).launch {
+            viewModelScope.launch {
                 claimDeviceUseCase.claimDevice(currentSerialNumber, currentLat, currentLon)
                     .map {
                         Timber.d("Claimed device: $it")
@@ -139,7 +156,7 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     }
 
     fun fetchUserEmail() {
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             claimDeviceUseCase.fetchUserEmail()
                 .map {
                     userEmail = it
@@ -147,6 +164,32 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
                 .mapLeft {
                     userEmail = null
                 }
+        }
+    }
+
+    fun nextButtonStatus(enabled: Boolean) {
+        onNextButtonEnabledStatus.postValue(enabled)
+    }
+
+    fun nextButtonClick() {
+        onNextButtonClick.postValue(true)
+    }
+
+    fun isSerialSet(): Boolean {
+        return isSerialSet
+    }
+
+    fun checkSerialAndContinue() {
+        onCheckSerialAndContinue.postValue(true)
+    }
+
+    fun validateAndSetSerial(serialNumber: String): Boolean {
+        return validator.validateSerialNumber(serialNumber).apply {
+            if(this) {
+                setSerialNumber(serialNumber)
+            } else {
+                setSerialSet(false)
+            }
         }
     }
 

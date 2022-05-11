@@ -26,8 +26,8 @@ android {
         applicationId "com.weatherxm.app"
         minSdkVersion 23
         targetSdkVersion 32
-        versionCode 11
-        versionName "3.0.9"
+        versionCode 12
+        versionName "3.1.0"
 
         // Resource value fields
         resValue("string", "mapbox_access_token", "$MAPBOX_ACCESS_TOKEN")
@@ -53,7 +53,7 @@ android {
         }
         mock {
             dimension "server"
-            applicationIdSuffix ".dev"
+            applicationIdSuffix ".mock"
             resValue "string", "app_name", "WXM Mock"
             buildConfigField("String", "API_URL", "\"https://api-dev.weatherxm.com\"")
             buildConfigField("String", "AUTH_URL", "\"https://api-dev.weatherxm.com\"")
@@ -90,11 +90,13 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            manifestPlaceholders = [crashlyticsEnabled:"true"]
         }
         debug {
             // Change minifyEnabled to true if you want to test code obfuscation in debug mode
             minifyEnabled false
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            manifestPlaceholders = [crashlyticsEnabled:"false"]
         }
     }
 
@@ -197,13 +199,15 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1"
     implementation "androidx.navigation:navigation-fragment-ktx:2.4.2"
     implementation "androidx.navigation:navigation-ui-ktx:2.4.2"
+    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
     implementation "androidx.preference:preference-ktx:1.2.0"
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
     implementation "androidx.security:security-crypto:1.0.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.viewpager2:viewpager2:1.0.0"
-    implementation "androidx.paging:paging-runtime-ktx:3.1.1"
-    implementation "com.google.android.material:material:1.5.0"
+
+    // Material Components for Android
+    implementation "com.google.android.material:material:1.6.0"
 
     // Google Play Services for Location & Maps
     implementation "com.google.android.gms:play-services-location:19.0.1"
@@ -231,7 +235,7 @@ dependencies {
     implementation "com.auth0.android:jwtdecode:2.0.1"
 
     // Animations
-    implementation "com.airbnb.android:lottie:5.0.3"
+    implementation "com.airbnb.android:lottie:5.1.1"
 
     // Charts
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
@@ -244,18 +248,18 @@ dependencies {
     implementation "io.insert-koin:koin-android:3.1.6"
 
     // Data types and more
-    implementation platform("io.arrow-kt:arrow-stack:1.0.1")
+    implementation platform("io.arrow-kt:arrow-stack:1.1.2")
     implementation "io.arrow-kt:arrow-core"
     implementation "io.arrow-kt:arrow-fx-coroutines"
 
     // Mapbox
-    implementation "com.mapbox.maps:android:10.4.0"
+    implementation "com.mapbox.maps:android:10.5.0"
 
     // Insetter
     implementation "dev.chrisbanes.insetter:insetter:0.6.1"
 
     // Import the Firebase BoM
-    implementation platform("com.google.firebase:firebase-bom:29.3.0")
+    implementation platform("com.google.firebase:firebase-bom:29.3.1")
     implementation "com.google.firebase:firebase-crashlytics-ktx"
     implementation "com.google.firebase:firebase-perf-ktx"
     implementation "com.google.firebase:firebase-config-ktx"
@@ -269,4 +273,10 @@ dependencies {
 
     // Input masking (for Serial Number input)
     implementation "com.github.RedMadRobot:input-mask-android:6.1.0"
+
+    // Better link handling in text views
+    implementation "me.saket:better-link-movement-method:2.2.0"
+
+    // Page Indicator
+    implementation "com.tbuonomo:dotsindicator:4.3"
 }

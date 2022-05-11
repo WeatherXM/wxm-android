@@ -21,10 +21,6 @@ val apiServiceModule = module {
         retrofit.create(AuthService::class.java)
     }
 
-    single<DeviceDataSource> {
-        DeviceDataSourceImpl(get())
-    }
-
     single<NetworkWeatherDataSource> {
         NetworkWeatherDataSource(get())
     }

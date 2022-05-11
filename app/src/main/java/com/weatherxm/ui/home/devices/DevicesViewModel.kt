@@ -3,14 +3,13 @@ package com.weatherxm.ui.home.devices
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.util.ResourcesHelper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -34,7 +33,7 @@ class DevicesViewModel : ViewModel(), KoinComponent {
 
     fun fetch() {
         this@DevicesViewModel.devices.postValue(Resource.loading())
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             userDeviceUseCase.getUserDevices()
                 .map { devices ->
                     Timber.d("Got devices: $devices")

@@ -92,6 +92,11 @@ class HourlyAdapter(
             } else {
                 binding.temperature.text = Weather.getFormattedTemperature(item.temperature)
             }
+            binding.precipitation.text = if (item.precipitation != null) {
+                Weather.getFormattedPrecipitation(item.precipitation)
+            } else {
+                Weather.getFormattedPrecipitationProbability(item.precipProbability)
+            }
             binding.icon.apply {
                 setAnimation(Weather.getWeatherAnimation(item.icon))
                 playAnimation()

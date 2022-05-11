@@ -112,10 +112,6 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
             binding.tokenCard.setTokenData(it)
         }
 
-        model.onLastRewardTokens().observe(this) {
-            binding.tokenCard.setLastRewardOnly(it)
-        }
-
         model.onLoading().observe(this) {
             if (it && binding.swiperefresh.isRefreshing) {
                 binding.progress.visibility = View.INVISIBLE

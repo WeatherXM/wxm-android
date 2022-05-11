@@ -3,6 +3,7 @@ package com.weatherxm.ui.userdevice
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Device
@@ -12,8 +13,6 @@ import com.weatherxm.ui.TokenSummary
 import com.weatherxm.ui.UIError
 import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.util.ResourcesHelper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -51,8 +50,6 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     private val onTokens = MutableLiveData<TokenSummary>()
 
-    private val onLastRewardTokens = MutableLiveData<Float>()
-
     fun onDeviceSet(): LiveData<Device> = onDeviceSet
 
     fun onLoading(): LiveData<Boolean> = onLoading
@@ -63,8 +60,6 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     fun onTokens(): LiveData<TokenSummary> = onTokens
 
-    fun onLastRewardTokens(): LiveData<Float> = onLastRewardTokens
-
     fun setDevice(device: Device) {
         this.device = device
         onDeviceSet.postValue(this.device)
@@ -73,14 +68,24 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     fun fetchUserDeviceAllData(forceRefresh: Boolean = false) {
         onLoading.postValue(true)
 
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             val userDevice = async {
                 userDeviceUseCase.getUserDevice(device.id)
             }
 
             // This function runs only on onCreate/onSwipeRefresh so we forceRefresh the getTokens
             val tokensDeferred = async {
-                userDeviceUseCase.getTokens24H(device.id, true)
+                when (tokensCurrentState) {
+                    TokensState.HOUR24 -> {
+                        userDeviceUseCase.getTokens24H(device.id, true)
+                    }
+                    TokensState.DAYS7 -> {
+                        userDeviceUseCase.getTokens7D(device.id, true)
+                    }
+                    TokensState.DAYS30 -> {
+                        userDeviceUseCase.getTokens30D(device.id, true)
+                    }
+                }
             }
 
             val forecastDeferred = async {
@@ -111,7 +116,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             val tokens = tokensDeferred.await()
             tokens
                 .map {
-                    onLastRewardTokens.postValue(it)
+                    onTokens.postValue(it)
                 }
                 .mapLeft {
                     if (it == Failure.NetworkError) {
@@ -140,7 +145,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     fun fetchForecast(newState: ForecastState) {
         onLoading.postValue(true)
         forecastCurrentState = newState
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             when (forecastCurrentState) {
                 ForecastState.TODAY -> {
                     userDeviceUseCase.getTodayForecast(device)
@@ -196,11 +201,11 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     fun fetchTokenDetails(newState: TokensState) {
         onLoading.postValue(true)
         tokensCurrentState = newState
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             when (tokensCurrentState) {
                 TokensState.HOUR24 -> {
                     userDeviceUseCase.getTokens24H(device.id)
-                        .map { onLastRewardTokens.postValue(it) }
+                        .map { onTokens.postValue(it) }
                         .mapLeft { handleTokenFailure(it) }
                 }
                 TokensState.DAYS7 -> {
@@ -233,7 +238,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     private fun fetchUserDevice() {
         onLoading.postValue(true)
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             userDeviceUseCase.getUserDevice(device.id)
                 .map {
                     Timber.d("Got User Device: $it")

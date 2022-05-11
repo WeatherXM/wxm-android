@@ -3,6 +3,7 @@ package com.weatherxm.ui.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import arrow.core.flatMap
 import com.weatherxm.R
 import com.weatherxm.data.ApiError.AuthError.InvalidUsername
@@ -14,8 +15,6 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.User
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.util.ResourcesHelper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -34,7 +33,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
 
     fun login(username: String, password: String) {
         isLoggedIn.postValue(Resource.loading())
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             authUseCase.login(username, password)
                 .mapLeft {
                     handleLoginFailure(it)

@@ -68,7 +68,7 @@ class ExplorerMapFragment : BaseMapFragment() {
         }
 
         // Fetch data
-        model.fetch()
+        model.fetch(true)
     }
 
     private fun onPolygonPointsUpdated(polygonPoints: List<PolygonAnnotationOptions>?) {

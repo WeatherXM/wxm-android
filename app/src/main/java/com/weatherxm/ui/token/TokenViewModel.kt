@@ -3,14 +3,13 @@ package com.weatherxm.ui.token
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Transaction
 import com.weatherxm.usecases.TokenUseCase
 import com.weatherxm.util.ResourcesHelper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -41,7 +40,7 @@ class TokenViewModel : ViewModel(), KoinComponent {
 
     fun fetchFirstPageTransactions(deviceId: String) {
         onFirstPageTransactions.postValue(Resource.loading())
-        CoroutineScope(Dispatchers.IO).launch {
+        viewModelScope.launch {
             tokenUseCase.getTransactions(deviceId, currentPage)
                 .map {
                     Timber.d("Got Transactions: ${it.transactions}")
@@ -58,7 +57,7 @@ class TokenViewModel : ViewModel(), KoinComponent {
     fun fetchNewPageTransactions(deviceId: String) {
         if (hasNextPage && !blockNewPageRequest) {
             onNewTransactionsPage.postValue(Resource.loading())
-            CoroutineScope(Dispatchers.IO).launch {
+            viewModelScope.launch {
                 currentPage++
                 blockNewPageRequest = true
                 tokenUseCase.getTransactions(deviceId, currentPage)
