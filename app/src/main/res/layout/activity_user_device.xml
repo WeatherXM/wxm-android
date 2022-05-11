@@ -130,7 +130,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler"
                     android:layout_width="wrap_content"
-                    android:layout_height="120dp"
+                    android:layout_height="128dp"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:clipChildren="false"
                     android:clipToOutline="false"

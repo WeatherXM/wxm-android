@@ -23,14 +23,13 @@ class UserAgentRequestInterceptor(val context: Context) : Interceptor {
     private fun applicationInfo(): String {
         return try {
             val packageInfo = packageManager.getPackageInfo(context.packageName, 0)
-            val appName = packageInfo.applicationInfo.loadLabel(packageManager)
             val name = packageInfo.versionName
             val code = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 packageInfo.longVersionCode
             } else {
                 packageInfo.versionCode
             }
-            "(${context.applicationInfo.packageName}) $appName $name ($code)"
+            "wxm-android (${context.applicationInfo.packageName}); $name ($code)"
         } catch (e: PackageManager.NameNotFoundException) {
             Timber.d("Could not resolve application info: $e")
             "${context.applicationInfo.packageName} N/A (N/A)"

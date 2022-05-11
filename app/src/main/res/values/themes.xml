@@ -179,6 +179,17 @@
         <item name="android:maxLines">1</item>
     </style>
 
+    <style name="TextAppearance.WeatherXM.HourlyCard.Data.Precipitation" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/hourly_forecast_precipitation</item>
+        <item name="drawableStartCompat">@drawable/ic_weather_precip_prob_extra_small</item>
+        <item name="drawableTint">@color/hourly_forecast_precipitation</item>
+        <item name="android:drawablePadding">2dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">10sp</item>
+        <item name="autoSizeMaxTextSize">12sp</item>
+    </style>
+
     <style name="TextAppearance.WeatherXM.HourlyCard.Data.Time" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/hourly_forecast_texts_list</item>
         <item name="android:textSize">11sp</item>
