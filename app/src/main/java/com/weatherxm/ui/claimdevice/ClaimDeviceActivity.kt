@@ -50,12 +50,15 @@ class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
         }
 
         binding.nextBtn.setOnClickListener {
-            if(binding.pager.currentItem == PAGE_SERIAL_NUMBER && !model.isSerialSet()) {
+            if (binding.pager.currentItem == PAGE_SERIAL_NUMBER && !model.isSerialSet()) {
                 model.checkSerialAndContinue()
             } else {
                 onNextPressed()
             }
         }
+
+        // Make dots not clickable so the user can navigate only under our conditions
+        binding.pagerIndicator.dotsClickable = false
 
         binding.prevBtn.setOnClickListener {
             onBackPressed()
@@ -73,7 +76,7 @@ class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
     private fun onNextPressed() {
         binding.pager.currentItem += 1
 
-        if(binding.pager.currentItem == PAGE_RESULT) {
+        if (binding.pager.currentItem == PAGE_RESULT) {
             model.claimDevice()
         }
 
@@ -118,10 +121,11 @@ class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
     private fun updateUI() {
         when (binding.pager.currentItem) {
             PAGE_INFORMATION -> {
+                binding.prevBtn.visibility = View.INVISIBLE
                 binding.nextBtn.isEnabled = true
-                binding.nextBtn.text = getString(R.string.action_next)
             }
             PAGE_SERIAL_NUMBER -> {
+                binding.prevBtn.visibility = View.VISIBLE
                 binding.nextBtn.isEnabled = model.isSerialSet()
                 binding.nextBtn.text = getString(R.string.action_next)
             }
