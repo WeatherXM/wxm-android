@@ -133,6 +133,7 @@ fun LineChart.initializeHumidity24hChart(chartData: LineChartData) {
     notifyDataSetChanged()
 }
 
+@Suppress("MagicNumber")
 fun LineChart.initializePressure24hChart(chartData: LineChartData) {
     val dataSet = LineDataSet(chartData.entries, chartData.name)
     val lineData = LineData(dataSet)
