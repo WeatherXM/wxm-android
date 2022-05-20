@@ -8,12 +8,12 @@ import com.weatherxm.R
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.Failure
-import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
 import com.weatherxm.data.repository.WeatherRepository.Companion.PREFETCH_DAYS
 import com.weatherxm.ui.ForecastData
 import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.UIErrors.getDefaultMessageResId
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -56,8 +56,7 @@ class ForecastViewModel : ViewModel(), KoinComponent {
                         is InvalidFromDate, is InvalidToDate -> {
                             R.string.error_forecast_generic_message
                         }
-                        is NetworkError -> R.string.error_network
-                        else -> R.string.error_unknown
+                        else -> failure.getDefaultMessageResId()
                     }
                 )
             )

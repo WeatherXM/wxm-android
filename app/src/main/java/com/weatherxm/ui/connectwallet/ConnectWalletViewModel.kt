@@ -8,10 +8,10 @@ import arrow.core.valueOr
 import com.weatherxm.R
 import com.weatherxm.data.ApiError.UserError.WalletError.InvalidWalletAddress
 import com.weatherxm.data.Failure
-import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.ConnectWalletUseCase
 import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.UIErrors.getDefaultMessageResId
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -75,8 +75,7 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
                 resHelper.getString(
                     when (failure) {
                         is InvalidWalletAddress -> R.string.error_connect_wallet_invalid_address
-                        is NetworkError -> R.string.error_network
-                        else -> R.string.error_unknown
+                        else -> failure.getDefaultMessageResId()
                     }
                 )
             )

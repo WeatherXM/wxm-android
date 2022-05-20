@@ -12,7 +12,6 @@ import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
-import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.BarChartData
 import com.weatherxm.ui.HistoryCharts
@@ -21,6 +20,7 @@ import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getLast7Days
 import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.UIErrors.getDefaultMessageResId
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -79,8 +79,7 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
                         is InvalidFromDate, is InvalidToDate -> {
                             R.string.error_history_generic_message
                         }
-                        is NetworkError -> R.string.error_network
-                        else -> R.string.error_unknown
+                        else -> failure.getDefaultMessageResId()
                     }
                 )
             )

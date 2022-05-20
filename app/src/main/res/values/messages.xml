@@ -1,8 +1,8 @@
 <resources>
     <!-- Error Messages -->
     <string name="error_generic_message">Oops! Something went wrong.</string>
-    <string name="error_unknown">"Something went wrong: Unknown Error"</string>
-    <string name="error_network">Something went wrong: Network Error - check your internet connection</string>
+    <string name="error_network_generic">Please, check your internet connection and try again.</string>
+    <string name="error_network_timed_out">Server taking too long to respond. Please check your connection and try again.</string>
     <string name="error_history_no_data_on_day">Oops! Could not load data from network.</string>
     <string name="error_history_generic_message">"Fetching history failed"</string>
     <string name="error_history_no_charts_found">"Oops! Charts could not be loaded."</string>

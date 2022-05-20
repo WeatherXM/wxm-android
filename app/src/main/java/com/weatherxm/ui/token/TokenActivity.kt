@@ -45,7 +45,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
         val device = intent?.extras?.getParcelable<Device>(ARG_DEVICE)
         if (device == null) {
             Timber.d("Could not start TokenActivity. Device is null.")
-            toast(R.string.error_unknown)
+            toast(R.string.error_generic_message)
             finish()
             return
         }

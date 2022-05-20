@@ -20,6 +20,8 @@ import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.ApiError.UserError.WalletError.InvalidWalletAddress
+import com.weatherxm.data.NetworkError.ConnectionTimeoutError
+import com.weatherxm.data.NetworkError.NoConnectionError
 import com.weatherxm.data.network.ErrorResponse
 import com.weatherxm.data.network.ErrorResponse.Companion.DEVICE_ALREADY_CLAIMED
 import com.weatherxm.data.network.ErrorResponse.Companion.DEVICE_NOT_FOUND
@@ -40,6 +42,7 @@ import com.weatherxm.data.network.ErrorResponse.Companion.VALIDATION
 import okhttp3.Request
 import okhttp3.Response
 import timber.log.Timber
+import java.net.SocketTimeoutException
 
 fun Request.path(): String = this.url.encodedPath
 
@@ -84,8 +87,13 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
                 )
             }
             is NetworkResponse.NetworkError -> {
-                Timber.d(this.error, "Network response: NetworkError")
-                Either.Left(Failure.NetworkError)
+                if (this.error is SocketTimeoutException) {
+                    Timber.d(this.error, "Network response: ConnectionTimeoutError")
+                    Either.Left(ConnectionTimeoutError)
+                } else {
+                    Timber.d(this.error, "Network response: NoConnectionError")
+                    Either.Left(NoConnectionError)
+                }
             }
             is NetworkResponse.UnknownError -> {
                 Timber.d(this.error, "Network response: UnknownError")
