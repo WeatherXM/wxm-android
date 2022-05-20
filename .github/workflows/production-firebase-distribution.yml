@@ -1,7 +1,8 @@
 name: Build Production & Firebase Distribution
 on:
     push:
-        branches: [ main ]
+        tags:
+            - '[0-9]+.[0-9]+.[0-9]+'
 env:
     # Mapbox SDK secrets
     ORG_GRADLE_PROJECT_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
