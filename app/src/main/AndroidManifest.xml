@@ -27,6 +27,16 @@
             android:name="firebase_crashlytics_collection_enabled"
             android:value="${crashlyticsEnabled}" />
 
+        <!-- Icon to show in notification tray for messages sent from Firebase -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification_default" />
+
+        <!-- Default color for incoming Firebase notification messages -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/blue" />
+
         <!-- Alias for the launcher activity so that we may change it in the future without problems -->
         <activity-alias
             android:name="Home"
@@ -106,6 +116,14 @@
             android:theme="@style/Theme.WeatherXM" />
 
         <!-- Services -->
+        <service
+            android:name="com.weatherxm.service.MessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
 
     </application>
 

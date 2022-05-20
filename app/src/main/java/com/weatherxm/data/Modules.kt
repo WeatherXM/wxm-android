@@ -11,6 +11,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.SettingsClient
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
@@ -322,7 +323,10 @@ val validator = module {
     }
 }
 
-val firebaseRemoteConfig = module {
+val firebase = module {
+    single<FirebaseMessaging> {
+        FirebaseMessaging.getInstance()
+    }
     single<FirebaseRemoteConfig> {
         // Init Firebase config
         Firebase.remoteConfig.apply {
@@ -402,7 +406,7 @@ val modules = listOf(
     validator,
     usecases,
     resourcesHelper,
-    firebaseRemoteConfig,
+    firebase,
     apiServiceModule,
     utilities
 )
