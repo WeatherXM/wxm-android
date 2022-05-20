@@ -109,6 +109,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
         }
 
         model.onTokens().observe(this) {
+            binding.tokenCard.enableStatusOfOptions(model.hasInitialTokenFetchCompleted())
             binding.tokenCard.setTokenData(it)
         }
 

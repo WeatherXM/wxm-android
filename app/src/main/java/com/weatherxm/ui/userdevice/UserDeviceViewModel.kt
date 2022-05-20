@@ -28,6 +28,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     private lateinit var device: Device
     private var tokensCurrentState = TokensState.HOUR24
     private var forecastCurrentState = ForecastState.TODAY
+    private var initialTokenFetchCompleted = false
 
     enum class TokensState {
         HOUR24,
@@ -117,6 +118,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             tokens
                 .map {
                     onTokens.postValue(it)
+                    initialTokenFetchCompleted = true
                 }
                 .mapLeft {
                     if (it == Failure.NetworkError) {
@@ -221,6 +223,10 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             }
             onLoading.postValue(false)
         }
+    }
+
+    fun hasInitialTokenFetchCompleted(): Boolean {
+        return initialTokenFetchCompleted
     }
 
     /*
