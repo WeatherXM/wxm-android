@@ -22,13 +22,12 @@ import com.weatherxm.util.initializePressure24hChart
 import com.weatherxm.util.initializeTemperature24hChart
 import com.weatherxm.util.initializeUV24hChart
 import com.weatherxm.util.initializeWind24hChart
-import org.koin.core.component.KoinComponent
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-class HistoryChartsFragment : Fragment(), KoinComponent {
+class HistoryChartsFragment : Fragment() {
 
     private val model: HistoryChartsViewModel by activityViewModels()
     private lateinit var binding: FragmentHistoryChartsBinding

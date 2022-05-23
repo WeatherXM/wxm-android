@@ -17,8 +17,6 @@ import com.weatherxm.util.DateTimeHelper.getHourMinutesFromISO
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UnitConverter
 import com.weatherxm.util.Weather
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 interface HistoryUseCase {
     suspend fun getWeatherHistory(
@@ -29,9 +27,10 @@ interface HistoryUseCase {
     ): Either<Failure, List<HistoryCharts>>
 }
 
-class HistoryUseCaseImpl : HistoryUseCase, KoinComponent {
-    private val weatherRepository: WeatherRepository by inject()
-    private val resHelper: ResourcesHelper by inject()
+class HistoryUseCaseImpl(
+    private val weatherRepository: WeatherRepository,
+    private val resHelper: ResourcesHelper
+) : HistoryUseCase {
 
     /*
         Return either a HistoryCharts object with all the entries for the chart of each data

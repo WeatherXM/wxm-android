@@ -7,9 +7,8 @@ import android.widget.LinearLayout
 import com.github.mikephil.charting.charts.BarChart
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewBarChartBinding
-import org.koin.core.component.KoinComponent
 
-class BarChartView : LinearLayout, KoinComponent {
+class BarChartView : LinearLayout {
 
     private lateinit var binding: ViewBarChartBinding
 

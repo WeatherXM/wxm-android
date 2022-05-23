@@ -10,6 +10,7 @@ import androidx.security.crypto.MasterKeys
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.SettingsClient
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -46,14 +47,21 @@ import com.weatherxm.data.network.interceptor.AuthRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthTokenAuthenticator
 import com.weatherxm.data.network.interceptor.ClientIdentificationRequestInterceptor
 import com.weatherxm.data.repository.AppConfigRepository
+import com.weatherxm.data.repository.AppConfigRepositoryImpl
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
 import com.weatherxm.data.repository.DeviceRepository
+import com.weatherxm.data.repository.DeviceRepositoryImpl
 import com.weatherxm.data.repository.LocationRepository
+import com.weatherxm.data.repository.LocationRepositoryImpl
 import com.weatherxm.data.repository.TokenRepository
+import com.weatherxm.data.repository.TokenRepositoryImpl
 import com.weatherxm.data.repository.UserRepository
+import com.weatherxm.data.repository.UserRepositoryImpl
 import com.weatherxm.data.repository.WalletRepository
+import com.weatherxm.data.repository.WalletRepositoryImpl
 import com.weatherxm.data.repository.WeatherRepository
+import com.weatherxm.data.repository.WeatherRepositoryImpl
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.explorer.HexWithResolutionJsonAdapter
 import com.weatherxm.usecases.AuthUseCase
@@ -147,7 +155,7 @@ private val preferences = module {
 
 private val datasources = module {
     single<LocationDataSource> {
-        LocationDataSourceImpl()
+        LocationDataSourceImpl(get())
     }
 
     single<NetworkUserDataSource> {
@@ -196,49 +204,49 @@ private val repositories = module {
         AuthRepositoryImpl(get(), get(), get())
     }
     single<LocationRepository> {
-        LocationRepository()
+        LocationRepositoryImpl(get())
     }
     single<UserRepository> {
-        UserRepository(get(), get())
+        UserRepositoryImpl(get(), get())
     }
     single<WalletRepository> {
-        WalletRepository(get(), get())
+        WalletRepositoryImpl(get(), get())
     }
     single<DeviceRepository> {
-        DeviceRepository(get())
+        DeviceRepositoryImpl(get())
     }
     single<TokenRepository> {
-        TokenRepository(get())
+        TokenRepositoryImpl(get())
     }
     single<WeatherRepository> {
-        WeatherRepository(get(), get())
+        WeatherRepositoryImpl(get(), get())
     }
     single<AppConfigRepository> {
-        AppConfigRepository(get())
+        AppConfigRepositoryImpl(get())
     }
 }
 
 private val usecases = module {
     single<ExplorerUseCase> {
-        ExplorerUseCaseImpl()
+        ExplorerUseCaseImpl(get(), get(), get())
     }
     single<UserDeviceUseCase> {
-        UserDeviceUseCaseImpl()
+        UserDeviceUseCaseImpl(get(), get(), get())
     }
     single<HistoryUseCase> {
-        HistoryUseCaseImpl()
+        HistoryUseCaseImpl(get(), get())
     }
     single<ForecastUseCase> {
-        ForecastUseCaseImpl()
+        ForecastUseCaseImpl(get(), get())
     }
     single<ClaimDeviceUseCase> {
-        ClaimDeviceUseCaseImpl()
+        ClaimDeviceUseCaseImpl(get(), get())
     }
     single<TokenUseCase> {
-        TokenUseCaseImpl()
+        TokenUseCaseImpl(get())
     }
     single<AuthUseCase> {
-        AuthUseCaseImpl()
+        AuthUseCaseImpl(get(), get(), get(), get())
     }
     single<UserUseCase> {
         UserUseCaseImpl(get(), get())
@@ -276,7 +284,7 @@ private val network = module {
         val client: OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(get() as HttpLoggingInterceptor)
             .addInterceptor(get() as ClientIdentificationRequestInterceptor)
-            .addInterceptor(AuthRequestInterceptor())
+            .addInterceptor(AuthRequestInterceptor(get(), get()))
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
@@ -299,8 +307,8 @@ private val network = module {
         val client: OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(get() as HttpLoggingInterceptor)
             .addInterceptor(get() as ClientIdentificationRequestInterceptor)
-            .addInterceptor(ApiRequestInterceptor())
-            .authenticator(AuthTokenAuthenticator())
+            .addInterceptor(ApiRequestInterceptor(get()))
+            .authenticator(AuthTokenAuthenticator(get(), get(), get()))
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
@@ -340,6 +348,9 @@ val firebase = module {
                 }
             )
         }
+    }
+    single<FirebaseCrashlytics> {
+        FirebaseCrashlytics.getInstance()
     }
 }
 

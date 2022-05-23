@@ -10,9 +10,7 @@ interface AuthTokenDataSource {
     suspend fun clear()
 }
 
-class AuthTokenDataSourceImpl(
-    private val preferences: SharedPreferences,
-) : AuthTokenDataSource {
+class AuthTokenDataSourceImpl(private val preferences: SharedPreferences, ) : AuthTokenDataSource {
 
     companion object {
         const val KEY_ACCESS = "access"

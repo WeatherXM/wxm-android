@@ -17,10 +17,9 @@ import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.scalebar.scalebar
 import com.weatherxm.databinding.FragmentMapBinding
 import dev.chrisbanes.insetter.applyInsetter
-import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
-open class BaseMapFragment : Fragment(), KoinComponent {
+open class BaseMapFragment : Fragment() {
 
     protected lateinit var binding: FragmentMapBinding
     protected lateinit var polygonManager: PolygonAnnotationManager

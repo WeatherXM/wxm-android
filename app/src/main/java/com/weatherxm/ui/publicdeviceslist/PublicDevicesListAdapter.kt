@@ -10,13 +10,11 @@ import com.weatherxm.data.Device
 import com.weatherxm.databinding.ListItemPublicDeviceBinding
 import com.weatherxm.util.DateTimeHelper.getRelativeTimeFromISO
 import com.weatherxm.util.setTextAndColor
-import org.koin.core.component.KoinComponent
 
 class PublicDevicesListAdapter(
     private val publicDeviceListener: (Device) -> Unit
 ) : ListAdapter<Device,
-    PublicDevicesListAdapter.PublicDeviceViewHolder>(PublicDeviceDiffCallback()),
-    KoinComponent {
+    PublicDevicesListAdapter.PublicDeviceViewHolder>(PublicDeviceDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PublicDeviceViewHolder {
         val binding = ListItemPublicDeviceBinding

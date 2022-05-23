@@ -16,8 +16,6 @@ import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.H7_RESOLUTION
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.ZOOM_LEVEL_CHANGE_HEX
 import com.weatherxm.ui.explorer.HexWithResolution
 import com.weatherxm.util.ResourcesHelper
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import timber.log.Timber
 
 interface ExplorerUseCase {
@@ -34,11 +32,11 @@ interface ExplorerUseCase {
     suspend fun saveDevicesPointsH7(devices: List<Device>)
 }
 
-class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
-
-    private val deviceRepository: DeviceRepository by inject()
-    private val gson: Gson by inject()
-    private val resHelper: ResourcesHelper by inject()
+class ExplorerUseCaseImpl(
+    private val deviceRepository: DeviceRepository,
+    private val gson: Gson,
+    private val resHelper: ResourcesHelper
+) : ExplorerUseCase {
 
     // Points to paint
     private var pointsHex7: MutableList<PolygonAnnotationOptions> = mutableListOf()
@@ -61,15 +59,15 @@ class ExplorerUseCaseImpl : ExplorerUseCase, KoinComponent {
     * save their points both on H3 and H7 so they can be served immediately afterwards
     */
     override suspend fun getPublicDevices(forceRefresh: Boolean): Either<Failure, List<Device>> {
-        if(forceRefresh) {
+        if (forceRefresh) {
             pointsHex3.clear()
             pointsHex7.clear()
         }
         return deviceRepository.getPublicDevices(forceRefresh).tap {
-            if(pointsHex3.isEmpty()) {
+            if (pointsHex3.isEmpty()) {
                 saveDevicesPointsH3(it)
             }
-            if(pointsHex7.isEmpty()) {
+            if (pointsHex7.isEmpty()) {
                 saveDevicesPointsH7(it)
             }
         }

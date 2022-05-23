@@ -7,8 +7,6 @@ import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.data.repository.WalletRepository
 import com.weatherxm.data.repository.WeatherRepository
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 interface AuthUseCase {
     suspend fun login(username: String, password: String): Either<Failure, String>
@@ -24,11 +22,12 @@ interface AuthUseCase {
     suspend fun logout()
 }
 
-class AuthUseCaseImpl : AuthUseCase, KoinComponent {
-    private val authRepository: AuthRepository by inject()
-    private val userRepository: UserRepository by inject()
-    private val weatherRepository: WeatherRepository by inject()
-    private val walletRepository: WalletRepository by inject()
+class AuthUseCaseImpl(
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository,
+    private val weatherRepository: WeatherRepository,
+    private val walletRepository: WalletRepository
+) : AuthUseCase {
 
     override suspend fun isLoggedIn(): Either<Error, String> {
         return authRepository.isLoggedIn()

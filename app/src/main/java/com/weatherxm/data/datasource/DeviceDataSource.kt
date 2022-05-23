@@ -15,9 +15,7 @@ interface DeviceDataSource {
     suspend fun claimDevice(serialNumber: String, location: Location): Either<Failure, Device>
 }
 
-class DeviceDataSourceImpl(
-    private val apiService: ApiService
-) : DeviceDataSource {
+class DeviceDataSourceImpl(private val apiService: ApiService) : DeviceDataSource {
     private lateinit var publicDevices: List<Device>
 
     override suspend fun getPublicDevices(forceRefresh: Boolean): Either<Failure, List<Device>> {

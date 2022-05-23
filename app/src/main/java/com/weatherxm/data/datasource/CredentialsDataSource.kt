@@ -3,7 +3,6 @@ package com.weatherxm.data.datasource
 import android.content.SharedPreferences
 import arrow.core.Either
 import com.weatherxm.data.network.Credentials
-import org.koin.core.component.KoinComponent
 
 interface CredentialsDataSource {
     suspend fun getCredentials(): Either<Error, Credentials>
@@ -13,7 +12,7 @@ interface CredentialsDataSource {
 
 class CredentialsDataSourceImpl(
     private val preferences: SharedPreferences,
-) : CredentialsDataSource, KoinComponent {
+) : CredentialsDataSource {
 
     companion object {
         const val KEY_USERNAME = "username"

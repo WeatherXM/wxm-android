@@ -18,10 +18,9 @@ import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
-import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
-class ClaimDeviceActivity : FragmentActivity(), KoinComponent {
+class ClaimDeviceActivity : FragmentActivity() {
 
     private val model: ClaimDeviceViewModel by viewModels()
     private lateinit var binding: ActivityClaimDeviceBinding

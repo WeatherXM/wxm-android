@@ -23,15 +23,13 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import timber.log.Timber
 
-class AuthTokenAuthenticator : Authenticator, KoinComponent {
-
-    private val authService: AuthService by inject()
-    private val authTokenRepository: AuthTokenDataSource by inject()
-    private val credentialsRepository: CredentialsDataSource by inject()
+class AuthTokenAuthenticator(
+    private val authService: AuthService,
+    private val authTokenRepository: AuthTokenDataSource,
+    private val credentialsRepository: CredentialsDataSource
+) : Authenticator {
 
     override fun authenticate(route: Route?, response: Response): Request? {
         // The original request

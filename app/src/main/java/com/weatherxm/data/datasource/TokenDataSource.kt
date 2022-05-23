@@ -12,9 +12,7 @@ interface TokenDataSource {
     suspend fun getTransactions(deviceId: String, page: Int?): Either<Failure, TransactionsResponse>
 }
 
-class TokenDataSourceImpl(
-    private val apiService: ApiService
-) : TokenDataSource {
+class TokenDataSourceImpl(private val apiService: ApiService) : TokenDataSource {
     lateinit var tokens: Tokens
 
     override suspend fun getTokens(

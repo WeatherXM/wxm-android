@@ -8,8 +8,6 @@ import com.weatherxm.ui.DailyForecast
 import com.weatherxm.util.DateTimeHelper.getShortNameOfDayFromLocalDate
 import com.weatherxm.util.DateTimeHelper.getSimplifiedDate
 import com.weatherxm.util.ResourcesHelper
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.time.ZonedDateTime
 
 interface ForecastUseCase {
@@ -21,9 +19,10 @@ interface ForecastUseCase {
     ): Either<Failure, List<DailyForecast>>
 }
 
-class ForecastUseCaseImpl : ForecastUseCase, KoinComponent {
-    private val weatherRepository: WeatherRepository by inject()
-    private val resourcesHelper: ResourcesHelper by inject()
+class ForecastUseCaseImpl(
+    private val weatherRepository: WeatherRepository,
+    private val resourcesHelper: ResourcesHelper
+) : ForecastUseCase {
 
     override suspend fun getDailyForecast(
         deviceId: String,

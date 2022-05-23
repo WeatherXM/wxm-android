@@ -12,10 +12,9 @@ import com.weatherxm.databinding.ActivityForecastBinding
 import com.weatherxm.ui.DailyForecast
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
-import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
-class ForecastActivity : AppCompatActivity(), KoinComponent {
+class ForecastActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityForecastBinding
     private val model: ForecastViewModel by viewModels()

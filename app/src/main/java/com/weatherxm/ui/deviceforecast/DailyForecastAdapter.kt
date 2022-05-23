@@ -10,13 +10,11 @@ import com.weatherxm.databinding.ListItemDailyForecastBinding
 import com.weatherxm.ui.DailyForecast
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.roundToDecimals
-import org.koin.core.component.KoinComponent
 
 class DailyForecastAdapter :
     ListAdapter<DailyForecast, DailyForecastAdapter.DailyForecastViewHolder>(
         DailyForecastDiffCallback()
-    ),
-    KoinComponent {
+    ) {
 
     private var minTemperature: Float? = Float.MIN_VALUE
     private var maxTemperature: Float? = Float.MAX_VALUE
