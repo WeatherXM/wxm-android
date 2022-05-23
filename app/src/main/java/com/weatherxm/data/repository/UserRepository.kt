@@ -5,18 +5,22 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.User
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.NetworkUserDataSource
-import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
-class UserRepository(
+interface UserRepository {
+    suspend fun getUser(): Either<Failure, User>
+    suspend fun clearCache()
+}
+
+class UserRepositoryImpl(
     private val networkUserDataSource: NetworkUserDataSource,
     private val cacheUserDataSource: CacheUserDataSource
-) : KoinComponent {
+) : UserRepository {
 
     /**
      * Gets user from cache or network, combining the underlying data sources
      */
-    suspend fun getUser(): Either<Failure, User> {
+    override suspend fun getUser(): Either<Failure, User> {
         return cacheUserDataSource.getUser()
             .tap {
                 Timber.d("Got user from cache [${it.email}].")
@@ -29,7 +33,7 @@ class UserRepository(
             }
     }
 
-    suspend fun clearCache() {
+    override suspend fun clearCache() {
         cacheUserDataSource.clear()
     }
 }

@@ -4,12 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.weatherxm.R
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Transaction
 import com.weatherxm.usecases.TokenUseCase
-import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -21,7 +20,6 @@ class TokenViewModel : ViewModel(), KoinComponent {
     }
 
     private val tokenUseCase: TokenUseCase by inject()
-    private val resHelper: ResourcesHelper by inject()
 
     private var currentPage = 0
     private var hasNextPage = false
@@ -73,15 +71,6 @@ class TokenViewModel : ViewModel(), KoinComponent {
     }
 
     private fun handleFailure(failure: Failure) {
-        onFirstPageTransactions.postValue(
-            Resource.error(
-                resHelper.getString(
-                    when (failure) {
-                        is Failure.NetworkError -> R.string.error_network
-                        else -> R.string.error_unknown
-                    }
-                )
-            )
-        )
+        onFirstPageTransactions.postValue(Resource.error(failure.getDefaultMessage()))
     }
 }

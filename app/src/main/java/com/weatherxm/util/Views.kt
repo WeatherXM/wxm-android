@@ -14,9 +14,11 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.core.text.HtmlCompat
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.weatherxm.ui.common.hide
@@ -122,6 +124,10 @@ fun Fragment.hideKeyboard() {
 
 fun Activity.hideKeyboard() {
     hideKeyboard(currentFocus ?: View(this))
+}
+
+fun ChipGroup.setChildrenEnabled(enable: Boolean) {
+    children.forEach { it.isEnabled = enable }
 }
 
 private fun Context.hideKeyboard(view: View) {

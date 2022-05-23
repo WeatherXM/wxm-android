@@ -15,8 +15,6 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.suspendCancellableCoroutine
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
@@ -30,7 +28,9 @@ interface LocationDataSource {
     fun getLocationUpdates(): Flow<Location>
 }
 
-class LocationDataSourceImpl : LocationDataSource, KoinComponent {
+class LocationDataSourceImpl(
+    private val fusedLocationProviderClient: FusedLocationProviderClient
+) : LocationDataSource {
 
     companion object {
         /**
@@ -53,8 +53,6 @@ class LocationDataSourceImpl : LocationDataSource, KoinComponent {
          */
         private const val FOREGROUND_MINIMUM_DISPLACEMENT: Long = 1
     }
-
-    private val fusedLocationProviderClient: FusedLocationProviderClient by inject()
 
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     override suspend fun getLastLocation(): Location {

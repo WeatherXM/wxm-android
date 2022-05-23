@@ -26,8 +26,8 @@ android {
         applicationId "com.weatherxm.app"
         minSdkVersion 23
         targetSdkVersion 32
-        versionCode 12
-        versionName "3.1.0"
+        versionCode 13
+        versionName "3.1.1"
 
         // Resource value fields
         resValue("string", "mapbox_access_token", "$MAPBOX_ACCESS_TOKEN")
@@ -57,6 +57,13 @@ android {
             resValue "string", "app_name", "WXM Mock"
             buildConfigField("String", "API_URL", "\"https://api-dev.weatherxm.com\"")
             buildConfigField("String", "AUTH_URL", "\"https://api-dev.weatherxm.com\"")
+        }
+        staging {
+            dimension "server"
+            applicationIdSuffix ".staging"
+            resValue "string", "app_name", "WXM Staging"
+            buildConfigField("String", "API_URL", "\"https://api-staging.weatherxm.com\"")
+            buildConfigField("String", "AUTH_URL", "\"https://api-staging.weatherxm.com\"")
         }
         dev {
             dimension "server"
@@ -263,7 +270,7 @@ dependencies {
     implementation "com.google.firebase:firebase-crashlytics-ktx"
     implementation "com.google.firebase:firebase-perf-ktx"
     implementation "com.google.firebase:firebase-config-ktx"
-
+    implementation "com.google.firebase:firebase-messaging-ktx"
 
     // QR Code Scanner
     implementation "com.journeyapps:zxing-android-embedded:4.3.0"

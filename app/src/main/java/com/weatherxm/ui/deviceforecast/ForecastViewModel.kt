@@ -8,12 +8,12 @@ import com.weatherxm.R
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.Failure
-import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
-import com.weatherxm.data.repository.WeatherRepository.Companion.PREFETCH_DAYS
-import com.weatherxm.ui.ForecastData
+import com.weatherxm.data.repository.WeatherRepositoryImpl.Companion.PREFETCH_DAYS
+import com.weatherxm.ui.DailyForecast
 import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.UIErrors.getDefaultMessageResId
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -26,18 +26,18 @@ class ForecastViewModel : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
 
     // All charts currently visible
-    private val onForecast = MutableLiveData<Resource<ForecastData>>().apply {
+    private val onForecast = MutableLiveData<Resource<List<DailyForecast>>>().apply {
         value = Resource.loading()
     }
 
-    fun onForecast(): LiveData<Resource<ForecastData>> = onForecast
+    fun onForecast(): LiveData<Resource<List<DailyForecast>>> = onForecast
 
-    fun getWeatherForecast(deviceId: String) {
+    fun getWeatherForecast(deviceId: String, forceRefresh: Boolean = false) {
         onForecast.postValue(Resource.loading())
         viewModelScope.launch {
             val fromDate = ZonedDateTime.now()
             val toDate = ZonedDateTime.now().plusDays(PREFETCH_DAYS)
-            forecastUseCase.getDailyForecast(deviceId, fromDate, toDate)
+            forecastUseCase.getDailyForecast(deviceId, fromDate, toDate, forceRefresh)
                 .map { forecast ->
                     Timber.d("Got daily forecast from $fromDate to $toDate")
                     onForecast.postValue(Resource.success(forecast))
@@ -56,8 +56,7 @@ class ForecastViewModel : ViewModel(), KoinComponent {
                         is InvalidFromDate, is InvalidToDate -> {
                             R.string.error_forecast_generic_message
                         }
-                        is NetworkError -> R.string.error_network
-                        else -> R.string.error_unknown
+                        else -> failure.getDefaultMessageResId()
                     }
                 )
             )

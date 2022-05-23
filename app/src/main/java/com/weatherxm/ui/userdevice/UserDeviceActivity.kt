@@ -45,7 +45,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
         val device = intent?.extras?.getParcelable<Device>(ARG_DEVICE)
         if (device == null) {
             Timber.d("Could not start UserDeviceActivity. Device is null.")
-            toast(R.string.error_unknown)
+            toast(R.string.error_generic_message)
             finish()
             return
         }
@@ -109,6 +109,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
         }
 
         model.onTokens().observe(this) {
+            binding.tokenCard.enableStatusOfOptions(model.hasInitialTokenFetchCompleted())
             binding.tokenCard.setTokenData(it)
         }
 

@@ -8,15 +8,13 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import timber.log.Timber
 
 /**
  * {@see okhttp3.Interceptor} that adds Authorization header to the request,
  * using a stored JWT token with Bearer schema.
  */
-class ApiRequestInterceptor : Interceptor, KoinComponent {
+class ApiRequestInterceptor(private val authTokenDataSource: AuthTokenDataSource) : Interceptor {
 
     companion object {
         const val AUTH_HEADER = "Authorization"
@@ -24,8 +22,6 @@ class ApiRequestInterceptor : Interceptor, KoinComponent {
         const val NO_AUTH_HEADER_VALUE = "true"
         const val NO_AUTH_HEADER = "$NO_AUTH_HEADER_KEY: $NO_AUTH_HEADER_VALUE"
     }
-
-    private val authTokenDataSource: AuthTokenDataSource by inject()
 
     override fun intercept(chain: Interceptor.Chain): Response {
         // Original request

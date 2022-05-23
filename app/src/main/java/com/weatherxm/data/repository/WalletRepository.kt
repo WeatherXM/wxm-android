@@ -4,18 +4,23 @@ import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
-import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
-class WalletRepository(
+interface WalletRepository {
+    suspend fun getWalletAddress(): Either<Failure, String?>
+    suspend fun setWalletAddress(address: String): Either<Failure, Unit>
+    suspend fun clearCache()
+}
+
+class WalletRepositoryImpl(
     private val networkWalletDataSource: NetworkWalletDataSource,
     private val cacheWalletDataSource: CacheWalletDataSource
-) : KoinComponent {
+) : WalletRepository {
 
     /**
      * Gets wallet from cache or network, combining the underlying data sources
      */
-    suspend fun getWalletAddress(): Either<Failure, String?> {
+    override suspend fun getWalletAddress(): Either<Failure, String?> {
         return cacheWalletDataSource.getWalletAddress()
             .tap {
                 Timber.d("Got wallet from cache [$it].")
@@ -33,7 +38,7 @@ class WalletRepository(
     /**
      * Save wallet address
      */
-    suspend fun setWalletAddress(address: String): Either<Failure, Unit> {
+    override suspend fun setWalletAddress(address: String): Either<Failure, Unit> {
         return networkWalletDataSource.setWalletAddress(address)
             .tap {
                 Timber.d("Saved new wallet address [$address].")
@@ -42,7 +47,7 @@ class WalletRepository(
             }
     }
 
-    suspend fun clearCache() {
+    override suspend fun clearCache() {
         cacheWalletDataSource.clear()
     }
 }

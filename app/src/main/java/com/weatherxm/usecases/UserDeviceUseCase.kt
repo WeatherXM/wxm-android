@@ -11,8 +11,6 @@ import com.weatherxm.data.repository.WeatherRepository
 import com.weatherxm.ui.TokenSummary
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getNowInTimezone
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 interface UserDeviceUseCase {
     suspend fun getUserDevices(): Either<Failure, List<Device>>
@@ -43,10 +41,12 @@ interface UserDeviceUseCase {
     ): Either<Failure, TokenSummary>
 }
 
-class UserDeviceUseCaseImpl : UserDeviceUseCase, KoinComponent {
-    private val deviceRepository: DeviceRepository by inject()
-    private val tokenRepository: TokenRepository by inject()
-    private val weatherRepository: WeatherRepository by inject()
+class UserDeviceUseCaseImpl(
+    private val deviceRepository: DeviceRepository,
+    private val tokenRepository: TokenRepository,
+    private val weatherRepository: WeatherRepository
+) : UserDeviceUseCase {
+
 
     override suspend fun getUserDevices(): Either<Failure, List<Device>> {
         return deviceRepository.getUserDevices()

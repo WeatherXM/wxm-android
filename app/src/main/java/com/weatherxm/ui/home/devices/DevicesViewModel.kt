@@ -4,12 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.UserDeviceUseCase
-import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -18,7 +17,6 @@ import timber.log.Timber
 class DevicesViewModel : ViewModel(), KoinComponent {
 
     private val userDeviceUseCase: UserDeviceUseCase by inject()
-    private val resHelper: ResourcesHelper by inject()
 
     private val devices = MutableLiveData<Resource<List<Device>>>().apply {
         value = Resource.loading()
@@ -50,15 +48,6 @@ class DevicesViewModel : ViewModel(), KoinComponent {
     }
 
     private fun handleFailure(failure: Failure) {
-        devices.postValue(
-            Resource.error(
-                resHelper.getString(
-                    when (failure) {
-                        is Failure.NetworkError -> R.string.error_network
-                        else -> R.string.error_unknown
-                    }
-                )
-            )
-        )
+        devices.postValue(Resource.error(failure.getDefaultMessage()))
     }
 }

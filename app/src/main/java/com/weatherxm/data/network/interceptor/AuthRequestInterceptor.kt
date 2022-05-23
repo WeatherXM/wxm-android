@@ -7,18 +7,16 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import timber.log.Timber
 import java.io.IOException
 
 /**
  * {@see okhttp3.Interceptor} that saves an AuthToken in the response of the /auth endpoints.
  */
-class AuthRequestInterceptor : Interceptor, KoinComponent {
-
-    private val authTokenDataSource: AuthTokenDataSource by inject()
-    private val authTokenJsonAdapter: AuthTokenJsonAdapter by inject()
+class AuthRequestInterceptor(
+    private val authTokenDataSource: AuthTokenDataSource,
+    private val authTokenJsonAdapter: AuthTokenJsonAdapter
+) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         // Original request

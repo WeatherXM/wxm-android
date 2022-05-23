@@ -6,17 +6,16 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.DeviceRepository
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 interface ClaimDeviceUseCase {
     suspend fun claimDevice(serialNumber: String, lat: Double, lon: Double): Either<Failure, Device>
     suspend fun fetchUserEmail(): Either<Error, String>
 }
 
-class ClaimDeviceUseCaseImpl : ClaimDeviceUseCase, KoinComponent {
-    private val deviceRepository: DeviceRepository by inject()
-    private val authRepository: AuthRepository by inject()
+class ClaimDeviceUseCaseImpl(
+    private val deviceRepository: DeviceRepository,
+    private val authRepository: AuthRepository
+) : ClaimDeviceUseCase {
 
     override suspend fun claimDevice(
         serialNumber: String,

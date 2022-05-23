@@ -39,7 +39,7 @@ class HistoryActivity : AppCompatActivity(), KoinComponent {
         val device = intent?.extras?.getParcelable<Device>(ARG_DEVICE)
         if (device == null) {
             Timber.d("Could not start HistoryActivity. Device is null.")
-            toast(R.string.error_unknown)
+            toast(R.string.error_generic_message)
             finish()
             return
         }
@@ -48,6 +48,13 @@ class HistoryActivity : AppCompatActivity(), KoinComponent {
 
         binding.dateTabs.onTabSelected {
             model.setSelectedTab(it.position)
+        }
+
+        model.onUpdateDates().observe(this) {
+            if (it) {
+                binding.dateTabs.removeAllTabs()
+                updateDates()
+            }
         }
 
         updateDates()

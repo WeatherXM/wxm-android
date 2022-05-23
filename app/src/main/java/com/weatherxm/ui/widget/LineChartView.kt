@@ -7,9 +7,8 @@ import android.widget.LinearLayout
 import com.github.mikephil.charting.charts.LineChart
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewLineChartBinding
-import org.koin.core.component.KoinComponent
 
-class LineChartView : LinearLayout, KoinComponent {
+class LineChartView : LinearLayout {
 
     private lateinit var binding: ViewLineChartBinding
 

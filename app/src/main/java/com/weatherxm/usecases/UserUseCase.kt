@@ -7,7 +7,6 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.User
 import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.data.repository.WalletRepository
-import org.koin.core.component.KoinComponent
 
 interface UserUseCase {
     suspend fun getUser(): Either<Failure, User>
@@ -17,7 +16,7 @@ interface UserUseCase {
 class UserUseCaseImpl(
     private val userRepository: UserRepository,
     private val walletRepository: WalletRepository
-) : UserUseCase, KoinComponent {
+) : UserUseCase {
 
     override suspend fun getUser(): Either<Failure, User> {
         return userRepository.getUser()

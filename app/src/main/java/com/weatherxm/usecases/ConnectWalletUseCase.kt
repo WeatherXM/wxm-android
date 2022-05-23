@@ -5,7 +5,6 @@ import arrow.core.leftIfNull
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.WalletRepository
-import org.koin.core.component.KoinComponent
 
 interface ConnectWalletUseCase {
     suspend fun getWalletAddress(): Either<Failure, String>
@@ -14,7 +13,7 @@ interface ConnectWalletUseCase {
 
 class ConnectWalletUseCaseImpl(
     private val walletRepository: WalletRepository
-) : ConnectWalletUseCase, KoinComponent {
+) : ConnectWalletUseCase {
 
     override suspend fun getWalletAddress(): Either<Failure, String> {
         return walletRepository.getWalletAddress()

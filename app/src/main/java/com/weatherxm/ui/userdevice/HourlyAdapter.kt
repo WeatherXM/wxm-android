@@ -12,11 +12,10 @@ import com.weatherxm.ui.userdevice.HourlyAdapter.HourlyViewHolder
 import com.weatherxm.ui.userdevice.UserDeviceViewModel.ForecastState
 import com.weatherxm.util.DateTimeHelper.getHourMinutesFromISO
 import com.weatherxm.util.Weather
-import org.koin.core.component.KoinComponent
 
 class HourlyAdapter(
     private val onHourlyForecastSelected: (SelectedHourlyForecast) -> Unit
-) : ListAdapter<HourlyWeather, HourlyViewHolder>(HourlyDiffCallback()), KoinComponent {
+) : ListAdapter<HourlyWeather, HourlyViewHolder>(HourlyDiffCallback()) {
 
     private var selectedPosition = RecyclerView.NO_POSITION
     private var forecastState: ForecastState = ForecastState.TODAY

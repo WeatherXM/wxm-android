@@ -9,10 +9,13 @@ import com.weatherxm.data.ApiError
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.NetworkError.ConnectionTimeoutError
+import com.weatherxm.data.NetworkError.NoConnectionError
 import com.weatherxm.ui.TokenSummary
 import com.weatherxm.ui.UIError
 import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -28,6 +31,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     private lateinit var device: Device
     private var tokensCurrentState = TokensState.HOUR24
     private var forecastCurrentState = ForecastState.TODAY
+    private var initialTokenFetchCompleted = false
 
     enum class TokensState {
         HOUR24,
@@ -107,7 +111,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     setDevice(it)
                 }
                 .mapLeft {
-                    if (it == Failure.NetworkError) {
+                    if (it == NoConnectionError || it == ConnectionTimeoutError) {
                         shouldRetry = true
                     }
                     errorOnUserDevice = true
@@ -117,9 +121,10 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             tokens
                 .map {
                     onTokens.postValue(it)
+                    initialTokenFetchCompleted = true
                 }
                 .mapLeft {
-                    if (it == Failure.NetworkError) {
+                    if (it == NoConnectionError || it == ConnectionTimeoutError) {
                         shouldRetry = true
                     }
                     errorOnTokens = true
@@ -131,7 +136,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     onForecast.postValue(addCurrentToForecast(device.currentWeather, it))
                 }
                 .mapLeft {
-                    if (it == Failure.NetworkError) {
+                    if (it == NoConnectionError || it == ConnectionTimeoutError) {
                         shouldRetry = true
                     }
                     errorOnForecast = true
@@ -187,12 +192,12 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             is ApiError.UserError.InvalidFromDate, is ApiError.UserError.InvalidToDate -> {
                 uiError.errorMessage = resHelper.getString(R.string.error_forecast_generic_message)
             }
-            is Failure.NetworkError -> {
-                uiError.errorMessage = resHelper.getString(R.string.error_network)
+            is NoConnectionError, is ConnectionTimeoutError -> {
+                uiError.errorMessage = failure.getDefaultMessage()
                 uiError.retryFunction = { (::fetchForecast)(forecastCurrentState) }
             }
             else -> {
-                uiError.errorMessage = resHelper.getString(R.string.error_unknown)
+                uiError.errorMessage = resHelper.getString(R.string.error_generic_message)
             }
         }
         onError.postValue(uiError)
@@ -223,6 +228,10 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         }
     }
 
+    fun hasInitialTokenFetchCompleted(): Boolean {
+        return initialTokenFetchCompleted
+    }
+
     /*
     * Needed to show 1 decimal point at temperature only if the first tile on the "Today" state
     * is selected - which means only on current weather.
@@ -251,12 +260,13 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                             uiError.errorMessage =
                                 resHelper.getString(R.string.error_user_device_not_found)
                         }
-                        is Failure.NetworkError -> {
-                            uiError.errorMessage = resHelper.getString(R.string.error_network)
+                        is NoConnectionError, is ConnectionTimeoutError -> {
+                            uiError.errorMessage = it.getDefaultMessage()
                             uiError.retryFunction = ::fetchUserDevice
                         }
                         else -> {
-                            uiError.errorMessage = resHelper.getString(R.string.error_unknown)
+                            uiError.errorMessage =
+                                resHelper.getString(R.string.error_generic_message)
                         }
                     }
                     onError.postValue(uiError)
@@ -314,14 +324,14 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         when (failure) {
             is ApiError.GenericError -> {
                 uiError.errorMessage =
-                    failure.message ?: resHelper.getString(R.string.error_unknown)
+                    failure.message ?: resHelper.getString(R.string.error_generic_message)
             }
-            is Failure.NetworkError -> {
-                uiError.errorMessage = resHelper.getString(R.string.error_network)
+            is NoConnectionError, is ConnectionTimeoutError -> {
+                uiError.errorMessage = failure.getDefaultMessage()
                 uiError.retryFunction = { (::fetchTokenDetails)(tokensCurrentState) }
             }
             else -> {
-                uiError.errorMessage = resHelper.getString(R.string.error_unknown)
+                uiError.errorMessage = resHelper.getString(R.string.error_generic_message)
             }
         }
         onError.postValue(uiError)

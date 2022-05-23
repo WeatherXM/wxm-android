@@ -20,10 +20,9 @@ import com.weatherxm.databinding.FragmentPublicDeviceDetailsBinding
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
-class PublicDeviceDetailFragment : BottomSheetDialogFragment(), KoinComponent {
+class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
     private val explorerModel: ExplorerViewModel by activityViewModels()
     private val model: PublicDeviceDetailViewModel by viewModels()
     private lateinit var binding: FragmentPublicDeviceDetailsBinding

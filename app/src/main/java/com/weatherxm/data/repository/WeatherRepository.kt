@@ -6,21 +6,36 @@ import com.weatherxm.data.WeatherData
 import com.weatherxm.data.datasource.CacheWeatherDataSource
 import com.weatherxm.data.datasource.NetworkWeatherDataSource
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
-import org.koin.core.component.KoinComponent
 import timber.log.Timber
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
-class WeatherRepository(
+interface WeatherRepository {
+    suspend fun getDeviceForecast(
+        deviceId: String,
+        fromDate: ZonedDateTime,
+        toDate: ZonedDateTime,
+        forceRefresh: Boolean
+    ): Either<Failure, List<WeatherData>>
+
+    suspend fun clearCache()
+    suspend fun getHourlyWeatherHistory(
+        deviceId: String,
+        fromDate: String,
+        toDate: String
+    ): Either<Failure, List<WeatherData>>
+}
+
+class WeatherRepositoryImpl(
     private val networkWeatherDataSource: NetworkWeatherDataSource,
     private val cacheWeatherDataSource: CacheWeatherDataSource
-) : KoinComponent {
+) : WeatherRepository {
 
     companion object {
         const val PREFETCH_DAYS = 7L
     }
 
-    suspend fun getDeviceForecast(
+    override suspend fun getDeviceForecast(
         deviceId: String,
         fromDate: ZonedDateTime,
         toDate: ZonedDateTime,
@@ -49,11 +64,11 @@ class WeatherRepository(
             }
     }
 
-    suspend fun clearCache() {
+    override suspend fun clearCache() {
         cacheWeatherDataSource.clear()
     }
 
-    suspend fun getHourlyWeatherHistory(
+    override suspend fun getHourlyWeatherHistory(
         deviceId: String,
         fromDate: String,
         toDate: String

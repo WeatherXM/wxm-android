@@ -22,7 +22,7 @@ private const val CHART_BOTTOM_OFFSET = 20F
 private const val LINE_WIDTH = 2F
 private const val POINT_SIZE = 2F
 private const val MAXIMUMS_GRID_LINES_Y_AXIS = 4
-private const val Y_AXIS_DEFAULT_GRANULARITY = 0.1F
+private const val Y_AXIS_1_DECIMAL_GRANULARITY = 0.1F
 private const val Y_AXIS_PRECIP_INCHES_GRANULARITY = 0.01F
 private const val X_AXIS_DEFAULT_TIME_GRANULARITY = 3F
 private const val X_AXIS_GRANULARITY_1_HOUR = 1F
@@ -46,6 +46,7 @@ private fun LineChart.setDefaultSettings(chartData: LineChartData) {
     axisLeft.setLabelCount(MAXIMUMS_GRID_LINES_Y_AXIS, false)
     axisLeft.resetAxisMinimum()
     axisLeft.resetAxisMaximum()
+    axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit)
 
     // X axis settings
     xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -103,7 +104,6 @@ fun LineChart.initializeTemperature24hChart(chartData: LineChartData) {
         axisLeft.axisMinimum = dataSet.yMin - 1
         axisLeft.axisMaximum = dataSet.yMax + 1
     }
-    axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit)
 
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(chartData.timestamps)
@@ -128,15 +128,13 @@ fun LineChart.initializeHumidity24hChart(chartData: LineChartData) {
     dataSet.color = resources.getColor(chartData.lineColor, context.theme)
     dataSet.setCircleColor(resources.getColor(chartData.lineColor, context.theme))
 
-    // Y Axis settings
-    axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit)
-
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(chartData.timestamps)
     show()
     notifyDataSetChanged()
 }
 
+@Suppress("MagicNumber")
 fun LineChart.initializePressure24hChart(chartData: LineChartData) {
     val dataSet = LineDataSet(chartData.entries, chartData.name)
     val lineData = LineData(dataSet)
@@ -161,10 +159,16 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData) {
     * So this is a custom fix to add custom minimum and maximum values on the Y Axis
     */
     if (dataSet.yMax - dataSet.yMin < 2) {
-        axisLeft.axisMinimum = dataSet.yMin - 1
-        axisLeft.axisMaximum = dataSet.yMax + 1
+        if (chartData.unit == resources.getString(R.string.pressure_inHg)) {
+            axisLeft.axisMinimum = dataSet.yMin - 0.1F
+            axisLeft.axisMaximum = dataSet.yMax + 0.1F
+            axisLeft.granularity = Y_AXIS_1_DECIMAL_GRANULARITY
+            axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit, 1)
+        } else {
+            axisLeft.axisMinimum = dataSet.yMin - 1
+            axisLeft.axisMaximum = dataSet.yMax + 1
+        }
     }
-    axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit)
 
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(chartData.timestamps)
@@ -209,7 +213,7 @@ fun LineChart.initializePrecipitation24hChart(chartData: LineChartData) {
     axisLeft.granularity = if (inchesUsed) {
         Y_AXIS_PRECIP_INCHES_GRANULARITY
     } else {
-        Y_AXIS_DEFAULT_GRANULARITY
+        Y_AXIS_1_DECIMAL_GRANULARITY
     }
 
     /*
@@ -287,14 +291,15 @@ fun LineChart.initializeWind24hChart(
     * If max - min < 2 that means that the values are probably too close together.
     * Which causes a bug not showing labels on Y axis because granularity is set 1.
     * So this is a custom fix to add custom minimum and maximum values on the Y Axis
+    * NOTE: Wind Gust is always equal or higher than wind speed that's why we use its max
     */
-    if (dataSetWindSpeed.yMax - dataSetWindSpeed.yMin < 2) {
+    if (dataSetWindGust.yMax - dataSetWindSpeed.yMin < 2) {
         if (dataSetWindSpeed.yMin < 1) {
             axisLeft.axisMinimum = 0F
-            axisLeft.axisMaximum = dataSetWindSpeed.yMax + 2
+            axisLeft.axisMaximum = dataSetWindGust.yMax + 2
         } else {
             axisLeft.axisMinimum = dataSetWindSpeed.yMin - 1
-            axisLeft.axisMaximum = dataSetWindSpeed.yMax + 1
+            axisLeft.axisMaximum = dataSetWindGust.yMax + 1
         }
     }
     axisLeft.valueFormatter = CustomYAxisFormatter(windSpeedData.unit)

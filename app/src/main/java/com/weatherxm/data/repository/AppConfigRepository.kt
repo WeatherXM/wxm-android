@@ -1,26 +1,34 @@
 package com.weatherxm.data.repository
 
 import com.weatherxm.data.datasource.AppConfigDataSource
-import org.koin.core.component.KoinComponent
 
-class AppConfigRepository(private val appConfigDataSource: AppConfigDataSource) : KoinComponent {
+interface AppConfigRepository {
+    fun shouldUpdate(): Boolean
+    fun isUpdateMandatory(): Boolean
+    fun getChangelog(): String
+    fun setLastRemindedVersion()
+}
 
-    fun shouldUpdate(): Boolean {
+class AppConfigRepositoryImpl(
+    private val appConfigDataSource: AppConfigDataSource
+) : AppConfigRepository {
+
+    override fun shouldUpdate(): Boolean {
         val lastRemindedVersion = appConfigDataSource.getLastRemindedVersion()
         val lastRemoteVersion = appConfigDataSource.getLastRemoteVersionCode()
         return appConfigDataSource.shouldUpdate() &&
             (lastRemindedVersion < lastRemoteVersion || isUpdateMandatory())
     }
 
-    fun isUpdateMandatory(): Boolean {
+    override fun isUpdateMandatory(): Boolean {
         return appConfigDataSource.isUpdateMandatory()
     }
 
-    fun getChangelog(): String {
+    override fun getChangelog(): String {
         return appConfigDataSource.getChangelog()
     }
 
-    fun setLastRemindedVersion() {
+    override fun setLastRemindedVersion() {
         appConfigDataSource.setLastRemindedVersion()
     }
 }

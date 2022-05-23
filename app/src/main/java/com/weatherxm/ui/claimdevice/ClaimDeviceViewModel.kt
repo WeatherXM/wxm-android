@@ -22,10 +22,10 @@ import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceAlreadyClaimed
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.Failure
-import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.UIErrors.getDefaultMessageResId
 import com.weatherxm.util.Validator
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -145,10 +145,9 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
                     when (failure) {
                         is InvalidClaimId -> R.string.error_claim_invalid_serial
                         is InvalidClaimLocation -> R.string.error_claim_invalid_location
-                        is NetworkError -> R.string.error_network
                         is DeviceAlreadyClaimed -> R.string.error_claim_device_already_claimed
                         is DeviceNotFound -> R.string.error_claim_not_found
-                        else -> R.string.error_unknown
+                        else -> failure.getDefaultMessageResId()
                     }
                 )
             )
@@ -185,7 +184,7 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
 
     fun validateAndSetSerial(serialNumber: String): Boolean {
         return validator.validateSerialNumber(serialNumber).apply {
-            if(this) {
+            if (this) {
                 setSerialNumber(serialNumber)
             } else {
                 setSerialSet(false)

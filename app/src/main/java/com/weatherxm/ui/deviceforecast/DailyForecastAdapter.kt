@@ -9,13 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.databinding.ListItemDailyForecastBinding
 import com.weatherxm.ui.DailyForecast
 import com.weatherxm.util.Weather
-import org.koin.core.component.KoinComponent
+import com.weatherxm.util.Weather.roundToDecimals
 
 class DailyForecastAdapter :
     ListAdapter<DailyForecast, DailyForecastAdapter.DailyForecastViewHolder>(
         DailyForecastDiffCallback()
-    ),
-    KoinComponent {
+    ) {
 
     private var minTemperature: Float? = Float.MIN_VALUE
     private var maxTemperature: Float? = Float.MAX_VALUE
@@ -52,9 +51,20 @@ class DailyForecastAdapter :
                 playAnimation()
             }
             binding.temperature.apply {
-                valueFrom = minTemperature ?: 0F
-                valueTo = maxTemperature ?: 0F
-                values = listOf(item.minTemp ?: 0F, item.maxTemp ?: 0F)
+                /*
+                * Consider the following case:
+                * Day X: minimum value: 10.01, max value 15.99
+                * Day Y: minimum value 10.49, max value 15.51
+                * In the above examples, min and max temperature show up as 10 and 16 on both days,
+                * but the slider will be drawn according to the floats, not the min/max as integers.
+                * Therefore we round the to 0 decimals here before drawing the slider.
+                 */
+                valueFrom = roundToDecimals(minTemperature ?: 0F, 0)
+                valueTo = roundToDecimals(maxTemperature ?: 0F, 0)
+                values = listOf(
+                    roundToDecimals(item.minTemp ?: 0F, 0),
+                    roundToDecimals(item.maxTemp ?: 0F, 0)
+                )
             }
             binding.minTemperature.text = Weather.getFormattedTemperature(item.minTemp)
             binding.maxTemperature.text = Weather.getFormattedTemperature(item.maxTemp)

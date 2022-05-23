@@ -4,8 +4,8 @@ import androidx.annotation.Keep
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.squareup.moshi.JsonClass
-import com.weatherxm.data.Transaction
 import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.Transaction
 
 @Keep
 data class UIError(
@@ -75,14 +75,6 @@ data class TokenData(
 data class TokenSummary(
     var total: Float,
     var values: MutableList<Pair<String, Float>>
-)
-
-@Keep
-@JsonClass(generateAdapter = true)
-data class ForecastData(
-    var minTemp: Float?,
-    var maxTemp: Float?,
-    var dailyForecasts: List<DailyForecast>
 )
 
 @Keep

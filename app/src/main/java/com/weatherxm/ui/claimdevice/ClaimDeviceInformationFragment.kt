@@ -8,9 +8,8 @@ import androidx.fragment.app.Fragment
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimDeviceInstructionsBinding
 import com.weatherxm.util.setHtml
-import org.koin.core.component.KoinComponent
 
-class ClaimDeviceInformationFragment : Fragment(), KoinComponent {
+class ClaimDeviceInformationFragment : Fragment() {
     private lateinit var binding: FragmentClaimDeviceInstructionsBinding
 
     override fun onCreateView(

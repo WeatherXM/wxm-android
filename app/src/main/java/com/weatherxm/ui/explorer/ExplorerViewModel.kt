@@ -6,13 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mapbox.geojson.Point
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
-import com.weatherxm.R
 import com.weatherxm.data.Device
-import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.MapboxUtils
-import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -30,7 +28,6 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     }
 
     private val explorerUseCase: ExplorerUseCase by inject()
-    private val resHelper: ResourcesHelper by inject()
 
     private var currentZoom: Double = 0.0
     private var currentExplorerState = ExplorerState(null)
@@ -76,16 +73,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
                         state.postValue(Resource.success(currentExplorerState))
                     }
                     .mapLeft {
-                        state.postValue(
-                            Resource.error(
-                                resHelper.getString(
-                                    when (it) {
-                                        is NetworkError -> R.string.error_network
-                                        else -> R.string.error_unknown
-                                    }
-                                )
-                            )
-                        )
+                        state.postValue(Resource.error(it.getDefaultMessage()))
                     }
             }
         }

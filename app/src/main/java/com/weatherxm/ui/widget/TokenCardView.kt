@@ -11,6 +11,7 @@ import com.weatherxm.databinding.ViewTokenCardBinding
 import com.weatherxm.ui.TokenSummary
 import com.weatherxm.ui.userdevice.UserDeviceViewModel
 import com.weatherxm.util.Tokens.formatTokens
+import com.weatherxm.util.setChildrenEnabled
 
 open class TokenCardView : LinearLayout {
 
@@ -40,6 +41,9 @@ open class TokenCardView : LinearLayout {
         orientation = VERTICAL
         gravity = Gravity.CENTER
 
+        // Disable the different options initially, we enable it later after the first fetch of data
+        binding.tokenOptions.setChildrenEnabled(false)
+
         binding.tokenOptions.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.token24h -> {
@@ -59,6 +63,10 @@ open class TokenCardView : LinearLayout {
         tokenSummary = data
         chart(data.values)
         total(data.total)
+    }
+
+    fun enableStatusOfOptions(enabled: Boolean) {
+        binding.tokenOptions.setChildrenEnabled(enabled)
     }
 
     private fun chart(data: List<Pair<String, Float>>) {

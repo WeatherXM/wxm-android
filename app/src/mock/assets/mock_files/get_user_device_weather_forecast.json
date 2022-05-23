@@ -771,9 +771,10 @@
             }
         ],
         "daily": {
-            "temperature_max": 15.56,
-            "temperature_min": 10.15,
+            "temperature_max": 15.51,
+            "temperature_min": 10.05,
             "precipitation": 0,
+            "precipitation_probability": 47,
             "icon": "partly-cloudy-night",
             "precip_type": "rain",
             "pressure": 1020,
@@ -1152,8 +1153,8 @@
             }
         ],
         "daily": {
-            "temperature_max": 5,
-            "temperature_min": -4.0,
+            "temperature_max": 15.99,
+            "temperature_min": 10.49,
             "precipitation": 0,
             "precipitation_probability": 47,
             "icon": "partly-cloudy-night",
@@ -1534,8 +1535,8 @@
             }
         ],
         "daily": {
-            "temperature_max": 15.56,
-            "temperature_min": 10.15,
+            "temperature_max": 15.51,
+            "temperature_min": 10.05,
             "precipitation": 0,
             "precipitation_probability": 10,
             "icon": "partly-cloudy-night",

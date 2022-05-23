@@ -2,10 +2,9 @@ package com.weatherxm.util
 
 import androidx.annotation.ColorRes
 import com.weatherxm.R
-import org.koin.core.component.KoinComponent
 import java.text.DecimalFormat
 
-object Tokens : KoinComponent {
+object Tokens {
 
     @Suppress("MagicNumber")
     @ColorRes

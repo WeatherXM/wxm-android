@@ -5,17 +5,37 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.TokensSummaryResponse
 import com.weatherxm.data.TransactionsResponse
 import com.weatherxm.data.datasource.TokenDataSource
-import org.koin.core.component.KoinComponent
 
-class TokenRepository(private val tokenDataSource: TokenDataSource) : KoinComponent {
+interface TokenRepository {
+    suspend fun getTokens24H(deviceId: String, forceRefresh: Boolean): Either<Failure, Float?>
+    suspend fun getTokens7D(
+        deviceId: String,
+        forceRefresh: Boolean
+    ): Either<Failure, TokensSummaryResponse>
 
-    suspend fun getTokens24H(deviceId: String, forceRefresh: Boolean): Either<Failure, Float?> {
+    suspend fun getTokens30D(
+        deviceId: String,
+        forceRefresh: Boolean
+    ): Either<Failure, TokensSummaryResponse>
+
+    suspend fun getTransactions(
+        deviceId: String,
+        page: Int?
+    ): Either<Failure, TransactionsResponse>
+}
+
+class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenRepository {
+
+    override suspend fun getTokens24H(
+        deviceId: String,
+        forceRefresh: Boolean
+    ): Either<Failure, Float?> {
         return tokenDataSource.getTokens(deviceId, forceRefresh).map {
             it.daily.total
         }
     }
 
-    suspend fun getTokens7D(
+    override suspend fun getTokens7D(
         deviceId: String,
         forceRefresh: Boolean
     ): Either<Failure, TokensSummaryResponse> {
@@ -24,7 +44,7 @@ class TokenRepository(private val tokenDataSource: TokenDataSource) : KoinCompon
         }
     }
 
-    suspend fun getTokens30D(
+    override suspend fun getTokens30D(
         deviceId: String,
         forceRefresh: Boolean
     ): Either<Failure, TokensSummaryResponse> {
@@ -33,7 +53,7 @@ class TokenRepository(private val tokenDataSource: TokenDataSource) : KoinCompon
         }
     }
 
-    suspend fun getTransactions(
+    override suspend fun getTransactions(
         deviceId: String,
         page: Int?
     ): Either<Failure, TransactionsResponse> {

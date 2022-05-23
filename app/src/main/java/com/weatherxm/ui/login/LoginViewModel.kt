@@ -10,11 +10,12 @@ import com.weatherxm.data.ApiError.AuthError.InvalidUsername
 import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidCredentials
 import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidPassword
 import com.weatherxm.data.Failure
-import com.weatherxm.data.Failure.NetworkError
 import com.weatherxm.data.Resource
 import com.weatherxm.data.User
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.UIErrors.getDefaultMessage
+import com.weatherxm.util.UIErrors.getDefaultMessageResId
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -61,8 +62,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
                         is InvalidUsername -> R.string.error_login_invalid_username
                         is InvalidPassword -> R.string.error_login_invalid_password
                         is InvalidCredentials -> R.string.error_login_invalid_credentials
-                        is NetworkError -> R.string.error_network
-                        else -> R.string.error_unknown
+                        else -> failure.getDefaultMessageResId()
                     }
                 )
             )
@@ -70,15 +70,6 @@ class LoginViewModel : ViewModel(), KoinComponent {
     }
 
     private fun handleUserFailure(failure: Failure) {
-        user.postValue(
-            Resource.error(
-                resHelper.getString(
-                    when (failure) {
-                        is NetworkError -> R.string.error_network
-                        else -> R.string.error_unknown
-                    }
-                )
-            )
-        )
+        user.postValue(Resource.error(failure.getDefaultMessage()))
     }
 }

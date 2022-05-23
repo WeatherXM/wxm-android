@@ -7,9 +7,14 @@ import androidx.annotation.Keep
  */
 @Keep
 sealed class Failure {
-    object NetworkError : Failure()
     object JsonError : Failure()
     object UnknownError : Failure()
+}
+
+@Keep
+sealed class NetworkError : Failure() {
+    object ConnectionTimeoutError : NetworkError()
+    object NoConnectionError : NetworkError()
 }
 
 @Keep
