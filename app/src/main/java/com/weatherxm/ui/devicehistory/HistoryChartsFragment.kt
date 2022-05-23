@@ -60,10 +60,12 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
             Timber.d("Charts updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
+                    binding.swiperefresh.isRefreshing = false
                     resource.data?.let { updateUI(it) }
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
+                    binding.swiperefresh.isRefreshing = false
                     binding.chartsView.visibility = View.GONE
                     binding.empty.clear()
                     binding.empty.animation(R.raw.anim_error)
@@ -74,12 +76,22 @@ class HistoryChartsFragment : Fragment(), KoinComponent {
                     binding.empty.visibility = View.VISIBLE
                 }
                 Status.LOADING -> {
-                    binding.chartsView.visibility = View.GONE
-                    binding.empty.clear()
-                    binding.empty.animation(R.raw.anim_loading)
-                    binding.empty.visibility = View.VISIBLE
+                    if (binding.swiperefresh.isRefreshing) {
+                        binding.empty.clear()
+                        binding.empty.visibility = View.GONE
+                    } else {
+                        binding.chartsView.visibility = View.GONE
+                        binding.empty.clear()
+                        binding.empty.animation(R.raw.anim_loading)
+                        binding.empty.visibility = View.VISIBLE
+                    }
                 }
             }
+        }
+
+        binding.swiperefresh.setOnRefreshListener {
+            model.updateDates()
+            getWeatherHistory()
         }
 
         return binding.root

@@ -50,8 +50,10 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
     private val onCharts = MutableLiveData<Resource<HistoryCharts>>().apply {
         value = Resource.loading()
     }
+    private val onUpdateDates = MutableLiveData(false)
 
     fun onCharts(): LiveData<Resource<HistoryCharts>> = onCharts
+    fun onUpdateDates(): LiveData<Boolean> = onUpdateDates
 
     fun getWeatherHistory(device: Device, context: Context) {
         onCharts.postValue(Resource.loading())
@@ -122,5 +124,9 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
 
     fun getDatesForTabs(): List<String> {
         return getLast7Days(resHelper)
+    }
+
+    fun updateDates() {
+        onUpdateDates.postValue(true)
     }
 }

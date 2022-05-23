@@ -128,11 +128,14 @@ object Weather : KoinComponent {
     }
 
     fun getFormattedWindDirection(value: Int): String {
-        val savedUnit =
-            sharedPref.getString(resHelper.getString(R.string.key_wind_direction_preference), "")
         val defaultUnit = resHelper.getString(R.string.wind_direction_cardinal)
+        val savedUnit =
+            sharedPref.getString(
+                resHelper.getString(R.string.key_wind_direction_preference),
+                defaultUnit
+            )
 
-        if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
+        if (savedUnit != defaultUnit) {
             val windDegreesMark = resHelper.getString(R.string.wind_direction_degrees_mark)
             return "$value$windDegreesMark"
         }
@@ -153,12 +156,15 @@ object Weather : KoinComponent {
             return null
         }
 
-        val savedUnit =
-            sharedPref.getString(resHelper.getString(R.string.key_temperature_preference), "")
         val defaultUnit = resHelper.getString(R.string.temperature_celsius)
+        val savedUnit =
+            sharedPref.getString(
+                resHelper.getString(R.string.key_temperature_preference),
+                defaultUnit
+            )
 
         // Return the value based on the weather unit the user wants
-        val valueToReturn = if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
+        val valueToReturn = if (savedUnit != defaultUnit) {
             UnitConverter.celsiusToFahrenheit(value.toFloat())
         } else {
             value
@@ -178,12 +184,15 @@ object Weather : KoinComponent {
             return null
         }
 
-        val savedUnit =
-            sharedPref.getString(resHelper.getString(R.string.key_precipitation_preference), "")
         val defaultUnit = resHelper.getString(R.string.precipitation_mm)
+        val savedUnit =
+            sharedPref.getString(
+                resHelper.getString(R.string.key_precipitation_preference),
+                defaultUnit
+            )
 
         // Return the value based on the weather unit the user wants
-        return if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
+        return if (savedUnit != defaultUnit) {
             // On inches we use 2 decimals
             roundToDecimals(UnitConverter.millimetersToInches(value.toFloat()), decimals = 2)
         } else {
@@ -199,12 +208,15 @@ object Weather : KoinComponent {
             return null
         }
 
-        val savedUnit =
-            sharedPref.getString(resHelper.getString(R.string.key_wind_speed_preference), "")
         val defaultUnit = resHelper.getString(R.string.wind_speed_ms)
+        val savedUnit =
+            sharedPref.getString(
+                resHelper.getString(R.string.key_wind_speed_preference),
+                defaultUnit
+            )
 
         // Return the value based on the weather unit the user wants
-        return if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
+        return if (savedUnit != defaultUnit) {
             when (savedUnit) {
                 resHelper.getString(R.string.wind_speed_knots) -> {
                     roundToDecimals(UnitConverter.msToKnots(value.toFloat()))
@@ -235,12 +247,12 @@ object Weather : KoinComponent {
             return null
         }
 
-        val savedUnit =
-            sharedPref.getString(resHelper.getString(R.string.key_pressure_preference), "")
         val defaultUnit = resHelper.getString(R.string.pressure_hpa)
+        val savedUnit =
+            sharedPref.getString(resHelper.getString(R.string.key_pressure_preference), defaultUnit)
         // Return the value based on the weather unit the user wants, also round to 1 decimal
         return roundToDecimals(
-            if (!savedUnit.isNullOrEmpty() && savedUnit != defaultUnit) {
+            if (savedUnit != defaultUnit) {
                 UnitConverter.hpaToInHg(value.toFloat())
             } else {
                 value
@@ -269,7 +281,7 @@ object Weather : KoinComponent {
         }
     }
 
-    private fun roundToDecimals(value: Number, decimals: Int = 1): Float {
+    fun roundToDecimals(value: Number, decimals: Int = 1): Float {
         return value.toFloat().toBigDecimal().setScale(decimals, BigDecimal.ROUND_HALF_UP).toFloat()
     }
 }

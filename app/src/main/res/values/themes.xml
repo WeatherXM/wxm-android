@@ -25,13 +25,17 @@
         <item name="appBarLayoutStyle">@style/Widget.WeatherXM.AppBar</item>
         <item name="toolbarStyle">@style/Widget.WeatherXM.ToolBar</item>
         <item name="progressBarStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
-        <item name="linearProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal</item>
-        <item name="circularProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Circular</item>
+        <item name="linearProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Horizontal
+        </item>
+        <item name="circularProgressIndicatorStyle">@style/Widget.WeatherXM.ProgressBar.Circular
+        </item>
         <item name="bottomNavigationStyle">@style/Widget.WeatherXM.BottomNavigationView</item>
         <item name="materialButtonStyle">@style/Widget.WeatherXM.Button</item>
         <item name="buttonBarPositiveButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button</item>
-        <item name="buttonBarNeutralButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button.Subtle</item>
-        <item name="buttonBarNegativeButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button.Subtle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button.Subtle
+        </item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.WeatherXM.ButtonBar.Button.Subtle
+        </item>
         <item name="materialCardViewElevatedStyle">@style/Widget.WeatherXM.MaterialCard</item>
         <item name="materialCardViewStyle">?materialCardViewElevatedStyle</item>
         <item name="elevationOverlayEnabled">false</item>
@@ -175,7 +179,9 @@
 
     <style name="TextAppearance.WeatherXM.HourlyCard.Data" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/hourly_forecast_texts_list</item>
-        <item name="android:textSize">12sp</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">8sp</item>
+        <item name="autoSizeMaxTextSize">12sp</item>
         <item name="android:maxLines">1</item>
     </style>
 
@@ -184,15 +190,18 @@
         <item name="drawableStartCompat">@drawable/ic_weather_precip_prob_extra_small</item>
         <item name="drawableTint">@color/hourly_forecast_precipitation</item>
         <item name="android:drawablePadding">2dp</item>
-        <item name="android:textSize">12sp</item>
         <item name="autoSizeTextType">uniform</item>
-        <item name="autoSizeMinTextSize">10sp</item>
+        <item name="autoSizeMinTextSize">8sp</item>
         <item name="autoSizeMaxTextSize">12sp</item>
+        <item name="android:maxLines">1</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.HourlyCard.Data.Time" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/hourly_forecast_texts_list</item>
-        <item name="android:textSize">11sp</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMinTextSize">8sp</item>
+        <item name="autoSizeMaxTextSize">12sp</item>
+        <item name="android:maxLines">1</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Updated.On" parent="TextAppearance.MaterialComponents.Body1">

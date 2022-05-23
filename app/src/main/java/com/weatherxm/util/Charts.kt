@@ -45,6 +45,7 @@ private fun LineChart.setDefaultSettings(chartData: LineChartData) {
     axisLeft.gridColor = resources.getColor(R.color.chart_grid_color, context.theme)
     axisLeft.setLabelCount(MAXIMUMS_GRID_LINES_Y_AXIS, false)
     axisLeft.resetAxisMinimum()
+    axisLeft.resetAxisMaximum()
     axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit)
 
     // X axis settings
@@ -290,14 +291,15 @@ fun LineChart.initializeWind24hChart(
     * If max - min < 2 that means that the values are probably too close together.
     * Which causes a bug not showing labels on Y axis because granularity is set 1.
     * So this is a custom fix to add custom minimum and maximum values on the Y Axis
+    * NOTE: Wind Gust is always equal or higher than wind speed that's why we use its max
     */
-    if (dataSetWindSpeed.yMax - dataSetWindSpeed.yMin < 2) {
+    if (dataSetWindGust.yMax - dataSetWindSpeed.yMin < 2) {
         if (dataSetWindSpeed.yMin < 1) {
             axisLeft.axisMinimum = 0F
-            axisLeft.axisMaximum = dataSetWindSpeed.yMax + 2
+            axisLeft.axisMaximum = dataSetWindGust.yMax + 2
         } else {
             axisLeft.axisMinimum = dataSetWindSpeed.yMin - 1
-            axisLeft.axisMaximum = dataSetWindSpeed.yMax + 1
+            axisLeft.axisMaximum = dataSetWindGust.yMax + 1
         }
     }
     axisLeft.valueFormatter = CustomYAxisFormatter(windSpeedData.unit)

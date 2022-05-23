@@ -22,7 +22,7 @@
             app:title="@string/precipitation" />
 
         <ListPreference
-            app:defaultValue="@string/wind_speed_kmh"
+            app:defaultValue="@string/wind_speed_ms"
             app:entries="@array/wind_speed_entries"
             app:entryValues="@array/wind_speed_values"
             app:iconSpaceReserved="false"

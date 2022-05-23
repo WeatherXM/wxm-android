@@ -3,22 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_marginEnd="@dimen/margin_normal"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/margin_small"
     android:clipChildren="false"
     android:clipToOutline="false"
     android:clipToPadding="false"
-    tools:layout_height="128dp"
+    tools:layout_height="160dp"
     tools:targetApi="s">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
         style="@style/Widget.WeatherXM.MaterialCard.HourlyForecast"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
         app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="H,5:3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -33,16 +32,15 @@
                 style="@style/TextAppearance.WeatherXM.HourlyCard.Data"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_small"
                 android:gravity="center_horizontal"
                 tools:text="26°C" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/icon"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="48dp"
+                android:layout_marginVertical="@dimen/margin_extra_small"
                 android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
                 android:scaleType="centerInside"
                 app:lottie_autoPlay="false"
                 app:lottie_loop="true"
@@ -55,10 +53,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/margin_small"
                 android:gravity="center"
-                android:lines="1"
-                tools:text="50%" />
+                tools:text="100.0 mm" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/time"

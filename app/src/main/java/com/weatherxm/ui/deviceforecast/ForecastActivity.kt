@@ -9,7 +9,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityForecastBinding
-import com.weatherxm.ui.ForecastData
+import com.weatherxm.ui.DailyForecast
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
@@ -53,6 +53,10 @@ class ForecastActivity : AppCompatActivity(), KoinComponent {
         adapter = DailyForecastAdapter()
         binding.recycler.adapter = adapter
 
+        binding.swiperefresh.setOnRefreshListener {
+            model.getWeatherForecast(deviceId, forceRefresh = true)
+        }
+
         model.onForecast().observe(this) {
             updateUI(it)
         }
@@ -60,15 +64,17 @@ class ForecastActivity : AppCompatActivity(), KoinComponent {
         model.getWeatherForecast(deviceId)
     }
 
-    private fun updateUI(resource: Resource<ForecastData>) {
+    private fun updateUI(resource: Resource<List<DailyForecast>>) {
         when (resource.status) {
             Status.SUCCESS -> {
-                resource.data?.let { adapter.submitList(it.dailyForecasts) }
+                binding.swiperefresh.isRefreshing = false
+                resource.data?.let { adapter.submitList(it) }
                 binding.empty.visibility = View.GONE
                 binding.recycler.visibility = View.VISIBLE
             }
             Status.ERROR -> {
                 Timber.d("Got error: $resource.message")
+                binding.swiperefresh.isRefreshing = false
                 binding.recycler.visibility = View.GONE
                 binding.empty.animation(R.raw.anim_error)
                 binding.empty.title(getString(R.string.error_forecast_no_data))
@@ -78,10 +84,15 @@ class ForecastActivity : AppCompatActivity(), KoinComponent {
                 binding.empty.visibility = View.VISIBLE
             }
             Status.LOADING -> {
-                binding.recycler.visibility = View.GONE
-                binding.empty.clear()
-                binding.empty.animation(R.raw.anim_loading)
-                binding.empty.visibility = View.VISIBLE
+                if (binding.swiperefresh.isRefreshing) {
+                    binding.empty.clear()
+                    binding.empty.visibility = View.GONE
+                } else {
+                    binding.recycler.visibility = View.GONE
+                    binding.empty.clear()
+                    binding.empty.animation(R.raw.anim_loading)
+                    binding.empty.visibility = View.VISIBLE
+                }
             }
         }
     }

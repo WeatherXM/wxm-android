@@ -50,6 +50,13 @@ class HistoryActivity : AppCompatActivity(), KoinComponent {
             model.setSelectedTab(it.position)
         }
 
+        model.onUpdateDates().observe(this) {
+            if (it) {
+                binding.dateTabs.removeAllTabs()
+                updateDates()
+            }
+        }
+
         updateDates()
 
         navigator.showHistoryCharts(supportFragmentManager, device)

@@ -10,7 +10,7 @@ import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.data.repository.WeatherRepository.Companion.PREFETCH_DAYS
-import com.weatherxm.ui.ForecastData
+import com.weatherxm.ui.DailyForecast
 import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
@@ -26,18 +26,18 @@ class ForecastViewModel : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
 
     // All charts currently visible
-    private val onForecast = MutableLiveData<Resource<ForecastData>>().apply {
+    private val onForecast = MutableLiveData<Resource<List<DailyForecast>>>().apply {
         value = Resource.loading()
     }
 
-    fun onForecast(): LiveData<Resource<ForecastData>> = onForecast
+    fun onForecast(): LiveData<Resource<List<DailyForecast>>> = onForecast
 
-    fun getWeatherForecast(deviceId: String) {
+    fun getWeatherForecast(deviceId: String, forceRefresh: Boolean = false) {
         onForecast.postValue(Resource.loading())
         viewModelScope.launch {
             val fromDate = ZonedDateTime.now()
             val toDate = ZonedDateTime.now().plusDays(PREFETCH_DAYS)
-            forecastUseCase.getDailyForecast(deviceId, fromDate, toDate)
+            forecastUseCase.getDailyForecast(deviceId, fromDate, toDate, forceRefresh)
                 .map { forecast ->
                     Timber.d("Got daily forecast from $fromDate to $toDate")
                     onForecast.postValue(Resource.success(forecast))
