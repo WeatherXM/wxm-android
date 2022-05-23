@@ -11,14 +11,14 @@ import timber.log.Timber
  * {@see okhttp3.Interceptor} that adds User-Agent header to the request,
  * using app & device information.
  */
-class UserAgentRequestInterceptor(val context: Context) : Interceptor {
+class ClientIdentificationRequestInterceptor(val context: Context) : Interceptor {
 
     companion object {
-        private const val USER_AGENT = "User-Agent"
+        private const val CLIENT_IDENTIFICATION_HEADER = "X-WXM-Client"
     }
 
     private val packageManager = context.packageManager
-    private val userAgent = "${applicationInfo()}; ${systemInfo()}; ${deviceInfo()}"
+    private val clientIdentifier = "${applicationInfo()}; ${systemInfo()}; ${deviceInfo()}"
 
     private fun applicationInfo(): String {
         return try {
@@ -46,9 +46,9 @@ class UserAgentRequestInterceptor(val context: Context) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        Timber.d("Adding user agent [$userAgent]")
+        Timber.d("Adding client identification header [$clientIdentifier]")
         val requestWithUserAgent = request.newBuilder()
-            .header(USER_AGENT, userAgent)
+            .header(CLIENT_IDENTIFICATION_HEADER, clientIdentifier)
             .build()
         return chain.proceed(requestWithUserAgent)
     }

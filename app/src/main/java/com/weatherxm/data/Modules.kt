@@ -44,7 +44,7 @@ import com.weatherxm.data.network.AuthTokenJsonAdapter
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthTokenAuthenticator
-import com.weatherxm.data.network.interceptor.UserAgentRequestInterceptor
+import com.weatherxm.data.network.interceptor.ClientIdentificationRequestInterceptor
 import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
@@ -263,8 +263,8 @@ private val network = module {
         HttpLoggingInterceptor().setLevel(if (BuildConfig.DEBUG) Level.BODY else Level.NONE)
     }
 
-    single<UserAgentRequestInterceptor> {
-        UserAgentRequestInterceptor(androidContext())
+    single<ClientIdentificationRequestInterceptor> {
+        ClientIdentificationRequestInterceptor(androidContext())
     }
 
     single<MoshiConverterFactory> {
@@ -275,7 +275,7 @@ private val network = module {
         // Create client
         val client: OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(get() as HttpLoggingInterceptor)
-            .addInterceptor(get() as UserAgentRequestInterceptor)
+            .addInterceptor(get() as ClientIdentificationRequestInterceptor)
             .addInterceptor(AuthRequestInterceptor())
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
@@ -298,7 +298,7 @@ private val network = module {
         // Create client
         val client: OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(get() as HttpLoggingInterceptor)
-            .addInterceptor(get() as UserAgentRequestInterceptor)
+            .addInterceptor(get() as ClientIdentificationRequestInterceptor)
             .addInterceptor(ApiRequestInterceptor())
             .authenticator(AuthTokenAuthenticator())
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
