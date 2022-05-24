@@ -64,6 +64,12 @@ android {
             resValue "string", "app_name", "WXM Staging"
             buildConfigField("String", "API_URL", "\"https://api-staging.weatherxm.com\"")
             buildConfigField("String", "AUTH_URL", "\"https://api-staging.weatherxm.com\"")
+            firebaseAppDistribution {
+                artifactType = "APK"
+                releaseNotes = "Release notes for staging version"
+                serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
+                groups = "$FIREBASE_INTERNAL_TEST_GROUP"
+            }
         }
         dev {
             dimension "server"
