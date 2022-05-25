@@ -54,7 +54,7 @@ data class Device(
     val attributes: Attributes?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
-    val address: String?,
+    var address: String?,
     val rewards: Rewards?
 ) : Parcelable {
     // TODO: When we have the new field for the "label" of the device use it here

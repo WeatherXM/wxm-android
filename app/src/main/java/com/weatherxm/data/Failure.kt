@@ -8,6 +8,7 @@ import androidx.annotation.Keep
 @Keep
 sealed class Failure {
     object JsonError : Failure()
+    object NoGeocoderError : Failure()
     object UnknownError : Failure()
 }
 
@@ -72,6 +73,7 @@ sealed class ApiError(val message: String? = null) : Failure() {
 
 @Keep
 sealed class DataError : Failure() {
+    object DatabaseMissError : DataError()
     object CacheMissError : DataError()
     object CacheExpiredError : DataError()
     object NoWalletAddressError : DataError()

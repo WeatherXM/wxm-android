@@ -104,7 +104,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
             currentHexSelected = hexWithResolution.index
             onHexSelected.postValue(hexWithResolution.index)
         } else {
-            val centerOfHex = explorerUseCase.getCenterOfHex3AsPoint(hexWithResolution)
+            val centerOfHex = explorerUseCase.getCenterOfHexAsPoint(hexWithResolution)
             centerOfHex?.let { onZoomChange.postValue(centerOfHex) }
         }
     }

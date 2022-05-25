@@ -24,9 +24,9 @@ interface ExplorerUseCase {
         zoom: Double
     ): List<PolygonAnnotationOptions>
 
-    fun getCenterOfHex3AsPoint(hexCenterWithResolution: HexWithResolution?): Point?
+    fun getCenterOfHexAsPoint(hexCenterWithResolution: HexWithResolution?): Point?
     fun hexWithResToJson(index: String, center: Location, resolution: Int): JsonElement
-    fun getDevicesOfH7(hexIndex: String?): MutableList<Device>?
+    suspend fun getDevicesOfH7(hexIndex: String?): MutableList<Device>?
     suspend fun getPublicDevices(forceRefresh: Boolean = false): Either<Failure, List<Device>>
     suspend fun saveDevicesPointsH3(devices: List<Device>)
     suspend fun saveDevicesPointsH7(devices: List<Device>)
@@ -81,8 +81,8 @@ class ExplorerUseCaseImpl(
         }
     }
 
-    // Get the center of Hex3 of a device. Used for zooming in when clicked.
-    override fun getCenterOfHex3AsPoint(hexCenterWithResolution: HexWithResolution?): Point? {
+    // Get the center of a Hex of a device. Used for zooming in when clicked currently at an H3 hex.
+    override fun getCenterOfHexAsPoint(hexCenterWithResolution: HexWithResolution?): Point? {
         hexCenterWithResolution?.let {
             return Point.fromLngLat(it.lon, it.lat)
         }
@@ -147,7 +147,7 @@ class ExplorerUseCaseImpl(
         }
     }
 
-    override fun getDevicesOfH7(hexIndex: String?): MutableList<Device> {
+    override suspend fun getDevicesOfH7(hexIndex: String?): MutableList<Device> {
         return deviceRepository.getDevicesOfH7(hexIndex)
     }
 }
