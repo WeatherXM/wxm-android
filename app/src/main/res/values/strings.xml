@@ -24,6 +24,7 @@
     <!-- Login -->
     <string name="title_login">Login</string>
     <string name="forgot_password">Forgot Password?</string>
+    <string name="login_instructions">Login with your email and your password to access your account.</string>
 
     <!-- Bottom Navigation Menu -->
     <string name="title_explorer">Explorer</string>
