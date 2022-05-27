@@ -17,6 +17,8 @@ object Weather : KoinComponent {
 
     private const val DECIMALS_PRECIPITATION_INCHES = 2
     private const val DECIMALS_PRECIPITATION_MILLIMETERS = 1
+    private const val DECIMALS_PRESSURE_INHG = 2
+    private const val DECIMALS_PRESSURE_HPA = 1
 
     /*
      * Suppress ComplexMethod because it is just a bunch of "when statements"
@@ -250,14 +252,15 @@ object Weather : KoinComponent {
         val defaultUnit = resHelper.getString(R.string.pressure_hpa)
         val savedUnit =
             sharedPref.getString(resHelper.getString(R.string.key_pressure_preference), defaultUnit)
-        // Return the value based on the weather unit the user wants, also round to 1 decimal
-        return roundToDecimals(
-            if (savedUnit != defaultUnit) {
-                UnitConverter.hpaToInHg(value.toFloat())
-            } else {
-                value
-            }
-        )
+
+        // Return the value based on the weather unit the user wants
+        return if (savedUnit != defaultUnit) {
+            // On inHg we use 2 decimals
+            roundToDecimals(UnitConverter.hpaToInHg(value.toFloat()), decimals = 2)
+        } else {
+            // This is the default value - hpa - so we show 1 decimal
+            roundToDecimals(value)
+        }
     }
 
     fun getPreferredUnit(keyOnSharedPref: String, defaultUnit: String): String {
@@ -278,6 +281,19 @@ object Weather : KoinComponent {
             DECIMALS_PRECIPITATION_MILLIMETERS
         } else {
             DECIMALS_PRECIPITATION_INCHES
+        }
+    }
+
+    fun getDecimalsPressure(): Int {
+        val keyOnSharedPref = resHelper.getString(R.string.key_pressure_preference)
+        val defaultUnit = resHelper.getString(R.string.pressure_hpa)
+
+        val unit = getPreferredUnit(keyOnSharedPref, defaultUnit)
+
+        return if (unit == resHelper.getString(R.string.pressure_hpa)) {
+            DECIMALS_PRESSURE_HPA
+        } else {
+            DECIMALS_PRESSURE_INHG
         }
     }
 
