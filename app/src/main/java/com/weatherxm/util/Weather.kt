@@ -173,7 +173,7 @@ object Weather : KoinComponent {
         }
 
         return if (decimals == 0) {
-            valueToReturn.toInt()
+            roundToInt(valueToReturn)
         } else {
             roundToDecimals(valueToReturn)
         }
@@ -299,5 +299,9 @@ object Weather : KoinComponent {
 
     fun roundToDecimals(value: Number, decimals: Int = 1): Float {
         return value.toFloat().toBigDecimal().setScale(decimals, BigDecimal.ROUND_HALF_UP).toFloat()
+    }
+
+    fun roundToInt(value: Number): Int {
+        return value.toFloat().toBigDecimal().setScale(0, BigDecimal.ROUND_HALF_UP).toInt()
     }
 }
