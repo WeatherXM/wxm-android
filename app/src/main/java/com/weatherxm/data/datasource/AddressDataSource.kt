@@ -30,20 +30,25 @@ class NetworkAddressDataSource(private val context: Context) : AddressDataSource
         * and we need to wait for the results actually.
         */
         return if (Geocoder.isPresent()) {
-            val geocoderAddress =
-                Geocoder(context, locale).getFromLocation(hex.center.lat, hex.center.lon, 1)[0]
+            val geocoderAddresses =
+                Geocoder(context, locale).getFromLocation(hex.center.lat, hex.center.lon, 1)
 
-            Either.Right(
-                if (geocoderAddress.locality != null) {
-                    "${geocoderAddress.locality}, ${geocoderAddress.countryCode}"
-                } else if (geocoderAddress.subAdminArea != null) {
-                    "${geocoderAddress.subAdminArea}, ${geocoderAddress.countryCode}"
-                } else if (geocoderAddress.adminArea != null) {
-                    "${geocoderAddress.adminArea}, ${geocoderAddress.countryCode}"
-                } else {
-                    geocoderAddress.countryName
-                }
-            )
+            if (geocoderAddresses.isNullOrEmpty()) {
+                Either.Left(Failure.LocationAddressNotFound)
+            } else {
+                val geocoderAddress = geocoderAddresses[0]
+                Either.Right(
+                    if (geocoderAddress.locality != null) {
+                        "${geocoderAddress.locality}, ${geocoderAddress.countryCode}"
+                    } else if (geocoderAddress.subAdminArea != null) {
+                        "${geocoderAddress.subAdminArea}, ${geocoderAddress.countryCode}"
+                    } else if (geocoderAddress.adminArea != null) {
+                        "${geocoderAddress.adminArea}, ${geocoderAddress.countryCode}"
+                    } else {
+                        geocoderAddress.countryName
+                    }
+                )
+            }
         } else {
             Either.Left(Failure.NoGeocoderError)
         }

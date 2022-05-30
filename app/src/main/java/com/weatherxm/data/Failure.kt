@@ -9,6 +9,7 @@ import androidx.annotation.Keep
 sealed class Failure {
     object JsonError : Failure()
     object NoGeocoderError : Failure()
+    object LocationAddressNotFound : Failure()
     object UnknownError : Failure()
 }
 
