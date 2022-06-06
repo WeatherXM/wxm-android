@@ -79,7 +79,7 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
         nextButtonClick()
     }
 
-    private fun setSerialSet(isSet: Boolean) {
+    fun setSerialSet(isSet: Boolean) {
         isSerialSet = isSet
     }
 
