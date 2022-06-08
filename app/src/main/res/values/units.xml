@@ -36,6 +36,8 @@
     <string name="temperature_fahrenheit">°F</string>
     <string name="precipitation_mm">&#160;mm</string>
     <string name="precipitation_in">&#160;in</string>
+    <string name="precipitation_mm_hour">&#160;mm/h</string>
+    <string name="precipitation_in_hour">&#160;in/h</string>
     <string name="wind_speed_kmh">&#160;km/h</string>
     <string name="wind_speed_mph">&#160;mph</string>
     <string name="wind_speed_ms">&#160;m/s</string>

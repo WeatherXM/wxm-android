@@ -61,16 +61,13 @@ object Weather : KoinComponent {
         return "$valueToReturn$unit"
     }
 
-    fun getFormattedPrecipitation(value: Float?): String {
+    fun getFormattedPrecipitation(value: Float?, isPrecipRate: Boolean = true): String {
         if (value == null) {
             return EMPTY_VALUE
         }
 
         val valueToReturn = convertPrecipitation(value)
-        val unit = getPreferredUnit(
-            resHelper.getString(R.string.key_precipitation_preference),
-            resHelper.getString(R.string.precipitation_mm)
-        )
+        val unit = getPrecipitationPreferredUnit(isPrecipRate)
 
         return "$valueToReturn$unit"
     }
@@ -271,13 +268,34 @@ object Weather : KoinComponent {
         return defaultUnit
     }
 
+    fun getPrecipitationPreferredUnit(isPrecipRate: Boolean): String {
+        val keyOnSharedPref = resHelper.getString(R.string.key_precipitation_preference)
+        val defaultUnitOnPreferences = resHelper.getString(R.string.precipitation_mm)
+
+        val savedUnit = getPreferredUnit(keyOnSharedPref, defaultUnitOnPreferences)
+
+        return if (defaultUnitOnPreferences == savedUnit) {
+            if (isPrecipRate) {
+                resHelper.getString(R.string.precipitation_mm_hour)
+            } else {
+                resHelper.getString(R.string.precipitation_mm)
+            }
+        } else {
+            if (isPrecipRate) {
+                resHelper.getString(R.string.precipitation_in_hour)
+            } else {
+                resHelper.getString(R.string.precipitation_in)
+            }
+        }
+    }
+
     fun getDecimalsPrecipitation(): Int {
         val keyOnSharedPref = resHelper.getString(R.string.key_precipitation_preference)
         val defaultUnit = resHelper.getString(R.string.precipitation_mm)
 
         val unit = getPreferredUnit(keyOnSharedPref, defaultUnit)
 
-        return if (unit == resHelper.getString(R.string.precipitation_mm)) {
+        return if (unit == defaultUnit) {
             DECIMALS_PRECIPITATION_MILLIMETERS
         } else {
             DECIMALS_PRECIPITATION_INCHES

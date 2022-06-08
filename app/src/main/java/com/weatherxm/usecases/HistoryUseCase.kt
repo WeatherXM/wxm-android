@@ -71,10 +71,7 @@ class HistoryUseCaseImpl(
         return LineChartData(
             resHelper.getString(R.string.precipitation),
             R.color.precipIntensity,
-            Weather.getPreferredUnit(
-                resHelper.getString(R.string.key_precipitation_preference),
-                resHelper.getString(R.string.precipitation_mm)
-            ),
+            Weather.getPrecipitationPreferredUnit(false),
             timestamps = time,
             entries = entries
         )
