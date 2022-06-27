@@ -8,5 +8,6 @@
     <string name="website">https://weatherxm.com</string>
     <string name="suggested_wallets_documentation">https://docs.weatherxm.com/suggested-wallet</string>
     <string name="terms_of_service_url">https://weatherxm.com/mobile/terms/</string>
+    <string name="troubleshooting_url">https://docs.weatherxm.com/wxm-devices/wifi-m5-bundle/troubleshooting</string>
     <string name="market_url">market://details?id=%s</string>
 </resources>

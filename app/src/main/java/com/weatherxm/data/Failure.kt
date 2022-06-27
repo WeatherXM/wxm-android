@@ -8,6 +8,8 @@ import androidx.annotation.Keep
 @Keep
 sealed class Failure {
     object JsonError : Failure()
+    object NoGeocoderError : Failure()
+    object LocationAddressNotFound : Failure()
     object UnknownError : Failure()
 }
 
@@ -42,6 +44,7 @@ sealed class ApiError(val message: String? = null) : Failure() {
     }
 
     class DeviceNotFound(message: String? = null) : ApiError(message)
+    class InvalidFriendlyName(message: String? = null) : ApiError(message)
 
     sealed class UserError(message: String? = null) : ApiError(message) {
         sealed class WalletError(message: String? = null) : UserError(message) {
@@ -56,6 +59,7 @@ sealed class ApiError(val message: String? = null) : Failure() {
 
         class InvalidFromDate(message: String? = null) : UserError(message)
         class InvalidToDate(message: String? = null) : UserError(message)
+        class InvalidTimezone(message: String? = null) : UserError(message)
     }
 
     sealed class GenericError(message: String? = null) : ApiError(message) {
@@ -72,6 +76,7 @@ sealed class ApiError(val message: String? = null) : Failure() {
 
 @Keep
 sealed class DataError : Failure() {
+    object DatabaseMissError : DataError()
     object CacheMissError : DataError()
     object CacheExpiredError : DataError()
     object NoWalletAddressError : DataError()

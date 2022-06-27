@@ -45,7 +45,13 @@ class ClaimDeviceSerialNumberFragment : Fragment() {
                     binding.serialNumberContainer.error = null
                     binding.serialNumberContainer.helperText =
                         "${extractedValue.length}/$SERIAL_NUMBER_MAX_LENGTH"
-                    model.nextButtonStatus(extractedValue.isNotEmpty())
+                    model.nextButtonStatus(
+                        extractedValue.isNotEmpty()
+                            && extractedValue.length == SERIAL_NUMBER_MAX_LENGTH
+                    )
+                    if(model.isSerialSet()) {
+                        model.setSerialSet(false)
+                    }
                 }
             })
 

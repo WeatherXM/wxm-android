@@ -47,12 +47,14 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
 
         fun bind(item: Device) {
             this.device = item
-            binding.name.text = item.name
+            binding.name.text = item.getNameOrLabel()
             binding.icon.setAnimation(Weather.getWeatherAnimation(item.currentWeather?.icon))
             binding.temperature.text =
                 Weather.getFormattedTemperature(item.currentWeather?.temperature, 1)
 
-            device.attributes?.lastActiveAt?.let {
+            val lastActiveZonedDateTime =
+                device.attributes?.lastWeatherStationActivity ?: device.attributes?.lastActiveAt
+            lastActiveZonedDateTime?.let {
                 binding.lastSeen.text = itemView.resources.getString(
                     R.string.last_active,
                     getRelativeTimeFromISO(
@@ -72,17 +74,18 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 binding.tokensLastDay.text = lastReward
             }
 
-            when {
-                item.attributes?.isActive == null -> {
-                    binding.statusChip.setTextAndColor(R.string.unknown, R.color.grey)
+            binding.statusChip.setTextAndColor(
+                when (item.attributes?.isActive) {
+                    true -> R.string.online
+                    false -> R.string.offline
+                    null -> R.string.unknown
+                },
+                when (item.attributes?.isActive) {
+                    true -> R.color.device_status_online
+                    false -> R.color.device_status_offline
+                    null -> R.color.device_status_unknown
                 }
-                item.attributes.isActive -> {
-                    binding.statusChip.setTextAndColor(R.string.online, R.color.green)
-                }
-                else -> {
-                    binding.statusChip.setTextAndColor(R.string.offline, R.color.red)
-                }
-            }
+            )
         }
     }
 
@@ -97,6 +100,9 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 oldItem.currentWeather?.icon == newItem.currentWeather?.icon &&
                 oldItem.currentWeather?.temperature == newItem.currentWeather?.temperature &&
                 oldItem.currentWeather?.timestamp == newItem.currentWeather?.timestamp &&
+                oldItem.rewards?.totalRewards == newItem.rewards?.totalRewards &&
+                oldItem.rewards?.actualReward == newItem.rewards?.actualReward &&
+                oldItem.attributes?.friendlyName == newItem.attributes?.friendlyName &&
                 oldItem.attributes?.isActive == newItem.attributes?.isActive
         }
     }

@@ -37,8 +37,10 @@ import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
+import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
+import com.weatherxm.data.datasource.StorageAddressDataSource
 import com.weatherxm.data.datasource.TokenDataSource
 import com.weatherxm.data.datasource.TokenDataSourceImpl
 import com.weatherxm.data.network.AuthTokenJsonAdapter
@@ -197,6 +199,14 @@ private val datasources = module {
     single<AppConfigDataSource> {
         AppConfigDataSourceImpl(get(), get())
     }
+
+    single<NetworkAddressDataSource> {
+        NetworkAddressDataSource(androidContext())
+    }
+
+    single<StorageAddressDataSource> {
+        StorageAddressDataSource(get())
+    }
 }
 
 private val repositories = module {
@@ -213,7 +223,7 @@ private val repositories = module {
         WalletRepositoryImpl(get(), get())
     }
     single<DeviceRepository> {
-        DeviceRepositoryImpl(get())
+        DeviceRepositoryImpl(get(), get(), get())
     }
     single<TokenRepository> {
         TokenRepositoryImpl(get())

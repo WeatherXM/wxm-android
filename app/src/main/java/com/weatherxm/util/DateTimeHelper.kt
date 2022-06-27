@@ -18,6 +18,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
+@Suppress("TooManyFunctions")
 object DateTimeHelper : KoinComponent {
 
     private val formatter24h: DateTimeFormatter by inject(named(HOUR_FORMAT_24H))
@@ -25,7 +26,7 @@ object DateTimeHelper : KoinComponent {
     private val formatter12hHourOnly: DateTimeFormatter by inject(named(HOUR_FORMAT_12H_HOUR_ONLY))
     private val formatterMonthDay: DateTimeFormatter by inject(named(DATE_FORMAT_MONTH_DAY))
 
-    fun getNowInTimezone(timezone: String?): ZonedDateTime {
+    fun getNowInTimezone(timezone: String? = null): ZonedDateTime {
         if (timezone == null) {
             return ZonedDateTime.now()
         }
@@ -33,14 +34,21 @@ object DateTimeHelper : KoinComponent {
         return ZonedDateTime.now(tz)
     }
 
-    fun getFormattedDate(timeInISO: String?): String {
-        return ZonedDateTime.parse(timeInISO).toLocalDate().toString()
+    fun getTimezone(): String {
+        return ZoneId.systemDefault().toString()
+    }
+
+    fun getLocalDate(timeInISO: String?): LocalDate {
+        return ZonedDateTime.parse(timeInISO).toLocalDate()
+    }
+
+    fun getFormattedDate(zonedDateTime: ZonedDateTime): String {
+        return getLocalDate(zonedDateTime.toString()).toString()
     }
 
     fun getRelativeDayFromISO(
         resHelper: ResourcesHelper,
         timeInISO: String,
-        includeDate: Boolean,
         fullName: Boolean
     ): String {
         val zonedDateTime = ZonedDateTime.parse(timeInISO)
@@ -54,11 +62,8 @@ object DateTimeHelper : KoinComponent {
                 } else {
                     zonedDateTime.dayOfWeek.getShortName(resHelper)
                 }
-                if (!includeDate) {
-                    nameOfDay
-                } else {
-                    "$nameOfDay ${zonedDateTime.format(formatterMonthDay)}"
-                }
+
+                "$nameOfDay ${zonedDateTime.format(formatterMonthDay)}"
             }
         }
     }
@@ -73,8 +78,7 @@ object DateTimeHelper : KoinComponent {
                 getRelativeDayFromISO(
                     resHelper,
                     zonedDateTime.minusDays(i.toLong()).toString(),
-                    includeDate = true,
-                    fullName = false
+                    false
                 )
             )
         }
@@ -137,7 +141,7 @@ object DateTimeHelper : KoinComponent {
         return now.dayOfYear == this.dayOfYear
     }
 
-    private fun ZonedDateTime.isTomorrow(): Boolean {
+    fun ZonedDateTime.isTomorrow(): Boolean {
         val now = ZonedDateTime.now(this.zone)
         return now.dayOfYear == this.minusDays(1).dayOfYear
     }

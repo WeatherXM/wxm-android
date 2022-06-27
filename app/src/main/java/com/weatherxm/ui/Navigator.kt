@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.result.ActivityResultLauncher
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -108,12 +109,14 @@ class Navigator {
         )
     }
 
-    fun showUserDevice(fragment: Fragment, device: Device) {
+    fun showUserDevice(
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        fragment: Fragment,
+        device: Device
+    ) {
         fragment.context?.let {
-            it.startActivity(
-                Intent(
-                    it, UserDeviceActivity::class.java
-                )
+            activityResultLauncher.launch(
+                Intent(it, UserDeviceActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(UserDeviceActivity.ARG_DEVICE, device)
             )

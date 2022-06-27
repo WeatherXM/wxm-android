@@ -5,6 +5,7 @@ import com.weatherxm.R
 import java.text.DecimalFormat
 
 object Tokens {
+    const val EMPTY_VALUE = "-"
 
     @Suppress("MagicNumber")
     @ColorRes
@@ -19,6 +20,12 @@ object Tokens {
                 else -> R.color.reward_score_unknown
             }
         } ?: R.color.reward_score_unknown
+    }
+
+    fun formatValue(value: Float?): String {
+        return value?.let {
+            formatTokens(it)
+        } ?: EMPTY_VALUE
     }
 
     fun formatTokens(amount: Float): String {

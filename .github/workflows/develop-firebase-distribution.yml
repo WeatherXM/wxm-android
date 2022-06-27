@@ -41,7 +41,7 @@ jobs:
                     echo "${{ secrets.ENCODED_SERVICE_ACCOUNT }}" | base64 -d > ./ci-service-account.json
                     echo "${{ secrets.ENCODED_RELEASE_KEYSTORE }}" > release-keystore.asc
                     gpg -d --passphrase "${{ secrets.ENCODED_RELEASE_KEYSTORE_PASSPHRASE }}" --batch release-keystore.asc > ./${{ secrets.RELEASE_KEYSTORE }}
-            -   name: Build development release build and distribute on Firebase
+            -   name: Build development release and distribute on Firebase
                 run: |
                     ./gradlew :app:assembleRemoteDevRelease :app:appDistributionUploadRemoteDevRelease
                     rm ./ci-service-account.json

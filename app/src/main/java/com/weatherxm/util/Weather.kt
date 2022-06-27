@@ -17,6 +17,8 @@ object Weather : KoinComponent {
 
     private const val DECIMALS_PRECIPITATION_INCHES = 2
     private const val DECIMALS_PRECIPITATION_MILLIMETERS = 1
+    private const val DECIMALS_PRESSURE_INHG = 2
+    private const val DECIMALS_PRESSURE_HPA = 1
 
     /*
      * Suppress ComplexMethod because it is just a bunch of "when statements"
@@ -45,30 +47,35 @@ object Weather : KoinComponent {
         }
     }
 
-    fun getFormattedTemperature(value: Float?, decimals: Int = 0): String {
+    fun getFormattedTemperature(
+        value: Float?,
+        decimals: Int = 0,
+        fullUnit: Boolean = true
+    ): String {
         if (value == null) {
             return EMPTY_VALUE
         }
 
         val valueToReturn = convertTemp(value, decimals)
-        val unit = getPreferredUnit(
-            resHelper.getString(R.string.key_temperature_preference),
-            resHelper.getString(R.string.temperature_celsius)
-        )
+        val unit = if (fullUnit) {
+            getPreferredUnit(
+                resHelper.getString(R.string.key_temperature_preference),
+                resHelper.getString(R.string.temperature_celsius)
+            )
+        } else {
+            resHelper.getString(R.string.degrees_mark)
+        }
 
         return "$valueToReturn$unit"
     }
 
-    fun getFormattedPrecipitation(value: Float?): String {
+    fun getFormattedPrecipitation(value: Float?, isPrecipRate: Boolean = true): String {
         if (value == null) {
             return EMPTY_VALUE
         }
 
         val valueToReturn = convertPrecipitation(value)
-        val unit = getPreferredUnit(
-            resHelper.getString(R.string.key_precipitation_preference),
-            resHelper.getString(R.string.precipitation_mm)
-        )
+        val unit = getPrecipitationPreferredUnit(isPrecipRate)
 
         return "$valueToReturn$unit"
     }
@@ -136,7 +143,7 @@ object Weather : KoinComponent {
             )
 
         if (savedUnit != defaultUnit) {
-            val windDegreesMark = resHelper.getString(R.string.wind_direction_degrees_mark)
+            val windDegreesMark = resHelper.getString(R.string.degrees_mark)
             return "$value$windDegreesMark"
         }
 
@@ -171,7 +178,7 @@ object Weather : KoinComponent {
         }
 
         return if (decimals == 0) {
-            valueToReturn.toInt()
+            roundToInt(valueToReturn)
         } else {
             roundToDecimals(valueToReturn)
         }
@@ -250,14 +257,15 @@ object Weather : KoinComponent {
         val defaultUnit = resHelper.getString(R.string.pressure_hpa)
         val savedUnit =
             sharedPref.getString(resHelper.getString(R.string.key_pressure_preference), defaultUnit)
-        // Return the value based on the weather unit the user wants, also round to 1 decimal
-        return roundToDecimals(
-            if (savedUnit != defaultUnit) {
-                UnitConverter.hpaToInHg(value.toFloat())
-            } else {
-                value
-            }
-        )
+
+        // Return the value based on the weather unit the user wants
+        return if (savedUnit != defaultUnit) {
+            // On inHg we use 2 decimals
+            roundToDecimals(UnitConverter.hpaToInHg(value.toFloat()), decimals = 2)
+        } else {
+            // This is the default value - hpa - so we show 1 decimal
+            roundToDecimals(value)
+        }
     }
 
     fun getPreferredUnit(keyOnSharedPref: String, defaultUnit: String): String {
@@ -268,20 +276,58 @@ object Weather : KoinComponent {
         return defaultUnit
     }
 
+    fun getPrecipitationPreferredUnit(isPrecipRate: Boolean): String {
+        val keyOnSharedPref = resHelper.getString(R.string.key_precipitation_preference)
+        val defaultUnitOnPreferences = resHelper.getString(R.string.precipitation_mm)
+
+        val savedUnit = getPreferredUnit(keyOnSharedPref, defaultUnitOnPreferences)
+
+        return if (defaultUnitOnPreferences == savedUnit) {
+            if (isPrecipRate) {
+                resHelper.getString(R.string.precipitation_mm_hour)
+            } else {
+                resHelper.getString(R.string.precipitation_mm)
+            }
+        } else {
+            if (isPrecipRate) {
+                resHelper.getString(R.string.precipitation_in_hour)
+            } else {
+                resHelper.getString(R.string.precipitation_in)
+            }
+        }
+    }
+
     fun getDecimalsPrecipitation(): Int {
         val keyOnSharedPref = resHelper.getString(R.string.key_precipitation_preference)
         val defaultUnit = resHelper.getString(R.string.precipitation_mm)
 
         val unit = getPreferredUnit(keyOnSharedPref, defaultUnit)
 
-        return if (unit == resHelper.getString(R.string.precipitation_mm)) {
+        return if (unit == defaultUnit) {
             DECIMALS_PRECIPITATION_MILLIMETERS
         } else {
             DECIMALS_PRECIPITATION_INCHES
         }
     }
 
+    fun getDecimalsPressure(): Int {
+        val keyOnSharedPref = resHelper.getString(R.string.key_pressure_preference)
+        val defaultUnit = resHelper.getString(R.string.pressure_hpa)
+
+        val unit = getPreferredUnit(keyOnSharedPref, defaultUnit)
+
+        return if (unit == resHelper.getString(R.string.pressure_hpa)) {
+            DECIMALS_PRESSURE_HPA
+        } else {
+            DECIMALS_PRESSURE_INHG
+        }
+    }
+
     fun roundToDecimals(value: Number, decimals: Int = 1): Float {
         return value.toFloat().toBigDecimal().setScale(decimals, BigDecimal.ROUND_HALF_UP).toFloat()
+    }
+
+    fun roundToInt(value: Number): Int {
+        return value.toFloat().toBigDecimal().setScale(0, BigDecimal.ROUND_HALF_UP).toInt()
     }
 }

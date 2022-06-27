@@ -46,7 +46,7 @@ class ForecastActivity : AppCompatActivity() {
         }
 
         deviceId = device.id
-        binding.toolbar.subtitle = device.address ?: device.name
+        binding.toolbar.subtitle = device.address ?: device.getNameOrLabel()
 
         // Initialize the adapter with empty data
         adapter = DailyForecastAdapter()

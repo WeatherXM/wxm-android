@@ -11,6 +11,7 @@
     <string name="action_next">Next</string>
     <string name="action_back">Back</string>
     <string name="action_logout">Logout</string>
+    <string name="action_clear">Clear</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
@@ -24,6 +25,7 @@
     <!-- Login -->
     <string name="title_login">Login</string>
     <string name="forgot_password">Forgot Password?</string>
+    <string name="login_instructions">Login with your email and your password to access your account.</string>
 
     <!-- Bottom Navigation Menu -->
     <string name="title_explorer">Explorer</string>
@@ -43,6 +45,7 @@
     <string name="offline">Offline</string>
     <string name="unknown">Unknown</string>
     <string name="empty_weather_stations">Oh, no! No WXM devices yet?</string>
+    <string name="displayed_times">All displayed times are in %s timezone.</string>
 
     <!-- Update Prompt -->
     <string name="title_update_prompt">New Update</string>
@@ -87,7 +90,8 @@
     <!-- Tokens -->
     <string name="title_device_rewards">Detailed WXM Rewards</string>
     <string name="see_wxm_rewards">See Detailed WXM Rewards</string>
-    <string name="no_transactions">Oh, no! No transactions yet?</string>
+    <string name="no_transactions_title">Oh, no! No transactions yet?</string>
+    <string name="no_rewards">No rewards</string>
     <string name="rewards">Rewards</string>
     <string name="wxm">WXM</string>
     <string name="tokens_last">Last:</string>
@@ -95,6 +99,7 @@
     <string name="button_24h">24H</string>
     <string name="button_7d">7D</string>
     <string name="button_30d">30D</string>
+    <string name="all">All</string>
     <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after WXM mainnet token launch. Actual rewards may differ from the ones you see in the chart above.]]></string>
     <string name="wxm_amount">%s WXM</string>
     <string name="reward">+ %s WXM</string>
@@ -110,7 +115,6 @@
     <string name="claim_device_info_text"><![CDATA[<h5>Step 1</h5>Swipe left on your WXM device\'s screen and press \"Configure WiFi\" to connect the device to your home WiFi.<h5>Step 2</h5>Plug the GPS antenna into your WXM device, place the antenna near a window and power up the device via USB.<h5>Step 3</h5>Press <b>NEXT</b> to claim your device.<br/><br/>Don\'t have a WXM device yet? Get one on <a href=\"https://weatherxm.com\">weatherxm.com</a>.]]></string>
     <string name="action_claim">Claim</string>
     <string name="info_claim_contact_support">Trouble claiming your device? Contact our support team.</string>
-    <string name="info_claim_buy_miner">Don\'t have a WXM device yet?\nGet one on weatherxm.com.</string>
     <string name="device_serial_number_title">Device Serial Number</string>
     <string name="device_serial_number_hint">Enter the device\'s serial number</string>
     <string name="device_serial_number_instructions">The S/N is 18 characters long and looks like this: &lt;strong&gt;12:34:56:78:9A:BC:DE:F0:12&lt;/strong&gt;. You  can find it on your M5 device\'s screen. Please type only the letters and numbers.</string>
@@ -129,4 +133,10 @@
     <string name="empty_history_day_title">Oops! No weather data.</string>
     <string name="empty_history_day_subtitle">No weather data found for your device for this day.</string>
     <string name="empty_history_day_subtitle_with_day">No weather data found for your device for %s.</string>
+
+    <!-- Edit Name -->
+    <string name="edit_name">Edit Name</string>
+    <string name="edit_name_helper_text">This friendly name is private. It will be visible only to you when you are logged in.</string>
+    <string name="edit_name_hint">Enter a new friendly name</string>
+
 </resources>

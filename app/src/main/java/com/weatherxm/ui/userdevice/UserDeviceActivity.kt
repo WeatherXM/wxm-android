@@ -1,31 +1,38 @@
 package com.weatherxm.ui.userdevice
 
+import android.app.Activity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.ActivityUserDeviceBinding
+import com.weatherxm.databinding.ViewEditNameBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.AlertDialogFragment
 import com.weatherxm.ui.common.toast
-import com.weatherxm.ui.widget.TokenCardView
 import com.weatherxm.util.DateTimeHelper.getRelativeTimeFromISO
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.onTabSelected
+import com.weatherxm.util.setColor
 import com.weatherxm.util.setHtml
-import com.weatherxm.util.setTextAndColor
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
-class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.TokenOptionListener {
+class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickListener {
 
     private val model: UserDeviceViewModel by viewModels()
     private lateinit var binding: ActivityUserDeviceBinding
     private lateinit var hourlyAdapter: HourlyAdapter
+    private lateinit var layoutManagerOfRecycler: LinearLayoutManager
     private val navigator: Navigator by inject()
     private var snackbar: Snackbar? = null
 
@@ -50,17 +57,25 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
             return
         }
 
-        // Initialize the adapter with empty data and its listener when an item is clicked
-        hourlyAdapter = HourlyAdapter {
-            binding.currentWeatherCard.setWeatherData(
-                it.hourlyWeather,
-                model.temperatureDecimalsToShow(it.selectedPosition)
-            )
-        }
+        binding.toolbar.setOnMenuItemClickListener(this)
+
+        // Initialize the adapter with empty data
+        hourlyAdapter = HourlyAdapter()
         binding.recycler.adapter = hourlyAdapter
+
+        // Initialize the layout manager
+        layoutManagerOfRecycler = binding.recycler.layoutManager as LinearLayoutManager
+
+        binding.recycler.setOnScrollChangeListener { _, _, _, _, _ ->
+            onHourlyForecastScroll()
+        }
 
         // Fix flickering on item selection
         (binding.recycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+
+        binding.dateTabs.onTabSelected {
+            onForecastDateSelected(it)
+        }
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
@@ -68,6 +83,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
 
         binding.swiperefresh.setOnRefreshListener {
             model.fetchUserDeviceAllData(forceRefresh = true)
+            setResult(Activity.RESULT_OK)
         }
 
         binding.historicalCharts.setOnClickListener {
@@ -82,26 +98,11 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
             navigator.showTokenScreen(this, device)
         }
 
-        binding.tokenCard.optionListener = this
-
         binding.tokenNotice.setHtml(R.string.device_detail_token_notice)
 
-        binding.dateTabs.onTabSelected {
-            when (it.position) {
-                TAB_TODAY -> {
-                    model.fetchForecast(UserDeviceViewModel.ForecastState.TODAY)
-                    hourlyAdapter.setForecastState(UserDeviceViewModel.ForecastState.TODAY)
-                }
-                TAB_TOMORROW -> {
-                    model.fetchForecast(UserDeviceViewModel.ForecastState.TOMORROW)
-                    hourlyAdapter.setForecastState(UserDeviceViewModel.ForecastState.TOMORROW)
-                }
-            }
-        }
-
         model.onDeviceSet().observe(this) {
-            updateToolbar(it)
-            binding.currentWeatherCard.setWeatherData(it.currentWeather, 1)
+            updateDeviceInfo(it)
+            binding.currentWeatherCard.setData(it.currentWeather, it.timezone, 1)
         }
 
         model.onForecast().observe(this) {
@@ -109,8 +110,14 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
         }
 
         model.onTokens().observe(this) {
-            binding.tokenCard.enableStatusOfOptions(model.hasInitialTokenFetchCompleted())
-            binding.tokenCard.setTokenData(it)
+            binding.tokenCard.setTokenInfo(it, device.rewards?.totalRewards)
+        }
+
+        model.onEditNameChange().observe(this) {
+            if (it) {
+                model.fetchUserDevice()
+                setResult(Activity.RESULT_OK)
+            }
         }
 
         model.onLoading().observe(this) {
@@ -133,27 +140,99 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
         model.fetchUserDeviceAllData()
     }
 
-    private fun updateToolbar(device: Device) {
-        binding.title.text = device.name
+    override fun onMenuItemClick(menuItem: MenuItem?): Boolean {
+        return when (menuItem?.itemId) {
+            R.id.settings -> {
+                navigator.showPreferences(this)
+                true
+            }
+            R.id.edit_name -> {
+                val editNameView = ViewEditNameBinding.inflate(layoutInflater)
+                editNameView.newAddress.setText(model.getDevice().attributes?.friendlyName)
 
-        binding.statusChip.apply {
-            when (device.attributes?.isActive) {
-                true -> setTextAndColor(R.string.online, R.color.green)
-                false -> setTextAndColor(R.string.offline, R.color.red)
-                null -> setTextAndColor(R.string.unknown, R.color.grey)
+                AlertDialogFragment
+                    .Builder(
+                        title = getString(R.string.edit_name),
+                        view = editNameView.root
+                    )
+                    .onNegativeClick(getString(R.string.action_cancel)) {
+                    }
+                    .onNeutralClick(getString(R.string.action_clear)) {
+                        model.clearFriendlyName()
+                    }
+                    .onPositiveClick(getString(R.string.action_save)) {
+                        model.setFriendlyName(editNameView.newAddress.text.toString())
+                    }
+                    .build()
+                    .show(this)
+
+                true
+            }
+            else -> false
+        }
+    }
+
+    private fun onForecastDateSelected(dateTabSelected: TabLayout.Tab) {
+        when (dateTabSelected.position) {
+            TAB_TODAY -> {
+                layoutManagerOfRecycler.scrollToPosition(0)
+            }
+            TAB_TOMORROW -> {
+                layoutManagerOfRecycler.scrollToPositionWithOffset(
+                    model.getPositionOfTomorrowFirstItem(hourlyAdapter.currentList), 0
+                )
             }
         }
+    }
 
-        val lastActive = device.attributes?.lastActiveAt?.let {
+    private fun onHourlyForecastScroll() {
+        val firstItemVisiblePosition = layoutManagerOfRecycler.findFirstVisibleItemPosition()
+        val firstItemHourlyWeather = hourlyAdapter.getItemFromPosition(firstItemVisiblePosition)
+        if (model.isHourlyWeatherTomorrow(firstItemHourlyWeather)) {
+            binding.dateTabs.selectTab(binding.dateTabs.getTabAt(TAB_TOMORROW))
+        } else {
+            binding.dateTabs.selectTab(binding.dateTabs.getTabAt(TAB_TODAY))
+        }
+    }
+
+    private fun updateDeviceInfo(device: Device) {
+        binding.name.text = device.getNameOrLabel()
+        binding.collapsingToolbar.title = device.getNameOrLabel()
+
+        binding.statusIcon.setColor(
+            when (device.attributes?.isActive) {
+                true -> {
+                    binding.errorCard.hide()
+                    R.color.device_status_online
+                }
+                false -> {
+                    binding.errorCard.setErrorMessageWithUrl(R.string.error_user_device_offline)
+                    R.color.device_status_offline
+                }
+                null -> {
+                    R.color.device_status_unknown
+                }
+            }
+        )
+
+        val lastActiveZonedDateTime =
+            device.attributes?.lastWeatherStationActivity ?: device.attributes?.lastActiveAt
+        val lastActive = lastActiveZonedDateTime?.let {
             getString(
                 R.string.last_active,
                 getRelativeTimeFromISO(it, getString(R.string.last_active_just_now))
             )
         }
 
-        binding.subtitle.text = listOf(device.address, lastActive)
-            .filterNot { it.isNullOrEmpty() }
-            .joinToString(" · ")
+        binding.address.text = device.address
+        binding.lastActive.text = lastActive
+        binding.statusLabel.text = getString(
+            when (device.attributes?.isActive) {
+                true -> R.string.online
+                false -> R.string.offline
+                null -> R.string.unknown
+            }
+        )
     }
 
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {
@@ -170,9 +249,5 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, TokenCardView.Tok
             snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
         }
         snackbar?.show()
-    }
-
-    override fun onOptionClick(tokenOption: UserDeviceViewModel.TokensState) {
-        model.fetchTokenDetails(tokenOption)
     }
 }

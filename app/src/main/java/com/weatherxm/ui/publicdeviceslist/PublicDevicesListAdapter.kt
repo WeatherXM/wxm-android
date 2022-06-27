@@ -43,7 +43,10 @@ class PublicDevicesListAdapter(
         fun bind(item: Device) {
             this.device = item
             binding.name.text = item.name
-            device.attributes?.lastActiveAt?.let {
+
+            val lastActiveZonedDateTime =
+                device.attributes?.lastWeatherStationActivity ?: device.attributes?.lastActiveAt
+            lastActiveZonedDateTime?.let {
                 binding.lastSeen.text = itemView.resources.getString(
                     R.string.last_active,
                     getRelativeTimeFromISO(
@@ -52,11 +55,18 @@ class PublicDevicesListAdapter(
                     )
                 )
             }
-            when (item.attributes?.isActive) {
-                true -> binding.statusChip.setTextAndColor(R.string.online, R.color.green)
-                false -> binding.statusChip.setTextAndColor(R.string.offline, R.color.red)
-                null -> binding.statusChip.setTextAndColor(R.string.unknown, R.color.grey)
-            }
+            binding.statusChip.setTextAndColor(
+                when (item.attributes?.isActive) {
+                    true -> R.string.online
+                    false -> R.string.offline
+                    null -> R.string.unknown
+                },
+                when (item.attributes?.isActive) {
+                    true -> R.color.device_status_online
+                    false -> R.color.device_status_offline
+                    null -> R.color.device_status_unknown
+                }
+            )
         }
     }
 

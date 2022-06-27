@@ -1,9 +1,15 @@
 {
     "daily": {
-        "total": 0
+        "timestamp": "2022-06-03T14:45:06+02:00",
+        "tx_hash": "0xa01f5fab82632244d7a554ccbc9617a13ca64c201e1f34d9920a35cb3a450ce1",
+        "validation_score": 1.0,
+        "daily_reward": 2567.89,
+        "actual_reward": 2567.89,
+        "total_rewards": 100.0,
+        "lost_rewards": 0.0
     },
     "weekly": {
-        "total": 12524.395604395606,
+        "total": 1252.395604395606,
         "tokens": [
             {
                 "timestamp": "2022-03-30T00:00:00+03:00",
@@ -35,7 +41,7 @@
         ]
     },
     "monthly": {
-        "total": 42214.63019714997,
+        "total": 4214.63019714997,
         "tokens": [
             {
                 "timestamp": "2022-03-07T00:00:00+02:00"

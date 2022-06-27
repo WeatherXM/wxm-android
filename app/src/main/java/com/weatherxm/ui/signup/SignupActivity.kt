@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.text.HtmlCompat
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -32,18 +31,13 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
 
         binding.root.applyInsets()
 
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
         binding.username.onTextChanged {
             binding.usernameContainer.error = null
             binding.signup.isEnabled = !binding.username.text.isNullOrEmpty()
-        }
-
-        binding.loginPrompt.text = HtmlCompat.fromHtml(
-            getString(R.string.prompt_login),
-            HtmlCompat.FROM_HTML_MODE_COMPACT
-        )
-        binding.loginPrompt.setOnClickListener {
-            navigator.showLogin(this)
-            finish()
         }
 
         binding.done.setOnClickListener {

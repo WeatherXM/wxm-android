@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.text.HtmlCompat
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.data.Resource
@@ -36,6 +35,10 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
 
         binding.root.applyInsets()
 
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
         binding.username.onTextChanged {
             binding.usernameContainer.error = null
             binding.login.isEnabled =
@@ -50,16 +53,6 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
 
         binding.forgotPassword.setOnClickListener {
             navigator.showResetPassword(this)
-        }
-
-        binding.signupPrompt.text = HtmlCompat.fromHtml(
-            getString(R.string.prompt_signup),
-            HtmlCompat.FROM_HTML_MODE_COMPACT
-        )
-
-        binding.signupPrompt.setOnClickListener {
-            navigator.showSignup(this)
-            finish()
         }
 
         binding.login.setOnClickListener {
@@ -156,6 +149,5 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
         binding.password.isEnabled = enable
         binding.login.isEnabled = enable
         binding.forgotPassword.isEnabled = enable
-        binding.signupPrompt.isEnabled = enable
     }
 }

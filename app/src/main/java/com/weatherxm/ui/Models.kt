@@ -44,7 +44,7 @@ data class LineChartData(
     var entries: MutableList<Entry>
 ) {
     fun isNullOrEmpty(): Boolean {
-        return timestamps.isNullOrEmpty() && entries.isNullOrEmpty()
+        return timestamps.isEmpty() && entries.isEmpty()
     }
 }
 
@@ -58,22 +58,25 @@ data class BarChartData(
     var entries: MutableList<BarEntry>
 ) {
     fun isNullOrEmpty(): Boolean {
-        return timestamps.isNullOrEmpty() && entries.isNullOrEmpty()
+        return timestamps.isEmpty() && entries.isEmpty()
     }
 }
 
 @Keep
 @JsonClass(generateAdapter = true)
-data class TokenData(
-    var tokens24h: TokenSummary,
-    var tokens7d: TokenSummary,
-    var tokens30d: TokenSummary
+data class TokenInfo(
+    var lastReward: Transaction? = null,
+    var total7d: Float? = null,
+    var chart7d: TokenValuesChart? = null,
+    var max7dReward: Float? = null,
+    var total30d: Float? = null,
+    var chart30d: TokenValuesChart? = null,
+    var max30dReward: Float? = null
 )
 
 @Keep
 @JsonClass(generateAdapter = true)
-data class TokenSummary(
-    var total: Float,
+data class TokenValuesChart(
     var values: MutableList<Pair<String, Float>>
 )
 
@@ -92,7 +95,8 @@ data class DailyForecast(
 @JsonClass(generateAdapter = true)
 data class UITransactions(
     var transactions: List<Transaction>,
-    var hasNextPage: Boolean
+    var hasNextPage: Boolean = false,
+    var reachedTotal: Boolean = false
 )
 
 @Keep

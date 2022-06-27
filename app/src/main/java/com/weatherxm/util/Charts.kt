@@ -24,6 +24,7 @@ private const val POINT_SIZE = 2F
 private const val MAXIMUMS_GRID_LINES_Y_AXIS = 4
 private const val Y_AXIS_1_DECIMAL_GRANULARITY = 0.1F
 private const val Y_AXIS_PRECIP_INCHES_GRANULARITY = 0.01F
+private const val Y_AXIS_PRESSURE_INHG_GRANULARITY = 0.01F
 private const val X_AXIS_DEFAULT_TIME_GRANULARITY = 3F
 private const val X_AXIS_GRANULARITY_1_HOUR = 1F
 
@@ -144,7 +145,13 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData) {
     setDefaultSettings(chartData)
 
     marker =
-        CustomDefaultMarkerView(context, chartData.timestamps, chartData.name, chartData.unit, 1)
+        CustomDefaultMarkerView(
+            context,
+            chartData.timestamps,
+            chartData.name,
+            chartData.unit,
+            decimals = Weather.getDecimalsPressure()
+        )
 
     // Line and highlight Settings
     dataSet.setDefaultSettings(context, resources)
@@ -162,8 +169,8 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData) {
         if (chartData.unit == resources.getString(R.string.pressure_inHg)) {
             axisLeft.axisMinimum = dataSet.yMin - 0.1F
             axisLeft.axisMaximum = dataSet.yMax + 0.1F
-            axisLeft.granularity = Y_AXIS_1_DECIMAL_GRANULARITY
-            axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit, 1)
+            axisLeft.granularity = Y_AXIS_PRESSURE_INHG_GRANULARITY
+            axisLeft.valueFormatter = CustomYAxisFormatter(chartData.unit, 2)
         } else {
             axisLeft.axisMinimum = dataSet.yMin - 1
             axisLeft.axisMaximum = dataSet.yMax + 1

@@ -105,6 +105,13 @@ class HistoryChartsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        with(binding.displayTimeNotice) {
+            visibility = device.timezone?.let {
+                text = getString(R.string.displayed_times, it)
+                View.VISIBLE
+            } ?: View.GONE
+        }
+
         getWeatherHistory()
     }
 

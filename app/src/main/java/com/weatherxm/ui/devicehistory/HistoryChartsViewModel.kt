@@ -59,8 +59,8 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
         onCharts.postValue(Resource.loading())
 
         viewModelScope.launch {
-            val fromDate = getFormattedDate(ZonedDateTime.now().minusDays(DAYS_TO_FETCH).toString())
-            val toDate = getFormattedDate(ZonedDateTime.now().toString())
+            val fromDate = getFormattedDate(ZonedDateTime.now().minusDays(DAYS_TO_FETCH))
+            val toDate = getFormattedDate(ZonedDateTime.now())
             historyUseCase.getWeatherHistory(device, fromDate, toDate, context)
                 .map { historyCharts ->
                     Timber.d("Got History Charts: $historyCharts")
