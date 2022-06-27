@@ -67,9 +67,8 @@ class TransactionsAdapter(
 
             binding.prevLine.visibility = if (position == 0) View.GONE else View.VISIBLE
 
-            item.timestamp?.let {
-                binding.date.text = ZonedDateTime.parse(it).format(dateFormat)
-            }
+            binding.date.text = ZonedDateTime.parse(item.timestamp).format(dateFormat)
+
             binding.txHash.text = item.txHash?.let {
                 mask.maskHash(hash = it, offsetStart = 8, offsetEnd = 8, maxMaskedChars = 6)
             }

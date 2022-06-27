@@ -14,10 +14,12 @@ import com.weatherxm.data.ApiError.GenericError.JWTError.UnauthorizedError
 import com.weatherxm.data.ApiError.GenericError.NotFoundError
 import com.weatherxm.data.ApiError.GenericError.UnknownError
 import com.weatherxm.data.ApiError.GenericError.ValidationError
+import com.weatherxm.data.ApiError.InvalidFriendlyName
 import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceAlreadyClaimed
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
+import com.weatherxm.data.ApiError.UserError.InvalidTimezone
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.ApiError.UserError.WalletError.InvalidWalletAddress
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
@@ -30,8 +32,10 @@ import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_ACCESS_TOKEN
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_CLAIM_ID
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_CLAIM_LOCATION
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_CREDENTIALS
+import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_FRIENDLY_NAME
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_FROM_DATE
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_PASSWORD
+import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_TIMEZONE
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_TO_DATE
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_USERNAME
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_WALLET_ADDRESS
@@ -73,8 +77,10 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
                         INVALID_ACCESS_TOKEN -> InvalidAccessToken(this.body?.message)
                         DEVICE_NOT_FOUND -> DeviceNotFound(this.body?.message)
                         INVALID_WALLET_ADDRESS -> InvalidWalletAddress(this.body?.message)
+                        INVALID_FRIENDLY_NAME -> InvalidFriendlyName(this.body?.message)
                         INVALID_FROM_DATE -> InvalidFromDate(this.body?.message)
                         INVALID_TO_DATE -> InvalidToDate(this.body?.message)
+                        INVALID_TIMEZONE -> InvalidTimezone(this.body?.message)
                         INVALID_CLAIM_ID -> InvalidClaimId(this.body?.message)
                         INVALID_CLAIM_LOCATION -> InvalidClaimLocation(this.body?.message)
                         DEVICE_ALREADY_CLAIMED -> DeviceAlreadyClaimed(this.body?.message)

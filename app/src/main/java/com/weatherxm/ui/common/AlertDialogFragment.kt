@@ -3,6 +3,7 @@ package com.weatherxm.ui.common
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -19,13 +20,14 @@ class AlertDialogFragment : DialogFragment() {
         fun onClick()
     }
 
-    @Suppress("unused", "LongParameterList")
+    @Suppress("LongParameterList")
     class Builder(
         var title: String? = null,
         var message: String? = null,
         var positive: String? = null,
         var negative: String? = null,
         var neutral: String? = null,
+        var view: View? = null,
         var onPositiveClickListener: OnDialogActionClickListener? = null,
         var onNegativeClickListener: OnDialogActionClickListener? = null,
         var onNeutralClickListener: OnDialogActionClickListener? = null,
@@ -69,6 +71,7 @@ class AlertDialogFragment : DialogFragment() {
                     ARG_NEUTRAL to this@Builder.neutral,
                     ARG_CANCELLABLE to this@Builder.cancellable
                 )
+                customView = this@Builder.view
                 onPositiveClickListener = this@Builder.onPositiveClickListener
                 onNegativeClickListener = this@Builder.onNegativeClickListener
                 onNeutralClickListener = this@Builder.onNeutralClickListener
@@ -97,6 +100,7 @@ class AlertDialogFragment : DialogFragment() {
     private var onPositiveClickListener: OnDialogActionClickListener? = null
     private var onNegativeClickListener: OnDialogActionClickListener? = null
     private var onNeutralClickListener: OnDialogActionClickListener? = null
+    private var customView: View? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = MaterialAlertDialogBuilder(requireContext())
@@ -129,6 +133,10 @@ class AlertDialogFragment : DialogFragment() {
         }
         arguments?.getString(ARG_NEUTRAL)?.let {
             builder.setNeutralButton(it, listener)
+        }
+
+        customView?.let {
+            builder.setView(it)
         }
 
         return builder.create()

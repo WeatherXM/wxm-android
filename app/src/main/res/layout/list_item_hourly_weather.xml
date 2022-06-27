@@ -4,19 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/margin_small"
     android:clipChildren="false"
     android:clipToOutline="false"
     android:clipToPadding="false"
-    tools:layout_height="160dp"
+    tools:layout_height="180dp"
     tools:targetApi="s">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
         style="@style/Widget.WeatherXM.MaterialCard.HourlyForecast"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        app:cardUseCompatPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,19 +26,18 @@
             android:orientation="vertical">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/temperature"
-                style="@style/TextAppearance.WeatherXM.HourlyCard.Data"
+                android:id="@+id/time"
+                style="@style/TextAppearance.WeatherXM.HourlyCard.Data.Time"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="24dp"
                 android:gravity="center_horizontal"
-                tools:text="26°C" />
+                tools:text="13:37 am" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/icon"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginVertical="@dimen/margin_extra_small"
-                android:layout_gravity="center_horizontal"
+                android:layout_height="60dp"
+                android:layout_marginVertical="@dimen/margin_small"
                 android:scaleType="centerInside"
                 app:lottie_autoPlay="false"
                 app:lottie_loop="true"
@@ -51,19 +48,19 @@
                 android:id="@+id/precipitation"
                 style="@style/TextAppearance.WeatherXM.HourlyCard.Data.Precipitation"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="24dp"
                 android:layout_gravity="center_horizontal"
                 android:gravity="center"
-                tools:text="100.0 mm" />
+                tools:text="100%" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/time"
-                style="@style/TextAppearance.WeatherXM.HourlyCard.Data.Time"
+                android:id="@+id/temperature"
+                style="@style/TextAppearance.WeatherXM.HourlyCard.Data"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="24dp"
                 android:layout_marginTop="@dimen/margin_small"
                 android:gravity="center_horizontal"
-                tools:text="13:37 am" />
+                tools:text="26°" />
 
         </LinearLayout>
 

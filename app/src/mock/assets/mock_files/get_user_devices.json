@@ -2,6 +2,7 @@
     {
         "id": "702d3cc0-10e9-11ec-877e-63751227e9ec",
         "name": "Crazy Canary Blizzard",
+        "timezone": "Europe/Berlin",
         "label": null,
         "location": {
             "lat": 37.97521056577561,
@@ -10,6 +11,7 @@
         "attributes": {
             "isActive": true,
             "lastActiveAt": "2022-01-13T22:00:00+02:00",
+            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "831edafffffffff",
                 "polygon": [
@@ -102,6 +104,7 @@
     {
         "id": "76d13810-10e9-11ec-877e-63751227e9ec",
         "name": "Exotic Pecan Aurora",
+        "timezone": "America/New_York",
         "label": null,
         "location": {
             "lat": 35.51622463589852,
@@ -110,6 +113,7 @@
         "attributes": {
             "isActive": true,
             "lastActiveAt": "2022-01-13T22:00:00+02:00",
+            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f72fffffffff",
                 "polygon": [
@@ -202,6 +206,7 @@
     {
         "id": "76d13810-10e9-11ec-877e-63751227e9ea",
         "name": "Enormous Pilot Hurricane",
+        "timezone": "America/Chicago",
         "label": null,
         "location": {
             "lat": 35.51622463589852,
@@ -210,6 +215,7 @@
         "attributes": {
             "isActive": true,
             "lastActiveAt": "2022-01-13T22:00:00+02:00",
+            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f72fffffffff",
                 "polygon": [
@@ -302,6 +308,7 @@
     {
         "id": "76d13810-00e9-11ec-877e-63751227e9ec",
         "name": "Acoustic Barrier Hail",
+        "timezone": "Etc/GMT",
         "label": null,
         "location": {
             "lat": 35.51622463589852,
@@ -310,6 +317,7 @@
         "attributes": {
             "isActive": true,
             "lastActiveAt": "2022-01-13T22:00:00+02:00",
+            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f72fffffffff",
                 "polygon": [
@@ -402,6 +410,7 @@
     {
         "id": "76113810-10e9-11ec-877e-63751227e9ec",
         "name": "Brutal Fatality Lightning",
+        "timezone": "America/Toronto",
         "label": null,
         "location": {
             "lat": 35.51622463589852,
@@ -410,6 +419,7 @@
         "attributes": {
             "isActive": true,
             "lastActiveAt": "2022-01-13T22:00:00+02:00",
+            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f72fffffffff",
                 "polygon": [

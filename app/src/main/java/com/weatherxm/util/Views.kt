@@ -11,8 +11,11 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
@@ -58,9 +61,8 @@ fun Chip.setTextAndColor(@StringRes text: Int, color: Int) {
     this.text = this.resources.getString(text)
 }
 
-fun Chip.setTextAndColor(text: String, color: Int) {
-    this.setChipBackgroundColorResource(color)
-    this.text = text
+fun ImageView.setColor(@ColorRes color: Int) {
+    this.setColorFilter(ResourcesCompat.getColor(resources, color, null))
 }
 
 fun ViewGroup.applyInsets(top: Boolean = true, bottom: Boolean = true) {

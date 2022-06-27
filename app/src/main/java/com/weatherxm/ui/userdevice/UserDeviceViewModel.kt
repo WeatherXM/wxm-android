@@ -11,9 +11,10 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
-import com.weatherxm.ui.TokenSummary
+import com.weatherxm.ui.TokenInfo
 import com.weatherxm.ui.UIError
 import com.weatherxm.usecases.UserDeviceUseCase
+import com.weatherxm.util.DateTimeHelper.isTomorrow
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.async
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
+import java.time.ZonedDateTime
 
 @Suppress("TooManyFunctions")
 class UserDeviceViewModel : ViewModel(), KoinComponent {
@@ -29,22 +31,10 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     private val userDeviceUseCase: UserDeviceUseCase by inject()
 
     private lateinit var device: Device
-    private var tokensCurrentState = TokensState.HOUR24
-    private var forecastCurrentState = ForecastState.TODAY
-    private var initialTokenFetchCompleted = false
-
-    enum class TokensState {
-        HOUR24,
-        DAYS7,
-        DAYS30
-    }
-
-    enum class ForecastState {
-        TODAY,
-        TOMORROW
-    }
 
     private val onDeviceSet = MutableLiveData<Device>()
+
+    private val onEditNameChange = MutableLiveData<Boolean>()
 
     private val onLoading = MutableLiveData<Boolean>()
 
@@ -52,9 +42,11 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     private val onForecast = MutableLiveData<List<HourlyWeather>>()
 
-    private val onTokens = MutableLiveData<TokenSummary>()
+    private val onTokens = MutableLiveData<TokenInfo>()
 
     fun onDeviceSet(): LiveData<Device> = onDeviceSet
+
+    fun onEditNameChange(): LiveData<Boolean> = onEditNameChange
 
     fun onLoading(): LiveData<Boolean> = onLoading
 
@@ -62,11 +54,15 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     fun onForecast(): LiveData<List<HourlyWeather>> = onForecast
 
-    fun onTokens(): LiveData<TokenSummary> = onTokens
+    fun onTokens(): LiveData<TokenInfo> = onTokens
 
     fun setDevice(device: Device) {
         this.device = device
         onDeviceSet.postValue(this.device)
+    }
+
+    fun getDevice(): Device {
+        return device
     }
 
     fun fetchUserDeviceAllData(forceRefresh: Boolean = false) {
@@ -77,27 +73,12 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                 userDeviceUseCase.getUserDevice(device.id)
             }
 
-            // This function runs only on onCreate/onSwipeRefresh so we forceRefresh the getTokens
             val tokensDeferred = async {
-                when (tokensCurrentState) {
-                    TokensState.HOUR24 -> {
-                        userDeviceUseCase.getTokens24H(device.id, true)
-                    }
-                    TokensState.DAYS7 -> {
-                        userDeviceUseCase.getTokens7D(device.id, true)
-                    }
-                    TokensState.DAYS30 -> {
-                        userDeviceUseCase.getTokens30D(device.id, true)
-                    }
-                }
+                userDeviceUseCase.getTokenInfoLast30D(device.id)
             }
 
             val forecastDeferred = async {
-                if (forecastCurrentState == ForecastState.TODAY) {
-                    userDeviceUseCase.getTodayForecast(device, forceRefresh)
-                } else {
-                    userDeviceUseCase.getTomorrowForecast(device, forceRefresh)
-                }
+                userDeviceUseCase.getTodayAndTomorrowForecast(device, forceRefresh)
             }
 
             var errorOnUserDevice = false
@@ -121,7 +102,6 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             tokens
                 .map {
                     onTokens.postValue(it)
-                    initialTokenFetchCompleted = true
                 }
                 .mapLeft {
                     if (it == NoConnectionError || it == ConnectionTimeoutError) {
@@ -133,7 +113,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             val forecast = forecastDeferred.await()
             forecast
                 .map {
-                    onForecast.postValue(addCurrentToForecast(device.currentWeather, it))
+                    onForecast.postValue(it)
                 }
                 .mapLeft {
                     if (it == NoConnectionError || it == ConnectionTimeoutError) {
@@ -147,41 +127,22 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun fetchForecast(newState: ForecastState) {
+    private fun fetchForecast() {
         onLoading.postValue(true)
-        forecastCurrentState = newState
         viewModelScope.launch {
-            when (forecastCurrentState) {
-                ForecastState.TODAY -> {
-                    userDeviceUseCase.getTodayForecast(device)
-                        .map {
-                            Timber.d("Got short term forecast for TODAY")
-                            onForecast.postValue(addCurrentToForecast(device.currentWeather, it))
-                        }
-                        .mapLeft {
-                            handleForecastFailure(it)
-                        }
+            userDeviceUseCase.getTodayAndTomorrowForecast(device)
+                .map {
+                    Timber.d("Got short term forecast for TODAY & TOMORROW")
+                    if (it.isEmpty()) {
+                        onError.postValue(
+                            UIError(resHelper.getString(R.string.forecast_empty), null)
+                        )
+                    }
+                    onForecast.postValue(it)
                 }
-                ForecastState.TOMORROW -> {
-                    userDeviceUseCase.getTomorrowForecast(device)
-                        .map {
-                            Timber.d("Got short term forecast for TOMORROW")
-                            if (it.isEmpty()) {
-                                onError.postValue(
-                                    UIError(resHelper.getString(R.string.forecast_empty), null)
-                                )
-                                onForecast.postValue(it)
-                            } else {
-                                onForecast.postValue(
-                                    addCurrentToForecast(device.currentWeather, it)
-                                )
-                            }
-                        }
-                        .mapLeft {
-                            handleForecastFailure(it)
-                        }
+                .mapLeft {
+                    handleForecastFailure(it)
                 }
-            }
             onLoading.postValue(false)
         }
     }
@@ -194,7 +155,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             }
             is NoConnectionError, is ConnectionTimeoutError -> {
                 uiError.errorMessage = failure.getDefaultMessage()
-                uiError.retryFunction = { (::fetchForecast)(forecastCurrentState) }
+                uiError.retryFunction = { fetchForecast() }
             }
             else -> {
                 uiError.errorMessage = resHelper.getString(R.string.error_generic_message)
@@ -203,49 +164,17 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         onError.postValue(uiError)
     }
 
-    fun fetchTokenDetails(newState: TokensState) {
+    private fun fetchTokenDetails() {
         onLoading.postValue(true)
-        tokensCurrentState = newState
         viewModelScope.launch {
-            when (tokensCurrentState) {
-                TokensState.HOUR24 -> {
-                    userDeviceUseCase.getTokens24H(device.id)
-                        .map { onTokens.postValue(it) }
-                        .mapLeft { handleTokenFailure(it) }
-                }
-                TokensState.DAYS7 -> {
-                    userDeviceUseCase.getTokens7D(device.id)
-                        .map { onTokens.postValue(it) }
-                        .mapLeft { handleTokenFailure(it) }
-                }
-                TokensState.DAYS30 -> {
-                    userDeviceUseCase.getTokens30D(device.id)
-                        .map { onTokens.postValue(it) }
-                        .mapLeft { handleTokenFailure(it) }
-                }
-            }
+            userDeviceUseCase.getTokenInfoLast30D(device.id)
+                .map { onTokens.postValue(it) }
+                .mapLeft { handleTokenFailure(it) }
             onLoading.postValue(false)
         }
     }
 
-    fun hasInitialTokenFetchCompleted(): Boolean {
-        return initialTokenFetchCompleted
-    }
-
-    /*
-    * Needed to show 1 decimal point at temperature only if the first tile on the "Today" state
-    * is selected - which means only on current weather.
-    * On forecast tiles show 0 decimal points.
-     */
-    fun temperatureDecimalsToShow(selectedPosition: Int): Int {
-        return if (selectedPosition == 0 && forecastCurrentState == ForecastState.TODAY) {
-            1
-        } else {
-            0
-        }
-    }
-
-    private fun fetchUserDevice() {
+    fun fetchUserDevice() {
         onLoading.postValue(true)
         viewModelScope.launch {
             userDeviceUseCase.getUserDevice(device.id)
@@ -304,13 +233,13 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             uiError.errorMessage = resHelper.getString(R.string.error_user_device_token_failed)
 
             if (shouldRetry) {
-                uiError.retryFunction = { (::fetchTokenDetails)(tokensCurrentState) }
+                uiError.retryFunction = ::fetchTokenDetails
             }
         } else if (errorForecast) {
             uiError.errorMessage = resHelper.getString(R.string.error_user_device_forecast_failed)
 
             if (shouldRetry) {
-                uiError.retryFunction = { (::fetchForecast)(forecastCurrentState) }
+                uiError.retryFunction = { fetchForecast() }
             }
         }
 
@@ -328,7 +257,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             }
             is NoConnectionError, is ConnectionTimeoutError -> {
                 uiError.errorMessage = failure.getDefaultMessage()
-                uiError.retryFunction = { (::fetchTokenDetails)(tokensCurrentState) }
+                uiError.retryFunction = ::fetchTokenDetails
             }
             else -> {
                 uiError.errorMessage = resHelper.getString(R.string.error_generic_message)
@@ -337,26 +266,60 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         onError.postValue(uiError)
     }
 
-    private fun addCurrentToForecast(
-        currentWeather: HourlyWeather?,
-        forecastTimeseries: List<HourlyWeather>?
-    ): List<HourlyWeather> {
-        forecastTimeseries?.let {
-            val currentAndForecast =
-                if (currentWeather == null || forecastCurrentState != ForecastState.TODAY) {
-                    forecastTimeseries
-                } else {
-                    val listToReturn = forecastTimeseries.toMutableList()
-                    listToReturn.add(0, currentWeather)
-                    listToReturn.toList()
-                }
-            return currentAndForecast
-        }
+    fun isHourlyWeatherTomorrow(hourlyWeather: HourlyWeather?): Boolean {
+        return ZonedDateTime.parse(hourlyWeather?.timestamp).isTomorrow()
+    }
 
-        return if (currentWeather != null) {
-            listOf(currentWeather)
-        } else {
-            listOf()
+    fun getPositionOfTomorrowFirstItem(currentForecasts: List<HourlyWeather>): Int {
+        var position = 0
+        currentForecasts.forEach {
+            if (isHourlyWeatherTomorrow(it)) {
+                return position
+            }
+            position++
+        }
+        return position
+    }
+
+    fun setFriendlyName(friendlyName: String) {
+        if (friendlyName.isNotEmpty() && friendlyName != device.attributes?.friendlyName) {
+            onLoading.postValue(true)
+            viewModelScope.launch {
+                userDeviceUseCase.setFriendlyName(device.id, friendlyName)
+                    .map {
+                        onEditNameChange.postValue(true)
+                    }
+                    .mapLeft {
+                        onError.postValue(
+                            UIError(
+                                resHelper.getString(R.string.error_generic_message),
+                                null
+                            )
+                        )
+                    }
+                onLoading.postValue(false)
+            }
+        }
+    }
+
+    fun clearFriendlyName() {
+        if (device.attributes?.friendlyName?.isNotEmpty() == true) {
+            onLoading.postValue(true)
+            viewModelScope.launch {
+                userDeviceUseCase.clearFriendlyName(device.id)
+                    .map {
+                        onEditNameChange.postValue(true)
+                    }
+                    .mapLeft {
+                        onError.postValue(
+                            UIError(
+                                resHelper.getString(R.string.error_generic_message),
+                                null
+                            )
+                        )
+                    }
+                onLoading.postValue(false)
+            }
         }
     }
 }

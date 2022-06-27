@@ -1,9 +1,12 @@
 package com.weatherxm.ui.home.devices
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +24,16 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
     private val model: DevicesViewModel by activityViewModels()
     private val navigator: Navigator by inject()
     private lateinit var binding: FragmentDevicesBinding
+
+    // Register the launcher for the connect wallet activity and wait for a possible result
+    private val userDeviceLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                model.fetch()
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,6 +102,6 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
     }
 
     override fun onDeviceClicked(device: Device) {
-        navigator.showUserDevice(this, device)
+        navigator.showUserDevice(userDeviceLauncher, this, device)
     }
 }

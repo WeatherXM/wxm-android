@@ -4,41 +4,36 @@ import arrow.core.Either
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
-import com.weatherxm.data.WeatherData
+import com.weatherxm.data.Transaction
+import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.WeatherRepository
-import com.weatherxm.ui.TokenSummary
+import com.weatherxm.ui.TokenInfo
+import com.weatherxm.ui.TokenValuesChart
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
+import com.weatherxm.util.DateTimeHelper.getLocalDate
 import com.weatherxm.util.DateTimeHelper.getNowInTimezone
+import com.weatherxm.util.DateTimeHelper.getTimezone
+import java.time.LocalDate
 
 interface UserDeviceUseCase {
     suspend fun getUserDevices(): Either<Failure, List<Device>>
     suspend fun getUserDevice(deviceId: String): Either<Failure, Device>
-    suspend fun getTodayForecast(
+    suspend fun getTodayAndTomorrowForecast(
         device: Device,
         forceRefresh: Boolean = false
     ): Either<Failure, List<HourlyWeather>>
 
-    suspend fun getTomorrowForecast(
-        device: Device,
-        forceRefresh: Boolean = false
-    ): Either<Failure, List<HourlyWeather>>
+    suspend fun getTokenInfoLast30D(deviceId: String): Either<Failure, TokenInfo>
+    fun createDatedTransactionsList(
+        fromDate: LocalDate,
+        timezone: String,
+        transactions: List<Transaction>
+    ): List<Pair<String, Float>>
 
-    suspend fun getTokens24H(
-        deviceId: String,
-        forceRefresh: Boolean = false
-    ): Either<Failure, TokenSummary>
-
-    suspend fun getTokens7D(
-        deviceId: String,
-        forceRefresh: Boolean = false
-    ): Either<Failure, TokenSummary>
-
-    suspend fun getTokens30D(
-        deviceId: String,
-        forceRefresh: Boolean = false
-    ): Either<Failure, TokenSummary>
+    suspend fun setFriendlyName(deviceId: String, friendlyName: String): Either<Failure, Unit>
+    suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit>
 }
 
 class UserDeviceUseCaseImpl(
@@ -56,72 +51,134 @@ class UserDeviceUseCaseImpl(
         return deviceRepository.getUserDevice(deviceId)
     }
 
-    override suspend fun getTokens24H(
-        deviceId: String,
-        forceRefresh: Boolean
-    ): Either<Failure, TokenSummary> {
-        return tokenRepository.getTokens24H(deviceId, forceRefresh).map { lastReward ->
-            lastReward?.let {
-                TokenSummary(it, mutableListOf())
-            } ?: TokenSummary(0F, mutableListOf())
+    override fun createDatedTransactionsList(
+        fromDate: LocalDate,
+        timezone: String,
+        transactions: List<Transaction>
+    ): List<Pair<String, Float>> {
+        val datesAndTxs = mutableMapOf<LocalDate, Float>()
+        val lastMonthDates = mutableListOf<LocalDate>()
+        var nowDate = LocalDate.now()
+
+        // Create a list of dates, and a map of dates and transactions from latest -> earliest
+        while (!nowDate.isBefore(fromDate)) {
+            lastMonthDates.add(nowDate)
+            datesAndTxs[nowDate] = VERY_SMALL_NUMBER_FOR_CHART
+            nowDate = nowDate.minusDays(1)
         }
+
+        transactions.forEach { tx ->
+            val date = getLocalDate(tx.timestamp)
+
+            val amountForDate = datesAndTxs.getOrDefault(date, 0.0F)
+            if (tx.actualReward != null && tx.actualReward > 0.0F) {
+                datesAndTxs[date] = amountForDate + tx.actualReward
+            }
+        }
+
+        val datedTransactions = mutableListOf<Pair<String, Float>>()
+        lastMonthDates.forEach {
+            datedTransactions.add(
+                Pair(it.toString(), datesAndTxs.getOrDefault(it, VERY_SMALL_NUMBER_FOR_CHART))
+            )
+        }
+
+        return datedTransactions
     }
 
-    override suspend fun getTokens7D(
-        deviceId: String,
-        forceRefresh: Boolean
-    ): Either<Failure, TokenSummary> {
-        return tokenRepository.getTokens7D(deviceId, forceRefresh).map {
-            it.toTokenSummary()
-        }
-    }
+    // We suppress magic number because we use specific numbers to check last month and last week
+    @Suppress("MagicNumber")
+    override suspend fun getTokenInfoLast30D(deviceId: String): Either<Failure, TokenInfo> {
+        val now = getNowInTimezone()
+        val fromDateAsLocalDate = getLocalDate(now.minusDays(30).toString())
+        val formattedFromDate = fromDateAsLocalDate.toString()
+        val timezone = getTimezone()
 
-    override suspend fun getTokens30D(
-        deviceId: String,
-        forceRefresh: Boolean
-    ): Either<Failure, TokenSummary> {
-        return tokenRepository.getTokens30D(deviceId, forceRefresh).map {
-            it.toTokenSummary()
-        }
-    }
+        return tokenRepository.getAllTransactionsInRange(deviceId, timezone, formattedFromDate)
+            .map { transactions ->
+                if (transactions.isNotEmpty()) {
+                    val lastReward = transactions[0]
+                    var total7d: Float? = 0.0F
+                    var total30d: Float? = 0.0F
+                    val chart7d = TokenValuesChart(mutableListOf())
+                    val chart30d = TokenValuesChart(mutableListOf())
+                    val datedTransactions =
+                        createDatedTransactionsList(fromDateAsLocalDate, timezone, transactions)
 
-    override suspend fun getTodayForecast(
-        device: Device,
-        forceRefresh: Boolean
-    ): Either<Failure, List<HourlyWeather>> {
-        val now = getNowInTimezone(device.timezone)
-        val today = getFormattedDate(now.toString())
+                    /*
+                    * Populate the totals and the chart data from latest -> earliest
+                     */
+                    for ((position, datedTx) in datedTransactions.withIndex()) {
+                        if (position <= 6) {
+                            if (datedTx.second > VERY_SMALL_NUMBER_FOR_CHART) {
+                                total7d = total7d?.plus(datedTx.second)
+                            }
+                            chart7d.values.add(datedTx)
+                        }
+                        if (datedTx.second > VERY_SMALL_NUMBER_FOR_CHART) {
+                            total30d = total30d?.plus(datedTx.second)
+                        }
+                        chart30d.values.add(datedTx)
+                    }
 
-        return weatherRepository.getDeviceForecast(device.id, now, now, forceRefresh)
-            .map {
-                getHourlyWeatherFromData(it, today)
+                    // Find the maximum 7 and 30 day rewards (AKA the biggest bar on the chart)
+                    val max7dReward = chart7d.values.maxOfOrNull { it.second }
+                    val max30dReward = chart30d.values.maxOfOrNull { it.second }
+
+                    /*
+                    * We need to reverse the order in the chart data because we have saved them
+                    * from latest -> earliest but we need the earliest -> latest for proper
+                    * displaying them
+                    */
+                    chart7d.values = chart7d.values.reversed().toMutableList()
+                    chart30d.values = chart30d.values.reversed().toMutableList()
+
+                    TokenInfo(
+                        lastReward,
+                        total7d,
+                        chart7d,
+                        max7dReward,
+                        total30d,
+                        chart30d,
+                        max30dReward
+                    )
+                } else {
+                    TokenInfo()
+                }
             }
     }
 
-    override suspend fun getTomorrowForecast(
+    override suspend fun getTodayAndTomorrowForecast(
         device: Device,
         forceRefresh: Boolean
     ): Either<Failure, List<HourlyWeather>> {
         val now = getNowInTimezone(device.timezone)
-        val tomorrow = getFormattedDate(now.plusDays(1).toString())
+        val today = getFormattedDate(now)
+        val tomorrow = getFormattedDate(now.plusDays(1))
 
         return weatherRepository.getDeviceForecast(device.id, now, now.plusDays(1), forceRefresh)
-            .map {
-                getHourlyWeatherFromData(it, tomorrow)
+            .map { response ->
+                val hourlyForecastToReturn = mutableListOf<HourlyWeather>()
+                hourlyForecastToReturn.apply {
+                    response.forEach {
+                        if (it.date.equals(today) || it.date.equals(tomorrow)) {
+                            it.hourly?.let { hourlyForecast ->
+                                this.addAll(hourlyForecast)
+                            }
+                        }
+                    }
+                }
             }
     }
 
-    private fun getHourlyWeatherFromData(
-        weatherData: List<WeatherData>,
-        date: String
-    ): List<HourlyWeather> {
-        var dataToReturn = listOf<HourlyWeather>()
-        weatherData.forEach {
-            if (it.date.equals(date) && it.hourly != null) {
-                dataToReturn = it.hourly
-            }
-        }
+    override suspend fun setFriendlyName(
+        deviceId: String,
+        friendlyName: String
+    ): Either<Failure, Unit> {
+        return deviceRepository.setFriendlyName(deviceId, friendlyName)
+    }
 
-        return dataToReturn
+    override suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit> {
+        return deviceRepository.clearFriendlyName(deviceId)
     }
 }

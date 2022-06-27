@@ -16,6 +16,8 @@ interface DeviceRepository {
     suspend fun claimDevice(serialNumber: String, location: Location): Either<Failure, Device>
     suspend fun getDevicesOfH7(hexIndex: String?): MutableList<Device>
     suspend fun getDeviceAddress(device: Device): String?
+    suspend fun setFriendlyName(deviceId: String, friendlyName: String): Either<Failure, Unit>
+    suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit>
 }
 
 class DeviceRepositoryImpl(
@@ -105,5 +107,16 @@ class DeviceRepositoryImpl(
         }
 
         return hexAddress
+    }
+
+    override suspend fun setFriendlyName(
+        deviceId: String,
+        friendlyName: String
+    ): Either<Failure, Unit> {
+        return deviceDataSource.setFriendlyName(deviceId, friendlyName)
+    }
+
+    override suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit> {
+        return deviceDataSource.clearFriendlyName(deviceId)
     }
 }

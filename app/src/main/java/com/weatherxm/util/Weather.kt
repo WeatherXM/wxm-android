@@ -47,16 +47,24 @@ object Weather : KoinComponent {
         }
     }
 
-    fun getFormattedTemperature(value: Float?, decimals: Int = 0): String {
+    fun getFormattedTemperature(
+        value: Float?,
+        decimals: Int = 0,
+        fullUnit: Boolean = true
+    ): String {
         if (value == null) {
             return EMPTY_VALUE
         }
 
         val valueToReturn = convertTemp(value, decimals)
-        val unit = getPreferredUnit(
-            resHelper.getString(R.string.key_temperature_preference),
-            resHelper.getString(R.string.temperature_celsius)
-        )
+        val unit = if (fullUnit) {
+            getPreferredUnit(
+                resHelper.getString(R.string.key_temperature_preference),
+                resHelper.getString(R.string.temperature_celsius)
+            )
+        } else {
+            resHelper.getString(R.string.degrees_mark)
+        }
 
         return "$valueToReturn$unit"
     }
@@ -135,7 +143,7 @@ object Weather : KoinComponent {
             )
 
         if (savedUnit != defaultUnit) {
-            val windDegreesMark = resHelper.getString(R.string.wind_direction_degrees_mark)
+            val windDegreesMark = resHelper.getString(R.string.degrees_mark)
             return "$value$windDegreesMark"
         }
 

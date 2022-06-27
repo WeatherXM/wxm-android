@@ -8,6 +8,8 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Transaction
 import com.weatherxm.usecases.TokenUseCase
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
+import com.weatherxm.util.DateTimeHelper.getNowInTimezone
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -17,6 +19,7 @@ import timber.log.Timber
 class TokenViewModel : ViewModel(), KoinComponent {
     companion object {
         const val TransactionExplorer = "https://mumbai.polygonscan.com/tx/"
+        const val FETCH_INTERVAL_MONTHS = 3L
     }
 
     private val tokenUseCase: TokenUseCase by inject()
@@ -24,6 +27,9 @@ class TokenViewModel : ViewModel(), KoinComponent {
     private var currentPage = 0
     private var hasNextPage = false
     private var blockNewPageRequest = false
+    private var reachedTotal = false
+    private var currFromDate = getNowInTimezone().minusMonths(FETCH_INTERVAL_MONTHS)
+    private var currToDate = getNowInTimezone()
     private val currentShownTransactions = mutableListOf<Transaction>()
 
     private val onFirstPageTransactions = MutableLiveData<Resource<List<Transaction>>>().apply {
@@ -39,10 +45,11 @@ class TokenViewModel : ViewModel(), KoinComponent {
     fun fetchFirstPageTransactions(deviceId: String) {
         onFirstPageTransactions.postValue(Resource.loading())
         viewModelScope.launch {
-            tokenUseCase.getTransactions(deviceId, currentPage)
+            tokenUseCase.getTransactions(deviceId, currentPage, getFormattedDate(currFromDate))
                 .map {
                     Timber.d("Got Transactions: ${it.transactions}")
                     hasNextPage = it.hasNextPage
+                    reachedTotal = it.reachedTotal
                     currentShownTransactions.addAll(it.transactions)
                     onFirstPageTransactions.postValue(Resource.success(currentShownTransactions))
                 }
@@ -58,13 +65,42 @@ class TokenViewModel : ViewModel(), KoinComponent {
             viewModelScope.launch {
                 currentPage++
                 blockNewPageRequest = true
-                tokenUseCase.getTransactions(deviceId, currentPage)
-                    .map {
-                        Timber.d("Got Transactions: ${it.transactions}")
-                        hasNextPage = it.hasNextPage
-                        currentShownTransactions.addAll(it.transactions)
-                        onNewTransactionsPage.postValue(Resource.success(currentShownTransactions))
-                    }
+
+                tokenUseCase.getTransactions(
+                    deviceId,
+                    currentPage,
+                    getFormattedDate(currFromDate),
+                    getFormattedDate(currToDate)
+                ).map {
+                    Timber.d("Got Transactions: ${it.transactions}")
+                    hasNextPage = it.hasNextPage
+                    reachedTotal = it.reachedTotal
+                    currentShownTransactions.addAll(it.transactions)
+                    onNewTransactionsPage.postValue(Resource.success(currentShownTransactions))
+                }
+
+                blockNewPageRequest = false
+            }
+        } else if (!hasNextPage && !blockNewPageRequest && !reachedTotal) {
+            onNewTransactionsPage.postValue(Resource.loading())
+            viewModelScope.launch {
+                currentPage = 0
+                blockNewPageRequest = true
+                currToDate = currFromDate
+                currFromDate = currFromDate.minusMonths(FETCH_INTERVAL_MONTHS)
+
+                tokenUseCase.getTransactions(
+                    deviceId,
+                    currentPage,
+                    getFormattedDate(currFromDate),
+                    getFormattedDate(currToDate)
+                ).map {
+                    Timber.d("Got Transactions: ${it.transactions}")
+                    hasNextPage = it.hasNextPage
+                    reachedTotal = it.reachedTotal
+                    currentShownTransactions.addAll(it.transactions)
+                    onNewTransactionsPage.postValue(Resource.success(currentShownTransactions))
+                }
                 blockNewPageRequest = false
             }
         }

@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import com.weatherxm.R
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.databinding.ViewWeatherCardBinding
 import com.weatherxm.util.DateTimeHelper.getHourMinutesFromISO
@@ -42,7 +43,7 @@ class WeatherCardView : LinearLayout, KoinComponent {
         gravity = Gravity.CENTER
     }
 
-    private fun updateCurrentWeatherUI(decimalsOnTemp: Int) {
+    private fun updateCurrentWeatherUI(decimalsOnTemp: Int, tz: String?) {
         with(binding) {
             icon.setAnimation(Weather.getWeatherAnimation(weatherData?.icon))
             icon.playAnimation()
@@ -56,16 +57,25 @@ class WeatherCardView : LinearLayout, KoinComponent {
             wind.text = Weather.getFormattedWind(weatherData?.windSpeed, weatherData?.windDirection)
             solar.text = Weather.getFormattedUV(weatherData?.uvIndex)
             updatedOn.text = weatherData?.timestamp?.let {
-                val day = getRelativeDayFromISO(resHelper, it, includeDate = true, fullName = true)
+                val day = getRelativeDayFromISO(resHelper, it, true)
                 val time = getHourMinutesFromISO(context, it)
                 "$day, $time"
             } ?: ""
+
+            with(timezoneInfo) {
+                visibility = tz?.let {
+                    text = resHelper.getString(R.string.displayed_times, it)
+                    android.view.View.VISIBLE
+                } ?: android.view.View.GONE
+            }
+
+
         }
     }
 
-    fun setWeatherData(data: HourlyWeather?, decimalsOnTemp: Int = 0) {
+    fun setData(data: HourlyWeather?, tz: String?, decimalsOnTemp: Int = 0) {
         weatherData = data
-        updateCurrentWeatherUI(decimalsOnTemp)
+        updateCurrentWeatherUI(decimalsOnTemp, tz)
     }
 
     fun show() {

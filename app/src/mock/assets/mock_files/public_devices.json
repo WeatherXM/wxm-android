@@ -8,6 +8,9 @@
             "lon": 22.429473128603995
         },
         "attributes": {
+            "isActive": true,
+            "lastActiveAt": "2022-01-13T22:00:00+02:00",
+            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "831edefffffffff",
                 "polygon": [
@@ -101,6 +104,9 @@
             "lon": 24.940125388382246
         },
         "attributes": {
+            "isActive": true,
+            "lastActiveAt": "2022-01-13T22:00:00+02:00",
+            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f75fffffffff",
                 "polygon": [
@@ -194,6 +200,9 @@
             "lon": 24.01903666307378
         },
         "attributes": {
+            "isActive": true,
+            "lastActiveAt": "2022-01-13T22:00:00+02:00",
+            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f72fffffffff",
                 "polygon": [
@@ -287,6 +296,9 @@
             "lon": 25.131309775605438
         },
         "attributes": {
+            "isActive": true,
+            "lastActiveAt": "2022-01-13T22:00:00+02:00",
+            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f73fffffffff",
                 "polygon": [

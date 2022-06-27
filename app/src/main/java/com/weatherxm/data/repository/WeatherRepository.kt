@@ -45,11 +45,11 @@ class WeatherRepositoryImpl(
             clearCache()
         }
 
-        val from = getFormattedDate(fromDate.toString())
+        val from = getFormattedDate(fromDate)
         val to = if (ChronoUnit.DAYS.between(fromDate, toDate) < PREFETCH_DAYS) {
-            getFormattedDate(fromDate.plusDays(PREFETCH_DAYS).toString())
+            getFormattedDate(fromDate.plusDays(PREFETCH_DAYS))
         } else {
-            getFormattedDate(toDate.toString())
+            getFormattedDate(toDate)
         }
 
         return cacheWeatherDataSource.getForecast(deviceId, from, to)

@@ -1,7 +1,8 @@
 {
     "id": "76d13810-10e9-11ec-877e-63751227e9ec",
-    "name": "Exotic Pecan Aurora",
+    "name": "Weatherwise Wintergreen Stratocumulus",
     "label": null,
+    "timezone": "Europe/Athens",
     "location": {
         "lat": 35.51622463589852,
         "lon": 24.01903666307378
@@ -9,6 +10,7 @@
     "attributes": {
         "isActive": true,
         "lastActiveAt": "2022-01-13T22:00:00+02:00",
+        "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
         "hex3": {
             "index": "833f72fffffffff",
             "polygon": [
@@ -92,5 +94,9 @@
         "wind_gust": 17.4,
         "precip_type": "rain"
     },
-    "address": "Chania, GR"
+    "address": "Chania, GR",
+    "rewards": {
+        "total_rewards": 30523.65,
+        "actual_reward": 156.6
+    }
 }

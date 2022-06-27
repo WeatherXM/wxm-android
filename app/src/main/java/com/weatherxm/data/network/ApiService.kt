@@ -5,13 +5,13 @@ import co.infinum.retromock.meta.MockBehavior
 import co.infinum.retromock.meta.MockResponse
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.data.Device
-import com.weatherxm.data.Tokens
 import com.weatherxm.data.TransactionsResponse
 import com.weatherxm.data.User
 import com.weatherxm.data.Wallet
 import com.weatherxm.data.WeatherData
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor.Companion.NO_AUTH_HEADER
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
@@ -76,13 +76,7 @@ interface ApiService {
         @Query("exclude") exclude: String? = null,
     ): NetworkResponse<List<WeatherData>, ErrorResponse>
 
-    @Mock
-    @MockResponse(body = "mock_files/get_user_device_tokens.json")
-    @GET("/api/v1/me/devices/{deviceId}/tokens")
-    suspend fun getTokens(
-        @Path("deviceId") deviceId: String,
-    ): NetworkResponse<Tokens, ErrorResponse>
-
+    @Suppress("LongParameterList")
     @Mock
     @MockResponse(body = "mock_files/get_user_device_transactions.json")
     @GET("/api/v1/me/devices/{deviceId}/tokens/transactions")
@@ -90,6 +84,9 @@ interface ApiService {
         @Path("deviceId") deviceId: String,
         @Query("page") page: Int? = null,
         @Query("pageSize") pageSize: Int? = null,
+        @Query("timezone") timezone: String? = null,
+        @Query("fromDate") fromDate: String? = null,
+        @Query("toDate") toDate: String? = null,
     ): NetworkResponse<TransactionsResponse, ErrorResponse>
 
     @Mock
@@ -109,4 +106,22 @@ interface ApiService {
     suspend fun claimDevice(
         @Body address: ClaimDeviceBody,
     ): NetworkResponse<Device, ErrorResponse>
+
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 200, body = "mock_files/empty_response.json")
+    @POST("/api/v1/me/devices/{deviceId}/friendlyName")
+    suspend fun setFriendlyName(
+        @Path("deviceId") deviceId: String,
+        @Body friendlyName: FriendlyNameBody,
+    ): NetworkResponse<Unit, ErrorResponse>
+
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 200, body = "mock_files/empty_response.json")
+    @DELETE("/api/v1/me/devices/{deviceId}/friendlyName")
+    suspend fun clearFriendlyName(
+        @Path("deviceId") deviceId: String
+    ): NetworkResponse<Unit, ErrorResponse>
+
 }

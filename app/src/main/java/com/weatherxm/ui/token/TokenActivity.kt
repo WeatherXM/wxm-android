@@ -51,7 +51,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
         }
 
         deviceId = device.id
-        binding.toolbar.subtitle = device.name
+        binding.toolbar.subtitle = device.getNameOrLabel()
 
         // Initialize the adapter with empty data
         adapter = TransactionsAdapter({ transactionListener(it) }) { endOfDataListener() }
@@ -77,7 +77,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
                     binding.empty.visibility = View.GONE
                 } else {
                     binding.empty.animation(R.raw.anim_empty_devices, false)
-                    binding.empty.title(getString(R.string.no_transactions))
+                    binding.empty.title(getString(R.string.no_transactions_title))
                     binding.empty.subtitle(getString(R.string.info_come_back_later))
                     binding.empty.listener(null)
                     binding.empty.visibility = View.VISIBLE

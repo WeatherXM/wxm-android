@@ -45,8 +45,8 @@ class NetworkWeatherDataSource(private val apiService: ApiService) : WeatherData
             val tz = ZoneId.of(data[0].tz)
             val todayDate = ZonedDateTime.now(tz)
 
-            data[0].date = getFormattedDate(todayDate.toString())
-            data[1].date = getFormattedDate(todayDate.plusDays(1).toString())
+            data[0].date = getFormattedDate(todayDate)
+            data[1].date = getFormattedDate(todayDate.plusDays(1))
 
             var newTimestamp = todayDate.withHour(0).withMinute(0).withSecond(0)
             data[0].hourly?.forEach {

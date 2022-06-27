@@ -69,7 +69,7 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/notice_text"
-                        style="@style/TextAppearance.WeatherXM.Notice"
+                        style="@style/TextAppearance.WeatherXM.Warning"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_small"

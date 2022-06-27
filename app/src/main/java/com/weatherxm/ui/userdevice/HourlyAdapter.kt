@@ -7,40 +7,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.databinding.ListItemHourlyWeatherBinding
-import com.weatherxm.ui.SelectedHourlyForecast
 import com.weatherxm.ui.userdevice.HourlyAdapter.HourlyViewHolder
-import com.weatherxm.ui.userdevice.UserDeviceViewModel.ForecastState
 import com.weatherxm.util.DateTimeHelper.getHourMinutesFromISO
 import com.weatherxm.util.Weather
 
-class HourlyAdapter(
-    private val onHourlyForecastSelected: (SelectedHourlyForecast) -> Unit
-) : ListAdapter<HourlyWeather, HourlyViewHolder>(HourlyDiffCallback()) {
-
-    private var selectedPosition = RecyclerView.NO_POSITION
-    private var forecastState: ForecastState = ForecastState.TODAY
-
-    fun setForecastState(newState: ForecastState) {
-        forecastState = newState
-    }
-
-    override fun submitList(list: List<HourlyWeather>?) {
-        if (selectedPosition != RecyclerView.NO_POSITION && selectedPosition != 0) {
-            // Reset list as we need to reset the selected item also
-            super.submitList(null)
-        }
-
-        // Reset selected position
-        selectedPosition = if (list.isNullOrEmpty()) RecyclerView.NO_POSITION else 0
-
-        // Update data
-        super.submitList(list)
-
-        // Invoke callback for newly selected position
-        list?.let {
-            onHourlyForecastSelected(SelectedHourlyForecast(it[selectedPosition], selectedPosition))
-        }
-    }
+class HourlyAdapter : ListAdapter<HourlyWeather, HourlyViewHolder>(HourlyDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyViewHolder {
         val binding = ListItemHourlyWeatherBinding.inflate(
@@ -48,54 +19,31 @@ class HourlyAdapter(
             parent,
             false
         )
-        return HourlyViewHolder(binding, onHourlyForecastSelected)
+        return HourlyViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: HourlyViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, isSelected(position))
+        holder.bind(item)
     }
 
-    private fun isSelected(position: Int): Boolean {
-        return selectedPosition == position
-            || (selectedPosition == RecyclerView.NO_POSITION && position == 0)
+    fun getItemFromPosition(position: Int): HourlyWeather? {
+        return if (currentList.isNotEmpty()) {
+            currentList[position]
+        } else {
+            null
+        }
     }
 
     inner class HourlyViewHolder(
         private val binding: ListItemHourlyWeatherBinding,
-        private val onHourlyForecastSelected: (SelectedHourlyForecast) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        init {
-            itemView.setOnClickListener {
-                // Invoke listener
-                onHourlyForecastSelected(
-                    SelectedHourlyForecast(getItem(adapterPosition), adapterPosition)
-                )
-
-                // Change the selected state
-                val lastSelectedItem = selectedPosition
-                selectedPosition = adapterPosition
-
-                // Notify unselected & selected items, to force UI update
-                notifyItemChanged(lastSelectedItem)
-                notifyItemChanged(selectedPosition)
-            }
-        }
-
-        fun bind(item: HourlyWeather, isSelected: Boolean) {
-            binding.root.isActivated = isSelected
-            binding.time.text = getHourMinutesFromISO(itemView.context, item.timestamp)
-            if (forecastState == ForecastState.TODAY && adapterPosition == 0) {
-                binding.temperature.text = Weather.getFormattedTemperature(item.temperature, 1)
-            } else {
-                binding.temperature.text = Weather.getFormattedTemperature(item.temperature)
-            }
-            binding.precipitation.text = if (item.precipitation != null) {
-                Weather.getFormattedPrecipitation(item.precipitation)
-            } else {
+        fun bind(item: HourlyWeather) {
+            binding.time.text = getHourMinutesFromISO(itemView.context, item.timestamp, false)
+            binding.temperature.text = Weather.getFormattedTemperature(item.temperature)
+            binding.precipitation.text =
                 Weather.getFormattedPrecipitationProbability(item.precipProbability)
-            }
             binding.icon.apply {
                 setAnimation(Weather.getWeatherAnimation(item.icon))
                 playAnimation()

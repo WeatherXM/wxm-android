@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.weatherxm.ui.TokenSummary
 import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
 
@@ -57,9 +56,8 @@ data class Device(
     var address: String?,
     val rewards: Rewards?
 ) : Parcelable {
-    // TODO: When we have the new field for the "label" of the device use it here
     fun getNameOrLabel(): String {
-        return name
+        return attributes?.friendlyName ?: name
     }
 }
 
@@ -68,7 +66,15 @@ data class Device(
 @Parcelize
 data class Attributes(
     val isActive: Boolean?,
+    /// TODO: Handle this in the next app release (after the API release) 
+    @Deprecated(
+        "Remove in the next API release",
+        ReplaceWith("lastWeatherStationActivity"),
+        DeprecationLevel.WARNING
+    )
     val lastActiveAt: ZonedDateTime?,
+    val lastWeatherStationActivity: ZonedDateTime?,
+    val friendlyName: String?,
     val hex3: Hex,
     val hex7: Hex,
 ) : Parcelable
@@ -96,7 +102,7 @@ data class Rewards(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class Tokens(
-    val daily: TokensSummaryResponse,
+    val daily: Transaction,
     val weekly: TokensSummaryResponse,
     val monthly: TokensSummaryResponse
 ) : Parcelable
@@ -107,35 +113,7 @@ data class Tokens(
 data class TokensSummaryResponse(
     val total: Float?,
     val tokens: List<TokenEntry>?
-) : Parcelable {
-    companion object {
-        /*
-        * Have this very small number to use when a day is null or zero,
-        * in order to have a bar in the chart in the token card view
-         */
-        const val VERY_SMALL_NUMBER_FOR_CHART = 0.001F
-    }
-
-    fun toTokenSummary(): TokenSummary {
-        val summary = TokenSummary(0F, mutableListOf())
-
-        total?.let {
-            summary.total = it
-        }
-
-        tokens?.let {
-            it.forEach { tokenEntry ->
-                val reward = tokenEntry.actualReward
-                if (tokenEntry.timestamp != null && reward != null && reward > 0.0) {
-                    summary.values.add(Pair(tokenEntry.timestamp, reward))
-                } else if (tokenEntry.timestamp != null) {
-                    summary.values.add(Pair(tokenEntry.timestamp, VERY_SMALL_NUMBER_FOR_CHART))
-                }
-            }
-        }
-        return summary
-    }
-}
+) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -161,7 +139,7 @@ data class TransactionsResponse(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class Transaction(
-    val timestamp: String?,
+    val timestamp: String,
     @Json(name = "tx_hash")
     val txHash: String?,
     @Json(name = "validation_score")
@@ -172,7 +150,15 @@ data class Transaction(
     val actualReward: Float?,
     @Json(name = "total_rewards")
     val totalRewards: Float?,
-) : Parcelable
+) : Parcelable {
+    companion object {
+        /*
+        * Have this very small number to use when a day is null or zero,
+        * in order to have a bar in the chart in the token card view
+         */
+        const val VERY_SMALL_NUMBER_FOR_CHART = 0.001F
+    }
+}
 
 @Keep
 @JsonClass(generateAdapter = true)
