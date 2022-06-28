@@ -9,6 +9,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.ResourcesHelper
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -24,7 +25,7 @@ class PublicDevicesListViewModel : ViewModel(), KoinComponent {
     fun address(): LiveData<String> = address
 
     fun fetchDevices(hexIndex: String?) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val devicesOfH7 = explorerUseCase.getDevicesOfH7(hexIndex)
             this@PublicDevicesListViewModel.devices.postValue(
                 if (devicesOfH7.isNullOrEmpty()) {

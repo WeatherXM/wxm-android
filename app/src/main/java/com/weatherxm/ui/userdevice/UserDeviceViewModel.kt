@@ -17,6 +17,7 @@ import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.util.DateTimeHelper.isTomorrow
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -68,7 +69,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     fun fetchUserDeviceAllData(forceRefresh: Boolean = false) {
         onLoading.postValue(true)
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val userDevice = async {
                 userDeviceUseCase.getUserDevice(device.id)
             }
@@ -176,7 +177,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     fun fetchUserDevice() {
         onLoading.postValue(true)
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             userDeviceUseCase.getUserDevice(device.id)
                 .map {
                     Timber.d("Got User Device: $it")
