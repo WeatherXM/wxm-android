@@ -7,6 +7,8 @@ import arrow.core.Either
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Hex
+import timber.log.Timber
+import java.io.IOException
 import java.util.*
 
 interface AddressDataSource {
@@ -30,24 +32,29 @@ class NetworkAddressDataSource(private val context: Context) : AddressDataSource
         * and we need to wait for the results actually.
         */
         return if (Geocoder.isPresent()) {
-            val geocoderAddresses =
-                Geocoder(context, locale).getFromLocation(hex.center.lat, hex.center.lon, 1)
+            try {
+                val geocoderAddresses =
+                    Geocoder(context, locale).getFromLocation(hex.center.lat, hex.center.lon, 1)
 
-            if (geocoderAddresses.isNullOrEmpty()) {
-                Either.Left(Failure.LocationAddressNotFound)
-            } else {
-                val geocoderAddress = geocoderAddresses[0]
-                Either.Right(
-                    if (geocoderAddress.locality != null) {
-                        "${geocoderAddress.locality}, ${geocoderAddress.countryCode}"
-                    } else if (geocoderAddress.subAdminArea != null) {
-                        "${geocoderAddress.subAdminArea}, ${geocoderAddress.countryCode}"
-                    } else if (geocoderAddress.adminArea != null) {
-                        "${geocoderAddress.adminArea}, ${geocoderAddress.countryCode}"
-                    } else {
-                        geocoderAddress.countryName
-                    }
-                )
+                if (geocoderAddresses.isNullOrEmpty()) {
+                    Either.Left(Failure.LocationAddressNotFound)
+                } else {
+                    val geocoderAddress = geocoderAddresses[0]
+                    Either.Right(
+                        if (geocoderAddress.locality != null) {
+                            "${geocoderAddress.locality}, ${geocoderAddress.countryCode}"
+                        } else if (geocoderAddress.subAdminArea != null) {
+                            "${geocoderAddress.subAdminArea}, ${geocoderAddress.countryCode}"
+                        } else if (geocoderAddress.adminArea != null) {
+                            "${geocoderAddress.adminArea}, ${geocoderAddress.countryCode}"
+                        } else {
+                            geocoderAddress.countryName
+                        }
+                    )
+                }
+            } catch (exception: IOException) {
+                Timber.w(exception, "Geocoder failed with: IOException.")
+                Either.Left(Failure.UnknownError)
             }
         } else {
             Either.Left(Failure.NoGeocoderError)
