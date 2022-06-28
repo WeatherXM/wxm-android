@@ -66,13 +66,6 @@ data class Device(
 @Parcelize
 data class Attributes(
     val isActive: Boolean?,
-    /// TODO: Handle this in the next app release (after the API release) 
-    @Deprecated(
-        "Remove in the next API release",
-        ReplaceWith("lastWeatherStationActivity"),
-        DeprecationLevel.WARNING
-    )
-    val lastActiveAt: ZonedDateTime?,
     val lastWeatherStationActivity: ZonedDateTime?,
     val friendlyName: String?,
     val hex3: Hex,

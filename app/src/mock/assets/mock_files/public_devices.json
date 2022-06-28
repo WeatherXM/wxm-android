@@ -9,7 +9,6 @@
         },
         "attributes": {
             "isActive": true,
-            "lastActiveAt": "2022-01-13T22:00:00+02:00",
             "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "831edefffffffff",
@@ -105,7 +104,6 @@
         },
         "attributes": {
             "isActive": true,
-            "lastActiveAt": "2022-01-13T22:00:00+02:00",
             "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f75fffffffff",
@@ -201,7 +199,6 @@
         },
         "attributes": {
             "isActive": true,
-            "lastActiveAt": "2022-01-13T22:00:00+02:00",
             "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f72fffffffff",
@@ -297,7 +294,6 @@
         },
         "attributes": {
             "isActive": true,
-            "lastActiveAt": "2022-01-13T22:00:00+02:00",
             "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f73fffffffff",

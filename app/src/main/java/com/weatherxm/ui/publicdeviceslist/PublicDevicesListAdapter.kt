@@ -44,9 +44,7 @@ class PublicDevicesListAdapter(
             this.device = item
             binding.name.text = item.name
 
-            val lastActiveZonedDateTime =
-                device.attributes?.lastWeatherStationActivity ?: device.attributes?.lastActiveAt
-            lastActiveZonedDateTime?.let {
+            device.attributes?.lastWeatherStationActivity?.let {
                 binding.lastSeen.text = itemView.resources.getString(
                     R.string.last_active,
                     getRelativeTimeFromISO(

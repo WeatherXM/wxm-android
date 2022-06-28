@@ -215,9 +215,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
             }
         )
 
-        val lastActiveZonedDateTime =
-            device.attributes?.lastWeatherStationActivity ?: device.attributes?.lastActiveAt
-        val lastActive = lastActiveZonedDateTime?.let {
+        val lastActive = device.attributes?.lastWeatherStationActivity?.let {
             getString(
                 R.string.last_active,
                 getRelativeTimeFromISO(it, getString(R.string.last_active_just_now))
