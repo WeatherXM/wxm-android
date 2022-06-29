@@ -7,7 +7,9 @@ import com.weatherxm.data.Location
 import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.StorageAddressDataSource
+import com.weatherxm.data.datasource.UserActionDataSource
 import timber.log.Timber
+import java.util.Date
 
 interface DeviceRepository {
     suspend fun getUserDevices(): Either<Failure, List<Device>>
@@ -18,13 +20,16 @@ interface DeviceRepository {
     suspend fun getDeviceAddress(device: Device): String?
     suspend fun setFriendlyName(deviceId: String, friendlyName: String): Either<Failure, Unit>
     suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit>
+    suspend fun getLastFriendlyNameChanged(deviceId: String): Long
 }
 
 class DeviceRepositoryImpl(
     private val deviceDataSource: DeviceDataSource,
     private val networkAddressDataSource: NetworkAddressDataSource,
-    private val storageAddressDataSource: StorageAddressDataSource
+    private val storageAddressDataSource: StorageAddressDataSource,
+    private val userActionDataSource: UserActionDataSource
 ) : DeviceRepository {
+
     // Devices on H7 hexes, the key is the hex index, and the value the contained devices
     private val devicesH7Hexes: MutableMap<String, MutableList<Device>> = mutableMapOf()
 
@@ -114,9 +119,19 @@ class DeviceRepositoryImpl(
         friendlyName: String
     ): Either<Failure, Unit> {
         return deviceDataSource.setFriendlyName(deviceId, friendlyName)
+            .tap {
+                userActionDataSource.setLastFriendlyNameChanged(deviceId, Date().time)
+            }
     }
 
     override suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit> {
         return deviceDataSource.clearFriendlyName(deviceId)
+            .tap {
+                userActionDataSource.setLastFriendlyNameChanged(deviceId, Date().time)
+            }
+    }
+
+    override suspend fun getLastFriendlyNameChanged(deviceId: String): Long {
+        return userActionDataSource.getLastFriendlyNameChanged(deviceId)
     }
 }

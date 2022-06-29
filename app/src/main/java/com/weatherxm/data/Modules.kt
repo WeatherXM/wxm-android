@@ -43,6 +43,8 @@ import com.weatherxm.data.datasource.NetworkWalletDataSource
 import com.weatherxm.data.datasource.StorageAddressDataSource
 import com.weatherxm.data.datasource.TokenDataSource
 import com.weatherxm.data.datasource.TokenDataSourceImpl
+import com.weatherxm.data.datasource.UserActionDataSource
+import com.weatherxm.data.datasource.UserActionDataSourceImpl
 import com.weatherxm.data.network.AuthTokenJsonAdapter
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthRequestInterceptor
@@ -98,7 +100,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 const val RETROFIT_API = "RETROFIT_API"
@@ -207,6 +209,10 @@ private val datasources = module {
     single<StorageAddressDataSource> {
         StorageAddressDataSource(get())
     }
+
+    single<UserActionDataSource> {
+        UserActionDataSourceImpl(get())
+    }
 }
 
 private val repositories = module {
@@ -223,7 +229,7 @@ private val repositories = module {
         WalletRepositoryImpl(get(), get())
     }
     single<DeviceRepository> {
-        DeviceRepositoryImpl(get(), get(), get())
+        DeviceRepositoryImpl(get(), get(), get(), get())
     }
     single<TokenRepository> {
         TokenRepositoryImpl(get())

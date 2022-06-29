@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.Either
+import arrow.core.getOrHandle
 import com.weatherxm.R
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Device
@@ -282,7 +284,26 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         return position
     }
 
-    fun setFriendlyName(friendlyName: String) {
+    fun setOrClearFriendlyName(friendlyName: String?) {
+        if (friendlyName == null) {
+            clearFriendlyName()
+        } else {
+            setFriendlyName(friendlyName)
+        }
+    }
+
+    fun canChangeFriendlyName(): Either<UIError, Boolean> {
+        return userDeviceUseCase.canChangeFriendlyName(device.id)
+            .mapLeft {
+                Timber.d(it.message)
+                UIError(
+                    resHelper.getString(R.string.error_friendly_name_change_rate_limit),
+                    null
+                )
+            }
+    }
+
+    private fun setFriendlyName(friendlyName: String) {
         if (friendlyName.isNotEmpty() && friendlyName != device.attributes?.friendlyName) {
             onLoading.postValue(true)
             viewModelScope.launch {
@@ -303,7 +324,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun clearFriendlyName() {
+    private fun clearFriendlyName() {
         if (device.attributes?.friendlyName?.isNotEmpty() == true) {
             onLoading.postValue(true)
             viewModelScope.launch {

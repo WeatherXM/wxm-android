@@ -14,9 +14,7 @@ import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.ActivityUserDeviceBinding
-import com.weatherxm.databinding.ViewEditNameBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.AlertDialogFragment
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.DateTimeHelper.getRelativeTimeFromISO
 import com.weatherxm.util.applyInsets
@@ -147,25 +145,15 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
                 true
             }
             R.id.edit_name -> {
-                val editNameView = ViewEditNameBinding.inflate(layoutInflater)
-                editNameView.newAddress.setText(model.getDevice().attributes?.friendlyName)
-
-                AlertDialogFragment
-                    .Builder(
-                        title = getString(R.string.edit_name),
-                        view = editNameView.root
-                    )
-                    .onNegativeClick(getString(R.string.action_cancel)) {
-                    }
-                    .onNeutralClick(getString(R.string.action_clear)) {
-                        model.clearFriendlyName()
-                    }
-                    .onPositiveClick(getString(R.string.action_save)) {
-                        model.setFriendlyName(editNameView.newAddress.text.toString())
-                    }
-                    .build()
-                    .show(this)
-
+                model.canChangeFriendlyName()
+                    .fold({
+                        toast(it.errorMessage)
+                    }, {
+                        // This cannot be false, by design
+                        FriendlyNameDialogFragment(model.getDevice().attributes?.friendlyName) {
+                            model.setOrClearFriendlyName(it)
+                        }.show(this)
+                    })
                 true
             }
             else -> false
