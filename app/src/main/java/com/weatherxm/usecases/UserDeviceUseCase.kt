@@ -16,9 +16,10 @@ import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getLocalDate
 import com.weatherxm.util.DateTimeHelper.getNowInTimezone
 import com.weatherxm.util.DateTimeHelper.getTimezone
+import com.weatherxm.util.Tokens.roundTokens
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
-import java.util.Date
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 interface UserDeviceUseCase {
@@ -81,7 +82,13 @@ class UserDeviceUseCaseImpl(
 
             val amountForDate = datesAndTxs.getOrDefault(date, 0.0F)
             if (tx.actualReward != null && tx.actualReward > 0.0F) {
-                datesAndTxs[date] = amountForDate + tx.actualReward
+                /*
+                * We need to round this number as we use it further for getting the max in a range
+                * And we show that max rounded. Small differences occur if we don't round it.
+                * example: https://github.com/WeatherXM/issue-tracker/issues/97
+                 */
+                val roundedReward = roundTokens(tx.actualReward)
+                datesAndTxs[date] = amountForDate + roundedReward
             }
         }
 

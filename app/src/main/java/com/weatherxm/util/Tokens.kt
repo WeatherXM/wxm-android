@@ -2,10 +2,11 @@ package com.weatherxm.util
 
 import androidx.annotation.ColorRes
 import com.weatherxm.R
+import java.math.BigDecimal
 import java.text.DecimalFormat
 
 object Tokens {
-    const val EMPTY_VALUE = "-"
+    private const val EMPTY_VALUE = "-"
 
     @Suppress("MagicNumber")
     @ColorRes
@@ -30,5 +31,9 @@ object Tokens {
 
     fun formatTokens(amount: Float): String {
         return DecimalFormat("0.00").format(amount.toBigDecimal())
+    }
+
+    fun roundTokens(value: Number, decimals: Int = 2): Float {
+        return value.toFloat().toBigDecimal().setScale(decimals, BigDecimal.ROUND_HALF_UP).toFloat()
     }
 }
