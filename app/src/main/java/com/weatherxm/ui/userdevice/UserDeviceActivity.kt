@@ -18,7 +18,6 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.DateTimeHelper.getRelativeTimeFromISO
 import com.weatherxm.util.applyInsets
-import com.weatherxm.util.onTabSelected
 import com.weatherxm.util.setColor
 import com.weatherxm.util.setHtml
 import org.koin.core.component.KoinComponent
@@ -71,9 +70,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         // Fix flickering on item selection
         (binding.recycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
-        binding.dateTabs.onTabSelected {
-            onForecastDateSelected(it)
-        }
+        binding.dateTabs.addOnTabSelectedListener(onForecastDateSelectedListener)
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
@@ -174,13 +171,22 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
     }
 
     private fun onHourlyForecastScroll() {
+        val dateTabs = binding.dateTabs
         val firstItemVisiblePosition = layoutManagerOfRecycler.findFirstVisibleItemPosition()
         val firstItemHourlyWeather = hourlyAdapter.getItemFromPosition(firstItemVisiblePosition)
-        if (model.isHourlyWeatherTomorrow(firstItemHourlyWeather)) {
-            binding.dateTabs.selectTab(binding.dateTabs.getTabAt(TAB_TOMORROW))
-        } else {
-            binding.dateTabs.selectTab(binding.dateTabs.getTabAt(TAB_TODAY))
+        val isFirstItemTomorrow = model.isHourlyWeatherTomorrow(firstItemHourlyWeather)
+
+        // Disable tab listener first
+        binding.dateTabs.removeOnTabSelectedListener(onForecastDateSelectedListener)
+
+        if (isFirstItemTomorrow && dateTabs.selectedTabPosition == TAB_TODAY) {
+            dateTabs.getTabAt(TAB_TOMORROW)?.select()
+        } else if (!isFirstItemTomorrow && dateTabs.selectedTabPosition == TAB_TOMORROW) {
+            dateTabs.getTabAt(TAB_TODAY)?.select()
         }
+
+        // Re-enable listener
+        binding.dateTabs.addOnTabSelectedListener(onForecastDateSelectedListener)
     }
 
     private fun updateDeviceInfo(device: Device) {
@@ -235,5 +241,18 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
             snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
         }
         snackbar?.show()
+    }
+
+    private val onForecastDateSelectedListener = object : TabLayout.OnTabSelectedListener {
+        override fun onTabSelected(tab: TabLayout.Tab?) {
+            tab?.let { onForecastDateSelected(it) }
+        }
+
+        override fun onTabUnselected(tab: TabLayout.Tab?) {
+            // No-op
+        }
+        override fun onTabReselected(tab: TabLayout.Tab?) {
+            // No-op
+        }
     }
 }
