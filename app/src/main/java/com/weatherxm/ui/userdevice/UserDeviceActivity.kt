@@ -82,15 +82,15 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         }
 
         binding.historicalCharts.setOnClickListener {
-            navigator.showHistoryActivity(this, device)
+            navigator.showHistoryActivity(this, model.getDevice())
         }
 
         binding.forecastNextDays.setOnClickListener {
-            navigator.showForecast(this, device)
+            navigator.showForecast(this, model.getDevice())
         }
 
         binding.tokenRewards.setOnClickListener {
-            navigator.showTokenScreen(this, device)
+            navigator.showTokenScreen(this, model.getDevice())
         }
 
         binding.tokenNotice.setHtml(R.string.device_detail_token_notice)
