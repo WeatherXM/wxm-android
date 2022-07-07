@@ -105,7 +105,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         }
 
         model.onTokens().observe(this) {
-            binding.tokenCard.setTokenInfo(it, device.rewards?.totalRewards)
+            binding.tokenCard.setTokenInfo(it, model.getDevice().rewards?.totalRewards)
         }
 
         model.onEditNameChange().observe(this) {

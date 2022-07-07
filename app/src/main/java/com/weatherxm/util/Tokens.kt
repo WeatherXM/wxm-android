@@ -3,11 +3,10 @@ package com.weatherxm.util
 import androidx.annotation.ColorRes
 import com.weatherxm.R
 import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.DecimalFormat
 
 object Tokens {
-    private const val EMPTY_VALUE = "-"
-
     @Suppress("MagicNumber")
     @ColorRes
     fun getRewardScoreColor(score: Float?): Int {
@@ -26,11 +25,14 @@ object Tokens {
     fun formatValue(value: Float?): String {
         return value?.let {
             formatTokens(it)
-        } ?: EMPTY_VALUE
+        } ?: formatTokens(0F)
     }
 
     fun formatTokens(amount: Float): String {
-        return DecimalFormat("0.00").format(amount.toBigDecimal())
+        val decimalFormat = DecimalFormat("0.00")
+        // In order to match the rounding mode on roundTokens and fix inconsistencies
+        decimalFormat.roundingMode = RoundingMode.HALF_UP
+        return decimalFormat.format(amount.toBigDecimal())
     }
 
     fun roundTokens(value: Number, decimals: Int = 2): Float {
