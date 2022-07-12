@@ -8,9 +8,9 @@ import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
-import com.weatherxm.data.Transaction
 import com.weatherxm.databinding.ActivityTokenBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.UITransaction
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.token.TokenViewModel.Companion.TransactionExplorer
 import com.weatherxm.util.applyInsets
@@ -68,7 +68,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
         model.fetchFirstPageTransactions(deviceId)
     }
 
-    private fun updateUIFirstPage(resource: Resource<List<Transaction>>) {
+    private fun updateUIFirstPage(resource: Resource<List<UITransaction>>) {
         when (resource.status) {
             Status.SUCCESS -> {
                 if (!resource.data.isNullOrEmpty()) {
@@ -103,7 +103,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
         }
     }
 
-    private fun updateUINewPage(resource: Resource<List<Transaction>>) {
+    private fun updateUINewPage(resource: Resource<List<UITransaction>>) {
         when (resource.status) {
             Status.SUCCESS -> {
                 if (!resource.data.isNullOrEmpty()) {
@@ -122,8 +122,8 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
         }
     }
 
-    private fun transactionListener(transaction: Transaction) {
-        transaction.txHash?.let { hash ->
+    private fun transactionListener(uiTransaction: UITransaction) {
+        uiTransaction.txHash?.let { hash ->
             navigator.openWebsite(this, "$TransactionExplorer$hash")
         }
     }

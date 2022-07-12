@@ -14,7 +14,7 @@
         android:layout_width="4dp"
         android:layout_height="24dp"
         android:layout_marginStart="48dp"
-        android:background="@color/purple"
+        android:background="@color/tokenChartBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,7 +32,7 @@
         android:layout_width="4dp"
         android:layout_height="24dp"
         android:layout_marginStart="48dp"
-        android:background="@color/purple"
+        android:background="@color/tokenChartBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/date_point" />
 
@@ -70,6 +70,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="0x123456 ... ABCDEF" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/timestamp"
+                style="@style/TextAppearance.WeatherXM.Transaction.Timestamp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="end|center_vertical"
+                android:text="@string/reward"
+                app:layout_constraintBottom_toBottomOf="@id/tx_hash"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tx_hash"
+                app:layout_constraintTop_toTopOf="@id/tx_hash"
+                tools:text="04/05, 23:59" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/reward"

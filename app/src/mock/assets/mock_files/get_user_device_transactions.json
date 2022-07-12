@@ -9,31 +9,39 @@
             "validation_score": 1
         },
         {
+            "timestamp": "2022-06-03T11:00:03+00:00",
+            "tx_hash": "0x03bdd2562125a1063807283b8001b3e4ae7caaf5fdce0089dd73b844968ba29d",
+            "daily_reward": 75.86281588447653,
+            "actual_reward": 53.10397111913357,
+            "total_rewards": 3191.7288233139766,
+            "validation_score": 0.7
+        },
+        {
             "timestamp": "2022-06-02T12:00:02+00:00",
             "tx_hash": "0x19d0175a7d1bd74b583a344cae73a037d85ccf7d3cec01cf0400bef821fe96c1",
             "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
+            "actual_reward": 10.361090909090909,
             "total_rewards": 6089.857877520646,
-            "validation_score": 1
+            "validation_score": 0.1
         },
         {
             "timestamp": "2022-06-01T12:00:03+00:00",
             "tx_hash": "0x7d772698e75859dc8cc2198191521ae0ad694de057f05703684c73680ce54327",
             "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
+            "actual_reward": 51.80545454545454,
             "total_rewards": 5986.246968429737,
-            "validation_score": 1
+            "validation_score": 0.5
         },
         {
             "timestamp": "2022-05-31T12:00:04+00:00",
             "tx_hash": "0x7a06c13b6f7c8b7797ee9e69ae55c672ad8974e120f26cf72af8c3887876f5c0",
             "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
+            "actual_reward": 93.24981818181818,
             "total_rewards": 5882.636059338827,
-            "validation_score": 1
+            "validation_score": 0.9
         },
         {
-            "timestamp": "2022-05-30T12:00:02+00:00",
+            "timestamp": "2022-05-31T12:00:02+00:00",
             "tx_hash": "0x2b3f30cf8eb90c305e56b5f538835ee7558b72c51188ff82129e32bd787d20e3",
             "daily_reward": 103.61090909090909,
             "actual_reward": 103.61090909090909,
@@ -41,7 +49,7 @@
             "validation_score": 1
         },
         {
-            "timestamp": "2022-05-29T12:00:03+00:00",
+            "timestamp": "2022-05-31T12:00:03+00:00",
             "tx_hash": "0x0e8ce1f0fa1790bf286fb598b79afcecb8b5c88d5e7ca38b0e4b753f6a72c69d",
             "daily_reward": 103.61090909090909,
             "actual_reward": 103.61090909090909,

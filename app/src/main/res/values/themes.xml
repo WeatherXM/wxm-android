@@ -551,9 +551,13 @@
     </style>
 
     <style name="TextAppearance.WeatherXM.Transaction.Date" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Transaction.Timestamp" parent="TextAppearance.Material3.LabelSmall">
+        <item name="android:textStyle">italic</item>
     </style>
 
     <style name="Widget.WeatherXM.Transaction.Hash" parent="Widget.Material3.Chip.Filter">

@@ -259,7 +259,7 @@ private val usecases = module {
         ClaimDeviceUseCaseImpl(get(), get())
     }
     single<TokenUseCase> {
-        TokenUseCaseImpl(get())
+        TokenUseCaseImpl(get(), get())
     }
     single<AuthUseCase> {
         AuthUseCaseImpl(get(), get(), get(), get())

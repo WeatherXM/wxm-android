@@ -4,6 +4,6 @@
     android:opacity="opaque"
     android:shape="oval">
 
-    <solid android:color="@color/purple" />
+    <solid android:color="@color/tokenChartBackground" />
 
 </shape>
