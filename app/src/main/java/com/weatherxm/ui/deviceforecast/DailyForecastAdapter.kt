@@ -16,15 +16,32 @@ class DailyForecastAdapter :
         DailyForecastDiffCallback()
     ) {
 
-    private var minTemperature: Float? = Float.MAX_VALUE
-    private var maxTemperature: Float? = Float.MIN_VALUE
+    private var minTemperature: Float = Float.MAX_VALUE
+    private var maxTemperature: Float = Float.MIN_VALUE
 
     override fun submitList(list: List<DailyForecast>?) {
-        minTemperature = list?.minOfOrNull { it.minTemp ?: Float.MAX_VALUE }
-        maxTemperature = list?.maxOfOrNull { it.maxTemp ?: Float.MIN_VALUE }
+        /*
+        Consider the following case:
+        Day X: minimum value: 10.01, max value 15.99
+        Day Y: minimum value 10.49, max value 15.51
+        In the above examples, min and max temperature are 10 and 16 on both days,
+        but the slider will be drawn according to the floats, not the min/max as ints.
+        Therefore we round all values to 0 decimals here before drawing the slider.
+        */
+        minTemperature = list
+            ?.minOfOrNull { it.minTemp ?: Float.MAX_VALUE }
+            ?.let { roundToDecimals(it, 0) } ?: 0F
+        maxTemperature = list
+            ?.maxOfOrNull { it.maxTemp ?: Float.MIN_VALUE }
+            ?.let { roundToDecimals(it, 0) } ?: 0F
 
         // Update data
-        super.submitList(list)
+        super.submitList(list?.map {
+            it.apply {
+                this.minTemp = roundToDecimals(this.minTemp ?: 0F, 0)
+                this.maxTemp = roundToDecimals(this.maxTemp ?: 0F, 0)
+            }
+        })
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyForecastViewHolder {
@@ -54,20 +71,9 @@ class DailyForecastAdapter :
                 binding.temperature.visibility = View.INVISIBLE
             } else {
                 binding.temperature.apply {
-                    /*
-                    * Consider the following case:
-                    * Day X: minimum value: 10.01, max value 15.99
-                    * Day Y: minimum value 10.49, max value 15.51
-                    * In the above examples, min and max temperature are 10 and 16 on both days,
-                    * but the slider will be drawn according to the floats, not the min/max as ints.
-                    * Therefore we round the to 0 decimals here before drawing the slider.
-                     */
-                    valueFrom = roundToDecimals(minTemperature ?: 0F, 0)
-                    valueTo = roundToDecimals(maxTemperature ?: 0F, 0)
-                    values = listOf(
-                        roundToDecimals(item.minTemp ?: 0F, 0),
-                        roundToDecimals(item.maxTemp ?: 0F, 0)
-                    )
+                    valueFrom = minTemperature
+                    valueTo = maxTemperature
+                    values = listOf(item.minTemp, item.maxTemp)
                 }
             }
             binding.minTemperature.text = Weather.getFormattedTemperature(item.minTemp)

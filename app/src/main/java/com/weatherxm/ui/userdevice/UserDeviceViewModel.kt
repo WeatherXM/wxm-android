@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.Either
+import arrow.core.getOrHandle
 import com.weatherxm.R
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Device
@@ -17,6 +19,7 @@ import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.util.DateTimeHelper.isTomorrow
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -68,7 +71,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     fun fetchUserDeviceAllData(forceRefresh: Boolean = false) {
         onLoading.postValue(true)
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val userDevice = async {
                 userDeviceUseCase.getUserDevice(device.id)
             }
@@ -176,7 +179,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     fun fetchUserDevice() {
         onLoading.postValue(true)
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             userDeviceUseCase.getUserDevice(device.id)
                 .map {
                     Timber.d("Got User Device: $it")
@@ -281,7 +284,26 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         return position
     }
 
-    fun setFriendlyName(friendlyName: String) {
+    fun setOrClearFriendlyName(friendlyName: String?) {
+        if (friendlyName == null) {
+            clearFriendlyName()
+        } else {
+            setFriendlyName(friendlyName)
+        }
+    }
+
+    fun canChangeFriendlyName(): Either<UIError, Boolean> {
+        return userDeviceUseCase.canChangeFriendlyName(device.id)
+            .mapLeft {
+                Timber.d(it.message)
+                UIError(
+                    resHelper.getString(R.string.error_friendly_name_change_rate_limit),
+                    null
+                )
+            }
+    }
+
+    private fun setFriendlyName(friendlyName: String) {
         if (friendlyName.isNotEmpty() && friendlyName != device.attributes?.friendlyName) {
             onLoading.postValue(true)
             viewModelScope.launch {
@@ -302,7 +324,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun clearFriendlyName() {
+    private fun clearFriendlyName() {
         if (device.attributes?.friendlyName?.isNotEmpty() == true) {
             onLoading.postValue(true)
             viewModelScope.launch {

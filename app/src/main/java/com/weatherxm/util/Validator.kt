@@ -7,8 +7,10 @@ class Validator {
         const val MINIMUM_PASSWORD_LENGTH = 6
         const val ADDRESS_LENGTH = 42
         const val SERIAL_NUMBER_LENGTH = 18
+        const val FRIENDLY_NAME_MAX_LENGTH = 64
         const val REGEX_ETH_ADDRESS = "^0x[a-fA-F0-9]{40}\$"
         const val REGEX_SERIAL_NUMBER = "^[a-fA-F0-9]{18}\$"
+        const val REGEX_FRIENDLY_NAME = "^(?!\\s*\$).+"
     }
 
     fun validateUsername(username: String): Boolean {
@@ -31,5 +33,12 @@ class Validator {
             return false
         }
         return serialNumber.matches(Regex(REGEX_SERIAL_NUMBER))
+    }
+
+    fun validateFriendlyName(friendlyName: String?): Boolean {
+        if (friendlyName.isNullOrEmpty() || friendlyName.length > FRIENDLY_NAME_MAX_LENGTH) {
+            return false
+        }
+        return friendlyName.matches(Regex(REGEX_FRIENDLY_NAME))
     }
 }

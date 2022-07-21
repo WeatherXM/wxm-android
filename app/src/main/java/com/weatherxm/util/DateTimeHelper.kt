@@ -92,7 +92,7 @@ object DateTimeHelper : KoinComponent {
         val now = ZonedDateTime.now(date.zone)
 
         // Too soon?
-        if (Duration.between(now, date).toMinutes() < 1 && defaultIfTooSoon != null) {
+        if (Duration.between(date, now).toMinutes() < 1 && defaultIfTooSoon != null) {
             return defaultIfTooSoon
         }
 

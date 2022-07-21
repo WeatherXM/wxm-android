@@ -1,17 +1,18 @@
 package com.weatherxm.ui.explorer
 
-import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
-import com.mapbox.maps.plugin.animation.camera
-import com.mapbox.maps.plugin.animation.easeTo
+import com.mapbox.maps.extension.style.layers.addLayerAbove
+import com.mapbox.maps.extension.style.sources.addSource
+import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
+import com.mapbox.maps.extension.style.sources.getSource
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.weatherxm.data.Status
 import com.weatherxm.ui.BaseMapFragment
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.ZOOM_H3_CLICK
+import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
 import timber.log.Timber
 
 class ExplorerMapFragment : BaseMapFragment() {
@@ -20,11 +21,6 @@ class ExplorerMapFragment : BaseMapFragment() {
         so it needs to be the same model as the parent's one.
     */
     private val model: ExplorerViewModel by activityViewModels()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mapStyle = "mapbox://styles/exmachina/ckrxjh01a5e7317plznjeicao"
-        super.onViewCreated(view, savedInstanceState)
-    }
 
     override fun onMapReady(map: MapboxMap) {
         polygonManager.addClickListener {
@@ -37,10 +33,25 @@ class ExplorerMapFragment : BaseMapFragment() {
             true
         }
 
+        map.addOnCameraChangeListener {
+            model.setCurrentCamera(map.cameraState.zoom, map.cameraState.center)
+        }
+
         model.explorerState().observe(this) { resource ->
             Timber.d("Data updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
+                    resource.data?.geoJsonSource?.let { source ->
+                        val mapStyle = map.getStyle()
+                        if (mapStyle?.styleSourceExists(HEATMAP_SOURCE_ID) == true) {
+                            source.data?.let {
+                                (mapStyle.getSource(HEATMAP_SOURCE_ID) as GeoJsonSource).data(it)
+                            }
+                        } else {
+                            mapStyle?.addSource(source)
+                            mapStyle?.addLayerAbove(model.getHeatMapLayer(), "waterway-label")
+                        }
+                    }
                     onPolygonPointsUpdated(resource.data?.polygonPoints)
                     binding.progress.visibility = View.INVISIBLE
                 }
@@ -53,22 +64,18 @@ class ExplorerMapFragment : BaseMapFragment() {
             }
         }
 
-        model.onZoomChange().observe(this) { newZoom ->
-            val newPointCameraOptions = CameraOptions.Builder()
-                .center(newZoom)
-                .zoom(ZOOM_H3_CLICK)
-                .build()
-
-            map.easeTo(newPointCameraOptions, null)
-        }
-
-        binding.mapView.camera.addCameraZoomChangeListener { zoom ->
-            Timber.d("New zoom: $zoom")
-            model.changeHexSize(zoom)
+        // Set camera to the last saved location the user was at
+        model.getCurrentCamera()?.let {
+            map.setCamera(
+                CameraOptions.Builder()
+                    .center(it.center)
+                    .zoom(it.zoom)
+                    .build()
+            )
         }
 
         // Fetch data
-        model.fetch(true)
+        model.fetch()
     }
 
     private fun onPolygonPointsUpdated(polygonPoints: List<PolygonAnnotationOptions>?) {
@@ -80,5 +87,9 @@ class ExplorerMapFragment : BaseMapFragment() {
         // First clear the map and the relevant attributes
         polygonManager.deleteAll()
         polygonManager.create(polygonPoints)
+    }
+
+    override fun getMapStyle(): String {
+        return "mapbox://styles/exmachina/ckrxjh01a5e7317plznjeicao"
     }
 }

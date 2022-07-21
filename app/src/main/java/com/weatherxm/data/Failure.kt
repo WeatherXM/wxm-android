@@ -81,3 +81,8 @@ sealed class DataError : Failure() {
     object CacheExpiredError : DataError()
     object NoWalletAddressError : DataError()
 }
+
+@Keep
+sealed class UserActionError(val message: String? = null) : Failure() {
+    class UserActionRateLimitedError(message: String? = null) : UserActionError(message)
+}

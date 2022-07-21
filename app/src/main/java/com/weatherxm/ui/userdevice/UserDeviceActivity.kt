@@ -14,13 +14,10 @@ import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.ActivityUserDeviceBinding
-import com.weatherxm.databinding.ViewEditNameBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.AlertDialogFragment
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.DateTimeHelper.getRelativeTimeFromISO
 import com.weatherxm.util.applyInsets
-import com.weatherxm.util.onTabSelected
 import com.weatherxm.util.setColor
 import com.weatherxm.util.setHtml
 import org.koin.core.component.KoinComponent
@@ -73,9 +70,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         // Fix flickering on item selection
         (binding.recycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
-        binding.dateTabs.onTabSelected {
-            onForecastDateSelected(it)
-        }
+        binding.dateTabs.addOnTabSelectedListener(onForecastDateSelectedListener)
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
@@ -87,15 +82,15 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         }
 
         binding.historicalCharts.setOnClickListener {
-            navigator.showHistoryActivity(this, device)
+            navigator.showHistoryActivity(this, model.getDevice())
         }
 
         binding.forecastNextDays.setOnClickListener {
-            navigator.showForecast(this, device)
+            navigator.showForecast(this, model.getDevice())
         }
 
         binding.tokenRewards.setOnClickListener {
-            navigator.showTokenScreen(this, device)
+            navigator.showTokenScreen(this, model.getDevice())
         }
 
         binding.tokenNotice.setHtml(R.string.device_detail_token_notice)
@@ -110,7 +105,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         }
 
         model.onTokens().observe(this) {
-            binding.tokenCard.setTokenInfo(it, device.rewards?.totalRewards)
+            binding.tokenCard.setTokenInfo(it, model.getDevice().rewards?.totalRewards)
         }
 
         model.onEditNameChange().observe(this) {
@@ -147,25 +142,15 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
                 true
             }
             R.id.edit_name -> {
-                val editNameView = ViewEditNameBinding.inflate(layoutInflater)
-                editNameView.newAddress.setText(model.getDevice().attributes?.friendlyName)
-
-                AlertDialogFragment
-                    .Builder(
-                        title = getString(R.string.edit_name),
-                        view = editNameView.root
-                    )
-                    .onNegativeClick(getString(R.string.action_cancel)) {
-                    }
-                    .onNeutralClick(getString(R.string.action_clear)) {
-                        model.clearFriendlyName()
-                    }
-                    .onPositiveClick(getString(R.string.action_save)) {
-                        model.setFriendlyName(editNameView.newAddress.text.toString())
-                    }
-                    .build()
-                    .show(this)
-
+                model.canChangeFriendlyName()
+                    .fold({
+                        toast(it.errorMessage)
+                    }, {
+                        // This cannot be false, by design
+                        FriendlyNameDialogFragment(model.getDevice().attributes?.friendlyName) {
+                            model.setOrClearFriendlyName(it)
+                        }.show(this)
+                    })
                 true
             }
             else -> false
@@ -186,13 +171,22 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
     }
 
     private fun onHourlyForecastScroll() {
+        val dateTabs = binding.dateTabs
         val firstItemVisiblePosition = layoutManagerOfRecycler.findFirstVisibleItemPosition()
         val firstItemHourlyWeather = hourlyAdapter.getItemFromPosition(firstItemVisiblePosition)
-        if (model.isHourlyWeatherTomorrow(firstItemHourlyWeather)) {
-            binding.dateTabs.selectTab(binding.dateTabs.getTabAt(TAB_TOMORROW))
-        } else {
-            binding.dateTabs.selectTab(binding.dateTabs.getTabAt(TAB_TODAY))
+        val isFirstItemTomorrow = model.isHourlyWeatherTomorrow(firstItemHourlyWeather)
+
+        // Disable tab listener first
+        binding.dateTabs.removeOnTabSelectedListener(onForecastDateSelectedListener)
+
+        if (isFirstItemTomorrow && dateTabs.selectedTabPosition == TAB_TODAY) {
+            dateTabs.getTabAt(TAB_TOMORROW)?.select()
+        } else if (!isFirstItemTomorrow && dateTabs.selectedTabPosition == TAB_TOMORROW) {
+            dateTabs.getTabAt(TAB_TODAY)?.select()
         }
+
+        // Re-enable listener
+        binding.dateTabs.addOnTabSelectedListener(onForecastDateSelectedListener)
     }
 
     private fun updateDeviceInfo(device: Device) {
@@ -215,9 +209,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
             }
         )
 
-        val lastActiveZonedDateTime =
-            device.attributes?.lastWeatherStationActivity ?: device.attributes?.lastActiveAt
-        val lastActive = lastActiveZonedDateTime?.let {
+        val lastActive = device.attributes?.lastWeatherStationActivity?.let {
             getString(
                 R.string.last_active,
                 getRelativeTimeFromISO(it, getString(R.string.last_active_just_now))
@@ -249,5 +241,18 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
             snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
         }
         snackbar?.show()
+    }
+
+    private val onForecastDateSelectedListener = object : TabLayout.OnTabSelectedListener {
+        override fun onTabSelected(tab: TabLayout.Tab?) {
+            tab?.let { onForecastDateSelected(it) }
+        }
+
+        override fun onTabUnselected(tab: TabLayout.Tab?) {
+            // No-op
+        }
+        override fun onTabReselected(tab: TabLayout.Tab?) {
+            // No-op
+        }
     }
 }

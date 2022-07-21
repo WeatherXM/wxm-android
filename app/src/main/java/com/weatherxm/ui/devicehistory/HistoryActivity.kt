@@ -10,6 +10,7 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.applyOnGlobalLayout
+import com.weatherxm.util.createAndAddTab
 import com.weatherxm.util.onTabSelected
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -52,7 +53,6 @@ class HistoryActivity : AppCompatActivity(), KoinComponent {
 
         model.onUpdateDates().observe(this) {
             if (it) {
-                binding.dateTabs.removeAllTabs()
                 updateDates()
             }
         }
@@ -63,11 +63,32 @@ class HistoryActivity : AppCompatActivity(), KoinComponent {
     }
 
     private fun updateDates() {
-        model.getDatesForTabs().forEach { date ->
-            val newDateTab = binding.dateTabs.newTab()
-            newDateTab.text = date
-            binding.dateTabs.addTab(newDateTab)
+        val currentEarliestDate = model.getEarliestDate()
+        val tabsFromModel = model.getDatesForTabs()
+
+        /*
+        * If the date tabs are not being initialized, create and add all of them and
+        * select the latest value.
+        *
+        * If the date tabs exist, then check the current earliest date  if it is the same
+        * as the new earliest date.
+        * If it isn't, then that means we have moved one day forward so remove that earliest date
+        * and add at the end of the date tabs the latest day we just fetched, and auto-select it
+        * to make it visible that the new day's data just arrived and the dates at the top changed.
+        */
+        if (binding.dateTabs.tabCount == 0) {
+            tabsFromModel.forEach { date ->
+                binding.dateTabs.createAndAddTab(date)
+            }
+            selectLatestDate()
+        } else if (tabsFromModel[0] != currentEarliestDate) {
+            binding.dateTabs.removeTabAt(0)
+            binding.dateTabs.createAndAddTab(tabsFromModel[tabsFromModel.size - 1])
+            selectLatestDate()
         }
+    }
+
+    private fun selectLatestDate() {
         // Select last tab (TODAY) by default
         binding.dateTabs.getTabAt(binding.dateTabs.tabCount - 1)?.apply {
             view.applyOnGlobalLayout { this.select() }

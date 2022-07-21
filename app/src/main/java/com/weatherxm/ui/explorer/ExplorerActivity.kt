@@ -1,13 +1,18 @@
 package com.weatherxm.ui.explorer
 
 import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import com.google.android.material.snackbar.Snackbar
+import com.mapbox.geojson.Point
+import com.weatherxm.BuildConfig
 import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityExplorerBinding
+import com.weatherxm.ui.BaseMapFragment.OnMapDebugInfoListener
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Animation.HideAnimation.SlideOutToBottom
 import com.weatherxm.ui.common.Animation.HideAnimation.SlideOutToTop
@@ -20,8 +25,9 @@ import dev.chrisbanes.insetter.applyInsetter
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
+import java.util.Locale
 
-class ExplorerActivity : AppCompatActivity(), KoinComponent {
+class ExplorerActivity : AppCompatActivity(), KoinComponent, OnMapDebugInfoListener {
 
     private val navigator: Navigator by inject()
     private val resourcesHelper: ResourcesHelper by inject()
@@ -55,10 +61,10 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent {
         }
 
         model.onHexSelected().observe(this) {
-            navigator.showPublicDevicesList(supportFragmentManager, it)
+            navigator.showPublicDevicesList(supportFragmentManager)
         }
 
-        model.onDeviceSelected().observe(this) {
+        model.onPublicDeviceSelected().observe(this) {
             navigator.showDeviceDetails(supportFragmentManager, it)
         }
 
@@ -94,6 +100,8 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent {
                 else -> false
             }
         }
+
+        binding.mapDebugInfoContainer.visibility = if (BuildConfig.DEBUG) VISIBLE else GONE
     }
 
     private fun showErrorOnMapLoading(message: String) {
@@ -120,5 +128,15 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent {
                 margin(left = false, top = false, right = false, bottom = true)
             }
         }
+    }
+
+    @Suppress("MagicNumber")
+    override fun onMapDebugInfoUpdated(zoom: Double, center: Point) {
+        fun format(number: Number, decimals: Int = 2): String {
+            return String.format(Locale.getDefault(), "%.${decimals}f", number)
+        }
+
+        binding.mapDebugInfo.text = "ZOOM = ${format(zoom)}\nCENTER = " +
+            "${format(center.latitude(), 6)}, ${format(center.longitude(), 6)}"
     }
 }

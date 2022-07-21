@@ -3,30 +3,72 @@ package com.weatherxm.ui.publicdevicedetail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
-import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.UIDevice
+import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.ResourcesHelper
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
 class PublicDeviceDetailViewModel : ViewModel(), KoinComponent {
-
     private val resHelper: ResourcesHelper by inject()
-    private val device = MutableLiveData<Resource<Device>>(Resource.loading())
+    private val explorerUseCase: ExplorerUseCase by inject()
+    private val onPublicDevice = MutableLiveData<Resource<UIDevice>>()
 
-    fun device(): LiveData<Resource<Device>> = device
+    fun onPublicDevice(): LiveData<Resource<UIDevice>> = onPublicDevice
 
-    fun setDevice(device: Device?) {
-        this@PublicDeviceDetailViewModel.device.postValue(
-            if (device == null) {
+    fun fetchDevice(index: String?, deviceId: String?) {
+        onPublicDevice.postValue(Resource.loading())
+        viewModelScope.launch {
+            if (deviceId == null || index == null) {
                 Timber.w("Getting public device details failed: null")
-                Resource.error(resHelper.getString(R.string.error_public_device_no_data))
-            } else {
-                Timber.d("Got Public Device: $device")
-                Resource.success(device)
+                onPublicDevice.postValue(
+                    Resource.error(resHelper.getString(R.string.error_public_device_no_data))
+                )
+                return@launch
             }
-        )
+            val publicDevice = async {
+                explorerUseCase.getPublicDevice(index, deviceId)
+            }
+
+            val tokensDeferred = async {
+                explorerUseCase.getTokenInfoLast30D(deviceId)
+            }
+
+            var uiDevice: UIDevice? = null
+            val publicDeviceResponse = publicDevice.await()
+            publicDeviceResponse
+                .map {
+                    Timber.d("Got Public Device: $it")
+                    uiDevice = it
+                }
+                .mapLeft {
+                    Timber.w("Getting public device details failed")
+                    onPublicDevice.postValue(
+                        Resource.error(resHelper.getString(R.string.error_public_device_no_data))
+                    )
+                    return@launch
+                }
+
+            val tokens = tokensDeferred.await()
+            tokens
+                .map {
+                    uiDevice?.tokenInfo = it
+                }
+                .mapLeft {
+                    Timber.w("Getting public device token data failed")
+                    onPublicDevice.postValue(
+                        Resource.error(resHelper.getString(R.string.error_public_device_no_data))
+                    )
+                    return@launch
+                }
+
+            onPublicDevice.postValue(Resource.success(uiDevice))
+        }
     }
 }

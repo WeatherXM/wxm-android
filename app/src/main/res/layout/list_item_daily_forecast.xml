@@ -9,8 +9,9 @@
 
     <LinearLayout
         android:id="@+id/dayInfoContainer"
-        android:layout_width="wrap_content"
+        android:layout_width="48dp"
         android:layout_height="wrap_content"
+        android:layout_weight="0"
         android:orientation="vertical">
 
         <com.google.android.material.textview.MaterialTextView
@@ -31,9 +32,10 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/icon"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="@dimen/margin_normal"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_weight="0"
         android:scaleType="centerInside"
         app:lottie_autoPlay="false"
         app:lottie_loop="true"
@@ -46,6 +48,7 @@
         android:layout_width="42dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_normal"
+        android:layout_weight="0"
         android:gravity="center_vertical|end"
         tools:text="50%" />
 
@@ -55,6 +58,7 @@
         android:layout_width="36dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_normal"
+        android:layout_weight="0"
         android:gravity="end"
         tools:text="-30°C" />
 
@@ -64,7 +68,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="2dp"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:enabled="false"
         app:values="@array/temperature_slider_sample_values"
         tools:trackColorInactive="@color/light_grey"
@@ -76,6 +80,7 @@
         style="@style/TextAppearance.WeatherXM.Forecast.Temperature.Max"
         android:layout_width="36dp"
         android:layout_height="wrap_content"
+        android:layout_weight="0"
         android:gravity="start"
         tools:text="24°C" />
 

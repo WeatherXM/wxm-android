@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.weatherxm.ui.UIDevice
 import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
 
@@ -44,6 +45,34 @@ data class Location(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
+data class PublicDevice(
+    val id: String,
+    val name: String,
+    val timezone: String?,
+    val isActive: Boolean?,
+    val lastWeatherStationActivity: ZonedDateTime?,
+    val cellIndex: String?,
+    @Json(name = "current_weather")
+    val currentWeather: HourlyWeather?,
+) : Parcelable {
+    fun toUIDevice(): UIDevice {
+        return UIDevice(
+            id,
+            name,
+            cellIndex,
+            isActive,
+            lastWeatherStationActivity,
+            timezone,
+            null,
+            currentWeather,
+            null
+        )
+    }
+}
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
 data class Device(
     val id: String,
     val name: String,
@@ -66,13 +95,6 @@ data class Device(
 @Parcelize
 data class Attributes(
     val isActive: Boolean?,
-    /// TODO: Handle this in the next app release (after the API release) 
-    @Deprecated(
-        "Remove in the next API release",
-        ReplaceWith("lastWeatherStationActivity"),
-        DeprecationLevel.WARNING
-    )
-    val lastActiveAt: ZonedDateTime?,
     val lastWeatherStationActivity: ZonedDateTime?,
     val friendlyName: String?,
     val hex3: Hex,
@@ -225,5 +247,16 @@ data class DailyData(
     @Json(name = "cloud_cover")
     val cloudCover: Int?,
     val pressure: Float?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class PublicHex(
+    val index: String,
+    @Json(name = "device_count")
+    val deviceCount: Int?,
+    val center: Location,
+    val polygon: List<Location>,
 ) : Parcelable
 

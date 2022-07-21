@@ -21,6 +21,13 @@ interface TokenRepository {
         fromDate: String?,
         toDate: String? = null
     ): Either<Failure, List<Transaction>>
+
+    suspend fun getAllPublicTransactionsInRange(
+        deviceId: String,
+        timezone: String?,
+        fromDate: String?,
+        toDate: String? = null
+    ): Either<Failure, List<Transaction>>
 }
 
 class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenRepository {
@@ -60,6 +67,22 @@ class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenR
         return getTxsRecursively(txs, deviceId, 0, PAGE_SIZE_50, timezone, fromDate, toDate)
     }
 
+    override suspend fun getAllPublicTransactionsInRange(
+        deviceId: String,
+        timezone: String?,
+        fromDate: String?,
+        toDate: String?
+    ): Either<Failure, List<Transaction>> {
+        val txs = mutableListOf<Transaction>()
+        /*
+        * The recursion should start from page = 0 until it reaches the last page
+        * Also set a pageSize of 50 as the default is 10, and we want to fetch all the pages from
+        * the API before sending the result back to the UI, so we increase the pageSize to not
+        * spam the API and DDOS it (nor delay the UI also).
+         */
+        return getPublicTxsRecursively(txs, deviceId, 0, PAGE_SIZE_50, timezone, fromDate, toDate)
+    }
+
     @Suppress("LongParameterList")
     private suspend fun getTxsRecursively(
         txs: MutableList<Transaction>,
@@ -72,6 +95,44 @@ class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenR
     ): Either<Failure, List<Transaction>> {
         val resp =
             tokenDataSource.getTransactions(deviceId, page, pageSize, timezone, fromDate, toDate)
+        resp
+            .mapLeft {
+                return Either.Left(it)
+            }
+            .map {
+                txs.addAll(it.data)
+                if (it.hasNextPage) {
+                    val newPage = if (page == null) {
+                        1
+                    } else {
+                        page + 1
+                    }
+
+                    // Keep getting the TXs recursively
+                    getTxsRecursively(txs, deviceId, newPage, pageSize, timezone, fromDate, toDate)
+                }
+            }
+        return Either.Right(txs)
+    }
+
+    @Suppress("LongParameterList")
+    private suspend fun getPublicTxsRecursively(
+        txs: MutableList<Transaction>,
+        deviceId: String,
+        page: Int?,
+        pageSize: Int?,
+        timezone: String?,
+        fromDate: String?,
+        toDate: String?
+    ): Either<Failure, List<Transaction>> {
+        val resp = tokenDataSource.getPublicTransactions(
+            deviceId,
+            page,
+            pageSize,
+            timezone,
+            fromDate,
+            toDate
+        )
         resp
             .mapLeft {
                 return Either.Left(it)

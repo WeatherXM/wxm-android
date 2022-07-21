@@ -6,12 +6,15 @@ import android.location.Geocoder
 import arrow.core.Either
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
-import com.weatherxm.data.Hex
+import com.weatherxm.data.Location
+import timber.log.Timber
+import java.io.IOException
 import java.util.*
 
 interface AddressDataSource {
     suspend fun getLocationAddress(
-        hex: Hex,
+        hexIndex: String,
+        location: Location,
         locale: Locale = Locale.getDefault()
     ): Either<Failure, String?>
 
@@ -19,7 +22,11 @@ interface AddressDataSource {
 }
 
 class NetworkAddressDataSource(private val context: Context) : AddressDataSource {
-    override suspend fun getLocationAddress(hex: Hex, locale: Locale): Either<Failure, String?> {
+    override suspend fun getLocationAddress(
+        hexIndex: String,
+        location: Location,
+        locale: Locale
+    ): Either<Failure, String?> {
         /*
         * Google Says: https://developer.android.com/reference/android/location/Geocoder
         * This method was deprecated in API level Tiramisu.
@@ -30,24 +37,29 @@ class NetworkAddressDataSource(private val context: Context) : AddressDataSource
         * and we need to wait for the results actually.
         */
         return if (Geocoder.isPresent()) {
-            val geocoderAddresses =
-                Geocoder(context, locale).getFromLocation(hex.center.lat, hex.center.lon, 1)
+            try {
+                val geocoderAddresses =
+                    Geocoder(context, locale).getFromLocation(location.lat, location.lon, 1)
 
-            if (geocoderAddresses.isNullOrEmpty()) {
-                Either.Left(Failure.LocationAddressNotFound)
-            } else {
-                val geocoderAddress = geocoderAddresses[0]
-                Either.Right(
-                    if (geocoderAddress.locality != null) {
-                        "${geocoderAddress.locality}, ${geocoderAddress.countryCode}"
-                    } else if (geocoderAddress.subAdminArea != null) {
-                        "${geocoderAddress.subAdminArea}, ${geocoderAddress.countryCode}"
-                    } else if (geocoderAddress.adminArea != null) {
-                        "${geocoderAddress.adminArea}, ${geocoderAddress.countryCode}"
-                    } else {
-                        geocoderAddress.countryName
-                    }
-                )
+                if (geocoderAddresses.isNullOrEmpty()) {
+                    Either.Left(Failure.LocationAddressNotFound)
+                } else {
+                    val geocoderAddress = geocoderAddresses[0]
+                    Either.Right(
+                        if (geocoderAddress.locality != null) {
+                            "${geocoderAddress.locality}, ${geocoderAddress.countryCode}"
+                        } else if (geocoderAddress.subAdminArea != null) {
+                            "${geocoderAddress.subAdminArea}, ${geocoderAddress.countryCode}"
+                        } else if (geocoderAddress.adminArea != null) {
+                            "${geocoderAddress.adminArea}, ${geocoderAddress.countryCode}"
+                        } else {
+                            geocoderAddress.countryName
+                        }
+                    )
+                }
+            } catch (exception: IOException) {
+                Timber.w(exception, "Geocoder failed with: IOException.")
+                Either.Left(Failure.UnknownError)
             }
         } else {
             Either.Left(Failure.NoGeocoderError)
@@ -67,8 +79,12 @@ class NetworkAddressDataSource(private val context: Context) : AddressDataSource
  */
 class StorageAddressDataSource(private val preferences: SharedPreferences) : AddressDataSource {
 
-    override suspend fun getLocationAddress(hex: Hex, locale: Locale): Either<Failure, String?> {
-        return preferences.getString(hex.index, null)?.let {
+    override suspend fun getLocationAddress(
+        hexIndex: String,
+        location: Location,
+        locale: Locale
+    ): Either<Failure, String?> {
+        return preferences.getString(hexIndex, null)?.let {
             Either.Right(it)
         } ?: Either.Left(DataError.DatabaseMissError)
     }

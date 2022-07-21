@@ -6,6 +6,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.Transaction
 import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
+import com.weatherxm.data.UserActionError
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.WeatherRepository
@@ -15,7 +16,11 @@ import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getLocalDate
 import com.weatherxm.util.DateTimeHelper.getNowInTimezone
 import com.weatherxm.util.DateTimeHelper.getTimezone
+import com.weatherxm.util.Tokens.roundTokens
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 interface UserDeviceUseCase {
     suspend fun getUserDevices(): Either<Failure, List<Device>>
@@ -34,6 +39,7 @@ interface UserDeviceUseCase {
 
     suspend fun setFriendlyName(deviceId: String, friendlyName: String): Either<Failure, Unit>
     suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit>
+    fun canChangeFriendlyName(deviceId: String): Either<UserActionError, Boolean>
 }
 
 class UserDeviceUseCaseImpl(
@@ -42,6 +48,10 @@ class UserDeviceUseCaseImpl(
     private val weatherRepository: WeatherRepository
 ) : UserDeviceUseCase {
 
+    companion object {
+        // Allow device friendly name change once in 10 minutes
+        val FRIENDLY_NAME_TIME_LIMIT = TimeUnit.MINUTES.toMillis(10)
+    }
 
     override suspend fun getUserDevices(): Either<Failure, List<Device>> {
         return deviceRepository.getUserDevices()
@@ -72,7 +82,13 @@ class UserDeviceUseCaseImpl(
 
             val amountForDate = datesAndTxs.getOrDefault(date, 0.0F)
             if (tx.actualReward != null && tx.actualReward > 0.0F) {
-                datesAndTxs[date] = amountForDate + tx.actualReward
+                /*
+                * We need to round this number as we use it further for getting the max in a range
+                * And we show that max rounded. Small differences occur if we don't round it.
+                * example: https://github.com/WeatherXM/issue-tracker/issues/97
+                 */
+                val roundedReward = roundTokens(tx.actualReward)
+                datesAndTxs[date] = amountForDate + roundedReward
             }
         }
 
@@ -180,5 +196,22 @@ class UserDeviceUseCaseImpl(
 
     override suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit> {
         return deviceRepository.clearFriendlyName(deviceId)
+    }
+
+    override fun canChangeFriendlyName(deviceId: String): Either<UserActionError, Boolean> {
+        // Check if user has already set a friendly name within a predefined time window
+        val lastFriendlyNameChanged = runBlocking {
+            deviceRepository.getLastFriendlyNameChanged(deviceId)
+        }
+        val diff = Date().time - lastFriendlyNameChanged
+        return if (diff >= FRIENDLY_NAME_TIME_LIMIT) {
+            Either.Right(true)
+        } else {
+            Either.Left(
+                UserActionError.UserActionRateLimitedError(
+                    "${diff}ms passed since last name change [Limit ${FRIENDLY_NAME_TIME_LIMIT}ms]"
+                )
+            )
+        }
     }
 }

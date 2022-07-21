@@ -4,20 +4,57 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/new_name_container"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/edit_name_hint"
-        app:helperText="@string/edit_name_helper_text">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/new_address"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/new_name_container"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text" />
+            android:hint="@string/edit_name_hint"
+            android:paddingBottom="@dimen/padding_normal"
+            app:counterEnabled="true"
+            app:counterMaxLength="64"
+            app:helperText="@string/edit_name_helper_text"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/new_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text|textCapWords" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/clear"
+            style="?attr/buttonBarNeutralButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_clear"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/new_name_container" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel"
+            style="?attr/buttonBarNegativeButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_cancel"
+            app:layout_constraintEnd_toStartOf="@id/save"
+            app:layout_constraintTop_toBottomOf="@id/new_name_container" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save"
+            style="?attr/buttonBarPositiveButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/new_name_container" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

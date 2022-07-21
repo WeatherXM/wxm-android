@@ -56,6 +56,12 @@ fun TabLayout.onTabSelected(callback: (TabLayout.Tab) -> Unit) {
     })
 }
 
+fun TabLayout.createAndAddTab(text: String) {
+    val newTab = this.newTab()
+    newTab.text = text
+    this.addTab(newTab)
+}
+
 fun Chip.setTextAndColor(@StringRes text: Int, color: Int) {
     this.setChipBackgroundColorResource(color)
     this.text = this.resources.getString(text)

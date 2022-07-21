@@ -56,7 +56,7 @@ class ClaimDeviceResultFragment : Fragment(), KoinComponent {
             Status.SUCCESS -> {
                 binding.statusView.animation(R.raw.anim_success, false)
                 binding.statusView.title(getString(R.string.success))
-                binding.statusView.subtitle(resource.data)
+                binding.statusView.htmlSubtitle(R.string.success_claim_device, resource.data)
                 binding.statusView.visibility = View.VISIBLE
                 binding.contactSupport.visibility = View.INVISIBLE
                 binding.done.isEnabled = true

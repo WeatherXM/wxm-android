@@ -73,12 +73,12 @@ class Navigator {
         )
     }
 
-    fun showPublicDevicesList(fragmentManager: FragmentManager, hexIndex: String?) {
-        val modalBottomSheet = PublicDevicesListFragment.newInstance(hexIndex)
+    fun showPublicDevicesList(fragmentManager: FragmentManager) {
+        val modalBottomSheet = PublicDevicesListFragment()
         modalBottomSheet.show(fragmentManager, PublicDevicesListFragment.TAG)
     }
 
-    fun showDeviceDetails(fragmentManager: FragmentManager, device: Device) {
+    fun showDeviceDetails(fragmentManager: FragmentManager, device: UIDevice) {
         val modalBottomSheet = PublicDeviceDetailFragment.newInstance(device)
         modalBottomSheet.show(fragmentManager, PublicDeviceDetailFragment.TAG)
     }

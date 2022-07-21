@@ -4,41 +4,140 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:animateLayoutChanges="true"
-    android:fitsSystemWindows="false"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/padding_normal"
-    tools:context=".ui.publicdevicedetail.PublicDeviceDetailFragment">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:navigationIcon="@drawable/ic_close" />
+        android:layout_marginBottom="@dimen/margin_normal">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/title"
-        style="@style/TextAppearance.WeatherXM.Device.Details.Title"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            app:layout_collapseMode="pin"
+            app:navigationIcon="@drawable/ic_back" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingHorizontal="40dp"
+                app:layout_scrollFlags="scroll">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/address"
+                    style="@style/TextAppearance.WeatherXM.Device.Details.Subtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:gravity="center_vertical"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Athens, GR" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/name"
+                    style="@style/TextAppearance.WeatherXM.Device.Details.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/address"
+                    app:layout_constraintTop_toBottomOf="@id/address"
+                    tools:text="Weatherwise Wintergreen Stratocumulus" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/status_label"
+                    style="@style/TextAppearance.WeatherXM.Device.Details.Subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/address"
+                    app:layout_constraintTop_toBottomOf="@id/name"
+                    tools:text="Online" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/last_active"
+                    style="@style/TextAppearance.WeatherXM.Device.Details.Subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:textColor="@color/black_translucent"
+                    android:textSize="14sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/status_label"
+                    app:layout_constraintStart_toEndOf="@id/status_label"
+                    tools:text="Last seen 2 mins ago" />
+
+                <ImageView
+                    android:id="@+id/status_icon"
+                    android:layout_width="6dp"
+                    android:layout_height="6dp"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:src="@drawable/badge_circle"
+                    app:layout_constraintBottom_toBottomOf="@id/status_label"
+                    app:layout_constraintEnd_toStartOf="@id/status_label"
+                    app:layout_constraintTop_toTopOf="@id/status_label"
+                    tools:ignore="ContentDescription" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToOutline="false"
+        android:clipToPadding="false"
+        android:fillViewport="true"
         android:layout_marginHorizontal="@dimen/margin_normal"
-        tools:text="Weatherwise Wintergreen Stratocumulus" />
+        android:paddingBottom="@dimen/margin_large"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        tools:targetApi="s">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/subtitle"
-        style="@style/TextAppearance.WeatherXM.Device.Details.Subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_normal"
-        android:layout_marginTop="@dimen/margin_extra_small"
-        tools:text="Athens, GR" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToOutline="false"
+            android:clipToPadding="false">
 
-    <com.weatherxm.ui.widget.WeatherCardView
-        android:id="@+id/currentWeatherCard"
+            <com.weatherxm.ui.widget.WeatherCardView
+                android:id="@+id/currentWeatherCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.weatherxm.ui.widget.TokenCardView
+                android:id="@+id/tokenCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                app:layout_constraintTop_toBottomOf="@id/currentWeatherCard" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Empty -->
+
+    <com.weatherxm.ui.widget.EmptyView
+        android:id="@+id/empty"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_normal"
-        android:layout_marginTop="@dimen/margin_normal" />
-
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:padding="@dimen/padding_extra_large"
+        android:visibility="gone"
+        app:empty_animation="@raw/anim_loading"
+        app:empty_subtitle="How are you?"
+        app:empty_title="Nothing here"
+        tools:visibility="visible" />
 </LinearLayout>

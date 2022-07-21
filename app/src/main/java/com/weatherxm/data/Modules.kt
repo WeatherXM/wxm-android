@@ -35,6 +35,8 @@ import com.weatherxm.data.datasource.CredentialsDataSource
 import com.weatherxm.data.datasource.CredentialsDataSourceImpl
 import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
+import com.weatherxm.data.datasource.ExplorerDataSource
+import com.weatherxm.data.datasource.ExplorerDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkAddressDataSource
@@ -43,6 +45,8 @@ import com.weatherxm.data.datasource.NetworkWalletDataSource
 import com.weatherxm.data.datasource.StorageAddressDataSource
 import com.weatherxm.data.datasource.TokenDataSource
 import com.weatherxm.data.datasource.TokenDataSourceImpl
+import com.weatherxm.data.datasource.UserActionDataSource
+import com.weatherxm.data.datasource.UserActionDataSourceImpl
 import com.weatherxm.data.network.AuthTokenJsonAdapter
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthRequestInterceptor
@@ -54,6 +58,8 @@ import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.DeviceRepositoryImpl
+import com.weatherxm.data.repository.ExplorerRepository
+import com.weatherxm.data.repository.ExplorerRepositoryImpl
 import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.data.repository.LocationRepositoryImpl
 import com.weatherxm.data.repository.TokenRepository
@@ -65,7 +71,7 @@ import com.weatherxm.data.repository.WalletRepositoryImpl
 import com.weatherxm.data.repository.WeatherRepository
 import com.weatherxm.data.repository.WeatherRepositoryImpl
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.explorer.HexWithResolutionJsonAdapter
+import com.weatherxm.ui.UIHexJsonAdapter
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.AuthUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase
@@ -98,7 +104,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 const val RETROFIT_API = "RETROFIT_API"
@@ -200,12 +206,20 @@ private val datasources = module {
         AppConfigDataSourceImpl(get(), get())
     }
 
+    single<ExplorerDataSource> {
+        ExplorerDataSourceImpl(get())
+    }
+
     single<NetworkAddressDataSource> {
         NetworkAddressDataSource(androidContext())
     }
 
     single<StorageAddressDataSource> {
         StorageAddressDataSource(get())
+    }
+
+    single<UserActionDataSource> {
+        UserActionDataSourceImpl(get())
     }
 }
 
@@ -223,7 +237,10 @@ private val repositories = module {
         WalletRepositoryImpl(get(), get())
     }
     single<DeviceRepository> {
-        DeviceRepositoryImpl(get(), get(), get())
+        DeviceRepositoryImpl(get(), get(), get(), get())
+    }
+    single<ExplorerRepository> {
+        ExplorerRepositoryImpl(get(), get(), get())
     }
     single<TokenRepository> {
         TokenRepositoryImpl(get())
@@ -238,7 +255,7 @@ private val repositories = module {
 
 private val usecases = module {
     single<ExplorerUseCase> {
-        ExplorerUseCaseImpl(get(), get(), get())
+        ExplorerUseCaseImpl(get(), get(), get(), get())
     }
     single<UserDeviceUseCase> {
         UserDeviceUseCaseImpl(get(), get(), get())
@@ -253,7 +270,7 @@ private val usecases = module {
         ClaimDeviceUseCaseImpl(get(), get())
     }
     single<TokenUseCase> {
-        TokenUseCaseImpl(get())
+        TokenUseCaseImpl(get(), get())
     }
     single<AuthUseCase> {
         AuthUseCaseImpl(get(), get(), get(), get())
@@ -390,8 +407,8 @@ private val utilities = module {
             .create()
     }
 
-    single<HexWithResolutionJsonAdapter> {
-        HexWithResolutionJsonAdapter(get())
+    single<UIHexJsonAdapter> {
+        UIHexJsonAdapter(get())
     }
 
     single<AuthTokenJsonAdapter> {

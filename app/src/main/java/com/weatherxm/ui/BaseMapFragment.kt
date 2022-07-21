@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
@@ -16,17 +17,32 @@ import com.mapbox.maps.plugin.annotation.generated.createPolygonAnnotationManage
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.scalebar.scalebar
 import com.weatherxm.databinding.FragmentMapBinding
+import com.weatherxm.ui.BaseMapFragment.OnMapDebugInfoListener
 import dev.chrisbanes.insetter.applyInsetter
 import timber.log.Timber
 
 open class BaseMapFragment : Fragment() {
 
+    fun interface OnMapDebugInfoListener {
+        fun onMapDebugInfoUpdated(zoom: Double, center: Point)
+    }
+
     protected lateinit var binding: FragmentMapBinding
     protected lateinit var polygonManager: PolygonAnnotationManager
     protected lateinit var pointManager: PointAnnotationManager
 
-    protected var mapStyle: String = Style.MAPBOX_STREETS
+    private lateinit var debugInfoListener: OnMapDebugInfoListener
     private var defaultStartingZoomLevel: Double = 1.0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        try {
+            debugInfoListener = activity as OnMapDebugInfoListener
+        } catch (e: ClassCastException) {
+            Timber.d(e, "Parent activity does not implement OnMapDebugInfoListener.")
+            debugInfoListener = OnMapDebugInfoListener { _, _ ->  /* NOOP */ }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +64,15 @@ open class BaseMapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val map = binding.mapView.getMapboxMap()
-        map.loadStyleUri(mapStyle) {
+
+        map.addOnCameraChangeListener {
+            debugInfoListener.onMapDebugInfoUpdated(
+                zoom = map.cameraState.zoom,
+                center = map.cameraState.center
+            )
+        }
+
+        map.loadStyleUri(getMapStyle()) {
             Timber.d("MapBox is ready and style loaded")
 
             binding.mapView.gestures.rotateEnabled = false
@@ -59,12 +83,12 @@ open class BaseMapFragment : Fragment() {
                 pointManager = this.createPointAnnotationManager()
             }
 
-            val cameraPosition = CameraOptions.Builder()
-                .zoom(defaultStartingZoomLevel)
-                .build()
-
             // Update camera
-            map.setCamera(cameraPosition)
+            map.setCamera(
+                CameraOptions.Builder()
+                    .zoom(defaultStartingZoomLevel)
+                    .build()
+            )
 
             onMapReady(map)
         }
@@ -74,5 +98,9 @@ open class BaseMapFragment : Fragment() {
 
     open fun onMapReady(map: MapboxMap) {
         // Override in subclasses
+    }
+
+    open fun getMapStyle(): String {
+        return Style.MAPBOX_STREETS
     }
 }

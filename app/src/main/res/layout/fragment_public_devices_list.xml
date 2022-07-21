@@ -12,13 +12,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/padding_normal">
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingVertical="@dimen/padding_normal">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/title"
             style="@style/TextAppearance.WeatherXM.Device.Details.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/card_side_margin"
             android:text="@string/weather_stations"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,7 +30,8 @@
             style="@style/TextAppearance.WeatherXM.Device.Details.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
+            android:layout_marginHorizontal="@dimen/card_side_margin"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/title"
             tools:text="Athens, GR"
             tools:visibility="visible" />
@@ -36,12 +40,29 @@
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:overScrollMode="never"
-            android:paddingBottom="@dimen/padding_normal"
+            android:paddingBottom="@dimen/padding_extra_large"
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/location"
-            tools:listitem="@layout/list_item_public_device" />
+            tools:listitem="@layout/list_item_device" />
+
+        <!-- Empty -->
+
+        <com.weatherxm.ui.widget.EmptyView
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:padding="@dimen/padding_extra_large"
+            android:visibility="gone"
+            app:empty_animation="@raw/anim_loading"
+            app:layout_constraintTop_toBottomOf="@id/location"
+            tools:empty_subtitle="How are you?"
+            tools:empty_title="Nothing here"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

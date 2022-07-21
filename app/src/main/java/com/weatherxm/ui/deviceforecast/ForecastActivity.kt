@@ -20,7 +20,6 @@ class ForecastActivity : AppCompatActivity() {
     private val model: ForecastViewModel by viewModels()
 
     private lateinit var adapter: DailyForecastAdapter
-    private lateinit var deviceId: String
 
     companion object {
         const val ARG_DEVICE = "device"
@@ -45,7 +44,8 @@ class ForecastActivity : AppCompatActivity() {
             return
         }
 
-        deviceId = device.id
+        model.setDevice(device)
+
         binding.toolbar.subtitle = device.address ?: device.getNameOrLabel()
 
         // Initialize the adapter with empty data
@@ -53,14 +53,14 @@ class ForecastActivity : AppCompatActivity() {
         binding.recycler.adapter = adapter
 
         binding.swiperefresh.setOnRefreshListener {
-            model.getWeatherForecast(deviceId, forceRefresh = true)
+            model.getWeatherForecast(forceRefresh = true)
         }
 
         model.onForecast().observe(this) {
             updateUI(it)
         }
 
-        model.getWeatherForecast(deviceId)
+        model.getWeatherForecast()
     }
 
     private fun updateUI(resource: Resource<List<DailyForecast>>) {
@@ -79,7 +79,7 @@ class ForecastActivity : AppCompatActivity() {
                 binding.empty.title(getString(R.string.error_forecast_no_data))
                 binding.empty.subtitle(resource.message)
                 binding.empty.action(getString(R.string.action_retry))
-                binding.empty.listener { model.getWeatherForecast(deviceId) }
+                binding.empty.listener { model.getWeatherForecast() }
                 binding.empty.visibility = View.VISIBLE
             }
             Status.LOADING -> {

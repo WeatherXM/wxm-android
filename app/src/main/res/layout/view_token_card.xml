@@ -39,8 +39,8 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/padding_large"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:paddingTop="@dimen/padding_large">
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/maxReward"
@@ -177,7 +177,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/button_7d"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:ensureMinTouchTargetSize="false"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/total7D_WXM"
@@ -196,7 +199,7 @@
                     style="@style/Widget.WeatherXM.Token.InfoChip"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/margin_normal"
+                    android:layout_marginStart="@dimen/margin_large"
                     android:text="@string/button_30d"
                     app:layout_constraintStart_toEndOf="@id/total7D_WXM" />
 
@@ -217,7 +220,7 @@
                     style="@style/Widget.WeatherXM.Token.InfoChip"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/margin_normal"
+                    android:layout_marginStart="@dimen/margin_large"
                     android:text="@string/all"
                     app:layout_constraintStart_toEndOf="@id/total30D_WXM" />
 
@@ -232,6 +235,7 @@
                     app:layout_constraintStart_toEndOf="@id/totalAll"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="5020.12" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

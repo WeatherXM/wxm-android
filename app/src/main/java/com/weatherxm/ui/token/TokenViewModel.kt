@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
-import com.weatherxm.data.Transaction
+import com.weatherxm.ui.UITransaction
 import com.weatherxm.usecases.TokenUseCase
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getNowInTimezone
@@ -30,27 +30,27 @@ class TokenViewModel : ViewModel(), KoinComponent {
     private var reachedTotal = false
     private var currFromDate = getNowInTimezone().minusMonths(FETCH_INTERVAL_MONTHS)
     private var currToDate = getNowInTimezone()
-    private val currentShownTransactions = mutableListOf<Transaction>()
+    private val currentShownTransactions = mutableListOf<UITransaction>()
 
-    private val onFirstPageTransactions = MutableLiveData<Resource<List<Transaction>>>().apply {
+    private val onFirstPageTransactions = MutableLiveData<Resource<List<UITransaction>>>().apply {
         value = Resource.loading()
     }
 
-    private val onNewTransactionsPage = MutableLiveData<Resource<List<Transaction>>>()
+    private val onNewTransactionsPage = MutableLiveData<Resource<List<UITransaction>>>()
 
-    fun onFirstPageTransactions(): LiveData<Resource<List<Transaction>>> = onFirstPageTransactions
+    fun onFirstPageTransactions(): LiveData<Resource<List<UITransaction>>> = onFirstPageTransactions
 
-    fun onNewTransactionsPage(): LiveData<Resource<List<Transaction>>> = onNewTransactionsPage
+    fun onNewTransactionsPage(): LiveData<Resource<List<UITransaction>>> = onNewTransactionsPage
 
     fun fetchFirstPageTransactions(deviceId: String) {
         onFirstPageTransactions.postValue(Resource.loading())
         viewModelScope.launch {
             tokenUseCase.getTransactions(deviceId, currentPage, getFormattedDate(currFromDate))
                 .map {
-                    Timber.d("Got Transactions: ${it.transactions}")
+                    Timber.d("Got Transactions: ${it.uiTransactions}")
                     hasNextPage = it.hasNextPage
                     reachedTotal = it.reachedTotal
-                    currentShownTransactions.addAll(it.transactions)
+                    currentShownTransactions.addAll(it.uiTransactions)
                     onFirstPageTransactions.postValue(Resource.success(currentShownTransactions))
                 }
                 .mapLeft {
@@ -72,10 +72,10 @@ class TokenViewModel : ViewModel(), KoinComponent {
                     getFormattedDate(currFromDate),
                     getFormattedDate(currToDate)
                 ).map {
-                    Timber.d("Got Transactions: ${it.transactions}")
+                    Timber.d("Got Transactions: ${it.uiTransactions}")
                     hasNextPage = it.hasNextPage
                     reachedTotal = it.reachedTotal
-                    currentShownTransactions.addAll(it.transactions)
+                    currentShownTransactions.addAll(it.uiTransactions)
                     onNewTransactionsPage.postValue(Resource.success(currentShownTransactions))
                 }
 
@@ -95,10 +95,10 @@ class TokenViewModel : ViewModel(), KoinComponent {
                     getFormattedDate(currFromDate),
                     getFormattedDate(currToDate)
                 ).map {
-                    Timber.d("Got Transactions: ${it.transactions}")
+                    Timber.d("Got Transactions: ${it.uiTransactions}")
                     hasNextPage = it.hasNextPage
                     reachedTotal = it.reachedTotal
-                    currentShownTransactions.addAll(it.transactions)
+                    currentShownTransactions.addAll(it.uiTransactions)
                     onNewTransactionsPage.postValue(Resource.success(currentShownTransactions))
                 }
                 blockNewPageRequest = false

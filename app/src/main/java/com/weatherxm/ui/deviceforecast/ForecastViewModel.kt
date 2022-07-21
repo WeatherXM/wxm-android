@@ -7,23 +7,26 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
+import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.data.repository.WeatherRepositoryImpl.Companion.PREFETCH_DAYS
 import com.weatherxm.ui.DailyForecast
 import com.weatherxm.usecases.ForecastUseCase
+import com.weatherxm.util.DateTimeHelper.getNowInTimezone
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import java.time.ZonedDateTime
 
 class ForecastViewModel : ViewModel(), KoinComponent {
 
     private val forecastUseCase: ForecastUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
+
+    private lateinit var device: Device
 
     // All charts currently visible
     private val onForecast = MutableLiveData<Resource<List<DailyForecast>>>().apply {
@@ -32,12 +35,16 @@ class ForecastViewModel : ViewModel(), KoinComponent {
 
     fun onForecast(): LiveData<Resource<List<DailyForecast>>> = onForecast
 
-    fun getWeatherForecast(deviceId: String, forceRefresh: Boolean = false) {
+    fun setDevice(device: Device) {
+        this.device = device
+    }
+
+    fun getWeatherForecast(forceRefresh: Boolean = false) {
         onForecast.postValue(Resource.loading())
         viewModelScope.launch {
-            val fromDate = ZonedDateTime.now()
-            val toDate = ZonedDateTime.now().plusDays(PREFETCH_DAYS)
-            forecastUseCase.getDailyForecast(deviceId, fromDate, toDate, forceRefresh)
+            val fromDate = getNowInTimezone(device.timezone)
+            val toDate = fromDate.plusDays(PREFETCH_DAYS)
+            forecastUseCase.getDailyForecast(device.id, fromDate, toDate, forceRefresh)
                 .map { forecast ->
                     Timber.d("Got daily forecast from $fromDate to $toDate")
                     onForecast.postValue(Resource.success(forecast))

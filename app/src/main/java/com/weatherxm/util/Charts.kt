@@ -348,6 +348,7 @@ fun BarChart.initializeUV24hChart(data: BarChartData) {
     axisLeft.isGranularityEnabled = true
     axisLeft.granularity = 1F
     axisLeft.valueFormatter = CustomYAxisFormatter(data.unit)
+    axisLeft.gridColor = resources.getColor(R.color.chart_grid_color, context.theme)
     axisRight.isEnabled = false
     isScaleYEnabled = false
 
@@ -361,6 +362,7 @@ fun BarChart.initializeUV24hChart(data: BarChartData) {
     } else {
         X_AXIS_DEFAULT_TIME_GRANULARITY
     }
+    xAxis.gridColor = resources.getColor(R.color.chart_grid_color, context.theme)
     show()
     notifyDataSetChanged()
 }

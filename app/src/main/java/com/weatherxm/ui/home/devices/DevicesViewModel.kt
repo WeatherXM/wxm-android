@@ -9,6 +9,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.util.UIErrors.getDefaultMessage
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -31,7 +32,7 @@ class DevicesViewModel : ViewModel(), KoinComponent {
 
     fun fetch() {
         this@DevicesViewModel.devices.postValue(Resource.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             userDeviceUseCase.getUserDevices()
                 .map { devices ->
                     Timber.d("Got devices: $devices")
