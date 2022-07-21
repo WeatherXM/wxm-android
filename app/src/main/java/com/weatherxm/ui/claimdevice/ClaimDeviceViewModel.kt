@@ -122,14 +122,7 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
                 claimDeviceUseCase.claimDevice(currentSerialNumber, currentLat, currentLon)
                     .map {
                         Timber.d("Claimed device: $it")
-                        onClaimResult.postValue(
-                            Resource.success(
-                                resHelper.getString(
-                                    R.string.success_claim_device,
-                                    it.name
-                                )
-                            )
-                        )
+                        onClaimResult.postValue(Resource.success(it.name))
                     }
                     .mapLeft {
                         handleFailure(it)

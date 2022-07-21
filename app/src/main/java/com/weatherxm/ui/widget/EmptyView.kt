@@ -12,6 +12,7 @@ import com.airbnb.lottie.LottieDrawable.INFINITE
 import com.weatherxm.R
 import com.weatherxm.R.styleable.EmptyView_empty_action
 import com.weatherxm.databinding.ViewEmptyBinding
+import com.weatherxm.util.setHtml
 
 class EmptyView : LinearLayout {
 
@@ -72,6 +73,18 @@ class EmptyView : LinearLayout {
         binding.subtitle.apply {
             text = subtitle
             visibility = if (subtitle != null) View.VISIBLE else View.GONE
+        }
+        return this
+    }
+
+    fun htmlSubtitle(@StringRes resId: Int, arg: String?): EmptyView {
+        binding.subtitle.apply {
+            if(arg.isNullOrEmpty()) {
+                setHtml(resId)
+            } else {
+                setHtml(resId, arg)
+            }
+            visibility = View.VISIBLE
         }
         return this
     }
