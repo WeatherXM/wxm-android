@@ -5,8 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
-import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.UIDevice
+import com.weatherxm.ui.UIHex
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.Dispatchers
@@ -18,30 +19,39 @@ import timber.log.Timber
 class PublicDevicesListViewModel : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val explorerUseCase: ExplorerUseCase by inject()
-    private val devices = MutableLiveData<Resource<List<Device>>>(Resource.loading())
+    private val onPublicDevices = MutableLiveData<Resource<List<UIDevice>>>(Resource.loading())
     private val address = MutableLiveData<String>()
 
-    fun devices(): LiveData<Resource<List<Device>>> = devices
+    fun onPublicDevices(): LiveData<Resource<List<UIDevice>>> = onPublicDevices
     fun address(): LiveData<String> = address
 
-    fun fetchDevices(hexIndex: String?) {
+    fun fetchDevices(uiHex: UIHex?) {
+        onPublicDevices.postValue(Resource.loading())
         viewModelScope.launch(Dispatchers.IO) {
-            val devicesOfH7 = explorerUseCase.getDevicesOfH7(hexIndex)
-            this@PublicDevicesListViewModel.devices.postValue(
-                if (devicesOfH7.isNullOrEmpty()) {
-                    Timber.w("Getting public devices failed: null")
+            if (uiHex == null || uiHex.index.isEmpty()) {
+                Timber.w("Getting public devices failed: hexIndex = null")
+                onPublicDevices.postValue(
                     Resource.error(resHelper.getString(R.string.error_public_devices_no_data))
-                } else {
-                    Timber.d("Got Public Devices: $devices")
-                    Resource.success(devicesOfH7.sortedByDescending { it.attributes?.isActive })
-                }
-            )
-            devicesOfH7?.forEach { device ->
-                device.address?.let {
-                    this@PublicDevicesListViewModel.address.postValue(it)
-                    return@forEach
-                }
+                )
+                return@launch
             }
+
+            explorerUseCase.getPublicDevicesOfHex(uiHex)
+                .map {
+                    onPublicDevices.postValue(Resource.success(it))
+                    it.forEach { device ->
+                        device.address?.let {
+                            this@PublicDevicesListViewModel.address.postValue(it)
+                            return@forEach
+                        }
+                    }
+
+                }
+                .mapLeft {
+                    onPublicDevices.postValue(
+                        Resource.error(resHelper.getString(R.string.error_public_devices_no_data))
+                    )
+                }
         }
     }
 }

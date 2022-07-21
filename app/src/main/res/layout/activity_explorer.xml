@@ -41,6 +41,25 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/map_debug_info_container"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_normal"
+            app:cardBackgroundColor="@color/blue_translucent"
+            app:cardCornerRadius="@dimen/card_corner_radius"
+            app:cardUseCompatPadding="false"
+            app:contentPadding="@dimen/padding_small">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/map_debug_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white_translucent"
+                tools:text="ZOOM = 12.7" />
+
+        </com.google.android.material.card.MaterialCardView>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.card.MaterialCardView

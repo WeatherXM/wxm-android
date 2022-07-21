@@ -35,6 +35,8 @@ import com.weatherxm.data.datasource.CredentialsDataSource
 import com.weatherxm.data.datasource.CredentialsDataSourceImpl
 import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
+import com.weatherxm.data.datasource.ExplorerDataSource
+import com.weatherxm.data.datasource.ExplorerDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkAddressDataSource
@@ -56,6 +58,8 @@ import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.DeviceRepositoryImpl
+import com.weatherxm.data.repository.ExplorerRepository
+import com.weatherxm.data.repository.ExplorerRepositoryImpl
 import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.data.repository.LocationRepositoryImpl
 import com.weatherxm.data.repository.TokenRepository
@@ -67,7 +71,7 @@ import com.weatherxm.data.repository.WalletRepositoryImpl
 import com.weatherxm.data.repository.WeatherRepository
 import com.weatherxm.data.repository.WeatherRepositoryImpl
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.explorer.HexWithResolutionJsonAdapter
+import com.weatherxm.ui.UIHexJsonAdapter
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.AuthUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase
@@ -202,6 +206,10 @@ private val datasources = module {
         AppConfigDataSourceImpl(get(), get())
     }
 
+    single<ExplorerDataSource> {
+        ExplorerDataSourceImpl(get())
+    }
+
     single<NetworkAddressDataSource> {
         NetworkAddressDataSource(androidContext())
     }
@@ -231,6 +239,9 @@ private val repositories = module {
     single<DeviceRepository> {
         DeviceRepositoryImpl(get(), get(), get(), get())
     }
+    single<ExplorerRepository> {
+        ExplorerRepositoryImpl(get(), get(), get())
+    }
     single<TokenRepository> {
         TokenRepositoryImpl(get())
     }
@@ -244,7 +255,7 @@ private val repositories = module {
 
 private val usecases = module {
     single<ExplorerUseCase> {
-        ExplorerUseCaseImpl(get(), get(), get())
+        ExplorerUseCaseImpl(get(), get(), get(), get())
     }
     single<UserDeviceUseCase> {
         UserDeviceUseCaseImpl(get(), get(), get())
@@ -396,8 +407,8 @@ private val utilities = module {
             .create()
     }
 
-    single<HexWithResolutionJsonAdapter> {
-        HexWithResolutionJsonAdapter(get())
+    single<UIHexJsonAdapter> {
+        UIHexJsonAdapter(get())
     }
 
     single<AuthTokenJsonAdapter> {

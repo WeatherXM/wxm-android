@@ -1,11 +1,19 @@
 package com.weatherxm.ui
 
+import android.os.Parcelable
 import androidx.annotation.Keep
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
+import com.mapbox.geojson.Point
+import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
+import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.Location
 import com.weatherxm.data.Transaction
+import kotlinx.parcelize.Parcelize
+import java.time.ZonedDateTime
 
 @Keep
 data class UIError(
@@ -64,6 +72,7 @@ data class BarChartData(
 
 @Keep
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class TokenInfo(
     var lastReward: Transaction? = null,
     var total7d: Float? = null,
@@ -72,13 +81,14 @@ data class TokenInfo(
     var total30d: Float? = null,
     var chart30d: TokenValuesChart? = null,
     var max30dReward: Float? = null
-)
+) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class TokenValuesChart(
     var values: MutableList<Pair<String, Float>>
-)
+) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -125,3 +135,40 @@ data class SelectedHourlyForecast(
     var hourlyWeather: HourlyWeather,
     var selectedPosition: Int
 )
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class ExplorerData(
+    var geoJsonSource: GeoJsonSource,
+    var polygonPoints: List<PolygonAnnotationOptions>,
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class UIHex(
+    var index: String,
+    var center: Location
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class ExplorerCamera(
+    var zoom: Double,
+    var center: Point
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class UIDevice(
+    val id: String,
+    val name: String,
+    val cellIndex: String?,
+    val isActive: Boolean?,
+    val lastWeatherStationActivity: ZonedDateTime?,
+    val timezone: String?,
+    var address: String?,
+    @Json(name = "current_weather")
+    val currentWeather: HourlyWeather?,
+    var tokenInfo: TokenInfo?
+) : Parcelable

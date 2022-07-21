@@ -4,46 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenCreated
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weatherxm.R
-import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentPublicDevicesListBinding
-import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.UIDevice
 import com.weatherxm.ui.explorer.ExplorerViewModel
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class PublicDevicesListFragment : BottomSheetDialogFragment() {
     private val explorerModel: ExplorerViewModel by activityViewModels()
     private val model: PublicDevicesListViewModel by viewModels()
     private lateinit var binding: FragmentPublicDevicesListBinding
-    private var selectedHexIndex: String? = null
     private lateinit var adapter: PublicDevicesListAdapter
 
     companion object {
         const val TAG = "PublicDevicesListFragment"
-        private const val ARG_HEX_SELECTED_INDEX = "hex_index"
-
-        fun newInstance(hexIndex: String?) = PublicDevicesListFragment().apply {
-            arguments = Bundle().apply {
-                putString(ARG_HEX_SELECTED_INDEX, hexIndex)
-            }
-        }
-    }
-
-    init {
-        lifecycleScope.launch {
-            whenCreated {
-                selectedHexIndex = arguments?.getString(ARG_HEX_SELECTED_INDEX)
-            }
-        }
     }
 
     override fun getTheme(): Int {
@@ -63,13 +42,13 @@ class PublicDevicesListFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = PublicDevicesListAdapter {
-            explorerModel.onDeviceClicked(it)
+            explorerModel.onPublicDeviceClicked(explorerModel.getCurrentHexSelected(), it)
             dismiss()
         }
 
         binding.recycler.adapter = adapter
 
-        model.devices().observe(this) {
+        model.onPublicDevices().observe(this) {
             updateUI(it)
         }
 
@@ -78,25 +57,39 @@ class PublicDevicesListFragment : BottomSheetDialogFragment() {
             binding.location.visibility = View.VISIBLE
         }
 
-        model.fetchDevices(selectedHexIndex)
+        model.fetchDevices(explorerModel.getCurrentHexSelected())
     }
 
-    private fun updateUI(devices: Resource<List<Device>>) {
-        when (devices.status) {
+    private fun updateUI(response: Resource<List<UIDevice>>) {
+        when (response.status) {
             Status.SUCCESS -> {
-                binding.title.text = getString(R.string.weather_stations)
-                if (!devices.data.isNullOrEmpty()) {
-                    adapter.submitList(devices.data)
+                if (!response.data.isNullOrEmpty()) {
+                    adapter.submitList(response.data)
+                    binding.empty.visibility = View.GONE
                     binding.recycler.visibility = View.VISIBLE
                 } else {
-                    context.toast(getString(R.string.error_generic_message), Toast.LENGTH_LONG)
+                    binding.empty.clear()
+                    binding.empty.animation(R.raw.anim_error)
+                    binding.empty.title(getString(R.string.error_generic_message))
+                    binding.recycler.visibility = View.GONE
+                    binding.empty.visibility = View.VISIBLE
                 }
             }
             Status.ERROR -> {
-                Timber.d(devices.message, devices.message)
-                devices.message?.let { context.toast(it, Toast.LENGTH_LONG) }
+                Timber.d(response.message, response.message)
+                binding.empty.clear()
+                binding.empty.animation(R.raw.anim_error)
+                binding.empty.title(getString(R.string.error_generic_message))
+                binding.empty.subtitle(response.message)
+                binding.recycler.visibility = View.GONE
+                binding.empty.visibility = View.VISIBLE
             }
-            Status.LOADING -> {}
+            Status.LOADING -> {
+                binding.empty.clear()
+                binding.empty.animation(R.raw.anim_loading)
+                binding.recycler.visibility = View.GONE
+                binding.empty.visibility = View.VISIBLE
+            }
         }
     }
 }

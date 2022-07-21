@@ -51,10 +51,10 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         setContentView(binding.root)
 
         explorerModel.onHexSelected().observe(this) {
-            navigator.showPublicDevicesList(supportFragmentManager, it)
+            navigator.showPublicDevicesList(supportFragmentManager)
         }
 
-        explorerModel.onDeviceSelected().observe(this) {
+        explorerModel.onPublicDeviceSelected().observe(this) {
             navigator.showDeviceDetails(supportFragmentManager, it)
         }
 

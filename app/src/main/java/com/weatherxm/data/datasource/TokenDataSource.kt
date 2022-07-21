@@ -16,6 +16,16 @@ interface TokenDataSource {
         fromDate: String? = null,
         toDate: String? = null
     ): Either<Failure, TransactionsResponse>
+
+    @Suppress("LongParameterList")
+    suspend fun getPublicTransactions(
+        deviceId: String,
+        page: Int?,
+        pageSize: Int? = null,
+        timezone: String? = null,
+        fromDate: String? = null,
+        toDate: String? = null
+    ): Either<Failure, TransactionsResponse>
 }
 
 class TokenDataSourceImpl(private val apiService: ApiService) : TokenDataSource {
@@ -29,5 +39,23 @@ class TokenDataSourceImpl(private val apiService: ApiService) : TokenDataSource 
     ): Either<Failure, TransactionsResponse> {
         return apiService.getTransactions(deviceId, page, pageSize, timezone, fromDate, toDate)
             .map()
+    }
+
+    override suspend fun getPublicTransactions(
+        deviceId: String,
+        page: Int?,
+        pageSize: Int?,
+        timezone: String?,
+        fromDate: String?,
+        toDate: String?
+    ): Either<Failure, TransactionsResponse> {
+        return apiService.getPublicTransactions(
+            deviceId,
+            page,
+            pageSize,
+            timezone,
+            fromDate,
+            toDate
+        ).map()
     }
 }

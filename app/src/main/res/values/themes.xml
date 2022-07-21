@@ -193,7 +193,7 @@
     </style>
 
     <style name="TextAppearance.WeatherXM.Updated.On" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:textColor">@color/colorOnSecondary</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">italic</item>
     </style>
@@ -218,7 +218,7 @@
 
     <style name="TextAppearance.WeatherXM.Devices.List.WeatherData" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textSize">20sp</item>
-        <item name="drawableTint">@color/colorOnSecondary</item>
+        <item name="android:textColor">@color/colorOnSecondary</item>
         <item name="android:textStyle">bold</item>
     </style>
 
