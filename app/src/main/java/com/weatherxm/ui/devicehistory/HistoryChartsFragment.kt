@@ -89,16 +89,15 @@ class HistoryChartsFragment : Fragment() {
         }
 
         binding.swiperefresh.setOnRefreshListener {
-            model.updateDates()
-            getWeatherHistory()
+            getWeatherHistory(true)
         }
 
         return binding.root
     }
 
-    private fun getWeatherHistory() {
+    private fun getWeatherHistory(isSwipeRefresh: Boolean = false) {
         context?.let {
-            model.getWeatherHistory(device, it)
+            model.getWeatherHistory(device, it, isSwipeRefresh)
         }
     }
 

@@ -45,6 +45,7 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
      * so we have this info to show him the correct charts
      */
     private var selectedTab: Int = 0
+    private lateinit var currentDates: List<String>
 
     // All charts currently visible
     private val onCharts = MutableLiveData<Resource<HistoryCharts>>().apply {
@@ -55,7 +56,7 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
     fun onCharts(): LiveData<Resource<HistoryCharts>> = onCharts
     fun onUpdateDates(): LiveData<Boolean> = onUpdateDates
 
-    fun getWeatherHistory(device: Device, context: Context) {
+    fun getWeatherHistory(device: Device, context: Context, isSwipeRefresh: Boolean = false) {
         onCharts.postValue(Resource.loading())
 
         viewModelScope.launch {
@@ -70,6 +71,9 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
                 .mapLeft {
                     handleFailure(it)
                 }
+            if(isSwipeRefresh) {
+                updateDates()
+            }
         }
     }
 
@@ -115,15 +119,24 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
     }
 
     fun isDataValid(data: LineChartData): Boolean {
-        return !data.timestamps.isNullOrEmpty() && !data.entries.isNullOrEmpty()
+        return data.timestamps.isNotEmpty() && data.entries.isNotEmpty()
     }
 
     fun isDataValid(data: BarChartData): Boolean {
-        return !data.timestamps.isNullOrEmpty() && !data.entries.isNullOrEmpty()
+        return data.timestamps.isNotEmpty() && data.entries.isNotEmpty()
     }
 
     fun getDatesForTabs(): List<String> {
-        return getLast7Days(resHelper)
+        currentDates = getLast7Days(resHelper)
+        return currentDates
+    }
+
+    fun getEarliestDate(): String? {
+        return if (this::currentDates.isInitialized) {
+            currentDates[0]
+        } else {
+            null
+        }
     }
 
     fun updateDates() {
