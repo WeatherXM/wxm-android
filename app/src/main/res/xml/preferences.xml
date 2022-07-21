@@ -69,6 +69,11 @@
         app:title="@string/help">
         <Preference
             app:iconSpaceReserved="false"
+            app:key="@string/title_open_documentation"
+            app:summary="@string/desc_open_documentation"
+            app:title="@string/title_open_documentation" />
+        <Preference
+            app:iconSpaceReserved="false"
             app:key="@string/title_contact_support"
             app:summary="@string/desc_contact_support"
             app:title="@string/title_contact_support" />

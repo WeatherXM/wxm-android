@@ -12,6 +12,8 @@
     <string name="help">Help</string>
     <string name="title_contact_support">Contact Support</string>
     <string name="desc_contact_support">Send us an email and we\'ll get back to you as soon as possible.</string>
+    <string name="title_open_documentation">Documentation</string>
+    <string name="desc_open_documentation">Read more about the project, find out how rewards work, tutorials on how to setup your station, troubleshooting guides, and more.</string>
 
     <!-- About -->
     <string name="about">About</string>

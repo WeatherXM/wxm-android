@@ -37,6 +37,8 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
                         findPreference(getString(R.string.action_logout))
                     val resetPassButton: Preference? =
                         findPreference(getString(R.string.change_password))
+                    val openDocumentationButton: Preference? =
+                        findPreference(getString(R.string.title_open_documentation))
                     val contactSupportButton: Preference? =
                         findPreference(getString(R.string.title_contact_support))
                     logoutButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -46,6 +48,11 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
                     resetPassButton?.onPreferenceClickListener =
                         Preference.OnPreferenceClickListener {
                             navigator.showResetPassword(this)
+                            true
+                        }
+                    openDocumentationButton?.onPreferenceClickListener =
+                        Preference.OnPreferenceClickListener {
+                            navigator.openWebsite(context, getString(R.string.documentation_url))
                             true
                         }
                     contactSupportButton?.onPreferenceClickListener =
