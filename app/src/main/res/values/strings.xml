@@ -32,6 +32,10 @@
     <string name="title_devices">Devices</string>
     <string name="title_profile">Profile</string>
 
+    <!-- Explorer -->
+    <string name="title_devices_count">Online Stations</string>
+    <string name="devices_count">%d</string>
+
     <!-- Profile -->
     <string name="hello">Hello</string>
     <string name="hello_user">Hello, %s</string>

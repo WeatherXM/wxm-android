@@ -46,6 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/margin_normal"
+            android:alpha="0.0"
             app:cardBackgroundColor="@color/blue_translucent"
             app:cardCornerRadius="@dimen/card_corner_radius"
             app:cardUseCompatPadding="false"
@@ -55,6 +56,7 @@
                 android:id="@+id/map_debug_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textAppearance="?textAppearanceBodySmall"
                 android:textColor="@color/white_translucent"
                 tools:text="ZOOM = 12.7" />
 
@@ -62,44 +64,90 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/login_signup_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/overlay_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="@dimen/margin_normal"
-        app:cardBackgroundColor="@color/white_translucent"
-        app:cardElevation="@dimen/card_elevation"
-        app:cardMaxElevation="@dimen/card_elevation"
-        app:contentPadding="@dimen/padding_normal"
         app:layout_dodgeInsetEdges="bottom">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/devices_count_card"
+            style="@style/Widget.WeatherXM.MaterialCard.DevicesCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_normal"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/title_devices_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/title_devices_count"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Explorer.DevicesCount.Title"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/devices_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Explorer.DevicesCount.Value"
+                    app:layout_constraintStart_toEndOf="@id/title_devices_count"
+                    tools:text="600" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/login_signup_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintVertical_chainStyle="packed">
+            android:layout_marginTop="@dimen/margin_normal"
+            app:cardBackgroundColor="@color/white_translucent"
+            app:cardElevation="@dimen/card_elevation"
+            app:cardMaxElevation="@dimen/card_elevation"
+            app:contentPadding="@dimen/padding_normal"
+            app:layout_constraintTop_toBottomOf="@id/devices_count_card">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/login"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/action_sign_in"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintVertical_chainStyle="packed">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/signupPrompt"
-                style="@style/Widget.WeatherXM.TextButton.Subtle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/prompt_signup"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintLeft_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/login" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_sign_in"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/signupPrompt"
+                    style="@style/Widget.WeatherXM.TextButton.Subtle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/prompt_signup"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintLeft_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/login" />
 
-    </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

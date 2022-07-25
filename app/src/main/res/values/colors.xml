@@ -60,6 +60,9 @@
     <color name="token_transaction_hash_background">#66E4E4E4</color>
     <color name="token_transaction_hash_foreground">#66000000</color>
 
+    <color name="explorer_devices_count_title">#CAC4CF</color>
+    <color name="explorer_devices_count_value">#46D163</color>
+
     <color name="dateTabNormalTextColor">#40116295</color>
     <color name="dateTabSelectedTextColor">#116295</color>
 
