@@ -75,7 +75,7 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
                 resHelper.getString(
                     when (failure) {
                         is InvalidWalletAddress -> R.string.error_connect_wallet_invalid_address
-                        else -> failure.getDefaultMessageResId()
+                        else -> failure.getDefaultMessageResId(R.string.error_reach_out_short)
                     }
                 )
             )

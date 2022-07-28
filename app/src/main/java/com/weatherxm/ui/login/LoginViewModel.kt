@@ -62,7 +62,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
                         is InvalidUsername -> R.string.error_login_invalid_username
                         is InvalidPassword -> R.string.error_login_invalid_password
                         is InvalidCredentials -> R.string.error_login_invalid_credentials
-                        else -> failure.getDefaultMessageResId()
+                        else -> failure.getDefaultMessageResId(R.string.error_reach_out_short)
                     }
                 )
             )

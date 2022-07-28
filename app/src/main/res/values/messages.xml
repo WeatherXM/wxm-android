@@ -1,6 +1,8 @@
 <resources>
     <!-- Error Messages -->
     <string name="error_generic_message">Oops! Something went wrong.</string>
+    <string name="error_reach_out">It\’s not you, it\’s us! Please retry and if problem persists, reach out to us at support@weatherxm.com</string>
+    <string name="error_reach_out_short">It\’s not you, it\’s us! If problem persists, reach out to us.</string>
     <string name="error_network_generic">Please, check your internet connection and try again.</string>
     <string name="error_network_timed_out">Server taking too long to respond. Please check your connection and try again.</string>
     <string name="error_history_no_data_on_day">Oops! Could not load data from network.</string>

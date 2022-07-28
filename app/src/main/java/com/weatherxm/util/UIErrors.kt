@@ -13,15 +13,15 @@ object UIErrors : KoinComponent {
     private val resHelper: ResourcesHelper by inject()
 
     @StringRes
-    fun Failure.getDefaultMessageResId(): Int {
+    fun Failure.getDefaultMessageResId(@StringRes fallback: Int? = null): Int {
         return when (this) {
             is NoConnectionError -> R.string.error_network_generic
             is ConnectionTimeoutError -> R.string.error_network_timed_out
-            else -> R.string.error_generic_message
+            else -> fallback ?: R.string.error_reach_out
         }
     }
 
-    fun Failure.getDefaultMessage(): String {
-        return resHelper.getString(this.getDefaultMessageResId())
+    fun Failure.getDefaultMessage(@StringRes fallback: Int? = null): String {
+        return resHelper.getString(this.getDefaultMessageResId(fallback))
     }
 }
