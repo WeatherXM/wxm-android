@@ -51,6 +51,11 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val navController = findNavController(R.id.nav_host_fragment)
+
+        // Setup navigation view
+        binding.navView.setupWithNavController(navController)
+
         explorerModel.onHexSelected().observe(this) {
             navigator.showPublicDevicesList(supportFragmentManager)
         }
@@ -63,9 +68,11 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             Timber.d("Status updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
-                    binding.devicesCount.text =
-                        getString(R.string.devices_count, resource.data?.totalDevices)
-                    binding.devicesCountCard.visibility = View.VISIBLE
+                    if (navController.currentDestination?.id == R.id.navigation_explorer) {
+                        binding.devicesCount.text =
+                            getString(R.string.devices_count, resource.data?.totalDevices)
+                        binding.devicesCountCard.visibility = View.VISIBLE
+                    }
                     snackbar?.dismiss()
                 }
                 Status.ERROR -> {
@@ -87,11 +94,6 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 binding.navView.hideIfNot()
             }
         }
-
-        val navController = findNavController(R.id.nav_host_fragment)
-
-        // Setup navigation view
-        binding.navView.setupWithNavController(navController)
 
         /*
          * Show/hide FAB and devices count label
