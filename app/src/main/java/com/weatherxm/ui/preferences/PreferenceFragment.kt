@@ -16,10 +16,6 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
     private val model: PreferenceViewModel by activityViewModels()
     private val navigator: Navigator by inject()
 
-    companion object {
-        const val TAG = "PreferenceFragment"
-    }
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 

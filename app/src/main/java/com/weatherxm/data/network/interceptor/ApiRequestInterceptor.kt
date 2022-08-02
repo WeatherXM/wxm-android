@@ -20,7 +20,6 @@ class ApiRequestInterceptor(private val authTokenDataSource: AuthTokenDataSource
         const val AUTH_HEADER = "Authorization"
         const val NO_AUTH_HEADER_KEY = "No-Authorization"
         const val NO_AUTH_HEADER_VALUE = "true"
-        const val NO_AUTH_HEADER = "$NO_AUTH_HEADER_KEY: $NO_AUTH_HEADER_VALUE"
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {

@@ -160,7 +160,7 @@ class ExplorerUseCaseImpl(
                 Pair(
                     it.toString(), datesAndTxs.getOrDefault(
                         it,
-                        Transaction.VERY_SMALL_NUMBER_FOR_CHART
+                        VERY_SMALL_NUMBER_FOR_CHART
                     )
                 )
             )

@@ -327,7 +327,7 @@ object Weather : KoinComponent {
         return value.toFloat().toBigDecimal().setScale(decimals, BigDecimal.ROUND_HALF_UP).toFloat()
     }
 
-    fun roundToInt(value: Number): Int {
+    private fun roundToInt(value: Number): Int {
         return value.toFloat().toBigDecimal().setScale(0, BigDecimal.ROUND_HALF_UP).toInt()
     }
 }

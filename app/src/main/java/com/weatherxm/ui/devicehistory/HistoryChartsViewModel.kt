@@ -72,7 +72,7 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
                     handleFailure(it)
                 }
             if(isSwipeRefresh) {
-                updateDates()
+                onUpdateDates.postValue(true)
             }
         }
     }
@@ -137,9 +137,5 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
         } else {
             null
         }
-    }
-
-    fun updateDates() {
-        onUpdateDates.postValue(true)
     }
 }
