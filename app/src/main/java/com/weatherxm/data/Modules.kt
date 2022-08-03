@@ -42,6 +42,8 @@ import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
+import com.weatherxm.data.datasource.SharedPreferencesDataSource
+import com.weatherxm.data.datasource.SharedPreferencesDataSourceImpl
 import com.weatherxm.data.datasource.StorageAddressDataSource
 import com.weatherxm.data.datasource.TokenDataSource
 import com.weatherxm.data.datasource.TokenDataSourceImpl
@@ -62,6 +64,8 @@ import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.ExplorerRepositoryImpl
 import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.data.repository.LocationRepositoryImpl
+import com.weatherxm.data.repository.SharedPreferenceRepositoryImpl
+import com.weatherxm.data.repository.SharedPreferencesRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.TokenRepositoryImpl
 import com.weatherxm.data.repository.UserRepository
@@ -221,6 +225,10 @@ private val datasources = module {
     single<UserActionDataSource> {
         UserActionDataSourceImpl(get())
     }
+
+    single<SharedPreferencesDataSource> {
+        SharedPreferencesDataSourceImpl(get())
+    }
 }
 
 private val repositories = module {
@@ -251,6 +259,9 @@ private val repositories = module {
     single<AppConfigRepository> {
         AppConfigRepositoryImpl(get())
     }
+    single<SharedPreferencesRepository> {
+        SharedPreferenceRepositoryImpl(get())
+    }
 }
 
 private val usecases = module {
@@ -258,7 +269,7 @@ private val usecases = module {
         ExplorerUseCaseImpl(get(), get(), get(), get())
     }
     single<UserDeviceUseCase> {
-        UserDeviceUseCaseImpl(get(), get(), get())
+        UserDeviceUseCaseImpl(get(), get(), get(), get())
     }
     single<HistoryUseCase> {
         HistoryUseCaseImpl(get(), get())
@@ -295,7 +306,7 @@ private val location = module {
 
 private val network = module {
     single<HttpLoggingInterceptor> {
-        HttpLoggingInterceptor().setLevel(if (BuildConfig.DEBUG) Level.BODY else Level.NONE)
+        HttpLoggingInterceptor().setLevel(if (BuildConfig.DEBUG) Level.BASIC else Level.NONE)
     }
 
     single<ClientIdentificationRequestInterceptor> {

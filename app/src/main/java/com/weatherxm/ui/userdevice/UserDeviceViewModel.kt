@@ -26,6 +26,7 @@ import org.koin.core.component.inject
 import timber.log.Timber
 import java.time.ZonedDateTime
 
+
 @Suppress("TooManyFunctions")
 class UserDeviceViewModel : ViewModel(), KoinComponent {
 
@@ -46,6 +47,8 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     private val onTokens = MutableLiveData<TokenInfo>()
 
+    private val onUnitPreferenceChanged = MutableLiveData(false)
+
     fun onDeviceSet(): LiveData<Device> = onDeviceSet
 
     fun onEditNameChange(): LiveData<Boolean> = onEditNameChange
@@ -57,6 +60,8 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     fun onForecast(): LiveData<List<HourlyWeather>> = onForecast
 
     fun onTokens(): LiveData<TokenInfo> = onTokens
+
+    fun onUnitPreferenceChanged(): LiveData<Boolean> = onUnitPreferenceChanged
 
     fun setDevice(device: Device) {
         this.device = device
@@ -343,6 +348,16 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     }
                 onLoading.postValue(false)
             }
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            userDeviceUseCase.getUnitPreferenceChangedFlow()
+                .collect {
+                    Timber.d("Unit preference key changed: $it. Triggering data update.")
+                    onUnitPreferenceChanged.postValue(true)
+                }
         }
     }
 }
