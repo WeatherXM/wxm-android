@@ -8,6 +8,7 @@ import com.weatherxm.data.Transaction
 import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.data.UserActionError
 import com.weatherxm.data.repository.DeviceRepository
+import com.weatherxm.data.repository.SharedPreferencesRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.WeatherRepository
 import com.weatherxm.ui.TokenInfo
@@ -17,6 +18,8 @@ import com.weatherxm.util.DateTimeHelper.getLocalDate
 import com.weatherxm.util.DateTimeHelper.getNowInTimezone
 import com.weatherxm.util.DateTimeHelper.getTimezone
 import com.weatherxm.util.Tokens.roundTokens
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.util.*
@@ -40,17 +43,32 @@ interface UserDeviceUseCase {
     suspend fun setFriendlyName(deviceId: String, friendlyName: String): Either<Failure, Unit>
     suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit>
     fun canChangeFriendlyName(deviceId: String): Either<UserActionError, Boolean>
+    fun getUnitPreferenceChangedFlow(): Flow<String>
 }
 
 class UserDeviceUseCaseImpl(
     private val deviceRepository: DeviceRepository,
     private val tokenRepository: TokenRepository,
-    private val weatherRepository: WeatherRepository
+    private val weatherRepository: WeatherRepository,
+    private val preferencesRepository: SharedPreferencesRepository
 ) : UserDeviceUseCase {
 
     companion object {
         // Allow device friendly name change once in 10 minutes
         val FRIENDLY_NAME_TIME_LIMIT = TimeUnit.MINUTES.toMillis(10)
+
+        val UNIT_PREF_KEYS = arrayOf(
+            "temperature_unit",
+            "precipitation_unit",
+            "wind_speed_unit",
+            "wind_direction_unit",
+            "pressure_unit"
+        )
+    }
+
+    override fun getUnitPreferenceChangedFlow(): Flow<String> {
+        return preferencesRepository.getPreferenceChangeFlow()
+            .filter { key -> key in UNIT_PREF_KEYS }
     }
 
     override suspend fun getUserDevices(): Either<Failure, List<Device>> {

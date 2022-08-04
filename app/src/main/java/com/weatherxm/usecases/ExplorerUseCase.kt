@@ -12,6 +12,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 import com.weatherxm.data.Transaction
+import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.ui.ExplorerData
@@ -21,8 +22,11 @@ import com.weatherxm.ui.UIDevice
 import com.weatherxm.ui.UIHex
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
-import com.weatherxm.util.DateTimeHelper
+import com.weatherxm.util.DateTimeHelper.getLocalDate
+import com.weatherxm.util.DateTimeHelper.getNowInTimezone
+import com.weatherxm.util.DateTimeHelper.getTimezone
 import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.Tokens.roundTokens
 import java.time.LocalDate
 
 
@@ -74,8 +78,11 @@ class ExplorerUseCaseImpl(
                 }
             ))
 
+            var totalDevices = 0
             val polygonPoints = mutableListOf<PolygonAnnotationOptions>()
             it.forEach { publicHex ->
+                totalDevices += publicHex.deviceCount ?: 0
+
                 val polygonAnnotationOptions = PolygonAnnotationOptions()
                     .withFillColor(resHelper.getColor(R.color.hexFillColor))
                     .withFillOpacity(FILL_OPACITY_HEXAGONS)
@@ -86,7 +93,7 @@ class ExplorerUseCaseImpl(
                 polygonPoints.add(polygonAnnotationOptions)
             }
 
-            ExplorerData(geoJsonSource, polygonPoints)
+            ExplorerData(totalDevices, geoJsonSource, polygonPoints)
         }
     }
 
@@ -128,16 +135,22 @@ class ExplorerUseCaseImpl(
         // Create a list of dates, and a map of dates and transactions from latest -> earliest
         while (!nowDate.isBefore(fromDate)) {
             lastMonthDates.add(nowDate)
-            datesAndTxs[nowDate] = Transaction.VERY_SMALL_NUMBER_FOR_CHART
+            datesAndTxs[nowDate] = VERY_SMALL_NUMBER_FOR_CHART
             nowDate = nowDate.minusDays(1)
         }
 
         transactions.forEach { tx ->
-            val date = DateTimeHelper.getLocalDate(tx.timestamp)
+            val date = getLocalDate(tx.timestamp)
 
             val amountForDate = datesAndTxs.getOrDefault(date, 0.0F)
             if (tx.actualReward != null && tx.actualReward > 0.0F) {
-                datesAndTxs[date] = amountForDate + tx.actualReward
+                /*
+                * We need to round this number as we use it further for getting the max in a range
+                * And we show that max rounded. Small differences occur if we don't round it.
+                * example: https://github.com/WeatherXM/issue-tracker/issues/97
+                 */
+                val roundedReward = roundTokens(tx.actualReward)
+                datesAndTxs[date] = amountForDate + roundedReward
             }
         }
 
@@ -147,7 +160,7 @@ class ExplorerUseCaseImpl(
                 Pair(
                     it.toString(), datesAndTxs.getOrDefault(
                         it,
-                        Transaction.VERY_SMALL_NUMBER_FOR_CHART
+                        VERY_SMALL_NUMBER_FOR_CHART
                     )
                 )
             )
@@ -159,10 +172,10 @@ class ExplorerUseCaseImpl(
     // We suppress magic number because we use specific numbers to check last month and last week
     @Suppress("MagicNumber")
     override suspend fun getTokenInfoLast30D(deviceId: String): Either<Failure, TokenInfo> {
-        val now = DateTimeHelper.getNowInTimezone()
-        val fromDateAsLocalDate = DateTimeHelper.getLocalDate(now.minusDays(30).toString())
+        val now = getNowInTimezone()
+        val fromDateAsLocalDate = getLocalDate(now.minusDays(30).toString())
         val fromDate = fromDateAsLocalDate.toString()
-        val timezone = DateTimeHelper.getTimezone()
+        val timezone = getTimezone()
 
         return tokenRepository.getAllPublicTransactionsInRange(deviceId, timezone, fromDate)
             .map { transactions ->
@@ -180,12 +193,12 @@ class ExplorerUseCaseImpl(
                      */
                     for ((position, datedTx) in datedTransactions.withIndex()) {
                         if (position <= 6) {
-                            if (datedTx.second > Transaction.VERY_SMALL_NUMBER_FOR_CHART) {
+                            if (datedTx.second > VERY_SMALL_NUMBER_FOR_CHART) {
                                 total7d = total7d?.plus(datedTx.second)
                             }
                             chart7d.values.add(datedTx)
                         }
-                        if (datedTx.second > Transaction.VERY_SMALL_NUMBER_FOR_CHART) {
+                        if (datedTx.second > VERY_SMALL_NUMBER_FOR_CHART) {
                             total30d = total30d?.plus(datedTx.second)
                         }
                         chart30d.values.add(datedTx)

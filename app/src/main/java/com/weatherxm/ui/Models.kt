@@ -139,6 +139,7 @@ data class SelectedHourlyForecast(
 @Keep
 @JsonClass(generateAdapter = true)
 data class ExplorerData(
+    var totalDevices: Int,
     var geoJsonSource: GeoJsonSource,
     var polygonPoints: List<PolygonAnnotationOptions>,
 )

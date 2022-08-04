@@ -607,4 +607,20 @@
         <item name="android:textColorLink">@color/white</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.DevicesCount" parent="Widget.WeatherXM.MaterialCard.Small">
+        <item name="cardBackgroundColor">@color/black_translucent</item>
+        <item name="contentPadding">@dimen/padding_small</item>
+        <item name="useCompatPadding">false</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Explorer.DevicesCount.Title" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textColor">@color/explorer_devices_count_title</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Explorer.DevicesCount.Value" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textColor">@color/explorer_devices_count_value</item>
+        <item name="fontFamily">monospace</item>
+        <item name="fontWeight">700</item>
+    </style>
 </resources>

@@ -73,8 +73,18 @@ open class TokenCardView : LinearLayout, KoinComponent {
     private fun updateUI(totalAllTime: Float?) {
         binding.total7DWXM.text = formatValue(tokenInfo?.total7d)
         binding.total30DWXM.text = formatValue(tokenInfo?.total30d)
-        binding.totalAllWXM.text = formatValue(totalAllTime)
         binding.tokenOptions.setChildrenEnabled(true)
+
+        /*
+        * TODO: On explorer, {totalAllTime = null} always at this point as  we don't have it yet,
+        * so perform this simple check to hide the total info when it's being used on explorer
+         */
+        if (totalAllTime == null) {
+            binding.totalAll.visibility = View.GONE
+            binding.totalAllWXM.visibility = View.GONE
+        } else {
+            binding.totalAllWXM.text = formatValue(totalAllTime)
+        }
 
         updateLastReward(tokenInfo?.lastReward)
 

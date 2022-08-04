@@ -9,13 +9,13 @@ import com.mapbox.maps.extension.style.expressions.dsl.generated.interpolate
 import com.mapbox.maps.extension.style.layers.generated.HeatmapLayer
 import com.mapbox.maps.extension.style.layers.generated.heatmapLayer
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
+import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.ExplorerCamera
 import com.weatherxm.ui.ExplorerData
 import com.weatherxm.ui.UIDevice
 import com.weatherxm.ui.UIHex
 import com.weatherxm.usecases.ExplorerUseCase
-import com.weatherxm.usecases.ExplorerUseCaseImpl
 import com.weatherxm.util.MapboxUtils
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.launch
@@ -169,7 +169,9 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
                     state.postValue(Resource.success(it))
                 }
                 .mapLeft {
-                    state.postValue(Resource.error(it.getDefaultMessage()))
+                    state.postValue(
+                        Resource.error(it.getDefaultMessage(R.string.error_reach_out_short))
+                    )
                 }
         }
     }

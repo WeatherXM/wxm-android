@@ -14,6 +14,62 @@
         app:navGraph="@navigation/bottom_navigation"
         tools:ignore="FragmentTagUsage" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:layout_dodgeInsetEdges="bottom">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/devices_count_card"
+            style="@style/Widget.WeatherXM.MaterialCard.DevicesCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_normal"
+            android:layout_marginBottom="@dimen/margin_normal"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/nav_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/title_devices_count"
+                    style="@style/TextAppearance.WeatherXM.Explorer.DevicesCount.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/padding_small"
+                    android:text="@string/title_devices_count"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/devices_count"
+                    style="@style/TextAppearance.WeatherXM.Explorer.DevicesCount.Value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/padding_small"
+                    app:layout_constraintStart_toEndOf="@id/title_devices_count"
+                    tools:text="600" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nav_view"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/margin_normal"
+            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_nav_menu" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_device"
         android:layout_width="wrap_content"
@@ -26,15 +82,5 @@
         app:layout_anchorGravity="top|end"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
         app:tint="@color/white" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:layout_marginVertical="@dimen/margin_normal"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        app:layout_dodgeInsetEdges="bottom"
-        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

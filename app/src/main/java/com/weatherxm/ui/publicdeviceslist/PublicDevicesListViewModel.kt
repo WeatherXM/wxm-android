@@ -40,8 +40,8 @@ class PublicDevicesListViewModel : ViewModel(), KoinComponent {
                 .map {
                     onPublicDevices.postValue(Resource.success(it))
                     it.forEach { device ->
-                        device.address?.let {
-                            this@PublicDevicesListViewModel.address.postValue(it)
+                        device.address?.let { address ->
+                            this@PublicDevicesListViewModel.address.postValue(address)
                             return@forEach
                         }
                     }

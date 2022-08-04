@@ -95,6 +95,15 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
 
         binding.tokenNotice.setHtml(R.string.device_detail_token_notice)
 
+        // onCreate was too big. Handle the initialization of the observers in a seperate function
+        initObservers()
+
+        // Fetch data
+        model.setDevice(device)
+        model.fetchUserDeviceAllData()
+    }
+
+    private fun initObservers() {
         model.onDeviceSet().observe(this) {
             updateDeviceInfo(it)
             binding.currentWeatherCard.setData(it.currentWeather, it.timezone, 1)
@@ -115,6 +124,13 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
             }
         }
 
+        model.onUnitPreferenceChanged().observe(this) {
+            if (it) {
+                binding.currentWeatherCard.updateCurrentWeatherUI(1, model.getDevice().timezone)
+                hourlyAdapter.notifyDataSetChanged()
+            }
+        }
+
         model.onLoading().observe(this) {
             if (it && binding.swiperefresh.isRefreshing) {
                 binding.progress.visibility = View.INVISIBLE
@@ -129,10 +145,6 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         model.onError().observe(this) {
             showSnackbarMessage(it.errorMessage, it.retryFunction)
         }
-
-        // Fetch data
-        model.setDevice(device)
-        model.fetchUserDeviceAllData()
     }
 
     override fun onMenuItemClick(menuItem: MenuItem?): Boolean {
@@ -251,6 +263,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         override fun onTabUnselected(tab: TabLayout.Tab?) {
             // No-op
         }
+
         override fun onTabReselected(tab: TabLayout.Tab?) {
             // No-op
         }

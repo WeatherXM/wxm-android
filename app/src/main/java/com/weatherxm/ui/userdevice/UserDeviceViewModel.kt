@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
-import arrow.core.getOrHandle
 import com.weatherxm.R
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Device
@@ -27,6 +26,7 @@ import org.koin.core.component.inject
 import timber.log.Timber
 import java.time.ZonedDateTime
 
+
 @Suppress("TooManyFunctions")
 class UserDeviceViewModel : ViewModel(), KoinComponent {
 
@@ -47,6 +47,8 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     private val onTokens = MutableLiveData<TokenInfo>()
 
+    private val onUnitPreferenceChanged = MutableLiveData(false)
+
     fun onDeviceSet(): LiveData<Device> = onDeviceSet
 
     fun onEditNameChange(): LiveData<Boolean> = onEditNameChange
@@ -58,6 +60,8 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     fun onForecast(): LiveData<List<HourlyWeather>> = onForecast
 
     fun onTokens(): LiveData<TokenInfo> = onTokens
+
+    fun onUnitPreferenceChanged(): LiveData<Boolean> = onUnitPreferenceChanged
 
     fun setDevice(device: Device) {
         this.device = device
@@ -157,11 +161,11 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                 uiError.errorMessage = resHelper.getString(R.string.error_forecast_generic_message)
             }
             is NoConnectionError, is ConnectionTimeoutError -> {
-                uiError.errorMessage = failure.getDefaultMessage()
+                uiError.errorMessage = failure.getDefaultMessage(R.string.error_reach_out_short)
                 uiError.retryFunction = { fetchForecast() }
             }
             else -> {
-                uiError.errorMessage = resHelper.getString(R.string.error_generic_message)
+                uiError.errorMessage = resHelper.getString(R.string.error_reach_out_short)
             }
         }
         onError.postValue(uiError)
@@ -193,12 +197,14 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                                 resHelper.getString(R.string.error_user_device_not_found)
                         }
                         is NoConnectionError, is ConnectionTimeoutError -> {
-                            uiError.errorMessage = it.getDefaultMessage()
+                            uiError.errorMessage = it.getDefaultMessage(
+                                R.string.error_reach_out_short
+                            )
                             uiError.retryFunction = ::fetchUserDevice
                         }
                         else -> {
                             uiError.errorMessage =
-                                resHelper.getString(R.string.error_generic_message)
+                                resHelper.getString(R.string.error_reach_out_short)
                         }
                     }
                     onError.postValue(uiError)
@@ -256,14 +262,14 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         when (failure) {
             is ApiError.GenericError -> {
                 uiError.errorMessage =
-                    failure.message ?: resHelper.getString(R.string.error_generic_message)
+                    failure.message ?: resHelper.getString(R.string.error_reach_out_short)
             }
             is NoConnectionError, is ConnectionTimeoutError -> {
-                uiError.errorMessage = failure.getDefaultMessage()
+                uiError.errorMessage = failure.getDefaultMessage(R.string.error_reach_out_short)
                 uiError.retryFunction = ::fetchTokenDetails
             }
             else -> {
-                uiError.errorMessage = resHelper.getString(R.string.error_generic_message)
+                uiError.errorMessage = resHelper.getString(R.string.error_reach_out_short)
             }
         }
         onError.postValue(uiError)
@@ -314,7 +320,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     .mapLeft {
                         onError.postValue(
                             UIError(
-                                resHelper.getString(R.string.error_generic_message),
+                                resHelper.getString(R.string.error_reach_out_short),
                                 null
                             )
                         )
@@ -335,13 +341,23 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     .mapLeft {
                         onError.postValue(
                             UIError(
-                                resHelper.getString(R.string.error_generic_message),
+                                resHelper.getString(R.string.error_reach_out_short),
                                 null
                             )
                         )
                     }
                 onLoading.postValue(false)
             }
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            userDeviceUseCase.getUnitPreferenceChangedFlow()
+                .collect {
+                    Timber.d("Unit preference key changed: $it. Triggering data update.")
+                    onUnitPreferenceChanged.postValue(true)
+                }
         }
     }
 }

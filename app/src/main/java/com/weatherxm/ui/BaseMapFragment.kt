@@ -36,11 +36,11 @@ open class BaseMapFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        try {
-            debugInfoListener = activity as OnMapDebugInfoListener
+        debugInfoListener = try {
+            activity as OnMapDebugInfoListener
         } catch (e: ClassCastException) {
             Timber.d(e, "Parent activity does not implement OnMapDebugInfoListener.")
-            debugInfoListener = OnMapDebugInfoListener { _, _ ->  /* NOOP */ }
+            OnMapDebugInfoListener { _, _ ->  /* NOOP */ }
         }
     }
 

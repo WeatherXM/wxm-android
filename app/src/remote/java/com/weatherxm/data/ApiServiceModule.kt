@@ -1,8 +1,6 @@
 package com.weatherxm.data
 
 import com.weatherxm.data.datasource.CacheWeatherDataSource
-import com.weatherxm.data.datasource.DeviceDataSource
-import com.weatherxm.data.datasource.DeviceDataSourceImpl
 import com.weatherxm.data.datasource.NetworkWeatherDataSource
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.AuthService

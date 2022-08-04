@@ -63,6 +63,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                     binding.swiperefresh.isRefreshing = false
                     if (!devicesResource.data.isNullOrEmpty()) {
                         adapter.submitList(devicesResource.data)
+                        adapter.notifyDataSetChanged()
                         binding.recycler.visibility = View.VISIBLE
                         binding.empty.visibility = View.GONE
                     } else {
@@ -95,6 +96,12 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                         binding.empty.visibility = View.VISIBLE
                     }
                 }
+            }
+        }
+
+        model.preferenceChanged().observe(viewLifecycleOwner) {
+            if (it) {
+                adapter.notifyDataSetChanged()
             }
         }
 

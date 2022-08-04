@@ -3,6 +3,7 @@ package com.weatherxm.ui.home.profile
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.User
 import com.weatherxm.usecases.UserUseCase
@@ -33,7 +34,7 @@ class ProfileViewModel : ViewModel(), KoinComponent {
             .map {
                 user.postValue(Resource.success(it))
             }.mapLeft {
-                user.postValue(Resource.error(it.getDefaultMessage()))
+                user.postValue(Resource.error(it.getDefaultMessage(R.string.error_reach_out_short)))
             }
     }
 

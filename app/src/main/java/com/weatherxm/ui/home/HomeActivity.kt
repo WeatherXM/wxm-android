@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
@@ -50,6 +51,11 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val navController = findNavController(R.id.nav_host_fragment)
+
+        // Setup navigation view
+        binding.navView.setupWithNavController(navController)
+
         explorerModel.onHexSelected().observe(this) {
             navigator.showPublicDevicesList(supportFragmentManager)
         }
@@ -62,6 +68,11 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             Timber.d("Status updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
+                    if (navController.currentDestination?.id == R.id.navigation_explorer) {
+                        binding.devicesCount.text =
+                            getString(R.string.devices_count, resource.data?.totalDevices)
+                        binding.devicesCountCard.visibility = View.VISIBLE
+                    }
                     snackbar?.dismiss()
                 }
                 Status.ERROR -> {
@@ -84,19 +95,23 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
-        val navController = findNavController(R.id.nav_host_fragment)
-
-        // Setup navigation view
-        binding.navView.setupWithNavController(navController)
-
-        // Show/hide FAB based on selected navigation item and dismiss snackbar if shown
+        /*
+         * Show/hide FAB and devices count label
+         * based on selected navigation item and dismiss snackbar if shown
+         */
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (snackbar?.isShown == true) {
                 snackbar?.dismiss()
             }
             when (destination.id) {
-                R.id.navigation_devices -> binding.addDevice.showIfNot()
-                else -> binding.addDevice.hideIfNot()
+                R.id.navigation_devices -> {
+                    binding.addDevice.showIfNot()
+                    binding.devicesCountCard.visibility = View.GONE
+                }
+                else -> {
+                    binding.addDevice.hideIfNot()
+                    binding.devicesCountCard.visibility = View.GONE
+                }
             }
         }
 
@@ -114,6 +129,12 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             type(navigationBars = true) {
                 padding(horizontal = false, vertical = false)
                 margin(bottom = true)
+            }
+        }
+
+        binding.devicesCountCard.applyInsetter {
+            type(statusBars = true) {
+                margin(left = false, top = true, right = false, bottom = false)
             }
         }
 

@@ -43,7 +43,7 @@ class WeatherCardView : LinearLayout, KoinComponent {
         gravity = Gravity.CENTER
     }
 
-    private fun updateCurrentWeatherUI(decimalsOnTemp: Int, tz: String?) {
+    fun updateCurrentWeatherUI(decimalsOnTemp: Int, tz: String?) {
         with(binding) {
             icon.setAnimation(Weather.getWeatherAnimation(weatherData?.icon))
             icon.playAnimation()

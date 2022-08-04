@@ -25,7 +25,7 @@ import dev.chrisbanes.insetter.applyInsetter
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import java.util.Locale
+import java.util.*
 
 class ExplorerActivity : AppCompatActivity(), KoinComponent, OnMapDebugInfoListener {
 
@@ -48,14 +48,19 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent, OnMapDebugInfoListe
             Timber.d("Status updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
+                    binding.devicesCount.text =
+                        getString(R.string.devices_count, resource.data?.totalDevices)
+                    binding.devicesCountCard.visibility = VISIBLE
                     snackbar?.dismiss()
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
                     resource.message?.let { showErrorOnMapLoading(it) }
+                    binding.devicesCountCard.visibility = GONE
                 }
                 Status.LOADING -> {
                     snackbar?.dismiss()
+                    binding.devicesCountCard.visibility = GONE
                 }
             }
         }
@@ -71,10 +76,10 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent, OnMapDebugInfoListe
         model.showMapOverlayViews().observe(this) { shouldShow ->
             if (shouldShow) {
                 binding.appBar.show(SlideInFromTop)
-                binding.loginSignupView.show(SlideInFromBottom)
+                binding.overlayContainer.show(SlideInFromBottom)
             } else {
                 binding.appBar.hide(SlideOutToTop)
-                binding.loginSignupView.hide(SlideOutToBottom)
+                binding.overlayContainer.hide(SlideOutToBottom)
             }
         }
 
@@ -123,7 +128,7 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent, OnMapDebugInfoListe
             }
         }
 
-        binding.loginSignupView.applyInsetter {
+        binding.overlayContainer.applyInsetter {
             type(navigationBars = true) {
                 margin(left = false, top = false, right = false, bottom = true)
             }
