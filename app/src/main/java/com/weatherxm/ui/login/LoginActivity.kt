@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
         binding.root.applyInsets()
 
         binding.toolbar.setNavigationOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.username.onTextChanged {

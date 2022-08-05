@@ -27,7 +27,7 @@ class ResetPasswordActivity : AppCompatActivity(), KoinComponent {
         binding.root.applyInsets()
 
         binding.toolbar.setNavigationOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
         binding.email.onTextChanged {
             binding.emailContainer.error = null

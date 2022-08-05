@@ -2,6 +2,7 @@ package com.weatherxm.ui.updateprompt
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
@@ -27,6 +28,14 @@ class UpdatePromptActivity : AppCompatActivity(), KoinComponent {
 
         binding.toolbar.setNavigationOnClickListener {
             model.checkIfLoggedIn()
+        }
+
+        onBackPressedDispatcher.addCallback {
+            if (model.isUpdateMandatory()) {
+                finish()
+            } else {
+                model.checkIfLoggedIn()
+            }
         }
 
         binding.updateDescription.setHtml(R.string.desc_update_prompt)
@@ -57,13 +66,5 @@ class UpdatePromptActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.changelog.text = model.getChangelog()
-    }
-
-    override fun onBackPressed() {
-        if (model.isUpdateMandatory()) {
-            super.onBackPressed()
-        } else {
-            model.checkIfLoggedIn()
-        }
     }
 }
