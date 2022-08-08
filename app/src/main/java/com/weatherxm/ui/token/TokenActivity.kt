@@ -39,7 +39,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
         binding.root.applyInsets()
 
         binding.toolbar.setNavigationOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         val device = intent?.extras?.getParcelable<Device>(ARG_DEVICE)

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
@@ -53,7 +54,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         onBackGoHome = intent?.extras?.getBoolean(ARG_ON_BACK_GO_HOME) ?: false
 
         binding.toolbar.setNavigationOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.newAddressContainer.setEndIconOnClickListener {
@@ -125,14 +126,14 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         model.isAddressSaved().observe(this) { result ->
             onAddressSaved(result)
         }
-    }
 
-    override fun onBackPressed() {
-        if (onBackGoHome) {
-            navigator.showHome(this)
-            finish()
-        } else {
-            super.onBackPressed()
+        onBackPressedDispatcher.addCallback {
+            if (onBackGoHome) {
+                navigator.showHome(this@ConnectWalletActivity)
+                finish()
+            } else {
+                finish()
+            }
         }
     }
 

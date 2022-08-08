@@ -73,7 +73,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         binding.dateTabs.addOnTabSelectedListener(onForecastDateSelectedListener)
 
         binding.toolbar.setNavigationOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.swiperefresh.setOnRefreshListener {
@@ -95,7 +95,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
 
         binding.tokenNotice.setHtml(R.string.device_detail_token_notice)
 
-        // onCreate was too big. Handle the initialization of the observers in a seperate function
+        // onCreate was too big. Handle the initialization of the observers in a separate function
         initObservers()
 
         // Fetch data

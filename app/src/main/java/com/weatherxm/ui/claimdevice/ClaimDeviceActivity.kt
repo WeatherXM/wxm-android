@@ -5,6 +5,7 @@ import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -60,12 +61,28 @@ class ClaimDeviceActivity : FragmentActivity() {
         binding.pagerIndicator.dotsClickable = false
 
         binding.prevBtn.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.toolbar.setNavigationOnClickListener {
-            super.onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
             finish()
+        }
+
+        onBackPressedDispatcher.addCallback {
+            when (binding.pager.currentItem) {
+                PAGE_INFORMATION, PAGE_RESULT -> {
+                    // If the user is currently looking at the first
+                    // or the final step (although only on failure on the final step this code runs)
+                    // go back to home and finish this activity
+                    finish()
+                }
+                else -> {
+                    // Otherwise, select the previous step.
+                    binding.pager.currentItem = binding.pager.currentItem - 1
+                }
+            }
+            updateUI()
         }
 
         model.fetchUserEmail()
@@ -96,23 +113,6 @@ class ClaimDeviceActivity : FragmentActivity() {
                     }
                 }
             )
-        }
-        updateUI()
-    }
-
-    override fun onBackPressed() {
-        when (binding.pager.currentItem) {
-            PAGE_INFORMATION, PAGE_RESULT -> {
-                // If the user is currently looking at the first
-                // or the final step (although only on failure on the final step this code runs)
-                // go back to home and finish this activity
-                super.onBackPressed()
-                finish()
-            }
-            else -> {
-                // Otherwise, select the previous step.
-                binding.pager.currentItem = binding.pager.currentItem - 1
-            }
         }
         updateUI()
     }
