@@ -103,7 +103,7 @@
     <string name="button_24h">24H</string>
     <string name="button_7d">7D</string>
     <string name="button_30d">30D</string>
-    <string name="all">All</string>
+    <string name="total">total</string>
     <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after WXM mainnet token launch. Actual rewards may differ from the ones you see in the chart above.]]></string>
     <string name="wxm_amount">%s WXM</string>
     <string name="reward">+ %s WXM</string>

@@ -153,6 +153,7 @@ class ClaimDeviceActivity : FragmentActivity() {
 
         override fun getItemCount(): Int = PAGE_COUNT
 
+        @Suppress("UseCheckOrError")
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 PAGE_INFORMATION -> ClaimDeviceInformationFragment()
