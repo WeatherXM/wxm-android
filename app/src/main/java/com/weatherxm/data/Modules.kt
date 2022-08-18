@@ -125,8 +125,7 @@ private const val PREFERENCES_CREDENTIALS = "PREFERENCES_CREDENTIALS"
 private const val PREFERENCES_CREDENTIALS_FILE = "credentials"
 private const val NETWORK_CACHE_SIZE = 50L * 1024L * 1024L // 50MB
 
-// TODO: Revert it to 30L when the fetching of the public devices is fixed (aka taking <30 seconds)
-private const val CONNECT_TIMEOUT = 60L
+private const val CONNECT_TIMEOUT = 30L
 private const val READ_TIMEOUT = 30L
 private const val WRITE_TIMEOUT = 60L
 private const val FIREBASE_CONFIG_FETCH_INTERVAL_DEBUG = 30L

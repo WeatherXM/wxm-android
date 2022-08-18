@@ -19,6 +19,22 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
+        val openDocumentationButton: Preference? =
+            findPreference(getString(R.string.title_open_documentation))
+        val contactSupportButton: Preference? =
+            findPreference(getString(R.string.title_contact_support))
+
+        openDocumentationButton?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                navigator.openWebsite(context, getString(R.string.documentation_url))
+                true
+            }
+        contactSupportButton?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                navigator.sendSupportEmail(context)
+                true
+            }
+
         model.isLoggedIn().observe(this) { result ->
             result
                 .mapLeft {
@@ -33,27 +49,14 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
                         findPreference(getString(R.string.action_logout))
                     val resetPassButton: Preference? =
                         findPreference(getString(R.string.change_password))
-                    val openDocumentationButton: Preference? =
-                        findPreference(getString(R.string.title_open_documentation))
-                    val contactSupportButton: Preference? =
-                        findPreference(getString(R.string.title_contact_support))
-                    logoutButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        showLogoutDialog()
-                        true
-                    }
+                    logoutButton?.onPreferenceClickListener =
+                        Preference.OnPreferenceClickListener {
+                            showLogoutDialog()
+                            true
+                        }
                     resetPassButton?.onPreferenceClickListener =
                         Preference.OnPreferenceClickListener {
                             navigator.showResetPassword(this)
-                            true
-                        }
-                    openDocumentationButton?.onPreferenceClickListener =
-                        Preference.OnPreferenceClickListener {
-                            navigator.openWebsite(context, getString(R.string.documentation_url))
-                            true
-                        }
-                    contactSupportButton?.onPreferenceClickListener =
-                        Preference.OnPreferenceClickListener {
-                            navigator.sendSupportEmail(context)
                             true
                         }
                 }
