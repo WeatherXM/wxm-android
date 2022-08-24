@@ -3,6 +3,7 @@ package com.weatherxm.data
 import android.content.SharedPreferences
 import android.text.format.DateFormat
 import androidx.preference.PreferenceManager
+import androidx.room.Room
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionScheme
 import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme
@@ -23,6 +24,9 @@ import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
+import com.weatherxm.data.database.AppDatabase
+import com.weatherxm.data.database.DatabaseConverters
+import com.weatherxm.data.database.dao.DeviceHistoryDao
 import com.weatherxm.data.datasource.AppConfigDataSource
 import com.weatherxm.data.datasource.AppConfigDataSourceImpl
 import com.weatherxm.data.datasource.AuthDataSource
@@ -33,6 +37,7 @@ import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.CredentialsDataSource
 import com.weatherxm.data.datasource.CredentialsDataSourceImpl
+import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
 import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
 import com.weatherxm.data.datasource.ExplorerDataSource
@@ -42,6 +47,7 @@ import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
+import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
 import com.weatherxm.data.datasource.SharedPreferencesDataSource
 import com.weatherxm.data.datasource.SharedPreferencesDataSourceImpl
 import com.weatherxm.data.datasource.StorageAddressDataSource
@@ -72,8 +78,10 @@ import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.data.repository.UserRepositoryImpl
 import com.weatherxm.data.repository.WalletRepository
 import com.weatherxm.data.repository.WalletRepositoryImpl
-import com.weatherxm.data.repository.WeatherRepository
-import com.weatherxm.data.repository.WeatherRepositoryImpl
+import com.weatherxm.data.repository.WeatherForecastRepository
+import com.weatherxm.data.repository.WeatherForecastRepositoryImpl
+import com.weatherxm.data.repository.WeatherHistoryRepository
+import com.weatherxm.data.repository.WeatherHistoryRepositoryImpl
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.UIHexJsonAdapter
 import com.weatherxm.usecases.AuthUseCase
@@ -108,11 +116,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 const val RETROFIT_API = "RETROFIT_API"
 const val RETROFIT_AUTH = "RETROFIT_AUTH"
+const val APP_DATABASE_NAME = "WEATHERXM"
 
 const val HOUR_FORMAT_24H = "HH:mm"
 const val HOUR_FORMAT_12H_FULL = "h:mm a"
@@ -167,6 +176,14 @@ private val preferences = module {
 private val datasources = module {
     single<LocationDataSource> {
         LocationDataSourceImpl(get())
+    }
+
+    single<NetworkWeatherHistoryDataSource> {
+        NetworkWeatherHistoryDataSource(get())
+    }
+
+    single<DatabaseWeatherHistoryDataSource> {
+        DatabaseWeatherHistoryDataSource(get())
     }
 
     single<NetworkUserDataSource> {
@@ -252,8 +269,11 @@ private val repositories = module {
     single<TokenRepository> {
         TokenRepositoryImpl(get())
     }
-    single<WeatherRepository> {
-        WeatherRepositoryImpl(get(), get())
+    single<WeatherForecastRepository> {
+        WeatherForecastRepositoryImpl(get(), get())
+    }
+    single<WeatherHistoryRepository> {
+        WeatherHistoryRepositoryImpl(get(), get())
     }
     single<AppConfigRepository> {
         AppConfigRepositoryImpl(get())
@@ -403,6 +423,18 @@ val resourcesHelper = module {
     }
 }
 
+val database = module {
+    single<AppDatabase> {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, APP_DATABASE_NAME)
+            .addTypeConverter(DatabaseConverters())
+            .build()
+    }
+    single<DeviceHistoryDao> {
+        val database = get<AppDatabase>()
+        database.deviceHistoryDao()
+    }
+}
+
 private val utilities = module {
     single<Moshi> {
         Moshi.Builder()
@@ -456,5 +488,6 @@ val modules = listOf(
     resourcesHelper,
     firebase,
     apiServiceModule,
+    database,
     utilities
 )

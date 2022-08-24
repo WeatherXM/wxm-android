@@ -10,7 +10,7 @@ import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
-import com.weatherxm.data.repository.WeatherRepositoryImpl.Companion.PREFETCH_DAYS
+import com.weatherxm.data.repository.WeatherForecastRepositoryImpl.Companion.PREFETCH_DAYS
 import com.weatherxm.ui.DailyForecast
 import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.util.DateTimeHelper.getNowInTimezone

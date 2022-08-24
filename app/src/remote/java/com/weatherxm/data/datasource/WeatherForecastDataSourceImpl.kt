@@ -9,27 +9,8 @@ import com.weatherxm.data.map
 import com.weatherxm.data.network.ApiService
 import java.util.concurrent.TimeUnit
 
-interface WeatherDataSource {
-    suspend fun getForecast(
-        deviceId: String,
-        fromDate: String,
-        toDate: String,
-        exclude: String? = null
-    ): Either<Failure, List<WeatherData>>
-
-    suspend fun setForecast(deviceId: String, forecast: List<WeatherData>)
-
-    suspend fun clear()
-
-    suspend fun getWeatherHistory(
-        deviceId: String,
-        fromDate: String,
-        toDate: String,
-        exclude: String?
-    ): Either<Failure, List<WeatherData>>
-}
-
-class NetworkWeatherDataSource(private val apiService: ApiService) : WeatherDataSource {
+class NetworkWeatherForecastDataSource(private val apiService: ApiService) :
+    WeatherForecastDataSource {
 
     override suspend fun getForecast(
         deviceId: String,
@@ -47,21 +28,12 @@ class NetworkWeatherDataSource(private val apiService: ApiService) : WeatherData
     override suspend fun clear() {
         // No-op
     }
-
-    override suspend fun getWeatherHistory(
-        deviceId: String,
-        fromDate: String,
-        toDate: String,
-        exclude: String?
-    ): Either<Failure, List<WeatherData>> {
-        return apiService.getWeatherHistory(deviceId, fromDate, toDate, exclude).map()
-    }
 }
 
 /**
  * In-memory user cache. Could be expanded to use SharedPreferences or a different cache.
  */
-class CacheWeatherDataSource : WeatherDataSource {
+class CacheWeatherForecastDataSource : WeatherForecastDataSource {
 
     private var forecasts: ArrayMap<String, TimedForecastData> = ArrayMap()
 
@@ -83,15 +55,6 @@ class CacheWeatherDataSource : WeatherDataSource {
 
     override suspend fun clear() {
         this.forecasts.clear()
-    }
-
-    override suspend fun getWeatherHistory(
-        deviceId: String,
-        fromDate: String,
-        toDate: String,
-        exclude: String?
-    ): Either<Failure, List<WeatherData>> {
-        TODO("Not yet implemented. Probably not using cache after all on History.")
     }
 
     data class TimedForecastData(

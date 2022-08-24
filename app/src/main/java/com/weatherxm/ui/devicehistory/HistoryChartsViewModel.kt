@@ -21,6 +21,7 @@ import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getLast7Days
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -59,9 +60,9 @@ class HistoryChartsViewModel : ViewModel(), KoinComponent {
     fun getWeatherHistory(device: Device, context: Context, isSwipeRefresh: Boolean = false) {
         onCharts.postValue(Resource.loading())
 
-        viewModelScope.launch {
-            val fromDate = getFormattedDate(ZonedDateTime.now().minusDays(DAYS_TO_FETCH))
-            val toDate = getFormattedDate(ZonedDateTime.now())
+        viewModelScope.launch(Dispatchers.IO) {
+            val fromDate = getFormattedDate(ZonedDateTime.now().minusDays(DAYS_TO_FETCH).toString())
+            val toDate = getFormattedDate(ZonedDateTime.now().toString())
             historyUseCase.getWeatherHistory(device, fromDate, toDate, context)
                 .map { historyCharts ->
                     Timber.d("Got History Charts: $historyCharts")

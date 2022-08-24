@@ -6,7 +6,7 @@ import com.weatherxm.data.User
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.data.repository.WalletRepository
-import com.weatherxm.data.repository.WeatherRepository
+import com.weatherxm.data.repository.WeatherForecastRepository
 
 interface AuthUseCase {
     suspend fun login(username: String, password: String): Either<Failure, String>
@@ -25,7 +25,7 @@ interface AuthUseCase {
 class AuthUseCaseImpl(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository,
-    private val weatherRepository: WeatherRepository,
+    private val weatherForecastRepository: WeatherForecastRepository,
     private val walletRepository: WalletRepository
 ) : AuthUseCase {
 
@@ -56,7 +56,7 @@ class AuthUseCaseImpl(
     override suspend fun logout() {
         authRepository.logout()
         userRepository.clearCache()
-        weatherRepository.clearCache()
+        weatherForecastRepository.clearCache()
         walletRepository.clearCache()
     }
 }

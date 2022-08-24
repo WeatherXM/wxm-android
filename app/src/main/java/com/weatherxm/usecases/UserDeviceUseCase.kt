@@ -10,7 +10,7 @@ import com.weatherxm.data.UserActionError
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.SharedPreferencesRepository
 import com.weatherxm.data.repository.TokenRepository
-import com.weatherxm.data.repository.WeatherRepository
+import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.TokenInfo
 import com.weatherxm.ui.TokenValuesChart
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
-import java.util.*
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 interface UserDeviceUseCase {
@@ -49,7 +49,7 @@ interface UserDeviceUseCase {
 class UserDeviceUseCaseImpl(
     private val deviceRepository: DeviceRepository,
     private val tokenRepository: TokenRepository,
-    private val weatherRepository: WeatherRepository,
+    private val weatherForecastRepository: WeatherForecastRepository,
     private val preferencesRepository: SharedPreferencesRepository
 ) : UserDeviceUseCase {
 
@@ -190,19 +190,17 @@ class UserDeviceUseCaseImpl(
         val today = getFormattedDate(now)
         val tomorrow = getFormattedDate(now.plusDays(1))
 
-        return weatherRepository.getDeviceForecast(device.id, now, now.plusDays(1), forceRefresh)
-            .map { response ->
-                val hourlyForecastToReturn = mutableListOf<HourlyWeather>()
-                hourlyForecastToReturn.apply {
-                    response.forEach {
-                        if (it.date.equals(today) || it.date.equals(tomorrow)) {
-                            it.hourly?.let { hourlyForecast ->
-                                this.addAll(hourlyForecast)
-                            }
-                        }
-                    }
-                }
-            }
+        return weatherForecastRepository.getDeviceForecast(
+            device.id,
+            now,
+            now.plusDays(1),
+            forceRefresh
+        ).map { response ->
+            response
+                .filter { it.date.equals(today) || it.date.equals(tomorrow) }
+                .mapNotNull { it.hourly }
+                .flatten()
+        }
     }
 
     override suspend fun setFriendlyName(
