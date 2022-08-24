@@ -96,6 +96,8 @@ import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.usecases.ForecastUseCaseImpl
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
+import com.weatherxm.usecases.StartupUseCase
+import com.weatherxm.usecases.StartupUseCaseImpl
 import com.weatherxm.usecases.TokenUseCase
 import com.weatherxm.usecases.TokenUseCaseImpl
 import com.weatherxm.usecases.UserDeviceUseCase
@@ -284,6 +286,9 @@ private val repositories = module {
 }
 
 private val usecases = module {
+    single<StartupUseCase> {
+        StartupUseCaseImpl(get(), get())
+    }
     single<ExplorerUseCase> {
         ExplorerUseCaseImpl(get(), get(), get(), get())
     }
@@ -404,6 +409,7 @@ val firebase = module {
                     }
                 }
             )
+            fetchAndActivate()
         }
     }
     single<FirebaseCrashlytics> {

@@ -38,10 +38,13 @@
         <item name="tabStyle">@style/Widget.WeatherXM.TabLayout</item>
     </style>
 
-    <style name="Theme.WeatherXM.Splash">
-        <item name="android:windowBackground">@drawable/splash_background</item>
+    <style name="Theme.WeatherXM.Startup" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/background_color</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_background</item>
+        <item name="windowSplashScreenAnimationDuration">500</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
+        <item name="postSplashScreenTheme">@style/Theme.WeatherXM</item>
     </style>
 
     <style name="Theme.WeatherXM.Forecast" parent="@style/Theme.WeatherXM">
