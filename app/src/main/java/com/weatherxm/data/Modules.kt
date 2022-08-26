@@ -96,6 +96,10 @@ import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.usecases.ForecastUseCaseImpl
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
+import com.weatherxm.usecases.PreferencesUseCase
+import com.weatherxm.usecases.PreferencesUseCaseImpl
+import com.weatherxm.usecases.SendFeedbackUseCase
+import com.weatherxm.usecases.SendFeedbackUseCaseImpl
 import com.weatherxm.usecases.StartupUseCase
 import com.weatherxm.usecases.StartupUseCaseImpl
 import com.weatherxm.usecases.TokenUseCase
@@ -257,7 +261,7 @@ private val repositories = module {
         LocationRepositoryImpl(get())
     }
     single<UserRepository> {
-        UserRepositoryImpl(get(), get())
+        UserRepositoryImpl(get(), get(), get())
     }
     single<WalletRepository> {
         WalletRepositoryImpl(get(), get())
@@ -308,13 +312,19 @@ private val usecases = module {
         TokenUseCaseImpl(get(), get())
     }
     single<AuthUseCase> {
-        AuthUseCaseImpl(get(), get(), get(), get())
+        AuthUseCaseImpl(get(), get())
     }
     single<UserUseCase> {
         UserUseCaseImpl(get(), get())
     }
     single<ConnectWalletUseCase> {
         ConnectWalletUseCaseImpl(get())
+    }
+    single<PreferencesUseCase> {
+        PreferencesUseCaseImpl(get(), get(), get(), get())
+    }
+    single<SendFeedbackUseCase> {
+        SendFeedbackUseCaseImpl(get(), get())
     }
 }
 

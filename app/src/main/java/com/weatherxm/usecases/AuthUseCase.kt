@@ -5,8 +5,6 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.User
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.UserRepository
-import com.weatherxm.data.repository.WalletRepository
-import com.weatherxm.data.repository.WeatherForecastRepository
 
 interface AuthUseCase {
     suspend fun login(username: String, password: String): Either<Failure, String>
@@ -19,14 +17,11 @@ interface AuthUseCase {
 
     suspend fun resetPassword(email: String): Either<Failure, Unit>
     suspend fun isLoggedIn(): Either<Error, String>
-    suspend fun logout()
 }
 
 class AuthUseCaseImpl(
     private val authRepository: AuthRepository,
-    private val userRepository: UserRepository,
-    private val weatherForecastRepository: WeatherForecastRepository,
-    private val walletRepository: WalletRepository
+    private val userRepository: UserRepository
 ) : AuthUseCase {
 
     override suspend fun isLoggedIn(): Either<Error, String> {
@@ -51,12 +46,5 @@ class AuthUseCaseImpl(
 
     override suspend fun resetPassword(email: String): Either<Failure, Unit> {
         return authRepository.resetPassword(email)
-    }
-
-    override suspend fun logout() {
-        authRepository.logout()
-        userRepository.clearCache()
-        weatherForecastRepository.clearCache()
-        walletRepository.clearCache()
     }
 }

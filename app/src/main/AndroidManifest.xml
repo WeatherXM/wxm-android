@@ -114,6 +114,10 @@
             android:name="com.weatherxm.ui.updateprompt.UpdatePromptActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.sendfeedback.SendFeedbackActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
 
         <!-- Services -->
         <service

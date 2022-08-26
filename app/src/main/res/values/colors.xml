@@ -18,6 +18,7 @@
     <color name="dark_blue">#454A75</color>
     <color name="off_white">#EEEEEE</color>
     <color name="white_blue">#F0F4FF</color>
+    <color name="blue_tint">#E4F1FD</color>
 
     <color name="success">#00e676</color>
     <color name="error">#ff1744</color>

@@ -22,6 +22,7 @@ import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.publicdevicedetail.PublicDeviceDetailFragment
 import com.weatherxm.ui.publicdeviceslist.PublicDevicesListFragment
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
+import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.token.TokenActivity
@@ -178,6 +179,16 @@ class Navigator {
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(TokenActivity.ARG_DEVICE, device)
         )
+    }
+
+    fun showSendFeedback(fragment: Fragment) {
+        fragment.context?.let {
+            it.startActivity(
+                Intent(
+                    it, SendFeedbackActivity::class.java
+                ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            )
+        }
     }
 
     fun sendSupportEmail(
