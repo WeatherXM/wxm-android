@@ -173,7 +173,8 @@ class ExplorerUseCaseImpl(
     @Suppress("MagicNumber")
     override suspend fun getTokenInfoLast30D(deviceId: String): Either<Failure, TokenInfo> {
         val now = getNowInTimezone()
-        val fromDateAsLocalDate = getLocalDate(now.minusDays(30).toString())
+        // Last 29 days of transactions + today = 30 days
+        val fromDateAsLocalDate = getLocalDate(now.minusDays(29).toString())
         val fromDate = fromDateAsLocalDate.toString()
         val timezone = getTimezone()
 

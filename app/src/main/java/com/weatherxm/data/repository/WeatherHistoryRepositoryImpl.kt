@@ -8,6 +8,7 @@ import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
 import com.weatherxm.util.DateTimeHelper.dateToLocalDate
 import com.weatherxm.util.DateTimeHelper.getLocalDate
 import org.koin.core.component.KoinComponent
+import java.time.ZonedDateTime
 
 class WeatherHistoryRepositoryImpl(
     private val networkSource: NetworkWeatherHistoryDataSource,
@@ -50,8 +51,16 @@ class WeatherHistoryRepositoryImpl(
             toDate,
             "daily"
         ).map { networkData ->
-            // Save the "new" days (skipping the current day) in db asynchronously
-            databaseSource.setWeatherHistory(deviceId, networkData)
+            // Save the "new" days (skipping the current day/toDate) in db asynchronously
+            networkData
+                .filter {
+                    getLocalDate(it.timestamp) != ZonedDateTime.now().toLocalDate()
+                }
+                .apply {
+                    if (isNotEmpty()) {
+                        databaseSource.setWeatherHistory(deviceId, this)
+                    }
+                }
 
             // Return a combination of saved and new data
             val dataToReturn = mutableListOf<HourlyWeather>()

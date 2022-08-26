@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
-import java.util.Date
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 interface UserDeviceUseCase {
@@ -124,7 +124,8 @@ class UserDeviceUseCaseImpl(
     @Suppress("MagicNumber")
     override suspend fun getTokenInfoLast30D(deviceId: String): Either<Failure, TokenInfo> {
         val now = getNowInTimezone()
-        val fromDateAsLocalDate = getLocalDate(now.minusDays(30).toString())
+        // Last 29 days of transactions + today = 30 days
+        val fromDateAsLocalDate = getLocalDate(now.minusDays(29).toString())
         val formattedFromDate = fromDateAsLocalDate.toString()
         val timezone = getTimezone()
 
