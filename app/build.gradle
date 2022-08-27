@@ -26,8 +26,8 @@ android {
         applicationId "com.weatherxm.app"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 17
-        versionName "3.1.5"
+        versionCode 18
+        versionName "3.1.6"
 
         // Resource value fields
         resValue("string", "mapbox_access_token", "$MAPBOX_ACCESS_TOKEN")
@@ -213,6 +213,7 @@ dependencies {
     implementation "androidx.collection:collection-ktx:1.2.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     implementation "androidx.core:core-ktx:1.8.0"
+    implementation "androidx.core:core-splashscreen:1.0.0"
     implementation "androidx.fragment:fragment-ktx:1.5.1"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
@@ -299,4 +300,8 @@ dependencies {
 
     // Page Indicator
     implementation "com.tbuonomo:dotsindicator:4.3"
+
+    // Room
+    implementation "androidx.room:room-runtime:2.4.3"
+    kapt "androidx.room:room-compiler:2.4.3"
 }

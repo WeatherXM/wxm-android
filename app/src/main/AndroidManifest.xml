@@ -42,7 +42,7 @@
             android:name="Home"
             android:exported="true"
             android:label="@string/app_name"
-            android:targetActivity="com.weatherxm.ui.splash.SplashActivity">
+            android:targetActivity="com.weatherxm.ui.startup.StartupActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -52,9 +52,9 @@
         <!-- Activities -->
 
         <activity
-            android:name="com.weatherxm.ui.splash.SplashActivity"
+            android:name="com.weatherxm.ui.startup.StartupActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM.Splash" />
+            android:theme="@style/Theme.WeatherXM.Startup" />
         <activity
             android:name="com.weatherxm.ui.explorer.ExplorerActivity"
             android:screenOrientation="portrait"
@@ -112,6 +112,10 @@
             android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.updateprompt.UpdatePromptActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.sendfeedback.SendFeedbackActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
 

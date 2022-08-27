@@ -3,6 +3,7 @@ package com.weatherxm.data
 import android.content.SharedPreferences
 import android.text.format.DateFormat
 import androidx.preference.PreferenceManager
+import androidx.room.Room
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionScheme
 import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme
@@ -23,6 +24,9 @@ import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
+import com.weatherxm.data.database.AppDatabase
+import com.weatherxm.data.database.DatabaseConverters
+import com.weatherxm.data.database.dao.DeviceHistoryDao
 import com.weatherxm.data.datasource.AppConfigDataSource
 import com.weatherxm.data.datasource.AppConfigDataSourceImpl
 import com.weatherxm.data.datasource.AuthDataSource
@@ -33,6 +37,7 @@ import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.CredentialsDataSource
 import com.weatherxm.data.datasource.CredentialsDataSourceImpl
+import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
 import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
 import com.weatherxm.data.datasource.ExplorerDataSource
@@ -42,6 +47,7 @@ import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
+import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
 import com.weatherxm.data.datasource.SharedPreferencesDataSource
 import com.weatherxm.data.datasource.SharedPreferencesDataSourceImpl
 import com.weatherxm.data.datasource.StorageAddressDataSource
@@ -72,8 +78,10 @@ import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.data.repository.UserRepositoryImpl
 import com.weatherxm.data.repository.WalletRepository
 import com.weatherxm.data.repository.WalletRepositoryImpl
-import com.weatherxm.data.repository.WeatherRepository
-import com.weatherxm.data.repository.WeatherRepositoryImpl
+import com.weatherxm.data.repository.WeatherForecastRepository
+import com.weatherxm.data.repository.WeatherForecastRepositoryImpl
+import com.weatherxm.data.repository.WeatherHistoryRepository
+import com.weatherxm.data.repository.WeatherHistoryRepositoryImpl
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.UIHexJsonAdapter
 import com.weatherxm.usecases.AuthUseCase
@@ -88,6 +96,12 @@ import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.usecases.ForecastUseCaseImpl
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
+import com.weatherxm.usecases.PreferencesUseCase
+import com.weatherxm.usecases.PreferencesUseCaseImpl
+import com.weatherxm.usecases.SendFeedbackUseCase
+import com.weatherxm.usecases.SendFeedbackUseCaseImpl
+import com.weatherxm.usecases.StartupUseCase
+import com.weatherxm.usecases.StartupUseCaseImpl
 import com.weatherxm.usecases.TokenUseCase
 import com.weatherxm.usecases.TokenUseCaseImpl
 import com.weatherxm.usecases.UserDeviceUseCase
@@ -108,11 +122,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 const val RETROFIT_API = "RETROFIT_API"
 const val RETROFIT_AUTH = "RETROFIT_AUTH"
+const val APP_DATABASE_NAME = "WEATHERXM"
 
 const val HOUR_FORMAT_24H = "HH:mm"
 const val HOUR_FORMAT_12H_FULL = "h:mm a"
@@ -125,8 +140,7 @@ private const val PREFERENCES_CREDENTIALS = "PREFERENCES_CREDENTIALS"
 private const val PREFERENCES_CREDENTIALS_FILE = "credentials"
 private const val NETWORK_CACHE_SIZE = 50L * 1024L * 1024L // 50MB
 
-// TODO: Revert it to 30L when the fetching of the public devices is fixed (aka taking <30 seconds)
-private const val CONNECT_TIMEOUT = 60L
+private const val CONNECT_TIMEOUT = 30L
 private const val READ_TIMEOUT = 30L
 private const val WRITE_TIMEOUT = 60L
 private const val FIREBASE_CONFIG_FETCH_INTERVAL_DEBUG = 30L
@@ -168,6 +182,14 @@ private val preferences = module {
 private val datasources = module {
     single<LocationDataSource> {
         LocationDataSourceImpl(get())
+    }
+
+    single<NetworkWeatherHistoryDataSource> {
+        NetworkWeatherHistoryDataSource(get())
+    }
+
+    single<DatabaseWeatherHistoryDataSource> {
+        DatabaseWeatherHistoryDataSource(get())
     }
 
     single<NetworkUserDataSource> {
@@ -239,7 +261,7 @@ private val repositories = module {
         LocationRepositoryImpl(get())
     }
     single<UserRepository> {
-        UserRepositoryImpl(get(), get())
+        UserRepositoryImpl(get(), get(), get())
     }
     single<WalletRepository> {
         WalletRepositoryImpl(get(), get())
@@ -253,8 +275,11 @@ private val repositories = module {
     single<TokenRepository> {
         TokenRepositoryImpl(get())
     }
-    single<WeatherRepository> {
-        WeatherRepositoryImpl(get(), get())
+    single<WeatherForecastRepository> {
+        WeatherForecastRepositoryImpl(get(), get())
+    }
+    single<WeatherHistoryRepository> {
+        WeatherHistoryRepositoryImpl(get(), get())
     }
     single<AppConfigRepository> {
         AppConfigRepositoryImpl(get())
@@ -265,6 +290,9 @@ private val repositories = module {
 }
 
 private val usecases = module {
+    single<StartupUseCase> {
+        StartupUseCaseImpl(get(), get())
+    }
     single<ExplorerUseCase> {
         ExplorerUseCaseImpl(get(), get(), get(), get())
     }
@@ -284,13 +312,19 @@ private val usecases = module {
         TokenUseCaseImpl(get(), get())
     }
     single<AuthUseCase> {
-        AuthUseCaseImpl(get(), get(), get(), get())
+        AuthUseCaseImpl(get(), get())
     }
     single<UserUseCase> {
         UserUseCaseImpl(get(), get())
     }
     single<ConnectWalletUseCase> {
         ConnectWalletUseCaseImpl(get())
+    }
+    single<PreferencesUseCase> {
+        PreferencesUseCaseImpl(get(), get(), get(), get())
+    }
+    single<SendFeedbackUseCase> {
+        SendFeedbackUseCaseImpl(get(), get())
     }
 }
 
@@ -385,6 +419,7 @@ val firebase = module {
                     }
                 }
             )
+            fetchAndActivate()
         }
     }
     single<FirebaseCrashlytics> {
@@ -401,6 +436,18 @@ val navigator = module {
 val resourcesHelper = module {
     single {
         ResourcesHelper(androidContext().resources)
+    }
+}
+
+val database = module {
+    single<AppDatabase> {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, APP_DATABASE_NAME)
+            .addTypeConverter(DatabaseConverters())
+            .build()
+    }
+    single<DeviceHistoryDao> {
+        val database = get<AppDatabase>()
+        database.deviceHistoryDao()
     }
 }
 
@@ -457,5 +504,6 @@ val modules = listOf(
     resourcesHelper,
     firebase,
     apiServiceModule,
+    database,
     utilities
 )

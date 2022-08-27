@@ -46,6 +46,14 @@ object DateTimeHelper : KoinComponent {
         return getLocalDate(zonedDateTime.toString()).toString()
     }
 
+    fun dateToLocalDate(date: String): LocalDate {
+        return LocalDate.parse(date)
+    }
+
+    fun getFormattedDate(timeInISO: String?): String {
+        return ZonedDateTime.parse(timeInISO).toLocalDate().toString()
+    }
+
     fun getRelativeDayFromISO(
         resHelper: ResourcesHelper,
         timeInISO: String,

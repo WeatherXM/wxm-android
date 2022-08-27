@@ -200,7 +200,7 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
                 null
             }
         }
-        priority?.let { it ->
+        priority?.let {
             locationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location == null) {

@@ -1,6 +1,12 @@
 package com.weatherxm.ui.preferences
 
+import android.app.Activity
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
+import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.os.Bundle
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -8,6 +14,8 @@ import androidx.preference.PreferenceFragmentCompat
 import com.weatherxm.R
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.AlertDialogFragment
+import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
@@ -16,8 +24,49 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
     private val model: PreferenceViewModel by activityViewModels()
     private val navigator: Navigator by inject()
 
+    companion object {
+        const val TAG = "PreferenceFragment"
+    }
+
+    // Register the launcher for the claim device activity and wait for a possible result
+    private val sendFeedbackLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                context.toast(getString(R.string.thank_you_feedback))
+                model.dismissSurveyPrompt()
+            }
+        }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
+
+        val openDocumentationButton: Preference? =
+            findPreference(getString(R.string.title_open_documentation))
+        val contactSupportButton: Preference? =
+            findPreference(getString(R.string.title_contact_support))
+        val userResearchButton: Preference? =
+            findPreference(getString(R.string.user_panel_title))
+        val shortWxmSurvey: Preference? =
+            findPreference(getString(R.string.short_app_survey))
+
+        userResearchButton?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                navigator.openWebsite(this.context, getString(R.string.user_panel_url))
+                true
+            }
+
+        openDocumentationButton?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                navigator.openWebsite(context, getString(R.string.documentation_url))
+                true
+            }
+        contactSupportButton?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                navigator.sendSupportEmail(context)
+                true
+            }
 
         model.isLoggedIn().observe(this) { result ->
             result
@@ -25,7 +74,9 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
                     Timber.d("Not logged in. Hide account preferences.")
                     val accountCategory: PreferenceCategory? =
                         findPreference(getString(R.string.account))
+
                     accountCategory?.isVisible = false
+                    shortWxmSurvey?.isVisible = false
                 }
                 .map {
                     Timber.d("Logged in. Handle button clicks")
@@ -33,30 +84,37 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
                         findPreference(getString(R.string.action_logout))
                     val resetPassButton: Preference? =
                         findPreference(getString(R.string.change_password))
-                    val openDocumentationButton: Preference? =
-                        findPreference(getString(R.string.title_open_documentation))
-                    val contactSupportButton: Preference? =
-                        findPreference(getString(R.string.title_contact_support))
-                    logoutButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                        showLogoutDialog()
-                        true
-                    }
+
+                    logoutButton?.onPreferenceClickListener =
+                        Preference.OnPreferenceClickListener {
+                            showLogoutDialog()
+                            true
+                        }
                     resetPassButton?.onPreferenceClickListener =
                         Preference.OnPreferenceClickListener {
                             navigator.showResetPassword(this)
                             true
                         }
-                    openDocumentationButton?.onPreferenceClickListener =
+                    shortWxmSurvey?.onPreferenceClickListener =
                         Preference.OnPreferenceClickListener {
-                            navigator.openWebsite(context, getString(R.string.documentation_url))
-                            true
-                        }
-                    contactSupportButton?.onPreferenceClickListener =
-                        Preference.OnPreferenceClickListener {
-                            navigator.sendSupportEmail(context)
+                            launchSendFeedback()
                             true
                         }
                 }
+        }
+
+        model.onShowSurveyScreen().observe(this) {
+            if (it) {
+                launchSendFeedback()
+            }
+        }
+    }
+
+    private fun launchSendFeedback() {
+        this.context?.let {
+            val intent = Intent(it, SendFeedbackActivity::class.java)
+                .addFlags(FLAG_ACTIVITY_SINGLE_TOP or FLAG_ACTIVITY_CLEAR_TOP)
+            sendFeedbackLauncher.launch(intent)
         }
     }
 

@@ -22,8 +22,9 @@ import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.publicdevicedetail.PublicDeviceDetailFragment
 import com.weatherxm.ui.publicdeviceslist.PublicDevicesListFragment
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
+import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
 import com.weatherxm.ui.signup.SignupActivity
-import com.weatherxm.ui.splash.SplashActivity
+import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.token.TokenActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.ui.userdevice.UserDeviceActivity
@@ -141,10 +142,10 @@ class Navigator {
         }
     }
 
-    fun showSplash(context: Context) {
+    fun showStartup(context: Context) {
         context.startActivity(
             Intent(
-                context, SplashActivity::class.java
+                context, StartupActivity::class.java
             ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
     }
@@ -178,6 +179,16 @@ class Navigator {
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(TokenActivity.ARG_DEVICE, device)
         )
+    }
+
+    fun showSendFeedback(fragment: Fragment) {
+        fragment.context?.let {
+            it.startActivity(
+                Intent(
+                    it, SendFeedbackActivity::class.java
+                ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            )
+        }
     }
 
     fun sendSupportEmail(

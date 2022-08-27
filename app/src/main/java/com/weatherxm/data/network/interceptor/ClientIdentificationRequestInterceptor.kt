@@ -44,6 +44,10 @@ class ClientIdentificationRequestInterceptor(val context: Context) : Interceptor
         return "${Build.MANUFACTURER} (${Build.MODEL})"
     }
 
+    fun getClientIdentifier(): String {
+        return clientIdentifier
+    }
+
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         Timber.d("Adding client identification header [$clientIdentifier]")

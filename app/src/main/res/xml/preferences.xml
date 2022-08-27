@@ -2,6 +2,39 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
+        app:key="@string/account"
+        app:title="@string/account">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/change_password"
+            app:summary="@string/request_reset_password_desc"
+            app:title="@string/change_password" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/action_logout"
+            app:summary="@string/logout_desc"
+            app:title="@string/action_logout" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:key="@string/feedback"
+        app:title="@string/feedback">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/user_panel_title"
+            app:summary="@string/user_panel_desc"
+            app:title="@string/user_panel_title" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/short_app_survey"
+            app:summary="@string/short_app_survey_desc"
+            app:title="@string/short_app_survey" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
         app:title="@string/weather_units">
         <ListPreference
             app:defaultValue="@string/temperature_celsius"
@@ -47,21 +80,6 @@
             app:key="@string/key_pressure_preference"
             app:useSimpleSummaryProvider="true"
             app:title="@string/pressure" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        app:iconSpaceReserved="false"
-        app:key="@string/account"
-        app:title="@string/account">
-        <Preference
-            app:iconSpaceReserved="false"
-            app:key="@string/change_password"
-            app:summary="@string/request_reset_password_desc"
-            app:title="@string/change_password" />
-        <Preference
-            app:iconSpaceReserved="false"
-            app:key="@string/action_logout"
-            app:title="@string/action_logout" />
     </PreferenceCategory>
 
     <PreferenceCategory

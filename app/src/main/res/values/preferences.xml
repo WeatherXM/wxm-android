@@ -6,7 +6,16 @@
     <string name="change_password">Change Password</string>
     <string name="request_reset_password_desc">Request a password reset email to change your password.</string>
     <string name="title_dialog_logout">Logout?</string>
+    <string name="logout_desc">Logout of your account</string>
     <string name="message_dialog_logout">Are you sure you want to logout?</string>
+
+    <!-- Feedback -->
+    <string name="feedback">Feedback</string>
+    <string name="user_panel_title">Join the WeatherXM User Panel</string>
+    <string name="user_panel_desc">You may join the WeatherXM user research panel, share your insights and help shape the future of  WeatherXM apps and services.</string>
+    <string name="short_app_survey">Short App Survey</string>
+    <string name="short_app_survey_prompt_desc">Your feedback matters. Tap to take a very quick survey.</string>
+    <string name="short_app_survey_desc">Share your feedback by taking the WeatherXM app quick survey. It only has 2 mandatory questions!</string>
 
     <!-- Help -->
     <string name="help">Help</string>

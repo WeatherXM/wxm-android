@@ -38,10 +38,13 @@
         <item name="tabStyle">@style/Widget.WeatherXM.TabLayout</item>
     </style>
 
-    <style name="Theme.WeatherXM.Splash">
-        <item name="android:windowBackground">@drawable/splash_background</item>
+    <style name="Theme.WeatherXM.Startup" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/background_color</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_background</item>
+        <item name="windowSplashScreenAnimationDuration">500</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
+        <item name="postSplashScreenTheme">@style/Theme.WeatherXM</item>
     </style>
 
     <style name="Theme.WeatherXM.Forecast" parent="@style/Theme.WeatherXM">
@@ -550,6 +553,15 @@
         <item name="cardBackgroundColor">@color/error</item>
     </style>
 
+    <style name="Widget.WeatherXM.MaterialCard.Survey" parent="Widget.WeatherXM.MaterialCard">
+        <item name="cardBackgroundColor">@color/blue_tint</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.MaterialCard.Survey.Title" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="TextAppearance.WeatherXM.Transaction.Date" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
@@ -595,6 +607,10 @@
     <style name="Widget.WeatherXM.ImageButton" parent="@style/Widget.Material3.MaterialTimePicker.ImageButton">
         <item name="android:background">@color/transparent</item>
         <item name="iconTint">@color/colorOnPrimary</item>
+    </style>
+
+    <style name="Widget.WeatherXM.ImageButton.InfoCard" parent="@style/Widget.Material3.MaterialTimePicker.ImageButton">
+        <item name="android:background">@color/transparent</item>
     </style>
 
     <style name="Widget.WeatherXM.OverlayCard.Error" parent="Widget.WeatherXM.MaterialCard.Small">

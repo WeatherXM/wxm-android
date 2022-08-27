@@ -103,7 +103,7 @@
     <string name="button_24h">24H</string>
     <string name="button_7d">7D</string>
     <string name="button_30d">30D</string>
-    <string name="all">All</string>
+    <string name="total">total</string>
     <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after WXM mainnet token launch. Actual rewards may differ from the ones you see in the chart above.]]></string>
     <string name="wxm_amount">%s WXM</string>
     <string name="reward">+ %s WXM</string>
@@ -143,4 +143,7 @@
     <string name="edit_name_helper_text">This friendly name is private. It will be visible only to you when you are logged in.</string>
     <string name="edit_name_hint">Enter a new friendly name</string>
 
+    <!-- Feedback -->
+    <string name="send_feedback">Short App Survey</string>
+    <string name="thank_you_feedback">Thank you for your feedback!</string>
 </resources>

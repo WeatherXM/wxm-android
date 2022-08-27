@@ -1,5 +1,6 @@
 package com.weatherxm.data.datasource
 
+import androidx.collection.ArrayMap
 import arrow.core.Either
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
@@ -7,33 +8,13 @@ import com.weatherxm.data.WeatherData
 import com.weatherxm.data.map
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
-import androidx.collection.ArrayMap
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 
-interface WeatherDataSource {
-    suspend fun getForecast(
-        deviceId: String,
-        fromDate: String,
-        toDate: String,
-        exclude: String? = null
-    ): Either<Failure, List<WeatherData>>
+class NetworkWeatherForecastDataSource(private val apiService: ApiService) :
+    WeatherForecastDataSource {
 
-    suspend fun setForecast(deviceId: String, forecast: List<WeatherData>)
-    fun clear()
-
-    suspend fun getWeatherHistory(
-        deviceId: String,
-        fromDate: String,
-        toDate: String,
-        exclude: String?
-    ): Either<Failure, List<WeatherData>>
-}
-
-class NetworkWeatherDataSource(private val apiService: ApiService) : WeatherDataSource {
-
-    // Custom fix to change the timestamps to today/tomorrow.
     override suspend fun getForecast(
         deviceId: String,
         fromDate: String,
@@ -67,24 +48,15 @@ class NetworkWeatherDataSource(private val apiService: ApiService) : WeatherData
         // No-op
     }
 
-    override fun clear() {
+    override suspend fun clear() {
         // No-op
-    }
-
-    override suspend fun getWeatherHistory(
-        deviceId: String,
-        fromDate: String,
-        toDate: String,
-        exclude: String?
-    ): Either<Failure, List<WeatherData>> {
-        return apiService.getWeatherHistory(deviceId, fromDate, toDate, exclude).map()
     }
 }
 
 /**
  * In-memory user cache. Could be expanded to use SharedPreferences or a different cache.
  */
-class CacheWeatherDataSource : WeatherDataSource {
+class CacheWeatherForecastDataSource : WeatherForecastDataSource {
 
     private var forecasts: ArrayMap<String, TimedForecastData> = ArrayMap()
 
@@ -94,30 +66,18 @@ class CacheWeatherDataSource : WeatherDataSource {
         toDate: String,
         exclude: String?
     ): Either<Failure, List<WeatherData>> {
-        return if (forecasts[deviceId]?.isExpired() == true) {
-            Either.Left(DataError.CacheExpiredError)
-        } else {
-            forecasts[deviceId]?.let { Either.Right(it.value) }
-                ?: Either.Left(DataError.CacheMissError)
-        }
-
+        return forecasts[deviceId]?.let {
+            if (it.isExpired()) Either.Left(DataError.CacheExpiredError)
+            else Either.Right(it.value)
+        } ?: Either.Left(DataError.CacheMissError)
     }
 
     override suspend fun setForecast(deviceId: String, forecast: List<WeatherData>) {
-        this.forecasts.put(deviceId, TimedForecastData(forecast))
+        this.forecasts[deviceId] = TimedForecastData(forecast)
     }
 
-    override fun clear() {
+    override suspend fun clear() {
         this.forecasts.clear()
-    }
-
-    override suspend fun getWeatherHistory(
-        deviceId: String,
-        fromDate: String,
-        toDate: String,
-        exclude: String?
-    ): Either<Failure, List<WeatherData>> {
-        TODO("Not yet implemented. Probably not using cache after all on History.")
     }
 
     data class TimedForecastData(
