@@ -11,8 +11,6 @@ import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.weatherxm.R
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
-import com.weatherxm.data.Transaction
-import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.ui.ExplorerData
@@ -25,8 +23,6 @@ import com.weatherxm.util.DateTimeHelper.getLocalDate
 import com.weatherxm.util.DateTimeHelper.getNowInTimezone
 import com.weatherxm.util.DateTimeHelper.getTimezone
 import com.weatherxm.util.ResourcesHelper
-import com.weatherxm.util.Tokens.roundTokens
-import java.time.LocalDate
 
 
 interface ExplorerUseCase {
@@ -39,11 +35,6 @@ interface ExplorerUseCase {
     suspend fun getPublicDevicesOfHex(uiHex: UIHex): Either<Failure, List<UIDevice>>
     suspend fun getPublicDevice(index: String, deviceId: String): Either<Failure, UIDevice>
     suspend fun getTokenInfoLast30D(deviceId: String): Either<Failure, TokenInfo>
-    fun createDatedTransactionsList(
-        fromDate: LocalDate,
-        timezone: String,
-        transactions: List<Transaction>
-    ): List<Pair<String, Float>>
 }
 
 class ExplorerUseCaseImpl(
@@ -114,45 +105,6 @@ class ExplorerUseCaseImpl(
         return explorerRepository.getPublicDevice(index, deviceId).map {
             it.toUIDevice()
         }
-    }
-
-    override fun createDatedTransactionsList(
-        fromDate: LocalDate,
-        timezone: String,
-        transactions: List<Transaction>
-    ): List<Pair<String, Float>> {
-        val datesAndTxs = mutableMapOf<LocalDate, Float>()
-        val lastMonthDates = mutableListOf<LocalDate>()
-        var nowDate = LocalDate.now()
-
-        // Create a list of dates, and a map of dates and transactions from latest -> earliest
-        while (!nowDate.isBefore(fromDate)) {
-            lastMonthDates.add(nowDate)
-            datesAndTxs[nowDate] = VERY_SMALL_NUMBER_FOR_CHART
-            nowDate = nowDate.minusDays(1)
-        }
-
-        transactions
-            .filter { it.actualReward != null && it.actualReward > 0.0F }
-            .map { tx ->
-                /*
-                * We need to round this number as we use it further for getting the max in a range
-                * And we show that max rounded. Small differences occur if we don't round it.
-                * example: https://github.com/WeatherXM/issue-tracker/issues/97
-                 */
-                tx.actualReward?.let {
-                    val date = getLocalDate(tx.timestamp)
-                    val amountForDate = datesAndTxs.getOrDefault(date, 0.0F)
-
-                    datesAndTxs[date] = amountForDate + roundTokens(it)
-                }
-            }
-
-        val datedTransactions = lastMonthDates.map {
-            Pair(it.toString(), datesAndTxs.getOrDefault(it, VERY_SMALL_NUMBER_FOR_CHART))
-        }
-
-        return datedTransactions
     }
 
     // We suppress magic number because we use specific numbers to check last month and last week
