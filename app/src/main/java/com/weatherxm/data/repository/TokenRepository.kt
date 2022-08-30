@@ -2,9 +2,15 @@ package com.weatherxm.data.repository
 
 import arrow.core.Either
 import com.weatherxm.data.Failure
+import com.weatherxm.data.LastAndDatedTxs
 import com.weatherxm.data.Transaction
+import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.data.TransactionsResponse
 import com.weatherxm.data.datasource.TokenDataSource
+import com.weatherxm.util.DateTimeHelper
+import com.weatherxm.util.DateTimeHelper.dateToLocalDate
+import com.weatherxm.util.Tokens.roundTokens
+import java.time.LocalDate
 
 interface TokenRepository {
     suspend fun getTransactions(
@@ -20,14 +26,14 @@ interface TokenRepository {
         timezone: String?,
         fromDate: String?,
         toDate: String? = null
-    ): Either<Failure, List<Transaction>>
+    ): Either<Failure, LastAndDatedTxs>
 
     suspend fun getAllPublicTransactionsInRange(
         deviceId: String,
         timezone: String?,
         fromDate: String?,
         toDate: String? = null
-    ): Either<Failure, List<Transaction>>
+    ): Either<Failure, LastAndDatedTxs>
 }
 
 class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenRepository {
@@ -56,7 +62,7 @@ class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenR
         timezone: String?,
         fromDate: String?,
         toDate: String?
-    ): Either<Failure, List<Transaction>> {
+    ): Either<Failure, LastAndDatedTxs> {
         val txs = mutableListOf<Transaction>()
         /*
         * The recursion should start from page = 0 until it reaches the last page
@@ -72,7 +78,7 @@ class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenR
         timezone: String?,
         fromDate: String?,
         toDate: String?
-    ): Either<Failure, List<Transaction>> {
+    ): Either<Failure, LastAndDatedTxs> {
         val txs = mutableListOf<Transaction>()
         /*
         * The recursion should start from page = 0 until it reaches the last page
@@ -92,7 +98,7 @@ class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenR
         timezone: String?,
         fromDate: String?,
         toDate: String?
-    ): Either<Failure, List<Transaction>> {
+    ): Either<Failure, LastAndDatedTxs> {
         val resp =
             tokenDataSource.getTransactions(deviceId, page, pageSize, timezone, fromDate, toDate)
         resp
@@ -112,7 +118,10 @@ class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenR
                     getTxsRecursively(txs, deviceId, newPage, pageSize, timezone, fromDate, toDate)
                 }
             }
-        return Either.Right(txs)
+
+        val lastReward = if (txs.isNotEmpty()) txs[0] else null
+        val datedTxs = createDatedTransactionsList(dateToLocalDate(fromDate), txs)
+        return Either.Right(LastAndDatedTxs(lastReward, datedTxs))
     }
 
     @Suppress("LongParameterList")
@@ -124,7 +133,7 @@ class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenR
         timezone: String?,
         fromDate: String?,
         toDate: String?
-    ): Either<Failure, List<Transaction>> {
+    ): Either<Failure, LastAndDatedTxs> {
         val resp = tokenDataSource.getPublicTransactions(
             deviceId,
             page,
@@ -147,9 +156,59 @@ class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenR
                     }
 
                     // Keep getting the TXs recursively
-                    getTxsRecursively(txs, deviceId, newPage, pageSize, timezone, fromDate, toDate)
+                    getPublicTxsRecursively(
+                        txs,
+                        deviceId,
+                        newPage,
+                        pageSize,
+                        timezone,
+                        fromDate,
+                        toDate
+                    )
                 }
             }
-        return Either.Right(txs)
+
+        val lastReward = if (txs.isNotEmpty()) txs[0] else null
+        val datedTxs = createDatedTransactionsList(dateToLocalDate(fromDate), txs)
+        return Either.Right(LastAndDatedTxs(lastReward, datedTxs))
+    }
+
+    private fun createDatedTransactionsList(
+        fromDate: LocalDate?,
+        transactions: List<Transaction>
+    ): List<Pair<String, Float>> {
+        val datesAndTxs = mutableMapOf<LocalDate, Float>()
+        val lastMonthDates = mutableListOf<LocalDate>()
+        var nowDate = LocalDate.now()
+
+        // Create a list of dates, and a map of dates and transactions from latest -> earliest
+        while (!nowDate.isBefore(fromDate)) {
+            lastMonthDates.add(nowDate)
+            datesAndTxs[nowDate] = VERY_SMALL_NUMBER_FOR_CHART
+            nowDate = nowDate.minusDays(1)
+        }
+
+        transactions
+            .filter { it.actualReward != null && it.actualReward > 0.0F }
+            .forEach { tx ->
+                tx.actualReward?.let {
+                    val date = DateTimeHelper.getLocalDate(tx.timestamp)
+                    val amountForDate = datesAndTxs.getOrDefault(date, 0.0F)
+
+                    /*
+                    * We need to round the tokens number
+                    * as we use it further for getting the max in a range
+                    * And we show that max rounded. Small differences occur if we don't round it.
+                    * example: https://github.com/WeatherXM/issue-tracker/issues/97
+                    */
+                    datesAndTxs[date] = amountForDate + roundTokens(it)
+                }
+            }
+
+        val datedTransactions = lastMonthDates.map {
+            Pair(it.toString(), datesAndTxs.getOrDefault(it, VERY_SMALL_NUMBER_FOR_CHART))
+        }
+
+        return datedTransactions
     }
 }

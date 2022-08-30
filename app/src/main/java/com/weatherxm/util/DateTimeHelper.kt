@@ -46,7 +46,7 @@ object DateTimeHelper : KoinComponent {
         return getLocalDate(zonedDateTime.toString()).toString()
     }
 
-    fun dateToLocalDate(date: String): LocalDate {
+    fun dateToLocalDate(date: String?): LocalDate {
         return LocalDate.parse(date)
     }
 

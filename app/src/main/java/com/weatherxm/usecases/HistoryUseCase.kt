@@ -254,7 +254,6 @@ class HistoryUseCaseImpl(
         data: List<HourlyWeather>,
         context: Context
     ): List<HistoryCharts> {
-        val charts = mutableListOf<HistoryCharts>()
 
         val datesAndData: ArrayMap<String, MutableList<HourlyWeather>> = arrayMapOf()
 
@@ -267,8 +266,8 @@ class HistoryUseCaseImpl(
             }
         }
 
-        datesAndData.forEach {
-            charts.add(createHourlyCharts(context, it.key, it.value))
+        val charts = datesAndData.map {
+            createHourlyCharts(context, it.key, it.value)
         }
 
         return charts

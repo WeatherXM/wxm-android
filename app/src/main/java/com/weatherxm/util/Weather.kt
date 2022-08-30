@@ -38,7 +38,7 @@ object Weather : KoinComponent {
             "rain" -> R.raw.anim_weather_rain
             "thunderstorms-rain" -> R.raw.anim_weather_thunderstorms_rain
             "snow" -> R.raw.anim_weather_snow
-            "sleet" -> R.raw.anim_weather_snow
+            "sleet" -> R.raw.anim_weather_sleet
             // The 3 following cases are for backward compatibility
             "wind" -> R.raw.anim_weather_wind
             "fog" -> R.raw.anim_weather_fog
