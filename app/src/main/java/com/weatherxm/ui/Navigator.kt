@@ -22,7 +22,7 @@ import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.publicdevicedetail.PublicDeviceDetailFragment
 import com.weatherxm.ui.publicdeviceslist.PublicDevicesListFragment
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
-import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
+import com.weatherxm.ui.scandevices.ScanDevicesFragment
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.token.TokenActivity
@@ -181,14 +181,9 @@ class Navigator {
         )
     }
 
-    fun showSendFeedback(fragment: Fragment) {
-        fragment.context?.let {
-            it.startActivity(
-                Intent(
-                    it, SendFeedbackActivity::class.java
-                ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            )
-        }
+    fun showScanDialog(fragmentManager: FragmentManager) {
+        val modalBottomSheet = ScanDevicesFragment()
+        modalBottomSheet.show(fragmentManager, ScanDevicesFragment.TAG)
     }
 
     fun sendSupportEmail(

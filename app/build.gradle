@@ -304,4 +304,8 @@ dependencies {
     // Room
     implementation "androidx.room:room-runtime:2.4.3"
     kapt "androidx.room:room-compiler:2.4.3"
+
+    // BLE Scanning and Communication
+    implementation "com.juul.kable:core:0.18.0"
+    implementation "no.nordicsemi.android:dfu:2.1.0"
 }

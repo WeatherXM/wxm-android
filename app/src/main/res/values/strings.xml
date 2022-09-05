@@ -21,6 +21,8 @@
     <string name="permission_permanently_denied_title">Permission permanently denied</string>
     <string name="permission_permanently_denied_rationale">Go to the app settings to give the required permissions.</string>
     <string name="warn_cancelled">Cancelled!</string>
+    <string name="perm_location_bluetooth_title">Access to bluetooth and location?</string>
+    <string name="perm_location_bluetooth_desc">Bluetooth and location permissions are needed to be able to pair with your Weather Station.</string>
 
     <!-- Login -->
     <string name="title_login">Login</string>
@@ -113,6 +115,14 @@
     <string name="network_max_reward">Network Max</string>
     <string name="transaction_hash">Transaction hash: %s</string>
 
+    <!-- Scan Devices -->
+    <string name="select_your_device">Select your device</string>
+    <string name="select_device_desc">To claim your device, you must enable Bluetooth and allow WXM app to access it. \n\n Alternative, you can tap bellow to claim the device manually!</string>
+    <string name="claim_manually">Claim Device Manually</string>
+    <string name="device_id">Device ID: %s</string>
+    <string name="scan_again">Scan Again for Devices</string>
+    <string name="no_devices_found">No Devices Found</string>
+    <string name="no_devices_found_subtitle">Please reset your WXM device and scan again!\nOr, you can try claiming your device manually bellow</string>
 
     <!-- Claim device -->
     <string name="title_claim_device">Claim Device</string>

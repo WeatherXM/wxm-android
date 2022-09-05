@@ -213,3 +213,11 @@ data class UIDevice(
     val currentWeather: HourlyWeather?,
     var tokenInfo: TokenInfo?
 ) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class ScannedDevice(
+    val address: String,
+    val name: String?
+) : Parcelable

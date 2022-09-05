@@ -24,6 +24,9 @@ import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
+import com.weatherxm.data.bluetooth.BluetoothConnectionManager
+import com.weatherxm.data.bluetooth.BluetoothScanner
+import com.weatherxm.data.bluetooth.BluetoothUpdater
 import com.weatherxm.data.database.AppDatabase
 import com.weatherxm.data.database.DatabaseConverters
 import com.weatherxm.data.database.dao.DeviceHistoryDao
@@ -33,6 +36,8 @@ import com.weatherxm.data.datasource.AuthDataSource
 import com.weatherxm.data.datasource.AuthDataSourceImpl
 import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSourceImpl
+import com.weatherxm.data.datasource.BluetoothDataSource
+import com.weatherxm.data.datasource.BluetoothDataSourceImpl
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.CredentialsDataSource
@@ -64,6 +69,8 @@ import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AppConfigRepositoryImpl
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
+import com.weatherxm.data.repository.BluetoothRepository
+import com.weatherxm.data.repository.BluetoothRepositoryImpl
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.DeviceRepositoryImpl
 import com.weatherxm.data.repository.ExplorerRepository
@@ -86,6 +93,8 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.UIHexJsonAdapter
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.AuthUseCaseImpl
+import com.weatherxm.usecases.BluetoothConnectionUseCase
+import com.weatherxm.usecases.BluetoothConnectionUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCaseImpl
 import com.weatherxm.usecases.ConnectWalletUseCase
@@ -98,6 +107,8 @@ import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
 import com.weatherxm.usecases.PreferencesUseCase
 import com.weatherxm.usecases.PreferencesUseCaseImpl
+import com.weatherxm.usecases.ScanDevicesUseCase
+import com.weatherxm.usecases.ScanDevicesUseCaseImpl
 import com.weatherxm.usecases.SendFeedbackUseCase
 import com.weatherxm.usecases.SendFeedbackUseCaseImpl
 import com.weatherxm.usecases.StartupUseCase
@@ -251,6 +262,10 @@ private val datasources = module {
     single<SharedPreferencesDataSource> {
         SharedPreferencesDataSourceImpl(get())
     }
+
+    single<BluetoothDataSource> {
+        BluetoothDataSourceImpl(get(), get(), get())
+    }
 }
 
 private val repositories = module {
@@ -286,6 +301,9 @@ private val repositories = module {
     }
     single<SharedPreferencesRepository> {
         SharedPreferenceRepositoryImpl(get())
+    }
+    single<BluetoothRepository> {
+        BluetoothRepositoryImpl(get(), get())
     }
 }
 
@@ -325,6 +343,12 @@ private val usecases = module {
     }
     single<SendFeedbackUseCase> {
         SendFeedbackUseCaseImpl(get(), get())
+    }
+    single<ScanDevicesUseCase> {
+        ScanDevicesUseCaseImpl(get())
+    }
+    single<BluetoothConnectionUseCase> {
+        BluetoothConnectionUseCaseImpl(get())
     }
 }
 
@@ -394,6 +418,18 @@ private val network = module {
             .addCallAdapterFactory(NetworkResponseAdapterFactory())
             .client(client)
             .build()
+    }
+}
+
+private val bluetooth = module {
+    single<BluetoothScanner> {
+        BluetoothScanner()
+    }
+    single<BluetoothConnectionManager> {
+        BluetoothConnectionManager()
+    }
+    single<BluetoothUpdater> {
+        BluetoothUpdater(get(), get())
     }
 }
 
@@ -495,6 +531,7 @@ private val utilities = module {
 val modules = listOf(
     preferences,
     network,
+    bluetooth,
     datasources,
     repositories,
     location,
