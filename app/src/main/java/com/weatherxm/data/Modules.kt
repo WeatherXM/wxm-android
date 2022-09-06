@@ -426,7 +426,7 @@ private val bluetooth = module {
         BluetoothScanner()
     }
     single<BluetoothConnectionManager> {
-        BluetoothConnectionManager()
+        BluetoothConnectionManager(get())
     }
     single<BluetoothUpdater> {
         BluetoothUpdater(get(), get())

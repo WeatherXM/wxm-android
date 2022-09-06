@@ -1,5 +1,12 @@
 package com.weatherxm.data.bluetooth
 
+import android.annotation.SuppressLint
+import android.bluetooth.BluetoothDevice
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.content.IntentFilter.SYSTEM_HIGH_PRIORITY
 import arrow.core.Either
 import com.juul.kable.BluetoothDisabledException
 import com.juul.kable.Characteristic
@@ -15,17 +22,77 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
-class BluetoothConnectionManager {
-    companion object {
-        const val DEFAULT_PAIR_PIN = "000000"
-    }
+class BluetoothConnectionManager(private val context: Context) {
+    private val defaultBlePin = "000000"
 
     private lateinit var peripheral: Peripheral
     private var readCharacteristic: Characteristic? = null
     private var writeCharacteristic: Characteristic? = null
+
+    private val pairingRequestFilter = IntentFilter(BluetoothDevice.ACTION_PAIRING_REQUEST)
+    private val bondStateChangedFilter = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
+
+    /*
+    * This broadcast receiver is used to intercept the BLE PIN prompt as we know that already
+    * and we want to input it automatically.
+     */
+    private val pairingRequestBroadcastReceiver = object : BroadcastReceiver() {
+        @SuppressLint("MissingPermission")
+        override fun onReceive(context: Context?, intent: Intent) {
+            if (intent.action == BluetoothDevice.ACTION_PAIRING_REQUEST) {
+                val type =
+                    intent.getIntExtra(BluetoothDevice.EXTRA_PAIRING_VARIANT, BluetoothDevice.ERROR)
+
+                if (type == BluetoothDevice.PAIRING_VARIANT_PIN) {
+                    Timber.d("Auto entering BLE PIN of the device")
+                    val bluetoothDevice =
+                        intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+                    bluetoothDevice?.setPin(defaultBlePin.toByteArray())
+                    abortBroadcast()
+                }
+            }
+        }
+    }
+
+    /*
+    * This broadcast receiver is a necessity in order to know when our device is BONDED and we can
+    * start communicating with it and working on its data
+     */
+    private val bondStateChangedReceiver = object : BroadcastReceiver() {
+        @SuppressLint("MissingPermission")
+        override fun onReceive(context: Context?, intent: Intent) {
+            if (intent.action == BluetoothDevice.ACTION_BOND_STATE_CHANGED) {
+                val bluetoothDevice =
+                    intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+
+                when (bluetoothDevice?.bondState) {
+                    BluetoothDevice.BOND_BONDED -> {
+                        Timber.d("Bonded.")
+                        /*
+                        * Any communication or work with the BLE device that needs to be done
+                        * should be done after we reach this point where the BLE device is bonded
+                         */
+                        // TODO: Remove these. They are being used for testing purposes.
+                        GlobalScope.launch {
+                            setReadWriteCharacteristic()
+                            fetchGeneralInfo()
+                            fetchMeasurement()
+                        }
+                    }
+                    BluetoothDevice.BOND_BONDING -> {
+                        Timber.d("Bonding...")
+                    }
+                    BluetoothDevice.BOND_NONE -> {
+                        Timber.d("Bonding NONE...")
+                    }
+                }
+            }
+        }
+    }
 
     @OptIn(DelicateCoroutinesApi::class)
     fun setPeripheral(identifier: Identifier): Either<Failure, Unit> {
@@ -44,12 +111,14 @@ class BluetoothConnectionManager {
 
     suspend fun connectToPeripheral(): Either<Failure, Peripheral> {
         return try {
+            /*
+             * Register the receivers BEFORE trying to connect
+             */
+            pairingRequestFilter.priority = SYSTEM_HIGH_PRIORITY
+            bondStateChangedFilter.priority = SYSTEM_HIGH_PRIORITY
+            context.registerReceiver(pairingRequestBroadcastReceiver, pairingRequestFilter)
+            context.registerReceiver(bondStateChangedReceiver, bondStateChangedFilter)
             peripheral.connect()
-
-            // TODO: Remove these from here, they are used for testing purposes
-            setReadWriteCharacteristic()
-            fetchGeneralInfo()
-            fetchMeasurement()
             Either.Right(peripheral)
         } catch (e: ConnectionRejectedException) {
             Timber.w(e, "Connection to peripheral failed with ConnectionRejectedException")
@@ -66,6 +135,7 @@ class BluetoothConnectionManager {
         }
     }
 
+    // TODO: If not needed, remove it.
     suspend fun disconnectPeripheral() {
         peripheral.disconnect()
     }

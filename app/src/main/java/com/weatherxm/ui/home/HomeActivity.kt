@@ -1,16 +1,8 @@
 package com.weatherxm.ui.home
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothDevice.BOND_NONE
-import android.bluetooth.BluetoothDevice.EXTRA_BOND_STATE
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResult
@@ -22,11 +14,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.data.Status
-import com.weatherxm.data.bluetooth.BluetoothConnectionManager
 import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity
-import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
@@ -58,107 +48,13 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
+    // TODO: This will be used in the Update activity where the flow is TBD. 
     private val findZipFileLauncher =
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             result.data?.data?.let {
                 homeViewModel.update(it)
             }
         }
-
-    /*
-    * These 3 intentFilters and broadcastReceivers below are being used here for testing
-    * purposes in order to debug and fix the bypassing of PIN in a correct way.
-     */
-    private val intentFilter = IntentFilter(BluetoothDevice.ACTION_PAIRING_REQUEST)
-    private val intentFilter2 = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
-    private val intentFilter3 = IntentFilter()
-
-    private val broadCastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        @SuppressLint("MissingPermission")
-        override fun onReceive(context: Context?, intent: Intent) {
-            val action = intent.action
-            if (BluetoothDevice.ACTION_PAIRING_REQUEST == action) {
-                val bluetoothDevice =
-                    intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-
-                bluetoothDevice?.let {
-                    // TODO: Check on different android versions 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                        checkPermissionsAndThen(
-                            permissions = arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
-                            rationaleTitle = getString(R.string.perm_location_bluetooth_title),
-                            rationaleMessage = getString(R.string.perm_location_bluetooth_desc),
-                            onGranted = {
-                                Timber.d("Auto entering BLE PIN of the device")
-                                it.setPin(BluetoothConnectionManager.DEFAULT_PAIR_PIN.toByteArray())
-                                it.createBond()
-                                abortBroadcast()
-                            }
-                        )
-                    } else {
-                        checkPermissionsAndThen(
-                            permissions = arrayOf(Manifest.permission.BLUETOOTH_ADMIN),
-                            rationaleTitle = getString(R.string.perm_location_bluetooth_title),
-                            rationaleMessage = getString(R.string.perm_location_bluetooth_desc),
-                            onGranted = {
-                                Timber.d("Auto entering BLE PIN of the device")
-                                it.setPin(BluetoothConnectionManager.DEFAULT_PAIR_PIN.toByteArray())
-                                it.createBond()
-                                abortBroadcast()
-                            }
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    private val broadCastReceiver2: BroadcastReceiver = object : BroadcastReceiver() {
-        @SuppressLint("MissingPermission")
-        override fun onReceive(context: Context?, intent: Intent) {
-            val action = intent.action
-
-            if (BluetoothDevice.ACTION_BOND_STATE_CHANGED == action) {
-                val bluetoothDevice =
-                    intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                val currentBondState = bluetoothDevice?.bondState
-                val bondStateFromIntent = intent.getIntExtra(EXTRA_BOND_STATE, BOND_NONE)
-
-                when (currentBondState) {
-                    BluetoothDevice.BOND_BONDED -> {
-                        println("BOND_BONDED")
-                    }
-                    BluetoothDevice.BOND_BONDING -> {
-                        println("BOND_BONDING")
-                    }
-                    BluetoothDevice.BOND_NONE -> {
-                        println("BOND_NONE")
-                    }
-                }
-                println("currentBondState: $currentBondState")
-                println("bondState from intent: $bondStateFromIntent")
-                println("BOND_BONDED: ${BluetoothDevice.BOND_BONDED}")
-                println("BOND_BONDING: ${BluetoothDevice.BOND_BONDING}")
-                println("BOND_NONE: ${BluetoothDevice.BOND_NONE}")
-            }
-        }
-    }
-
-    private val broadCastReceiver3: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent) {
-            when (intent.action) {
-                BluetoothDevice.ACTION_BOND_STATE_CHANGED -> {
-                    println("ACTION_BOND_STATE_CHANGED")
-                }
-                BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
-                    println("ACTION_ACL_DISCONNECTED")
-                }
-                BluetoothDevice.ACTION_BOND_STATE_CHANGED -> {
-                    println("ACTION_BOND_STATE_CHANGED")
-                }
-            }
-        }
-    }
 
     @SuppressLint("UnsafeOptInUsageError")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -246,25 +142,17 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
 
         homeViewModel.onScannedDeviceSelected().observe(this) {
             GlobalScope.launch {
-                intentFilter3.addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
-                intentFilter3.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
-                intentFilter.priority = IntentFilter.SYSTEM_HIGH_PRIORITY
-                intentFilter2.priority = IntentFilter.SYSTEM_HIGH_PRIORITY
-                intentFilter3.priority = IntentFilter.SYSTEM_HIGH_PRIORITY
-                registerReceiver(broadCastReceiver, intentFilter)
-                registerReceiver(broadCastReceiver2, intentFilter2)
-                registerReceiver(broadCastReceiver3, intentFilter3)
-
                 homeViewModel.setPeripheral(it.address)
                 homeViewModel.connectToPeripheral()
             }
         }
 
+        // TODO: For testing purposes. 
         homeViewModel.onConnectedDevice().observe(this) {
-//            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE)
-//                .setType("application/zip")
-//
-//            findZipFileLauncher.launch(intent)
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE)
+                .setType("application/zip")
+
+            findZipFileLauncher.launch(intent)
         }
 
         // Disable BottomNavigationView bottom padding, added by default, and add margin
