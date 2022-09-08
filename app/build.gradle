@@ -307,5 +307,6 @@ dependencies {
 
     // BLE Scanning and Communication
     implementation "com.juul.kable:core:0.18.0"
+    implementation "com.github.espressif:esp-idf-provisioning-android:lib-2.0.14"
     implementation "no.nordicsemi.android:dfu:2.1.0"
 }

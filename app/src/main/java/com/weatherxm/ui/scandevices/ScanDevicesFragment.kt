@@ -91,7 +91,6 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
     }
 
     private fun checkAndScanBleDevices() {
-        // TODO: Confirm if all these permissions are needed
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             checkPermissionsAndThen(
                 permissions = arrayOf(

@@ -20,7 +20,13 @@ class ScanDevicesViewModel : ViewModel(), KoinComponent {
 
     fun scanBleDevices() {
         viewModelScope.launch {
-            scanDevicesUseCase.scanBleDevices()
+            scanDevicesUseCase.startScanning()
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            scanDevicesUseCase.registerOnScanning()
                 .collect {
                     if (!scannedDevices.contains(it)) {
                         Timber.d("New scanned device collected: $it")

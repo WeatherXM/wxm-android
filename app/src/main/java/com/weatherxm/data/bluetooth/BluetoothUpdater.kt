@@ -61,6 +61,7 @@ class BluetoothUpdater(
         return progress
     }
 
+    // TODO: Use this to pass to the UI info about completion status (success or failure)
     fun getCompletionStatus(): Flow<Either<Failure, Unit>> = completionStatus
 
     inner class UpdateProgressListener : DfuProgressListener {

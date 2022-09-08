@@ -3,7 +3,6 @@ package com.weatherxm.data.datasource
 import android.bluetooth.BluetoothDevice
 import android.net.Uri
 import arrow.core.Either
-import com.juul.kable.Advertisement
 import com.juul.kable.Identifier
 import com.juul.kable.Peripheral
 import com.weatherxm.data.Failure
@@ -18,8 +17,12 @@ class BluetoothDataSourceImpl(
     private val bluetoothUpdater: BluetoothUpdater,
 ) : BluetoothDataSource {
 
-    override suspend fun scanBleDevices(): Flow<Advertisement> {
-        return scanner.scanBleDevices()
+    override suspend fun registerOnScanning(): Flow<BluetoothDevice> {
+        return scanner.registerOnScanning()
+    }
+
+    override suspend fun startScanning() {
+        scanner.startScanning()
     }
 
     override fun setPeripheral(identifier: Identifier): Either<Failure, Unit> {

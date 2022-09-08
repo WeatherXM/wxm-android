@@ -21,6 +21,7 @@ sealed class NetworkError : Failure() {
 
 @Keep
 sealed class BluetoothError(val message: String? = null) : Failure() {
+    object ScanningError : BluetoothError()
     object PeripheralCreationError : BluetoothError()
     object ConnectionRejectedError : BluetoothError()
     object CancellationError : BluetoothError()

@@ -8,6 +8,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionScheme
 import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme
 import androidx.security.crypto.MasterKeys
+import com.espressif.provisioning.ESPProvisionManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.SettingsClient
@@ -422,8 +423,11 @@ private val network = module {
 }
 
 private val bluetooth = module {
+    single<ESPProvisionManager> {
+        ESPProvisionManager.getInstance(androidContext())
+    }
     single<BluetoothScanner> {
-        BluetoothScanner()
+        BluetoothScanner(get())
     }
     single<BluetoothConnectionManager> {
         BluetoothConnectionManager(get())

@@ -41,6 +41,9 @@ class BluetoothConnectionManager(private val context: Context) {
     * and we want to input it automatically.
      */
     private val pairingRequestBroadcastReceiver = object : BroadcastReceiver() {
+        /*
+        * Suppress this because we have asked for permissions already before we reach here.
+         */
         @SuppressLint("MissingPermission")
         override fun onReceive(context: Context?, intent: Intent) {
             if (intent.action == BluetoothDevice.ACTION_PAIRING_REQUEST) {
