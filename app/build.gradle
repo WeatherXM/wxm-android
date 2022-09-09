@@ -50,6 +50,7 @@ android {
     productFlavors {
         local {
             dimension "mode"
+            resValue "string", "app_name", "WXM Local Mock"
         }
         remote {
             dimension "mode"
@@ -57,9 +58,9 @@ android {
         mock {
             dimension "server"
             applicationIdSuffix ".mock"
-            resValue "string", "app_name", "WXM Mock"
-            buildConfigField("String", "API_URL", "\"https://api-dev.weatherxm.com\"")
-            buildConfigField("String", "AUTH_URL", "\"https://api-dev.weatherxm.com\"")
+            resValue "string", "app_name", "WXM Remote Mock"
+            buildConfigField("String", "API_URL", "\"https://wxm-api-mock.herokuapp.com\"")
+            buildConfigField("String", "AUTH_URL", "\"https://wxm-api-mock.herokuapp.com\"")
         }
         staging {
             dimension "server"
@@ -124,8 +125,6 @@ android {
     variantFilter { variant ->
         def names = variant.flavors*.name
         if (names.contains("local") && !names.contains("mock")) {
-            variant.setIgnore(true)
-        } else if (names.contains("remote") && names.contains("mock")) {
             variant.setIgnore(true)
         } else if (variant.buildType.name != "debug" && names.contains("mock")) {
             variant.setIgnore(true)

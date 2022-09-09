@@ -19,7 +19,7 @@ class SendFeedbackViewModel : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
 
     // Needed for adding user-id info on the google form (used for sending feedback)
-    private lateinit var userId: String
+    private var userId: String = ""
 
     fun getPrefilledFormUrl(): String {
         val clientIdentifier = useCase.getClientIdentifier()
@@ -40,9 +40,6 @@ class SendFeedbackViewModel : ViewModel(), KoinComponent {
             useCase.getUser()
                 .map {
                     userId = it.id
-                }
-                .mapLeft {
-                    userId = ""
                 }
         }
     }
