@@ -142,14 +142,13 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
 
         homeViewModel.onScannedDeviceSelected().observe(this) {
             GlobalScope.launch {
-                homeViewModel.setPeripheral(it.address)
+                homeViewModel.setPeripheral(it.bluetoothDevice)
                 homeViewModel.connectToPeripheral()
             }
         }
 
         // TODO: For testing purposes. 
         homeViewModel.onConnectedDevice().observe(this) {
-            // TODO: Check all different SDK versions in order to put the correct intent action
 //            val intent = Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE)
 //                .setType("application/zip")
 //

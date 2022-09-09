@@ -30,6 +30,12 @@ sealed class BluetoothError(val message: String? = null) : Failure() {
     object DfuAborted : BluetoothError()
 
     class DfuUpdateError(message: String? = null) : BluetoothError(message)
+
+    sealed class ProvisionError : BluetoothError() {
+        class GenericError : ProvisionError()
+        class WifiConfigError : ProvisionError()
+        class CreateSessionError : ProvisionError()
+    }
 }
 
 @Keep

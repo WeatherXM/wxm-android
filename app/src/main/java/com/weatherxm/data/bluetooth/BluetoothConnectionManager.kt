@@ -12,7 +12,6 @@ import com.juul.kable.BluetoothDisabledException
 import com.juul.kable.Characteristic
 import com.juul.kable.ConnectionLostException
 import com.juul.kable.ConnectionRejectedException
-import com.juul.kable.Identifier
 import com.juul.kable.Peripheral
 import com.juul.kable.peripheral
 import com.weatherxm.data.BluetoothError
@@ -24,7 +23,6 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 import timber.log.Timber
-
 
 class BluetoothConnectionManager(private val context: Context) {
     private val defaultBlePin = "000000"
@@ -98,12 +96,12 @@ class BluetoothConnectionManager(private val context: Context) {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun setPeripheral(identifier: Identifier): Either<Failure, Unit> {
+    fun setPeripheral(bluetoothDevice: BluetoothDevice): Either<Failure, Unit> {
         return try {
-            peripheral = GlobalScope.peripheral(identifier)
+            peripheral = GlobalScope.peripheral(bluetoothDevice)
             Either.Right(Unit)
         } catch (e: IllegalArgumentException) {
-            Timber.w(e, "Creation of peripheral failed: $identifier")
+            Timber.w(e, "Creation of peripheral failed: $bluetoothDevice")
             Either.Left(BluetoothError.PeripheralCreationError)
         }
     }

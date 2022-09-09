@@ -3,13 +3,12 @@ package com.weatherxm.data.repository
 import android.bluetooth.BluetoothDevice
 import android.net.Uri
 import arrow.core.Either
-import com.juul.kable.Identifier
+import com.espressif.provisioning.listeners.WiFiScanListener
 import com.juul.kable.Peripheral
 import com.weatherxm.data.Failure
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager
 import com.weatherxm.data.datasource.BluetoothDataSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
 
 class BluetoothRepositoryImpl(
     private val bluetoothDataSource: BluetoothDataSource,
@@ -21,18 +20,15 @@ class BluetoothRepositoryImpl(
     */
     @Suppress("MissingPermission")
     override suspend fun registerOnScanning(): Flow<BluetoothDevice> {
-        // TODO: Replace this naive filtering.
-        return bluetoothDataSource.registerOnScanning().filter {
-            it.name.contains("WXM")
-        }
+        return bluetoothDataSource.registerOnScanning()
     }
 
     override suspend fun startScanning() {
         bluetoothDataSource.startScanning()
     }
 
-    override fun setPeripheral(identifier: Identifier): Either<Failure, Unit> {
-        return bluetoothConnectionManager.setPeripheral(identifier)
+    override fun setPeripheral(bluetoothDevice: BluetoothDevice): Either<Failure, Unit> {
+        return bluetoothConnectionManager.setPeripheral(bluetoothDevice)
     }
 
     override suspend fun connectToPeripheral(): Either<Failure, Peripheral> {
@@ -45,5 +41,25 @@ class BluetoothRepositoryImpl(
 
     override fun update(updatePackage: Uri): Flow<Int> {
         return bluetoothDataSource.update(updatePackage)
+    }
+
+    override fun scanNetworks(wiFiScanListener: WiFiScanListener) {
+        bluetoothDataSource.scanNetworks(wiFiScanListener)
+    }
+
+    override fun provision(ssid: String, passphrase: String) {
+        bluetoothDataSource.provision(ssid, passphrase)
+    }
+
+    override fun registerOnProvisionCompletionStatus(): Flow<Either<Failure, Unit>> {
+        return bluetoothDataSource.registerOnProvisionCompletionStatus()
+    }
+
+    override fun registerOnScanCompletionStatus(): Flow<Either<Failure, Unit>> {
+        return bluetoothDataSource.registerOnScanCompletionStatus()
+    }
+
+    override fun registerOnUpdateCompletionStatus(): Flow<Either<Failure, Unit>> {
+        return bluetoothDataSource.registerOnUpdateCompletionStatus()
     }
 }

@@ -22,7 +22,11 @@ class ScanDevicesUseCaseImpl(
     override suspend fun registerOnScanning(): Flow<ScannedDevice> {
         return bluetoothRepository.registerOnScanning().map {
             Timber.d("New bluetooth device collected: $it")
-            ScannedDevice(it.address, it.name)
+            ScannedDevice(
+                address = it.address,
+                name = it.name,
+                bluetoothDevice = it
+            )
         }
     }
 

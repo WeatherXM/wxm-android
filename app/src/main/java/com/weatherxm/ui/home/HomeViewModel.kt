@@ -33,8 +33,8 @@ class HomeViewModel : ViewModel(), KoinComponent {
         onClaimManually.postValue(true)
     }
 
-    fun setPeripheral(identifier: String) {
-        usecase.setPeripheral(identifier)
+    fun setPeripheral(bluetoothDevice: BluetoothDevice) {
+        usecase.setPeripheral(bluetoothDevice)
     }
 
     fun connectToPeripheral() {

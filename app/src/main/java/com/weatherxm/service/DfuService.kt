@@ -9,8 +9,8 @@ class DfuService : DfuBaseService() {
     // TODO: Use appropriate notification target class
     override fun getNotificationTarget(): Class<out Activity> {
         /*
-         * As a target activity the NotificationActivity is returned, not the MainActivity. This is because
-         * the notification must create a new task:
+         * As a target activity the NotificationActivity is returned, not the MainActivity.
+         * This is because the notification must create a new task:
          *
          * intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
          *

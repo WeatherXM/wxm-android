@@ -43,7 +43,10 @@ class BluetoothScanner(private val espProvisionManager: ESPProvisionManager) {
 
             override fun onPeripheralFound(device: BluetoothDevice?, scanResult: ScanResult?) {
                 device?.let {
-                    scannedDevices.tryEmit(it)
+                    // TODO: Replace this naive filtering with the correct one in the future
+                    if (it.name.contains("WXM")) {
+                        scannedDevices.tryEmit(it)
+                    }
                 }
             }
 

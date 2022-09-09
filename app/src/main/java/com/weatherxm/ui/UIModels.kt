@@ -1,5 +1,6 @@
 package com.weatherxm.ui
 
+import android.bluetooth.BluetoothDevice
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.github.mikephil.charting.data.BarEntry
@@ -219,5 +220,12 @@ data class UIDevice(
 @Parcelize
 data class ScannedDevice(
     val address: String,
-    val name: String?
+    val name: String?,
+    val type: DeviceType = DeviceType.M5_WIFI,
+    val bluetoothDevice: BluetoothDevice
 ) : Parcelable
+
+enum class DeviceType {
+    M5_WIFI,
+    HELIUM
+}

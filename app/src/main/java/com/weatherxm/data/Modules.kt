@@ -8,6 +8,8 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionScheme
 import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme
 import androidx.security.crypto.MasterKeys
+import com.espressif.provisioning.ESPConstants
+import com.espressif.provisioning.ESPDevice
 import com.espressif.provisioning.ESPProvisionManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -26,6 +28,7 @@ import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager
+import com.weatherxm.data.bluetooth.BluetoothProvisioner
 import com.weatherxm.data.bluetooth.BluetoothScanner
 import com.weatherxm.data.bluetooth.BluetoothUpdater
 import com.weatherxm.data.database.AppDatabase
@@ -265,7 +268,7 @@ private val datasources = module {
     }
 
     single<BluetoothDataSource> {
-        BluetoothDataSourceImpl(get(), get(), get())
+        BluetoothDataSourceImpl(get(), get(), get(), get())
     }
 }
 
@@ -426,6 +429,13 @@ private val bluetooth = module {
     single<ESPProvisionManager> {
         ESPProvisionManager.getInstance(androidContext())
     }
+    single<ESPDevice> {
+        val espProvisionerManager = get() as ESPProvisionManager
+        espProvisionerManager.createESPDevice(
+            ESPConstants.TransportType.TRANSPORT_BLE,
+            ESPConstants.SecurityType.SECURITY_0
+        )
+    }
     single<BluetoothScanner> {
         BluetoothScanner(get())
     }
@@ -434,6 +444,9 @@ private val bluetooth = module {
     }
     single<BluetoothUpdater> {
         BluetoothUpdater(get(), get())
+    }
+    single<BluetoothProvisioner> {
+        BluetoothProvisioner(get())
     }
 }
 

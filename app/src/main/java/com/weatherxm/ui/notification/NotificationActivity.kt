@@ -24,7 +24,7 @@ class NotificationActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Now finish, which will drop you to the activity at which you were at the top of the task stack
+        // Now finish, which will drop you to the activity at which you were at the top of the stack
         finish()
     }
 }

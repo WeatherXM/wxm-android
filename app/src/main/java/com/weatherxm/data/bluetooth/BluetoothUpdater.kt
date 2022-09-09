@@ -34,6 +34,7 @@ class BluetoothUpdater(
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
+    @Suppress("MagicNumber")
     fun setUpdater() {
         dfuServiceInitiator =
             DfuServiceInitiator(bluetoothConnectionManager.getPeripheral().identifier)
