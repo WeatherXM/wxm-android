@@ -48,6 +48,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/loginInstructions"
+                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/login_instructions"

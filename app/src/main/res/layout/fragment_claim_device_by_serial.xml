@@ -23,7 +23,7 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/serial_number_title"
-                    style="@style/TextAppearance.WeatherXM.Card.Title"
+                    style="@style/TextAppearance.WeatherXM.TextInput.Title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/device_serial_number_title"
@@ -57,7 +57,7 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/instructions"
-                    style="@style/TextAppearance.WeatherXM.Card.Body"
+                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"

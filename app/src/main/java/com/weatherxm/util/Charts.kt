@@ -34,6 +34,7 @@ private fun LineChart.setDefaultSettings(chartData: LineChartData) {
     description.isEnabled = false
     extraBottomOffset = CHART_BOTTOM_OFFSET
     legend.isEnabled = false
+    legend.textColor = resources.getColor(R.color.colorOnSurface, context.theme)
 
     // Line and highlight Settings
     lineData.setDrawValues(false)
@@ -43,7 +44,9 @@ private fun LineChart.setDefaultSettings(chartData: LineChartData) {
     axisLeft.isGranularityEnabled = true
     isScaleYEnabled = false
     axisRight.isEnabled = false
-    axisLeft.gridColor = resources.getColor(R.color.chart_grid_color, context.theme)
+    axisLeft.axisLineColor = resources.getColor(R.color.chart_axis_line_color, context.theme)
+    axisLeft.gridColor = resources.getColor(R.color.colorBackground, context.theme)
+    axisLeft.textColor = resources.getColor(R.color.colorOnSurface, context.theme)
     axisLeft.setLabelCount(MAXIMUMS_GRID_LINES_Y_AXIS, false)
     axisLeft.resetAxisMinimum()
     axisLeft.resetAxisMaximum()
@@ -57,7 +60,9 @@ private fun LineChart.setDefaultSettings(chartData: LineChartData) {
     } else {
         X_AXIS_DEFAULT_TIME_GRANULARITY
     }
-    xAxis.gridColor = resources.getColor(R.color.chart_grid_color, context.theme)
+    xAxis.axisLineColor = resources.getColor(R.color.chart_axis_line_color, context.theme)
+    xAxis.gridColor = resources.getColor(R.color.colorBackground, context.theme)
+    xAxis.textColor = resources.getColor(R.color.colorOnSurface, context.theme)
 
     setOnTouchListener { _, event ->
         when (event.action) {
@@ -74,7 +79,9 @@ private fun LineDataSet.setDefaultSettings(context: Context, resources: Resource
     circleRadius = POINT_SIZE
     lineWidth = LINE_WIDTH
     mode = LineDataSet.Mode.CUBIC_BEZIER
-    highLightColor = resources.getColor(R.color.highlighter, context.theme)
+    highLightColor = resources.getColor(R.color.colorOnSurface, context.theme)
+    color = resources.getColor(R.color.colorPrimary, context.theme)
+    setCircleColor(resources.getColor(R.color.colorPrimary, context.theme))
 }
 
 fun LineChart.initializeTemperature24hChart(chartData: LineChartData) {
@@ -91,8 +98,6 @@ fun LineChart.initializeTemperature24hChart(chartData: LineChartData) {
 
     // Line and highlight Settings
     dataSet.setDefaultSettings(context, resources)
-    dataSet.color = resources.getColor(chartData.lineColor, context.theme)
-    dataSet.setCircleColor(resources.getColor(chartData.lineColor, context.theme))
 
     // Y Axis settings
 
@@ -126,8 +131,6 @@ fun LineChart.initializeHumidity24hChart(chartData: LineChartData) {
 
     // Line and highlight Settings
     dataSet.setDefaultSettings(context, resources)
-    dataSet.color = resources.getColor(chartData.lineColor, context.theme)
-    dataSet.setCircleColor(resources.getColor(chartData.lineColor, context.theme))
 
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(chartData.timestamps)
@@ -155,8 +158,6 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData) {
 
     // Line and highlight Settings
     dataSet.setDefaultSettings(context, resources)
-    dataSet.color = resources.getColor(chartData.lineColor, context.theme)
-    dataSet.setCircleColor(resources.getColor(chartData.lineColor, context.theme))
 
     // Y Axis settings
 
@@ -213,8 +214,6 @@ fun LineChart.initializePrecipitation24hChart(chartData: LineChartData) {
     dataSet.setDefaultSettings(context, resources)
     dataSet.mode = LineDataSet.Mode.STEPPED
     dataSet.setDrawFilled(true)
-    dataSet.color = resources.getColor(chartData.lineColor, context.theme)
-    dataSet.setCircleColor(resources.getColor(chartData.lineColor, context.theme))
 
     // Y Axis settings
     axisLeft.granularity = if (inchesUsed) {
@@ -251,6 +250,7 @@ fun LineChart.initializePrecipitation24hChart(chartData: LineChartData) {
     notifyDataSetChanged()
 }
 
+@Suppress("MagicNumber")
 fun LineChart.initializeWind24hChart(
     windSpeedData: LineChartData, windGustData: LineChartData, windDirectionData: LineChartData
 ) {
@@ -283,15 +283,14 @@ fun LineChart.initializeWind24hChart(
 
     // Wind Speed
     dataSetWindSpeed.setDefaultSettings(context, resources)
-    dataSetWindSpeed.color = resources.getColor(windSpeedData.lineColor, context.theme)
-    dataSetWindSpeed.setCircleColor(resources.getColor(windSpeedData.lineColor, context.theme))
 
     // Wind Gust Settings
     dataSetWindGust.setDefaultSettings(context, resources)
     dataSetWindGust.setDrawIcons(false)
+    dataSetWindGust.setDrawCircles(false)
+    dataSetWindGust.enableDashedLine(30.0F, 20.0F, 0.0F)
     dataSetWindGust.isHighlightEnabled = false
-    dataSetWindGust.color = resources.getColor(windGustData.lineColor, context.theme)
-    dataSetWindGust.setCircleColor(resources.getColor(windGustData.lineColor, context.theme))
+    dataSetWindGust.color = resources.getColor(R.color.chart_wind_gust_color, context.theme)
 
     // Y Axis settings
     /*
@@ -326,13 +325,14 @@ fun BarChart.initializeUV24hChart(data: BarChartData) {
     // General Chart Settings
     description.isEnabled = false
     legend.isEnabled = false
+    legend.textColor = resources.getColor(R.color.colorOnSurface, context.theme)
     marker = CustomDefaultMarkerView(context, data.timestamps, data.name, data.unit)
     extraBottomOffset = CHART_BOTTOM_OFFSET
 
     // Bar and highlight Settings
     barData.setDrawValues(false)
-    dataSet.color = resources.getColor(R.color.uvIndex, context.theme)
-    dataSet.highLightColor = resources.getColor(R.color.highlighter, context.theme)
+    dataSet.color = resources.getColor(R.color.colorPrimary, context.theme)
+    dataSet.highLightColor = resources.getColor(R.color.colorPrimaryVariant, context.theme)
 
     setOnTouchListener { _, event ->
         when (event.action) {
@@ -348,7 +348,9 @@ fun BarChart.initializeUV24hChart(data: BarChartData) {
     axisLeft.isGranularityEnabled = true
     axisLeft.granularity = 1F
     axisLeft.valueFormatter = CustomYAxisFormatter(data.unit)
-    axisLeft.gridColor = resources.getColor(R.color.chart_grid_color, context.theme)
+    axisLeft.textColor = resources.getColor(R.color.colorOnSurface, context.theme)
+    axisLeft.axisLineColor = resources.getColor(R.color.chart_axis_line_color, context.theme)
+    axisLeft.gridColor = resources.getColor(R.color.colorBackground, context.theme)
     axisRight.isEnabled = false
     isScaleYEnabled = false
 
@@ -357,12 +359,14 @@ fun BarChart.initializeUV24hChart(data: BarChartData) {
     xAxis.setDrawAxisLine(false)
     xAxis.setDrawGridLines(false)
     xAxis.valueFormatter = CustomXAxisFormatter(data.timestamps)
+    xAxis.textColor = resources.getColor(R.color.colorOnSurface, context.theme)
     xAxis.granularity = if (data.entries.size in 2..3) {
         X_AXIS_GRANULARITY_1_HOUR
     } else {
         X_AXIS_DEFAULT_TIME_GRANULARITY
     }
-    xAxis.gridColor = resources.getColor(R.color.chart_grid_color, context.theme)
+    xAxis.axisLineColor = resources.getColor(R.color.chart_axis_line_color, context.theme)
+    xAxis.gridColor = resources.getColor(R.color.colorBackground, context.theme)
     show()
     notifyDataSetChanged()
 }

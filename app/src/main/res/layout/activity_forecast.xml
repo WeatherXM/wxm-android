@@ -40,6 +40,8 @@
                 android:overScrollMode="never"
                 android:scrollbars="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:layout_editor_absoluteX="108dp"
+                tools:layout_editor_absoluteY="255dp"
                 tools:listitem="@layout/list_item_daily_forecast" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

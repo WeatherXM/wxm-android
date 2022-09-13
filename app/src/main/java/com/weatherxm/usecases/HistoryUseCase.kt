@@ -73,7 +73,7 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.precipitation),
-            R.color.precipIntensity,
+            R.color.precip_intensity,
             Weather.getPrecipitationPreferredUnit(false),
             timestamps = time,
             entries = entries
@@ -86,7 +86,7 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.wind_speed),
-            R.color.windSpeed,
+            R.color.wind_speed,
             Weather.getPreferredUnit(
                 resHelper.getString(R.string.key_wind_speed_preference),
                 resHelper.getString(R.string.wind_speed_ms)
@@ -102,7 +102,7 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.wind_gust),
-            R.color.windGust,
+            R.color.wind_gust,
             Weather.getPreferredUnit(
                 resHelper.getString(R.string.key_wind_speed_preference),
                 resHelper.getString(R.string.wind_speed_ms)
@@ -118,7 +118,7 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.wind_direction),
-            R.color.windSpeed,
+            R.color.wind_speed,
             Weather.getPreferredUnit(
                 resHelper.getString(R.string.key_wind_direction_preference),
                 resHelper.getString(R.string.wind_direction_cardinal)
@@ -163,13 +163,17 @@ class HistoryUseCaseImpl(
     ): BarChartData {
         return BarChartData(
             resHelper.getString(R.string.uv_index),
-            R.color.uvIndex,
+            R.color.uv_index,
             resHelper.getString(R.string.uv_index_unit),
             timestamps = time,
             entries = entries
         )
     }
 
+    /*
+    * Suppress complex method warning by detekt because it is just a bunch of `.let` statements
+     */
+    @Suppress("ComplexMethod")
     private fun createHourlyCharts(
         context: Context,
         date: String,
@@ -188,50 +192,57 @@ class HistoryUseCaseImpl(
         val time = mutableListOf<String>()
 
         hourlyWeatherData.forEach { hourlyWeather ->
+            // Set showMinutes12Format as false
+            // on hourly data they don't matter and they cause UI issues
+            time.add(getHourMinutesFromISO(context, hourlyWeather.timestamp, false))
 
-            hourlyWeather.timestamp.let { timestampNonNull ->
-                // Set showMinutes12Format as false
-                // on hourly data they don't matter and they cause UI issues
-                time.add(getHourMinutesFromISO(context, timestampNonNull, false))
+            hourlyWeather.temperature?.let {
+                temperatureEntries.add(Entry(counter, Weather.convertTemp(it, 1) as Float))
+            }
 
-                hourlyWeather.temperature?.let {
-                    temperatureEntries.add(Entry(counter, Weather.convertTemp(it, 1) as Float))
-                }
+            hourlyWeather.precipitation?.let {
+                precipEntries.add(Entry(counter, Weather.convertPrecipitation(it) as Float))
+            }
 
-                hourlyWeather.precipitation?.let {
-                    precipEntries.add(Entry(counter, Weather.convertPrecipitation(it) as Float))
-                }
+            // Get the wind speed and direction formatted
+            val windSpeedValue = Weather.convertWindSpeed(hourlyWeather.windSpeed)?.toFloat()
+            val windGustValue = Weather.convertWindSpeed(hourlyWeather.windGust)?.toFloat()
+            var windDirection: Drawable? = null
+            hourlyWeather.windDirection?.let {
+                val index = UnitConverter.getIndexOfCardinal(it)
+                windDirection = resHelper.getWindDirectionDrawable(index)
+                windDirectionEntries.add(Entry(counter, it.toFloat()))
+            }
 
-                // Get the wind speed and direction formatted
-                val windSpeed = Weather.convertWindSpeed(hourlyWeather.windSpeed)
-                var windDirection: Drawable? = null
-                if (hourlyWeather.windDirection != null) {
-                    val index = UnitConverter.getIndexOfCardinal(hourlyWeather.windDirection)
-                    windDirection = resHelper.getWindDirectionDrawable(index)
-                    windDirectionEntries.add(Entry(counter, hourlyWeather.windDirection.toFloat()))
-                }
-                if (windSpeed != null && windDirection != null && windSpeed.toFloat() > 0) {
-                    windSpeedEntries.add(Entry(counter, windSpeed.toFloat(), windDirection))
-                } else if (windSpeed != null) {
-                    windSpeedEntries.add(Entry(counter, windSpeed.toFloat()))
-                }
+            /*
+            * Show wind direction only when the icon is available and wind speed OR wind gust
+            * are not null and great than zero
+             */
+            val shouldShowDirection = windDirection != null &&
+                (((windSpeedValue ?: 0.0F) > 0) || ((windGustValue ?: 0.0F) > 0))
 
-                val windGust = Weather.convertWindSpeed(hourlyWeather.windGust)
-                if (windGust != null) {
-                    windGustEntries.add(Entry(counter, windGust.toFloat()))
+            windSpeedValue?.let {
+                if (shouldShowDirection) {
+                    windSpeedEntries.add(Entry(counter, it, windDirection))
+                } else {
+                    windSpeedEntries.add(Entry(counter, it))
                 }
+            }
 
-                hourlyWeather.pressure?.let {
-                    pressureEntries.add(Entry(counter, Weather.convertPressure(it) as Float))
-                }
+            windGustValue?.let {
+                windGustEntries.add(Entry(counter, it))
+            }
 
-                hourlyWeather.humidity?.let {
-                    humidityEntries.add(Entry(counter, it.toFloat()))
-                }
+            hourlyWeather.pressure?.let {
+                pressureEntries.add(Entry(counter, Weather.convertPressure(it) as Float))
+            }
 
-                hourlyWeather.uvIndex?.let {
-                    uvIndexEntries.add(BarEntry(counter, it.toFloat()))
-                }
+            hourlyWeather.humidity?.let {
+                humidityEntries.add(Entry(counter, it.toFloat()))
+            }
+
+            hourlyWeather.uvIndex?.let {
+                uvIndexEntries.add(BarEntry(counter, it.toFloat()))
             }
 
             counter++
@@ -254,7 +265,6 @@ class HistoryUseCaseImpl(
         data: List<HourlyWeather>,
         context: Context
     ): List<HistoryCharts> {
-        val charts = mutableListOf<HistoryCharts>()
 
         val datesAndData: ArrayMap<String, MutableList<HourlyWeather>> = arrayMapOf()
 
@@ -267,8 +277,8 @@ class HistoryUseCaseImpl(
             }
         }
 
-        datesAndData.forEach {
-            charts.add(createHourlyCharts(context, it.key, it.value))
+        val charts = datesAndData.map {
+            createHourlyCharts(context, it.key, it.value)
         }
 
         return charts

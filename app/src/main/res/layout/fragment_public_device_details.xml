@@ -30,7 +30,7 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/address"
-                    style="@style/TextAppearance.WeatherXM.Device.Details.Subtitle"
+                    style="@style/TextAppearance.WeatherXM.Device.Details.Address"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
@@ -70,7 +70,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
-                    android:textColor="@color/black_translucent"
                     android:textSize="14sp"
                     app:layout_constraintBaseline_toBaselineOf="@id/status_label"
                     app:layout_constraintStart_toEndOf="@id/status_label"

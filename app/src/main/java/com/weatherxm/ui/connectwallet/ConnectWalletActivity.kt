@@ -89,12 +89,12 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         // Listen to current address for UI update
         model.currentAddress().observe(this) { address ->
             if (address.isNullOrEmpty()) {
-                binding.notice.visibility = View.VISIBLE
+                binding.warning.visibility = View.VISIBLE
                 binding.currentAddressContainer.visibility = View.GONE
                 binding.currentAddressTitle.visibility = View.GONE
                 binding.newAddress.setText("")
             } else {
-                binding.notice.visibility = View.GONE
+                binding.warning.visibility = View.GONE
                 binding.currentAddressContainer.visibility = View.VISIBLE
                 binding.currentAddressTitle.visibility = View.VISIBLE
                 binding.currentAddress.setText(mask.maskHash(address))

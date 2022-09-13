@@ -9,7 +9,6 @@
     tools:parentTag="LinearLayout">
 
     <com.google.android.material.card.MaterialCardView
-        style="@style/Widget.WeatherXM.MaterialCard.Tokens"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardUseCompatPadding="true">
@@ -130,7 +129,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         app:chart_axis="none"
-                        app:chart_barsColor="@color/off_white"
+                        app:chart_barsColor="@color/light_mid_grey"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -147,14 +146,14 @@
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/option7D"
-                            style="@style/Widget.WeatherXM.Token.Chip"
+                            style="@style/Widget.WeatherXM.Chip.Token"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/button_7d" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/option30D"
-                            style="@style/Widget.WeatherXM.Token.Chip"
+                            style="@style/Widget.WeatherXM.Chip.Token"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/button_30d" />
@@ -173,11 +172,10 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/total7D"
-                    style="@style/Widget.WeatherXM.Token.InfoChip"
+                    style="@style/Widget.WeatherXM.Chip.TokenInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/button_7d"
-                    app:ensureMinTouchTargetSize="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -196,7 +194,7 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/total30d"
-                    style="@style/Widget.WeatherXM.Token.InfoChip"
+                    style="@style/Widget.WeatherXM.Chip.TokenInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/margin_large"
@@ -217,7 +215,7 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/totalAll"
-                    style="@style/Widget.WeatherXM.Token.InfoChip"
+                    style="@style/Widget.WeatherXM.Chip.TokenInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/margin_large"

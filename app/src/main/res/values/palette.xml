@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#00000000</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="purple">#9D1F63</color>
+
+    <!-- Color Palette/Library Design Team -->
+
+    <color name="light_mid_grey">#92989E</color>
+    <color name="light_dark_grey">#4B4D4E</color>
+
+    <color name="light_top">#FAFAFA</color>
+    <color name="light_light3">#F2F4F9</color>
+    <color name="light_light2">#EEF0F4</color>
+    <color name="light_light1">#E7E9F0</color>
+    <color name="light_background">#DCE0E9</color>
+    <color name="light_darkest_blue">#000F52</color>
+    <color name="light_darker_blue">#002092</color>
+    <color name="light_primary">#0A3FAD</color>
+    <color name="light_lighter_blue">#0467F1</color>
+    <color name="light_lightest_blue">#78B7FB</color>
+    <color name="light_blue_tint">#E4F1FD</color>
+    <color name="light_accent">#800162</color>
+    <color name="light_crypto">#3A3F6A</color>
+
+    <color name="dark_top">#31323C</color>
+    <color name="dark_dark3">#292931</color>
+    <color name="dark_dark2">#1D1E26</color>
+    <color name="dark_dark1">#1A1B1E</color>
+    <color name="dark_background">#040404</color>
+    <color name="dark_darkest">#C4DAF1</color>
+    <color name="dark_darker">#92BBE8</color>
+    <color name="dark_primary">#68A4F9</color>
+    <color name="dark_lighter_blue">#3D7EF6</color>
+    <color name="dark_lightest_blue">#0331A3</color>
+    <color name="dark_blue_tint">#162351</color>
+    <color name="dark_accent">#E567F0</color>
+    <color name="dark_crypto">#8C97F5</color>
+
+    <color name="success">#00E676</color>
+    <color name="success_tint">#C9F8E1</color>
+    <color name="error">#FF1744</color>
+    <color name="error_tint">#FADCE3</color>
+    <color name="warning">#FFAB49</color>
+    <color name="warning_tint">#FBDEBC</color>
+
+    <!-- End -->
+</resources>

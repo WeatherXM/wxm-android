@@ -19,27 +19,25 @@
         app:lottie_loop="true"
         tools:background="#88424242" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
+        style="@style/TextAppearance.WeatherXM.EmptyView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="24dp"
         android:gravity="center_horizontal"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        android:textStyle="bold"
         tools:text="Nothing here!" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/subtitle"
+        style="@style/TextAppearance.WeatherXM.Default.BodyLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="4dp"
         android:autoLink="all"
         android:gravity="center_horizontal"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-        android:textStyle="normal"
         tools:text="Honestly, something is wrong" />
 
     <com.google.android.material.button.MaterialButton
@@ -49,8 +47,6 @@
         android:layout_gravity="center"
         android:layout_marginTop="24dp"
         android:minWidth="128dp"
-        android:visibility="gone"
-        app:backgroundTint="?colorPrimary"
         tools:text="Retry?" />
 
 </merge>

@@ -8,6 +8,7 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
+import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
@@ -16,6 +17,7 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.AlertDialogFragment
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
+import com.weatherxm.util.DisplayModeHelper
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
@@ -23,6 +25,7 @@ import timber.log.Timber
 class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
     private val model: PreferenceViewModel by activityViewModels()
     private val navigator: Navigator by inject()
+    private val displayModeHelper: DisplayModeHelper by inject()
 
     companion object {
         const val TAG = "PreferenceFragment"
@@ -48,14 +51,10 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
             findPreference(getString(R.string.title_contact_support))
         val userResearchButton: Preference? =
             findPreference(getString(R.string.user_panel_title))
+        val displayPreference =
+            findPreference<ListPreference>(getString(R.string.key_theme))
         val shortWxmSurvey: Preference? =
             findPreference(getString(R.string.short_app_survey))
-
-        userResearchButton?.onPreferenceClickListener =
-            Preference.OnPreferenceClickListener {
-                navigator.openWebsite(this.context, getString(R.string.user_panel_url))
-                true
-            }
 
         openDocumentationButton?.onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
@@ -67,6 +66,16 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
                 navigator.sendSupportEmail(context)
                 true
             }
+        userResearchButton?.onPreferenceClickListener =
+            Preference.OnPreferenceClickListener {
+                navigator.openWebsite(this.context, getString(R.string.user_panel_url))
+                true
+            }
+
+        displayPreference?.setOnPreferenceChangeListener { _, newValue ->
+            displayModeHelper.setDisplayMode(newValue.toString())
+            true
+        }
 
         model.isLoggedIn().observe(this) { result ->
             result

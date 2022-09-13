@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             app:collapsedTitleGravity="start|center_vertical"
             app:collapsedTitleTextAppearance="@style/TextAppearance.WeatherXM.Device.Details.Title"
-            app:contentScrim="@color/white_blue"
+            app:contentScrim="@color/colorBackground"
             app:expandedTitleGravity="start|bottom"
             app:expandedTitleMarginBottom="@dimen/margin_small"
             app:expandedTitleMarginEnd="64dp"
@@ -48,7 +48,7 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/address"
-                    style="@style/TextAppearance.WeatherXM.Device.Details.Subtitle"
+                    style="@style/TextAppearance.WeatherXM.Device.Details.Address"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
@@ -88,7 +88,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
-                    android:textColor="@color/black_translucent"
                     android:textSize="14sp"
                     app:layout_constraintBaseline_toBaselineOf="@id/status_label"
                     app:layout_constraintStart_toEndOf="@id/status_label"
@@ -174,7 +173,6 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:clipChildren="false"
                         android:clipToOutline="false"
                         android:clipToPadding="false">
@@ -183,7 +181,7 @@
                             android:id="@+id/date_tabs"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:paddingHorizontal="@dimen/padding_normal"
+                            android:layout_marginHorizontal="@dimen/padding_normal"
                             app:layout_constraintEnd_toStartOf="@id/forecastNextDays"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
@@ -228,9 +226,10 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/historicalCharts"
-                            style="@style/Widget.WeatherXM.TextButton.Subtle"
+                            style="@style/Widget.WeatherXM.Button.Subtle.Borders"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/padding_normal"
                             android:text="@string/see_historical_charts"
                             app:layout_constraintTop_toBottomOf="@id/recycler"
                             tools:layout_editor_absoluteX="0dp" />
@@ -248,7 +247,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/tokenRewards"
-                    style="@style/Widget.WeatherXM.Button.Subtle.Colored"
+                    style="@style/Widget.WeatherXM.Button.Subtle.Borders"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_normal"

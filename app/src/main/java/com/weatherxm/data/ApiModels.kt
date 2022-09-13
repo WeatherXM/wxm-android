@@ -123,32 +123,6 @@ data class Rewards(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class Tokens(
-    val daily: Transaction,
-    val weekly: TokensSummaryResponse,
-    val monthly: TokensSummaryResponse
-) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class TokensSummaryResponse(
-    val total: Float?,
-    val tokens: List<TokenEntry>?
-) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class TokenEntry(
-    val timestamp: String?,
-    @Json(name = "actual_reward")
-    val actualReward: Float?
-) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
 data class TransactionsResponse(
     val data: List<Transaction>,
     @Json(name = "total_pages")
