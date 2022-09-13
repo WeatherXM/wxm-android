@@ -41,10 +41,6 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
             }
         }
 
-    override fun getTheme(): Int {
-        return R.style.ThemeOverlay_WeatherXM_BottomSheetDialog
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

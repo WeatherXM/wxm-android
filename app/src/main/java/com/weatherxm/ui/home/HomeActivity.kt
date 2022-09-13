@@ -29,7 +29,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
-
 class HomeActivity : AppCompatActivity(), KoinComponent {
     private val navigator: Navigator by inject()
     private lateinit var binding: ActivityHomeBinding

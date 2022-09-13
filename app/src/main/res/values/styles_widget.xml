@@ -154,6 +154,15 @@
         <item name="cardBackgroundColor">@color/survey_prompt_card_background</item>
     </style>
 
+    <style name="Widget.WeatherXM.MaterialCard.ScannedDevices" parent="Widget.WeatherXM.MaterialCard">
+        <item name="cardBackgroundColor">@color/scanned_devices_card_color</item>
+        <item name="cardCornerRadius">0dp</item>
+        <item name="contentPadding">0dp</item>
+        <item name="contentPaddingTop">@dimen/padding_normal</item>
+        <item name="contentPaddingBottom">@dimen/padding_normal</item>
+    </style>
+
+
     <!--
         PopupMenu
     -->

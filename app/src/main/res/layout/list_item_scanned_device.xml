@@ -7,6 +7,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/name"
+        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_normal"
@@ -16,6 +17,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/deviceId"
+        style="@style/TextAppearance.WeatherXM.ScannedDevices.DeviceId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
@@ -25,7 +27,7 @@
         tools:text="Device ID: wx56n46" />
 
     <View
-        android:id="@+id/prev_line"
+        android:id="@+id/bottomBorder"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/black"

@@ -32,6 +32,9 @@
     <color name="chart_popup_text_color">@color/dark_top</color>
     <color name="chart_wind_gust_color">@color/dark_darkest</color>
 
+    <!-- Scan Devices -->
+    <color name="scanned_devices_card_color">@color/dark_dark2</color>
+
     <!-- Explorer -->
     <color name="hex_fill_color">#3388ff</color>
     <color name="hex_fill_outline_color">@color/white</color>

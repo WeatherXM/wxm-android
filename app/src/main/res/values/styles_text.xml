@@ -281,6 +281,15 @@
     </style>
 
     <!--
+        Scanned Devices
+    -->
+    <style name="TextAppearance.WeatherXM.ScannedDevices.DeviceId" parent="TextAppearance.WeatherXM.Default.BodyMedium">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!--
         Tabs
     -->
     <style name="TextAppearance.WeatherXM.Tabs" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">

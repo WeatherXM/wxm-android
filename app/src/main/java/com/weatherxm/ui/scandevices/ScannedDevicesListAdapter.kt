@@ -5,14 +5,19 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.weatherxm.R
 import com.weatherxm.databinding.ListItemScannedDeviceBinding
 import com.weatherxm.ui.ScannedDevice
+import com.weatherxm.util.ResourcesHelper
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class ScannedDevicesListAdapter(
     private val scannedDeviceListener: (ScannedDevice) -> Unit
 ) : ListAdapter<ScannedDevice,
     ScannedDevicesListAdapter.ScannedDeviceViewHolder>(PublicDeviceDiffCallback()), KoinComponent {
+
+    val resHelper: ResourcesHelper by inject()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScannedDeviceViewHolder {
         val binding =
@@ -41,7 +46,7 @@ class ScannedDevicesListAdapter(
         fun bind(item: ScannedDevice) {
             this.scannedDevice = item
             binding.name.text = item.name
-            binding.deviceId.text = item.address
+            binding.deviceId.text = resHelper.getString(R.string.device_id, item.address)
         }
     }
 
