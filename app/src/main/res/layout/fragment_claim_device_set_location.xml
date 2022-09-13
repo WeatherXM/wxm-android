@@ -20,6 +20,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/descSetLocation"
+                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/description_set_location"

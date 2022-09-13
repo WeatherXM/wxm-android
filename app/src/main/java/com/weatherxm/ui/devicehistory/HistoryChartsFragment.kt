@@ -198,7 +198,9 @@ class HistoryChartsFragment : Fragment() {
             barChart.initializeUV24hChart(data)
         } else {
             barChart.setNoDataText(getString(R.string.error_history_no_data_chart_found))
-            context?.getColor(R.color.black)?.let { barChart.setNoDataTextColor(it) }
+            context?.getColor(R.color.colorOnSurface)?.let {
+                barChart.setNoDataTextColor(it)
+            }
             barChart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
         }
     }
@@ -230,7 +232,9 @@ class HistoryChartsFragment : Fragment() {
 
     private fun showNoDataText(lineChart: LineChart) {
         lineChart.setNoDataText(getString(R.string.error_history_no_data_chart_found))
-        context?.getColor(R.color.black)?.let { lineChart.setNoDataTextColor(it) }
+        context?.getColor(R.color.colorOnSurface)?.let {
+            lineChart.setNoDataTextColor(it)
+        }
         lineChart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
     }
 }

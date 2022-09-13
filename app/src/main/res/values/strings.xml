@@ -85,7 +85,7 @@
     <string name="signup_hint_email">Email *</string>
     <string name="signup_hint_first_name">First Name</string>
     <string name="signup_hint_last_name">Last Name</string>
-    <string name="prompt_signup"><![CDATA[Don\'t have an account? <span style=\"color: #2599df\">SIGN UP</span>]]></string>
+    <string name="signup_text">Don\'t have an account?</string>
     <string name="signup_instructions">Signup with your email and your account will be created shortly.</string>
     <string name="success_signup_text">Thanks for joining WeatherXM! We have sent you an account activation link to %s. Please, set a password and then try to sign in.</string>
     <string name="info_registration_contact_support">Not receiving an activation email? Contact our support team.</string>

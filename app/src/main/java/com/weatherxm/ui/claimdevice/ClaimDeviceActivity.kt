@@ -7,8 +7,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
@@ -21,7 +21,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import timber.log.Timber
 
-class ClaimDeviceActivity : FragmentActivity() {
+class ClaimDeviceActivity : AppCompatActivity() {
 
     private val model: ClaimDeviceViewModel by viewModels()
     private lateinit var binding: ActivityClaimDeviceBinding
@@ -141,7 +141,7 @@ class ClaimDeviceActivity : FragmentActivity() {
     }
 
     private class ClaimDevicePagerAdapter(
-        activity: FragmentActivity
+        activity: AppCompatActivity
     ) : FragmentStateAdapter(activity) {
         companion object {
             const val PAGE_INFORMATION = 0

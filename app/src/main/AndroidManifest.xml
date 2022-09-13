@@ -35,7 +35,7 @@
         <!-- Default color for incoming Firebase notification messages -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/blue" />
+            android:resource="@color/colorPrimary" />
 
         <!-- Alias for the launcher activity so that we may change it in the future without problems -->
         <activity-alias
@@ -101,7 +101,7 @@
         <activity
             android:name="com.weatherxm.ui.deviceforecast.ForecastActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM.Forecast" />
+            android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.claimdevice.ClaimDeviceActivity"
             android:screenOrientation="portrait"

@@ -35,6 +35,20 @@
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
+        app:key="@string/display"
+        app:title="@string/display">
+        <ListPreference
+            app:defaultValue="@string/system_value"
+            app:entries="@array/theme_entries"
+            app:entryValues="@array/theme_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/key_theme"
+            app:summary="%s"
+            app:title="@string/theme" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
         app:title="@string/weather_units">
         <ListPreference
             app:defaultValue="@string/temperature_celsius"

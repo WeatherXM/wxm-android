@@ -81,6 +81,6 @@
         app:layout_anchor="@id/nav_view"
         app:layout_anchorGravity="top|end"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
-        app:tint="@color/white" />
+        app:tint="@color/colorOnPrimary" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

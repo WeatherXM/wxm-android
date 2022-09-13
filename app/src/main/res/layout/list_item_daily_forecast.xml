@@ -64,14 +64,14 @@
 
     <com.google.android.material.slider.RangeSlider
         android:id="@+id/temperature"
-        style="@style/Widget.WeatherXM.Forecast.Temperature.Slider"
+        style="@style/Widget.WeatherXM.Slider.Forecast.Temperature"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="2dp"
         android:layout_weight="1"
         android:enabled="false"
         app:values="@array/temperature_slider_sample_values"
-        tools:trackColorInactive="@color/light_grey"
+        tools:trackColorInactive="@color/light_mid_grey"
         tools:valueFrom="10"
         tools:valueTo="25" />
 

@@ -49,7 +49,7 @@
             android:id="@+id/pagerIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:dotsColor="@color/blue"
+            app:dotsColor="@color/colorPrimary"
             app:dotsSize="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/nextBtn"

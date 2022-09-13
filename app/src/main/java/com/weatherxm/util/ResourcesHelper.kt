@@ -13,7 +13,8 @@ class ResourcesHelper(private val resources: Resources) {
 
     @ColorInt
     fun getColor(@ColorRes colorResId: Int): Int {
-        return ResourcesCompat.getColor(resources, colorResId, null)
+        // TODO: How to automatically return colors-night or colors?
+        return resources.getColor(colorResId, null)
     }
 
     fun getString(@StringRes stringRes: Int): String {
@@ -25,11 +26,12 @@ class ResourcesHelper(private val resources: Resources) {
     }
 
     fun getWindDirectionDrawable(index: Int): Drawable {
-        val windDirectionDrawables: LayerDrawable = ResourcesCompat.getDrawable(
+        val windDirectionDrawable = ResourcesCompat.getDrawable(
             resources,
             R.drawable.layers_wind_direction,
             null
         ) as LayerDrawable
-        return windDirectionDrawables.getDrawable(index)
+
+        return windDirectionDrawable.getDrawable(index)
     }
 }

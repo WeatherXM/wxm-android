@@ -33,6 +33,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/updateDescription"
+                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/desc_update_prompt"
@@ -40,7 +41,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/changelogTitle"
-                style="@style/TextAppearance.WeatherXM.Paragraph.Title"
+                style="@style/TextAppearance.WeatherXM.Default.TitleLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
@@ -57,6 +58,7 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/changelog"
+                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"

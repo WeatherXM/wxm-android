@@ -73,7 +73,7 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.precipitation),
-            R.color.precipIntensity,
+            R.color.precip_intensity,
             Weather.getPrecipitationPreferredUnit(false),
             timestamps = time,
             entries = entries
@@ -86,7 +86,7 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.wind_speed),
-            R.color.windSpeed,
+            R.color.wind_speed,
             Weather.getPreferredUnit(
                 resHelper.getString(R.string.key_wind_speed_preference),
                 resHelper.getString(R.string.wind_speed_ms)
@@ -102,7 +102,7 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.wind_gust),
-            R.color.windGust,
+            R.color.wind_gust,
             Weather.getPreferredUnit(
                 resHelper.getString(R.string.key_wind_speed_preference),
                 resHelper.getString(R.string.wind_speed_ms)
@@ -118,7 +118,7 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.wind_direction),
-            R.color.windSpeed,
+            R.color.wind_speed,
             Weather.getPreferredUnit(
                 resHelper.getString(R.string.key_wind_direction_preference),
                 resHelper.getString(R.string.wind_direction_cardinal)
@@ -163,7 +163,7 @@ class HistoryUseCaseImpl(
     ): BarChartData {
         return BarChartData(
             resHelper.getString(R.string.uv_index),
-            R.color.uvIndex,
+            R.color.uv_index,
             resHelper.getString(R.string.uv_index_unit),
             timestamps = time,
             entries = entries

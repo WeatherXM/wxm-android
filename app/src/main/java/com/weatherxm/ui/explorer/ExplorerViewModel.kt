@@ -11,6 +11,7 @@ import com.mapbox.maps.extension.style.layers.generated.heatmapLayer
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.weatherxm.R
 import com.weatherxm.data.Resource
+import com.weatherxm.data.SingleLiveEvent
 import com.weatherxm.ui.ExplorerCamera
 import com.weatherxm.ui.ExplorerData
 import com.weatherxm.ui.UIDevice
@@ -38,11 +39,23 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
         value = Resource.loading()
     }
 
-    // The list of a devices in a hex
-    private val onHexSelected = MutableLiveData<String>()
+    /*
+     * The list of a devices in a hex.
+     *
+     * We use SingleLiveEvent because MutableLiveData persists and re-posts the value
+     * to the observers on configuration change (like a theme change) and the effects of the
+     * observers happen again (like re-opening a closed BottomSheetDialog).
+     */
+    private val onHexSelected = SingleLiveEvent<String>()
 
-    // The details/data of a public device
-    private val onPublicDeviceSelected = MutableLiveData<UIDevice>()
+    /*
+     * The details/data of a public device
+     *
+     * We use SingleLiveEvent because MutableLiveData persists and re-posts the value
+     * to the observers on configuration change (like a theme change) and the effects of the
+     * observers happen again (like re-opening a closed BottomSheetDialog).
+     */
+    private val onPublicDeviceSelected = SingleLiveEvent<UIDevice>()
 
     // Needed for passing info to the activity to show/hide elements when onMapClick
     private val showMapOverlayViews = MutableLiveData(true)

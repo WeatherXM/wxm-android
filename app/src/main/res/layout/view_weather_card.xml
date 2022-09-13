@@ -9,7 +9,6 @@
     tools:parentTag="LinearLayout">
 
     <com.google.android.material.card.MaterialCardView
-        style="@style/Widget.WeatherXM.MaterialCard.Weather"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -81,9 +80,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:drawableStart="@drawable/ic_weather_temperature"
+                            app:drawableTint="@color/weather_card_data_icon"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/feelsLikeTitle"
+                            style="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/feels_like"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/feelsLikeIcon" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/feelsLike"
@@ -92,17 +102,8 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/feelsLikeIcon"
+                            app:layout_constraintTop_toBottomOf="@id/feelsLikeTitle"
                             tools:text="27°C" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/feels_like"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/feelsLike" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -115,9 +116,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="0dp"
                             android:drawableStart="@drawable/ic_weather_precipitation"
+                            app:drawableTint="@color/weather_card_data_icon"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/precipTitle"
+                            style="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:text="@string/precipitation_intensity"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/precipIcon" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/precipitation_intensity"
@@ -126,17 +138,8 @@
                             android:layout_height="0dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/precipIcon"
+                            app:layout_constraintTop_toBottomOf="@id/precipTitle"
                             tools:text="1.0 mm" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:text="@string/precipitation_intensity"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/precipitation_intensity" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -149,9 +152,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:drawableStart="@drawable/ic_weather_wind"
+                            app:drawableTint="@color/weather_card_data_icon"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/windTitle"
+                            style="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/wind"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/windIcon" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/wind"
@@ -160,17 +174,8 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/windIcon"
+                            app:layout_constraintTop_toBottomOf="@id/windTitle"
                             tools:text="2bf NW" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/wind"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/wind" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
 
@@ -192,9 +197,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:drawableStart="@drawable/ic_weather_humidity"
+                            app:drawableTint="@color/weather_card_data_icon"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/humidityTitle"
+                            style="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/humidity"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/humidityIcon" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/humidity"
@@ -203,17 +219,8 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/humidityIcon"
+                            app:layout_constraintTop_toBottomOf="@id/humidityTitle"
                             tools:text="45%" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/humidity"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/humidity" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -226,9 +233,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:drawableStart="@drawable/ic_weather_pressure"
+                            app:drawableTint="@color/weather_card_data_icon"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/pressureTitle"
+                            style="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pressure"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/pressureIcon" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/pressure"
@@ -237,17 +255,8 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/pressureIcon"
+                            app:layout_constraintTop_toBottomOf="@id/pressureTitle"
                             tools:text="10 hpa" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/pressure"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/pressure" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -260,9 +269,20 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:drawableStart="@drawable/ic_weather_solar"
+                            app:drawableTint="@color/weather_card_data_icon"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/solarTitle"
+                            style="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/uv_index"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/solarIcon" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/solar"
@@ -271,17 +291,8 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/solarIcon"
+                            app:layout_constraintTop_toBottomOf="@id/solarTitle"
                             tools:text="7" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            style="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/uv_index"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/solar" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
