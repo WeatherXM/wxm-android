@@ -89,6 +89,10 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                     if (binding.swiperefresh.isRefreshing) {
                         binding.empty.clear()
                         binding.empty.visibility = View.GONE
+                    } else if (adapter.currentList.isNotEmpty()) {
+                        binding.empty.clear()
+                        binding.empty.visibility = View.GONE
+                        binding.swiperefresh.isRefreshing = true
                     } else {
                         binding.recycler.visibility = View.GONE
                         binding.empty.clear()

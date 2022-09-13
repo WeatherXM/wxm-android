@@ -7,6 +7,9 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.google.android.material.snackbar.Snackbar
@@ -20,6 +23,7 @@ import com.weatherxm.util.DateTimeHelper.getRelativeTimeFromISO
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setColor
 import com.weatherxm.util.setHtml
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -39,6 +43,22 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         const val TAB_TOMORROW = 1
     }
 
+    init {
+        lifecycleScope.launch {
+            // Launch the block in a new coroutine every time the lifecycle
+            // is in the RESUMED state (or above) and cancel it when it's STOPPED.
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                Timber.d("Starting device polling")
+                // Trigger the flow for refreshing device data in the background
+                model.deviceAutoRefresh().collect {
+                    it.tap { device ->
+                        onDeviceUpdated(device)
+                    }
+                }
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUserDeviceBinding.inflate(layoutInflater)
@@ -53,6 +73,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
             finish()
             return
         }
+        model.setDevice(device)
 
         binding.toolbar.setOnMenuItemClickListener(this)
 
@@ -77,7 +98,8 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         }
 
         binding.swiperefresh.setOnRefreshListener {
-            model.fetchUserDeviceAllData(forceRefresh = true)
+            model.fetchTokensForecastData(forceRefresh = true)
+            model.fetchUserDevice()
             setResult(Activity.RESULT_OK)
         }
 
@@ -97,16 +119,15 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
 
         // onCreate was too big. Handle the initialization of the observers in a separate function
         initObservers()
+        onDeviceUpdated(device)
 
         // Fetch data
-        model.setDevice(device)
-        model.fetchUserDeviceAllData()
+        model.fetchTokensForecastData()
     }
 
     private fun initObservers() {
         model.onDeviceSet().observe(this) {
-            updateDeviceInfo(it)
-            binding.currentWeatherCard.setData(it.currentWeather, it.timezone, 1)
+            onDeviceUpdated(it)
         }
 
         model.onForecast().observe(this) {
@@ -126,7 +147,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
 
         model.onUnitPreferenceChanged().observe(this) {
             if (it) {
-                binding.currentWeatherCard.updateCurrentWeatherUI(1, model.getDevice().timezone)
+                binding.currentWeatherCard.updateCurrentWeatherUI(model.getDevice().timezone)
                 hourlyAdapter.notifyDataSetChanged()
             }
         }
@@ -145,6 +166,11 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         model.onError().observe(this) {
             showSnackbarMessage(it.errorMessage, it.retryFunction)
         }
+    }
+
+    private fun onDeviceUpdated(device: Device) {
+        updateDeviceInfo(device)
+        binding.currentWeatherCard.setData(device.currentWeather, device.timezone)
     }
 
     override fun onMenuItemClick(menuItem: MenuItem?): Boolean {

@@ -14,10 +14,11 @@ import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getLocalDate
 import com.weatherxm.util.DateTimeHelper.getNowInTimezone
 import com.weatherxm.util.DateTimeHelper.getTimezone
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.runBlocking
-import java.util.*
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 class UserDeviceUseCaseImpl(

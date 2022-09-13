@@ -19,7 +19,7 @@ import java.time.ZonedDateTime
 @Keep
 data class UIError(
     var errorMessage: String,
-    var retryFunction: (() -> Unit)?
+    var retryFunction: (() -> Unit)? = null
 )
 
 @Keep

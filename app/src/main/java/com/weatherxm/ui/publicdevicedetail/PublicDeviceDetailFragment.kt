@@ -100,8 +100,7 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
                 updateDeviceInfo(resource.data)
                 binding.currentWeatherCard.setData(
                     resource.data?.currentWeather,
-                    resource.data?.timezone,
-                    1
+                    resource.data?.timezone
                 )
                 binding.currentWeatherCard.show()
                 resource.data?.tokenInfo?.let {
