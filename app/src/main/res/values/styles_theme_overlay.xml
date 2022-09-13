@@ -1,0 +1,21 @@
+<resources>
+
+    <style name="ThemeOverlay.WeatherXM.TabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="colorSurface">@color/transparent</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherXM.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="colorSurface">@color/bottomSheetDialog_background</item>
+        <item name="bottomSheetStyle">@style/Widget.WeatherXM.BottomSheet.Dialog</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherXM.BottomSheetDialog.Explorer.Devices" parent="ThemeOverlay.WeatherXM.BottomSheetDialog">
+        <item name="colorSurface">@color/bottomSheetDialog_background</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherXM.Toolbar" parent="ThemeOverlay.Material3.Toolbar.Surface">
+        <item name="colorSurface">@color/transparent</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="navigationIconTint">@color/colorPrimary</item>
+    </style>
+</resources>

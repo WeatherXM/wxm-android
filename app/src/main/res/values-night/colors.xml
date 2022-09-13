@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/dark_primary</color>
+    <color name="colorPrimaryVariant">@color/dark_lighter_blue</color>
+    <color name="colorOnPrimary">@color/dark_background</color>
+
+    <color name="colorSurface">@color/dark_top</color>
+    <color name="colorOnSurface">@color/light_top</color>
+    <color name="colorOnSurfaceVariant">@color/light_mid_grey</color>
+
+    <color name="colorBackground">@color/dark_background</color>
+    <color name="colorOnBackground">@color/light_top</color>
+
+    <!-- System and Launcher -->
+    <color name="ic_launcher_background">#1B75BA</color>
+    <color name="status_bar_color">#80003b77</color>
+
+    <!-- Weather Card -->
+    <color name="weather_card_data_icon">@color/dark_darkest</color>
+    <color name="weather_card_data_subtitle">@color/dark_darkest</color>
+
+    <!-- Hourly Forecast Card -->
+    <color name="hourly_forecast_card_precipitation">@color/light_mid_grey</color>
+
+    <!-- Dates Tabs -->
+    <color name="date_tab_selected_text_color">@color/dark_darkest</color>
+    <color name="date_tab_selected_background">@color/dark_dark2</color>
+
+    <!-- History Chart -->
+    <color name="chart_axis_line_color">@color/light_mid_grey</color>
+    <color name="chart_popup_background">@color/dark_darkest</color>
+    <color name="chart_popup_text_color">@color/dark_top</color>
+    <color name="chart_wind_gust_color">@color/dark_darkest</color>
+
+    <!-- Explorer -->
+    <color name="hex_fill_color">#3388ff</color>
+    <color name="hex_fill_outline_color">@color/white</color>
+    <color name="explorer_devices_count_background">#88000000</color>
+    <color name="explorer_devices_count_title">#CAC4CF</color>
+    <color name="explorer_devices_count_value">#46D163</color>
+    <color name="bottomSheetDialog_background">@color/dark_dark1</color>
+
+    <!-- Daily Forecast -->
+    <color name="daily_forecast_date">@color/dark_darker</color>
+    <color name="daily_forecast_precip_prob_some">@color/light_lightest_blue</color>
+    <color name="daily_forecast_precip_prob_none">@color/light_mid_grey</color>
+    <color name="daily_forecast_temperature_slider">@color/dark_darkest</color>
+    <color name="daily_forecast_temperature_slider_inactive">@color/dark_dark1</color>
+
+    <!-- Token Chart -->
+    <color name="token_info_chip_background_color">@color/dark_dark3</color>
+
+    <!-- Transactions -->
+    <color name="token_transaction_hash_background">@color/dark_blue_tint</color>
+    <color name="token_transaction_slider_inactive">@color/dark_dark1</color>
+    <color name="token_transaction_date_color">@color/light_mid_grey</color>
+    <color name="token_transaction_descriptions">@color/light_mid_grey</color>
+    <color name="token_transaction_line">@color/light_dark_grey</color>
+
+    <!-- Survey Prompt -->
+    <color name="survey_prompt_card_background">@color/dark_blue_tint</color>
+
+    <!-- Weather Data colors -->
+    <color name="temperature">#084D6A</color>
+    <color name="precip_intensity">#48BEC5</color>
+    <color name="precip_probability">#97D779</color>
+    <color name="wind_speed">#4FE0B6</color>
+    <color name="wind_gust">#3E54D3</color>
+    <color name="pressure">#4F80E2</color>
+    <color name="humidity">#48BEC5</color>
+    <color name="uv_index">#FFCE49</color>
+
+    <!-- Reward Scores -->
+    <color name="reward_score_very_high">#46D163</color>
+    <color name="reward_score_high">#E1CA60</color>
+    <color name="reward_score_average">#F3AD4E</color>
+    <color name="reward_score_low">#EF8B4F</color>
+    <color name="reward_score_very_low">#F6736D</color>
+    <color name="reward_score_unknown">#BAC7CB</color>
+
+    <!-- Online/Offline indicators -->
+    <color name="device_status_online">@color/success</color>
+    <color name="device_status_offline">@color/error</color>
+    <color name="device_status_unknown">@color/light_mid_grey</color>
+</resources>

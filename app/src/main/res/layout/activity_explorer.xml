@@ -46,8 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_margin="@dimen/margin_normal"
-            android:alpha="0.0"
-            app:cardBackgroundColor="@color/blue_translucent"
+            app:cardBackgroundColor="@color/transparent"
             app:cardCornerRadius="@dimen/card_corner_radius"
             app:cardUseCompatPadding="false"
             app:contentPadding="@dimen/padding_small">
@@ -57,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?textAppearanceBodySmall"
-                android:textColor="@color/white_translucent"
+                android:textColor="@color/light_top"
                 tools:text="ZOOM = 12.7" />
 
         </com.google.android.material.card.MaterialCardView>
@@ -88,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/title_devices_count"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -96,7 +95,7 @@
                     android:textAppearance="@style/TextAppearance.WeatherXM.Explorer.DevicesCount.Title"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/devices_count"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -111,13 +110,10 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/login_signup_view"
+            style="@style/Widget.WeatherXM.MaterialCard.Login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
-            app:cardBackgroundColor="@color/white_translucent"
-            app:cardElevation="@dimen/card_elevation"
-            app:cardMaxElevation="@dimen/card_elevation"
-            app:contentPadding="@dimen/padding_normal"
             app:layout_constraintTop_toBottomOf="@id/devices_count_card">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -134,15 +130,36 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/signupPrompt"
-                    style="@style/Widget.WeatherXM.TextButton.Subtle"
-                    android:layout_width="match_parent"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/signUpContainer"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/prompt_signup"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintLeft_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/login" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/login">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/signUpText"
+                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/signup_text"
+                        app:layout_constraintBottom_toBottomOf="@id/signupPrompt"
+                        app:layout_constraintEnd_toStartOf="@id/signupPrompt"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/signupPrompt" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/signupPrompt"
+                        style="@style/Widget.WeatherXM.TextButton.Subtle.Caps"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_signup"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/signUpText"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

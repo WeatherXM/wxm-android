@@ -123,6 +123,7 @@ import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.usecases.UserDeviceUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.usecases.UserUseCaseImpl
+import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.Mask
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Validator
@@ -504,6 +505,12 @@ val database = module {
     }
 }
 
+val displayModeHelper = module {
+    single {
+        DisplayModeHelper(androidContext().resources, get())
+    }
+}
+
 private val utilities = module {
     single<Moshi> {
         Moshi.Builder()
@@ -559,5 +566,6 @@ val modules = listOf(
     firebase,
     apiServiceModule,
     database,
+    displayModeHelper,
     utilities
 )

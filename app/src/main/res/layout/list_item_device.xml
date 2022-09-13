@@ -72,7 +72,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/statusChip"
-            style="@style/Widget.WeatherXM.Status.Chip"
+            style="@style/Widget.WeatherXM.Chip.Status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
@@ -109,7 +109,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/lastSeen"
-            style="@style/TextAppearance.WeatherXM.Updated.On"
+            style="@style/TextAppearance.WeatherXM.Devices.List.LastSeen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"

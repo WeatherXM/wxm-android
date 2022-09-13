@@ -73,9 +73,9 @@ class ExplorerUseCaseImpl(
                 totalDevices += publicHex.deviceCount ?: 0
 
                 PolygonAnnotationOptions()
-                    .withFillColor(resHelper.getColor(R.color.hexFillColor))
+                    .withFillColor(resHelper.getColor(R.color.hex_fill_color))
                     .withFillOpacity(FILL_OPACITY_HEXAGONS)
-                    .withFillOutlineColor(resHelper.getColor(R.color.hexFillOutlineColor))
+                    .withFillOutlineColor(resHelper.getColor(R.color.hex_fill_outline_color))
                     .withData(gson.toJsonTree(UIHex(publicHex.index, publicHex.center)))
                     .withPoints(polygonPointsToLatLng(publicHex.polygon))
             }

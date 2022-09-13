@@ -17,6 +17,24 @@
     <string name="short_app_survey_prompt_desc">Your feedback matters. Tap to take a very quick survey.</string>
     <string name="short_app_survey_desc">Share your feedback by taking the WeatherXM app quick survey. It only has 2 mandatory questions!</string>
 
+    <!-- Display -->
+    <string name="display">Display</string>
+    <string name="theme">Theme</string>
+    <string name="key_theme" translatable="false">theme</string>
+    <string name="light_value" translatable="false">Light</string>
+    <string name="dark_value" translatable="false">Dark</string>
+    <string name="system_value" translatable="false">System</string>
+    <string-array name="theme_entries">
+        <item>Light Theme</item>
+        <item>Dark Theme</item>
+        <item>System</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>@string/light_value</item>
+        <item>@string/dark_value</item>
+        <item>@string/system_value</item>
+    </string-array>
+
     <!-- Help -->
     <string name="help">Help</string>
     <string name="title_contact_support">Contact Support</string>

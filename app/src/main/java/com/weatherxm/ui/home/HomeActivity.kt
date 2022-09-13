@@ -1,6 +1,5 @@
 package com.weatherxm.ui.home
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +8,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
@@ -39,6 +39,7 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
     private val homeViewModel: HomeViewModel by viewModels()
 
     private var snackbar: Snackbar? = null
+    private lateinit var navController: NavController
 
     // Register the launcher for the claim device activity and wait for a possible result
     private val claimDeviceLauncher =
@@ -48,7 +49,7 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
-    // TODO: This will be used in the Update activity where the flow is TBD. 
+    // TODO: This will be used in the Update activity where the flow is TBD.
     private val findZipFileLauncher =
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             result.data?.data?.let {
@@ -56,13 +57,12 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
-    @SuppressLint("UnsafeOptInUsageError")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navController = findNavController(R.id.nav_host_fragment)
+        navController = findNavController(R.id.nav_host_fragment)
 
         // Setup navigation view
         binding.navView.setupWithNavController(navController)
@@ -117,13 +117,12 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             when (destination.id) {
                 R.id.navigation_devices -> {
                     binding.addDevice.showIfNot()
-                    binding.devicesCountCard.visibility = View.GONE
                 }
                 else -> {
                     binding.addDevice.hideIfNot()
-                    binding.devicesCountCard.visibility = View.GONE
                 }
             }
+            binding.devicesCountCard.visibility = View.GONE
         }
 
         binding.addDevice.setOnClickListener {
@@ -147,7 +146,7 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
-        // TODO: For testing purposes. 
+        // TODO: For testing purposes.
         homeViewModel.onConnectedDevice().observe(this) {
 //            val intent = Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE)
 //                .setType("application/zip")
@@ -172,6 +171,29 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
 
         // Fetch user's devices
         devicesViewModel.fetch()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        /*
+        * Changing the theme from Profile -> Settings and going back to profile
+        * shows the "Add Device" floating button visible again. This code is to fix this.
+         */
+        when (navController.currentDestination?.id) {
+            R.id.navigation_devices -> {
+                binding.addDevice.showIfNot()
+                binding.devicesCountCard.visibility = View.GONE
+            }
+            R.id.navigation_explorer -> {
+                binding.addDevice.hideIfNot()
+                binding.devicesCountCard.visibility = View.VISIBLE
+            }
+            else -> {
+                binding.addDevice.hideIfNot()
+                binding.devicesCountCard.visibility = View.GONE
+            }
+        }
     }
 
     private fun handleBadge(hasWallet: Boolean) {

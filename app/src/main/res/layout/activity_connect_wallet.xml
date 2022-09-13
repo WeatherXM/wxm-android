@@ -43,8 +43,8 @@
             app:layout_constraintVertical_chainStyle="packed">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/notice"
-                style="@style/Widget.WeatherXM.MaterialCard.Notice"
+                android:id="@+id/warning"
+                style="@style/Widget.WeatherXM.MaterialCard.Warning"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
@@ -59,7 +59,7 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/notice_icon"
+                        android:id="@+id/warning_icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_error"
@@ -68,14 +68,13 @@
                         tools:ignore="ContentDescription" />
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/notice_text"
                         style="@style/TextAppearance.WeatherXM.Warning"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_small"
                         android:text="@string/wallet_prompt"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/notice_icon"
+                        app:layout_constraintStart_toEndOf="@id/warning_icon"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -88,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/notice">
+                app:layout_constraintTop_toBottomOf="@id/warning">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -97,7 +96,7 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/currentAddressTitle"
-                        style="@style/TextAppearance.WeatherXM.Card.Title"
+                        style="@style/TextAppearance.WeatherXM.TextInput.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/current_address"
@@ -131,7 +130,7 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/addressInfo"
-                        style="@style/TextAppearance.WeatherXM.Card.Title"
+                        style="@style/TextAppearance.WeatherXM.TextInput.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/wxm_address"
@@ -196,11 +195,10 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/saveBtn"
-                style="@style/Widget.WeatherXM.Button.Purple"
+                style="@style/Widget.WeatherXM.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
-                android:enabled="false"
                 android:text="@string/action_save"
                 app:layout_constraintTop_toBottomOf="@id/ownershipCheckbox"
                 app:layout_insetEdge="bottom" />

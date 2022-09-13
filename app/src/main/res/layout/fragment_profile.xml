@@ -19,7 +19,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/email"
-            style="@style/TextAppearance.WeatherXM.Profile.UserInfo"
+            style="@style/TextAppearance.WeatherXM.Default.BodyLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_normal"
@@ -65,7 +65,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/connect_wallet"
-                        style="@style/Widget.WeatherXM.Profile.Elements"
+                        style="@style/Widget.WeatherXM.TextButton.Profile.Elements"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/title_connect_wallet"
@@ -90,7 +90,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/settings"
-                    style="@style/Widget.WeatherXM.Profile.Elements"
+                    style="@style/Widget.WeatherXM.TextButton.Profile.Elements"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/settings"

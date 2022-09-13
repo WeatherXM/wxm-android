@@ -104,7 +104,8 @@ open class TokenCardView : LinearLayout, KoinComponent {
             resources.getString(R.string.score, it)
         } ?: resources.getString(R.string.score_unknown)
 
-        val color = resHelper.getColor(Tokens.getRewardScoreColor(data?.validationScore))
+        val color =
+            resources.getColor(Tokens.getRewardScoreColor(data?.validationScore), context.theme)
         binding.scoreIcon.setColorFilter(color)
 
         with(binding.rewardTimestamp) {

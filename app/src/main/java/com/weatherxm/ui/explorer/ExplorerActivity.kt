@@ -5,7 +5,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.text.HtmlCompat
 import com.google.android.material.snackbar.Snackbar
 import com.mapbox.geojson.Point
 import com.weatherxm.BuildConfig
@@ -20,7 +19,6 @@ import com.weatherxm.ui.common.Animation.ShowAnimation.SlideInFromBottom
 import com.weatherxm.ui.common.Animation.ShowAnimation.SlideInFromTop
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.show
-import com.weatherxm.util.ResourcesHelper
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -30,7 +28,6 @@ import java.util.*
 class ExplorerActivity : AppCompatActivity(), KoinComponent, OnMapDebugInfoListener {
 
     private val navigator: Navigator by inject()
-    private val resourcesHelper: ResourcesHelper by inject()
     private val model: ExplorerViewModel by viewModels()
     private lateinit var binding: ActivityExplorerBinding
 
@@ -86,11 +83,6 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent, OnMapDebugInfoListe
         binding.login.setOnClickListener {
             navigator.showLogin(this)
         }
-
-        binding.signupPrompt.text = HtmlCompat.fromHtml(
-            resourcesHelper.getString(R.string.prompt_signup),
-            HtmlCompat.FROM_HTML_MODE_COMPACT
-        )
 
         binding.signupPrompt.setOnClickListener {
             navigator.showSignup(this)

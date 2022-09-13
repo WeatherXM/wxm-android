@@ -27,7 +27,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/location"
-            style="@style/TextAppearance.WeatherXM.Device.Details.Subtitle"
+            style="@style/TextAppearance.WeatherXM.Device.Details.Address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/card_side_margin"
