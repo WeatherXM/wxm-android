@@ -148,12 +148,20 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         * Changing the theme from Profile -> Settings and going back to profile
         * shows the "Add Device" floating button visible again. This code is to fix this.
          */
-        if (navController.currentDestination?.id == R.id.navigation_devices) {
-            binding.addDevice.showIfNot()
-        } else {
-            binding.addDevice.hideIfNot()
+        when (navController.currentDestination?.id) {
+            R.id.navigation_devices -> {
+                binding.addDevice.showIfNot()
+                binding.devicesCountCard.visibility = View.GONE
+            }
+            R.id.navigation_explorer -> {
+                binding.addDevice.hideIfNot()
+                binding.devicesCountCard.visibility = View.VISIBLE
+            }
+            else -> {
+                binding.addDevice.hideIfNot()
+                binding.devicesCountCard.visibility = View.GONE
+            }
         }
-        binding.devicesCountCard.visibility = View.GONE
     }
 
     private fun handleBadge(hasWallet: Boolean) {
