@@ -60,6 +60,10 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
 
         binding.recycler.adapter = adapter
 
+        binding.closePopup.setOnClickListener {
+            dismiss()
+        }
+
         binding.claimDeviceManually.setOnClickListener {
             homeViewModel.claimManually()
             dismiss()
