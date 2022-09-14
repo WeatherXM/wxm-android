@@ -20,6 +20,7 @@ import com.weatherxm.util.DateTimeHelper.getHourMinutesFromISO
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UnitConverter
 import com.weatherxm.util.Weather
+import java.time.LocalDate
 
 interface HistoryUseCase {
     suspend fun getWeatherHistory(
@@ -249,7 +250,7 @@ class HistoryUseCaseImpl(
         }
 
         return HistoryCharts(
-            date,
+            LocalDate.parse(date),
             createTemperatureLineChartData(time, temperatureEntries),
             createPrecipitationLineChartData(time, precipEntries),
             createWindSpeedLineChartData(time, windSpeedEntries),
