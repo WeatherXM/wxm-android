@@ -138,7 +138,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 const val RETROFIT_API = "RETROFIT_API"

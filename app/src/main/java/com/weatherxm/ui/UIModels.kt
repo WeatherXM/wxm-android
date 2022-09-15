@@ -15,18 +15,19 @@ import com.weatherxm.data.LastAndDatedTxs
 import com.weatherxm.data.Location
 import com.weatherxm.data.Transaction
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
 import java.time.ZonedDateTime
 
 @Keep
 data class UIError(
     var errorMessage: String,
-    var retryFunction: (() -> Unit)?
+    var retryFunction: (() -> Unit)? = null
 )
 
 @Keep
 @JsonClass(generateAdapter = true)
 data class HistoryCharts(
-    var date: String?,
+    var date: LocalDate,
     var temperature: LineChartData,
     var precipitation: LineChartData,
     var windSpeed: LineChartData,
@@ -56,6 +57,10 @@ data class LineChartData(
     fun isNullOrEmpty(): Boolean {
         return timestamps.isEmpty() && entries.isEmpty()
     }
+
+    fun isDataValid(): Boolean {
+        return timestamps.isNotEmpty() && entries.isNotEmpty()
+    }
 }
 
 @Keep
@@ -69,6 +74,10 @@ data class BarChartData(
 ) {
     fun isNullOrEmpty(): Boolean {
         return timestamps.isEmpty() && entries.isEmpty()
+    }
+
+    fun isDataValid(): Boolean {
+        return timestamps.isNotEmpty() && entries.isNotEmpty()
     }
 }
 

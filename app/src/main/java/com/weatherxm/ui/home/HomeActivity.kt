@@ -168,12 +168,13 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
-        // Fetch user's devices
-        devicesViewModel.fetch()
     }
 
     override fun onResume() {
         super.onResume()
+
+        // Fetch user's devices
+        devicesViewModel.fetch()
 
         /*
         * Changing the theme from Profile -> Settings and going back to profile
