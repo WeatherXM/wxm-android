@@ -16,22 +16,30 @@ import com.weatherxm.ui.TokenInfo
 import com.weatherxm.ui.UIError
 import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.util.DateTimeHelper.isTomorrow
+import com.weatherxm.util.RefreshHandler
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 import java.time.ZonedDateTime
-
+import java.util.concurrent.TimeUnit
 
 @Suppress("TooManyFunctions")
 class UserDeviceViewModel : ViewModel(), KoinComponent {
+    companion object {
+        private const val REFRESH_INTERVAL_SECONDS = 30L
+    }
 
     private val resHelper: ResourcesHelper by inject()
     private val userDeviceUseCase: UserDeviceUseCase by inject()
+    private val refreshHandler = RefreshHandler(
+        refreshIntervalMillis = TimeUnit.SECONDS.toMillis(REFRESH_INTERVAL_SECONDS)
+    )
 
     private lateinit var device: Device
 
@@ -65,21 +73,16 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     fun setDevice(device: Device) {
         this.device = device
-        onDeviceSet.postValue(this.device)
     }
 
     fun getDevice(): Device {
         return device
     }
 
-    fun fetchUserDeviceAllData(forceRefresh: Boolean = false) {
+    fun fetchTokensForecastData(forceRefresh: Boolean = false) {
         onLoading.postValue(true)
 
         viewModelScope.launch(Dispatchers.IO) {
-            val userDevice = async {
-                userDeviceUseCase.getUserDevice(device.id)
-            }
-
             val tokensDeferred = async {
                 userDeviceUseCase.getTokenInfoLast30D(device.id)
             }
@@ -88,22 +91,9 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                 userDeviceUseCase.getTodayAndTomorrowForecast(device, forceRefresh)
             }
 
-            var errorOnUserDevice = false
             var errorOnTokens = false
             var errorOnForecast = false
             var shouldRetry = false
-
-            val deviceResponse = userDevice.await()
-            deviceResponse
-                .map {
-                    setDevice(it)
-                }
-                .mapLeft {
-                    if (it == NoConnectionError || it == ConnectionTimeoutError) {
-                        shouldRetry = true
-                    }
-                    errorOnUserDevice = true
-                }
 
             val tokens = tokensDeferred.await()
             tokens
@@ -129,7 +119,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     errorOnForecast = true
                 }
 
-            handleErrors(errorOnUserDevice, errorOnTokens, errorOnForecast, shouldRetry)
+            handleErrors(errorOnTokens, errorOnForecast, shouldRetry)
             onLoading.postValue(false)
         }
     }
@@ -142,7 +132,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                     Timber.d("Got short term forecast for TODAY & TOMORROW")
                     if (it.isEmpty()) {
                         onError.postValue(
-                            UIError(resHelper.getString(R.string.forecast_empty), null)
+                            UIError(resHelper.getString(R.string.forecast_empty))
                         )
                     }
                     onForecast.postValue(it)
@@ -155,20 +145,21 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     }
 
     private fun handleForecastFailure(failure: Failure) {
-        val uiError = UIError("", null)
-        when (failure) {
-            is ApiError.UserError.InvalidFromDate, is ApiError.UserError.InvalidToDate -> {
-                uiError.errorMessage = resHelper.getString(R.string.error_forecast_generic_message)
+        onError.postValue(
+            when (failure) {
+                is ApiError.UserError.InvalidFromDate, is ApiError.UserError.InvalidToDate -> {
+                    UIError(resHelper.getString(R.string.error_forecast_generic_message))
+                }
+                is NoConnectionError, is ConnectionTimeoutError -> {
+                    UIError(failure.getDefaultMessage(R.string.error_reach_out_short)) {
+                        fetchForecast()
+                    }
+                }
+                else -> {
+                    UIError(resHelper.getString(R.string.error_reach_out_short))
+                }
             }
-            is NoConnectionError, is ConnectionTimeoutError -> {
-                uiError.errorMessage = failure.getDefaultMessage(R.string.error_reach_out_short)
-                uiError.retryFunction = { fetchForecast() }
-            }
-            else -> {
-                uiError.errorMessage = resHelper.getString(R.string.error_reach_out_short)
-            }
-        }
-        onError.postValue(uiError)
+        )
     }
 
     private fun fetchTokenDetails() {
@@ -187,27 +178,27 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             userDeviceUseCase.getUserDevice(device.id)
                 .map {
                     Timber.d("Got User Device: $it")
-                    setDevice(it)
+                    device = it
+                    onDeviceSet.postValue(device)
                 }
                 .mapLeft {
-                    val uiError = UIError("", null)
                     when (it) {
                         is ApiError.DeviceNotFound -> {
-                            uiError.errorMessage =
-                                resHelper.getString(R.string.error_user_device_not_found)
+                            UIError(resHelper.getString(R.string.error_user_device_not_found))
                         }
                         is NoConnectionError, is ConnectionTimeoutError -> {
-                            uiError.errorMessage = it.getDefaultMessage(
-                                R.string.error_reach_out_short
+                            UIError(
+                                it.getDefaultMessage(R.string.error_reach_out_short),
+                                ::fetchUserDevice
                             )
-                            uiError.retryFunction = ::fetchUserDevice
                         }
                         else -> {
-                            uiError.errorMessage =
-                                resHelper.getString(R.string.error_reach_out_short)
+                            UIError(resHelper.getString(R.string.error_reach_out_short))
                         }
                     }
-                    onError.postValue(uiError)
+                }
+                .tapLeft {
+                    onError.postValue(it)
                 }
             onLoading.postValue(false)
         }
@@ -215,7 +206,6 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
 
     @Suppress("ComplexMethod")
     private fun handleErrors(
-        errorDevice: Boolean,
         errorToken: Boolean,
         errorForecast: Boolean,
         shouldRetry: Boolean
@@ -225,18 +215,11 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         // This if checks if 2/3 error states are true, so we fetch all the data again
         // Otherwise we have either 0/3 or 1/3 error states so just check them one by one
         @Suppress("ComplexCondition")
-        if ((errorDevice && (errorToken || errorForecast)) || (errorToken && errorForecast)) {
+        if (errorToken && errorForecast) {
             uiError.errorMessage = resHelper.getString(R.string.error_user_device_data_failed)
 
             if (shouldRetry) {
-                uiError.retryFunction = { fetchUserDeviceAllData() }
-            }
-        } else if (errorDevice) {
-            uiError.errorMessage =
-                resHelper.getString(R.string.error_user_device_current_weather_failed)
-
-            if (shouldRetry) {
-                uiError.retryFunction = ::fetchUserDevice
+                uiError.retryFunction = { fetchTokensForecastData() }
             }
         } else if (errorToken) {
             uiError.errorMessage = resHelper.getString(R.string.error_user_device_token_failed)
@@ -252,7 +235,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
             }
         }
 
-        if (errorToken || errorForecast || errorDevice) {
+        if (errorToken || errorForecast) {
             onError.postValue(uiError)
         }
     }
@@ -308,6 +291,33 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
                 )
             }
     }
+
+    suspend fun deviceAutoRefresh() = refreshHandler.flow()
+        .map {
+            userDeviceUseCase.getUserDevice(device.id)
+                .tap {
+                    Timber.d("Got User Device using polling: ${it.name}")
+                }
+                .mapLeft {
+                    when (it) {
+                        is ApiError.DeviceNotFound -> {
+                            UIError(resHelper.getString(R.string.error_user_device_not_found))
+                        }
+                        is NoConnectionError, is ConnectionTimeoutError -> {
+                            UIError(
+                                it.getDefaultMessage(R.string.error_reach_out_short),
+                                ::fetchUserDevice
+                            )
+                        }
+                        else -> {
+                            UIError(resHelper.getString(R.string.error_reach_out_short))
+                        }
+                    }
+                }
+                .tapLeft {
+                    onError.postValue(it)
+                }
+        }
 
     private fun setFriendlyName(friendlyName: String) {
         if (friendlyName.isNotEmpty() && friendlyName != device.attributes?.friendlyName) {

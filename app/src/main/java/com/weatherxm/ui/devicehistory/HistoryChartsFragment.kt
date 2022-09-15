@@ -23,7 +23,6 @@ import com.weatherxm.util.initializeTemperature24hChart
 import com.weatherxm.util.initializeUV24hChart
 import com.weatherxm.util.initializeWind24hChart
 import timber.log.Timber
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -60,7 +59,7 @@ class HistoryChartsFragment : Fragment() {
             when (resource.status) {
                 Status.SUCCESS -> {
                     binding.swiperefresh.isRefreshing = false
-                    resource.data?.let { updateUI(it) }
+                    updateUI(resource.data)
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
@@ -123,20 +122,18 @@ class HistoryChartsFragment : Fragment() {
         binding.chartUvIndex.getChart().clear()
     }
 
-    private fun updateUI(historyCharts: HistoryCharts) {
+    private fun updateUI(historyCharts: HistoryCharts?) {
         clearCharts()
 
-        if (historyCharts.isEmpty()) {
+        if (historyCharts == null || historyCharts.isEmpty()) {
             binding.chartsView.visibility = View.GONE
             binding.empty.clear()
             binding.empty.title(getString(R.string.empty_history_day_title))
             binding.empty.subtitle(
-                historyCharts.date?.let {
+                historyCharts?.date?.let {
                     getString(
                         R.string.empty_history_day_subtitle_with_day,
-                        LocalDate.parse(it).format(
-                            DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
-                        )
+                        it.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
                     )
                 } ?: getString(R.string.empty_history_day_subtitle)
             )
@@ -170,7 +167,7 @@ class HistoryChartsFragment : Fragment() {
     }
 
     private fun initTemperatureChart(lineChart: LineChart, data: LineChartData) {
-        if (model.isDataValid(data)) {
+        if (data.isDataValid()) {
             lineChart.initializeTemperature24hChart(data)
         } else {
             showNoDataText(lineChart)
@@ -178,7 +175,7 @@ class HistoryChartsFragment : Fragment() {
     }
 
     private fun initHumidityChart(lineChart: LineChart, data: LineChartData) {
-        if (model.isDataValid(data)) {
+        if (data.isDataValid()) {
             lineChart.initializeHumidity24hChart(data)
         } else {
             showNoDataText(lineChart)
@@ -186,7 +183,7 @@ class HistoryChartsFragment : Fragment() {
     }
 
     private fun initPressureChart(lineChart: LineChart, data: LineChartData) {
-        if (model.isDataValid(data)) {
+        if (data.isDataValid()) {
             lineChart.initializePressure24hChart(data)
         } else {
             showNoDataText(lineChart)
@@ -194,7 +191,7 @@ class HistoryChartsFragment : Fragment() {
     }
 
     private fun initUvChart(barChart: BarChart, data: BarChartData) {
-        if (model.isDataValid(data)) {
+        if (data.isDataValid()) {
             barChart.initializeUV24hChart(data)
         } else {
             barChart.setNoDataText(getString(R.string.error_history_no_data_chart_found))
@@ -205,12 +202,10 @@ class HistoryChartsFragment : Fragment() {
         }
     }
 
-    private fun initPrecipitationChart(
-        precipIntensityData: LineChartData
-    ) {
-        if (model.isDataValid(precipIntensityData)) {
+    private fun initPrecipitationChart(data: LineChartData) {
+        if (data.isDataValid()) {
             binding.chartPrecipitation.getChart()
-                .initializePrecipitation24hChart(precipIntensityData)
+                .initializePrecipitation24hChart(data)
         } else {
             showNoDataText(binding.chartPrecipitation.getChart())
         }
@@ -219,8 +214,9 @@ class HistoryChartsFragment : Fragment() {
     private fun initWindChart(
         windSpeedData: LineChartData, windGustData: LineChartData, windDirectionData: LineChartData
     ) {
-        if (model.isDataValid(windSpeedData) && model.isDataValid(windGustData)
-            && model.isDataValid(windDirectionData)
+        if (windSpeedData.isDataValid()
+            && windGustData.isDataValid()
+            && windDirectionData.isDataValid()
         ) {
             binding.chartWind
                 .getChart()

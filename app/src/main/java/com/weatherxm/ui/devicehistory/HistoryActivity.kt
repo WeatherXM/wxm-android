@@ -8,6 +8,9 @@ import com.weatherxm.data.Device
 import com.weatherxm.databinding.ActivityHistoryBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
+import com.weatherxm.util.DateTimeHelper
+import com.weatherxm.util.DateTimeHelper.LocalDateRange
+import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.applyOnGlobalLayout
 import com.weatherxm.util.createAndAddTab
@@ -21,6 +24,7 @@ class HistoryActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityHistoryBinding
     private val model: HistoryChartsViewModel by viewModels()
     private val navigator: Navigator by inject()
+    private val resHelper: ResourcesHelper by inject()
 
     companion object {
         const val ARG_DEVICE = "device"
@@ -48,47 +52,27 @@ class HistoryActivity : AppCompatActivity(), KoinComponent {
         binding.toolbar.subtitle = device.address ?: device.name
 
         binding.dateTabs.onTabSelected {
-            model.setSelectedTab(it.position)
+            model.setSelectedDay(it.text.toString())
         }
-
-        model.onUpdateDates().observe(this) {
-            if (it) {
-                updateDates()
-            }
-        }
-
-        updateDates()
 
         navigator.showHistoryCharts(supportFragmentManager, device)
-    }
 
-    private fun updateDates() {
-        val currentEarliestDate = model.getEarliestDate()
-        val tabsFromModel = model.getDatesForTabs()
-
-        /*
-        * If the date tabs are not being initialized, create and add all of them and
-        * select the latest tab.
-        *
-        * If the date tabs exist, then check the current earliest date  if it is the same
-        * as the new earliest date.
-        * If it isn't, then that means we have moved one day forward so we remove all date tabs
-        * and recreate them and select again the latest tab to make it visible that the new day's
-        * data just arrived and the dates at the top changed.
-        */
-        if (binding.dateTabs.tabCount == 0) {
-            createDatesAndSelectLatest(tabsFromModel)
-        } else if (tabsFromModel[0] != currentEarliestDate) {
-            binding.dateTabs.removeAllTabs()
-            createDatesAndSelectLatest(tabsFromModel)
+        // Listen for changes in the date range
+        model.dates().observe(this) { dates ->
+            updateDateStrip(dates)
         }
     }
 
-    private fun createDatesAndSelectLatest(newTabs: List<String>) {
-        newTabs.forEach { date ->
-            binding.dateTabs.createAndAddTab(date)
+    // Update dates in tab strip
+    private fun updateDateStrip(dates: LocalDateRange) {
+        // Delete existing tabs
+        binding.dateTabs.removeAllTabs()
+        // Add tabs for dates
+        dates.forEach { date ->
+            binding.dateTabs.createAndAddTab(
+                DateTimeHelper.getRelativeDayFromLocalDate(resHelper, date)
+            )
         }
-
         // Select last tab (TODAY) by default
         binding.dateTabs.getTabAt(binding.dateTabs.tabCount - 1)?.apply {
             view.applyOnGlobalLayout { this.select() }

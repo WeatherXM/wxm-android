@@ -98,8 +98,8 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/feelsLike"
                             style="@style/TextAppearance.WeatherXM.WeatherCard.Data"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/feelsLikeTitle"
@@ -114,7 +114,7 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/precipIcon"
                             android:layout_width="wrap_content"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:drawableStart="@drawable/ic_weather_precipitation"
                             app:drawableTint="@color/weather_card_data_icon"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -125,7 +125,7 @@
                             android:id="@+id/precipTitle"
                             style="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
                             android:layout_width="wrap_content"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:text="@string/precipitation_intensity"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +134,7 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/precipitation_intensity"
                             style="@style/TextAppearance.WeatherXM.WeatherCard.Data"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="0dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -170,12 +170,12 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/wind"
                             style="@style/TextAppearance.WeatherXM.WeatherCard.Data"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/windTitle"
-                            tools:text="2bf NW" />
+                            tools:text="3,7 kmh/h NNW" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </LinearLayout>
 
@@ -215,8 +215,8 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/humidity"
                             style="@style/TextAppearance.WeatherXM.WeatherCard.Data"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/humidityTitle"
@@ -251,8 +251,8 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/pressure"
                             style="@style/TextAppearance.WeatherXM.WeatherCard.Data"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/pressureTitle"
@@ -287,8 +287,8 @@
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/solar"
                             style="@style/TextAppearance.WeatherXM.WeatherCard.Data"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/solarTitle"

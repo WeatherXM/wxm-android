@@ -43,7 +43,7 @@ class WeatherCardView : LinearLayout, KoinComponent {
         gravity = Gravity.CENTER
     }
 
-    fun updateCurrentWeatherUI(decimalsOnTemp: Int, tz: String?) {
+    fun updateCurrentWeatherUI(tz: String?, decimalsOnTemp: Int = 1) {
         with(binding) {
             icon.setAnimation(Weather.getWeatherAnimation(weatherData?.icon))
             icon.playAnimation()
@@ -73,9 +73,9 @@ class WeatherCardView : LinearLayout, KoinComponent {
         }
     }
 
-    fun setData(data: HourlyWeather?, tz: String?, decimalsOnTemp: Int = 0) {
+    fun setData(data: HourlyWeather?, tz: String?, decimalsOnTemp: Int = 1) {
         weatherData = data
-        updateCurrentWeatherUI(decimalsOnTemp, tz)
+        updateCurrentWeatherUI(tz, decimalsOnTemp)
     }
 
     fun show() {

@@ -17,6 +17,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.math.absoluteValue
 
 @Suppress("TooManyFunctions")
 object DateTimeHelper : KoinComponent {
@@ -76,21 +77,24 @@ object DateTimeHelper : KoinComponent {
         }
     }
 
-    @Suppress("MagicNumber")
-    fun getLast7Days(resHelper: ResourcesHelper): List<String> {
-        val last7days = mutableListOf<String>()
-
-        val zonedDateTime = ZonedDateTime.now()
-        for (i in 7 downTo 0) {
-            last7days.add(
-                getRelativeDayFromISO(
-                    resHelper,
-                    zonedDateTime.minusDays(i.toLong()).toString(),
-                    false
-                )
-            )
+    fun getRelativeDayFromLocalDate(
+        resHelper: ResourcesHelper,
+        localDate: LocalDate,
+        fullName: Boolean = false
+    ): String {
+        return when {
+            localDate.isToday() -> resHelper.getString(R.string.today)
+            localDate.isTomorrow() -> resHelper.getString(R.string.tomorrow)
+            localDate.isYesterday() -> resHelper.getString(R.string.yesterday)
+            else -> {
+                val nameOfDay = if (fullName) {
+                    localDate.dayOfWeek.getName(resHelper)
+                } else {
+                    localDate.dayOfWeek.getShortName(resHelper)
+                }
+                "$nameOfDay ${localDate.format(formatterMonthDay)}"
+            }
         }
-        return last7days
     }
 
     fun getRelativeTimeFromISO(
@@ -154,6 +158,21 @@ object DateTimeHelper : KoinComponent {
         return now.dayOfYear == this.minusDays(1).dayOfYear
     }
 
+    private fun LocalDate.isYesterday(): Boolean {
+        val now = LocalDate.now()
+        return now.minusDays(1).dayOfYear == this.dayOfYear
+    }
+
+    private fun LocalDate.isToday(): Boolean {
+        val now = LocalDate.now()
+        return now.dayOfYear == this.dayOfYear
+    }
+
+    fun LocalDate.isTomorrow(): Boolean {
+        val now = LocalDate.now()
+        return now.dayOfYear == this.minusDays(1).dayOfYear
+    }
+
     private fun DayOfWeek.getName(resHelper: ResourcesHelper): String {
         return when (this) {
             DayOfWeek.MONDAY -> resHelper.getString(R.string.monday)
@@ -175,6 +194,72 @@ object DateTimeHelper : KoinComponent {
             DayOfWeek.FRIDAY -> resHelper.getString(R.string.fri)
             DayOfWeek.SATURDAY -> resHelper.getString(R.string.sat)
             DayOfWeek.SUNDAY -> resHelper.getString(R.string.sun)
+        }
+    }
+
+    fun getDateRangeFromToday(n: Int, includeToday: Boolean = true): LocalDateRange {
+        val today = LocalDate.now()
+        return if (n > 0) {
+            val offset = if (includeToday) 1L else 0L
+            LocalDateRange(
+                today.minusDays(offset),
+                today.plusDays(n.toLong() - offset)
+            )
+        } else if (n < 0) {
+            val offset = if (includeToday) 0L else 1L
+            LocalDateRange(
+                today.minusDays(n.absoluteValue.toLong() + offset),
+                today.minusDays(offset)
+            )
+        } else {
+            throw IllegalArgumentException("n must be a non-zero negative or positive number")
+        }
+    }
+
+    @Suppress("EqualsOrHashCode")
+    class LocalDateRange(
+        override val start: LocalDate,
+        override val endInclusive: LocalDate
+    ) : ClosedRange<LocalDate>, Iterable<LocalDate> {
+        override fun iterator(): Iterator<LocalDate> {
+            return LocalDateIterator(start, endInclusive)
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (other is LocalDateRange) {
+                this.forEachIndexed { index, date ->
+                    if (!date.isEqual(other.elementAt(index))) {
+                        return false
+                    }
+                }
+                return true
+            } else {
+                return false
+            }
+        }
+
+        override fun toString(): String = "DateRange($start...$endInclusive]"
+
+        override fun hashCode(): Int = toString().hashCode()
+    }
+
+    class LocalDateIterator(
+        start: LocalDate,
+        private val endInclusive: LocalDate
+    ) : Iterator<LocalDate> {
+
+        private var current = start
+
+        override fun hasNext(): Boolean {
+            return current.isBefore(endInclusive)
+        }
+
+        override fun next(): LocalDate {
+            if (!hasNext()) {
+                throw NoSuchElementException("Reached the end of the LocalDateRange")
+            }
+            current = current.plusDays(1)
+            return current
         }
     }
 }
