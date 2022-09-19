@@ -85,7 +85,22 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
                 checkAndScanBleDevices()
             } else {
                 val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-                enableBluetoothLauncher.launch(enableBtIntent)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    checkPermissionsAndThen(
+                        permissions = arrayOf(
+                            Manifest.permission.BLUETOOTH_CONNECT
+                        ),
+                        rationaleTitle = getString(R.string.perm_location_bluetooth_title),
+                        rationaleMessage = getString(R.string.perm_location_bluetooth_desc),
+                        onGranted = {
+                            lifecycleScope.launch {
+                                enableBluetoothLauncher.launch(enableBtIntent)
+                            }
+                        }
+                    )
+                } else {
+                    enableBluetoothLauncher.launch(enableBtIntent)
+                }
             }
         }
     }
