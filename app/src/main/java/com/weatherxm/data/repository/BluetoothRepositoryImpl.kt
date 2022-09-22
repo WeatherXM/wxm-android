@@ -6,13 +6,11 @@ import arrow.core.Either
 import com.espressif.provisioning.listeners.WiFiScanListener
 import com.juul.kable.Peripheral
 import com.weatherxm.data.Failure
-import com.weatherxm.data.bluetooth.BluetoothConnectionManager
 import com.weatherxm.data.datasource.BluetoothDataSource
 import kotlinx.coroutines.flow.Flow
 
 class BluetoothRepositoryImpl(
-    private val bluetoothDataSource: BluetoothDataSource,
-    private val bluetoothConnectionManager: BluetoothConnectionManager
+    private val bluetoothDataSource: BluetoothDataSource
 ) : BluetoothRepository {
 
     /*
@@ -28,11 +26,11 @@ class BluetoothRepositoryImpl(
     }
 
     override fun setPeripheral(bluetoothDevice: BluetoothDevice): Either<Failure, Unit> {
-        return bluetoothConnectionManager.setPeripheral(bluetoothDevice)
+        return bluetoothDataSource.setPeripheral(bluetoothDevice)
     }
 
     override suspend fun connectToPeripheral(): Either<Failure, Peripheral> {
-        return bluetoothConnectionManager.connectToPeripheral()
+        return bluetoothDataSource.connectToPeripheral()
     }
 
     override fun setUpdater() {
@@ -61,5 +59,9 @@ class BluetoothRepositoryImpl(
 
     override fun registerOnUpdateCompletionStatus(): Flow<Either<Failure, Unit>> {
         return bluetoothDataSource.registerOnUpdateCompletionStatus()
+    }
+
+    override fun registerOnBondStatus(): Flow<Int> {
+        return bluetoothDataSource.registerOnBondStatus()
     }
 }

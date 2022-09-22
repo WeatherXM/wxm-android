@@ -12,6 +12,7 @@ interface BluetoothConnectionUseCase {
     fun setPeripheral(bluetoothDevice: BluetoothDevice)
     suspend fun connectToPeripheral(): Either<Failure, Peripheral>
     fun update(updatePackage: Uri): Flow<Int>
+    fun registerOnBondStatus(): Flow<Int>
 }
 
 class BluetoothConnectionUseCaseImpl(
@@ -29,5 +30,9 @@ class BluetoothConnectionUseCaseImpl(
     override fun update(updatePackage: Uri): Flow<Int> {
         bluetoothRepository.setUpdater()
         return bluetoothRepository.update(updatePackage)
+    }
+
+    override fun registerOnBondStatus(): Flow<Int> {
+        return bluetoothRepository.registerOnBondStatus()
     }
 }

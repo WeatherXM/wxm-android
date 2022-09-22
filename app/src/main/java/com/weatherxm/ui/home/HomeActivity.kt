@@ -146,11 +146,11 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         }
 
         // TODO: For testing purposes.
-        homeViewModel.onConnectedDevice().observe(this) {
-//            val intent = Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE)
-//                .setType("application/zip")
-//
-//            findZipFileLauncher.launch(intent)
+        homeViewModel.onBondedDevice().observe(this) {
+            val intent = Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE)
+                .setType("application/zip")
+
+            findZipFileLauncher.launch(intent)
         }
 
         // Disable BottomNavigationView bottom padding, added by default, and add margin

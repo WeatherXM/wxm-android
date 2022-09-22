@@ -23,6 +23,10 @@ class BluetoothDataSourceImpl(
         return scanner.registerOnScanning()
     }
 
+    override fun registerOnBondStatus(): Flow<Int> {
+        return connectionManager.onBondStatus()
+    }
+
     override fun registerOnProvisionCompletionStatus(): Flow<Either<Failure, Unit>> {
         return provisioner.getProvisioningCompletionStatus()
     }

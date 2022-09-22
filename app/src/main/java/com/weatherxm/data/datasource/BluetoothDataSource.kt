@@ -13,6 +13,7 @@ interface BluetoothDataSource {
     suspend fun startScanning()
     fun setPeripheral(bluetoothDevice: BluetoothDevice): Either<Failure, Unit>
     suspend fun connectToPeripheral(): Either<Failure, Peripheral>
+    fun registerOnBondStatus(): Flow<Int>
     fun setUpdater()
     fun update(updatePackage: Uri): Flow<Int>
     fun scanNetworks(wiFiScanListener: WiFiScanListener)

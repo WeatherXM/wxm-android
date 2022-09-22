@@ -19,6 +19,9 @@ import com.weatherxm.data.Failure
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
@@ -33,6 +36,13 @@ class BluetoothConnectionManager(private val context: Context) {
 
     private val pairingRequestFilter = IntentFilter(BluetoothDevice.ACTION_PAIRING_REQUEST)
     private val bondStateChangedFilter = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
+
+    private val bondStatus = MutableSharedFlow<Int>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    fun onBondStatus(): Flow<Int> = bondStatus
 
     /*
     * This broadcast receiver is used to intercept the BLE PIN prompt as we know that already
@@ -72,7 +82,8 @@ class BluetoothConnectionManager(private val context: Context) {
 
                 when (bluetoothDevice?.bondState) {
                     BluetoothDevice.BOND_BONDED -> {
-                        Timber.d("Bonded.")
+                        Timber.d("BLE Bonded.")
+                        bondStatus.tryEmit(BluetoothDevice.BOND_BONDED)
                         /*
                         * Any communication or work with the BLE device that needs to be done
                         * should be done after we reach this point where the BLE device is bonded
@@ -85,10 +96,12 @@ class BluetoothConnectionManager(private val context: Context) {
                         }
                     }
                     BluetoothDevice.BOND_BONDING -> {
-                        Timber.d("Bonding...")
+                        Timber.d("BLE Bonding...")
+                        bondStatus.tryEmit(BluetoothDevice.BOND_BONDING)
                     }
                     BluetoothDevice.BOND_NONE -> {
-                        Timber.d("Bonding NONE...")
+                        Timber.d("BLE Bonding NONE...")
+                        bondStatus.tryEmit(BluetoothDevice.BOND_NONE)
                     }
                 }
             }

@@ -308,7 +308,7 @@ private val repositories = module {
         SharedPreferenceRepositoryImpl(get())
     }
     single<BluetoothRepository> {
-        BluetoothRepositoryImpl(get(), get())
+        BluetoothRepositoryImpl(get())
     }
 }
 

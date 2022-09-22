@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.juul.kable.Peripheral
 import com.weatherxm.ui.ScannedDevice
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import kotlinx.coroutines.launch
@@ -22,8 +21,8 @@ class HomeViewModel : ViewModel(), KoinComponent {
     private val onClaimManually = MutableLiveData(false)
     fun onClaimManually() = onClaimManually
 
-    private val onConnectedDevice = MutableLiveData<Peripheral>()
-    fun onConnectedDevice() = onConnectedDevice
+    private val onBondedDevice = MutableLiveData<Unit>()
+    fun onBondedDevice() = onBondedDevice
 
     fun selectScannedDevice(scannedDevice: ScannedDevice) {
         onScannedDeviceSelected.postValue(scannedDevice)
@@ -40,9 +39,6 @@ class HomeViewModel : ViewModel(), KoinComponent {
     fun connectToPeripheral() {
         viewModelScope.launch {
             usecase.connectToPeripheral()
-                .map {
-                    onConnectedDevice.postValue(it)
-                }
                 .mapLeft {
                     // TODO: Handle failure
                 }
@@ -54,6 +50,25 @@ class HomeViewModel : ViewModel(), KoinComponent {
             usecase.update(updatePackage).collect {
                 // TODO: Handle progress here
             }
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            usecase.registerOnBondStatus()
+                .collect {
+                    when (it) {
+                        BluetoothDevice.BOND_BONDING -> {
+                            // TODO: What to show here??
+                        }
+                        BluetoothDevice.BOND_BONDED -> {
+                            onBondedDevice.postValue(Unit)
+                        }
+                        BluetoothDevice.BOND_NONE -> {
+                            // TODO: What to show here??
+                        }
+                    }
+                }
         }
     }
 }
