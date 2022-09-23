@@ -17,7 +17,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/deviceId"
-        style="@style/TextAppearance.WeatherXM.ScannedDevices.DeviceId"
+        style="@style/TextAppearance.WeatherXM.BluetoothScanning.DeviceId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"

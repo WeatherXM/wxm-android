@@ -5,8 +5,10 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,10 +19,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weatherxm.R
+import com.weatherxm.data.Resource
+import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentScanDevicesBinding
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.home.HomeViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ScanDevicesFragment : BottomSheetDialogFragment() {
     private val model: ScanDevicesViewModel by viewModels()
@@ -37,7 +42,7 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
             if (it.resultCode == Activity.RESULT_OK) {
                 checkAndScanBleDevices()
             } else {
-                // TODO: What to do/show when user doesn't give access to bluetooth?
+                // TODO: What to do/show when user doesn't enable bluetooth?
             }
         }
 
@@ -64,6 +69,20 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
             dismiss()
         }
 
+        binding.scanAgain.setOnClickListener {
+            if (!model.isScanningRunning()) {
+                adapter.submitList(mutableListOf())
+                checkAndScanBleDevices()
+            }
+        }
+
+        binding.accessBluetoothPrompt.setOnClickListener {
+            Timber.d("Going to application settings")
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            intent.data = Uri.fromParts("package", context?.packageName, null)
+            startActivity(intent)
+        }
+
         binding.claimDeviceManually.setOnClickListener {
             homeViewModel.claimManually()
             dismiss()
@@ -72,6 +91,12 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
         model.onNewAdvertisement().observe(this) {
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
+            binding.infoContainer.visibility = View.GONE
+            binding.recycler.visibility = View.VISIBLE
+        }
+
+        model.onProgress().observe(this) {
+            updateUI(it)
         }
 
         context?.let {
@@ -79,8 +104,9 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
                 ContextCompat.getSystemService(it, BluetoothManager::class.java)?.adapter
 
             if (bluetoothAdapter == null) {
-                // Device doesn't support Bluetooth
-                // TODO: What to do/show when device doesn't support bluetooth?
+                binding.infoTitle.text = getString(R.string.no_bluetooth_available)
+                binding.infoSubtitle.text = getString(R.string.no_bluetooth_available_desc)
+                binding.infoContainer.visibility = View.VISIBLE
             } else if (bluetoothAdapter.isEnabled) {
                 checkAndScanBleDevices()
             } else {
@@ -90,17 +116,51 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
                         permissions = arrayOf(
                             Manifest.permission.BLUETOOTH_CONNECT
                         ),
-                        rationaleTitle = getString(R.string.perm_location_bluetooth_title),
-                        rationaleMessage = getString(R.string.perm_location_bluetooth_desc),
+                        rationaleTitle = getString(R.string.permission_bluetooth_title),
+                        rationaleMessage = getString(R.string.perm_bluetooth_scanning_desc),
                         onGranted = {
                             lifecycleScope.launch {
                                 enableBluetoothLauncher.launch(enableBtIntent)
                             }
+                        },
+                        onDenied = {
+                            binding.infoTitle.text = getString(R.string.no_bluetooth_access)
+                            binding.infoSubtitle.text = getString(R.string.no_bluetooth_access_desc)
+                            binding.scanAgain.visibility = View.GONE
+                            binding.accessBluetoothPrompt.visibility = View.VISIBLE
+                            binding.infoContainer.visibility = View.VISIBLE
                         }
                     )
                 } else {
                     enableBluetoothLauncher.launch(enableBtIntent)
                 }
+            }
+        }
+    }
+
+    private fun updateUI(result: Resource<Unit>) {
+        when (result.status) {
+            Status.SUCCESS -> {
+                if (adapter.currentList.isNotEmpty()) {
+                    binding.infoContainer.visibility = View.GONE
+                } else {
+                    binding.infoTitle.text = getString(R.string.no_devices_found)
+                    binding.infoSubtitle.text = getString(R.string.no_devices_found_desc)
+                    binding.infoSubtitle.visibility = View.VISIBLE
+                    binding.recycler.visibility = View.VISIBLE
+                }
+            }
+            Status.ERROR -> {
+                binding.infoTitle.text = getString(R.string.scan_failed_title)
+                binding.infoSubtitle.text = result.message
+                binding.infoSubtitle.visibility = View.VISIBLE
+                binding.recycler.visibility = View.VISIBLE
+            }
+            Status.LOADING -> {
+                binding.recycler.visibility = View.GONE
+                binding.infoTitle.text = getString(R.string.scanning_in_progress)
+                binding.infoSubtitle.visibility = View.GONE
+                binding.infoContainer.visibility = View.VISIBLE
             }
         }
     }
@@ -112,12 +172,19 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
                     Manifest.permission.BLUETOOTH_SCAN,
                     Manifest.permission.BLUETOOTH_CONNECT
                 ),
-                rationaleTitle = getString(R.string.perm_location_bluetooth_title),
-                rationaleMessage = getString(R.string.perm_location_bluetooth_desc),
+                rationaleTitle = getString(R.string.permission_bluetooth_title),
+                rationaleMessage = getString(R.string.perm_bluetooth_scanning_desc),
                 onGranted = {
                     lifecycleScope.launch {
                         model.scanBleDevices()
                     }
+                },
+                onDenied = {
+                    binding.infoTitle.text = getString(R.string.no_bluetooth_access)
+                    binding.infoSubtitle.text = getString(R.string.no_bluetooth_access_desc)
+                    binding.scanAgain.visibility = View.GONE
+                    binding.accessBluetoothPrompt.visibility = View.VISIBLE
+                    binding.infoContainer.visibility = View.VISIBLE
                 }
             )
         } else {
@@ -126,12 +193,19 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ),
-                rationaleTitle = getString(R.string.perm_location_bluetooth_title),
-                rationaleMessage = getString(R.string.perm_location_bluetooth_desc),
+                rationaleTitle = getString(R.string.permission_location_title),
+                rationaleMessage = getString(R.string.perm_location_scanning_desc),
                 onGranted = {
                     lifecycleScope.launch {
                         model.scanBleDevices()
                     }
+                },
+                onDenied = {
+                    binding.infoTitle.text = getString(R.string.no_location_access)
+                    binding.infoSubtitle.text = getString(R.string.no_location_access_desc)
+                    binding.scanAgain.visibility = View.GONE
+                    binding.accessBluetoothPrompt.visibility = View.VISIBLE
+                    binding.infoContainer.visibility = View.VISIBLE
                 }
             )
         }

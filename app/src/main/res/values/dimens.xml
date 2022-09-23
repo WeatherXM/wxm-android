@@ -10,6 +10,8 @@
     <dimen name="card_selected_elevation">8dp</dimen>
     <dimen name="card_corner_radius">12dp</dimen>
 
+    <dimen name="button_corner_radius">4dp</dimen>
+
     <dimen name="margin_extra_extra_large">62dp</dimen>
     <dimen name="margin_extra_large">48dp</dimen>
     <dimen name="margin_large">24dp</dimen>

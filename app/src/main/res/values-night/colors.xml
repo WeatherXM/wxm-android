@@ -19,6 +19,9 @@
     <color name="weather_card_data_icon">@color/dark_darkest</color>
     <color name="weather_card_data_subtitle">@color/dark_darkest</color>
 
+    <!-- Scanning -->
+    <color name="bluetooth_scanning_info_title">@color/dark_darkest</color>
+
     <!-- Hourly Forecast Card -->
     <color name="hourly_forecast_card_precipitation">@color/light_mid_grey</color>
 

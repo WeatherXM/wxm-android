@@ -16,13 +16,12 @@
     <string name="no">No</string>
 
     <!-- Permissions -->
-    <string name="permission_location_title">Access to your location?</string>
-    <string name="permission_location_rationale">Location permission is needed to verify your WXM device\'s location.</string>
+    <string name="permission_location_title">Access to your location</string>
+    <string name="permission_location_rationale">WeatherXM would like to know your location while using the app. This information will be used to provide more accurate information to you.</string>
     <string name="permission_permanently_denied_title">Permission permanently denied</string>
     <string name="permission_permanently_denied_rationale">Go to the app settings to give the required permissions.</string>
     <string name="warn_cancelled">Cancelled!</string>
-    <string name="perm_location_bluetooth_title">Access to bluetooth and location?</string>
-    <string name="perm_location_bluetooth_desc">Bluetooth and location permissions are needed to be able to pair with your Weather Station.</string>
+    <string name="permission_bluetooth_title">WeatherXM Requests Access to Bluetooth</string>
 
     <!-- Login -->
     <string name="title_login">Login</string>
@@ -116,13 +115,25 @@
     <string name="transaction_hash">Transaction hash: %s</string>
 
     <!-- Scan Devices -->
+    <string name="perm_bluetooth_scanning_desc">We will need to access bluetooth in order to utilise it in connecting and communicating to your WeatherXM Device.</string>
+    <string name="perm_location_scanning_desc">We will need to access your location in order to utilise it in connecting and communicating to your WeatherXM Device.</string>
     <string name="select_your_device">Select your device</string>
     <string name="select_device_desc">To claim your device, you must enable Bluetooth and allow WXM app to access it. \n\nAlternative, you can tap bellow to claim the device manually!</string>
     <string name="claim_manually">Claim Device Manually</string>
     <string name="device_id">Device ID: %s</string>
     <string name="scan_again">Scan Again for Devices</string>
+    <string name="no_bluetooth_available">No Bluetooth</string>
+    <string name="no_bluetooth_available_desc">No bluetooth found. Please select Claim Device Manually.</string>
+    <string name="access_to_bluetooth_prompt">Go to Settings and Grant Access</string>
+    <string name="scanning_in_progress">Scanning for WeatherXM Devices</string>
+    <string name="no_location_access">No Bluetooth Access</string>
+    <string name="no_location_access_desc">In order to connect your device, WeatherXM app needs access to Location. If you do not wish to provide such access, please select Claim Device Manually.</string>
+    <string name="no_bluetooth_access">No Bluetooth Access</string>
+    <string name="no_bluetooth_access_desc">In order to connect your device, WeatherXM app needs access to Bluetooth. If you do not wish to provide such access, please select Claim Device Manually.</string>
     <string name="no_devices_found">No Devices Found</string>
-    <string name="no_devices_found_subtitle">Please reset your WXM device and scan again!\nOr, you can try claiming your device manually bellow</string>
+    <string name="no_devices_found_desc">Please reset your WXM device and scan again!\nOr, you can try claiming your device manually bellow.</string>
+    <string name="scan_failed_title">Scanning Failed</string>
+    <string name="scan_failed_desc">Something went wrong! Please either Scan Again, or if the problem persists, you can Claim Device Manually.</string>
 
     <!-- Claim device -->
     <string name="title_claim_device">Claim Device</string>

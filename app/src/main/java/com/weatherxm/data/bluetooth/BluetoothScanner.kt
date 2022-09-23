@@ -8,6 +8,7 @@ import com.espressif.provisioning.ESPProvisionManager
 import com.espressif.provisioning.listeners.BleScanListener
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Failure
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,15 +22,20 @@ class BluetoothScanner(private val espProvisionManager: ESPProvisionManager) {
 
     private val completionStatus = MutableSharedFlow<Either<Failure, Unit>>(
         replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
+        onBufferOverflow = BufferOverflow.DROP_LATEST
     )
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun registerOnScanning(): Flow<BluetoothDevice> {
+        completionStatus.resetReplayCache()
         return scannedDevices
     }
 
-    // TODO: Use this to pass to the UI info about completion status (success or failure)
-    fun getCompletionStatus(): Flow<Either<Failure, Unit>> = completionStatus
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun getCompletionStatus(): Flow<Either<Failure, Unit>> {
+        completionStatus.resetReplayCache()
+        return completionStatus
+    }
 
     /*
     * Suppress this because we have asked for permissions already before we reach here.
@@ -43,10 +49,11 @@ class BluetoothScanner(private val espProvisionManager: ESPProvisionManager) {
 
             override fun onPeripheralFound(device: BluetoothDevice?, scanResult: ScanResult?) {
                 device?.let {
-                    // TODO: Replace this naive filtering with the correct one in the future
-                    if (it.name.contains("WXM")) {
-                        scannedDevices.tryEmit(it)
-                    }
+                    scannedDevices.tryEmit(it)
+                    // TODO: Add filtering with the correct one in the future
+//                    if (it.name.contains("WXM")) {
+//                        scannedDevices.tryEmit(it)
+//                    }
                 }
             }
 

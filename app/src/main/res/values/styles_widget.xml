@@ -65,6 +65,10 @@
         <item name="cornerRadius">@dimen/card_corner_radius</item>
     </style>
 
+    <style name="Widget.WeatherXM.Button.Subtle.Borders.SmallRadius" parent="Widget.WeatherXM.Button.Subtle.Borders">
+        <item name="cornerRadius">@dimen/button_corner_radius</item>
+    </style>
+
     <style name="Widget.WeatherXM.TextButton.Subtle" parent="@style/Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textAllCaps">false</item>

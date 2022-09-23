@@ -111,6 +111,9 @@ class ClaimDeviceActivity : AppCompatActivity() {
                             model.updateLocationOnMap(location)
                         }
                     }
+                },
+                onDenied = {
+                    toast(R.string.error_claim_gps_failed)
                 }
             )
         }

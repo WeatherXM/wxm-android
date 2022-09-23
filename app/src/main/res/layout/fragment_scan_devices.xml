@@ -58,6 +58,38 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/infoContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_normal"
+                    android:gravity="center"
+                    app:layout_constraintBottom_toTopOf="@id/buttonContainers"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/infoTitle"
+                        style="@style/TextAppearance.WeatherXM.BluetoothScanning.InfoTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_normal"
+                        android:layout_marginBottom="@dimen/margin_normal"
+                        android:gravity="center"
+                        app:layout_constraintBottom_toTopOf="@id/infoSubtitle"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="@string/no_devices_found" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/infoSubtitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_normal"
+                        android:gravity="center"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:text="@string/no_devices_found_desc" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler"
                     android:layout_width="match_parent"
@@ -67,50 +99,42 @@
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:scrollbars="vertical"
+                    android:visibility="gone"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toTopOf="@id/scanAgain"
+                    app:layout_constraintBottom_toTopOf="@id/buttonContainers"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:listitem="@layout/list_item_scanned_device" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/errorContainer"
+                    android:id="@+id/buttonContainers"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toTopOf="@id/scanAgain"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintBottom_toBottomOf="parent">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/errorTitle"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/scanAgain"
+                        style="@style/Widget.WeatherXM.Button.Subtle.Borders.SmallRadius"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/margin_normal"
-                        android:gravity="center"
-                        android:text="@string/no_devices_found"
+                        android:text="@string/scan_again"
+                        app:icon="@drawable/ic_bluetooth"
+                        app:iconGravity="textStart"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/errorSubtitle"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/accessBluetoothPrompt"
+                        style="@style/Widget.WeatherXM.Button.Subtle.Borders.SmallRadius"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/margin_normal"
-                        android:layout_marginTop="@dimen/card_side_margin"
-                        android:gravity="center"
-                        android:text="@string/no_devices_found_subtitle"
-                        app:layout_constraintTop_toBottomOf="@id/errorTitle" />
+                        android:text="@string/access_to_bluetooth_prompt"
+                        android:visibility="gone"
+                        app:icon="@drawable/ic_bluetooth"
+                        app:iconGravity="textStart"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/scanAgain"
-                    style="@style/Widget.WeatherXM.TextButton.Subtle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/scan_again"
-                    app:icon="@drawable/ic_bluetooth"
-                    app:iconGravity="textStart"
-                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -118,7 +142,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/claimDeviceManually"
-            style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+            style="@style/Widget.WeatherXM.Button.Subtle.Borders.SmallRadius"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_normal"
