@@ -1,0 +1,53 @@
+package com.weatherxm.ui.claimdevice.selectdevicetype
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.weatherxm.databinding.FragmentSelectDeviceTypeBinding
+import com.weatherxm.ui.DeviceType
+import com.weatherxm.ui.home.HomeViewModel
+
+class SelectDeviceTypeFragment : BottomSheetDialogFragment() {
+    private val model: SelectDeviceTypeViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
+    private lateinit var binding: FragmentSelectDeviceTypeBinding
+    private lateinit var adapter: AvailableDeviceTypesAdapter
+
+    companion object {
+        const val TAG = "SelectDeviceTypeFragment"
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSelectDeviceTypeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        adapter = AvailableDeviceTypesAdapter {
+            if (it.type == DeviceType.HELIUM) {
+                homeViewModel.scanDevices()
+            } else {
+                homeViewModel.claimManually()
+            }
+            dismiss()
+        }
+
+        binding.recycler.adapter = adapter
+
+        binding.closePopup.setOnClickListener {
+            dismiss()
+        }
+
+        adapter.submitList(model.getAvailableDeviceTypes())
+    }
+}

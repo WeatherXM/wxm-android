@@ -21,8 +21,15 @@ class HomeViewModel : ViewModel(), KoinComponent {
     private val onClaimManually = MutableLiveData(false)
     fun onClaimManually() = onClaimManually
 
+    private val onScanDevices = MutableLiveData(false)
+    fun onScanDevices() = onScanDevices
+
     private val onBondedDevice = MutableLiveData<Unit>()
     fun onBondedDevice() = onBondedDevice
+
+    fun scanDevices() {
+        onScanDevices.postValue(true)
+    }
 
     fun selectScannedDevice(scannedDevice: ScannedDevice) {
         onScannedDeviceSelected.postValue(scannedDevice)

@@ -1,6 +1,7 @@
-package com.weatherxm.ui.scandevices
+package com.weatherxm.ui.claimdevice.scandevices
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -26,7 +27,7 @@ class ScannedDevicesListAdapter(
     }
 
     override fun onBindViewHolder(holder: ScannedDeviceViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), position)
     }
 
     inner class ScannedDeviceViewHolder(
@@ -43,10 +44,14 @@ class ScannedDevicesListAdapter(
             }
         }
 
-        fun bind(item: ScannedDevice) {
+        fun bind(item: ScannedDevice, position: Int) {
             this.scannedDevice = item
             binding.name.text = item.name
             binding.deviceId.text = resHelper.getString(R.string.device_id, item.address)
+
+            if (position == currentList.size - 1) {
+                binding.bottomBorder.visibility = View.INVISIBLE
+            }
         }
     }
 

@@ -125,7 +125,13 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.addDevice.setOnClickListener {
-            navigator.showScanDialog(supportFragmentManager)
+            navigator.showSelectDeviceTypeDialog(supportFragmentManager)
+        }
+
+        homeViewModel.onScanDevices().observe(this) {
+            if (it) {
+                navigator.showScanDialog(supportFragmentManager)
+            }
         }
 
         profileViewModel.wallet().observe(this) {

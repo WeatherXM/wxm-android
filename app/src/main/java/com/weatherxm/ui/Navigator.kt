@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.weatherxm.R
 import com.weatherxm.data.Device
+import com.weatherxm.ui.claimdevice.scandevices.ScanDevicesFragment
+import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeFragment
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.deviceforecast.ForecastActivity
@@ -22,7 +24,6 @@ import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.publicdevicedetail.PublicDeviceDetailFragment
 import com.weatherxm.ui.publicdeviceslist.PublicDevicesListFragment
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
-import com.weatherxm.ui.scandevices.ScanDevicesFragment
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.token.TokenActivity
@@ -179,6 +180,11 @@ class Navigator {
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(TokenActivity.ARG_DEVICE, device)
         )
+    }
+
+    fun showSelectDeviceTypeDialog(fragmentManager: FragmentManager) {
+        val modalBottomSheet = SelectDeviceTypeFragment()
+        modalBottomSheet.show(fragmentManager, SelectDeviceTypeFragment.TAG)
     }
 
     fun showScanDialog(fragmentManager: FragmentManager) {

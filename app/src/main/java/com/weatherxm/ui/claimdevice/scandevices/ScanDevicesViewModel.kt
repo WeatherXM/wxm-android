@@ -1,4 +1,4 @@
-package com.weatherxm.ui.scandevices
+package com.weatherxm.ui.claimdevice.scandevices
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -28,18 +28,6 @@ class ScanDevicesViewModel : ViewModel(), KoinComponent {
 
     fun scanBleDevices() {
         viewModelScope.launch {
-            onProgress.postValue(Resource.loading())
-            scannedDevices = mutableListOf()
-            scanDevicesUseCase.startScanning()
-        }
-    }
-
-    fun isScanningRunning(): Boolean {
-        return onProgress.value?.status == Status.LOADING
-    }
-
-    init {
-        viewModelScope.launch {
             scanDevicesUseCase.registerOnScanningCompletionStatus()
                 .collect { completionStatus ->
                     completionStatus.map {
@@ -62,5 +50,15 @@ class ScanDevicesViewModel : ViewModel(), KoinComponent {
                     }
                 }
         }
+
+        viewModelScope.launch {
+            onProgress.postValue(Resource.loading())
+            scannedDevices = mutableListOf()
+            scanDevicesUseCase.startScanning()
+        }
+    }
+
+    fun isScanningRunning(): Boolean {
+        return onProgress.value?.status == Status.LOADING
     }
 }

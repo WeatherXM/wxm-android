@@ -230,8 +230,17 @@ data class UIDevice(
 data class ScannedDevice(
     val address: String,
     val name: String?,
-    val type: DeviceType = DeviceType.M5_WIFI,
+    val type: DeviceType = DeviceType.HELIUM,
     val bluetoothDevice: BluetoothDevice
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class AvailableDeviceType(
+    val title: String,
+    val desc: String,
+    val type: DeviceType,
 ) : Parcelable
 
 enum class DeviceType {

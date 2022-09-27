@@ -6,32 +6,31 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/name"
+        android:id="@+id/title"
         style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_normal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="M5 WiFi" />
+        tools:text="@string/m5_ws1000_title" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/deviceId"
+        android:id="@+id/desc"
         style="@style/TextAppearance.WeatherXM.Default.PrimaryColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
-        android:text="@string/device_id"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name"
-        tools:text="Device ID: wx56n46" />
+        app:layout_constraintTop_toBottomOf="@id/title"
+        tools:text="@string/m5_ws1000_desc" />
 
     <View
         android:id="@+id/bottomBorder"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/light_mid_grey"
         android:layout_marginTop="@dimen/margin_normal"
-        app:layout_constraintTop_toBottomOf="@id/deviceId"/>
+        android:background="@color/light_mid_grey"
+        app:layout_constraintTop_toBottomOf="@id/desc" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

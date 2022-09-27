@@ -113,6 +113,8 @@ import com.weatherxm.usecases.PreferencesUseCase
 import com.weatherxm.usecases.PreferencesUseCaseImpl
 import com.weatherxm.usecases.ScanDevicesUseCase
 import com.weatherxm.usecases.ScanDevicesUseCaseImpl
+import com.weatherxm.usecases.SelectDeviceTypeUseCase
+import com.weatherxm.usecases.SelectDeviceTypeUseCaseImpl
 import com.weatherxm.usecases.SendFeedbackUseCase
 import com.weatherxm.usecases.SendFeedbackUseCaseImpl
 import com.weatherxm.usecases.StartupUseCase
@@ -138,7 +140,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 const val RETROFIT_API = "RETROFIT_API"
@@ -351,6 +353,9 @@ private val usecases = module {
     }
     single<ScanDevicesUseCase> {
         ScanDevicesUseCaseImpl(get())
+    }
+    single<SelectDeviceTypeUseCase> {
+        SelectDeviceTypeUseCaseImpl()
     }
     single<BluetoothConnectionUseCase> {
         BluetoothConnectionUseCaseImpl(get())
