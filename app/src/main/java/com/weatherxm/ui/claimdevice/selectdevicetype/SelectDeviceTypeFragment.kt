@@ -37,7 +37,7 @@ class SelectDeviceTypeFragment : BottomSheetDialogFragment() {
             if (it.type == DeviceType.HELIUM) {
                 homeViewModel.scanDevices()
             } else {
-                homeViewModel.claimManually()
+                homeViewModel.claimM5Manually()
             }
             dismiss()
         }

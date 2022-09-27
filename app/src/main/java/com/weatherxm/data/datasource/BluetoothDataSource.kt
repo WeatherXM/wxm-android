@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface BluetoothDataSource {
     suspend fun registerOnScanning(): Flow<BluetoothDevice>
     suspend fun startScanning()
-    fun setPeripheral(bluetoothDevice: BluetoothDevice): Either<Failure, Unit>
+    fun setPeripheral(address: String): Either<Failure, Unit>
     suspend fun connectToPeripheral(): Either<Failure, Peripheral>
     fun registerOnBondStatus(): Flow<Int>
     fun setUpdater()

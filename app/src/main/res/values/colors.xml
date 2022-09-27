@@ -64,7 +64,7 @@
     <color name="token_transaction_line">@color/light_mid_grey</color>
 
     <!-- Survey Prompt -->
-    <color name="survey_prompt_card_background">@color/light_blue_tint</color>
+    <color name="info_card_background">@color/light_blue_tint</color>
 
     <!-- Weather Data colors -->
     <color name="temperature">#084D6A</color>

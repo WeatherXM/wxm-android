@@ -32,7 +32,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/survey_prompt"
-                style="@style/Widget.WeatherXM.MaterialCard.Survey"
+                style="@style/Widget.WeatherXM.MaterialCard.InfoBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal"

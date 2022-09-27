@@ -18,7 +18,7 @@ import timber.log.Timber
 class ScanDevicesViewModel : ViewModel(), KoinComponent {
     private val scanDevicesUseCase: ScanDevicesUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
-    private lateinit var scannedDevices: MutableList<ScannedDevice>
+    private var scannedDevices: MutableList<ScannedDevice> = mutableListOf()
 
     private val onNewAdvertisement = MutableLiveData<List<ScannedDevice>>()
     fun onNewAdvertisement(): LiveData<List<ScannedDevice>> = onNewAdvertisement
@@ -27,6 +27,18 @@ class ScanDevicesViewModel : ViewModel(), KoinComponent {
     fun onProgress(): LiveData<Resource<Unit>> = onProgress
 
     fun scanBleDevices() {
+        viewModelScope.launch {
+            onProgress.postValue(Resource.loading())
+            scannedDevices = mutableListOf()
+            scanDevicesUseCase.startScanning()
+        }
+    }
+
+    fun isScanningRunning(): Boolean {
+        return onProgress.value?.status == Status.LOADING
+    }
+
+    init {
         viewModelScope.launch {
             scanDevicesUseCase.registerOnScanningCompletionStatus()
                 .collect { completionStatus ->
@@ -50,15 +62,5 @@ class ScanDevicesViewModel : ViewModel(), KoinComponent {
                     }
                 }
         }
-
-        viewModelScope.launch {
-            onProgress.postValue(Resource.loading())
-            scannedDevices = mutableListOf()
-            scanDevicesUseCase.startScanning()
-        }
-    }
-
-    fun isScanningRunning(): Boolean {
-        return onProgress.value?.status == Status.LOADING
     }
 }

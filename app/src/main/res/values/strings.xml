@@ -12,8 +12,10 @@
     <string name="action_back">Back</string>
     <string name="action_logout">Logout</string>
     <string name="action_clear">Clear</string>
+    <string name="action_try_again">Try Again</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="scan_qr_code">Scan QR Code</string>
 
     <!-- Permissions -->
     <string name="permission_location_title">Access to your location</string>
@@ -156,6 +158,17 @@
     <string name="description_set_location">Please set your location in the map so you can proceed with claiming the device.</string>
     <string name="success_claim_device"><![CDATA[You claimed the device: <br><b>%s</b>]]></string>
     <string name="action_devices_list">View device list</string>
+    <string name="action_quit_claiming">Quit Claiming</string>
+    <string name="pairing_failed_title">Pairing Failed!</string>
+
+    <!-- Helium -->
+    <string name="verify_device">Verify Device</string>
+    <string name="dev_eui">Dev EUI</string>
+    <string name="enter_dev_eui">Enter dev EUI</string>
+    <string name="dev_eui_info_text">Dev EUI and Device Key can be found in the station package. Alternative, you can scan the QR on the packaging.</string>
+    <string name="device_key">Device Key</string>
+    <string name="enter_device_key">Enter device\'s Key</string>
+    <string name="helium_pairing_failed_desc">The Pairing process with WS2000 has failed. Please try again, and if the problem persists, claim your device manually.</string>
 
     <!-- Forecast -->
     <string name="forecast_7_day">7 Day Forecast</string>

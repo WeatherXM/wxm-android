@@ -109,12 +109,12 @@ class BluetoothConnectionManager(private val context: Context) {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun setPeripheral(bluetoothDevice: BluetoothDevice): Either<Failure, Unit> {
+    fun setPeripheral(address: String): Either<Failure, Unit> {
         return try {
-            peripheral = GlobalScope.peripheral(bluetoothDevice)
+            peripheral = GlobalScope.peripheral(address)
             Either.Right(Unit)
         } catch (e: IllegalArgumentException) {
-            Timber.w(e, "Creation of peripheral failed: $bluetoothDevice")
+            Timber.w(e, "Creation of peripheral failed: $address")
             Either.Left(BluetoothError.PeripheralCreationError)
         }
     }

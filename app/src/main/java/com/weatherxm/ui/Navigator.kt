@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.weatherxm.R
 import com.weatherxm.data.Device
+import com.weatherxm.ui.claimdevice.ClaimDeviceActivity
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity
 import com.weatherxm.ui.claimdevice.scandevices.ScanDevicesFragment
 import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeFragment
 import com.weatherxm.ui.common.toast
@@ -187,9 +189,33 @@ class Navigator {
         modalBottomSheet.show(fragmentManager, SelectDeviceTypeFragment.TAG)
     }
 
-    fun showScanDialog(fragmentManager: FragmentManager) {
-        val modalBottomSheet = ScanDevicesFragment()
+    fun showScanDialog(fragmentManager: FragmentManager, deviceType: DeviceType) {
+        val modalBottomSheet = ScanDevicesFragment.newInstance(deviceType)
         modalBottomSheet.show(fragmentManager, ScanDevicesFragment.TAG)
+    }
+
+    fun showClaimM5(
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        context: Context
+    ) {
+        activityResultLauncher.launch(
+            Intent(context, ClaimDeviceActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        )
+    }
+
+    fun showClaimHelium(
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        context: Context,
+        isManualClaiming: Boolean,
+        deviceBleAddress: String? = null
+    ) {
+        activityResultLauncher.launch(
+            Intent(context, ClaimHeliumDeviceActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ClaimHeliumDeviceActivity.ARG_IS_MANUAL_CLAIMING, isManualClaiming)
+                .putExtra(ClaimHeliumDeviceActivity.ARG_DEVICE_BLE_ADDRESS, deviceBleAddress)
+        )
     }
 
     fun sendSupportEmail(

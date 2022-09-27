@@ -1,7 +1,6 @@
 package com.weatherxm.ui.home
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.ActivityResult
@@ -15,16 +14,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityHomeBinding
+import com.weatherxm.ui.DeviceType
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.claimdevice.ClaimDeviceActivity
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.ui.home.profile.ProfileViewModel
 import com.weatherxm.util.hideIfNot
 import com.weatherxm.util.showIfNot
 import dev.chrisbanes.insetter.applyInsetter
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -45,14 +42,6 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 devicesViewModel.fetch()
-            }
-        }
-
-    // TODO: This will be used in the Update activity where the flow is TBD.
-    private val findZipFileLauncher =
-        registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
-            result.data?.data?.let {
-                homeViewModel.update(it)
             }
         }
 
@@ -130,7 +119,7 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
 
         homeViewModel.onScanDevices().observe(this) {
             if (it) {
-                navigator.showScanDialog(supportFragmentManager)
+                navigator.showScanDialog(supportFragmentManager, DeviceType.HELIUM)
             }
         }
 
@@ -138,25 +127,20 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             handleBadge(!it.isNullOrEmpty())
         }
 
-        homeViewModel.onClaimManually().observe(this) {
+        homeViewModel.onClaimM5Manually().observe(this) {
             if (it) {
-                claimDeviceLauncher.launch(Intent(this, ClaimDeviceActivity::class.java))
+                navigator.showClaimM5(claimDeviceLauncher, this)
+            }
+        }
+
+        homeViewModel.onClaimHeliumManually().observe(this) {
+            if (it) {
+                navigator.showClaimHelium(claimDeviceLauncher, this, true)
             }
         }
 
         homeViewModel.onScannedDeviceSelected().observe(this) {
-            GlobalScope.launch {
-                homeViewModel.setPeripheral(it.bluetoothDevice)
-                homeViewModel.connectToPeripheral()
-            }
-        }
-
-        // TODO: For testing purposes.
-        homeViewModel.onBondedDevice().observe(this) {
-            val intent = Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE)
-                .setType("application/zip")
-
-            findZipFileLauncher.launch(intent)
+            navigator.showClaimHelium(claimDeviceLauncher, this, false, it.address)
         }
 
         // Disable BottomNavigationView bottom padding, added by default, and add margin

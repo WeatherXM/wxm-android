@@ -59,6 +59,7 @@
     </style>
 
     <style name="Widget.WeatherXM.Button.Subtle.Borders" parent="@style/Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:minHeight">54dp</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textAllCaps">false</item>
         <item name="strokeColor">@color/colorPrimary</item>
@@ -154,8 +155,8 @@
         <item name="android:alpha">0.9</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.Survey" parent="Widget.WeatherXM.MaterialCard">
-        <item name="cardBackgroundColor">@color/survey_prompt_card_background</item>
+    <style name="Widget.WeatherXM.MaterialCard.InfoBox" parent="Widget.WeatherXM.MaterialCard">
+        <item name="cardBackgroundColor">@color/info_card_background</item>
     </style>
 
     <style name="Widget.WeatherXM.MaterialCard.ClaimingFlowDevices" parent="Widget.WeatherXM.MaterialCard">

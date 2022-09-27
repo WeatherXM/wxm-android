@@ -11,6 +11,7 @@ import com.weatherxm.data.bluetooth.BluetoothProvisioner
 import com.weatherxm.data.bluetooth.BluetoothScanner
 import com.weatherxm.data.bluetooth.BluetoothUpdater
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onEach
 
 class BluetoothDataSourceImpl(
     private val scanner: BluetoothScanner,
@@ -18,9 +19,12 @@ class BluetoothDataSourceImpl(
     private val provisioner: BluetoothProvisioner,
     private val updater: BluetoothUpdater,
 ) : BluetoothDataSource {
+    private val currentScannedDevices = mutableMapOf<String, BluetoothDevice>()
 
     override suspend fun registerOnScanning(): Flow<BluetoothDevice> {
-        return scanner.registerOnScanning()
+        return scanner.registerOnScanning().onEach {
+            currentScannedDevices[it.address] = it
+        }
     }
 
     override fun registerOnBondStatus(): Flow<Int> {
@@ -40,11 +44,12 @@ class BluetoothDataSourceImpl(
     }
 
     override suspend fun startScanning() {
+        currentScannedDevices.clear()
         scanner.startScanning()
     }
 
-    override fun setPeripheral(bluetoothDevice: BluetoothDevice): Either<Failure, Unit> {
-        return connectionManager.setPeripheral(bluetoothDevice)
+    override fun setPeripheral(address: String): Either<Failure, Unit> {
+        return connectionManager.setPeripheral(address)
     }
 
     override suspend fun connectToPeripheral(): Either<Failure, Peripheral> {

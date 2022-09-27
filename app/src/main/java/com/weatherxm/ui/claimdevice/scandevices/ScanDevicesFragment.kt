@@ -17,11 +17,13 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenCreated
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentScanDevicesBinding
+import com.weatherxm.ui.DeviceType
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.setHtml
@@ -34,8 +36,28 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentScanDevicesBinding
     private lateinit var adapter: ScannedDevicesListAdapter
 
+    private lateinit var deviceType: DeviceType
+
     companion object {
         const val TAG = "ScanDevicesFragment"
+        private const val ARG_DEVICE_TYPE = "device_type"
+
+        fun newInstance(deviceType: DeviceType) = ScanDevicesFragment().apply {
+            arguments = Bundle().apply { putString(ARG_DEVICE_TYPE, deviceType.name) }
+        }
+    }
+
+    init {
+        lifecycleScope.launch {
+            whenCreated {
+                val typeAsString = arguments?.getString(ARG_DEVICE_TYPE)
+                deviceType = if (typeAsString == DeviceType.HELIUM.name) {
+                    DeviceType.HELIUM
+                } else {
+                    DeviceType.M5_WIFI
+                }
+            }
+        }
     }
 
     private val enableBluetoothLauncher =
@@ -87,7 +109,7 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
         }
 
         binding.claimDeviceManually.setOnClickListener {
-            homeViewModel.claimManually()
+            homeViewModel.claimHeliumManually()
             dismiss()
         }
 

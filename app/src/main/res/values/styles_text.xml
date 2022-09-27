@@ -313,6 +313,10 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="TextAppearance.WeatherXM.TextInput.TitleMedium" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <!--
         Survey Prompt on Preferences Screen
     -->

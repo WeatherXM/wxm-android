@@ -27,8 +27,7 @@ class ScanDevicesUseCaseImpl(
             Timber.d("New bluetooth device collected: $it")
             ScannedDevice(
                 address = it.address,
-                name = it.name,
-                bluetoothDevice = it
+                name = it.name
             )
         }
     }
