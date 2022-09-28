@@ -24,9 +24,6 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
         binding = ActivityClaimHeliumDeviceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        model.setManualClaiming(intent?.extras?.getBoolean(ARG_IS_MANUAL_CLAIMING))
-        model.setDeviceAddress(intent?.extras?.getString(ARG_DEVICE_BLE_ADDRESS))
-
         binding.root.applyInsets()
 
         // The pager adapter, which provides the pages to the view pager widget.
@@ -41,6 +38,11 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
         model.onCancel().observe(this) {
             if (it) finish()
         }
+
+        model.setup(
+            intent?.extras?.getBoolean(ARG_IS_MANUAL_CLAIMING),
+            intent?.extras?.getString(ARG_DEVICE_BLE_ADDRESS)
+        )
     }
 
     private class ClaimHeliumDevicePagerAdapter(

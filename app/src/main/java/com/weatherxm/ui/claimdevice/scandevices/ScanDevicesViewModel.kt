@@ -8,7 +8,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.ui.ScannedDevice
-import com.weatherxm.usecases.ScanDevicesUseCase
+import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -16,7 +16,7 @@ import org.koin.core.component.inject
 import timber.log.Timber
 
 class ScanDevicesViewModel : ViewModel(), KoinComponent {
-    private val scanDevicesUseCase: ScanDevicesUseCase by inject()
+    private val scanDevicesUseCase: BluetoothScannerUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
     private var scannedDevices: MutableList<ScannedDevice> = mutableListOf()
 
@@ -29,7 +29,7 @@ class ScanDevicesViewModel : ViewModel(), KoinComponent {
     fun scanBleDevices() {
         viewModelScope.launch {
             onProgress.postValue(Resource.loading())
-            scannedDevices = mutableListOf()
+            scannedDevices.clear()
             scanDevicesUseCase.startScanning()
         }
     }

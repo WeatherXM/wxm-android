@@ -1,37 +1,30 @@
 package com.weatherxm.usecases
 
-import android.net.Uri
 import arrow.core.Either
 import com.juul.kable.Peripheral
 import com.weatherxm.data.Failure
-import com.weatherxm.data.repository.BluetoothRepository
+import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepository
 import kotlinx.coroutines.flow.Flow
 
 interface BluetoothConnectionUseCase {
     fun setPeripheral(address: String): Either<Failure, Unit>
     suspend fun connectToPeripheral(): Either<Failure, Peripheral>
-    fun update(updatePackage: Uri): Flow<Int>
     fun registerOnBondStatus(): Flow<Int>
 }
 
 class BluetoothConnectionUseCaseImpl(
-    private val bluetoothRepository: BluetoothRepository,
+    private val bluetoothConnectionRepository: BluetoothConnectionRepository,
 ) : BluetoothConnectionUseCase {
 
     override fun setPeripheral(address: String): Either<Failure, Unit> {
-        return bluetoothRepository.setPeripheral(address)
+        return bluetoothConnectionRepository.setPeripheral(address)
     }
 
     override suspend fun connectToPeripheral(): Either<Failure, Peripheral> {
-        return bluetoothRepository.connectToPeripheral()
-    }
-
-    override fun update(updatePackage: Uri): Flow<Int> {
-        bluetoothRepository.setUpdater()
-        return bluetoothRepository.update(updatePackage)
+        return bluetoothConnectionRepository.connectToPeripheral()
     }
 
     override fun registerOnBondStatus(): Flow<Int> {
-        return bluetoothRepository.registerOnBondStatus()
+        return bluetoothConnectionRepository.registerOnBondStatus()
     }
 }

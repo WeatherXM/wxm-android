@@ -229,6 +229,7 @@ data class UIDevice(
 data class ScannedDevice(
     val address: String,
     val name: String?,
+    val eui: String?,
     val type: DeviceType = DeviceType.HELIUM
 ) : Parcelable
 

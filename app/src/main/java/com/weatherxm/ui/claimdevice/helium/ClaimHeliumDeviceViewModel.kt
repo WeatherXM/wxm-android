@@ -17,6 +17,13 @@ class ClaimHeliumDeviceViewModel : ViewModel(), KoinComponent {
     fun onCancel() = onCancel
     fun onNext() = onNext
 
+    fun setup(isManual: Boolean?, macAddress: String?) {
+        this.isManual = isManual == true
+        macAddress?.let {
+            deviceAddress = it
+        }
+    }
+
     fun setDeviceEUI(devEUI: String) {
         this.devEUI = devEUI
     }
@@ -25,14 +32,12 @@ class ClaimHeliumDeviceViewModel : ViewModel(), KoinComponent {
         deviceKey = key
     }
 
-    fun setDeviceAddress(address: String?) {
-        address?.let {
-            deviceAddress = it
-        }
-    }
-
     fun getDeviceAddress(): String {
         return deviceAddress
+    }
+
+    fun isManualClaiming(): Boolean {
+        return isManual
     }
 
     fun cancel() {
@@ -41,13 +46,5 @@ class ClaimHeliumDeviceViewModel : ViewModel(), KoinComponent {
 
     fun next() {
         onNext.postValue(true)
-    }
-
-    fun isManualClaiming(): Boolean {
-        return isManual
-    }
-
-    fun setManualClaiming(isManual: Boolean?) {
-        this.isManual = isManual == true
     }
 }

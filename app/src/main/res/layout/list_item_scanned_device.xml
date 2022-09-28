@@ -16,15 +16,15 @@
         tools:text="M5 WiFi" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/deviceId"
+        android:id="@+id/deviceEui"
         style="@style/TextAppearance.WeatherXM.Default.PrimaryColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
-        android:text="@string/device_id"
+        android:text="@string/device_eui"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/name"
-        tools:text="Device ID: wx56n46" />
+        tools:text="Device EUI: wx56n46" />
 
     <View
         android:id="@+id/bottomBorder"
@@ -32,6 +32,6 @@
         android:layout_height="1dp"
         android:background="@color/light_mid_grey"
         android:layout_marginTop="@dimen/margin_normal"
-        app:layout_constraintTop_toBottomOf="@id/deviceId"/>
+        app:layout_constraintTop_toBottomOf="@id/deviceEui" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

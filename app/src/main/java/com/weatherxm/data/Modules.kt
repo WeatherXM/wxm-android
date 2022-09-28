@@ -40,8 +40,14 @@ import com.weatherxm.data.datasource.AuthDataSource
 import com.weatherxm.data.datasource.AuthDataSourceImpl
 import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSourceImpl
-import com.weatherxm.data.datasource.BluetoothDataSource
-import com.weatherxm.data.datasource.BluetoothDataSourceImpl
+import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSource
+import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSourceImpl
+import com.weatherxm.data.datasource.bluetooth.BluetoothProvisionerDataSource
+import com.weatherxm.data.datasource.bluetooth.BluetoothProvisionerDataSourceImpl
+import com.weatherxm.data.datasource.bluetooth.BluetoothScannerDataSource
+import com.weatherxm.data.datasource.bluetooth.BluetoothScannerDataSourceImpl
+import com.weatherxm.data.datasource.bluetooth.BluetoothUpdaterDataSource
+import com.weatherxm.data.datasource.bluetooth.BluetoothUpdaterDataSourceImpl
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.CredentialsDataSource
@@ -73,8 +79,12 @@ import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AppConfigRepositoryImpl
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
-import com.weatherxm.data.repository.BluetoothRepository
-import com.weatherxm.data.repository.BluetoothRepositoryImpl
+import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepository
+import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepositoryImpl
+import com.weatherxm.data.repository.bluetooth.BluetoothProvisionerRepository
+import com.weatherxm.data.repository.bluetooth.BluetoothProvisionerRepositoryImpl
+import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepository
+import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepositoryImpl
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.DeviceRepositoryImpl
 import com.weatherxm.data.repository.ExplorerRepository
@@ -99,6 +109,8 @@ import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.AuthUseCaseImpl
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothConnectionUseCaseImpl
+import com.weatherxm.usecases.BluetoothScannerUseCase
+import com.weatherxm.usecases.BluetoothScannerUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCaseImpl
 import com.weatherxm.usecases.ConnectWalletUseCase
@@ -111,8 +123,6 @@ import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
 import com.weatherxm.usecases.PreferencesUseCase
 import com.weatherxm.usecases.PreferencesUseCaseImpl
-import com.weatherxm.usecases.ScanDevicesUseCase
-import com.weatherxm.usecases.ScanDevicesUseCaseImpl
 import com.weatherxm.usecases.SelectDeviceTypeUseCase
 import com.weatherxm.usecases.SelectDeviceTypeUseCaseImpl
 import com.weatherxm.usecases.SendFeedbackUseCase
@@ -270,8 +280,20 @@ private val datasources = module {
         SharedPreferencesDataSourceImpl(get())
     }
 
-    single<BluetoothDataSource> {
-        BluetoothDataSourceImpl(get(), get(), get(), get())
+    single<BluetoothScannerDataSource> {
+        BluetoothScannerDataSourceImpl(get())
+    }
+
+    single<BluetoothConnectionDataSource> {
+        BluetoothConnectionDataSourceImpl(get())
+    }
+
+    single<BluetoothUpdaterDataSource> {
+        BluetoothUpdaterDataSourceImpl(get())
+    }
+
+    single<BluetoothProvisionerDataSource> {
+        BluetoothProvisionerDataSourceImpl(get())
     }
 }
 
@@ -309,8 +331,14 @@ private val repositories = module {
     single<SharedPreferencesRepository> {
         SharedPreferenceRepositoryImpl(get())
     }
-    single<BluetoothRepository> {
-        BluetoothRepositoryImpl(get())
+    single<BluetoothScannerRepository> {
+        BluetoothScannerRepositoryImpl(get())
+    }
+    single<BluetoothConnectionRepository> {
+        BluetoothConnectionRepositoryImpl(get())
+    }
+    single<BluetoothProvisionerRepository> {
+        BluetoothProvisionerRepositoryImpl(get())
     }
 }
 
@@ -351,8 +379,8 @@ private val usecases = module {
     single<SendFeedbackUseCase> {
         SendFeedbackUseCaseImpl(get(), get())
     }
-    single<ScanDevicesUseCase> {
-        ScanDevicesUseCaseImpl(get())
+    single<BluetoothScannerUseCase> {
+        BluetoothScannerUseCaseImpl(get())
     }
     single<SelectDeviceTypeUseCase> {
         SelectDeviceTypeUseCaseImpl()

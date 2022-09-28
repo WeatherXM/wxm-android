@@ -47,10 +47,15 @@ class ScannedDevicesListAdapter(
         fun bind(item: ScannedDevice, position: Int) {
             this.scannedDevice = item
             binding.name.text = item.name
-            binding.deviceId.text = resHelper.getString(R.string.device_id, item.address)
+            binding.deviceEui.text = resHelper.getString(
+                R.string.device_eui,
+                item.eui ?: resHelper.getString(R.string.not_found)
+            )
 
             if (position == currentList.size - 1) {
                 binding.bottomBorder.visibility = View.INVISIBLE
+            } else {
+                binding.bottomBorder.visibility = View.VISIBLE
             }
         }
     }

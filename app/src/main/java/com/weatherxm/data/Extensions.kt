@@ -48,6 +48,8 @@ import okhttp3.Response
 import timber.log.Timber
 import java.net.SocketTimeoutException
 
+fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
+
 fun Request.path(): String = this.url.encodedPath
 
 fun Response.path(): String = this.request.path()
