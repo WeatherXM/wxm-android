@@ -35,7 +35,15 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
     private val barcodeLauncher =
         registerForActivityResult(ScanContract()) { result: ScanIntentResult ->
             result.contents.let {
-                model.parseScanResult(it)
+                val scannedEUI = model.getEUIFromScanner(it)
+                binding.devEUI.setText(scannedEUI)
+                parentModel.setDeviceEUI(scannedEUI)
+
+                if (parentModel.isManualClaiming()) {
+                    val scannedKey = model.getKeyFromScanner(it)
+                    binding.devKey.setText(scannedKey)
+                    parentModel.setDeviceKey(scannedKey)
+                }
             }
         }
 
@@ -78,8 +86,11 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
         }
 
         model.onPairing().observe(viewLifecycleOwner) { showSpinner ->
-            if (showSpinner) binding.loading.visibility = View.VISIBLE
-            else binding.loading.visibility = View.GONE
+            if (showSpinner && !parentModel.isManualClaiming()) {
+                binding.loading.visibility = View.VISIBLE
+            } else {
+                binding.loading.visibility = View.GONE
+            }
         }
     }
 

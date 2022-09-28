@@ -64,8 +64,12 @@ class ClaimHeliumDeviceVerifyViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun parseScanResult(result: String?) {
-        // TODO: Parse scan's result 
+    fun getEUIFromScanner(result: String?): String {
+        return result?.take(16) ?: ""
+    }
+
+    fun getKeyFromScanner(result: String?): String {
+        return result?.substring(16..31) ?: ""
     }
 
     // TODO: Remove this

@@ -27,7 +27,7 @@ class BluetoothScanner(private val espProvisionManager: ESPProvisionManager) {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun registerOnScanning(): Flow<BluetoothDevice> {
-        completionStatus.resetReplayCache()
+        scannedDevices.resetReplayCache()
         return scannedDevices
     }
 
@@ -49,11 +49,10 @@ class BluetoothScanner(private val espProvisionManager: ESPProvisionManager) {
 
             override fun onPeripheralFound(device: BluetoothDevice?, scanResult: ScanResult?) {
                 device?.let {
-                    scannedDevices.tryEmit(it)
                     // TODO: Add filtering with the correct one in the future
-//                    if (it.name.contains("WXM")) {
-//                        scannedDevices.tryEmit(it)
-//                    }
+                    if (it.name.contains("WXM")) {
+                        scannedDevices.tryEmit(it)
+                    }
                 }
             }
 
