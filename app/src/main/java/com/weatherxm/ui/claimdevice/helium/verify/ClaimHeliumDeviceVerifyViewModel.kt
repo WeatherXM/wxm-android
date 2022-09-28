@@ -2,10 +2,12 @@ package com.weatherxm.ui.claimdevice.helium.verify
 
 import android.bluetooth.BluetoothDevice
 import android.net.Uri
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.data.BluetoothError
 import com.weatherxm.ui.UIError
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.util.ResourcesHelper
@@ -19,6 +21,9 @@ class ClaimHeliumDeviceVerifyViewModel : ViewModel(), KoinComponent {
 
     private val onError = MutableLiveData<UIError>()
     fun onError() = onError
+
+    private val onPairing = MutableLiveData(true)
+    fun onPairing(): LiveData<Boolean> = onPairing
 
     fun setPeripheral(address: String) {
         usecase.setPeripheral(address)
@@ -36,30 +41,26 @@ class ClaimHeliumDeviceVerifyViewModel : ViewModel(), KoinComponent {
 
     private fun connectToPeripheral() {
         viewModelScope.launch {
-            usecase.registerOnBondStatus().collect {
-                when (it) {
-                    BluetoothDevice.BOND_BONDED -> {
-                        // TODO: Do what? Fetch device key?
-                    }
-                    BluetoothDevice.BOND_BONDING -> {
-                        // TODO: Do what? Show progress (if any??)?
-                    }
-                    BluetoothDevice.BOND_NONE -> {
-                        onError.postValue(
+            usecase.connectToPeripheral().mapLeft {
+                onError.postValue(
+                    when (it) {
+                        is BluetoothError.BluetoothDisabledException -> {
+                            UIError(resHelper.getString(R.string.helium_bluetooth_disabled)) {
+                                connectToPeripheral()
+                            }
+                        }
+                        is BluetoothError.ConnectionLostException -> {
+                            UIError(resHelper.getString(R.string.helium_bluetooth_connection_lost)) {
+                                connectToPeripheral()
+                            }
+                        }
+                        else -> {
                             UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
                                 connectToPeripheral()
                             }
-                        )
-                    }
-                }
+                        }
+                    })
             }
-        }
-
-        viewModelScope.launch {
-            usecase.connectToPeripheral()
-                .mapLeft {
-                    // TODO: Handle failure
-                }
         }
     }
 
@@ -72,6 +73,29 @@ class ClaimHeliumDeviceVerifyViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             usecase.update(updatePackage).collect {
                 // TODO: Handle progress here
+            }
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            usecase.registerOnBondStatus().collect {
+                when (it) {
+                    BluetoothDevice.BOND_BONDED -> {
+                        onPairing.postValue(false)
+                    }
+                    BluetoothDevice.BOND_BONDING -> {
+                        onPairing.postValue(true)
+                    }
+                    BluetoothDevice.BOND_NONE -> {
+                        onError.postValue(
+                            UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
+                                connectToPeripheral()
+                            }
+                        )
+                        onPairing.postValue(false)
+                    }
+                }
             }
         }
     }

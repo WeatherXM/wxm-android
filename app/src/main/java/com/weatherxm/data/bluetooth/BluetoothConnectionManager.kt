@@ -18,13 +18,11 @@ import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Failure
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.takeWhile
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class BluetoothConnectionManager(private val context: Context) {
@@ -39,10 +37,14 @@ class BluetoothConnectionManager(private val context: Context) {
 
     private val bondStatus = MutableSharedFlow<Int>(
         replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
+        onBufferOverflow = BufferOverflow.DROP_LATEST
     )
 
-    fun onBondStatus(): Flow<Int> = bondStatus
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun onBondStatus(): Flow<Int> {
+        bondStatus.resetReplayCache()
+        return bondStatus
+    }
 
     /*
     * This broadcast receiver is used to intercept the BLE PIN prompt as we know that already
@@ -82,18 +84,12 @@ class BluetoothConnectionManager(private val context: Context) {
 
                 when (bluetoothDevice?.bondState) {
                     BluetoothDevice.BOND_BONDED -> {
-                        Timber.d("BLE Bonded.")
-                        bondStatus.tryEmit(BluetoothDevice.BOND_BONDED)
                         /*
                         * Any communication or work with the BLE device that needs to be done
                         * should be done after we reach this point where the BLE device is bonded
                          */
-                        // TODO: Remove these. They are being used for testing purposes.
-                        GlobalScope.launch {
-                            setReadWriteCharacteristic()
-                            fetchGeneralInfo()
-                            fetchMeasurement()
-                        }
+                        Timber.d("BLE Bonded.")
+                        bondStatus.tryEmit(BluetoothDevice.BOND_BONDED)
                     }
                     BluetoothDevice.BOND_BONDING -> {
                         Timber.d("BLE Bonding...")
@@ -154,6 +150,7 @@ class BluetoothConnectionManager(private val context: Context) {
         peripheral.disconnect()
     }
 
+    // TODO: If not needed, remove it.
     private fun setReadWriteCharacteristic() {
         peripheral.services?.forEach { service ->
             service.characteristics.forEach {
@@ -164,53 +161,5 @@ class BluetoothConnectionManager(private val context: Context) {
                 }
             }
         }
-    }
-
-    private suspend fun fetchGeneralInfo() {
-        val command = "AT+CONFIG=?\r\n".toByteArray()
-        writeCharacteristic?.let {
-            // TODO: Handle exception on write
-            peripheral.write(it, command)
-        }
-
-        val flowResponse = readCharacteristic?.let {
-            peripheral.observe(it)
-        }
-
-        var fullResponse = ""
-        flowResponse
-            ?.takeWhile {
-                String(it).replace("\r", "").replace("\n", "") != "OK"
-            }
-            ?.onCompletion {
-                Timber.d("General Info Response: $fullResponse")
-            }
-            ?.collect {
-                fullResponse += String(it)
-            }
-    }
-
-    private suspend fun fetchMeasurement() {
-        val command = "AT+MEA=?\r\n".toByteArray()
-        writeCharacteristic?.let {
-            // TODO: Handle exception on write
-            peripheral.write(it, command)
-        }
-
-        val flowResponse = readCharacteristic?.let {
-            peripheral.observe(it)
-        }
-
-        var fullResponse = ""
-        flowResponse
-            ?.takeWhile {
-                String(it).replace("\r", "").replace("\n", "") != "OK"
-            }
-            ?.onCompletion {
-                Timber.d("Measurement Response: $fullResponse")
-            }
-            ?.collect {
-                fullResponse += String(it)
-            }
     }
 }

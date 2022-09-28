@@ -169,6 +169,8 @@
     <string name="device_key">Device Key</string>
     <string name="enter_device_key">Enter device\'s Key</string>
     <string name="helium_pairing_failed_desc">The Pairing process with WS2000 has failed. Please try again, and if the problem persists, claim your device manually.</string>
+    <string name="helium_bluetooth_disabled">The Pairing process with WS2000 has failed. Bluetooth is disabled. Please enable it and try again or claim your device manually.</string>
+    <string name="helium_bluetooth_connection_lost">The Pairing process with WS2000 has failed. Bluetooth connection has been lost. Please try again, and if the problem persists, claim your device manually.</string>
 
     <!-- Forecast -->
     <string name="forecast_7_day">7 Day Forecast</string>

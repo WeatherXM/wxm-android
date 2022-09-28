@@ -105,10 +105,12 @@ class ErrorDialogFragment : DialogFragment() {
 
         binding.positiveButton.setOnClickListener {
             setResult(RESULT_POSITIVE)
+            dismiss()
         }
 
         binding.negativeButton.setOnClickListener {
             setResult(RESULT_NEGATIVE)
+            dismiss()
         }
 
         return builder.create()

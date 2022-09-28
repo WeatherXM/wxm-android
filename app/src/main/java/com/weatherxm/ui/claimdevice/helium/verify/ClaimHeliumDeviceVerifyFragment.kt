@@ -76,6 +76,11 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
         model.onError().observe(viewLifecycleOwner) {
             showErrorDialog(it)
         }
+
+        model.onPairing().observe(viewLifecycleOwner) { showSpinner ->
+            if (showSpinner) binding.loading.visibility = View.VISIBLE
+            else binding.loading.visibility = View.GONE
+        }
     }
 
     private fun showErrorDialog(uiError: UIError) {
@@ -88,7 +93,7 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
                 parentModel.cancel()
             }
             .onPositiveClick(getString(R.string.action_try_again)) {
-                uiError.retryFunction
+                uiError.retryFunction?.invoke()
             }
             .build()
             .show(this)
