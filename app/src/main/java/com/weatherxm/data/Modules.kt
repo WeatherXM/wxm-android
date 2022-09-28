@@ -40,14 +40,6 @@ import com.weatherxm.data.datasource.AuthDataSource
 import com.weatherxm.data.datasource.AuthDataSourceImpl
 import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSourceImpl
-import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSource
-import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSourceImpl
-import com.weatherxm.data.datasource.bluetooth.BluetoothProvisionerDataSource
-import com.weatherxm.data.datasource.bluetooth.BluetoothProvisionerDataSourceImpl
-import com.weatherxm.data.datasource.bluetooth.BluetoothScannerDataSource
-import com.weatherxm.data.datasource.bluetooth.BluetoothScannerDataSourceImpl
-import com.weatherxm.data.datasource.bluetooth.BluetoothUpdaterDataSource
-import com.weatherxm.data.datasource.bluetooth.BluetoothUpdaterDataSourceImpl
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.CredentialsDataSource
@@ -70,6 +62,14 @@ import com.weatherxm.data.datasource.TokenDataSource
 import com.weatherxm.data.datasource.TokenDataSourceImpl
 import com.weatherxm.data.datasource.UserActionDataSource
 import com.weatherxm.data.datasource.UserActionDataSourceImpl
+import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSource
+import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSourceImpl
+import com.weatherxm.data.datasource.bluetooth.BluetoothProvisionerDataSource
+import com.weatherxm.data.datasource.bluetooth.BluetoothProvisionerDataSourceImpl
+import com.weatherxm.data.datasource.bluetooth.BluetoothScannerDataSource
+import com.weatherxm.data.datasource.bluetooth.BluetoothScannerDataSourceImpl
+import com.weatherxm.data.datasource.bluetooth.BluetoothUpdaterDataSource
+import com.weatherxm.data.datasource.bluetooth.BluetoothUpdaterDataSourceImpl
 import com.weatherxm.data.network.AuthTokenJsonAdapter
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthRequestInterceptor
@@ -79,12 +79,6 @@ import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AppConfigRepositoryImpl
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
-import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepository
-import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepositoryImpl
-import com.weatherxm.data.repository.bluetooth.BluetoothProvisionerRepository
-import com.weatherxm.data.repository.bluetooth.BluetoothProvisionerRepositoryImpl
-import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepository
-import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepositoryImpl
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.DeviceRepositoryImpl
 import com.weatherxm.data.repository.ExplorerRepository
@@ -103,6 +97,12 @@ import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.data.repository.WeatherForecastRepositoryImpl
 import com.weatherxm.data.repository.WeatherHistoryRepository
 import com.weatherxm.data.repository.WeatherHistoryRepositoryImpl
+import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepository
+import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepositoryImpl
+import com.weatherxm.data.repository.bluetooth.BluetoothProvisionerRepository
+import com.weatherxm.data.repository.bluetooth.BluetoothProvisionerRepositoryImpl
+import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepository
+import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepositoryImpl
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.UIHexJsonAdapter
 import com.weatherxm.usecases.AuthUseCase
@@ -386,7 +386,7 @@ private val usecases = module {
         SelectDeviceTypeUseCaseImpl()
     }
     single<BluetoothConnectionUseCase> {
-        BluetoothConnectionUseCaseImpl(get())
+        BluetoothConnectionUseCaseImpl(get(), get())
     }
 }
 

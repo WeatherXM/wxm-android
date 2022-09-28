@@ -25,4 +25,8 @@ class BluetoothScannerRepositoryImpl(
     override fun registerOnScanCompletionStatus(): Flow<Either<Failure, Unit>> {
         return dataSource.registerOnScanCompletionStatus()
     }
+
+    override fun getScannedDevice(macAddress: String): BluetoothDeviceWithEUI? {
+        return dataSource.getScannedDevice(macAddress)
+    }
 }

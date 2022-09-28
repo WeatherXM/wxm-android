@@ -1,7 +1,6 @@
 package com.weatherxm.ui.claimdevice.helium.verify
 
 import android.bluetooth.BluetoothDevice
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,15 +24,31 @@ class ClaimHeliumDeviceVerifyViewModel : ViewModel(), KoinComponent {
     private val onPairing = MutableLiveData(true)
     fun onPairing(): LiveData<Boolean> = onPairing
 
-    fun setPeripheral(address: String) {
-        usecase.setPeripheral(address)
+    private val onDeviceEUIFromBLE = MutableLiveData<String>()
+    fun onDeviceEUIFromBLE(): LiveData<String> = onDeviceEUIFromBLE
+
+    fun setupBluetoothClaiming(macAddress: String) {
+        usecase.getDeviceEUI(macAddress)?.let {
+            setPeripheral(macAddress)
+            onDeviceEUIFromBLE.postValue(it)
+        } ?: run {
+            onError.postValue(
+                UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
+                    setupBluetoothClaiming(macAddress)
+                }
+            )
+        }
+    }
+
+    private fun setPeripheral(macAddress: String) {
+        usecase.setPeripheral(macAddress)
             .map {
                 connectToPeripheral()
             }
             .mapLeft {
                 onError.postValue(
                     UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
-                        setPeripheral(address)
+                        setPeripheral(macAddress)
                     }
                 )
             }
@@ -73,13 +88,13 @@ class ClaimHeliumDeviceVerifyViewModel : ViewModel(), KoinComponent {
     }
 
     // TODO: Remove this
-    fun update(updatePackage: Uri) {
-        viewModelScope.launch {
-            usecase.update(updatePackage).collect {
-                // TODO: Handle progress here
-            }
-        }
-    }
+//    fun update(updatePackage: Uri) {
+//        viewModelScope.launch {
+//            usecase.update(updatePackage).collect {
+//                // TODO: Handle progress here
+//            }
+//        }
+//    }
 
     init {
         viewModelScope.launch {
@@ -103,5 +118,4 @@ class ClaimHeliumDeviceVerifyViewModel : ViewModel(), KoinComponent {
             }
         }
     }
-
 }

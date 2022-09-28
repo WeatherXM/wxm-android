@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -24,12 +22,12 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
     private lateinit var binding: FragmentClaimDeviceHeliumVerifyBinding
 
     // TODO: This will be used in the Update activity where the flow is TBD.
-    private val findZipFileLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            result.data?.data?.let {
-                model.update(it)
-            }
-        }
+//    private val findZipFileLauncher =
+//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+//            result.data?.data?.let {
+//                model.update(it)
+//            }
+//        }
 
     // Register the launcher and result handler for QR code scanner
     private val barcodeLauncher =
@@ -74,13 +72,6 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
             // TODO: Handle verification status and go next
         }
 
-        if (!parentModel.isManualClaiming()) {
-            binding.devKeyTitle.visibility = View.GONE
-            binding.devKeyContainer.visibility = View.GONE
-
-            connectToDevice()
-        }
-
         model.onError().observe(viewLifecycleOwner) {
             showErrorDialog(it)
         }
@@ -91,6 +82,19 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
             } else {
                 binding.loading.visibility = View.GONE
             }
+        }
+
+        model.onDeviceEUIFromBLE().observe(viewLifecycleOwner) {
+            binding.devEUI.setText(it)
+            parentModel.setDeviceEUI(it)
+        }
+
+        if (!parentModel.isManualClaiming()) {
+            // TODO: Wait for final design to show/hide fields
+//            binding.devKeyTitle.visibility = View.GONE
+//            binding.devKeyContainer.visibility = View.GONE
+
+            model.setupBluetoothClaiming(parentModel.getDeviceAddress())
         }
     }
 
@@ -108,10 +112,6 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
             }
             .build()
             .show(this)
-    }
-
-    private fun connectToDevice() {
-        model.setPeripheral(parentModel.getDeviceAddress())
     }
 
 //        TODO: For testing purposes. Remove on PR.

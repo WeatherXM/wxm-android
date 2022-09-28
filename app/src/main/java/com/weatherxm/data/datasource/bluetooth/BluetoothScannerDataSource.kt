@@ -9,4 +9,5 @@ interface BluetoothScannerDataSource {
     suspend fun registerOnScanning(): Flow<BluetoothDeviceWithEUI>
     suspend fun startScanning()
     fun registerOnScanCompletionStatus(): Flow<Either<Failure, Unit>>
+    fun getScannedDevice(macAddress: String): BluetoothDeviceWithEUI?
 }
