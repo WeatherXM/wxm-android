@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.ListItemDeviceBinding
-import com.weatherxm.util.DateTimeHelper.getRelativeTimeFromISO
+import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Tokens.formatTokens
 import com.weatherxm.util.Weather
@@ -53,13 +53,14 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 Weather.getFormattedTemperature(item.currentWeather?.temperature, 1)
 
             device.attributes?.lastWeatherStationActivity?.let {
-                binding.lastSeen.text = itemView.resources.getString(
-                    R.string.last_active,
-                    getRelativeTimeFromISO(
-                        it,
-                        itemView.resources.getString(R.string.last_active_just_now)
+                with(binding.lastSeen) {
+                    text = context.getString(
+                        R.string.last_active,
+                        it.getRelativeFormattedTime(
+                            fallbackIfTooSoon = context.getString(R.string.last_active_just_now)
+                        )
                     )
-                )
+                }
             }
 
             device.rewards?.totalRewards?.let {

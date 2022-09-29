@@ -10,14 +10,16 @@ import com.weatherxm.data.repository.SharedPreferencesRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.TokenInfo
-import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getLocalDate
 import com.weatherxm.util.DateTimeHelper.getNowInTimezone
 import com.weatherxm.util.DateTimeHelper.getTimezone
-import kotlinx.coroutines.CoroutineDispatcher
+import com.weatherxm.util.DateTimeHelper.isToday
+import com.weatherxm.util.DateTimeHelper.isTomorrow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.runBlocking
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -72,18 +74,16 @@ class UserDeviceUseCaseImpl(
         device: Device,
         forceRefresh: Boolean
     ): Either<Failure, List<HourlyWeather>> {
-        val now = getNowInTimezone(device.timezone)
-        val today = getFormattedDate(now)
-        val tomorrow = getFormattedDate(now.plusDays(1))
-
+        val dateStart = ZonedDateTime.now(ZoneId.of(device.timezone))
+        val dateEnd = dateStart.plusDays(1)
         return weatherForecastRepository.getDeviceForecast(
             device.id,
-            now,
-            now.plusDays(1),
+            dateStart,
+            dateEnd,
             forceRefresh
         ).map { response ->
             response
-                .filter { it.date.equals(today) || it.date.equals(tomorrow) }
+                .filter { it.date.isToday() || it.date.isTomorrow() }
                 .mapNotNull { it.hourly }
                 .flatten()
         }

@@ -2,10 +2,9 @@ package com.weatherxm.data.database
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
-import com.squareup.moshi.Moshi
-import com.weatherxm.data.WeatherData
+import java.time.LocalDate
 import java.time.ZonedDateTime
-import java.util.*
+import java.util.Date
 
 @ProvidedTypeConverter
 class DatabaseConverters {
@@ -18,6 +17,16 @@ class DatabaseConverters {
     @TypeConverter
     fun fromZonedDateTime(zonedDateTime: ZonedDateTime): String {
         return zonedDateTime.toString()
+    }
+
+    @TypeConverter
+    fun toLocalDate(isoDateString: String?): LocalDate {
+        return LocalDate.parse(isoDateString)
+    }
+
+    @TypeConverter
+    fun fromLocalDate(date: LocalDate): String {
+        return date.toString()
     }
 
     @TypeConverter

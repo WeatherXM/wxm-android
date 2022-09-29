@@ -7,7 +7,6 @@ import com.weatherxm.ui.UITransaction
 import com.weatherxm.ui.UITransactions
 import com.weatherxm.util.DateTimeHelper.getTimezone
 import com.weatherxm.util.Mask
-import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
@@ -44,10 +43,9 @@ class TokenUseCaseImpl(
                             tx.actualReward != null
                         }
                         .map { tx ->
-                            val timestamp = ZonedDateTime.parse(tx.timestamp)
                             UITransaction(
-                                formattedDate = timestamp.format(dateFormat),
-                                formattedTimestamp = timestamp.format(timestampFormat),
+                                formattedDate = tx.timestamp.format(dateFormat),
+                                formattedTimestamp = tx.timestamp.format(timestampFormat),
                                 txHash = tx.txHash,
                                 txHashMasked = tx.txHash?.let { hash ->
                                     mask.maskHash(

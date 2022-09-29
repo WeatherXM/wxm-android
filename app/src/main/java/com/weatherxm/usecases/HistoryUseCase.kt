@@ -2,8 +2,6 @@ package com.weatherxm.usecases
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import androidx.collection.ArrayMap
-import androidx.collection.arrayMapOf
 import arrow.core.Either
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
@@ -15,7 +13,6 @@ import com.weatherxm.data.repository.WeatherHistoryRepository
 import com.weatherxm.ui.BarChartData
 import com.weatherxm.ui.HistoryCharts
 import com.weatherxm.ui.LineChartData
-import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getHourMinutesFromISO
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UnitConverter
@@ -25,30 +22,25 @@ import java.time.LocalDate
 interface HistoryUseCase {
     suspend fun getWeatherHistory(
         device: Device,
-        fromDate: String,
-        toDate: String,
-        context: Context
-    ): Either<Failure, List<HistoryCharts>>
+        date: LocalDate,
+        forceUpdate: Boolean = false
+    ): Either<Failure, HistoryCharts>
 }
 
 class HistoryUseCaseImpl(
+    private val context: Context,
     private val weatherHistoryRepository: WeatherHistoryRepository,
     private val resHelper: ResourcesHelper
 ) : HistoryUseCase {
 
-    /*
-        Return either a HistoryCharts object with all the entries for the chart of each data
-        Either a Failure object
-    */
     override suspend fun getWeatherHistory(
         device: Device,
-        fromDate: String,
-        toDate: String,
-        context: Context
-    ): Either<Failure, List<HistoryCharts>> {
-        return weatherHistoryRepository.getHourlyWeatherHistory(device.id, fromDate, toDate)
-            .map { deviceHourlyHistory ->
-                return Either.Right(createAllHourlyCharts(deviceHourlyHistory, context))
+        date: LocalDate,
+        forceUpdate: Boolean
+    ): Either<Failure, HistoryCharts> {
+        return weatherHistoryRepository.getHourlyWeatherHistory(device.id, date, forceUpdate)
+            .map {
+                createHourlyCharts(date, it)
             }
     }
 
@@ -176,8 +168,7 @@ class HistoryUseCaseImpl(
      */
     @Suppress("ComplexMethod")
     private fun createHourlyCharts(
-        context: Context,
-        date: String,
+        date: LocalDate,
         hourlyWeatherData: List<HourlyWeather>
     ): HistoryCharts {
         var counter = 0F
@@ -195,7 +186,7 @@ class HistoryUseCaseImpl(
         hourlyWeatherData.forEach { hourlyWeather ->
             // Set showMinutes12Format as false
             // on hourly data they don't matter and they cause UI issues
-            time.add(getHourMinutesFromISO(context, hourlyWeather.timestamp, false))
+            time.add(getHourMinutesFromISO(context, hourlyWeather.timestamp.toString(), false))
 
             hourlyWeather.temperature?.let {
                 temperatureEntries.add(Entry(counter, Weather.convertTemp(it, 1) as Float))
@@ -250,38 +241,15 @@ class HistoryUseCaseImpl(
         }
 
         return HistoryCharts(
-            LocalDate.parse(date),
-            createTemperatureLineChartData(time, temperatureEntries),
-            createPrecipitationLineChartData(time, precipEntries),
-            createWindSpeedLineChartData(time, windSpeedEntries),
-            createWindGustLineChartData(time, windGustEntries),
-            createWindDirectionLineChartData(time, windDirectionEntries),
-            createHumidityLineChartData(time, humidityEntries),
-            createPressureLineChartData(time, pressureEntries),
-            createUvIndexBarChartData(time, uvIndexEntries)
+            date = date,
+            temperature = createTemperatureLineChartData(time, temperatureEntries),
+            precipitation = createPrecipitationLineChartData(time, precipEntries),
+            windSpeed = createWindSpeedLineChartData(time, windSpeedEntries),
+            windGust = createWindGustLineChartData(time, windGustEntries),
+            windDirection = createWindDirectionLineChartData(time, windDirectionEntries),
+            humidity = createHumidityLineChartData(time, humidityEntries),
+            pressure = createPressureLineChartData(time, pressureEntries),
+            uvIndex = createUvIndexBarChartData(time, uvIndexEntries)
         )
-    }
-
-    private fun createAllHourlyCharts(
-        data: List<HourlyWeather>,
-        context: Context
-    ): List<HistoryCharts> {
-
-        val datesAndData: ArrayMap<String, MutableList<HourlyWeather>> = arrayMapOf()
-
-        data.forEach {
-            val date = getFormattedDate(it.timestamp)
-            if (datesAndData.contains(date)) {
-                datesAndData[date]?.add(it)
-            } else {
-                datesAndData[date] = mutableListOf(it)
-            }
-        }
-
-        val charts = datesAndData.map {
-            createHourlyCharts(context, it.key, it.value)
-        }
-
-        return charts
     }
 }

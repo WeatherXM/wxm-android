@@ -1,8 +1,6 @@
 package com.weatherxm.data
 
 import co.infinum.retromock.Retromock
-import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
-import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.AuthService
 import org.koin.android.ext.koin.androidContext
@@ -24,13 +22,5 @@ val apiServiceModule = module {
             .defaultBodyFactory(androidContext().assets::open)
             .build()
             .create(AuthService::class.java)
-    }
-
-    single<NetworkWeatherForecastDataSource> {
-        NetworkWeatherForecastDataSource(get())
-    }
-
-    single<CacheWeatherForecastDataSource> {
-        CacheWeatherForecastDataSource()
     }
 }

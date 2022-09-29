@@ -7,7 +7,6 @@ import com.weatherxm.data.Transaction
 import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.data.TransactionsResponse
 import com.weatherxm.data.datasource.TokenDataSource
-import com.weatherxm.util.DateTimeHelper
 import com.weatherxm.util.DateTimeHelper.dateToLocalDate
 import com.weatherxm.util.Tokens.roundTokens
 import java.time.LocalDate
@@ -108,11 +107,7 @@ class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenR
             .map {
                 txs.addAll(it.data)
                 if (it.hasNextPage) {
-                    val newPage = if (page == null) {
-                        1
-                    } else {
-                        page + 1
-                    }
+                    val newPage = if (page == null) 1 else page + 1
 
                     // Keep getting the TXs recursively
                     getTxsRecursively(txs, deviceId, newPage, pageSize, timezone, fromDate, toDate)
@@ -192,7 +187,7 @@ class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenR
             .filter { it.actualReward != null && it.actualReward > 0.0F }
             .forEach { tx ->
                 tx.actualReward?.let {
-                    val date = DateTimeHelper.getLocalDate(tx.timestamp)
+                    val date = tx.timestamp.toLocalDate()
                     val amountForDate = datesAndTxs.getOrDefault(date, 0.0F)
 
                     /*
