@@ -24,6 +24,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
+import com.weatherxm.R
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.show
 import dev.chrisbanes.insetter.applyInsetter
@@ -42,6 +43,25 @@ fun EditText.onTextChanged(callback: (String) -> Unit) {
 
 fun EditText.clear() {
     this.setText("")
+}
+
+fun ImageView.setWarningDrawable(context: Context) {
+    val drawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_warning, context.theme)
+    drawable?.setTint(ResourcesCompat.getColor(resources, R.color.warning, context.theme))
+    this.setImageDrawable(drawable)
+}
+
+fun ImageView.setBluetoothDrawable(context: Context) {
+    val drawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_bluetooth, context.theme)
+    drawable?.setTint(ResourcesCompat.getColor(resources, R.color.light_mid_grey, context.theme))
+    this.setImageDrawable(drawable)
+}
+
+fun ImageView.setNoDevicesFoundDrawable(context: Context) {
+    val drawable =
+        ResourcesCompat.getDrawable(resources, R.drawable.ic_no_devices_found, context.theme)
+    drawable?.setTint(ResourcesCompat.getColor(resources, R.color.light_mid_grey, context.theme))
+    this.setImageDrawable(drawable)
 }
 
 @Suppress("EmptyFunctionBlock")

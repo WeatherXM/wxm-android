@@ -67,16 +67,27 @@
                     app:layout_constraintBottom_toTopOf="@id/buttonContainers"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <ImageView
+                        android:id="@+id/infoIcon"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="ContentDescription"
+                        tools:src="@drawable/ic_warning" />
+
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/infoTitle"
                         style="@style/TextAppearance.WeatherXM.BluetoothScanning.InfoTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
                         android:layout_marginHorizontal="@dimen/margin_normal"
                         android:layout_marginBottom="@dimen/margin_normal"
                         android:gravity="center"
                         app:layout_constraintBottom_toTopOf="@id/infoSubtitle"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/infoIcon"
                         tools:text="@string/no_devices_found" />
 
                     <com.google.android.material.textview.MaterialTextView

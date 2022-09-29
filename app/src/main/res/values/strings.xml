@@ -129,14 +129,14 @@
     <string name="no_bluetooth_available_desc"><![CDATA[No bluetooth found. Please select <b>Claim Device Manually</b>.]]></string>
     <string name="access_to_bluetooth_prompt">Go to Settings and Grant Access</string>
     <string name="scanning_in_progress">Scanning for WeatherXM Devices</string>
-    <string name="no_location_access">No Bluetooth Access</string>
+    <string name="no_location_access">No Location Access</string>
     <string name="no_location_access_desc"><![CDATA[In order to connect your device, WeatherXM app needs access to Location. If you do not wish to provide such access, please select <b>Claim Device Manually</b>.]]></string>
     <string name="bluetooth_not_enabled">Bluetooth is not enabled</string>
     <string name="bluetooth_not_enabled_desc"><![CDATA[In order to connect your device, WeatherXM app needs an enabled Bluetooth. If you do not wish to provide such access, please select <b>Claim Device Manually</b>.]]></string>
     <string name="no_bluetooth_access">No Bluetooth Access</string>
     <string name="no_bluetooth_access_desc"><![CDATA[In order to connect your device, WeatherXM app needs access to Bluetooth. If you do not wish to provide such access, please select <b>Claim Device Manually</b>.]]></string>
     <string name="no_devices_found">No Devices Found</string>
-    <string name="no_devices_found_desc">Please reset your WXM device and scan again!\nOr, you can try claiming your device manually bellow.</string>
+    <string name="no_devices_found_desc"><![CDATA[Please reset your WXM device and scan again!\nOr, you can try <b>claiming your device manually</b> below.]]></string>
     <string name="scan_failed_title">Scanning Failed</string>
     <string name="scan_failed_desc"><![CDATA[Something went wrong! Please either Scan Again, or if the problem persists, you can <b>Claim Device Manually</b>.]]></string>
 
