@@ -5,14 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/typeIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="@dimen/margin_normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/colorOnSurface"
+        tools:src="@drawable/ic_helium" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/name"
         style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_normal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="@dimen/margin_small"
+        app:layout_constraintBottom_toBottomOf="@id/typeIcon"
+        app:layout_constraintStart_toEndOf="@id/typeIcon"
+        app:layout_constraintTop_toTopOf="@id/typeIcon"
         tools:text="M5 WiFi" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -23,7 +34,7 @@
         android:layout_marginTop="@dimen/margin_small"
         android:text="@string/device_eui"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintTop_toBottomOf="@id/typeIcon"
         tools:text="Device EUI: wx56n46" />
 
     <View
