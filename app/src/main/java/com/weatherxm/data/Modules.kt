@@ -45,6 +45,8 @@ import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
 import com.weatherxm.data.datasource.ExplorerDataSource
 import com.weatherxm.data.datasource.ExplorerDataSourceImpl
+import com.weatherxm.data.datasource.HttpCacheDataSource
+import com.weatherxm.data.datasource.HttpCacheDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkAddressDataSource
@@ -131,7 +133,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 const val RETROFIT_API = "RETROFIT_API"
@@ -268,11 +270,15 @@ private val datasources = module {
     single<CacheWeatherForecastDataSource> {
         CacheWeatherForecastDataSource()
     }
+
+    single<HttpCacheDataSource> {
+        HttpCacheDataSourceImpl(get())
+    }
 }
 
 private val repositories = module {
     single<AuthRepository> {
-        AuthRepositoryImpl(get(), get(), get())
+        AuthRepositoryImpl(get(), get(), get(), get(), get(), get(), get())
     }
     single<LocationRepository> {
         LocationRepositoryImpl(get())
@@ -356,6 +362,11 @@ private val location = module {
 }
 
 private val network = module {
+    single<Cache> {
+        // Install HTTP cache
+        Cache(androidContext().cacheDir, NETWORK_CACHE_SIZE)
+    }
+
     single<HttpLoggingInterceptor> {
         HttpLoggingInterceptor().setLevel(if (BuildConfig.DEBUG) Level.BASIC else Level.NONE)
     }
@@ -389,8 +400,6 @@ private val network = module {
     }
 
     single<Retrofit>(named(RETROFIT_API)) {
-        // Install HTTP cache
-        val cache = Cache(androidContext().cacheDir, NETWORK_CACHE_SIZE)
 
         // Create client
         val client: OkHttpClient = OkHttpClient.Builder()
@@ -401,7 +410,7 @@ private val network = module {
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
-            .cache(cache)
+            .cache(get() as Cache)
             .build()
 
         // Create retrofit instance
