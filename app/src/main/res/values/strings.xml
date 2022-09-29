@@ -124,7 +124,7 @@
     <string name="select_device_desc">To claim your device, you must enable Bluetooth and allow WXM app to access it. \n\nAlternative, you can tap bellow to claim the device manually!</string>
     <string name="claim_manually">Claim Device Manually</string>
     <string name="device_eui">Device EUI: %s</string>
-    <string name="scan_again">Scan Again for Devices</string>
+    <string name="scan_again">Scan Again</string>
     <string name="no_bluetooth_available">No Bluetooth</string>
     <string name="no_bluetooth_available_desc"><![CDATA[No bluetooth found. Please select <b>Claim Device Manually</b>.]]></string>
     <string name="access_to_bluetooth_prompt">Go to Settings and Grant Access</string>
@@ -136,9 +136,9 @@
     <string name="no_bluetooth_access">No Bluetooth Access</string>
     <string name="no_bluetooth_access_desc"><![CDATA[In order to connect your device, WeatherXM app needs access to Bluetooth. If you do not wish to provide such access, please select <b>Claim Device Manually</b>.]]></string>
     <string name="no_devices_found">No Devices Found</string>
-    <string name="no_devices_found_desc"><![CDATA[Please reset your WXM device and scan again!\nOr, you can try <b>claiming your device manually</b> below.]]></string>
+    <string name="no_devices_found_desc"><![CDATA[Please reset your WXM device and <b>Scan Again</b>!\nOr, you can try <b>claiming your device manually</b> below.]]></string>
     <string name="scan_failed_title">Scanning Failed</string>
-    <string name="scan_failed_desc"><![CDATA[Something went wrong! Please either Scan Again, or if the problem persists, you can <b>Claim Device Manually</b>.]]></string>
+    <string name="scan_failed_desc"><![CDATA[Something went wrong! Please either <b>Scan Again</b>, or if the problem persists, you can <b>Claim Device Manually</b>.]]></string>
 
     <!-- Select Device Type -->
     <string name="select_your_device_type">Select your device type</string>
@@ -149,7 +149,6 @@
 
 
     <!-- Claim device -->
-    <string name="title_claim_device">Claim Device</string>
     <string name="claim_device_info_text"><![CDATA[<h5>Step 1</h5>Swipe left on your WXM device\'s screen and press \"Configure WiFi\" to connect the device to your home WiFi.<h5>Step 2</h5>Plug the GPS antenna into your WXM device, place the antenna near a window and power up the device via USB.<h5>Step 3</h5>Press <b>NEXT</b> to claim your device.<br/><br/>Don\'t have a WXM device yet? Get one on <a href=\"https://weatherxm.com\">weatherxm.com</a>.]]></string>
     <string name="action_claim">Claim</string>
     <string name="info_claim_contact_support">Trouble claiming your device? Contact our support team.</string>
@@ -162,7 +161,11 @@
     <string name="action_quit_claiming">Quit Claiming</string>
     <string name="pairing_failed_title">Pairing Failed!</string>
 
-    <!-- Helium -->
+    <!-- Claim M5 -->
+    <string name="title_claim_m5_device">Claim M5 Device</string>
+
+    <!-- Claim Helium -->
+    <string name="title_claim_helium_device">Claim Helium Device</string>
     <string name="verify_device">Verify Device</string>
     <string name="dev_eui">Dev EUI</string>
     <string name="enter_dev_eui">Enter dev EUI</string>

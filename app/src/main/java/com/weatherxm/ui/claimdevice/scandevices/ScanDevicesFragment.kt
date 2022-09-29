@@ -15,18 +15,17 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenCreated
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentScanDevicesBinding
-import com.weatherxm.ui.DeviceType
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceViewModel
 import com.weatherxm.ui.common.checkPermissionsAndThen
-import com.weatherxm.ui.home.HomeViewModel
+import com.weatherxm.util.disable
 import com.weatherxm.util.setBluetoothDrawable
 import com.weatherxm.util.setHtml
 import com.weatherxm.util.setNoDevicesFoundDrawable
@@ -34,35 +33,11 @@ import com.weatherxm.util.setWarningDrawable
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class ScanDevicesFragment : BottomSheetDialogFragment() {
+class ScanDevicesFragment : Fragment() {
     private val model: ScanDevicesViewModel by viewModels()
-    private val homeViewModel: HomeViewModel by activityViewModels()
+    private val parentViewModel: ClaimHeliumDeviceViewModel by activityViewModels()
     private lateinit var binding: FragmentScanDevicesBinding
     private lateinit var adapter: ScannedDevicesListAdapter
-
-    private lateinit var deviceType: DeviceType
-
-    companion object {
-        const val TAG = "ScanDevicesFragment"
-        private const val ARG_DEVICE_TYPE = "device_type"
-
-        fun newInstance(deviceType: DeviceType) = ScanDevicesFragment().apply {
-            arguments = Bundle().apply { putString(ARG_DEVICE_TYPE, deviceType.name) }
-        }
-    }
-
-    init {
-        lifecycleScope.launch {
-            whenCreated {
-                val typeAsString = arguments?.getString(ARG_DEVICE_TYPE)
-                deviceType = if (typeAsString == DeviceType.HELIUM.name) {
-                    DeviceType.HELIUM
-                } else {
-                    DeviceType.M5_WIFI
-                }
-            }
-        }
-    }
 
     private val enableBluetoothLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -87,15 +62,11 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = ScannedDevicesListAdapter {
-            homeViewModel.selectScannedDevice(it)
-            dismiss()
+            parentViewModel.setDeviceAddress(it.address)
+            parentViewModel.next()
         }
 
         binding.recycler.adapter = adapter
-
-        binding.closePopup.setOnClickListener {
-            dismiss()
-        }
 
         binding.scanAgain.setOnClickListener {
             if (!model.isScanningRunning()) {
@@ -112,18 +83,17 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
         }
 
         binding.claimDeviceManually.setOnClickListener {
-            homeViewModel.claimHeliumManually()
-            dismiss()
+            parentViewModel.claimManually()
         }
 
-        model.onNewAdvertisement().observe(this) {
+        model.onNewAdvertisement().observe(viewLifecycleOwner) {
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
             binding.infoContainer.visibility = View.GONE
             binding.recycler.visibility = View.VISIBLE
         }
 
-        model.onProgress().observe(this) {
+        model.onProgress().observe(viewLifecycleOwner) {
             updateUI(it)
         }
 
@@ -159,7 +129,7 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
                                 R.string.no_bluetooth_access,
                                 R.string.no_bluetooth_access_desc
                             )
-                            binding.scanAgain.visibility = View.GONE
+                            binding.scanAgain.disable(requireContext())
                             binding.accessBluetoothPrompt.visibility = View.VISIBLE
                         }
                     )
@@ -224,7 +194,7 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
                 onDenied = {
                     binding.infoIcon.setBluetoothDrawable(requireContext())
                     showInfoMessage(R.string.no_bluetooth_access, R.string.no_bluetooth_access_desc)
-                    binding.scanAgain.visibility = View.GONE
+                    binding.scanAgain.disable(requireContext())
                     binding.accessBluetoothPrompt.visibility = View.VISIBLE
                 }
             )
@@ -244,7 +214,7 @@ class ScanDevicesFragment : BottomSheetDialogFragment() {
                 onDenied = {
                     binding.infoIcon.setBluetoothDrawable(requireContext())
                     showInfoMessage(R.string.no_location_access, R.string.no_location_access_desc)
-                    binding.scanAgain.visibility = View.GONE
+                    binding.scanAgain.disable(requireContext())
                     binding.accessBluetoothPrompt.visibility = View.VISIBLE
                 }
             )

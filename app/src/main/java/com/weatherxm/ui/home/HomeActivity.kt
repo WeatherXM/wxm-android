@@ -14,7 +14,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityHomeBinding
-import com.weatherxm.ui.DeviceType
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
@@ -117,9 +116,9 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             navigator.showSelectDeviceTypeDialog(supportFragmentManager)
         }
 
-        homeViewModel.onScanDevices().observe(this) {
+        homeViewModel.onClaimHelium().observe(this) {
             if (it) {
-                navigator.showScanDialog(supportFragmentManager, DeviceType.HELIUM)
+                navigator.showClaimHelium(claimDeviceLauncher, this)
             }
         }
 
@@ -131,16 +130,6 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             if (it) {
                 navigator.showClaimM5(claimDeviceLauncher, this)
             }
-        }
-
-        homeViewModel.onClaimHeliumManually().observe(this) {
-            if (it) {
-                navigator.showClaimHelium(claimDeviceLauncher, this, true)
-            }
-        }
-
-        homeViewModel.onScannedDeviceSelected().observe(this) {
-            navigator.showClaimHelium(claimDeviceLauncher, this, false, it.address)
         }
 
         // Disable BottomNavigationView bottom padding, added by default, and add margin

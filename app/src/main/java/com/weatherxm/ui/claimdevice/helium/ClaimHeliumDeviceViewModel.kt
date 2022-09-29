@@ -13,15 +13,14 @@ class ClaimHeliumDeviceViewModel : ViewModel(), KoinComponent {
 
     private val onCancel = MutableLiveData(false)
     private val onNext = MutableLiveData(false)
+    private val onClaimManually = MutableLiveData(false)
 
     fun onCancel() = onCancel
     fun onNext() = onNext
+    fun onClaimManually() = onClaimManually
 
-    fun setup(isManual: Boolean?, macAddress: String?) {
+    fun setManual(isManual: Boolean?) {
         this.isManual = isManual == true
-        macAddress?.let {
-            deviceAddress = it
-        }
     }
 
     fun setDeviceEUI(devEUI: String) {
@@ -30,6 +29,10 @@ class ClaimHeliumDeviceViewModel : ViewModel(), KoinComponent {
 
     fun setDeviceKey(key: String) {
         deviceKey = key
+    }
+
+    fun setDeviceAddress(macAddress: String) {
+        deviceAddress = macAddress
     }
 
     fun getDeviceAddress(): String {
@@ -46,5 +49,9 @@ class ClaimHeliumDeviceViewModel : ViewModel(), KoinComponent {
 
     fun next() {
         onNext.postValue(true)
+    }
+
+    fun claimManually() {
+        onClaimManually.postValue(true)
     }
 }

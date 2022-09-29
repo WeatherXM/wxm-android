@@ -20,6 +20,7 @@ import androidx.core.text.HtmlCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -62,6 +63,12 @@ fun ImageView.setNoDevicesFoundDrawable(context: Context) {
         ResourcesCompat.getDrawable(resources, R.drawable.ic_no_devices_found, context.theme)
     drawable?.setTint(ResourcesCompat.getColor(resources, R.color.light_mid_grey, context.theme))
     this.setImageDrawable(drawable)
+}
+
+fun MaterialButton.disable(context: Context) {
+    this.isEnabled = false
+    this.setBackgroundColor(resources.getColor(R.color.light_mid_grey, context.theme))
+    this.setTextColor(resources.getColor(R.color.light_dark_grey, context.theme))
 }
 
 @Suppress("EmptyFunctionBlock")

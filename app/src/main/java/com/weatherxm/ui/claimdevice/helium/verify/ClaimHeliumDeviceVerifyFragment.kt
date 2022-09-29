@@ -70,6 +70,7 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
 
         binding.next.setOnClickListener {
             // TODO: Handle verification status and go next
+            parentModel.next()
         }
 
         model.onError().observe(viewLifecycleOwner) {
