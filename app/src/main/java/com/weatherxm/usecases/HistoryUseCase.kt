@@ -50,7 +50,21 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.temperature),
-            R.color.temperature,
+            Weather.getPreferredUnit(
+                resHelper.getString(R.string.key_temperature_preference),
+                resHelper.getString(R.string.temperature_celsius)
+            ),
+            timestamps = time,
+            entries = entries
+        )
+    }
+
+    private fun createFeelsLikeLineChartData(
+        time: MutableList<String>,
+        entries: MutableList<Entry>
+    ): LineChartData {
+        return LineChartData(
+            resHelper.getString(R.string.feels_like),
             Weather.getPreferredUnit(
                 resHelper.getString(R.string.key_temperature_preference),
                 resHelper.getString(R.string.temperature_celsius)
@@ -66,7 +80,6 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.precipitation),
-            R.color.precip_intensity,
             Weather.getPrecipitationPreferredUnit(false),
             timestamps = time,
             entries = entries
@@ -79,7 +92,6 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.wind_speed),
-            R.color.wind_speed,
             Weather.getPreferredUnit(
                 resHelper.getString(R.string.key_wind_speed_preference),
                 resHelper.getString(R.string.wind_speed_ms)
@@ -95,7 +107,6 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.wind_gust),
-            R.color.wind_gust,
             Weather.getPreferredUnit(
                 resHelper.getString(R.string.key_wind_speed_preference),
                 resHelper.getString(R.string.wind_speed_ms)
@@ -111,7 +122,6 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.wind_direction),
-            R.color.wind_speed,
             Weather.getPreferredUnit(
                 resHelper.getString(R.string.key_wind_direction_preference),
                 resHelper.getString(R.string.wind_direction_cardinal)
@@ -127,7 +137,6 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.humidity),
-            R.color.humidity,
             resHelper.getString(R.string.percent),
             timestamps = time,
             entries = entries
@@ -140,7 +149,6 @@ class HistoryUseCaseImpl(
     ): LineChartData {
         return LineChartData(
             resHelper.getString(R.string.pressure),
-            R.color.pressure,
             Weather.getPreferredUnit(
                 resHelper.getString(R.string.key_pressure_preference),
                 resHelper.getString(R.string.pressure_hpa)
@@ -156,7 +164,6 @@ class HistoryUseCaseImpl(
     ): BarChartData {
         return BarChartData(
             resHelper.getString(R.string.uv_index),
-            R.color.uv_index,
             resHelper.getString(R.string.uv_index_unit),
             timestamps = time,
             entries = entries
@@ -174,6 +181,7 @@ class HistoryUseCaseImpl(
         var counter = 0F
 
         val temperatureEntries = mutableListOf<Entry>()
+        val feelsLikeEntries = mutableListOf<Entry>()
         val precipEntries = mutableListOf<Entry>()
         val windSpeedEntries = mutableListOf<Entry>()
         val windGustEntries = mutableListOf<Entry>()
@@ -190,6 +198,10 @@ class HistoryUseCaseImpl(
 
             hourlyWeather.temperature?.let {
                 temperatureEntries.add(Entry(counter, Weather.convertTemp(it, 1) as Float))
+            }
+
+            hourlyWeather.feelsLike?.let {
+                feelsLikeEntries.add(Entry(counter, Weather.convertTemp(it, 1) as Float))
             }
 
             hourlyWeather.precipitation?.let {
@@ -243,6 +255,7 @@ class HistoryUseCaseImpl(
         return HistoryCharts(
             date = date,
             temperature = createTemperatureLineChartData(time, temperatureEntries),
+            feelsLike = createFeelsLikeLineChartData(time, feelsLikeEntries),
             precipitation = createPrecipitationLineChartData(time, precipEntries),
             windSpeed = createWindSpeedLineChartData(time, windSpeedEntries),
             windGust = createWindGustLineChartData(time, windGustEntries),

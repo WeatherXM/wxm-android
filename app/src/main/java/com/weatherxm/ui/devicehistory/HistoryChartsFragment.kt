@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.weatherxm.R
 import com.weatherxm.data.Status
@@ -140,7 +139,7 @@ class HistoryChartsFragment : Fragment() {
         clearCharts()
 
         // Init Temperature Chart
-        initTemperatureChart(binding.chartTemperature.getChart(), historyCharts.temperature)
+        initTemperatureChart(historyCharts.temperature, historyCharts.feelsLike)
 
         // Init Wind Chart
         initWindChart(historyCharts.windSpeed, historyCharts.windGust, historyCharts.windDirection)
@@ -149,48 +148,51 @@ class HistoryChartsFragment : Fragment() {
         initPrecipitationChart(historyCharts.precipitation)
 
         // Init Humidity Chart
-        initHumidityChart(binding.chartHumidity.getChart(), historyCharts.humidity)
+        initHumidityChart(historyCharts.humidity)
 
         // Init Pressure Char
-        initPressureChart(binding.chartPressure.getChart(), historyCharts.pressure)
+        initPressureChart(historyCharts.pressure)
 
         // Init Uv Index Char
-        initUvChart(binding.chartUvIndex.getChart(), historyCharts.uvIndex)
+        initUvChart(historyCharts.uvIndex)
     }
 
-    private fun initTemperatureChart(lineChart: LineChart, data: LineChartData) {
-        if (data.isDataValid()) {
-            lineChart.initializeTemperature24hChart(data)
+    private fun initTemperatureChart(temperatureData: LineChartData, feelsLikeData: LineChartData) {
+        if (temperatureData.isDataValid() && feelsLikeData.isDataValid()) {
+            binding.chartTemperature
+                .getChart()
+                .initializeTemperature24hChart(temperatureData, feelsLikeData)
         } else {
-            showNoDataText(lineChart)
+            showNoDataText(binding.chartTemperature.getChart())
         }
     }
 
-    private fun initHumidityChart(lineChart: LineChart, data: LineChartData) {
+    private fun initHumidityChart(data: LineChartData) {
         if (data.isDataValid()) {
-            lineChart.initializeHumidity24hChart(data)
+            binding.chartHumidity.getChart().initializeHumidity24hChart(data)
         } else {
-            showNoDataText(lineChart)
+            showNoDataText(binding.chartHumidity.getChart())
         }
     }
 
-    private fun initPressureChart(lineChart: LineChart, data: LineChartData) {
+    private fun initPressureChart(data: LineChartData) {
         if (data.isDataValid()) {
-            lineChart.initializePressure24hChart(data)
+            binding.chartPressure.getChart().initializePressure24hChart(data)
         } else {
-            showNoDataText(lineChart)
+            showNoDataText(binding.chartPressure.getChart())
         }
     }
 
-    private fun initUvChart(barChart: BarChart, data: BarChartData) {
+    private fun initUvChart(data: BarChartData) {
+        val uvChart = binding.chartUvIndex.getChart()
         if (data.isDataValid()) {
-            barChart.initializeUV24hChart(data)
+            uvChart.initializeUV24hChart(data)
         } else {
-            barChart.setNoDataText(getString(R.string.error_history_no_data_chart_found))
+            uvChart.setNoDataText(getString(R.string.error_history_no_data_chart_found))
             context?.getColor(R.color.colorOnSurface)?.let {
-                barChart.setNoDataTextColor(it)
+                uvChart.setNoDataTextColor(it)
             }
-            barChart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
+            uvChart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
         }
     }
 

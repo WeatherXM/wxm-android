@@ -48,24 +48,47 @@ class CustomDefaultMarkerView(
         super.refreshContent(entryClicked, highlight)
     }
 
-    @Suppress("MagicNumber")
     override fun draw(canvas: Canvas, posx: Float, posy: Float) {
-        // translate to the correct position and draw
-        var newPosX = posx
-        var newPosY = posy
-        // Prevent overflow to the right
-        if (posx > canvas.width / 2) {
-            newPosX = ((canvas.width / 3).toFloat())
-        }
+        this.customDraw(canvas, posx, posy)
+    }
+}
 
-        // We do this as for continuous 0 values on the y Axis the marker view hides those values
-        if (posy > canvas.height / 2) {
-            newPosY = 0F
-        }
+// Custom implementation of https://weeklycoding.com/mpandroidchart-documentation/markerview/
+class CustomTemperatureMarkerView(
+    context: Context,
+    private val times: MutableList<String>?,
+    private val feelsLikeEntries: MutableList<Entry>?,
+    private val temperatureTitle: String,
+    private val feelsLikeTitle: String
+) : MarkerView(context, R.layout.view_two_values_chart_marker) {
+    private var timeView: TextView = findViewById(R.id.time)
+    private var temperatureView: TextView = findViewById(R.id.value)
+    private var feelsLikeView: TextView = findViewById(R.id.secondValue)
 
-        // Add 10 to posy so that the marker view isn't over the point selected but a bit lower
-        canvas.translate(newPosX, newPosY)
-        draw(canvas)
+    // callbacks everytime the MarkerView is redrawn, can be used to update the
+    // content (user-interface)
+    @SuppressLint("SetTextI18n")
+    override fun refreshContent(entryClicked: Entry, highlight: Highlight?) {
+        /*
+            We find the relevant timestamp, wind gust and wind direction by
+            using the same index as the wind speed to get the value in the relevant list
+         */
+        timeView.text = times?.get(entryClicked.x.toInt()) ?: ""
+
+        // Get the correct temperature and feels like formatted with the correct decimal separator
+        val formattedTemperature = Weather.getFormattedTemperature(entryClicked.y, 1)
+        val formattedFeelsLike =
+            Weather.getFormattedTemperature(feelsLikeEntries?.get(entryClicked.x.toInt())?.y, 1)
+
+        temperatureView.text = "$temperatureTitle: $formattedTemperature"
+        feelsLikeView.text = "$feelsLikeTitle: $formattedFeelsLike"
+
+        // this will perform necessary layouting
+        super.refreshContent(entryClicked, highlight)
+    }
+
+    override fun draw(canvas: Canvas, posx: Float, posy: Float) {
+        this.customDraw(canvas, posx, posy)
     }
 }
 
@@ -125,23 +148,8 @@ class CustomWindMarkerView(
         super.refreshContent(entryClicked, highlight)
     }
 
-    @Suppress("MagicNumber")
     override fun draw(canvas: Canvas, posx: Float, posy: Float) {
-        // translate to the correct position and draw
-        var newPosX = posx
-        var newPosY = posy
-        // Prevent overflow to the right
-        if (posx > canvas.width / 2) {
-            newPosX = ((canvas.width / 3).toFloat())
-        }
-
-        // We do this as for continuous 0 values on intensity the marker view hides those values
-        if (posy > canvas.height / 2) {
-            newPosY = 0F
-        }
-
-        canvas.translate(newPosX, newPosY)
-        draw(canvas)
+        this.customDraw(canvas, posx, posy)
     }
 }
 

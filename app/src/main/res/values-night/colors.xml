@@ -30,7 +30,8 @@
     <color name="chart_axis_line_color">@color/light_mid_grey</color>
     <color name="chart_popup_background">@color/dark_darkest</color>
     <color name="chart_popup_text_color">@color/dark_top</color>
-    <color name="chart_wind_gust_color">@color/dark_darkest</color>
+    <color name="chart_primary_line">@color/dark_darkest</color>
+    <color name="chart_secondary_line">@color/dark_lighter_blue</color>
 
     <!-- Explorer -->
     <color name="hex_fill_color">#3388ff</color>
@@ -59,16 +60,6 @@
 
     <!-- Survey Prompt -->
     <color name="survey_prompt_card_background">@color/dark_blue_tint</color>
-
-    <!-- Weather Data colors -->
-    <color name="temperature">#084D6A</color>
-    <color name="precip_intensity">#48BEC5</color>
-    <color name="precip_probability">#97D779</color>
-    <color name="wind_speed">#4FE0B6</color>
-    <color name="wind_gust">#3E54D3</color>
-    <color name="pressure">#4F80E2</color>
-    <color name="humidity">#48BEC5</color>
-    <color name="uv_index">#FFCE49</color>
 
     <!-- Reward Scores -->
     <color name="reward_score_very_high">#46D163</color>
