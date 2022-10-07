@@ -6,6 +6,8 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.weatherxm.ui.UIDevice
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 @Keep
@@ -85,9 +87,17 @@ data class Device(
     var address: String?,
     val rewards: Rewards?
 ) : Parcelable {
+    companion object {
+        fun empty() = Device(
+            "", "", null, null, null, null, null, null, null
+        )
+    }
+
     fun getNameOrLabel(): String {
         return attributes?.friendlyName ?: name
     }
+
+    fun isEmpty() = id == "" && name == ""
 }
 
 @Keep
@@ -135,7 +145,7 @@ data class TransactionsResponse(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class Transaction(
-    val timestamp: String,
+    val timestamp: ZonedDateTime,
     @Json(name = "tx_hash")
     val txHash: String?,
     @Json(name = "validation_score")
@@ -160,7 +170,7 @@ data class Transaction(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class WeatherData(
-    var date: String?,
+    var date: LocalDate,
     val tz: String?,
     val hourly: List<HourlyWeather>?,
     val daily: DailyData?
@@ -170,7 +180,7 @@ data class WeatherData(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class HourlyWeather(
-    var timestamp: String,
+    var timestamp: ZonedDateTime,
     val precipitation: Float?,
     val temperature: Float?,
     @Json(name = "feels_like")

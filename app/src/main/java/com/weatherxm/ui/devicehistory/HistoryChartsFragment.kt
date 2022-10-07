@@ -7,10 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.weatherxm.R
-import com.weatherxm.data.Device
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentHistoryChartsBinding
 import com.weatherxm.ui.BarChartData
@@ -28,23 +26,22 @@ import java.time.format.FormatStyle
 
 class HistoryChartsFragment : Fragment() {
 
-    private val model: HistoryChartsViewModel by activityViewModels()
-    private lateinit var binding: FragmentHistoryChartsBinding
-    private lateinit var device: Device
-
-    companion object {
-        const val ARG_DEVICE = "device"
-
-        fun newInstance(device: Device) = HistoryChartsFragment().apply {
-            arguments = Bundle().apply {
-                putParcelable(ARG_DEVICE, device)
-            }
-        }
+    fun interface SwipeRefreshCallback {
+        fun onSwipeRefresh()
     }
 
+    private val model: HistoryChartsViewModel by activityViewModels()
+    private var callback: SwipeRefreshCallback? = null
+    private lateinit var binding: FragmentHistoryChartsBinding
+
+    @Suppress("SwallowedException")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        device = requireNotNull(requireArguments().getParcelable(ARG_DEVICE))
+        try {
+            callback = activity as SwipeRefreshCallback
+        } catch (e: ClassCastException) {
+            Timber.w("${activity?.localClassName} does not implement SwipeRefreshCallback")
+        }
     }
 
     override fun onCreateView(
@@ -53,13 +50,48 @@ class HistoryChartsFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         binding = FragmentHistoryChartsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        model.onCharts().observe(viewLifecycleOwner) { resource ->
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        with(binding.displayTimeNotice) {
+            visibility = model.device.timezone?.let {
+                text = getString(R.string.displayed_times, it)
+                View.VISIBLE
+            } ?: View.GONE
+        }
+
+        binding.swiperefresh.setOnRefreshListener {
+            refresh()
+        }
+
+        model.charts().observe(viewLifecycleOwner) { resource ->
             Timber.d("Charts updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
                     binding.swiperefresh.isRefreshing = false
-                    updateUI(resource.data)
+                    val isEmpty = resource.data == null || resource.data.isEmpty()
+                    if (isEmpty) {
+                        binding.chartsView.visibility = View.GONE
+                        binding.empty.clear()
+                        binding.empty.title(getString(R.string.empty_history_day_title))
+                        binding.empty.subtitle(
+                            resource.data?.date?.let {
+                                getString(
+                                    R.string.empty_history_day_subtitle_with_day,
+                                    it.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+                                )
+                            } ?: getString(R.string.empty_history_day_subtitle)
+                        )
+                        binding.empty.animation(R.raw.anim_empty_generic)
+                        binding.empty.visibility = View.VISIBLE
+                    } else {
+                        resource.data?.let { updateUI(it) }
+                        binding.empty.visibility = View.GONE
+                        binding.chartsView.visibility = View.VISIBLE
+                    }
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
@@ -70,7 +102,7 @@ class HistoryChartsFragment : Fragment() {
                     binding.empty.title(getString(R.string.error_history_no_data_on_day))
                     binding.empty.subtitle(resource.message)
                     binding.empty.action(getString(R.string.action_retry))
-                    binding.empty.listener { getWeatherHistory() }
+                    binding.empty.listener { refresh() }
                     binding.empty.visibility = View.VISIBLE
                 }
                 Status.LOADING -> {
@@ -86,31 +118,10 @@ class HistoryChartsFragment : Fragment() {
                 }
             }
         }
-
-        binding.swiperefresh.setOnRefreshListener {
-            getWeatherHistory(true)
-        }
-
-        return binding.root
     }
 
-    private fun getWeatherHistory(isSwipeRefresh: Boolean = false) {
-        context?.let {
-            model.getWeatherHistory(device, it, isSwipeRefresh)
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        with(binding.displayTimeNotice) {
-            visibility = device.timezone?.let {
-                text = getString(R.string.displayed_times, it)
-                View.VISIBLE
-            } ?: View.GONE
-        }
-
-        getWeatherHistory()
+    private fun refresh() {
+        callback?.onSwipeRefresh()
     }
 
     private fun clearCharts() {
@@ -122,31 +133,13 @@ class HistoryChartsFragment : Fragment() {
         binding.chartUvIndex.getChart().clear()
     }
 
-    private fun updateUI(historyCharts: HistoryCharts?) {
+    private fun updateUI(historyCharts: HistoryCharts) {
+        Timber.d("Updating charts for ${historyCharts.date}")
+
         clearCharts()
 
-        if (historyCharts == null || historyCharts.isEmpty()) {
-            binding.chartsView.visibility = View.GONE
-            binding.empty.clear()
-            binding.empty.title(getString(R.string.empty_history_day_title))
-            binding.empty.subtitle(
-                historyCharts?.date?.let {
-                    getString(
-                        R.string.empty_history_day_subtitle_with_day,
-                        it.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
-                    )
-                } ?: getString(R.string.empty_history_day_subtitle)
-            )
-            binding.empty.animation(R.raw.anim_empty_generic)
-            binding.empty.visibility = View.VISIBLE
-            return
-        } else {
-            binding.empty.visibility = View.GONE
-            binding.chartsView.visibility = View.VISIBLE
-        }
-
         // Init Temperature Chart
-        initTemperatureChart(binding.chartTemperature.getChart(), historyCharts.temperature)
+        initTemperatureChart(historyCharts.temperature, historyCharts.feelsLike)
 
         // Init Wind Chart
         initWindChart(historyCharts.windSpeed, historyCharts.windGust, historyCharts.windDirection)
@@ -155,50 +148,51 @@ class HistoryChartsFragment : Fragment() {
         initPrecipitationChart(historyCharts.precipitation)
 
         // Init Humidity Chart
-        initHumidityChart(binding.chartHumidity.getChart(), historyCharts.humidity)
+        initHumidityChart(historyCharts.humidity)
 
         // Init Pressure Char
-        initPressureChart(binding.chartPressure.getChart(), historyCharts.pressure)
+        initPressureChart(historyCharts.pressure)
 
         // Init Uv Index Char
-        initUvChart(binding.chartUvIndex.getChart(), historyCharts.uvIndex)
-
-        binding.chartsView.visibility = View.VISIBLE
+        initUvChart(historyCharts.uvIndex)
     }
 
-    private fun initTemperatureChart(lineChart: LineChart, data: LineChartData) {
-        if (data.isDataValid()) {
-            lineChart.initializeTemperature24hChart(data)
+    private fun initTemperatureChart(temperatureData: LineChartData, feelsLikeData: LineChartData) {
+        if (temperatureData.isDataValid() && feelsLikeData.isDataValid()) {
+            binding.chartTemperature
+                .getChart()
+                .initializeTemperature24hChart(temperatureData, feelsLikeData)
         } else {
-            showNoDataText(lineChart)
+            showNoDataText(binding.chartTemperature.getChart())
         }
     }
 
-    private fun initHumidityChart(lineChart: LineChart, data: LineChartData) {
+    private fun initHumidityChart(data: LineChartData) {
         if (data.isDataValid()) {
-            lineChart.initializeHumidity24hChart(data)
+            binding.chartHumidity.getChart().initializeHumidity24hChart(data)
         } else {
-            showNoDataText(lineChart)
+            showNoDataText(binding.chartHumidity.getChart())
         }
     }
 
-    private fun initPressureChart(lineChart: LineChart, data: LineChartData) {
+    private fun initPressureChart(data: LineChartData) {
         if (data.isDataValid()) {
-            lineChart.initializePressure24hChart(data)
+            binding.chartPressure.getChart().initializePressure24hChart(data)
         } else {
-            showNoDataText(lineChart)
+            showNoDataText(binding.chartPressure.getChart())
         }
     }
 
-    private fun initUvChart(barChart: BarChart, data: BarChartData) {
+    private fun initUvChart(data: BarChartData) {
+        val uvChart = binding.chartUvIndex.getChart()
         if (data.isDataValid()) {
-            barChart.initializeUV24hChart(data)
+            uvChart.initializeUV24hChart(data)
         } else {
-            barChart.setNoDataText(getString(R.string.error_history_no_data_chart_found))
+            uvChart.setNoDataText(getString(R.string.error_history_no_data_chart_found))
             context?.getColor(R.color.colorOnSurface)?.let {
-                barChart.setNoDataTextColor(it)
+                uvChart.setNoDataTextColor(it)
             }
-            barChart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
+            uvChart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
         }
     }
 

@@ -31,6 +31,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/historyView"
+        android:name="com.weatherxm.ui.devicehistory.HistoryChartsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"

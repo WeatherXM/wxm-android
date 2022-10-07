@@ -1,33 +1,36 @@
 package com.weatherxm.ui.devicehistory
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.ActivityHistoryBinding
-import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.getLastTab
+import com.weatherxm.ui.common.getParcelableExtra
+import com.weatherxm.ui.common.getSelectedTab
 import com.weatherxm.ui.common.toast
-import com.weatherxm.util.DateTimeHelper
-import com.weatherxm.util.DateTimeHelper.LocalDateRange
-import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.ui.devicehistory.HistoryChartsFragment.SwipeRefreshCallback
+import com.weatherxm.util.DateTimeHelper.getFormattedRelativeDay
+import com.weatherxm.util.LocalDateRange
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.applyOnGlobalLayout
-import com.weatherxm.util.createAndAddTab
 import com.weatherxm.util.onTabSelected
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
+import java.time.LocalDate
 
-class HistoryActivity : AppCompatActivity(), KoinComponent {
-
-    private lateinit var binding: ActivityHistoryBinding
-    private val model: HistoryChartsViewModel by viewModels()
-    private val navigator: Navigator by inject()
-    private val resHelper: ResourcesHelper by inject()
+class HistoryActivity : AppCompatActivity(), KoinComponent, SwipeRefreshCallback {
 
     companion object {
         const val ARG_DEVICE = "device"
+    }
+
+    private lateinit var binding: ActivityHistoryBinding
+
+    private val model: HistoryChartsViewModel by viewModel {
+        parametersOf(getParcelableExtra(ARG_DEVICE, Device.empty()))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,28 +40,27 @@ class HistoryActivity : AppCompatActivity(), KoinComponent {
 
         binding.root.applyInsets()
 
-        binding.toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-
-        val device = intent?.extras?.getParcelable<Device>(ARG_DEVICE)
-        if (device == null) {
+        if (model.device.isEmpty()) {
             Timber.d("Could not start HistoryActivity. Device is null.")
             toast(R.string.error_generic_message)
             finish()
             return
         }
 
-        binding.toolbar.subtitle = device.address ?: device.name
-
-        binding.dateTabs.onTabSelected {
-            model.setSelectedDay(it.text.toString())
+        with(binding.toolbar) {
+            setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+            subtitle = model.device.address ?: model.device.name
         }
 
-        navigator.showHistoryCharts(supportFragmentManager, device)
+        binding.dateTabs.onTabSelected {
+            val date = it.tag as LocalDate
+            Timber.d("Date selected on tab: $date")
+            model.onDateSelected(date)
+        }
 
         // Listen for changes in the date range
         model.dates().observe(this) { dates ->
+            Timber.d("Got new dates: $dates")
             updateDateStrip(dates)
         }
     }
@@ -67,16 +69,29 @@ class HistoryActivity : AppCompatActivity(), KoinComponent {
     private fun updateDateStrip(dates: LocalDateRange) {
         // Delete existing tabs
         binding.dateTabs.removeAllTabs()
+
         // Add tabs for dates
         dates.forEach { date ->
-            binding.dateTabs.createAndAddTab(
-                DateTimeHelper.getRelativeDayFromLocalDate(resHelper, date)
+            binding.dateTabs.addTab(
+                binding.dateTabs.newTab().apply {
+                    text = date.getFormattedRelativeDay(this@HistoryActivity)
+                    // Save the LocalDate object as tag in the Tab, so that we can use it later
+                    tag = date
+                },
+                false
             )
         }
+
         // Select last tab (TODAY) by default
-        binding.dateTabs.getTabAt(binding.dateTabs.tabCount - 1)?.apply {
+        binding.dateTabs.getLastTab()?.apply {
             view.applyOnGlobalLayout { this.select() }
         }
     }
-}
 
+    override fun onSwipeRefresh() {
+        binding.dateTabs.getSelectedTab()?.let {
+            val date = it.tag as LocalDate
+            model.onDateSelected(date, true)
+        }
+    }
+}

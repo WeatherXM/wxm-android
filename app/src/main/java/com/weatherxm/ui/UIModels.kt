@@ -28,6 +28,7 @@ data class UIError(
 data class HistoryCharts(
     var date: LocalDate,
     var temperature: LineChartData,
+    var feelsLike: LineChartData,
     var precipitation: LineChartData,
     var windSpeed: LineChartData,
     var windGust: LineChartData,
@@ -37,10 +38,10 @@ data class HistoryCharts(
     var uvIndex: BarChartData
 ) {
     fun isEmpty(): Boolean {
-        return temperature.isNullOrEmpty() && precipitation.isNullOrEmpty()
-            && windSpeed.isNullOrEmpty() && windGust.isNullOrEmpty()
-            && windDirection.isNullOrEmpty() && humidity.isNullOrEmpty()
-            && pressure.isNullOrEmpty() && uvIndex.isNullOrEmpty()
+        return temperature.isNullOrEmpty() && feelsLike.isNullOrEmpty()
+            && precipitation.isNullOrEmpty() && windSpeed.isNullOrEmpty()
+            && windGust.isNullOrEmpty() && windDirection.isNullOrEmpty()
+            && humidity.isNullOrEmpty() && pressure.isNullOrEmpty() && uvIndex.isNullOrEmpty()
     }
 }
 
@@ -48,7 +49,6 @@ data class HistoryCharts(
 @JsonClass(generateAdapter = true)
 data class LineChartData(
     var name: String,
-    var lineColor: Int,
     var unit: String,
     var timestamps: MutableList<String>,
     var entries: MutableList<Entry>
@@ -66,7 +66,6 @@ data class LineChartData(
 @JsonClass(generateAdapter = true)
 data class BarChartData(
     var name: String,
-    var lineColor: Int,
     var unit: String,
     var timestamps: MutableList<String>,
     var entries: MutableList<BarEntry>

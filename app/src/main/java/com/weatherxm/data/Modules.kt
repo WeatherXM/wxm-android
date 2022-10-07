@@ -26,6 +26,8 @@ import com.google.gson.GsonBuilder
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
+import com.weatherxm.data.adapters.LocalDateJsonAdapter
+import com.weatherxm.data.adapters.LocalDateTimeJsonAdapter
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager
 import com.weatherxm.data.bluetooth.BluetoothProvisioner
@@ -42,6 +44,7 @@ import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSourceImpl
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.CacheWalletDataSource
+import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.CredentialsDataSource
 import com.weatherxm.data.datasource.CredentialsDataSourceImpl
 import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
@@ -49,11 +52,14 @@ import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
 import com.weatherxm.data.datasource.ExplorerDataSource
 import com.weatherxm.data.datasource.ExplorerDataSourceImpl
+import com.weatherxm.data.datasource.HttpCacheDataSource
+import com.weatherxm.data.datasource.HttpCacheDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
+import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
 import com.weatherxm.data.datasource.SharedPreferencesDataSource
 import com.weatherxm.data.datasource.SharedPreferencesDataSourceImpl
@@ -105,6 +111,7 @@ import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepository
 import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepositoryImpl
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.UIHexJsonAdapter
+import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.AuthUseCaseImpl
 import com.weatherxm.usecases.BluetoothConnectionUseCase
@@ -144,10 +151,13 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.logging.HttpLoggingInterceptor.Level
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -280,6 +290,18 @@ private val datasources = module {
         SharedPreferencesDataSourceImpl(get())
     }
 
+    single<NetworkWeatherForecastDataSource> {
+        NetworkWeatherForecastDataSource(get())
+    }
+
+    single<CacheWeatherForecastDataSource> {
+        CacheWeatherForecastDataSource()
+    }
+
+    single<HttpCacheDataSource> {
+        HttpCacheDataSourceImpl(get())
+    }
+
     single<BluetoothScannerDataSource> {
         BluetoothScannerDataSourceImpl(get())
     }
@@ -299,7 +321,7 @@ private val datasources = module {
 
 private val repositories = module {
     single<AuthRepository> {
-        AuthRepositoryImpl(get(), get(), get())
+        AuthRepositoryImpl(get(), get(), get(), get(), get(), get(), get())
     }
     single<LocationRepository> {
         LocationRepositoryImpl(get())
@@ -353,10 +375,10 @@ private val usecases = module {
         UserDeviceUseCaseImpl(get(), get(), get(), get())
     }
     single<HistoryUseCase> {
-        HistoryUseCaseImpl(get(), get())
+        HistoryUseCaseImpl(androidContext(), get(), get())
     }
     single<ForecastUseCase> {
-        ForecastUseCaseImpl(get(), get())
+        ForecastUseCaseImpl(androidContext(), get())
     }
     single<ClaimDeviceUseCase> {
         ClaimDeviceUseCaseImpl(get(), get())
@@ -401,6 +423,11 @@ private val location = module {
 }
 
 private val network = module {
+    single<Cache> {
+        // Install HTTP cache
+        Cache(androidContext().cacheDir, NETWORK_CACHE_SIZE)
+    }
+
     single<HttpLoggingInterceptor> {
         HttpLoggingInterceptor().setLevel(if (BuildConfig.DEBUG) Level.BASIC else Level.NONE)
     }
@@ -434,8 +461,6 @@ private val network = module {
     }
 
     single<Retrofit>(named(RETROFIT_API)) {
-        // Install HTTP cache
-        val cache = Cache(androidContext().cacheDir, NETWORK_CACHE_SIZE)
 
         // Create client
         val client: OkHttpClient = OkHttpClient.Builder()
@@ -446,7 +471,7 @@ private val network = module {
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
-            .cache(cache)
+            .cache(get() as Cache)
             .build()
 
         // Create retrofit instance
@@ -548,6 +573,8 @@ private val utilities = module {
     single<Moshi> {
         Moshi.Builder()
             .add(ZonedDateTime::class.java, ZonedDateTimeJsonAdapter())
+            .add(LocalDateTime::class.java, LocalDateTimeJsonAdapter())
+            .add(LocalDate::class.java, LocalDateJsonAdapter())
             .build()
     }
 
@@ -585,6 +612,12 @@ private val utilities = module {
     }
 }
 
+private val viewmodels = module {
+    viewModel { params ->
+        HistoryChartsViewModel(device = params.get())
+    }
+}
+
 val modules = listOf(
     preferences,
     network,
@@ -600,5 +633,6 @@ val modules = listOf(
     apiServiceModule,
     database,
     displayModeHelper,
-    utilities
+    utilities,
+    viewmodels
 )

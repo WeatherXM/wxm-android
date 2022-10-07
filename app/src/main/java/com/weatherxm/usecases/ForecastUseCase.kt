@@ -1,13 +1,17 @@
 package com.weatherxm.usecases
 
+import android.content.Context
 import arrow.core.Either
+import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
 import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.DailyForecast
-import com.weatherxm.util.DateTimeHelper.getShortNameOfDayFromLocalDate
-import com.weatherxm.util.DateTimeHelper.getSimplifiedDate
-import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.DateTimeHelper.getShortName
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import org.koin.core.qualifier.named
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 interface ForecastUseCase {
     suspend fun getDailyForecast(
@@ -19,9 +23,11 @@ interface ForecastUseCase {
 }
 
 class ForecastUseCaseImpl(
-    private val weatherForecastRepository: WeatherForecastRepository,
-    private val resourcesHelper: ResourcesHelper
-) : ForecastUseCase {
+    private val context: Context,
+    private val weatherForecastRepository: WeatherForecastRepository
+) : ForecastUseCase, KoinComponent {
+
+    private val formatterMonthDay: DateTimeFormatter by inject(named(DATE_FORMAT_MONTH_DAY))
 
     override suspend fun getDailyForecast(
         deviceId: String,
@@ -30,18 +36,16 @@ class ForecastUseCaseImpl(
         forceRefresh: Boolean
     ): Either<Failure, List<DailyForecast>> {
         return weatherForecastRepository.getDeviceForecast(deviceId, fromDate, toDate, forceRefresh)
-            .map {
-                it.map { weatherData ->
-                    DailyForecast().apply {
-                        weatherData.date?.let { date ->
-                            nameOfDay = getShortNameOfDayFromLocalDate(resourcesHelper, date)
-                            dateOfDay = getSimplifiedDate(date)
-                        }
-                        icon = weatherData.daily?.icon
-                        maxTemp = weatherData.daily?.temperatureMax
-                        minTemp = weatherData.daily?.temperatureMin
-                        precipProbability = weatherData.daily?.precipProbability
-                    }
+            .map { result ->
+                result.map {
+                    DailyForecast(
+                        nameOfDay = it.date.format(formatterMonthDay),
+                        dateOfDay = it.date.dayOfWeek.getShortName(context),
+                        icon = it.daily?.icon,
+                        maxTemp = it.daily?.temperatureMax,
+                        minTemp = it.daily?.temperatureMin,
+                        precipProbability = it.daily?.precipProbability
+                    )
                 }
             }
     }

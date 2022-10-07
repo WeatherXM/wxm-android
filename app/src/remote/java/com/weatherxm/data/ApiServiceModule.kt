@@ -18,12 +18,4 @@ val apiServiceModule = module {
         val retrofit = get<Retrofit>(named(RETROFIT_AUTH))
         retrofit.create(AuthService::class.java)
     }
-
-    single<NetworkWeatherForecastDataSource> {
-        NetworkWeatherForecastDataSource(get())
-    }
-
-    single<CacheWeatherForecastDataSource> {
-        CacheWeatherForecastDataSource()
-    }
 }

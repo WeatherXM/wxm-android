@@ -91,7 +91,7 @@ interface ApiService {
         @Path("deviceId") deviceId: String,
         @Query("fromDate") fromDate: String,
         @Query("toDate") toDate: String,
-        @Query("exclude") exclude: String? = null,
+        @Query("exclude") exclude: String? = "daily",
     ): NetworkResponse<List<WeatherData>, ErrorResponse>
 
     @Mock

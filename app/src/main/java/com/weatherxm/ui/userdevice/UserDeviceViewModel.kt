@@ -26,7 +26,6 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 
 @Suppress("TooManyFunctions")
@@ -177,7 +176,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch(Dispatchers.IO) {
             userDeviceUseCase.getUserDevice(device.id)
                 .map {
-                    Timber.d("Got User Device: $it")
+                    Timber.d("Got User Device: ${it.name}")
                     device = it
                     onDeviceSet.postValue(device)
                 }
@@ -259,7 +258,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     }
 
     fun isHourlyWeatherTomorrow(hourlyWeather: HourlyWeather?): Boolean {
-        return ZonedDateTime.parse(hourlyWeather?.timestamp).isTomorrow()
+        return hourlyWeather?.timestamp?.isTomorrow() ?: false
     }
 
     fun getPositionOfTomorrowFirstItem(currentForecasts: List<HourlyWeather>): Int {

@@ -1,6 +1,5 @@
 package com.weatherxm.ui.devicehistory
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,124 +8,88 @@ import com.weatherxm.R
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.Device
-import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.HistoryCharts
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.util.DateTimeHelper.getDateRangeFromToday
-import com.weatherxm.util.DateTimeHelper.getRelativeDayFromLocalDate
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
+import java.time.LocalDate
 
-class HistoryChartsViewModel : ViewModel(), KoinComponent {
+class HistoryChartsViewModel(
+    val device: Device
+) : ViewModel(), KoinComponent {
 
     companion object {
-        // 8 days in the past (including today)
-        private const val DAYS_TO_FETCH = -8
+        // 7 days in the past (+ today)
+        private const val DAYS_TO_SHOW = -7
     }
 
     private val historyUseCase: HistoryUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
 
-    /*
-     * The selected day.
-     * Need to save it in case the user picks another day before the data is fetched
-     * so we have this info to show him the correct charts
-     */
-    private var selectedDay: String = ""
-
-    private val dates = MutableLiveData(getDateRangeFromToday(DAYS_TO_FETCH))
+    private val dates = MutableLiveData(getDateRangeFromToday(DAYS_TO_SHOW))
     fun dates() = dates
 
-    /*
-    * A hashmap that contains as keys the relative days shown in the UI
-    * and as values the historical charts for that day
-    *
-    * IMPORTANT: As said before the keys are the same relative days as shown in the UI.
-    *
-    * Explanation:
-    *  - We use relative days as keys produced by getRelativeDayFromLocalDate()
-    *  - The currentDates has relative days
-    *       by using getLast7Days() which uses internally getRelativeDayFromLocalDate()
-    *  - The tabs of the UI are the values of the currentDates
-    *  - The selectedDay is the text of the selected tab
-    *  - So we use dataForDates[selectedDay] in our code to get the charts for this day
-     */
-    private var dataForDates: HashMap<String, HistoryCharts?> = HashMap()
+    private val charts = MutableLiveData<Resource<HistoryCharts>>(Resource.loading())
+    fun charts(): LiveData<Resource<HistoryCharts>> = charts
 
-    // All charts currently visible
-    private val onCharts = MutableLiveData<Resource<HistoryCharts>>().apply {
-        value = Resource.loading()
-    }
+    private var updateWeatherHistoryJob: Job? = null
 
-    fun onCharts(): LiveData<Resource<HistoryCharts>> = onCharts
+    private fun fetchWeatherHistory(date: LocalDate, forceUpdate: Boolean = false) {
+        // If this the first data update, force a network update
+        val shouldForceUpdate = forceUpdate || updateWeatherHistoryJob == null
 
-    fun getWeatherHistory(device: Device, context: Context, isSwipeRefresh: Boolean = false) {
-        onCharts.postValue(Resource.loading())
+        updateWeatherHistoryJob?.let {
+            if (it.isActive) {
+                it.cancel("Cancelling running history job.")
+            }
+        }
 
-        // Get new date range
-        val newDates = getDateRangeFromToday(DAYS_TO_FETCH)
+        updateWeatherHistoryJob = viewModelScope.launch(Dispatchers.IO) {
+            // Post loading status
+            charts.postValue(Resource.loading())
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val fromDate = newDates.first().toString()
-            val toDate = newDates.last().toString()
+            Timber.d("Fetching data for $date [forced=$shouldForceUpdate]")
 
             // Fetch fresh data
-            historyUseCase.getWeatherHistory(device, fromDate, toDate, context)
-                .map { historyCharts ->
-                    Timber.d("Got History Charts")
-                    mapPositionToData(historyCharts)
-                    getDataForSelectedDay()
+            historyUseCase.getWeatherHistory(device, date, shouldForceUpdate)
+                .tap {
+                    Timber.d("Returning history charts for [${it.date}]")
+                    charts.postValue(Resource.success(it))
                 }
-                .mapLeft {
-                    handleFailure(it)
+                .tapLeft {
+                    charts.postValue(
+                        Resource.error(
+                            resHelper.getString(
+                                when (it) {
+                                    is InvalidFromDate, is InvalidToDate -> {
+                                        R.string.error_history_generic_message
+                                    }
+                                    else -> it.getDefaultMessageResId()
+                                }
+                            )
+                        )
+                    )
                 }
+        }
 
-            // If this is a forced refresh and date range has changed, post updated dates
-            if (isSwipeRefresh && newDates != dates.value) {
-                Timber.d("Dates have changed. Posting update.")
-                dates.postValue(newDates)
+        updateWeatherHistoryJob?.invokeOnCompletion {
+            if (it is CancellationException) {
+                Timber.d("Cancelled running history job.")
             }
         }
     }
 
-    private fun handleFailure(failure: Failure) {
-        onCharts.postValue(
-            Resource.error(
-                resHelper.getString(
-                    when (failure) {
-                        is InvalidFromDate, is InvalidToDate -> {
-                            R.string.error_history_generic_message
-                        }
-                        else -> failure.getDefaultMessageResId()
-                    }
-                )
-            )
-        )
-    }
-
-    private fun mapPositionToData(allCharts: List<HistoryCharts>) {
-        allCharts.forEach {
-            val relativeDate = getRelativeDayFromLocalDate(resHelper, it.date, false)
-            dataForDates[relativeDate] = it
-        }
-    }
-
-    fun setSelectedDay(day: String) {
-        selectedDay = day
-        getDataForSelectedDay()
-    }
-
-    private fun getDataForSelectedDay() {
-        if (dataForDates.isNotEmpty()) {
-            onCharts.postValue(Resource.loading())
-            val data = dataForDates[selectedDay]
-            onCharts.postValue(Resource.success(data))
-        }
+    fun onDateSelected(date: LocalDate, forceUpdate: Boolean = false) {
+        fetchWeatherHistory(date, forceUpdate)
     }
 }

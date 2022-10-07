@@ -33,7 +33,9 @@
     <color name="chart_axis_line_color">@color/light_dark_grey</color>
     <color name="chart_popup_background">@color/light_darkest_blue</color>
     <color name="chart_popup_text_color">@color/light_top</color>
-    <color name="chart_wind_gust_color">@color/light_darkest_blue</color>
+    <color name="chart_primary_line">@color/light_darker_blue</color>
+    <color name="chart_secondary_line">@color/light_lightest_blue</color>
+    <color name="chart_feels_like_fill_color">#F1AA3E</color>
 
     <!-- Scan Devices -->
     <color name="claiming_flow_devices_card_color">@color/light_light2</color>
@@ -65,16 +67,6 @@
 
     <!-- Survey Prompt -->
     <color name="info_card_background">@color/light_blue_tint</color>
-
-    <!-- Weather Data colors -->
-    <color name="temperature">#084D6A</color>
-    <color name="precip_intensity">#48BEC5</color>
-    <color name="precip_probability">#97D779</color>
-    <color name="wind_speed">#4FE0B6</color>
-    <color name="wind_gust">#3E54D3</color>
-    <color name="pressure">#4F80E2</color>
-    <color name="humidity">#48BEC5</color>
-    <color name="uv_index">#FFCE49</color>
 
     <!-- Reward Scores -->
     <color name="reward_score_very_high">#46D163</color>

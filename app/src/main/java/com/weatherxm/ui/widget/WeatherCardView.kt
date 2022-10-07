@@ -8,17 +8,13 @@ import android.widget.LinearLayout
 import com.weatherxm.R
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.databinding.ViewWeatherCardBinding
-import com.weatherxm.util.DateTimeHelper.getHourMinutesFromISO
-import com.weatherxm.util.DateTimeHelper.getRelativeDayFromISO
-import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.util.DateTimeHelper.getFormattedDay
+import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Weather
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-class WeatherCardView : LinearLayout, KoinComponent {
+class WeatherCardView : LinearLayout {
 
     private lateinit var binding: ViewWeatherCardBinding
-    private val resHelper: ResourcesHelper by inject()
     private var weatherData: HourlyWeather? = null
 
     constructor(context: Context?) : super(context) {
@@ -57,14 +53,14 @@ class WeatherCardView : LinearLayout, KoinComponent {
             wind.text = Weather.getFormattedWind(weatherData?.windSpeed, weatherData?.windDirection)
             solar.text = Weather.getFormattedUV(weatherData?.uvIndex)
             updatedOn.text = weatherData?.timestamp?.let {
-                val day = getRelativeDayFromISO(resHelper, it, true)
-                val time = getHourMinutesFromISO(context, it)
+                val day = it.getFormattedDay(context, true)
+                val time = it.getFormattedTime(context)
                 "$day, $time"
             } ?: ""
 
             with(timezoneInfo) {
                 visibility = tz?.let {
-                    text = resHelper.getString(R.string.displayed_times, it)
+                    text = context.getString(R.string.displayed_times, it)
                     android.view.View.VISIBLE
                 } ?: android.view.View.GONE
             }

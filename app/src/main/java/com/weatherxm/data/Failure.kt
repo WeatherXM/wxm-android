@@ -105,3 +105,6 @@ sealed class DataError : Failure() {
 sealed class UserActionError(val message: String? = null) : Failure() {
     class UserActionRateLimitedError(message: String? = null) : UserActionError(message)
 }
+
+@Keep
+sealed class CancellationError(message: String? = null) : Failure()

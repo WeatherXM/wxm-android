@@ -4,6 +4,7 @@ package com.weatherxm.util
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Canvas
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -19,6 +20,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import com.github.mikephil.charting.components.MarkerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
@@ -163,6 +165,26 @@ fun Activity.hideKeyboard() {
 
 fun ChipGroup.setChildrenEnabled(enable: Boolean) {
     children.forEach { it.isEnabled = enable }
+}
+
+@Suppress("MagicNumber")
+fun MarkerView.customDraw(canvas: Canvas, posx: Float, posy: Float) {
+    // translate to the correct position and draw
+    var newPosX = posx
+    var newPosY = posy
+    // Prevent overflow to the right
+    if (posx > canvas.width / 2) {
+        newPosX = ((canvas.width / 3).toFloat())
+    }
+
+    // We do this as for continuous 0 values on the y Axis the marker view hides those values
+    if (posy > canvas.height / 2) {
+        newPosY = 0F
+    }
+
+    // Add 10 to posy so that the marker view isn't over the point selected but a bit lower
+    canvas.translate(newPosX, newPosY)
+    this.draw(canvas)
 }
 
 private fun Context.hideKeyboard(view: View) {
