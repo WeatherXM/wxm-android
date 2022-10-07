@@ -65,8 +65,12 @@
     <color name="token_transaction_descriptions">@color/light_dark_grey</color>
     <color name="token_transaction_line">@color/light_mid_grey</color>
 
-    <!-- Survey Prompt -->
+    <!-- Info Card -->
     <color name="info_card_background">@color/light_blue_tint</color>
+    <color name="info_card_icon_color">@color/light_darkest_blue</color>
+
+    <!-- Error Card -->
+    <color name="error_card_close_button_color">@color/light_dark_grey</color>
 
     <!-- Reward Scores -->
     <color name="reward_score_very_high">#46D163</color>

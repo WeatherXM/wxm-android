@@ -116,17 +116,17 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             navigator.showSelectDeviceTypeDialog(supportFragmentManager)
         }
 
+        profileViewModel.wallet().observe(this) {
+            handleBadge(!it.isNullOrEmpty())
+        }
+
         homeViewModel.onClaimHelium().observe(this) {
             if (it) {
                 navigator.showClaimHelium(claimDeviceLauncher, this)
             }
         }
 
-        profileViewModel.wallet().observe(this) {
-            handleBadge(!it.isNullOrEmpty())
-        }
-
-        homeViewModel.onClaimM5Manually().observe(this) {
+        homeViewModel.onClaimM5().observe(this) {
             if (it) {
                 navigator.showClaimM5(claimDeviceLauncher, this)
             }

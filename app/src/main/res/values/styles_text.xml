@@ -291,14 +291,6 @@
     </style>
 
     <!--
-        Bluetooth Scanning
-    -->
-    <style name="TextAppearance.WeatherXM.BluetoothScanning.InfoTitle" parent="TextAppearance.WeatherXM.Default.BodyLarge">
-        <item name="android:textColor">@color/bluetooth_scanning_info_title</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <!--
         Tabs
     -->
     <style name="TextAppearance.WeatherXM.Tabs" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">

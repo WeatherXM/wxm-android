@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import org.koin.core.component.KoinComponent
 
 class HomeViewModel : ViewModel(), KoinComponent {
-    private val onClaimM5Manually = MutableLiveData(false)
-    fun onClaimM5Manually() = onClaimM5Manually
+    private val onClaimM5 = MutableLiveData(false)
+    fun onClaimM5() = onClaimM5
 
     private val onClaimHelium = MutableLiveData(false)
     fun onClaimHelium() = onClaimHelium
@@ -15,7 +15,7 @@ class HomeViewModel : ViewModel(), KoinComponent {
         onClaimHelium.postValue(true)
     }
 
-    fun claimM5Manually() {
-        onClaimM5Manually.postValue(true)
+    fun claimM5() {
+        onClaimM5.postValue(true)
     }
 }

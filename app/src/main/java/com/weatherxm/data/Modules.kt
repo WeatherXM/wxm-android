@@ -8,9 +8,6 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionScheme
 import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme
 import androidx.security.crypto.MasterKeys
-import com.espressif.provisioning.ESPConstants
-import com.espressif.provisioning.ESPDevice
-import com.espressif.provisioning.ESPProvisionManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.SettingsClient
@@ -29,10 +26,6 @@ import com.weatherxm.BuildConfig
 import com.weatherxm.data.adapters.LocalDateJsonAdapter
 import com.weatherxm.data.adapters.LocalDateTimeJsonAdapter
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
-import com.weatherxm.data.bluetooth.BluetoothConnectionManager
-import com.weatherxm.data.bluetooth.BluetoothProvisioner
-import com.weatherxm.data.bluetooth.BluetoothScanner
-import com.weatherxm.data.bluetooth.BluetoothUpdater
 import com.weatherxm.data.database.AppDatabase
 import com.weatherxm.data.database.DatabaseConverters
 import com.weatherxm.data.database.dao.DeviceHistoryDao
@@ -68,14 +61,6 @@ import com.weatherxm.data.datasource.TokenDataSource
 import com.weatherxm.data.datasource.TokenDataSourceImpl
 import com.weatherxm.data.datasource.UserActionDataSource
 import com.weatherxm.data.datasource.UserActionDataSourceImpl
-import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSource
-import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSourceImpl
-import com.weatherxm.data.datasource.bluetooth.BluetoothProvisionerDataSource
-import com.weatherxm.data.datasource.bluetooth.BluetoothProvisionerDataSourceImpl
-import com.weatherxm.data.datasource.bluetooth.BluetoothScannerDataSource
-import com.weatherxm.data.datasource.bluetooth.BluetoothScannerDataSourceImpl
-import com.weatherxm.data.datasource.bluetooth.BluetoothUpdaterDataSource
-import com.weatherxm.data.datasource.bluetooth.BluetoothUpdaterDataSourceImpl
 import com.weatherxm.data.network.AuthTokenJsonAdapter
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthRequestInterceptor
@@ -103,21 +88,11 @@ import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.data.repository.WeatherForecastRepositoryImpl
 import com.weatherxm.data.repository.WeatherHistoryRepository
 import com.weatherxm.data.repository.WeatherHistoryRepositoryImpl
-import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepository
-import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepositoryImpl
-import com.weatherxm.data.repository.bluetooth.BluetoothProvisionerRepository
-import com.weatherxm.data.repository.bluetooth.BluetoothProvisionerRepositoryImpl
-import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepository
-import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepositoryImpl
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.UIHexJsonAdapter
 import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.AuthUseCaseImpl
-import com.weatherxm.usecases.BluetoothConnectionUseCase
-import com.weatherxm.usecases.BluetoothConnectionUseCaseImpl
-import com.weatherxm.usecases.BluetoothScannerUseCase
-import com.weatherxm.usecases.BluetoothScannerUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCaseImpl
 import com.weatherxm.usecases.ConnectWalletUseCase
@@ -301,22 +276,6 @@ private val datasources = module {
     single<HttpCacheDataSource> {
         HttpCacheDataSourceImpl(get())
     }
-
-    single<BluetoothScannerDataSource> {
-        BluetoothScannerDataSourceImpl(get())
-    }
-
-    single<BluetoothConnectionDataSource> {
-        BluetoothConnectionDataSourceImpl(get())
-    }
-
-    single<BluetoothUpdaterDataSource> {
-        BluetoothUpdaterDataSourceImpl(get())
-    }
-
-    single<BluetoothProvisionerDataSource> {
-        BluetoothProvisionerDataSourceImpl(get())
-    }
 }
 
 private val repositories = module {
@@ -352,15 +311,6 @@ private val repositories = module {
     }
     single<SharedPreferencesRepository> {
         SharedPreferenceRepositoryImpl(get())
-    }
-    single<BluetoothScannerRepository> {
-        BluetoothScannerRepositoryImpl(get())
-    }
-    single<BluetoothConnectionRepository> {
-        BluetoothConnectionRepositoryImpl(get())
-    }
-    single<BluetoothProvisionerRepository> {
-        BluetoothProvisionerRepositoryImpl(get())
     }
 }
 
@@ -401,14 +351,8 @@ private val usecases = module {
     single<SendFeedbackUseCase> {
         SendFeedbackUseCaseImpl(get(), get())
     }
-    single<BluetoothScannerUseCase> {
-        BluetoothScannerUseCaseImpl(get())
-    }
     single<SelectDeviceTypeUseCase> {
         SelectDeviceTypeUseCaseImpl()
-    }
-    single<BluetoothConnectionUseCase> {
-        BluetoothConnectionUseCaseImpl(get(), get())
     }
 }
 
@@ -481,31 +425,6 @@ private val network = module {
             .addCallAdapterFactory(NetworkResponseAdapterFactory())
             .client(client)
             .build()
-    }
-}
-
-private val bluetooth = module {
-    single<ESPProvisionManager> {
-        ESPProvisionManager.getInstance(androidContext())
-    }
-    single<ESPDevice> {
-        val espProvisionerManager = get() as ESPProvisionManager
-        espProvisionerManager.createESPDevice(
-            ESPConstants.TransportType.TRANSPORT_BLE,
-            ESPConstants.SecurityType.SECURITY_0
-        )
-    }
-    single<BluetoothScanner> {
-        BluetoothScanner(get())
-    }
-    single<BluetoothConnectionManager> {
-        BluetoothConnectionManager(get())
-    }
-    single<BluetoothUpdater> {
-        BluetoothUpdater(get(), get())
-    }
-    single<BluetoothProvisioner> {
-        BluetoothProvisioner(get())
     }
 }
 
@@ -621,7 +540,6 @@ private val viewmodels = module {
 val modules = listOf(
     preferences,
     network,
-    bluetooth,
     datasources,
     repositories,
     location,

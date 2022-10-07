@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
-import com.weatherxm.databinding.ActivityClaimDeviceBinding
+import com.weatherxm.databinding.ActivityClaimM5DeviceBinding
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_INFORMATION
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
@@ -24,11 +24,11 @@ import timber.log.Timber
 class ClaimDeviceActivity : AppCompatActivity() {
 
     private val model: ClaimDeviceViewModel by viewModels()
-    private lateinit var binding: ActivityClaimDeviceBinding
+    private lateinit var binding: ActivityClaimM5DeviceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityClaimDeviceBinding.inflate(layoutInflater)
+        binding = ActivityClaimM5DeviceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.root.applyInsets()

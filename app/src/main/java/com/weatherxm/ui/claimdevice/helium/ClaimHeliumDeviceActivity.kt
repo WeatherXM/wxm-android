@@ -9,7 +9,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
 import com.weatherxm.ui.claimdevice.ClaimDeviceLocationFragment
 import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumDeviceVerifyFragment
-import com.weatherxm.ui.claimdevice.scandevices.ScanDevicesFragment
 import com.weatherxm.util.applyInsets
 
 class ClaimHeliumDeviceActivity : AppCompatActivity() {
@@ -24,7 +23,7 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
         binding.root.applyInsets()
 
         // The pager adapter, which provides the pages to the view pager widget.
-        var pagerAdapter = ClaimHeliumDevicePagerAdapter(this)
+        val pagerAdapter = ClaimHeliumDevicePagerAdapter(this)
         binding.pager.adapter = pagerAdapter
         binding.pager.isUserInputEnabled = false
 
@@ -43,20 +42,10 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
         model.onNext().observe(this) {
             if (it) binding.pager.currentItem += 1
         }
-
-        model.onClaimManually().observe(this) {
-            if (it) {
-                model.setManual(true)
-                pagerAdapter = ClaimHeliumDevicePagerAdapter(this, true)
-                binding.pager.adapter = pagerAdapter
-                binding.pager.isUserInputEnabled = false
-            }
-        }
     }
 
     private class ClaimHeliumDevicePagerAdapter(
-        activity: AppCompatActivity,
-        private val isManualClaiming: Boolean = false
+        activity: AppCompatActivity
     ) : FragmentStateAdapter(activity) {
         companion object {
             const val PAGE_COUNT = 3
@@ -67,17 +56,8 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
         @Suppress("UseCheckOrError")
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> if (isManualClaiming) {
-                    ClaimHeliumDeviceVerifyFragment()
-                } else {
-                    ScanDevicesFragment()
-                }
-                1 -> if (isManualClaiming) {
-                    // TODO: Reset Fragment here
-                    ClaimDeviceLocationFragment()
-                } else {
-                    ClaimHeliumDeviceVerifyFragment()
-                }
+                0 -> ClaimHeliumDeviceVerifyFragment()
+                1 -> ClaimDeviceLocationFragment()
                 2 -> ClaimDeviceLocationFragment()
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }

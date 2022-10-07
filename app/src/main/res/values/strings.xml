@@ -13,6 +13,7 @@
     <string name="action_logout">Logout</string>
     <string name="action_clear">Clear</string>
     <string name="action_try_again">Try Again</string>
+    <string name="action_verify">Verify</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="scan_qr_code">Scan QR Code</string>
@@ -145,8 +146,7 @@
     <string name="m5_ws1000_title">WS1000 | M5</string>
     <string name="m5_ws1000_desc">Claim Device Manually</string>
     <string name="helium_type_title">WS2000 | Helium</string>
-    <string name="helium_type_desc">Claim Device via Bluetooth</string>
-
+    <string name="helium_type_desc">Claim Device Manually</string>
 
     <!-- Claim device -->
     <string name="claim_device_info_text"><![CDATA[<h5>Step 1</h5>Swipe left on your WXM device\'s screen and press \"Configure WiFi\" to connect the device to your home WiFi.<h5>Step 2</h5>Plug the GPS antenna into your WXM device, place the antenna near a window and power up the device via USB.<h5>Step 3</h5>Press <b>NEXT</b> to claim your device.<br/><br/>Don\'t have a WXM device yet? Get one on <a href=\"https://weatherxm.com\">weatherxm.com</a>.]]></string>
@@ -171,10 +171,11 @@
     <string name="enter_dev_eui">Enter dev EUI</string>
     <string name="dev_eui_info_text">Dev EUI and Device Key can be found in the station package. Alternative, you can scan the QR on the packaging.</string>
     <string name="device_key">Device Key</string>
+    <string name="invalid_dev_eui">Invalid Dev EUI</string>
+    <string name="invalid_dev_key">Invalid Device Key</string>
     <string name="enter_device_key">Enter device\'s Key</string>
-    <string name="helium_pairing_failed_desc">The Pairing process with WS2000 has failed. Please try again, and if the problem persists, claim your device manually.</string>
-    <string name="helium_bluetooth_disabled">The Pairing process with WS2000 has failed. Bluetooth is disabled. Please enable it and try again or claim your device manually.</string>
-    <string name="helium_bluetooth_connection_lost">The Pairing process with WS2000 has failed. Bluetooth connection has been lost. Please try again, and if the problem persists, claim your device manually.</string>
+    <string name="wrong_combination">Wrong Combination</string>
+    <string name="wrong_combination_message"><![CDATA[Dev EUI and Device Key combination is wrong! Please retype/rescan and try again.<br><br>If you still have problems, contact our support at <b>support@weatherxm.com</b>]]></string>
 
     <!-- Forecast -->
     <string name="forecast_7_day">7 Day Forecast</string>

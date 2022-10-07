@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -10,164 +9,162 @@
         android:id="@+id/serialNumberCard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/margin_normal"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        android:layout_marginBottom="@dimen/margin_normal">
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="true"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+            android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintVertical_chainStyle="packed">
+                android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/margin_normal"
+                app:layout_constraintBottom_toTopOf="@id/buttonsContainer"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/verifyDevice"
-                    style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/verify_device"
+                    app:layout_constraintVertical_chainStyle="packed">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/verifyDevice"
+                        style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/verify_device"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/devEUITitle"
+                        style="@style/TextAppearance.WeatherXM.TextInput.TitleMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_extra_large"
+                        android:text="@string/dev_eui"
+                        app:layout_constraintTop_toBottomOf="@id/verifyDevice" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/devEUIContainer"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/enter_dev_eui"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="16"
+                        app:helperTextEnabled="true"
+                        app:layout_constraintTop_toBottomOf="@id/devEUITitle">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/devEUI"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:digits="0123456789ABCDEFabcdef:"
+                            android:imeOptions="actionNext"
+                            android:inputType="text|textCapCharacters"
+                            android:singleLine="true"
+                            android:textSize="18sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/devKeyTitle"
+                        style="@style/TextAppearance.WeatherXM.TextInput.TitleMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_large"
+                        android:text="@string/device_key"
+                        app:layout_constraintTop_toBottomOf="@id/devEUIContainer" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/devKeyContainer"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/enter_device_key"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="16"
+                        app:helperTextEnabled="true"
+                        app:layout_constraintTop_toBottomOf="@id/devKeyTitle">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/devKey"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:digits="0123456789ABCDEFabcdef:"
+                            android:imeOptions="actionNext"
+                            android:inputType="text|textCapCharacters"
+                            android:singleLine="true"
+                            android:textSize="18sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/scan"
+                        style="@style/Widget.WeatherXM.Button.Subtle.Borders.SmallRadius"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:text="@string/scan_qr_code"
+                        app:icon="@drawable/ic_scan_wallet"
+                        app:iconGravity="textStart"
+                        app:layout_constraintTop_toBottomOf="@id/devKeyContainer" />
+
+                    <com.weatherxm.ui.widget.ErrorCardView
+                        android:id="@+id/errorCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_large"
+                        android:visibility="gone"
+                        app:error_message="@string/wrong_combination_message"
+                        app:error_title="@string/wrong_combination"
+                        app:layout_constraintTop_toBottomOf="@id/scan" />
+
+                    <com.weatherxm.ui.widget.InformationCardView
+                        android:id="@+id/infoCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_large"
+                        app:info_message="@string/dev_eui_info_text"
+                        app:layout_constraintTop_toBottomOf="@id/errorCard" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+            <LinearLayout
+                android:id="@+id/buttonsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancel"
+                    style="@style/Widget.WeatherXM.Button.Subtle.Borders.SmallRadius"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_normal"
+                    android:layout_weight="1"
+                    android:text="@string/action_cancel"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/devEUITitle"
-                    style="@style/TextAppearance.WeatherXM.TextInput.TitleMedium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_extra_large"
-                    android:text="@string/dev_eui"
-                    app:layout_constraintTop_toBottomOf="@id/verifyDevice" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/devEUIContainer"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/enter_dev_eui"
-                    app:helperTextEnabled="true"
-                    app:layout_constraintTop_toBottomOf="@id/devEUITitle">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/devEUI"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:digits="0123456789ABCDEFabcdef:"
-                        android:imeOptions="actionNext"
-                        android:inputType="text|textCapCharacters"
-                        android:singleLine="true"
-                        android:textSize="18sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/devKeyTitle"
-                    style="@style/TextAppearance.WeatherXM.TextInput.TitleMedium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_large"
-                    android:text="@string/device_key"
-                    app:layout_constraintTop_toBottomOf="@id/devEUIContainer" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/devKeyContainer"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/enter_device_key"
-                    app:helperTextEnabled="true"
-                    app:layout_constraintTop_toBottomOf="@id/devKeyTitle">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/devKey"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:digits="0123456789ABCDEFabcdef:"
-                        android:imeOptions="actionNext"
-                        android:inputType="text|textCapCharacters"
-                        android:singleLine="true"
-                        android:textSize="18sp" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/info_box"
-                    style="@style/Widget.WeatherXM.MaterialCard.InfoBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_large"
-                    app:cardUseCompatPadding="false"
-                    app:contentPadding="@dimen/padding_large"
-                    app:layout_constraintTop_toBottomOf="@id/devKeyContainer">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/info_dev_eui"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_small"
-                        android:text="@string/dev_eui_info_text"
-                        app:layout_constraintBottom_toBottomOf="@id/close_survey_prompt_button"
-                        app:layout_constraintTop_toTopOf="@id/close_survey_prompt_button" />
-
-                </com.google.android.material.card.MaterialCardView>
-
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/scan"
-                    style="@style/Widget.WeatherXM.Button.Subtle.Borders.SmallRadius"
-                    android:layout_width="match_parent"
+                    android:id="@+id/verify"
+                    style="@style/Widget.WeatherXM.Button"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_normal"
-                    android:text="@string/scan_qr_code"
-                    app:icon="@drawable/ic_scan_wallet"
-                    app:iconGravity="textStart"
-                    app:layout_constraintTop_toBottomOf="@id/info_box" />
-
-                <com.google.android.material.progressindicator.CircularProgressIndicator
-                    android:id="@+id/loading"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:visibility="gone"
+                    android:layout_weight="1"
+                    android:text="@string/action_verify"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="visible" />
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.core.widget.NestedScrollView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintBottom_toBottomOf="parent">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/cancel"
-                style="@style/Widget.WeatherXM.Button.Subtle.Borders.SmallRadius"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_normal"
-                android:layout_weight="1"
-                android:text="@string/action_cancel"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/next"
-                style="@style/Widget.WeatherXM.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/action_next"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
