@@ -2,14 +2,12 @@ package com.weatherxm.ui.claimdevice.helium.verify
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Validator
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class ClaimHeliumDeviceVerifyViewModel : ViewModel(), KoinComponent {
     private val validator: Validator by inject()
-    private val resHelper: ResourcesHelper by inject()
 
     private val onDevKeyError = MutableLiveData(false)
     fun onDevKeyError() = onDevKeyError

@@ -1,0 +1,41 @@
+package com.weatherxm.ui.claimdevice.helium.reset
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import com.weatherxm.R
+import com.weatherxm.databinding.FragmentClaimDeviceHeliumResetBinding
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceViewModel
+import com.weatherxm.util.setHtml
+
+class ClaimHeliumDeviceResetFragment : Fragment() {
+    private val parentModel: ClaimHeliumDeviceViewModel by activityViewModels()
+    private lateinit var binding: FragmentClaimDeviceHeliumResetBinding
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentClaimDeviceHeliumResetBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.cancel.setOnClickListener {
+            parentModel.cancel()
+        }
+
+        binding.resetAndPairButton.setOnClickListener {
+            // TODO: API call
+        }
+
+        binding.firstStep.setHtml(R.string.reset_and_pair_first_step)
+        binding.secondStep.setHtml(R.string.reset_and_pair_second_step)
+    }
+}

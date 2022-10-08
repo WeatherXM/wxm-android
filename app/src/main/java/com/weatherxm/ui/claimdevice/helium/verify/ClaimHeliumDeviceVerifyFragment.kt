@@ -66,6 +66,8 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
                 binding.devEUI.text.toString().trim(),
                 binding.devKey.text.toString().trim()
             )
+            // TODO: Remove this
+            parentModel.next()
         }
 
         model.onDevEUIError().observe(viewLifecycleOwner) {

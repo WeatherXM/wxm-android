@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
 import com.weatherxm.ui.claimdevice.ClaimDeviceLocationFragment
+import com.weatherxm.ui.claimdevice.helium.reset.ClaimHeliumDeviceResetFragment
 import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumDeviceVerifyFragment
 import com.weatherxm.util.applyInsets
 
@@ -57,7 +58,7 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> ClaimHeliumDeviceVerifyFragment()
-                1 -> ClaimDeviceLocationFragment()
+                1 -> ClaimHeliumDeviceResetFragment()
                 2 -> ClaimDeviceLocationFragment()
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }

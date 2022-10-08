@@ -6,7 +6,6 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/serialNumberCard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/margin_normal">
@@ -160,6 +159,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/action_verify"
+                    android:textAllCaps="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </LinearLayout>
