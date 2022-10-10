@@ -13,6 +13,7 @@ import com.weatherxm.R
 import com.weatherxm.R.styleable.EmptyView_empty_action
 import com.weatherxm.databinding.ViewEmptyBinding
 import com.weatherxm.util.setHtml
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 class EmptyView : LinearLayout {
 
@@ -77,12 +78,24 @@ class EmptyView : LinearLayout {
         return this
     }
 
-    fun htmlSubtitle(@StringRes resId: Int, arg: String?): EmptyView {
+    fun htmlSubtitle(
+        @StringRes resId: Int,
+        arg: String?,
+        linkClickedListener: (() -> Unit)? = null
+    ): EmptyView {
         binding.subtitle.apply {
-            if(arg.isNullOrEmpty()) {
+            if (arg.isNullOrEmpty()) {
                 setHtml(resId)
             } else {
                 setHtml(resId, arg)
+            }
+            if (linkClickedListener != null) {
+                movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                    setOnLinkClickListener { _, _ ->
+                        linkClickedListener.invoke()
+                        return@setOnLinkClickListener true
+                    }
+                }
             }
             visibility = View.VISIBLE
         }

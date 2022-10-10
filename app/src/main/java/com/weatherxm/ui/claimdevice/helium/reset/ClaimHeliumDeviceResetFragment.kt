@@ -8,11 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimDeviceHeliumResetBinding
+import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceViewModel
 import com.weatherxm.util.setHtml
+import org.koin.android.ext.android.inject
 
 class ClaimHeliumDeviceResetFragment : Fragment() {
     private val parentModel: ClaimHeliumDeviceViewModel by activityViewModels()
+    private val navigator: Navigator by inject()
     private lateinit var binding: FragmentClaimDeviceHeliumResetBinding
 
     override fun onCreateView(
@@ -32,7 +35,8 @@ class ClaimHeliumDeviceResetFragment : Fragment() {
         }
 
         binding.resetAndPairButton.setOnClickListener {
-            // TODO: API call
+            navigator.showHeliumPairingStatus(requireActivity().supportFragmentManager)
+            parentModel.resetAndPair()
         }
 
         binding.firstStep.setHtml(R.string.reset_and_pair_first_step)

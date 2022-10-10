@@ -12,6 +12,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity
+import com.weatherxm.ui.claimdevice.helium.pairingstatus.PairingStatusFragment
 import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeFragment
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
@@ -198,6 +199,11 @@ class Navigator {
             Intent(context, ClaimHeliumDeviceActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
+    }
+
+    fun showHeliumPairingStatus(fragmentManager: FragmentManager) {
+        val modalBottomSheet = PairingStatusFragment()
+        modalBottomSheet.show(fragmentManager, PairingStatusFragment.TAG)
     }
 
     fun sendSupportEmail(

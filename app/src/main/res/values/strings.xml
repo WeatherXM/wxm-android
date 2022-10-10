@@ -159,7 +159,6 @@
     <string name="success_claim_device"><![CDATA[You claimed the device: <br><b>%s</b>]]></string>
     <string name="action_devices_list">View device list</string>
     <string name="action_quit_claiming">Quit Claiming</string>
-    <string name="pairing_failed_title">Pairing Failed!</string>
 
     <!-- Claim M5 -->
     <string name="title_claim_m5_device">Claim M5 Device</string>
@@ -181,6 +180,10 @@
     <string name="reset_and_pair_first_step"><![CDATA[Press the <b>Reset Button</b> on the bottom of your WeatherXM device. You will need a pin or a small screwdriver to do this.]]></string>
     <string name="reset_and_pair_second_step"><![CDATA[Tap the <b>Reset & Claim</b> button below.]]></string>
     <string name="reset_and_pair_info_delay">This step might take up to two minutes due to Helium network bandwidth limitations!</string>
+    <string name="pairing_device">Pairing Device</string>
+    <string name="pairing_device_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to Helium network bandwidth limitations!<b>]]></string>
+    <string name="pairing_failed">Pairing Failed</string>
+    <string name="pairing_failed_desc"><![CDATA[Pairing failed, please try again!<br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a><br><br>Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
 
     <!-- Forecast -->
     <string name="forecast_7_day">7 Day Forecast</string>

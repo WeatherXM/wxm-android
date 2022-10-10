@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="@dimen/margin_normal"
         android:gravity="center_horizontal"
         tools:text="Nothing here!" />
 
@@ -35,14 +35,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="@dimen/margin_extra_small"
         android:autoLink="all"
         android:gravity="center_horizontal"
         tools:text="Honestly, something is wrong" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/action"
-        android:layout_width="wrap_content"
+        style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="24dp"
