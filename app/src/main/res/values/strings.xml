@@ -174,7 +174,7 @@
     <string name="invalid_dev_key">Invalid Device Key</string>
     <string name="enter_device_key">Enter device\'s Key</string>
     <string name="wrong_combination">Wrong Combination</string>
-    <string name="wrong_combination_message"><![CDATA[Dev EUI and Device Key combination is wrong! Please retype/rescan and try again.<br><br>If you still have problems, contact our support at <b>support@weatherxm.com</b>]]></string>
+    <string name="wrong_combination_message"><![CDATA[Dev EUI and Device Key combination is wrong! Please retype/rescan and try again.<br><br>If you still have problems, contact our support at <a>support@weatherxm.com</a>]]></string>
     <string name="reset_station">Reset Station</string>
     <string name="reset_and_pair">Reset &amp; Pair</string>
     <string name="reset_and_pair_first_step"><![CDATA[Press the <b>Reset Button</b> on the bottom of your WeatherXM device. You will need a pin or a small screwdriver to do this.]]></string>

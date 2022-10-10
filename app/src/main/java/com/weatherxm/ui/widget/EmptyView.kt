@@ -80,7 +80,7 @@ class EmptyView : LinearLayout {
 
     fun htmlSubtitle(
         @StringRes resId: Int,
-        arg: String?,
+        arg: String? = null,
         linkClickedListener: (() -> Unit)? = null
     ): EmptyView {
         binding.subtitle.apply {

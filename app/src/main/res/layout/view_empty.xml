@@ -31,7 +31,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/subtitle"
-        style="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

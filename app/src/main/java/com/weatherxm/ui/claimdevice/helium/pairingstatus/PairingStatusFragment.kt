@@ -32,6 +32,10 @@ class PairingStatusFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
+    override fun getTheme(): Int {
+        return R.style.ThemeOverlay_WeatherXM_BottomSheetDialog
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -56,21 +60,14 @@ class PairingStatusFragment : BottomSheetDialogFragment() {
             }
             Status.ERROR -> {
                 binding.buttonsContainer.visibility = View.VISIBLE
-                binding.empty.clear()
                 binding.empty.animation(R.raw.anim_error)
                 binding.empty.title(R.string.pairing_failed)
                 binding.empty.htmlSubtitle(R.string.pairing_failed_desc, result.message) {
-                    navigator.sendSupportEmail(
-                        context = context,
-                        subject = getString(R.string.support_email_subject_helium_pairing_failed)
-                    )
+                    sendSupportEmail()
                 }
                 binding.empty.action(getString(R.string.title_contact_support))
                 binding.empty.listener {
-                    navigator.sendSupportEmail(
-                        context = context,
-                        subject = getString(R.string.support_email_subject_helium_pairing_failed)
-                    )
+                    sendSupportEmail()
                 }
             }
             Status.LOADING -> {
@@ -78,8 +75,20 @@ class PairingStatusFragment : BottomSheetDialogFragment() {
                 binding.empty.clear()
                 binding.empty.animation(R.raw.anim_loading)
                 binding.empty.title(R.string.pairing_device)
-                binding.empty.htmlSubtitle(R.string.pairing_device_desc, null)
+                binding.empty.htmlSubtitle(R.string.pairing_device_desc)
             }
         }
+    }
+
+    private fun sendSupportEmail() {
+        navigator.sendSupportEmail(
+            context = context,
+            subject = getString(R.string.support_email_subject_helium_pairing_failed),
+            body = getString(
+                R.string.support_email_body_claiming_helium,
+                parentModel.getDevEUI(),
+                parentModel.getDeviceKey()
+            )
+        )
     }
 }

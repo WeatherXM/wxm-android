@@ -10,6 +10,7 @@ import androidx.annotation.StringRes
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewErrorCardBinding
 import com.weatherxm.util.setHtml
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 class ErrorCardView : LinearLayout {
 
@@ -76,12 +77,24 @@ class ErrorCardView : LinearLayout {
         return this
     }
 
-    fun htmlMessage(@StringRes resId: Int, arg: String? = null): ErrorCardView {
+    fun htmlMessage(
+        @StringRes resId: Int,
+        arg: String? = null,
+        linkClickedListener: (() -> Unit)? = null
+    ): ErrorCardView {
         binding.message.apply {
             if (arg.isNullOrEmpty()) {
                 setHtml(resId)
             } else {
                 setHtml(resId, arg)
+            }
+            if (linkClickedListener != null) {
+                movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                    setOnLinkClickListener { _, _ ->
+                        linkClickedListener.invoke()
+                        return@setOnLinkClickListener true
+                    }
+                }
             }
             visibility = View.VISIBLE
         }

@@ -12,12 +12,16 @@ import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimDeviceHeliumVerifyBinding
+import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceViewModel
 import com.weatherxm.util.onTextChanged
+import org.koin.android.ext.android.inject
 
 class ClaimHeliumDeviceVerifyFragment : Fragment() {
     private val parentModel: ClaimHeliumDeviceViewModel by activityViewModels()
     private val model: ClaimHeliumDeviceVerifyViewModel by viewModels()
+    private val navigator: Navigator by inject()
+
     private lateinit var binding: FragmentClaimDeviceHeliumVerifyBinding
 
     // Register the launcher and result handler for QR code scanner
@@ -84,7 +88,17 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
 
         model.onVerifyError().observe(viewLifecycleOwner) {
             if (it) {
-                binding.errorCard.htmlMessage(R.string.wrong_combination_message)
+                binding.errorCard.htmlMessage(R.string.wrong_combination_message) {
+                    navigator.sendSupportEmail(
+                        context = context,
+                        subject = getString(R.string.support_email_subject_helium_verify_failed),
+                        body = getString(
+                            R.string.support_email_body_claiming_helium,
+                            parentModel.getDevEUI(),
+                            parentModel.getDeviceKey()
+                        )
+                    )
+                }
                 binding.errorCard.show()
             }
         }

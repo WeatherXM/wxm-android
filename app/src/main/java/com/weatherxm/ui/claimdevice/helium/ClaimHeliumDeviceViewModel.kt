@@ -9,8 +9,8 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
 class ClaimHeliumDeviceViewModel : ViewModel(), KoinComponent {
-    private lateinit var devEUI: String
-    private lateinit var deviceKey: String
+    private var devEUI: String = ""
+    private var deviceKey: String = ""
 
     private val onCancel = MutableLiveData(false)
     private val onNext = MutableLiveData(false)
@@ -26,6 +26,14 @@ class ClaimHeliumDeviceViewModel : ViewModel(), KoinComponent {
 
     fun setDeviceKey(key: String) {
         deviceKey = key
+    }
+
+    fun getDevEUI(): String {
+        return devEUI
+    }
+
+    fun getDeviceKey(): String {
+        return deviceKey
     }
 
     fun resetAndPair() {
