@@ -205,15 +205,15 @@ dependencies {
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:1.1.5"
 
     // Android Jetpack libraries
-    implementation "androidx.activity:activity-ktx:1.5.1"
-    implementation "androidx.annotation:annotation:1.4.0"
+    implementation "androidx.activity:activity-ktx:1.6.0"
+    implementation "androidx.annotation:annotation:1.5.0"
     implementation "androidx.appcompat:appcompat:1.5.1"
     implementation "androidx.browser:browser:1.4.0"
     implementation "androidx.collection:collection-ktx:1.2.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     implementation "androidx.core:core-ktx:1.9.0"
     implementation "androidx.core:core-splashscreen:1.0.0"
-    implementation "androidx.fragment:fragment-ktx:1.5.2"
+    implementation "androidx.fragment:fragment-ktx:1.5.3"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
@@ -267,10 +267,10 @@ dependencies {
     implementation "com.github.fondesa:kpermissions:3.3.0"
 
     // Dependency Injection
-    implementation "io.insert-koin:koin-android:3.2.1"
+    implementation "io.insert-koin:koin-android:3.2.2"
 
     // Data types and more
-    implementation platform("io.arrow-kt:arrow-stack:1.1.2")
+    implementation platform("io.arrow-kt:arrow-stack:1.1.3")
     implementation "io.arrow-kt:arrow-core"
     implementation "io.arrow-kt:arrow-fx-coroutines"
 
@@ -281,7 +281,7 @@ dependencies {
     implementation "dev.chrisbanes.insetter:insetter:0.6.1"
 
     // Import the Firebase BoM
-    implementation platform("com.google.firebase:firebase-bom:30.4.1")
+    implementation platform("com.google.firebase:firebase-bom:30.5.0")
     implementation "com.google.firebase:firebase-crashlytics-ktx"
     implementation "com.google.firebase:firebase-perf-ktx"
     implementation "com.google.firebase:firebase-config-ktx"
