@@ -26,7 +26,6 @@ private const val Y_AXIS_1_DECIMAL_GRANULARITY = 0.1F
 private const val Y_AXIS_PRECIP_INCHES_GRANULARITY = 0.01F
 private const val Y_AXIS_PRESSURE_INHG_GRANULARITY = 0.01F
 private const val X_AXIS_DEFAULT_TIME_GRANULARITY = 3F
-private const val X_AXIS_GRANULARITY_1_HOUR = 1F
 
 @Suppress("MagicNumber")
 private fun LineChart.setDefaultSettings(chartData: LineChartData) {
@@ -58,11 +57,7 @@ private fun LineChart.setDefaultSettings(chartData: LineChartData) {
     with(xAxis) {
         position = XAxis.XAxisPosition.BOTTOM
         setDrawAxisLine(false)
-        granularity = if (chartData.entries.size in 2..3) {
-            X_AXIS_GRANULARITY_1_HOUR
-        } else {
-            X_AXIS_DEFAULT_TIME_GRANULARITY
-        }
+        granularity = X_AXIS_DEFAULT_TIME_GRANULARITY
         axisLineColor = resources.getColor(R.color.chart_axis_line_color, context.theme)
         gridColor = resources.getColor(R.color.colorBackground, context.theme)
         textColor = resources.getColor(R.color.colorOnSurface, context.theme)
@@ -410,8 +405,8 @@ fun LineChart.initializeWind24hChart(
 }
 
 @Suppress("MagicNumber")
-fun BarChart.initializeUV24hChart(data: BarChartData) {
-    val dataSet = BarDataSet(data.entries, data.name)
+fun BarChart.initializeUV24hChart(chartData: BarChartData) {
+    val dataSet = BarDataSet(chartData.entries, chartData.name)
     val barData = BarData(dataSet)
     setData(barData)
 
@@ -419,7 +414,7 @@ fun BarChart.initializeUV24hChart(data: BarChartData) {
     description.isEnabled = false
     legend.isEnabled = false
     legend.textColor = resources.getColor(R.color.colorOnSurface, context.theme)
-    marker = CustomDefaultMarkerView(context, data.timestamps, data.name, data.unit)
+    marker = CustomDefaultMarkerView(context, chartData.timestamps, chartData.name, chartData.unit)
     extraBottomOffset = CHART_BOTTOM_OFFSET
 
     // Bar and highlight Settings
@@ -441,7 +436,7 @@ fun BarChart.initializeUV24hChart(data: BarChartData) {
         axisMinimum = 0F
         isGranularityEnabled = true
         granularity = 1F
-        valueFormatter = CustomYAxisFormatter(data.unit)
+        valueFormatter = CustomYAxisFormatter(chartData.unit)
         textColor = resources.getColor(R.color.colorOnSurface, context.theme)
         axisLineColor = resources.getColor(R.color.chart_axis_line_color, context.theme)
         gridColor = resources.getColor(R.color.colorBackground, context.theme)
@@ -454,13 +449,9 @@ fun BarChart.initializeUV24hChart(data: BarChartData) {
         position = XAxis.XAxisPosition.BOTTOM
         setDrawAxisLine(false)
         setDrawGridLines(false)
-        valueFormatter = CustomXAxisFormatter(data.timestamps)
+        valueFormatter = CustomXAxisFormatter(chartData.timestamps)
         textColor = resources.getColor(R.color.colorOnSurface, context.theme)
-        granularity = if (data.entries.size in 2..3) {
-            X_AXIS_GRANULARITY_1_HOUR
-        } else {
-            X_AXIS_DEFAULT_TIME_GRANULARITY
-        }
+        granularity = X_AXIS_DEFAULT_TIME_GRANULARITY
         axisLineColor = resources.getColor(R.color.chart_axis_line_color, context.theme)
         gridColor = resources.getColor(R.color.colorBackground, context.theme)
     }
