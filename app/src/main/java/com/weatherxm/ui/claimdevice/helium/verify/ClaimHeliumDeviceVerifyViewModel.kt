@@ -18,10 +18,12 @@ class ClaimHeliumDeviceVerifyViewModel : ViewModel(), KoinComponent {
     private val onVerifyError = MutableLiveData(false)
     fun onVerifyError() = onVerifyError
 
+    @Suppress("MagicNumber")
     fun getEUIFromScanner(result: String?): String {
         return result?.take(16) ?: ""
     }
 
+    @Suppress("MagicNumber")
     fun getKeyFromScanner(result: String?): String {
         return result?.substring(16..31) ?: ""
     }

@@ -28,6 +28,12 @@ class InformationCardView : LinearLayout {
         defStyleAttr
     ) {
         init(context, attrs)
+    }
+
+    private fun init(context: Context?, attrs: AttributeSet? = null) {
+        binding = ViewInformationCardBinding.inflate(LayoutInflater.from(context), this)
+        orientation = VERTICAL
+        gravity = Gravity.CENTER
 
         this.context.theme.obtainStyledAttributes(attrs, R.styleable.InformationCardView, 0, 0)
             .apply {
@@ -37,12 +43,6 @@ class InformationCardView : LinearLayout {
                     recycle()
                 }
             }
-    }
-
-    private fun init(context: Context?, attrs: AttributeSet? = null) {
-        binding = ViewInformationCardBinding.inflate(LayoutInflater.from(context), this)
-        orientation = VERTICAL
-        gravity = Gravity.CENTER
     }
 
     fun message(@StringRes resId: Int): InformationCardView {

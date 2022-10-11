@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.databinding.ListItemSelectDeviceTypeBinding
-import com.weatherxm.ui.AvailableDeviceType
-import com.weatherxm.ui.DeviceType
+import com.weatherxm.ui.claimdevice.AvailableDeviceType
+import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.util.ResourcesHelper
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

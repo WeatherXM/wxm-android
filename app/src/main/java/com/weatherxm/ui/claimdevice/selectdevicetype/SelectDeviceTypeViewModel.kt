@@ -1,7 +1,7 @@
 package com.weatherxm.ui.claimdevice.selectdevicetype
 
 import androidx.lifecycle.ViewModel
-import com.weatherxm.ui.AvailableDeviceType
+import com.weatherxm.ui.claimdevice.AvailableDeviceType
 import com.weatherxm.usecases.SelectDeviceTypeUseCase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

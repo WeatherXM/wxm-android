@@ -90,3 +90,8 @@ data class UIDevice(
     val currentWeather: HourlyWeather?,
     var tokenInfo: TokenInfo?
 ) : Parcelable
+
+enum class DeviceType {
+    M5_WIFI,
+    HELIUM
+}

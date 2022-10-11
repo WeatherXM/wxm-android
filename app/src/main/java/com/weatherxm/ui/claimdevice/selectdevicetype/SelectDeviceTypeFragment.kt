@@ -8,7 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weatherxm.databinding.FragmentSelectDeviceTypeBinding
-import com.weatherxm.ui.DeviceType
+import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.home.HomeViewModel
 
 class SelectDeviceTypeFragment : BottomSheetDialogFragment() {

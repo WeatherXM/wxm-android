@@ -98,16 +98,10 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
          * based on selected navigation item and dismiss snackbar if shown
          */
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (snackbar?.isShown == true) {
-                snackbar?.dismiss()
-            }
+            if (snackbar?.isShown == true) snackbar?.dismiss()
             when (destination.id) {
-                R.id.navigation_devices -> {
-                    binding.addDevice.showIfNot()
-                }
-                else -> {
-                    binding.addDevice.hideIfNot()
-                }
+                R.id.navigation_devices -> binding.addDevice.showIfNot()
+                else -> binding.addDevice.hideIfNot()
             }
             binding.devicesCountCard.visibility = View.GONE
         }
@@ -121,15 +115,11 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         }
 
         homeViewModel.onClaimHelium().observe(this) {
-            if (it) {
-                navigator.showClaimHelium(claimDeviceLauncher, this)
-            }
+            if (it) navigator.showClaimHelium(claimDeviceLauncher, this)
         }
 
         homeViewModel.onClaimM5().observe(this) {
-            if (it) {
-                navigator.showClaimM5(claimDeviceLauncher, this)
-            }
+            if (it) navigator.showClaimM5(claimDeviceLauncher, this)
         }
 
         // Disable BottomNavigationView bottom padding, added by default, and add margin
