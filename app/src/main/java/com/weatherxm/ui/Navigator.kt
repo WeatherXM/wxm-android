@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.weatherxm.R
 import com.weatherxm.data.Device
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity
 import com.weatherxm.ui.claimdevice.helium.pairingstatus.PairingStatusFragment

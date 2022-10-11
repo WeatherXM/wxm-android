@@ -10,7 +10,6 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityTokenBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.UITransaction
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.token.TokenViewModel.Companion.TransactionExplorer
 import com.weatherxm.util.applyInsets

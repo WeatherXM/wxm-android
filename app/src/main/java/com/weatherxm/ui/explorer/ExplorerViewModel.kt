@@ -12,10 +12,7 @@ import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.SingleLiveEvent
-import com.weatherxm.ui.ExplorerCamera
-import com.weatherxm.ui.ExplorerData
-import com.weatherxm.ui.UIDevice
-import com.weatherxm.ui.UIHex
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.MapboxUtils
 import com.weatherxm.util.UIErrors.getDefaultMessage

@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.databinding.ListItemDailyForecastBinding
-import com.weatherxm.ui.DailyForecast
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.roundToDecimals
 

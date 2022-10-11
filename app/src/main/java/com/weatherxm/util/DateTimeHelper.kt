@@ -11,49 +11,19 @@ import com.weatherxm.data.HOUR_FORMAT_24H
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
-import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
-import java.time.ZoneId
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.absoluteValue
 
-@Suppress("TooManyFunctions")
 object DateTimeHelper : KoinComponent {
 
     private val formatter24h: DateTimeFormatter by inject(named(HOUR_FORMAT_24H))
     private val formatter12hFull: DateTimeFormatter by inject(named(HOUR_FORMAT_12H_FULL))
     private val formatter12hHourOnly: DateTimeFormatter by inject(named(HOUR_FORMAT_12H_HOUR_ONLY))
     private val formatterMonthDay: DateTimeFormatter by inject(named(DATE_FORMAT_MONTH_DAY))
-
-    fun getNowInTimezone(timezone: String? = null): ZonedDateTime {
-        if (timezone == null) {
-            return ZonedDateTime.now()
-        }
-        val tz = ZoneId.of(timezone)
-        return ZonedDateTime.now(tz)
-    }
-
-    fun getTimezone(): String {
-        return ZoneId.systemDefault().toString()
-    }
-
-    fun getLocalDate(timeInISO: String?): LocalDate {
-        return ZonedDateTime.parse(timeInISO).toLocalDate()
-    }
-
-    fun getFormattedDate(zonedDateTime: ZonedDateTime): String {
-        return getLocalDate(zonedDateTime.toString()).toString()
-    }
-
-    fun dateToLocalDate(date: String?): LocalDate {
-        return LocalDate.parse(date)
-    }
-
-    fun getFormattedDate(timeInISO: String?): String {
-        return ZonedDateTime.parse(timeInISO).toLocalDate().toString()
-    }
 
     fun getHourMinutesFromISO(
         context: Context,
@@ -72,19 +42,19 @@ object DateTimeHelper : KoinComponent {
         }
     }
 
-    private fun ZonedDateTime.isYesterday(): Boolean {
-        val now = ZonedDateTime.now(this.zone)
-        return now.minusDays(1).dayOfYear == this.dayOfYear
-    }
-
-    private fun ZonedDateTime.isToday(): Boolean {
-        val now = ZonedDateTime.now(this.zone)
-        return now.dayOfYear == this.dayOfYear
-    }
-
-    fun ZonedDateTime.isTomorrow(): Boolean {
-        val now = ZonedDateTime.now(this.zone)
-        return now.dayOfYear == this.minusDays(1).dayOfYear
+    fun LocalDateTime.getFormattedTime(
+        context: Context,
+        showMinutes12HourFormat: Boolean = true
+    ): String {
+        return if (DateFormat.is24HourFormat(context)) {
+            format(formatter24h)
+        } else {
+            if (showMinutes12HourFormat) {
+                format(formatter12hFull)
+            } else {
+                format(formatter12hHourOnly)
+            }
+        }
     }
 
     fun ZonedDateTime.getFormattedDay(context: Context, showFullName: Boolean = false): String {
@@ -134,21 +104,6 @@ object DateTimeHelper : KoinComponent {
         ).toString()
     }
 
-    private fun LocalDate.isYesterday(): Boolean {
-        val now = LocalDate.now()
-        return now.minusDays(1).dayOfYear == this.dayOfYear
-    }
-
-    fun LocalDate.isToday(): Boolean {
-        val now = LocalDate.now()
-        return now.dayOfYear == this.dayOfYear
-    }
-
-    fun LocalDate.isTomorrow(): Boolean {
-        val now = LocalDate.now()
-        return now.dayOfYear == this.minusDays(1).dayOfYear
-    }
-
     fun LocalDate.getFormattedRelativeDay(
         context: Context,
         fullName: Boolean = false
@@ -165,30 +120,6 @@ object DateTimeHelper : KoinComponent {
                 }
                 "$nameOfDay ${format(formatterMonthDay)}"
             }
-        }
-    }
-
-    private fun DayOfWeek.getName(context: Context): String {
-        return when (this) {
-            DayOfWeek.MONDAY -> context.getString(R.string.monday)
-            DayOfWeek.TUESDAY -> context.getString(R.string.tuesday)
-            DayOfWeek.WEDNESDAY -> context.getString(R.string.wednesday)
-            DayOfWeek.THURSDAY -> context.getString(R.string.thursday)
-            DayOfWeek.FRIDAY -> context.getString(R.string.friday)
-            DayOfWeek.SATURDAY -> context.getString(R.string.saturday)
-            DayOfWeek.SUNDAY -> context.getString(R.string.sunday)
-        }
-    }
-
-    fun DayOfWeek.getShortName(context: Context): String {
-        return when (this) {
-            DayOfWeek.MONDAY -> context.getString(R.string.mon)
-            DayOfWeek.TUESDAY -> context.getString(R.string.tue)
-            DayOfWeek.WEDNESDAY -> context.getString(R.string.wed)
-            DayOfWeek.THURSDAY -> context.getString(R.string.thu)
-            DayOfWeek.FRIDAY -> context.getString(R.string.fri)
-            DayOfWeek.SATURDAY -> context.getString(R.string.sat)
-            DayOfWeek.SUNDAY -> context.getString(R.string.sun)
         }
     }
 

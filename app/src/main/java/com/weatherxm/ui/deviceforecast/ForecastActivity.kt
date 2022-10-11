@@ -9,7 +9,6 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityForecastBinding
-import com.weatherxm.ui.DailyForecast
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import timber.log.Timber

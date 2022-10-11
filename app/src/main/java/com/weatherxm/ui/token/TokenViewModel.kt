@@ -6,15 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
-import com.weatherxm.ui.UITransaction
 import com.weatherxm.usecases.TokenUseCase
-import com.weatherxm.util.DateTimeHelper.getFormattedDate
-import com.weatherxm.util.DateTimeHelper.getNowInTimezone
 import com.weatherxm.util.UIErrors.getDefaultMessage
+import com.weatherxm.util.toISODate
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
+import java.time.ZonedDateTime
 
 class TokenViewModel : ViewModel(), KoinComponent {
     companion object {
@@ -28,8 +27,8 @@ class TokenViewModel : ViewModel(), KoinComponent {
     private var hasNextPage = false
     private var blockNewPageRequest = false
     private var reachedTotal = false
-    private var currFromDate = getNowInTimezone().minusMonths(FETCH_INTERVAL_MONTHS)
-    private var currToDate = getNowInTimezone()
+    private var currFromDate = ZonedDateTime.now().minusMonths(FETCH_INTERVAL_MONTHS)
+    private var currToDate = ZonedDateTime.now()
     private val currentShownTransactions = mutableListOf<UITransaction>()
 
     private val onFirstPageTransactions = MutableLiveData<Resource<List<UITransaction>>>().apply {
@@ -45,7 +44,7 @@ class TokenViewModel : ViewModel(), KoinComponent {
     fun fetchFirstPageTransactions(deviceId: String) {
         onFirstPageTransactions.postValue(Resource.loading())
         viewModelScope.launch {
-            tokenUseCase.getTransactions(deviceId, currentPage, getFormattedDate(currFromDate))
+            tokenUseCase.getTransactions(deviceId, currentPage, currFromDate.toISODate())
                 .map {
                     Timber.d("Got Transactions: ${it.uiTransactions}")
                     hasNextPage = it.hasNextPage
@@ -69,8 +68,8 @@ class TokenViewModel : ViewModel(), KoinComponent {
                 tokenUseCase.getTransactions(
                     deviceId,
                     currentPage,
-                    getFormattedDate(currFromDate),
-                    getFormattedDate(currToDate)
+                    currFromDate.toISODate(),
+                    currToDate.toISODate()
                 ).map {
                     Timber.d("Got Transactions: ${it.uiTransactions}")
                     hasNextPage = it.hasNextPage
@@ -92,8 +91,8 @@ class TokenViewModel : ViewModel(), KoinComponent {
                 tokenUseCase.getTransactions(
                     deviceId,
                     currentPage,
-                    getFormattedDate(currFromDate),
-                    getFormattedDate(currToDate)
+                    currFromDate.toISODate(),
+                    currToDate.toISODate()
                 ).map {
                     Timber.d("Got Transactions: ${it.uiTransactions}")
                     hasNextPage = it.hasNextPage

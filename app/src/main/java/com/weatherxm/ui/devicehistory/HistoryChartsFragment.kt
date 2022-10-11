@@ -11,9 +11,6 @@ import com.github.mikephil.charting.charts.LineChart
 import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentHistoryChartsBinding
-import com.weatherxm.ui.BarChartData
-import com.weatherxm.ui.HistoryCharts
-import com.weatherxm.ui.LineChartData
 import com.weatherxm.util.initializeHumidity24hChart
 import com.weatherxm.util.initializePrecipitation24hChart
 import com.weatherxm.util.initializePressure24hChart

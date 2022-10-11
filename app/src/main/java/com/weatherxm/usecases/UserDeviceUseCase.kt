@@ -5,7 +5,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.UserActionError
-import com.weatherxm.ui.TokenInfo
+import com.weatherxm.ui.common.TokenInfo
 import kotlinx.coroutines.flow.Flow
 
 interface UserDeviceUseCase {

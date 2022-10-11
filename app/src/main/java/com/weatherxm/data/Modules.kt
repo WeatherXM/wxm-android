@@ -89,8 +89,8 @@ import com.weatherxm.data.repository.WeatherForecastRepositoryImpl
 import com.weatherxm.data.repository.WeatherHistoryRepository
 import com.weatherxm.data.repository.WeatherHistoryRepositoryImpl
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.UIHexJsonAdapter
 import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
+import com.weatherxm.ui.explorer.UIHexJsonAdapter
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.AuthUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase

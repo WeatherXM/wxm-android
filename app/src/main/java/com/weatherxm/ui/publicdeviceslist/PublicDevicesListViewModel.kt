@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.Resource
-import com.weatherxm.ui.UIDevice
-import com.weatherxm.ui.UIHex
+import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.explorer.UIHex
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.Dispatchers
