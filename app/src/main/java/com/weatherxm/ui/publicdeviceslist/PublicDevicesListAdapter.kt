@@ -8,20 +8,15 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.databinding.ListItemDeviceBinding
-import com.weatherxm.ui.UIDevice
-import com.weatherxm.util.DateTimeHelper.getRelativeTimeFromISO
-import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.publicdeviceslist.PublicDevicesListAdapter.PublicDeviceViewHolder
+import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Weather
 import com.weatherxm.util.setTextAndColor
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class PublicDevicesListAdapter(
     private val publicDeviceListener: (UIDevice) -> Unit
-) : ListAdapter<UIDevice,
-    PublicDevicesListAdapter.PublicDeviceViewHolder>(PublicDeviceDiffCallback()), KoinComponent {
-
-    val resHelper: ResourcesHelper by inject()
+) : ListAdapter<UIDevice, PublicDeviceViewHolder>(PublicDeviceDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PublicDeviceViewHolder {
         val binding = ListItemDeviceBinding
@@ -55,13 +50,14 @@ class PublicDevicesListAdapter(
                 Weather.getFormattedTemperature(item.currentWeather?.temperature, 1)
 
             device.lastWeatherStationActivity?.let {
-                binding.lastSeen.text = itemView.resources.getString(
-                    R.string.last_active,
-                    getRelativeTimeFromISO(
-                        it,
-                        itemView.resources.getString(R.string.last_active_just_now)
+                with(binding.lastSeen) {
+                    context.getString(
+                        R.string.last_active,
+                        it.getRelativeFormattedTime(
+                            fallbackIfTooSoon = context.getString(R.string.last_active_just_now)
+                        )
                     )
-                )
+                }
             }
 
             // Hide them as we are not showing token-related data in public devices list for now

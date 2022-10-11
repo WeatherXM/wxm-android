@@ -1,6 +1,5 @@
 package com.weatherxm.data.database.entities
 
-import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import com.weatherxm.data.HourlyWeather
@@ -8,10 +7,8 @@ import java.time.ZonedDateTime
 
 @Entity(primaryKeys = ["device_id", "timestamp"])
 data class DeviceHourlyHistory(
-    @NonNull
     @ColumnInfo(name = "device_id")
     val deviceId: String,
-    @NonNull
     @ColumnInfo(name = "timestamp")
     val timestamp: ZonedDateTime,
     @ColumnInfo(name = "temperature")
@@ -40,7 +37,7 @@ data class DeviceHourlyHistory(
         fun fromHourlyWeather(deviceId: String, hourlyWeather: HourlyWeather): DeviceHourlyHistory {
             return DeviceHourlyHistory(
                 deviceId,
-                ZonedDateTime.parse(hourlyWeather.timestamp),
+                hourlyWeather.timestamp,
                 hourlyWeather.temperature,
                 hourlyWeather.precipitation,
                 hourlyWeather.precipProbability,

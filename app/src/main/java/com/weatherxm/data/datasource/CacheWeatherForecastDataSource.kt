@@ -2,51 +2,41 @@ package com.weatherxm.data.datasource
 
 import androidx.collection.ArrayMap
 import arrow.core.Either
+import arrow.core.flatMap
+import arrow.core.rightIfNotNull
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.WeatherData
-import com.weatherxm.data.map
-import com.weatherxm.data.network.ApiService
+import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
-
-class NetworkWeatherForecastDataSource(private val apiService: ApiService) :
-    WeatherForecastDataSource {
-
-    override suspend fun getForecast(
-        deviceId: String,
-        fromDate: String,
-        toDate: String,
-        exclude: String?
-    ): Either<Failure, List<WeatherData>> {
-        return apiService.getForecast(deviceId, fromDate, toDate, exclude).map()
-    }
-
-    override suspend fun setForecast(deviceId: String, forecast: List<WeatherData>) {
-        // No-op
-    }
-
-    override suspend fun clear() {
-        // No-op
-    }
-}
 
 /**
  * In-memory user cache. Could be expanded to use SharedPreferences or a different cache.
  */
 class CacheWeatherForecastDataSource : WeatherForecastDataSource {
 
+    companion object {
+        // Default cache expiration time 15 minutes
+        val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
+    }
+
     private var forecasts: ArrayMap<String, TimedForecastData> = ArrayMap()
 
     override suspend fun getForecast(
         deviceId: String,
-        fromDate: String,
-        toDate: String,
+        fromDate: ZonedDateTime,
+        toDate: ZonedDateTime,
         exclude: String?
     ): Either<Failure, List<WeatherData>> {
-        return forecasts[deviceId]?.let {
-            if (it.isExpired()) Either.Left(DataError.CacheExpiredError)
-            else Either.Right(it.value)
-        } ?: Either.Left(DataError.CacheMissError)
+        return forecasts[deviceId].rightIfNotNull {
+            DataError.CacheMissError
+        }.flatMap {
+            if (it.isExpired()) {
+                Either.Left(DataError.CacheExpiredError)
+            } else {
+                Either.Right(it.value)
+            }
+        }
     }
 
     override suspend fun setForecast(deviceId: String, forecast: List<WeatherData>) {
@@ -59,8 +49,7 @@ class CacheWeatherForecastDataSource : WeatherForecastDataSource {
 
     data class TimedForecastData(
         val value: List<WeatherData>,
-        // Default cache expiration: 15 minutes
-        private val cacheExpirationTime: Long = TimeUnit.MINUTES.toMillis(15)
+        private val cacheExpirationTime: Long = DEFAULT_CACHE_EXPIRATION
     ) {
         private val creationTime: Long = now()
 

@@ -5,7 +5,6 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.WeatherData
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
-import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 import java.time.ZonedDateTime
@@ -41,20 +40,19 @@ class WeatherForecastRepositoryImpl(
             clearCache()
         }
 
-        val from = getFormattedDate(fromDate)
         val to = if (ChronoUnit.DAYS.between(fromDate, toDate) < PREFETCH_DAYS) {
-            getFormattedDate(fromDate.plusDays(PREFETCH_DAYS))
+            fromDate.plusDays(PREFETCH_DAYS)
         } else {
-            getFormattedDate(toDate)
+            toDate
         }
 
-        return cacheSource.getForecast(deviceId, from, to)
+        return cacheSource.getForecast(deviceId, fromDate, to)
             .tap {
-                Timber.d("Got forecast from cache [$from to $to].")
+                Timber.d("Got forecast from cache [$fromDate to $to].")
             }
             .mapLeft {
-                return networkSource.getForecast(deviceId, from, to).tap {
-                    Timber.d("Got forecast from network [$from to $to].")
+                return networkSource.getForecast(deviceId, fromDate, to).tap {
+                    Timber.d("Got forecast from network [$fromDate to $to].")
                     cacheSource.setForecast(deviceId, it)
                 }
             }

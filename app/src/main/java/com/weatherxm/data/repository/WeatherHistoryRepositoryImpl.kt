@@ -1,14 +1,16 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
+import arrow.core.filterOrElse
+import arrow.core.handleErrorWith
+import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
 import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
-import com.weatherxm.util.DateTimeHelper.dateToLocalDate
-import com.weatherxm.util.DateTimeHelper.getLocalDate
 import org.koin.core.component.KoinComponent
-import java.time.ZonedDateTime
+import timber.log.Timber
+import java.time.LocalDate
 
 class WeatherHistoryRepositoryImpl(
     private val networkSource: NetworkWeatherHistoryDataSource,
@@ -17,60 +19,51 @@ class WeatherHistoryRepositoryImpl(
 
     override suspend fun getHourlyWeatherHistory(
         deviceId: String,
-        fromDate: String,
-        toDate: String
+        date: LocalDate,
+        forceUpdate: Boolean
     ): Either<Failure, List<HourlyWeather>> {
-
-        val savedData =
-            databaseSource.getWeatherHistory(deviceId, fromDate, toDate, null)
-
-        /*
-        * OPTIMIZATION:
-        * Get the latest saved day. If it is after the fromDate we want to fetch data from
-        * then change that fromDate to the next day after the last saved day.
-         */
-        var lastTimestampSaved: String? = null
-        savedData.map {
-            lastTimestampSaved = if (it.isNotEmpty()) it.last().timestamp else null
-        }.mapLeft {
-            null
-        }
-
-        val newFromDate = if (
-            lastTimestampSaved != null
-            && getLocalDate(lastTimestampSaved).isAfter(dateToLocalDate(fromDate))
-        ) {
-            getLocalDate(lastTimestampSaved).plusDays(1).toString()
+        return if (forceUpdate) {
+            Timber.d("Forced update. Skipping db.")
+            getHistoryFromNetwork(deviceId, date)
         } else {
-            fromDate
+            Timber.d("Non-forced update. Trying db first.")
+            getHistoryFromDatabase(deviceId, date)
+                .handleErrorWith {
+                    getHistoryFromNetwork(deviceId, date)
+                }
         }
+    }
 
-        return networkSource.getWeatherHistory(
-            deviceId,
-            newFromDate,
-            toDate,
-            "daily"
-        ).map { networkData ->
-            // Save the "new" days (skipping the current day/toDate) in db asynchronously
-            networkData
-                .filter {
-                    getLocalDate(it.timestamp) != ZonedDateTime.now().toLocalDate()
+    private suspend fun getHistoryFromDatabase(
+        deviceId: String,
+        date: LocalDate
+    ): Either<Failure, List<HourlyWeather>> {
+        return databaseSource.getWeatherHistory(deviceId, date, date)
+            .map {
+                Timber.d("Got device history from db")
+                it.filter { hourly ->
+                    hourly.timestamp.toLocalDate().toEpochDay() == date.toEpochDay()
                 }
-                .apply {
-                    if (isNotEmpty()) {
-                        databaseSource.setWeatherHistory(deviceId, this)
-                    }
-                }
-
-            // Return a combination of saved and new data
-            val dataToReturn = mutableListOf<HourlyWeather>()
-
-            savedData.map {
-                dataToReturn.addAll(it)
             }
-            dataToReturn.addAll(networkData)
+            .filterOrElse({ it.isNotEmpty() }, { DataError.DatabaseMissError })
+            .tapLeft {
+                Timber.d("No data in db for $date")
+            }
+    }
 
-            dataToReturn.toList()
-        }
+    private suspend fun getHistoryFromNetwork(
+        deviceId: String,
+        date: LocalDate
+    ): Either<Failure, List<HourlyWeather>> {
+        Timber.d("Get device history from network")
+        return networkSource.getWeatherHistory(deviceId, date, date)
+            .tap {
+                if (it.isNotEmpty()) {
+                    Timber.d("Save data in db ${it.first().timestamp..it.last().timestamp}")
+                    databaseSource.setWeatherHistory(deviceId, it)
+                } else {
+                    Timber.d("No data to save in db!")
+                }
+            }
     }
 }

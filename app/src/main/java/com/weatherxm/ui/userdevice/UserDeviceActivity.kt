@@ -19,7 +19,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.databinding.ActivityUserDeviceBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
-import com.weatherxm.util.DateTimeHelper.getRelativeTimeFromISO
+import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setColor
 import com.weatherxm.util.setHtml
@@ -250,7 +250,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         val lastActive = device.attributes?.lastWeatherStationActivity?.let {
             getString(
                 R.string.last_active,
-                getRelativeTimeFromISO(it, getString(R.string.last_active_just_now))
+                it.getRelativeFormattedTime(getString(R.string.last_active_just_now))
             )
         }
 

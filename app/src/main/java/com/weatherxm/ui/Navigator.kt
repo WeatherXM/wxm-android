@@ -10,11 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.weatherxm.R
 import com.weatherxm.data.Device
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.deviceforecast.ForecastActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
-import com.weatherxm.ui.devicehistory.HistoryChartsFragment
 import com.weatherxm.ui.explorer.ExplorerActivity
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
@@ -156,13 +156,6 @@ class Navigator {
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(HistoryActivity.ARG_DEVICE, device)
         )
-    }
-
-    fun showHistoryCharts(fragmentManager: FragmentManager, device: Device) {
-        fragmentManager
-            .beginTransaction()
-            .replace(R.id.historyView, HistoryChartsFragment.newInstance(device))
-            .commit()
     }
 
     fun showForecast(context: Context, device: Device?) {

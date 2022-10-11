@@ -9,15 +9,14 @@ import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.SharedPreferencesRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.WeatherForecastRepository
-import com.weatherxm.ui.TokenInfo
-import com.weatherxm.util.DateTimeHelper.getFormattedDate
-import com.weatherxm.util.DateTimeHelper.getLocalDate
-import com.weatherxm.util.DateTimeHelper.getNowInTimezone
-import com.weatherxm.util.DateTimeHelper.getTimezone
-import kotlinx.coroutines.CoroutineDispatcher
+import com.weatherxm.ui.common.TokenInfo
+import com.weatherxm.util.isToday
+import com.weatherxm.util.isTomorrow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.runBlocking
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -57,33 +56,30 @@ class UserDeviceUseCaseImpl(
     // We suppress magic number because we use specific numbers to check last month and last week
     @Suppress("MagicNumber")
     override suspend fun getTokenInfoLast30D(deviceId: String): Either<Failure, TokenInfo> {
-        val now = getNowInTimezone()
         // Last 29 days of transactions + today = 30 days
-        val fromDate = getLocalDate(now.minusDays(29).toString()).toString()
-        val timezone = getTimezone()
-
-        return tokenRepository.getAllTransactionsInRange(deviceId, timezone, fromDate)
-            .map {
-                TokenInfo().fromLastAndDatedTxs(it)
-            }
+        val fromDate = ZonedDateTime.now().minusDays(29).toLocalDate().toString()
+        return tokenRepository.getAllTransactionsInRange(
+            deviceId = deviceId,
+            fromDate = fromDate
+        ).map {
+            TokenInfo().fromLastAndDatedTxs(it)
+        }
     }
 
     override suspend fun getTodayAndTomorrowForecast(
         device: Device,
         forceRefresh: Boolean
     ): Either<Failure, List<HourlyWeather>> {
-        val now = getNowInTimezone(device.timezone)
-        val today = getFormattedDate(now)
-        val tomorrow = getFormattedDate(now.plusDays(1))
-
+        val dateStart = ZonedDateTime.now(ZoneId.of(device.timezone))
+        val dateEnd = dateStart.plusDays(1)
         return weatherForecastRepository.getDeviceForecast(
             device.id,
-            now,
-            now.plusDays(1),
+            dateStart,
+            dateEnd,
             forceRefresh
         ).map { response ->
             response
-                .filter { it.date.equals(today) || it.date.equals(tomorrow) }
+                .filter { it.date.isToday() || it.date.isTomorrow() }
                 .mapNotNull { it.hourly }
                 .flatten()
         }

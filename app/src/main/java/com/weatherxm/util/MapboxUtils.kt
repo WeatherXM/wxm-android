@@ -2,8 +2,8 @@ package com.weatherxm.util
 
 import com.google.gson.JsonObject
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
-import com.weatherxm.ui.UIHex
-import com.weatherxm.ui.UIHexJsonAdapter
+import com.weatherxm.ui.explorer.UIHex
+import com.weatherxm.ui.explorer.UIHexJsonAdapter
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

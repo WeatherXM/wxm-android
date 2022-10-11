@@ -7,30 +7,29 @@ import com.weatherxm.data.Transaction
 import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.data.TransactionsResponse
 import com.weatherxm.data.datasource.TokenDataSource
-import com.weatherxm.util.DateTimeHelper
-import com.weatherxm.util.DateTimeHelper.dateToLocalDate
 import com.weatherxm.util.Tokens.roundTokens
 import java.time.LocalDate
+import java.time.ZoneId
 
 interface TokenRepository {
     suspend fun getTransactions(
         deviceId: String,
         page: Int?,
-        timezone: String?,
+        timezone: String? = ZoneId.systemDefault().toString(),
         fromDate: String?,
         toDate: String? = null
     ): Either<Failure, TransactionsResponse>
 
     suspend fun getAllTransactionsInRange(
         deviceId: String,
-        timezone: String?,
+        timezone: String? = ZoneId.systemDefault().toString(),
         fromDate: String?,
         toDate: String? = null
     ): Either<Failure, LastAndDatedTxs>
 
     suspend fun getAllPublicTransactionsInRange(
         deviceId: String,
-        timezone: String?,
+        timezone: String? = ZoneId.systemDefault().toString(),
         fromDate: String?,
         toDate: String? = null
     ): Either<Failure, LastAndDatedTxs>
@@ -108,11 +107,7 @@ class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenR
             .map {
                 txs.addAll(it.data)
                 if (it.hasNextPage) {
-                    val newPage = if (page == null) {
-                        1
-                    } else {
-                        page + 1
-                    }
+                    val newPage = if (page == null) 1 else page + 1
 
                     // Keep getting the TXs recursively
                     getTxsRecursively(txs, deviceId, newPage, pageSize, timezone, fromDate, toDate)
@@ -120,7 +115,7 @@ class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenR
             }
 
         val lastReward = if (txs.isNotEmpty()) txs[0] else null
-        val datedTxs = createDatedTransactionsList(dateToLocalDate(fromDate), txs)
+        val datedTxs = createDatedTransactionsList(LocalDate.parse(fromDate), txs)
         return Either.Right(LastAndDatedTxs(lastReward, datedTxs))
     }
 
@@ -169,7 +164,7 @@ class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenR
             }
 
         val lastReward = if (txs.isNotEmpty()) txs[0] else null
-        val datedTxs = createDatedTransactionsList(dateToLocalDate(fromDate), txs)
+        val datedTxs = createDatedTransactionsList(LocalDate.parse(fromDate), txs)
         return Either.Right(LastAndDatedTxs(lastReward, datedTxs))
     }
 
@@ -192,7 +187,7 @@ class TokenRepositoryImpl(private val tokenDataSource: TokenDataSource) : TokenR
             .filter { it.actualReward != null && it.actualReward > 0.0F }
             .forEach { tx ->
                 tx.actualReward?.let {
-                    val date = DateTimeHelper.getLocalDate(tx.timestamp)
+                    val date = tx.timestamp.toLocalDate()
                     val amountForDate = datesAndTxs.getOrDefault(date, 0.0F)
 
                     /*

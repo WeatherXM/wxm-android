@@ -16,9 +16,9 @@ import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentPublicDeviceDetailsBinding
-import com.weatherxm.ui.UIDevice
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.ExplorerViewModel
-import com.weatherxm.util.DateTimeHelper
+import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.setColor
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -143,7 +143,7 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
         binding.lastActive.text = device?.lastWeatherStationActivity?.let {
             getString(
                 R.string.last_active,
-                DateTimeHelper.getRelativeTimeFromISO(it, getString(R.string.last_active_just_now))
+                it.getRelativeFormattedTime(getString(R.string.last_active_just_now))
             )
         }
 

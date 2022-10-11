@@ -13,16 +13,14 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.TokenRepository
-import com.weatherxm.ui.ExplorerData
-import com.weatherxm.ui.TokenInfo
-import com.weatherxm.ui.UIDevice
-import com.weatherxm.ui.UIHex
+import com.weatherxm.ui.common.TokenInfo
+import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.explorer.ExplorerData
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
-import com.weatherxm.util.DateTimeHelper.getLocalDate
-import com.weatherxm.util.DateTimeHelper.getNowInTimezone
-import com.weatherxm.util.DateTimeHelper.getTimezone
+import com.weatherxm.ui.explorer.UIHex
 import com.weatherxm.util.ResourcesHelper
+import java.time.ZonedDateTime
 
 
 interface ExplorerUseCase {
@@ -63,7 +61,10 @@ class ExplorerUseCaseImpl(
             val geoJsonSource = heatmap.featureCollection(FeatureCollection.fromFeatures(
                 it.map { hex ->
                     Feature.fromGeometry(Point.fromLngLat(hex.center.lon, hex.center.lat)).apply {
-                        this.addNumberProperty(ExplorerUseCase.DEVICE_COUNT_KEY, hex.deviceCount)
+                        this.addNumberProperty(
+                            ExplorerUseCase.DEVICE_COUNT_KEY,
+                            hex.deviceCount
+                        )
                     }
                 }
             ))
@@ -110,15 +111,15 @@ class ExplorerUseCaseImpl(
     // We suppress magic number because we use specific numbers to check last month and last week
     @Suppress("MagicNumber")
     override suspend fun getTokenInfoLast30D(deviceId: String): Either<Failure, TokenInfo> {
-        val now = getNowInTimezone()
         // Last 29 days of transactions + today = 30 days
-        val fromDate = getLocalDate(now.minusDays(28).toString()).toString()
-        val timezone = getTimezone()
+        val fromDate = ZonedDateTime.now().minusDays(29).toLocalDate().toString()
 
-        return tokenRepository.getAllPublicTransactionsInRange(deviceId, timezone, fromDate)
-            .map {
-                TokenInfo().fromLastAndDatedTxs(it)
-            }
+        return tokenRepository.getAllPublicTransactionsInRange(
+            deviceId = deviceId,
+            fromDate = fromDate
+        ).map {
+            TokenInfo().fromLastAndDatedTxs(it)
+        }
     }
 }
 

@@ -4,7 +4,11 @@ import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.AuthDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSource
+import com.weatherxm.data.datasource.CacheUserDataSource
+import com.weatherxm.data.datasource.CacheWalletDataSource
+import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.CredentialsDataSource
+import com.weatherxm.data.datasource.HttpCacheDataSource
 
 interface AuthRepository {
     suspend fun login(username: String, password: String): Either<Failure, String>
@@ -19,10 +23,15 @@ interface AuthRepository {
     suspend fun resetPassword(email: String): Either<Failure, Unit>
 }
 
+@Suppress("LongParameterList")
 class AuthRepositoryImpl(
     private val authTokenDatasource: AuthTokenDataSource,
     private val credentialsDatasource: CredentialsDataSource,
-    private val authDataSource: AuthDataSource
+    private val authDataSource: AuthDataSource,
+    private val userDataSource: CacheUserDataSource,
+    private val walletDataSource: CacheWalletDataSource,
+    private val weatherForecastDataSource: CacheWeatherForecastDataSource,
+    private val httpCacheDataSource: HttpCacheDataSource
 ) : AuthRepository {
 
     override suspend fun login(username: String, password: String): Either<Failure, String> {
@@ -32,6 +41,10 @@ class AuthRepositoryImpl(
     override suspend fun logout() {
         authTokenDatasource.clear()
         credentialsDatasource.clear()
+        userDataSource.clear()
+        walletDataSource.clear()
+        weatherForecastDataSource.clear()
+        httpCacheDataSource.clear()
     }
 
     override suspend fun isLoggedIn(): Either<Error, String> {

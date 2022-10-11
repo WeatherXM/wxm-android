@@ -10,22 +10,18 @@ import com.weatherxm.R
 import com.weatherxm.data.Transaction
 import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.databinding.ViewTokenCardBinding
-import com.weatherxm.ui.TokenInfo
-import com.weatherxm.ui.TokenValuesChart
-import com.weatherxm.util.DateTimeHelper.getHourMinutesFromISO
-import com.weatherxm.util.DateTimeHelper.getRelativeDayFromISO
-import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.ui.common.TokenInfo
+import com.weatherxm.ui.common.TokenValuesChart
+import com.weatherxm.util.DateTimeHelper.getFormattedDay
+import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Tokens
 import com.weatherxm.util.Tokens.formatTokens
 import com.weatherxm.util.Tokens.formatValue
 import com.weatherxm.util.setChildrenEnabled
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
-open class TokenCardView : LinearLayout, KoinComponent {
+open class TokenCardView : LinearLayout {
 
     private lateinit var binding: ViewTokenCardBinding
-    val resHelper: ResourcesHelper by inject()
 
     private var tokenInfo: TokenInfo? = null
 
@@ -96,7 +92,7 @@ open class TokenCardView : LinearLayout, KoinComponent {
     }
 
     private fun updateLastReward(data: Transaction?) {
-        binding.lastReward.text =  data?.actualReward?.let {
+        binding.lastReward.text = data?.actualReward?.let {
             resources.getString(R.string.reward, formatTokens(it))
         } ?: resources.getString(R.string.reward, formatTokens(0F))
 
@@ -112,10 +108,9 @@ open class TokenCardView : LinearLayout, KoinComponent {
             if (data?.timestamp == null) {
                 visibility = View.GONE
             } else {
-                val day = getRelativeDayFromISO(resHelper, data.timestamp, true)
-                val time = getHourMinutesFromISO(context, data.timestamp)
-                val dateAndTime = "$day, $time"
-                text = dateAndTime
+                val day = data.timestamp.getFormattedDay(context, true)
+                val time = data.timestamp.getFormattedTime(context)
+                text = listOf(day, time).joinToString(separator = ", ")
             }
         }
     }

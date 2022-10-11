@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.databinding.ListItemTokenTransactionBinding
-import com.weatherxm.ui.UITransaction
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Tokens.formatTokens
 import com.weatherxm.util.Tokens.getRewardScoreColor

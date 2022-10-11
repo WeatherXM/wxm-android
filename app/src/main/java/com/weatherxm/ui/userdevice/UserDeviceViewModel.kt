@@ -12,13 +12,13 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
-import com.weatherxm.ui.TokenInfo
-import com.weatherxm.ui.UIError
+import com.weatherxm.ui.common.TokenInfo
+import com.weatherxm.ui.common.UIError
 import com.weatherxm.usecases.UserDeviceUseCase
-import com.weatherxm.util.DateTimeHelper.isTomorrow
 import com.weatherxm.util.RefreshHandler
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
+import com.weatherxm.util.isTomorrow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.map
@@ -26,7 +26,6 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import java.time.ZonedDateTime
 import java.util.concurrent.TimeUnit
 
 @Suppress("TooManyFunctions")
@@ -177,7 +176,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch(Dispatchers.IO) {
             userDeviceUseCase.getUserDevice(device.id)
                 .map {
-                    Timber.d("Got User Device: $it")
+                    Timber.d("Got User Device: ${it.name}")
                     device = it
                     onDeviceSet.postValue(device)
                 }
@@ -259,7 +258,7 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     }
 
     fun isHourlyWeatherTomorrow(hourlyWeather: HourlyWeather?): Boolean {
-        return ZonedDateTime.parse(hourlyWeather?.timestamp).isTomorrow()
+        return hourlyWeather?.timestamp?.isTomorrow() ?: false
     }
 
     fun getPositionOfTomorrowFirstItem(currentForecasts: List<HourlyWeather>): Int {

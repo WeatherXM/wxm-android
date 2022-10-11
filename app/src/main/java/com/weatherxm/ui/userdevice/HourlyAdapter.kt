@@ -40,7 +40,9 @@ class HourlyAdapter : ListAdapter<HourlyWeather, HourlyViewHolder>(HourlyDiffCal
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: HourlyWeather) {
-            binding.time.text = getHourMinutesFromISO(itemView.context, item.timestamp, false)
+            binding.time.text = getHourMinutesFromISO(
+                itemView.context, item.timestamp.toString(), false
+            )
             binding.temperature.text = Weather.getFormattedTemperature(item.temperature)
             binding.precipitation.text =
                 Weather.getFormattedPrecipitationProbability(item.precipProbability)
