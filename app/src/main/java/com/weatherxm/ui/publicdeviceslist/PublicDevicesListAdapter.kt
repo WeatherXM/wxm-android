@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.databinding.ListItemDeviceBinding
-import com.weatherxm.ui.UIDevice
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.publicdeviceslist.PublicDevicesListAdapter.PublicDeviceViewHolder
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Weather

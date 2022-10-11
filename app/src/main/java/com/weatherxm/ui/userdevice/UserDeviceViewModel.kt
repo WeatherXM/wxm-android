@@ -12,13 +12,13 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
-import com.weatherxm.ui.TokenInfo
-import com.weatherxm.ui.UIError
+import com.weatherxm.ui.common.TokenInfo
+import com.weatherxm.ui.common.UIError
 import com.weatherxm.usecases.UserDeviceUseCase
-import com.weatherxm.util.DateTimeHelper.isTomorrow
 import com.weatherxm.util.RefreshHandler
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
+import com.weatherxm.util.isTomorrow
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.map

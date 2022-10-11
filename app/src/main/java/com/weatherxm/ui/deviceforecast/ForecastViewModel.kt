@@ -11,15 +11,15 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.data.repository.WeatherForecastRepositoryImpl.Companion.PREFETCH_DAYS
-import com.weatherxm.ui.DailyForecast
 import com.weatherxm.usecases.ForecastUseCase
-import com.weatherxm.util.DateTimeHelper.getNowInTimezone
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class ForecastViewModel : ViewModel(), KoinComponent {
 
@@ -42,7 +42,9 @@ class ForecastViewModel : ViewModel(), KoinComponent {
     fun getWeatherForecast(forceRefresh: Boolean = false) {
         onForecast.postValue(Resource.loading())
         viewModelScope.launch {
-            val fromDate = getNowInTimezone(device.timezone)
+            val fromDate = device.timezone?.let {
+                ZonedDateTime.now(ZoneId.of(it))
+            } ?: ZonedDateTime.now()
             val toDate = fromDate.plusDays(PREFETCH_DAYS)
             forecastUseCase.getDailyForecast(device.id, fromDate, toDate, forceRefresh)
                 .map { forecast ->

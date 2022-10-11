@@ -7,13 +7,19 @@ class LocalDateRange(
     override val endInclusive: LocalDate
 ) : ClosedRange<LocalDate>, Iterable<LocalDate> {
 
+    fun start() = start
+
+    fun end() = endInclusive
+
+    fun all() = map { it }
+
     override fun iterator() = LocalDateIterator(start, endInclusive)
 
     override fun equals(other: Any?): Boolean {
-        return other is LocalDateRange && start == other.start && endInclusive == other.endInclusive
+        return other is LocalDateRange && start() == other.start() && end() == other.end()
     }
 
-    override fun toString() = "LocalDateRange($start...$endInclusive]"
+    override fun toString() = "LocalDateRange[${start()}...${end()}]"
 
     override fun hashCode(): Int = toString().hashCode()
 }
@@ -40,3 +46,18 @@ class LocalDateIterator(
 }
 
 operator fun LocalDate.rangeTo(other: LocalDate) = LocalDateRange(this, other)
+
+fun LocalDate.isYesterday(): Boolean {
+    val now = LocalDate.now()
+    return now.minusDays(1).dayOfYear == this.dayOfYear
+}
+
+fun LocalDate.isToday(): Boolean {
+    val now = LocalDate.now()
+    return now.dayOfYear == this.dayOfYear
+}
+
+fun LocalDate.isTomorrow(): Boolean {
+    val now = LocalDate.now()
+    return now.dayOfYear == this.minusDays(1).dayOfYear
+}

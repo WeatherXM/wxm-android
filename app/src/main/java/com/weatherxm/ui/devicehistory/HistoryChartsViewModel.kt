@@ -9,7 +9,6 @@ import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
-import com.weatherxm.ui.HistoryCharts
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.util.DateTimeHelper.getDateRangeFromToday
 import com.weatherxm.util.ResourcesHelper

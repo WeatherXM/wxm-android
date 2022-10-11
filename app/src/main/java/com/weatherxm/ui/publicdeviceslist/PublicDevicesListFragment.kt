@@ -11,7 +11,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentPublicDevicesListBinding
-import com.weatherxm.ui.UIDevice
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import timber.log.Timber
 

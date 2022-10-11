@@ -10,8 +10,8 @@ import com.weatherxm.R
 import com.weatherxm.data.Transaction
 import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.databinding.ViewTokenCardBinding
-import com.weatherxm.ui.TokenInfo
-import com.weatherxm.ui.TokenValuesChart
+import com.weatherxm.ui.common.TokenInfo
+import com.weatherxm.ui.common.TokenValuesChart
 import com.weatherxm.util.DateTimeHelper.getFormattedDay
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Tokens

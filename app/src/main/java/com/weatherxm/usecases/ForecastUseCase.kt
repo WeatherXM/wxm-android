@@ -5,8 +5,8 @@ import arrow.core.Either
 import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
 import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.WeatherForecastRepository
-import com.weatherxm.ui.DailyForecast
-import com.weatherxm.util.DateTimeHelper.getShortName
+import com.weatherxm.ui.deviceforecast.DailyForecast
+import com.weatherxm.util.getShortName
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named

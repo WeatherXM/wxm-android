@@ -32,7 +32,6 @@
     <color name="chart_popup_text_color">@color/light_top</color>
     <color name="chart_primary_line">@color/light_darker_blue</color>
     <color name="chart_secondary_line">@color/light_lightest_blue</color>
-    <color name="chart_feels_like_fill_color">#F1AA3E</color>
 
     <!-- Explorer -->
     <color name="hex_fill_color">#3388ff</color>
