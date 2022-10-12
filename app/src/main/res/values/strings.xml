@@ -159,6 +159,7 @@
     <string name="success_claim_device"><![CDATA[You claimed the device: <br><b>%s</b>]]></string>
     <string name="action_devices_list">View device list</string>
     <string name="action_quit_claiming">Quit Claiming</string>
+    <string name="location">Location</string>
 
     <!-- Claim M5 -->
     <string name="title_claim_m5_device">Claim M5 Device</string>

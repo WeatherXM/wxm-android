@@ -6,11 +6,16 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.weatherxm.R
 import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
 import com.weatherxm.ui.claimdevice.ClaimDeviceLocationFragment
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_LOCATION
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_RESET
 import com.weatherxm.ui.claimdevice.helium.reset.ClaimHeliumDeviceResetFragment
 import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumDeviceVerifyFragment
 import com.weatherxm.util.applyInsets
+import com.weatherxm.util.setIcon
+import com.weatherxm.util.setIconAndColor
 
 class ClaimHeliumDeviceActivity : AppCompatActivity() {
     private val model: ClaimHeliumDeviceViewModel by viewModels()
@@ -41,7 +46,20 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
         }
 
         model.onNext().observe(this) {
-            if (it) binding.pager.currentItem += 1
+            with(binding) {
+                if (it) pager.currentItem += 1
+
+                when (pager.currentItem) {
+                    PAGE_RESET -> {
+                        verify.setIconAndColor(R.drawable.ic_checkmark, R.color.success_tint)
+                        resetAndPair.setIcon(R.drawable.ic_two_filled)
+                    }
+                    PAGE_LOCATION -> {
+                        resetAndPair.setIconAndColor(R.drawable.ic_checkmark, R.color.success_tint)
+                        location.setIcon(R.drawable.ic_three_filled)
+                    }
+                }
+            }
         }
     }
 
@@ -49,6 +67,9 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
         activity: AppCompatActivity
     ) : FragmentStateAdapter(activity) {
         companion object {
+            const val PAGE_VERIFY = 0
+            const val PAGE_RESET = 1
+            const val PAGE_LOCATION = 2
             const val PAGE_COUNT = 3
         }
 

@@ -15,6 +15,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
@@ -88,6 +89,15 @@ fun TabLayout.createAndAddTab(text: String) {
 fun Chip.setTextAndColor(@StringRes text: Int, color: Int) {
     this.setChipBackgroundColorResource(color)
     this.text = this.resources.getString(text)
+}
+
+fun Chip.setIcon(@DrawableRes drawable: Int) {
+    this.chipIcon = ResourcesCompat.getDrawable(resources, drawable, context.theme)
+}
+
+fun Chip.setIconAndColor(@DrawableRes drawable: Int, color: Int) {
+    this.setChipBackgroundColorResource(color)
+    this.chipIcon = ResourcesCompat.getDrawable(resources, drawable, context.theme)
 }
 
 fun ImageView.setColor(@ColorRes color: Int) {

@@ -203,6 +203,17 @@
     <!--
         Chips
     -->
+    <style name="Widget.WeatherXM.Chip.Navigation" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="chipBackgroundColor">@color/colorSurface</item>
+        <item name="android:textSize">12sp</item>
+        <item name="chipIconSize">20dp</item>
+        <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="android:clickable">false</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipCornerRadius">20dp</item>
+    </style>
+
     <style name="Widget.WeatherXM.Chip.Status" parent="Widget.MaterialComponents.Chip.Action">
         <item name="android:textColor">@color/dark_background</item>
         <item name="android:textSize">12sp</item>
