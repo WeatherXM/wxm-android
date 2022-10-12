@@ -39,6 +39,11 @@ class PairingStatusFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.closeButton.setOnClickListener {
+            // TODO: What else other than dismiss?!
+            dismiss()
+        }
+
         binding.quitClaiming.setOnClickListener {
             parentModel.cancel()
         }
@@ -71,7 +76,6 @@ class PairingStatusFragment : BottomSheetDialogFragment() {
                 }
             }
             Status.LOADING -> {
-                binding.buttonsContainer.visibility = View.GONE
                 binding.empty.clear()
                 binding.empty.animation(R.raw.anim_loading)
                 binding.empty.title(R.string.pairing_device)

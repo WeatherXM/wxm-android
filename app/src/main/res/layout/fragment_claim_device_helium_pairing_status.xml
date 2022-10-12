@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,34 +16,35 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/statusContainer"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/closeButton"
+                style="@style/Widget.WeatherXM.ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/ic_close"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.weatherxm.ui.widget.EmptyView
+                android:id="@+id/empty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/margin_extra_extra_large"
-                android:scrollbars="vertical"
+                android:paddingBottom="@dimen/padding_extra_large"
+                app:empty_animation="@raw/anim_loading"
+                app:empty_subtitle="Pairing Device"
+                app:empty_title="Pairing Device"
                 app:layout_constraintBottom_toTopOf="@id/buttonsContainer"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <com.weatherxm.ui.widget.EmptyView
-                    android:id="@+id/empty"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    app:empty_animation="@raw/anim_weather_clear_day"
-                    app:empty_subtitle="Pairing Device"
-                    app:empty_title="Pairing Device" />
-
-            </androidx.core.widget.NestedScrollView>
+                app:layout_constraintTop_toBottomOf="@id/closeButton" />
 
             <LinearLayout
                 android:id="@+id/buttonsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:baselineAligned="false"
                 android:orientation="horizontal"
+                android:visibility="invisible"
                 android:weightSum="2"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:visibility="visible">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/quitClaiming"
