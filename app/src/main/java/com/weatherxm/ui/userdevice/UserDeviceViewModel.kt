@@ -29,7 +29,7 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 @Suppress("TooManyFunctions")
-class UserDeviceViewModel : ViewModel(), KoinComponent {
+class UserDeviceViewModel(var device: Device) : ViewModel(), KoinComponent {
     companion object {
         private const val REFRESH_INTERVAL_SECONDS = 30L
     }
@@ -39,8 +39,6 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     private val refreshHandler = RefreshHandler(
         refreshIntervalMillis = TimeUnit.SECONDS.toMillis(REFRESH_INTERVAL_SECONDS)
     )
-
-    private lateinit var device: Device
 
     private val onDeviceSet = MutableLiveData<Device>()
 
@@ -69,14 +67,6 @@ class UserDeviceViewModel : ViewModel(), KoinComponent {
     fun onTokens(): LiveData<TokenInfo> = onTokens
 
     fun onUnitPreferenceChanged(): LiveData<Boolean> = onUnitPreferenceChanged
-
-    fun setDevice(device: Device) {
-        this.device = device
-    }
-
-    fun getDevice(): Device {
-        return device
-    }
 
     fun fetchTokensForecastData(forceRefresh: Boolean = false) {
         onLoading.postValue(true)

@@ -21,12 +21,10 @@ import timber.log.Timber
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-class ForecastViewModel : ViewModel(), KoinComponent {
+class ForecastViewModel(val device: Device) : ViewModel(), KoinComponent {
 
     private val forecastUseCase: ForecastUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
-
-    private lateinit var device: Device
 
     // All charts currently visible
     private val onForecast = MutableLiveData<Resource<List<DailyForecast>>>().apply {
@@ -34,10 +32,6 @@ class ForecastViewModel : ViewModel(), KoinComponent {
     }
 
     fun onForecast(): LiveData<Resource<List<DailyForecast>>> = onForecast
-
-    fun setDevice(device: Device) {
-        this.device = device
-    }
 
     fun getWeatherForecast(forceRefresh: Boolean = false) {
         onForecast.postValue(Resource.loading())
