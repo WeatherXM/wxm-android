@@ -52,10 +52,14 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
                 when (pager.currentItem) {
                     PAGE_RESET -> {
                         verify.setIconAndColor(R.drawable.ic_checkmark, R.color.success_tint)
+                        verify.setChipIconTintResource(R.color.dark_background)
+                        verify.setTextColor(getColor(R.color.dark_background))
                         resetAndPair.setIcon(R.drawable.ic_two_filled)
                     }
                     PAGE_LOCATION -> {
                         resetAndPair.setIconAndColor(R.drawable.ic_checkmark, R.color.success_tint)
+                        resetAndPair.setChipIconTintResource(R.color.dark_background)
+                        resetAndPair.setTextColor(getColor(R.color.dark_background))
                         location.setIcon(R.drawable.ic_three_filled)
                     }
                 }
