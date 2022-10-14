@@ -45,7 +45,7 @@ class WeatherHistoryRepositoryImpl(
                     hourly.timestamp.toLocalDate().toEpochDay() == date.toEpochDay()
                 }
             }
-            .filterOrElse({ it.isNotEmpty() }, { DataError.DatabaseMissError })
+            .filterOrElse({ isDateComplete(date, it) }, { DataError.DatabaseMissError })
             .tapLeft {
                 Timber.d("No data in db for $date")
             }
@@ -65,5 +65,49 @@ class WeatherHistoryRepositoryImpl(
                     Timber.d("No data to save in db!")
                 }
             }
+    }
+
+    /**
+     * Returns true if a data-day is complete. In this first implementation, since we know
+     * we are requesting hourly aggregations, it's safe to assume we need at least (or exactly)
+     * 24 hourly items and definitely values within 2 hours from the  the start/end of day.
+     *
+     * TODO This could be improved with a more sophisticated timeseries continuity check.
+     */
+    @SuppressWarnings("ReturnCount")
+    private fun isDateComplete(
+        date: LocalDate,
+        data: List<HourlyWeather>,
+        startOfDayMaxOffsetHours: Long = 2L,
+        endOfDayMaxOffsetHours: Long = 2L,
+        minHourlyLength: Long = 24L
+    ): Boolean {
+        if (data.isEmpty()) {
+            Timber.d("History for $date is empty")
+            return false
+        }
+
+        if (data.size < minHourlyLength) {
+            Timber.d("History for $date is too short (size=${data.size})")
+            return false
+        }
+
+        val tz = data.firstNotNullOfOrNull { it.timestamp.zone } ?: return false
+
+        // Check if the first element is within startOfDayMaxOffsetHours hours from the start of day
+        val startOfDay = date.atStartOfDay(tz)
+        if (data.first().timestamp.isAfter(startOfDay.plusHours(startOfDayMaxOffsetHours))) {
+            Timber.d("First hourly value for $date is too late)")
+            return false
+        }
+
+        // Check if the last element is within endOfDayMaxOffsetHours hours from the end of day
+        val endOfDay = date.plusDays(1).atStartOfDay(tz).minusNanos(1)
+        if (data.last().timestamp.isBefore(endOfDay.minusHours(endOfDayMaxOffsetHours))) {
+            Timber.d("First hourly value for $date is too late)")
+            return false
+        }
+
+        return true
     }
 }
