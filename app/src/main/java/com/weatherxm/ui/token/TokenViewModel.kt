@@ -74,8 +74,17 @@ class TokenViewModel : ViewModel(), KoinComponent {
                     Timber.d("Got Transactions: ${it.uiTransactions}")
                     hasNextPage = it.hasNextPage
                     reachedTotal = it.reachedTotal
-                    currentShownTransactions.addAll(it.uiTransactions)
-                    onNewTransactionsPage.postValue(Resource.success(currentShownTransactions))
+                    /*
+                     * There is an edge case where uiTransactions is empty, we have next page
+                     * and we need to hide the spinner (it's literally a success) in the UI,
+                     * but to not refresh the adapter. So we pass null on these occasions.
+                     */
+                    if (it.uiTransactions.isNotEmpty()) {
+                        currentShownTransactions.addAll(it.uiTransactions)
+                        onNewTransactionsPage.postValue(Resource.success(currentShownTransactions))
+                    } else {
+                        onNewTransactionsPage.postValue(Resource.success(null))
+                    }
                 }
 
                 blockNewPageRequest = false
@@ -98,7 +107,17 @@ class TokenViewModel : ViewModel(), KoinComponent {
                     hasNextPage = it.hasNextPage
                     reachedTotal = it.reachedTotal
                     currentShownTransactions.addAll(it.uiTransactions)
-                    onNewTransactionsPage.postValue(Resource.success(currentShownTransactions))
+                    /*
+                     * There is an edge case where uiTransactions is empty, we have next page
+                     * and we need to hide the spinner (it's literally a success) in the UI,
+                     * but to not refresh the adapter. So we pass null on these occasions.
+                     */
+                    if (it.uiTransactions.isNotEmpty()) {
+                        currentShownTransactions.addAll(it.uiTransactions)
+                        onNewTransactionsPage.postValue(Resource.success(currentShownTransactions))
+                    } else {
+                        onNewTransactionsPage.postValue(Resource.success(null))
+                    }
                 }
                 blockNewPageRequest = false
             }

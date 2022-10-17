@@ -76,9 +76,8 @@ class CustomTemperatureMarkerView(
         timeView.text = times?.get(entryClicked.x.toInt()) ?: ""
 
         // Get the correct temperature and feels like formatted with the correct decimal separator
-        val formattedTemperature = Weather.getFormattedTemperature(entryClicked.y, 1)
-        val formattedFeelsLike =
-            Weather.getFormattedTemperature(feelsLikeEntries?.get(entryClicked.x.toInt())?.y, 1)
+        val formattedTemperature = "%.${1}f".format(entryClicked.y)
+        val formattedFeelsLike = "%.${1}f".format(feelsLikeEntries?.get(entryClicked.x.toInt())?.y)
 
         temperatureView.text = "$temperatureTitle: $formattedTemperature"
         feelsLikeView.text = "$feelsLikeTitle: $formattedFeelsLike"

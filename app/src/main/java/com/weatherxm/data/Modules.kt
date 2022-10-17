@@ -89,8 +89,10 @@ import com.weatherxm.data.repository.WeatherForecastRepositoryImpl
 import com.weatherxm.data.repository.WeatherHistoryRepository
 import com.weatherxm.data.repository.WeatherHistoryRepositoryImpl
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.deviceforecast.ForecastViewModel
 import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
 import com.weatherxm.ui.explorer.UIHexJsonAdapter
+import com.weatherxm.ui.userdevice.UserDeviceViewModel
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.AuthUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase
@@ -527,6 +529,12 @@ private val utilities = module {
 }
 
 private val viewmodels = module {
+    viewModel { params ->
+        UserDeviceViewModel(device = params.get())
+    }
+    viewModel { params ->
+        ForecastViewModel(device = params.get())
+    }
     viewModel { params ->
         HistoryChartsViewModel(device = params.get())
     }

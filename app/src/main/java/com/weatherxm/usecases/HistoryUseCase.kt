@@ -72,6 +72,7 @@ class HistoryUseCaseImpl(
         var windDirectionFound: Boolean
         var pressureFound: Boolean
         var humidityFound: Boolean
+        var uvIndexFound: Boolean
 
         LocalDateTimeRange(
             date.atStartOfDay(),
@@ -85,6 +86,7 @@ class HistoryUseCaseImpl(
             windDirectionFound = false
             pressureFound = false
             humidityFound = false
+            uvIndexFound = false
             val counter = i.toFloat()
 
             // Set showMinutes12Format as false
@@ -151,6 +153,7 @@ class HistoryUseCaseImpl(
 
                     hourlyWeather.uvIndex?.let {
                         uvIndexEntries.add(BarEntry(counter, it.toFloat()))
+                        uvIndexFound = true
                     }
                 }
             }
@@ -163,6 +166,7 @@ class HistoryUseCaseImpl(
             if (!windDirectionFound) windDirectionEntries.add(Entry(counter, Float.NaN))
             if (!pressureFound) pressureEntries.add(Entry(counter, Float.NaN))
             if (!humidityFound) humidityEntries.add(Entry(counter, Float.NaN))
+            if (!uvIndexFound) uvIndexEntries.add(BarEntry(counter, 0.0F))
         }
 
         return HistoryCharts(
