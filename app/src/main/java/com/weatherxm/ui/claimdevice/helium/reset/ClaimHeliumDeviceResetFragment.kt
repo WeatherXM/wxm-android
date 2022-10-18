@@ -30,16 +30,11 @@ class ClaimHeliumDeviceResetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.cancel.setOnClickListener {
-            parentModel.cancel()
+        binding.nextButton.setOnClickListener {
+            parentModel.next()
         }
 
-        binding.resetAndPairButton.setOnClickListener {
-            navigator.showHeliumPairingStatus(requireActivity().supportFragmentManager)
-            parentModel.resetAndPair()
-        }
-
-        binding.firstStep.setHtml(R.string.reset_and_pair_first_step)
-        binding.secondStep.setHtml(R.string.reset_and_pair_second_step)
+        binding.firstStep.setHtml(R.string.reset_first_step)
+        binding.secondStep.setHtml(R.string.reset_second_step)
     }
 }

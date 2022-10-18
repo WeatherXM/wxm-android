@@ -29,29 +29,23 @@
         app:layout_constraintTop_toBottomOf="@id/app_bar">
 
         <com.google.android.material.chip.Chip
+            android:id="@+id/reset"
+            style="@style/Widget.WeatherXM.Chip.Navigation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/reset"
+            app:chipIcon="@drawable/ic_one_filled" />
+
+        <com.google.android.material.chip.Chip
             android:id="@+id/verify"
             style="@style/Widget.WeatherXM.Chip.Navigation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/action_verify"
-            app:chipIcon="@drawable/ic_one_filled"
-            app:chipIconTint="@color/colorOnSurface"
-            app:chipStrokeColor="@color/light_mid_grey"
-            app:chipStrokeWidth="1dp" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/resetAndPair"
-            style="@style/Widget.WeatherXM.Chip.Navigation"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_marginStart="-25dp"
-            android:layout_weight="1"
-            android:text="@string/reset_and_pair"
-            app:chipIcon="@drawable/ic_two_outlined"
-            app:chipIconTint="@color/colorOnSurface"
-            app:chipStrokeColor="@color/light_mid_grey"
-            app:chipStrokeWidth="1dp" />
+            android:text="@string/action_verify"
+            app:chipIcon="@drawable/ic_two_outlined" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/location"
@@ -61,10 +55,7 @@
             android:layout_marginStart="-25dp"
             android:layout_weight="1"
             android:text="@string/location"
-            app:chipIcon="@drawable/ic_three_outlined"
-            app:chipIconTint="@color/colorOnSurface"
-            app:chipStrokeColor="@color/light_mid_grey"
-            app:chipStrokeWidth="1dp" />
+            app:chipIcon="@drawable/ic_three_outlined" />
     </LinearLayout>
 
     <androidx.viewpager2.widget.ViewPager2

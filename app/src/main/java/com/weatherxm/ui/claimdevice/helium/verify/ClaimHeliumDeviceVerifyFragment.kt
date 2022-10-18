@@ -71,7 +71,7 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
                 binding.devKey.text.toString().trim()
             )
             // TODO: Remove this
-            parentModel.next()
+            navigator.showHeliumPairingStatus(requireActivity().supportFragmentManager)
         }
 
         model.onDevEUIError().observe(viewLifecycleOwner) {

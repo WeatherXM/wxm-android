@@ -206,11 +206,13 @@
     <style name="Widget.WeatherXM.Chip.Navigation" parent="Widget.MaterialComponents.Chip.Action">
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="chipBackgroundColor">@color/colorSurface</item>
+        <item name="chipIconTint">@color/colorOnSurface</item>
         <item name="android:textSize">12sp</item>
         <item name="chipIconSize">20dp</item>
         <item name="chipMinTouchTargetSize">0dp</item>
         <item name="android:clickable">false</item>
-        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipStrokeColor">@color/light_mid_grey</item>
         <item name="chipCornerRadius">20dp</item>
     </style>
 

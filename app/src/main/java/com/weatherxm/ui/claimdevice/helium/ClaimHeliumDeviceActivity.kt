@@ -10,7 +10,7 @@ import com.weatherxm.R
 import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
 import com.weatherxm.ui.claimdevice.ClaimDeviceLocationFragment
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_LOCATION
-import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_RESET
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_VERIFY
 import com.weatherxm.ui.claimdevice.helium.reset.ClaimHeliumDeviceResetFragment
 import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumDeviceVerifyFragment
 import com.weatherxm.util.applyInsets
@@ -50,16 +50,16 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
                 if (it) pager.currentItem += 1
 
                 when (pager.currentItem) {
-                    PAGE_RESET -> {
+                    PAGE_VERIFY -> {
+                        reset.setIconAndColor(R.drawable.ic_checkmark, R.color.success_tint)
+                        reset.setChipIconTintResource(R.color.dark_background)
+                        reset.setTextColor(getColor(R.color.dark_background))
+                        verify.setIcon(R.drawable.ic_two_filled)
+                    }
+                    PAGE_LOCATION -> {
                         verify.setIconAndColor(R.drawable.ic_checkmark, R.color.success_tint)
                         verify.setChipIconTintResource(R.color.dark_background)
                         verify.setTextColor(getColor(R.color.dark_background))
-                        resetAndPair.setIcon(R.drawable.ic_two_filled)
-                    }
-                    PAGE_LOCATION -> {
-                        resetAndPair.setIconAndColor(R.drawable.ic_checkmark, R.color.success_tint)
-                        resetAndPair.setChipIconTintResource(R.color.dark_background)
-                        resetAndPair.setTextColor(getColor(R.color.dark_background))
                         location.setIcon(R.drawable.ic_three_filled)
                     }
                 }
@@ -71,8 +71,8 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
         activity: AppCompatActivity
     ) : FragmentStateAdapter(activity) {
         companion object {
-            const val PAGE_VERIFY = 0
-            const val PAGE_RESET = 1
+            const val PAGE_RESET = 0
+            const val PAGE_VERIFY = 1
             const val PAGE_LOCATION = 2
             const val PAGE_COUNT = 3
         }
@@ -82,8 +82,8 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
         @Suppress("UseCheckOrError")
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> ClaimHeliumDeviceVerifyFragment()
-                1 -> ClaimHeliumDeviceResetFragment()
+                0 -> ClaimHeliumDeviceResetFragment()
+                1 -> ClaimHeliumDeviceVerifyFragment()
                 2 -> ClaimDeviceLocationFragment()
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }

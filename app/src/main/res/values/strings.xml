@@ -177,10 +177,9 @@
     <string name="wrong_combination">Wrong Combination</string>
     <string name="wrong_combination_message"><![CDATA[Dev EUI and Device Key combination is wrong! Please retype/rescan and try again.<br><br>If you still have problems, contact our support at <a>support@weatherxm.com</a>]]></string>
     <string name="reset_station">Reset Station</string>
-    <string name="reset_and_pair">Reset &amp; Pair</string>
-    <string name="reset_and_pair_first_step"><![CDATA[Press the <b>Reset Button</b> on the bottom of your WeatherXM device. You will need a pin or a small screwdriver to do this.]]></string>
-    <string name="reset_and_pair_second_step"><![CDATA[Tap the <b>Reset & Claim</b> button below.]]></string>
-    <string name="reset_and_pair_info_delay">This step might take up to two minutes due to Helium network bandwidth limitations!</string>
+    <string name="reset">Reset</string>
+    <string name="reset_first_step"><![CDATA[Press the <b>RESET hole</b> on the bottom of your WeatherXM device.]]></string>
+    <string name="reset_second_step"><![CDATA[Tap the <b>Next</b> button below.]]></string>
     <string name="pairing_device">Pairing Device</string>
     <string name="pairing_device_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to Helium network bandwidth limitations!<b>]]></string>
     <string name="pairing_failed">Pairing Failed</string>

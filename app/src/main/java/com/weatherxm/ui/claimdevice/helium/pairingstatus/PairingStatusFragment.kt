@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weatherxm.R
 import com.weatherxm.data.Resource
@@ -16,6 +17,7 @@ import org.koin.android.ext.android.inject
 
 class PairingStatusFragment : BottomSheetDialogFragment() {
     private val parentModel: ClaimHeliumDeviceViewModel by activityViewModels()
+    private val model: PairingStatusViewModel by viewModels()
     private val navigator: Navigator by inject()
     private lateinit var binding: FragmentClaimDeviceHeliumPairingStatusBinding
 
@@ -49,12 +51,14 @@ class PairingStatusFragment : BottomSheetDialogFragment() {
         }
 
         binding.tryAgain.setOnClickListener {
-            parentModel.resetAndPair()
+            model.pair()
         }
 
-        parentModel.onPairing().observe(viewLifecycleOwner) {
+        model.onPairing().observe(viewLifecycleOwner) {
             updateUI(it)
         }
+
+        model.pair()
     }
 
     private fun updateUI(result: Resource<String>) {
@@ -76,6 +80,7 @@ class PairingStatusFragment : BottomSheetDialogFragment() {
                 }
             }
             Status.LOADING -> {
+                binding.buttonsContainer.visibility = View.INVISIBLE
                 binding.empty.clear()
                 binding.empty.animation(R.raw.anim_loading)
                 binding.empty.title(R.string.pairing_device)
