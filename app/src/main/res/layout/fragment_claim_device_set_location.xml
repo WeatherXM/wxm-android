@@ -81,7 +81,6 @@
                 android:id="@+id/navigation_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 app:cardCornerRadius="0dp"
                 app:contentPadding="@dimen/padding_small"
                 app:contentPaddingBottom="@dimen/padding_normal"

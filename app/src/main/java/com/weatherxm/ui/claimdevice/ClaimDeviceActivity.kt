@@ -181,7 +181,7 @@ class ClaimDeviceActivity : AppCompatActivity() {
             return when (position) {
                 PAGE_INFORMATION -> ClaimDeviceInformationFragment()
                 PAGE_SERIAL_NUMBER -> ClaimDeviceSerialNumberFragment()
-                PAGE_LOCATION -> ClaimDeviceLocationFragment()
+                PAGE_LOCATION -> ClaimDeviceLocationFragment.newInstance(true)
                 PAGE_RESULT -> ClaimDeviceResultFragment()
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }

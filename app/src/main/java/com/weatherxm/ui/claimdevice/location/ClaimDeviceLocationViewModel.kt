@@ -33,11 +33,6 @@ import org.koin.core.component.inject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-/*
-* This suppress is needed because of the complexity of the claiming process where a lot of
-* fragments and an activity are involved and communication is needed between them
-*/
-@Suppress("TooManyFunctions")
 class ClaimDeviceLocationViewModel : ViewModel(), KoinComponent {
     // Current arbitrary values for the viewpager and the map
     companion object {

@@ -6,20 +6,46 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenCreated
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weatherxm.databinding.FragmentClaimDeviceSetLocationBinding
 import com.weatherxm.ui.claimdevice.ClaimDeviceViewModel
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceViewModel
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.hideKeyboard
 import com.weatherxm.util.onTextChanged
+import kotlinx.coroutines.launch
 
 class ClaimDeviceLocationFragment : Fragment() {
-    private val model: ClaimDeviceViewModel by activityViewModels()
+    private val m5ParentModel: ClaimDeviceViewModel by activityViewModels()
+    private val heliumParentModel: ClaimHeliumDeviceViewModel by activityViewModels()
     private val locationModel: ClaimDeviceLocationViewModel by activityViewModels()
     private lateinit var binding: FragmentClaimDeviceSetLocationBinding
 
     private lateinit var adapter: SearchResultsAdapter
     private lateinit var recyclerLayoutManager: LinearLayoutManager
+
+    private var hasBottomNavigationButtons: Boolean = false
+
+    companion object {
+        const val TAG = "ClaimDeviceLocationFragment"
+        private const val ARG_HAS_PAGER = "has_pager"
+
+        fun newInstance(hasBottomNavigationButtons: Boolean) = ClaimDeviceLocationFragment().apply {
+            arguments = Bundle().apply { putBoolean(ARG_HAS_PAGER, hasBottomNavigationButtons) }
+        }
+    }
+
+    init {
+        lifecycleScope.launch {
+            whenCreated {
+                arguments?.getBoolean(ARG_HAS_PAGER)?.let {
+                    hasBottomNavigationButtons = it
+                }
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,15 +64,18 @@ class ClaimDeviceLocationFragment : Fragment() {
             return
         }
 
-        model.nextButtonStatus(true)
+        if (hasBottomNavigationButtons) {
+            m5ParentModel.nextButtonStatus(true)
+            binding.navigationButtons.visibility = View.GONE
+        } else {
+            binding.cancel.setOnClickListener {
+                heliumParentModel.cancel()
+            }
 
-        binding.cancel.setOnClickListener {
-            model.cancel()
-        }
-
-        binding.confirmAndClaim.setOnClickListener {
-            locationModel.confirmLocation()
-            model.nextButtonClick()
+            binding.confirmAndClaim.setOnClickListener {
+                locationModel.confirmLocation()
+                heliumParentModel.next()
+            }
         }
 
         locationModel.onError().observe(viewLifecycleOwner) {
