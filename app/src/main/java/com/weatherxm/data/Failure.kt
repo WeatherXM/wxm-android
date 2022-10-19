@@ -88,4 +88,16 @@ sealed class UserActionError(val message: String? = null) : Failure() {
 }
 
 @Keep
-sealed class CancellationError(message: String? = null) : Failure()
+sealed class MapBoxError : Failure() {
+    object GeocodingError : MapBoxError()
+    sealed class ReverseGeocodingError : MapBoxError() {
+        object SearchResultNoAddressError : ReverseGeocodingError()
+        object SearchResultNotAccurateError : ReverseGeocodingError()
+        object SearchResultNotNearbyError : ReverseGeocodingError()
+        object SearchResultAddressFormatError : ReverseGeocodingError()
+    }
+    object SuggestionLocationError : MapBoxError()
+}
+
+@Keep
+object CancellationError : Failure()

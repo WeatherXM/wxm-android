@@ -2,21 +2,26 @@ package com.weatherxm.ui.deviceforecast
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityForecastBinding
+import com.weatherxm.ui.common.getParcelableExtra
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 class ForecastActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityForecastBinding
-    private val model: ForecastViewModel by viewModels()
+
+    private val model: ForecastViewModel by viewModel {
+        parametersOf(getParcelableExtra(ARG_DEVICE, Device.empty()))
+    }
 
     private lateinit var adapter: DailyForecastAdapter
 
@@ -35,17 +40,14 @@ class ForecastActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        val device = intent?.extras?.getParcelable<Device>(ARG_DEVICE)
-        if (device == null) {
+        if (model.device.isEmpty()) {
             Timber.d("Could not start ForecastActivity. Device is null.")
             toast(R.string.error_generic_message)
             finish()
             return
         }
 
-        model.setDevice(device)
-
-        binding.toolbar.subtitle = device.address ?: device.getNameOrLabel()
+        binding.toolbar.subtitle = model.device.address ?: model.device.getNameOrLabel()
 
         // Initialize the adapter with empty data
         adapter = DailyForecastAdapter()

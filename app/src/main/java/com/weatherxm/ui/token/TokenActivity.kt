@@ -108,8 +108,8 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
                 if (!resource.data.isNullOrEmpty()) {
                     adapter.submitList(resource.data)
                     adapter.notifyDataSetChanged()
-                    binding.loadingNewPage.visibility = View.GONE
                 }
+                binding.loadingNewPage.visibility = View.GONE
             }
             Status.ERROR -> {
                 Timber.d("Got error: $resource.message")

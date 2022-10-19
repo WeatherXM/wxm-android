@@ -40,6 +40,7 @@
     <!-- Explorer -->
     <string name="title_devices_count">Online Stations</string>
     <string name="devices_count">%d</string>
+    <string name="search_location">Search for location</string>
 
     <!-- Profile -->
     <string name="hello">Hello</string>
@@ -155,7 +156,9 @@
     <string name="device_serial_number_title">Device Serial Number</string>
     <string name="device_serial_number_hint">Enter the device\'s serial number</string>
     <string name="device_serial_number_instructions">The S/N is 18 characters long and looks like this: &lt;strong&gt;12:34:56:78:9A:BC:DE:F0:12&lt;/strong&gt;. You  can find it on your M5 device\'s screen. Please type only the letters and numbers.</string>
-    <string name="description_set_location">Please set your location in the map so you can proceed with claiming the device.</string>
+    <string name="confirm_location_installation">Confirm Location of Installation</string>
+    <string name="installation_location">Installation Location</string>
+    <string name="confirm_and_claim">Confirm and Claim</string>
     <string name="success_claim_device"><![CDATA[You claimed the device: <br><b>%s</b>]]></string>
     <string name="action_devices_list">View device list</string>
     <string name="action_quit_claiming">Quit Claiming</string>

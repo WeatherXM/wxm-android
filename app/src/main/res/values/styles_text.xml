@@ -16,6 +16,11 @@
         <item name="fontFamily">sans-serif-medium</item>
     </style>
 
+    <style name="TextAppearance.WeatherXM.Default.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
     <style name="TextAppearance.WeatherXM.Default.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
         <item name="android:textColor">@color/colorOnSurface</item>
     </style>
@@ -260,6 +265,13 @@
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="android:textStyle">italic</item>
         <item name="android:alpha">0.5</item>
+    </style>
+
+    <!--
+        Claiming Screens
+    -->
+    <style name="TextAppearance.WeatherXM.Claim.InMap" parent="TextAppearance.WeatherXM.Default.TitleMedium">
+        <item name="android:textColor">@color/dark_background</item>
     </style>
 
     <!--

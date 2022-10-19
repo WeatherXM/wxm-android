@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.lifecycle.Lifecycle
@@ -18,19 +17,23 @@ import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.ActivityUserDeviceBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.getParcelableExtra
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setColor
 import com.weatherxm.util.setHtml
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickListener {
-
-    private val model: UserDeviceViewModel by viewModels()
+    private val model: UserDeviceViewModel by viewModel {
+        parametersOf(getParcelableExtra(ARG_DEVICE, Device.empty()))
+    }
     private lateinit var binding: ActivityUserDeviceBinding
     private lateinit var hourlyAdapter: HourlyAdapter
     private lateinit var layoutManagerOfRecycler: LinearLayoutManager
@@ -66,14 +69,12 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
 
         binding.root.applyInsets()
 
-        val device = intent?.extras?.getParcelable<Device>(ARG_DEVICE)
-        if (device == null) {
+        if (model.device.isEmpty()) {
             Timber.d("Could not start UserDeviceActivity. Device is null.")
             toast(R.string.error_generic_message)
             finish()
             return
         }
-        model.setDevice(device)
 
         binding.toolbar.setOnMenuItemClickListener(this)
 
@@ -104,22 +105,22 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         }
 
         binding.historicalCharts.setOnClickListener {
-            navigator.showHistoryActivity(this, model.getDevice())
+            navigator.showHistoryActivity(this, model.device)
         }
 
         binding.forecastNextDays.setOnClickListener {
-            navigator.showForecast(this, model.getDevice())
+            navigator.showForecast(this, model.device)
         }
 
         binding.tokenRewards.setOnClickListener {
-            navigator.showTokenScreen(this, model.getDevice())
+            navigator.showTokenScreen(this, model.device)
         }
 
         binding.tokenNotice.setHtml(R.string.device_detail_token_notice)
 
         // onCreate was too big. Handle the initialization of the observers in a separate function
         initObservers()
-        onDeviceUpdated(device)
+        onDeviceUpdated(model.device)
 
         // Fetch data
         model.fetchTokensForecastData()
@@ -135,7 +136,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
         }
 
         model.onTokens().observe(this) {
-            binding.tokenCard.setTokenInfo(it, model.getDevice().rewards?.totalRewards)
+            binding.tokenCard.setTokenInfo(it, model.device.rewards?.totalRewards)
         }
 
         model.onEditNameChange().observe(this) {
@@ -147,7 +148,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
 
         model.onUnitPreferenceChanged().observe(this) {
             if (it) {
-                binding.currentWeatherCard.updateCurrentWeatherUI(model.getDevice().timezone)
+                binding.currentWeatherCard.updateCurrentWeatherUI(model.device.timezone)
                 hourlyAdapter.notifyDataSetChanged()
             }
         }
@@ -185,7 +186,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
                         toast(it.errorMessage)
                     }, {
                         // This cannot be false, by design
-                        FriendlyNameDialogFragment(model.getDevice().attributes?.friendlyName) {
+                        FriendlyNameDialogFragment(model.device.attributes?.friendlyName) {
                             model.setOrClearFriendlyName(it)
                         }.show(this)
                     })
