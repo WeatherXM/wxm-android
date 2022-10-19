@@ -28,6 +28,12 @@ import com.weatherxm.util.setIconAndColor
 import timber.log.Timber
 
 class ClaimHeliumActivity : AppCompatActivity() {
+    companion object {
+        const val CURRENT_PAGE = "current_page"
+        const val DEV_EUI = "dev_eui"
+        const val DEV_KEY = "dev_key"
+    }
+
     private val model: ClaimHeliumViewModel by viewModels()
     private val locationModel: ClaimLocationViewModel by viewModels()
     private val verifyModel: ClaimHeliumVerifyViewModel by viewModels()
@@ -62,6 +68,12 @@ class ClaimHeliumActivity : AppCompatActivity() {
         }
 
         model.fetchUserEmail()
+
+        savedInstanceState?.let {
+            binding.pager.currentItem = it.getInt(CURRENT_PAGE, 0)
+            verifyModel.setDeviceEUI(it.getString(DEV_EUI, ""))
+            verifyModel.setDeviceKey(it.getString(DEV_KEY, ""))
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -115,6 +127,13 @@ class ClaimHeliumActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt(CURRENT_PAGE, binding.pager.currentItem)
+        outState.putString(DEV_EUI, verifyModel.getDevEUI())
+        outState.putString(DEV_KEY, verifyModel.getDeviceKey())
+        super.onSaveInstanceState(outState)
     }
 
     private class ClaimHeliumDevicePagerAdapter(
