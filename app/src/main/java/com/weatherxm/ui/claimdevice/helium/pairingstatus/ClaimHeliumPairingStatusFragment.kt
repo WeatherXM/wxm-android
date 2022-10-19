@@ -10,19 +10,21 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
-import com.weatherxm.databinding.FragmentClaimDeviceHeliumPairingStatusBinding
+import com.weatherxm.databinding.FragmentClaimHeliumPairingStatusBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceViewModel
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
+import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyViewModel
 import org.koin.android.ext.android.inject
 
-class PairingStatusFragment : BottomSheetDialogFragment() {
-    private val parentModel: ClaimHeliumDeviceViewModel by activityViewModels()
-    private val model: PairingStatusViewModel by viewModels()
+class ClaimHeliumPairingStatusFragment : BottomSheetDialogFragment() {
+    private val parentModel: ClaimHeliumViewModel by activityViewModels()
+    private val verifyModel: ClaimHeliumVerifyViewModel by activityViewModels()
+    private val model: ClaimHeliumPairingStatusViewModel by viewModels()
     private val navigator: Navigator by inject()
-    private lateinit var binding: FragmentClaimDeviceHeliumPairingStatusBinding
+    private lateinit var binding: FragmentClaimHeliumPairingStatusBinding
 
     companion object {
-        const val TAG = "PairingStatusFragment"
+        const val TAG = "ClaimHeliumPairingStatusFragment"
     }
 
     override fun onCreateView(
@@ -30,7 +32,7 @@ class PairingStatusFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentClaimDeviceHeliumPairingStatusBinding.inflate(inflater, container, false)
+        binding = FragmentClaimHeliumPairingStatusBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -95,8 +97,8 @@ class PairingStatusFragment : BottomSheetDialogFragment() {
             subject = getString(R.string.support_email_subject_helium_pairing_failed),
             body = getString(
                 R.string.support_email_body_claiming_helium,
-                parentModel.getDevEUI(),
-                parentModel.getDeviceKey()
+                verifyModel.getDevEUI(),
+                verifyModel.getDeviceKey()
             )
         )
     }

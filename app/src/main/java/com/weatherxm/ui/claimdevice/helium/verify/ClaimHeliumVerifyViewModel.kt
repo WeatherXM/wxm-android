@@ -6,8 +6,10 @@ import com.weatherxm.util.Validator
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class ClaimHeliumDeviceVerifyViewModel : ViewModel(), KoinComponent {
+class ClaimHeliumVerifyViewModel : ViewModel(), KoinComponent {
     private val validator: Validator by inject()
+    private var devEUI: String = ""
+    private var deviceKey: String = ""
 
     private val onDevKeyError = MutableLiveData(false)
     fun onDevKeyError() = onDevKeyError
@@ -17,6 +19,22 @@ class ClaimHeliumDeviceVerifyViewModel : ViewModel(), KoinComponent {
 
     private val onVerifyError = MutableLiveData(false)
     fun onVerifyError() = onVerifyError
+
+    fun setDeviceEUI(devEUI: String) {
+        this.devEUI = devEUI
+    }
+
+    fun setDeviceKey(key: String) {
+        deviceKey = key
+    }
+
+    fun getDevEUI(): String {
+        return devEUI
+    }
+
+    fun getDeviceKey(): String {
+        return deviceKey
+    }
 
     @Suppress("MagicNumber")
     fun getEUIFromScanner(result: String?): String {
@@ -36,7 +54,9 @@ class ClaimHeliumDeviceVerifyViewModel : ViewModel(), KoinComponent {
         onDevKeyError.postValue(!validDevKey)
 
         if (validDevEUI && validDevKey) {
-            // TODO: Verified. Continue with API call.
+            setDeviceEUI(devEUI)
+            setDeviceKey(devKey)
+            // TODO: Verified. Continue with API call and open helium pairing status fragment.
         }
     }
 }

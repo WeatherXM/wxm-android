@@ -29,7 +29,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/mapView"
-                android:name="com.weatherxm.ui.claimdevice.location.ClaimDeviceMapFragment"
+                android:name="com.weatherxm.ui.claimdevice.location.ClaimMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"

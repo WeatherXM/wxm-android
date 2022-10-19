@@ -7,20 +7,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.weatherxm.R
-import com.weatherxm.databinding.FragmentClaimDeviceHeliumResetBinding
-import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceViewModel
+import com.weatherxm.databinding.FragmentClaimHeliumResetBinding
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.util.setHtml
 
-class ClaimHeliumDeviceResetFragment : Fragment() {
-    private val parentModel: ClaimHeliumDeviceViewModel by activityViewModels()
-    private lateinit var binding: FragmentClaimDeviceHeliumResetBinding
+class ClaimHeliumResetFragment : Fragment() {
+    private val parentModel: ClaimHeliumViewModel by activityViewModels()
+    private lateinit var binding: FragmentClaimHeliumResetBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentClaimDeviceHeliumResetBinding.inflate(inflater, container, false)
+        binding = FragmentClaimHeliumResetBinding.inflate(inflater, container, false)
         return binding.root
     }
 

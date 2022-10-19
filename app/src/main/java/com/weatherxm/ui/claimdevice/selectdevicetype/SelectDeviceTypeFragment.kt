@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.weatherxm.databinding.FragmentSelectDeviceTypeBinding
+import com.weatherxm.databinding.FragmentClaimSelectDeviceTypeBinding
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.home.HomeViewModel
 
 class SelectDeviceTypeFragment : BottomSheetDialogFragment() {
     private val model: SelectDeviceTypeViewModel by viewModels()
     private val homeViewModel: HomeViewModel by activityViewModels()
-    private lateinit var binding: FragmentSelectDeviceTypeBinding
+    private lateinit var binding: FragmentClaimSelectDeviceTypeBinding
     private lateinit var adapter: AvailableDeviceTypesAdapter
 
     companion object {
@@ -26,7 +26,7 @@ class SelectDeviceTypeFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentSelectDeviceTypeBinding.inflate(inflater, container, false)
+        binding = FragmentClaimSelectDeviceTypeBinding.inflate(inflater, container, false)
         return binding.root
     }
 

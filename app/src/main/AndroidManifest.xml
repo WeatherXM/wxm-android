@@ -104,11 +104,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.weatherxm.ui.claimdevice.ClaimDeviceActivity"
+            android:name="com.weatherxm.ui.claimdevice.m5.ClaimM5Activity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity"
+            android:name="com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity

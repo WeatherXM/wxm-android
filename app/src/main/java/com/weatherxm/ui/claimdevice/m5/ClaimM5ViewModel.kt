@@ -1,5 +1,6 @@
-package com.weatherxm.ui.claimdevice
+package com.weatherxm.ui.claimdevice.m5
 
+import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,67 +14,61 @@ import com.weatherxm.data.Resource
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
-import com.weatherxm.util.Validator
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
-/*
-* This suppress is needed because of the complexity of the claiming process where a lot of
-* fragments and an activity are involved and communication is needed between them
-*/
-@Suppress("TooManyFunctions")
-class ClaimDeviceViewModel : ViewModel(), KoinComponent {
+class ClaimM5ViewModel : ViewModel(), KoinComponent {
     private val claimDeviceUseCase: ClaimDeviceUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
-    private val validator: Validator by inject()
 
-    private lateinit var currentSerialNumber: String
-    private var isSerialSet = false
     private var userEmail: String? = null
-    private var installationLat: Double = 0.0
-    private var installationLon: Double = 0.0
 
     private val onNextButtonEnabledStatus = MutableLiveData(true)
-    private val onNextButtonClick = MutableLiveData(false)
+    private val onNext = MutableLiveData(false)
     private val onCancel = MutableLiveData(false)
-    private val onCheckSerialAndContinue = MutableLiveData(false)
     private val onClaimResult = MutableLiveData<Resource<String>>().apply {
         value = Resource.loading()
     }
 
     fun onNextButtonEnabledStatus() = onNextButtonEnabledStatus
-    fun onNextButtonClick() = onNextButtonClick
+    fun onNext() = onNext
     fun onCancel() = onCancel
-    fun onCheckSerialAndContinue() = onCheckSerialAndContinue
     fun onClaimResult() = onClaimResult
+
+    fun nextButtonStatus(enabled: Boolean) {
+        onNextButtonEnabledStatus.postValue(enabled)
+    }
+
+    fun next() {
+        onNext.postValue(true)
+    }
 
     fun cancel() {
         onCancel.postValue(true)
     }
 
-    fun setSerialSet(isSet: Boolean) {
-        isSerialSet = isSet
-    }
-
-    fun getSerialNumber(): String {
-        return currentSerialNumber
+    fun fetchUserEmail() {
+        viewModelScope.launch {
+            claimDeviceUseCase.fetchUserEmail()
+                .map {
+                    userEmail = it
+                }
+                .mapLeft {
+                    userEmail = null
+                }
+        }
     }
 
     fun getUserEmail(): String? {
         return userEmail
     }
 
-    fun setInstallationLocation(lat: Double, lon: Double) {
-        installationLat = lat
-        installationLat = lon
-    }
-
-    fun claimDevice() {
+    fun claimDevice(serialNumber: String, location: Location) {
         onClaimResult.postValue(Resource.loading())
         viewModelScope.launch {
-            claimDeviceUseCase.claimDevice(currentSerialNumber, installationLat, installationLon)
+            claimDeviceUseCase.claimDevice(serialNumber, location.latitude, location.longitude)
                 .map {
                     Timber.d("Claimed device: $it")
                     onClaimResult.postValue(Resource.success(it.name))
@@ -98,44 +93,5 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
                 )
             )
         )
-    }
-
-    fun fetchUserEmail() {
-        viewModelScope.launch {
-            claimDeviceUseCase.fetchUserEmail()
-                .map {
-                    userEmail = it
-                }
-                .mapLeft {
-                    userEmail = null
-                }
-        }
-    }
-
-    fun nextButtonStatus(enabled: Boolean) {
-        onNextButtonEnabledStatus.postValue(enabled)
-    }
-
-    fun nextButtonClick() {
-        onNextButtonClick.postValue(true)
-    }
-
-    fun isSerialSet(): Boolean {
-        return isSerialSet
-    }
-
-    fun checkSerialAndContinue() {
-        onCheckSerialAndContinue.postValue(true)
-    }
-
-    fun validateAndSetSerial(serialNumber: String): Boolean {
-        return validator.validateSerialNumber(serialNumber).apply {
-            if (this) {
-                currentSerialNumber = serialNumber
-                isSerialSet = true
-            } else {
-                isSerialSet = false
-            }
-        }
     }
 }

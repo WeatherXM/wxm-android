@@ -6,23 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
-import com.weatherxm.databinding.FragmentClaimDeviceHeliumVerifyBinding
+import com.weatherxm.databinding.FragmentClaimHeliumVerifyBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceViewModel
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.util.onTextChanged
 import org.koin.android.ext.android.inject
 
-class ClaimHeliumDeviceVerifyFragment : Fragment() {
-    private val parentModel: ClaimHeliumDeviceViewModel by activityViewModels()
-    private val model: ClaimHeliumDeviceVerifyViewModel by viewModels()
+class ClaimHeliumVerifyFragment : Fragment() {
+    private val parentModel: ClaimHeliumViewModel by activityViewModels()
+    private val model: ClaimHeliumVerifyViewModel by activityViewModels()
     private val navigator: Navigator by inject()
 
-    private lateinit var binding: FragmentClaimDeviceHeliumVerifyBinding
+    private lateinit var binding: FragmentClaimHeliumVerifyBinding
 
     // Register the launcher and result handler for QR code scanner
     private val barcodeLauncher =
@@ -32,8 +31,8 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
                 val scannedKey = model.getKeyFromScanner(it)
                 binding.devKey.setText(scannedKey)
                 binding.devEUI.setText(scannedEUI)
-                parentModel.setDeviceKey(scannedKey)
-                parentModel.setDeviceEUI(scannedEUI)
+                model.setDeviceKey(scannedKey)
+                model.setDeviceEUI(scannedEUI)
             }
         }
 
@@ -42,7 +41,7 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentClaimDeviceHeliumVerifyBinding.inflate(inflater, container, false)
+        binding = FragmentClaimHeliumVerifyBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -94,8 +93,8 @@ class ClaimHeliumDeviceVerifyFragment : Fragment() {
                         subject = getString(R.string.support_email_subject_helium_verify_failed),
                         body = getString(
                             R.string.support_email_body_claiming_helium,
-                            parentModel.getDevEUI(),
-                            parentModel.getDeviceKey()
+                            model.getDevEUI(),
+                            model.getDeviceKey()
                         )
                     )
                 }

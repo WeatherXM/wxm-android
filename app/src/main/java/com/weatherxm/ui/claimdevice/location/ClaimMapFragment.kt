@@ -13,12 +13,15 @@ import com.mapbox.maps.ViewAnnotationAnchor
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.weatherxm.R
 import com.weatherxm.ui.BaseMapFragment
-import com.weatherxm.ui.claimdevice.ClaimDeviceViewModel
-import com.weatherxm.ui.claimdevice.location.ClaimDeviceLocationViewModel.Companion.ZOOM_LEVEL
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
+import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel.Companion.ZOOM_LEVEL
+import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
+import com.weatherxm.ui.common.DeviceType
 
-class ClaimDeviceMapFragment : BaseMapFragment() {
-    private val model: ClaimDeviceViewModel by activityViewModels()
-    private val locationModel: ClaimDeviceLocationViewModel by activityViewModels()
+class ClaimMapFragment : BaseMapFragment() {
+    private val m5ParentModel: ClaimM5ViewModel by activityViewModels()
+    private val heliumParentModel: ClaimHeliumViewModel by activityViewModels()
+    private val locationModel: ClaimLocationViewModel by activityViewModels()
 
     private lateinit var marker: View
 
@@ -28,7 +31,13 @@ class ClaimDeviceMapFragment : BaseMapFragment() {
         locationModel.onLocationConfirmed().observe(viewLifecycleOwner) {
             if (it) {
                 val location = viewManager.getViewAnnotationOptionsByView(marker)?.geometry as Point
-                model.setInstallationLocation(location.latitude(), location.longitude())
+                locationModel.setInstallationLocation(location.latitude(), location.longitude())
+
+                if (locationModel.getDeviceType() == DeviceType.M5_WIFI) {
+                    m5ParentModel.next()
+                } else {
+                    heliumParentModel.next()
+                }
             }
         }
     }

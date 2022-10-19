@@ -19,10 +19,8 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.SearchSuggestion
-import com.weatherxm.R
-import com.weatherxm.ui.common.UIError
+import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.usecases.ClaimDeviceUseCase
-import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -33,7 +31,8 @@ import org.koin.core.component.inject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class ClaimDeviceLocationViewModel : ViewModel(), KoinComponent {
+@Suppress("TooManyFunctions")
+class ClaimLocationViewModel : ViewModel(), KoinComponent {
     // Current arbitrary values for the viewpager and the map
     companion object {
         const val ZOOM_LEVEL: Double = 15.0
@@ -41,28 +40,49 @@ class ClaimDeviceLocationViewModel : ViewModel(), KoinComponent {
     }
 
     private val usecase: ClaimDeviceUseCase by inject()
-    private val resHelper: ResourcesHelper by inject()
     private lateinit var locationClient: FusedLocationProviderClient
     private var reverseGeocodingJob: Job? = null
+    private var installationLocation = Location("").apply {
+        latitude = 0.0
+        longitude = 0.0
+    }
+    private var deviceType = DeviceType.M5_WIFI
 
     private val onDeviceLocation = MutableLiveData<Location>()
     private val onSelectedSearchLocation = MutableLiveData<Location>()
     private val onLocationConfirmed = MutableLiveData(false)
-    private val onSearchResults = MutableLiveData<List<SearchSuggestion>>(mutableListOf())
-    private val onError = MutableLiveData<UIError>()
-    private val onClearSearchBox = MutableLiveData(false)
+    private val onSearchResults = MutableLiveData<List<SearchSuggestion>?>(mutableListOf())
     private val onReverseGeocodedAddress = MutableLiveData<String?>(null)
 
     fun onDeviceLocation() = onDeviceLocation
     fun onSearchResults() = onSearchResults
     fun onSelectedSearchLocation() = onSelectedSearchLocation
     fun onLocationConfirmed() = onLocationConfirmed
-    fun onError() = onError
-    fun onClearSearchBox() = onClearSearchBox
     fun onReverseGeocodedAddress() = onReverseGeocodedAddress
 
     fun confirmLocation() {
         onLocationConfirmed.postValue(true)
+    }
+
+    fun setDeviceType(type: DeviceType) {
+        deviceType = type
+    }
+
+    fun getDeviceType(): DeviceType {
+        return deviceType
+    }
+
+    fun setInstallationLocation(lat: Double, lon: Double) {
+        installationLocation.latitude = lat
+        installationLocation.longitude = lon
+    }
+
+    fun getInstallationLocation(): Location {
+        return installationLocation
+    }
+
+    fun isInstallationLocationValid(): Boolean {
+        return installationLocation.latitude != 0.0 && installationLocation.longitude != 0.0
     }
 
     @Suppress("MagicNumber")
@@ -119,9 +139,7 @@ class ClaimDeviceLocationViewModel : ViewModel(), KoinComponent {
                 .tap { suggestions ->
                     onSearchResults.postValue(suggestions)
                 }.tapLeft {
-                    onError.postValue(
-                        UIError(resHelper.getString(R.string.error_search_suggestions))
-                    )
+                    onSearchResults.postValue(null)
                 }
         }
     }
@@ -131,7 +149,6 @@ class ClaimDeviceLocationViewModel : ViewModel(), KoinComponent {
             usecase.getSuggestionLocation(suggestion)
                 .tap { location ->
                     onSelectedSearchLocation.postValue(location)
-                    onClearSearchBox.postValue(true)
                 }
         }
     }

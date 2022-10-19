@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.weatherxm.R
 import com.weatherxm.data.Device
-import com.weatherxm.ui.claimdevice.ClaimDeviceActivity
-import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity
-import com.weatherxm.ui.claimdevice.helium.pairingstatus.PairingStatusFragment
+import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
+import com.weatherxm.ui.claimdevice.helium.pairingstatus.ClaimHeliumPairingStatusFragment
 import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeFragment
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.toast
@@ -187,7 +187,7 @@ class Navigator {
         context: Context
     ) {
         activityResultLauncher.launch(
-            Intent(context, ClaimDeviceActivity::class.java)
+            Intent(context, ClaimM5Activity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
     }
@@ -197,14 +197,14 @@ class Navigator {
         context: Context
     ) {
         activityResultLauncher.launch(
-            Intent(context, ClaimHeliumDeviceActivity::class.java)
+            Intent(context, ClaimHeliumActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
     }
 
     fun showHeliumPairingStatus(fragmentManager: FragmentManager) {
-        val modalBottomSheet = PairingStatusFragment()
-        modalBottomSheet.show(fragmentManager, PairingStatusFragment.TAG)
+        val modalBottomSheet = ClaimHeliumPairingStatusFragment()
+        modalBottomSheet.show(fragmentManager, ClaimHeliumPairingStatusFragment.TAG)
     }
 
     fun sendSupportEmail(

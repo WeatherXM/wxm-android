@@ -1,4 +1,4 @@
-package com.weatherxm.ui.claimdevice
+package com.weatherxm.ui.claimdevice.m5.verify
 
 import android.os.Bundle
 import android.text.Editable
@@ -11,19 +11,26 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import com.weatherxm.R
-import com.weatherxm.databinding.FragmentClaimDeviceBySerialBinding
+import com.weatherxm.databinding.FragmentClaimM5VerifyBinding
+import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.util.setHtml
 
-class ClaimDeviceSerialNumberFragment : Fragment() {
-    private val model: ClaimDeviceViewModel by activityViewModels()
-    private lateinit var binding: FragmentClaimDeviceBySerialBinding
+class ClaimM5VerifyFragment : Fragment() {
+    private val parentModel: ClaimM5ViewModel by activityViewModels()
+    private val model: ClaimM5VerifyViewModel by activityViewModels()
+    private lateinit var binding: FragmentClaimM5VerifyBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentClaimDeviceBySerialBinding.inflate(inflater, container, false)
+        binding = FragmentClaimM5VerifyBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.instructions.setHtml(R.string.device_serial_number_instructions)
 
@@ -45,35 +52,42 @@ class ClaimDeviceSerialNumberFragment : Fragment() {
                     binding.serialNumberContainer.error = null
                     binding.serialNumberContainer.helperText =
                         "${extractedValue.length}/$SERIAL_NUMBER_MAX_LENGTH"
-                    model.nextButtonStatus(
+                    parentModel.nextButtonStatus(
                         extractedValue.isNotEmpty()
                             && extractedValue.length == SERIAL_NUMBER_MAX_LENGTH
                     )
-                    if(model.isSerialSet()) {
-                        model.setSerialSet(false)
-                    }
+
+                    /**
+                     * Acts as "resetting" the serial number in case the user goes back and forth
+                     * in the serial number & location screen and edits the SN after he has already
+                     * set it successfully once
+                     */
+                    model.setSerialNumber("")
                 }
             })
 
         binding.serialNumber.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                model.nextButtonClick()
+                validateAndSetSerial()
             }
             true
         }
 
         model.onCheckSerialAndContinue().observe(viewLifecycleOwner) { shouldCheckSerial ->
             if (shouldCheckSerial) {
-                if (!model.validateAndSetSerial(binding.serialNumber.text.unmask())) {
-                    binding.serialNumberContainer.error =
-                        getString(R.string.warn_validation_invalid_serial_number)
-                } else {
-                    model.nextButtonClick()
-                }
+                validateAndSetSerial()
             }
         }
+    }
 
-        return binding.root
+    private fun validateAndSetSerial() {
+        if (!model.validateSerial(binding.serialNumber.text.unmask())) {
+            binding.serialNumberContainer.error =
+                getString(R.string.warn_validation_invalid_serial_number)
+        } else {
+            model.setSerialNumber(binding.serialNumber.text.unmask())
+            parentModel.next()
+        }
     }
 
     /**

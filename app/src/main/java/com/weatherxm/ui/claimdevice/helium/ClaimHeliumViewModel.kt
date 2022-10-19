@@ -1,16 +1,18 @@
 package com.weatherxm.ui.claimdevice.helium
 
+import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Resource
+import com.weatherxm.usecases.ClaimDeviceUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class ClaimHeliumDeviceViewModel : ViewModel(), KoinComponent {
-    private var devEUI: String = ""
-    private var deviceKey: String = ""
+class ClaimHeliumViewModel : ViewModel(), KoinComponent {
+    private val claimDeviceUseCase: ClaimDeviceUseCase by inject()
 
     private val onCancel = MutableLiveData(false)
     private val onNext = MutableLiveData(false)
@@ -18,25 +20,11 @@ class ClaimHeliumDeviceViewModel : ViewModel(), KoinComponent {
         value = Resource.loading()
     }
 
+    private var userEmail: String? = null
+
     fun onCancel() = onCancel
     fun onNext() = onNext
     fun onClaimResult() = onClaimResult
-
-    fun setDeviceEUI(devEUI: String) {
-        this.devEUI = devEUI
-    }
-
-    fun setDeviceKey(key: String) {
-        deviceKey = key
-    }
-
-    fun getDevEUI(): String {
-        return devEUI
-    }
-
-    fun getDeviceKey(): String {
-        return deviceKey
-    }
 
     fun cancel() {
         onCancel.postValue(true)
@@ -46,7 +34,21 @@ class ClaimHeliumDeviceViewModel : ViewModel(), KoinComponent {
         onNext.postValue(true)
     }
 
-    fun claimDevice() {
+    fun fetchUserEmail() {
+        viewModelScope.launch {
+            claimDeviceUseCase.fetchUserEmail().map {
+                    userEmail = it
+                }.mapLeft {
+                    userEmail = null
+                }
+        }
+    }
+
+    fun getUserEmail(): String? {
+        return userEmail
+    }
+
+    fun claimDevice(devEUI: String, devKey: String, location: Location) {
         onClaimResult.postValue(Resource.loading())
         viewModelScope.launch {
             // TODO: API call

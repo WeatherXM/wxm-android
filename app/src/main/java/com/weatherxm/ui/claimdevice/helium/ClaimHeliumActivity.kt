@@ -10,14 +10,16 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
-import com.weatherxm.ui.claimdevice.ClaimDeviceResultFragment
-import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_LOCATION
-import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_RESULT
-import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_VERIFY
-import com.weatherxm.ui.claimdevice.helium.reset.ClaimHeliumDeviceResetFragment
-import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumDeviceVerifyFragment
-import com.weatherxm.ui.claimdevice.location.ClaimDeviceLocationFragment
-import com.weatherxm.ui.claimdevice.location.ClaimDeviceLocationViewModel
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_LOCATION
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_RESULT
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_VERIFY
+import com.weatherxm.ui.claimdevice.helium.reset.ClaimHeliumResetFragment
+import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyFragment
+import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyViewModel
+import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
+import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
+import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
@@ -25,9 +27,10 @@ import com.weatherxm.util.setIcon
 import com.weatherxm.util.setIconAndColor
 import timber.log.Timber
 
-class ClaimHeliumDeviceActivity : AppCompatActivity() {
-    private val model: ClaimHeliumDeviceViewModel by viewModels()
-    private val locationModel: ClaimDeviceLocationViewModel by viewModels()
+class ClaimHeliumActivity : AppCompatActivity() {
+    private val model: ClaimHeliumViewModel by viewModels()
+    private val locationModel: ClaimLocationViewModel by viewModels()
+    private val verifyModel: ClaimHeliumVerifyViewModel by viewModels()
     private lateinit var binding: ActivityClaimHeliumDeviceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +60,8 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
         model.onNext().observe(this) {
             if (it) onNextPressed()
         }
+
+        model.fetchUserEmail()
     }
 
     @SuppressLint("MissingPermission")
@@ -86,7 +91,7 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
                         rationaleMessage = getString(R.string.permission_location_rationale),
                         onGranted = {
                             // Get last location
-                            locationModel.getLocationAndThen(this@ClaimHeliumDeviceActivity) { location ->
+                            locationModel.getLocationAndThen(this@ClaimHeliumActivity) { location ->
                                 Timber.d("Got user location: $location")
                                 if (location == null) {
                                     toast(R.string.error_claim_gps_failed)
@@ -99,7 +104,11 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
                     )
                 }
                 PAGE_RESULT -> {
-                    model.claimDevice()
+                    model.claimDevice(
+                        verifyModel.getDevEUI(),
+                        verifyModel.getDeviceKey(),
+                        locationModel.getInstallationLocation()
+                    )
                     location.setIconAndColor(R.drawable.ic_checkmark, R.color.success_tint)
                     location.setChipIconTintResource(R.color.dark_background)
                     location.setTextColor(getColor(R.color.dark_background))
@@ -124,10 +133,10 @@ class ClaimHeliumDeviceActivity : AppCompatActivity() {
         @Suppress("UseCheckOrError")
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                PAGE_RESET -> ClaimHeliumDeviceResetFragment()
-                PAGE_VERIFY -> ClaimHeliumDeviceVerifyFragment()
-                PAGE_LOCATION -> ClaimDeviceLocationFragment.newInstance(false)
-                PAGE_RESULT -> ClaimDeviceResultFragment()
+                PAGE_RESET -> ClaimHeliumResetFragment()
+                PAGE_VERIFY -> ClaimHeliumVerifyFragment()
+                PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.HELIUM)
+                PAGE_RESULT -> ClaimResultFragment()
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }
         }

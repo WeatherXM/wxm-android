@@ -8,7 +8,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
-class PairingStatusViewModel : ViewModel(), KoinComponent {
+class ClaimHeliumPairingStatusViewModel : ViewModel(), KoinComponent {
     private val onPairing = MutableLiveData<Resource<String>>()
 
     fun onPairing() = onPairing

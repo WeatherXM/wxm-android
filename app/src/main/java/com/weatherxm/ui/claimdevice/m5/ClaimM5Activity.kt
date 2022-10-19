@@ -1,4 +1,4 @@
-package com.weatherxm.ui.claimdevice
+package com.weatherxm.ui.claimdevice.m5
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -12,26 +12,32 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityClaimM5DeviceBinding
-import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_INFORMATION
-import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
-import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
-import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_SERIAL_NUMBER
-import com.weatherxm.ui.claimdevice.location.ClaimDeviceLocationFragment
-import com.weatherxm.ui.claimdevice.location.ClaimDeviceLocationViewModel
+import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
+import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_INFORMATION
+import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
+import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
+import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_SERIAL_NUMBER
+import com.weatherxm.ui.claimdevice.m5.information.ClaimM5InformationFragment
+import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyFragment
+import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
+import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
+import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import timber.log.Timber
 
-class ClaimDeviceActivity : AppCompatActivity() {
+class ClaimM5Activity : AppCompatActivity() {
     companion object {
         const val CURRENT_PAGE = "current_page"
         const val SERIAL_NUMBER = "serial_number"
     }
 
-    private val model: ClaimDeviceViewModel by viewModels()
     private lateinit var binding: ActivityClaimM5DeviceBinding
-    private val locationModel: ClaimDeviceLocationViewModel by viewModels()
+    private val model: ClaimM5ViewModel by viewModels()
+    private val locationModel: ClaimLocationViewModel by viewModels()
+    private val verifyModel: ClaimM5VerifyViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,13 +62,19 @@ class ClaimDeviceActivity : AppCompatActivity() {
             binding.nextBtn.isEnabled = enabled
         }
 
-        model.onNextButtonClick().observe(this) { shouldClick ->
+        model.onNext().observe(this) { shouldClick ->
             if (shouldClick) binding.nextBtn.performClick()
         }
 
         binding.nextBtn.setOnClickListener {
-            if (binding.pager.currentItem == PAGE_SERIAL_NUMBER && !model.isSerialSet()) {
-                model.checkSerialAndContinue()
+            if (binding.pager.currentItem == PAGE_SERIAL_NUMBER
+                && verifyModel.getSerialNumber().isEmpty()
+            ) {
+                verifyModel.checkSerialAndContinue()
+            } else if (binding.pager.currentItem == PAGE_LOCATION
+                && !locationModel.isInstallationLocationValid()
+            ) {
+                locationModel.confirmLocation()
             } else {
                 onNextPressed()
             }
@@ -100,14 +112,17 @@ class ClaimDeviceActivity : AppCompatActivity() {
 
         savedInstanceState?.let {
             binding.pager.currentItem = it.getInt(CURRENT_PAGE, 0)
-            model.validateAndSetSerial(it.getString(SERIAL_NUMBER, ""))
+            val savedSn = it.getString(SERIAL_NUMBER, "")
+            if (verifyModel.validateSerial(savedSn)) {
+                verifyModel.setSerialNumber(savedSn)
+            }
             updateUI()
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putInt(CURRENT_PAGE, binding.pager.currentItem)
-        outState.putString(SERIAL_NUMBER, model.getSerialNumber())
+        outState.putString(SERIAL_NUMBER, verifyModel.getSerialNumber())
         super.onSaveInstanceState(outState)
     }
 
@@ -116,7 +131,10 @@ class ClaimDeviceActivity : AppCompatActivity() {
         binding.pager.currentItem += 1
 
         if (binding.pager.currentItem == PAGE_RESULT) {
-            model.claimDevice()
+            model.claimDevice(
+                verifyModel.getSerialNumber(),
+                locationModel.getInstallationLocation()
+            )
         }
 
         if (binding.pager.currentItem == PAGE_LOCATION) {
@@ -179,10 +197,10 @@ class ClaimDeviceActivity : AppCompatActivity() {
         @Suppress("UseCheckOrError")
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                PAGE_INFORMATION -> ClaimDeviceInformationFragment()
-                PAGE_SERIAL_NUMBER -> ClaimDeviceSerialNumberFragment()
-                PAGE_LOCATION -> ClaimDeviceLocationFragment.newInstance(true)
-                PAGE_RESULT -> ClaimDeviceResultFragment()
+                PAGE_INFORMATION -> ClaimM5InformationFragment()
+                PAGE_SERIAL_NUMBER -> ClaimM5VerifyFragment()
+                PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.M5_WIFI)
+                PAGE_RESULT -> ClaimResultFragment()
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }
         }
