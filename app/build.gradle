@@ -275,7 +275,8 @@ dependencies {
     implementation "io.arrow-kt:arrow-fx-coroutines"
 
     // Mapbox
-    implementation "com.mapbox.maps:android:10.8.0"
+    implementation "com.mapbox.maps:android:10.9.0-beta.2"
+    implementation "com.mapbox.search:mapbox-search-android:1.0.0-beta.37"
 
     // Insetter
     implementation "dev.chrisbanes.insetter:insetter:0.6.1"

@@ -16,6 +16,7 @@
     <dimen name="margin_normal">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_extra_small">4dp</dimen>
+    <dimen name="margin_extra_extra_small">2dp</dimen>
 
     <dimen name="padding_extra_large">48dp</dimen>
     <dimen name="padding_large">24dp</dimen>
@@ -40,4 +41,6 @@
     <dimen name="reward_slider_thumb_elevation">0dp</dimen>
     <dimen name="reward_slider_thumb_radius">0dp</dimen>
     <dimen name="reward_slider_track_height">16dp</dimen>
+
+    <dimen name="claiming_flow_button_radius">5dp</dimen>
 </resources>

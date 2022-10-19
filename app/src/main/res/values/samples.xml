@@ -8,4 +8,5 @@
         <item>0</item>
         <item>1500</item>
     </array>
+    <string name="claim_device_serial_number_placeholder" />
 </resources>

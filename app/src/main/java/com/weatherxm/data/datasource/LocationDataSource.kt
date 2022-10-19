@@ -1,7 +1,10 @@
 package com.weatherxm.data.datasource
 
 import android.Manifest
+import android.content.Context
+import android.content.Context.TELEPHONY_SERVICE
 import android.os.Looper
+import android.telephony.TelephonyManager
 import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -16,9 +19,11 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
+
 
 interface LocationDataSource {
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -26,10 +31,12 @@ interface LocationDataSource {
 
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     fun getLocationUpdates(): Flow<Location>
+    fun getUserCountry(): String?
 }
 
 class LocationDataSourceImpl(
-    private val fusedLocationProviderClient: FusedLocationProviderClient
+    private val fusedLocationProviderClient: FusedLocationProviderClient,
+    private val context: Context
 ) : LocationDataSource {
 
     companion object {
@@ -144,5 +151,24 @@ class LocationDataSourceImpl(
             .setSmallestDisplacement(FOREGROUND_MINIMUM_DISPLACEMENT.toFloat())
             .setInterval(FOREGROUND_INTERVAL)
             .setFastestInterval(FOREGROUND_FASTEST_INTERVAL)
+    }
+
+    // https://stackoverflow.com/questions/3659809/where-am-i-get-country
+    override fun getUserCountry(): String? {
+        val telephonyManager = context.getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+        val simCountry = telephonyManager.simCountryIso
+        val networkCountry = telephonyManager.networkCountryIso
+
+        return if (simCountry.length == 2) {
+            Timber.d("Found user's country via SIM: [country=$simCountry]")
+            simCountry
+        } else {
+            if (networkCountry.length == 2) {
+                Timber.d("Found user's country via Network: [country=$networkCountry]")
+                networkCountry
+            } else {
+                null
+            }
+        }
     }
 }

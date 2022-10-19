@@ -16,12 +16,18 @@ import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPolygonAnnotationManager
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.scalebar.scalebar
+import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.weatherxm.databinding.FragmentMapBinding
 import com.weatherxm.ui.BaseMapFragment.OnMapDebugInfoListener
 import dev.chrisbanes.insetter.applyInsetter
 import timber.log.Timber
 
 open class BaseMapFragment : Fragment() {
+    companion object {
+        const val CURRENT_LAT = "current_lat"
+        const val CURRENT_LON = "current_lon"
+        const val CURRENT_ZOOM = "current_zoom"
+    }
 
     fun interface OnMapDebugInfoListener {
         fun onMapDebugInfoUpdated(zoom: Double, center: Point)
@@ -30,9 +36,11 @@ open class BaseMapFragment : Fragment() {
     protected lateinit var binding: FragmentMapBinding
     protected lateinit var polygonManager: PolygonAnnotationManager
     protected lateinit var pointManager: PointAnnotationManager
+    protected lateinit var viewManager: ViewAnnotationManager
 
     private lateinit var debugInfoListener: OnMapDebugInfoListener
     private var defaultStartingZoomLevel: Double = 1.0
+    private lateinit var map: MapboxMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +71,9 @@ open class BaseMapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val map = binding.mapView.getMapboxMap()
+        map = binding.mapView.getMapboxMap()
+
+        viewManager = binding.mapView.viewAnnotationManager
 
         map.addOnCameraChangeListener {
             debugInfoListener.onMapDebugInfoUpdated(
@@ -84,14 +94,36 @@ open class BaseMapFragment : Fragment() {
             }
 
             // Update camera
-            map.setCamera(
-                CameraOptions.Builder()
-                    .zoom(defaultStartingZoomLevel)
-                    .build()
-            )
+            if (savedInstanceState != null) {
+                map.setCamera(
+                    CameraOptions.Builder()
+                        .zoom(savedInstanceState.getDouble(CURRENT_ZOOM, defaultStartingZoomLevel))
+                        .center(
+                            Point.fromLngLat(
+                                savedInstanceState.getDouble(CURRENT_LON, 0.0),
+                                savedInstanceState.getDouble(CURRENT_LAT, 0.0)
+                            )
+                        )
+                        .build()
+                )
+            } else {
+                map.setCamera(
+                    CameraOptions.Builder()
+                        .zoom(defaultStartingZoomLevel)
+                        .build()
+                )
+            }
 
             onMapReady(map)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        val center = map.cameraState.center
+        outState.putDouble(CURRENT_LAT, center.latitude())
+        outState.putDouble(CURRENT_LON, center.longitude())
+        outState.putDouble(CURRENT_ZOOM, map.cameraState.zoom)
+        super.onSaveInstanceState(outState)
     }
 
     fun getMap(): MapboxMap = binding.mapView.getMapboxMap()

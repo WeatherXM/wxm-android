@@ -21,8 +21,11 @@ import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
+import com.mapbox.search.SearchEngine
+import com.mapbox.search.SearchEngineSettings
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
+import com.weatherxm.R
 import com.weatherxm.data.adapters.LocalDateJsonAdapter
 import com.weatherxm.data.adapters.LocalDateTimeJsonAdapter
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
@@ -35,6 +38,7 @@ import com.weatherxm.data.datasource.AuthDataSource
 import com.weatherxm.data.datasource.AuthDataSourceImpl
 import com.weatherxm.data.datasource.AuthTokenDataSource
 import com.weatherxm.data.datasource.AuthTokenDataSourceImpl
+import com.weatherxm.data.datasource.CacheAddressSearchDataSource
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
@@ -50,6 +54,7 @@ import com.weatherxm.data.datasource.HttpCacheDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkAddressDataSource
+import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
 import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
@@ -66,6 +71,8 @@ import com.weatherxm.data.network.interceptor.ApiRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthRequestInterceptor
 import com.weatherxm.data.network.interceptor.AuthTokenAuthenticator
 import com.weatherxm.data.network.interceptor.ClientIdentificationRequestInterceptor
+import com.weatherxm.data.repository.AddressRepository
+import com.weatherxm.data.repository.AddressRepositoryImpl
 import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AppConfigRepositoryImpl
 import com.weatherxm.data.repository.AuthRepository
@@ -194,7 +201,7 @@ private val preferences = module {
 
 private val datasources = module {
     single<LocationDataSource> {
-        LocationDataSourceImpl(get())
+        LocationDataSourceImpl(get(), androidContext())
     }
 
     single<NetworkWeatherHistoryDataSource> {
@@ -250,7 +257,7 @@ private val datasources = module {
     }
 
     single<NetworkAddressDataSource> {
-        NetworkAddressDataSource(androidContext())
+        NetworkAddressDataSource(androidContext(), get())
     }
 
     single<StorageAddressDataSource> {
@@ -275,6 +282,14 @@ private val datasources = module {
 
     single<HttpCacheDataSource> {
         HttpCacheDataSourceImpl(get())
+    }
+
+    single<NetworkAddressSearchDataSource> {
+        NetworkAddressSearchDataSource(get())
+    }
+
+    single<CacheAddressSearchDataSource> {
+        CacheAddressSearchDataSource()
     }
 }
 
@@ -312,6 +327,9 @@ private val repositories = module {
     single<SharedPreferencesRepository> {
         SharedPreferenceRepositoryImpl(get())
     }
+    single<AddressRepository> {
+        AddressRepositoryImpl(get(), get(), get(), get())
+    }
 }
 
 private val usecases = module {
@@ -331,7 +349,7 @@ private val usecases = module {
         ForecastUseCaseImpl(androidContext(), get())
     }
     single<ClaimDeviceUseCase> {
-        ClaimDeviceUseCaseImpl(get(), get())
+        ClaimDeviceUseCaseImpl(get(), get(), get())
     }
     single<TokenUseCase> {
         TokenUseCaseImpl(get(), get())
@@ -486,6 +504,11 @@ val displayModeHelper = module {
 }
 
 private val utilities = module {
+    single<SearchEngine> {
+        SearchEngine.createSearchEngine(
+            SearchEngineSettings(androidContext().resources.getString(R.string.mapbox_access_token))
+        )
+    }
     single<Moshi> {
         Moshi.Builder()
             .add(ZonedDateTime::class.java, ZonedDateTimeJsonAdapter())

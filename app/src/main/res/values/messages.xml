@@ -35,6 +35,7 @@
     <string name="error_open_website_support_cannot_open_url">Oops! Could not open %s</string>
     <string name="error_cannot_open_play_store">Oops! Could not open Play Store.</string>
     <string name="error_friendly_name_change_rate_limit">You can only change your device\'s friendly name once in 10 minutes.</string>
+    <string name="error_search_suggestions">Search suggestions not available. Please try again later.</string>
 
     <!-- Warn Messages -->
     <string name="warn_validation_invalid_email">Not a valid email</string>

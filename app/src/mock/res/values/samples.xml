@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="claim_device_serial_number_placeholder">AA:AA:AA:AA:AA:AA:AA:AA:AA</string>
+</resources>
