@@ -32,7 +32,6 @@ class ClaimDeviceActivity : AppCompatActivity() {
     private val model: ClaimDeviceViewModel by viewModels()
     private lateinit var binding: ActivityClaimM5DeviceBinding
     private val locationModel: ClaimDeviceLocationViewModel by viewModels()
-    private lateinit var binding: ActivityClaimDeviceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

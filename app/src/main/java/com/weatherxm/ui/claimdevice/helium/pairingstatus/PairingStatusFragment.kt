@@ -80,7 +80,7 @@ class PairingStatusFragment : BottomSheetDialogFragment() {
                 }
             }
             Status.LOADING -> {
-                binding.buttonsContainer.visibility = View.INVISIBLE
+                binding.buttonsContainer.visibility = View.GONE
                 binding.empty.clear()
                 binding.empty.animation(R.raw.anim_loading)
                 binding.empty.title(R.string.pairing_device)

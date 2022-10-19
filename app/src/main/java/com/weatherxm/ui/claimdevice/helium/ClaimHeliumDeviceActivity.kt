@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
-import com.weatherxm.ui.claimdevice.ClaimDeviceLocationFragment
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_LOCATION
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumDeviceActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_VERIFY
 import com.weatherxm.ui.claimdevice.helium.reset.ClaimHeliumDeviceResetFragment
 import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumDeviceVerifyFragment
+import com.weatherxm.ui.claimdevice.location.ClaimDeviceLocationFragment
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setIcon
 import com.weatherxm.util.setIconAndColor
