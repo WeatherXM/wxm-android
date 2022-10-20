@@ -19,12 +19,16 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
     private val onClaimResult = MutableLiveData<Resource<String>>().apply {
         value = Resource.loading()
     }
-
-    private var userEmail: String? = null
+    private val onClaimManually = MutableLiveData(false)
 
     fun onCancel() = onCancel
     fun onNext() = onNext
     fun onClaimResult() = onClaimResult
+    fun onClaimManually() = onClaimManually
+
+    private var userEmail: String? = null
+    private var deviceAddress = ""
+    private var isManual = false
 
     fun cancel() {
         onCancel.postValue(true)
@@ -34,18 +38,38 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
         onNext.postValue(true)
     }
 
+    fun setManual(isManual: Boolean?) {
+        this.isManual = isManual == true
+    }
+
+    fun isManualClaiming(): Boolean {
+        return isManual
+    }
+
     fun fetchUserEmail() {
         viewModelScope.launch {
             claimDeviceUseCase.fetchUserEmail().map {
-                    userEmail = it
-                }.mapLeft {
-                    userEmail = null
-                }
+                userEmail = it
+            }.mapLeft {
+                userEmail = null
+            }
         }
+    }
+
+    fun setDeviceAddress(address: String) {
+        deviceAddress = address
+    }
+
+    fun getDeviceAddress(): String {
+        return deviceAddress
     }
 
     fun getUserEmail(): String? {
         return userEmail
+    }
+
+    fun claimManually() {
+        onClaimManually.postValue(true)
     }
 
     fun claimDevice(devEUI: String, devKey: String, location: Location) {

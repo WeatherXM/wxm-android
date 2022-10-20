@@ -29,26 +29,26 @@
         app:layout_constraintTop_toBottomOf="@id/app_bar">
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/reset"
+            android:id="@+id/firstStep"
             style="@style/Widget.WeatherXM.Chip.Navigation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/reset"
+            android:text="@string/action_reset"
             app:chipIcon="@drawable/ic_one_filled" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/verify"
+            android:id="@+id/secondStep"
             style="@style/Widget.WeatherXM.Chip.Navigation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="-25dp"
-            android:text="@string/action_verify"
+            android:text="@string/action_pair"
             app:chipIcon="@drawable/ic_two_outlined" />
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/location"
+            android:id="@+id/thirdStep"
             style="@style/Widget.WeatherXM.Chip.Navigation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

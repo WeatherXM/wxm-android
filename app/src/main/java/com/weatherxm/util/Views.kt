@@ -56,6 +56,12 @@ fun ImageView.setWarningDrawable(context: Context) {
     this.setImageDrawable(drawable)
 }
 
+fun ImageView.setBluetoothDrawable(context: Context) {
+    val drawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_bluetooth, context.theme)
+    drawable?.setTint(ResourcesCompat.getColor(resources, R.color.light_mid_grey, context.theme))
+    this.setImageDrawable(drawable)
+}
+
 fun ImageView.setNoDevicesFoundDrawable(context: Context) {
     val drawable =
         ResourcesCompat.getDrawable(resources, R.drawable.ic_no_devices_found, context.theme)

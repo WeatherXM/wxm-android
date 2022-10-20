@@ -91,6 +91,16 @@ data class UIDevice(
     var tokenInfo: TokenInfo?
 ) : Parcelable
 
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class ScannedDevice(
+    val address: String,
+    val name: String?,
+    val eui: String?,
+    val type: DeviceType = DeviceType.HELIUM
+) : Parcelable
+
 enum class DeviceType {
     M5_WIFI,
     HELIUM

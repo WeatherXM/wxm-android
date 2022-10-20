@@ -13,6 +13,7 @@ import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimHeliumVerifyBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
+import com.weatherxm.ui.common.show
 import com.weatherxm.util.onTextChanged
 import org.koin.android.ext.android.inject
 

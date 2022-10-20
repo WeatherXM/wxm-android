@@ -14,6 +14,10 @@
     <string name="action_clear">Clear</string>
     <string name="action_try_again">Try Again</string>
     <string name="action_verify">Verify</string>
+    <string name="action_pair">Pair</string>
+    <string name="action_reset">Reset</string>
+    <string name="action_select">Select</string>
+    <string name="action_have_reset_device">I\’ve Reset My Device</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="scan_qr_code">Scan QR Code</string>
@@ -122,8 +126,8 @@
     <!-- Scan Devices -->
     <string name="perm_bluetooth_scanning_desc">We will need to access bluetooth in order to utilise it in connecting and communicating to your WeatherXM Device.</string>
     <string name="perm_location_scanning_desc">We will need to access your location in order to utilise it in connecting and communicating to your WeatherXM Device.</string>
-    <string name="select_your_device">Select your device</string>
-    <string name="select_device_desc">To claim your device, you must enable Bluetooth and allow WXM app to access it. \n\nAlternative, you can tap bellow to claim the device manually!</string>
+    <string name="select_device_to_pair">Select Device to Pair</string>
+    <string name="select_device_desc">Select your device from the list below.</string>
     <string name="claim_manually">Claim Device Manually</string>
     <string name="device_eui">Device EUI: %s</string>
     <string name="scan_again">Scan Again</string>
@@ -147,7 +151,8 @@
     <string name="m5_ws1000_title">WS1000 | M5</string>
     <string name="m5_ws1000_desc">Claim Device Manually</string>
     <string name="helium_type_title">WS2000 | Helium</string>
-    <string name="helium_type_desc">Claim Device Manually</string>
+    <string name="helium_type_desc">Claim Device via Bluetooth</string>
+
 
     <!-- Claim device -->
     <string name="claim_device_info_text"><![CDATA[<h5>Step 1</h5>Swipe left on your WXM device\'s screen and press \"Configure WiFi\" to connect the device to your home WiFi.<h5>Step 2</h5>Plug the GPS antenna into your WXM device, place the antenna near a window and power up the device via USB.<h5>Step 3</h5>Press <b>NEXT</b> to claim your device.<br/><br/>Don\'t have a WXM device yet? Get one on <a href=\"https://weatherxm.com\">weatherxm.com</a>.]]></string>
@@ -182,12 +187,16 @@
     <string name="wrong_combination_message"><![CDATA[Dev EUI and Device Key combination is wrong! Please retype/rescan and try again.<br><br>If you still have problems, contact our support at <a>support@weatherxm.com</a>]]></string>
     <string name="reset_station">Reset Station</string>
     <string name="reset">Reset</string>
-    <string name="reset_first_step"><![CDATA[Press the <b>RESET hole</b> on the bottom of your WeatherXM device.]]></string>
-    <string name="reset_second_step"><![CDATA[Tap the <b>Next</b> button below.]]></string>
+    <string name="reset_ble_first_step"><![CDATA[Push the <b>RESET button</b> on the bottom of your WeatherXM device to enable bluetooth pairing. <b>This will expire in 5 minutes. After that, you will need to push it again to restart the pairing!</b>]]></string>
+    <string name="reset_manual_first_step"><![CDATA[Press the <b>RESET hole</b> on the bottom of your WeatherXM device.]]></string>
+    <string name="reset_second_step"><![CDATA[Tap the \"I\'ve reset my device\" button below.]]></string>
     <string name="pairing_device">Pairing Device</string>
     <string name="pairing_device_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to Helium network bandwidth limitations!<b>]]></string>
     <string name="pairing_failed">Pairing Failed</string>
     <string name="pairing_failed_desc"><![CDATA[Pairing failed, please try again!<br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a><br><br>Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
+    <string name="helium_pairing_failed_desc">The Pairing process with WS2000 has failed. Please try again, and if the problem persists, claim your device manually.</string>
+    <string name="helium_bluetooth_disabled">The Pairing process with WS2000 has failed. Bluetooth is disabled. Please enable it and try again or claim your device manually.</string>
+    <string name="helium_bluetooth_connection_lost">The Pairing process with WS2000 has failed. Bluetooth connection has been lost. Please try again, and if the problem persists, claim your device manually.</string>
 
     <!-- Forecast -->
     <string name="forecast_7_day">7 Day Forecast</string>

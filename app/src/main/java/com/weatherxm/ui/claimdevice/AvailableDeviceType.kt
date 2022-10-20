@@ -12,5 +12,5 @@ import kotlinx.parcelize.Parcelize
 data class AvailableDeviceType(
     val title: String,
     val desc: String,
-    val type: DeviceType,
+    val type: DeviceType = DeviceType.HELIUM,
 ) : Parcelable

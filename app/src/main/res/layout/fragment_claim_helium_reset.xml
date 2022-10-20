@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginBottom="@dimen/margin_normal"
-                app:layout_constraintBottom_toTopOf="@id/nextButton"
+                app:layout_constraintBottom_toTopOf="@id/buttonsContainer"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,54 +36,34 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
-                        android:id="@+id/oneIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginTop="@dimen/margin_extra_large"
-                        android:src="@drawable/ic_one_filled"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/resetTitle"
-                        app:tint="@color/colorOnSurface"
-                        tools:ignore="ContentDescription" />
-
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/firstStep"
                         style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_normal"
-                        android:text="@string/reset_first_step"
-                        app:layout_constraintStart_toEndOf="@id/oneIcon"
-                        app:layout_constraintTop_toTopOf="@id/oneIcon" />
-
-                    <ImageView
-                        android:id="@+id/twoIcon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginTop="@dimen/margin_normal"
-                        android:src="@drawable/ic_two_filled"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/firstStep"
-                        app:tint="@color/colorOnSurface"
-                        tools:ignore="ContentDescription" />
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:drawableStart="@drawable/ic_one_filled"
+                        android:drawablePadding="@dimen/margin_normal"
+                        android:drawableTint="@color/colorOnSurface"
+                        android:text="@string/reset_ble_first_step"
+                        app:layout_constraintTop_toBottomOf="@id/resetTitle" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/secondStep"
                         style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_normal"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:drawableStart="@drawable/ic_two_filled"
+                        android:drawablePadding="@dimen/margin_normal"
+                        android:drawableTint="@color/colorOnSurface"
                         android:text="@string/reset_second_step"
-                        app:layout_constraintBottom_toBottomOf="@id/twoIcon"
-                        app:layout_constraintStart_toEndOf="@id/twoIcon"
-                        app:layout_constraintTop_toTopOf="@id/twoIcon" />
+                        app:layout_constraintTop_toBottomOf="@id/firstStep" />
 
                     <ImageView
                         android:id="@+id/resetIcon"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_marginTop="@dimen/margin_large"
                         android:src="@drawable/ic_reset_weather_station"
                         app:layout_constraintTop_toBottomOf="@id/secondStep"
                         tools:ignore="ContentDescription" />
@@ -92,17 +72,30 @@
 
             </androidx.core.widget.NestedScrollView>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/nextButton"
-                style="@style/Widget.WeatherXM.Button"
+            <LinearLayout
+                android:id="@+id/buttonsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/action_next"
-                android:textAllCaps="false"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent">
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/nextButton"
+                    style="@style/Widget.WeatherXM.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_have_reset_device"
+                    android:textAllCaps="false" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/claimManually"
+                    style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/claim_manually"
+                    android:textAllCaps="false" />
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </com.google.android.material.card.MaterialCardView>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

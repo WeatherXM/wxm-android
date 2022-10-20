@@ -20,6 +20,25 @@ sealed class NetworkError : Failure() {
 }
 
 @Keep
+sealed class BluetoothError(val message: String? = null) : Failure() {
+    object ScanningError : BluetoothError()
+    object PeripheralCreationError : BluetoothError()
+    object ConnectionRejectedError : BluetoothError()
+    object CancellationError : BluetoothError()
+    object ConnectionLostException : BluetoothError()
+    object BluetoothDisabledException : BluetoothError()
+    object DfuAborted : BluetoothError()
+
+    class DfuUpdateError(message: String? = null) : BluetoothError(message)
+
+    sealed class ProvisionError : BluetoothError() {
+        object GenericError : ProvisionError()
+        object WifiConfigError : ProvisionError()
+        object CreateSessionError : ProvisionError()
+    }
+}
+
+@Keep
 sealed class AuthError : Failure() {
     object InvalidAuthTokenError : AuthError()
     object InvalidAccessTokenError : AuthError()

@@ -14,9 +14,26 @@ import com.weatherxm.databinding.FragmentClaimHeliumPairingStatusBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyViewModel
+import com.weatherxm.ui.common.ErrorDialogFragment
+import com.weatherxm.ui.common.UIError
 import org.koin.android.ext.android.inject
 
 class ClaimHeliumPairingStatusFragment : BottomSheetDialogFragment() {
+    // TODO: This will be used in the Update activity where the flow is TBD.
+//    private val findZipFileLauncher =
+//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+//            result.data?.data?.let {
+//                model.update(it)
+//            }
+//        }
+//        TODO: For testing purposes. Remove on PR.
+//        model.onBondedDevice().observe(this) {
+//            val intent = Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE)
+//                .setType("application/zip")
+//
+//            findZipFileLauncher.launch(intent)
+//        }
+
     private val parentModel: ClaimHeliumViewModel by activityViewModels()
     private val verifyModel: ClaimHeliumVerifyViewModel by activityViewModels()
     private val model: ClaimHeliumPairingStatusViewModel by viewModels()
@@ -44,7 +61,6 @@ class ClaimHeliumPairingStatusFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.closeButton.setOnClickListener {
-            // TODO: What else other than dismiss?!
             dismiss()
         }
 
@@ -53,14 +69,53 @@ class ClaimHeliumPairingStatusFragment : BottomSheetDialogFragment() {
         }
 
         binding.tryAgain.setOnClickListener {
-            model.pair()
+            if (!parentModel.isManualClaiming()) {
+                model.setupBluetoothClaiming(parentModel.getDeviceAddress())
+            } else {
+                model.pair(verifyModel.getDevEUI(), verifyModel.getDeviceKey())
+            }
         }
 
         model.onPairing().observe(viewLifecycleOwner) {
             updateUI(it)
         }
 
-        model.pair()
+        model.onBLEPaired().observe(viewLifecycleOwner) {
+            if (it) {
+                // TODO: FETCH DEV KEY VIA BLE
+                model.pair(verifyModel.getDevEUI(), verifyModel.getDeviceKey())
+            }
+        }
+
+        model.onBLEError().observe(viewLifecycleOwner) {
+            showErrorDialog(it)
+        }
+
+        model.onBLEDevEUI().observe(viewLifecycleOwner) {
+            verifyModel.setDeviceEUI(it)
+        }
+
+        if (!parentModel.isManualClaiming()) {
+            model.setupBluetoothClaiming(parentModel.getDeviceAddress())
+        } else {
+            model.pair(verifyModel.getDevEUI(), verifyModel.getDeviceKey())
+        }
+    }
+
+    private fun showErrorDialog(uiError: UIError) {
+        ErrorDialogFragment
+            .Builder(
+                title = getString(R.string.pairing_failed),
+                message = uiError.errorMessage
+            )
+            .onNegativeClick(getString(R.string.action_quit_claiming)) {
+                parentModel.cancel()
+            }
+            .onPositiveClick(getString(R.string.action_try_again)) {
+                uiError.retryFunction?.invoke()
+            }
+            .build()
+            .show(this)
     }
 
     private fun updateUI(result: Resource<String>) {

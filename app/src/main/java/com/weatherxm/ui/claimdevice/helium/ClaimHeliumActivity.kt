@@ -10,15 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
-import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_LOCATION
-import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_RESULT
-import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_VERIFY
 import com.weatherxm.ui.claimdevice.helium.reset.ClaimHeliumResetFragment
 import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyFragment
 import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
+import com.weatherxm.ui.claimdevice.scandevices.ScanDevicesFragment
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
@@ -47,7 +45,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
         binding.root.applyInsets()
 
         // The pager adapter, which provides the pages to the view pager widget.
-        val pagerAdapter = ClaimHeliumDevicePagerAdapter(this)
+        var pagerAdapter = ClaimHeliumDevicePagerAdapter(this)
         binding.pager.adapter = pagerAdapter
         binding.pager.isUserInputEnabled = false
 
@@ -67,6 +65,16 @@ class ClaimHeliumActivity : AppCompatActivity() {
             if (it) onNextPressed()
         }
 
+        model.onClaimManually().observe(this) {
+            if (it) {
+                model.setManual(true)
+                pagerAdapter = ClaimHeliumDevicePagerAdapter(this, true)
+                binding.pager.adapter = pagerAdapter
+                binding.pager.isUserInputEnabled = false
+                binding.secondStep.text = getString(R.string.action_verify)
+            }
+        }
+
         model.fetchUserEmail()
 
         savedInstanceState?.let {
@@ -76,51 +84,54 @@ class ClaimHeliumActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("MissingPermission")
     private fun onNextPressed() {
         with(binding) {
             pager.currentItem += 1
 
             when (pager.currentItem) {
-                PAGE_VERIFY -> {
-                    reset.setSuccessChip()
-                    verify.setIcon(R.drawable.ic_two_filled)
+                ClaimHeliumDevicePagerAdapter.PAGE_VERIFY_OR_PAIR -> {
+                    firstStep.setSuccessChip()
+                    secondStep.setIcon(R.drawable.ic_two_filled)
                 }
-                PAGE_LOCATION -> {
-                    verify.setSuccessChip()
-                    location.setIcon(R.drawable.ic_three_filled)
-
-                    checkPermissionsAndThen(
-                        permissions = arrayOf(
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                        ),
-                        rationaleTitle = getString(R.string.permission_location_title),
-                        rationaleMessage = getString(R.string.permission_location_rationale),
-                        onGranted = {
-                            // Get last location
-                            locationModel.getLocationAndThen(this@ClaimHeliumActivity) {
-                                Timber.d("Got user location: $it")
-                                if (it == null) {
-                                    toast(R.string.error_claim_gps_failed)
-                                }
-                            }
-                        },
-                        onDenied = {
-                            toast(R.string.error_claim_gps_failed)
-                        }
-                    )
+                ClaimHeliumDevicePagerAdapter.PAGE_LOCATION -> {
+                    secondStep.setSuccessChip()
+                    thirdStep.setIcon(R.drawable.ic_three_filled)
+                    askForLocationPermissions()
                 }
-                PAGE_RESULT -> {
+                ClaimHeliumDevicePagerAdapter.PAGE_RESULT -> {
                     model.claimDevice(
                         verifyModel.getDevEUI(),
                         verifyModel.getDeviceKey(),
                         locationModel.getInstallationLocation()
                     )
-                    location.setSuccessChip()
+                    thirdStep.setSuccessChip()
                 }
             }
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun askForLocationPermissions() {
+        checkPermissionsAndThen(
+            permissions = arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
+            rationaleTitle = getString(R.string.permission_location_title),
+            rationaleMessage = getString(R.string.permission_location_rationale),
+            onGranted = {
+                // Get last location
+                locationModel.getLocationAndThen(this@ClaimHeliumActivity) {
+                    Timber.d("Got user location: $it")
+                    if (it == null) {
+                        toast(R.string.error_claim_gps_failed)
+                    }
+                }
+            },
+            onDenied = {
+                toast(R.string.error_claim_gps_failed)
+            }
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -131,13 +142,14 @@ class ClaimHeliumActivity : AppCompatActivity() {
     }
 
     private class ClaimHeliumDevicePagerAdapter(
-        activity: AppCompatActivity
+        activity: AppCompatActivity,
+        private val isManualClaiming: Boolean = false
     ) : FragmentStateAdapter(activity) {
         companion object {
             const val PAGE_RESET = 0
-            const val PAGE_VERIFY = 1
             const val PAGE_LOCATION = 2
             const val PAGE_RESULT = 3
+            const val PAGE_VERIFY_OR_PAIR = 1
             const val PAGE_COUNT = 4
         }
 
@@ -147,7 +159,13 @@ class ClaimHeliumActivity : AppCompatActivity() {
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 PAGE_RESET -> ClaimHeliumResetFragment()
-                PAGE_VERIFY -> ClaimHeliumVerifyFragment()
+                PAGE_VERIFY_OR_PAIR -> {
+                    if (isManualClaiming) {
+                        ClaimHeliumVerifyFragment()
+                    } else {
+                        ScanDevicesFragment()
+                    }
+                }
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.HELIUM)
                 PAGE_RESULT -> ClaimResultFragment()
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
