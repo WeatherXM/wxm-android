@@ -1,4 +1,4 @@
-package com.weatherxm.ui.claimdevice.scandevices
+package com.weatherxm.ui.claimdevice.helium.pair
 
 import android.Manifest
 import android.app.Activity
@@ -22,9 +22,12 @@ import androidx.lifecycle.lifecycleScope
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
-import com.weatherxm.databinding.FragmentClaimHeliumScanBinding
+import com.weatherxm.databinding.FragmentClaimHeliumPairBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
+import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyViewModel
+import com.weatherxm.ui.common.ErrorDialogFragment
+import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.util.disable
 import com.weatherxm.util.setBluetoothDrawable
@@ -35,11 +38,27 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
-class ScanDevicesFragment : Fragment() {
-    private val model: ScanDevicesViewModel by viewModels()
-    private val parentViewModel: ClaimHeliumViewModel by activityViewModels()
+class ClaimHeliumPairFragment : Fragment() {
+    // TODO: This will be used in the Update activity where the flow is TBD.
+//    private val findZipFileLauncher =
+//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+//            result.data?.data?.let {
+//                model.update(it)
+//            }
+//        }
+//        TODO: For testing purposes. Remove on PR.
+//        model.onBondedDevice().observe(this) {
+//            val intent = Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE)
+//                .setType("application/zip")
+//
+//            findZipFileLauncher.launch(intent)
+//        }
+
+    private val model: ClaimHeliumPairViewModel by viewModels()
+    private val parentModel: ClaimHeliumViewModel by activityViewModels()
+    private val verifyModel: ClaimHeliumVerifyViewModel by activityViewModels()
     private val navigator: Navigator by inject()
-    private lateinit var binding: FragmentClaimHeliumScanBinding
+    private lateinit var binding: FragmentClaimHeliumPairBinding
     private lateinit var adapter: ScannedDevicesListAdapter
 
     private val enableBluetoothLauncher =
@@ -57,7 +76,7 @@ class ScanDevicesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentClaimHeliumScanBinding.inflate(inflater, container, false)
+        binding = FragmentClaimHeliumPairBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -65,8 +84,8 @@ class ScanDevicesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = ScannedDevicesListAdapter {
-            parentViewModel.setDeviceAddress(it.address)
-            navigator.showHeliumPairingStatus(requireActivity().supportFragmentManager)
+            parentModel.setDeviceAddress(it.address)
+            model.setupBluetoothClaiming(it.address)
         }
 
         binding.recycler.adapter = adapter
@@ -86,7 +105,7 @@ class ScanDevicesFragment : Fragment() {
         }
 
         binding.claimDeviceManually.setOnClickListener {
-            parentViewModel.claimManually()
+            parentModel.claimManually()
         }
 
         model.onNewAdvertisement().observe(viewLifecycleOwner) {
@@ -96,8 +115,23 @@ class ScanDevicesFragment : Fragment() {
             binding.recycler.visibility = View.VISIBLE
         }
 
-        model.onProgress().observe(viewLifecycleOwner) {
+        model.onScanProgress().observe(viewLifecycleOwner) {
             updateUI(it)
+        }
+
+        model.onBLEPaired().observe(viewLifecycleOwner) {
+            if (it) {
+                // TODO: FETCH DEV KEY VIA BLE THEN SHOW PAIRING DIALOG
+                navigator.showHeliumPairingStatus(requireActivity().supportFragmentManager)
+            }
+        }
+
+        model.onBLEError().observe(viewLifecycleOwner) {
+            showErrorDialog(it)
+        }
+
+        model.onBLEDevEUI().observe(viewLifecycleOwner) {
+            verifyModel.setDeviceEUI(it)
         }
 
         context?.let {
@@ -141,6 +175,22 @@ class ScanDevicesFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showErrorDialog(uiError: UIError) {
+        ErrorDialogFragment
+            .Builder(
+                title = getString(R.string.pairing_failed),
+                message = uiError.errorMessage
+            )
+            .onNegativeClick(getString(R.string.action_quit_claiming)) {
+                parentModel.cancel()
+            }
+            .onPositiveClick(getString(R.string.action_try_again)) {
+                uiError.retryFunction?.invoke()
+            }
+            .build()
+            .show(this)
     }
 
     private fun updateUI(result: Resource<Unit>) {

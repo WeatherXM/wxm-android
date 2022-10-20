@@ -16,7 +16,7 @@ import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
-import com.weatherxm.ui.claimdevice.scandevices.ScanDevicesFragment
+import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairFragment
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
@@ -163,7 +163,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
                     if (isManualClaiming) {
                         ClaimHeliumVerifyFragment()
                     } else {
-                        ScanDevicesFragment()
+                        ClaimHeliumPairFragment()
                     }
                 }
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.HELIUM)

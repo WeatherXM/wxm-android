@@ -1,4 +1,4 @@
-package com.weatherxm.ui.claimdevice.scandevices
+package com.weatherxm.ui.claimdevice.helium.pair
 
 import android.view.LayoutInflater
 import android.view.View
