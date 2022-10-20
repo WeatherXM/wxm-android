@@ -24,7 +24,7 @@ import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setIcon
-import com.weatherxm.util.setIconAndColor
+import com.weatherxm.util.setSuccessChip
 import timber.log.Timber
 
 class ClaimHeliumActivity : AppCompatActivity() {
@@ -83,15 +83,11 @@ class ClaimHeliumActivity : AppCompatActivity() {
 
             when (pager.currentItem) {
                 PAGE_VERIFY -> {
-                    reset.setIconAndColor(R.drawable.ic_checkmark, R.color.success_tint)
-                    reset.setChipIconTintResource(R.color.dark_background)
-                    reset.setTextColor(getColor(R.color.dark_background))
+                    reset.setSuccessChip()
                     verify.setIcon(R.drawable.ic_two_filled)
                 }
                 PAGE_LOCATION -> {
-                    verify.setIconAndColor(R.drawable.ic_checkmark, R.color.success_tint)
-                    verify.setChipIconTintResource(R.color.dark_background)
-                    verify.setTextColor(getColor(R.color.dark_background))
+                    verify.setSuccessChip()
                     location.setIcon(R.drawable.ic_three_filled)
 
                     checkPermissionsAndThen(
@@ -103,9 +99,9 @@ class ClaimHeliumActivity : AppCompatActivity() {
                         rationaleMessage = getString(R.string.permission_location_rationale),
                         onGranted = {
                             // Get last location
-                            locationModel.getLocationAndThen(this@ClaimHeliumActivity) { location ->
-                                Timber.d("Got user location: $location")
-                                if (location == null) {
+                            locationModel.getLocationAndThen(this@ClaimHeliumActivity) {
+                                Timber.d("Got user location: $it")
+                                if (it == null) {
                                     toast(R.string.error_claim_gps_failed)
                                 }
                             }
@@ -121,9 +117,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
                         verifyModel.getDeviceKey(),
                         locationModel.getInstallationLocation()
                     )
-                    location.setIconAndColor(R.drawable.ic_checkmark, R.color.success_tint)
-                    location.setChipIconTintResource(R.color.dark_background)
-                    location.setTextColor(getColor(R.color.dark_background))
+                    location.setSuccessChip()
                 }
             }
         }

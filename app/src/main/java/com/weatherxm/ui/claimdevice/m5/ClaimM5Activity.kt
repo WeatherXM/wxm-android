@@ -1,10 +1,8 @@
 package com.weatherxm.ui.claimdevice.m5
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +12,6 @@ import com.weatherxm.R
 import com.weatherxm.databinding.ActivityClaimM5DeviceBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
-import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_INFORMATION
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_SERIAL_NUMBER
@@ -26,6 +23,8 @@ import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
+import com.weatherxm.util.setIcon
+import com.weatherxm.util.setSuccessChip
 import timber.log.Timber
 
 class ClaimM5Activity : AppCompatActivity() {
@@ -51,61 +50,20 @@ class ClaimM5Activity : AppCompatActivity() {
         binding.pager.adapter = pagerAdapter
         binding.pager.isUserInputEnabled = false
 
-        val pagerIndicator = binding.pagerIndicator
-        pagerIndicator.attachTo(binding.pager)
-
         model.onCancel().observe(this) {
             if (it) finish()
         }
 
-        model.onNextButtonEnabledStatus().observe(this) { enabled ->
-            binding.nextBtn.isEnabled = enabled
-        }
-
-        model.onNext().observe(this) { shouldClick ->
-            if (shouldClick) binding.nextBtn.performClick()
-        }
-
-        binding.nextBtn.setOnClickListener {
-            if (binding.pager.currentItem == PAGE_SERIAL_NUMBER
-                && verifyModel.getSerialNumber().isEmpty()
-            ) {
-                verifyModel.checkSerialAndContinue()
-            } else if (binding.pager.currentItem == PAGE_LOCATION
-                && !locationModel.isInstallationLocationValid()
-            ) {
-                locationModel.confirmLocation()
-            } else {
-                onNextPressed()
-            }
-        }
-
-        // Make dots not clickable so the user can navigate only under our conditions
-        binding.pagerIndicator.dotsClickable = false
-
-        binding.prevBtn.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+        model.onNext().observe(this) {
+            if (it) onNextPressed()
         }
 
         binding.toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
             finish()
         }
 
         onBackPressedDispatcher.addCallback {
-            when (binding.pager.currentItem) {
-                PAGE_INFORMATION, PAGE_RESULT -> {
-                    // If the user is currently looking at the first
-                    // or the final step (although only on failure on the final step this code runs)
-                    // go back to home and finish this activity
-                    finish()
-                }
-                else -> {
-                    // Otherwise, select the previous step.
-                    binding.pager.currentItem = binding.pager.currentItem - 1
-                }
-            }
-            updateUI()
+            finish()
         }
 
         model.fetchUserEmail()
@@ -116,7 +74,6 @@ class ClaimM5Activity : AppCompatActivity() {
             if (verifyModel.validateSerial(savedSn)) {
                 verifyModel.setSerialNumber(savedSn)
             }
-            updateUI()
         }
     }
 
@@ -128,55 +85,46 @@ class ClaimM5Activity : AppCompatActivity() {
 
     @SuppressLint("MissingPermission")
     private fun onNextPressed() {
-        binding.pager.currentItem += 1
+        with(binding) {
+            pager.currentItem += 1
 
-        if (binding.pager.currentItem == PAGE_RESULT) {
-            model.claimDevice(
-                verifyModel.getSerialNumber(),
-                locationModel.getInstallationLocation()
-            )
-        }
+            when (pager.currentItem) {
+                PAGE_SERIAL_NUMBER -> {
+                    instructions.setSuccessChip()
+                    verify.setIcon(R.drawable.ic_two_filled)
+                }
+                PAGE_LOCATION -> {
+                    verify.setSuccessChip()
+                    location.setIcon(R.drawable.ic_three_filled)
 
-        if (binding.pager.currentItem == PAGE_LOCATION) {
-            checkPermissionsAndThen(
-                permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
-                rationaleTitle = getString(R.string.permission_location_title),
-                rationaleMessage = getString(R.string.permission_location_rationale),
-                onGranted = {
-                    // Get last location
-                    locationModel.getLocationAndThen(this) { location ->
-                        Timber.d("Got user location: $location")
-                        if (location == null) {
+                    checkPermissionsAndThen(
+                        permissions = arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        ),
+                        rationaleTitle = getString(R.string.permission_location_title),
+                        rationaleMessage = getString(R.string.permission_location_rationale),
+                        onGranted = {
+                            // Get last location
+                            locationModel.getLocationAndThen(this@ClaimM5Activity) {
+                                Timber.d("Got user location: $it")
+                                if (it == null) {
+                                    toast(R.string.error_claim_gps_failed)
+                                }
+                            }
+                        },
+                        onDenied = {
                             toast(R.string.error_claim_gps_failed)
                         }
-                    }
-                },
-                onDenied = {
-                    toast(R.string.error_claim_gps_failed)
+                    )
                 }
-            )
-        }
-        updateUI()
-    }
-
-    private fun updateUI() {
-        when (binding.pager.currentItem) {
-            PAGE_INFORMATION -> {
-                binding.prevBtn.visibility = View.INVISIBLE
-                binding.nextBtn.isEnabled = true
-            }
-            PAGE_SERIAL_NUMBER -> {
-                binding.prevBtn.visibility = View.VISIBLE
-                binding.nextBtn.text = getString(R.string.action_next)
-            }
-            PAGE_LOCATION -> {
-                binding.prevBtn.visibility = View.VISIBLE
-                binding.nextBtn.text = getString(R.string.action_claim)
-            }
-            PAGE_RESULT -> {
-                binding.prevBtn.visibility = View.GONE
-                binding.pagerIndicator.visibility = View.GONE
-                binding.nextBtn.visibility = View.GONE
+                PAGE_RESULT -> {
+                    model.claimDevice(
+                        verifyModel.getSerialNumber(),
+                        locationModel.getInstallationLocation()
+                    )
+                    location.setSuccessChip()
+                }
             }
         }
     }

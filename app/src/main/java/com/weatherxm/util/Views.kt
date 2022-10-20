@@ -18,6 +18,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.core.text.HtmlCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
@@ -95,9 +96,11 @@ fun Chip.setIcon(@DrawableRes drawable: Int) {
     this.chipIcon = ResourcesCompat.getDrawable(resources, drawable, context.theme)
 }
 
-fun Chip.setIconAndColor(@DrawableRes drawable: Int, color: Int) {
-    this.setChipBackgroundColorResource(color)
-    this.chipIcon = ResourcesCompat.getDrawable(resources, drawable, context.theme)
+fun Chip.setSuccessChip() {
+    this.setChipBackgroundColorResource(R.color.success_tint)
+    this.chipIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_checkmark, context.theme)
+    this.setChipIconTintResource(R.color.dark_background)
+    this.setTextColor(getColor(resources, R.color.dark_background, context.theme))
 }
 
 fun ImageView.setColor(@ColorRes color: Int) {

@@ -166,6 +166,7 @@
 
     <!-- Claim M5 -->
     <string name="title_claim_m5_device">Claim M5 Device</string>
+    <string name="instructions">Instructions</string>
 
     <!-- Claim Helium -->
     <string name="title_claim_helium_device">Claim Helium Device</string>

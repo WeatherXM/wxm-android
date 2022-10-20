@@ -69,16 +69,27 @@ class ClaimLocationFragment : Fragment() {
             return
         }
 
-        if (model.getDeviceType() == DeviceType.M5_WIFI) {
-            m5ParentModel.nextButtonStatus(true)
-            binding.navigationButtons.visibility = View.GONE
-        } else {
-            binding.cancel.setOnClickListener {
+        binding.cancel.setOnClickListener {
+            if (model.getDeviceType() == DeviceType.M5_WIFI) {
+                m5ParentModel.cancel()
+            } else {
                 heliumParentModel.cancel()
             }
+        }
 
-            binding.confirmAndClaim.setOnClickListener {
-                model.confirmLocation()
+        binding.confirmAndClaim.setOnClickListener {
+            if (model.getDeviceType() == DeviceType.M5_WIFI) {
+                m5ParentModel.cancel()
+            } else {
+                heliumParentModel.cancel()
+            }
+        }
+
+        binding.confirmAndClaim.setOnClickListener {
+            model.confirmLocation()
+            if (model.getDeviceType() == DeviceType.M5_WIFI) {
+                m5ParentModel.next()
+            } else {
                 heliumParentModel.next()
             }
         }

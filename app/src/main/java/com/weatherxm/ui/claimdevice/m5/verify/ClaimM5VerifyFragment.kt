@@ -52,10 +52,8 @@ class ClaimM5VerifyFragment : Fragment() {
                     binding.serialNumberContainer.error = null
                     binding.serialNumberContainer.helperText =
                         "${extractedValue.length}/$SERIAL_NUMBER_MAX_LENGTH"
-                    parentModel.nextButtonStatus(
-                        extractedValue.isNotEmpty()
-                            && extractedValue.length == SERIAL_NUMBER_MAX_LENGTH
-                    )
+                    binding.verify.isEnabled = extractedValue.isNotEmpty()
+                        && extractedValue.length == SERIAL_NUMBER_MAX_LENGTH
 
                     /**
                      * Acts as "resetting" the serial number in case the user goes back and forth
@@ -73,10 +71,12 @@ class ClaimM5VerifyFragment : Fragment() {
             true
         }
 
-        model.onCheckSerialAndContinue().observe(viewLifecycleOwner) { shouldCheckSerial ->
-            if (shouldCheckSerial) {
-                validateAndSetSerial()
-            }
+        binding.cancel.setOnClickListener {
+            parentModel.cancel()
+        }
+
+        binding.verify.setOnClickListener {
+            validateAndSetSerial()
         }
     }
 

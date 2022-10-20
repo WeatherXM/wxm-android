@@ -25,21 +25,15 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
 
     private var userEmail: String? = null
 
-    private val onNextButtonEnabledStatus = MutableLiveData(true)
     private val onNext = MutableLiveData(false)
     private val onCancel = MutableLiveData(false)
     private val onClaimResult = MutableLiveData<Resource<String>>().apply {
         value = Resource.loading()
     }
 
-    fun onNextButtonEnabledStatus() = onNextButtonEnabledStatus
     fun onNext() = onNext
     fun onCancel() = onCancel
     fun onClaimResult() = onClaimResult
-
-    fun nextButtonStatus(enabled: Boolean) {
-        onNextButtonEnabledStatus.postValue(enabled)
-    }
 
     fun next() {
         onNext.postValue(true)
