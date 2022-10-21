@@ -7,68 +7,69 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.card.MaterialCardView
-            android:id="@+id/serialNumberCard"
+        android:id="@+id/serialNumberCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/margin_normal"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        app:layout_constraintBottom_toTopOf="@+id/next"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/margin_normal"
-            app:layout_constraintBottom_toTopOf="@+id/next"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+            app:layout_constraintVertical_chainStyle="packed">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/serial_number_title"
+                style="@style/TextAppearance.WeatherXM.TextInput.Title"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintVertical_chainStyle="packed">
+                android:layout_height="wrap_content"
+                android:text="@string/device_serial_number_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/serial_number_title"
-                    style="@style/TextAppearance.WeatherXM.TextInput.Title"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/serial_number_container"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:hint="@string/device_serial_number_hint"
+                app:helperTextEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/serial_number_title">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/serial_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/device_serial_number_title"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:digits="0123456789ABCDEFabcdef:"
+                    android:imeOptions="actionNext"
+                    android:inputType="text|textCapCharacters"
+                    android:singleLine="true"
+                    android:text="@string/claim_device_serial_number_placeholder"
+                    android:textSize="18sp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/serial_number_container"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_normal"
-                    android:hint="@string/device_serial_number_hint"
-                    app:helperTextEnabled="true"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/serial_number_title">
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/serial_number"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:digits="0123456789ABCDEFabcdef:"
-                        android:imeOptions="actionNext"
-                        android:inputType="text|textCapCharacters"
-                        android:singleLine="true"
-                        android:textSize="18sp" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/instructions"
+                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:bufferType="spannable"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/serial_number_container"
+                tools:text="@string/device_serial_number_instructions" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/instructions"
-                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_normal"
-                    android:bufferType="spannable"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/serial_number_container"
-                    tools:text="@string/device_serial_number_instructions" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -16,14 +16,21 @@ import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity.ClaimDevicePagerAdapter.Companion.PAGE_SERIAL_NUMBER
+import com.weatherxm.ui.claimdevice.location.ClaimDeviceLocationFragment
+import com.weatherxm.ui.claimdevice.location.ClaimDeviceLocationViewModel
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import timber.log.Timber
 
 class ClaimDeviceActivity : AppCompatActivity() {
+    companion object {
+        const val CURRENT_PAGE = "current_page"
+        const val SERIAL_NUMBER = "serial_number"
+    }
 
     private val model: ClaimDeviceViewModel by viewModels()
+    private val locationModel: ClaimDeviceLocationViewModel by viewModels()
     private lateinit var binding: ActivityClaimDeviceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +47,10 @@ class ClaimDeviceActivity : AppCompatActivity() {
 
         val pagerIndicator = binding.pagerIndicator
         pagerIndicator.attachTo(binding.pager)
+
+        model.onCancel().observe(this) {
+            if (it) finish()
+        }
 
         model.onNextButtonEnabledStatus().observe(this) { enabled ->
             binding.nextBtn.isEnabled = enabled
@@ -86,6 +97,18 @@ class ClaimDeviceActivity : AppCompatActivity() {
         }
 
         model.fetchUserEmail()
+
+        savedInstanceState?.let {
+            binding.pager.currentItem = it.getInt(CURRENT_PAGE, 0)
+            model.validateAndSetSerial(it.getString(SERIAL_NUMBER, ""))
+            updateUI()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt(CURRENT_PAGE, binding.pager.currentItem)
+        outState.putString(SERIAL_NUMBER, model.getSerialNumber())
+        super.onSaveInstanceState(outState)
     }
 
     @SuppressLint("MissingPermission")
@@ -103,12 +126,10 @@ class ClaimDeviceActivity : AppCompatActivity() {
                 rationaleMessage = getString(R.string.permission_location_rationale),
                 onGranted = {
                     // Get last location
-                    model.getLocationAndThen(this) { location ->
+                    locationModel.getLocationAndThen(this) { location ->
                         Timber.d("Got user location: $location")
                         if (location == null) {
                             toast(R.string.error_claim_gps_failed)
-                        } else {
-                            model.updateLocationOnMap(location)
                         }
                     }
                 }
@@ -125,11 +146,10 @@ class ClaimDeviceActivity : AppCompatActivity() {
             }
             PAGE_SERIAL_NUMBER -> {
                 binding.prevBtn.visibility = View.VISIBLE
-                binding.nextBtn.isEnabled = model.isSerialSet()
                 binding.nextBtn.text = getString(R.string.action_next)
             }
             PAGE_LOCATION -> {
-                binding.nextBtn.isEnabled = model.getLocationSet()
+                binding.prevBtn.visibility = View.VISIBLE
                 binding.nextBtn.text = getString(R.string.action_claim)
             }
             PAGE_RESULT -> {

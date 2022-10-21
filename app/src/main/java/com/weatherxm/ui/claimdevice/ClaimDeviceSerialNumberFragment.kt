@@ -67,6 +67,8 @@ class ClaimDeviceSerialNumberFragment : Fragment() {
                 if (!model.validateAndSetSerial(binding.serialNumber.text.unmask())) {
                     binding.serialNumberContainer.error =
                         getString(R.string.warn_validation_invalid_serial_number)
+                } else {
+                    model.nextButtonClick()
                 }
             }
         }

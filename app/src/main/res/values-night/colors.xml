@@ -15,6 +15,9 @@
     <color name="ic_launcher_background">#1B75BA</color>
     <color name="status_bar_color">#80003b77</color>
 
+    <!-- List Divider -->
+    <color name="list_divider">@color/dark_dark2</color>
+
     <!-- Weather Card -->
     <color name="weather_card_data_icon">@color/dark_darkest</color>
     <color name="weather_card_data_subtitle">@color/dark_darkest</color>
