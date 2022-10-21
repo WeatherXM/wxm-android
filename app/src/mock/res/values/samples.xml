@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="claim_device_serial_number_placeholder">AA:AA:AA:AA:AA:AA:AA:AA:AA</string>
+    <string name="claim_device_dev_eui_key_placeholder">0123456789ABCDF0</string>
 </resources>

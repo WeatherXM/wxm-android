@@ -1,5 +1,6 @@
 package com.weatherxm.ui
 
+import android.bluetooth.BluetoothAdapter
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -8,11 +9,12 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.Device
-import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
 import com.weatherxm.ui.claimdevice.helium.pairingstatus.ClaimHeliumPairingStatusFragment
+import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
 import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeFragment
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.toast
@@ -125,6 +127,14 @@ class Navigator {
                     .putExtra(UserDeviceActivity.ARG_DEVICE, device)
             )
         }
+    }
+
+    fun showQRScanner(activityResultLauncher: ActivityResultLauncher<ScanOptions>) {
+        activityResultLauncher.launch(ScanOptions().setBeepEnabled(false))
+    }
+
+    fun showBluetoothEnablePrompt(bluetoothLauncher: ActivityResultLauncher<Intent>) {
+        bluetoothLauncher.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
     }
 
     fun showResetPassword(context: Context) {

@@ -9,4 +9,5 @@
         <item>1500</item>
     </array>
     <string name="claim_device_serial_number_placeholder" />
+    <string name="claim_device_dev_eui_key_placeholder" />
 </resources>

@@ -8,12 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
-import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimHeliumVerifyBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
-import com.weatherxm.ui.common.show
 import com.weatherxm.util.onTextChanged
 import org.koin.android.ext.android.inject
 
@@ -28,12 +26,8 @@ class ClaimHeliumVerifyFragment : Fragment() {
     private val barcodeLauncher =
         registerForActivityResult(ScanContract()) { result: ScanIntentResult ->
             result.contents.let {
-                val scannedEUI = model.getEUIFromScanner(it)
-                val scannedKey = model.getKeyFromScanner(it)
-                binding.devKey.setText(scannedKey)
-                binding.devEUI.setText(scannedEUI)
-                model.setDeviceKey(scannedKey)
-                model.setDeviceEUI(scannedEUI)
+                binding.devEUI.setText(model.getEUIFromScanner(it))
+                binding.devKey.setText(model.getKeyFromScanner(it))
             }
         }
 
@@ -58,7 +52,7 @@ class ClaimHeliumVerifyFragment : Fragment() {
         }
 
         binding.scan.setOnClickListener {
-            barcodeLauncher.launch(ScanOptions().setBeepEnabled(false))
+            navigator.showQRScanner(barcodeLauncher)
         }
 
         binding.cancel.setOnClickListener {

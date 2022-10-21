@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
-import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -58,7 +57,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.newAddressContainer.setEndIconOnClickListener {
-            scanWallet()
+            navigator.showQRScanner(barcodeLauncher)
         }
 
         binding.newAddress.onTextChanged {
@@ -135,12 +134,6 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
                 finish()
             }
         }
-    }
-
-    private fun scanWallet() {
-        barcodeLauncher.launch(
-            ScanOptions().setBeepEnabled(false)
-        )
     }
 
     private fun shareAddress(address: String) {

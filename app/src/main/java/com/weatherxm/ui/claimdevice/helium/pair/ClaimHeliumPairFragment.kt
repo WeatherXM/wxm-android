@@ -1,9 +1,11 @@
 package com.weatherxm.ui.claimdevice.helium.pair
 
-import android.Manifest
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.BLUETOOTH_CONNECT
+import android.Manifest.permission.BLUETOOTH_SCAN
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -14,11 +16,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -29,12 +29,10 @@ import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyViewModel
 import com.weatherxm.ui.common.ErrorDialogFragment
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.checkPermissionsAndThen
-import com.weatherxm.util.disable
 import com.weatherxm.util.setBluetoothDrawable
 import com.weatherxm.util.setHtml
 import com.weatherxm.util.setNoDevicesFoundDrawable
 import com.weatherxm.util.setWarningDrawable
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import timber.log.Timber
 
@@ -58,6 +56,7 @@ class ClaimHeliumPairFragment : Fragment() {
     private val parentModel: ClaimHeliumViewModel by activityViewModels()
     private val verifyModel: ClaimHeliumVerifyViewModel by activityViewModels()
     private val navigator: Navigator by inject()
+    private val bluetoothAdapter: BluetoothAdapter? by inject()
     private lateinit var binding: FragmentClaimHeliumPairBinding
     private lateinit var adapter: ScannedDevicesListAdapter
 
@@ -84,7 +83,6 @@ class ClaimHeliumPairFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = ScannedDevicesListAdapter {
-            parentModel.setDeviceAddress(it.address)
             model.setupBluetoothClaiming(it.address)
         }
 
@@ -108,7 +106,7 @@ class ClaimHeliumPairFragment : Fragment() {
             parentModel.claimManually()
         }
 
-        model.onNewAdvertisement().observe(viewLifecycleOwner) {
+        model.onNewScannedDevice().observe(viewLifecycleOwner) {
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
             binding.infoContainer.visibility = View.GONE
@@ -134,46 +132,26 @@ class ClaimHeliumPairFragment : Fragment() {
             verifyModel.setDeviceEUI(it)
         }
 
-        context?.let {
-            val bluetoothAdapter: BluetoothAdapter? =
-                ContextCompat.getSystemService(it, BluetoothManager::class.java)?.adapter
-
-            if (bluetoothAdapter == null) {
-                binding.infoIcon.setBluetoothDrawable(requireContext())
-                showInfoMessage(
-                    R.string.no_bluetooth_available,
-                    R.string.no_bluetooth_available_desc
-                )
-            } else if (bluetoothAdapter.isEnabled) {
+        bluetoothAdapter?.let {
+            if (it.isEnabled) {
                 checkAndScanBleDevices()
             } else {
-                val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     checkPermissionsAndThen(
-                        permissions = arrayOf(
-                            Manifest.permission.BLUETOOTH_CONNECT
-                        ),
+                        permissions = arrayOf(BLUETOOTH_CONNECT),
                         rationaleTitle = getString(R.string.permission_bluetooth_title),
                         rationaleMessage = getString(R.string.perm_bluetooth_scanning_desc),
                         onGranted = {
-                            lifecycleScope.launch {
-                                enableBluetoothLauncher.launch(enableBtIntent)
-                            }
+                            navigator.showBluetoothEnablePrompt(enableBluetoothLauncher)
                         },
-                        onDenied = {
-                            binding.infoIcon.setBluetoothDrawable(requireContext())
-                            showInfoMessage(
-                                R.string.no_bluetooth_access,
-                                R.string.no_bluetooth_access_desc
-                            )
-                            binding.scanAgain.disable(requireContext())
-                            binding.accessBluetoothPrompt.visibility = View.VISIBLE
-                        }
-                    )
+                        onDenied = { showNoBluetoothAccessText() })
                 } else {
-                    enableBluetoothLauncher.launch(enableBtIntent)
+                    navigator.showBluetoothEnablePrompt(enableBluetoothLauncher)
                 }
             }
+        } ?: run {
+            binding.infoIcon.setBluetoothDrawable(requireContext())
+            showInfoMessage(R.string.no_bluetooth_available, R.string.no_bluetooth_available_desc)
         }
     }
 
@@ -230,44 +208,30 @@ class ClaimHeliumPairFragment : Fragment() {
         binding.infoContainer.visibility = View.VISIBLE
     }
 
+    private fun showNoBluetoothAccessText() {
+        binding.infoIcon.setBluetoothDrawable(requireContext())
+        showInfoMessage(R.string.no_bluetooth_access, R.string.no_bluetooth_access_desc)
+        binding.accessBluetoothPrompt.visibility = View.VISIBLE
+    }
+
     private fun checkAndScanBleDevices() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             checkPermissionsAndThen(
-                permissions = arrayOf(
-                    Manifest.permission.BLUETOOTH_SCAN,
-                    Manifest.permission.BLUETOOTH_CONNECT
-                ),
+                permissions = arrayOf(BLUETOOTH_SCAN, BLUETOOTH_CONNECT),
                 rationaleTitle = getString(R.string.permission_bluetooth_title),
                 rationaleMessage = getString(R.string.perm_bluetooth_scanning_desc),
-                onGranted = {
-                    lifecycleScope.launch {
-                        model.scanBleDevices()
-                    }
-                },
-                onDenied = {
-                    binding.infoIcon.setBluetoothDrawable(requireContext())
-                    showInfoMessage(R.string.no_bluetooth_access, R.string.no_bluetooth_access_desc)
-                    binding.scanAgain.disable(requireContext())
-                    binding.accessBluetoothPrompt.visibility = View.VISIBLE
-                }
+                onGranted = { model.scanBleDevices() },
+                onDenied = { showNoBluetoothAccessText() }
             )
         } else {
             checkPermissionsAndThen(
-                permissions = arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
+                permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
                 rationaleTitle = getString(R.string.permission_location_title),
                 rationaleMessage = getString(R.string.perm_location_scanning_desc),
-                onGranted = {
-                    lifecycleScope.launch {
-                        model.scanBleDevices()
-                    }
-                },
+                onGranted = { model.scanBleDevices() },
                 onDenied = {
                     binding.infoIcon.setBluetoothDrawable(requireContext())
                     showInfoMessage(R.string.no_location_access, R.string.no_location_access_desc)
-                    binding.scanAgain.disable(requireContext())
                     binding.accessBluetoothPrompt.visibility = View.VISIBLE
                 }
             )

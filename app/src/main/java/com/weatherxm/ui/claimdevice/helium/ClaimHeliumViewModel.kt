@@ -27,7 +27,6 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
     fun onClaimManually() = onClaimManually
 
     private var userEmail: String? = null
-    private var deviceAddress = ""
     private var isManual = false
 
     fun cancel() {
@@ -54,14 +53,6 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
                 userEmail = null
             }
         }
-    }
-
-    fun setDeviceAddress(address: String) {
-        deviceAddress = address
-    }
-
-    fun getDeviceAddress(): String {
-        return deviceAddress
     }
 
     fun getUserEmail(): String? {

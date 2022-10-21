@@ -28,10 +28,10 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     private val onBLEPaired = MutableLiveData(false)
     private val onBLEError = MutableLiveData<UIError>()
     private val onBLEDevEUI = MutableLiveData<String>()
-    private val onNewAdvertisement = MutableLiveData<List<ScannedDevice>>()
+    private val onNewScannedDevice = MutableLiveData<List<ScannedDevice>>()
     private val onScanProgress = MutableLiveData<Resource<Unit>>()
 
-    fun onNewAdvertisement(): LiveData<List<ScannedDevice>> = onNewAdvertisement
+    fun onNewScannedDevice(): LiveData<List<ScannedDevice>> = onNewScannedDevice
     fun onScanProgress(): LiveData<Resource<Unit>> = onScanProgress
     fun onBLEPaired() = onBLEPaired
     fun onBLEError() = onBLEError
@@ -41,13 +41,11 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             onScanProgress.postValue(Resource.loading())
             scannedDevices.clear()
-            scanDevicesUseCase.startScanning()
-                .map {
-                    onScanProgress.postValue(Resource.success(Unit))
-                }
-                .mapLeft {
-                    onScanProgress.postValue(Resource.error(""))
-                }
+            scanDevicesUseCase.startScanning().tap {
+                onScanProgress.postValue(Resource.success(Unit))
+            }.tapLeft {
+                onScanProgress.postValue(Resource.error(""))
+            }
         }
     }
 
@@ -56,10 +54,10 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     }
 
     fun setupBluetoothClaiming(macAddress: String) {
-        bluetoothConnectionUseCase.getDeviceEUI(macAddress)?.let {
+        bluetoothConnectionUseCase.getDeviceEUI(macAddress).tap {
             onBLEDevEUI.postValue(it)
             setPeripheral(macAddress)
-        } ?: run {
+        }.tapLeft {
             onBLEError.postValue(
                 UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
                     setupBluetoothClaiming(macAddress)
@@ -68,15 +66,13 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     }
 
     private fun setPeripheral(macAddress: String) {
-        bluetoothConnectionUseCase.setPeripheral(macAddress)
-            .map {
-                connectToPeripheral()
-            }
-            .mapLeft {
-                onBLEError.postValue(UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
-                    setPeripheral(macAddress)
-                })
-            }
+        bluetoothConnectionUseCase.setPeripheral(macAddress).tap {
+            connectToPeripheral()
+        }.tapLeft {
+            onBLEError.postValue(UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
+                setPeripheral(macAddress)
+            })
+        }
     }
 
     private fun connectToPeripheral() {
@@ -112,7 +108,7 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
                     if (!scannedDevices.contains(it)) {
                         Timber.d("New scanned device collected: $it")
                         scannedDevices.add(it)
-                        this@ClaimHeliumPairViewModel.onNewAdvertisement.postValue(scannedDevices)
+                        this@ClaimHeliumPairViewModel.onNewScannedDevice.postValue(scannedDevices)
                     }
                 }
         }

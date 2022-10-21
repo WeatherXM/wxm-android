@@ -63,6 +63,7 @@
                             android:imeOptions="actionNext"
                             android:inputType="text|textCapCharacters"
                             android:singleLine="true"
+                            android:text="@string/claim_device_dev_eui_key_placeholder"
                             android:textSize="18sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -95,6 +96,7 @@
                             android:imeOptions="actionNext"
                             android:inputType="text|textCapCharacters"
                             android:singleLine="true"
+                            android:text="@string/claim_device_dev_eui_key_placeholder"
                             android:textSize="18sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>

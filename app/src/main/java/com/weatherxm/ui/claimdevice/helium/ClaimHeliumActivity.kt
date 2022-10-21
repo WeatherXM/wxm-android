@@ -1,6 +1,7 @@
 package com.weatherxm.ui.claimdevice.helium
 
-import android.Manifest
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.addCallback
@@ -10,13 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
+import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairFragment
 import com.weatherxm.ui.claimdevice.helium.reset.ClaimHeliumResetFragment
 import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyFragment
 import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
-import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairFragment
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
@@ -67,9 +68,11 @@ class ClaimHeliumActivity : AppCompatActivity() {
 
         model.onClaimManually().observe(this) {
             if (it) {
+                val currentPage = binding.pager.currentItem
                 model.setManual(true)
                 pagerAdapter = ClaimHeliumDevicePagerAdapter(this, true)
                 binding.pager.adapter = pagerAdapter
+                binding.pager.currentItem = currentPage
                 binding.pager.isUserInputEnabled = false
                 binding.secondStep.text = getString(R.string.action_verify)
             }
@@ -113,10 +116,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
     @SuppressLint("MissingPermission")
     private fun askForLocationPermissions() {
         checkPermissionsAndThen(
-            permissions = arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ),
+            permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
             rationaleTitle = getString(R.string.permission_location_title),
             rationaleMessage = getString(R.string.permission_location_rationale),
             onGranted = {
@@ -147,9 +147,9 @@ class ClaimHeliumActivity : AppCompatActivity() {
     ) : FragmentStateAdapter(activity) {
         companion object {
             const val PAGE_RESET = 0
+            const val PAGE_VERIFY_OR_PAIR = 1
             const val PAGE_LOCATION = 2
             const val PAGE_RESULT = 3
-            const val PAGE_VERIFY_OR_PAIR = 1
             const val PAGE_COUNT = 4
         }
 

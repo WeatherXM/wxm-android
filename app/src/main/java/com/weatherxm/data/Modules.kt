@@ -1,7 +1,10 @@
 package com.weatherxm.data
 
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
 import android.content.SharedPreferences
 import android.text.format.DateFormat
+import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import androidx.room.Room
 import androidx.security.crypto.EncryptedSharedPreferences
@@ -505,6 +508,9 @@ private val network = module {
 }
 
 private val bluetooth = module {
+    single<BluetoothAdapter?> {
+        ContextCompat.getSystemService(androidContext(), BluetoothManager::class.java)?.adapter
+    }
     single<ESPProvisionManager> {
         ESPProvisionManager.getInstance(androidContext())
     }

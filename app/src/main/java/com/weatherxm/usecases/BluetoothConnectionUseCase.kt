@@ -2,6 +2,7 @@ package com.weatherxm.usecases
 
 import arrow.core.Either
 import com.juul.kable.Peripheral
+import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepository
 import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepository
@@ -11,7 +12,7 @@ interface BluetoothConnectionUseCase {
     fun setPeripheral(address: String): Either<Failure, Unit>
     suspend fun connectToPeripheral(): Either<Failure, Peripheral>
     fun registerOnBondStatus(): Flow<Int>
-    fun getDeviceEUI(macAddress: String): String?
+    fun getDeviceEUI(macAddress: String): Either<Failure, String>
 }
 
 class BluetoothConnectionUseCaseImpl(
@@ -31,7 +32,9 @@ class BluetoothConnectionUseCaseImpl(
         return bluetoothConnectionRepository.registerOnBondStatus()
     }
 
-    override fun getDeviceEUI(macAddress: String): String? {
-        return bluetoothScannerRepository.getScannedDevice(macAddress)?.devEUI
+    override fun getDeviceEUI(macAddress: String): Either<Failure, String> {
+        return bluetoothScannerRepository.getScannedDevice(macAddress)?.devEUI?.let {
+            Either.Right(it)
+        } ?: Either.Left(DataError.CacheMissError)
     }
 }

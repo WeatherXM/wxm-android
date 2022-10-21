@@ -142,7 +142,7 @@
     <string name="no_bluetooth_access">No Bluetooth Access</string>
     <string name="no_bluetooth_access_desc"><![CDATA[In order to connect your device, WeatherXM app needs access to Bluetooth. If you do not wish to provide such access, please select <b>Claim Device Manually</b>.]]></string>
     <string name="no_devices_found">No Devices Found</string>
-    <string name="no_devices_found_desc"><![CDATA[Please reset your WXM device and <b>Scan Again</b>!\nOr, you can try <b>claiming your device manually</b> below.]]></string>
+    <string name="no_devices_found_desc"><![CDATA[We could not find any WeatherXM devices, please try to <b>scan again</b>!<br>Or, you can try claiming your device manually below.]]></string>
     <string name="scan_failed_title">Scanning Failed</string>
     <string name="scan_failed_desc"><![CDATA[Something went wrong! Please either <b>Scan Again</b>, or if the problem persists, you can <b>Claim Device Manually</b>.]]></string>
 
