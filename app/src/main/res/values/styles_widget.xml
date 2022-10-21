@@ -155,13 +155,17 @@
         <item name="cardBackgroundColor">@color/chart_popup_background</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.Warning" parent="Widget.WeatherXM.MaterialCard">
-        <item name="cardBackgroundColor">@color/error</item>
-    </style>
-
     <style name="Widget.WeatherXM.MaterialCard.DevicesCount" parent="Widget.WeatherXM.MaterialCard.Small">
         <item name="cardBackgroundColor">@color/explorer_devices_count_background</item>
         <item name="useCompatPadding">false</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.Warning" parent="Widget.WeatherXM.MaterialCard">
+        <item name="android:textColor">@color/dark_background</item>
+        <item name="cardBackgroundColor">@color/warning_tint</item>
+        <item name="contentPadding">@dimen/padding_small</item>
+        <item name="contentPaddingTop">@dimen/padding_normal</item>
+        <item name="contentPaddingBottom">@dimen/padding_normal</item>
     </style>
 
     <style name="Widget.WeatherXM.MaterialCard.Error" parent="Widget.WeatherXM.MaterialCard">

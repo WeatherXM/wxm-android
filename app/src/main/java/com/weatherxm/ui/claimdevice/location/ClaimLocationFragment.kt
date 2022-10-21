@@ -9,25 +9,24 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimSetLocationBinding
+import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.hideKeyboard
-import com.weatherxm.util.onTextChanged
+import com.weatherxm.util.setHtml
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 class ClaimLocationFragment : Fragment() {
     private val m5ParentModel: ClaimM5ViewModel by activityViewModels()
     private val heliumParentModel: ClaimHeliumViewModel by activityViewModels()
     private val model: ClaimLocationViewModel by activityViewModels()
+    private val navigator: Navigator by inject()
     private lateinit var binding: FragmentClaimSetLocationBinding
-
-    private lateinit var adapter: SearchResultsAdapter
-    private lateinit var recyclerLayoutManager: LinearLayoutManager
 
     companion object {
         const val TAG = "ClaimLocationFragment"
@@ -86,6 +85,7 @@ class ClaimLocationFragment : Fragment() {
         }
 
         binding.confirmAndClaim.setOnClickListener {
+            // TODO: Confirm Location only if the installation togle is checked
             model.confirmLocation()
             if (model.getDeviceType() == DeviceType.M5_WIFI) {
                 m5ParentModel.next()
@@ -95,41 +95,54 @@ class ClaimLocationFragment : Fragment() {
         }
 
         model.onSelectedSearchLocation().observe(viewLifecycleOwner) {
-            adapter.updateData("", mutableListOf())
-            binding.recycler.visibility = View.GONE
+            binding.addressSearchView.clear()
         }
 
         model.onSearchResults().observe(viewLifecycleOwner) {
             if (it == null) {
                 context.toast(getString(R.string.error_search_suggestions))
-            } else if (it.isEmpty() || binding.searchBox.length() <= 2) {
-                adapter.updateData("", mutableListOf())
-                binding.recycler.visibility = View.GONE
+            } else if (it.isEmpty() || binding.addressSearchView.getQueryLength() <= 2) {
+                binding.addressSearchView.clear()
             } else {
-                adapter.updateData(binding.searchBox.text.toString(), it)
-                binding.recycler.visibility = View.VISIBLE
+                binding.addressSearchView.setData(it)
             }
         }
 
-        binding.searchBox.onTextChanged {
-            if (it.isEmpty()) {
-                adapter.updateData("", mutableListOf())
-                binding.recycler.visibility = View.GONE
-            } else if (it.length >= 2) {
-                model.geocoding(it)
-            } else {
-                adapter.updateData("", mutableListOf())
-                binding.recycler.visibility = View.GONE
-            }
-        }
-
-        adapter = SearchResultsAdapter {
+        binding.addressSearchView.setAdapter(SearchResultsAdapter {
             model.getLocationFromSearchSuggestion(it)
             hideKeyboard()
+        }) {
+            model.geocoding(it)
         }
 
-        binding.recycler.adapter = adapter
-        recyclerLayoutManager = binding.recycler.layoutManager as LinearLayoutManager
-        binding.recycler.visibility = View.GONE
+        binding.installationToggle.setOnCheckedChangeListener { _, checked ->
+            with(binding) {
+                if (checked) {
+                    mapContainer.visibility = View.VISIBLE
+                    infoContainer.strokeWidth = 0
+                    needHelpInstallation.visibility = View.GONE
+                    warningBox.visibility = View.GONE
+                    toggleDescription.text = getString(R.string.installation_toggle_checked)
+                    mapView.getFragment<ClaimMapFragment>().initMarkerAndListeners()
+                } else {
+                    mapContainer.visibility = View.GONE
+                    infoContainer.strokeWidth = 1
+                    needHelpInstallation.visibility = View.VISIBLE
+                    warningBox.visibility = View.VISIBLE
+                    toggleDescription.text = getString(R.string.installation_toggle_unchecked)
+                }
+            }
+        }
+
+        with(binding.needHelpInstallation) {
+            movementMethod =
+                me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {
+                    setOnLinkClickListener { _, url ->
+                        navigator.openWebsite(context, url)
+                        return@setOnLinkClickListener true
+                    }
+                }
+            setHtml(R.string.need_help_installation, getString(R.string.documentation_url))
+        }
     }
 }

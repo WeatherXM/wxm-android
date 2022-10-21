@@ -81,10 +81,6 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
         return installationLocation
     }
 
-    fun isInstallationLocationValid(): Boolean {
-        return installationLocation.latitude != 0.0 && installationLocation.longitude != 0.0
-    }
-
     @Suppress("MagicNumber")
     @RequiresPermission(anyOf = [ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION])
     fun getLocationAndThen(context: Context, onLocation: (location: Location?) -> Unit) {

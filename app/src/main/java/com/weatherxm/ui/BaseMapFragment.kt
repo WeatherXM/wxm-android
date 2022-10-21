@@ -10,9 +10,7 @@ import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.annotations
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
-import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPolygonAnnotationManager
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.scalebar.scalebar
@@ -35,7 +33,6 @@ open class BaseMapFragment : Fragment() {
 
     protected lateinit var binding: FragmentMapBinding
     protected lateinit var polygonManager: PolygonAnnotationManager
-    protected lateinit var pointManager: PointAnnotationManager
     protected lateinit var viewManager: ViewAnnotationManager
 
     private lateinit var debugInfoListener: OnMapDebugInfoListener
@@ -90,7 +87,6 @@ open class BaseMapFragment : Fragment() {
 
             with(binding.mapView.annotations) {
                 polygonManager = this.createPolygonAnnotationManager()
-                pointManager = this.createPointAnnotationManager()
             }
 
             // Update camera

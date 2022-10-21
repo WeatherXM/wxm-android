@@ -42,44 +42,12 @@
             android:paddingVertical="@dimen/padding_normal"
             app:layout_constraintVertical_chainStyle="packed">
 
-            <com.google.android.material.card.MaterialCardView
+            <com.weatherxm.ui.widget.WarningCardView
                 android:id="@+id/warning"
-                style="@style/Widget.WeatherXM.MaterialCard.Warning"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                app:cardUseCompatPadding="false"
-                app:contentPadding="@dimen/padding_normal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/warning_icon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_error"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="ContentDescription" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        style="@style/TextAppearance.WeatherXM.Warning"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_small"
-                        android:text="@string/wallet_prompt"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/warning_icon"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.card.MaterialCardView>
+                app:layout_constraintTop_toTopOf="parent"
+                app:warning_message="@string/wallet_prompt" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/addressCard"
