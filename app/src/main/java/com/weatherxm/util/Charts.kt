@@ -90,9 +90,9 @@ private fun MutableList<LineDataSet>.secondaryLineInit(
     forEach {
         with(it) {
             setDefaultSettings(context, resources)
-            setDrawCircles(false)
             isHighlightEnabled = false
             color = resources.getColor(R.color.chart_secondary_line, context.theme)
+            setCircleColor(resources.getColor(R.color.chart_secondary_line, context.theme))
         }
     }
     return this
