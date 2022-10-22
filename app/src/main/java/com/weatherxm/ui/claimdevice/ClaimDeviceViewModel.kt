@@ -29,7 +29,7 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val validator: Validator by inject()
 
-    private lateinit var currentSerialNumber: String
+    private var currentSerialNumber: String = ""
     private var isSerialSet = false
     private var userEmail: String? = null
     private var installationLat: Double = 0.0
