@@ -1,4 +1,4 @@
-package com.weatherxm.ui.claimdevice.selectdevicetype
+package com.weatherxm.usecases.selectdevicetype
 
 import androidx.lifecycle.ViewModel
 import com.weatherxm.ui.claimdevice.AvailableDeviceType

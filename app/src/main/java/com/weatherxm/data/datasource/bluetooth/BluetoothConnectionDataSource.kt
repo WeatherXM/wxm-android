@@ -11,4 +11,5 @@ interface BluetoothConnectionDataSource {
     fun registerOnBondStatus(): Flow<Int>
     fun getPairedDevices(): List<BluetoothDevice>?
     suspend fun fetchClaimingKey(): Either<Failure, String>
+    suspend fun fetchDeviceEUI(): Either<Failure, String>
 }

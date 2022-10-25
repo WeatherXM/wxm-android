@@ -63,16 +63,12 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
 
     fun setupBluetoothClaiming(macAddress: String) {
         selectedDeviceMacAddress = macAddress
-        bluetoothConnectionUseCase.getDeviceEUI(macAddress).tap {
-            onBLEDevEUI.postValue(it)
-            setPeripheral(macAddress)
+        bluetoothConnectionUseCase.setPeripheral(macAddress).tap {
+            connectToPeripheral()
         }.tapLeft {
-            onBLEError.postValue(
-                UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
-                    setupBluetoothClaiming(macAddress)
-                })
-            // TODO: Remove this?
-            setPeripheral(macAddress)
+            onBLEError.postValue(UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
+                setupBluetoothClaiming(macAddress)
+            })
         }
     }
 
@@ -81,16 +77,6 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
         GlobalScope.launch {
             updater.setUpdater()
             updater.update(uri)
-        }
-    }
-
-    private fun setPeripheral(macAddress: String) {
-        bluetoothConnectionUseCase.setPeripheral(macAddress).tap {
-            connectToPeripheral()
-        }.tapLeft {
-            onBLEError.postValue(UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
-                setPeripheral(macAddress)
-            })
         }
     }
 
@@ -119,8 +105,23 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
                     it.address == selectedDeviceMacAddress
                 }
                 if (isDevicePaired == true) {
-                    fetchClaimingKey()
+                    fetchDeviceEUI()
                 }
+            }
+        }
+    }
+
+    private fun fetchDeviceEUI() {
+        viewModelScope.launch {
+            bluetoothConnectionUseCase.fetchDeviceEUI().tap {
+                onBLEDevEUI.postValue(it)
+                fetchClaimingKey()
+            }.tapLeft {
+                onBLEError.postValue(UIError(
+                    resHelper.getString(R.string.helium_fetching_info_failed)
+                ) {
+                    fetchDeviceEUI()
+                })
             }
         }
     }
@@ -131,7 +132,7 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
                 onBLEClaimingKey.postValue(it)
             }.tapLeft {
                 onBLEError.postValue(UIError(
-                    resHelper.getString(R.string.helium_pairing_failed_desc)
+                    resHelper.getString(R.string.helium_fetching_info_failed)
                 ) {
                     fetchClaimingKey()
                 })
@@ -154,7 +155,7 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
             bluetoothConnectionUseCase.registerOnBondStatus().collect {
                 when (it) {
                     BluetoothDevice.BOND_BONDED -> {
-                        fetchClaimingKey()
+                        fetchDeviceEUI()
                     }
                     BluetoothDevice.BOND_NONE -> {
                         onBLEError.postValue(

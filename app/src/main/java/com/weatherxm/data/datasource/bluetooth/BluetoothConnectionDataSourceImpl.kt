@@ -6,6 +6,8 @@ import android.bluetooth.BluetoothDevice
 import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager
+import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_CLAIMING_KEY_COMMAND
+import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_DEV_EUI_COMMAND
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -43,7 +45,18 @@ class BluetoothConnectionDataSourceImpl(
     override suspend fun fetchClaimingKey(): Either<Failure, String> {
         return suspendCoroutine { continuation ->
             GlobalScope.launch {
-                connectionManager.fetchClaimingKey {
+                connectionManager.fetchATCommand(AT_CLAIMING_KEY_COMMAND) {
+                    continuation.resumeWith(Result.success(it))
+                }
+            }
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    override suspend fun fetchDeviceEUI(): Either<Failure, String> {
+        return suspendCoroutine { continuation ->
+            GlobalScope.launch {
+                connectionManager.fetchATCommand(AT_DEV_EUI_COMMAND) {
                     continuation.resumeWith(Result.success(it))
                 }
             }

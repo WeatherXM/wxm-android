@@ -15,7 +15,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
 import com.weatherxm.ui.claimdevice.helium.pairingstatus.ClaimHeliumPairingStatusFragment
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
-import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeFragment
+import com.weatherxm.usecases.selectdevicetype.SelectDeviceTypeFragment
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity

@@ -431,7 +431,7 @@ private val usecases = module {
         SelectDeviceTypeUseCaseImpl()
     }
     single<BluetoothConnectionUseCase> {
-        BluetoothConnectionUseCaseImpl(get(), get())
+        BluetoothConnectionUseCaseImpl(get())
     }
 }
 

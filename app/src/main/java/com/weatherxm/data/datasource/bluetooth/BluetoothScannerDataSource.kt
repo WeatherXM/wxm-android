@@ -8,5 +8,4 @@ import kotlinx.coroutines.flow.Flow
 interface BluetoothScannerDataSource {
     suspend fun registerOnScanning(): Flow<BluetoothDeviceWithEUI>
     suspend fun startScanning(): Either<Failure, Unit>
-    fun getScannedDevice(macAddress: String): BluetoothDeviceWithEUI?
 }

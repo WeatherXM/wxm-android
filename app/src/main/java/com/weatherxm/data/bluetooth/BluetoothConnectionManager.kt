@@ -24,7 +24,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.takeWhile
 import timber.log.Timber
 
@@ -32,6 +31,8 @@ class BluetoothConnectionManager(private val context: Context) {
     companion object {
         const val READ_CHARACTERISTIC_UUID = "49616"
         const val WRITE_CHARACTERISTIC_UUID = "34729"
+        const val AT_CLAIMING_KEY_COMMAND = "AT+CLAIM_KEY=?\r\n"
+        const val AT_DEV_EUI_COMMAND = "ΑΤ+DevEUI_get=?\r\n"
     }
 
     private lateinit var peripheral: Peripheral
@@ -140,17 +141,16 @@ class BluetoothConnectionManager(private val context: Context) {
         }
     }
 
-    suspend fun fetchClaimingKey(listener: (Either<Failure, String>) -> Unit) {
+    suspend fun fetchATCommand(command: String, listener: (Either<Failure, String>) -> Unit) {
         setReadWriteCharacteristic()
-        Timber.d("[BLE Communication]: Fetching claiming key...")
 
-        val command = "AT+CLAIM_KEY=?\r\n".toByteArray()
+        Timber.d("========== [BLE Communication]: $command")
 
         writeCharacteristic?.let {
             try {
-                peripheral.write(it, command)
+                peripheral.write(it, command.toByteArray())
             } catch (e: GattRequestRejectedException) {
-                Timber.w(e, "Fetching claiming key failed: GattRequestRejectedException")
+                Timber.w(e, "[$command] failed: GattRequestRejectedException")
                 listener.invoke(Either.Left(BluetoothError.ConnectionRejectedError))
             }
         }
@@ -159,17 +159,19 @@ class BluetoothConnectionManager(private val context: Context) {
             peripheral.observe(it)
         }
 
-        var key = ""
         flowResponse
             ?.takeWhile {
-                String(it).replace("\r", "").replace("\n", "") != "OK"
-            }
-            ?.onCompletion {
-                Timber.d("---  Claiming Key Response: $key ---")
-                listener.invoke(Either.Right(key))
+                val currentResponse = String(it).replace("\r", "").replace("\n", "")
+                if (currentResponse.contains("ERROR")) {
+                    Timber.w("[BLE Communication] ERROR: $currentResponse")
+                    listener.invoke(Either.Left(BluetoothError.ATCommandError))
+                    return@takeWhile false
+                }
+                currentResponse != "OK"
             }
             ?.collect {
-                key += String(it)
+                Timber.d("========== [BLE Communication] Response: ${String(it)}")
+                listener.invoke(Either.Right(String(it)))
             }
     }
 }

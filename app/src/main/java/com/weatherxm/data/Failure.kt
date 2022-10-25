@@ -27,6 +27,7 @@ sealed class BluetoothError(val message: String? = null) : Failure() {
     object CancellationError : BluetoothError()
     object ConnectionLostException : BluetoothError()
     object BluetoothDisabledException : BluetoothError()
+    object ATCommandError : BluetoothError()
     object DfuAborted : BluetoothError()
 
     class DfuUpdateError(message: String? = null) : BluetoothError(message)

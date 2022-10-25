@@ -10,16 +10,12 @@ import com.weatherxm.R
 import com.weatherxm.databinding.ListItemScannedDeviceBinding
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.ScannedDevice
-import com.weatherxm.util.ResourcesHelper
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class ScannedDevicesListAdapter(
     private val scannedDeviceListener: (ScannedDevice) -> Unit
 ) : ListAdapter<ScannedDevice,
     ScannedDevicesListAdapter.ScannedDeviceViewHolder>(PublicDeviceDiffCallback()), KoinComponent {
-
-    val resHelper: ResourcesHelper by inject()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScannedDeviceViewHolder {
         val binding =
@@ -48,10 +44,6 @@ class ScannedDevicesListAdapter(
         fun bind(item: ScannedDevice, position: Int) {
             this.scannedDevice = item
             binding.name.text = item.name
-            binding.deviceEui.text = resHelper.getString(
-                R.string.device_eui,
-                item.eui ?: resHelper.getString(R.string.not_found)
-            )
             if (item.type == DeviceType.HELIUM) {
                 binding.typeIcon.setImageResource(R.drawable.ic_helium)
             } else {

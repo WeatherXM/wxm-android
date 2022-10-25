@@ -21,8 +21,4 @@ class BluetoothScannerRepositoryImpl(
     override suspend fun startScanning(): Either<Failure, Unit> {
         return dataSource.startScanning()
     }
-
-    override fun getScannedDevice(macAddress: String): BluetoothDeviceWithEUI? {
-        return dataSource.getScannedDevice(macAddress)
-    }
 }

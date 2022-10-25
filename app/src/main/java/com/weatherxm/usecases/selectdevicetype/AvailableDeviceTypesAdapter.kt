@@ -1,4 +1,4 @@
-package com.weatherxm.ui.claimdevice.selectdevicetype
+package com.weatherxm.usecases.selectdevicetype
 
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +17,7 @@ import org.koin.core.component.inject
 class AvailableDeviceTypesAdapter(
     private val deviceTypeListener: (AvailableDeviceType) -> Unit
 ) : ListAdapter<AvailableDeviceType,
-    AvailableDeviceTypesAdapter.AvailableDeviceTypeViewHolder>(PublicDeviceDiffCallback()),
+        AvailableDeviceTypesAdapter.AvailableDeviceTypeViewHolder>(PublicDeviceDiffCallback()),
     KoinComponent {
 
     val resHelper: ResourcesHelper by inject()

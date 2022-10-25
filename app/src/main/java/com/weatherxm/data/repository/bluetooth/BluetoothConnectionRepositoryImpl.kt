@@ -29,4 +29,8 @@ class BluetoothConnectionRepositoryImpl(
     override suspend fun fetchClaimingKey(): Either<Failure, String> {
         return dataSource.fetchClaimingKey()
     }
+
+    override suspend fun fetchDeviceEUI(): Either<Failure, String> {
+        return dataSource.fetchDeviceEUI()
+    }
 }
