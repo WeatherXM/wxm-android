@@ -50,7 +50,7 @@ class BluetoothScanner(private val espProvisionManager: ESPProvisionManager) {
                 override fun onPeripheralFound(device: BluetoothDevice?, scanResult: ScanResult?) {
                     device?.let {
                         // TODO: Add filtering with the correct one in the future
-                        if (it.name.contains("WXM")) {
+                        if (it.name.contains("WeatherXM")) {
                             val devEUI =
                                 scanResult?.scanRecord?.getManufacturerSpecificData(
                                     DEVICE_EUI_MANUFACTURER_ID

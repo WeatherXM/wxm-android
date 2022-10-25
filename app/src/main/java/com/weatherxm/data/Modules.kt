@@ -327,7 +327,7 @@ private val datasources = module {
     }
 
     single<BluetoothConnectionDataSource> {
-        BluetoothConnectionDataSourceImpl(get())
+        BluetoothConnectionDataSourceImpl(get(), get())
     }
 
     single<BluetoothUpdaterDataSource> {

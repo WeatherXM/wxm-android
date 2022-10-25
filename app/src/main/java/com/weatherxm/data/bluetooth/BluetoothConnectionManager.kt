@@ -12,6 +12,7 @@ import com.juul.kable.BluetoothDisabledException
 import com.juul.kable.Characteristic
 import com.juul.kable.ConnectionLostException
 import com.juul.kable.ConnectionRejectedException
+import com.juul.kable.GattRequestRejectedException
 import com.juul.kable.Peripheral
 import com.juul.kable.peripheral
 import com.weatherxm.data.BluetoothError
@@ -23,16 +24,20 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.takeWhile
 import timber.log.Timber
 
 class BluetoothConnectionManager(private val context: Context) {
-    private val defaultBlePin = "000000"
+    companion object {
+        const val READ_CHARACTERISTIC_UUID = "49616"
+        const val WRITE_CHARACTERISTIC_UUID = "34729"
+    }
 
     private lateinit var peripheral: Peripheral
     private var readCharacteristic: Characteristic? = null
     private var writeCharacteristic: Characteristic? = null
 
-    private val pairingRequestFilter = IntentFilter(BluetoothDevice.ACTION_PAIRING_REQUEST)
     private val bondStateChangedFilter = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
 
     private val bondStatus = MutableSharedFlow<Int>(
@@ -44,31 +49,6 @@ class BluetoothConnectionManager(private val context: Context) {
     fun onBondStatus(): Flow<Int> {
         bondStatus.resetReplayCache()
         return bondStatus
-    }
-
-    /*
-    * This broadcast receiver is used to intercept the BLE PIN prompt as we know that already
-    * and we want to input it automatically.
-     */
-    private val pairingRequestBroadcastReceiver = object : BroadcastReceiver() {
-        /*
-        * Suppress this because we have asked for permissions already before we reach here.
-         */
-        @SuppressLint("MissingPermission")
-        override fun onReceive(context: Context?, intent: Intent) {
-            if (intent.action == BluetoothDevice.ACTION_PAIRING_REQUEST) {
-                val type =
-                    intent.getIntExtra(BluetoothDevice.EXTRA_PAIRING_VARIANT, BluetoothDevice.ERROR)
-
-                if (type == BluetoothDevice.PAIRING_VARIANT_PIN) {
-                    Timber.d("Auto entering BLE PIN of the device")
-                    val bluetoothDevice =
-                        intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                    bluetoothDevice?.setPin(defaultBlePin.toByteArray())
-                    abortBroadcast()
-                }
-            }
-        }
     }
 
     /*
@@ -84,10 +64,6 @@ class BluetoothConnectionManager(private val context: Context) {
 
                 when (bluetoothDevice?.bondState) {
                     BluetoothDevice.BOND_BONDED -> {
-                        /*
-                        * Any communication or work with the BLE device that needs to be done
-                        * should be done after we reach this point where the BLE device is bonded
-                         */
                         Timber.d("BLE Bonded.")
                         bondStatus.tryEmit(BluetoothDevice.BOND_BONDED)
                     }
@@ -119,17 +95,15 @@ class BluetoothConnectionManager(private val context: Context) {
         return peripheral
     }
 
-    suspend fun connectToPeripheral(): Either<Failure, Peripheral> {
+    suspend fun connectToPeripheral(): Either<Failure, Unit> {
         return try {
             /*
              * Register the receivers BEFORE trying to connect
              */
-            pairingRequestFilter.priority = SYSTEM_HIGH_PRIORITY
             bondStateChangedFilter.priority = SYSTEM_HIGH_PRIORITY
-            context.registerReceiver(pairingRequestBroadcastReceiver, pairingRequestFilter)
             context.registerReceiver(bondStateChangedReceiver, bondStateChangedFilter)
             peripheral.connect()
-            Either.Right(peripheral)
+            Either.Right(Unit)
         } catch (e: ConnectionRejectedException) {
             Timber.w(e, "Connection to peripheral failed with ConnectionRejectedException")
             Either.Left(BluetoothError.ConnectionRejectedError)
@@ -150,16 +124,52 @@ class BluetoothConnectionManager(private val context: Context) {
         peripheral.disconnect()
     }
 
-    // TODO: If not needed, remove it.
     private fun setReadWriteCharacteristic() {
+        if (readCharacteristic != null && writeCharacteristic != null) {
+            return
+        }
+        Timber.d("[BLE Communication] Setting read & write characteristics...")
         peripheral.services?.forEach { service ->
             service.characteristics.forEach {
-                if (it.characteristicUuid.toString().contains("34729")) {
+                if (it.characteristicUuid.toString().contains(WRITE_CHARACTERISTIC_UUID)) {
                     writeCharacteristic = it
-                } else if (it.characteristicUuid.toString().contains("49616")) {
+                } else if (it.characteristicUuid.toString().contains(READ_CHARACTERISTIC_UUID)) {
                     readCharacteristic = it
                 }
             }
         }
+    }
+
+    suspend fun fetchClaimingKey(listener: (Either<Failure, String>) -> Unit) {
+        setReadWriteCharacteristic()
+        Timber.d("[BLE Communication]: Fetching claiming key...")
+
+        val command = "AT+CLAIM_KEY=?\r\n".toByteArray()
+
+        writeCharacteristic?.let {
+            try {
+                peripheral.write(it, command)
+            } catch (e: GattRequestRejectedException) {
+                Timber.w(e, "Fetching claiming key failed: GattRequestRejectedException")
+                listener.invoke(Either.Left(BluetoothError.ConnectionRejectedError))
+            }
+        }
+
+        val flowResponse = readCharacteristic?.let {
+            peripheral.observe(it)
+        }
+
+        var key = ""
+        flowResponse
+            ?.takeWhile {
+                String(it).replace("\r", "").replace("\n", "") != "OK"
+            }
+            ?.onCompletion {
+                Timber.d("---  Claiming Key Response: $key ---")
+                listener.invoke(Either.Right(key))
+            }
+            ?.collect {
+                key += String(it)
+            }
     }
 }

@@ -44,13 +44,6 @@ class ClaimHeliumPairFragment : Fragment() {
 //                model.update(it)
 //            }
 //        }
-//        TODO: For testing purposes. Remove on PR.
-//        model.onBondedDevice().observe(this) {
-//            val intent = Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE)
-//                .setType("application/zip")
-//
-//            findZipFileLauncher.launch(intent)
-//        }
 
     private val model: ClaimHeliumPairViewModel by viewModels()
     private val parentModel: ClaimHeliumViewModel by activityViewModels()
@@ -117,19 +110,22 @@ class ClaimHeliumPairFragment : Fragment() {
             updateUI(it)
         }
 
-        model.onBLEPaired().observe(viewLifecycleOwner) {
-            if (it) {
-                // TODO: FETCH DEV KEY VIA BLE THEN SHOW PAIRING DIALOG
-                navigator.showHeliumPairingStatus(requireActivity().supportFragmentManager)
-            }
-        }
-
         model.onBLEError().observe(viewLifecycleOwner) {
             showErrorDialog(it)
         }
 
         model.onBLEDevEUI().observe(viewLifecycleOwner) {
             verifyModel.setDeviceEUI(it)
+        }
+
+        model.onBLEClaimingKey().observe(viewLifecycleOwner) {
+            // TODO: For testing purposes. Remove on PR.
+//                val intent = Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE)
+//                    .setType("application/zip")
+//
+//                findZipFileLauncher.launch(intent)
+            verifyModel.setDeviceKey(it)
+            navigator.showHeliumPairingStatus(requireActivity().supportFragmentManager)
         }
 
         bluetoothAdapter?.let {

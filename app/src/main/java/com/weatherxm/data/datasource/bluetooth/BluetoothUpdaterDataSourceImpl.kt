@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 class BluetoothUpdaterDataSourceImpl(
     private val updater: BluetoothUpdater
 ) : BluetoothUpdaterDataSource {
-    override suspend fun setUpdater(): Either<Failure, Unit> {
+    override suspend fun setUpdater() {
         return updater.setUpdater()
     }
 

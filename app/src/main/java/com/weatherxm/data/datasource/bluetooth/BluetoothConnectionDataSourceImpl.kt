@@ -1,24 +1,52 @@
 package com.weatherxm.data.datasource.bluetooth
 
+import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
 import arrow.core.Either
-import com.juul.kable.Peripheral
 import com.weatherxm.data.Failure
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import kotlin.coroutines.suspendCoroutine
 
 class BluetoothConnectionDataSourceImpl(
-    private val connectionManager: BluetoothConnectionManager
+    private val connectionManager: BluetoothConnectionManager,
+    private val bluetoothAdapter: BluetoothAdapter?
 ) : BluetoothConnectionDataSource {
+
+    /**
+     * Suppress MissingPermission as we will call this function only after we have it granted
+     */
+    @SuppressLint("MissingPermission")
+    override fun getPairedDevices(): List<BluetoothDevice>? {
+        return bluetoothAdapter?.bondedDevices?.filter {
+            it.name.contains("WeatherXM")
+        }
+    }
 
     override fun setPeripheral(address: String): Either<Failure, Unit> {
         return connectionManager.setPeripheral(address)
     }
 
-    override suspend fun connectToPeripheral(): Either<Failure, Peripheral> {
+    override suspend fun connectToPeripheral(): Either<Failure, Unit> {
         return connectionManager.connectToPeripheral()
     }
 
     override fun registerOnBondStatus(): Flow<Int> {
         return connectionManager.onBondStatus()
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    override suspend fun fetchClaimingKey(): Either<Failure, String> {
+        return suspendCoroutine { continuation ->
+            GlobalScope.launch {
+                connectionManager.fetchClaimingKey {
+                    continuation.resumeWith(Result.success(it))
+                }
+            }
+        }
     }
 }

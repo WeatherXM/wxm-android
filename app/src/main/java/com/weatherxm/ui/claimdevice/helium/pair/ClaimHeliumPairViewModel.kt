@@ -1,6 +1,7 @@
 package com.weatherxm.ui.claimdevice.helium.pair
 
 import android.bluetooth.BluetoothDevice
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,11 +10,13 @@ import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
+import com.weatherxm.data.datasource.bluetooth.BluetoothUpdaterDataSource
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.ResourcesHelper
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -25,17 +28,22 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     private val bluetoothConnectionUseCase: BluetoothConnectionUseCase by inject()
     private var scannedDevices: MutableList<ScannedDevice> = mutableListOf()
 
-    private val onBLEPaired = MutableLiveData(false)
+    // TODO: Remove on PR
+    private val updater: BluetoothUpdaterDataSource by inject()
+
     private val onBLEError = MutableLiveData<UIError>()
     private val onBLEDevEUI = MutableLiveData<String>()
+    private val onBLEClaimingKey = MutableLiveData<String>()
     private val onNewScannedDevice = MutableLiveData<List<ScannedDevice>>()
     private val onScanProgress = MutableLiveData<Resource<Unit>>()
 
+    private var selectedDeviceMacAddress: String = ""
+
     fun onNewScannedDevice(): LiveData<List<ScannedDevice>> = onNewScannedDevice
     fun onScanProgress(): LiveData<Resource<Unit>> = onScanProgress
-    fun onBLEPaired() = onBLEPaired
     fun onBLEError() = onBLEError
     fun onBLEDevEUI() = onBLEDevEUI
+    fun onBLEClaimingKey() = onBLEClaimingKey
 
     fun scanBleDevices() {
         viewModelScope.launch {
@@ -54,6 +62,7 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     }
 
     fun setupBluetoothClaiming(macAddress: String) {
+        selectedDeviceMacAddress = macAddress
         bluetoothConnectionUseCase.getDeviceEUI(macAddress).tap {
             onBLEDevEUI.postValue(it)
             setPeripheral(macAddress)
@@ -62,6 +71,16 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
                 UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
                     setupBluetoothClaiming(macAddress)
                 })
+            // TODO: Remove this?
+            setPeripheral(macAddress)
+        }
+    }
+
+    // TODO: Remove this on PR
+    fun update(uri: Uri) {
+        GlobalScope.launch {
+            updater.setUpdater()
+            updater.update(uri)
         }
     }
 
@@ -77,50 +96,65 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
 
     private fun connectToPeripheral() {
         viewModelScope.launch {
-            bluetoothConnectionUseCase.connectToPeripheral().mapLeft {
-                onBLEError.postValue(
-                    when (it) {
-                        is BluetoothError.BluetoothDisabledException -> {
-                            UIError(resHelper.getString(R.string.helium_bluetooth_disabled)) {
-                                connectToPeripheral()
-                            }
-                        }
-                        is BluetoothError.ConnectionLostException -> {
-                            UIError(resHelper.getString(R.string.helium_bluetooth_connection_lost)) {
-                                connectToPeripheral()
-                            }
-                        }
-                        else -> {
-                            UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
-                                connectToPeripheral()
-                            }
+            bluetoothConnectionUseCase.connectToPeripheral().tapLeft {
+                onBLEError.postValue(when (it) {
+                    is BluetoothError.BluetoothDisabledException -> {
+                        UIError(resHelper.getString(R.string.helium_bluetooth_disabled)) {
+                            connectToPeripheral()
                         }
                     }
-                )
+                    is BluetoothError.ConnectionLostException -> {
+                        UIError(resHelper.getString(R.string.helium_bluetooth_connection_lost)) {
+                            connectToPeripheral()
+                        }
+                    }
+                    else -> {
+                        UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
+                            connectToPeripheral()
+                        }
+                    }
+                })
+            }.tap {
+                val isDevicePaired = bluetoothConnectionUseCase.getPairedDevices()?.any {
+                    it.address == selectedDeviceMacAddress
+                }
+                if (isDevicePaired == true) {
+                    fetchClaimingKey()
+                }
+            }
+        }
+    }
+
+    private fun fetchClaimingKey() {
+        viewModelScope.launch {
+            bluetoothConnectionUseCase.fetchClaimingKey().tap {
+                onBLEClaimingKey.postValue(it)
+            }.tapLeft {
+                onBLEError.postValue(UIError(
+                    resHelper.getString(R.string.helium_pairing_failed_desc)
+                ) {
+                    fetchClaimingKey()
+                })
             }
         }
     }
 
     init {
         viewModelScope.launch {
-            scanDevicesUseCase.registerOnScanning()
-                .collect {
-                    if (!scannedDevices.contains(it)) {
-                        Timber.d("New scanned device collected: $it")
-                        scannedDevices.add(it)
-                        this@ClaimHeliumPairViewModel.onNewScannedDevice.postValue(scannedDevices)
-                    }
+            scanDevicesUseCase.registerOnScanning().collect {
+                if (!scannedDevices.contains(it)) {
+                    Timber.d("New scanned device collected: $it")
+                    scannedDevices.add(it)
+                    this@ClaimHeliumPairViewModel.onNewScannedDevice.postValue(scannedDevices)
                 }
+            }
         }
 
         viewModelScope.launch {
             bluetoothConnectionUseCase.registerOnBondStatus().collect {
                 when (it) {
                     BluetoothDevice.BOND_BONDED -> {
-                        onBLEPaired.postValue(true)
-                    }
-                    BluetoothDevice.BOND_BONDING -> {
-                        onBLEPaired.postValue(false)
+                        fetchClaimingKey()
                     }
                     BluetoothDevice.BOND_NONE -> {
                         onBLEError.postValue(
