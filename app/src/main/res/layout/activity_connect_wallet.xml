@@ -73,12 +73,11 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/current_address_container"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        style="@style/Widget.WeatherXM.TextInputEditText.OutlinedBox.Dense"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal"
                         android:hint="@string/current_address"
-                        android:paddingBottom="@dimen/margin_extra_large"
                         app:endIconDrawable="@drawable/ic_share"
                         app:endIconMode="custom"
                         app:hintEnabled="false"
@@ -101,6 +100,7 @@
                         style="@style/TextAppearance.WeatherXM.TextInput.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_extra_large"
                         android:text="@string/wxm_address"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +108,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/new_address_container"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        style="@style/Widget.WeatherXM.TextInputEditText.OutlinedBox.Dense"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal"

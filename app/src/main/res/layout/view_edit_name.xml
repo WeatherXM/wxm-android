@@ -9,11 +9,10 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/new_name_container"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/Widget.WeatherXM.TextInputEditText.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/edit_name_hint"
-            android:paddingBottom="@dimen/padding_normal"
             app:counterEnabled="true"
             app:counterMaxLength="64"
             app:helperText="@string/edit_name_helper_text"
@@ -32,6 +31,7 @@
             style="?attr/buttonBarNeutralButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
             android:text="@string/action_clear"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/new_name_container" />
@@ -41,6 +41,7 @@
             style="?attr/buttonBarNegativeButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
             android:text="@string/action_cancel"
             app:layout_constraintEnd_toStartOf="@id/save"
             app:layout_constraintTop_toBottomOf="@id/new_name_container" />
@@ -50,6 +51,7 @@
             style="?attr/buttonBarPositiveButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
             android:text="@string/action_save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/new_name_container" />
