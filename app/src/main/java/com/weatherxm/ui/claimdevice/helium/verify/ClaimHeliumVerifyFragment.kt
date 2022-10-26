@@ -1,9 +1,11 @@
 package com.weatherxm.ui.claimdevice.helium.verify
 
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.journeyapps.barcodescanner.ScanContract
@@ -43,6 +45,10 @@ class ClaimHeliumVerifyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Convert typed characters to uppercase
+        binding.devEUI.filters = arrayOf(InputFilter.AllCaps())
+        binding.devKey.filters = arrayOf(InputFilter.AllCaps())
+
         binding.devEUI.onTextChanged {
             binding.devEUIContainer.error = null
         }
@@ -59,13 +65,23 @@ class ClaimHeliumVerifyFragment : Fragment() {
             parentModel.cancel()
         }
 
+        binding.devKey.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                model.checkAndVerify(
+                    binding.devEUI.text.toString().trim(),
+                    binding.devKey.text.toString().trim()
+                )
+            }
+            true
+        }
+
         binding.verify.setOnClickListener {
             model.checkAndVerify(
                 binding.devEUI.text.toString().trim(),
                 binding.devKey.text.toString().trim()
             )
             // TODO: Remove this
-            navigator.showHeliumPairingStatus(requireActivity().supportFragmentManager)
+            //    navigator.showHeliumPairingStatus(requireActivity().supportFragmentManager)
         }
 
         model.onDevEUIError().observe(viewLifecycleOwner) {

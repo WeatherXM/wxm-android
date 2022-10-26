@@ -32,7 +32,7 @@ class BluetoothConnectionManager(private val context: Context) {
         const val READ_CHARACTERISTIC_UUID = "49616"
         const val WRITE_CHARACTERISTIC_UUID = "34729"
         const val AT_CLAIMING_KEY_COMMAND = "AT+CLAIM_KEY=?\r\n"
-        const val AT_DEV_EUI_COMMAND = "ΑΤ+DevEUI_get=?\r\n"
+        const val AT_DEV_EUI_COMMAND = "AT+DEUI=?\r\n"
     }
 
     private lateinit var peripheral: Peripheral

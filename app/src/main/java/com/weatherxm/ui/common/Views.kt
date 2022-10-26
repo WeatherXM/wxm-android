@@ -1,6 +1,7 @@
 package com.weatherxm.ui.common
 
 import android.content.Context
+import android.text.Editable
 import android.widget.Toast
 import androidx.annotation.IntDef
 import androidx.annotation.StringRes
@@ -79,3 +80,13 @@ fun TabLayout.getLastTab(): TabLayout.Tab? {
 fun TabLayout.getSelectedTab(): TabLayout.Tab? {
     return getTabAt(selectedTabPosition)
 }
+
+/**
+ * Remove colon ":" character from Serial Number text
+ */
+fun Editable?.unmask(): String = this.toString().unmask()
+
+/**
+ * Remove colon ":" character from Serial Number text
+ */
+fun String.unmask(): String = this.toString().replace(":", "")

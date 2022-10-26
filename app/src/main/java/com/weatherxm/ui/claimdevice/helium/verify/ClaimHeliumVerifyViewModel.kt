@@ -38,16 +38,12 @@ class ClaimHeliumVerifyViewModel : ViewModel(), KoinComponent {
 
     @Suppress("MagicNumber")
     fun getEUIFromScanner(result: String?): String {
-        val eui = result?.take(16) ?: ""
-        setDeviceEUI(eui)
-        return eui
+        return result?.take(16) ?: ""
     }
 
     @Suppress("MagicNumber")
     fun getKeyFromScanner(result: String?): String {
-        val key = result?.substring(16..31) ?: ""
-        setDeviceKey(key)
-        return key
+        return result?.substring(16..31) ?: ""
     }
 
     fun checkAndVerify(devEUI: String, devKey: String) {

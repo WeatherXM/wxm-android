@@ -13,6 +13,7 @@ import com.weatherxm.data.Status
 import com.weatherxm.data.datasource.bluetooth.BluetoothUpdaterDataSource
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIError
+import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.ResourcesHelper
@@ -114,7 +115,10 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     private fun fetchDeviceEUI() {
         viewModelScope.launch {
             bluetoothConnectionUseCase.fetchDeviceEUI().tap {
-                onBLEDevEUI.postValue(it)
+                /**
+                 * BLE returns Dev EUI with `:` in between so we need to unmask it
+                 */
+                onBLEDevEUI.postValue(it.unmask())
                 fetchClaimingKey()
             }.tapLeft {
                 onBLEError.postValue(UIError(

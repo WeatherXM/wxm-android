@@ -1,7 +1,6 @@
 package com.weatherxm.ui.claimdevice.m5.verify
 
 import android.os.Bundle
-import android.text.Editable
 import android.text.InputFilter
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import com.redmadrobot.inputmask.MaskedTextChangedListener
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimM5VerifyBinding
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
+import com.weatherxm.ui.common.unmask
 import com.weatherxm.util.setHtml
 
 class ClaimM5VerifyFragment : Fragment() {
@@ -89,11 +89,6 @@ class ClaimM5VerifyFragment : Fragment() {
             parentModel.next()
         }
     }
-
-    /**
-     * Remove colon ":" character from Serial Number text
-     */
-    private fun Editable?.unmask(): String = this.toString().replace(":", "")
 
     companion object {
         const val SERIAL_NUMBER_MASK = "[__]:[__]:[__]:[__]:[__]:[__]:[__]:[__]:[__]"
