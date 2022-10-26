@@ -61,7 +61,9 @@ class BluetoothProvisioner(private val espDevice: ESPDevice) : KoinComponent {
                     )
                 }
 
-                override fun provisioningFailedFromDevice(failureReason: ESPConstants.ProvisionFailureReason?) {
+                override fun provisioningFailedFromDevice(
+                    failureReason: ESPConstants.ProvisionFailureReason?
+                ) {
                     Timber.w("Provision: Failed from device $failureReason")
                     continuation.resumeWith(
                         Result.success(

@@ -20,6 +20,7 @@ import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.checkPermissionsAndThen
+import com.weatherxm.ui.common.hasAnyPermissions
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setIcon
@@ -66,6 +67,10 @@ class ClaimHeliumActivity : AppCompatActivity() {
             if (it) onNextPressed()
         }
 
+        locationModel.onRequestLocationPermissions().observe(this) {
+            if (it) requestLocationPermissions()
+        }
+
         model.onClaimManually().observe(this) {
             if (it) {
                 val currentPage = binding.pager.currentItem
@@ -99,7 +104,9 @@ class ClaimHeliumActivity : AppCompatActivity() {
                 ClaimHeliumDevicePagerAdapter.PAGE_LOCATION -> {
                     secondStep.setSuccessChip()
                     thirdStep.setIcon(R.drawable.ic_three_filled)
-                    askForLocationPermissions()
+                    if (hasAnyPermissions(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION)) {
+                        getUserLocation()
+                    }
                 }
                 ClaimHeliumDevicePagerAdapter.PAGE_RESULT -> {
                     model.claimDevice(
@@ -113,25 +120,25 @@ class ClaimHeliumActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("MissingPermission")
-    private fun askForLocationPermissions() {
+    private fun requestLocationPermissions() {
         checkPermissionsAndThen(
             permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
             rationaleTitle = getString(R.string.permission_location_title),
             rationaleMessage = getString(R.string.permission_location_rationale),
-            onGranted = {
-                // Get last location
-                locationModel.getLocationAndThen(this@ClaimHeliumActivity) {
-                    Timber.d("Got user location: $it")
-                    if (it == null) {
-                        toast(R.string.error_claim_gps_failed)
-                    }
-                }
-            },
-            onDenied = {
+            onGranted = { getUserLocation() },
+            onDenied = { toast(R.string.error_claim_gps_failed) }
+        )
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun getUserLocation() {
+        // Get last location
+        locationModel.getLocationAndThen(this@ClaimHeliumActivity) {
+            Timber.d("Got user location: $it")
+            if (it == null) {
                 toast(R.string.error_claim_gps_failed)
             }
-        )
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

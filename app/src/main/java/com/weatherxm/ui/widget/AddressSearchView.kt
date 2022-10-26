@@ -34,7 +34,11 @@ class AddressSearchView : LinearLayout {
         binding = ViewAddressSearchBinding.inflate(LayoutInflater.from(context), this)
     }
 
-    fun setAdapter(adapter: SearchResultsAdapter, onTextChangedCallback: (String) -> Unit) {
+    fun setAdapter(
+        adapter: SearchResultsAdapter,
+        onTextChanged: (String) -> Unit,
+        onMyLocationClicked: () -> Unit
+    ) {
         this.adapter = adapter
         binding.recycler.adapter = adapter
         binding.recycler.visibility = GONE
@@ -42,8 +46,11 @@ class AddressSearchView : LinearLayout {
             if (it.isEmpty() || it.length <= 2) {
                 clear()
             } else {
-                onTextChangedCallback.invoke(it)
+                onTextChanged.invoke(it)
             }
+        }
+        binding.myLocationButton.setOnClickListener {
+            onMyLocationClicked.invoke()
         }
     }
 

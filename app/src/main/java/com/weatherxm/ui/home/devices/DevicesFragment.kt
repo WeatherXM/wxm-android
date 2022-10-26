@@ -104,9 +104,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
         }
 
         model.preferenceChanged().observe(viewLifecycleOwner) {
-            if (it) {
-                adapter.notifyDataSetChanged()
-            }
+            if (it) adapter.notifyDataSetChanged()
         }
 
         return binding.root

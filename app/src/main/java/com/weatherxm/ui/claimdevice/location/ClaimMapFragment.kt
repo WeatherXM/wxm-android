@@ -67,6 +67,7 @@ class ClaimMapFragment : BaseMapFragment() {
      *
      * The `delay` is also necessary for it to work.
      */
+    @Suppress("MagicNumber")
     fun initMarkerAndListeners() {
         lifecycleScope.launch() {
             delay(100L)

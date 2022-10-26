@@ -30,6 +30,12 @@ fun FragmentActivity.hasPermissions(
     hasPermission(permission)
 }
 
+fun FragmentActivity.hasAnyPermissions(
+    vararg permissions: String
+): Boolean = permissions.any { permission ->
+    hasPermission(permission)
+}
+
 fun Fragment.checkPermissionsAndThen(
     vararg permissions: String,
     rationaleTitle: String,

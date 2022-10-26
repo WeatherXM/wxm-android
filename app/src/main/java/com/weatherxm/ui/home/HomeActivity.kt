@@ -119,9 +119,7 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         }
 
         homeViewModel.onClaimM5Manually().observe(this) {
-            if (it) {
-                navigator.showClaimM5(claimDeviceLauncher, this)
-            }
+            if (it) navigator.showClaimM5(claimDeviceLauncher, this)
         }
 
         // Disable BottomNavigationView bottom padding, added by default, and add margin

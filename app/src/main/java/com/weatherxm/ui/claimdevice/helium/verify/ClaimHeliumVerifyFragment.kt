@@ -69,15 +69,11 @@ class ClaimHeliumVerifyFragment : Fragment() {
         }
 
         model.onDevEUIError().observe(viewLifecycleOwner) {
-            if (it) {
-                binding.devEUIContainer.error = getString(R.string.invalid_dev_eui)
-            }
+            if (it) binding.devEUIContainer.error = getString(R.string.invalid_dev_eui)
         }
 
         model.onDevKeyError().observe(viewLifecycleOwner) {
-            if (it) {
-                binding.devKeyContainer.error = getString(R.string.invalid_dev_key)
-            }
+            if (it) binding.devKeyContainer.error = getString(R.string.invalid_dev_key)
         }
 
         model.onVerifyError().observe(viewLifecycleOwner) {

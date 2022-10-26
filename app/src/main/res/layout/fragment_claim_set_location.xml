@@ -101,6 +101,7 @@
                 android:id="@+id/addressSearchView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_normal"
                 app:layout_constraintTop_toTopOf="@id/mapView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -123,7 +124,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/cancel"
-                    style="@style/Widget.WeatherXM.Button.Claiming.Cancel"
+                    style="@style/Widget.WeatherXM.Button.Subtle.Borders"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_normal"
@@ -134,7 +135,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/confirmAndClaim"
-                    style="@style/Widget.WeatherXM.Button.Claiming.ConfirmAndClaim"
+                    style="@style/Widget.WeatherXM.Button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

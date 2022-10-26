@@ -113,9 +113,7 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
         }
 
         model.onShowSurveyScreen().observe(this) {
-            if (it) {
-                launchSendFeedback()
-            }
+            if (it) launchSendFeedback()
         }
     }
 

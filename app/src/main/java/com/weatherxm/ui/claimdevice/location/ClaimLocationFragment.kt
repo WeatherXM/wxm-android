@@ -77,20 +77,15 @@ class ClaimLocationFragment : Fragment() {
         }
 
         binding.confirmAndClaim.setOnClickListener {
-            if (model.getDeviceType() == DeviceType.M5_WIFI) {
-                m5ParentModel.cancel()
+            if (binding.installationToggle.isChecked) {
+                model.confirmLocation()
+                if (model.getDeviceType() == DeviceType.M5_WIFI) {
+                    m5ParentModel.next()
+                } else {
+                    heliumParentModel.next()
+                }
             } else {
-                heliumParentModel.cancel()
-            }
-        }
-
-        binding.confirmAndClaim.setOnClickListener {
-            // TODO: Confirm Location only if the installation togle is checked
-            model.confirmLocation()
-            if (model.getDeviceType() == DeviceType.M5_WIFI) {
-                m5ParentModel.next()
-            } else {
-                heliumParentModel.next()
+                // TODO: What are we doing when installation is not confirmed?
             }
         }
 
@@ -108,12 +103,19 @@ class ClaimLocationFragment : Fragment() {
             }
         }
 
-        binding.addressSearchView.setAdapter(SearchResultsAdapter {
+        val adapter = SearchResultsAdapter {
             model.getLocationFromSearchSuggestion(it)
             hideKeyboard()
-        }) {
-            model.geocoding(it)
         }
+
+        binding.addressSearchView.setAdapter(adapter,
+            onTextChanged = {
+                model.geocoding(it)
+            },
+            onMyLocationClicked = {
+                model.requestLocationPermissions()
+            }
+        )
 
         binding.installationToggle.setOnCheckedChangeListener { _, checked ->
             with(binding) {

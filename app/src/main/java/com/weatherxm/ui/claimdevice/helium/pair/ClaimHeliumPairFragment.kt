@@ -39,7 +39,8 @@ import timber.log.Timber
 class ClaimHeliumPairFragment : Fragment() {
     // TODO: This will be used in the Update activity where the flow is TBD.
 //    private val findZipFileLauncher =
-//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+//        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+//        result: ActivityResult ->
 //            result.data?.data?.let {
 //                model.update(it)
 //            }
@@ -120,7 +121,8 @@ class ClaimHeliumPairFragment : Fragment() {
 
         model.onBLEClaimingKey().observe(viewLifecycleOwner) {
             // TODO: For testing purposes. Remove on PR.
-//                val intent = Intent(Intent.ACTION_GET_CONTENT).addCategory(Intent.CATEGORY_OPENABLE)
+//                val intent = Intent(Intent.ACTION_GET_CONTENT)
+//                .addCategory(Intent.CATEGORY_OPENABLE)
 //                    .setType("application/zip")
 //
 //                findZipFileLauncher.launch(intent)
