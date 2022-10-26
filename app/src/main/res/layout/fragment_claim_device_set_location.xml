@@ -24,6 +24,7 @@
                 android:padding="@dimen/margin_normal"
                 android:text="@string/confirm_location_installation"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,17 +40,21 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_small"
                 app:layout_constraintTop_toTopOf="@id/mapView">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/searchBoxContainer"
                     style="@style/Widget.WeatherXM.TextInputEditText.OutlinedBox.Dense"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="0dp"
+                    android:layout_marginEnd="@dimen/margin_small"
                     app:endIconDrawable="@drawable/ic_search"
                     app:endIconMode="custom"
                     app:hintEnabled="false"
+                    app:layout_constraintEnd_toStartOf="@id/myLocationButton"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -62,17 +67,34 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/myLocationButton"
+                    style="@style/Widget.WeatherXM.Button.Location.Toggle"
+                    android:layout_width="60dp"
+                    android:layout_height="0dp"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    app:icon="@drawable/ic_my_location"
+                    app:iconSize="24dp"
+                    app:layout_constraintBottom_toBottomOf="@id/searchBoxContainer"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/searchBoxContainer"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="200dp"
-                    android:layout_marginHorizontal="@dimen/margin_normal"
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:overScrollMode="never"
                     android:scrollbars="vertical"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintTop_toBottomOf="@id/searchBoxContainer"
+                    app:layout_constraintEnd_toEndOf="@id/searchBoxContainer"
+                    app:layout_constraintStart_toStartOf="@id/searchBoxContainer"
                     tools:listitem="@layout/list_item_location" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -97,7 +119,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/cancel"
-                        style="@style/Widget.WeatherXM.Button.Claiming.Cancel"
+                        style="@style/Widget.WeatherXM.TextButton.Subtle"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_normal"
@@ -108,7 +130,7 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/confirmAndClaim"
-                        style="@style/Widget.WeatherXM.Button.Claiming.ConfirmAndClaim"
+                        style="@style/Widget.WeatherXM.Button"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
