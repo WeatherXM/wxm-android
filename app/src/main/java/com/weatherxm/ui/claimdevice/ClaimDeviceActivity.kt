@@ -60,6 +60,12 @@ class ClaimDeviceActivity : AppCompatActivity() {
             if (shouldClick) binding.nextBtn.performClick()
         }
 
+        model.onRequestLocationPermissions().observe(this) {
+            if (it) {
+                requestLocationPermissions()
+            }
+        }
+
         binding.nextBtn.setOnClickListener {
             if (binding.pager.currentItem == PAGE_SERIAL_NUMBER && !model.isSerialSet()) {
                 model.checkSerialAndContinue()
@@ -111,7 +117,6 @@ class ClaimDeviceActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
     }
 
-    @SuppressLint("MissingPermission")
     private fun onNextPressed() {
         binding.pager.currentItem += 1
 
@@ -119,23 +124,25 @@ class ClaimDeviceActivity : AppCompatActivity() {
             model.claimDevice()
         }
 
-        if (binding.pager.currentItem == PAGE_LOCATION) {
-            checkPermissionsAndThen(
-                permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
-                rationaleTitle = getString(R.string.permission_location_title),
-                rationaleMessage = getString(R.string.permission_location_rationale),
-                onGranted = {
-                    // Get last location
-                    locationModel.getLocationAndThen(this) { location ->
-                        Timber.d("Got user location: $location")
-                        if (location == null) {
-                            toast(R.string.error_claim_gps_failed)
-                        }
+        updateUI()
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun requestLocationPermissions() {
+        checkPermissionsAndThen(
+            permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
+            rationaleTitle = getString(R.string.permission_location_title),
+            rationaleMessage = getString(R.string.permission_location_rationale),
+            onGranted = {
+                // Get last location
+                locationModel.getLocationAndThen(this) { location ->
+                    Timber.d("Got user location: $location")
+                    if (location == null) {
+                        toast(R.string.error_claim_gps_failed)
                     }
                 }
-            )
-        }
-        updateUI()
+            }
+        )
     }
 
     private fun updateUI() {

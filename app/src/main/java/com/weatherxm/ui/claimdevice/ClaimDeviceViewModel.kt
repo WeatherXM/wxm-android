@@ -29,12 +29,13 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val validator: Validator by inject()
 
-    private lateinit var currentSerialNumber: String
+    private var currentSerialNumber: String = ""
     private var isSerialSet = false
     private var userEmail: String? = null
     private var installationLat: Double = 0.0
     private var installationLon: Double = 0.0
 
+    private val onRequestLocationPermissions = MutableLiveData(false)
     private val onNextButtonEnabledStatus = MutableLiveData(true)
     private val onNextButtonClick = MutableLiveData(false)
     private val onCancel = MutableLiveData(false)
@@ -43,6 +44,7 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
         value = Resource.loading()
     }
 
+    fun onRequestLocationPermissions() = onRequestLocationPermissions
     fun onNextButtonEnabledStatus() = onNextButtonEnabledStatus
     fun onNextButtonClick() = onNextButtonClick
     fun onCancel() = onCancel
@@ -137,5 +139,9 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
                 isSerialSet = false
             }
         }
+    }
+
+    fun requestLocationPermissions() {
+        onRequestLocationPermissions.postValue(true)
     }
 }
