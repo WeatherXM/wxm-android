@@ -93,9 +93,10 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
         newAddress.postValue(sanitize(scannedAddress))
     }
 
+    @Suppress("MagicNumber")
     private fun sanitize(address: String): String {
         return Validated.Valid(address)
-            .map { it.substring(it.indexOf(ETH_ADDR_PREFIX)) }
+            .map { it.substring(it.indexOf(ETH_ADDR_PREFIX)).slice(0..41) }
             .valueOr { "" }
     }
 }

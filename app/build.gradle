@@ -26,8 +26,8 @@ android {
         applicationId "com.weatherxm.app"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 24
-        versionName "3.2.2"
+        versionCode 25
+        versionName "3.2.3"
 
         // Resource value fields
         resValue("string", "mapbox_access_token", "$MAPBOX_ACCESS_TOKEN")
@@ -275,8 +275,8 @@ dependencies {
     implementation "io.arrow-kt:arrow-fx-coroutines"
 
     // Mapbox
-    implementation "com.mapbox.maps:android:10.9.0-beta.2"
-    implementation "com.mapbox.search:mapbox-search-android:1.0.0-beta.37"
+    implementation "com.mapbox.maps:android:10.9.0"
+    implementation "com.mapbox.search:mapbox-search-android:1.0.0-beta.39"
 
     // Insetter
     implementation "dev.chrisbanes.insetter:insetter:0.6.1"
