@@ -1,5 +1,6 @@
 package com.weatherxm.usecases
 
+import android.annotation.SuppressLint
 import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepository
@@ -15,18 +16,19 @@ class BluetoothScannerUseCaseImpl(
     /*
     * Suppress this because we have asked for permissions already before we reach here.
     */
-    @Suppress("MissingPermission")
+    @SuppressLint("MissingPermission")
     override suspend fun registerOnScanning(): Flow<ScannedDevice> {
         return bluetoothScannerRepository.registerOnScanning().map {
             Timber.d("New bluetooth device collected: $it")
-            ScannedDevice(
-                address = it.bluetoothDevice.address,
-                name = it.bluetoothDevice.name
-            )
+            ScannedDevice(address = it.address, name = it.name)
         }
     }
 
     override suspend fun startScanning(): Either<Failure, Unit> {
         return bluetoothScannerRepository.startScanning()
+    }
+
+    override fun stopScanning() {
+        bluetoothScannerRepository.stopScanning()
     }
 }

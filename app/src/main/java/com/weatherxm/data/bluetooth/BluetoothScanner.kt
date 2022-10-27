@@ -6,10 +6,8 @@ import android.bluetooth.le.ScanResult
 import arrow.core.Either
 import com.espressif.provisioning.ESPProvisionManager
 import com.espressif.provisioning.listeners.BleScanListener
-import com.weatherxm.data.BluetoothDeviceWithEUI
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Failure
-import com.weatherxm.data.toHexString
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
@@ -19,17 +17,15 @@ import kotlin.coroutines.suspendCoroutine
 
 
 class BluetoothScanner(private val espProvisionManager: ESPProvisionManager) {
-    companion object {
-        private const val DEVICE_EUI_MANUFACTURER_ID = 89
-    }
-
-    private val scannedDevices = MutableSharedFlow<BluetoothDeviceWithEUI>(
+    private val scannedDevices = MutableSharedFlow<BluetoothDevice>(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
+    private var isScanningRunning = false
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun registerOnScanning(): Flow<BluetoothDeviceWithEUI> {
+    fun registerOnScanning(): Flow<BluetoothDevice> {
         scannedDevices.resetReplayCache()
         return scannedDevices
     }
@@ -40,8 +36,10 @@ class BluetoothScanner(private val espProvisionManager: ESPProvisionManager) {
     @SuppressLint("MissingPermission")
     suspend fun startScanning(): Either<Failure, Unit> {
         return suspendCoroutine { continuation ->
+            isScanningRunning = true
             espProvisionManager.searchBleEspDevices(object : BleScanListener {
                 override fun scanStartFailed() {
+                    isScanningRunning = false
                     continuation.resumeWith(
                         Result.success(Either.Left(BluetoothError.ScanningError))
                     )
@@ -51,28 +49,34 @@ class BluetoothScanner(private val espProvisionManager: ESPProvisionManager) {
                     device?.let {
                         // TODO: Add filtering with the correct one in the future
                         if (it.name.contains("WeatherXM")) {
-                            val devEUI =
-                                scanResult?.scanRecord?.getManufacturerSpecificData(
-                                    DEVICE_EUI_MANUFACTURER_ID
-                                )?.toHexString()?.uppercase()
-                            scannedDevices.tryEmit(BluetoothDeviceWithEUI(devEUI, it))
+                            scannedDevices.tryEmit(it)
                         }
                     }
                 }
 
                 override fun scanCompleted() {
+                    isScanningRunning = false
                     continuation.resumeWith(
                         Result.success(Either.Right(Unit))
                     )
                 }
 
                 override fun onFailure(e: Exception?) {
-                    Timber.w(e, "BLE Scanning failure.")
+                    Timber.w(e, "[BLE Scanning]: Failure")
+                    isScanningRunning = false
                     continuation.resumeWith(
                         Result.success(Either.Left(BluetoothError.ScanningError))
                     )
                 }
             })
         }
+    }
+
+    /*
+    * Suppress this because we have asked for permissions already before we reach here.
+    */
+    @SuppressLint("MissingPermission")
+    fun stopScanning() {
+        if (isScanningRunning) espProvisionManager.stopBleScan()
     }
 }

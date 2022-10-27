@@ -120,11 +120,6 @@ class BluetoothConnectionManager(private val context: Context) {
         }
     }
 
-    // TODO: If not needed, remove it.
-    suspend fun disconnectPeripheral() {
-        peripheral.disconnect()
-    }
-
     private fun setReadWriteCharacteristic() {
         if (readCharacteristic != null && writeCharacteristic != null) {
             return
@@ -155,23 +150,19 @@ class BluetoothConnectionManager(private val context: Context) {
             }
         }
 
-        val flowResponse = readCharacteristic?.let {
-            peripheral.observe(it)
-        }
-
-        flowResponse
-            ?.takeWhile {
+        readCharacteristic?.let { characteristic ->
+            peripheral.observe(characteristic).takeWhile {
                 val currentResponse = String(it).replace("\r", "").replace("\n", "")
+                Timber.d("========== [BLE Communication] Response: $currentResponse")
                 if (currentResponse.contains("ERROR")) {
-                    Timber.w("[BLE Communication] ERROR: $currentResponse")
+                    Timber.w("========== [BLE Communication] ERROR: $currentResponse")
                     listener.invoke(Either.Left(BluetoothError.ATCommandError))
                     return@takeWhile false
                 }
                 currentResponse != "OK"
-            }
-            ?.collect {
-                Timber.d("========== [BLE Communication] Response: ${String(it)}")
+            }.collect {
                 listener.invoke(Either.Right(String(it)))
             }
+        }
     }
 }
