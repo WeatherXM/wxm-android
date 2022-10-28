@@ -35,7 +35,7 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
     private var installationLat: Double = 0.0
     private var installationLon: Double = 0.0
 
-    private val onRequestLocationPermissions = MutableLiveData(false)
+    private val onGetUserLocation = MutableLiveData(false)
     private val onNextButtonEnabledStatus = MutableLiveData(true)
     private val onNextButtonClick = MutableLiveData(false)
     private val onCancel = MutableLiveData(false)
@@ -44,7 +44,7 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
         value = Resource.loading()
     }
 
-    fun onRequestLocationPermissions() = onRequestLocationPermissions
+    fun onGetUserLocation() = onGetUserLocation
     fun onNextButtonEnabledStatus() = onNextButtonEnabledStatus
     fun onNextButtonClick() = onNextButtonClick
     fun onCancel() = onCancel
@@ -141,7 +141,7 @@ class ClaimDeviceViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun requestLocationPermissions() {
-        onRequestLocationPermissions.postValue(true)
+    fun getUserLocation() {
+        onGetUserLocation.postValue(true)
     }
 }
