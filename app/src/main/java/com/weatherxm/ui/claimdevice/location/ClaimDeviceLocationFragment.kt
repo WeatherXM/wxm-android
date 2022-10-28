@@ -41,7 +41,7 @@ class ClaimDeviceLocationFragment : Fragment() {
         model.nextButtonStatus(true)
 
         binding.myLocationButton.setOnClickListener {
-            model.requestLocationPermissions()
+            model.getUserLocation()
         }
 
         binding.cancel.setOnClickListener {

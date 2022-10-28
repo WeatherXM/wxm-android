@@ -60,7 +60,7 @@ class ClaimDeviceActivity : AppCompatActivity() {
             if (shouldClick) binding.nextBtn.performClick()
         }
 
-        model.onRequestLocationPermissions().observe(this) {
+        model.onGetUserLocation().observe(this) {
             if (it) {
                 requestLocationPermissions()
             }
@@ -122,6 +122,10 @@ class ClaimDeviceActivity : AppCompatActivity() {
 
         if (binding.pager.currentItem == PAGE_RESULT) {
             model.claimDevice()
+        }
+
+        if (binding.pager.currentItem == PAGE_LOCATION) {
+            requestLocationPermissions()
         }
 
         updateUI()
