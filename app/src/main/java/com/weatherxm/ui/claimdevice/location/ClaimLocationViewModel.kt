@@ -48,22 +48,22 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
     }
     private var deviceType = DeviceType.M5_WIFI
 
-    private val onRequestLocationPermissions = MutableLiveData(false)
+    private val onGetUserLocation = MutableLiveData(false)
     private val onDeviceLocation = MutableLiveData<Location>()
     private val onSelectedSearchLocation = MutableLiveData<Location>()
     private val onLocationConfirmed = MutableLiveData(false)
     private val onSearchResults = MutableLiveData<List<SearchSuggestion>?>(mutableListOf())
     private val onReverseGeocodedAddress = MutableLiveData<String?>(null)
 
-    fun onRequestLocationPermissions() = onRequestLocationPermissions
+    fun onGetUserLocation() = onGetUserLocation
     fun onDeviceLocation() = onDeviceLocation
     fun onSearchResults() = onSearchResults
     fun onSelectedSearchLocation() = onSelectedSearchLocation
     fun onLocationConfirmed() = onLocationConfirmed
     fun onReverseGeocodedAddress() = onReverseGeocodedAddress
 
-    fun requestLocationPermissions() {
-        onRequestLocationPermissions.postValue(true)
+    fun getUserLocation() {
+        onGetUserLocation.postValue(true)
     }
 
     fun confirmLocation() {

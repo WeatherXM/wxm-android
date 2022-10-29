@@ -20,7 +20,6 @@ import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.checkPermissionsAndThen
-import com.weatherxm.ui.common.hasAnyPermissions
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setIcon
@@ -67,7 +66,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
             if (it) onNextPressed()
         }
 
-        locationModel.onRequestLocationPermissions().observe(this) {
+        locationModel.onGetUserLocation().observe(this) {
             if (it) requestLocationPermissions()
         }
 
@@ -104,9 +103,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
                 ClaimHeliumDevicePagerAdapter.PAGE_LOCATION -> {
                     secondStep.setSuccessChip()
                     thirdStep.setIcon(R.drawable.ic_three_filled)
-                    if (hasAnyPermissions(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION)) {
-                        getUserLocation()
-                    }
+                    requestLocationPermissions()
                 }
                 ClaimHeliumDevicePagerAdapter.PAGE_RESULT -> {
                     model.claimDevice(

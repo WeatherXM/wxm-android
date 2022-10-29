@@ -25,14 +25,12 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
 
     private var userEmail: String? = null
 
-    private val onGetUserLocation = MutableLiveData(false)
     private val onNext = MutableLiveData(false)
     private val onCancel = MutableLiveData(false)
     private val onClaimResult = MutableLiveData<Resource<String>>().apply {
         value = Resource.loading()
     }
 
-    fun onGetUserLocation() = onGetUserLocation
     fun onNext() = onNext
     fun onCancel() = onCancel
     fun onClaimResult() = onClaimResult
@@ -43,10 +41,6 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
 
     fun cancel() {
         onCancel.postValue(true)
-    }
-
-    fun getUserLocation() {
-        onGetUserLocation.postValue(true)
     }
 
     fun fetchUserEmail() {

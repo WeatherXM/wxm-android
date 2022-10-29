@@ -22,7 +22,6 @@ import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
 import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.checkPermissionsAndThen
-import com.weatherxm.ui.common.hasAnyPermissions
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setIcon
@@ -52,7 +51,7 @@ class ClaimM5Activity : AppCompatActivity() {
         binding.pager.adapter = pagerAdapter
         binding.pager.isUserInputEnabled = false
 
-        locationModel.onRequestLocationPermissions().observe(this) {
+        locationModel.onGetUserLocation().observe(this) {
             if (it) requestLocationPermissions()
         }
 
@@ -102,9 +101,7 @@ class ClaimM5Activity : AppCompatActivity() {
                 PAGE_LOCATION -> {
                     verify.setSuccessChip()
                     location.setIcon(R.drawable.ic_three_filled)
-                    if (hasAnyPermissions(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION)) {
-                        getUserLocation()
-                    }
+                    requestLocationPermissions()
                 }
                 PAGE_RESULT -> {
                     model.claimDevice(

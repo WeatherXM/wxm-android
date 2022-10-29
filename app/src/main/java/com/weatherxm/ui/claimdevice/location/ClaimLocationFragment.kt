@@ -113,7 +113,7 @@ class ClaimLocationFragment : Fragment() {
                 model.geocoding(it)
             },
             onMyLocationClicked = {
-                model.requestLocationPermissions()
+                model.getUserLocation()
             }
         )
 
