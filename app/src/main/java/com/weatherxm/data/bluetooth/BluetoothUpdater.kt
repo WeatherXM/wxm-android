@@ -28,30 +28,30 @@ class BluetoothUpdater(
     @Suppress("MagicNumber")
     fun setUpdater() {
         dfuServiceInitiator =
-            DfuServiceInitiator(bluetoothConnectionManager.getPeripheral().identifier).setKeepBond(
-                true
-            ).setPrepareDataObjectDelay(300L)
+            DfuServiceInitiator(bluetoothConnectionManager.getPeripheral().identifier)
+                .setKeepBond(true)
+                .setPrepareDataObjectDelay(300L)
 
         DfuServiceListenerHelper.registerProgressListener(
             context, object : DfuProgressListener {
                 override fun onDeviceConnecting(deviceAddress: String) {
-                    Timber.d("Updating via BLE: onDeviceConnecting: $deviceAddress")
+                    Timber.d("[BLE Updater]: onDeviceConnecting: $deviceAddress")
                 }
 
                 override fun onDeviceConnected(deviceAddress: String) {
-                    Timber.d("Updating via BLE: onDeviceConnected: $deviceAddress")
+                    Timber.d("[BLE Updater]: onDeviceConnected: $deviceAddress")
                 }
 
                 override fun onDfuProcessStarting(deviceAddress: String) {
-                    Timber.d("Updating via BLE: onDfuProcessStarting: $deviceAddress")
+                    Timber.d("[BLE Updater]: onDfuProcessStarting: $deviceAddress")
                 }
 
                 override fun onDfuProcessStarted(deviceAddress: String) {
-                    Timber.d("Updating via BLE: onDfuProcessStarted: $deviceAddress")
+                    Timber.d("[BLE Updater]: onDfuProcessStarted: $deviceAddress")
                 }
 
                 override fun onEnablingDfuMode(deviceAddress: String) {
-                    Timber.d("Updating via BLE: onEnablingDfuMode: $deviceAddress")
+                    Timber.d("[BLE Updater]: onEnablingDfuMode: $deviceAddress")
                 }
 
                 override fun onProgressChanged(
@@ -63,7 +63,7 @@ class BluetoothUpdater(
                     partsTotal: Int
                 ) {
                     Timber.d(
-                        "Updating via BLE: onProgressChanged: $deviceAddress, " +
+                        "[BLE Updater]: onProgressChanged: $deviceAddress, " +
                             "percent: $percent%, speed: $speed, avgSpeed: $avgSpeed, " +
                                 "currentPart: $currentPart, partsTotal: $partsTotal"
                         )
@@ -71,23 +71,23 @@ class BluetoothUpdater(
                     }
 
                     override fun onFirmwareValidating(deviceAddress: String) {
-                        Timber.d("Updating via BLE: onFirmwareValidating: $deviceAddress")
+                        Timber.d("[BLE Updater]: onFirmwareValidating: $deviceAddress")
                     }
 
                     override fun onDeviceDisconnecting(deviceAddress: String?) {
-                        Timber.d("Updating via BLE: onDeviceDisconnecting: $deviceAddress")
+                        Timber.d("[BLE Updater]: onDeviceDisconnecting: $deviceAddress")
                     }
 
                     override fun onDeviceDisconnected(deviceAddress: String) {
-                        Timber.d("Updating via BLE: onDeviceDisconnected: $deviceAddress")
+                        Timber.d("[BLE Updater]: onDeviceDisconnected: $deviceAddress")
                     }
 
                     override fun onDfuCompleted(deviceAddress: String) {
-                        Timber.d("Updating via BLE: onDfuCompleted: $deviceAddress")
+                        Timber.d("[BLE Updater]: onDfuCompleted: $deviceAddress")
                     }
 
                     override fun onDfuAborted(deviceAddress: String) {
-                        Timber.d("Updating via BLE: onDfuAborted: $deviceAddress")
+                        Timber.d("[BLE Updater]: onDfuAborted: $deviceAddress")
                     }
 
                     override fun onError(
@@ -97,7 +97,7 @@ class BluetoothUpdater(
                         message: String?
                     ) {
                         Timber.w(
-                            "Updating via BLE: onError: $deviceAddress, " +
+                            "[BLE Updater]: onError: $deviceAddress, " +
                                 "error: $error, errorType: $errorType, message: $message"
                         )
                     }

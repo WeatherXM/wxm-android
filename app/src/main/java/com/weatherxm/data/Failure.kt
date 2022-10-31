@@ -35,6 +35,7 @@ sealed class BluetoothError(val message: String? = null) : Failure() {
     sealed class ProvisionError : BluetoothError() {
         object GenericError : ProvisionError()
         object WifiConfigError : ProvisionError()
+        object WifiScanError : ProvisionError()
         object CreateSessionError : ProvisionError()
     }
 }

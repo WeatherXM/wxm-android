@@ -69,6 +69,11 @@ class ClaimHeliumPairingStatusFragment : BottomSheetDialogFragment() {
                 parentModel.next()
             }
             Status.ERROR -> {
+                if (parentModel.isManualClaiming()) {
+                    verifyModel.verifyCombinationError()
+                    dismiss()
+                    return
+                }
                 binding.buttonsContainer.visibility = View.VISIBLE
                 binding.empty.animation(R.raw.anim_error)
                 binding.empty.title(R.string.pairing_failed)

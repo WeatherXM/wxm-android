@@ -1,8 +1,8 @@
 package com.weatherxm.service
 
 import android.app.Activity
+import com.weatherxm.BuildConfig
 import com.weatherxm.ui.notification.NotificationActivity
-import no.nordicsemi.android.dfu.BuildConfig
 import no.nordicsemi.android.dfu.DfuBaseService
 
 class DfuService : DfuBaseService() {
@@ -29,7 +29,6 @@ class DfuService : DfuBaseService() {
         return NotificationActivity::class.java
     }
 
-    // TODO: Is this OK for printing progress or shall we return true?
     override fun isDebug(): Boolean {
         return BuildConfig.DEBUG
     }

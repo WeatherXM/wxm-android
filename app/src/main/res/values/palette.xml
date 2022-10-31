@@ -46,5 +46,25 @@
     <color name="warning">#FFAB49</color>
     <color name="warning_tint">#FBDEBC</color>
 
+    <!-- Explorer -->
+    <color name="hex_fill_color">#3388ff</color>
+    <color name="hex_fill_outline_color">@color/white</color>
+    <color name="explorer_devices_count_background">#88000000</color>
+    <color name="explorer_devices_count_title">#CAC4CF</color>
+    <color name="explorer_devices_count_value">#46D163</color>
+
+    <!-- Reward Scores -->
+    <color name="reward_score_very_high">#46D163</color>
+    <color name="reward_score_high">#E1CA60</color>
+    <color name="reward_score_average">#F3AD4E</color>
+    <color name="reward_score_low">#EF8B4F</color>
+    <color name="reward_score_very_low">#F6736D</color>
+    <color name="reward_score_unknown">#BAC7CB</color>
+
+    <!-- Online/Offline indicators -->
+    <color name="device_status_online">@color/success</color>
+    <color name="device_status_offline">@color/error</color>
+    <color name="device_status_unknown">@color/light_mid_grey</color>
+
     <!-- End -->
 </resources>

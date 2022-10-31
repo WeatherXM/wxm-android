@@ -47,8 +47,13 @@ class BluetoothScanner(private val espProvisionManager: ESPProvisionManager) {
 
                 override fun onPeripheralFound(device: BluetoothDevice?, scanResult: ScanResult?) {
                     device?.let {
-                        // TODO: Add filtering with the correct one in the future
-                        if (it.name.contains("WeatherXM")) {
+                        /**
+                         * DfuTarg is shown up when device gets in a "bricked" state, such as when
+                         * a user interrupts the updating. So we need to show it in case the user
+                         * wants to retry updating it.
+                         */
+                        val deviceName = it.name
+                        if (deviceName.contains("WeatherXM") || deviceName.contains("DfuTarg")) {
                             scannedDevices.tryEmit(it)
                         }
                     }

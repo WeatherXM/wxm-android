@@ -17,8 +17,8 @@ class ClaimHeliumVerifyViewModel : ViewModel(), KoinComponent {
     private val onDevEUIError = MutableLiveData(false)
     fun onDevEUIError() = onDevEUIError
 
-    private val onVerifyError = MutableLiveData(false)
-    fun onVerifyError() = onVerifyError
+    private val onVerifyCombinationError = MutableLiveData(false)
+    fun onVerifyCombinationError() = onVerifyCombinationError
 
     fun setDeviceEUI(devEUI: String) {
         this.devEUI = devEUI
@@ -46,17 +46,23 @@ class ClaimHeliumVerifyViewModel : ViewModel(), KoinComponent {
         return result?.substring(16..31) ?: ""
     }
 
-    fun checkAndVerify(devEUI: String, devKey: String) {
+    fun checkAndSet(devEUI: String, devKey: String): Boolean {
         val validDevEUI = validator.validateDevEUI(devEUI)
         val validDevKey = validator.validateDevKey(devKey)
 
         onDevEUIError.postValue(!validDevEUI)
         onDevKeyError.postValue(!validDevKey)
 
-        if (validDevEUI && validDevKey) {
+        return if (validDevEUI && validDevKey) {
             setDeviceEUI(devEUI)
             setDeviceKey(devKey)
-            // TODO: Verified. Continue with API call and open helium pairing status fragment.
+            true
+        } else {
+            false
         }
+    }
+
+    fun verifyCombinationError() {
+        onVerifyCombinationError.postValue(true)
     }
 }

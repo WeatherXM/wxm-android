@@ -19,7 +19,7 @@ import com.weatherxm.data.Location
 import com.weatherxm.data.MapBoxError
 import timber.log.Timber
 import java.io.IOException
-import java.util.Locale
+import java.util.*
 import kotlin.coroutines.suspendCoroutine
 
 interface AddressDataSource {
@@ -101,7 +101,7 @@ class NetworkAddressDataSource(
         hexIndex: String,
         address: String
     ): Either<Failure, Unit> {
-        TODO("Won't be implemented. Ignore this.")
+        throw NotImplementedError()
     }
 
     override suspend fun getAddressFromPoint(point: Point): Either<Failure, SearchResult> {

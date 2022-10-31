@@ -16,6 +16,7 @@ class ClaimHeliumPairingStatusViewModel : ViewModel(), KoinComponent {
     fun onPairing() = onPairing
 
     fun pair(devEUI: String, deviceKey: String) {
+        onPairing.postValue(Resource.loading())
         viewModelScope.launch {
             // TODO: Actual API call
             delay(5000L)

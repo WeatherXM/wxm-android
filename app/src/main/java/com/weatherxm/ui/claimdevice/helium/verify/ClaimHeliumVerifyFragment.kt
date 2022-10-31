@@ -67,21 +67,13 @@ class ClaimHeliumVerifyFragment : Fragment() {
 
         binding.devKey.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                model.checkAndVerify(
-                    binding.devEUI.text.toString().trim(),
-                    binding.devKey.text.toString().trim()
-                )
+                verify()
             }
             true
         }
 
         binding.verify.setOnClickListener {
-            model.checkAndVerify(
-                binding.devEUI.text.toString().trim(),
-                binding.devKey.text.toString().trim()
-            )
-            // TODO: Remove this
-            //    navigator.showHeliumPairingStatus(requireActivity().supportFragmentManager)
+            verify()
         }
 
         model.onDevEUIError().observe(viewLifecycleOwner) {
@@ -92,7 +84,7 @@ class ClaimHeliumVerifyFragment : Fragment() {
             if (it) binding.devKeyContainer.error = getString(R.string.invalid_dev_key)
         }
 
-        model.onVerifyError().observe(viewLifecycleOwner) {
+        model.onVerifyCombinationError().observe(viewLifecycleOwner) {
             if (it) {
                 binding.errorCard.htmlMessage(R.string.wrong_combination_message) {
                     navigator.sendSupportEmail(
@@ -105,8 +97,20 @@ class ClaimHeliumVerifyFragment : Fragment() {
                         )
                     )
                 }
+                binding.devEUIContainer.error = getString(R.string.wrong_combination_keys)
+                binding.devKeyContainer.error = getString(R.string.wrong_combination_keys)
                 binding.errorCard.show()
             }
+        }
+    }
+
+    private fun verify() {
+        if (model.checkAndSet(
+                binding.devEUI.text.toString().trim(),
+                binding.devKey.text.toString().trim()
+            )
+        ) {
+            navigator.showHeliumPairingStatus(requireActivity().supportFragmentManager)
         }
     }
 }

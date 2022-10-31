@@ -65,15 +65,15 @@ class BluetoothConnectionManager(private val context: Context) {
 
                 when (bluetoothDevice?.bondState) {
                     BluetoothDevice.BOND_BONDED -> {
-                        Timber.d("BLE Bonded.")
+                        Timber.d("[BLE Communication]: Bonded.")
                         bondStatus.tryEmit(BluetoothDevice.BOND_BONDED)
                     }
                     BluetoothDevice.BOND_BONDING -> {
-                        Timber.d("BLE Bonding...")
+                        Timber.d("[BLE Communication]: Bonding...")
                         bondStatus.tryEmit(BluetoothDevice.BOND_BONDING)
                     }
                     BluetoothDevice.BOND_NONE -> {
-                        Timber.d("BLE Bonding NONE...")
+                        Timber.d("[BLE Communication]: Bonding NONE...")
                         bondStatus.tryEmit(BluetoothDevice.BOND_NONE)
                     }
                 }
@@ -124,7 +124,7 @@ class BluetoothConnectionManager(private val context: Context) {
         if (readCharacteristic != null && writeCharacteristic != null) {
             return
         }
-        Timber.d("[BLE Communication] Setting read & write characteristics...")
+        Timber.d("[BLE Communication]: Setting read & write characteristics...")
         peripheral.services?.forEach { service ->
             service.characteristics.forEach {
                 if (it.characteristicUuid.toString().contains(WRITE_CHARACTERISTIC_UUID)) {
@@ -139,7 +139,7 @@ class BluetoothConnectionManager(private val context: Context) {
     suspend fun fetchATCommand(command: String, listener: (Either<Failure, String>) -> Unit) {
         setReadWriteCharacteristic()
 
-        Timber.d("========== [BLE Communication]: $command")
+        Timber.d("[BLE Communication]: $command")
 
         writeCharacteristic?.let {
             try {
@@ -153,9 +153,9 @@ class BluetoothConnectionManager(private val context: Context) {
         readCharacteristic?.let { characteristic ->
             peripheral.observe(characteristic).takeWhile {
                 val currentResponse = String(it).replace("\r", "").replace("\n", "")
-                Timber.d("========== [BLE Communication] Response: $currentResponse")
+                Timber.d("[BLE Communication] Response: $currentResponse")
                 if (currentResponse.contains("ERROR")) {
-                    Timber.w("========== [BLE Communication] ERROR: $currentResponse")
+                    Timber.w("[BLE Communication] ERROR: $currentResponse")
                     listener.invoke(Either.Left(BluetoothError.ATCommandError))
                     return@takeWhile false
                 }
