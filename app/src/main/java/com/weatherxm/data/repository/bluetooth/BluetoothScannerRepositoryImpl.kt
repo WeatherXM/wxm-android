@@ -14,7 +14,7 @@ class BluetoothScannerRepositoryImpl(
         return dataSource.registerOnScanning()
     }
 
-    override suspend fun startScanning(): Either<Failure, Unit> {
+    override suspend fun startScanning(): Flow<Either<Failure, Int>> {
         return dataSource.startScanning()
     }
 

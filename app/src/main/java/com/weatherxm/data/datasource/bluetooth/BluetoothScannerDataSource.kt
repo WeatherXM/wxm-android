@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface BluetoothScannerDataSource {
     suspend fun registerOnScanning(): Flow<BluetoothDevice>
-    suspend fun startScanning(): Either<Failure, Unit>
+    suspend fun startScanning(): Flow<Either<Failure, Int>>
     fun stopScanning()
 }

@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Resource
-import com.weatherxm.data.Status
 import com.weatherxm.data.datasource.bluetooth.BluetoothUpdaterDataSource
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIError
@@ -36,30 +35,36 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     private val onBLEDevEUI = MutableLiveData<String>()
     private val onBLEClaimingKey = MutableLiveData<String>()
     private val onNewScannedDevice = MutableLiveData<List<ScannedDevice>>()
-    private val onScanProgress = MutableLiveData<Resource<Unit>>()
+    private val onScanStatus = MutableLiveData<Resource<Unit>>()
+    private val onScanProgress = MutableLiveData<Int>()
 
     private var selectedDeviceMacAddress: String = ""
 
     fun onNewScannedDevice(): LiveData<List<ScannedDevice>> = onNewScannedDevice
-    fun onScanProgress(): LiveData<Resource<Unit>> = onScanProgress
+    fun onScanStatus(): LiveData<Resource<Unit>> = onScanStatus
+    fun onScanProgress(): LiveData<Int> = onScanProgress
     fun onBLEError() = onBLEError
     fun onBLEDevEUI() = onBLEDevEUI
     fun onBLEClaimingKey() = onBLEClaimingKey
 
+    @Suppress("MagicNumber")
     fun scanBleDevices() {
         viewModelScope.launch {
-            onScanProgress.postValue(Resource.loading())
+            onScanStatus.postValue(Resource.loading())
             scannedDevices.clear()
-            scanDevicesUseCase.startScanning().tap {
-                onScanProgress.postValue(Resource.success(Unit))
-            }.tapLeft {
-                onScanProgress.postValue(Resource.error(""))
+            scanDevicesUseCase.startScanning().collect {
+                it.tap { progress ->
+                    if (progress == 100) {
+                        onScanProgress.postValue(progress)
+                        onScanStatus.postValue(Resource.success(Unit))
+                    } else {
+                        onScanProgress.postValue(progress)
+                    }
+                }.tapLeft {
+                    onScanStatus.postValue(Resource.error(""))
+                }
             }
         }
-    }
-
-    fun isScanningRunning(): Boolean {
-        return onScanProgress.value?.status == Status.LOADING
     }
 
     fun setupBluetoothClaiming(macAddress: String) {

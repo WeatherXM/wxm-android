@@ -133,8 +133,22 @@
         <item name="contentPadding">@dimen/padding_large</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.Small" parent="Widget.Material3.CardView.Filled">
+    <style name="Widget.WeatherXM.MaterialCard.Small" parent="Widget.WeatherXM.MaterialCard">
         <item name="contentPadding">@dimen/padding_small</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.Messages" parent="Widget.WeatherXM.MaterialCard">
+        <item name="contentPadding">@dimen/padding_small</item>
+        <item name="contentPaddingTop">@dimen/padding_normal</item>
+        <item name="contentPaddingBottom">@dimen/padding_normal</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.NoRadius" parent="Widget.WeatherXM.MaterialCard">
+        <item name="cardCornerRadius">0dp</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.NoRadius.Small" parent="Widget.WeatherXM.MaterialCard.Small">
+        <item name="cardCornerRadius">0dp</item>
     </style>
 
     <style name="Widget.WeatherXM.MaterialCard.Login" parent="Widget.WeatherXM.MaterialCard">
@@ -143,18 +157,16 @@
         <item name="contentPadding">@dimen/padding_normal</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.ForecastAndHistory" parent="Widget.WeatherXM.MaterialCard">
+    <style name="Widget.WeatherXM.MaterialCard.ForecastAndHistory" parent="Widget.WeatherXM.MaterialCard.NoRadius">
         <item name="cardBackgroundColor">@color/transparent</item>
-        <item name="cardCornerRadius">0dp</item>
         <item name="contentPadding">0dp</item>
         <item name="contentPaddingTop">@dimen/padding_small</item>
         <item name="contentPaddingBottom">@dimen/padding_small</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.HourlyForecast" parent="Widget.WeatherXM.MaterialCard.Small">
+    <style name="Widget.WeatherXM.MaterialCard.HourlyForecast" parent="Widget.WeatherXM.MaterialCard.NoRadius.Small">
         <item name="cardBackgroundColor">@color/transparent</item>
         <item name="android:stateListAnimator">@animator/weather_forecast_tile_elevation</item>
-        <item name="cardCornerRadius">0dp</item>
     </style>
 
     <style name="Widget.WeatherXM.MaterialCard.ChartMarker" parent="Widget.WeatherXM.MaterialCard.Small">
@@ -166,51 +178,35 @@
         <item name="useCompatPadding">false</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.Warning" parent="Widget.WeatherXM.MaterialCard">
+    <style name="Widget.WeatherXM.MaterialCard.Warning" parent="Widget.WeatherXM.MaterialCard.Messages">
         <item name="android:textColor">@color/dark_background</item>
         <item name="cardBackgroundColor">@color/warning_tint</item>
-        <item name="contentPadding">@dimen/padding_small</item>
-        <item name="contentPaddingTop">@dimen/padding_normal</item>
-        <item name="contentPaddingBottom">@dimen/padding_normal</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.Error" parent="Widget.WeatherXM.MaterialCard">
+    <style name="Widget.WeatherXM.MaterialCard.Error" parent="Widget.WeatherXM.MaterialCard.Messages">
         <item name="cardBackgroundColor">@color/error_tint</item>
         <item name="strokeWidth">1dp</item>
         <item name="strokeColor">@color/error</item>
-        <item name="contentPadding">@dimen/padding_small</item>
-        <item name="contentPaddingTop">@dimen/padding_normal</item>
-        <item name="contentPaddingBottom">@dimen/padding_normal</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.Error.Overlay" parent="Widget.WeatherXM.MaterialCard.Error">
+    <style name="Widget.WeatherXM.MaterialCard.Error.Overlay" parent="Widget.WeatherXM.MaterialCard">
         <item name="cardBackgroundColor">@color/error</item>
         <item name="android:alpha">0.9</item>
-        <item name="strokeWidth">0dp</item>
-        <item name="contentPadding">@dimen/padding_large</item>
-    </style>
-
-    <style name="Widget.WeatherXM.MaterialCard.Info" parent="Widget.WeatherXM.MaterialCard">
-        <item name="contentPadding">@dimen/padding_small</item>
         <item name="contentPaddingTop">@dimen/padding_normal</item>
         <item name="contentPaddingBottom">@dimen/padding_normal</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.Info" parent="Widget.WeatherXM.MaterialCard.Messages">
         <item name="cardBackgroundColor">@color/info_card_background</item>
     </style>
 
     <style name="Widget.WeatherXM.MaterialCard.AddressOnMap" parent="Widget.WeatherXM.MaterialCard.Small">
-        <item name="cardBackgroundColor">@color/colorSurface</item>
-        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
-        <item name="cardPreventCornerOverlap">false</item>
-        <item name="contentPadding">@dimen/padding_small</item>
         <item name="cardElevation">@dimen/card_selected_elevation</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.ClaimingFlowDevices" parent="Widget.WeatherXM.MaterialCard">
+    <style name="Widget.WeatherXM.MaterialCard.ClaimingFlowDevices" parent="Widget.WeatherXM.MaterialCard.NoRadius">
         <item name="cardBackgroundColor">@color/claiming_flow_devices_card_color</item>
-        <item name="cardCornerRadius">0dp</item>
-        <item name="contentPadding">0dp</item>
-        <item name="contentPaddingTop">@dimen/padding_normal</item>
-        <item name="contentPaddingBottom">@dimen/padding_normal</item>
+        <item name="contentPadding">@dimen/padding_normal</item>
     </style>
 
 

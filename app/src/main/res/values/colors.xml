@@ -44,6 +44,7 @@
 
     <!-- Scan Devices -->
     <color name="claiming_flow_devices_card_color">@color/light_light2</color>
+    <color name="progress_color_in_button">@color/light_lightest_blue</color>
 
     <!-- Explorer -->
     <color name="bottomSheetDialog_background">@color/light_light1</color>

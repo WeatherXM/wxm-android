@@ -13,6 +13,8 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
@@ -78,15 +80,14 @@ class ClaimHeliumPairFragment : Fragment() {
 
         adapter = ScannedDevicesListAdapter {
             model.setupBluetoothClaiming(it.address)
+            binding.progressBar.visibility = GONE
         }
 
         binding.recycler.adapter = adapter
 
         binding.scanAgain.setOnClickListener {
-            if (!model.isScanningRunning()) {
-                adapter.submitList(mutableListOf())
-                checkAndScanBleDevices()
-            }
+            adapter.submitList(mutableListOf())
+            checkAndScanBleDevices()
         }
 
         binding.accessBluetoothPrompt.setOnClickListener {
@@ -103,12 +104,16 @@ class ClaimHeliumPairFragment : Fragment() {
         model.onNewScannedDevice().observe(viewLifecycleOwner) {
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
-            binding.infoContainer.visibility = View.GONE
-            binding.recycler.visibility = View.VISIBLE
+            binding.infoContainer.visibility = GONE
+            binding.recycler.visibility = VISIBLE
+        }
+
+        model.onScanStatus().observe(viewLifecycleOwner) {
+            updateUI(it)
         }
 
         model.onScanProgress().observe(viewLifecycleOwner) {
-            updateUI(it)
+            binding.progressBar.progress = it
         }
 
         model.onBLEError().observe(viewLifecycleOwner) {
@@ -172,21 +177,27 @@ class ClaimHeliumPairFragment : Fragment() {
     private fun updateUI(result: Resource<Unit>) {
         when (result.status) {
             Status.SUCCESS -> {
+                binding.progressBar.visibility = GONE
+                binding.scanAgain.isEnabled = true
                 if (adapter.currentList.isNotEmpty()) {
-                    binding.infoContainer.visibility = View.GONE
+                    binding.infoContainer.visibility = GONE
                 } else {
-                    binding.recycler.visibility = View.GONE
+                    binding.recycler.visibility = GONE
                     binding.infoIcon.setNoDevicesFoundDrawable(requireContext())
                     showInfoMessage(R.string.no_devices_found, R.string.no_devices_found_desc)
                 }
             }
             Status.ERROR -> {
-                binding.recycler.visibility = View.GONE
+                binding.progressBar.visibility = GONE
+                binding.scanAgain.isEnabled = true
+                binding.recycler.visibility = GONE
                 binding.infoIcon.setWarningDrawable(requireContext())
                 showInfoMessage(R.string.scan_failed_title, R.string.scan_failed_desc)
             }
             Status.LOADING -> {
-                binding.recycler.visibility = View.GONE
+                binding.progressBar.visibility = VISIBLE
+                binding.scanAgain.isEnabled = false
+                binding.recycler.visibility = GONE
                 binding.infoIcon.setBluetoothDrawable(requireContext())
                 showInfoMessage(R.string.scanning_in_progress, null)
             }
@@ -198,18 +209,18 @@ class ClaimHeliumPairFragment : Fragment() {
         with(binding.infoSubtitle) {
             subtitle?.let {
                 setHtml(it)
-                visibility = View.VISIBLE
+                visibility = VISIBLE
             } ?: run {
-                visibility = View.GONE
+                visibility = GONE
             }
         }
-        binding.infoContainer.visibility = View.VISIBLE
+        binding.infoContainer.visibility = VISIBLE
     }
 
     private fun showNoBluetoothAccessText() {
         binding.infoIcon.setBluetoothDrawable(requireContext())
         showInfoMessage(R.string.no_bluetooth_access, R.string.no_bluetooth_access_desc)
-        binding.accessBluetoothPrompt.visibility = View.VISIBLE
+        binding.accessBluetoothPrompt.visibility = VISIBLE
     }
 
     private fun checkAndScanBleDevices() {
@@ -230,7 +241,7 @@ class ClaimHeliumPairFragment : Fragment() {
                 onDenied = {
                     binding.infoIcon.setBluetoothDrawable(requireContext())
                     showInfoMessage(R.string.no_location_access, R.string.no_location_access_desc)
-                    binding.accessBluetoothPrompt.visibility = View.VISIBLE
+                    binding.accessBluetoothPrompt.visibility = VISIBLE
                 }
             )
         }

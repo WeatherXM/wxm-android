@@ -64,9 +64,8 @@
                             android:id="@+id/infoContainer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/margin_normal"
                             android:gravity="center"
-                            app:layout_constraintBottom_toTopOf="@id/scanAgain"
+                            app:layout_constraintBottom_toTopOf="@id/scanAgainContainer"
                             app:layout_constraintTop_toTopOf="parent">
 
                             <ImageView
@@ -117,27 +116,46 @@
                             android:id="@+id/recycler"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:layout_marginHorizontal="@dimen/margin_normal"
                             android:layout_marginBottom="@dimen/margin_large"
                             android:clipChildren="false"
                             android:clipToPadding="false"
                             android:scrollbars="vertical"
                             android:visibility="gone"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            app:layout_constraintBottom_toTopOf="@id/scanAgain"
+                            app:layout_constraintBottom_toTopOf="@id/scanAgainContainer"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:listitem="@layout/list_item_scanned_device" />
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/scanAgain"
-                            style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                        <FrameLayout
+                            android:id="@+id/scanAgainContainer"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/margin_normal"
-                            android:text="@string/scan_again"
-                            app:icon="@drawable/ic_bluetooth"
-                            app:iconGravity="textStart"
-                            app:layout_constraintBottom_toBottomOf="parent" />
+                            app:layout_constraintBottom_toBottomOf="parent">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/scanAgain"
+                                style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                                android:layout_width="match_parent"
+                                android:layout_height="54dp"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:text="@string/scan_again"
+                                app:icon="@drawable/ic_bluetooth"
+                                app:iconGravity="textStart" />
+
+                            <com.google.android.material.progressindicator.LinearProgressIndicator
+                                android:id="@+id/progressBar"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:alpha="0.5"
+                                android:indeterminate="false"
+                                android:indeterminateOnly="false"
+                                android:visibility="gone"
+                                app:indicatorColor="@color/progress_color_in_button"
+                                app:trackColor="@color/transparent"
+                                app:trackThickness="54dp"
+                                tools:visibility="visible" />
+                        </FrameLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
