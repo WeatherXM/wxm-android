@@ -17,7 +17,9 @@ import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.weatherxm.databinding.FragmentMapBinding
 import com.weatherxm.ui.BaseMapFragment.OnMapDebugInfoListener
+import com.weatherxm.util.DisplayModeHelper
 import dev.chrisbanes.insetter.applyInsetter
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 open class BaseMapFragment : Fragment() {
@@ -30,6 +32,8 @@ open class BaseMapFragment : Fragment() {
     fun interface OnMapDebugInfoListener {
         fun onMapDebugInfoUpdated(zoom: Double, center: Point)
     }
+
+    private val displayModeHelper: DisplayModeHelper by inject()
 
     protected lateinit var binding: FragmentMapBinding
     protected lateinit var polygonManager: PolygonAnnotationManager
@@ -129,6 +133,10 @@ open class BaseMapFragment : Fragment() {
     }
 
     open fun getMapStyle(): String {
-        return Style.MAPBOX_STREETS
+        return if (displayModeHelper.isDarkModeEnabled()) {
+            Style.DARK
+        } else {
+            Style.MAPBOX_STREETS
+        }
     }
 }
