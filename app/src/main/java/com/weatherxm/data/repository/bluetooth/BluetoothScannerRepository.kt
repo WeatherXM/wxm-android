@@ -2,7 +2,6 @@ package com.weatherxm.data.repository.bluetooth
 
 import android.bluetooth.BluetoothDevice
 import arrow.core.Either
-import com.weatherxm.data.BluetoothScanProgress
 import com.weatherxm.data.Failure
 import kotlinx.coroutines.flow.Flow
 
