@@ -24,6 +24,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.takeWhile
 import timber.log.Timber
 
@@ -151,6 +152,7 @@ class BluetoothConnectionManager(private val context: Context) {
         }
 
         readCharacteristic?.let { characteristic ->
+            var fullResponse = ""
             peripheral.observe(characteristic).takeWhile {
                 val currentResponse = String(it).replace("\r", "").replace("\n", "")
                 Timber.d("[BLE Communication] Response: $currentResponse")
@@ -160,8 +162,11 @@ class BluetoothConnectionManager(private val context: Context) {
                     return@takeWhile false
                 }
                 currentResponse != "OK"
+            }.onCompletion {
+                Timber.d("[BLE Communication] Full Response: $fullResponse")
+                listener.invoke(Either.Right(fullResponse))
             }.collect {
-                listener.invoke(Either.Right(String(it)))
+                fullResponse += String(it)
             }
         }
     }
