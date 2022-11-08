@@ -77,15 +77,11 @@ class ClaimLocationFragment : Fragment() {
         }
 
         binding.confirmAndClaim.setOnClickListener {
-            if (binding.installationToggle.isChecked) {
-                model.confirmLocation()
-                if (model.getDeviceType() == DeviceType.M5_WIFI) {
-                    m5ParentModel.next()
-                } else {
-                    heliumParentModel.next()
-                }
+            model.confirmLocation()
+            if (model.getDeviceType() == DeviceType.M5_WIFI) {
+                m5ParentModel.next()
             } else {
-                // TODO: What are we doing when installation is not confirmed?
+                heliumParentModel.next()
             }
         }
 
@@ -117,24 +113,26 @@ class ClaimLocationFragment : Fragment() {
             }
         )
 
-        binding.installationToggle.setOnCheckedChangeListener { _, checked ->
-            with(binding) {
-                if (checked) {
-                    mapContainer.visibility = View.VISIBLE
-                    infoContainer.strokeWidth = 0
-                    needHelpInstallation.visibility = View.GONE
-                    warningBox.visibility = View.GONE
-                    toggleDescription.text = getString(R.string.installation_toggle_checked)
-                    mapView.getFragment<ClaimMapFragment>().initMarkerAndListeners()
-                } else {
-                    mapContainer.visibility = View.GONE
-                    infoContainer.strokeWidth = 1
-                    needHelpInstallation.visibility = View.VISIBLE
-                    warningBox.visibility = View.VISIBLE
-                    toggleDescription.text = getString(R.string.installation_toggle_unchecked)
-                }
-            }
-        }
+        // TODO: Re-enable this when we have confirm of location
+        binding.mapView.getFragment<ClaimMapFragment>().initMarkerAndListeners()
+//        binding.installationToggle.setOnCheckedChangeListener { _, checked ->
+//            with(binding) {
+//                if (checked) {
+//                    mapContainer.visibility = View.VISIBLE
+//                    infoContainer.strokeWidth = 0
+//                    needHelpInstallation.visibility = View.GONE
+//                    warningBox.visibility = View.GONE
+//                    toggleDescription.text = getString(R.string.installation_toggle_checked)
+//                    mapView.getFragment<ClaimMapFragment>().initMarkerAndListeners()
+//                } else {
+//                    mapContainer.visibility = View.GONE
+//                    infoContainer.strokeWidth = 1
+//                    needHelpInstallation.visibility = View.VISIBLE
+//                    warningBox.visibility = View.VISIBLE
+//                    toggleDescription.text = getString(R.string.installation_toggle_unchecked)
+//                }
+//            }
+//        }
 
         with(binding.needHelpInstallation) {
             movementMethod =
