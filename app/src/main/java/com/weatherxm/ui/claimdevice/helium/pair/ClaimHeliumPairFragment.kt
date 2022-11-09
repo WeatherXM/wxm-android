@@ -28,7 +28,7 @@ import com.weatherxm.databinding.FragmentClaimHeliumPairBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyViewModel
-import com.weatherxm.ui.common.ErrorDialogFragment
+import com.weatherxm.ui.common.ActionDialogFragment
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.util.setBluetoothDrawable
@@ -159,7 +159,7 @@ class ClaimHeliumPairFragment : Fragment() {
     }
 
     private fun showErrorDialog(uiError: UIError) {
-        ErrorDialogFragment
+        ActionDialogFragment
             .Builder(
                 title = getString(R.string.pairing_failed),
                 message = uiError.errorMessage

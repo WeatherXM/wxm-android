@@ -10,10 +10,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.weatherxm.databinding.ViewErrorDialogBinding
+import com.weatherxm.databinding.ViewActionDialogBinding
 import timber.log.Timber
 
-class ErrorDialogFragment : DialogFragment() {
+class ActionDialogFragment : DialogFragment() {
 
     fun interface OnDialogActionClickListener {
         fun onClick()
@@ -46,9 +46,9 @@ class ErrorDialogFragment : DialogFragment() {
             this.onNegativeClickListener = listener
         }
 
-        fun build(): ErrorDialogFragment {
+        fun build(): ActionDialogFragment {
             Timber.d("Building AlertDialogFragment with params: $this")
-            return ErrorDialogFragment().apply {
+            return ActionDialogFragment().apply {
                 arguments = bundleOf(
                     ARG_TITLE to this@Builder.title,
                     ARG_MESSAGE to this@Builder.message,
@@ -62,7 +62,7 @@ class ErrorDialogFragment : DialogFragment() {
     }
 
     companion object {
-        const val TAG = "ErrorDialogFragment"
+        const val TAG = "ActionDialogFragment"
 
         private const val REQUEST_KEY = "error_dialog_request_key"
         private const val KEY_RESULT = "result"
@@ -78,12 +78,12 @@ class ErrorDialogFragment : DialogFragment() {
 
     private var onPositiveClickListener: OnDialogActionClickListener? = null
     private var onNegativeClickListener: OnDialogActionClickListener? = null
-    private lateinit var binding: ViewErrorDialogBinding
+    private lateinit var binding: ViewActionDialogBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder = MaterialAlertDialogBuilder(requireContext())
 
-        binding = ViewErrorDialogBinding.inflate(layoutInflater)
+        binding = ViewActionDialogBinding.inflate(layoutInflater)
 
         builder.setView(binding.root)
 
