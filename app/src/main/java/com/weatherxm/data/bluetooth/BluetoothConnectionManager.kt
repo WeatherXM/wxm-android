@@ -2,6 +2,7 @@ package com.weatherxm.data.bluetooth
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -121,7 +122,7 @@ class BluetoothConnectionManager(private val context: Context) {
         }
     }
 
-    private fun setReadWriteCharacteristic() {
+    private suspend fun setReadWriteCharacteristic() {
         if (readCharacteristic != null && writeCharacteristic != null) {
             return
         }
@@ -131,6 +132,7 @@ class BluetoothConnectionManager(private val context: Context) {
                 if (it.characteristicUuid.toString().contains(WRITE_CHARACTERISTIC_UUID)) {
                     writeCharacteristic = it
                 } else if (it.characteristicUuid.toString().contains(READ_CHARACTERISTIC_UUID)) {
+                    peripheral.write(it.descriptors[0], ENABLE_NOTIFICATION_VALUE)
                     readCharacteristic = it
                 }
             }
