@@ -1,17 +1,14 @@
 package com.weatherxm.data.datasource
 
-import android.content.SharedPreferences
 import androidx.annotation.StringDef
+import com.weatherxm.data.services.CacheService
 
 interface UserActionDataSource {
     suspend fun getLastFriendlyNameChanged(deviceId: String): Long
     suspend fun setLastFriendlyNameChanged(deviceId: String, timestamp: Long)
-    suspend fun clear()
 }
 
-class UserActionDataSourceImpl(
-    private val preferences: SharedPreferences
-) : UserActionDataSource {
+class UserActionDataSourceImpl(private val cacheService: CacheService) : UserActionDataSource {
 
     companion object {
         const val ACTION_EDIT_FRIENDLY_NAME = "edit_friendly_name"
@@ -27,15 +24,11 @@ class UserActionDataSourceImpl(
 
     override suspend fun getLastFriendlyNameChanged(deviceId: String): Long {
         val key = getUserDeviceActionKey(ACTION_EDIT_FRIENDLY_NAME, deviceId)
-        return preferences.getLong(key, 0L)
+        return cacheService.getLastFriendlyNameChanged(key)
     }
 
     override suspend fun setLastFriendlyNameChanged(deviceId: String, timestamp: Long) {
         val key = getUserDeviceActionKey(ACTION_EDIT_FRIENDLY_NAME, deviceId)
-        preferences.edit().putLong(key, timestamp).apply()
-    }
-
-    override suspend fun clear() {
-        preferences.edit().clear().apply()
+        cacheService.setLastFriendlyNameChanged(key, timestamp)
     }
 }

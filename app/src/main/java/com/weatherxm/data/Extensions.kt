@@ -11,6 +11,7 @@ import com.weatherxm.data.ApiError.AuthError.SignupError.UserAlreadyExists
 import com.weatherxm.data.ApiError.DeviceNotFound
 import com.weatherxm.data.ApiError.GenericError.JWTError.ForbiddenError
 import com.weatherxm.data.ApiError.GenericError.JWTError.UnauthorizedError
+import com.weatherxm.data.ApiError.GenericError.JWTError.UserNotFoundError
 import com.weatherxm.data.ApiError.GenericError.NotFoundError
 import com.weatherxm.data.ApiError.GenericError.UnknownError
 import com.weatherxm.data.ApiError.GenericError.ValidationError
@@ -24,6 +25,7 @@ import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.ApiError.UserError.WalletError.InvalidWalletAddress
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
+import com.weatherxm.data.NetworkError.ParseJsonError
 import com.weatherxm.data.network.ErrorResponse
 import com.weatherxm.data.network.ErrorResponse.Companion.DEVICE_ALREADY_CLAIMED
 import com.weatherxm.data.network.ErrorResponse.Companion.DEVICE_NOT_FOUND
@@ -42,6 +44,7 @@ import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_WALLET_ADDRESS
 import com.weatherxm.data.network.ErrorResponse.Companion.NOT_FOUND
 import com.weatherxm.data.network.ErrorResponse.Companion.UNAUTHORIZED
 import com.weatherxm.data.network.ErrorResponse.Companion.USER_ALREADY_EXISTS
+import com.weatherxm.data.network.ErrorResponse.Companion.USER_NOT_FOUND
 import com.weatherxm.data.network.ErrorResponse.Companion.VALIDATION
 import okhttp3.Request
 import okhttp3.Response
@@ -68,46 +71,48 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
             is NetworkResponse.ServerError -> {
                 Timber.d(this.error, "Network response: ServerError")
                 Timber.w(this.error, this.body.toString())
+                val code = this.body?.code
                 Either.Left(
-                    when (this.body?.code) {
-                        INVALID_USERNAME -> InvalidUsername(this.body?.message)
-                        INVALID_PASSWORD -> InvalidPassword(this.body?.message)
-                        INVALID_CREDENTIALS -> InvalidCredentials(this.body?.message)
-                        USER_ALREADY_EXISTS -> UserAlreadyExists(this.body?.message)
-                        INVALID_ACCESS_TOKEN -> InvalidAccessToken(this.body?.message)
-                        DEVICE_NOT_FOUND -> DeviceNotFound(this.body?.message)
-                        INVALID_WALLET_ADDRESS -> InvalidWalletAddress(this.body?.message)
-                        INVALID_FRIENDLY_NAME -> InvalidFriendlyName(this.body?.message)
-                        INVALID_FROM_DATE -> InvalidFromDate(this.body?.message)
-                        INVALID_TO_DATE -> InvalidToDate(this.body?.message)
-                        INVALID_TIMEZONE -> InvalidTimezone(this.body?.message)
-                        INVALID_CLAIM_ID -> InvalidClaimId(this.body?.message)
-                        INVALID_CLAIM_LOCATION -> InvalidClaimLocation(this.body?.message)
-                        DEVICE_ALREADY_CLAIMED -> DeviceAlreadyClaimed(this.body?.message)
-                        UNAUTHORIZED -> UnauthorizedError(this.body?.message)
-                        FORBIDDEN -> ForbiddenError(this.body?.message)
-                        VALIDATION -> ValidationError(this.body?.message)
-                        NOT_FOUND -> NotFoundError(this.body?.message)
-                        else -> UnknownError(this.body?.message)
+                    when (code) {
+                        INVALID_USERNAME -> InvalidUsername(code, this.body?.message)
+                        INVALID_PASSWORD -> InvalidPassword(code, this.body?.message)
+                        INVALID_CREDENTIALS -> InvalidCredentials(code, this.body?.message)
+                        USER_ALREADY_EXISTS -> UserAlreadyExists(code, this.body?.message)
+                        INVALID_ACCESS_TOKEN -> InvalidAccessToken(code, this.body?.message)
+                        DEVICE_NOT_FOUND -> DeviceNotFound(code, this.body?.message)
+                        INVALID_WALLET_ADDRESS -> InvalidWalletAddress(code, this.body?.message)
+                        INVALID_FRIENDLY_NAME -> InvalidFriendlyName(code, this.body?.message)
+                        INVALID_FROM_DATE -> InvalidFromDate(code, this.body?.message)
+                        INVALID_TO_DATE -> InvalidToDate(code, this.body?.message)
+                        INVALID_TIMEZONE -> InvalidTimezone(code, this.body?.message)
+                        INVALID_CLAIM_ID -> InvalidClaimId(code, this.body?.message)
+                        INVALID_CLAIM_LOCATION -> InvalidClaimLocation(code, this.body?.message)
+                        DEVICE_ALREADY_CLAIMED -> DeviceAlreadyClaimed(code, this.body?.message)
+                        UNAUTHORIZED -> UnauthorizedError(code, this.body?.message)
+                        USER_NOT_FOUND -> UserNotFoundError(code, this.body?.message)
+                        FORBIDDEN -> ForbiddenError(code, this.body?.message)
+                        VALIDATION -> ValidationError(code, this.body?.message)
+                        NOT_FOUND -> NotFoundError(code, this.body?.message)
+                        else -> UnknownError(code, this.body?.message)
                     }
                 )
             }
             is NetworkResponse.NetworkError -> {
                 if (this.error is SocketTimeoutException) {
                     Timber.d(this.error, "Network response: ConnectionTimeoutError")
-                    Either.Left(ConnectionTimeoutError)
+                    Either.Left(ConnectionTimeoutError())
                 } else {
                     Timber.d(this.error, "Network response: NoConnectionError")
-                    Either.Left(NoConnectionError)
+                    Either.Left(NoConnectionError())
                 }
             }
             is NetworkResponse.UnknownError -> {
                 Timber.d(this.error, "Network response: UnknownError")
-                Either.Left(Failure.UnknownError)
+                Either.Left(UnknownError())
             }
         }
     } catch (exception: JsonDataException) {
         Timber.w(exception, "Could not parse json response")
-        Either.Left(Failure.JsonError)
+        Either.Left(ParseJsonError())
     }
 }

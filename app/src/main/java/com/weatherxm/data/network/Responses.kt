@@ -7,14 +7,6 @@ import com.squareup.moshi.JsonClass
 import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
-data class Credentials(
-    @Json(name = "username") val username: String,
-    @Json(name = "password") val password: String
-) {
-    fun isValid(): Boolean = username.isNotEmpty() && password.isNotEmpty()
-}
-
-@JsonClass(generateAdapter = true)
 data class AuthToken(
     @Json(name = "token") val access: String,
     @Json(name = "refreshToken") val refresh: String
@@ -56,6 +48,7 @@ data class ErrorResponse(
         const val INVALID_CLAIM_LOCATION = "InvalidClaimLocation"
         const val DEVICE_ALREADY_CLAIMED = "DeviceAlreadyClaimed"
         const val UNAUTHORIZED = "Unauthorized"
+        const val USER_NOT_FOUND = "UserNotFound"
         const val FORBIDDEN = "Forbidden"
         const val VALIDATION = "Validation"
         const val NOT_FOUND = "NotFound"

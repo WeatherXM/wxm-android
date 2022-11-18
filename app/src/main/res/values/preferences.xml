@@ -8,6 +8,8 @@
     <string name="title_dialog_logout">Logout?</string>
     <string name="logout_desc">Logout of your account</string>
     <string name="message_dialog_logout">Are you sure you want to logout?</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_desc">Permanently delete your account, and data. This is not reversible!</string>
 
     <!-- Feedback -->
     <string name="feedback">Feedback</string>

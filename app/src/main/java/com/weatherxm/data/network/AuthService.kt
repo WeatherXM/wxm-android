@@ -30,4 +30,9 @@ interface AuthService {
     suspend fun refresh(
         @Body refresh: RefreshBody,
     ): NetworkResponse<AuthToken, ErrorResponse>
+
+    @Mock
+    @MockResponse(body = "mock_files/empty_response.json")
+    @POST("/api/v1/auth/logout")
+    suspend fun logout(): NetworkResponse<Unit, ErrorResponse>
 }

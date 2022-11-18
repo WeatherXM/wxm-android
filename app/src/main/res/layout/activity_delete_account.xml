@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/delete_account" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/infoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toTopOf="@id/checkboxCard"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/quickDescription"
+                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/deletion_account_quick_description"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/deletedData"
+                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:text="@string/deletion_account_what_is_deleted"
+                    app:layout_constraintTop_toBottomOf="@id/quickDescription" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/notDeletedData"
+                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:text="@string/deletion_account_what_is_not_deleted"
+                    app:layout_constraintTop_toBottomOf="@id/deletedData" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/doNotCollectData"
+                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:text="@string/deletion_account_do_not_collect_data"
+                    app:layout_constraintTop_toBottomOf="@id/notDeletedData" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/askSupport"
+                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="@dimen/margin_normal"
+                    android:text="@string/deletion_account_ask_support"
+                    app:layout_constraintTop_toBottomOf="@id/doNotCollectData" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/checkboxCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/passwordContainer"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_password"
+                    app:errorIconDrawable="@null"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:passwordToggleEnabled="true"
+                    app:startIconDrawable="@drawable/ic_password">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeActionLabel="@string/delete_account"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword"
+                        android:selectAllOnFocus="true" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:id="@+id/toggleContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/passwordContainer">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent">
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switcher"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:contentDescription="@string/understand_deletion_checkbox_message"
+                            android:gravity="top"
+                            app:layout_constraintStart_toStartOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/margin_normal">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/checkboxText"
+                            style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/understand_deletion_checkbox_message"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/deleteAccount"
+                    style="@style/Widget.WeatherXM.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:enabled="false"
+                    android:text="@string/delete_account"
+                    android:textAllCaps="false"
+                    app:backgroundTint="@color/error"
+                    app:layout_constraintTop_toBottomOf="@id/toggleContainer" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/statusCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/statusContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                app:layout_constraintBottom_toTopOf="@id/buttonsContainer"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.weatherxm.ui.widget.EmptyView
+                    android:id="@+id/empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    app:empty_animation="@raw/anim_weather_clear_day"
+                    app:empty_subtitle="@string/deletion_success_message"
+                    app:empty_title="Account Deleted" />
+
+            </androidx.core.widget.NestedScrollView>
+
+            <LinearLayout
+                android:id="@+id/buttonsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/successButtons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/goToSignIn"
+                        style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_normal"
+                        android:layout_weight="1"
+                        android:text="@string/go_to_sign_in_screen"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/takeSurvey"
+                        style="@style/Widget.WeatherXM.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/take_short_survey"
+                        android:textAllCaps="false"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/failureButtons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="2"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/cancelDeletion"
+                        style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_normal"
+                        android:layout_weight="1"
+                        android:text="@string/cancel_deletion"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/retryDeletion"
+                        style="@style/Widget.WeatherXM.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/retry_deleting_account"
+                        android:textAllCaps="false"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

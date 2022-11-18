@@ -26,6 +26,12 @@ interface ApiService {
     suspend fun getUser(): NetworkResponse<User, ErrorResponse>
 
     @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 204, body = "mock_files/empty_response.json")
+    @DELETE("/api/v1/me")
+    suspend fun deleteAccount(): NetworkResponse<Unit, ErrorResponse>
+
+    @Mock
     @MockResponse(body = "mock_files/get_user_devices.json")
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @GET("/api/v1/me/devices")

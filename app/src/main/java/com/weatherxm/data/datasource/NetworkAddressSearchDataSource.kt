@@ -142,10 +142,6 @@ class NetworkAddressSearchDataSource(
         throw NotImplementedError()
     }
 
-    override suspend fun clear() {
-        throw NotImplementedError()
-    }
-
     private fun Point.toLocation(): Location {
         return Location("Search").apply {
             latitude = latitude()

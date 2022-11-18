@@ -13,12 +13,12 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.MapBoxError.ReverseGeocodingError
 import com.weatherxm.data.repository.AddressRepository
-import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.DeviceRepository
+import com.weatherxm.data.repository.UserRepository
 
 interface ClaimDeviceUseCase {
     suspend fun claimDevice(serialNumber: String, lat: Double, lon: Double): Either<Failure, Device>
-    suspend fun fetchUserEmail(): Either<Error, String>
+    suspend fun fetchUserEmail(): Either<Failure, String>
     suspend fun getSearchSuggestions(query: String): Either<Failure, List<SearchSuggestion>>
     suspend fun getSuggestionLocation(suggestion: SearchSuggestion): Either<Failure, Location>
     suspend fun getAddressFromPoint(point: Point): Either<Failure, String>
@@ -26,7 +26,7 @@ interface ClaimDeviceUseCase {
 
 class ClaimDeviceUseCaseImpl(
     private val deviceRepository: DeviceRepository,
-    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository,
     private val addressRepository: AddressRepository
 ) : ClaimDeviceUseCase {
 
@@ -38,8 +38,8 @@ class ClaimDeviceUseCaseImpl(
         return deviceRepository.claimDevice(serialNumber, com.weatherxm.data.Location(lat, lon))
     }
 
-    override suspend fun fetchUserEmail(): Either<Error, String> {
-        return authRepository.isLoggedIn()
+    override suspend fun fetchUserEmail(): Either<Failure, String> {
+        return userRepository.getUserUsername()
     }
 
     override suspend fun getSearchSuggestions(
