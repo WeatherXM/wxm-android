@@ -2,8 +2,7 @@
     <!--
         Defaults
     -->
-    <style name="Widget.WeatherXM.ImageButton" parent="@style/Widget.Material3.MaterialTimePicker.ImageButton">
-        <item name="android:background">@color/transparent</item>
+    <style name="Widget.WeatherXM.ImageButton" parent="@style/Widget.Material3.Button.IconButton">
         <item name="iconTint">@color/colorOnSurface</item>
     </style>
 

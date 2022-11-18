@@ -166,7 +166,7 @@ class HistoryUseCaseImpl(
             if (!windDirectionFound) windDirectionEntries.add(Entry(counter, Float.NaN))
             if (!pressureFound) pressureEntries.add(Entry(counter, Float.NaN))
             if (!humidityFound) humidityEntries.add(Entry(counter, Float.NaN))
-            if (!uvIndexFound) uvIndexEntries.add(BarEntry(counter, 0.0F))
+            if (!uvIndexFound) uvIndexEntries.add(BarEntry(counter, Float.MIN_VALUE))
         }
 
         return HistoryCharts(

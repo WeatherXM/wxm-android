@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
+import com.weatherxm.data.Failure
 import com.weatherxm.usecases.PreferencesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,11 +29,11 @@ class PreferenceViewModel : ViewModel(), KoinComponent {
     fun onShowSurveyScreen() = onShowSurveyScreen
     fun onDismissSurveyPrompt() = onDismissSurveyPrompt
 
-    fun isLoggedIn(): LiveData<Either<Error, String>> = isLoggedIn
+    fun isLoggedIn(): LiveData<Either<Failure, Boolean>> = isLoggedIn
 
     // Needed for checking if the user is logged in or not, so we can show/hide the logout button
-    private val isLoggedIn = MutableLiveData<Either<Error, String>>().apply {
-        Timber.d("Getting credentials in the background")
+    private val isLoggedIn = MutableLiveData<Either<Failure, Boolean>>().apply {
+        Timber.d("Checking if user is logged in in the background")
         viewModelScope.launch(Dispatchers.IO) {
             postValue(preferencesUseCase.isLoggedIn())
         }

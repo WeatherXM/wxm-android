@@ -22,7 +22,9 @@ class SharedPreferencesDataSourceImpl(
     private val sharedPreferenceChangeListener =
         SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             Timber.d("SharedPreferences key changed [key=$key]")
-            flow.tryEmit(key)
+            key?.let {
+                flow.tryEmit(it)
+            }
         }
 
     init {

@@ -1,7 +1,6 @@
 package com.weatherxm.data.datasource
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.location.Geocoder
 import arrow.core.Either
 import com.mapbox.geojson.Point
@@ -13,10 +12,10 @@ import com.mapbox.search.SearchEngine
 import com.mapbox.search.common.SearchCancellationException
 import com.mapbox.search.result.SearchResult
 import com.weatherxm.data.CancellationError
-import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 import com.weatherxm.data.MapBoxError
+import com.weatherxm.data.services.CacheService
 import timber.log.Timber
 import java.io.IOException
 import java.util.*
@@ -101,7 +100,7 @@ class NetworkAddressDataSource(
         hexIndex: String,
         address: String
     ): Either<Failure, Unit> {
-        throw NotImplementedError()
+        throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 
     override suspend fun getAddressFromPoint(point: Point): Either<Failure, SearchResult> {
@@ -142,23 +141,21 @@ class NetworkAddressDataSource(
 /**
  * Simple shared preference database with key and value both strings.
  */
-class StorageAddressDataSource(private val preferences: SharedPreferences) : AddressDataSource {
+class StorageAddressDataSource(private val cacheService: CacheService) : AddressDataSource {
 
     override suspend fun getLocationAddress(
         hexIndex: String,
         location: Location,
         locale: Locale
     ): Either<Failure, String?> {
-        return preferences.getString(hexIndex, null)?.let {
-            Either.Right(it)
-        } ?: Either.Left(DataError.DatabaseMissError)
+        return cacheService.getLocationAddress(hexIndex)
     }
 
     override suspend fun setLocationAddress(
         hexIndex: String,
         address: String
     ): Either<Failure, Unit> {
-        preferences.edit().putString(hexIndex, address).apply()
+        cacheService.setLocationAddress(hexIndex, address)
         return Either.Right(Unit)
     }
 

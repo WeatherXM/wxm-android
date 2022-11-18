@@ -44,27 +44,21 @@ import com.weatherxm.data.database.DatabaseConverters
 import com.weatherxm.data.database.dao.DeviceHistoryDao
 import com.weatherxm.data.datasource.AppConfigDataSource
 import com.weatherxm.data.datasource.AppConfigDataSourceImpl
-import com.weatherxm.data.datasource.AuthDataSource
-import com.weatherxm.data.datasource.AuthDataSourceImpl
-import com.weatherxm.data.datasource.AuthTokenDataSource
-import com.weatherxm.data.datasource.AuthTokenDataSourceImpl
 import com.weatherxm.data.datasource.CacheAddressSearchDataSource
+import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
-import com.weatherxm.data.datasource.CredentialsDataSource
-import com.weatherxm.data.datasource.CredentialsDataSourceImpl
 import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
 import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
 import com.weatherxm.data.datasource.ExplorerDataSource
 import com.weatherxm.data.datasource.ExplorerDataSourceImpl
-import com.weatherxm.data.datasource.HttpCacheDataSource
-import com.weatherxm.data.datasource.HttpCacheDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
+import com.weatherxm.data.datasource.NetworkAuthDataSource
 import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
@@ -113,6 +107,7 @@ import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.data.repository.WeatherForecastRepositoryImpl
 import com.weatherxm.data.repository.WeatherHistoryRepository
 import com.weatherxm.data.repository.WeatherHistoryRepositoryImpl
+import com.weatherxm.data.services.CacheService
 import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepository
 import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepositoryImpl
 import com.weatherxm.data.repository.bluetooth.BluetoothProvisionerRepository
@@ -134,6 +129,8 @@ import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCaseImpl
 import com.weatherxm.usecases.ConnectWalletUseCase
 import com.weatherxm.usecases.ConnectWalletUseCaseImpl
+import com.weatherxm.usecases.DeleteAccountUseCase
+import com.weatherxm.usecases.DeleteAccountUseCaseImpl
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.ExplorerUseCaseImpl
 import com.weatherxm.usecases.ForecastUseCase
@@ -186,8 +183,6 @@ const val DATE_FORMAT_MONTH_DAY = "d/M"
 private const val ENCRYPTED_PREFERENCES_KEY = "ENCRYPTED_PREFERENCES_KEY"
 private const val PREFERENCES_AUTH_TOKEN = "PREFERENCES_AUTH_TOKEN"
 private const val PREFERENCES_AUTH_TOKEN_FILE = "auth_token"
-private const val PREFERENCES_CREDENTIALS = "PREFERENCES_CREDENTIALS"
-private const val PREFERENCES_CREDENTIALS_FILE = "credentials"
 private const val NETWORK_CACHE_SIZE = 50L * 1024L * 1024L // 50MB
 
 private const val CONNECT_TIMEOUT = 30L
@@ -216,17 +211,6 @@ private val preferences = module {
             PrefValueEncryptionScheme.AES256_GCM
         )
     }
-
-    // Encrypted SharedPreferences for storing user credentials
-    single<SharedPreferences>(named(PREFERENCES_CREDENTIALS)) {
-        EncryptedSharedPreferences.create(
-            PREFERENCES_CREDENTIALS_FILE,
-            get(named(ENCRYPTED_PREFERENCES_KEY)),
-            androidContext(),
-            PrefKeyEncryptionScheme.AES256_SIV,
-            PrefValueEncryptionScheme.AES256_GCM
-        )
-    }
 }
 
 private val datasources = module {
@@ -247,7 +231,7 @@ private val datasources = module {
     }
 
     single<CacheUserDataSource> {
-        CacheUserDataSource()
+        CacheUserDataSource(get())
     }
 
     single<DeviceDataSource> {
@@ -259,23 +243,19 @@ private val datasources = module {
     }
 
     single<CacheWalletDataSource> {
-        CacheWalletDataSource()
+        CacheWalletDataSource(get())
     }
 
     single<TokenDataSource> {
         TokenDataSourceImpl(get())
     }
 
-    single<AuthDataSource> {
-        AuthDataSourceImpl(get(), get(), get())
+    single<NetworkAuthDataSource> {
+        NetworkAuthDataSource(get(), get())
     }
 
-    single<AuthTokenDataSource> {
-        AuthTokenDataSourceImpl(get(named(PREFERENCES_AUTH_TOKEN)))
-    }
-
-    single<CredentialsDataSource> {
-        CredentialsDataSourceImpl(get(named(PREFERENCES_CREDENTIALS)))
+    single<CacheAuthDataSource> {
+        CacheAuthDataSource(get())
     }
 
     single<AppConfigDataSource> {
@@ -307,11 +287,7 @@ private val datasources = module {
     }
 
     single<CacheWeatherForecastDataSource> {
-        CacheWeatherForecastDataSource()
-    }
-
-    single<HttpCacheDataSource> {
-        HttpCacheDataSourceImpl(get())
+        CacheWeatherForecastDataSource(get())
     }
 
     single<NetworkAddressSearchDataSource> {
@@ -319,7 +295,7 @@ private val datasources = module {
     }
 
     single<CacheAddressSearchDataSource> {
-        CacheAddressSearchDataSource()
+        CacheAddressSearchDataSource(get())
     }
 
     single<BluetoothScannerDataSource> {
@@ -341,13 +317,13 @@ private val datasources = module {
 
 private val repositories = module {
     single<AuthRepository> {
-        AuthRepositoryImpl(get(), get(), get(), get(), get(), get(), get())
+        AuthRepositoryImpl(get(), get(), get(), get())
     }
     single<LocationRepository> {
         LocationRepositoryImpl(get())
     }
     single<UserRepository> {
-        UserRepositoryImpl(get(), get(), get())
+        UserRepositoryImpl(get(), get())
     }
     single<WalletRepository> {
         WalletRepositoryImpl(get(), get())
@@ -419,10 +395,13 @@ private val usecases = module {
         ConnectWalletUseCaseImpl(get())
     }
     single<PreferencesUseCase> {
-        PreferencesUseCaseImpl(get(), get(), get(), get())
+        PreferencesUseCaseImpl(get(), get())
     }
     single<SendFeedbackUseCase> {
         SendFeedbackUseCaseImpl(get(), get())
+    }
+    single<DeleteAccountUseCase> {
+        DeleteAccountUseCaseImpl(get(), get())
     }
     single<BluetoothScannerUseCase> {
         BluetoothScannerUseCaseImpl(get())
@@ -463,12 +442,24 @@ private val network = module {
         MoshiConverterFactory.create(get()).asLenient()
     }
 
+    single<AuthTokenAuthenticator> {
+        AuthTokenAuthenticator(get(), get(), get(), get(), get())
+    }
+
+    single<ApiRequestInterceptor> {
+        ApiRequestInterceptor(get())
+    }
+
+    single<AuthRequestInterceptor> {
+        AuthRequestInterceptor(get(), get())
+    }
+
     single<Retrofit>(named(RETROFIT_AUTH)) {
         // Create client
         val client: OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(get() as HttpLoggingInterceptor)
             .addInterceptor(get() as ClientIdentificationRequestInterceptor)
-            .addInterceptor(AuthRequestInterceptor(get(), get()))
+            .addInterceptor(get() as AuthRequestInterceptor)
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
@@ -489,8 +480,8 @@ private val network = module {
         val client: OkHttpClient = OkHttpClient.Builder()
             .addInterceptor(get() as HttpLoggingInterceptor)
             .addInterceptor(get() as ClientIdentificationRequestInterceptor)
-            .addInterceptor(ApiRequestInterceptor(get()))
-            .authenticator(AuthTokenAuthenticator(get(), get(), get()))
+            .addInterceptor(get() as ApiRequestInterceptor)
+            .authenticator(get() as AuthTokenAuthenticator)
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
@@ -596,6 +587,10 @@ val displayModeHelper = module {
 }
 
 private val utilities = module {
+    single<CacheService> {
+        CacheService(get(), get<SharedPreferences>(named(PREFERENCES_AUTH_TOKEN)), get())
+    }
+
     single<SearchEngine> {
         SearchEngine.createSearchEngine(
             SearchEngineSettings(androidContext().resources.getString(R.string.mapbox_access_token))

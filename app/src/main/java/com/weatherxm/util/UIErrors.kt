@@ -24,4 +24,8 @@ object UIErrors : KoinComponent {
     fun Failure.getDefaultMessage(@StringRes fallback: Int? = null): String {
         return resHelper.getString(this.getDefaultMessageResId(fallback))
     }
+
+    fun Failure.getCode(): String {
+        return code ?: Failure.CODE_UNKNOWN
+    }
 }

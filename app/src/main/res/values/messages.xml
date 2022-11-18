@@ -39,6 +39,7 @@
 
     <!-- Warn Messages -->
     <string name="warn_validation_invalid_email">Not a valid email</string>
+    <string name="warn_invalid_password">Invalid Password</string>
     <string name="warn_validation_invalid_serial_number">Invalid serial number</string>
     <string name="warn_validation_invalid_password">Password must be >5 characters</string>
     <string name="warn_validation_invalid_address">Invalid WXM Address</string>

@@ -1,8 +1,8 @@
 package com.weatherxm.data.datasource
 
-import android.content.SharedPreferences
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.weatherxm.BuildConfig
+import com.weatherxm.data.services.CacheService
 
 interface AppConfigDataSource {
     fun shouldUpdate(): Boolean
@@ -15,14 +15,13 @@ interface AppConfigDataSource {
 
 class AppConfigDataSourceImpl(
     private val firebaseRemoteConfig: FirebaseRemoteConfig,
-    private val preferences: SharedPreferences
+    private val cacheService: CacheService
 ) : AppConfigDataSource {
 
     companion object {
         const val REMOTE_CONFIG_VERSION_CODE = "android_app_version_code"
         const val REMOTE_CONFIG_MINIMUM_VERSION_CODE = "android_app_minimum_code"
         const val REMOTE_CONFIG_CHANGELOG = "android_app_changelog"
-        const val LAST_REMINDED_VERSION = "last_reminded_version"
     }
 
     override fun getLastRemoteVersionCode(): Int {
@@ -49,11 +48,11 @@ class AppConfigDataSourceImpl(
     }
 
     override fun getLastRemindedVersion(): Int {
-        return preferences.getInt(LAST_REMINDED_VERSION, 0)
+        return cacheService.getLastRemindedVersion()
     }
 
     override fun setLastRemindedVersion() {
         val lastVersion = firebaseRemoteConfig.getDouble(REMOTE_CONFIG_VERSION_CODE).toInt()
-        preferences.edit().putInt(LAST_REMINDED_VERSION, lastVersion).apply()
+        cacheService.setLastRemindedVersion(lastVersion)
     }
 }

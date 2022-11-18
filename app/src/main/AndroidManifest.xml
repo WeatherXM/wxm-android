@@ -132,6 +132,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
+            android:name="com.weatherxm.ui.deleteaccount.DeleteAccountActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name="com.weatherxm.ui.notification.NotificationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />

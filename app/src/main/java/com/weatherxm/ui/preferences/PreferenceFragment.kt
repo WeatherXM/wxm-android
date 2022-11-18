@@ -1,9 +1,6 @@
 package com.weatherxm.ui.preferences
 
 import android.app.Activity
-import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
-import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.os.Bundle
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,7 +13,6 @@ import com.weatherxm.R
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.AlertDialogFragment
 import com.weatherxm.ui.common.toast
-import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
 import com.weatherxm.util.DisplayModeHelper
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
@@ -93,6 +89,8 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
                         findPreference(getString(R.string.action_logout))
                     val resetPassButton: Preference? =
                         findPreference(getString(R.string.change_password))
+                    val deleteAccountButton: Preference? =
+                        findPreference(getString(R.string.delete_account))
 
                     logoutButton?.onPreferenceClickListener =
                         Preference.OnPreferenceClickListener {
@@ -109,6 +107,12 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
                             launchSendFeedback()
                             true
                         }
+
+                    deleteAccountButton?.onPreferenceClickListener =
+                        Preference.OnPreferenceClickListener {
+                            navigator.showDeleteAccount(this)
+                            true
+                        }
                 }
         }
 
@@ -119,9 +123,7 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
 
     private fun launchSendFeedback() {
         this.context?.let {
-            val intent = Intent(it, SendFeedbackActivity::class.java)
-                .addFlags(FLAG_ACTIVITY_SINGLE_TOP or FLAG_ACTIVITY_CLEAR_TOP)
-            sendFeedbackLauncher.launch(intent)
+            navigator.showSendFeedback(sendFeedbackLauncher, it)
         }
     }
 

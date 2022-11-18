@@ -90,7 +90,7 @@ class UserDeviceViewModel(var device: Device) : ViewModel(), KoinComponent {
                     onTokens.postValue(it)
                 }
                 .mapLeft {
-                    if (it == NoConnectionError || it == ConnectionTimeoutError) {
+                    if (it is NoConnectionError || it is ConnectionTimeoutError) {
                         shouldRetry = true
                     }
                     errorOnTokens = true
@@ -102,7 +102,7 @@ class UserDeviceViewModel(var device: Device) : ViewModel(), KoinComponent {
                     onForecast.postValue(it)
                 }
                 .mapLeft {
-                    if (it == NoConnectionError || it == ConnectionTimeoutError) {
+                    if (it is NoConnectionError || it is ConnectionTimeoutError) {
                         shouldRetry = true
                     }
                     errorOnForecast = true

@@ -14,6 +14,11 @@
             app:key="@string/action_logout"
             app:summary="@string/logout_desc"
             app:title="@string/action_logout" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/delete_account"
+            app:summary="@string/delete_account_desc"
+            app:title="@string/delete_account" />
     </PreferenceCategory>
 
     <PreferenceCategory

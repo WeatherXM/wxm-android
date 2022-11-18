@@ -15,6 +15,10 @@ class SendFeedbackActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityWebviewBinding
     private val model: SendFeedbackViewModel by viewModels()
 
+    companion object {
+        const val ARG_IS_DELETE_ACCOUNT_FORM = "is_delete_account_form"
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +26,8 @@ class SendFeedbackActivity : AppCompatActivity(), KoinComponent {
         setContentView(binding.root)
 
         binding.root.applyInsets()
+
+        val isDeleteAccountForm = intent?.extras?.getBoolean(ARG_IS_DELETE_ACCOUNT_FORM) ?: false
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -32,13 +38,11 @@ class SendFeedbackActivity : AppCompatActivity(), KoinComponent {
         binding.webview.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
                 // Hack way to make some fields hidden (like userID)
-                view.loadUrl(
-                    "javascript:(function() { " +
-                        "document.getElementsByClassName('Dq4amc')[0].style.display='none'; " +
-                        "document.getElementsByClassName('Qr7Oae')[5].style.display='none'; " +
-                        "document.getElementsByClassName('Qr7Oae')[6].style.display='none'; " +
-                        "})()"
-                )
+                if (isDeleteAccountForm) {
+                    view.loadUrl(model.getJavascriptInjectionCodeDeleteForm())
+                } else {
+                    view.loadUrl(model.getJavascriptInjectionCodeSurveyForm())
+                }
                 if (model.isUrlFormResponse(url)) {
                     setResult(Activity.RESULT_OK)
                 }
@@ -46,6 +50,6 @@ class SendFeedbackActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
-        binding.webview.loadUrl(model.getPrefilledFormUrl())
+        binding.webview.loadUrl(model.getPrefilledSurveyFormUrl(isDeleteAccountForm))
     }
 }

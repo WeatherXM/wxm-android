@@ -75,6 +75,24 @@
     <string name="success_reset_password_text">If your e-mail is registered with us you will receive instructions for resetting your password.</string>
     <string name="send_email_instructions">Enter the email associated with your WeatherXM account and we will send you a password reset link.</string>
 
+    <!-- Delete Account -->
+    <string name="deletion_account_quick_description"><![CDATA[By deleting your account, you will <b>no longer be eligible to gain WXM rewards</b>, and, you will <b>no longer be able to view your station data</b> in the WeatherXM apps.]]></string>
+    <string name="deletion_account_what_is_deleted"><![CDATA[This <b>will delete</b> the following data:<br>&#8226; Your name.<br>&#8226; Your email address.<br>&#8226; Your station(s) details, their location, and their token rewards history]]></string>
+    <string name="deletion_account_what_is_not_deleted"><![CDATA[This <b>will not delete:</b><br>&#8226; The weather data you’ve shared with the network.<br>&#8226; The WXM rewards you’ve collected. These are yours forever!]]></string>
+    <string name="deletion_account_do_not_collect_data">We do not collect nor store any personal data!</string>
+    <string name="deletion_account_ask_support"><![CDATA[If you have any questions regarding your data and the deletion of your account, please contact our support team at <a href=\%1$s\">support@weatherxm.com</a>.]]></string>
+    <string name="understand_deletion_checkbox_message">I understand what deleting my WeatherXM account means.</string>
+    <string name="deleting_account">Deleting Account…</string>
+    <string name="deletion_success_title">Account Deleted</string>
+    <string name="deletion_success_message">We hate to see you go, and would like to hear why this happened.\n\nWe’d appreciate it if you could share your feedback with us! It will only take 5 minutes and will help us understand what went wrong!</string>
+    <string name="deletion_failure_title">Deletion Failed</string>
+    <string name="deletion_failure_message"><![CDATA[Deletion failed, please try again! If the problem persists, please contact our support team at <b><a>support@weatherxm.com</a></b>.<br><br>Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
+    <string name="cancel_deletion">Cancel Deletion</string>
+    <string name="retry_deleting_account">Retry Deleting Account</string>
+    <string name="validating_password">Validating Password…</string>
+    <string name="go_to_sign_in_screen">Go to Sign In screen</string>
+    <string name="take_short_survey">Take a Short Survey</string>
+
     <!-- Connect Wallet -->
     <string name="wallet_prompt">Connecting a wallet is mandatory for getting rewards. If you do not connect your wallet, the rewards of your WXM Devices will be lost.</string>
     <string name="suggested_wallets">It is highly recommended to use MetaMask, as the most compatible wallet.</string>
