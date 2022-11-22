@@ -24,7 +24,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingVertical="@dimen/padding_normal"
+                android:paddingTop="@dimen/padding_normal"
                 app:layout_constraintVertical_chainStyle="packed">
 
                 <com.google.android.material.textview.MaterialTextView
@@ -51,8 +51,8 @@
                     style="@style/Widget.WeatherXM.MaterialCard.ClaimingFlowDevices"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginVertical="@dimen/margin_large"
-                    app:layout_constraintBottom_toTopOf="@id/claimDeviceManually"
+                    android:layout_marginTop="@dimen/margin_large"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/description">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -160,15 +160,6 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/claimDeviceManually"
-                    style="@style/Widget.WeatherXM.Button.Subtle.Borders"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/margin_normal"
-                    android:text="@string/claim_manually"
-                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

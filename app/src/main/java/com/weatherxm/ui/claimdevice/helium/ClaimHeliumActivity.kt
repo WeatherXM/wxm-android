@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
+import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyFragment
+import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyViewModel
 import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairFragment
 import com.weatherxm.ui.claimdevice.helium.reset.ClaimHeliumResetFragment
 import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyFragment
@@ -36,6 +38,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
     private val model: ClaimHeliumViewModel by viewModels()
     private val locationModel: ClaimLocationViewModel by viewModels()
     private val verifyModel: ClaimHeliumVerifyViewModel by viewModels()
+    private val frequencyModel: ClaimHeliumFrequencyViewModel by viewModels()
     private lateinit var binding: ActivityClaimHeliumDeviceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,13 +108,18 @@ class ClaimHeliumActivity : AppCompatActivity() {
                     thirdStep.setIcon(R.drawable.ic_three_filled)
                     requestLocationPermissions()
                 }
+                ClaimHeliumDevicePagerAdapter.PAGE_FREQUENCY -> {
+                    thirdStep.setSuccessChip()
+                    fourthStep.setIcon(R.drawable.ic_four_filled)
+                    frequencyModel.getCountryAndFrequencies(locationModel.getInstallationLocation())
+                }
                 ClaimHeliumDevicePagerAdapter.PAGE_RESULT -> {
                     model.claimDevice(
                         verifyModel.getDevEUI(),
                         verifyModel.getDeviceKey(),
                         locationModel.getInstallationLocation()
                     )
-                    thirdStep.setSuccessChip()
+                    fourthStep.setSuccessChip()
                 }
             }
         }
@@ -153,8 +161,9 @@ class ClaimHeliumActivity : AppCompatActivity() {
             const val PAGE_RESET = 0
             const val PAGE_VERIFY_OR_PAIR = 1
             const val PAGE_LOCATION = 2
-            const val PAGE_RESULT = 3
-            const val PAGE_COUNT = 4
+            const val PAGE_FREQUENCY = 3
+            const val PAGE_RESULT = 4
+            const val PAGE_COUNT = 5
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -171,6 +180,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
                     }
                 }
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.HELIUM)
+                PAGE_FREQUENCY -> ClaimHeliumFrequencyFragment()
                 PAGE_RESULT -> ClaimResultFragment()
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }

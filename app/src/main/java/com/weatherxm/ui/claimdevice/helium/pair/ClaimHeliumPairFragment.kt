@@ -97,10 +97,6 @@ class ClaimHeliumPairFragment : Fragment() {
             startActivity(intent)
         }
 
-        binding.claimDeviceManually.setOnClickListener {
-            parentModel.claimManually()
-        }
-
         model.onNewScannedDevice().observe(viewLifecycleOwner) {
             adapter.submitList(it)
             adapter.notifyDataSetChanged()

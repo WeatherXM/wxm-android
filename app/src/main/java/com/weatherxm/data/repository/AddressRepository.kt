@@ -10,7 +10,9 @@ import com.mapbox.search.result.ResultAccuracy
 import com.mapbox.search.result.SearchAddress
 import com.mapbox.search.result.SearchResult
 import com.mapbox.search.result.SearchSuggestion
+import com.weatherxm.data.CountryAndFrequencies
 import com.weatherxm.data.Failure
+import com.weatherxm.data.Frequency
 import com.weatherxm.data.MapBoxError.ReverseGeocodingError
 import com.weatherxm.data.datasource.CacheAddressSearchDataSource
 import com.weatherxm.data.datasource.LocationDataSource
@@ -22,6 +24,7 @@ interface AddressRepository {
     suspend fun getSearchSuggestions(query: String): Either<Failure, List<SearchSuggestion>>
     suspend fun getSuggestionLocation(suggestion: SearchSuggestion): Either<Failure, Location>
     suspend fun getAddressFromPoint(point: Point): Either<Failure, SearchAddress>
+    suspend fun getCountryAndFrequencies(location: Location): CountryAndFrequencies
 }
 
 class AddressRepositoryImpl(
@@ -98,6 +101,16 @@ class AddressRepositoryImpl(
                     }
                 }
             }
+    }
+
+    override suspend fun getCountryAndFrequencies(location: Location): CountryAndFrequencies {
+        return networkAddress.getCountryAndFrequencies(location).fold({
+            CountryAndFrequencies(
+                null,
+                Frequency.US915,
+                listOf(Frequency.EU868, Frequency.AU915, Frequency.CN470)
+            )
+        }, { it })
     }
 
     /**

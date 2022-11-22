@@ -9,6 +9,7 @@ import com.mapbox.geojson.Point
 import com.mapbox.search.result.SearchAddress
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.data.CancellationError
+import com.weatherxm.data.CountryAndFrequencies
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.MapBoxError.ReverseGeocodingError
@@ -22,6 +23,7 @@ interface ClaimDeviceUseCase {
     suspend fun getSearchSuggestions(query: String): Either<Failure, List<SearchSuggestion>>
     suspend fun getSuggestionLocation(suggestion: SearchSuggestion): Either<Failure, Location>
     suspend fun getAddressFromPoint(point: Point): Either<Failure, String>
+    suspend fun getCountryAndFrequencies(location: Location): CountryAndFrequencies
 }
 
 class ClaimDeviceUseCaseImpl(
@@ -67,5 +69,9 @@ class ClaimDeviceUseCaseImpl(
                     ReverseGeocodingError.SearchResultAddressFormatError
                 }
             }
+    }
+
+    override suspend fun getCountryAndFrequencies(location: Location): CountryAndFrequencies {
+        return addressRepository.getCountryAndFrequencies(location)
     }
 }

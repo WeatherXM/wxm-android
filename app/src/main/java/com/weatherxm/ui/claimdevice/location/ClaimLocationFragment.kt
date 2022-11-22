@@ -68,15 +68,11 @@ class ClaimLocationFragment : Fragment() {
             return
         }
 
-        binding.cancel.setOnClickListener {
-            if (model.getDeviceType() == DeviceType.M5_WIFI) {
-                m5ParentModel.cancel()
-            } else {
-                heliumParentModel.cancel()
-            }
+        binding.confirmLocationToggle.setOnCheckedChangeListener { _, checked ->
+            binding.confirm.isEnabled = checked
         }
 
-        binding.confirmAndClaim.setOnClickListener {
+        binding.confirm.setOnClickListener {
             model.confirmLocation()
             if (model.getDeviceType() == DeviceType.M5_WIFI) {
                 m5ParentModel.next()

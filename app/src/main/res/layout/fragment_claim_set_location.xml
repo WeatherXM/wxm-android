@@ -36,7 +36,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/margin_normal"
-                        android:text="@string/confirm_location_installation"
+                        android:text="@string/location_of_installation"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -119,35 +119,40 @@
             app:contentPaddingTop="@dimen/padding_normal"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:layout_height="wrap_content">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/cancel"
-                    style="@style/Widget.WeatherXM.Button.Subtle.Borders"
-                    android:layout_width="0dp"
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/confirmLocationToggle"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_normal"
-                    android:layout_weight="1"
-                    android:text="@string/action_cancel"
+                    android:gravity="top"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/confirmAndClaim"
-                    style="@style/Widget.WeatherXM.Button"
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/confirmLocationText"
+                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/confirm_and_claim"
+                    android:layout_marginStart="@dimen/margin_normal"
+                    android:text="@string/confirm_location_description"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toEndOf="@id/confirmLocationToggle"
+                    app:layout_constraintTop_toTopOf="@id/confirmLocationToggle" />
 
-            </LinearLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/confirm"
+                    style="@style/Widget.WeatherXM.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:enabled="false"
+                    android:text="@string/confirm_and_proceed"
+                    android:textAllCaps="false"
+                    app:layout_constraintTop_toBottomOf="@id/confirmLocationText" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
     </androidx.constraintlayout.widget.ConstraintLayout>

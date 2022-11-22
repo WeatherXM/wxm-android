@@ -31,16 +31,19 @@ class ClaimHeliumResetFragment : Fragment() {
             parentModel.next()
         }
 
-        binding.claimManually.setOnClickListener {
-            parentModel.claimManually()
-        }
+        binding.firstStep.setHtml(R.string.reset_ble_first_step)
 
-        if (parentModel.isManualClaiming()) {
-            binding.firstStep.setHtml(R.string.reset_manual_first_step)
-            binding.claimManually.visibility = View.GONE
-        } else {
-            binding.firstStep.setHtml(R.string.reset_ble_first_step)
-        }
+        // TODO: Remove if we do not use again the manual claiming
+//        binding.claimManually.setOnClickListener {
+//            parentModel.claimManually()
+//        }
+//
+//        if (parentModel.isManualClaiming()) {
+//            binding.firstStep.setHtml(R.string.reset_manual_first_step)
+//            binding.claimManually.visibility = View.GONE
+//        } else {
+//            binding.firstStep.setHtml(R.string.reset_ble_first_step)
+//        }
 
         binding.secondStep.setHtml(R.string.reset_second_step)
     }

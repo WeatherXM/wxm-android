@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginBottom="@dimen/margin_normal"
-                app:layout_constraintBottom_toTopOf="@id/buttonsContainer"
+                app:layout_constraintBottom_toTopOf="@id/nextButton"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -72,30 +72,14 @@
 
             </androidx.core.widget.NestedScrollView>
 
-            <LinearLayout
-                android:id="@+id/buttonsContainer"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/nextButton"
+                style="@style/Widget.WeatherXM.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/nextButton"
-                    style="@style/Widget.WeatherXM.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/action_have_reset_device"
-                    android:textAllCaps="false" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/claimManually"
-                    style="@style/Widget.WeatherXM.Button.Subtle.Borders"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_normal"
-                    android:text="@string/claim_manually"
-                    android:textAllCaps="false" />
-            </LinearLayout>
+                android:text="@string/action_have_reset_device"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

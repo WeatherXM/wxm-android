@@ -178,17 +178,19 @@
     <string name="device_serial_number_title">Device Serial Number</string>
     <string name="device_serial_number_hint">Enter the device\'s serial number</string>
     <string name="device_serial_number_instructions">The S/N is 18 characters long and looks like this: &lt;strong&gt;12:34:56:78:9A:BC:DE:F0:12&lt;/strong&gt;. You  can find it on your M5 device\'s screen. Please type only the letters and numbers.</string>
-    <string name="confirm_location_installation">Confirm Location of Installation</string>
+    <string name="location_of_installation">Location of Installation</string>
     <string name="installation_toggle_unchecked">Not yet, will install at a later time!</string>
     <string name="installation_toggle_checked">Installed and ready!</string>
     <string name="need_help_installation"><![CDATA[Need help with proper weather station installation?<br><b><a href=\"%1$s\">View our installation guide</a></b>]]></string>
     <string name="installation_location">Installation Location</string>
     <string name="installation_location_warning_text">Your device will be claimed, but until you properly install it, it will not get any WXM rewards.\n\nOnce you do so, you can enable your device by switching the toggle to “Installed and ready!” on your device details screen.</string>
-    <string name="confirm_and_claim">Confirm and Claim</string>
+    <string name="confirm_and_proceed">Confirm and Proceed</string>
     <string name="success_claim_device"><![CDATA[You claimed the device: <br><b>%s</b>]]></string>
     <string name="action_devices_list">View device list</string>
     <string name="action_quit_claiming">Quit Claiming</string>
     <string name="location">Location</string>
+    <string name="confirm_location_description">I hereby acknowledge that the location above is the correct one, and can be used to verify the eligibility of this station\’s rewards.</string>
+    <string name="set_and_claim">Set and Claim</string>
 
     <!-- Claim M5 -->
     <string name="title_claim_m5_device">Claim M5 Device</string>
@@ -220,6 +222,12 @@
     <string name="helium_fetching_info_failed">Fetching device\'s info failed. Please try again, and if the problem persists, claim your device manually.</string>
     <string name="helium_bluetooth_disabled">The Pairing process with WS2000 has failed. Bluetooth is disabled. Please enable it and try again or claim your device manually.</string>
     <string name="helium_bluetooth_connection_lost">The Pairing process with WS2000 has failed. Bluetooth connection has been lost. Please try again, and if the problem persists, claim your device manually.</string>
+    <string name="frequency">Frequency</string>
+    <string name="frequency_selected_text">Given the location of installation you defined in the previous step, we\’ve selected the appropriate frequency for %s.</string>
+    <string name="set_frequency">Set Your Station\'s Frequency</string>
+    <string name="recommended_frequency_for">Recommended for %s</string>
+    <string name="set_frequency_desc"><![CDATA[Helium\'s LoRaWAN Network requires that you set your station\’s frequency for gateway configuration for the country you\’ve installed your station.<br><br>A list of the countries and their respective frequencies can be <a href=\"%1$s\">found here.</a>]]></string>
+    <string name="set_frequency_toggle_desc">I hereby acknowledge that the frequency selected above is the correct on for the country \’ve installed and will operate this station.</string>
 
     <!-- Forecast -->
     <string name="forecast_7_day">7 Day Forecast</string>

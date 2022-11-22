@@ -14,3 +14,19 @@ data class LastAndDatedTxs(
     val lastTx: Transaction?,
     val datedTxs: List<Pair<String, Float>>,
 ) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class CountryAndFrequencies(
+    val country: String?,
+    val recommendedFrequency: Frequency,
+    val otherFrequencies: List<Frequency>,
+) : Parcelable
+
+enum class Frequency {
+    EU868,
+    US915,
+    CN470,
+    AU915
+}

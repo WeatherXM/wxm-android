@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_normal"
-        android:weightSum="3"
+        android:weightSum="4"
         app:layout_constraintTop_toBottomOf="@id/app_bar">
 
         <com.google.android.material.chip.Chip
@@ -56,6 +56,16 @@
             android:layout_weight="1"
             android:text="@string/location"
             app:chipIcon="@drawable/ic_three_outlined" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/fourthStep"
+            style="@style/Widget.WeatherXM.Chip.Navigation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-25dp"
+            android:layout_weight="1"
+            android:text="@string/frequency"
+            app:chipIcon="@drawable/ic_four_outlined" />
     </LinearLayout>
 
     <androidx.viewpager2.widget.ViewPager2
