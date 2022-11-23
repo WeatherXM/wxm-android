@@ -2,7 +2,8 @@
     <!--
         Defaults
     -->
-    <style name="Widget.WeatherXM.ImageButton" parent="@style/Widget.Material3.Button.IconButton">
+    <style name="Widget.WeatherXM.IconButton" parent="@style/Widget.Material3.Button.IconButton">
+        <item name="android:background">@color/transparent</item>
         <item name="iconTint">@color/colorOnSurface</item>
     </style>
 
@@ -99,7 +100,7 @@
         <item name="iconGravity">start</item>
     </style>
 
-    <style name="Widget.WeatherXM.ImageButton.MaterialCard.Overlay.Error" parent="@style/Widget.WeatherXM.ImageButton">
+    <style name="Widget.WeatherXM.IconButton.MaterialCard.Overlay.Error" parent="@style/Widget.WeatherXM.IconButton">
         <item name="iconTint">@color/light_top</item>
     </style>
 
@@ -338,5 +339,28 @@
         <item name="trackColorActive">@color/reward_score_very_high</item>
         <item name="trackColorInactive">@color/token_transaction_slider_inactive</item>
         <item name="trackHeight">@dimen/reward_slider_track_height</item>
+    </style>
+
+    <!--
+        AlertDialog Styles
+    -->
+    <style name="Widget.WeatherXM.AlertDialog.Title" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:textAppearance">@style/TextAppearance.Material3.HeadlineSmall</item>
+        <item name="android:textColor">@color/dialog_title</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Widget.WeatherXM.AlertDialog.Body" parent="MaterialAlertDialog.Material3.Body.Text">
+        <item name="android:textAppearance">@style/TextAppearance.WeatherXM.AlertDialog.Body</item>
+    </style>
+
+    <style name="Widget.WeatherXM.AlertDialog.Button.Positive" parent="Widget.WeatherXM.Button">
+        <item name="android:layout_marginLeft">@dimen/margin_normal</item>
+    </style>
+
+    <style name="Widget.WeatherXM.AlertDialog.Button.Negative" parent="Widget.WeatherXM.TextButton.Subtle">
+    </style>
+
+    <style name="Widget.WeatherXM.AlertDialog.Button.Neutral" parent="Widget.WeatherXM.TextButton.Subtle">
     </style>
 </resources>

@@ -9,6 +9,7 @@
     <string name="action_ok">OK</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_next">Next</string>
+    <string name="action_confirm">Confirm</string>
     <string name="action_back">Back</string>
     <string name="action_logout">Logout</string>
     <string name="action_clear">Clear</string>
@@ -20,7 +21,7 @@
     <string name="action_have_reset_device">I\’ve Reset My Device</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="scan_qr_code">Scan QR Code</string>
+    <string name="action_scan_qr">Scan QR Code</string>
     <string name="important_message">Important Message</string>
 
     <!-- Permissions -->
@@ -93,19 +94,30 @@
     <string name="go_to_sign_in_screen">Go to Sign In screen</string>
     <string name="take_short_survey">Take a Short Survey</string>
 
+    <!-- Password Prompt -->
+    <string name="password_prompt_title">Confirm Password To Proceed</string>
+    <string name="type_your_password">Type your password</string>
+
     <!-- Connect Wallet -->
-    <string name="wallet_prompt">Connecting a wallet is mandatory for getting rewards. If you do not connect your wallet, the rewards of your WXM Devices will be lost.</string>
-    <string name="suggested_wallets">It is highly recommended to use MetaMask, as the most compatible wallet.</string>
-    <string name="title_connect_wallet">Connect Wallet</string>
-    <string name="wxm_address">New WXM Address</string>
-    <string name="hint_wxm_address">Enter or scan WXM wallet address</string>
-    <string name="how_to_create_wallet">You don\'t have a WXM wallet?\n Read here how you can create one.</string>
+    <string name="add_wallet_now">Add Wallet Now</string>
+    <string name="wallet_address_missing">Wallet Address is Missing!</string>
+    <string name="wallet_address_missing_desc">You haven\’t added a wallet yet. Thus, we will not be able to send you any WXM rewards.</string>
+    <string name="suggested_wallets">It is highly recommended to use MetaMask, as it is the most compatible wallet.</string>
+    <string name="my_wallet">My Wallet</string>
+    <string name="check_wallet_compatibility">Check compatibility here</string>
+    <string name="wallet_compatibility">Wallet Compatibility</string>
+    <string name="wallet_compatibility_desc"><![CDATA[Not sure if you own a WXM compatible wallet? <b>If your wallet is not compatible you may not be able to redeem or use WXM rewards!</b>]]></string>
+    <string name="enter_your_wallet_address">Enter your wallet address</string>
+    <string name="edit_your_wallet_address">Edit Wallet Address</string>
+    <string name="hint_wxm_address">E.g., 0xDe1f*****B7F5 </string>
+    <string name="create_metamask">Create a MetaMask wallet here</string>
     <string name="ownership_wallet">I acknowledge that I have ownership and full access to this wallet.</string>
-    <string name="acknowledge_location">I acknowledge that this location is the one I will deploy the device.</string>
     <string name="accept_terms"><![CDATA[I have read and accept the <a href=\"%1$s\">Terms of Service</a>.]]></string>
-    <string name="title_share_wallet">Share WXM wallet address</string>
-    <string name="current_address">Current Address</string>
     <string name="address_saved">Success: Address Saved.</string>
+    <string name="action_save_wallet_address">Save Wallet Address</string>
+    <string name="confirm_wallet_ownership_title">Confirm Wallet Ownership</string>
+    <string name="confirm_wallet_ownership_desc">Please make sure you have the complete ownership of the Wallet ending in <b>%1$s</b>.\n\nIf you don\’t, you will lose all WXM rewards from now on!</string>
+    <string name="edit_wallet_password_prompt_desc"><![CDATA[In order to edit the Wallet Address you need to confirm you are the owner of this account.<br><b>Please type in your password to edit Wallet Address.</b>]]></string>
 
     <!-- Registration -->
     <string name="action_signup">Sign Up</string>

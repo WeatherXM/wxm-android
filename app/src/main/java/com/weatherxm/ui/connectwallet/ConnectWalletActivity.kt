@@ -1,24 +1,26 @@
 package com.weatherxm.ui.connectwallet
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.snackbar.Snackbar
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
+import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityConnectWalletBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.AlertDialogFragment
+import com.weatherxm.ui.common.getRichText
 import com.weatherxm.util.Mask
 import com.weatherxm.util.Validator
 import com.weatherxm.util.applyInsets
-import com.weatherxm.util.clear
 import com.weatherxm.util.onTextChanged
 import com.weatherxm.util.setHtml
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
@@ -33,13 +35,14 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
     private val validator: Validator by inject()
     private val navigator: Navigator by inject()
     private var snackbar: Snackbar? = null
-    private var onBackGoHome = false
 
     // Register the launcher and result handler for QR code scanner
     private val barcodeLauncher =
         registerForActivityResult(ScanContract()) { result: ScanIntentResult ->
             result.contents.let {
-                model.onScanAddress(it)
+                model.onScanAddress(it)?.let { address ->
+                    binding.address.setText(address)
+                }
             }
         }
 
@@ -50,28 +53,50 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
 
         binding.root.applyInsets()
 
-        onBackGoHome = intent?.extras?.getBoolean(ARG_ON_BACK_GO_HOME) ?: false
+        binding.walletCompatibilityCard
+            .htmlMessage(R.string.wallet_compatibility_desc)
+            .action(
+                getString(R.string.check_wallet_compatibility),
+                ResourcesCompat.getDrawable(resources, R.drawable.ic_open_new, this.theme)
+            ) {
+                navigator.openWebsite(this, getString(R.string.suggested_wallets_documentation))
+            }
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.newAddressContainer.setEndIconOnClickListener {
+        binding.scanQR.setOnClickListener {
             navigator.showQRScanner(barcodeLauncher)
         }
 
-        binding.newAddress.onTextChanged {
-            binding.newAddressContainer.error = null
-            binding.saveBtn.isEnabled = !binding.newAddress.text.isNullOrEmpty()
-        }
-
-        model.newAddress().observe(this) { address ->
-            address?.let {
-                binding.newAddress.setText(it)
+        binding.editWallet.setOnClickListener {
+            navigator.showPasswordPrompt(
+                this,
+                R.string.edit_wallet_password_prompt_desc
+            ) { isPasswordConfirmed ->
+                if (isPasswordConfirmed) {
+                    Timber.d("Password confirmation success!")
+                    onEditClicked()
+                } else {
+                    Timber.d("Password confirmation prompt was cancelled or failed.")
+                }
             }
         }
 
-        with(binding.termsCheckbox) {
+        binding.address.onTextChanged {
+            binding.addressContainer.error = null
+        }
+
+        binding.termsCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            binding.saveBtn.isEnabled = binding.ownershipCheckbox.isChecked && isChecked
+        }
+
+        binding.ownershipCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            binding.saveBtn.isEnabled = binding.termsCheckbox.isChecked && isChecked
+        }
+
+        with(binding.termsCheckboxDesc) {
             movementMethod = BetterLinkMovementMethod.newInstance().apply {
                 setOnLinkClickListener { _, url ->
                     navigator.openWebsite(this@ConnectWalletActivity, url)
@@ -81,102 +106,112 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             setHtml(R.string.accept_terms, getString(R.string.terms_of_service_url))
         }
 
-        binding.openDocumentation.setOnClickListener {
+        binding.createMetamask.setOnClickListener {
             navigator.openWebsite(this, getString(R.string.suggested_wallets_documentation))
         }
 
         // Listen to current address for UI update
-        model.currentAddress().observe(this) { address ->
-            if (address.isNullOrEmpty()) {
-                binding.warning.visibility = View.VISIBLE
-                binding.currentAddressContainer.visibility = View.GONE
-                binding.currentAddressTitle.visibility = View.GONE
-                binding.newAddress.setText("")
-            } else {
-                binding.warning.visibility = View.GONE
-                binding.currentAddressContainer.visibility = View.VISIBLE
-                binding.currentAddressTitle.visibility = View.VISIBLE
-                binding.currentAddress.setText(mask.maskHash(address))
-                binding.currentAddressContainer.setEndIconOnClickListener {
-                    shareAddress(address)
-                }
-            }
+        model.currentAddress().observe(this) {
+            onAddressUpdateUI(it)
         }
 
-        // Changing the newAddress field should update the form's state in the view model
-        // and then the form as a whole (address + checkboxes) should be validated there
         binding.saveBtn.setOnClickListener {
-            val address = binding.newAddress.text.toString()
+            val address = binding.address.text.toString()
 
             if (!validator.validateEthAddress(address)) {
-                binding.newAddressContainer.error =
-                    getString(R.string.warn_validation_invalid_address)
+                binding.addressContainer.error = getString(R.string.warn_validation_invalid_address)
                 return@setOnClickListener
             }
 
-            model.saveAddress(
-                address,
-                binding.termsCheckbox.isChecked,
-                binding.ownershipCheckbox.isChecked
-            )
+            showConfirmWalletDialog(address)
         }
 
         // Listen for newly saved address state change
         model.isAddressSaved().observe(this) { result ->
-            onAddressSaved(result)
+            onNewAddressSaved(result)
         }
 
         onBackPressedDispatcher.addCallback {
-            if (onBackGoHome) {
-                navigator.showHome(this@ConnectWalletActivity)
-                finish()
-            } else {
-                finish()
+            finish()
+        }
+    }
+
+    private fun showConfirmWalletDialog(address: String) {
+        AlertDialogFragment
+            .Builder(
+                title = getString(R.string.confirm_wallet_ownership_title),
+                message = getRichText(
+                    R.string.confirm_wallet_ownership_desc,
+                    model.getLastPartOfAddress(address)
+                )
+            )
+            .onPositiveClick(getString(R.string.action_confirm)) {
+                model.saveAddress(address)
             }
+            .onNegativeClick(getString(R.string.action_cancel)) {
+                // Do nothing
+            }
+            .build()
+            .show(this)
+    }
+
+    private fun onEditClicked() {
+        binding.editWallet.visibility = View.GONE
+        binding.addressContainer.isEnabled = true
+        binding.addressContainer.isCounterEnabled = true
+        binding.address.setText(model.currentAddress().value)
+        binding.termsCheckbox.isChecked = false
+        binding.ownershipCheckbox.isChecked = false
+        binding.saveBtn.isEnabled = false
+        binding.scanQR.visibility = View.VISIBLE
+        binding.checkBoxesAndButtonContainer.visibility = View.VISIBLE
+        binding.ownershipCheckbox.isEnabled = true
+        binding.termsCheckbox.isEnabled = true
+        binding.walletCompatibilityCard.show()
+    }
+
+    private fun onAddressUpdateUI(address: String?) {
+        if (address.isNullOrEmpty()) {
+            binding.editWallet.visibility = View.GONE
+            binding.scanQR.visibility = View.VISIBLE
+            binding.checkBoxesAndButtonContainer.visibility = View.VISIBLE
+        } else {
+            binding.editWallet.visibility = View.VISIBLE
+            binding.address.setText(mask.maskHash(address))
+            binding.address.isEnabled = false
+            binding.addressContainer.isCounterEnabled = false
+            binding.scanQR.visibility = View.GONE
+            binding.checkBoxesAndButtonContainer.visibility = View.GONE
+            binding.walletCompatibilityCard.hide()
         }
     }
 
-    private fun shareAddress(address: String) {
-        val intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, address)
-            type = "text/plain"
-        }
-        startActivity(Intent.createChooser(intent, getString(R.string.title_share_wallet)))
-    }
-
-    private fun onAddressSaved(result: Resource<String>) {
+    private fun onNewAddressSaved(result: Resource<String>) {
         when (result.status) {
             Status.SUCCESS -> {
                 Timber.d("Address saved.")
-                binding.newAddress.clear()
                 result.data?.let {
                     showSnackbarMessage(it)
                 }
-                setProgressEnabled(false)
-                setInputEnabled(true)
+                binding.loading.visibility = View.GONE
                 setResult(Activity.RESULT_OK)
             }
             Status.ERROR -> {
                 result.message?.let {
                     showSnackbarMessage(it)
                 }
-                setProgressEnabled(false)
+                binding.loading.visibility = View.GONE
                 setInputEnabled(true)
             }
             Status.LOADING -> {
-                setProgressEnabled(true)
+                binding.loading.visibility = View.VISIBLE
                 setInputEnabled(false)
             }
         }
     }
 
-    private fun setProgressEnabled(enabled: Boolean) {
-        binding.loading.visibility = if (enabled) View.VISIBLE else View.INVISIBLE
-    }
-
     private fun setInputEnabled(enabled: Boolean) {
-        binding.newAddressContainer.isEnabled = enabled
+        binding.addressContainer.isEnabled = enabled
         binding.termsCheckbox.isEnabled = enabled
         binding.ownershipCheckbox.isEnabled = enabled
         binding.saveBtn.isEnabled = enabled
@@ -188,9 +223,5 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         }
         snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
         snackbar?.show()
-    }
-
-    companion object {
-        const val ARG_ON_BACK_GO_HOME = "on_back_go_home"
     }
 }

@@ -35,6 +35,7 @@
         <item name="materialCardViewStyle">?materialCardViewElevatedStyle</item>
         <item name="elevationOverlayEnabled">false</item>
         <item name="tabStyle">@style/Widget.WeatherXM.TabLayout</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.WeatherXM.AlertDialog</item>
     </style>
 
     <style name="Theme.WeatherXM.Startup" parent="Theme.SplashScreen">

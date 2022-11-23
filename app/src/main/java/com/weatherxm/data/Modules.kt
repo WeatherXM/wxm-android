@@ -137,6 +137,8 @@ import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.usecases.ForecastUseCaseImpl
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
+import com.weatherxm.usecases.PasswordPromptUseCase
+import com.weatherxm.usecases.PasswordPromptUseCaseImpl
 import com.weatherxm.usecases.PreferencesUseCase
 import com.weatherxm.usecases.PreferencesUseCaseImpl
 import com.weatherxm.usecases.SelectDeviceTypeUseCase
@@ -402,6 +404,9 @@ private val usecases = module {
     }
     single<DeleteAccountUseCase> {
         DeleteAccountUseCaseImpl(get(), get())
+    }
+    single<PasswordPromptUseCase> {
+        PasswordPromptUseCaseImpl(get())
     }
     single<BluetoothScannerUseCase> {
         BluetoothScannerUseCaseImpl(get())

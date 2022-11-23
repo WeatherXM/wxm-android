@@ -20,53 +20,35 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
 
     companion object {
         const val ETH_ADDR_PREFIX: String = "0x"
+        const val LAST_CHARS_TO_SHOW_AS_CONFIRM = 5
     }
 
     private val connectWalletUseCase: ConnectWalletUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
 
-    private var currentAddress = MutableLiveData<String?>(null)
-    fun currentAddress() = currentAddress.apply {
-        // Get initial value from repository
-        viewModelScope.launch {
-            connectWalletUseCase.getWalletAddress()
-                .map { postValue(it) }
-        }
-    }
-
-    private var newAddress = MutableLiveData<String?>(null)
-    fun newAddress() = newAddress
+    private var currentAddress = MutableLiveData("")
+    fun currentAddress() = currentAddress
 
     private val isAddressSaved = MutableLiveData<Resource<String>>()
     fun isAddressSaved() = isAddressSaved
 
-    fun saveAddress(address: String, termsChecked: Boolean, ownershipChecked: Boolean) {
+    fun saveAddress(address: String) {
         isAddressSaved.postValue(Resource.loading())
-        if (termsChecked && ownershipChecked) {
-            viewModelScope.launch {
-                connectWalletUseCase.setWalletAddress(address)
-                    .mapLeft {
-                        handleFailure(it)
-                    }.map {
-                        isAddressSaved.postValue(
-                            Resource.success(resHelper.getString(R.string.address_saved))
-                        )
-                        currentAddress.postValue(address)
-                    }
-            }
-        } else if (ownershipChecked) {
-            isAddressSaved.postValue(
-                Resource.error(
-                    resHelper.getString(R.string.warn_connect_wallet_terms_not_accepted)
-                )
-            )
-        } else {
-            isAddressSaved.postValue(
-                Resource.error(
-                    resHelper.getString(R.string.warn_connect_wallet_access_not_acknowledged)
-                )
-            )
+        viewModelScope.launch {
+            connectWalletUseCase.setWalletAddress(address)
+                .mapLeft {
+                    handleFailure(it)
+                }.map {
+                    isAddressSaved.postValue(
+                        Resource.success(resHelper.getString(R.string.address_saved))
+                    )
+                    currentAddress.postValue(address)
+                }
         }
+    }
+
+    fun getLastPartOfAddress(address: String): String {
+        return address.substring(address.length - LAST_CHARS_TO_SHOW_AS_CONFIRM)
     }
 
     private fun handleFailure(failure: Failure) {
@@ -86,11 +68,12 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
     * Custom fix because scanning the address in Metamask adds the "ethereum:" prefix
     * Also fix if the QR scanned is not an ETH address (or is null) to return null and not proceed
     */
-    fun onScanAddress(scannedAddress: String?) {
-        if (scannedAddress.isNullOrEmpty() || !scannedAddress.contains(ETH_ADDR_PREFIX)) {
-            return
+    fun onScanAddress(scannedAddress: String?): String? {
+        return if (scannedAddress.isNullOrEmpty() || !scannedAddress.contains(ETH_ADDR_PREFIX)) {
+            null
+        } else {
+            sanitize(scannedAddress)
         }
-        newAddress.postValue(sanitize(scannedAddress))
     }
 
     @Suppress("MagicNumber")
@@ -98,5 +81,12 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
         return Validated.Valid(address)
             .map { it.substring(it.indexOf(ETH_ADDR_PREFIX)).slice(0..41) }
             .valueOr { "" }
+    }
+
+    init {
+        // Get initial value from repository
+        viewModelScope.launch {
+            connectWalletUseCase.getWalletAddress().map { currentAddress.postValue(it) }
+        }
     }
 }

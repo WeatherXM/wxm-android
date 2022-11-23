@@ -65,6 +65,5 @@
     <color name="device_status_online">@color/success</color>
     <color name="device_status_offline">@color/error</color>
     <color name="device_status_unknown">@color/light_mid_grey</color>
-
     <!-- End -->
 </resources>

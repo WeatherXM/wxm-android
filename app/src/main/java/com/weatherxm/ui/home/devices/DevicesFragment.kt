@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,6 +14,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.home.profile.ProfileViewModel
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -22,16 +22,23 @@ import org.koin.core.component.inject
 class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
 
     private val model: DevicesViewModel by activityViewModels()
+    private val profileViewModel: ProfileViewModel by activityViewModels()
     private val navigator: Navigator by inject()
     private lateinit var binding: FragmentDevicesBinding
 
     // Register the launcher for the connect wallet activity and wait for a possible result
     private val userDeviceLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result: ActivityResult ->
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 model.fetch()
+            }
+        }
+
+    // Register the launcher for the connect wallet activity and wait for a possible result
+    private val connectWalletLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                profileViewModel.fetchWallet()
             }
         }
 
@@ -65,6 +72,11 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                         adapter.submitList(devicesResource.data)
                         adapter.notifyDataSetChanged()
                         binding.recycler.visibility = View.VISIBLE
+                        if (profileViewModel.wallet().value.isNullOrEmpty()) {
+                            binding.walletWarning.action(getString(R.string.add_wallet_now)) {
+                                navigator.showConnectWallet(connectWalletLauncher, this)
+                            }.show()
+                        }
                         binding.empty.visibility = View.GONE
                     } else {
                         binding.empty.animation(R.raw.anim_empty_devices, false)
@@ -105,6 +117,10 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
 
         model.preferenceChanged().observe(viewLifecycleOwner) {
             if (it) adapter.notifyDataSetChanged()
+        }
+
+        profileViewModel.wallet().observe(viewLifecycleOwner) {
+            if (!it.isNullOrEmpty()) binding.walletWarning.visibility = View.GONE
         }
 
         return binding.root

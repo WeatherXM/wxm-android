@@ -132,6 +132,6 @@ data class BarChartData(
     var entries: MutableList<BarEntry>
 ) {
     fun isDataValid(): Boolean {
-        return timestamps.isNotEmpty() && entries.filterNot { it.y.isNaN() }.isNotEmpty()
+        return timestamps.isNotEmpty() && entries.filterNot { it.y == Float.MIN_VALUE }.isNotEmpty()
     }
 }

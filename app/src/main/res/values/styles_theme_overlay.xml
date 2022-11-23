@@ -18,4 +18,12 @@
         <item name="colorOnSurface">@color/colorOnSurface</item>
         <item name="navigationIconTint">@color/colorPrimary</item>
     </style>
+
+    <style name="ThemeOverlay.WeatherXM.AlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="materialAlertDialogTitleTextStyle">@style/Widget.WeatherXM.AlertDialog.Title</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/Widget.WeatherXM.AlertDialog.Body</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.WeatherXM.AlertDialog.Button.Positive</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.WeatherXM.AlertDialog.Button.Negative</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Widget.WeatherXM.AlertDialog.Button.Neutral</item>
+    </style>
 </resources>

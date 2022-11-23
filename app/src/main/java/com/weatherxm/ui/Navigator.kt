@@ -6,8 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
+import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
@@ -25,6 +27,7 @@ import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.explorer.ExplorerActivity
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
+import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.publicdevicedetail.PublicDeviceDetailFragment
 import com.weatherxm.ui.publicdeviceslist.PublicDevicesListFragment
@@ -83,6 +86,16 @@ class Navigator {
         )
     }
 
+    fun showPasswordPrompt(
+        activity: FragmentActivity,
+        @StringRes message: Int,
+        listener: PasswordPromptFragment.OnPasswordConfirmedListener
+    ) {
+        PasswordPromptFragment.newInstance(message).show(activity) {
+            listener.onPasswordConfirmed(it)
+        }
+    }
+
     fun showPublicDevicesList(fragmentManager: FragmentManager) {
         val modalBottomSheet = PublicDevicesListFragment()
         modalBottomSheet.show(fragmentManager, PublicDevicesListFragment.TAG)
@@ -109,14 +122,6 @@ class Navigator {
                 ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             )
         }
-    }
-
-    fun showConnectWallet(context: Context, onBackGoHome: Boolean) {
-        context.startActivity(
-            Intent(context, ConnectWalletActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(ConnectWalletActivity.ARG_ON_BACK_GO_HOME, onBackGoHome)
-        )
     }
 
     fun showUserDevice(
@@ -210,6 +215,31 @@ class Navigator {
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(TokenActivity.ARG_DEVICE, device)
         )
+    }
+
+    fun showConnectWallet(
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        fragment: Fragment
+    ) {
+        fragment.context?.let {
+            activityResultLauncher.launch(
+                Intent(it, ConnectWalletActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            )
+        }
+    }
+
+    fun showSendFeedback(
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        fragment: Fragment
+    ) {
+        fragment.context?.let {
+            activityResultLauncher.launch(
+                Intent(
+                    it, SendFeedbackActivity::class.java
+                ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            )
+        }
     }
 
     fun showSelectDeviceTypeDialog(fragmentManager: FragmentManager) {

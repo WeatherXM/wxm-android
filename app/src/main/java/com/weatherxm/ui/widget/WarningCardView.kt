@@ -1,12 +1,14 @@
 package com.weatherxm.ui.widget
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.StringRes
+import com.google.android.material.button.MaterialButton.ICON_GRAVITY_END
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewWarningCardBinding
 
@@ -71,6 +73,23 @@ class WarningCardView : LinearLayout {
         binding.message.apply {
             text = subtitle
             visibility = if (subtitle != null) View.VISIBLE else View.GONE
+        }
+        return this
+    }
+
+    fun action(
+        label: String,
+        endIcon: Drawable? = null,
+        listener: OnClickListener
+    ): WarningCardView {
+        with(binding.action) {
+            text = label
+            setOnClickListener(listener)
+            visibility = VISIBLE
+            if (endIcon != null) {
+                icon = endIcon
+                iconGravity = ICON_GRAVITY_END
+            }
         }
         return this
     }

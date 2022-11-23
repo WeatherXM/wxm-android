@@ -72,4 +72,7 @@
 
     <!-- Error Card -->
     <color name="error_card_close_button_color">@color/light_dark_grey</color>
+
+    <!-- Dialog -->
+    <color name="dialog_title">@color/light_darkest_blue</color>
 </resources>
