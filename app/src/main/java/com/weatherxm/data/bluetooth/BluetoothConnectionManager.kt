@@ -153,20 +153,25 @@ class BluetoothConnectionManager(private val context: Context) {
             }
         }
 
+        var failed = false
         readCharacteristic?.let { characteristic ->
             var fullResponse = ""
             peripheral.observe(characteristic).takeWhile {
                 val currentResponse = String(it).replace("\r", "").replace("\n", "")
                 Timber.d("[BLE Communication] Response: $currentResponse")
                 if (currentResponse.contains("ERROR")) {
-                    Timber.w("[BLE Communication] ERROR: $currentResponse")
-                    listener.invoke(Either.Left(BluetoothError.ATCommandError))
+                    Timber.e("[BLE Communication] ERROR: $currentResponse")
+                    failed = true
                     return@takeWhile false
                 }
                 currentResponse != "OK"
             }.onCompletion {
                 Timber.d("[BLE Communication] Full Response: $fullResponse")
-                listener.invoke(Either.Right(fullResponse))
+                if (failed) {
+                    listener.invoke(Either.Left(BluetoothError.ATCommandError))
+                } else {
+                    listener.invoke(Either.Right(fullResponse))
+                }
             }.collect {
                 fullResponse += String(it)
             }
