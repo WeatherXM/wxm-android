@@ -17,6 +17,7 @@ sealed class Failure(val code: String? = null) {
     object NoGeocoderError : Failure()
     object LocationAddressNotFound : Failure()
     object CountryNotFound : Failure()
+    object FrequencyMappingNotFound : Failure()
     object UnknownError : Failure()
     object InvalidRefreshTokenError : Failure()
 }

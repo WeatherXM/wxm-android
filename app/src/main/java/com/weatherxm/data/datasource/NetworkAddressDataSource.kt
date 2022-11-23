@@ -144,10 +144,10 @@ class NetworkAddressDataSource(
                     Either.Left(Failure.CountryNotFound)
                 } else {
                     val geocoderAddress = geocoderAddresses[0]
-                    val frequency = countryToFrequency(geocoderAddress.countryCode)
+                    val frequency = countryToFrequency(context, geocoderAddress.countryCode)
 
                     if (frequency == null) {
-                        Either.Left(Failure.CountryNotFound)
+                        Either.Left(Failure.FrequencyMappingNotFound)
                     } else {
                         Either.Right(
                             CountryAndFrequencies(

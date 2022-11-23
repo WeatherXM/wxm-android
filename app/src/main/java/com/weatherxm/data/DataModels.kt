@@ -27,6 +27,16 @@ data class CountryAndFrequencies(
 enum class Frequency {
     EU868,
     US915,
+    AU915,
+    AS923,
     CN470,
-    AU915
+    CN779,
+    KR920,
+    IN865,
+    RU864,
+    EU433,
+    AS923_1,
+    AS923_2,
+    AS923_3,
+    AS923_4
 }
