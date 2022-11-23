@@ -314,7 +314,7 @@
     <!--
         Survey Prompt on Preferences Screen
     -->
-    <style name="TextAppearance.WeatherXM.MaterialCard.Survey.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall">
+    <style name="TextAppearance.WeatherXM.MaterialCard.Messages.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -351,4 +351,17 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/light_top</item>
     </style>
+
+    <!--
+        Dialogs
+    -->
+    <style name="TextAppearance.WeatherXM.Dialog.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
+        <item name="android:textColor">@color/dialog_title</item>
+    </style>
+
+    <!--
+        AlertDialog
+    -->
+    <style name="TextAppearance.WeatherXM.AlertDialog.Body" parent="TextAppearance.WeatherXM.Default.BodyLarge" />
+
 </resources>

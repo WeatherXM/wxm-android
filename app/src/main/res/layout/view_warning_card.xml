@@ -7,7 +7,7 @@
     android:animateLayoutChanges="true">
 
     <com.google.android.material.card.MaterialCardView
-        style="@style/Widget.WeatherXM.MaterialCard.Error"
+        style="@style/Widget.WeatherXM.MaterialCard.Warning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -21,8 +21,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_error"
-                app:tint="@color/error"
+                android:src="@drawable/ic_warning"
+                app:tint="@color/warning"
                 tools:ignore="ContentDescription" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,7 +38,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/dark_background"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Error title here." />
+                    tools:text="Warning title here." />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/message"
@@ -50,7 +50,7 @@
                     android:textColor="@color/dark_background"
                     app:layout_constraintStart_toStartOf="@id/title"
                     app:layout_constraintTop_toBottomOf="@id/title"
-                    tools:text="Error description here." />
+                    tools:text="Warning message here." />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/action"
@@ -77,7 +77,6 @@
                 app:iconTint="@color/light_dark_grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </merge>

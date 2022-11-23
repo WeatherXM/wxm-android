@@ -1,10 +1,15 @@
 package com.weatherxm.ui.common
 
+import android.app.Activity
 import android.content.Context
+import android.text.Html
 import android.widget.Toast
 import androidx.annotation.IntDef
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.parseAsHtml
+import androidx.core.text.toHtml
+import androidx.core.text.toSpanned
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -79,3 +84,8 @@ fun TabLayout.getLastTab(): TabLayout.Tab? {
 fun TabLayout.getSelectedTab(): TabLayout.Tab? {
     return getTabAt(selectedTabPosition)
 }
+
+fun Activity.getRichText(
+    @StringRes resId: Int,
+    vararg args: Any = emptyArray()
+) = getText(resId).toSpanned().toHtml().format(*args).parseAsHtml().trim()

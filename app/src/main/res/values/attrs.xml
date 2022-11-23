@@ -6,6 +6,17 @@
         <attr name="empty_action" format="string" />
         <attr name="empty_animation" format="reference" />
     </declare-styleable>
+    <declare-styleable name="InformationCardView">
+        <attr name="info_message" format="string" />
+    </declare-styleable>
+    <declare-styleable name="ErrorCardView">
+        <attr name="error_title" format="string" />
+        <attr name="error_message" format="string" />
+    </declare-styleable>
+    <declare-styleable name="WarningCardView">
+        <attr name="warning_title" format="string" />
+        <attr name="warning_message" format="string" />
+    </declare-styleable>
     <declare-styleable name="StatusView">
         <attr name="status_title" format="string" />
         <attr name="status_subtitle" format="string" />

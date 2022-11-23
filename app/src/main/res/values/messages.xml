@@ -36,16 +36,15 @@
     <string name="error_cannot_open_play_store">Oops! Could not open Play Store.</string>
     <string name="error_friendly_name_change_rate_limit">You can only change your device\'s friendly name once in 10 minutes.</string>
     <string name="error_search_suggestions">Search suggestions not available. Please try again later.</string>
+    <string name="error_invalid_password">"Invalid password"</string>
 
     <!-- Warn Messages -->
     <string name="warn_validation_invalid_email">Not a valid email</string>
     <string name="warn_invalid_password">Invalid Password</string>
     <string name="warn_validation_invalid_serial_number">Invalid serial number</string>
     <string name="warn_validation_invalid_password">Password must be >5 characters</string>
-    <string name="warn_validation_invalid_address">Invalid WXM Address</string>
+    <string name="warn_validation_invalid_address">Invalid Address</string>
     <string name="warn_validation_invalid_friendly_name">Invalid Friendly Name</string>
-    <string name="warn_connect_wallet_terms_not_accepted">Please accept the terms to proceed.</string>
-    <string name="warn_connect_wallet_access_not_acknowledged">Please confirm that you have access to the wallet to proceed.</string>
 
     <!-- Info Messages -->
     <string name="info_come_back_later">Please come back later!</string>

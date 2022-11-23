@@ -79,7 +79,7 @@
             android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.connectwallet.ConnectWalletActivity"
-            android:label="@string/title_connect_wallet"
+            android:label="@string/my_wallet"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity

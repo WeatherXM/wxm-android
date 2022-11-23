@@ -2,7 +2,8 @@
     <!--
         Defaults
     -->
-    <style name="Widget.WeatherXM.ImageButton" parent="@style/Widget.Material3.Button.IconButton">
+    <style name="Widget.WeatherXM.IconButton" parent="@style/Widget.Material3.Button.IconButton">
+        <item name="android:background">@color/transparent</item>
         <item name="iconTint">@color/colorOnSurface</item>
     </style>
 
@@ -99,7 +100,7 @@
         <item name="iconGravity">start</item>
     </style>
 
-    <style name="Widget.WeatherXM.ImageButton.MaterialCard.Overlay.Error" parent="@style/Widget.WeatherXM.ImageButton">
+    <style name="Widget.WeatherXM.IconButton.MaterialCard.Overlay.Error" parent="@style/Widget.WeatherXM.IconButton">
         <item name="iconTint">@color/light_top</item>
     </style>
 
@@ -132,8 +133,22 @@
         <item name="contentPadding">@dimen/padding_large</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.Small" parent="Widget.Material3.CardView.Filled">
+    <style name="Widget.WeatherXM.MaterialCard.Small" parent="Widget.WeatherXM.MaterialCard">
         <item name="contentPadding">@dimen/padding_small</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.Messages" parent="Widget.WeatherXM.MaterialCard">
+        <item name="contentPadding">@dimen/padding_small</item>
+        <item name="contentPaddingTop">@dimen/padding_normal</item>
+        <item name="contentPaddingBottom">@dimen/padding_normal</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.NoRadius" parent="Widget.WeatherXM.MaterialCard">
+        <item name="cardCornerRadius">0dp</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.NoRadius.Small" parent="Widget.WeatherXM.MaterialCard.Small">
+        <item name="cardCornerRadius">0dp</item>
     </style>
 
     <style name="Widget.WeatherXM.MaterialCard.Login" parent="Widget.WeatherXM.MaterialCard">
@@ -142,26 +157,20 @@
         <item name="contentPadding">@dimen/padding_normal</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.ForecastAndHistory" parent="Widget.WeatherXM.MaterialCard">
+    <style name="Widget.WeatherXM.MaterialCard.ForecastAndHistory" parent="Widget.WeatherXM.MaterialCard.NoRadius">
         <item name="cardBackgroundColor">@color/transparent</item>
-        <item name="cardCornerRadius">0dp</item>
         <item name="contentPadding">0dp</item>
         <item name="contentPaddingTop">@dimen/padding_small</item>
         <item name="contentPaddingBottom">@dimen/padding_small</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.HourlyForecast" parent="Widget.WeatherXM.MaterialCard.Small">
+    <style name="Widget.WeatherXM.MaterialCard.HourlyForecast" parent="Widget.WeatherXM.MaterialCard.NoRadius.Small">
         <item name="cardBackgroundColor">@color/transparent</item>
         <item name="android:stateListAnimator">@animator/weather_forecast_tile_elevation</item>
-        <item name="cardCornerRadius">0dp</item>
     </style>
 
     <style name="Widget.WeatherXM.MaterialCard.ChartMarker" parent="Widget.WeatherXM.MaterialCard.Small">
         <item name="cardBackgroundColor">@color/chart_popup_background</item>
-    </style>
-
-    <style name="Widget.WeatherXM.MaterialCard.Warning" parent="Widget.WeatherXM.MaterialCard">
-        <item name="cardBackgroundColor">@color/error</item>
     </style>
 
     <style name="Widget.WeatherXM.MaterialCard.DevicesCount" parent="Widget.WeatherXM.MaterialCard.Small">
@@ -169,20 +178,29 @@
         <item name="useCompatPadding">false</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.Overlay.Error" parent="Widget.WeatherXM.MaterialCard.Small">
-        <item name="cardBackgroundColor">@color/error</item>
-        <item name="android:alpha">0.9</item>
+    <style name="Widget.WeatherXM.MaterialCard.Warning" parent="Widget.WeatherXM.MaterialCard.Messages">
+        <item name="android:textColor">@color/dark_background</item>
+        <item name="cardBackgroundColor">@color/warning_tint</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.Survey" parent="Widget.WeatherXM.MaterialCard">
-        <item name="cardBackgroundColor">@color/survey_prompt_card_background</item>
+    <style name="Widget.WeatherXM.MaterialCard.Error" parent="Widget.WeatherXM.MaterialCard.Messages">
+        <item name="cardBackgroundColor">@color/error_tint</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">@color/error</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.Error.Overlay" parent="Widget.WeatherXM.MaterialCard">
+        <item name="cardBackgroundColor">@color/error</item>
+        <item name="android:alpha">0.9</item>
+        <item name="contentPaddingTop">@dimen/padding_normal</item>
+        <item name="contentPaddingBottom">@dimen/padding_normal</item>
+    </style>
+
+    <style name="Widget.WeatherXM.MaterialCard.Info" parent="Widget.WeatherXM.MaterialCard.Messages">
+        <item name="cardBackgroundColor">@color/info_card_background</item>
     </style>
 
     <style name="Widget.WeatherXM.MaterialCard.AddressOnMap" parent="Widget.WeatherXM.MaterialCard.Small">
-        <item name="cardBackgroundColor">@color/colorSurface</item>
-        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
-        <item name="cardPreventCornerOverlap">false</item>
-        <item name="contentPadding">@dimen/padding_small</item>
         <item name="cardElevation">@dimen/card_selected_elevation</item>
     </style>
 
@@ -263,7 +281,6 @@
         <item name="android:clickable">false</item>
     </style>
 
-
     <!--
         Tab Layout
     -->
@@ -303,5 +320,28 @@
         <item name="trackColorActive">@color/reward_score_very_high</item>
         <item name="trackColorInactive">@color/token_transaction_slider_inactive</item>
         <item name="trackHeight">@dimen/reward_slider_track_height</item>
+    </style>
+
+    <!--
+        AlertDialog Styles
+    -->
+    <style name="Widget.WeatherXM.AlertDialog.Title" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:textAppearance">@style/TextAppearance.Material3.HeadlineSmall</item>
+        <item name="android:textColor">@color/dialog_title</item>
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Widget.WeatherXM.AlertDialog.Body" parent="MaterialAlertDialog.Material3.Body.Text">
+        <item name="android:textAppearance">@style/TextAppearance.WeatherXM.AlertDialog.Body</item>
+    </style>
+
+    <style name="Widget.WeatherXM.AlertDialog.Button.Positive" parent="Widget.WeatherXM.Button">
+        <item name="android:layout_marginLeft">@dimen/margin_normal</item>
+    </style>
+
+    <style name="Widget.WeatherXM.AlertDialog.Button.Negative" parent="Widget.WeatherXM.TextButton.Subtle">
+    </style>
+
+    <style name="Widget.WeatherXM.AlertDialog.Button.Neutral" parent="Widget.WeatherXM.TextButton.Subtle">
     </style>
 </resources>

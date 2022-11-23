@@ -10,13 +10,11 @@ import android.widget.LinearLayout
 import androidx.annotation.StringRes
 import com.google.android.material.button.MaterialButton.ICON_GRAVITY_END
 import com.weatherxm.R
-import com.weatherxm.databinding.ViewErrorCardBinding
-import com.weatherxm.util.setHtml
-import me.saket.bettermovementmethod.BetterLinkMovementMethod
+import com.weatherxm.databinding.ViewWarningCardBinding
 
-class ErrorCardView : LinearLayout {
+class WarningCardView : LinearLayout {
 
-    private lateinit var binding: ViewErrorCardBinding
+    private lateinit var binding: ViewWarningCardBinding
 
     constructor(context: Context?) : super(context) {
         init(context)
@@ -35,7 +33,7 @@ class ErrorCardView : LinearLayout {
     }
 
     private fun init(context: Context?, attrs: AttributeSet? = null) {
-        binding = ViewErrorCardBinding.inflate(LayoutInflater.from(context), this)
+        binding = ViewWarningCardBinding.inflate(LayoutInflater.from(context), this)
         orientation = VERTICAL
         gravity = Gravity.CENTER
 
@@ -43,22 +41,22 @@ class ErrorCardView : LinearLayout {
             hide()
         }
 
-        this.context.theme.obtainStyledAttributes(attrs, R.styleable.ErrorCardView, 0, 0).apply {
+        this.context.theme.obtainStyledAttributes(attrs, R.styleable.WarningCardView, 0, 0).apply {
             try {
-                title(getString(R.styleable.ErrorCardView_error_title))
-                message(getString(R.styleable.ErrorCardView_error_message))
+                title(getString(R.styleable.WarningCardView_warning_title))
+                message(getString(R.styleable.WarningCardView_warning_message))
             } finally {
                 recycle()
             }
         }
     }
 
-    fun title(@StringRes resId: Int): ErrorCardView {
+    fun title(@StringRes resId: Int): WarningCardView {
         title(resources.getString(resId))
         return this
     }
 
-    fun title(subtitle: String?): ErrorCardView {
+    fun title(subtitle: String?): WarningCardView {
         binding.title.apply {
             text = subtitle
             visibility = if (subtitle != null) View.VISIBLE else View.GONE
@@ -66,12 +64,12 @@ class ErrorCardView : LinearLayout {
         return this
     }
 
-    fun message(@StringRes resId: Int): ErrorCardView {
+    fun message(@StringRes resId: Int): WarningCardView {
         message(resources.getString(resId))
         return this
     }
 
-    fun message(subtitle: String?): ErrorCardView {
+    fun message(subtitle: String?): WarningCardView {
         binding.message.apply {
             text = subtitle
             visibility = if (subtitle != null) View.VISIBLE else View.GONE
@@ -79,31 +77,11 @@ class ErrorCardView : LinearLayout {
         return this
     }
 
-    fun htmlMessage(
-        @StringRes resId: Int,
-        arg: String? = null,
-        linkClickedListener: (() -> Unit)? = null
-    ): ErrorCardView {
-        binding.message.apply {
-            if (arg.isNullOrEmpty()) {
-                setHtml(resId)
-            } else {
-                setHtml(resId, arg)
-            }
-            if (linkClickedListener != null) {
-                movementMethod = BetterLinkMovementMethod.newInstance().apply {
-                    setOnLinkClickListener { _, _ ->
-                        linkClickedListener.invoke()
-                        return@setOnLinkClickListener true
-                    }
-                }
-            }
-            visibility = View.VISIBLE
-        }
-        return this
-    }
-
-    fun action(label: String, endIcon: Drawable? = null, listener: OnClickListener): ErrorCardView {
+    fun action(
+        label: String,
+        endIcon: Drawable? = null,
+        listener: OnClickListener
+    ): WarningCardView {
         with(binding.action) {
             text = label
             setOnClickListener(listener)

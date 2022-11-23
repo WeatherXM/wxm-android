@@ -104,10 +104,9 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
                         }
                     shortWxmSurvey?.onPreferenceClickListener =
                         Preference.OnPreferenceClickListener {
-                            launchSendFeedback()
+                            navigator.showSendFeedback(sendFeedbackLauncher, this)
                             true
                         }
-
                     deleteAccountButton?.onPreferenceClickListener =
                         Preference.OnPreferenceClickListener {
                             navigator.showDeleteAccount(this)
@@ -117,15 +116,7 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
         }
 
         model.onShowSurveyScreen().observe(this) {
-            if (it) {
-                launchSendFeedback()
-            }
-        }
-    }
-
-    private fun launchSendFeedback() {
-        this.context?.let {
-            navigator.showSendFeedback(sendFeedbackLauncher, it)
+            if (it) navigator.showSendFeedback(sendFeedbackLauncher, this)
         }
     }
 

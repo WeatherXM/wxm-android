@@ -23,7 +23,7 @@ class AlertDialogFragment : DialogFragment() {
     @Suppress("LongParameterList")
     class Builder(
         var title: String? = null,
-        var message: String? = null,
+        var message: CharSequence? = null,
         var positive: String? = null,
         var negative: String? = null,
         var neutral: String? = null,
@@ -37,7 +37,7 @@ class AlertDialogFragment : DialogFragment() {
             this.title = title
         }
 
-        fun message(message: String) = apply {
+        fun message(message: CharSequence) = apply {
             this.message = message
         }
 
@@ -109,7 +109,7 @@ class AlertDialogFragment : DialogFragment() {
             builder.setTitle(it)
         }
 
-        arguments?.getString(ARG_MESSAGE)?.let {
+        arguments?.getCharSequence(ARG_MESSAGE)?.let {
             builder.setMessage(it)
         }
 
