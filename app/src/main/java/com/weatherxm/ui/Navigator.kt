@@ -5,24 +5,29 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.result.ActivityResultLauncher
+import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
+import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
 import com.weatherxm.ui.deviceforecast.ForecastActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.explorer.ExplorerActivity
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
+import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.publicdevicedetail.PublicDeviceDetailFragment
 import com.weatherxm.ui.publicdeviceslist.PublicDevicesListFragment
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
+import com.weatherxm.ui.sendfeedback.SendFeedbackActivity.Companion.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.token.TokenActivity
@@ -42,12 +47,13 @@ class Navigator {
         )
     }
 
-    fun showLogin(context: Context) {
-        context.startActivity(
-            Intent(
-                context, LoginActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        )
+    fun showLogin(context: Context, isForcedLogout: Boolean = false) {
+        val intentFlags = if (isForcedLogout) {
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        } else {
+            Intent.FLAG_ACTIVITY_SINGLE_TOP
+        }
+        context.startActivity(Intent(context, LoginActivity::class.java).addFlags(intentFlags))
     }
 
     fun showSignup(context: Context) {
@@ -72,6 +78,16 @@ class Navigator {
                 context, UpdatePromptActivity::class.java
             ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
+    }
+
+    fun showPasswordPrompt(
+        activity: FragmentActivity,
+        @StringRes message: Int,
+        listener: PasswordPromptFragment.OnPasswordConfirmedListener
+    ) {
+        PasswordPromptFragment.newInstance(message).show(activity) {
+            listener.onPasswordConfirmed(it)
+        }
     }
 
     fun showPublicDevicesList(fragmentManager: FragmentManager) {
@@ -102,14 +118,6 @@ class Navigator {
         }
     }
 
-    fun showConnectWallet(context: Context, onBackGoHome: Boolean) {
-        context.startActivity(
-            Intent(context, ConnectWalletActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(ConnectWalletActivity.ARG_ON_BACK_GO_HOME, onBackGoHome)
-        )
-    }
-
     fun showUserDevice(
         activityResultLauncher: ActivityResultLauncher<Intent>,
         fragment: Fragment,
@@ -124,12 +132,33 @@ class Navigator {
         }
     }
 
+    fun showSendFeedback(
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        context: Context,
+        isDeleteAccountForm: Boolean = false
+    ) {
+        val intent = Intent(context, SendFeedbackActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .putExtra(ARG_IS_DELETE_ACCOUNT_FORM, isDeleteAccountForm)
+        activityResultLauncher.launch(intent)
+    }
+
     fun showResetPassword(context: Context) {
         context.startActivity(
             Intent(
                 context, ResetPasswordActivity::class.java
             ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
+    }
+
+    fun showDeleteAccount(fragment: Fragment) {
+        fragment.context?.let {
+            it.startActivity(
+                Intent(
+                    it, DeleteAccountActivity::class.java
+                ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            )
+        }
     }
 
     fun showResetPassword(fragment: Fragment) {
@@ -174,9 +203,24 @@ class Navigator {
         )
     }
 
-    fun showSendFeedback(fragment: Fragment) {
+    fun showConnectWallet(
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        fragment: Fragment
+    ) {
         fragment.context?.let {
-            it.startActivity(
+            activityResultLauncher.launch(
+                Intent(it, ConnectWalletActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            )
+        }
+    }
+
+    fun showSendFeedback(
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        fragment: Fragment
+    ) {
+        fragment.context?.let {
+            activityResultLauncher.launch(
                 Intent(
                     it, SendFeedbackActivity::class.java
                 ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)

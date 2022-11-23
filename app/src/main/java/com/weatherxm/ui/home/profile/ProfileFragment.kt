@@ -1,7 +1,6 @@
 package com.weatherxm.ui.home.profile
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +17,6 @@ import com.weatherxm.data.User
 import com.weatherxm.databinding.FragmentProfileBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
-import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.util.applyInsets
 import org.koin.android.ext.android.inject
 import timber.log.Timber
@@ -32,7 +30,7 @@ class ProfileFragment : Fragment() {
     private val connectWalletLauncher =
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                model.refreshWallet()
+                model.fetchWallet()
             }
         }
 
@@ -46,11 +44,7 @@ class ProfileFragment : Fragment() {
         binding.root.applyInsets()
 
         binding.connectWallet.setOnClickListener {
-            this.context?.let {
-                val intent = Intent(it, ConnectWalletActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                connectWalletLauncher.launch(intent)
-            }
+            navigator.showConnectWallet(connectWalletLauncher, this)
         }
 
         binding.settings.setOnClickListener {

@@ -4,57 +4,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    tools:orientation="vertical"
-    tools:parentTag="LinearLayout">
+    android:animateLayoutChanges="true">
 
     <com.google.android.material.card.MaterialCardView
-        style="@style/Widget.WeatherXM.MaterialCard.Overlay.Error"
+        style="@style/Widget.WeatherXM.MaterialCard.Error"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_error"
+                app:tint="@color/error"
+                tools:ignore="ContentDescription" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_normal"
+                android:layout_weight="1">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/title"
+                    style="@style/TextAppearance.WeatherXM.MaterialCard.Messages.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/dark_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Error title here." />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/message"
+                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:autoLink="all"
+                    android:textColor="@color/dark_background"
+                    app:layout_constraintStart_toStartOf="@id/title"
+                    app:layout_constraintTop_toBottomOf="@id/title"
+                    tools:text="Error description here." />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/action"
+                    style="@style/Widget.WeatherXM.TextButton.Subtle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="0dp"
+                    android:textColor="@color/light_primary"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/message"
+                    tools:text="Do something"
+                    tools:visibility="visible" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/closeButton"
-                style="@style/Widget.WeatherXM.ImageButton.MaterialCard.Overlay.Error"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/Widget.WeatherXM.IconButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="@dimen/margin_normal"
                 app:icon="@drawable/ic_close"
+                app:iconGravity="textStart"
+                app:iconTint="@color/light_dark_grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical">
-
-            <ImageView
-                android:id="@+id/error_icon"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_error"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/error_text"
-                style="@style/TextAppearance.WeatherXM.OverlayCard.Error"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/padding_normal"
-                android:gravity="center_horizontal"
-                app:layout_constraintTop_toBottomOf="@id/error_icon"
-                tools:text="Your weather station hasn\'t connected for a while. Please, visit our troubleshooting guide." />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
+        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
-
 </merge>

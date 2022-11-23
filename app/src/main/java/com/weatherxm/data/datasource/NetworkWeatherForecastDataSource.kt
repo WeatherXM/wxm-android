@@ -26,10 +26,10 @@ class NetworkWeatherForecastDataSource(
     }
 
     override suspend fun setForecast(deviceId: String, forecast: List<WeatherData>) {
-        // No-op
+        throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 
     override suspend fun clear() {
-        // No-op
+        throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 }

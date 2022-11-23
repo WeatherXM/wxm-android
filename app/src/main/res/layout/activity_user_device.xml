@@ -154,11 +154,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                    <com.weatherxm.ui.widget.ErrorCardView
+                    <com.weatherxm.ui.widget.WeatherOverlayErrorCardView
                         android:id="@+id/errorCard"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:visibility="gone" />
+                        android:layout_height="match_parent" />
 
                 </FrameLayout>
 

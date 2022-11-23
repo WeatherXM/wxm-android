@@ -1,5 +1,6 @@
 <resources>
     <string name="support_email_intent_title">Send email</string>
+    <string name="support_email_subject_delete_account">Delete Account</string>
     <string name="support_email_subject_cannot_claim">Cannot claim device</string>
     <string name="support_email_subject_no_activation">No activation email</string>
     <string name="support_email_body_user">User account email: %1$s</string>
@@ -7,10 +8,11 @@
     <string name="support_email_recipient">support@weatherxm.com</string>
     <string name="website">https://weatherxm.com</string>
     <string name="documentation_url">https://docs.weatherxm.com</string>
-    <string name="suggested_wallets_documentation">https://docs.weatherxm.com/suggested-wallet</string>
+    <string name="suggested_wallets_documentation">https://docs.weatherxm.com/wallet/adding-wallet</string>
     <string name="terms_of_service_url">https://weatherxm.com/mobile/terms/</string>
     <string name="troubleshooting_url">https://docs.weatherxm.com/wifi-m5-bundle/m5-troubleshooting</string>
     <string name="user_panel_url">https://docs.google.com/forms/d/e/1FAIpQLSc35pJdxM0tosVh-az0goKEjE1xzBs_OVo5V23coC8z1ayD6g/viewform</string>
     <string name="short_app_survey_url">https://docs.google.com/forms/d/e/1FAIpQLSc1T-odUwpXa01nODavwEtLgO00AfPxqfrdhbn_G5Lss0dD2w/viewform?usp=pp_url</string>
+    <string name="delete_account_survey_url">https://docs.google.com/forms/d/e/1FAIpQLSdWPLpyUx2fNIiohQ-XaskbkZuoUSqYhwIkGGjupJ7IDEX_aA/viewform?usp=pp_url</string>
     <string name="market_url">market://details?id=%s</string>
 </resources>

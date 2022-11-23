@@ -9,7 +9,6 @@ import timber.log.Timber
 interface WalletRepository {
     suspend fun getWalletAddress(): Either<Failure, String?>
     suspend fun setWalletAddress(address: String): Either<Failure, Unit>
-    suspend fun clearCache()
 }
 
 class WalletRepositoryImpl(
@@ -45,9 +44,5 @@ class WalletRepositoryImpl(
                 // Save also in cache, if network operation was successful
                 cacheWalletDataSource.setWalletAddress(address)
             }
-    }
-
-    override suspend fun clearCache() {
-        cacheWalletDataSource.clear()
     }
 }

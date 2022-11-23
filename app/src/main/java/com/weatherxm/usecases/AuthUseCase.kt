@@ -3,11 +3,12 @@ package com.weatherxm.usecases
 import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.User
+import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.UserRepository
 
 interface AuthUseCase {
-    suspend fun login(username: String, password: String): Either<Failure, String>
+    suspend fun login(username: String, password: String): Either<Failure, AuthToken>
     suspend fun getUser(): Either<Failure, User>
     suspend fun signup(
         username: String,
@@ -16,7 +17,7 @@ interface AuthUseCase {
     ): Either<Failure, String>
 
     suspend fun resetPassword(email: String): Either<Failure, Unit>
-    suspend fun isLoggedIn(): Either<Error, String>
+    suspend fun isLoggedIn(): Either<Failure, Boolean>
 }
 
 class AuthUseCaseImpl(
@@ -24,7 +25,7 @@ class AuthUseCaseImpl(
     private val userRepository: UserRepository
 ) : AuthUseCase {
 
-    override suspend fun isLoggedIn(): Either<Error, String> {
+    override suspend fun isLoggedIn(): Either<Failure, Boolean> {
         return authRepository.isLoggedIn()
     }
 
@@ -33,10 +34,12 @@ class AuthUseCaseImpl(
         firstName: String?,
         lastName: String?
     ): Either<Failure, String> {
-        return authRepository.signup(username, firstName, lastName)
+        return authRepository.signup(username, firstName, lastName).map {
+            username
+        }
     }
 
-    override suspend fun login(username: String, password: String): Either<Failure, String> {
+    override suspend fun login(username: String, password: String): Either<Failure, AuthToken> {
         return authRepository.login(username, password)
     }
 

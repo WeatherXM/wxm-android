@@ -17,6 +17,4 @@ interface AddressSearchDataSource {
     suspend fun getSuggestionLocation(suggestion: SearchSuggestion): Either<Failure, Location>
 
     suspend fun setSuggestionLocation(suggestion: SearchSuggestion, location: Location)
-
-    suspend fun clear()
 }

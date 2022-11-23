@@ -10,9 +10,12 @@ import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.weatherxm.R
 import com.weatherxm.ui.common.show
 import com.weatherxm.ui.devicehistory.BarChartData
@@ -37,6 +40,7 @@ private fun LineChart.setDefaultSettings(chartData: LineChartData) {
 
     // Line and highlight Settings
     lineData.setDrawValues(false)
+    maxHighlightDistance = 50F
 
     // Y Axis settings
     axisLeft.isGranularityEnabled = true
@@ -51,7 +55,6 @@ private fun LineChart.setDefaultSettings(chartData: LineChartData) {
         resetAxisMaximum()
         valueFormatter = CustomYAxisFormatter(chartData.unit)
     }
-
 
     // X axis settings
     with(xAxis) {
@@ -408,7 +411,7 @@ fun LineChart.initializeWind24hChart(
 fun BarChart.initializeUV24hChart(chartData: BarChartData) {
     val dataSet = BarDataSet(chartData.entries, chartData.name)
     val barData = BarData(dataSet)
-    setData(barData)
+    data = barData
 
     // General Chart Settings
     description.isEnabled = false
@@ -420,7 +423,9 @@ fun BarChart.initializeUV24hChart(chartData: BarChartData) {
     // Bar and highlight Settings
     barData.setDrawValues(false)
     dataSet.color = resources.getColor(R.color.colorPrimary, context.theme)
+    dataSet.highLightAlpha = 255
     dataSet.highLightColor = resources.getColor(R.color.colorPrimaryVariant, context.theme)
+    maxHighlightDistance = 50F
 
     setOnTouchListener { _, event ->
         when (event.action) {
@@ -430,6 +435,20 @@ fun BarChart.initializeUV24hChart(chartData: BarChartData) {
         }
         this.performClick()
     }
+
+    setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+        override fun onValueSelected(e: Entry?, h: Highlight?) {
+            if (e?.y == Float.MIN_VALUE) {
+                setDrawMarkers(false)
+            } else {
+                setDrawMarkers(true)
+            }
+        }
+
+        override fun onNothingSelected() {
+            setDrawMarkers(false)
+        }
+    })
 
     // Y Axis settings
     with(axisLeft) {

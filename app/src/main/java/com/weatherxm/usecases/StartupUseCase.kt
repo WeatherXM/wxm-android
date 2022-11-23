@@ -40,7 +40,7 @@ class StartupUseCaseImpl(
             } else {
                 authRepository.isLoggedIn()
                     .map {
-                        Timber.d("Already logged in as $it")
+                        Timber.d("Already logged in.")
                         trySend(StartupState.ShowHome)
                     }
                     .mapLeft {

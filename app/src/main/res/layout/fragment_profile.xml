@@ -68,7 +68,7 @@
                         style="@style/Widget.WeatherXM.TextButton.Profile.Elements"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/title_connect_wallet"
+                        android:text="@string/my_wallet"
                         app:icon="@drawable/wallet"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

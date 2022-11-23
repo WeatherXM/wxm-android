@@ -26,6 +26,5 @@ interface WeatherForecastDataSource {
     ): Either<Failure, List<WeatherData>>
 
     suspend fun setForecast(deviceId: String, forecast: List<WeatherData>)
-
     suspend fun clear()
 }

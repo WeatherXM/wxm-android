@@ -1,6 +1,6 @@
 package com.weatherxm.data.network.interceptor
 
-import com.weatherxm.data.datasource.AuthTokenDataSource
+import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.network.AuthTokenJsonAdapter
 import com.weatherxm.data.path
 import kotlinx.coroutines.runBlocking
@@ -14,7 +14,7 @@ import java.io.IOException
  * {@see okhttp3.Interceptor} that saves an AuthToken in the response of the /auth endpoints.
  */
 class AuthRequestInterceptor(
-    private val authTokenDataSource: AuthTokenDataSource,
+    private val cacheAuthDataSource: CacheAuthDataSource,
     private val authTokenJsonAdapter: AuthTokenJsonAdapter
 ) : Interceptor {
 
@@ -36,7 +36,7 @@ class AuthRequestInterceptor(
                 val authToken = authTokenJsonAdapter.fromJson(body)
                 authToken?.let {
                     Timber.d("[${response.path()}] Saving token from response.")
-                    runBlocking { authTokenDataSource.setAuthToken(authToken) }
+                    runBlocking { cacheAuthDataSource.setAuthToken(authToken) }
                 }
             } catch (e: IOException) {
                 Timber.d(e, "[${response.path()}] Failed to extract auth token.")

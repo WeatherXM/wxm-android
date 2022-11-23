@@ -40,11 +40,6 @@
     <color name="chart_secondary_line">@color/light_lightest_blue</color>
 
     <!-- Explorer -->
-    <color name="hex_fill_color">#3388ff</color>
-    <color name="hex_fill_outline_color">@color/white</color>
-    <color name="explorer_devices_count_background">#88000000</color>
-    <color name="explorer_devices_count_title">#CAC4CF</color>
-    <color name="explorer_devices_count_value">#46D163</color>
     <color name="bottomSheetDialog_background">@color/light_light1</color>
 
     <!-- Daily Forecast -->
@@ -64,19 +59,13 @@
     <color name="token_transaction_descriptions">@color/light_dark_grey</color>
     <color name="token_transaction_line">@color/light_mid_grey</color>
 
-    <!-- Survey Prompt -->
-    <color name="survey_prompt_card_background">@color/light_blue_tint</color>
+    <!-- Info Card -->
+    <color name="info_card_background">@color/light_blue_tint</color>
+    <color name="info_card_icon_color">@color/light_darkest_blue</color>
 
-    <!-- Reward Scores -->
-    <color name="reward_score_very_high">#46D163</color>
-    <color name="reward_score_high">#E1CA60</color>
-    <color name="reward_score_average">#F3AD4E</color>
-    <color name="reward_score_low">#EF8B4F</color>
-    <color name="reward_score_very_low">#F6736D</color>
-    <color name="reward_score_unknown">#BAC7CB</color>
+    <!-- Error Card -->
+    <color name="error_card_close_button_color">@color/light_dark_grey</color>
 
-    <!-- Online/Offline indicators -->
-    <color name="device_status_online">@color/success</color>
-    <color name="device_status_offline">@color/error</color>
-    <color name="device_status_unknown">@color/light_mid_grey</color>
+    <!-- Dialog -->
+    <color name="dialog_title">@color/light_darkest_blue</color>
 </resources>

@@ -1,7 +1,7 @@
 package com.weatherxm.data.network.interceptor
 
 import arrow.core.getOrHandle
-import com.weatherxm.data.datasource.AuthTokenDataSource
+import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor.Companion.AUTH_HEADER
 import com.weatherxm.data.path
 import kotlinx.coroutines.runBlocking
@@ -14,7 +14,7 @@ import timber.log.Timber
  * {@see okhttp3.Interceptor} that adds Authorization header to the request,
  * using a stored JWT token with Bearer schema.
  */
-class ApiRequestInterceptor(private val authTokenDataSource: AuthTokenDataSource) : Interceptor {
+class ApiRequestInterceptor(private val cacheAuthDataSource: CacheAuthDataSource) : Interceptor {
 
     companion object {
         const val AUTH_HEADER = "Authorization"
@@ -33,17 +33,18 @@ class ApiRequestInterceptor(private val authTokenDataSource: AuthTokenDataSource
 
         // Add auth header using the auth token with Bearer schema
         Timber.d("[${request.path()}] Adding Authorization header.")
-        return chain.proceed(request.signedRequest(authTokenDataSource))
+        return chain.proceed(request.signedRequest(cacheAuthDataSource))
     }
 }
 
-private fun Request.signedRequest(authTokenRepository: AuthTokenDataSource): Request {
+@Suppress("TooGenericExceptionThrown")
+private fun Request.signedRequest(cacheAuthDataSource: CacheAuthDataSource): Request {
     return runCatching {
         // Get stored auth token
         val authToken = runBlocking {
-            authTokenRepository.getAuthToken()
+            cacheAuthDataSource.getAuthToken()
         }.getOrHandle {
-            throw it
+            throw Error("Auth Token not found.")
         }
 
         // If token is invalid, log, but proceed anyway

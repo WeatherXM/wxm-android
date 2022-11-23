@@ -23,32 +23,30 @@ class ProfileViewModel : ViewModel(), KoinComponent {
     private val wallet = MutableLiveData<String?>()
     fun wallet() = wallet
 
-    fun refreshWallet() {
+    private fun fetchUser() {
         viewModelScope.launch {
-            fetchWallet()
+            userUseCase.getUser()
+                .map {
+                    user.postValue(Resource.success(it))
+                }.mapLeft {
+                    user.postValue(
+                        Resource.error(it.getDefaultMessage(R.string.error_reach_out_short))
+                    )
+                }
         }
     }
 
-    private suspend fun fetchUser() {
-        userUseCase.getUser()
-            .map {
-                user.postValue(Resource.success(it))
-            }.mapLeft {
-                user.postValue(Resource.error(it.getDefaultMessage(R.string.error_reach_out_short)))
-            }
-    }
-
-    private suspend fun fetchWallet() {
-        Timber.d("Getting wallet in the background")
-        userUseCase.getWalletAddress()
-            .map { wallet.postValue(it) }
-            .mapLeft { wallet.postValue(null) }
+    fun fetchWallet() {
+        viewModelScope.launch {
+            Timber.d("Getting wallet in the background")
+            userUseCase.getWalletAddress()
+                .map { wallet.postValue(it) }
+                .mapLeft { wallet.postValue(null) }
+        }
     }
 
     init {
-        viewModelScope.launch {
-            fetchUser()
-            fetchWallet()
-        }
+        fetchUser()
+        fetchWallet()
     }
 }

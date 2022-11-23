@@ -2,59 +2,39 @@ package com.weatherxm.data.datasource
 
 
 import android.location.Location
-import androidx.collection.ArrayMap
 import arrow.core.Either
-import arrow.core.flatMap
-import arrow.core.rightIfNotNull
 import com.mapbox.search.result.SearchSuggestion
-import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
+import com.weatherxm.data.services.CacheService
 
-/**
- * Search address in-memory cache data source.
- */
-class CacheAddressSearchDataSource : AddressSearchDataSource {
-
-    private var suggestions: ArrayMap<String, List<SearchSuggestion>> = ArrayMap()
-    private var locations: ArrayMap<String, Location> = ArrayMap()
+class CacheAddressSearchDataSource(
+    private val cacheService: CacheService
+) : AddressSearchDataSource {
 
     override suspend fun getSearchSuggestions(
         query: String,
         countryCode: String?
     ): Either<Failure, List<SearchSuggestion>> {
-        return suggestions[query].rightIfNotNull {
-            DataError.CacheMissError
-        }.flatMap {
-            Either.Right(it)
-        }
+        return cacheService.getSearchSuggestions(query)
     }
 
     override suspend fun setSearchSuggestions(
         query: String,
         suggestions: List<SearchSuggestion>
     ) {
-        this.suggestions[query] = suggestions
+        cacheService.setSearchSuggestions(query, suggestions)
     }
 
     override suspend fun getSuggestionLocation(
         suggestion: SearchSuggestion
     ): Either<Failure, Location> {
-        return locations[suggestion.id].rightIfNotNull {
-            DataError.CacheMissError
-        }.flatMap {
-            Either.Right(it)
-        }
+        return cacheService.getSuggestionLocation(suggestion)
     }
 
     override suspend fun setSuggestionLocation(
         suggestion: SearchSuggestion,
         location: Location
     ) {
-        locations[suggestion.id] = location
-    }
-
-    override suspend fun clear() {
-        suggestions.clear()
-        locations.clear()
+        cacheService.setSuggestionLocation(suggestion, location)
     }
 }

@@ -117,11 +117,7 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
                 binding.loading.visibility = View.INVISIBLE
                 val user = result.data
                 Timber.d("User: $user")
-                if (user?.hasWallet() == true) {
-                    navigator.showHome(this)
-                } else {
-                    navigator.showConnectWallet(this,true)
-                }
+                navigator.showHome(this)
                 finish()
             }
             Status.ERROR -> {
