@@ -19,8 +19,8 @@ class ClaimHeliumFrequencyViewModel : ViewModel(), KoinComponent {
     private val frequenciesInOrder = mutableListOf<Frequency>()
     private var selectedFrequency: Frequency? = null
 
-    private val onCountryAndFrequencies = MutableLiveData<FrequencyState>()
-    fun onCountryAndFrequencies() = onCountryAndFrequencies
+    private val onFrequencyState = MutableLiveData<FrequencyState>()
+    fun onFrequencyState() = onFrequencyState
 
     fun selectFrequency(position: Int) {
         selectedFrequency = frequenciesInOrder[position]
@@ -42,9 +42,10 @@ class ClaimHeliumFrequencyViewModel : ViewModel(), KoinComponent {
                     })"
                 } ?: recommendedFrequency.name
 
-                onCountryAndFrequencies.postValue(
-                    FrequencyState(country, recommendedLabel, otherFrequencies.map { it.name })
-                )
+                val frequencies = mutableListOf(recommendedLabel)
+                frequencies.addAll(otherFrequencies.map { it.name })
+
+                onFrequencyState.postValue(FrequencyState(country, frequencies))
             }
         }
     }

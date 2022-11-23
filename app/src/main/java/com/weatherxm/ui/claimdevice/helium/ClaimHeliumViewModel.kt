@@ -16,6 +16,7 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
 
     private val onCancel = MutableLiveData(false)
     private val onNext = MutableLiveData(false)
+    private val onBackToLocation = MutableLiveData(false)
     private val onClaimResult = MutableLiveData<Resource<String>>().apply {
         value = Resource.loading()
     }
@@ -23,6 +24,7 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
 
     fun onCancel() = onCancel
     fun onNext() = onNext
+    fun onBackToLocation() = onBackToLocation
     fun onClaimResult() = onClaimResult
     fun onClaimManually() = onClaimManually
 
@@ -35,6 +37,10 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
 
     fun next() {
         onNext.postValue(true)
+    }
+
+    fun backToLocation() {
+        onBackToLocation.postValue(true)
     }
 
     fun setManual(isManual: Boolean?) {

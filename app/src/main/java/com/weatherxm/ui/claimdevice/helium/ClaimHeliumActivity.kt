@@ -69,6 +69,14 @@ class ClaimHeliumActivity : AppCompatActivity() {
             if (it) onNextPressed()
         }
 
+        model.onBackToLocation().observe(this) {
+            if(it) {
+                binding.pager.currentItem -= 1
+                binding.thirdStep.setIcon(R.drawable.ic_three_filled)
+                binding.fourthStep.setIcon(R.drawable.ic_four_outlined)
+            }
+        }
+
         locationModel.onGetUserLocation().observe(this) {
             if (it) requestLocationPermissions()
         }

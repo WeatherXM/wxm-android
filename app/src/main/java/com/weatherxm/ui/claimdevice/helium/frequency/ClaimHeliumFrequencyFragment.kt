@@ -49,12 +49,16 @@ class ClaimHeliumFrequencyFragment : Fragment() {
             binding.setAndClaimButton.isEnabled = checked
         }
 
+        binding.backButton.setOnClickListener {
+            parentModel.backToLocation()
+        }
+
         binding.setAndClaimButton.setOnClickListener {
             model.selectFrequency(binding.frequenciesSelector.selectedItemPosition)
             parentModel.next()
         }
 
-        model.onCountryAndFrequencies().observe(viewLifecycleOwner) { result ->
+        model.onFrequencyState().observe(viewLifecycleOwner) { result ->
             if (result.country.isNullOrEmpty()) {
                 binding.frequencySelectedText.visibility = View.GONE
             } else {
@@ -63,12 +67,9 @@ class ClaimHeliumFrequencyFragment : Fragment() {
                 )
             }
 
-            val frequencies = mutableListOf(result.recommendedFrequency)
-            frequencies.addAll(result.otherFrequencies)
-            val adapter = ArrayAdapter(
-                requireContext(), android.R.layout.simple_spinner_dropdown_item, frequencies
+            binding.frequenciesSelector.adapter = ArrayAdapter(
+                requireContext(), android.R.layout.simple_spinner_dropdown_item, result.frequencies
             )
-            binding.frequenciesSelector.adapter = adapter
         }
     }
 }

@@ -11,26 +11,22 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimSetLocationBinding
-import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.hideKeyboard
-import com.weatherxm.util.setHtml
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 
 class ClaimLocationFragment : Fragment() {
     private val m5ParentModel: ClaimM5ViewModel by activityViewModels()
     private val heliumParentModel: ClaimHeliumViewModel by activityViewModels()
     private val model: ClaimLocationViewModel by activityViewModels()
-    private val navigator: Navigator by inject()
     private lateinit var binding: FragmentClaimSetLocationBinding
 
     companion object {
         const val TAG = "ClaimLocationFragment"
-        const val ARG_DEVICE_TYPE = "has_pager"
+        const val ARG_DEVICE_TYPE = "device_type"
 
         fun newInstance(deviceType: DeviceType) = ClaimLocationFragment().apply {
             arguments = Bundle().apply { putSerializable(ARG_DEVICE_TYPE, deviceType) }
@@ -129,16 +125,15 @@ class ClaimLocationFragment : Fragment() {
 //                }
 //            }
 //        }
-
-        with(binding.needHelpInstallation) {
-            movementMethod =
-                me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {
-                    setOnLinkClickListener { _, url ->
-                        navigator.openWebsite(context, url)
-                        return@setOnLinkClickListener true
-                    }
-                }
-            setHtml(R.string.need_help_installation, getString(R.string.documentation_url))
-        }
+//        with(binding.needHelpInstallation) {
+//            movementMethod =
+//                me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {
+//                    setOnLinkClickListener { _, url ->
+//                        navigator.openWebsite(context, url)
+//                        return@setOnLinkClickListener true
+//                    }
+//                }
+//            setHtml(R.string.need_help_installation, getString(R.string.documentation_url))
+//        }
     }
 }

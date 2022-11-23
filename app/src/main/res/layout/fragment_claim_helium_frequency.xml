@@ -17,7 +17,7 @@
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginBottom="@dimen/margin_normal"
+                android:layout_marginBottom="@dimen/margin_large"
                 app:layout_constraintBottom_toTopOf="@id/toggleButtonsContainer"
                 app:layout_constraintTop_toTopOf="parent">
 

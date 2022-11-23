@@ -5,6 +5,5 @@ import androidx.annotation.Keep
 @Keep
 data class FrequencyState(
     val country: String?,
-    val recommendedFrequency: String,
-    val otherFrequencies: List<String>,
+    val frequencies: List<String>
 )
