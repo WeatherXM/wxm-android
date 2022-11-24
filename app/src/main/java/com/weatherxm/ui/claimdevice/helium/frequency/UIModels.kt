@@ -1,3 +1,4 @@
+@file:Suppress("MatchingDeclarationName")
 package com.weatherxm.ui.claimdevice.helium.frequency
 
 import androidx.annotation.Keep

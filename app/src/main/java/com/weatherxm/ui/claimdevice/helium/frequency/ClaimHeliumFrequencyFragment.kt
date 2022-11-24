@@ -8,16 +8,16 @@ import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.weatherxm.R
+import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentClaimHeliumFrequencyBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
-import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.common.ActionDialogFragment
 import com.weatherxm.util.setHtml
 import org.koin.android.ext.android.inject
 
 class ClaimHeliumFrequencyFragment : Fragment() {
     private val parentModel: ClaimHeliumViewModel by activityViewModels()
-    private val locationModel: ClaimLocationViewModel by activityViewModels()
     private val model: ClaimHeliumFrequencyViewModel by activityViewModels()
     private val navigator: Navigator by inject()
     private lateinit var binding: FragmentClaimHeliumFrequencyBinding
@@ -54,8 +54,7 @@ class ClaimHeliumFrequencyFragment : Fragment() {
         }
 
         binding.setAndClaimButton.setOnClickListener {
-            model.selectFrequency(binding.frequenciesSelector.selectedItemPosition)
-            parentModel.next()
+            model.setFrequency(binding.frequenciesSelector.selectedItemPosition)
         }
 
         model.onFrequencyState().observe(viewLifecycleOwner) { result ->
@@ -71,5 +70,35 @@ class ClaimHeliumFrequencyFragment : Fragment() {
                 requireContext(), android.R.layout.simple_spinner_dropdown_item, result.frequencies
             )
         }
+
+        model.onSetFrequency().observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    parentModel.next()
+                }
+                Status.LOADING -> {
+                    // TODO: Show some loading progress bar or something?
+                }
+                Status.ERROR -> {
+                    showErrorDialog(it.message)
+                }
+            }
+        }
+    }
+
+    private fun showErrorDialog(message: String?) {
+        ActionDialogFragment
+            .Builder(
+                title = getString(R.string.set_frequency_failed_title),
+                message = message
+            )
+            .onNegativeClick(getString(R.string.action_quit_claiming)) {
+                parentModel.cancel()
+            }
+            .onPositiveClick(getString(R.string.action_try_again)) {
+                model.setFrequency(binding.frequenciesSelector.selectedItemPosition)
+            }
+            .build()
+            .show(this)
     }
 }

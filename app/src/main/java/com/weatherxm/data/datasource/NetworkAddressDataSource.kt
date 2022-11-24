@@ -131,39 +131,34 @@ class NetworkAddressDataSource(
         location: android.location.Location,
         locale: Locale
     ): Either<Failure, CountryAndFrequencies> {
-        return if (Geocoder.isPresent()) {
-            try {
-                val geocoderAddresses =
-                    Geocoder(context, locale).getFromLocation(
-                        location.latitude,
-                        location.longitude,
-                        1
-                    )
+        if (!Geocoder.isPresent()) {
+            return Either.Left(Failure.NoGeocoderError)
+        }
 
-                if (geocoderAddresses.isNullOrEmpty()) {
-                    Either.Left(Failure.CountryNotFound)
+        return try {
+            val geocoderAddresses = Geocoder(context, locale).getFromLocation(
+                location.latitude, location.longitude, 1
+            )
+
+            if (geocoderAddresses.isNullOrEmpty()) {
+                Either.Left(Failure.CountryNotFound)
+            } else {
+                val geocoderAddress = geocoderAddresses[0]
+                val frequency = countryToFrequency(context, geocoderAddress.countryCode)
+
+                if (frequency == null) {
+                    Either.Left(Failure.FrequencyMappingNotFound)
                 } else {
-                    val geocoderAddress = geocoderAddresses[0]
-                    val frequency = countryToFrequency(context, geocoderAddress.countryCode)
-
-                    if (frequency == null) {
-                        Either.Left(Failure.FrequencyMappingNotFound)
-                    } else {
-                        Either.Right(
-                            CountryAndFrequencies(
-                                geocoderAddress.countryName,
-                                frequency,
-                                otherFrequencies(frequency)
-                            )
+                    Either.Right(
+                        CountryAndFrequencies(
+                            geocoderAddress.countryName, frequency, otherFrequencies(frequency)
                         )
-                    }
+                    )
                 }
-            } catch (exception: IOException) {
-                Timber.w(exception, "Geocoder failed with: IOException.")
-                Either.Left(Failure.UnknownError)
             }
-        } else {
-            Either.Left(Failure.NoGeocoderError)
+        } catch (exception: IOException) {
+            Timber.w(exception, "Geocoder failed with: IOException.")
+            Either.Left(Failure.UnknownError)
         }
     }
 }

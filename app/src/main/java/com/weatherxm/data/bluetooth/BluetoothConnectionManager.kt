@@ -25,6 +25,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.takeWhile
 import timber.log.Timber
@@ -35,6 +36,7 @@ class BluetoothConnectionManager(private val context: Context) {
         const val WRITE_CHARACTERISTIC_UUID = "34729"
         const val AT_CLAIMING_KEY_COMMAND = "AT+CLAIM_KEY=?\r\n"
         const val AT_DEV_EUI_COMMAND = "AT+DEUI=?\r\n"
+        const val AT_SET_FREQUENCY_COMMAND = "AT+BAND="
     }
 
     private lateinit var peripheral: Peripheral
@@ -139,22 +141,30 @@ class BluetoothConnectionManager(private val context: Context) {
         }
     }
 
+    private suspend fun write(command: String): Boolean {
+        return writeCharacteristic?.let {
+            try {
+                peripheral.write(it, command.toByteArray())
+                true
+            } catch (e: GattRequestRejectedException) {
+                Timber.w(e, "[$command] failed: GattRequestRejectedException")
+                false
+            }
+        } ?: false
+    }
+
     suspend fun fetchATCommand(command: String, listener: (Either<Failure, String>) -> Unit) {
         setReadWriteCharacteristic()
 
         Timber.d("[BLE Communication]: $command")
 
-        writeCharacteristic?.let {
-            try {
-                peripheral.write(it, command.toByteArray())
-            } catch (e: GattRequestRejectedException) {
-                Timber.w(e, "[$command] failed: GattRequestRejectedException")
-                listener.invoke(Either.Left(BluetoothError.ConnectionRejectedError))
-            }
+        if (!write(command)) {
+            listener.invoke(Either.Left(BluetoothError.ConnectionRejectedError))
+            return
         }
 
-        var failed = false
         readCharacteristic?.let { characteristic ->
+            var failed = false
             var fullResponse = ""
             peripheral.observe(characteristic).takeWhile {
                 val currentResponse = String(it).replace("\r", "").replace("\n", "")
@@ -175,6 +185,40 @@ class BluetoothConnectionManager(private val context: Context) {
             }.collect {
                 fullResponse += String(it)
             }
+        }
+    }
+
+    suspend fun setATCommand(command: String, listener: (Either<Failure, Unit>) -> Unit) {
+        setReadWriteCharacteristic()
+
+        Timber.d("[BLE Communication]: $command")
+
+        if (!write(command)) {
+            listener.invoke(Either.Left(BluetoothError.ConnectionRejectedError))
+            return
+        }
+
+        readCharacteristic?.let { characteristic ->
+            var isSuccess = false
+            peripheral.observe(characteristic).takeWhile {
+                val currentResponse = String(it).replace("\r", "").replace("\n", "")
+                if (currentResponse.contains("ERROR")) {
+                    Timber.e("[BLE Communication] ERROR: $currentResponse")
+                    isSuccess = false
+                    return@takeWhile false
+                } else if (currentResponse == "OK") {
+                    isSuccess = true
+                    return@takeWhile false
+                }
+                true
+            }.onCompletion {
+                Timber.d("[BLE Communication]: Success: $isSuccess")
+                if (isSuccess) {
+                    listener.invoke(Either.Right(Unit))
+                } else {
+                    listener.invoke(Either.Left(BluetoothError.ATCommandError))
+                }
+            }.collect()
         }
     }
 }

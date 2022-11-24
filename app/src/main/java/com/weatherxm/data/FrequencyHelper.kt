@@ -35,6 +35,7 @@ fun countryToFrequency(context: Context, countryCode: String): Frequency? {
     }
 }
 
+@Suppress("MagicNumber", "ComplexMethod")
 fun frequencyToHeliumBleBandValue(frequency: Frequency): Int {
     return when (frequency) {
         Frequency.EU868 -> 5

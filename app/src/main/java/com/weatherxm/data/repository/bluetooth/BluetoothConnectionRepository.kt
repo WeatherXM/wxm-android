@@ -3,6 +3,7 @@ package com.weatherxm.data.repository.bluetooth
 import android.bluetooth.BluetoothDevice
 import arrow.core.Either
 import com.weatherxm.data.Failure
+import com.weatherxm.data.Frequency
 import kotlinx.coroutines.flow.Flow
 
 interface BluetoothConnectionRepository {
@@ -12,4 +13,5 @@ interface BluetoothConnectionRepository {
     fun getPairedDevices(): List<BluetoothDevice>?
     suspend fun fetchClaimingKey(): Either<Failure, String>
     suspend fun fetchDeviceEUI(): Either<Failure, String>
+    suspend fun setFrequency(frequency: Frequency): Either<Failure, Unit>
 }

@@ -3,6 +3,7 @@ package com.weatherxm.usecases
 import android.bluetooth.BluetoothDevice
 import arrow.core.Either
 import com.weatherxm.data.Failure
+import com.weatherxm.data.Frequency
 import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -32,5 +33,9 @@ class BluetoothConnectionUseCaseImpl(
 
     override suspend fun fetchDeviceEUI(): Either<Failure, String> {
         return bluetoothConnectionRepository.fetchDeviceEUI()
+    }
+
+    override suspend fun setFrequency(frequency: Frequency): Either<Failure, Unit> {
+        return bluetoothConnectionRepository.setFrequency(frequency)
     }
 }
