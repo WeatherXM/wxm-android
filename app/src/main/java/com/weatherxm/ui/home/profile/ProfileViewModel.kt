@@ -11,7 +11,6 @@ import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import timber.log.Timber
 
 class ProfileViewModel : ViewModel(), KoinComponent {
 
@@ -19,9 +18,6 @@ class ProfileViewModel : ViewModel(), KoinComponent {
 
     private val user = MutableLiveData<Resource<User>>()
     fun user() = user
-
-    private val wallet = MutableLiveData<String?>()
-    fun wallet() = wallet
 
     private fun fetchUser() {
         viewModelScope.launch {
@@ -36,17 +32,7 @@ class ProfileViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun fetchWallet() {
-        viewModelScope.launch {
-            Timber.d("Getting wallet in the background")
-            userUseCase.getWalletAddress()
-                .map { wallet.postValue(it) }
-                .mapLeft { wallet.postValue(null) }
-        }
-    }
-
     init {
         fetchUser()
-        fetchWallet()
     }
 }
