@@ -12,9 +12,11 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
+import com.weatherxm.data.Device
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.getParcelableExtra
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.util.hideIfNot
@@ -39,8 +41,16 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 devicesViewModel.fetch()
+                val device = result.data?.getParcelableExtra(ARG_DEVICE, Device.empty())
+                if (device != null && device != Device.empty()) {
+                    model.deviceClaimed(device)
+                }
             }
         }
+
+    companion object {
+        const val ARG_DEVICE = "device"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

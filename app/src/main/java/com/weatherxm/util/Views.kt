@@ -157,6 +157,15 @@ fun TextView.setHtml(
     setText(HtmlCompat.fromHtml(html, flags), TextView.BufferType.SPANNABLE)
 }
 
+fun TextView.setHtml(
+    message: String,
+    vararg args: Any = emptyArray(),
+    flags: Int = HtmlCompat.FROM_HTML_MODE_LEGACY
+) {
+    val html = message.format(*args)
+    setText(HtmlCompat.fromHtml(html, flags), TextView.BufferType.SPANNABLE)
+}
+
 fun View.applyOnGlobalLayout(listener: () -> Unit) {
     viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
         override fun onGlobalLayout() {

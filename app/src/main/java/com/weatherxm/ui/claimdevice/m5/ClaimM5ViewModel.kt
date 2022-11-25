@@ -11,6 +11,7 @@ import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.claimdevice.result.ClaimResult
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
@@ -27,7 +28,7 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
 
     private val onNext = MutableLiveData(false)
     private val onCancel = MutableLiveData(false)
-    private val onClaimResult = MutableLiveData<Resource<String>>().apply {
+    private val onClaimResult = MutableLiveData<Resource<ClaimResult>>().apply {
         value = Resource.loading()
     }
 
@@ -65,7 +66,7 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
             claimDeviceUseCase.claimDevice(serialNumber, location.latitude, location.longitude)
                 .map {
                     Timber.d("Claimed device: $it")
-                    onClaimResult.postValue(Resource.success(it.name))
+                    onClaimResult.postValue(Resource.success(ClaimResult(device = it)))
                 }
                 .mapLeft {
                     handleFailure(it)
@@ -84,7 +85,8 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
                         is DeviceNotFound -> R.string.error_claim_not_found
                         else -> failure.getDefaultMessageResId()
                     }
-                )
+                ),
+                ClaimResult(errorCode = failure.code)
             )
         )
     }

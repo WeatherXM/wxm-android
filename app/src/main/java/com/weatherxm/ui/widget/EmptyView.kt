@@ -102,6 +102,30 @@ class EmptyView : LinearLayout {
         return this
     }
 
+    fun htmlSubtitle(
+        subtitle: String,
+        arg: String? = null,
+        linkClickedListener: (() -> Unit)? = null
+    ): EmptyView {
+        binding.subtitle.apply {
+            if (arg.isNullOrEmpty()) {
+                setHtml(subtitle)
+            } else {
+                setHtml(subtitle, arg)
+            }
+            if (linkClickedListener != null) {
+                movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                    setOnLinkClickListener { _, _ ->
+                        linkClickedListener.invoke()
+                        return@setOnLinkClickListener true
+                    }
+                }
+            }
+            visibility = View.VISIBLE
+        }
+        return this
+    }
+
     fun animation(@RawRes res: Int, loop: Boolean = true): EmptyView {
         binding.animation.apply {
             setAnimation(res)

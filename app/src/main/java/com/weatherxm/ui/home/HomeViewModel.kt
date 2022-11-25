@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.DataError
+import com.weatherxm.data.Device
 import com.weatherxm.data.SingleLiveEvent
 import com.weatherxm.usecases.UserUseCase
 import kotlinx.coroutines.launch
@@ -25,9 +26,16 @@ class HomeViewModel : ViewModel(), KoinComponent {
     private val onClaimM5Manually = SingleLiveEvent<Boolean>()
     private val onClaimHelium = SingleLiveEvent<Boolean>()
 
+    /**
+     * Needed for passing info to the fragment to notify it
+     * to start a new activity (UserDeviceActivity) for the claimed device
+     */
+    private val onDeviceClaimed = SingleLiveEvent<Device>()
+
     fun onWalletMissing() = onWalletMissing
     fun onClaimM5Manually() = onClaimM5Manually
     fun onClaimHelium() = onClaimHelium
+    fun onDeviceClaimed() = onDeviceClaimed
 
     fun getWalletMissing() {
         viewModelScope.launch {
@@ -50,5 +58,9 @@ class HomeViewModel : ViewModel(), KoinComponent {
 
     fun claimM5Manually() {
         onClaimM5Manually.postValue(true)
+    }
+
+    fun deviceClaimed(device: Device) {
+        onDeviceClaimed.postValue(device)
     }
 }

@@ -6,67 +6,71 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/margin_normal"
-            app:layout_constraintBottom_toTopOf="@+id/done"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.weatherxm.ui.widget.EmptyView
+                android:id="@+id/statusView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                app:empty_animation="@raw/anim_loading"
+                app:empty_subtitle="@string/success_claim_device"
+                app:empty_title="@string/station_claimed"
+                app:layout_constraintBottom_toTopOf="@id/viewStation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <com.weatherxm.ui.widget.EmptyView
-                    android:id="@+id/statusView"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center"
-                    android:paddingHorizontal="@dimen/padding_normal"
-                    app:empty_animation="@raw/anim_loading"
-                    app:empty_subtitle="@string/success_claim_device"
-                    app:empty_title="@string/success"
-                    app:layout_constraintBottom_toTopOf="@id/contact_support"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:visibility="visible" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/viewStation"
+                style="@style/Widget.WeatherXM.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/action_view_station"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/failureButtons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:weightSum="2"
+                app:layout_constraintBottom_toBottomOf="parent">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/contact_support"
-                    style="@style/Widget.WeatherXM.TextButton.Subtle"
-                    android:layout_width="match_parent"
+                    android:id="@+id/quit"
+                    style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/info_claim_contact_support"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:visibility="visible" />
+                    android:layout_marginEnd="@dimen/margin_normal"
+                    android:layout_weight="1"
+                    android:text="@string/action_quit_claiming"
+                    android:textAllCaps="false" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/retry"
+                    style="@style/Widget.WeatherXM.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/action_retry_claiming"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/done"
-            style="@style/Widget.WeatherXM.Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="@string/action_devices_list"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -197,12 +197,15 @@
     <string name="installation_location">Installation Location</string>
     <string name="installation_location_warning_text">Your device will be claimed, but until you properly install it, it will not get any WXM rewards.\n\nOnce you do so, you can enable your device by switching the toggle to “Installed and ready!” on your device details screen.</string>
     <string name="confirm_and_proceed">Confirm and Proceed</string>
-    <string name="success_claim_device"><![CDATA[You claimed the device: <br><b>%s</b>]]></string>
-    <string name="action_devices_list">View device list</string>
+    <string name="action_view_station">View Station</string>
     <string name="action_quit_claiming">Quit Claiming</string>
+    <string name="action_retry_claiming">Retry Claiming</string>
     <string name="location">Location</string>
     <string name="confirm_location_description">I hereby acknowledge that the location above is the correct one, and can be used to verify the eligibility of this station\’s rewards.</string>
     <string name="set_and_claim">Set and Claim</string>
+    <string name="station_claimed">Station Claimed</string>
+    <string name="claiming_station">Claiming Station…</string>
+    <string name="success_claim_device"><![CDATA[Your station is claimed under your account:<br><b>%s</b>]]></string>
 
     <!-- Claim M5 -->
     <string name="title_claim_m5_device">Claim M5 Device</string>

@@ -7,8 +7,8 @@
     <string name="support_email_subject_helium_pairing_failed">Helium Pairing Failed</string>
     <string name="support_email_body_claiming_helium">Dev EUI: %1$s\nDevice Key: %2$s\n</string>
     <string name="support_email_body_user">User account email: %1$s</string>
-    <string name="support_email_body_user_and_m5_device_info">User account email: %1$s\nDevice S/N: %2$s\n</string>
-    <string name="support_email_body_user_and_helium_device_info">User account email: %1$s\nDevice EUI: %2$s\nDevice Key: %3$s\n</string>
+    <string name="support_email_body_user_and_m5_device_info">User account email: %1$s\nDevice S/N: %2$s\nError: %3$s\n\n</string>
+    <string name="support_email_body_user_and_helium_device_info">User account email: %1$s\nDevice EUI: %2$s\nDevice Key: %3$s\nError: %4$s\n\n</string>
     <string name="support_email_recipient">support@weatherxm.com</string>
     <string name="website">https://weatherxm.com</string>
     <string name="documentation_url">https://docs.weatherxm.com</string>

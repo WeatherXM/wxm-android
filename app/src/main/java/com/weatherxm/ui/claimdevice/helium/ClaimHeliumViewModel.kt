@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.claimdevice.result.ClaimResult
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,7 +18,7 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
     private val onCancel = MutableLiveData(false)
     private val onNext = MutableLiveData(false)
     private val onBackToLocation = MutableLiveData(false)
-    private val onClaimResult = MutableLiveData<Resource<String>>().apply {
+    private val onClaimResult = MutableLiveData<Resource<ClaimResult>>().apply {
         value = Resource.loading()
     }
     private val onClaimManually = MutableLiveData(false)
@@ -74,9 +75,11 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             // TODO: API call
             delay(3000L)
-            onClaimResult.postValue(Resource.success("NEW WEATHER STATION"))
+            onClaimResult.postValue(Resource.success(null))
             delay(3000L)
-            onClaimResult.postValue(Resource.error("Oopsie"))
+            onClaimResult.postValue(
+                Resource.error("Oopsie", ClaimResult(errorCode = "Error code to include in email"))
+            )
         }
     }
 }

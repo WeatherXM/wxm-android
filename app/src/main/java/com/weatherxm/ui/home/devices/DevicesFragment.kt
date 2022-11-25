@@ -26,7 +26,6 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
     private val navigator: Navigator by inject()
     private lateinit var binding: FragmentDevicesBinding
 
-    // Register the launcher for the connect wallet activity and wait for a possible result
     private val userDeviceLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -122,6 +121,12 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                 }.show()
             } else {
                 binding.walletWarning.hide()
+            }
+        }
+
+        parentModel.onDeviceClaimed().observe(viewLifecycleOwner) {
+            it?.let {
+                onDeviceClicked(it)
             }
         }
 
