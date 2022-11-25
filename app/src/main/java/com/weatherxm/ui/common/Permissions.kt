@@ -119,9 +119,7 @@ fun FragmentActivity.checkPermissionsAndThen(
 private fun FragmentActivity.permissionsBuilder(
     vararg permissions: String
 ): PermissionRequestBuilder {
-    if (permissions.isEmpty()) {
-        throw IllegalArgumentException("You need to define at least one permission.")
-    }
+    require(permissions.isNotEmpty()) { "You need to define at least one permission." }
     return permissionsBuilder(
         firstPermission = permissions[0],
         otherPermissions = permissions.drop(1).toTypedArray()

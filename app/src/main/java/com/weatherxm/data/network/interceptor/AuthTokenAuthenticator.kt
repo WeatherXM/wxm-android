@@ -3,6 +3,7 @@ package com.weatherxm.data.network.interceptor
 import android.content.Context
 import arrow.core.Either
 import arrow.core.flatMap
+import com.weatherxm.R
 import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.map
@@ -47,7 +48,11 @@ class AuthTokenAuthenticator(
                             runBlocking {
                                 authService.logout()
                                 cacheService.clearAll()
-                                navigator.showLogin(context, true)
+                                navigator.showLogin(
+                                    context,
+                                    true,
+                                    context.getString(R.string.session_expired)
+                                )
                             }
                         }
                         .orNull()

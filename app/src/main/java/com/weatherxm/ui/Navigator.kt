@@ -27,6 +27,7 @@ import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.explorer.ExplorerActivity
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
+import com.weatherxm.ui.login.LoginActivity.Companion.ARG_USER_MESSAGE
 import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.publicdevicedetail.PublicDeviceDetailFragment
@@ -53,13 +54,20 @@ class Navigator {
         )
     }
 
-    fun showLogin(context: Context, isForcedLogout: Boolean = false) {
+    fun showLogin(
+        context: Context,
+        isForcedLogout: Boolean = false,
+        userMessage: String? = null
+    ) {
         val intentFlags = if (isForcedLogout) {
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         } else {
             Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
-        context.startActivity(Intent(context, LoginActivity::class.java).addFlags(intentFlags))
+        context.startActivity(
+            Intent(context, LoginActivity::class.java).addFlags(intentFlags)
+                .putExtra(ARG_USER_MESSAGE, userMessage)
+        )
     }
 
     fun showSignup(context: Context) {

@@ -45,4 +45,6 @@
     <dimen name="reward_slider_track_height">16dp</dimen>
 
     <dimen name="claiming_flow_button_radius">5dp</dimen>
+
+    <dimen name="elevation_small">4dp</dimen>
 </resources>

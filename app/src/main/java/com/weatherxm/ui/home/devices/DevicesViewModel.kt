@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Device
-import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.util.UIErrors.getDefaultMessage
@@ -51,17 +50,13 @@ class DevicesViewModel : ViewModel(), KoinComponent {
                     this@DevicesViewModel.devices.postValue(Resource.success(devices))
                 }
                 .mapLeft {
-                    handleFailure(it)
+                    this@DevicesViewModel.devices.postValue(Resource.error(it.getDefaultMessage()))
                 }
         }
     }
 
     fun onScroll(dy: Int) {
         showOverlayViews.postValue(dy <= 0)
-    }
-
-    private fun handleFailure(failure: Failure) {
-        devices.postValue(Resource.error(failure.getDefaultMessage()))
     }
 
     init {

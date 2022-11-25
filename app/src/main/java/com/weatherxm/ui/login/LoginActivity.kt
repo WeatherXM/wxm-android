@@ -28,6 +28,10 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
 
     private var snackbar: Snackbar? = null
 
+    companion object {
+        const val ARG_USER_MESSAGE = "user_message"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -37,6 +41,10 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
+        }
+
+        intent?.extras?.getString(ARG_USER_MESSAGE)?.let {
+            showSnackbarMessage(it)
         }
 
         binding.username.onTextChanged {
