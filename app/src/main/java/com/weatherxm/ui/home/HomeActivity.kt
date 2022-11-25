@@ -19,7 +19,6 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.ClaimDeviceActivity
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
-import com.weatherxm.ui.home.profile.ProfileViewModel
 import com.weatherxm.util.hideIfNot
 import com.weatherxm.util.showIfNot
 import dev.chrisbanes.insetter.applyInsetter
@@ -31,9 +30,9 @@ import timber.log.Timber
 class HomeActivity : AppCompatActivity(), KoinComponent {
     private val navigator: Navigator by inject()
     private lateinit var binding: ActivityHomeBinding
+    private val model: HomeViewModel by viewModels()
     private val explorerModel: ExplorerViewModel by viewModels()
     private val devicesViewModel: DevicesViewModel by viewModels()
-    private val profileViewModel: ProfileViewModel by viewModels()
 
     private var snackbar: Snackbar? = null
     private lateinit var navController: NavController
@@ -118,8 +117,8 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             claimDeviceLauncher.launch(Intent(this, ClaimDeviceActivity::class.java))
         }
 
-        profileViewModel.wallet().observe(this) {
-            handleBadge(!it.isNullOrEmpty())
+        model.onWalletMissing().observe(this) {
+            handleBadge(it)
         }
 
         // Disable BottomNavigationView bottom padding, added by default, and add margin
@@ -165,8 +164,8 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         }
     }
 
-    private fun handleBadge(hasWallet: Boolean) {
-        if (!hasWallet) {
+    private fun handleBadge(missingWallet: Boolean) {
+        if (missingWallet) {
             binding.navView.getOrCreateBadge(R.id.navigation_profile)
         } else {
             binding.navView.removeBadge(R.id.navigation_profile)

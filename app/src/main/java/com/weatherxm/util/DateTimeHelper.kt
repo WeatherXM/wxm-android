@@ -124,9 +124,7 @@ object DateTimeHelper : KoinComponent {
     }
 
     fun getDateRangeFromToday(n: Int, includeToday: Boolean = true): LocalDateRange {
-        if (n == 0) {
-            throw IllegalArgumentException("n must be a non-zero negative or positive number")
-        }
+        require(n != 0) { "n must be a non-zero negative or positive number" }
         val today = LocalDate.now()
         val offset = if (includeToday) 0L else 1L
         val start = if (n > 0) today.plusDays(offset) else today.minusDays(n.absoluteValue + offset)

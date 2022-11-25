@@ -14,15 +14,15 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.home.profile.ProfileViewModel
+import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
 
+    private val parentModel: HomeViewModel by activityViewModels()
     private val model: DevicesViewModel by activityViewModels()
-    private val profileViewModel: ProfileViewModel by activityViewModels()
     private val navigator: Navigator by inject()
     private lateinit var binding: FragmentDevicesBinding
 
@@ -38,7 +38,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
     private val connectWalletLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                profileViewModel.fetchWallet()
+                parentModel.setWalletNotMissing()
             }
         }
 
@@ -72,12 +72,8 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                         adapter.submitList(devicesResource.data)
                         adapter.notifyDataSetChanged()
                         binding.recycler.visibility = View.VISIBLE
-                        if (profileViewModel.wallet().value.isNullOrEmpty()) {
-                            binding.walletWarning.action(getString(R.string.add_wallet_now)) {
-                                navigator.showConnectWallet(connectWalletLauncher, this)
-                            }.show()
-                        }
                         binding.empty.visibility = View.GONE
+                        parentModel.getWalletMissing()
                     } else {
                         binding.empty.animation(R.raw.anim_empty_devices, false)
                         binding.empty.title(getString(R.string.empty_weather_stations))
@@ -121,8 +117,14 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
             }
         }
 
-        profileViewModel.wallet().observe(viewLifecycleOwner) {
-            if (!it.isNullOrEmpty()) binding.walletWarning.visibility = View.GONE
+        parentModel.onWalletMissing().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.walletWarning.action(getString(R.string.add_wallet_now)) {
+                    navigator.showConnectWallet(connectWalletLauncher, this)
+                }.show()
+            } else {
+                binding.walletWarning.hide()
+            }
         }
 
         return binding.root
