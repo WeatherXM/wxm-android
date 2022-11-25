@@ -26,8 +26,8 @@ android {
         applicationId "com.weatherxm.app"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 28
-        versionName "3.2.6"
+        versionCode 29
+        versionName "3.2.7"
 
         // Resource value fields
         resValue("string", "mapbox_access_token", "$MAPBOX_ACCESS_TOKEN")
@@ -232,7 +232,7 @@ dependencies {
     implementation "com.google.android.material:material:1.7.0"
 
     // Google Play Services for Location & Maps
-    implementation "com.google.android.gms:play-services-location:21.0.1"
+    implementation "com.google.android.gms:play-services-location:20.0.0"
 
     // Logging
     implementation "com.jakewharton.timber:timber:5.0.1"
