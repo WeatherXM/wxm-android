@@ -184,12 +184,11 @@
 
 
     <!-- Claim device -->
-    <string name="claim_device_info_text"><![CDATA[<h5>Step 1</h5>Swipe left on your WXM device\'s screen and press \"Configure WiFi\" to connect the device to your home WiFi.<h5>Step 2</h5>Plug the GPS antenna into your WXM device, place the antenna near a window and power up the device via USB.<h5>Step 3</h5>Press <b>NEXT</b> to claim your device.<br/><br/>Don\'t have a WXM device yet? Get one on <a href=\"https://weatherxm.com\">weatherxm.com</a>.]]></string>
     <string name="action_claim">Claim</string>
     <string name="info_claim_contact_support">Trouble claiming your device? Contact our support team.</string>
     <string name="device_serial_number_title">Device Serial Number</string>
     <string name="device_serial_number_hint">Enter the device\'s serial number</string>
-    <string name="device_serial_number_instructions">The S/N is 18 characters long and looks like this: &lt;strong&gt;12:34:56:78:9A:BC:DE:F0:12&lt;/strong&gt;. You  can find it on your M5 device\'s screen. Please type only the letters and numbers.</string>
+    <string name="device_serial_number_instructions"><![CDATA[Device\'s serial number can be found in the M5 (shown after automatic reboot, or in the settings screen - swipe right to view). You can also find this information on the box of your station.<br><br>It is 18 characters long and looks like this: <strong>12:34:56:78:9A:BC:DE:F0:12</strong>. Please type only the letters and numbers.]]></string>
     <string name="location_of_installation">Location of Installation</string>
     <string name="installation_toggle_unchecked">Not yet, will install at a later time!</string>
     <string name="installation_toggle_checked">Installed and ready!</string>
@@ -208,11 +207,18 @@
     <string name="success_claim_device"><![CDATA[Your station is claimed under your account:<br><b>%s</b>]]></string>
 
     <!-- Claim M5 -->
-    <string name="title_claim_m5_device">Claim M5 Device</string>
-    <string name="instructions">Instructions</string>
+    <string name="title_claim_ws1000_device">Claim WS1000 Device</string>
+    <string name="connection">Connection</string>
+    <string name="verify_your_device">Verify Your Device</string>
+    <string name="action_connect_m5_wifi">I\'ve Connect My M5</string>
+    <string name="connect_m5_wifi">Connect M5 via WiFi</string>
+    <string name="connect_m5_wifi_first_step"><![CDATA[Open your phone\'s WiFi manager, and connect to the “<b>WXM M5 XXX</b>” network (this is your M5 device).]]></string>
+    <string name="connect_m5_wifi_second_step"><![CDATA[After connecting to the M5, open your browser, and type <b>10.10.1.1</b> to view the available networks page.]]></string>
+    <string name="connect_m5_wifi_third_step"><![CDATA[Choose the WiFi network you’d like to connect your M5 to and transmit data.]]></string>
+    <string name="connect_m5_wifi_watch_video">If you\’re having difficulty completing this step, make sure you watch the instructional video below!</string>
 
     <!-- Claim Helium -->
-    <string name="title_claim_helium_device">Claim Helium Device</string>
+    <string name="title_claim_ws2000_device">Claim WS2000 Device</string>
     <string name="verify_device">Verify Device</string>
     <string name="dev_eui">Dev EUI</string>
     <string name="enter_dev_eui">Enter dev EUI</string>

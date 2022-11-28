@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:navigationIcon="@drawable/ic_back"
-            app:title="@string/title_claim_m5_device" />
+            app:title="@string/title_claim_ws1000_device" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -29,12 +29,12 @@
         app:layout_constraintTop_toBottomOf="@id/app_bar">
 
         <com.google.android.material.chip.Chip
-            android:id="@+id/instructions"
+            android:id="@+id/connection"
             style="@style/Widget.WeatherXM.Chip.Navigation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/instructions"
+            android:text="@string/connection"
             app:chipIcon="@drawable/ic_one_filled" />
 
         <com.google.android.material.chip.Chip

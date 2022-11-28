@@ -95,7 +95,7 @@ class ClaimM5Activity : AppCompatActivity() {
 
             when (pager.currentItem) {
                 PAGE_SERIAL_NUMBER -> {
-                    instructions.setSuccessChip()
+                    connection.setSuccessChip()
                     verify.setIcon(R.drawable.ic_two_filled)
                 }
                 PAGE_LOCATION -> {

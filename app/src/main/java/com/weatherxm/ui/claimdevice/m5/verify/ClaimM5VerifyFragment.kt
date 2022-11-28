@@ -13,7 +13,6 @@ import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimM5VerifyBinding
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.common.unmask
-import com.weatherxm.util.setHtml
 
 class ClaimM5VerifyFragment : Fragment() {
     private val parentModel: ClaimM5ViewModel by activityViewModels()
@@ -32,7 +31,7 @@ class ClaimM5VerifyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.instructions.setHtml(R.string.device_serial_number_instructions)
+        binding.infoCard.htmlMessage(R.string.device_serial_number_instructions)
 
         // Convert typed characters to uppercase
         binding.serialNumber.filters = arrayOf(InputFilter.AllCaps())
@@ -69,10 +68,6 @@ class ClaimM5VerifyFragment : Fragment() {
                 validateAndSetSerial()
             }
             true
-        }
-
-        binding.cancel.setOnClickListener {
-            parentModel.cancel()
         }
 
         binding.verify.setOnClickListener {

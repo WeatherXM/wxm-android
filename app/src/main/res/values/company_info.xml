@@ -19,4 +19,5 @@
     <string name="short_app_survey_url">https://docs.google.com/forms/d/e/1FAIpQLSc1T-odUwpXa01nODavwEtLgO00AfPxqfrdhbn_G5Lss0dD2w/viewform?usp=pp_url</string>
     <string name="delete_account_survey_url">https://docs.google.com/forms/d/e/1FAIpQLSdWPLpyUx2fNIiohQ-XaskbkZuoUSqYhwIkGGjupJ7IDEX_aA/viewform?usp=pp_url</string>
     <string name="market_url">market://details?id=%s</string>
+    <string name="m5_connect_wifi_instructional_video">https://www.youtube.com/watch?v=sUJEwuFq1CE</string>
 </resources>

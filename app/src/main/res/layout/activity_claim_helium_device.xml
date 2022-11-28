@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:navigationIcon="@drawable/ic_back"
-            app:title="@string/title_claim_helium_device" />
+            app:title="@string/title_claim_ws2000_device" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
