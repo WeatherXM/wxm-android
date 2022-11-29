@@ -18,6 +18,7 @@ import com.weatherxm.data.datasource.CacheAddressSearchDataSource
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
+import com.weatherxm.data.otherFrequencies
 import timber.log.Timber
 
 interface AddressRepository {
@@ -105,11 +106,7 @@ class AddressRepositoryImpl(
 
     override suspend fun getCountryAndFrequencies(location: Location): CountryAndFrequencies {
         return networkAddress.getCountryAndFrequencies(location).fold({
-            CountryAndFrequencies(
-                null,
-                Frequency.US915,
-                listOf(Frequency.EU868, Frequency.AU915, Frequency.CN470)
-            )
+            CountryAndFrequencies(null, Frequency.US915, otherFrequencies(Frequency.US915))
         }, { it })
     }
 
