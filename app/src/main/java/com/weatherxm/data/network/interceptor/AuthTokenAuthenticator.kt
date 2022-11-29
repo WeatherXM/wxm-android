@@ -38,7 +38,6 @@ class AuthTokenAuthenticator(
 
         Timber.d("[${request.path()}] Status: ${response.code}. Invoking authenticator.")
 
-        // TODO: Is runBlocking correct here?
         return runBlocking {
             if (!this@AuthTokenAuthenticator::refreshJob.isInitialized || !refreshJob.isActive) {
                 refreshJob = async {

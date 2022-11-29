@@ -6,7 +6,6 @@ import com.weatherxm.ui.notification.NotificationActivity
 import no.nordicsemi.android.dfu.DfuBaseService
 
 class DfuService : DfuBaseService() {
-    // TODO: Use appropriate notification target class
     override fun getNotificationTarget(): Class<out Activity> {
         /*
          * As a target activity the NotificationActivity is returned, not the MainActivity.
