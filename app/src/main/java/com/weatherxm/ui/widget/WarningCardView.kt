@@ -77,18 +77,38 @@ class WarningCardView : LinearLayout {
         return this
     }
 
+    fun hideCloseButton(): WarningCardView {
+        binding.closeButton.visibility = GONE
+        return this
+    }
+
     fun action(
         label: String,
         endIcon: Drawable? = null,
+        actionWithBorders: Boolean = false,
         listener: OnClickListener
     ): WarningCardView {
-        with(binding.action) {
-            text = label
-            setOnClickListener(listener)
-            visibility = VISIBLE
-            if (endIcon != null) {
-                icon = endIcon
-                iconGravity = ICON_GRAVITY_END
+        if (actionWithBorders) {
+            with(binding.actionOutline) {
+                text = label
+                setOnClickListener(listener)
+                if (endIcon != null) {
+                    icon = endIcon
+                    iconGravity = ICON_GRAVITY_END
+                }
+                binding.action.visibility = GONE
+                visibility = VISIBLE
+            }
+        } else {
+            with(binding.action) {
+                text = label
+                setOnClickListener(listener)
+                if (endIcon != null) {
+                    icon = endIcon
+                    iconGravity = ICON_GRAVITY_END
+                }
+                binding.actionOutline.visibility = GONE
+                visibility = VISIBLE
             }
         }
         return this

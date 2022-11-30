@@ -14,6 +14,8 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.getParcelableExtra
+import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity.Companion.ARG_DEVICE
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
@@ -30,6 +32,16 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 model.fetch()
+            }
+        }
+
+    private val updateOTADeviceLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val device = result.data?.getParcelableExtra(ARG_DEVICE, Device.empty())
+                if (device != null && device != Device.empty()) {
+                    navigator.showUserDevice(userDeviceLauncher, this, device)
+                }
             }
         }
 
@@ -135,5 +147,9 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
 
     override fun onDeviceClicked(device: Device) {
         navigator.showUserDevice(userDeviceLauncher, this, device)
+    }
+
+    override fun onWarningActionClicked(device: Device) {
+        navigator.showDeviceHeliumOTA(updateOTADeviceLauncher, this, device)
     }
 }

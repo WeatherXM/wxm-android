@@ -64,6 +64,18 @@
                     app:layout_constraintTop_toBottomOf="@id/message"
                     tools:text="Do something"
                     tools:visibility="visible" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/actionOutline"
+                    style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:textColor="@color/light_primary"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/message"
+                    tools:text="Do something" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.google.android.material.button.MaterialButton

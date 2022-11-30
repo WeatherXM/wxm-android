@@ -24,6 +24,16 @@ data class CountryAndFrequencies(
     val otherFrequencies: List<Frequency>,
 ) : Parcelable
 
+@Keep
+@JsonClass(generateAdapter = true)
+data class OTAState(
+    val state: BluetoothOTAState,
+    val progress: Int,
+    var error: Int? = null,
+    var errorType: Int? = null,
+    var message: String? = null
+)
+
 enum class Frequency {
     EU868,
     US915,
@@ -36,4 +46,11 @@ enum class Frequency {
     AS923_2,
     AS923_3,
     AS923_4
+}
+
+enum class BluetoothOTAState {
+    IN_PROGRESS,
+    FAILED,
+    ABORTED,
+    COMPLETED
 }

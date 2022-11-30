@@ -19,6 +19,8 @@
     <string name="action_reset">Reset</string>
     <string name="action_select">Select</string>
     <string name="action_have_reset_device">I\’ve Reset My Device</string>
+    <string name="action_pair_device">Pair Device</string>
+    <string name="action_retry_updating">Retry Updating</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="action_scan_qr">Scan QR Code</string>
@@ -61,6 +63,29 @@
     <string name="unknown">Unknown</string>
     <string name="empty_weather_stations">Oh, no! No WXM devices yet?</string>
     <string name="displayed_times">All displayed times are in %s timezone.</string>
+
+    <!-- Update (Bluetooth OTA) Station -->
+    <string name="updated_needed_title">Station must be updated</string>
+    <string name="updated_needed_desc">In order for your station to keep operating normally, and receive WXM rewards, you must update the station.</string>
+    <string name="update_station_now">Update Station Now</string>
+    <string name="update_station">Update Station</string>
+    <string name="connecting_to_station">Connecting to Station…</string>
+    <string name="downloading_update">Downloading Update…</string>
+    <string name="downloading_update_subtitle"><![CDATA[Update download in progress.<br><b>Do not switch off the Application!</b>]]></string>
+    <string name="updating_station_subtitle"><![CDATA[<b>Make sure you don\'t move away from your station as you might lose Bluetooth connection!</b>]]></string>
+    <string name="updating_station">Updating Station…</string>
+    <string name="connect_to_station">Connect to Station</string>
+    <string name="download_firmware_update">Download Firmware Update</string>
+    <string name="install_firmware_update">Install Firmware Update</string>
+    <string name="station_not_in_range">Station not in range</string>
+    <string name="station_not_in_range_subtitle">We couldn\’t reach your station. Please make sure the station is powered up, and you are close enough for the Bluetooth connection to work.</string>
+    <string name="station_not_yet_paired">Station not yet paired</string>
+    <string name="station_not_yet_paired_message">In order to be able to update your station, you must first pair it via Bluetooth. To do so, please follow the instructions below.</string>
+    <string name="tap_pair_device_button"><![CDATA[Tap the <b>\"Pair Device\"</b> button below.]]></string>
+    <string name="station_updated">Station Updated</string>
+    <string name="station_updated_subtitle">Your station is updated to the latest Firmware!</string>
+    <string name="update_failed">Update Failed</string>
+    <string name="update_failed_message"><![CDATA[Updating failed, please try again! If the problem persists, please contact our support team at <b><a>support@weatherxm.com</a></b>.<br><br>Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
 
     <!-- Update Prompt -->
     <string name="title_update_prompt">New Update</string>

@@ -1,9 +1,9 @@
-package com.weatherxm.data.datasource.bluetooth
+package com.weatherxm.usecases
 
 import android.net.Uri
 import com.weatherxm.data.OTAState
 import kotlinx.coroutines.flow.Flow
 
-interface BluetoothUpdaterDataSource {
+interface BluetoothUpdaterUseCase {
     fun update(updatePackage: Uri): Flow<OTAState>
 }

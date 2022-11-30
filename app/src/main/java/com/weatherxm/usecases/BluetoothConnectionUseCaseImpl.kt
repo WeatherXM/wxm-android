@@ -11,7 +11,7 @@ class BluetoothConnectionUseCaseImpl(
     private val bluetoothConnectionRepository: BluetoothConnectionRepository
 ) : BluetoothConnectionUseCase {
 
-    override fun getPairedDevices(): List<BluetoothDevice>? {
+    override fun getPairedDevices(): List<BluetoothDevice> {
         return bluetoothConnectionRepository.getPairedDevices()
     }
 

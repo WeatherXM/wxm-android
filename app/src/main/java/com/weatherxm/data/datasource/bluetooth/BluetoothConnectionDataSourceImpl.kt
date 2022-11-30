@@ -26,10 +26,10 @@ class BluetoothConnectionDataSourceImpl(
      * Suppress MissingPermission as we will call this function only after we have it granted
      */
     @SuppressLint("MissingPermission")
-    override fun getPairedDevices(): List<BluetoothDevice>? {
+    override fun getPairedDevices(): List<BluetoothDevice> {
         return bluetoothAdapter?.bondedDevices?.filter {
             it.name.contains("WeatherXM")
-        }
+        } ?: mutableListOf()
     }
 
     override fun setPeripheral(address: String): Either<Failure, Unit> {

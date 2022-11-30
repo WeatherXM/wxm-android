@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import com.juul.kable.identifier
+import com.weatherxm.data.BluetoothOTAState
+import com.weatherxm.data.OTAState
 import com.weatherxm.service.DfuService
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
@@ -20,13 +22,13 @@ class BluetoothUpdater(
 ) : KoinComponent {
     private lateinit var dfuServiceInitiator: DfuServiceInitiator
 
-    private val progress = MutableSharedFlow<Int>(
+    private val onOTAState = MutableSharedFlow<OTAState>(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
 
     @Suppress("MagicNumber")
-    fun setUpdater() {
+    private fun setUpdater() {
         dfuServiceInitiator =
             DfuServiceInitiator(bluetoothConnectionManager.getPeripheral().identifier)
                 .setKeepBond(true)
@@ -65,10 +67,10 @@ class BluetoothUpdater(
                     Timber.d(
                         "[BLE Updater]: onProgressChanged: $deviceAddress, " +
                             "percent: $percent%, speed: $speed, avgSpeed: $avgSpeed, " +
-                                "currentPart: $currentPart, partsTotal: $partsTotal"
-                        )
-                        progress.tryEmit(percent)
-                    }
+                            "currentPart: $currentPart, partsTotal: $partsTotal"
+                    )
+                    onOTAState.tryEmit(OTAState(BluetoothOTAState.IN_PROGRESS, percent))
+                }
 
                     override fun onFirmwareValidating(deviceAddress: String) {
                         Timber.d("[BLE Updater]: onFirmwareValidating: $deviceAddress")
@@ -84,10 +86,12 @@ class BluetoothUpdater(
 
                     override fun onDfuCompleted(deviceAddress: String) {
                         Timber.d("[BLE Updater]: onDfuCompleted: $deviceAddress")
+                        onOTAState.tryEmit(OTAState(BluetoothOTAState.COMPLETED, 100))
                     }
 
                     override fun onDfuAborted(deviceAddress: String) {
                         Timber.d("[BLE Updater]: onDfuAborted: $deviceAddress")
+                        onOTAState.tryEmit(OTAState(BluetoothOTAState.ABORTED, 0))
                     }
 
                     override fun onError(
@@ -96,15 +100,26 @@ class BluetoothUpdater(
                         errorType: Int,
                         message: String?
                     ) {
-                        Timber.w(
+                        Timber.e(
                             "[BLE Updater]: onError: $deviceAddress, " +
                                 "error: $error, errorType: $errorType, message: $message"
                         )
+                        onOTAState.tryEmit(
+                            OTAState(
+                                BluetoothOTAState.FAILED,
+                                0,
+                                error,
+                                errorType,
+                                message
+                            )
+                        )
                     }
-                })
+            })
     }
 
-    fun update(updatePackage: Uri): Flow<Int> {
+    fun update(updatePackage: Uri): Flow<OTAState> {
+        setUpdater()
+
         /*
         * This is needed because of crashing. More:
         * https://github.com/NordicSemiconductor/Android-DFU-Library/issues/266
@@ -119,6 +134,6 @@ class BluetoothUpdater(
 
         dfuServiceInitiator.setZip(updatePackage)
         dfuServiceInitiator.start(context, DfuService::class.java)
-        return progress
+        return onOTAState
     }
 }

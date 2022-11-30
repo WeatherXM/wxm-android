@@ -92,7 +92,7 @@ class BluetoothConnectionManager(private val context: Context) {
             Either.Right(Unit)
         } catch (e: IllegalArgumentException) {
             Timber.w(e, "Creation of peripheral failed: $address")
-            Either.Left(BluetoothError.PeripheralCreationError)
+            Either.Left(BluetoothError.PeripheralCreationError())
         }
     }
 
@@ -111,16 +111,16 @@ class BluetoothConnectionManager(private val context: Context) {
             Either.Right(Unit)
         } catch (e: ConnectionRejectedException) {
             Timber.w(e, "Connection to peripheral failed with ConnectionRejectedException")
-            Either.Left(BluetoothError.ConnectionRejectedError)
+            Either.Left(BluetoothError.ConnectionRejectedError())
         } catch (e: CancellationException) {
             Timber.w(e, "Connection to peripheral failed with CancellationException")
-            Either.Left(BluetoothError.CancellationError)
+            Either.Left(BluetoothError.CancellationError())
         } catch (e: BluetoothDisabledException) {
             Timber.w(e, "Connection to peripheral failed with BluetoothDisabledException")
-            Either.Left(BluetoothError.BluetoothDisabledException)
+            Either.Left(BluetoothError.BluetoothDisabledException())
         } catch (e: ConnectionLostException) {
             Timber.w(e, "Connection to peripheral failed with ConnectionLostException")
-            Either.Left(BluetoothError.ConnectionLostException)
+            Either.Left(BluetoothError.ConnectionLostException())
         }
     }
 
@@ -159,7 +159,7 @@ class BluetoothConnectionManager(private val context: Context) {
         Timber.d("[BLE Communication]: $command")
 
         if (!write(command)) {
-            listener.invoke(Either.Left(BluetoothError.ConnectionRejectedError))
+            listener.invoke(Either.Left(BluetoothError.ConnectionRejectedError()))
             return
         }
 
@@ -194,7 +194,7 @@ class BluetoothConnectionManager(private val context: Context) {
         Timber.d("[BLE Communication]: $command")
 
         if (!write(command)) {
-            listener.invoke(Either.Left(BluetoothError.ConnectionRejectedError))
+            listener.invoke(Either.Left(BluetoothError.ConnectionRejectedError()))
             return
         }
 

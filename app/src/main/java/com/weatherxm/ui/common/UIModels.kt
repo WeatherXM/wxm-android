@@ -98,7 +98,13 @@ data class ScannedDevice(
     val address: String,
     val name: String?,
     val type: DeviceType = DeviceType.HELIUM
-) : Parcelable
+) : Parcelable {
+    companion object {
+        fun empty() = ScannedDevice(
+            "", ""
+        )
+    }
+}
 
 enum class DeviceType {
     M5_WIFI,

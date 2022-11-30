@@ -1,7 +1,6 @@
 package com.weatherxm.ui.claimdevice.helium.pair
 
 import android.bluetooth.BluetoothDevice
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,14 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Resource
-import com.weatherxm.data.datasource.bluetooth.BluetoothUpdaterDataSource
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.ResourcesHelper
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -27,9 +24,6 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     private val scanDevicesUseCase: BluetoothScannerUseCase by inject()
     private val connectionUseCase: BluetoothConnectionUseCase by inject()
     private var scannedDevices: MutableList<ScannedDevice> = mutableListOf()
-
-    // TODO: Remove on PR
-    private val updater: BluetoothUpdaterDataSource by inject()
 
     private val onBLEError = MutableLiveData<UIError>()
     private val onBLEDevEUI = MutableLiveData<String>()
@@ -79,14 +73,6 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    // TODO: Remove this on PR
-    fun update(uri: Uri) {
-        GlobalScope.launch {
-            updater.setUpdater()
-            updater.update(uri)
-        }
-    }
-
     private fun connectToPeripheral() {
         viewModelScope.launch {
             connectionUseCase.connectToPeripheral().tapLeft {
@@ -108,9 +94,9 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
                     }
                 })
             }.tap {
-                if (connectionUseCase.getPairedDevices()?.any {
+                if (connectionUseCase.getPairedDevices().any {
                         it.address == selectedDeviceMacAddress
-                    } == true
+                    }
                 ) {
                     fetchDeviceEUI()
                 }

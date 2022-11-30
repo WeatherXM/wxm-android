@@ -12,6 +12,11 @@ sealed class Failure(val code: String? = null) {
         const val CODE_NO_CONNECTION = "NO_CONNECTION"
         const val CODE_UNKNOWN = "UNKNOWN"
         const val CODE_JSON = "PARSE_JSON"
+        const val CODE_BL_REJECTED = "BLUETOOTH_REJECTED"
+        const val CODE_BL_CONNECTION_LOST = "BLUETOOTH_CONNECTION_LOST"
+        const val CODE_BL_DISABLED = "BLUETOOTH_DISABLED"
+        const val CODE_BL_CANCELLATION = "BLUETOOTH_CANCELLATION"
+        const val CODE_PERIPHERAL_ERROR = "PERIPHERAL_ERROR"
     }
 
     object NoGeocoderError : Failure()
@@ -30,16 +35,17 @@ sealed class NetworkError(code: String?) : Failure(code) {
 }
 
 @Keep
-sealed class BluetoothError(val message: String? = null) : Failure() {
+sealed class BluetoothError(code: String? = null, val message: String? = null) : Failure(code) {
     object ScanningError : BluetoothError()
-    object PeripheralCreationError : BluetoothError()
-    object ConnectionRejectedError : BluetoothError()
-    object CancellationError : BluetoothError()
-    object ConnectionLostException : BluetoothError()
-    object BluetoothDisabledException : BluetoothError()
+    object DeviceNotFound : BluetoothError()
     object ATCommandError : BluetoothError()
     object DfuAborted : BluetoothError()
 
+    class PeripheralCreationError(code: String? = CODE_PERIPHERAL_ERROR) : BluetoothError(code)
+    class ConnectionRejectedError(code: String? = CODE_BL_REJECTED) : BluetoothError(code)
+    class CancellationError(code: String? = CODE_BL_CANCELLATION) : BluetoothError(code)
+    class ConnectionLostException(code: String? = CODE_BL_CONNECTION_LOST) : BluetoothError(code)
+    class BluetoothDisabledException(code: String? = CODE_BL_DISABLED) : BluetoothError(code)
     class DfuUpdateError(message: String? = null) : BluetoothError(message)
 
     sealed class ProvisionError : BluetoothError() {

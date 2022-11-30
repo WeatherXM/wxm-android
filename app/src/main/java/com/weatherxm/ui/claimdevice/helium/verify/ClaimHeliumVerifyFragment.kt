@@ -17,6 +17,9 @@ import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.util.onTextChanged
 import org.koin.android.ext.android.inject
 
+/**
+ * TODO: Obsolete, remove it if we don't use manual claiming flow.
+ */
 class ClaimHeliumVerifyFragment : Fragment() {
     private val parentModel: ClaimHeliumViewModel by activityViewModels()
     private val model: ClaimHeliumVerifyViewModel by activityViewModels()
@@ -110,7 +113,7 @@ class ClaimHeliumVerifyFragment : Fragment() {
                 binding.devKey.text.toString().trim()
             )
         ) {
-            navigator.showHeliumPairingStatus(requireActivity().supportFragmentManager)
+        //    navigator.showHeliumPairingStatus(requireActivity().supportFragmentManager)
         }
     }
 }

@@ -107,15 +107,18 @@ import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.data.repository.WeatherForecastRepositoryImpl
 import com.weatherxm.data.repository.WeatherHistoryRepository
 import com.weatherxm.data.repository.WeatherHistoryRepositoryImpl
-import com.weatherxm.data.services.CacheService
 import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepository
 import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepositoryImpl
 import com.weatherxm.data.repository.bluetooth.BluetoothProvisionerRepository
 import com.weatherxm.data.repository.bluetooth.BluetoothProvisionerRepositoryImpl
 import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepository
 import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepositoryImpl
+import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepository
+import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepositoryImpl
+import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.deviceforecast.ForecastViewModel
+import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
 import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
 import com.weatherxm.ui.explorer.UIHexJsonAdapter
 import com.weatherxm.ui.userdevice.UserDeviceViewModel
@@ -125,6 +128,8 @@ import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothConnectionUseCaseImpl
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCaseImpl
+import com.weatherxm.usecases.BluetoothUpdaterUseCase
+import com.weatherxm.usecases.BluetoothUpdaterUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCaseImpl
 import com.weatherxm.usecases.ConnectWalletUseCase
@@ -363,6 +368,9 @@ private val repositories = module {
     single<BluetoothProvisionerRepository> {
         BluetoothProvisionerRepositoryImpl(get())
     }
+    single<BluetoothUpdaterRepository> {
+        BluetoothUpdaterRepositoryImpl(get())
+    }
 }
 
 private val usecases = module {
@@ -416,6 +424,9 @@ private val usecases = module {
     }
     single<BluetoothConnectionUseCase> {
         BluetoothConnectionUseCaseImpl(get())
+    }
+    single<BluetoothUpdaterUseCase> {
+        BluetoothUpdaterUseCaseImpl(get())
     }
 }
 
@@ -652,6 +663,9 @@ private val viewmodels = module {
     }
     viewModel { params ->
         HistoryChartsViewModel(device = params.get())
+    }
+    viewModel { params ->
+        DeviceHeliumOTAViewModel(device = params.get())
     }
 }
 

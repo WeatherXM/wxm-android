@@ -15,14 +15,13 @@ import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
-import com.weatherxm.ui.claimdevice.helium.pairingstatus.ClaimHeliumPairingStatusFragment
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
-import com.weatherxm.usecases.selectdevicetype.SelectDeviceTypeFragment
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
 import com.weatherxm.ui.deviceforecast.ForecastActivity
+import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.explorer.ExplorerActivity
 import com.weatherxm.ui.home.HomeActivity
@@ -40,6 +39,7 @@ import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.token.TokenActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.ui.userdevice.UserDeviceActivity
+import com.weatherxm.usecases.selectdevicetype.SelectDeviceTypeFragment
 import timber.log.Timber
 
 
@@ -275,9 +275,18 @@ class Navigator {
         )
     }
 
-    fun showHeliumPairingStatus(fragmentManager: FragmentManager) {
-        val modalBottomSheet = ClaimHeliumPairingStatusFragment()
-        modalBottomSheet.show(fragmentManager, ClaimHeliumPairingStatusFragment.TAG)
+    fun showDeviceHeliumOTA(
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        fragment: Fragment,
+        device: Device?
+    ) {
+        fragment.context?.let {
+            activityResultLauncher.launch(
+                Intent(it, DeviceHeliumOTAActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(DeviceHeliumOTAActivity.ARG_DEVICE, device)
+            )
+        }
     }
 
     fun sendSupportEmail(

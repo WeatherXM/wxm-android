@@ -11,7 +11,7 @@ class BluetoothConnectionRepositoryImpl(
     private val dataSource: BluetoothConnectionDataSource
 ) : BluetoothConnectionRepository {
 
-    override fun getPairedDevices(): List<BluetoothDevice>? {
+    override fun getPairedDevices(): List<BluetoothDevice> {
         return dataSource.getPairedDevices()
     }
 

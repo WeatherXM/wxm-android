@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.components.MarkerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -187,6 +188,12 @@ fun Activity.hideKeyboard() {
 
 fun ChipGroup.setChildrenEnabled(enable: Boolean) {
     children.forEach { it.isEnabled = enable }
+}
+
+fun MaterialCardView.showIntegratedWarning() {
+    setCardBackgroundColor(context.getColor(R.color.warning_tint))
+    strokeWidth = 1
+    strokeColor = context.getColor(R.color.warning)
 }
 
 @Suppress("MagicNumber")

@@ -73,7 +73,7 @@ class EmptyView : LinearLayout {
     fun subtitle(subtitle: String?): EmptyView {
         binding.subtitle.apply {
             text = subtitle
-            visibility = if (subtitle != null) View.VISIBLE else View.GONE
+            visibility = if (subtitle != null && subtitle.isNotEmpty()) View.VISIBLE else View.GONE
         }
         return this
     }
@@ -136,7 +136,10 @@ class EmptyView : LinearLayout {
     }
 
     fun action(label: String?): EmptyView {
-        binding.action.text = label
+        binding.action.apply {
+            text = label
+            visibility = if (label != null) View.VISIBLE else View.GONE
+        }
         return this
     }
 
