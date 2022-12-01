@@ -73,6 +73,7 @@
                     android:layout_marginTop="@dimen/margin_normal"
                     android:textColor="@color/light_primary"
                     android:visibility="gone"
+                    app:strokeColor="@color/light_primary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/message"
                     tools:text="Do something" />
