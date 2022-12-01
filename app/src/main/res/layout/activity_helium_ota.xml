@@ -121,10 +121,7 @@
                 android:drawableStart="@drawable/ic_one_filled"
                 android:drawablePadding="@dimen/margin_normal"
                 android:drawableTint="@color/colorOnSurface"
-                android:text="@string/connect_to_station"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:text="@string/connect_to_station" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/secondStep"
@@ -135,9 +132,7 @@
                 android:drawableStart="@drawable/ic_two_outlined"
                 android:drawablePadding="@dimen/margin_normal"
                 android:drawableTint="@color/colorOnSurface"
-                android:text="@string/download_firmware_update"
-                app:layout_constraintStart_toStartOf="@id/firstStep"
-                app:layout_constraintTop_toBottomOf="@id/firstStep" />
+                android:text="@string/download_firmware_update" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/thirdStep"
@@ -148,9 +143,7 @@
                 android:drawableStart="@drawable/ic_three_outlined"
                 android:drawablePadding="@dimen/margin_normal"
                 android:drawableTint="@color/colorOnSurface"
-                android:text="@string/install_firmware_update"
-                app:layout_constraintStart_toStartOf="@id/firstStep"
-                app:layout_constraintTop_toBottomOf="@id/secondStep" />
+                android:text="@string/install_firmware_update" />
         </LinearLayout>
 
         <!-- Buttons -->

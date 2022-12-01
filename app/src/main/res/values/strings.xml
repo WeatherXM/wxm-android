@@ -72,8 +72,8 @@
     <string name="connecting_to_station">Connecting to Station…</string>
     <string name="downloading_update">Downloading Update…</string>
     <string name="downloading_update_subtitle"><![CDATA[Update download in progress.<br><b>Do not switch off the Application!</b>]]></string>
-    <string name="updating_station_subtitle"><![CDATA[<b>Make sure you don\'t move away from your station as you might lose Bluetooth connection!</b>]]></string>
-    <string name="updating_station">Updating Station…</string>
+    <string name="installing_update_subtitle"><![CDATA[<b>Make sure you don\'t move away from your station as you might lose Bluetooth connection!</b>]]></string>
+    <string name="installing_update">Installing Update…</string>
     <string name="connect_to_station">Connect to Station</string>
     <string name="download_firmware_update">Download Firmware Update</string>
     <string name="install_firmware_update">Install Firmware Update</string>
@@ -186,19 +186,19 @@
     <string name="claim_manually">Claim Device Manually</string>
     <string name="scan_again">Scan Again</string>
     <string name="no_bluetooth_available">No Bluetooth</string>
-    <string name="no_bluetooth_available_desc"><![CDATA[No bluetooth found. Please select <b>Claim Device Manually</b>.]]></string>
+    <string name="no_bluetooth_available_desc"><![CDATA[No bluetooth found. Cannot proceed.]]></string>
     <string name="access_to_bluetooth_prompt">Go to Settings and Grant Access</string>
     <string name="scanning_in_progress">Scanning for WeatherXM Devices</string>
     <string name="no_location_access">No Location Access</string>
-    <string name="no_location_access_desc"><![CDATA[In order to connect your device, WeatherXM app needs access to Location. If you do not wish to provide such access, please select <b>Claim Device Manually</b>.]]></string>
+    <string name="no_location_access_desc"><![CDATA[In order to connect your device, WeatherXM app needs access to Location. If you do not wish to provide such access, <b>you will not be able to proceed</b> with claiming your weather station.]]></string>
     <string name="bluetooth_not_enabled">Bluetooth is not enabled</string>
-    <string name="bluetooth_not_enabled_desc"><![CDATA[In order to connect your device, WeatherXM app needs an enabled Bluetooth. If you do not wish to provide such access, please select <b>Claim Device Manually</b>.]]></string>
+    <string name="bluetooth_not_enabled_desc"><![CDATA[In order to connect your device, WeatherXM app needs an enabled Bluetooth. If you do not wish to provide such access, <b>you will not be able to proceed</b> with claiming your weather station.]]></string>
     <string name="no_bluetooth_access">No Bluetooth Access</string>
-    <string name="no_bluetooth_access_desc"><![CDATA[In order to connect your device, WeatherXM app needs access to Bluetooth. If you do not wish to provide such access, please select <b>Claim Device Manually</b>.]]></string>
+    <string name="no_bluetooth_access_desc"><![CDATA[In order to connect your device, WeatherXM app needs access to Bluetooth. If you do not wish to provide such access, <b>you will not be able to proceed</b> with claiming your weather station.]]></string>
     <string name="no_devices_found">No Devices Found</string>
-    <string name="no_devices_found_desc"><![CDATA[We could not find any WeatherXM devices, please try to <b>scan again</b>!<br>Or, you can try claiming your device manually below.]]></string>
+    <string name="no_devices_found_desc"><![CDATA[We could not find any WeatherXM devices, please try to <b>scan again</b>!]]></string>
     <string name="scan_failed_title">Scanning Failed</string>
-    <string name="scan_failed_desc"><![CDATA[Something went wrong! Please either <b>Scan Again</b>, or if the problem persists, you can <b>Claim Device Manually</b>.]]></string>
+    <string name="scan_failed_desc"><![CDATA[Something went wrong! Please <b>Scan Again</b>.]]></string>
 
     <!-- Select Device Type -->
     <string name="select_your_device_type">Select your device type</string>
@@ -264,10 +264,10 @@
     <string name="pairing_device_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to Helium network bandwidth limitations!<b>]]></string>
     <string name="pairing_failed">Pairing Failed</string>
     <string name="pairing_failed_desc"><![CDATA[Pairing failed, please try again!<br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a><br><br>Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
-    <string name="helium_pairing_failed_desc">The Pairing process with WS2000 has failed. Please try again, and if the problem persists, claim your device manually.</string>
-    <string name="helium_fetching_info_failed">Fetching device\'s info failed. Please try again, and if the problem persists, claim your device manually.</string>
-    <string name="helium_bluetooth_disabled">The Pairing process with WS2000 has failed. Bluetooth is disabled. Please enable it and try again or claim your device manually.</string>
-    <string name="helium_bluetooth_connection_lost">The Pairing process with WS2000 has failed. Bluetooth connection has been lost. Please try again, and if the problem persists, claim your device manually.</string>
+    <string name="helium_pairing_failed_desc">The Pairing process with WS2000 has failed. Please try again, and if the problem persists, contact support.</string>
+    <string name="helium_fetching_info_failed">Fetching device\'s info failed. Please try again, and if the problem persists, contact support.</string>
+    <string name="helium_bluetooth_disabled">The Pairing process with WS2000 has failed. Bluetooth is disabled. Please enable it and try again.</string>
+    <string name="helium_bluetooth_connection_lost">The Pairing process with WS2000 has failed. Bluetooth connection has been lost. Please try again, and if the problem persists, contact support.</string>
     <string name="frequency">Frequency</string>
     <string name="frequency_selected_text">Given the location of installation you defined in the previous step, we\’ve selected the appropriate frequency for %s.</string>
     <string name="set_frequency">Set Your Station\'s Frequency</string>

@@ -89,7 +89,7 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.pairDevice.setOnClickListener {
-            model.setPeripheral()
+            model.pairDevice()
         }
 
         binding.cancel.setOnClickListener {
@@ -198,25 +198,14 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
         }
     }
 
-    private fun sendSupportEmail(errorCode: String?) {
-        navigator.sendSupportEmail(
-            this,
-            recipient = getString(R.string.support_email_recipient),
-            subject = getString(R.string.support_email_subject_helium_ota_failed),
-            body = getString(
-                R.string.support_email_body_helium_ota_failed,
-                model.device.name,
-                errorCode ?: getString(R.string.unknown)
-            )
-        )
-    }
-
     private fun onLoadingStatusUpdate(status: OTAStatus?) {
         if (!binding.steps.isVisible) {
             hideButtons()
+            binding.notPairedInfoContainer.visibility = View.GONE
             binding.steps.visibility = View.VISIBLE
             binding.status.clear()
             binding.status.animation(R.raw.anim_loading)
+            binding.status.show()
         }
         when (status) {
             OTAStatus.CONNECT_TO_STATION -> {
@@ -236,8 +225,8 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
                 binding.secondStep.typeface = Typeface.DEFAULT_BOLD
             }
             else -> {
-                binding.status.title(R.string.updating_station)
-                binding.status.htmlSubtitle(R.string.updating_station_subtitle)
+                binding.status.title(R.string.installing_update)
+                binding.status.htmlSubtitle(R.string.installing_update_subtitle)
                 binding.secondStep.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.ic_checkmark, 0, 0, 0
                 )
@@ -255,6 +244,19 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
         binding.failureButtonsContainer.visibility = View.INVISIBLE
         binding.scanAgain.visibility = View.INVISIBLE
         binding.pairDevice.visibility = View.INVISIBLE
+    }
+
+    private fun sendSupportEmail(errorCode: String?) {
+        navigator.sendSupportEmail(
+            this,
+            recipient = getString(R.string.support_email_recipient),
+            subject = getString(R.string.support_email_subject_helium_ota_failed),
+            body = getString(
+                R.string.support_email_body_helium_ota_failed,
+                model.device.name,
+                errorCode ?: getString(R.string.unknown)
+            )
+        )
     }
 
     private fun initBluetoothAndStart() {

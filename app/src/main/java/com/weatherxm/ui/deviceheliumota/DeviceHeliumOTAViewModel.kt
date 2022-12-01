@@ -38,6 +38,10 @@ class DeviceHeliumOTAViewModel(
 
     private var scannedDevice = ScannedDevice.empty()
 
+    private fun deviceIsPaired(): Boolean {
+        return connectionUseCase.getPairedDevices().any { it.address == scannedDevice.address }
+    }
+
     @Suppress("MagicNumber")
     fun startScan() {
         onStatus.postValue(Resource.loading(State(OTAStatus.CONNECT_TO_STATION)))
@@ -65,10 +69,24 @@ class DeviceHeliumOTAViewModel(
             return
         }
 
-        if (connectionUseCase.getPairedDevices().any { it.address == scannedDevice.address }) {
+        if (deviceIsPaired()) {
             setPeripheral()
         } else {
             onStatus.postValue(Resource.error("", State(OTAStatus.PAIR_STATION)))
+        }
+    }
+
+    fun pairDevice() {
+        viewModelScope.launch {
+            connectionUseCase.setPeripheral(scannedDevice.address).tap {
+                connectionUseCase.connectToPeripheral().tap {
+                    if (deviceIsPaired()) {
+                        downloadUpdate()
+                    } else {
+                        onStatus.postValue(Resource.error("", State(OTAStatus.PAIR_STATION)))
+                    }
+                }
+            }
         }
     }
 
