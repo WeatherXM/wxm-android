@@ -501,7 +501,7 @@ val displayModeHelper = module {
 
 private val utilities = module {
     single<CacheService> {
-        CacheService(get(), get<SharedPreferences>(named(PREFERENCES_AUTH_TOKEN)), get())
+        CacheService(get(), get<SharedPreferences>(named(PREFERENCES_AUTH_TOKEN)), get(), get())
     }
 
     single<SearchEngine> {

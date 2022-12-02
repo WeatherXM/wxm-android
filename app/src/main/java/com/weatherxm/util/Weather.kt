@@ -3,6 +3,11 @@ package com.weatherxm.util
 import android.content.SharedPreferences
 import androidx.annotation.RawRes
 import com.weatherxm.R
+import com.weatherxm.data.services.CacheService.Companion.KEY_PRECIP
+import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
+import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
+import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
+import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -59,7 +64,7 @@ object Weather : KoinComponent {
         val valueToReturn = convertTemp(value, decimals)
         val unit = if (fullUnit) {
             getPreferredUnit(
-                resHelper.getString(R.string.key_temperature_preference),
+                resHelper.getString(KEY_TEMPERATURE),
                 resHelper.getString(R.string.temperature_celsius)
             )
         } else {
@@ -113,7 +118,7 @@ object Weather : KoinComponent {
 
         val valueToReturn = convertPressure(value)
         val unit = getPreferredUnit(
-            resHelper.getString(R.string.key_pressure_preference),
+            resHelper.getString(KEY_PRESSURE),
             resHelper.getString(R.string.pressure_hpa)
         )
 
@@ -127,7 +132,7 @@ object Weather : KoinComponent {
 
         val valueToReturn = convertWindSpeed(value)
         val unit = getPreferredUnit(
-            resHelper.getString(R.string.key_wind_speed_preference),
+            resHelper.getString(KEY_WIND),
             resHelper.getString(R.string.wind_speed_ms)
         )
 
@@ -136,11 +141,7 @@ object Weather : KoinComponent {
 
     fun getFormattedWindDirection(value: Int): String {
         val defaultUnit = resHelper.getString(R.string.wind_direction_cardinal)
-        val savedUnit =
-            sharedPref.getString(
-                resHelper.getString(R.string.key_wind_direction_preference),
-                defaultUnit
-            )
+        val savedUnit = sharedPref.getString(resHelper.getString(KEY_WIND_DIR), defaultUnit)
 
         if (savedUnit != defaultUnit) {
             val windDegreesMark = resHelper.getString(R.string.degrees_mark)
@@ -164,11 +165,7 @@ object Weather : KoinComponent {
         }
 
         val defaultUnit = resHelper.getString(R.string.temperature_celsius)
-        val savedUnit =
-            sharedPref.getString(
-                resHelper.getString(R.string.key_temperature_preference),
-                defaultUnit
-            )
+        val savedUnit = sharedPref.getString(resHelper.getString(KEY_TEMPERATURE), defaultUnit)
 
         // Return the value based on the weather unit the user wants
         val valueToReturn = if (savedUnit != defaultUnit) {
@@ -192,11 +189,7 @@ object Weather : KoinComponent {
         }
 
         val defaultUnit = resHelper.getString(R.string.precipitation_mm)
-        val savedUnit =
-            sharedPref.getString(
-                resHelper.getString(R.string.key_precipitation_preference),
-                defaultUnit
-            )
+        val savedUnit = sharedPref.getString(resHelper.getString(KEY_PRECIP), defaultUnit)
 
         // Return the value based on the weather unit the user wants
         return if (savedUnit != defaultUnit) {
@@ -216,11 +209,7 @@ object Weather : KoinComponent {
         }
 
         val defaultUnit = resHelper.getString(R.string.wind_speed_ms)
-        val savedUnit =
-            sharedPref.getString(
-                resHelper.getString(R.string.key_wind_speed_preference),
-                defaultUnit
-            )
+        val savedUnit = sharedPref.getString(resHelper.getString(KEY_WIND), defaultUnit)
 
         // Return the value based on the weather unit the user wants
         return if (savedUnit != defaultUnit) {
@@ -255,8 +244,7 @@ object Weather : KoinComponent {
         }
 
         val defaultUnit = resHelper.getString(R.string.pressure_hpa)
-        val savedUnit =
-            sharedPref.getString(resHelper.getString(R.string.key_pressure_preference), defaultUnit)
+        val savedUnit = sharedPref.getString(resHelper.getString(KEY_PRESSURE), defaultUnit)
 
         // Return the value based on the weather unit the user wants
         return if (savedUnit != defaultUnit) {
@@ -277,7 +265,7 @@ object Weather : KoinComponent {
     }
 
     fun getPrecipitationPreferredUnit(isPrecipRate: Boolean): String {
-        val keyOnSharedPref = resHelper.getString(R.string.key_precipitation_preference)
+        val keyOnSharedPref = resHelper.getString(KEY_PRECIP)
         val defaultUnitOnPreferences = resHelper.getString(R.string.precipitation_mm)
 
         val savedUnit = getPreferredUnit(keyOnSharedPref, defaultUnitOnPreferences)
@@ -298,7 +286,7 @@ object Weather : KoinComponent {
     }
 
     fun getDecimalsPrecipitation(): Int {
-        val keyOnSharedPref = resHelper.getString(R.string.key_precipitation_preference)
+        val keyOnSharedPref = resHelper.getString(KEY_PRECIP)
         val defaultUnit = resHelper.getString(R.string.precipitation_mm)
 
         val unit = getPreferredUnit(keyOnSharedPref, defaultUnit)
@@ -311,10 +299,9 @@ object Weather : KoinComponent {
     }
 
     fun getDecimalsPressure(): Int {
-        val keyOnSharedPref = resHelper.getString(R.string.key_pressure_preference)
-        val defaultUnit = resHelper.getString(R.string.pressure_hpa)
-
-        val unit = getPreferredUnit(keyOnSharedPref, defaultUnit)
+        val unit = getPreferredUnit(
+            resHelper.getString(KEY_PRESSURE), resHelper.getString(R.string.pressure_hpa)
+        )
 
         return if (unit == resHelper.getString(R.string.pressure_hpa)) {
             DECIMALS_PRESSURE_HPA

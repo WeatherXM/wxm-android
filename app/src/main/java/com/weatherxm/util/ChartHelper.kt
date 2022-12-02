@@ -11,6 +11,7 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.weatherxm.R
 import com.weatherxm.R.string.wind_speed_beaufort
+import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import kotlin.math.roundToInt
 
 // Custom implementation of https://weeklycoding.com/mpandroidchart-documentation/markerview/
@@ -122,7 +123,7 @@ class CustomWindMarkerView(
 
         // Get the correct wind unit
         val windUnit = Weather.getPreferredUnit(
-            resources.getString(R.string.key_wind_speed_preference),
+            resources.getString(KEY_WIND),
             resources.getString(R.string.wind_speed_ms)
         )
 
