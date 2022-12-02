@@ -7,6 +7,7 @@ import com.juul.kable.identifier
 import com.weatherxm.data.BluetoothOTAState
 import com.weatherxm.data.OTAState
 import com.weatherxm.service.DfuService
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -117,7 +118,9 @@ class BluetoothUpdater(
             })
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun update(updatePackage: Uri): Flow<OTAState> {
+        onOTAState.resetReplayCache()
         setUpdater()
 
         /*

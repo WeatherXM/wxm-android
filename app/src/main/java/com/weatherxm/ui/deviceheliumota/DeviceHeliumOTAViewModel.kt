@@ -33,6 +33,9 @@ class DeviceHeliumOTAViewModel(
     private val onStatus = MutableLiveData<Resource<State>>()
     fun onStatus() = onStatus
 
+    private val onInstallingProgress = MutableLiveData<Int>()
+    fun onInstallingProgress() = onInstallingProgress
+
     private val onDownloadFile = MutableLiveData(false)
     fun onDownloadFile() = onDownloadFile
 
@@ -125,7 +128,7 @@ class DeviceHeliumOTAViewModel(
             updaterUseCase.update(uri).collect {
                 when (it.state) {
                     BluetoothOTAState.IN_PROGRESS -> {
-                        // Show the progress as a percentage ???
+                        onInstallingProgress.postValue(it.progress)
                     }
                     BluetoothOTAState.COMPLETED -> {
                         onStatus.postValue(Resource.success(State(OTAStatus.INSTALLING)))

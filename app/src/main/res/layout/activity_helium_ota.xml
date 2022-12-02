@@ -144,6 +144,16 @@
                 android:drawablePadding="@dimen/margin_normal"
                 android:drawableTint="@color/colorOnSurface"
                 android:text="@string/install_firmware_update" />
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/installationProgressBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:indeterminate="false"
+                android:indeterminateOnly="false"
+                android:visibility="gone"
+                tools:visibility="visible" />
         </LinearLayout>
 
         <!-- Buttons -->

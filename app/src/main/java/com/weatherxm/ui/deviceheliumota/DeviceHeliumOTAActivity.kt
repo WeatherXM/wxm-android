@@ -112,6 +112,10 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
             onNewStatus(it)
         }
 
+        model.onInstallingProgress().observe(this) {
+            binding.installationProgressBar.progress = it
+        }
+
         // TODO: Remove when backend is ready
         model.onDownloadFile().observe(this) {
             if (it) {
@@ -202,6 +206,7 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
         if (!binding.steps.isVisible) {
             hideButtons()
             binding.notPairedInfoContainer.visibility = View.GONE
+            binding.installationProgressBar.visibility = View.GONE
             binding.steps.visibility = View.VISIBLE
             binding.status.clear()
             binding.status.animation(R.raw.anim_loading)
@@ -235,6 +240,7 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
                 )
                 binding.secondStep.typeface = Typeface.DEFAULT
                 binding.thirdStep.typeface = Typeface.DEFAULT_BOLD
+                binding.installationProgressBar.visibility = View.VISIBLE
             }
         }
     }
