@@ -27,7 +27,6 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentClaimHeliumPairBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
-import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyViewModel
 import com.weatherxm.ui.common.ActionDialogFragment
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.checkPermissionsAndThen
@@ -41,7 +40,6 @@ import timber.log.Timber
 class ClaimHeliumPairFragment : Fragment() {
     private val model: ClaimHeliumPairViewModel by viewModels()
     private val parentModel: ClaimHeliumViewModel by activityViewModels()
-    private val verifyModel: ClaimHeliumVerifyViewModel by activityViewModels()
     private val navigator: Navigator by inject()
     private val bluetoothAdapter: BluetoothAdapter? by inject()
     private lateinit var binding: FragmentClaimHeliumPairBinding
@@ -108,11 +106,11 @@ class ClaimHeliumPairFragment : Fragment() {
         }
 
         model.onBLEDevEUI().observe(viewLifecycleOwner) {
-            verifyModel.setDeviceEUI(it)
+            parentModel.setDeviceEUI(it)
         }
 
         model.onBLEClaimingKey().observe(viewLifecycleOwner) {
-            verifyModel.setDeviceKey(it)
+            parentModel.setDeviceKey(it)
             parentModel.next()
         }
 

@@ -88,7 +88,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             )
 
             // TODO: Check if OTA warning should be shown
-            if (true) {
+            if (false) {
                 binding.warningBox
                     .action(
                         resHelper.getString(R.string.update_station_now),

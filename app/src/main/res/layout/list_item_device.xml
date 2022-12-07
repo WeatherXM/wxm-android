@@ -135,6 +135,7 @@
             android:id="@+id/warningBox"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/deviceCard"
             app:warning_message="@string/updated_needed_desc"
             app:warning_title="@string/updated_needed_title" />

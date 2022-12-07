@@ -183,7 +183,7 @@ class BluetoothConnectionManager(private val context: Context) {
                     listener.invoke(Either.Right(fullResponse))
                 }
             }.collect {
-                fullResponse += String(it)
+                fullResponse += String(it).replace("'", "")
             }
         }
     }

@@ -42,7 +42,8 @@ data class ResetPasswordBody(
 @Parcelize
 data class ClaimDeviceBody(
     val serialNumber: String,
-    val location: Location
+    val location: Location,
+    val secret: String? = null
 ) : Parcelable
 
 @JsonClass(generateAdapter = true)

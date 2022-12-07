@@ -16,7 +16,6 @@ import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyViewMod
 import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairFragment
 import com.weatherxm.ui.claimdevice.helium.reset.ClaimHeliumResetFragment
 import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyFragment
-import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
@@ -37,7 +36,6 @@ class ClaimHeliumActivity : AppCompatActivity() {
 
     private val model: ClaimHeliumViewModel by viewModels()
     private val locationModel: ClaimLocationViewModel by viewModels()
-    private val verifyModel: ClaimHeliumVerifyViewModel by viewModels()
     private val frequencyModel: ClaimHeliumFrequencyViewModel by viewModels()
     private lateinit var binding: ActivityClaimHeliumDeviceBinding
 
@@ -81,24 +79,24 @@ class ClaimHeliumActivity : AppCompatActivity() {
             if (it) requestLocationPermissions()
         }
 
-        model.onClaimManually().observe(this) {
-            if (it) {
-                val currentPage = binding.pager.currentItem
-                model.setManual(true)
-                pagerAdapter = ClaimHeliumDevicePagerAdapter(this, true)
-                binding.pager.adapter = pagerAdapter
-                binding.pager.currentItem = currentPage
-                binding.pager.isUserInputEnabled = false
-                binding.secondStep.text = getString(R.string.action_verify)
-            }
-        }
+//        model.onClaimManually().observe(this) {
+//            if (it) {
+//                val currentPage = binding.pager.currentItem
+//                model.setManual(true)
+//                pagerAdapter = ClaimHeliumDevicePagerAdapter(this, true)
+//                binding.pager.adapter = pagerAdapter
+//                binding.pager.currentItem = currentPage
+//                binding.pager.isUserInputEnabled = false
+//                binding.secondStep.text = getString(R.string.action_verify)
+//            }
+//        }
 
         model.fetchUserEmail()
 
         savedInstanceState?.let {
             binding.pager.currentItem = it.getInt(CURRENT_PAGE, 0)
-            verifyModel.setDeviceEUI(it.getString(DEV_EUI, ""))
-            verifyModel.setDeviceKey(it.getString(DEV_KEY, ""))
+            model.setDeviceEUI(it.getString(DEV_EUI, ""))
+            model.setDeviceKey(it.getString(DEV_KEY, ""))
         }
     }
 
@@ -122,11 +120,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
                     frequencyModel.getCountryAndFrequencies(locationModel.getInstallationLocation())
                 }
                 ClaimHeliumDevicePagerAdapter.PAGE_RESULT -> {
-                    model.claimDevice(
-                        verifyModel.getDevEUI(),
-                        verifyModel.getDeviceKey(),
-                        locationModel.getInstallationLocation()
-                    )
+                    model.claimDevice(locationModel.getInstallationLocation())
                     fourthStep.setSuccessChip()
                 }
             }
@@ -156,8 +150,8 @@ class ClaimHeliumActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putInt(CURRENT_PAGE, binding.pager.currentItem)
-        outState.putString(DEV_EUI, verifyModel.getDevEUI())
-        outState.putString(DEV_KEY, verifyModel.getDeviceKey())
+        outState.putString(DEV_EUI, model.getDevEUI())
+        outState.putString(DEV_KEY, model.getDeviceKey())
         super.onSaveInstanceState(outState)
     }
 

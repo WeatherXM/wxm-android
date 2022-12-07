@@ -12,7 +12,12 @@ import com.weatherxm.data.network.FriendlyNameBody
 interface DeviceDataSource {
     suspend fun getUserDevices(): Either<Failure, List<Device>>
     suspend fun getUserDevice(deviceId: String): Either<Failure, Device>
-    suspend fun claimDevice(serialNumber: String, location: Location): Either<Failure, Device>
+    suspend fun claimDevice(
+        serialNumber: String,
+        location: Location,
+        secret: String? = null
+    ): Either<Failure, Device>
+
     suspend fun setFriendlyName(deviceId: String, friendlyName: String): Either<Failure, Unit>
     suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit>
 }
@@ -29,9 +34,10 @@ class DeviceDataSourceImpl(private val apiService: ApiService) : DeviceDataSourc
 
     override suspend fun claimDevice(
         serialNumber: String,
-        location: Location
+        location: Location,
+        secret: String?
     ): Either<Failure, Device> {
-        return apiService.claimDevice(ClaimDeviceBody(serialNumber, location)).map()
+        return apiService.claimDevice(ClaimDeviceBody(serialNumber, location, secret)).map()
     }
 
     override suspend fun setFriendlyName(

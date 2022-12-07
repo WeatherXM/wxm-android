@@ -33,7 +33,9 @@ class ClaimHeliumResetFragment : Fragment() {
 
         binding.firstStep.setHtml(R.string.reset_ble_first_step)
 
-        // TODO: Remove if we do not use again the manual claiming
+        /**
+         * TODO: Obsolete, remove it if we don't use manual claiming flow.
+         */
 //        binding.claimManually.setOnClickListener {
 //            parentModel.claimManually()
 //        }

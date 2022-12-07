@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.ApiError.DeviceNotFound
 import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceAlreadyClaimed
+import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceClaiming
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.Failure
@@ -83,6 +84,7 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
                         is InvalidClaimLocation -> R.string.error_claim_invalid_location
                         is DeviceAlreadyClaimed -> R.string.error_claim_device_already_claimed
                         is DeviceNotFound -> R.string.error_claim_not_found
+                        is DeviceClaiming -> R.string.error_claim_not_found_helium
                         else -> failure.getDefaultMessageResId()
                     }
                 ),

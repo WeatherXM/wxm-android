@@ -24,10 +24,13 @@
     <string name="error_forecast_generic_message">Fetching forecast failed</string>
     <string name="error_forecast_no_data">Oops! Forecast could not be fetched.</string>
     <string name="error_claim_failed_title">Claiming Failed</string>
+    <string name="error_claim_invalid_dev_eui"><![CDATA[Station claiming failed.<br><b>The Dev EUI is invalid</b>.<br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
     <string name="error_claim_invalid_serial"><![CDATA[Station claiming failed.<br><b>The serial number is invalid</b>.<br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
     <string name="error_claim_invalid_location"><![CDATA[Station claiming failed.<br><b>The location provided is invalid.</b><br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
     <string name="error_claim_device_already_claimed"><![CDATA[Station claiming failed.<br><b>This device is already claimed.</b><br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
     <string name="error_claim_not_found"><![CDATA[Station claiming failed.<br><b>Could not find a device with the requested serial number.</b><br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
+    <string name="error_claim_not_found_helium"><![CDATA[Station claiming failed.<br><b>Could not find such a device.</b><br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
+    <string name="error_claim_device_claiming_error"><![CDATA[Station claiming failed.<br><b>This device is not in claiming mode or the secret provided is invalid.</b><br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
     <string name="error_claim_gps_failed">Could not get current location.</string>
     <string name="error_public_device_no_data">Failed to get the details of the device: No Data</string>
     <string name="error_public_devices_no_data">Failed to get the public devices.</string>

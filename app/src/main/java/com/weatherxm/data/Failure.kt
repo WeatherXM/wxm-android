@@ -102,6 +102,11 @@ sealed class ApiError(code: String?, val message: String? = null) : Failure(code
                 code: String?,
                 message: String? = null
             ) : ClaimError(code, message)
+
+            class DeviceClaiming(
+                code: String?,
+                message: String? = null
+            ) : ClaimError(code, message)
         }
 
         class InvalidFromDate(code: String?, message: String? = null) : UserError(code, message)

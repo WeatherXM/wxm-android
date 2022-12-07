@@ -18,7 +18,13 @@ import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.UserRepository
 
 interface ClaimDeviceUseCase {
-    suspend fun claimDevice(serialNumber: String, lat: Double, lon: Double): Either<Failure, Device>
+    suspend fun claimDevice(
+        serialNumber: String,
+        lat: Double,
+        lon: Double,
+        secret: String? = null
+    ): Either<Failure, Device>
+
     suspend fun fetchUserEmail(): Either<Failure, String>
     suspend fun getSearchSuggestions(query: String): Either<Failure, List<SearchSuggestion>>
     suspend fun getSuggestionLocation(suggestion: SearchSuggestion): Either<Failure, Location>
@@ -35,9 +41,14 @@ class ClaimDeviceUseCaseImpl(
     override suspend fun claimDevice(
         serialNumber: String,
         lat: Double,
-        lon: Double
+        lon: Double,
+        secret: String?
     ): Either<Failure, Device> {
-        return deviceRepository.claimDevice(serialNumber, com.weatherxm.data.Location(lat, lon))
+        return deviceRepository.claimDevice(
+            serialNumber,
+            com.weatherxm.data.Location(lat, lon),
+            secret
+        )
     }
 
     override suspend fun fetchUserEmail(): Either<Failure, String> {

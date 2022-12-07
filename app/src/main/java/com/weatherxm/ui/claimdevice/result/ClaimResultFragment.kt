@@ -15,7 +15,6 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentClaimResultBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
-import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
@@ -30,7 +29,6 @@ class ClaimResultFragment : Fragment(), KoinComponent {
     private val m5ParentModel: ClaimM5ViewModel by activityViewModels()
     private val verifyM5Model: ClaimM5VerifyViewModel by activityViewModels()
     private val heliumParentModel: ClaimHeliumViewModel by activityViewModels()
-    private val verifyHeliumModel: ClaimHeliumVerifyViewModel by activityViewModels()
     private val locationModel: ClaimLocationViewModel by activityViewModels()
     private lateinit var binding: FragmentClaimResultBinding
     private val navigator: Navigator by inject()
@@ -86,11 +84,7 @@ class ClaimResultFragment : Fragment(), KoinComponent {
         }
 
         binding.retry.setOnClickListener {
-            heliumParentModel.claimDevice(
-                verifyHeliumModel.getDevEUI(),
-                verifyHeliumModel.getDeviceKey(),
-                locationModel.getInstallationLocation()
-            )
+            heliumParentModel.claimDevice(locationModel.getInstallationLocation())
         }
 
         heliumParentModel.onClaimResult().observe(viewLifecycleOwner) {
@@ -155,8 +149,8 @@ class ClaimResultFragment : Fragment(), KoinComponent {
                 body = getString(
                     R.string.support_email_body_user_and_helium_device_info,
                     heliumParentModel.getUserEmail(),
-                    verifyHeliumModel.getDevEUI(),
-                    verifyHeliumModel.getDeviceKey(),
+                    heliumParentModel.getDevEUI(),
+                    heliumParentModel.getDeviceKey(),
                     errorCode ?: getString(R.string.unknown)
                 )
             )
