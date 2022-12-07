@@ -39,7 +39,7 @@ import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.token.TokenActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.ui.userdevice.UserDeviceActivity
-import com.weatherxm.usecases.selectdevicetype.SelectDeviceTypeFragment
+import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeFragment
 import timber.log.Timber
 
 

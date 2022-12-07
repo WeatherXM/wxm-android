@@ -1,4 +1,4 @@
-package com.weatherxm.usecases.selectdevicetype
+package com.weatherxm.ui.claimdevice.selectdevicetype
 
 import android.os.Bundle
 import android.view.LayoutInflater
