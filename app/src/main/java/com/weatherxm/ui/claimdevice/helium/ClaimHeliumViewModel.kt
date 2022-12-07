@@ -86,7 +86,11 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
     fun claimDevice(location: Location) {
         onClaimResult.postValue(Resource.loading())
         viewModelScope.launch {
-            claimDeviceUseCase.claimDevice(devEUI, location.latitude, location.longitude, deviceKey)
+            /**
+             * TODO:
+             * We send devEUI as secret, until we fix the issue with the `deviceKey`.
+             */
+            claimDeviceUseCase.claimDevice(devEUI, location.latitude, location.longitude, devEUI)
                 .map {
                     Timber.d("Claimed device: $it")
                     onClaimResult.postValue(Resource.success(ClaimResult(device = it)))

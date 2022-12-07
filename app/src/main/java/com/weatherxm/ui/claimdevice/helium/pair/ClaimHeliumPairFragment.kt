@@ -107,6 +107,10 @@ class ClaimHeliumPairFragment : Fragment() {
 
         model.onBLEDevEUI().observe(viewLifecycleOwner) {
             parentModel.setDeviceEUI(it)
+            /**
+             * TODO: Remove this when we use the Claiming Key
+             */
+            parentModel.next()
         }
 
         model.onBLEClaimingKey().observe(viewLifecycleOwner) {

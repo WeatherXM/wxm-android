@@ -111,7 +111,10 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
                  * BLE returns Dev EUI with `:` in between so we need to unmask it
                  */
                 onBLEDevEUI.postValue(it.unmask())
-                fetchClaimingKey()
+                /**
+                 * TODO: Re-enable this when the issue with the claiming key gets fixed
+                 */
+                //    fetchClaimingKey()
             }.tapLeft {
                 onBLEError.postValue(UIError(
                     resHelper.getString(R.string.helium_fetching_info_failed)
