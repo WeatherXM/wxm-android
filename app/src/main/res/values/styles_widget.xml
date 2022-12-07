@@ -218,16 +218,23 @@
     <!--
         Chips
     -->
-    <style name="Widget.WeatherXM.Chip.Navigation" parent="Widget.MaterialComponents.Chip.Action">
+    <style name="Widget.WeatherXM.Navigation.Bar" parent="">
+        <item name="android:paddingStart">-2dp</item>
+        <item name="android:clipChildren">false</item>
+        <item name="android:clipToPadding">false</item>
+    </style>
+
+    <style name="Widget.WeatherXM.Navigation.Chip" parent="Widget.MaterialComponents.Chip.Action">
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="chipBackgroundColor">@color/colorSurface</item>
         <item name="chipIconTint">@color/colorOnSurface</item>
         <item name="android:textSize">12sp</item>
         <item name="chipIconSize">20dp</item>
+        <item name="chipStartPadding">6dp</item>
         <item name="chipMinTouchTargetSize">0dp</item>
         <item name="android:clickable">false</item>
-        <item name="chipStrokeWidth">1dp</item>
-        <item name="chipStrokeColor">@color/light_mid_grey</item>
+        <item name="chipStrokeWidth">2dp</item>
+        <item name="chipStrokeColor">?android:windowBackground</item>
         <item name="chipCornerRadius">20dp</item>
     </style>
 
