@@ -14,6 +14,7 @@ import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.ResourcesHelper
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -104,6 +105,12 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
         }
     }
 
+    fun disconnectFromPeripheral() {
+        GlobalScope.launch {
+            connectionUseCase.disconnectFromPeripheral()
+        }
+    }
+
     private fun fetchDeviceEUI() {
         viewModelScope.launch {
             connectionUseCase.fetchDeviceEUI().tap {
@@ -111,10 +118,7 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
                  * BLE returns Dev EUI with `:` in between so we need to unmask it
                  */
                 onBLEDevEUI.postValue(it.unmask())
-                /**
-                 * TODO: Re-enable this when the issue with the claiming key gets fixed
-                 */
-                //    fetchClaimingKey()
+                fetchClaimingKey()
             }.tapLeft {
                 onBLEError.postValue(UIError(
                     resHelper.getString(R.string.helium_fetching_info_failed)

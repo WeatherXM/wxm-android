@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
 import com.weatherxm.data.Device
+import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.databinding.ActivityUserDeviceBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.getParcelableExtra
@@ -23,6 +24,7 @@ import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setColor
 import com.weatherxm.util.setHtml
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
@@ -39,6 +41,9 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
     private lateinit var layoutManagerOfRecycler: LinearLayoutManager
     private val navigator: Navigator by inject()
     private var snackbar: Snackbar? = null
+
+    // TODO: Remove this before merging this PR. For testing purposes. 
+    private val deviceRepository: DeviceRepository by inject()
 
     companion object {
         const val ARG_DEVICE = "device"
@@ -190,6 +195,16 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
                             model.setOrClearFriendlyName(it)
                         }.show(this)
                     })
+                true
+            }
+            // TODO: Remove this before merging this PR. For testing purposes. 
+            R.id.delete_device -> {
+                model.device.label?.let {
+                    GlobalScope.launch {
+                        deviceRepository.deleteDevice(it.replace(":", ""))
+                    }
+                }
+                finish()
                 true
             }
             else -> false

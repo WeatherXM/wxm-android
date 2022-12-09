@@ -23,6 +23,10 @@ class BluetoothConnectionUseCaseImpl(
         return bluetoothConnectionRepository.connectToPeripheral()
     }
 
+    override suspend fun disconnectFromPeripheral() {
+        bluetoothConnectionRepository.disconnectFromPeripheral()
+    }
+
     override fun registerOnBondStatus(): Flow<Int> {
         return bluetoothConnectionRepository.registerOnBondStatus()
     }

@@ -100,6 +100,10 @@ class BluetoothConnectionManager(private val context: Context) {
         return peripheral
     }
 
+    suspend fun disconnectFromPeripheral() {
+        peripheral.disconnect()
+    }
+
     suspend fun connectToPeripheral(): Either<Failure, Unit> {
         return try {
             /*

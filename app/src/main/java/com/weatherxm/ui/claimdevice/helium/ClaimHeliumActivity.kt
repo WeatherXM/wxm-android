@@ -14,6 +14,7 @@ import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyFragment
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyViewModel
 import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairFragment
+import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairViewModel
 import com.weatherxm.ui.claimdevice.helium.reset.ClaimHeliumResetFragment
 import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
@@ -37,6 +38,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
     private val model: ClaimHeliumViewModel by viewModels()
     private val locationModel: ClaimLocationViewModel by viewModels()
     private val frequencyModel: ClaimHeliumFrequencyViewModel by viewModels()
+    private val pairModel: ClaimHeliumPairViewModel by viewModels()
     private lateinit var binding: ActivityClaimHeliumDeviceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +49,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
         binding.root.applyInsets()
 
         // The pager adapter, which provides the pages to the view pager widget.
-        var pagerAdapter = ClaimHeliumDevicePagerAdapter(this)
+        val pagerAdapter = ClaimHeliumDevicePagerAdapter(this)
         binding.pager.adapter = pagerAdapter
         binding.pager.isUserInputEnabled = false
 
@@ -98,6 +100,11 @@ class ClaimHeliumActivity : AppCompatActivity() {
             model.setDeviceEUI(it.getString(DEV_EUI, ""))
             model.setDeviceKey(it.getString(DEV_KEY, ""))
         }
+    }
+
+    override fun onDestroy() {
+        pairModel.disconnectFromPeripheral()
+        super.onDestroy()
     }
 
     private fun onNextPressed() {

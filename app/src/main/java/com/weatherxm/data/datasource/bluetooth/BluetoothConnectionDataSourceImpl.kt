@@ -40,6 +40,10 @@ class BluetoothConnectionDataSourceImpl(
         return connectionManager.connectToPeripheral()
     }
 
+    override suspend fun disconnectFromPeripheral() {
+        connectionManager.disconnectFromPeripheral()
+    }
+
     override fun registerOnBondStatus(): Flow<Int> {
         return connectionManager.onBondStatus()
     }

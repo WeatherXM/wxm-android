@@ -51,3 +51,9 @@ data class ClaimDeviceBody(
 data class FriendlyNameBody(
     val friendlyName: String
 ) : Parcelable
+
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeleteDeviceBody(
+    val serialNumber: String
+) : Parcelable

@@ -124,6 +124,9 @@ class ClaimResultFragment : Fragment(), KoinComponent {
                 binding.statusView.clear()
                 binding.statusView.animation(R.raw.anim_loading)
                 binding.statusView.title(R.string.claiming_station)
+                if (locationModel.getDeviceType() == DeviceType.HELIUM) {
+                    binding.statusView.htmlSubtitle(R.string.claiming_station_helium_desc)
+                }
                 binding.failureButtons.visibility = View.GONE
                 binding.viewStation.visibility = View.GONE
             }

@@ -20,7 +20,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -38,7 +37,7 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class ClaimHeliumPairFragment : Fragment() {
-    private val model: ClaimHeliumPairViewModel by viewModels()
+    private val model: ClaimHeliumPairViewModel by activityViewModels()
     private val parentModel: ClaimHeliumViewModel by activityViewModels()
     private val navigator: Navigator by inject()
     private val bluetoothAdapter: BluetoothAdapter? by inject()
@@ -107,10 +106,6 @@ class ClaimHeliumPairFragment : Fragment() {
 
         model.onBLEDevEUI().observe(viewLifecycleOwner) {
             parentModel.setDeviceEUI(it)
-            /**
-             * TODO: Remove this when we use the Claiming Key
-             */
-            parentModel.next()
         }
 
         model.onBLEClaimingKey().observe(viewLifecycleOwner) {

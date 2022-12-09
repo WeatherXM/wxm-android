@@ -24,6 +24,7 @@ interface DeviceRepository {
     suspend fun setFriendlyName(deviceId: String, friendlyName: String): Either<Failure, Unit>
     suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit>
     suspend fun getLastFriendlyNameChanged(deviceId: String): Long
+    suspend fun deleteDevice(serialNumber: String): Either<Failure, Unit>
 }
 
 class DeviceRepositoryImpl(
@@ -109,5 +110,9 @@ class DeviceRepositoryImpl(
 
     override suspend fun getLastFriendlyNameChanged(deviceId: String): Long {
         return userActionDataSource.getLastFriendlyNameChanged(deviceId)
+    }
+
+    override suspend fun deleteDevice(serialNumber: String): Either<Failure, Unit> {
+        return deviceDataSource.deleteDevice(serialNumber)
     }
 }

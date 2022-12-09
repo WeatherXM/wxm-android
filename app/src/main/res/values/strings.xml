@@ -229,6 +229,7 @@
     <string name="set_and_claim">Set and Claim</string>
     <string name="station_claimed">Station Claimed</string>
     <string name="claiming_station">Claiming Station…</string>
+    <string name="claiming_station_helium_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to Helium network bandwidth limitations!<b>]]></string>
     <string name="success_claim_device"><![CDATA[Your station is claimed under your account:<br><b>%s</b>]]></string>
 
     <!-- Claim M5 -->
