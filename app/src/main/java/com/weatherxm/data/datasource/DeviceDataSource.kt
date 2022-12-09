@@ -2,7 +2,7 @@ package com.weatherxm.data.datasource
 
 import arrow.core.Either
 import arrow.core.handleErrorWith
-import com.weatherxm.data.ApiError
+import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceClaiming
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
@@ -30,6 +30,10 @@ interface DeviceDataSource {
 }
 
 class DeviceDataSourceImpl(private val apiService: ApiService) : DeviceDataSource {
+    companion object {
+        const val CLAIM_MAX_RETRIES = 10
+        const val CLAIM_RETRY_DELAY_MS = 5000L
+    }
 
     override suspend fun getUserDevices(): Either<Failure, List<Device>> {
         return apiService.getUserDevices().map()
@@ -48,9 +52,9 @@ class DeviceDataSourceImpl(private val apiService: ApiService) : DeviceDataSourc
         return apiService.claimDevice(ClaimDeviceBody(serialNumber, location, secret))
             .map()
             .handleErrorWith {
-                if (it is ApiError.UserError.ClaimError.DeviceClaiming && numOfRetries < 10) {
+                if (it is DeviceClaiming && numOfRetries < CLAIM_MAX_RETRIES) {
                     Timber.d("Claiming Failed with ${it.code}. Retrying after 5 seconds...")
-                    delay(5000L)
+                    delay(CLAIM_RETRY_DELAY_MS)
                     claimDevice(serialNumber, location, secret, numOfRetries + 1)
                 } else {
                     Either.Left(it)

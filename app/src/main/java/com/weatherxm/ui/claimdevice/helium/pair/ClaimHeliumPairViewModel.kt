@@ -34,6 +34,7 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     private val onScanProgress = MutableLiveData<Int>()
 
     private var selectedDeviceMacAddress: String = ""
+    private var bleFetchStarted = false
 
     fun onNewScannedDevice(): LiveData<List<ScannedDevice>> = onNewScannedDevice
     fun onScanStatus(): LiveData<Resource<Unit>> = onScanStatus
@@ -63,11 +64,15 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     }
 
     fun setupBluetoothClaiming(macAddress: String) {
+        if (bleFetchStarted) return
+        bleFetchStarted = true
+
         scanDevicesUseCase.stopScanning()
         selectedDeviceMacAddress = macAddress
         connectionUseCase.setPeripheral(macAddress).tap {
             connectToPeripheral()
         }.tapLeft {
+            bleFetchStarted = false
             onBLEError.postValue(UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
                 setupBluetoothClaiming(macAddress)
             })
