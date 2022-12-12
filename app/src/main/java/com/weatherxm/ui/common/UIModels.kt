@@ -106,7 +106,8 @@ data class ScannedDevice(
     }
 }
 
-enum class DeviceType {
+@Parcelize
+enum class DeviceType : Parcelable {
     M5_WIFI,
     HELIUM
 }

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.weatherxm.R
+import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentClaimResultBinding
@@ -18,8 +19,8 @@ import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
+import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DeviceType
-import com.weatherxm.ui.home.HomeActivity.Companion.ARG_DEVICE
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -54,7 +55,7 @@ class ClaimResultFragment : Fragment(), KoinComponent {
         binding.viewStation.setOnClickListener {
             activity?.setResult(
                 Activity.RESULT_OK,
-                Intent().putExtra(ARG_DEVICE, model.getClaimedDevice())
+                Intent().putExtra(Contracts.ARG_DEVICE, model.getClaimedDevice())
             )
             activity?.finish()
         }
@@ -73,7 +74,9 @@ class ClaimResultFragment : Fragment(), KoinComponent {
         }
 
         m5ParentModel.onClaimResult().observe(viewLifecycleOwner) {
-            model.setClaimedDevice(it.data?.device)
+            it.data?.let { device ->
+                model.setClaimedDevice(device)
+            }
             updateUI(it)
         }
     }
@@ -88,19 +91,19 @@ class ClaimResultFragment : Fragment(), KoinComponent {
         }
 
         heliumParentModel.onClaimResult().observe(viewLifecycleOwner) {
-            model.setClaimedDevice(it.data?.device)
+            model.setClaimedDevice(it.data)
             updateUI(it)
         }
     }
 
-    private fun updateUI(resource: Resource<ClaimResult>) {
+    private fun updateUI(resource: Resource<Device>) {
         when (resource.status) {
             Status.SUCCESS -> {
                 binding.statusView.animation(R.raw.anim_success, false)
                 binding.statusView.title(R.string.station_claimed)
                 binding.statusView.htmlSubtitle(
                     R.string.success_claim_device,
-                    resource.data?.device?.name
+                    resource.data?.name
                 )
                 binding.failureButtons.visibility = View.GONE
                 binding.viewStation.visibility = View.VISIBLE
@@ -110,12 +113,12 @@ class ClaimResultFragment : Fragment(), KoinComponent {
                 binding.statusView.title(R.string.error_claim_failed_title)
                 resource.message?.let {
                     binding.statusView.htmlSubtitle(it) {
-                        sendSupportEmail(resource.data?.errorCode)
+                        sendSupportEmail(resource.error?.code)
                     }
                 }
                 binding.statusView.action(getString(R.string.title_contact_support))
                 binding.statusView.listener {
-                    sendSupportEmail(resource.data?.errorCode)
+                    sendSupportEmail(resource.error?.code)
                 }
                 binding.viewStation.visibility = View.GONE
                 binding.failureButtons.visibility = View.VISIBLE

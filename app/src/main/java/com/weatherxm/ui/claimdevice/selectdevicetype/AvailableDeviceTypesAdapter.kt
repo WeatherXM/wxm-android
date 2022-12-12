@@ -9,18 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.databinding.ListItemSelectDeviceTypeBinding
 import com.weatherxm.ui.claimdevice.AvailableDeviceType
+import com.weatherxm.ui.claimdevice.selectdevicetype.AvailableDeviceTypesAdapter.AvailableDeviceTypeViewHolder
 import com.weatherxm.ui.common.DeviceType
-import com.weatherxm.util.ResourcesHelper
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class AvailableDeviceTypesAdapter(
-    private val deviceTypeListener: (AvailableDeviceType) -> Unit
-) : ListAdapter<AvailableDeviceType,
-    AvailableDeviceTypesAdapter.AvailableDeviceTypeViewHolder>(PublicDeviceDiffCallback()),
-    KoinComponent {
-
-    val resHelper: ResourcesHelper by inject()
+    private val listener: (DeviceType) -> Unit
+) : ListAdapter<AvailableDeviceType, AvailableDeviceTypeViewHolder>(PublicDeviceDiffCallback()) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -32,7 +26,7 @@ class AvailableDeviceTypesAdapter(
                 parent,
                 false
             )
-        return AvailableDeviceTypeViewHolder(binding, deviceTypeListener)
+        return AvailableDeviceTypeViewHolder(binding, listener)
     }
 
     override fun onBindViewHolder(holder: AvailableDeviceTypeViewHolder, position: Int) {
@@ -41,22 +35,23 @@ class AvailableDeviceTypesAdapter(
 
     inner class AvailableDeviceTypeViewHolder(
         private val binding: ListItemSelectDeviceTypeBinding,
-        private val listener: (AvailableDeviceType) -> Unit
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        private lateinit var deviceType: AvailableDeviceType
+        private val listener: (DeviceType) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.root.setOnClickListener {
+                val deviceType = it.tag as DeviceType
                 listener(deviceType)
             }
         }
 
         fun bind(item: AvailableDeviceType, position: Int) {
-            this.deviceType = item
+            // Set the device type as tag in the root view
+            itemView.tag = item.type
+
             binding.title.text = item.title
             binding.desc.text = item.desc
+
             if (item.type == DeviceType.HELIUM) {
                 binding.typeIcon.setImageResource(R.drawable.ic_helium)
             } else {
@@ -85,7 +80,6 @@ class AvailableDeviceTypesAdapter(
             return oldItem.title == newItem.title &&
                 oldItem.desc == newItem.desc &&
                 oldItem.type == newItem.type
-
         }
     }
 }

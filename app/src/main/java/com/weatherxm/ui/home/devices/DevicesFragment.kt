@@ -1,5 +1,6 @@
 package com.weatherxm.ui.home.devices
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -53,6 +54,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
             }
         }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -135,13 +137,6 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                 binding.walletWarning.hide()
             }
         }
-
-        parentModel.onDeviceClaimed().observe(viewLifecycleOwner) {
-            it?.let {
-                onDeviceClicked(it)
-            }
-        }
-
         return binding.root
     }
 

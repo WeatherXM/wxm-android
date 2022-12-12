@@ -1,22 +1,24 @@
 package com.weatherxm.ui.home
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import arrow.core.Either
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
+import com.weatherxm.data.ApiError.UserError.ClaimError.ClaimCancelledError
 import com.weatherxm.data.Device
+import com.weatherxm.data.Failure
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.getParcelableExtra
+import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeDialogFragment
+import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.util.hideIfNot
@@ -28,29 +30,14 @@ import timber.log.Timber
 
 class HomeActivity : AppCompatActivity(), KoinComponent {
     private val navigator: Navigator by inject()
-    private lateinit var binding: ActivityHomeBinding
     private val model: HomeViewModel by viewModels()
     private val explorerModel: ExplorerViewModel by viewModels()
     private val devicesViewModel: DevicesViewModel by viewModels()
 
     private var snackbar: Snackbar? = null
+
+    private lateinit var binding: ActivityHomeBinding
     private lateinit var navController: NavController
-
-    // Register the launcher for the claim device activity and wait for a possible result
-    private val claimDeviceLauncher =
-        registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                devicesViewModel.fetch()
-                val device = result.data?.getParcelableExtra(ARG_DEVICE, Device.empty())
-                if (device != null && device != Device.empty()) {
-                    model.deviceClaimed(device)
-                }
-            }
-        }
-
-    companion object {
-        const val ARG_DEVICE = "device"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,19 +102,22 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.addDevice.setOnClickListener {
-            navigator.showSelectDeviceTypeDialog(supportFragmentManager)
+            // Show device type selection dialog
+            SelectDeviceTypeDialogFragment.newInstance { selectedDeviceType ->
+                if (selectedDeviceType == DeviceType.HELIUM) {
+                    navigator.showClaimHeliumFlow(this) { result ->
+                        handleClaimResult(result)
+                    }
+                } else {
+                    navigator.showClaimM5Flow(this) { result ->
+                        handleClaimResult(result)
+                    }
+                }
+            }.show(this)
         }
 
         model.onWalletMissing().observe(this) {
             handleBadge(it)
-        }
-
-        model.onClaimHelium().observe(this) {
-            if (it == true) navigator.showClaimHelium(claimDeviceLauncher, this)
-        }
-
-        model.onClaimM5Manually().observe(this) {
-            if (it == true) navigator.showClaimM5(claimDeviceLauncher, this)
         }
 
         // Disable BottomNavigationView bottom padding, added by default, and add margin
@@ -144,7 +134,19 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 margin(left = false, top = true, right = false, bottom = false)
             }
         }
+    }
 
+    private fun handleClaimResult(result: Either<Failure, Device>) {
+        Timber.d("Claim result: $result")
+        result
+            .tap {
+                navigator.showUserDevice(this, it)
+            }
+            .tapLeft {
+                if (it is ClaimCancelledError) {
+                    toast(R.string.warn_cancelled)
+                }
+            }
     }
 
     override fun onResume() {

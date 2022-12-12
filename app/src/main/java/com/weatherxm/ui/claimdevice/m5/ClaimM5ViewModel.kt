@@ -10,9 +10,9 @@ import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceAlreadyClaimed
 import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceClaiming
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
+import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
-import com.weatherxm.ui.claimdevice.result.ClaimResult
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
@@ -29,7 +29,7 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
 
     private val onNext = MutableLiveData(false)
     private val onCancel = MutableLiveData(false)
-    private val onClaimResult = MutableLiveData<Resource<ClaimResult>>().apply {
+    private val onClaimResult = MutableLiveData<Resource<Device>>().apply {
         value = Resource.loading()
     }
 
@@ -67,7 +67,7 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
             claimDeviceUseCase.claimDevice(serialNumber, location.latitude, location.longitude)
                 .map {
                     Timber.d("Claimed device: $it")
-                    onClaimResult.postValue(Resource.success(ClaimResult(device = it)))
+                    onClaimResult.postValue(Resource.success(it))
                 }
                 .mapLeft {
                     handleFailure(it)
@@ -82,13 +82,13 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
                     when (failure) {
                         is InvalidClaimId -> R.string.error_claim_invalid_serial
                         is InvalidClaimLocation -> R.string.error_claim_invalid_location
-                        is DeviceAlreadyClaimed -> R.string.error_claim_device_already_claimed
+                        is DeviceAlreadyClaimed -> R.string.error_claim_already_claimed
                         is DeviceNotFound -> R.string.error_claim_not_found
                         is DeviceClaiming -> R.string.error_claim_not_found_helium
                         else -> failure.getDefaultMessageResId()
                     }
                 ),
-                ClaimResult(errorCode = failure.code)
+                failure
             )
         )
     }

@@ -107,6 +107,21 @@ sealed class ApiError(code: String?, val message: String? = null) : Failure(code
                 code: String?,
                 message: String? = null
             ) : ClaimError(code, message)
+
+            class UnknownClaimedDevice(
+                code: String? = null,
+                message: String? = null
+            ) : ClaimError(code, message)
+
+            class ClaimCancelledError(
+                code: String? = null,
+                message: String? = null
+            ) : ClaimError(code, message)
+
+            class ClaimUnknownError(
+                code: String? = null,
+                message: String? = null
+            ) : ClaimError(code, message)
         }
 
         class InvalidFromDate(code: String?, message: String? = null) : UserError(code, message)

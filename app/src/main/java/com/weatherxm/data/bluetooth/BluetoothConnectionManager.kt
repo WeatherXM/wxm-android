@@ -101,7 +101,11 @@ class BluetoothConnectionManager(private val context: Context) {
     }
 
     suspend fun disconnectFromPeripheral() {
-        peripheral.disconnect()
+        try {
+            peripheral.disconnect()
+        } catch (e: Exception) {
+            Timber.d(e, "Could not disconnect peripheral.")
+        }
     }
 
     suspend fun connectToPeripheral(): Either<Failure, Unit> {

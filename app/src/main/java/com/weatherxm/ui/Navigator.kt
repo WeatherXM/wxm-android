@@ -11,9 +11,12 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import arrow.core.Either
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.Device
+import com.weatherxm.data.Failure
+import com.weatherxm.ui.claimdevice.getClaimResultHandler
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
 import com.weatherxm.ui.common.UIDevice
@@ -39,7 +42,6 @@ import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.token.TokenActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.ui.userdevice.UserDeviceActivity
-import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeFragment
 import timber.log.Timber
 
 
@@ -128,6 +130,16 @@ class Navigator {
                 Intent(
                     it, PreferenceActivity::class.java
                 ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            )
+        }
+    }
+
+    fun showUserDevice(context: Context?, device: Device) {
+        context?.let {
+            it.startActivity(
+                Intent(it, UserDeviceActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(UserDeviceActivity.ARG_DEVICE, device)
             )
         }
     }
@@ -250,27 +262,24 @@ class Navigator {
         }
     }
 
-    fun showSelectDeviceTypeDialog(fragmentManager: FragmentManager) {
-        val modalBottomSheet = SelectDeviceTypeFragment()
-        modalBottomSheet.show(fragmentManager, SelectDeviceTypeFragment.TAG)
-    }
-
-    fun showClaimM5(
-        activityResultLauncher: ActivityResultLauncher<Intent>,
-        context: Context
+    fun showClaimHeliumFlow(
+        activity: FragmentActivity,
+        callback: (Either<Failure, Device>) -> Unit
     ) {
-        activityResultLauncher.launch(
-            Intent(context, ClaimM5Activity::class.java)
+        // Launch claim activity
+        getClaimResultHandler(activity, callback).launch(
+            Intent(activity, ClaimHeliumActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
     }
 
-    fun showClaimHelium(
-        activityResultLauncher: ActivityResultLauncher<Intent>,
-        context: Context
+    fun showClaimM5Flow(
+        activity: FragmentActivity,
+        callback: (Either<Failure, Device>) -> Unit
     ) {
-        activityResultLauncher.launch(
-            Intent(context, ClaimHeliumActivity::class.java)
+        // Launch claim activity
+        getClaimResultHandler(activity, callback).launch(
+            Intent(activity, ClaimM5Activity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
     }
