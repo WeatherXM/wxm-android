@@ -51,14 +51,6 @@ class ClaimResultFragment : Fragment(), KoinComponent {
         } else {
             setupHeliumResultScreen()
         }
-
-        binding.viewStation.setOnClickListener {
-            activity?.setResult(
-                Activity.RESULT_OK,
-                Intent().putExtra(Contracts.ARG_DEVICE, model.getClaimedDevice())
-            )
-            activity?.finish()
-        }
     }
 
     private fun setupM5ResultScreen() {
@@ -78,6 +70,19 @@ class ClaimResultFragment : Fragment(), KoinComponent {
                 model.setClaimedDevice(device)
             }
             updateUI(it)
+            updateResult(it)
+        }
+    }
+
+    private fun updateResult(result: Resource<Device>) {
+        when (result.status) {
+            Status.SUCCESS -> {
+                activity?.setResult(
+                    Activity.RESULT_OK,
+                    Intent().putExtra(Contracts.ARG_DEVICE, model.getClaimedDevice())
+                )
+            }
+            else -> {}
         }
     }
 
@@ -105,6 +110,12 @@ class ClaimResultFragment : Fragment(), KoinComponent {
                     R.string.success_claim_device,
                     resource.data?.name
                 )
+                resource.data?.let { device ->
+                    binding.viewStation.setOnClickListener {
+                        navigator.showUserDevice(activity, device)
+                        activity?.finish()
+                    }
+                }
                 binding.failureButtons.visibility = View.GONE
                 binding.viewStation.visibility = View.VISIBLE
             }

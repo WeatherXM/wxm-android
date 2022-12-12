@@ -140,9 +140,11 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         Timber.d("Claim result: $result")
         result
             .tap {
-                navigator.showUserDevice(this, it)
+                // Just log
+                Timber.d("Device ${it.name} claimed successfully.")
             }
             .tapLeft {
+                // Error is handled elsewhere
                 if (it is ClaimCancelledError) {
                     toast(R.string.warn_cancelled)
                 }
