@@ -93,7 +93,7 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
                 .mapLeft {
                     onClaimResult.postValue(
                         Resource.error(
-                            resHelper.getString(
+                            msg = resHelper.getString(
                                 when (it) {
                                     is InvalidClaimId -> R.string.error_claim_invalid_dev_eui
                                     is InvalidClaimLocation -> R.string.error_claim_invalid_location
@@ -102,7 +102,8 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
                                     is DeviceClaiming -> R.string.error_claim_device_claiming_error
                                     else -> it.getDefaultMessageResId()
                                 }
-                            )
+                            ),
+                            error = it
                         )
                     )
                 }

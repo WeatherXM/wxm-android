@@ -78,7 +78,7 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
     private fun handleFailure(failure: Failure) {
         onClaimResult.postValue(
             Resource.error(
-                resHelper.getString(
+                msg = resHelper.getString(
                     when (failure) {
                         is InvalidClaimId -> R.string.error_claim_invalid_serial
                         is InvalidClaimLocation -> R.string.error_claim_invalid_location
@@ -88,7 +88,7 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
                         else -> failure.getDefaultMessageResId()
                     }
                 ),
-                failure
+                error = failure
             )
         )
     }
