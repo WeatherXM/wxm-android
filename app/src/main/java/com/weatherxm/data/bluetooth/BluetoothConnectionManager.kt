@@ -103,7 +103,7 @@ class BluetoothConnectionManager(private val context: Context) {
     suspend fun disconnectFromPeripheral() {
         try {
             peripheral.disconnect()
-        } catch (e: Exception) {
+        } catch (e: UninitializedPropertyAccessException) {
             Timber.d(e, "Could not disconnect peripheral.")
         }
     }
