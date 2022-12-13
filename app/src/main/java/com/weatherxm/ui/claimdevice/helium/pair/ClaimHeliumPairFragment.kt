@@ -77,7 +77,7 @@ class ClaimHeliumPairFragment : Fragment() {
 
         binding.scanAgain.setOnClickListener {
             adapter.submitList(mutableListOf())
-            checkAndScanBleDevices()
+            enableBluetoothAndScan()
         }
 
         binding.accessBluetoothPrompt.setOnClickListener {
@@ -115,27 +115,7 @@ class ClaimHeliumPairFragment : Fragment() {
             parentModel.next()
         }
 
-        bluetoothAdapter?.let {
-            if (it.isEnabled) {
-                checkAndScanBleDevices()
-            } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    checkPermissionsAndThen(
-                        permissions = arrayOf(BLUETOOTH_CONNECT),
-                        rationaleTitle = getString(R.string.permission_bluetooth_title),
-                        rationaleMessage = getString(R.string.perm_bluetooth_scanning_desc),
-                        onGranted = {
-                            navigator.showBluetoothEnablePrompt(enableBluetoothLauncher)
-                        },
-                        onDenied = { showNoBluetoothAccessText() })
-                } else {
-                    navigator.showBluetoothEnablePrompt(enableBluetoothLauncher)
-                }
-            }
-        } ?: run {
-            binding.infoIcon.setBluetoothDrawable(requireContext())
-            showInfoMessage(R.string.no_bluetooth_available, R.string.no_bluetooth_available_desc)
-        }
+        enableBluetoothAndScan()
     }
 
     private fun showErrorDialog(uiError: UIError) {
@@ -201,6 +181,30 @@ class ClaimHeliumPairFragment : Fragment() {
         binding.infoIcon.setBluetoothDrawable(requireContext())
         showInfoMessage(R.string.no_bluetooth_access, R.string.no_bluetooth_access_desc)
         binding.accessBluetoothPrompt.visibility = VISIBLE
+    }
+
+    private fun enableBluetoothAndScan() {
+        bluetoothAdapter?.let {
+            if (it.isEnabled) {
+                checkAndScanBleDevices()
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    checkPermissionsAndThen(
+                        permissions = arrayOf(BLUETOOTH_CONNECT),
+                        rationaleTitle = getString(R.string.permission_bluetooth_title),
+                        rationaleMessage = getString(R.string.perm_bluetooth_scanning_desc),
+                        onGranted = {
+                            navigator.showBluetoothEnablePrompt(enableBluetoothLauncher)
+                        },
+                        onDenied = { showNoBluetoothAccessText() })
+                } else {
+                    navigator.showBluetoothEnablePrompt(enableBluetoothLauncher)
+                }
+            }
+        } ?: run {
+            binding.infoIcon.setBluetoothDrawable(requireContext())
+            showInfoMessage(R.string.no_bluetooth_available, R.string.no_bluetooth_available_desc)
+        }
     }
 
     private fun checkAndScanBleDevices() {
