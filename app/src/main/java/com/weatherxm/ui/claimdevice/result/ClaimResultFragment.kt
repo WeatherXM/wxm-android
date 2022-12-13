@@ -1,14 +1,11 @@
 package com.weatherxm.ui.claimdevice.result
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
@@ -19,14 +16,12 @@ import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
-import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DeviceType
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
 class ClaimResultFragment : Fragment(), KoinComponent {
-    private val model: ClaimResultViewModel by viewModels()
     private val m5ParentModel: ClaimM5ViewModel by activityViewModels()
     private val verifyM5Model: ClaimM5VerifyViewModel by activityViewModels()
     private val heliumParentModel: ClaimHeliumViewModel by activityViewModels()
@@ -66,23 +61,7 @@ class ClaimResultFragment : Fragment(), KoinComponent {
         }
 
         m5ParentModel.onClaimResult().observe(viewLifecycleOwner) {
-            it.data?.let { device ->
-                model.setClaimedDevice(device)
-            }
             updateUI(it)
-            updateResult(it)
-        }
-    }
-
-    private fun updateResult(result: Resource<Device>) {
-        when (result.status) {
-            Status.SUCCESS -> {
-                activity?.setResult(
-                    Activity.RESULT_OK,
-                    Intent().putExtra(Contracts.ARG_DEVICE, model.getClaimedDevice())
-                )
-            }
-            else -> {}
         }
     }
 
@@ -96,11 +75,7 @@ class ClaimResultFragment : Fragment(), KoinComponent {
         }
 
         heliumParentModel.onClaimResult().observe(viewLifecycleOwner) {
-            it.data?.let { device ->
-                model.setClaimedDevice(device)
-            }
             updateUI(it)
-            updateResult(it)
         }
     }
 

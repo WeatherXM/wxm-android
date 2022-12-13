@@ -17,7 +17,6 @@ import com.weatherxm.usecases.BluetoothUpdaterUseCase
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getCode
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -117,7 +116,7 @@ class DeviceHeliumOTAViewModel(
         onStatus.postValue(Resource.loading(State(OTAStatus.DOWNLOADING)))
         viewModelScope.launch {
             // TODO: Download the update zip from the backend
-            delay(2000L)
+            // delay(2000L)
             onDownloadFile.postValue(true)
         }
     }
@@ -163,10 +162,10 @@ class DeviceHeliumOTAViewModel(
         viewModelScope.launch {
             scanUseCase.registerOnScanning().collect {
                 // TODO: Check with Device's EUI
-                if (it.name?.contains("40002F") == true) {
-                    scannedDevice = it
-                    scanUseCase.stopScanning()
-                }
+//                if (it.name?.contains("40002F") == true) {
+//                    scannedDevice = it
+//                    scanUseCase.stopScanning()
+//                }
             }
         }
 

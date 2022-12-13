@@ -43,7 +43,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
     private var snackbar: Snackbar? = null
 
     // TODO: Remove this before merging this PR. For testing purposes. 
-    private val deviceRepository: DeviceRepository by inject()
+   // private val deviceRepository: DeviceRepository by inject()
 
     companion object {
         const val ARG_DEVICE = "device"
@@ -198,15 +198,15 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
                 true
             }
             // TODO: Remove this before merging this PR. For testing purposes. 
-            R.id.delete_device -> {
-                model.device.label?.let {
-                    GlobalScope.launch {
-                        deviceRepository.deleteDevice(it.replace(":", ""))
-                    }
-                }
-                finish()
-                true
-            }
+//            R.id.delete_device -> {
+//                model.device.label?.let {
+//                    GlobalScope.launch {
+//                        deviceRepository.deleteDevice(it.replace(":", ""))
+//                    }
+//                }
+//                finish()
+//                true
+//            }
             else -> false
         }
     }

@@ -15,8 +15,8 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.getParcelableExtra
-import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity.Companion.ARG_DEVICE
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent

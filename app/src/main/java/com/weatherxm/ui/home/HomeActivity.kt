@@ -7,18 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import arrow.core.Either
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
-import com.weatherxm.data.ApiError.UserError.ClaimError.ClaimCancelledError
-import com.weatherxm.data.Device
-import com.weatherxm.data.Failure
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeDialogFragment
 import com.weatherxm.ui.common.DeviceType
-import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.util.hideIfNot
@@ -105,13 +100,9 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             // Show device type selection dialog
             SelectDeviceTypeDialogFragment.newInstance { selectedDeviceType ->
                 if (selectedDeviceType == DeviceType.HELIUM) {
-                    navigator.showClaimHeliumFlow(this) { result ->
-                        handleClaimResult(result)
-                    }
+                    navigator.showClaimHeliumFlow(this)
                 } else {
-                    navigator.showClaimM5Flow(this) { result ->
-                        handleClaimResult(result)
-                    }
+                    navigator.showClaimM5Flow(this)
                 }
             }.show(this)
         }
@@ -134,21 +125,6 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 margin(left = false, top = true, right = false, bottom = false)
             }
         }
-    }
-
-    private fun handleClaimResult(result: Either<Failure, Device>) {
-        Timber.d("Claim result: $result")
-        result
-            .tap {
-                // Just log
-                Timber.d("Device ${it.name} claimed successfully.")
-            }
-            .tapLeft {
-                // Error is handled elsewhere
-                if (it is ClaimCancelledError) {
-                    toast(R.string.warn_cancelled)
-                }
-            }
     }
 
     override fun onResume() {

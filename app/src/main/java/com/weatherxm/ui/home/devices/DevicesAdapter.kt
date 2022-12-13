@@ -88,18 +88,18 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             )
 
             // TODO: Check if OTA warning should be shown
-            if (false) {
-                binding.warningBox
-                    .action(
-                        resHelper.getString(R.string.update_station_now),
-                        actionWithBorders = true
-                    ) {
-                        deviceListener.onWarningActionClicked(item)
-                    }
-                    .hideCloseButton()
-                    .show()
-                binding.deviceCardWithWarning.showIntegratedWarning()
-            }
+//            if (false) {
+//                binding.warningBox
+//                    .action(
+//                        resHelper.getString(R.string.update_station_now),
+//                        actionWithBorders = true
+//                    ) {
+//                        deviceListener.onWarningActionClicked(item)
+//                    }
+//                    .hideCloseButton()
+//                    .show()
+//                binding.deviceCardWithWarning.showIntegratedWarning()
+//            }
         }
     }
 

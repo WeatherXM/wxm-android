@@ -11,14 +11,12 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import arrow.core.Either
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.Device
-import com.weatherxm.data.Failure
-import com.weatherxm.ui.claimdevice.getClaimResultHandler
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
@@ -262,25 +260,21 @@ class Navigator {
         }
     }
 
-    fun showClaimHeliumFlow(
-        activity: FragmentActivity,
-        callback: (Either<Failure, Device>) -> Unit
-    ) {
+    fun showClaimHeliumFlow(context: Context) {
         // Launch claim activity
-        getClaimResultHandler(activity, callback).launch(
-            Intent(activity, ClaimHeliumActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        context.startActivity(
+            Intent(
+                context, ClaimHeliumActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
     }
 
-    fun showClaimM5Flow(
-        activity: FragmentActivity,
-        callback: (Either<Failure, Device>) -> Unit
-    ) {
+    fun showClaimM5Flow(context: Context) {
         // Launch claim activity
-        getClaimResultHandler(activity, callback).launch(
-            Intent(activity, ClaimM5Activity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        context.startActivity(
+            Intent(
+                context, ClaimM5Activity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
     }
 
@@ -293,7 +287,7 @@ class Navigator {
             activityResultLauncher.launch(
                 Intent(it, DeviceHeliumOTAActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(DeviceHeliumOTAActivity.ARG_DEVICE, device)
+                    .putExtra(ARG_DEVICE, device)
             )
         }
     }

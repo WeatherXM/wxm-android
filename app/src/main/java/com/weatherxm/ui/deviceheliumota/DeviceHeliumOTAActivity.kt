@@ -19,6 +19,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityHeliumOtaBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.getParcelableExtra
 import com.weatherxm.ui.common.toast
@@ -31,11 +32,6 @@ import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
-
-    companion object {
-        const val ARG_DEVICE = "device"
-    }
-
     private lateinit var binding: ActivityHeliumOtaBinding
     private val bluetoothAdapter: BluetoothAdapter? by inject()
     private val navigator: Navigator by inject()
@@ -101,10 +97,7 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.viewStation.setOnClickListener {
-            setResult(
-                Activity.RESULT_OK,
-                Intent().putExtra(ARG_DEVICE, model.device)
-            )
+            navigator.showUserDevice(this, model.device)
             finish()
         }
 
