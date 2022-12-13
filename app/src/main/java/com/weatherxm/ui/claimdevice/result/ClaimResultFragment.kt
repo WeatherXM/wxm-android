@@ -96,8 +96,11 @@ class ClaimResultFragment : Fragment(), KoinComponent {
         }
 
         heliumParentModel.onClaimResult().observe(viewLifecycleOwner) {
-            model.setClaimedDevice(it.data)
+            it.data?.let { device ->
+                model.setClaimedDevice(device)
+            }
             updateUI(it)
+            updateResult(it)
         }
     }
 

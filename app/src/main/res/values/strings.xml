@@ -229,7 +229,7 @@
     <string name="set_and_claim">Set and Claim</string>
     <string name="station_claimed">Station Claimed</string>
     <string name="claiming_station">Claiming Station…</string>
-    <string name="claiming_station_helium_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to Helium network bandwidth limitations!<b>]]></string>
+    <string name="claiming_station_helium_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to the Helium\'s network bandwidth limitations!<b>]]></string>
     <string name="success_claim_device"><![CDATA[Your station is claimed under your account:<br><b>%s</b>]]></string>
 
     <!-- Claim M5 -->
@@ -262,7 +262,7 @@
     <string name="reset_manual_first_step"><![CDATA[Press the <b>RESET hole</b> on the bottom of your WeatherXM device.]]></string>
     <string name="reset_second_step"><![CDATA[Tap the \"I\'ve Reset My Device\" button below.]]></string>
     <string name="pairing_device">Pairing Device</string>
-    <string name="pairing_device_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to Helium network bandwidth limitations!<b>]]></string>
+    <string name="pairing_device_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to the Helium\'s network bandwidth limitations!<b>]]></string>
     <string name="pairing_failed">Pairing Failed</string>
     <string name="pairing_failed_desc"><![CDATA[Pairing failed, please try again!<br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a><br><br>Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
     <string name="helium_pairing_failed_desc">The Pairing process with WS2000 has failed. Please try again, and if the problem persists, contact support.</string>
