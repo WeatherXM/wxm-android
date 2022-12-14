@@ -30,11 +30,11 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
-        style="@style/Widget.WeatherXM.MaterialCard.ClaimingFlowDevices"
+        style="@style/Widget.WeatherXM.MaterialCard.NoRadius"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_normal"
-        app:contentPadding="@dimen/padding_large"
+        app:cardBackgroundColor="@color/select_device_type_card_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/closePopup"
         tools:layout_height="400dp">

@@ -25,8 +25,9 @@
     <color name="weather_card_data_icon">@color/dark_darkest</color>
     <color name="weather_card_data_subtitle">@color/dark_darkest</color>
 
-    <!-- Scanning -->
+    <!-- Bluetooth Scanning -->
     <color name="bluetooth_scanning_info_title">@color/dark_darkest</color>
+    <color name="progress_color_in_button">@color/dark_lighter_blue</color>
 
     <!-- Hourly Forecast Card -->
     <color name="hourly_forecast_card_precipitation">@color/light_mid_grey</color>
@@ -43,8 +44,7 @@
     <color name="chart_secondary_line">@color/dark_lighter_blue</color>
 
     <!-- Scan Devices -->
-    <color name="claiming_flow_devices_card_color">@color/dark_dark2</color>
-    <color name="progress_color_in_button">@color/dark_lighter_blue</color>
+    <color name="select_device_type_card_color">@color/dark_dark2</color>
 
     <!-- Explorer -->
     <color name="bottomSheetDialog_background">@color/dark_dark1</color>

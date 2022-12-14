@@ -187,12 +187,6 @@
         <item name="cardElevation">@dimen/card_selected_elevation</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.ClaimingFlowDevices" parent="Widget.WeatherXM.MaterialCard.NoRadius">
-        <item name="cardBackgroundColor">@color/claiming_flow_devices_card_color</item>
-        <item name="contentPadding">@dimen/padding_normal</item>
-    </style>
-
-
     <!--
         PopupMenu
     -->
