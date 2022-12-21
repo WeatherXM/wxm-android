@@ -36,29 +36,49 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <ImageView
+                        android:id="@+id/firstStepIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:layout_marginEnd="@dimen/margin_normal"
+                        android:src="@drawable/ic_one_filled"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/resetTitle"
+                        tools:ignore="ContentDescription" />
+
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/firstStep"
                         style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:drawableStart="@drawable/ic_one_filled"
-                        android:drawablePadding="@dimen/margin_normal"
-                        android:drawableTint="@color/colorOnSurface"
+                        android:layout_marginStart="@dimen/margin_normal"
                         android:text="@string/reset_ble_first_step"
-                        app:layout_constraintTop_toBottomOf="@id/resetTitle" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/firstStepIcon"
+                        app:layout_constraintTop_toTopOf="@id/firstStepIcon" />
+
+                    <ImageView
+                        android:id="@+id/secondStepIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:layout_marginEnd="@dimen/margin_normal"
+                        android:src="@drawable/ic_two_filled"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/firstStep"
+                        tools:ignore="ContentDescription" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/secondStep"
                         style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:drawableStart="@drawable/ic_two_filled"
-                        android:drawablePadding="@dimen/margin_normal"
-                        android:drawableTint="@color/colorOnSurface"
+                        android:layout_marginStart="@dimen/margin_normal"
                         android:text="@string/reset_second_step"
-                        app:layout_constraintTop_toBottomOf="@id/firstStep" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/secondStepIcon"
+                        app:layout_constraintTop_toTopOf="@id/secondStepIcon" />
 
                     <ImageView
                         android:id="@+id/resetIcon"

@@ -153,7 +153,8 @@
                                 android:insetBottom="0dp"
                                 android:text="@string/scan_again"
                                 app:icon="@drawable/ic_bluetooth"
-                                app:iconGravity="textStart" />
+                                app:iconGravity="textStart"
+                                app:iconTint="@color/colorPrimary" />
 
                             <com.google.android.material.progressindicator.LinearProgressIndicator
                                 android:id="@+id/progressBar"
