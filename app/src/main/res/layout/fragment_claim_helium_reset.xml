@@ -100,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorSurface"
-                android:elevation="@dimen/elevation_small"
+                android:elevation="@dimen/elevation_normal"
                 android:padding="@dimen/padding_large"
                 app:layout_constraintBottom_toBottomOf="parent">
 

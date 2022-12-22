@@ -46,4 +46,5 @@
     <dimen name="claiming_flow_button_radius">5dp</dimen>
 
     <dimen name="elevation_small">4dp</dimen>
+    <dimen name="elevation_normal">8dp</dimen>
 </resources>

@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/margin_normal"
+        app:contentPadding="0dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:layout_constraintBottom_toTopOf="@id/next"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,15 +19,17 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginBottom="@dimen/margin_normal"
+                android:padding="@dimen/padding_large"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                app:layout_constraintBottom_toTopOf="@id/connectButton"
+                app:layout_constraintBottom_toTopOf="@id/button_bar"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -131,14 +134,24 @@
 
             </androidx.core.widget.NestedScrollView>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/connectButton"
-                style="@style/Widget.WeatherXM.Button"
+            <FrameLayout
+                android:id="@+id/button_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/action_connect_m5_wifi"
-                android:textAllCaps="false"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                android:background="@color/colorSurface"
+                android:elevation="@dimen/elevation_normal"
+                android:padding="@dimen/padding_large"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/connectButton"
+                    style="@style/Widget.WeatherXM.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_connect_m5_wifi"
+                    android:textAllCaps="false"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
