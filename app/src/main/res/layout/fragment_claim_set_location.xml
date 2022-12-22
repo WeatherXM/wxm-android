@@ -22,9 +22,6 @@
                 android:layout_height="wrap_content"
                 app:contentPadding="0dp"
                 app:layout_constraintTop_toTopOf="parent">
-                <!-- TODO Re-enable these when we have confirm of location -->
-                <!--            app:strokeColor="@color/warning"-->
-                <!--            app:strokeWidth="1dp"-->
 
                 <LinearLayout
                     android:layout_width="match_parent"

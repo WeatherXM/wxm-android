@@ -16,7 +16,6 @@ import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyViewMod
 import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairFragment
 import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairViewModel
 import com.weatherxm.ui.claimdevice.helium.reset.ClaimHeliumResetFragment
-import com.weatherxm.ui.claimdevice.helium.verify.ClaimHeliumVerifyFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
@@ -80,18 +79,6 @@ class ClaimHeliumActivity : AppCompatActivity() {
         locationModel.onGetUserLocation().observe(this) {
             if (it) requestLocationPermissions()
         }
-
-//        model.onClaimManually().observe(this) {
-//            if (it) {
-//                val currentPage = binding.pager.currentItem
-//                model.setManual(true)
-//                pagerAdapter = ClaimHeliumDevicePagerAdapter(this, true)
-//                binding.pager.adapter = pagerAdapter
-//                binding.pager.currentItem = currentPage
-//                binding.pager.isUserInputEnabled = false
-//                binding.secondStep.text = getString(R.string.action_verify)
-//            }
-//        }
 
         model.fetchUserEmail()
 
@@ -164,7 +151,6 @@ class ClaimHeliumActivity : AppCompatActivity() {
 
     private class ClaimHeliumDevicePagerAdapter(
         activity: AppCompatActivity,
-        private val isManualClaiming: Boolean = false
     ) : FragmentStateAdapter(activity) {
         companion object {
             const val PAGE_RESET = 0
@@ -181,13 +167,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 PAGE_RESET -> ClaimHeliumResetFragment()
-                PAGE_VERIFY_OR_PAIR -> {
-                    if (isManualClaiming) {
-                        ClaimHeliumVerifyFragment()
-                    } else {
-                        ClaimHeliumPairFragment()
-                    }
-                }
+                PAGE_VERIFY_OR_PAIR -> ClaimHeliumPairFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.HELIUM)
                 PAGE_FREQUENCY -> ClaimHeliumFrequencyFragment()
                 PAGE_RESULT -> ClaimResultFragment()

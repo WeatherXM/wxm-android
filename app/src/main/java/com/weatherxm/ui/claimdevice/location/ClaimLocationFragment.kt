@@ -105,35 +105,6 @@ class ClaimLocationFragment : Fragment() {
             }
         )
 
-        // TODO: Re-enable this when we have confirm of location
         binding.mapView.getFragment<ClaimMapFragment>().initMarkerAndListeners()
-//        binding.installationToggle.setOnCheckedChangeListener { _, checked ->
-//            with(binding) {
-//                if (checked) {
-//                    mapContainer.visibility = View.VISIBLE
-//                    infoContainer.strokeWidth = 0
-//                    needHelpInstallation.visibility = View.GONE
-//                    warningBox.visibility = View.GONE
-//                    toggleDescription.text = getString(R.string.installation_toggle_checked)
-//                    mapView.getFragment<ClaimMapFragment>().initMarkerAndListeners()
-//                } else {
-//                    mapContainer.visibility = View.GONE
-//                    infoContainer.strokeWidth = 1
-//                    needHelpInstallation.visibility = View.VISIBLE
-//                    warningBox.visibility = View.VISIBLE
-//                    toggleDescription.text = getString(R.string.installation_toggle_unchecked)
-//                }
-//            }
-//        }
-//        with(binding.needHelpInstallation) {
-//            movementMethod =
-//                me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {
-//                    setOnLinkClickListener { _, url ->
-//                        navigator.openWebsite(context, url)
-//                        return@setOnLinkClickListener true
-//                    }
-//                }
-//            setHtml(R.string.need_help_installation, getString(R.string.documentation_url))
-//        }
     }
 }
