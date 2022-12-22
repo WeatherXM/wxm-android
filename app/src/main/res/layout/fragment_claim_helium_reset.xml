@@ -4,22 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/padding_normal">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/margin_normal">
+        app:contentPadding="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginBottom="@dimen/margin_normal"
-                app:layout_constraintBottom_toTopOf="@id/nextButton"
+                android:padding="@dimen/padding_large"
+                app:layout_constraintBottom_toTopOf="@id/button_bar"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -92,14 +95,27 @@
 
             </androidx.core.widget.NestedScrollView>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/nextButton"
-                style="@style/Widget.WeatherXM.Button"
+            <FrameLayout
+                android:id="@+id/button_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/action_have_reset_device"
-                android:textAllCaps="false"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                android:background="@color/colorSurface"
+                android:elevation="@dimen/elevation_small"
+                android:padding="@dimen/padding_large"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/nextButton"
+                    style="@style/Widget.WeatherXM.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_have_reset_device"
+                    android:textAllCaps="false" />
+
+            </FrameLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </com.google.android.material.card.MaterialCardView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
