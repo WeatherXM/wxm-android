@@ -32,21 +32,6 @@ class ClaimHeliumResetFragment : Fragment() {
         }
 
         binding.firstStep.setHtml(R.string.reset_ble_first_step)
-
-        /**
-         * TODO: Obsolete, remove it if we don't use manual claiming flow.
-         */
-//        binding.claimManually.setOnClickListener {
-//            parentModel.claimManually()
-//        }
-//
-//        if (parentModel.isManualClaiming()) {
-//            binding.firstStep.setHtml(R.string.reset_manual_first_step)
-//            binding.claimManually.visibility = View.GONE
-//        } else {
-//            binding.firstStep.setHtml(R.string.reset_ble_first_step)
-//        }
-
         binding.secondStep.setHtml(R.string.reset_second_step)
     }
 }
