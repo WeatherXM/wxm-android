@@ -1,7 +1,7 @@
 package com.weatherxm.ui.common
 
-// TODO: Refactor all activities/viewmodels to use this
 object Contracts {
-    const val REQUEST_DEVICE_CLAIM = "claim_device"
     const val ARG_DEVICE = "device"
+    const val ARG_USER_MESSAGE = "user_message"
+    const val ARG_IS_DELETE_ACCOUNT_FORM = "is_delete_account_form"
 }

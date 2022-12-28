@@ -16,6 +16,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentPublicDeviceDetailsBinding
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
@@ -31,7 +32,6 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "PublicDeviceDetailFragment"
-        private const val ARG_DEVICE = "device"
 
         fun newInstance(device: UIDevice) = PublicDeviceDetailFragment().apply {
             arguments = Bundle().apply { putParcelable(ARG_DEVICE, device) }

@@ -8,16 +8,13 @@ import android.webkit.WebViewClient
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.databinding.ActivityWebviewBinding
+import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
 
 class SendFeedbackActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityWebviewBinding
     private val model: SendFeedbackViewModel by viewModels()
-
-    companion object {
-        const val ARG_IS_DELETE_ACCOUNT_FORM = "is_delete_account_form"
-    }
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {

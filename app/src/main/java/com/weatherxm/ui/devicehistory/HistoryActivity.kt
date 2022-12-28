@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.ActivityHistoryBinding
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.getLastTab
 import com.weatherxm.ui.common.getParcelableExtra
 import com.weatherxm.ui.common.getSelectedTab
@@ -22,11 +23,6 @@ import timber.log.Timber
 import java.time.LocalDate
 
 class HistoryActivity : AppCompatActivity(), KoinComponent, SwipeRefreshCallback {
-
-    companion object {
-        const val ARG_DEVICE = "device"
-    }
-
     private lateinit var binding: ActivityHistoryBinding
 
     private val model: HistoryChartsViewModel by viewModel {

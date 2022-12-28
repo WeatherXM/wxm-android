@@ -17,6 +17,8 @@ import com.weatherxm.data.Device
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
+import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
@@ -27,14 +29,12 @@ import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.explorer.ExplorerActivity
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
-import com.weatherxm.ui.login.LoginActivity.Companion.ARG_USER_MESSAGE
 import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.publicdevicedetail.PublicDeviceDetailFragment
 import com.weatherxm.ui.publicdeviceslist.PublicDevicesListFragment
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
-import com.weatherxm.ui.sendfeedback.SendFeedbackActivity.Companion.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.token.TokenActivity
@@ -137,7 +137,7 @@ class Navigator {
             it.startActivity(
                 Intent(it, UserDeviceActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(UserDeviceActivity.ARG_DEVICE, device)
+                    .putExtra(ARG_DEVICE, device)
             )
         }
     }
@@ -151,7 +151,7 @@ class Navigator {
             activityResultLauncher.launch(
                 Intent(it, UserDeviceActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(UserDeviceActivity.ARG_DEVICE, device)
+                    .putExtra(ARG_DEVICE, device)
             )
         }
     }
@@ -215,7 +215,7 @@ class Navigator {
         context.startActivity(
             Intent(context, HistoryActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(HistoryActivity.ARG_DEVICE, device)
+                .putExtra(ARG_DEVICE, device)
         )
     }
 
@@ -223,7 +223,7 @@ class Navigator {
         context.startActivity(
             Intent(context, ForecastActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(ForecastActivity.ARG_DEVICE, device)
+                .putExtra(ARG_DEVICE, device)
         )
     }
 
@@ -231,7 +231,7 @@ class Navigator {
         context.startActivity(
             Intent(context, TokenActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(TokenActivity.ARG_DEVICE, device)
+                .putExtra(ARG_DEVICE, device)
         )
     }
 

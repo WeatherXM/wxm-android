@@ -8,6 +8,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityForecastBinding
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.getParcelableExtra
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
@@ -24,10 +25,6 @@ class ForecastActivity : AppCompatActivity() {
     }
 
     private lateinit var adapter: DailyForecastAdapter
-
-    companion object {
-        const val ARG_DEVICE = "device"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
