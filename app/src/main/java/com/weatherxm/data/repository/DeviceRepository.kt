@@ -14,11 +14,17 @@ import java.util.*
 interface DeviceRepository {
     suspend fun getUserDevices(): Either<Failure, List<Device>>
     suspend fun getUserDevice(deviceId: String): Either<Failure, Device>
-    suspend fun claimDevice(serialNumber: String, location: Location): Either<Failure, Device>
+    suspend fun claimDevice(
+        serialNumber: String,
+        location: Location,
+        secret: String? = null
+    ): Either<Failure, Device>
+
     suspend fun getDeviceAddress(device: Device): String?
     suspend fun setFriendlyName(deviceId: String, friendlyName: String): Either<Failure, Unit>
     suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit>
     suspend fun getLastFriendlyNameChanged(deviceId: String): Long
+    suspend fun deleteDevice(serialNumber: String): Either<Failure, Unit>
 }
 
 class DeviceRepositoryImpl(
@@ -55,9 +61,10 @@ class DeviceRepositoryImpl(
 
     override suspend fun claimDevice(
         serialNumber: String,
-        location: Location
+        location: Location,
+        secret: String?
     ): Either<Failure, Device> {
-        return deviceDataSource.claimDevice(serialNumber, location)
+        return deviceDataSource.claimDevice(serialNumber, location, secret)
     }
 
     override suspend fun getDeviceAddress(device: Device): String? {
@@ -103,5 +110,9 @@ class DeviceRepositoryImpl(
 
     override suspend fun getLastFriendlyNameChanged(deviceId: String): Long {
         return userActionDataSource.getLastFriendlyNameChanged(deviceId)
+    }
+
+    override suspend fun deleteDevice(serialNumber: String): Either<Failure, Unit> {
+        return deviceDataSource.deleteDevice(serialNumber)
     }
 }

@@ -13,6 +13,7 @@ import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Tokens.formatTokens
 import com.weatherxm.util.Weather
 import com.weatherxm.util.setTextAndColor
+import com.weatherxm.util.showIntegratedWarning
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -85,6 +86,20 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                     null -> R.color.device_status_unknown
                 }
             )
+
+            // TODO: Check if OTA warning should be shown
+//            if (false) {
+//                binding.warningBox
+//                    .action(
+//                        resHelper.getString(R.string.update_station_now),
+//                        actionWithBorders = true
+//                    ) {
+//                        deviceListener.onWarningActionClicked(item)
+//                    }
+//                    .hideCloseButton()
+//                    .show()
+//                binding.deviceCardWithWarning.showIntegratedWarning()
+//            }
         }
     }
 
@@ -109,4 +124,5 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
 
 interface DeviceListener {
     fun onDeviceClicked(device: Device)
+    fun onWarningActionClicked(device: Device)
 }

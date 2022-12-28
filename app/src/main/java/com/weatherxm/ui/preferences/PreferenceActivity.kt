@@ -39,9 +39,7 @@ class PreferenceActivity : AppCompatActivity(), KoinComponent {
         }
 
         model.onDismissSurveyPrompt().observe(this) {
-            if (it) {
-                binding.surveyPrompt.visibility = View.GONE
-            }
+            if (it) binding.surveyPrompt.visibility = View.GONE
         }
 
         model.isLoggedIn().observe(this) { result ->

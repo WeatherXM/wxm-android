@@ -9,6 +9,8 @@ import android.widget.LinearLayout
 import androidx.annotation.StringRes
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewInformationCardBinding
+import com.weatherxm.util.setHtml
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 class InformationCardView : LinearLayout {
 
@@ -54,6 +56,30 @@ class InformationCardView : LinearLayout {
         binding.message.apply {
             text = subtitle
             visibility = if (subtitle != null) View.VISIBLE else View.GONE
+        }
+        return this
+    }
+
+    fun htmlMessage(
+        @StringRes resId: Int,
+        arg: String? = null,
+        linkClickedListener: (() -> Unit)? = null
+    ): InformationCardView {
+        binding.message.apply {
+            if (arg.isNullOrEmpty()) {
+                setHtml(resId)
+            } else {
+                setHtml(resId, arg)
+            }
+            if (linkClickedListener != null) {
+                movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                    setOnLinkClickListener { _, _ ->
+                        linkClickedListener.invoke()
+                        return@setOnLinkClickListener true
+                    }
+                }
+            }
+            visibility = View.VISIBLE
         }
         return this
     }

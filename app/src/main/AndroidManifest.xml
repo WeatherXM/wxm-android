@@ -4,7 +4,16 @@
     package="com.weatherxm">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_SCAN"
+        android:usesPermissionFlags="neverForLocation"
+        tools:targetApi="s" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:name="com.weatherxm.app.App"
@@ -103,7 +112,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.weatherxm.ui.claimdevice.ClaimDeviceActivity"
+            android:name="com.weatherxm.ui.claimdevice.m5.ClaimM5Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
@@ -123,6 +136,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.weatherxm.ui.notification.NotificationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
 
         <!-- Services -->
         <service
@@ -133,6 +154,9 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name="com.weatherxm.service.DfuService"
+            android:exported="false" />
 
     </application>
 

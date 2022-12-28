@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.runBlocking
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import java.util.Date
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class UserDeviceUseCaseImpl(

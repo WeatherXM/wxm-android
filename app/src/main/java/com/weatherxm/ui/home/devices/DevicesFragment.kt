@@ -1,5 +1,6 @@
 package com.weatherxm.ui.home.devices
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +15,8 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.getParcelableExtra
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
@@ -26,11 +29,20 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
     private val navigator: Navigator by inject()
     private lateinit var binding: FragmentDevicesBinding
 
-    // Register the launcher for the connect wallet activity and wait for a possible result
     private val userDeviceLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 model.fetch()
+            }
+        }
+
+    private val updateOTADeviceLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val device = result.data?.getParcelableExtra(ARG_DEVICE, Device.empty())
+                if (device != null && device != Device.empty()) {
+                    navigator.showUserDevice(userDeviceLauncher, this, device)
+                }
             }
         }
 
@@ -42,6 +54,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
             }
         }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -112,9 +125,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
         }
 
         model.preferenceChanged().observe(viewLifecycleOwner) {
-            if (it) {
-                adapter.notifyDataSetChanged()
-            }
+            if (it) adapter.notifyDataSetChanged()
         }
 
         parentModel.onWalletMissing().observe(viewLifecycleOwner) {
@@ -126,11 +137,14 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                 binding.walletWarning.hide()
             }
         }
-
         return binding.root
     }
 
     override fun onDeviceClicked(device: Device) {
         navigator.showUserDevice(userDeviceLauncher, this, device)
+    }
+
+    override fun onWarningActionClicked(device: Device) {
+        navigator.showDeviceHeliumOTA(updateOTADeviceLauncher, this, device)
     }
 }

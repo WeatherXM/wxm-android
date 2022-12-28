@@ -38,6 +38,14 @@ interface ApiService {
     suspend fun getUserDevices(): NetworkResponse<List<Device>, ErrorResponse>
 
     @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 204, body = "mock_files/empty_response.json")
+    @POST("/api/v1/me/devices/disclaim")
+    suspend fun deleteDevice(
+        @Body address: DeleteDeviceBody,
+    ): NetworkResponse<Unit, ErrorResponse>
+
+    @Mock
     @MockResponse(body = "mock_files/get_user_device.json")
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @GET("/api/v1/me/devices/{deviceId}")

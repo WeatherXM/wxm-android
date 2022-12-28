@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
 import com.weatherxm.data.Device
+import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.databinding.ActivityUserDeviceBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.getParcelableExtra
@@ -23,6 +24,7 @@ import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setColor
 import com.weatherxm.util.setHtml
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent

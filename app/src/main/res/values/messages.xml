@@ -1,42 +1,48 @@
 <resources>
     <!-- Error Messages -->
     <string name="error_generic_message">Oops! Something went wrong.</string>
-    <string name="error_reach_out">It\’s not you, it\’s us! Please retry and if problem persists, reach out to us at support@weatherxm.com</string>
+    <string name="error_reach_out">It\’s not you, it\’s us! Please try again. If the problem persists, please contact our support team at support@weatherxm.com</string>
     <string name="error_reach_out_short">It\’s not you, it\’s us! If problem persists, reach out to us.</string>
     <string name="error_network_generic">Please, check your internet connection and try again.</string>
     <string name="error_network_timed_out">Server taking too long to respond. Please check your connection and try again.</string>
     <string name="error_history_no_data_on_day">Oops! Could not load data from network.</string>
-    <string name="error_history_generic_message">"Fetching history failed"</string>
-    <string name="error_history_no_data_chart_found">"No historical weather data could be found for this day."</string>
-    <string name="error_login_invalid_username">"Login failed: Invalid email"</string>
-    <string name="error_login_invalid_password">"Login failed: Invalid password"</string>
-    <string name="error_login_invalid_credentials">"Login failed: Invalid email or password"</string>
-    <string name="error_signup_invalid_username">"Signup failed: Invalid email"</string>
-    <string name="error_signup_user_already_exists">"Signup failed: User with email %1$s already exists"</string>
-    <string name="error_password_reset_invalid_username">"Password Reset failed: Invalid email"</string>
+    <string name="error_history_generic_message">Fetching history failed</string>
+    <string name="error_history_no_data_chart_found">No historical weather data could be found for this day.</string>
+    <string name="error_login_invalid_username">Login failed: Invalid email</string>
+    <string name="error_login_invalid_password">Login failed: Invalid password</string>
+    <string name="error_login_invalid_credentials">Login failed: Invalid email or password</string>
+    <string name="error_signup_invalid_username">Signup failed: Invalid email</string>
+    <string name="error_signup_user_already_exists">Signup failed: User with email %1$s already exists</string>
+    <string name="error_password_reset_invalid_username">Password Reset failed: Invalid email</string>
     <string name="error_user_device_offline"><![CDATA[Your weather station hasn\'t connected for a while.<br/>Please, visit our <a href=\"%1$s\">troubleshooting guide</a>.]]></string>
-    <string name="error_user_device_not_found">"Could not find the requested device"</string>
+    <string name="error_user_device_not_found">Could not find the requested device</string>
     <string name="error_user_device_data_failed">Getting data for this device failed.</string>
     <string name="error_user_device_current_weather_failed">Getting the current weather for this device failed.</string>
     <string name="error_user_device_forecast_failed">Getting weather forecast data failed.</string>
     <string name="error_user_device_token_failed">Getting token data failed.</string>
-    <string name="error_connect_wallet_invalid_address">"Invalid wallet address"</string>
-    <string name="error_forecast_generic_message">"Fetching forecast failed"</string>
-    <string name="error_forecast_no_data">"Oops! Forecast could not be fetched."</string>
-    <string name="error_claim_invalid_serial">"Claiming device failed: The serial number is invalid"</string>
-    <string name="error_claim_invalid_location">"Claiming device failed: The location provided is invalid"</string>
-    <string name="error_claim_device_already_claimed">"Claiming device failed: This device is already claimed"</string>
-    <string name="error_claim_not_found">"Claiming device failed: Could not find a device with the requested serial number"</string>
+    <string name="error_connect_wallet_invalid_address">Invalid wallet address</string>
+    <string name="error_forecast_generic_message">Fetching forecast failed</string>
+    <string name="error_forecast_no_data">Oops! Forecast could not be fetched.</string>
+    <string name="error_claim_failed_title">Claiming Failed</string>
+    <string name="error_claim_invalid_dev_eui"><![CDATA[Station claiming failed.<br><b>The Dev EUI is invalid</b>.<br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
+    <string name="error_claim_invalid_serial"><![CDATA[Station claiming failed.<br><b>The serial number is invalid</b>.<br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
+    <string name="error_claim_invalid_location"><![CDATA[Station claiming failed.<br><b>The location provided is invalid.</b><br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
+    <string name="error_claim_already_claimed"><![CDATA[Station claiming failed.<br><b>This device is already claimed.</b><br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
+    <string name="error_claim_not_found"><![CDATA[Station claiming failed.<br><b>Could not find a device with the requested serial number.</b><br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
+    <string name="error_claim_not_found_helium"><![CDATA[Station claiming failed.<br><b>Could not find such a device.</b><br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
+    <string name="error_claim_device_claiming_error"><![CDATA[Station claiming failed.<br><b>This device is not in claiming mode or the secret provided is invalid.</b><br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
     <string name="error_claim_gps_failed">Could not get current location.</string>
     <string name="error_public_device_no_data">Failed to get the details of the device: No Data</string>
     <string name="error_public_devices_no_data">Failed to get the public devices.</string>
-    <string name="error_transactions_no_data">"Oops! WXM transactions could not be fetched."</string>
+    <string name="error_transactions_no_data">Oops! WXM transactions could not be fetched.</string>
     <string name="error_support_cannot_send_email">Oops! Could not send email!</string>
     <string name="error_open_website_support_cannot_open_url">Oops! Could not open %s</string>
     <string name="error_cannot_open_play_store">Oops! Could not open Play Store.</string>
     <string name="error_friendly_name_change_rate_limit">You can only change your device\'s friendly name once in 10 minutes.</string>
     <string name="error_search_suggestions">Search suggestions not available. Please try again later.</string>
-    <string name="error_invalid_password">"Invalid password"</string>
+    <string name="error_invalid_password">Invalid password</string>
+    <string name="error_helium_ota_aborted">ABORTED</string>
+    <string name="error_helium_ota_failed">FAILED: Error: %1$d - Type: %2$d - Message: %3$s</string>
 
     <!-- Warn Messages -->
     <string name="warn_validation_invalid_email">Not a valid email</string>

@@ -15,6 +15,7 @@ class HomeViewModel : ViewModel(), KoinComponent {
 
     // Needed for passing info to show the wallet missing warning card and badges
     private val onWalletMissing = MutableLiveData(false)
+
     fun onWalletMissing() = onWalletMissing
 
     fun getWalletMissing() {
