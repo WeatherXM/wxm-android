@@ -5,6 +5,7 @@
     <color name="colorOnPrimary">@color/light_top</color>
 
     <color name="colorSurface">@color/light_top</color>
+    <color name="colorSurfaceVariant">@color/light_light1</color>
     <color name="colorOnSurface">@color/dark_background</color>
     <color name="colorOnSurfaceVariant">@color/light_dark_grey</color>
 

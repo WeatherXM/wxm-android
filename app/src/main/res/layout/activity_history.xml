@@ -23,7 +23,6 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/date_tabs"
-            style="@style/Widget.WeatherXM.TabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

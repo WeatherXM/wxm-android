@@ -4,7 +4,7 @@
     <string name="hint_password">Password</string>
     <string name="success">Success</string>
     <string name="action_save">Save</string>
-    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in">Sign In</string>
     <string name="action_retry">Retry</string>
     <string name="action_ok">OK</string>
     <string name="action_cancel">Cancel</string>

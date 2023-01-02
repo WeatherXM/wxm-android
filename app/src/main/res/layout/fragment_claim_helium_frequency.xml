@@ -50,7 +50,7 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/frequencyTitle"
-                        style="@style/TextAppearance.WeatherXM.TextInput.TitleMedium"
+                        style="@style/TextAppearance.WeatherXM.TextInput.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal"

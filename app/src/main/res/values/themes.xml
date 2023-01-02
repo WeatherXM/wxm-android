@@ -10,6 +10,7 @@
         <item name="colorPrimaryContainer">@color/colorPrimary</item>
         <item name="colorOnPrimary">@color/colorOnPrimary</item>
         <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorSurfaceVariant">@color/colorSurfaceVariant</item>
         <item name="colorOnSurface">@color/colorOnSurface</item>
         <item name="colorOnBackground">@color/colorOnBackground</item>
         <item name="colorError">@color/error</item>
@@ -74,7 +75,7 @@
         <item name="appBarLayoutStyle">@style/Widget.WeatherXM.AppBar</item>
     </style>
 
-    <style name="ShapeAppearance.WeatherXM.BottomSheet.Dialog" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+    <style name="ShapeAppearance.WeatherXM.BottomSheet.Dialog" parent="ShapeAppearance.Material3.LargeComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopRight">16dp</item>
         <item name="cornerSizeTopLeft">16dp</item>

@@ -41,7 +41,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/changelogTitle"
-                style="@style/TextAppearance.WeatherXM.Default.TitleLarge"
+                style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"

@@ -25,7 +25,7 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/name"
-                    style="@style/TextAppearance.WeatherXM.Devices.List.Name"
+                    style="@style/TextAppearance.WeatherXM.Default.PrimaryColor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_normal"
