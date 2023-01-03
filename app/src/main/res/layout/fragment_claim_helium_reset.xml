@@ -48,6 +48,7 @@
                         android:src="@drawable/ic_one_filled"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/resetTitle"
+                        app:tint="@color/colorOnSurface"
                         tools:ignore="ContentDescription" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -70,6 +71,7 @@
                         android:src="@drawable/ic_two_filled"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/firstStep"
+                        app:tint="@color/colorOnSurface"
                         tools:ignore="ContentDescription" />
 
                     <com.google.android.material.textview.MaterialTextView
