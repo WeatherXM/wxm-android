@@ -73,14 +73,14 @@ class EmptyView : LinearLayout {
     fun subtitle(subtitle: String?): EmptyView {
         binding.subtitle.apply {
             text = subtitle
-            visibility = if (subtitle != null) View.VISIBLE else View.GONE
+            visibility = if (subtitle != null && subtitle.isNotEmpty()) View.VISIBLE else View.GONE
         }
         return this
     }
 
     fun htmlSubtitle(
         @StringRes resId: Int,
-        arg: String?,
+        arg: String? = null,
         linkClickedListener: (() -> Unit)? = null
     ): EmptyView {
         binding.subtitle.apply {
@@ -88,6 +88,30 @@ class EmptyView : LinearLayout {
                 setHtml(resId)
             } else {
                 setHtml(resId, arg)
+            }
+            if (linkClickedListener != null) {
+                movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                    setOnLinkClickListener { _, _ ->
+                        linkClickedListener.invoke()
+                        return@setOnLinkClickListener true
+                    }
+                }
+            }
+            visibility = View.VISIBLE
+        }
+        return this
+    }
+
+    fun htmlSubtitle(
+        subtitle: String,
+        arg: String? = null,
+        linkClickedListener: (() -> Unit)? = null
+    ): EmptyView {
+        binding.subtitle.apply {
+            if (arg.isNullOrEmpty()) {
+                setHtml(subtitle)
+            } else {
+                setHtml(subtitle, arg)
             }
             if (linkClickedListener != null) {
                 movementMethod = BetterLinkMovementMethod.newInstance().apply {
@@ -112,7 +136,10 @@ class EmptyView : LinearLayout {
     }
 
     fun action(label: String?): EmptyView {
-        binding.action.text = label
+        binding.action.apply {
+            text = label
+            visibility = if (label != null) View.VISIBLE else View.GONE
+        }
         return this
     }
 

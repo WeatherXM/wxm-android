@@ -7,6 +7,7 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.fondesa.kpermissions.allDenied
 import com.fondesa.kpermissions.allPermanentlyDenied
 import com.fondesa.kpermissions.anyGranted
 import com.fondesa.kpermissions.anyShouldShowRationale
@@ -29,17 +30,25 @@ fun FragmentActivity.hasPermissions(
     hasPermission(permission)
 }
 
+fun FragmentActivity.hasAnyPermissions(
+    vararg permissions: String
+): Boolean = permissions.any { permission ->
+    hasPermission(permission)
+}
+
 fun Fragment.checkPermissionsAndThen(
     vararg permissions: String,
     rationaleTitle: String,
     rationaleMessage: String,
-    onGranted: () -> Unit
+    onGranted: () -> Unit,
+    onDenied: () -> Unit
 ) {
     activity?.checkPermissionsAndThen(
         permissions = permissions,
         rationaleTitle = rationaleTitle,
         rationaleMessage = rationaleMessage,
-        onGranted = onGranted
+        onGranted = onGranted,
+        onDenied = onDenied
     )
 }
 
@@ -47,7 +56,8 @@ fun FragmentActivity.checkPermissionsAndThen(
     vararg permissions: String,
     rationaleTitle: String,
     rationaleMessage: String,
-    onGranted: () -> Unit
+    onGranted: () -> Unit,
+    onDenied: () -> Unit
 ) {
     // Show rationale dialog
     fun onShowRationale() {
@@ -60,7 +70,8 @@ fun FragmentActivity.checkPermissionsAndThen(
                     permissions = permissions,
                     rationaleTitle = rationaleTitle,
                     rationaleMessage = rationaleMessage,
-                    onGranted = onGranted
+                    onGranted = onGranted,
+                    onDenied = onDenied,
                 )
             }
             .onNegativeClick(getString(R.string.action_cancel)) {
@@ -93,6 +104,10 @@ fun FragmentActivity.checkPermissionsAndThen(
     permissionsBuilder(
         permissions = permissions
     ).build().send { result ->
+        if (result.allDenied()) {
+            onDenied()
+        }
+
         when {
             result.anyGranted() -> onGranted()
             result.anyShouldShowRationale() -> onShowRationale()

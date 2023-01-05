@@ -13,4 +13,6 @@ interface UserDataSource {
     fun hasDismissedSurveyPrompt(): Boolean
     fun dismissSurveyPrompt()
     fun getUserId(): String
+    fun setWalletWarningDismissTimestamp()
+    fun getWalletWarningDismissTimestamp(): Long
 }

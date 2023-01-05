@@ -3,8 +3,14 @@
     <string name="support_email_subject_delete_account">Delete Account</string>
     <string name="support_email_subject_cannot_claim">Cannot claim device</string>
     <string name="support_email_subject_no_activation">No activation email</string>
+    <string name="support_email_subject_helium_verify_failed">Helium Verification Failed</string>
+    <string name="support_email_subject_helium_pairing_failed">Helium Pairing Failed</string>
+    <string name="support_email_subject_helium_ota_failed">Helium OTA Failed</string>
+    <string name="support_email_body_claiming_helium">Dev EUI: %1$s\nDevice Key: %2$s\n</string>
     <string name="support_email_body_user">User account email: %1$s</string>
-    <string name="support_email_body_user_and_device_info">User account email: %1$s\nDevice S/N: %2$s\n</string>
+    <string name="support_email_body_user_and_m5_device_info">User account email: %1$s\nDevice S/N: %2$s\nError: %3$s\n\n</string>
+    <string name="support_email_body_user_and_helium_device_info">User account email: %1$s\nDevice EUI: %2$s\nDevice Key: %3$s\nError: %4$s\n\n</string>
+    <string name="support_email_body_helium_ota_failed">Device Name: %1$s\nError Code: %2$s\n\n</string>
     <string name="support_email_recipient">support@weatherxm.com</string>
     <string name="website">https://weatherxm.com</string>
     <string name="documentation_url">https://docs.weatherxm.com</string>
@@ -15,4 +21,6 @@
     <string name="short_app_survey_url">https://docs.google.com/forms/d/e/1FAIpQLSc1T-odUwpXa01nODavwEtLgO00AfPxqfrdhbn_G5Lss0dD2w/viewform?usp=pp_url</string>
     <string name="delete_account_survey_url">https://docs.google.com/forms/d/e/1FAIpQLSdWPLpyUx2fNIiohQ-XaskbkZuoUSqYhwIkGGjupJ7IDEX_aA/viewform?usp=pp_url</string>
     <string name="market_url">market://details?id=%s</string>
+    <string name="m5_connect_wifi_instructional_video">https://www.youtube.com/watch?v=sUJEwuFq1CE</string>
+    <string name="helium_frequencies_mapping_url">https://docs.helium.com/lorawan-on-helium/region-plans/</string>
 </resources>

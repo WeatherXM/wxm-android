@@ -10,6 +10,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityTokenBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.token.TokenViewModel.Companion.TransactionExplorer
 import com.weatherxm.util.applyInsets
@@ -18,17 +19,12 @@ import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
 class TokenActivity : AppCompatActivity(), KoinComponent {
-
     private lateinit var binding: ActivityTokenBinding
     private val model: TokenViewModel by viewModels()
     private val navigator: Navigator by inject()
 
     private lateinit var adapter: TransactionsAdapter
     private lateinit var deviceId: String
-
-    companion object {
-        const val ARG_DEVICE = "device"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

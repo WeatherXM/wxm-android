@@ -10,16 +10,16 @@ import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.annotations
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationManager
-import com.mapbox.maps.plugin.annotation.generated.createPointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.createPolygonAnnotationManager
 import com.mapbox.maps.plugin.gestures.gestures
 import com.mapbox.maps.plugin.scalebar.scalebar
 import com.mapbox.maps.viewannotation.ViewAnnotationManager
 import com.weatherxm.databinding.FragmentMapBinding
 import com.weatherxm.ui.BaseMapFragment.OnMapDebugInfoListener
+import com.weatherxm.util.DisplayModeHelper
 import dev.chrisbanes.insetter.applyInsetter
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 open class BaseMapFragment : Fragment() {
@@ -33,9 +33,10 @@ open class BaseMapFragment : Fragment() {
         fun onMapDebugInfoUpdated(zoom: Double, center: Point)
     }
 
+    private val displayModeHelper: DisplayModeHelper by inject()
+
     protected lateinit var binding: FragmentMapBinding
     protected lateinit var polygonManager: PolygonAnnotationManager
-    protected lateinit var pointManager: PointAnnotationManager
     protected lateinit var viewManager: ViewAnnotationManager
 
     private lateinit var debugInfoListener: OnMapDebugInfoListener
@@ -90,7 +91,6 @@ open class BaseMapFragment : Fragment() {
 
             with(binding.mapView.annotations) {
                 polygonManager = this.createPolygonAnnotationManager()
-                pointManager = this.createPointAnnotationManager()
             }
 
             // Update camera
@@ -133,6 +133,10 @@ open class BaseMapFragment : Fragment() {
     }
 
     open fun getMapStyle(): String {
-        return Style.MAPBOX_STREETS
+        return if (displayModeHelper.isDarkModeEnabled()) {
+            Style.DARK
+        } else {
+            Style.MAPBOX_STREETS
+        }
     }
 }

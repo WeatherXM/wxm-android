@@ -90,3 +90,24 @@ data class UIDevice(
     val currentWeather: HourlyWeather?,
     var tokenInfo: TokenInfo?
 ) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class ScannedDevice(
+    val address: String,
+    val name: String?,
+    val type: DeviceType = DeviceType.HELIUM
+) : Parcelable {
+    companion object {
+        fun empty() = ScannedDevice(
+            "", ""
+        )
+    }
+}
+
+@Parcelize
+enum class DeviceType : Parcelable {
+    M5_WIFI,
+    HELIUM
+}

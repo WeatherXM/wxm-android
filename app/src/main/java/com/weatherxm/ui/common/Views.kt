@@ -3,6 +3,7 @@ package com.weatherxm.ui.common
 import android.app.Activity
 import android.content.Context
 import android.text.Html
+import android.text.Editable
 import android.widget.Toast
 import androidx.annotation.IntDef
 import androidx.annotation.StringRes
@@ -89,3 +90,13 @@ fun Activity.getRichText(
     @StringRes resId: Int,
     vararg args: Any = emptyArray()
 ) = getText(resId).toSpanned().toHtml().format(*args).parseAsHtml().trim()
+
+/**
+ * Remove colon ":" character from Serial Number text
+ */
+fun Editable?.unmask(): String = this.toString().unmask()
+
+/**
+ * Remove colon ":" character from Serial Number text
+ */
+fun String.unmask(): String = this.toString().replace(":", "")

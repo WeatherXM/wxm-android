@@ -37,6 +37,7 @@ allprojects {
                 password = project.properties["MAPBOX_DOWNLOADS_TOKEN"] ?: ""
             }
         }
+        maven { url "https://jitpack.io" }
     }
 
     apply {
@@ -57,6 +58,6 @@ task clean(type: Delete) {
  * Configures gradle wrapper for this project
  */
 wrapper {
-    gradleVersion = "7.5.1"
+    gradleVersion = "7.6"
     distributionUrl "https://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
 }

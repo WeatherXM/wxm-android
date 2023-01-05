@@ -10,5 +10,7 @@ interface UserRepository {
     suspend fun deleteAccount(): Either<Failure, Unit>
     fun hasDismissedSurveyPrompt(): Boolean
     fun dismissSurveyPrompt()
+    fun setWalletWarningDismissTimestamp()
     fun getUserId(): String
+    fun getWalletWarningDismissTimestamp(): Long
 }

@@ -7,16 +7,22 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.User
 import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.data.repository.WalletRepository
+import java.util.concurrent.TimeUnit
 
 interface UserUseCase {
     suspend fun getUser(): Either<Failure, User>
     suspend fun getWalletAddress(): Either<Failure, String>
+    suspend fun shouldShowWalletMissingWarning(): Boolean
+    fun setWalletWarningDismissTimestamp()
 }
 
 class UserUseCaseImpl(
     private val userRepository: UserRepository,
     private val walletRepository: WalletRepository
 ) : UserUseCase {
+    companion object {
+        val WALLET_WARNING_DISMISS_EXPIRATION = TimeUnit.HOURS.toMillis(24L)
+    }
 
     override suspend fun getUser(): Either<Failure, User> {
         return userRepository.getUser()
@@ -25,5 +31,20 @@ class UserUseCaseImpl(
     override suspend fun getWalletAddress(): Either<Failure, String> {
         return walletRepository.getWalletAddress()
             .leftIfNull { DataError.NoWalletAddressError }
+    }
+
+    override suspend fun shouldShowWalletMissingWarning(): Boolean {
+        val hasWalletAddress = walletRepository.getWalletAddress()
+            .leftIfNull { DataError.NoWalletAddressError }
+            .fold({ it !is DataError.NoWalletAddressError }, { it.isNotEmpty() })
+
+        val dismissTimestamp = userRepository.getWalletWarningDismissTimestamp()
+        val now = System.currentTimeMillis()
+
+        return !hasWalletAddress && (now - dismissTimestamp) > WALLET_WARNING_DISMISS_EXPIRATION
+    }
+
+    override fun setWalletWarningDismissTimestamp() {
+        userRepository.setWalletWarningDismissTimestamp()
     }
 }

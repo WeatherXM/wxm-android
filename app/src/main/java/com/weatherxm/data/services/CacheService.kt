@@ -2,16 +2,19 @@ package com.weatherxm.data.services
 
 import android.content.SharedPreferences
 import android.location.Location
+import androidx.annotation.StringRes
 import androidx.collection.ArrayMap
 import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.rightIfNotNull
 import com.mapbox.search.result.SearchSuggestion
+import com.weatherxm.R
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.User
 import com.weatherxm.data.WeatherData
 import com.weatherxm.data.network.AuthToken
+import com.weatherxm.util.ResourcesHelper
 import okhttp3.Cache
 import java.util.concurrent.TimeUnit
 
@@ -19,7 +22,8 @@ import java.util.concurrent.TimeUnit
 class CacheService(
     private val preferences: SharedPreferences,
     private val encryptedPreferences: SharedPreferences,
-    private val okHttpCache: Cache
+    private val okHttpCache: Cache,
+    private val resHelper: ResourcesHelper
 ) {
     companion object {
         const val KEY_ACCESS = "access"
@@ -27,9 +31,18 @@ class CacheService(
         const val KEY_LAST_REMINDED_VERSION = "last_reminded_version"
         const val KEY_USERNAME = "username"
         const val KEY_DISMISSED_SURVEY_PROMPT = "dismissed_survey_prompt"
+        const val KEY_WALLET_WARNING_DISMISSED_TIMESTAMP = "wallet_warning_dismissed_timestamp"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
+
+        // Some Preference's keys
+        const val KEY_THEME = R.string.key_theme
+        const val KEY_TEMPERATURE = R.string.key_temperature_preference
+        const val KEY_PRECIP = R.string.key_precipitation_preference
+        const val KEY_WIND = R.string.key_wind_speed_preference
+        const val KEY_WIND_DIR = R.string.key_wind_direction_preference
+        const val KEY_PRESSURE = R.string.key_pressure_preference
     }
 
     private var user: User? = null
@@ -165,6 +178,15 @@ class CacheService(
         preferences.edit().putBoolean(KEY_DISMISSED_SURVEY_PROMPT, true).apply()
     }
 
+    fun setWalletWarningDismissTimestamp() {
+        preferences.edit()
+            .putLong(KEY_WALLET_WARNING_DISMISSED_TIMESTAMP, System.currentTimeMillis()).apply()
+    }
+
+    fun getWalletWarningDismissTimestamp(): Long {
+        return preferences.getLong(KEY_WALLET_WARNING_DISMISSED_TIMESTAMP, 0L)
+    }
+
     fun clearForecast() {
         this.forecasts.clear()
     }
@@ -175,9 +197,39 @@ class CacheService(
         this.forecasts.clear()
         this.suggestions.clear()
         this.locations.clear()
-        preferences.edit().clear().apply()
-        encryptedPreferences.edit().clear().apply()
         okHttpCache.evictAll()
+        encryptedPreferences.edit().clear().apply()
+        clearUserPreferences()
+    }
+
+    /**
+     * Some settings should not be cleared when `clearAll` is being used (like on logging out).
+     * They are not private information and they have a serious impact in UX if we reset them.
+     * So, here we:
+     * 1. Fetch them
+     * 2. Save them in temp variables, and
+     * 3. Re-save them in the shared preferences.
+     */
+    private fun clearUserPreferences() {
+        val savedTheme = getPreferenceString(KEY_THEME, R.string.system_value)
+        val savedTemperature = getPreferenceString(KEY_TEMPERATURE, R.string.temperature_celsius)
+        val savedPrecipitation = getPreferenceString(KEY_PRECIP, R.string.precipitation_mm)
+        val savedWind = getPreferenceString(KEY_WIND, R.string.wind_speed_ms)
+        val savedWindDir = getPreferenceString(KEY_WIND_DIR, R.string.wind_direction_cardinal)
+        val savedPressure = getPreferenceString(KEY_PRESSURE, R.string.pressure_hpa)
+        preferences.edit()
+            .clear()
+            .putString(resHelper.getString(KEY_THEME), savedTheme)
+            .putString(resHelper.getString(KEY_TEMPERATURE), savedTemperature)
+            .putString(resHelper.getString(KEY_PRECIP), savedPrecipitation)
+            .putString(resHelper.getString(KEY_WIND), savedWind)
+            .putString(resHelper.getString(KEY_WIND_DIR), savedWindDir)
+            .putString(resHelper.getString(KEY_PRESSURE), savedPressure)
+            .apply()
+    }
+
+    private fun getPreferenceString(@StringRes key: Int, @StringRes fallback: Int): String? {
+        return preferences.getString(resHelper.getString(key), resHelper.getString(fallback))
     }
 
     data class TimedForecastData(

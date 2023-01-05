@@ -3,28 +3,27 @@ package com.weatherxm.ui.widget
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
+import android.widget.FrameLayout
 import androidx.annotation.StringRes
 import com.google.android.material.button.MaterialButton.ICON_GRAVITY_END
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewWarningCardBinding
 
-class WarningCardView : LinearLayout {
+class WarningCardView : FrameLayout {
 
     private lateinit var binding: ViewWarningCardBinding
 
-    constructor(context: Context?) : super(context) {
+    constructor(context: Context) : super(context) {
         init(context)
     }
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         init(context, attrs)
     }
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context,
         attrs,
         defStyleAttr
@@ -32,14 +31,8 @@ class WarningCardView : LinearLayout {
         init(context, attrs)
     }
 
-    private fun init(context: Context?, attrs: AttributeSet? = null) {
+    private fun init(context: Context, attrs: AttributeSet? = null) {
         binding = ViewWarningCardBinding.inflate(LayoutInflater.from(context), this)
-        orientation = VERTICAL
-        gravity = Gravity.CENTER
-
-        binding.closeButton.setOnClickListener {
-            hide()
-        }
 
         this.context.theme.obtainStyledAttributes(attrs, R.styleable.WarningCardView, 0, 0).apply {
             try {
@@ -77,18 +70,39 @@ class WarningCardView : LinearLayout {
         return this
     }
 
+    fun closeButton(listener: OnClickListener): WarningCardView {
+        binding.closeButton.visibility = VISIBLE
+        binding.closeButton.setOnClickListener(listener)
+        return this
+    }
+
     fun action(
         label: String,
         endIcon: Drawable? = null,
+        actionWithBorders: Boolean = false,
         listener: OnClickListener
     ): WarningCardView {
-        with(binding.action) {
-            text = label
-            setOnClickListener(listener)
-            visibility = VISIBLE
-            if (endIcon != null) {
-                icon = endIcon
-                iconGravity = ICON_GRAVITY_END
+        if (actionWithBorders) {
+            with(binding.actionOutline) {
+                text = label
+                setOnClickListener(listener)
+                if (endIcon != null) {
+                    icon = endIcon
+                    iconGravity = ICON_GRAVITY_END
+                }
+                binding.action.visibility = GONE
+                visibility = VISIBLE
+            }
+        } else {
+            with(binding.action) {
+                text = label
+                setOnClickListener(listener)
+                if (endIcon != null) {
+                    icon = endIcon
+                    iconGravity = ICON_GRAVITY_END
+                }
+                binding.actionOutline.visibility = GONE
+                visibility = VISIBLE
             }
         }
         return this

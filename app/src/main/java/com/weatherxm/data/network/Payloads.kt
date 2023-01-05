@@ -42,11 +42,18 @@ data class ResetPasswordBody(
 @Parcelize
 data class ClaimDeviceBody(
     val serialNumber: String,
-    val location: Location
+    val location: Location,
+    val secret: String? = null
 ) : Parcelable
 
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class FriendlyNameBody(
     val friendlyName: String
+) : Parcelable
+
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeleteDeviceBody(
+    val serialNumber: String
 ) : Parcelable

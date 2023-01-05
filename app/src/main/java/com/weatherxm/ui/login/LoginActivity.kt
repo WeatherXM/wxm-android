@@ -11,6 +11,7 @@ import com.weatherxm.data.Status
 import com.weatherxm.data.User
 import com.weatherxm.databinding.ActivityLoginBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.util.Validator
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.hideKeyboard
@@ -27,10 +28,6 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityLoginBinding
 
     private var snackbar: Snackbar? = null
-
-    companion object {
-        const val ARG_USER_MESSAGE = "user_message"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

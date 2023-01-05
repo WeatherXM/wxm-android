@@ -17,6 +17,7 @@ import com.weatherxm.data.ApiError.GenericError.UnknownError
 import com.weatherxm.data.ApiError.GenericError.ValidationError
 import com.weatherxm.data.ApiError.InvalidFriendlyName
 import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceAlreadyClaimed
+import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceClaiming
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
@@ -28,6 +29,7 @@ import com.weatherxm.data.NetworkError.NoConnectionError
 import com.weatherxm.data.NetworkError.ParseJsonError
 import com.weatherxm.data.network.ErrorResponse
 import com.weatherxm.data.network.ErrorResponse.Companion.DEVICE_ALREADY_CLAIMED
+import com.weatherxm.data.network.ErrorResponse.Companion.DEVICE_CLAIMING
 import com.weatherxm.data.network.ErrorResponse.Companion.DEVICE_NOT_FOUND
 import com.weatherxm.data.network.ErrorResponse.Companion.FORBIDDEN
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_ACCESS_TOKEN
@@ -50,6 +52,8 @@ import okhttp3.Request
 import okhttp3.Response
 import timber.log.Timber
 import java.net.SocketTimeoutException
+
+fun ByteArray.toHexString() = joinToString("") { "%02x".format(it) }
 
 fun Request.path(): String = this.url.encodedPath
 
@@ -88,6 +92,7 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
                         INVALID_CLAIM_ID -> InvalidClaimId(code, this.body?.message)
                         INVALID_CLAIM_LOCATION -> InvalidClaimLocation(code, this.body?.message)
                         DEVICE_ALREADY_CLAIMED -> DeviceAlreadyClaimed(code, this.body?.message)
+                        DEVICE_CLAIMING -> DeviceClaiming(code, this.body?.message)
                         UNAUTHORIZED -> UnauthorizedError(code, this.body?.message)
                         USER_NOT_FOUND -> UserNotFoundError(code, this.body?.message)
                         FORBIDDEN -> ForbiddenError(code, this.body?.message)

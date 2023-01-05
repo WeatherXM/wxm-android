@@ -151,10 +151,11 @@
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/signupPrompt"
-                        style="@style/Widget.WeatherXM.TextButton.Subtle.Caps"
+                        style="@style/Widget.WeatherXM.TextButton.Subtle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/action_signup"
+                        android:textAllCaps="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/signUpText"
                         app:layout_constraintTop_toTopOf="parent" />

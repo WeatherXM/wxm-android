@@ -86,11 +86,12 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/reward"
-                style="@style/TextAppearance.WeatherXM.Transaction.Reward"
+                style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:text="@string/reward"
+                android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/tx_hash"
                 tools:text="+ 2000 WXM" />
 

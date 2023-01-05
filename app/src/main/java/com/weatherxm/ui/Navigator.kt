@@ -1,5 +1,6 @@
 package com.weatherxm.ui
 
+import android.bluetooth.BluetoothAdapter
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -10,25 +11,30 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.Device
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
+import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
+import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
 import com.weatherxm.ui.deviceforecast.ForecastActivity
+import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.explorer.ExplorerActivity
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
-import com.weatherxm.ui.login.LoginActivity.Companion.ARG_USER_MESSAGE
 import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.publicdevicedetail.PublicDeviceDetailFragment
 import com.weatherxm.ui.publicdeviceslist.PublicDevicesListFragment
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
-import com.weatherxm.ui.sendfeedback.SendFeedbackActivity.Companion.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.token.TokenActivity
@@ -126,6 +132,16 @@ class Navigator {
         }
     }
 
+    fun showUserDevice(context: Context?, device: Device) {
+        context?.let {
+            it.startActivity(
+                Intent(it, UserDeviceActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_DEVICE, device)
+            )
+        }
+    }
+
     fun showUserDevice(
         activityResultLauncher: ActivityResultLauncher<Intent>,
         fragment: Fragment,
@@ -135,7 +151,7 @@ class Navigator {
             activityResultLauncher.launch(
                 Intent(it, UserDeviceActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(UserDeviceActivity.ARG_DEVICE, device)
+                    .putExtra(ARG_DEVICE, device)
             )
         }
     }
@@ -149,6 +165,14 @@ class Navigator {
             .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             .putExtra(ARG_IS_DELETE_ACCOUNT_FORM, isDeleteAccountForm)
         activityResultLauncher.launch(intent)
+    }
+
+    fun showQRScanner(activityResultLauncher: ActivityResultLauncher<ScanOptions>) {
+        activityResultLauncher.launch(ScanOptions().setBeepEnabled(false))
+    }
+
+    fun showBluetoothEnablePrompt(bluetoothLauncher: ActivityResultLauncher<Intent>) {
+        bluetoothLauncher.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
     }
 
     fun showResetPassword(context: Context) {
@@ -191,7 +215,7 @@ class Navigator {
         context.startActivity(
             Intent(context, HistoryActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(HistoryActivity.ARG_DEVICE, device)
+                .putExtra(ARG_DEVICE, device)
         )
     }
 
@@ -199,7 +223,7 @@ class Navigator {
         context.startActivity(
             Intent(context, ForecastActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(ForecastActivity.ARG_DEVICE, device)
+                .putExtra(ARG_DEVICE, device)
         )
     }
 
@@ -207,7 +231,7 @@ class Navigator {
         context.startActivity(
             Intent(context, TokenActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(TokenActivity.ARG_DEVICE, device)
+                .putExtra(ARG_DEVICE, device)
         )
     }
 
@@ -232,6 +256,38 @@ class Navigator {
                 Intent(
                     it, SendFeedbackActivity::class.java
                 ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            )
+        }
+    }
+
+    fun showClaimHeliumFlow(context: Context) {
+        // Launch claim activity
+        context.startActivity(
+            Intent(
+                context, ClaimHeliumActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        )
+    }
+
+    fun showClaimM5Flow(context: Context) {
+        // Launch claim activity
+        context.startActivity(
+            Intent(
+                context, ClaimM5Activity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        )
+    }
+
+    fun showDeviceHeliumOTA(
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        fragment: Fragment,
+        device: Device?
+    ) {
+        fragment.context?.let {
+            activityResultLauncher.launch(
+                Intent(it, DeviceHeliumOTAActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_DEVICE, device)
             )
         }
     }

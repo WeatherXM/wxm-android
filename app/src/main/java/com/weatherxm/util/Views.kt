@@ -15,17 +15,22 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.core.text.HtmlCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.components.MarkerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
+import com.weatherxm.R
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.show
 import dev.chrisbanes.insetter.applyInsetter
@@ -44,6 +49,31 @@ fun EditText.onTextChanged(callback: (String) -> Unit) {
 
 fun EditText.clear() {
     this.setText("")
+}
+
+fun ImageView.setWarningDrawable(context: Context) {
+    val drawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_warning, context.theme)
+    drawable?.setTint(ResourcesCompat.getColor(resources, R.color.warning, context.theme))
+    this.setImageDrawable(drawable)
+}
+
+fun ImageView.setBluetoothDrawable(context: Context) {
+    val drawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_bluetooth, context.theme)
+    drawable?.setTint(ResourcesCompat.getColor(resources, R.color.light_mid_grey, context.theme))
+    this.setImageDrawable(drawable)
+}
+
+fun ImageView.setNoDevicesFoundDrawable(context: Context) {
+    val drawable =
+        ResourcesCompat.getDrawable(resources, R.drawable.ic_no_devices_found, context.theme)
+    drawable?.setTint(ResourcesCompat.getColor(resources, R.color.light_mid_grey, context.theme))
+    this.setImageDrawable(drawable)
+}
+
+fun MaterialButton.disable(context: Context) {
+    this.isEnabled = false
+    this.setBackgroundColor(resources.getColor(R.color.light_mid_grey, context.theme))
+    this.setTextColor(resources.getColor(R.color.light_dark_grey, context.theme))
 }
 
 @Suppress("EmptyFunctionBlock")
@@ -67,6 +97,17 @@ fun TabLayout.createAndAddTab(text: String) {
 fun Chip.setTextAndColor(@StringRes text: Int, color: Int) {
     this.setChipBackgroundColorResource(color)
     this.text = this.resources.getString(text)
+}
+
+fun Chip.setIcon(@DrawableRes drawable: Int) {
+    this.chipIcon = ResourcesCompat.getDrawable(resources, drawable, context.theme)
+}
+
+fun Chip.setSuccessChip() {
+    this.setChipBackgroundColorResource(R.color.success_tint)
+    this.chipIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_checkmark, context.theme)
+    this.setChipIconTintResource(R.color.dark_background)
+    this.setTextColor(getColor(resources, R.color.dark_background, context.theme))
 }
 
 fun ImageView.setColor(@ColorRes color: Int) {
@@ -117,6 +158,15 @@ fun TextView.setHtml(
     setText(HtmlCompat.fromHtml(html, flags), TextView.BufferType.SPANNABLE)
 }
 
+fun TextView.setHtml(
+    message: String,
+    vararg args: Any = emptyArray(),
+    flags: Int = HtmlCompat.FROM_HTML_MODE_LEGACY
+) {
+    val html = message.format(*args)
+    setText(HtmlCompat.fromHtml(html, flags), TextView.BufferType.SPANNABLE)
+}
+
 fun View.applyOnGlobalLayout(listener: () -> Unit) {
     viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
         override fun onGlobalLayout() {
@@ -138,6 +188,12 @@ fun Activity.hideKeyboard() {
 
 fun ChipGroup.setChildrenEnabled(enable: Boolean) {
     children.forEach { it.isEnabled = enable }
+}
+
+fun MaterialCardView.showIntegratedWarning() {
+    setCardBackgroundColor(context.getColor(R.color.warning_tint))
+    strokeWidth = 1
+    strokeColor = context.getColor(R.color.warning)
 }
 
 @Suppress("MagicNumber")

@@ -67,7 +67,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.scanQR.setOnClickListener {
-            scanWallet()
+            navigator.showQRScanner(barcodeLauncher)
         }
 
         binding.editWallet.setOnClickListener {
@@ -168,12 +168,6 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         binding.ownershipCheckbox.isEnabled = true
         binding.termsCheckbox.isEnabled = true
         binding.walletCompatibilityCard.show()
-    }
-
-    private fun scanWallet() {
-        barcodeLauncher.launch(
-            ScanOptions().setBeepEnabled(false)
-        )
     }
 
     private fun onAddressUpdateUI(address: String?) {

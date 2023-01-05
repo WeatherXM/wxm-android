@@ -51,4 +51,12 @@ class UserRepositoryImpl(
     override fun dismissSurveyPrompt() {
         cacheUserDataSource.dismissSurveyPrompt()
     }
+
+    override fun setWalletWarningDismissTimestamp() {
+        cacheUserDataSource.setWalletWarningDismissTimestamp()
+    }
+
+    override fun getWalletWarningDismissTimestamp(): Long {
+        return cacheUserDataSource.getWalletWarningDismissTimestamp()
+    }
 }

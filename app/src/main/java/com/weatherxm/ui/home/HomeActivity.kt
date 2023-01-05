@@ -1,11 +1,7 @@
 package com.weatherxm.ui.home
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -16,7 +12,8 @@ import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.claimdevice.ClaimDeviceActivity
+import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeDialogFragment
+import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.util.hideIfNot
@@ -26,24 +23,16 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
-
 class HomeActivity : AppCompatActivity(), KoinComponent {
     private val navigator: Navigator by inject()
-    private lateinit var binding: ActivityHomeBinding
     private val model: HomeViewModel by viewModels()
     private val explorerModel: ExplorerViewModel by viewModels()
     private val devicesViewModel: DevicesViewModel by viewModels()
 
     private var snackbar: Snackbar? = null
-    private lateinit var navController: NavController
 
-    // Register the launcher for the claim device activity and wait for a possible result
-    private val claimDeviceLauncher =
-        registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                devicesViewModel.fetch()
-            }
-        }
+    private lateinit var binding: ActivityHomeBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,22 +88,23 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
          * based on selected navigation item and dismiss snackbar if shown
          */
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (snackbar?.isShown == true) {
-                snackbar?.dismiss()
-            }
+            if (snackbar?.isShown == true) snackbar?.dismiss()
             when (destination.id) {
-                R.id.navigation_devices -> {
-                    binding.addDevice.showIfNot()
-                }
-                else -> {
-                    binding.addDevice.hideIfNot()
-                }
+                R.id.navigation_devices -> binding.addDevice.showIfNot()
+                else -> binding.addDevice.hideIfNot()
             }
             binding.devicesCountCard.visibility = View.GONE
         }
 
         binding.addDevice.setOnClickListener {
-            claimDeviceLauncher.launch(Intent(this, ClaimDeviceActivity::class.java))
+            // Show device type selection dialog
+            SelectDeviceTypeDialogFragment.newInstance { selectedDeviceType ->
+                if (selectedDeviceType == DeviceType.HELIUM) {
+                    navigator.showClaimHeliumFlow(this)
+                } else {
+                    navigator.showClaimM5Flow(this)
+                }
+            }.show(this)
         }
 
         model.onWalletMissing().observe(this) {
@@ -135,7 +125,6 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 margin(left = false, top = true, right = false, bottom = false)
             }
         }
-
     }
 
     override fun onResume() {

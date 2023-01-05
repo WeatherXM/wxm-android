@@ -38,4 +38,12 @@ class NetworkUserDataSource(private val apiService: ApiService) : UserDataSource
     override fun getUserId(): String {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
+
+    override fun setWalletWarningDismissTimestamp() {
+        throw NotImplementedError("Won't be implemented. Ignore this.")
+    }
+
+    override fun getWalletWarningDismissTimestamp(): Long {
+        throw NotImplementedError("Won't be implemented. Ignore this.")
+    }
 }

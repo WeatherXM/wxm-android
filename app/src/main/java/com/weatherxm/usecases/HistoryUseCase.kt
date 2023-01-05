@@ -10,6 +10,10 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.repository.WeatherHistoryRepository
+import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
+import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
+import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
+import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
 import com.weatherxm.ui.devicehistory.BarChartData
 import com.weatherxm.ui.devicehistory.HistoryCharts
 import com.weatherxm.ui.devicehistory.LineChartData
@@ -174,7 +178,7 @@ class HistoryUseCaseImpl(
             temperature = LineChartData(
                 resHelper.getString(R.string.temperature),
                 Weather.getPreferredUnit(
-                    resHelper.getString(R.string.key_temperature_preference),
+                    resHelper.getString(KEY_TEMPERATURE),
                     resHelper.getString(R.string.temperature_celsius)
                 ),
                 times,
@@ -183,7 +187,7 @@ class HistoryUseCaseImpl(
             feelsLike = LineChartData(
                 resHelper.getString(R.string.feels_like),
                 Weather.getPreferredUnit(
-                    resHelper.getString(R.string.key_temperature_preference),
+                    resHelper.getString(KEY_TEMPERATURE),
                     resHelper.getString(R.string.temperature_celsius)
                 ),
                 times,
@@ -198,7 +202,7 @@ class HistoryUseCaseImpl(
             windSpeed = LineChartData(
                 resHelper.getString(R.string.wind_speed),
                 Weather.getPreferredUnit(
-                    resHelper.getString(R.string.key_wind_speed_preference),
+                    resHelper.getString(KEY_WIND),
                     resHelper.getString(R.string.wind_speed_ms)
                 ),
                 times,
@@ -207,7 +211,7 @@ class HistoryUseCaseImpl(
             windGust = LineChartData(
                 resHelper.getString(R.string.wind_gust),
                 Weather.getPreferredUnit(
-                    resHelper.getString(R.string.key_wind_speed_preference),
+                    resHelper.getString(KEY_WIND),
                     resHelper.getString(R.string.wind_speed_ms)
                 ),
                 times,
@@ -216,7 +220,7 @@ class HistoryUseCaseImpl(
             windDirection = LineChartData(
                 resHelper.getString(R.string.wind_direction),
                 Weather.getPreferredUnit(
-                    resHelper.getString(R.string.key_wind_direction_preference),
+                    resHelper.getString(KEY_WIND_DIR),
                     resHelper.getString(R.string.wind_direction_cardinal)
                 ),
                 times,
@@ -231,7 +235,7 @@ class HistoryUseCaseImpl(
             pressure = LineChartData(
                 resHelper.getString(R.string.pressure),
                 Weather.getPreferredUnit(
-                    resHelper.getString(R.string.key_pressure_preference),
+                    resHelper.getString(KEY_PRESSURE),
                     resHelper.getString(R.string.pressure_hpa)
                 ),
                 times,

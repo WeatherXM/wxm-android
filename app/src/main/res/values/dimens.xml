@@ -4,8 +4,7 @@
     <dimen name="activity_vertical_margin">24dp</dimen>
 
     <dimen name="card_side_margin">12dp</dimen>
-    <dimen name="card_top_margin">12dp</dimen>
-    <dimen name="card_bottom_margin">12dp</dimen>
+    <dimen name="card_vertical_margin">12dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="card_selected_elevation">8dp</dimen>
     <dimen name="card_corner_radius">12dp</dimen>
@@ -34,17 +33,10 @@
     <dimen name="chart_line_thickness">3dp</dimen>
     <dimen name="token_chip_corner_radius">5dp</dimen>
 
-    <dimen name="temperature_slider_halo_radius">0dp</dimen>
-    <dimen name="temperature_slider_thumb_elevation">0dp</dimen>
-    <dimen name="temperature_slider_thumb_radius">0dp</dimen>
-    <dimen name="temperature_slider_track_height">16dp</dimen>
-
-    <dimen name="reward_slider_halo_radius">0dp</dimen>
-    <dimen name="reward_slider_thumb_elevation">0dp</dimen>
-    <dimen name="reward_slider_thumb_radius">0dp</dimen>
-    <dimen name="reward_slider_track_height">16dp</dimen>
+    <dimen name="slider_default_track_height">16dp</dimen>
 
     <dimen name="claiming_flow_button_radius">5dp</dimen>
 
     <dimen name="elevation_small">4dp</dimen>
+    <dimen name="elevation_normal">8dp</dimen>
 </resources>

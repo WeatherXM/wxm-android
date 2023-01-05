@@ -65,6 +65,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_extra_small"
+                    android:textIsSelectable="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/address"
@@ -199,10 +200,12 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/forecastNextDays"
-                            style="@style/Widget.WeatherXM.TextButton.Subtle.Arrow.Next"
+                            style="@style/Widget.WeatherXM.TextButton.Subtle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/next_7_days"
+                            app:icon="@drawable/ic_next"
+                            app:iconGravity="end"
                             app:layout_constraintBottom_toBottomOf="@id/date_tabs"
                             app:layout_constraintEnd_toEndOf="parent" />
 

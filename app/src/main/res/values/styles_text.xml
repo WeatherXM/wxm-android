@@ -11,16 +11,6 @@
         <item name="fontFamily">sans-serif-medium</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.Default.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Default.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="fontFamily">sans-serif-medium</item>
-    </style>
-
     <style name="TextAppearance.WeatherXM.Default.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
         <item name="android:textColor">@color/colorOnSurface</item>
     </style>
@@ -31,6 +21,12 @@
 
     <style name="TextAppearance.WeatherXM.Default.BodySmall" parent="TextAppearance.Material3.BodySmall">
         <item name="android:textColor">@color/colorOnSurface</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Default.PrimaryColor" parent="TextAppearance.WeatherXM.Default.BodyMedium">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <!--
@@ -60,12 +56,6 @@
         <item name="android:textColor">@color/colorOnSurfaceVariant</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">italic</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Devices.List.Name" parent="TextAppearance.WeatherXM.Default.BodyLarge">
-        <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Devices.List.TokensTitle" parent="TextAppearance.WeatherXM.Default.BodyLarge">
@@ -240,10 +230,6 @@
     <!--
         Transaction Screen
     -->
-    <style name="TextAppearance.WeatherXM.Transaction.Reward" parent="TextAppearance.WeatherXM.Default.HeadlineSmall">
-        <item name="android:textStyle">bold</item>
-    </style>
-
     <style name="TextAppearance.WeatherXM.Transaction.Date" parent="TextAppearance.WeatherXM.Default.BodyLarge">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
@@ -259,13 +245,6 @@
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="android:textStyle">italic</item>
         <item name="android:alpha">0.5</item>
-    </style>
-
-    <!--
-        Claiming Screens
-    -->
-    <style name="TextAppearance.WeatherXM.Claim.InMap" parent="TextAppearance.WeatherXM.Default.TitleMedium">
-        <item name="android:textColor">@color/dark_background</item>
     </style>
 
     <!--
@@ -297,6 +276,14 @@
     </style>
 
     <!--
+        Bluetooth Scanning
+    -->
+    <style name="TextAppearance.WeatherXM.BluetoothScanning.InfoTitle" parent="TextAppearance.WeatherXM.Default.BodyLarge">
+        <item name="android:textColor">@color/bluetooth_scanning_info_title</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!--
         Tabs
     -->
     <style name="TextAppearance.WeatherXM.Tabs" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
@@ -308,7 +295,7 @@
         MaterialTextView above TextInput acting as title
     -->
     <style name="TextAppearance.WeatherXM.TextInput.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <!--
@@ -322,7 +309,7 @@
     <!--
         EmptyView
     -->
-    <style name="TextAppearance.WeatherXM.EmptyView.Title" parent="TextAppearance.WeatherXM.Default.TitleLarge">
+    <style name="TextAppearance.WeatherXM.EmptyView.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
     </style>
