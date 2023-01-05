@@ -14,22 +14,31 @@ class HomeViewModel : ViewModel(), KoinComponent {
     private val userUseCase: UserUseCase by inject()
 
     // Needed for passing info to show the wallet missing warning card and badges
+    private val onWalletMissingWarning = MutableLiveData(false)
     private val onWalletMissing = MutableLiveData(false)
 
+    fun onWalletMissingWarning() = onWalletMissingWarning
     fun onWalletMissing() = onWalletMissing
 
     fun getWalletMissing() {
         viewModelScope.launch {
+            onWalletMissingWarning.postValue(userUseCase.shouldShowWalletMissingWarning())
             userUseCase.getWalletAddress()
-                .map {
+                .tap {
                     onWalletMissing.postValue(it.isEmpty())
-                }.mapLeft {
+                }
+                .tapLeft {
                     onWalletMissing.postValue(it is DataError.NoWalletAddressError)
                 }
         }
     }
 
+    fun setWalletWarningDismissTimestamp() {
+        userUseCase.setWalletWarningDismissTimestamp()
+    }
+
     fun setWalletNotMissing() {
+        onWalletMissingWarning.postValue(false)
         onWalletMissing.postValue(false)
     }
 }

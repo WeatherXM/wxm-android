@@ -128,10 +128,13 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
             if (it) adapter.notifyDataSetChanged()
         }
 
-        parentModel.onWalletMissing().observe(viewLifecycleOwner) {
+        parentModel.onWalletMissingWarning().observe(viewLifecycleOwner) {
             if (it) {
                 binding.walletWarning.action(getString(R.string.add_wallet_now)) {
                     navigator.showConnectWallet(connectWalletLauncher, this)
+                }.closeButton {
+                    binding.walletWarning.hide()
+                    parentModel.setWalletWarningDismissTimestamp()
                 }.show()
             } else {
                 binding.walletWarning.hide()

@@ -31,6 +31,7 @@ class CacheService(
         const val KEY_LAST_REMINDED_VERSION = "last_reminded_version"
         const val KEY_USERNAME = "username"
         const val KEY_DISMISSED_SURVEY_PROMPT = "dismissed_survey_prompt"
+        const val KEY_WALLET_WARNING_DISMISSED_TIMESTAMP = "wallet_warning_dismissed_timestamp"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -175,6 +176,15 @@ class CacheService(
 
     fun dismissSurveyPrompt() {
         preferences.edit().putBoolean(KEY_DISMISSED_SURVEY_PROMPT, true).apply()
+    }
+
+    fun setWalletWarningDismissTimestamp() {
+        preferences.edit()
+            .putLong(KEY_WALLET_WARNING_DISMISSED_TIMESTAMP, System.currentTimeMillis()).apply()
+    }
+
+    fun getWalletWarningDismissTimestamp(): Long {
+        return preferences.getLong(KEY_WALLET_WARNING_DISMISSED_TIMESTAMP, 0L)
     }
 
     fun clearForecast() {
