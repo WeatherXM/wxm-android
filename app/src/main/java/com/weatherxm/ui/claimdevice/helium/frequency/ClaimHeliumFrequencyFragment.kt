@@ -42,7 +42,7 @@ class ClaimHeliumFrequencyFragment : Fragment() {
                         return@setOnLinkClickListener true
                     }
                 }
-            setHtml(R.string.set_frequency_desc, getString(R.string.documentation_url))
+            setHtml(R.string.set_frequency_desc, getString(R.string.helium_frequencies_mapping_url))
         }
 
         binding.confirmFrequencyToggle.setOnCheckedChangeListener { _, checked ->
