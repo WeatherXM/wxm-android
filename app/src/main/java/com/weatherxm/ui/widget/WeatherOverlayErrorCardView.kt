@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.annotation.StringRes
 import com.weatherxm.R
+import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ViewWeatherOverlayErrorCardBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.util.setHtml
@@ -43,7 +44,7 @@ class WeatherOverlayErrorCardView : LinearLayout, KoinComponent {
         gravity = Gravity.CENTER
     }
 
-    fun setErrorMessageWithUrl(@StringRes errorMessageResId: Int) {
+    fun setErrorMessageWithUrl(@StringRes errorMessageResId: Int, profile: DeviceProfile?) {
         with(binding.errorText) {
             movementMethod = BetterLinkMovementMethod.newInstance().apply {
                 setOnLinkClickListener { _, url ->
@@ -51,7 +52,16 @@ class WeatherOverlayErrorCardView : LinearLayout, KoinComponent {
                     return@setOnLinkClickListener true
                 }
             }
-            setHtml(errorMessageResId, context.resources.getString(R.string.troubleshooting_url))
+            if (profile == DeviceProfile.M5) {
+                setHtml(
+                    errorMessageResId, context.resources.getString(R.string.troubleshooting_m5_url)
+                )
+            } else {
+                setHtml(
+                    errorMessageResId,
+                    context.resources.getString(R.string.troubleshooting_helium_url)
+                )
+            }
         }
         show()
     }

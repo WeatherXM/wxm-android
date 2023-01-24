@@ -239,7 +239,10 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
                     R.color.device_status_online
                 }
                 false -> {
-                    binding.errorCard.setErrorMessageWithUrl(R.string.error_user_device_offline)
+                    binding.errorCard.setErrorMessageWithUrl(
+                        R.string.error_user_device_offline,
+                        device.profile
+                    )
                     R.color.device_status_offline
                 }
                 null -> {
