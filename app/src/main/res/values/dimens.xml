@@ -5,9 +5,11 @@
 
     <dimen name="card_side_margin">12dp</dimen>
     <dimen name="card_vertical_margin">12dp</dimen>
+    <dimen name="card_vertical_padding">12dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="card_selected_elevation">8dp</dimen>
     <dimen name="card_corner_radius">12dp</dimen>
+    <dimen name="card_stroke">1dp</dimen>
 
     <dimen name="button_corner_radius">4dp</dimen>
 

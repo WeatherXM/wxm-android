@@ -8,6 +8,7 @@
     tools:parentTag="android.widget.FrameLayout">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
         style="@style/Widget.WeatherXM.MaterialCard.Warning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

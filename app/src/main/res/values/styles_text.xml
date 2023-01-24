@@ -55,24 +55,22 @@
     <style name="TextAppearance.WeatherXM.Devices.List.LastSeen" parent="TextAppearance.WeatherXM.Default.BodyLarge">
         <item name="android:textColor">@color/colorOnSurfaceVariant</item>
         <item name="android:textSize">12sp</item>
-        <item name="android:textStyle">italic</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.Devices.List.TokensTitle" parent="TextAppearance.WeatherXM.Default.BodyLarge">
+    <style name="TextAppearance.WeatherXM.Devices.List.Address" parent="TextAppearance.WeatherXM.Default.BodyMedium">
+        <item name="android:textColor">@color/weather_card_data_subtitle</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Devices.List.WeatherData.Unit" parent="TextAppearance.WeatherXM.Default.BodyMedium">
+        <item name="android:textColor">@color/weather_card_unit</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Devices.List.WeatherData.Subtitle" parent="TextAppearance.WeatherXM.Default.BodySmall">
+        <item name="android:textColor">@color/weather_card_data_subtitle</item>
         <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Devices.List.Tokens" parent="TextAppearance.WeatherXM.Default.BodyLarge">
-        <item name="android:lines">1</item>
-        <item name="autoSizeTextType">uniform</item>
-        <item name="autoSizeMinTextSize">8sp</item>
-        <item name="autoSizeMaxTextSize">12sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Devices.List.WeatherData" parent="TextAppearance.WeatherXM.Default.BodyLarge">
-        <item name="android:textSize">20sp</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <!--

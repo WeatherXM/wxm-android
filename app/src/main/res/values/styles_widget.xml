@@ -242,6 +242,7 @@
         <item name="android:clickable">false</item>
         <item name="chipStrokeWidth">0dp</item>
         <item name="chipCornerRadius">20dp</item>
+        <item name="chipIconSize">20dp</item>
     </style>
 
     <style name="Widget.WeatherXM.Chip.Token" parent="Widget.Material3.Chip.Assist">

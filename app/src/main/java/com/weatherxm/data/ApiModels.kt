@@ -50,6 +50,7 @@ data class PublicDevice(
     val id: String,
     val name: String,
     val timezone: String?,
+    val profile: DeviceProfile?,
     val isActive: Boolean?,
     val lastWeatherStationActivity: ZonedDateTime?,
     val cellIndex: String?,
@@ -60,6 +61,7 @@ data class PublicDevice(
         return UIDevice(
             id,
             name,
+            profile,
             cellIndex,
             isActive,
             lastWeatherStationActivity,
@@ -80,6 +82,7 @@ data class Device(
     val label: String?,
     val location: Location?,
     val timezone: String?,
+    val profile: DeviceProfile?,
     val attributes: Attributes?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
@@ -88,7 +91,7 @@ data class Device(
 ) : Parcelable {
     companion object {
         fun empty() = Device(
-            "", "", null, null, null, null, null, null, null
+            "", "", null, null, null, null, null, null, null, null
         )
     }
 
@@ -199,7 +202,14 @@ data class HourlyWeather(
     @Json(name = "cloud_cover")
     val cloudCover: Int?,
     val pressure: Float?
-) : Parcelable
+) : Parcelable {
+    fun isEmpty(): Boolean {
+        return precipitation == null && temperature == null && feelsLike == null
+            && windDirection == null && humidity == null && windSpeed == null && windGust == null
+            && icon.isNullOrEmpty() && precipProbability == null && uvIndex == null
+            && cloudCover == null && pressure == null
+    }
+}
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -242,4 +252,9 @@ data class PublicHex(
     val center: Location,
     val polygon: List<Location>,
 ) : Parcelable
+
+enum class DeviceProfile {
+    M5,
+    Helium
+}
 

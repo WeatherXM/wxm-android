@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.LastAndDatedTxs
 import com.weatherxm.data.Transaction
@@ -81,6 +82,7 @@ data class TokenValuesChart(
 data class UIDevice(
     val id: String,
     val name: String,
+    var profile: DeviceProfile?,
     val cellIndex: String?,
     val isActive: Boolean?,
     val lastWeatherStationActivity: ZonedDateTime?,

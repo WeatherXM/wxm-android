@@ -43,10 +43,18 @@ class ErrorCardView : LinearLayout {
             hide()
         }
 
+        binding.action.visibility = GONE
+
         this.context.theme.obtainStyledAttributes(attrs, R.styleable.ErrorCardView, 0, 0).apply {
             try {
                 title(getString(R.styleable.ErrorCardView_error_title))
                 message(getString(R.styleable.ErrorCardView_error_message))
+                if (!getBoolean(R.styleable.ErrorCardView_error_includes_close_button, true)) {
+                    binding.closeButton.visibility = View.GONE
+                }
+                if (!getBoolean(R.styleable.ErrorCardView_error_includes_stroke, true)) {
+                    binding.card.strokeWidth = 0
+                }
             } finally {
                 recycle()
             }

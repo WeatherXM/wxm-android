@@ -24,6 +24,7 @@
 
     <!-- Weather Card -->
     <color name="weather_card_data_icon">@color/light_darkest_blue</color>
+    <color name="weather_card_unit">@color/light_mid_grey</color>
     <color name="weather_card_data_subtitle">@color/light_darkest_blue</color>
 
     <!-- Bluetooth Scanning -->
@@ -44,8 +45,11 @@
     <color name="chart_primary_line">@color/light_darker_blue</color>
     <color name="chart_secondary_line">@color/light_lightest_blue</color>
 
-    <!-- Select Device Type -->
-    <color name="select_device_type_card_color">@color/light_light2</color>
+    <!-- Devices List -->
+    <color name="devices_list_card_background">@color/light_light2</color>
+
+    <!-- Claiming Flow -->
+    <color name="select_device_card_color">@color/light_light2</color>
 
     <!-- Explorer -->
     <color name="bottomSheetDialog_background">@color/light_light1</color>

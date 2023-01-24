@@ -16,7 +16,7 @@ import java.math.BigDecimal
 @Suppress("TooManyFunctions")
 object Weather : KoinComponent {
 
-    private const val EMPTY_VALUE = "-"
+    private const val EMPTY_VALUE = "?"
     private val resHelper: ResourcesHelper by inject()
     private val sharedPref: SharedPreferences by inject()
 
@@ -55,86 +55,123 @@ object Weather : KoinComponent {
     fun getFormattedTemperature(
         value: Float?,
         decimals: Int = 0,
-        fullUnit: Boolean = true
+        fullUnit: Boolean = true,
+        includeUnit: Boolean = true
     ): String {
-        if (value == null) {
-            return EMPTY_VALUE
-        }
-
-        val valueToReturn = convertTemp(value, decimals)
-        val unit = if (fullUnit) {
+        val unit = if (fullUnit && includeUnit) {
             getPreferredUnit(
                 resHelper.getString(KEY_TEMPERATURE),
                 resHelper.getString(R.string.temperature_celsius)
             )
-        } else {
+        } else if (includeUnit) {
             resHelper.getString(R.string.degrees_mark)
+        } else {
+            ""
         }
+
+        if (value == null) {
+            return "$EMPTY_VALUE$unit"
+        }
+
+        val valueToReturn = convertTemp(value, decimals)
 
         return "$valueToReturn$unit"
     }
 
-    fun getFormattedPrecipitation(value: Float?, isPrecipRate: Boolean = true): String {
+    fun getFormattedPrecipitation(
+        value: Float?,
+        isPrecipRate: Boolean = true,
+        includeUnit: Boolean = true
+    ): String {
+        val unit = if (includeUnit) {
+            getPrecipitationPreferredUnit(isPrecipRate)
+        } else {
+            ""
+        }
+
         if (value == null) {
-            return EMPTY_VALUE
+            return "$EMPTY_VALUE$unit"
         }
 
         val valueToReturn = convertPrecipitation(value)
-        val unit = getPrecipitationPreferredUnit(isPrecipRate)
 
         return "$valueToReturn$unit"
     }
 
-    fun getFormattedPrecipitationProbability(value: Int?): String {
-        if (value == null) {
-            return EMPTY_VALUE
+    fun getFormattedPrecipitationProbability(value: Int?, includeUnit: Boolean = true): String {
+        val unit = if (includeUnit) {
+            "%"
+        } else {
+            ""
         }
-
-        return "$value%"
-    }
-
-    fun getFormattedHumidity(value: Int?): String {
         if (value == null) {
-            return EMPTY_VALUE
+            return "$EMPTY_VALUE$unit"
         }
-
-        return "$value%"
-    }
-
-    fun getFormattedUV(value: Int?): String {
-        if (value == null) {
-            return EMPTY_VALUE
-        }
-
-        val unit = resHelper.getString(R.string.uv_index_unit)
 
         return "$value$unit"
     }
 
-    fun getFormattedPressure(value: Float?): String {
+    fun getFormattedHumidity(value: Int?, includeUnit: Boolean = true): String {
+        val unit = if (includeUnit) {
+            "%"
+        } else {
+            ""
+        }
         if (value == null) {
-            return EMPTY_VALUE
+            return "$EMPTY_VALUE$unit"
+        }
+
+        return "$value$unit"
+    }
+
+    fun getFormattedUV(value: Int?, includeUnit: Boolean = true): String {
+        val unit = if (includeUnit) {
+            resHelper.getString(R.string.uv_index_unit)
+        } else {
+            ""
+        }
+
+        if (value == null) {
+            return "$EMPTY_VALUE$unit"
+        }
+
+
+        return "$value$unit"
+    }
+
+    fun getFormattedPressure(value: Float?, includeUnit: Boolean = true): String {
+        val unit = if (includeUnit) {
+            getPreferredUnit(
+                resHelper.getString(KEY_PRESSURE),
+                resHelper.getString(R.string.pressure_hpa)
+            )
+        } else {
+            ""
+        }
+
+        if (value == null) {
+            return "$EMPTY_VALUE$unit"
         }
 
         val valueToReturn = convertPressure(value)
-        val unit = getPreferredUnit(
-            resHelper.getString(KEY_PRESSURE),
-            resHelper.getString(R.string.pressure_hpa)
-        )
 
         return "$valueToReturn$unit"
     }
 
-    private fun getFormattedWindSpeed(value: Float?): String {
+    private fun getFormattedWindSpeed(value: Float?, includeUnit: Boolean = true): String {
+        val unit = if (includeUnit) {
+            getPreferredUnit(
+                resHelper.getString(KEY_WIND),
+                resHelper.getString(R.string.wind_speed_ms)
+            )
+        } else {
+            ""
+        }
         if (value == null) {
-            return EMPTY_VALUE
+            return "$EMPTY_VALUE$unit"
         }
 
         val valueToReturn = convertWindSpeed(value)
-        val unit = getPreferredUnit(
-            resHelper.getString(KEY_WIND),
-            resHelper.getString(R.string.wind_speed_ms)
-        )
 
         return "$valueToReturn$unit"
     }
@@ -151,10 +188,27 @@ object Weather : KoinComponent {
         return UnitConverter.degreesToCardinal(value)
     }
 
-    fun getFormattedWind(windSpeed: Float?, windDirection: Int?): String {
+    fun getFormattedWind(
+        windSpeed: Float?,
+        windDirection: Int?,
+        includeUnits: Boolean = true
+    ): String {
+        val windUnit = if (includeUnits) {
+            getPreferredUnit(
+                resHelper.getString(KEY_WIND),
+                resHelper.getString(R.string.wind_speed_ms)
+            )
+        } else {
+            ""
+        }
+
         return if (windSpeed != null && windDirection != null) {
-            "${getFormattedWindSpeed(windSpeed)} ${getFormattedWindDirection(windDirection)}"
-        } else EMPTY_VALUE
+            if (includeUnits) {
+                "${getFormattedWindSpeed(windSpeed)} ${getFormattedWindDirection(windDirection)}"
+            } else {
+                getFormattedWindSpeed(windSpeed, false)
+            }
+        } else "$EMPTY_VALUE$windUnit"
     }
 
     fun convertTemp(value: Number?, decimals: Int = 0): Number? {

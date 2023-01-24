@@ -17,8 +17,8 @@ import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.content.res.ResourcesCompat.getColor
+import androidx.core.content.res.ResourcesCompat.getDrawable
 import androidx.core.text.HtmlCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
@@ -52,21 +52,20 @@ fun EditText.clear() {
 }
 
 fun ImageView.setWarningDrawable(context: Context) {
-    val drawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_warning, context.theme)
-    drawable?.setTint(ResourcesCompat.getColor(resources, R.color.warning, context.theme))
+    val drawable = getDrawable(resources, R.drawable.ic_warning, context.theme)
+    drawable?.setTint(getColor(resources, R.color.warning, context.theme))
     this.setImageDrawable(drawable)
 }
 
 fun ImageView.setBluetoothDrawable(context: Context) {
-    val drawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_bluetooth, context.theme)
-    drawable?.setTint(ResourcesCompat.getColor(resources, R.color.light_mid_grey, context.theme))
+    val drawable = getDrawable(resources, R.drawable.ic_bluetooth, context.theme)
+    drawable?.setTint(getColor(resources, R.color.light_mid_grey, context.theme))
     this.setImageDrawable(drawable)
 }
 
 fun ImageView.setNoDevicesFoundDrawable(context: Context) {
-    val drawable =
-        ResourcesCompat.getDrawable(resources, R.drawable.ic_no_devices_found, context.theme)
-    drawable?.setTint(ResourcesCompat.getColor(resources, R.color.light_mid_grey, context.theme))
+    val drawable = getDrawable(resources, R.drawable.ic_no_devices_found, context.theme)
+    drawable?.setTint(getColor(resources, R.color.light_mid_grey, context.theme))
     this.setImageDrawable(drawable)
 }
 
@@ -88,30 +87,19 @@ fun TabLayout.onTabSelected(callback: (TabLayout.Tab) -> Unit) {
     })
 }
 
-fun TabLayout.createAndAddTab(text: String) {
-    val newTab = this.newTab()
-    newTab.text = text
-    this.addTab(newTab)
-}
-
-fun Chip.setTextAndColor(@StringRes text: Int, color: Int) {
-    this.setChipBackgroundColorResource(color)
-    this.text = this.resources.getString(text)
-}
-
 fun Chip.setIcon(@DrawableRes drawable: Int) {
-    this.chipIcon = ResourcesCompat.getDrawable(resources, drawable, context.theme)
+    this.chipIcon = getDrawable(resources, drawable, context.theme)
 }
 
 fun Chip.setSuccessChip() {
     this.setChipBackgroundColorResource(R.color.success_tint)
-    this.chipIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_checkmark, context.theme)
+    this.chipIcon = getDrawable(resources, R.drawable.ic_checkmark, context.theme)
     this.setChipIconTintResource(R.color.dark_background)
     this.setTextColor(getColor(resources, R.color.dark_background, context.theme))
 }
 
 fun ImageView.setColor(@ColorRes color: Int) {
-    this.setColorFilter(ResourcesCompat.getColor(resources, color, null))
+    this.setColorFilter(getColor(resources, color, null))
 }
 
 fun ViewGroup.applyInsets(top: Boolean = true, bottom: Boolean = true) {
@@ -190,10 +178,9 @@ fun ChipGroup.setChildrenEnabled(enable: Boolean) {
     children.forEach { it.isEnabled = enable }
 }
 
-fun MaterialCardView.showIntegratedWarning() {
-    setCardBackgroundColor(context.getColor(R.color.warning_tint))
-    strokeWidth = 1
-    strokeColor = context.getColor(R.color.warning)
+fun MaterialCardView.setStroke(width: Int, @ColorRes color: Int) {
+    strokeWidth = width
+    strokeColor = context.getColor(color)
 }
 
 @Suppress("MagicNumber")

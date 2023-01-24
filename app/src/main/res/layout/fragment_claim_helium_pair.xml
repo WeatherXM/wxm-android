@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/margin_normal"
-        app:cardBackgroundColor="@color/select_device_type_card_color"
+        app:cardBackgroundColor="@color/select_device_card_color"
         app:contentPadding="0dp"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 

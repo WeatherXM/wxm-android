@@ -12,6 +12,8 @@
     <declare-styleable name="ErrorCardView">
         <attr name="error_title" format="string" />
         <attr name="error_message" format="string" />
+        <attr name="error_includes_close_button" format="boolean" />
+        <attr name="error_includes_stroke" format="boolean" />
     </declare-styleable>
     <declare-styleable name="WarningCardView">
         <attr name="warning_title" format="string" />
@@ -28,5 +30,9 @@
     </declare-styleable>
     <declare-styleable name="BarChartView">
         <attr name="bar_chart_title" format="string" />
+    </declare-styleable>
+    <declare-styleable name="WeatherDataView">
+        <attr name="weather_data_title" format="string" />
+        <attr name="weather_data_icon" format="reference" />
     </declare-styleable>
 </resources>

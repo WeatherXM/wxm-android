@@ -58,11 +58,16 @@
     <string name="add_weather_station">Claim your WXM device by clicking the + button.</string>
     <string name="last_active">Last seen %s</string>
     <string name="last_active_just_now">just now</string>
+    <string name="just_now">Just now</string>
     <string name="online">Online</string>
     <string name="offline">Offline</string>
     <string name="unknown">Unknown</string>
     <string name="empty_weather_stations">Oh, no! No WXM devices yet?</string>
     <string name="displayed_times">All displayed times are in %s timezone.</string>
+    <string name="station_offline">Station Offline</string>
+    <string name="unknown_address">Unknown Address</string>
+    <string name="no_data">No Data</string>
+    <string name="no_data_message">We\’re unable to show updated station data. Please make sure your station is operational and connected to the internet.</string>
 
     <!-- Update (Bluetooth OTA) Station -->
     <string name="updated_needed_title">Station must be updated</string>

@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_normal"
-        app:cardBackgroundColor="@color/select_device_type_card_color"
+        app:cardBackgroundColor="@color/select_device_card_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/closePopup"
         tools:layout_height="400dp">

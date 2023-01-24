@@ -1,19 +1,22 @@
 package com.weatherxm.ui.home.devices
 
+import android.annotation.SuppressLint
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.Device
+import com.weatherxm.data.DeviceProfile
+import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.ResourcesHelper
-import com.weatherxm.util.Tokens.formatTokens
 import com.weatherxm.util.Weather
-import com.weatherxm.util.setTextAndColor
-import com.weatherxm.util.showIntegratedWarning
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -46,46 +49,73 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             }
         }
 
+        @SuppressLint("SetTextI18n")
         fun bind(item: Device) {
             this.device = item
             binding.name.text = item.getNameOrLabel()
-            binding.icon.setAnimation(Weather.getWeatherAnimation(item.currentWeather?.icon))
-            binding.temperature.text =
-                Weather.getFormattedTemperature(item.currentWeather?.temperature, 1)
 
-            device.attributes?.lastWeatherStationActivity?.let {
-                with(binding.lastSeen) {
-                    text = context.getString(
-                        R.string.last_active,
-                        it.getRelativeFormattedTime(
-                            fallbackIfTooSoon = context.getString(R.string.last_active_just_now)
-                        )
-                    )
-                }
+            if (item.currentWeather == null || item.currentWeather.isEmpty()) {
+                binding.weatherDataLayout.visibility = GONE
+                binding.noDataLayout.visibility = VISIBLE
+            } else {
+                setWeatherData(item)
             }
 
-            device.rewards?.totalRewards?.let {
-                val total = resHelper.getString(R.string.wxm_amount, formatTokens(it))
-                binding.tokensTotal.text = total
+            binding.address.text = if (item.address.isNullOrEmpty()) {
+                resHelper.getString(R.string.unknown_address)
+            } else {
+                item.address
             }
 
-            device.rewards?.actualReward?.let {
-                val lastReward = resHelper.getString(R.string.wxm_amount, formatTokens(it))
-                binding.tokensLastDay.text = lastReward
+            with(binding.lastSeen) {
+                text = item.attributes?.lastWeatherStationActivity?.getRelativeFormattedTime(
+                    fallbackIfTooSoon = context.getString(R.string.just_now)
+                )
             }
 
-            binding.statusChip.setTextAndColor(
-                when (item.attributes?.isActive) {
-                    true -> R.string.online
-                    false -> R.string.offline
-                    null -> R.string.unknown
-                },
-                when (item.attributes?.isActive) {
-                    true -> R.color.device_status_online
-                    false -> R.color.device_status_offline
-                    null -> R.color.device_status_unknown
+            binding.statusIcon.setImageResource(
+                if (device.profile == DeviceProfile.Helium) {
+                    R.drawable.ic_helium
+                } else {
+                    R.drawable.ic_wifi
                 }
             )
+
+            binding.status.setCardBackgroundColor(
+                itemView.context.getColor(
+                    when (item.attributes?.isActive) {
+                        true -> {
+                            R.color.device_status_online
+                        }
+                        false -> {
+                            R.color.device_status_offline
+                        }
+                        null -> {
+                            R.color.device_status_unknown
+                        }
+                    }
+                )
+            )
+
+            binding.error.visibility = if (item.attributes?.isActive == false) VISIBLE else GONE
+            binding.root.setStrokeColor(
+                ColorStateList.valueOf(
+                    itemView.context.getColor(
+                        when (item.attributes?.isActive) {
+                            false -> {
+                                R.color.error
+                            }
+                            else -> {
+                                R.color.transparent
+                            }
+                        }
+                    )
+                )
+            )
+
+            binding.root.strokeWidth = if (item.attributes?.isActive == false) {
+                itemView.resources.getDimensionPixelSize(R.dimen.card_stroke)
+            } else 0
 
             // TODO: Check if OTA warning should be shown
 //            if (false) {
@@ -100,6 +130,53 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
 //                    .show()
 //                binding.deviceCardWithWarning.showIntegratedWarning()
 //            }
+        }
+
+        private fun setWeatherData(item: Device) {
+            binding.icon.setAnimation(Weather.getWeatherAnimation(item.currentWeather?.icon))
+            binding.temperature.text = Weather.getFormattedTemperature(
+                item.currentWeather?.temperature, 1, includeUnit = false
+            )
+            binding.temperatureUnit.text = Weather.getPreferredUnit(
+                resHelper.getString(CacheService.KEY_TEMPERATURE),
+                resHelper.getString(R.string.temperature_celsius)
+            )
+            binding.feelsLike.text = Weather.getFormattedTemperature(
+                item.currentWeather?.feelsLike, 1, includeUnit = false
+            )
+            binding.feelsLikeUnit.text = Weather.getPreferredUnit(
+                resHelper.getString(CacheService.KEY_TEMPERATURE),
+                resHelper.getString(R.string.temperature_celsius)
+            )
+            binding.humidity.setData(
+                Weather.getFormattedHumidity(
+                    item.currentWeather?.humidity, includeUnit = false
+                ), "%"
+            )
+            binding.humidity.setData(
+                Weather.getFormattedHumidity(
+                    item.currentWeather?.humidity, includeUnit = false
+                ), "%"
+            )
+            val windValue = Weather.getFormattedWind(
+                item.currentWeather?.windSpeed,
+                item.currentWeather?.windDirection,
+                includeUnits = false
+            )
+            val windUnit = Weather.getPreferredUnit(
+                resHelper.getString(CacheService.KEY_WIND),
+                resHelper.getString(R.string.wind_speed_ms)
+            )
+            val windDirectionUnit = item.currentWeather?.windDirection?.let {
+                Weather.getFormattedWindDirection(it)
+            } ?: ""
+            binding.wind.setData(windValue, "$windUnit $windDirectionUnit")
+
+            binding.rain.setData(
+                Weather.getFormattedPrecipitation(
+                    item.currentWeather?.precipitation, includeUnit = false
+                ), Weather.getPrecipitationPreferredUnit(true)
+            )
         }
     }
 
