@@ -16,12 +16,7 @@ import timber.log.Timber
 
 class UpdatePromptViewModel : ViewModel(), KoinComponent {
 
-    private val authRepository: AuthRepository by inject()
     private val appConfigRepository: AppConfigRepository by inject()
-
-    private val isLoggedIn = MutableLiveData<Either<Failure, Boolean>>()
-
-    fun isLoggedIn(): LiveData<Either<Failure, Boolean>> = isLoggedIn
 
     fun isUpdateMandatory(): Boolean {
         return appConfigRepository.isUpdateMandatory()
@@ -29,12 +24,5 @@ class UpdatePromptViewModel : ViewModel(), KoinComponent {
 
     fun getChangelog(): String {
         return appConfigRepository.getChangelog()
-    }
-
-    fun checkIfLoggedIn() {
-        Timber.d("Checking if user is logged in in the background")
-        viewModelScope.launch(Dispatchers.IO) {
-            isLoggedIn.postValue(authRepository.isLoggedIn())
-        }
     }
 }

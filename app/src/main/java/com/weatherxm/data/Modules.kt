@@ -17,6 +17,8 @@ import com.espressif.provisioning.ESPProvisionManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.SettingsClient
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
@@ -122,6 +124,8 @@ import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
 import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
 import com.weatherxm.ui.explorer.UIHexJsonAdapter
 import com.weatherxm.ui.userdevice.UserDeviceViewModel
+import com.weatherxm.usecases.AnalyticsOptInUseCase
+import com.weatherxm.usecases.AnalyticsOptInUseCaseImpl
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.AuthUseCaseImpl
 import com.weatherxm.usecases.BluetoothConnectionUseCase
@@ -158,6 +162,7 @@ import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.usecases.UserDeviceUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.usecases.UserUseCaseImpl
+import com.weatherxm.util.AnalyticsHelper
 import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.Mask
 import com.weatherxm.util.ResourcesHelper
@@ -176,7 +181,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 const val RETROFIT_API = "RETROFIT_API"
@@ -405,7 +410,7 @@ private val usecases = module {
         ConnectWalletUseCaseImpl(get())
     }
     single<PreferencesUseCase> {
-        PreferencesUseCaseImpl(get(), get())
+        PreferencesUseCaseImpl(get(), get(), get())
     }
     single<SendFeedbackUseCase> {
         SendFeedbackUseCaseImpl(get(), get())
@@ -427,6 +432,9 @@ private val usecases = module {
     }
     single<BluetoothUpdaterUseCase> {
         BluetoothUpdaterUseCaseImpl(get())
+    }
+    single<AnalyticsOptInUseCase> {
+        AnalyticsOptInUseCaseImpl(get())
     }
 }
 
@@ -549,6 +557,9 @@ val validator = module {
 }
 
 val firebase = module {
+    single<FirebaseAnalytics> {
+        Firebase.analytics
+    }
     single<FirebaseMessaging> {
         FirebaseMessaging.getInstance()
     }
@@ -601,6 +612,13 @@ val displayModeHelper = module {
         DisplayModeHelper(androidContext().resources, get())
     }
 }
+
+val analyticsHelper = module {
+    single(createdAtStart = true) {
+        AnalyticsHelper(get(), get())
+    }
+}
+
 
 private val utilities = module {
     single<CacheService> {
@@ -684,6 +702,7 @@ val modules = listOf(
     apiServiceModule,
     database,
     displayModeHelper,
+    analyticsHelper,
     utilities,
     viewmodels
 )

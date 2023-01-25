@@ -21,6 +21,8 @@
     <string name="action_have_reset_device">I\’ve Reset My Device</string>
     <string name="action_pair_device">Pair Device</string>
     <string name="action_retry_updating">Retry Updating</string>
+    <string name="action_deny">Deny</string>
+    <string name="action_sounds_good">Sounds good!</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="action_scan_qr">Scan QR Code</string>
@@ -303,4 +305,15 @@
     <!-- Feedback -->
     <string name="send_feedback">Short App Survey</string>
     <string name="thank_you_feedback">Thank you for your feedback!</string>
+
+    <!-- Google Analytics Opt-In -->
+    <string name="google_analytics_title">Improving your experience</string>
+    <string name="what_we_collect">What we collect</string>
+    <string name="what_we_do_not_collect">What we don\'t collect</string>
+    <string name="app_usage_data">App Usage Data</string>
+    <string name="system_version">System version</string>
+    <string name="personal_data">Personal data</string>
+    <string name="identifying_information">Identifying information</string>
+    <string name="you_can_always_update_preferences">You can always update your preferences in the app settings.</string>
+    <string name="google_analytics_explanation_message"><![CDATA[To improve user experience in our apps, we are using analytics, for collecting crashes and other anonymous in-app events.<br>We do not collect ANY identifying information. Everything we collect will be used internally to improve your experience with WeatherXM. <b>All data are anonymized!</b>]]></string>
 </resources>

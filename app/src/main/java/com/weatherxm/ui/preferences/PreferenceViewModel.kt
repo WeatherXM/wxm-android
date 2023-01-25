@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.usecases.PreferencesUseCase
+import com.weatherxm.util.AnalyticsHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -15,6 +16,7 @@ import timber.log.Timber
 
 class PreferenceViewModel : ViewModel(), KoinComponent {
     private val preferencesUseCase: PreferencesUseCase by inject()
+    private val analyticsHelper: AnalyticsHelper by inject()
 
     // Needed for passing info to the activity to when logging out
     private val onLogout = MutableLiveData(false)
@@ -57,5 +59,10 @@ class PreferenceViewModel : ViewModel(), KoinComponent {
     fun dismissSurveyPrompt() {
         preferencesUseCase.dismissSurveyPrompt()
         onDismissSurveyPrompt.postValue(true)
+    }
+
+    fun setAnalyticsEnabled(enabled: Boolean) {
+        preferencesUseCase.setAnalyticsEnabled(enabled)
+        analyticsHelper.setAnalyticsEnabled(enabled)
     }
 }

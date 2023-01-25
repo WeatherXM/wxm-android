@@ -29,6 +29,7 @@ class CacheService(
         const val KEY_ACCESS = "access"
         const val KEY_REFRESH = "refresh"
         const val KEY_LAST_REMINDED_VERSION = "last_reminded_version"
+        const val KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP = "analytics_opt_in_or_out_timestamp"
         const val KEY_USERNAME = "username"
         const val KEY_DISMISSED_SURVEY_PROMPT = "dismissed_survey_prompt"
         const val KEY_WALLET_WARNING_DISMISSED_TIMESTAMP = "wallet_warning_dismissed_timestamp"
@@ -37,6 +38,7 @@ class CacheService(
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
 
         // Some Preference's keys
+        const val KEY_ANALYTICS = R.string.key_google_analytics
         const val KEY_THEME = R.string.key_theme
         const val KEY_TEMPERATURE = R.string.key_temperature_preference
         const val KEY_PRECIP = R.string.key_precipitation_preference
@@ -75,6 +77,23 @@ class CacheService(
 
     fun setLastRemindedVersion(lastVersion: Int) {
         preferences.edit().putInt(KEY_LAST_REMINDED_VERSION, lastVersion).apply()
+    }
+
+    fun setAnalyticsEnabledTimestamp() {
+        preferences.edit()
+            .putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, System.currentTimeMillis()).apply()
+    }
+
+    fun getAnalyticsOptInTimestamp(): Long {
+        return preferences.getLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, 0L)
+    }
+
+    fun getAnalyticsEnabled(): Boolean {
+        return preferences.getBoolean(resHelper.getString(KEY_ANALYTICS), false)
+    }
+
+    fun setAnalyticsEnabled(enabled: Boolean) {
+        preferences.edit().putBoolean(resHelper.getString(KEY_ANALYTICS), enabled).apply()
     }
 
     fun getLastFriendlyNameChanged(key: String): Long {
@@ -217,14 +236,19 @@ class CacheService(
         val savedWind = getPreferenceString(KEY_WIND, R.string.wind_speed_ms)
         val savedWindDir = getPreferenceString(KEY_WIND_DIR, R.string.wind_direction_cardinal)
         val savedPressure = getPreferenceString(KEY_PRESSURE, R.string.pressure_hpa)
-        preferences.edit()
-            .clear()
-            .putString(resHelper.getString(KEY_THEME), savedTheme)
+        val savedAnalyticsEnabled = preferences.getBoolean(resHelper.getString(KEY_ANALYTICS),false)
+        val savedAnalyticsOptInOrOutTimestamp = preferences.getLong(
+            KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, 0L
+        )
+
+        preferences.edit().clear().putString(resHelper.getString(KEY_THEME), savedTheme)
             .putString(resHelper.getString(KEY_TEMPERATURE), savedTemperature)
             .putString(resHelper.getString(KEY_PRECIP), savedPrecipitation)
             .putString(resHelper.getString(KEY_WIND), savedWind)
             .putString(resHelper.getString(KEY_WIND_DIR), savedWindDir)
             .putString(resHelper.getString(KEY_PRESSURE), savedPressure)
+            .putBoolean(resHelper.getString(KEY_ANALYTICS), savedAnalyticsEnabled)
+            .putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, savedAnalyticsOptInOrOutTimestamp)
             .apply()
     }
 

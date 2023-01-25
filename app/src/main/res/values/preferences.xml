@@ -10,6 +10,8 @@
     <string name="message_dialog_logout">Are you sure you want to logout?</string>
     <string name="delete_account">Delete Account</string>
     <string name="delete_account_desc">Permanently delete your account, and data. This is not reversible!</string>
+    <string name="google_analytics_preferences_title">Send anonymous data to make us better</string>
+    <string name="key_google_analytics" translatable="false">google_analytics</string>
 
     <!-- Feedback -->
     <string name="feedback">Feedback</string>

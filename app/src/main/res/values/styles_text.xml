@@ -29,6 +29,10 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TextAppearance.WeatherXM.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
+        <item name="android:textColor">@color/title</item>
+    </style>
+
     <!--
         Toolbar
     -->
@@ -335,13 +339,6 @@
     <style name="TextAppearance.WeatherXM.Warning" parent="TextAppearance.WeatherXM.Default.BodyMedium">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/light_top</item>
-    </style>
-
-    <!--
-        Dialogs
-    -->
-    <style name="TextAppearance.WeatherXM.Dialog.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
-        <item name="android:textColor">@color/dialog_title</item>
     </style>
 
     <!--

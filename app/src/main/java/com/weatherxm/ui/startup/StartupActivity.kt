@@ -21,6 +21,7 @@ class StartupActivity : AppCompatActivity(), KoinComponent {
             when (state) {
                 StartupState.ShowExplorer -> navigator.showExplorer(this)
                 StartupState.ShowHome -> navigator.showHome(this)
+                StartupState.ShowAnalyticsOptIn -> navigator.showAnalyticsOptIn(this)
                 StartupState.ShowUpdate -> navigator.showUpdatePrompt(this)
             }
             finish()

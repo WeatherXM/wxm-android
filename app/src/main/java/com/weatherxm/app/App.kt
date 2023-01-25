@@ -21,6 +21,12 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        // Setup debug logs on DEBUG builds (before all other statements,
+        // since we're using Timber for logging everywhere)
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
+
         // Setup DI
         startKoin {
             androidLogger(if (BuildConfig.DEBUG) Level.ERROR else Level.NONE)
@@ -28,10 +34,8 @@ class App : Application() {
             modules(modules)
         }
 
-        // Setup debug logs or crash reporting depending on the build type
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        } else {
+        // Setup crash reporting on RELEASE builds
+        if (!BuildConfig.DEBUG) {
             Timber.plant(CrashReportingTree())
         }
 

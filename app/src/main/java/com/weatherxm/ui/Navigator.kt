@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentManager
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.Device
+import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
@@ -90,6 +91,14 @@ class Navigator {
         context.startActivity(
             Intent(
                 context, UpdatePromptActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        )
+    }
+
+    fun showAnalyticsOptIn(context: Context) {
+        context.startActivity(
+            Intent(
+                context, AnalyticsOptInActivity::class.java
             ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
     }

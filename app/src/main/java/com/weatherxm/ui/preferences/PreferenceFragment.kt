@@ -9,6 +9,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
 import com.weatherxm.R
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.AlertDialogFragment
@@ -51,25 +52,29 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
             findPreference<ListPreference>(getString(R.string.key_theme))
         val shortWxmSurvey: Preference? =
             findPreference(getString(R.string.short_app_survey))
+        val analyticsPreference =
+            findPreference<SwitchPreferenceCompat>(getString(R.string.key_google_analytics))
 
-        openDocumentationButton?.onPreferenceClickListener =
-            Preference.OnPreferenceClickListener {
-                navigator.openWebsite(context, getString(R.string.documentation_url))
-                true
-            }
-        contactSupportButton?.onPreferenceClickListener =
-            Preference.OnPreferenceClickListener {
-                navigator.sendSupportEmail(context)
-                true
-            }
-        userResearchButton?.onPreferenceClickListener =
-            Preference.OnPreferenceClickListener {
-                navigator.openWebsite(this.context, getString(R.string.user_panel_url))
-                true
-            }
+        openDocumentationButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            navigator.openWebsite(context, getString(R.string.documentation_url))
+            true
+        }
+        contactSupportButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            navigator.sendSupportEmail(context)
+            true
+        }
+        userResearchButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            navigator.openWebsite(this.context, getString(R.string.user_panel_url))
+            true
+        }
 
         displayPreference?.setOnPreferenceChangeListener { _, newValue ->
             displayModeHelper.setDisplayMode(newValue.toString())
+            true
+        }
+
+        analyticsPreference?.setOnPreferenceChangeListener { _, newValue ->
+            model.setAnalyticsEnabled(newValue as Boolean)
             true
         }
 
@@ -85,19 +90,18 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
                 }
                 .map {
                     Timber.d("Logged in. Handle button clicks")
-                    val logoutButton: Preference? =
-                        findPreference(getString(R.string.action_logout))
-                    val resetPassButton: Preference? =
+                    val logoutBtn: Preference? = findPreference(getString(R.string.action_logout))
+                    val resetPassBtn: Preference? =
                         findPreference(getString(R.string.change_password))
                     val deleteAccountButton: Preference? =
                         findPreference(getString(R.string.delete_account))
 
-                    logoutButton?.onPreferenceClickListener =
+                    logoutBtn?.onPreferenceClickListener =
                         Preference.OnPreferenceClickListener {
                             showLogoutDialog()
                             true
                         }
-                    resetPassButton?.onPreferenceClickListener =
+                    resetPassBtn?.onPreferenceClickListener =
                         Preference.OnPreferenceClickListener {
                             navigator.showResetPassword(this)
                             true

@@ -107,13 +107,13 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-            manifestPlaceholders = [crashlyticsEnabled:"true"]
+            manifestPlaceholders = [crashlyticsEnabled: "true"]
         }
         debug {
             // Change minifyEnabled to true if you want to test code obfuscation in debug mode
             minifyEnabled false
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-            manifestPlaceholders = [crashlyticsEnabled:"false"]
+            manifestPlaceholders = [crashlyticsEnabled: "false"]
         }
     }
 
@@ -283,6 +283,7 @@ dependencies {
     implementation "com.google.firebase:firebase-perf-ktx"
     implementation "com.google.firebase:firebase-config-ktx"
     implementation "com.google.firebase:firebase-messaging-ktx"
+    implementation "com.google.firebase:firebase-analytics-ktx"
 
     // QR Code Scanner
     implementation "com.journeyapps:zxing-android-embedded:4.3.0"

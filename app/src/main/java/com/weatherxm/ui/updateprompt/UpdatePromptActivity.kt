@@ -12,7 +12,6 @@ import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setHtml
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import timber.log.Timber
 
 class UpdatePromptActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityUpdatePromptBinding
@@ -27,30 +26,17 @@ class UpdatePromptActivity : AppCompatActivity(), KoinComponent {
         binding.root.applyInsets()
 
         binding.toolbar.setNavigationOnClickListener {
-            model.checkIfLoggedIn()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         onBackPressedDispatcher.addCallback {
-            if (model.isUpdateMandatory()) {
-                finish()
-            } else {
-                model.checkIfLoggedIn()
+            if (!model.isUpdateMandatory()) {
+                navigator.showStartup(this@UpdatePromptActivity)
             }
+            finish()
         }
 
         binding.updateDescription.setHtml(R.string.desc_update_prompt)
-
-        model.isLoggedIn().observe(this) { result ->
-            result.mapLeft {
-                Timber.d("Not logged in. Show explorer.")
-                navigator.showExplorer(this)
-            }.map { username ->
-                Timber.d("Already logged in as $username")
-                navigator.showHome(this)
-            }
-            finish()
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
 
         if (model.isUpdateMandatory()) {
             binding.toolbar.navigationIcon = null
@@ -62,7 +48,8 @@ class UpdatePromptActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.continueWithoutUpdatingBtn.setOnClickListener {
-            model.checkIfLoggedIn()
+            navigator.showStartup(this)
+            finish()
         }
 
         binding.changelog.text = model.getChangelog()

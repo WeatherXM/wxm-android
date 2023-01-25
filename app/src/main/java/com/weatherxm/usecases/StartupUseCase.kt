@@ -41,7 +41,11 @@ class StartupUseCaseImpl(
                 authRepository.isLoggedIn()
                     .map {
                         Timber.d("Already logged in.")
-                        trySend(StartupState.ShowHome)
+                        if (!appConfigRepository.hasUserOptInOrOut()) {
+                            trySend(StartupState.ShowAnalyticsOptIn)
+                        } else {
+                            trySend(StartupState.ShowHome)
+                        }
                     }
                     .mapLeft {
                         Timber.d("Not logged in. Show explorer.")

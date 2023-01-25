@@ -144,6 +144,10 @@
             android:name="com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.analytics.AnalyticsOptInActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
 
         <!-- Services -->
         <service

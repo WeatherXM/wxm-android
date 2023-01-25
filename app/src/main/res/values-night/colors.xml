@@ -22,6 +22,9 @@
     <!-- List Divider -->
     <color name="list_divider">@color/dark_dark2</color>
 
+    <!-- Google Analytics -->
+    <color name="google_analytics_icon_background">@color/dark_dark2</color>
+
     <!-- Weather Card -->
     <color name="weather_card_data_icon">@color/dark_darkest</color>
     <color name="weather_card_unit">@color/light_dark_grey</color>
@@ -79,5 +82,5 @@
     <color name="error_card_close_button_color">@color/light_mid_grey</color>
 
     <!-- Dialog -->
-    <color name="dialog_title">@color/dark_darkest</color>
+    <color name="title">@color/dark_darkest</color>
 </resources>

@@ -4,6 +4,11 @@
         app:iconSpaceReserved="false"
         app:key="@string/account"
         app:title="@string/account">
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/key_google_analytics"
+            app:title="@string/google_analytics_preferences_title" />
         <Preference
             app:iconSpaceReserved="false"
             app:key="@string/change_password"
@@ -61,8 +66,8 @@
             app:entryValues="@array/temperature_values"
             app:iconSpaceReserved="false"
             app:key="@string/key_temperature_preference"
-            app:useSimpleSummaryProvider="true"
-            app:title="@string/temperature" />
+            app:title="@string/temperature"
+            app:useSimpleSummaryProvider="true" />
 
         <ListPreference
             app:defaultValue="@string/precipitation_mm"
@@ -70,8 +75,8 @@
             app:entryValues="@array/precipitation_values"
             app:iconSpaceReserved="false"
             app:key="@string/key_precipitation_preference"
-            app:useSimpleSummaryProvider="true"
-            app:title="@string/precipitation" />
+            app:title="@string/precipitation"
+            app:useSimpleSummaryProvider="true" />
 
         <ListPreference
             app:defaultValue="@string/wind_speed_ms"
@@ -79,8 +84,8 @@
             app:entryValues="@array/wind_speed_values"
             app:iconSpaceReserved="false"
             app:key="@string/key_wind_speed_preference"
-            app:useSimpleSummaryProvider="true"
-            app:title="@string/wind_speed" />
+            app:title="@string/wind_speed"
+            app:useSimpleSummaryProvider="true" />
 
         <ListPreference
             app:defaultValue="@string/wind_direction_cardinal"
@@ -88,8 +93,8 @@
             app:entryValues="@array/wind_direction_values"
             app:iconSpaceReserved="false"
             app:key="@string/key_wind_direction_preference"
-            app:useSimpleSummaryProvider="true"
-            app:title="@string/wind_direction" />
+            app:title="@string/wind_direction"
+            app:useSimpleSummaryProvider="true" />
 
         <ListPreference
             app:defaultValue="@string/pressure_hpa"
@@ -97,8 +102,8 @@
             app:entryValues="@array/pressure_values"
             app:iconSpaceReserved="false"
             app:key="@string/key_pressure_preference"
-            app:useSimpleSummaryProvider="true"
-            app:title="@string/pressure" />
+            app:title="@string/pressure"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 
     <PreferenceCategory

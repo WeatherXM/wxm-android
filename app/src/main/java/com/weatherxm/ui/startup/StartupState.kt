@@ -6,5 +6,6 @@ import androidx.annotation.Keep
 sealed class StartupState {
     object ShowExplorer : StartupState()
     object ShowHome : StartupState()
+    object ShowAnalyticsOptIn : StartupState()
     object ShowUpdate : StartupState()
 }
