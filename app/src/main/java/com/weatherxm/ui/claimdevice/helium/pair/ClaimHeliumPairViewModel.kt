@@ -27,6 +27,7 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     private var scannedDevices: MutableList<ScannedDevice> = mutableListOf()
 
     private val onBLEError = MutableLiveData<UIError>()
+    private val onBLEConnectionLost = MutableLiveData<Boolean>()
     private val onBLEDevEUI = MutableLiveData<String>()
     private val onBLEClaimingKey = MutableLiveData<String>()
     private val onNewScannedDevice = MutableLiveData<List<ScannedDevice>>()
@@ -40,6 +41,7 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     fun onScanStatus(): LiveData<Resource<Unit>> = onScanStatus
     fun onScanProgress(): LiveData<Int> = onScanProgress
     fun onBLEError() = onBLEError
+    fun onBLEConnectionLost() = onBLEConnectionLost
     fun onBLEDevEUI() = onBLEDevEUI
     fun onBLEClaimingKey() = onBLEClaimingKey
 
@@ -79,26 +81,28 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    private fun connectToPeripheral() {
+    fun connectToPeripheral() {
         viewModelScope.launch {
             connectionUseCase.connectToPeripheral().tapLeft {
-                onBLEError.postValue(when (it) {
+                when (it) {
                     is BluetoothError.BluetoothDisabledException -> {
-                        UIError(resHelper.getString(R.string.helium_bluetooth_disabled)) {
-                            connectToPeripheral()
-                        }
+                        onBLEError.postValue(
+                            UIError(resHelper.getString(R.string.helium_bluetooth_disabled)) {
+                                connectToPeripheral()
+                            }
+                        )
                     }
                     is BluetoothError.ConnectionLostException -> {
-                        UIError(resHelper.getString(R.string.helium_bluetooth_connection_lost)) {
-                            connectToPeripheral()
-                        }
+                        onBLEConnectionLost.postValue(true)
                     }
                     else -> {
-                        UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
-                            connectToPeripheral()
-                        }
+                        onBLEError.postValue(
+                            UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
+                                connectToPeripheral()
+                            }
+                        )
                     }
-                })
+                }
             }.tap {
                 if (connectionUseCase.getPairedDevices().any {
                         it.address == selectedDeviceMacAddress

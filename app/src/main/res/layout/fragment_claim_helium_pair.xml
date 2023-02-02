@@ -9,12 +9,12 @@
     android:fitsSystemWindows="false">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/margin_normal"
         app:cardBackgroundColor="@color/select_device_card_color"
-        app:contentPadding="0dp"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        app:contentPadding="0dp">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -90,90 +90,177 @@
                             tools:ignore="ContentDescription"
                             tools:src="@drawable/ic_warning" />
 
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/infoTitle"
-                                style="@style/TextAppearance.WeatherXM.BluetoothScanning.InfoTitle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/margin_normal"
-                                android:layout_marginBottom="@dimen/margin_normal"
-                                android:gravity="center"
-                                app:layout_constraintBottom_toTopOf="@id/infoSubtitle"
-                                app:layout_constraintTop_toBottomOf="@id/infoIcon"
-                                tools:text="@string/no_devices_found" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/infoSubtitle"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/margin_normal"
-                                android:gravity="center"
-                                app:layout_constraintBottom_toTopOf="@id/accessBluetoothPrompt"
-                                tools:text="@string/no_devices_found_desc" />
-
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/accessBluetoothPrompt"
-                                style="@style/Widget.WeatherXM.Button.Subtle.Borders"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/access_to_bluetooth_prompt"
-                                android:visibility="gone"
-                                app:icon="@drawable/ic_bluetooth"
-                                app:iconGravity="textStart"
-                                app:layout_constraintBottom_toBottomOf="parent" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recycler"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_marginBottom="@dimen/margin_large"
-                            android:clipChildren="false"
-                            android:clipToPadding="false"
-                            android:scrollbars="vertical"
-                            android:visibility="gone"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            app:layout_constraintBottom_toTopOf="@id/scanAgainContainer"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:listitem="@layout/list_item_scanned_device" />
-
-                        <FrameLayout
-                            android:id="@+id/scanAgainContainer"
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/infoTitle"
+                            style="@style/TextAppearance.WeatherXM.BluetoothScanning.InfoTitle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:layout_constraintBottom_toBottomOf="parent">
+                            android:layout_marginTop="@dimen/margin_normal"
+                            android:layout_marginBottom="@dimen/margin_normal"
+                            android:gravity="center"
+                            app:layout_constraintBottom_toTopOf="@id/infoSubtitle"
+                            app:layout_constraintTop_toBottomOf="@id/infoIcon"
+                            tools:text="@string/no_devices_found" />
 
-                            <com.google.android.material.button.MaterialButton
-                                android:id="@+id/scanAgain"
-                                style="@style/Widget.WeatherXM.Button.Subtle.Borders"
-                                android:layout_width="match_parent"
-                                android:layout_height="54dp"
-                                android:insetTop="0dp"
-                                android:insetBottom="0dp"
-                                android:text="@string/scan_again"
-                                app:icon="@drawable/ic_bluetooth"
-                                app:iconGravity="textStart"
-                                app:iconTint="@color/colorPrimary" />
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/infoSubtitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/margin_normal"
+                            android:gravity="center"
+                            app:layout_constraintBottom_toTopOf="@id/accessBluetoothPrompt"
+                            tools:text="@string/no_devices_found_desc" />
 
-                            <com.google.android.material.progressindicator.LinearProgressIndicator
-                                android:id="@+id/progressBar"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:alpha="0.5"
-                                android:indeterminate="false"
-                                android:indeterminateOnly="false"
-                                android:visibility="gone"
-                                app:indicatorColor="@color/progress_color_in_button"
-                                app:trackColor="@color/transparent"
-                                app:trackThickness="54dp"
-                                tools:visibility="visible" />
-                        </FrameLayout>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/accessBluetoothPrompt"
+                            style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/access_to_bluetooth_prompt"
+                            android:visibility="gone"
+                            app:icon="@drawable/ic_bluetooth"
+                            app:iconGravity="textStart"
+                            app:layout_constraintBottom_toBottomOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginBottom="@dimen/margin_large"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        android:scrollbars="vertical"
+                        android:visibility="gone"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintBottom_toTopOf="@id/scanAgainContainer"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:listitem="@layout/list_item_scanned_device" />
+
+                    <FrameLayout
+                        android:id="@+id/scanAgainContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/scanAgain"
+                            style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                            android:layout_width="match_parent"
+                            android:layout_height="54dp"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:text="@string/scan_again"
+                            app:icon="@drawable/ic_bluetooth"
+                            app:iconGravity="textStart"
+                            app:iconTint="@color/colorPrimary" />
+
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
+                            android:id="@+id/progressBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:alpha="0.5"
+                            android:indeterminate="false"
+                            android:indeterminateOnly="false"
+                            android:visibility="gone"
+                            app:indicatorColor="@color/progress_color_in_button"
+                            app:trackColor="@color/transparent"
+                            app:trackThickness="54dp"
+                            tools:visibility="visible" />
+                    </FrameLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/connectionErrorContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/connectionLostAnimation"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin_large"
+                app:layout_constraintBottom_toTopOf="@id/connectionLostTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/anim_error"
+                tools:background="#88424242" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/connectionLostTitle"
+                style="@style/TextAppearance.WeatherXM.EmptyView.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin_large"
+                android:gravity="center_horizontal"
+                android:text="@string/ble_connection_lost"
+                app:layout_constraintBottom_toTopOf="@id/connectionLostSubtitle" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/connectionLostSubtitle"
+                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin_large"
+                android:gravity="center_horizontal"
+                app:layout_constraintBottom_toTopOf="@id/contactSupport"
+                tools:text="@string/ble_connection_lost_description" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/contactSupport"
+                style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin_extra_large"
+                android:text="@string/title_contact_support"
+                app:layout_constraintBottom_toTopOf="@id/buttonsContainer" />
+
+            <LinearLayout
+                android:id="@+id/buttonsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/quit"
+                    style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_normal"
+                    android:layout_weight="1"
+                    android:text="@string/action_quit_claiming"
+                    android:textAllCaps="false" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/retry"
+                    style="@style/Widget.WeatherXM.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/action_retry_claiming"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
     </com.google.android.material.card.MaterialCardView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

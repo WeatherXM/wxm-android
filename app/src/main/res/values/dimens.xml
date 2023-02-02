@@ -9,6 +9,7 @@
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="card_selected_elevation">8dp</dimen>
     <dimen name="card_corner_radius">20dp</dimen>
+    <dimen name="card_corner_radius_small">10dp</dimen>
     <dimen name="card_stroke">1dp</dimen>
 
     <dimen name="button_corner_radius">4dp</dimen>

@@ -1,6 +1,7 @@
 <resources>
     <string name="support_email_intent_title">Send email</string>
     <string name="support_email_subject_delete_account">Delete Account</string>
+    <string name="support_email_subject_ble_connection_lost">BLE Connection Lost</string>
     <string name="support_email_subject_cannot_claim">Cannot claim device</string>
     <string name="support_email_subject_no_activation">No activation email</string>
     <string name="support_email_subject_helium_verify_failed">Helium Verification Failed</string>

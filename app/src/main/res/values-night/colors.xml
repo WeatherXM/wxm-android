@@ -27,7 +27,7 @@
 
     <!-- Weather Card -->
     <color name="weather_card_data_icon">@color/dark_darkest</color>
-    <color name="weather_card_unit">@color/light_dark_grey</color>
+    <color name="weather_card_unit">@color/light_mid_grey</color>
     <color name="weather_card_data_subtitle">@color/dark_darkest</color>
 
     <!-- Bluetooth Scanning -->

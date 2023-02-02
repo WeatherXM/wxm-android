@@ -114,6 +114,10 @@
         <item name="contentPadding">@dimen/padding_small</item>
     </style>
 
+    <style name="Widget.WeatherXM.MaterialCard.Small.Status" parent="Widget.WeatherXM.MaterialCard.Small">
+        <item name="cardCornerRadius">@dimen/card_corner_radius_small</item>
+    </style>
+
     <style name="Widget.WeatherXM.MaterialCard.Messages" parent="Widget.WeatherXM.MaterialCard">
         <item name="contentPadding">@dimen/padding_small</item>
         <item name="contentPaddingTop">@dimen/padding_normal</item>
@@ -344,9 +348,7 @@
         <item name="android:layout_marginLeft">@dimen/margin_normal</item>
     </style>
 
-    <style name="Widget.WeatherXM.AlertDialog.Button.Negative" parent="Widget.WeatherXM.TextButton.Subtle">
-    </style>
+    <style name="Widget.WeatherXM.AlertDialog.Button.Negative" parent="Widget.WeatherXM.TextButton.Subtle" />
 
-    <style name="Widget.WeatherXM.AlertDialog.Button.Neutral" parent="Widget.WeatherXM.TextButton.Subtle">
-    </style>
+    <style name="Widget.WeatherXM.AlertDialog.Button.Neutral" parent="Widget.WeatherXM.TextButton.Subtle" />
 </resources>

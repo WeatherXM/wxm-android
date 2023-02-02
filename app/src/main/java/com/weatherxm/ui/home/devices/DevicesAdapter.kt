@@ -57,6 +57,8 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             if (item.currentWeather == null || item.currentWeather.isEmpty()) {
                 binding.weatherDataLayout.visibility = GONE
                 binding.noDataLayout.visibility = VISIBLE
+                binding.noDataMessage.text =
+                    resHelper.getString(R.string.no_data_message_public_device)
             } else {
                 setWeatherData(item)
             }
@@ -147,11 +149,6 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             binding.feelsLikeUnit.text = Weather.getPreferredUnit(
                 resHelper.getString(CacheService.KEY_TEMPERATURE),
                 resHelper.getString(R.string.temperature_celsius)
-            )
-            binding.humidity.setData(
-                Weather.getFormattedHumidity(
-                    item.currentWeather?.humidity, includeUnit = false
-                ), "%"
             )
             binding.humidity.setData(
                 Weather.getFormattedHumidity(

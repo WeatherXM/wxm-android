@@ -70,6 +70,7 @@
     <string name="unknown_address">Unknown Address</string>
     <string name="no_data">No Data</string>
     <string name="no_data_message">We\’re unable to show updated station data. Please make sure your station is operational and connected to the internet.</string>
+    <string name="no_data_message_public_device">We\’re unable to show updated station data.</string>
 
     <!-- Update (Bluetooth OTA) Station -->
     <string name="updated_needed_title">Station must be updated</string>
@@ -238,6 +239,8 @@
     <string name="claiming_station">Claiming Station…</string>
     <string name="claiming_station_helium_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to the Helium\'s network bandwidth limitations!<b>]]></string>
     <string name="success_claim_device"><![CDATA[Your station is claimed under your account:<br><b>%s</b>]]></string>
+    <string name="ble_connection_lost">Connection Failed</string>
+    <string name="ble_connection_lost_description"><![CDATA[Something went wrong with the connection. Make sure you are <b>near your weather station</b> and retry claiming. If connection still fails, please <b>unpair the station and restart the claiming process</b>. For more details check our <a href=\"%1$s\">troubleshooting guide</a>.<br><br>Alternatively, you can contact our support.]]></string>
 
     <!-- Claim M5 -->
     <string name="title_claim_ws1000_device">Claim WS1000 Device</string>
@@ -261,8 +264,6 @@
     <string name="invalid_dev_key">Invalid Device Key</string>
     <string name="enter_device_key">Enter device\'s Key</string>
     <string name="wrong_combination">Wrong Combination</string>
-    <string name="wrong_combination_keys">Wrong Combination of Dev EUI and Device Key</string>
-    <string name="wrong_combination_message"><![CDATA[Dev EUI and Device Key combination is wrong! Please retype/rescan and try again.<br><br>If you still have problems, contact our support at <a>support@weatherxm.com</a>]]></string>
     <string name="reset_station">Reset Station</string>
     <string name="reset">Reset</string>
     <string name="reset_ble_first_step"><![CDATA[Push the <b>RESET button</b> on the bottom of your WeatherXM device to enable Bluetooth pairing. <b>This will expire in 5 minutes. After that, you will need to push it again to restart the pairing!</b>]]></string>
@@ -275,7 +276,6 @@
     <string name="helium_pairing_failed_desc">The Pairing process with WS2000 has failed. Please try again, and if the problem persists, contact support.</string>
     <string name="helium_fetching_info_failed">Fetching device\'s info failed. Please try again, and if the problem persists, contact support.</string>
     <string name="helium_bluetooth_disabled">The Pairing process with WS2000 has failed. Bluetooth is disabled. Please enable it and try again.</string>
-    <string name="helium_bluetooth_connection_lost">The Pairing process with WS2000 has failed. Bluetooth connection has been lost. Please try again, and if the problem persists, contact support.</string>
     <string name="frequency">Frequency</string>
     <string name="frequency_selected_text">Given the location of installation you defined in the previous step, we\’ve selected the appropriate frequency for %s.</string>
     <string name="set_frequency">Set Your Station\'s Frequency</string>

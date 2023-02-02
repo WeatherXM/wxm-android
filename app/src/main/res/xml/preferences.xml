@@ -8,6 +8,8 @@
             app:defaultValue="false"
             app:iconSpaceReserved="false"
             app:key="@string/key_google_analytics"
+            app:singleLineTitle="false"
+            app:summary="@string/google_analytics_preferences_desc"
             app:title="@string/google_analytics_preferences_title" />
         <Preference
             app:iconSpaceReserved="false"

@@ -30,6 +30,8 @@ import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.common.ActionDialogFragment
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.checkPermissionsAndThen
+import com.weatherxm.ui.common.hide
+import com.weatherxm.ui.common.show
 import com.weatherxm.util.setBluetoothDrawable
 import com.weatherxm.util.setHtml
 import com.weatherxm.util.setNoDevicesFoundDrawable
@@ -75,6 +77,36 @@ class ClaimHeliumPairFragment : Fragment() {
 
         binding.recycler.adapter = adapter
 
+        with(binding.connectionLostSubtitle) {
+            movementMethod =
+                me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {
+                    setOnLinkClickListener { _, url ->
+                        navigator.openWebsite(context, url)
+                        return@setOnLinkClickListener true
+                    }
+                }
+            setHtml(
+                R.string.ble_connection_lost_description,
+                getString(R.string.troubleshooting_helium_url)
+            )
+        }
+
+        binding.quit.setOnClickListener {
+            parentModel.cancel()
+        }
+
+        binding.contactSupport.setOnClickListener {
+            navigator.sendSupportEmail(
+                context = context,
+                subject = getString(R.string.support_email_subject_ble_connection_lost)
+            )
+        }
+        binding.retry.setOnClickListener {
+            binding.connectionErrorContainer.hide()
+            binding.mainContainer.show()
+            model.connectToPeripheral()
+        }
+
         binding.scanAgain.setOnClickListener {
             adapter.submitList(mutableListOf())
             enableBluetoothAndScan()
@@ -104,6 +136,13 @@ class ClaimHeliumPairFragment : Fragment() {
 
         model.onBLEError().observe(viewLifecycleOwner) {
             showErrorDialog(it)
+        }
+
+        model.onBLEConnectionLost().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.mainContainer.hide()
+                binding.connectionErrorContainer.show()
+            }
         }
 
         model.onBLEDevEUI().observe(viewLifecycleOwner) {

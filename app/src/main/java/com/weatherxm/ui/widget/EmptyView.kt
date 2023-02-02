@@ -1,6 +1,7 @@
 package com.weatherxm.ui.widget
 
 import android.content.Context
+import android.text.util.Linkify
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
