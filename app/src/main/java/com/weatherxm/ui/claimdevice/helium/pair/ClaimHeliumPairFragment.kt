@@ -140,8 +140,8 @@ class ClaimHeliumPairFragment : Fragment() {
 
         model.onBLEConnectionLost().observe(viewLifecycleOwner) {
             if (it) {
-                binding.mainContainer.hide()
-                binding.connectionErrorContainer.show()
+                binding.mainContainer.visibility = GONE
+                binding.connectionErrorContainer.visibility = VISIBLE
             }
         }
 
