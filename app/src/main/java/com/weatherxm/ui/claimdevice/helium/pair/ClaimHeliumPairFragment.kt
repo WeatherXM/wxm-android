@@ -102,8 +102,8 @@ class ClaimHeliumPairFragment : Fragment() {
             )
         }
         binding.retry.setOnClickListener {
-            binding.connectionErrorContainer.hide()
-            binding.mainContainer.show()
+            binding.connectionErrorContainer.hide(null)
+            binding.mainContainer.show(null)
             model.connectToPeripheral()
         }
 

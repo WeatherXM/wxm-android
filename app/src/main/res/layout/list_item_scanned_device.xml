@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground">
 
     <ImageView
         android:id="@+id/typeIcon"
@@ -30,8 +31,8 @@
         android:id="@+id/bottomBorder"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/light_mid_grey"
         android:layout_marginTop="@dimen/margin_normal"
+        android:background="@color/light_mid_grey"
         app:layout_constraintTop_toBottomOf="@id/name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
