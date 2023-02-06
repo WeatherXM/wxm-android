@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">@color/light_primary</color>
-    <color name="colorPrimaryVariant">@color/light_lighter_blue</color>
+    <color name="colorPrimaryVariant">@color/light_darkest_blue</color>
     <color name="colorOnPrimary">@color/light_top</color>
 
     <color name="colorSurface">@color/light_top</color>
@@ -12,12 +12,15 @@
     <color name="colorBackground">@color/light_background</color>
     <color name="colorOnBackground">@color/dark_background</color>
 
+    <color name="successTint">@color/light_success_tint</color>
+    <color name="errorTint">@color/light_error_tint</color>
+    <color name="warningTint">@color/light_warning_tint</color>
+    <color name="midGrey">@color/light_mid_grey</color>
+    <color name="darkGrey">@color/light_dark_grey</color>
+
     <!-- System and Launcher -->
     <color name="ic_launcher_background">#1B75BA</color>
     <color name="status_bar_color">#80003b77</color>
-
-    <!-- Text Input Layout -->
-    <color name="hint_text_color">@color/light_dark_grey</color>
 
     <!-- List Divider -->
     <color name="list_divider">@color/light_light2</color>
@@ -25,27 +28,15 @@
     <!-- Google Analytics -->
     <color name="google_analytics_icon_background">@color/light_light2</color>
 
-    <!-- Weather Card -->
-    <color name="weather_card_data_icon">@color/light_darkest_blue</color>
-    <color name="weather_card_unit">@color/light_mid_grey</color>
-    <color name="weather_card_data_subtitle">@color/light_darkest_blue</color>
-
     <!-- Bluetooth Scanning -->
-    <color name="bluetooth_scanning_info_title">@color/light_darkest_blue</color>
     <color name="progress_color_in_button">@color/light_lightest_blue</color>
 
-    <!-- Hourly Forecast Card -->
-    <color name="hourly_forecast_card_precipitation">@color/light_dark_grey</color>
-
     <!-- Dates Tabs -->
-    <color name="date_tab_selected_text_color">@color/light_darkest_blue</color>
     <color name="date_tab_selected_background">@color/light_light2</color>
 
     <!-- History Charts -->
-    <color name="chart_axis_line_color">@color/light_dark_grey</color>
     <color name="chart_popup_background">@color/light_darkest_blue</color>
     <color name="chart_popup_text_color">@color/light_top</color>
-    <color name="chart_primary_line">@color/light_darker_blue</color>
     <color name="chart_secondary_line">@color/light_lightest_blue</color>
 
     <!-- Devices List -->
@@ -54,33 +45,12 @@
     <!-- Claiming Flow -->
     <color name="select_device_card_color">@color/light_light2</color>
 
-    <!-- Explorer -->
-    <color name="bottomSheetDialog_background">@color/light_light1</color>
-
-    <!-- Daily Forecast -->
-    <color name="daily_forecast_date">@color/light_darker_blue</color>
-    <color name="daily_forecast_precip_prob_some">@color/dark_lightest_blue</color>
-    <color name="daily_forecast_precip_prob_none">@color/light_dark_grey</color>
-    <color name="daily_forecast_temperature_slider">@color/light_darkest_blue</color>
-    <color name="daily_forecast_temperature_slider_inactive">@color/light_light1</color>
-
     <!-- Token Chart -->
-    <color name="token_info_chip_background_color">@color/light_light3</color>
+    <color name="token_info_chip_background_color">@color/light_light2</color>
 
     <!-- Transactions -->
     <color name="token_transaction_hash_background">@color/light_blue_tint</color>
-    <color name="token_transaction_slider_inactive">@color/light_light1</color>
-    <color name="token_transaction_date_color">@color/light_dark_grey</color>
-    <color name="token_transaction_descriptions">@color/light_dark_grey</color>
-    <color name="token_transaction_line">@color/light_mid_grey</color>
 
     <!-- Info Card -->
     <color name="info_card_background">@color/light_blue_tint</color>
-    <color name="info_card_icon_color">@color/light_darkest_blue</color>
-
-    <!-- Error Card -->
-    <color name="error_card_close_button_color">@color/light_dark_grey</color>
-
-    <!-- Dialog -->
-    <color name="title">@color/light_darkest_blue</color>
 </resources>

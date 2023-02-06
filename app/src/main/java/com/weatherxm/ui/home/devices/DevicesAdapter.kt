@@ -17,6 +17,7 @@ import com.weatherxm.databinding.ListItemDeviceBinding
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
+import com.weatherxm.util.setColor
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -87,13 +88,15 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 itemView.context.getColor(
                     when (item.attributes?.isActive) {
                         true -> {
-                            R.color.device_status_online
+                            binding.statusIcon.setColor(R.color.success)
+                            R.color.successTint
                         }
                         false -> {
-                            R.color.device_status_offline
+                            binding.statusIcon.setColor(R.color.error)
+                            R.color.errorTint
                         }
                         null -> {
-                            R.color.device_status_unknown
+                            R.color.midGrey
                         }
                     }
                 )

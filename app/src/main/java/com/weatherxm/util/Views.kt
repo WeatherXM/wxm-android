@@ -59,20 +59,20 @@ fun ImageView.setWarningDrawable(context: Context) {
 
 fun ImageView.setBluetoothDrawable(context: Context) {
     val drawable = getDrawable(resources, R.drawable.ic_bluetooth, context.theme)
-    drawable?.setTint(getColor(resources, R.color.light_mid_grey, context.theme))
+    drawable?.setTint(getColor(resources, R.color.midGrey, context.theme))
     this.setImageDrawable(drawable)
 }
 
 fun ImageView.setNoDevicesFoundDrawable(context: Context) {
     val drawable = getDrawable(resources, R.drawable.ic_no_devices_found, context.theme)
-    drawable?.setTint(getColor(resources, R.color.light_mid_grey, context.theme))
+    drawable?.setTint(getColor(resources, R.color.midGrey, context.theme))
     this.setImageDrawable(drawable)
 }
 
 fun MaterialButton.disable(context: Context) {
     this.isEnabled = false
-    this.setBackgroundColor(resources.getColor(R.color.light_mid_grey, context.theme))
-    this.setTextColor(resources.getColor(R.color.light_dark_grey, context.theme))
+    this.setBackgroundColor(resources.getColor(R.color.midGrey, context.theme))
+    this.setTextColor(resources.getColor(R.color.darkGrey, context.theme))
 }
 
 @Suppress("EmptyFunctionBlock")
@@ -92,10 +92,8 @@ fun Chip.setIcon(@DrawableRes drawable: Int) {
 }
 
 fun Chip.setSuccessChip() {
-    this.setChipBackgroundColorResource(R.color.success_tint)
+    this.setChipBackgroundColorResource(R.color.successTint)
     this.chipIcon = getDrawable(resources, R.drawable.ic_checkmark, context.theme)
-    this.setChipIconTintResource(R.color.dark_background)
-    this.setTextColor(getColor(resources, R.color.dark_background, context.theme))
 }
 
 fun ImageView.setColor(@ColorRes color: Int) {

@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">@color/dark_primary</color>
-    <color name="colorPrimaryVariant">@color/dark_lighter_blue</color>
+    <color name="colorPrimaryVariant">@color/dark_darkest</color>
     <color name="colorOnPrimary">@color/dark_background</color>
 
     <color name="colorSurface">@color/dark_top</color>
     <color name="colorSurfaceVariant">@color/dark_dark1</color>
     <color name="colorOnSurface">@color/light_top</color>
-    <color name="colorOnSurfaceVariant">@color/light_mid_grey</color>
+    <color name="colorOnSurfaceVariant">@color/dark_dark_grey</color>
 
     <color name="colorBackground">@color/dark_background</color>
     <color name="colorOnBackground">@color/light_top</color>
 
+    <color name="successTint">@color/dark_success_tint</color>
+    <color name="errorTint">@color/dark_error_tint</color>
+    <color name="warningTint">@color/dark_warning_tint</color>
+    <color name="midGrey">@color/dark_mid_grey</color>
+    <color name="darkGrey">@color/dark_dark_grey</color>
+
     <!-- System and Launcher -->
     <color name="ic_launcher_background">#1B75BA</color>
     <color name="status_bar_color">#80003b77</color>
-
-    <!-- Text Input Layout -->
-    <color name="hint_text_color">@color/light_mid_grey</color>
 
     <!-- List Divider -->
     <color name="list_divider">@color/dark_dark2</color>
@@ -25,28 +28,16 @@
     <!-- Google Analytics -->
     <color name="google_analytics_icon_background">@color/dark_dark2</color>
 
-    <!-- Weather Card -->
-    <color name="weather_card_data_icon">@color/dark_darkest</color>
-    <color name="weather_card_unit">@color/light_mid_grey</color>
-    <color name="weather_card_data_subtitle">@color/dark_darkest</color>
-
     <!-- Bluetooth Scanning -->
-    <color name="bluetooth_scanning_info_title">@color/dark_darkest</color>
-    <color name="progress_color_in_button">@color/dark_lighter_blue</color>
-
-    <!-- Hourly Forecast Card -->
-    <color name="hourly_forecast_card_precipitation">@color/light_mid_grey</color>
+    <color name="progress_color_in_button">@color/dark_lightest_blue</color>
 
     <!-- Dates Tabs -->
-    <color name="date_tab_selected_text_color">@color/dark_darkest</color>
     <color name="date_tab_selected_background">@color/dark_dark2</color>
 
     <!-- History Chart -->
-    <color name="chart_axis_line_color">@color/light_mid_grey</color>
     <color name="chart_popup_background">@color/dark_darkest</color>
     <color name="chart_popup_text_color">@color/dark_top</color>
-    <color name="chart_primary_line">@color/dark_darkest</color>
-    <color name="chart_secondary_line">@color/dark_lighter_blue</color>
+    <color name="chart_secondary_line">@color/dark_darkest</color>
 
     <!-- Devices List -->
     <color name="devices_list_card_background">@color/dark_dark2</color>
@@ -54,33 +45,12 @@
     <!-- Claiming Flow -->
     <color name="select_device_card_color">@color/dark_dark2</color>
 
-    <!-- Explorer -->
-    <color name="bottomSheetDialog_background">@color/dark_dark1</color>
-
-    <!-- Daily Forecast -->
-    <color name="daily_forecast_date">@color/dark_darker</color>
-    <color name="daily_forecast_precip_prob_some">@color/light_lightest_blue</color>
-    <color name="daily_forecast_precip_prob_none">@color/light_mid_grey</color>
-    <color name="daily_forecast_temperature_slider">@color/dark_darkest</color>
-    <color name="daily_forecast_temperature_slider_inactive">@color/dark_dark1</color>
-
     <!-- Token Chart -->
-    <color name="token_info_chip_background_color">@color/dark_dark3</color>
+    <color name="token_info_chip_background_color">@color/dark_dark2</color>
 
     <!-- Transactions -->
     <color name="token_transaction_hash_background">@color/dark_blue_tint</color>
-    <color name="token_transaction_slider_inactive">@color/dark_dark1</color>
-    <color name="token_transaction_date_color">@color/light_mid_grey</color>
-    <color name="token_transaction_descriptions">@color/light_mid_grey</color>
-    <color name="token_transaction_line">@color/light_dark_grey</color>
 
     <!-- Info Card -->
     <color name="info_card_background">@color/dark_blue_tint</color>
-    <color name="info_card_icon_color">@color/dark_lightest_blue</color>
-
-    <!-- Error Card -->
-    <color name="error_card_close_button_color">@color/light_mid_grey</color>
-
-    <!-- Dialog -->
-    <color name="title">@color/dark_darkest</color>
 </resources>

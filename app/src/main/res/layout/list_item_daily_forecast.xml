@@ -71,7 +71,7 @@
         android:layout_weight="1"
         android:enabled="false"
         app:values="@array/temperature_slider_sample_values"
-        tools:trackColorInactive="@color/light_mid_grey"
+        tools:trackColorInactive="@color/midGrey"
         tools:valueFrom="10"
         tools:valueTo="25" />
 

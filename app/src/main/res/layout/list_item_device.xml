@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:cardBackgroundColor="@color/device_status_online">
+                    tools:cardBackgroundColor="@color/successTint">
 
                     <ImageView
                         android:id="@+id/status_icon"
@@ -78,7 +78,7 @@
                     style="@style/TextAppearance.WeatherXM.Default.PrimaryColor"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toStartOf="@id/status"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/status"
@@ -255,7 +255,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-16dp"
-            android:background="@color/device_status_offline"
+            android:background="@color/errorTint"
             android:elevation="0dp"
             android:paddingHorizontal="@dimen/padding_normal"
             android:paddingTop="@dimen/padding_normal"

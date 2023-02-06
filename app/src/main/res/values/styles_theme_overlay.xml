@@ -6,12 +6,12 @@
     </style>
 
     <style name="ThemeOverlay.WeatherXM.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
-        <item name="colorSurface">@color/bottomSheetDialog_background</item>
+        <item name="colorSurface">@color/colorSurfaceVariant</item>
         <item name="bottomSheetStyle">@style/Widget.WeatherXM.BottomSheet.Dialog</item>
     </style>
 
     <style name="ThemeOverlay.WeatherXM.BottomSheetDialog.Explorer.Devices" parent="ThemeOverlay.WeatherXM.BottomSheetDialog">
-        <item name="colorSurface">@color/bottomSheetDialog_background</item>
+        <item name="colorSurface">@color/colorSurfaceVariant</item>
     </style>
 
     <style name="ThemeOverlay.WeatherXM.Toolbar" parent="ThemeOverlay.Material3.Toolbar.Surface">

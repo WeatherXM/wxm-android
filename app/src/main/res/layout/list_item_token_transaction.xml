@@ -14,7 +14,7 @@
         android:layout_width="4dp"
         android:layout_height="24dp"
         android:layout_marginStart="48dp"
-        android:background="@color/token_transaction_line"
+        android:background="@color/midGrey"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,7 +32,7 @@
         android:layout_width="4dp"
         android:layout_height="24dp"
         android:layout_marginStart="48dp"
-        android:background="@color/token_transaction_line"
+        android:background="@color/midGrey"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/date_point" />
 
@@ -149,7 +149,7 @@
                 android:src="@drawable/ic_reward_scale"
                 app:layout_constraintStart_toEndOf="@id/score_description"
                 app:layout_constraintTop_toBottomOf="@id/reward_slider"
-                app:tint="@color/light_mid_grey"
+                app:tint="@color/midGrey"
                 tools:ignore="ContentDescription" />
 
             <com.google.android.material.textview.MaterialTextView

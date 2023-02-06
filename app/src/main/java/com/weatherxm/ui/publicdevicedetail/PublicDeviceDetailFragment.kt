@@ -133,9 +133,9 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
     private fun updateDeviceInfo(device: UIDevice?) {
         binding.statusIcon.setColor(
             when (device?.isActive) {
-                true -> R.color.device_status_online
-                false -> R.color.device_status_offline
-                null -> R.color.device_status_unknown
+                true -> R.color.successTint
+                false -> R.color.errorTint
+                null -> R.color.midGrey
             }
         )
         binding.statusIcon.visibility = VISIBLE

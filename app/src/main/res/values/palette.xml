@@ -8,43 +8,39 @@
 
     <!-- Color Palette/Library Design Team -->
 
-    <color name="light_mid_grey">#92989E</color>
-    <color name="light_dark_grey">#4B4D4E</color>
-
-    <color name="light_top">#FAFAFA</color>
-    <color name="light_light3">#F2F4F9</color>
-    <color name="light_light2">#EEF0F4</color>
-    <color name="light_light1">#E7E9F0</color>
-    <color name="light_background">#DCE0E9</color>
-    <color name="light_darkest_blue">#000F52</color>
-    <color name="light_darker_blue">#002092</color>
+    <color name="light_mid_grey">#C6C6D0</color>
+    <color name="light_dark_grey">#45464F</color>
+    <color name="light_top">#FEFBFF</color>
+    <color name="light_light2">#EAEBF9</color>
+    <color name="light_light1">#D3D9F2</color>
+    <color name="light_background">#E5E8FC</color>
+    <color name="light_darkest_blue">#00164D</color>
     <color name="light_primary">#0A3FAD</color>
-    <color name="light_lighter_blue">#0467F1</color>
-    <color name="light_lightest_blue">#78B7FB</color>
-    <color name="light_blue_tint">#E4F1FD</color>
+    <color name="light_lightest_blue">#B5C4FF</color>
+    <color name="light_blue_tint">#DFE2F6</color>
     <color name="light_accent">#800162</color>
-    <color name="light_crypto">#3A3F6A</color>
 
-    <color name="dark_top">#31323C</color>
-    <color name="dark_dark3">#292931</color>
-    <color name="dark_dark2">#1D1E26</color>
-    <color name="dark_dark1">#1A1B1E</color>
-    <color name="dark_background">#040404</color>
-    <color name="dark_darkest">#C4DAF1</color>
-    <color name="dark_darker">#92BBE8</color>
-    <color name="dark_primary">#68A4F9</color>
-    <color name="dark_lighter_blue">#3D7EF6</color>
-    <color name="dark_lightest_blue">#0331A3</color>
-    <color name="dark_blue_tint">#162351</color>
-    <color name="dark_accent">#E567F0</color>
-    <color name="dark_crypto">#8C97F5</color>
+    <color name="dark_mid_grey">#5D5E67</color>
+    <color name="dark_dark_grey">#C6C6D0</color>
+    <color name="dark_top">#31364A</color>
+    <color name="dark_dark2">#272C3A</color>
+    <color name="dark_dark1">#23252F</color>
+    <color name="dark_background">#1B1C22</color>
+    <color name="dark_darkest">#DCE1FF</color>
+    <color name="dark_primary">#B5C4FF</color>
+    <color name="dark_lightest_blue">#00297B</color>
+    <color name="dark_blue_tint">#1E2438</color>
+    <color name="dark_accent">#CD9EFC</color>
 
     <color name="success">#00E676</color>
-    <color name="success_tint">#C9F8E1</color>
+    <color name="light_success_tint">#D8F8EA</color>
+    <color name="dark_success_tint">#17392C</color>
     <color name="error">#FF1744</color>
-    <color name="error_tint">#FADCE3</color>
+    <color name="light_error_tint">#FED9E3</color>
+    <color name="dark_error_tint">#3D1A25</color>
     <color name="warning">#FFAB49</color>
-    <color name="warning_tint">#FBDEBC</color>
+    <color name="light_warning_tint">#FEEFE4</color>
+    <color name="dark_warning_tint">#3D3125</color>
 
     <!-- Explorer -->
     <color name="hex_fill_color">#3388ff</color>
@@ -60,10 +56,5 @@
     <color name="reward_score_low">#EF8B4F</color>
     <color name="reward_score_very_low">#F6736D</color>
     <color name="reward_score_unknown">#BAC7CB</color>
-
-    <!-- Online/Offline indicators -->
-    <color name="device_status_online">@color/success_tint</color>
-    <color name="device_status_offline">@color/error_tint</color>
-    <color name="device_status_unknown">@color/light_mid_grey</color>
     <!-- End -->
 </resources>

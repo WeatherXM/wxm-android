@@ -5,6 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorSurface"
     tools:context=".ui.preferences.PreferenceActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -44,14 +45,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
+                    <ImageView
+                        android:id="@+id/icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_survey"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/colorPrimary"
+                        tools:ignore="ContentDescription" />
+
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/survey_title"
                         style="@style/TextAppearance.WeatherXM.MaterialCard.Messages.Title"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_small"
+                        android:layout_marginStart="@dimen/margin_normal"
                         android:text="@string/short_app_survey"
                         app:layout_constraintBottom_toBottomOf="@id/close_survey_prompt_button"
+                        app:layout_constraintEnd_toStartOf="@id/close_survey_prompt_button"
+                        app:layout_constraintStart_toEndOf="@id/icon"
                         app:layout_constraintTop_toTopOf="@id/close_survey_prompt_button" />
 
                     <com.google.android.material.button.MaterialButton
@@ -67,11 +81,15 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/showSurveyButton"
                         style="@style/Widget.WeatherXM.TextButton.Subtle"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:gravity="start|center_vertical"
+                        android:paddingStart="0dp"
                         android:text="@string/short_app_survey_prompt_desc"
-                        app:layout_constraintTop_toBottomOf="@id/close_survey_prompt_button" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@id/survey_title"
+                        app:layout_constraintTop_toBottomOf="@id/close_survey_prompt_button"
+                        tools:ignore="RtlSymmetry" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

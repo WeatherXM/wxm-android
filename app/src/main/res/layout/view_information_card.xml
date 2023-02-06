@@ -23,7 +23,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_info"
-                app:tint="@color/info_card_icon_color"
+                app:tint="@color/colorPrimaryVariant"
                 tools:ignore="ContentDescription" />
 
             <com.google.android.material.textview.MaterialTextView

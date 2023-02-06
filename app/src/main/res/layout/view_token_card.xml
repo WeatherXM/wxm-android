@@ -129,7 +129,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         app:chart_axis="none"
-                        app:chart_barsColor="@color/light_mid_grey"
+                        app:chart_barsColor="@color/midGrey"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 

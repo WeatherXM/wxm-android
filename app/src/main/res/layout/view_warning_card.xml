@@ -40,7 +40,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:layout_marginTop="@dimen/margin_normal"
-                android:textColor="@color/dark_background"
                 app:layout_constraintEnd_toStartOf="@id/closeButton"
                 app:layout_constraintStart_toEndOf="@id/icon"
                 app:layout_constraintTop_toTopOf="parent"
@@ -53,7 +52,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:autoLink="all"
-                android:textColor="@color/dark_background"
                 app:layout_constraintEnd_toEndOf="@id/title"
                 app:layout_constraintStart_toStartOf="@id/title"
                 app:layout_constraintTop_toBottomOf="@id/title"
@@ -66,7 +64,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_normal"
                 android:paddingHorizontal="0dp"
-                android:textColor="@color/light_primary"
                 android:visibility="gone"
                 app:layout_constraintStart_toStartOf="@id/title"
                 app:layout_constraintTop_toBottomOf="@id/message"
@@ -93,7 +90,6 @@
                 android:layout_height="48dp"
                 app:icon="@drawable/ic_close"
                 app:iconGravity="textStart"
-                app:iconTint="@color/light_dark_grey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 

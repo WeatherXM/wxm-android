@@ -31,7 +31,7 @@
         <item name="android:paddingStart">0dp</item>
         <item name="android:paddingEnd">0dp</item>
         <item name="android:padding">0dp</item>
-        <item name="android:textColorHint">@color/hint_text_color</item>
+        <item name="android:textColorHint">@color/colorOnSurfaceVariant</item>
         <item name="boxStrokeColor">@color/text_input_box_stroke_color_selector</item>
         <item name="boxBackgroundColor">@color/colorSurface</item>
         <item name="endIconTint">@color/colorOnSurface</item>
@@ -96,7 +96,7 @@
         <item name="iconGravity">textTop</item>
         <item name="iconTint">@color/colorOnSurface</item>
         <item name="strokeWidth">1dp</item>
-        <item name="strokeColor">@color/light_mid_grey</item>
+        <item name="strokeColor">@color/midGrey</item>
         <item name="cornerRadius">@dimen/button_corner_radius</item>
     </style>
 
@@ -160,11 +160,11 @@
 
     <style name="Widget.WeatherXM.MaterialCard.Warning" parent="Widget.WeatherXM.MaterialCard.Messages">
         <item name="android:textColor">@color/dark_background</item>
-        <item name="cardBackgroundColor">@color/warning_tint</item>
+        <item name="cardBackgroundColor">@color/warningTint</item>
     </style>
 
     <style name="Widget.WeatherXM.MaterialCard.Error" parent="Widget.WeatherXM.MaterialCard.Messages">
-        <item name="cardBackgroundColor">@color/error_tint</item>
+        <item name="cardBackgroundColor">@color/errorTint</item>
         <item name="strokeWidth">1dp</item>
         <item name="strokeColor">@color/error</item>
     </style>
@@ -302,7 +302,7 @@
         <item name="tabBackground">@drawable/dates_background_selector</item>
         <item name="tabTextAppearance">@style/TextAppearance.WeatherXM.Tabs</item>
         <item name="tabTextColor">@color/colorPrimary</item>
-        <item name="tabSelectedTextColor">@color/date_tab_selected_text_color</item>
+        <item name="tabSelectedTextColor">@color/colorPrimaryVariant</item>
         <item name="tabPadding">@dimen/padding_extra_small</item>
         <item name="tabIndicatorHeight">0dp</item>
         <item name="android:background">@color/transparent</item>
@@ -322,13 +322,13 @@
     </style>
 
     <style name="Widget.WeatherXM.Slider.Forecast.Temperature" parent="Widget.WeatherXM.Slider">
-        <item name="trackColorActive">@color/daily_forecast_temperature_slider</item>
-        <item name="trackColorInactive">@color/daily_forecast_temperature_slider_inactive</item>
+        <item name="trackColorActive">@color/colorPrimaryVariant</item>
+        <item name="trackColorInactive">@color/colorSurfaceVariant</item>
     </style>
 
     <style name="Widget.WeatherXM.Slider.Transaction.Score" parent="Widget.WeatherXM.Slider">
         <item name="trackColorActive">@color/reward_score_very_high</item>
-        <item name="trackColorInactive">@color/token_transaction_slider_inactive</item>
+        <item name="trackColorInactive">@color/colorSurfaceVariant</item>
     </style>
 
     <!--
@@ -336,7 +336,7 @@
     -->
     <style name="Widget.WeatherXM.AlertDialog.Title" parent="MaterialAlertDialog.Material3.Title.Text">
         <item name="android:textAppearance">@style/TextAppearance.Material3.HeadlineSmall</item>
-        <item name="android:textColor">@color/title</item>
+        <item name="android:textColor">@color/colorPrimaryVariant</item>
         <item name="fontFamily">sans-serif-medium</item>
     </style>
 

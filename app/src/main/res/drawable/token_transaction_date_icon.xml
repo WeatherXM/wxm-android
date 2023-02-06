@@ -4,6 +4,6 @@
     android:opacity="opaque"
     android:shape="oval">
 
-    <solid android:color="@color/token_transaction_line" />
+    <solid android:color="@color/midGrey" />
 
 </shape>

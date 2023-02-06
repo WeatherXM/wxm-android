@@ -47,7 +47,7 @@ private fun LineChart.setDefaultSettings(chartData: LineChartData) {
     isScaleYEnabled = false
     axisRight.isEnabled = false
     with(axisLeft) {
-        axisLineColor = resources.getColor(R.color.chart_axis_line_color, context.theme)
+        axisLineColor = resources.getColor(R.color.colorOnSurfaceVariant, context.theme)
         gridColor = resources.getColor(R.color.colorBackground, context.theme)
         textColor = resources.getColor(R.color.colorOnSurface, context.theme)
         setLabelCount(MAXIMUMS_GRID_LINES_Y_AXIS, false)
@@ -61,7 +61,7 @@ private fun LineChart.setDefaultSettings(chartData: LineChartData) {
         position = XAxis.XAxisPosition.BOTTOM
         setDrawAxisLine(false)
         granularity = X_AXIS_DEFAULT_TIME_GRANULARITY
-        axisLineColor = resources.getColor(R.color.chart_axis_line_color, context.theme)
+        axisLineColor = resources.getColor(R.color.colorOnSurfaceVariant, context.theme)
         gridColor = resources.getColor(R.color.colorBackground, context.theme)
         textColor = resources.getColor(R.color.colorOnSurface, context.theme)
     }
@@ -82,8 +82,8 @@ private fun LineDataSet.setDefaultSettings(context: Context, resources: Resource
     lineWidth = LINE_WIDTH
     mode = LineDataSet.Mode.CUBIC_BEZIER
     highLightColor = resources.getColor(R.color.colorOnSurface, context.theme)
-    color = resources.getColor(R.color.chart_primary_line, context.theme)
-    setCircleColor(resources.getColor(R.color.chart_primary_line, context.theme))
+    color = resources.getColor(R.color.colorPrimary, context.theme)
+    setCircleColor(resources.getColor(R.color.colorPrimary, context.theme))
 }
 
 private fun MutableList<LineDataSet>.secondaryLineInit(
@@ -144,7 +144,7 @@ fun LineChart.initializeTemperature24hChart(
         newLegendEntry(
             temperatureData.name,
             legend.formLineWidth,
-            resources.getColor(R.color.chart_primary_line, context.theme)
+            resources.getColor(R.color.colorPrimary, context.theme)
         ),
         newLegendEntry(
             feelsLikeData.name,
@@ -359,7 +359,7 @@ fun LineChart.initializeWind24hChart(
         newLegendEntry(
             windSpeedData.name,
             legend.formLineWidth,
-            resources.getColor(R.color.chart_primary_line, context.theme)
+            resources.getColor(R.color.colorPrimary, context.theme)
         ),
         newLegendEntry(
             windGustData.name,
@@ -453,7 +453,7 @@ fun BarChart.initializeUV24hChart(chartData: BarChartData) {
         granularity = 1F
         valueFormatter = CustomYAxisFormatter(chartData.unit)
         textColor = resources.getColor(R.color.colorOnSurface, context.theme)
-        axisLineColor = resources.getColor(R.color.chart_axis_line_color, context.theme)
+        axisLineColor = resources.getColor(R.color.colorOnSurfaceVariant, context.theme)
         gridColor = resources.getColor(R.color.colorBackground, context.theme)
     }
     axisRight.isEnabled = false
@@ -467,7 +467,7 @@ fun BarChart.initializeUV24hChart(chartData: BarChartData) {
         valueFormatter = CustomXAxisFormatter(chartData.timestamps)
         textColor = resources.getColor(R.color.colorOnSurface, context.theme)
         granularity = X_AXIS_DEFAULT_TIME_GRANULARITY
-        axisLineColor = resources.getColor(R.color.chart_axis_line_color, context.theme)
+        axisLineColor = resources.getColor(R.color.colorOnSurfaceVariant, context.theme)
         gridColor = resources.getColor(R.color.colorBackground, context.theme)
     }
     show()

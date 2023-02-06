@@ -17,7 +17,7 @@
             app:layout_constraintBottom_toBottomOf="@id/value"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/title"
-            app:tint="@color/weather_card_data_subtitle"
+            app:tint="@color/colorPrimaryVariant"
             tools:ignore="contentDescription"
             tools:src="@drawable/ic_weather_humidity" />
 
