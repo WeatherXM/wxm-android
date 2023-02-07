@@ -173,14 +173,15 @@ fun LineChart.initializeTemperature24hChart(
     val yMinFeelsLike = feelsLikeLineDataSetsWithValues.minOf { it.yMin }
     val yMaxFeelsLike = feelsLikeLineDataSetsWithValues.maxOf { it.yMax }
     with(axisLeft) {
-        if (yMinFeelsLike < yMinTemperature) {
-            // If we get here that means feels like is lower than temperature this day
-            axisMinimum = yMinFeelsLike - 1
-            axisMaximum = yMaxTemperature + 1
+        axisMinimum = if (yMinFeelsLike < yMinTemperature) {
+            yMinFeelsLike - 1
         } else {
-            // If we get here that means feels like is higher than temperature this day
-            axisMinimum = yMinTemperature - 1
-            axisMaximum = yMaxFeelsLike + 1
+            yMinTemperature - 1
+        }
+        axisMaximum = if (yMaxFeelsLike > yMaxTemperature) {
+            yMaxFeelsLike + 1
+        } else {
+            yMaxTemperature + 1
         }
     }
 
