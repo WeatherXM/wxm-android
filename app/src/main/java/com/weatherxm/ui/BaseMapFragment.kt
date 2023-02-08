@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
+import com.mapbox.maps.MapView
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.annotations
@@ -128,6 +129,8 @@ open class BaseMapFragment : Fragment() {
     }
 
     fun getMap(): MapboxMap = binding.mapView.getMapboxMap()
+
+    fun getMapView(): MapView = binding.mapView
 
     open fun onMapReady(map: MapboxMap) {
         // Override in subclasses

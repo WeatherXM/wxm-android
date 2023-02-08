@@ -12,6 +12,47 @@
         tools:background="@color/black"
         tools:context=".ui.BaseMapFragment" />
 
+    <!-- Header -->
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/explorer_menu">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="144dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_normal"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitStart"
+                android:src="@drawable/app_logo_wide_no_tagline"
+                app:tint="@color/white" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/myLocationButton"
+        style="@style/Widget.WeatherXM.Button.Location.Toggle"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="@dimen/margin_normal"
+        app:icon="@drawable/ic_my_location"
+        app:iconSize="24dp"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        app:layout_constraintTop_toTopOf="@id/mapView"
+        tools:ignore="SpeakableTextPresentCheck" />
+
     <!-- Progress -->
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress"

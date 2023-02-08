@@ -18,8 +18,10 @@ import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel.Companion.ZOOM_LEVEL
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.ui.common.toast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class ClaimMapFragment : BaseMapFragment() {
     private val m5ParentModel: ClaimM5ViewModel by activityViewModels()
@@ -51,8 +53,15 @@ class ClaimMapFragment : BaseMapFragment() {
             return
         }
 
+        binding.myLocationButton.visibility = View.GONE
+
         locationModel.onDeviceLocation().observe(this) {
-            recenter(map, it)
+            Timber.d("Got user location: $it")
+            if (it == null) {
+                context.toast(R.string.error_claim_gps_failed)
+            } else {
+                recenter(map, it)
+            }
         }
 
         locationModel.onSelectedSearchLocation().observe(this) {

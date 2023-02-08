@@ -3,24 +3,16 @@ package com.weatherxm.ui.claimdevice.location
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
-import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Looper
 import androidx.annotation.RequiresPermission
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.usecases.ClaimDeviceUseCase
+import com.weatherxm.util.LocationHelper.getLocationAndThen
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -40,7 +32,6 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
     }
 
     private val usecase: ClaimDeviceUseCase by inject()
-    private lateinit var locationClient: FusedLocationProviderClient
     private var reverseGeocodingJob: Job? = null
     private var installationLocation = Location("").apply {
         latitude = 0.0
@@ -48,22 +39,22 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
     }
     private var deviceType = DeviceType.M5_WIFI
 
-    private val onGetUserLocation = MutableLiveData(false)
-    private val onDeviceLocation = MutableLiveData<Location>()
+    private val onRequestUserLocation = MutableLiveData<Boolean>(false)
+    private val onDeviceLocation = MutableLiveData<Location?>()
     private val onSelectedSearchLocation = MutableLiveData<Location>()
     private val onLocationConfirmed = MutableLiveData(false)
     private val onSearchResults = MutableLiveData<List<SearchSuggestion>?>(mutableListOf())
     private val onReverseGeocodedAddress = MutableLiveData<String?>(null)
 
-    fun onGetUserLocation() = onGetUserLocation
+    fun onRequestUserLocation() = onRequestUserLocation
     fun onDeviceLocation() = onDeviceLocation
     fun onSearchResults() = onSearchResults
     fun onSelectedSearchLocation() = onSelectedSearchLocation
     fun onLocationConfirmed() = onLocationConfirmed
     fun onReverseGeocodedAddress() = onReverseGeocodedAddress
 
-    fun getUserLocation() {
-        onGetUserLocation.postValue(true)
+    fun requestUserLocation() {
+        onRequestUserLocation.postValue(true)
     }
 
     fun confirmLocation() {
@@ -87,51 +78,10 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
         return installationLocation
     }
 
-    @Suppress("MagicNumber")
     @RequiresPermission(anyOf = [ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION])
-    fun getLocationAndThen(context: Context, onLocation: (location: Location?) -> Unit) {
-        locationClient = LocationServices.getFusedLocationProviderClient(context)
-        val priority = when (PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) -> {
-                Priority.PRIORITY_HIGH_ACCURACY
-            }
-            ActivityCompat.checkSelfPermission(context, ACCESS_COARSE_LOCATION) -> {
-                Priority.PRIORITY_BALANCED_POWER_ACCURACY
-            }
-            else -> {
-                null
-            }
-        }
-        priority?.let {
-            locationClient.lastLocation
-                .addOnSuccessListener { location ->
-                    if (location == null) {
-                        Timber.d("Current location is null. Requesting fresh location.")
-                        locationClient.requestLocationUpdates(
-                            LocationRequest.create()
-                                .setNumUpdates(1)
-                                .setInterval(TimeUnit.SECONDS.toMillis(2))
-                                .setFastestInterval(0)
-                                .setMaxWaitTime(TimeUnit.SECONDS.toMillis(3))
-                                .setPriority(it),
-                            object : LocationCallback() {
-                                override fun onLocationResult(result: LocationResult) {
-                                    result.lastLocation?.let {
-                                        onDeviceLocation.postValue(it)
-                                    } ?: onLocation.invoke(null)
-                                }
-                            },
-                            Looper.getMainLooper()
-                        )
-                    } else {
-                        Timber.d("Got current location: $location")
-                        onDeviceLocation.postValue(location)
-                    }
-                }
-                .addOnFailureListener {
-                    Timber.d(it, "Could not get current location.")
-                    onLocation.invoke(null)
-                }
+    fun getLocation(context: Context) {
+        getLocationAndThen(context) {
+            onDeviceLocation.postValue(it)
         }
     }
 

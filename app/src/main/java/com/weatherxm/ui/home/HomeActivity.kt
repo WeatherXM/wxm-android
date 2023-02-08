@@ -91,6 +91,10 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             if (snackbar?.isShown == true) snackbar?.dismiss()
             when (destination.id) {
                 R.id.navigation_devices -> binding.addDevice.showIfNot()
+                R.id.navigation_explorer -> {
+                    explorerModel.setExplorerAfterLoggedIn(true)
+                    binding.addDevice.hideIfNot()
+                }
                 else -> binding.addDevice.hideIfNot()
             }
             binding.devicesCountCard.visibility = View.GONE

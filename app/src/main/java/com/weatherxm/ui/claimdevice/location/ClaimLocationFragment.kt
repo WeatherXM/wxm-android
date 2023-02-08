@@ -1,5 +1,8 @@
 package com.weatherxm.ui.claimdevice.location
 
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +17,7 @@ import com.weatherxm.databinding.FragmentClaimSetLocationBinding
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.hideKeyboard
 import kotlinx.coroutines.launch
@@ -77,6 +81,12 @@ class ClaimLocationFragment : Fragment() {
             }
         }
 
+        model.onRequestUserLocation().observe(viewLifecycleOwner) {
+            if(it) {
+                requestLocationPermissions()
+            }
+        }
+
         model.onSelectedSearchLocation().observe(viewLifecycleOwner) {
             binding.addressSearchView.clear()
         }
@@ -101,10 +111,22 @@ class ClaimLocationFragment : Fragment() {
                 model.geocoding(it)
             },
             onMyLocationClicked = {
-                model.getUserLocation()
+                requestLocationPermissions()
             }
         )
-
         binding.mapView.getFragment<ClaimMapFragment>().initMarkerAndListeners()
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun requestLocationPermissions() {
+        context?.let { context ->
+            checkPermissionsAndThen(
+                permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
+                rationaleTitle = getString(R.string.permission_location_title),
+                rationaleMessage = getString(R.string.permission_location_rationale),
+                onGranted = { model.getLocation(context) },
+                onDenied = { context.toast(R.string.error_claim_gps_failed) }
+            )
+        }
     }
 }

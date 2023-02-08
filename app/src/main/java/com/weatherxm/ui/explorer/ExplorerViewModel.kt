@@ -1,5 +1,8 @@
 package com.weatherxm.ui.explorer
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,12 +17,14 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.SingleLiveEvent
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.ExplorerUseCase
+import com.weatherxm.util.LocationHelper.getLocationAndThen
 import com.weatherxm.util.MapboxUtils
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
+@Suppress("TooManyFunctions")
 class ExplorerViewModel : ViewModel(), KoinComponent {
     companion object {
         const val FILL_OPACITY_HEXAGONS: Double = 0.5
@@ -27,6 +32,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
         const val HEATMAP_LAYER_ID = "heatmap-layer"
         const val HEATMAP_LAYER_SOURCE = "heatmap"
         const val HEATMAP_WEIGHT_KEY = ExplorerUseCase.DEVICE_COUNT_KEY
+        const val USER_LOCATION_DEFAULT_ZOOM_LEVEL: Double = 11.0
     }
 
     private val explorerUseCase: ExplorerUseCase by inject()
@@ -62,6 +68,9 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
 
     // Save the current explorer camera zoom and center
     private var currentCamera: ExplorerCamera? = null
+
+    // Save the current status of where the explorer is located (before/after login)
+    private var explorerAfterLoggedIn = false
 
     @Suppress("MagicNumber")
     private val heatmapLayer: HeatmapLayer by lazy {
@@ -170,6 +179,14 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     fun onHexSelected(): LiveData<String> = onHexSelected
     fun onPublicDeviceSelected(): LiveData<UIDevice> = onPublicDeviceSelected
 
+    fun setExplorerAfterLoggedIn(isAfterLoggedIn: Boolean) {
+        explorerAfterLoggedIn = isAfterLoggedIn
+    }
+
+    fun isExplorerAfterLoggedIn(): Boolean {
+        return explorerAfterLoggedIn
+    }
+
     fun fetch() {
         state.postValue(Resource.loading())
 
@@ -224,4 +241,9 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
 
     @JvmName("getHeatMapLayer")
     fun getHeatMapLayer(): HeatmapLayer = heatmapLayer
+
+    @SuppressLint("MissingPermission")
+    fun getLocation(context: Context, onLocation: (location: Location?) -> Unit) {
+        getLocationAndThen(context, onLocation)
+    }
 }

@@ -1,8 +1,5 @@
 package com.weatherxm.ui.claimdevice.helium
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.addCallback
 import androidx.activity.viewModels
@@ -20,12 +17,9 @@ import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
 import com.weatherxm.ui.common.DeviceType
-import com.weatherxm.ui.common.checkPermissionsAndThen
-import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setIcon
 import com.weatherxm.util.setSuccessChip
-import timber.log.Timber
 
 class ClaimHeliumActivity : AppCompatActivity() {
     companion object {
@@ -69,15 +63,11 @@ class ClaimHeliumActivity : AppCompatActivity() {
         }
 
         model.onBackToLocation().observe(this) {
-            if(it) {
+            if (it) {
                 binding.pager.currentItem -= 1
                 binding.thirdStep.setIcon(R.drawable.ic_three_filled)
                 binding.fourthStep.setIcon(R.drawable.ic_four_outlined)
             }
-        }
-
-        locationModel.onGetUserLocation().observe(this) {
-            if (it) requestLocationPermissions()
         }
 
         model.fetchUserEmail()
@@ -106,7 +96,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
                 ClaimHeliumDevicePagerAdapter.PAGE_LOCATION -> {
                     secondStep.setSuccessChip()
                     thirdStep.setIcon(R.drawable.ic_three_filled)
-                    requestLocationPermissions()
+                    locationModel.requestUserLocation()
                 }
                 ClaimHeliumDevicePagerAdapter.PAGE_FREQUENCY -> {
                     thirdStep.setSuccessChip()
@@ -117,27 +107,6 @@ class ClaimHeliumActivity : AppCompatActivity() {
                     model.claimDevice(locationModel.getInstallationLocation())
                     fourthStep.setSuccessChip()
                 }
-            }
-        }
-    }
-
-    private fun requestLocationPermissions() {
-        checkPermissionsAndThen(
-            permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
-            rationaleTitle = getString(R.string.permission_location_title),
-            rationaleMessage = getString(R.string.permission_location_rationale),
-            onGranted = { getUserLocation() },
-            onDenied = { toast(R.string.error_claim_gps_failed) }
-        )
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun getUserLocation() {
-        // Get last location
-        locationModel.getLocationAndThen(this@ClaimHeliumActivity) {
-            Timber.d("Got user location: $it")
-            if (it == null) {
-                toast(R.string.error_claim_gps_failed)
             }
         }
     }

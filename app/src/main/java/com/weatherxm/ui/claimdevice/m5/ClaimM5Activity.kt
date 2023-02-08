@@ -1,7 +1,5 @@
 package com.weatherxm.ui.claimdevice.m5
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.addCallback
@@ -21,12 +19,9 @@ import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyFragment
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
 import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
 import com.weatherxm.ui.common.DeviceType
-import com.weatherxm.ui.common.checkPermissionsAndThen
-import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setIcon
 import com.weatherxm.util.setSuccessChip
-import timber.log.Timber
 
 class ClaimM5Activity : AppCompatActivity() {
     companion object {
@@ -50,10 +45,6 @@ class ClaimM5Activity : AppCompatActivity() {
         val pagerAdapter = ClaimDevicePagerAdapter(this)
         binding.pager.adapter = pagerAdapter
         binding.pager.isUserInputEnabled = false
-
-        locationModel.onGetUserLocation().observe(this) {
-            if (it) requestLocationPermissions()
-        }
 
         model.onCancel().observe(this) {
             if (it) finish()
@@ -101,7 +92,7 @@ class ClaimM5Activity : AppCompatActivity() {
                 PAGE_LOCATION -> {
                     verify.setSuccessChip()
                     location.setIcon(R.drawable.ic_three_filled)
-                    requestLocationPermissions()
+                    locationModel.requestUserLocation()
                 }
                 PAGE_RESULT -> {
                     model.claimDevice(
@@ -110,27 +101,6 @@ class ClaimM5Activity : AppCompatActivity() {
                     )
                     location.setSuccessChip()
                 }
-            }
-        }
-    }
-
-    private fun requestLocationPermissions() {
-        checkPermissionsAndThen(
-            permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
-            rationaleTitle = getString(R.string.permission_location_title),
-            rationaleMessage = getString(R.string.permission_location_rationale),
-            onGranted = { getUserLocation() },
-            onDenied = { toast(R.string.error_claim_gps_failed) }
-        )
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun getUserLocation() {
-        // Get last location
-        locationModel.getLocationAndThen(this@ClaimM5Activity) {
-            Timber.d("Got user location: $it")
-            if (it == null) {
-                toast(R.string.error_claim_gps_failed)
             }
         }
     }

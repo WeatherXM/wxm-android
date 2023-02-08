@@ -11,12 +11,10 @@ import com.weatherxm.BuildConfig
 import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityExplorerBinding
-import com.weatherxm.ui.BaseMapFragment.OnMapDebugInfoListener
+import com.weatherxm.ui.BaseMapFragment
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Animation.HideAnimation.SlideOutToBottom
-import com.weatherxm.ui.common.Animation.HideAnimation.SlideOutToTop
 import com.weatherxm.ui.common.Animation.ShowAnimation.SlideInFromBottom
-import com.weatherxm.ui.common.Animation.ShowAnimation.SlideInFromTop
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.show
 import dev.chrisbanes.insetter.applyInsetter
@@ -25,7 +23,8 @@ import org.koin.core.component.inject
 import timber.log.Timber
 import java.util.*
 
-class ExplorerActivity : AppCompatActivity(), KoinComponent, OnMapDebugInfoListener {
+class ExplorerActivity : AppCompatActivity(), KoinComponent,
+    BaseMapFragment.OnMapDebugInfoListener {
 
     private val navigator: Navigator by inject()
     private val model: ExplorerViewModel by viewModels()
@@ -39,7 +38,11 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent, OnMapDebugInfoListe
         binding = ActivityExplorerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        applyMapInsets()
+        binding.overlayContainer.applyInsetter {
+            type(navigationBars = true) {
+                margin(left = false, top = false, right = false, bottom = true)
+            }
+        }
 
         model.explorerState().observe(this) { resource ->
             Timber.d("Status updated: ${resource.status}")
@@ -70,16 +73,6 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent, OnMapDebugInfoListe
             navigator.showDeviceDetails(supportFragmentManager, it)
         }
 
-        model.showMapOverlayViews().observe(this) { shouldShow ->
-            if (shouldShow) {
-                binding.appBar.show(SlideInFromTop)
-                binding.overlayContainer.show(SlideInFromBottom)
-            } else {
-                binding.appBar.hide(SlideOutToTop)
-                binding.overlayContainer.hide(SlideOutToBottom)
-            }
-        }
-
         binding.login.setOnClickListener {
             navigator.showLogin(this)
         }
@@ -88,17 +81,25 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent, OnMapDebugInfoListe
             navigator.showSignup(this)
         }
 
-        binding.toolbar.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.settings -> {
-                    navigator.showPreferences(this)
-                    true
-                }
-                else -> false
+        model.showMapOverlayViews().observe(this) { shouldShow ->
+            if (shouldShow) {
+                binding.overlayContainer.show(SlideInFromBottom)
+            } else {
+                binding.overlayContainer.hide(SlideOutToBottom)
             }
         }
 
         binding.mapDebugInfoContainer.visibility = if (BuildConfig.DEBUG) VISIBLE else GONE
+    }
+
+    @Suppress("MagicNumber")
+    override fun onMapDebugInfoUpdated(zoom: Double, center: Point) {
+        fun format(number: Number, decimals: Int = 2): String {
+            return String.format(Locale.getDefault(), "%.${decimals}f", number)
+        }
+
+        binding.mapDebugInfo.text = "ZOOM = ${format(zoom)}\nCENTER = " +
+            "${format(center.latitude(), 6)}, ${format(center.longitude(), 6)}"
     }
 
     private fun showErrorOnMapLoading(message: String) {
@@ -111,29 +112,5 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent, OnMapDebugInfoListe
                 model.fetch()
             }
         snackbar?.show()
-    }
-
-    private fun applyMapInsets() {
-        binding.appBar.applyInsetter {
-            type(statusBars = true) {
-                margin(left = false, top = true, right = false, bottom = false)
-            }
-        }
-
-        binding.overlayContainer.applyInsetter {
-            type(navigationBars = true) {
-                margin(left = false, top = false, right = false, bottom = true)
-            }
-        }
-    }
-
-    @Suppress("MagicNumber")
-    override fun onMapDebugInfoUpdated(zoom: Double, center: Point) {
-        fun format(number: Number, decimals: Int = 2): String {
-            return String.format(Locale.getDefault(), "%.${decimals}f", number)
-        }
-
-        binding.mapDebugInfo.text = "ZOOM = ${format(zoom)}\nCENTER = " +
-            "${format(center.latitude(), 6)}, ${format(center.longitude(), 6)}"
     }
 }

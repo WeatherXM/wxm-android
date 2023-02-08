@@ -78,9 +78,9 @@
 
                     <com.weatherxm.ui.widget.WarningCardView
                         android:id="@+id/warningBox"
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@id/needHelpInstallation"
                         app:warning_message="@string/installation_location_warning_text"
                         app:warning_title="@string/important_message" />
@@ -95,12 +95,12 @@
                 app:layout_constraintBottom_toTopOf="@id/navigation_buttons"
                 app:layout_constraintTop_toBottomOf="@id/info_container">
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/mapView"
-                android:name="com.weatherxm.ui.claimdevice.location.ClaimMapFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:layout="@layout/fragment_map" />
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/mapView"
+                    android:name="com.weatherxm.ui.claimdevice.location.ClaimMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:layout="@layout/fragment_map" />
 
                 <com.weatherxm.ui.widget.AddressSearchView
                     android:id="@+id/addressSearchView"

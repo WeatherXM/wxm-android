@@ -15,41 +15,25 @@
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_map" />
 
-    <!-- Header -->
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/overlay_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:menu="@menu/explorer_menu">
-
-            <ImageView
-                android:id="@+id/logo"
-                android:layout_width="144dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_normal"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/app_name"
-                android:scaleType="fitStart"
-                android:src="@drawable/app_logo_wide_no_tagline"
-                app:tint="@color/white" />
-
-        </com.google.android.material.appbar.MaterialToolbar>
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="@dimen/margin_normal"
+        app:layout_dodgeInsetEdges="bottom">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/map_debug_info_container"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/margin_normal"
+            android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/transparent"
             app:cardCornerRadius="@dimen/card_corner_radius"
             app:cardUseCompatPadding="false"
-            app:contentPadding="@dimen/padding_small">
+            app:contentPadding="@dimen/padding_small"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/map_debug_info"
@@ -61,16 +45,6 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/overlay_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="@dimen/margin_normal"
-        app:layout_dodgeInsetEdges="bottom">
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/devices_count_card"
             style="@style/Widget.WeatherXM.MaterialCard.DevicesCount"
@@ -80,7 +54,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/map_debug_info_container"
             tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
