@@ -8,7 +8,7 @@
     android:animateLayoutChanges="true"
     tools:context=".ui.home.devices.DevicesFragment">
 
-    <!-- Content -->
+    <!-- Header -->
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -24,6 +24,8 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Content -->
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
@@ -33,11 +35,13 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:clipChildren="false">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:clipChildren="false">
 
                 <com.weatherxm.ui.widget.WarningCardView
                     android:id="@+id/walletWarning"
@@ -54,12 +58,15 @@
                     android:id="@+id/recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
                     android:overScrollMode="never"
                     android:scrollbars="vertical"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/walletWarning"
+                    app:layout_goneMarginTop="0dp"
                     tools:listitem="@layout/list_item_device" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>

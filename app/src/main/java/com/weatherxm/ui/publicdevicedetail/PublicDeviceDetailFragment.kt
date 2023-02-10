@@ -133,8 +133,8 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
     private fun updateDeviceInfo(device: UIDevice?) {
         binding.statusIcon.setColor(
             when (device?.isActive) {
-                true -> R.color.successTint
-                false -> R.color.errorTint
+                true -> R.color.success
+                false -> R.color.error
                 null -> R.color.midGrey
             }
         )

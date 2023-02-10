@@ -13,11 +13,11 @@
     <color name="light_top">#FEFBFF</color>
     <color name="light_light2">#EAEBF9</color>
     <color name="light_light1">#D3D9F2</color>
-    <color name="light_background">#E5E8FC</color>
+    <color name="light_background">#DFE2F6</color>
     <color name="light_darkest_blue">#00164D</color>
     <color name="light_primary">#0A3FAD</color>
     <color name="light_lightest_blue">#B5C4FF</color>
-    <color name="light_blue_tint">#DFE2F6</color>
+    <color name="light_blue_tint">#EFF0FF</color>
     <color name="light_accent">#800162</color>
 
     <color name="dark_mid_grey">#5D5E67</color>

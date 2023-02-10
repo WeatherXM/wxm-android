@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -16,8 +17,7 @@ import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeDialogFragm
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
-import com.weatherxm.util.hideIfNot
-import com.weatherxm.util.showIfNot
+import com.weatherxm.util.applyOnGlobalLayout
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -75,11 +75,11 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
 
         devicesViewModel.showOverlayViews().observe(this) { shouldShow ->
             if (shouldShow) {
-                binding.addDevice.showIfNot()
-                binding.navView.showIfNot()
+                binding.addDevice.show()
+                binding.navView.show()
             } else if (!shouldShow) {
-                binding.addDevice.hideIfNot()
-                binding.navView.hideIfNot()
+                binding.addDevice.hide()
+                binding.navView.hide()
             }
         }
 
@@ -90,12 +90,12 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             if (snackbar?.isShown == true) snackbar?.dismiss()
             when (destination.id) {
-                R.id.navigation_devices -> binding.addDevice.showIfNot()
+                R.id.navigation_devices -> binding.addDevice.show()
                 R.id.navigation_explorer -> {
                     explorerModel.setExplorerAfterLoggedIn(true)
-                    binding.addDevice.hideIfNot()
+                    binding.addDevice.hide()
                 }
-                else -> binding.addDevice.hideIfNot()
+                else -> binding.addDevice.hide()
             }
             binding.devicesCountCard.visibility = View.GONE
         }
@@ -124,10 +124,13 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
-        binding.devicesCountCard.applyInsetter {
-            type(statusBars = true) {
-                margin(left = false, top = true, right = false, bottom = false)
-            }
+        // Fix spacer's height to act as margin for the device count card
+        binding.space.applyOnGlobalLayout {
+            val navViewHeight = binding.navView.height
+            val deviceCountCardHeight = binding.devicesCountCard.height
+            val margin = resources.getDimensionPixelOffset(R.dimen.margin_large)
+            val params = (binding.space.layoutParams as CoordinatorLayout.LayoutParams)
+            params.height = navViewHeight + deviceCountCardHeight + margin
         }
     }
 
@@ -143,15 +146,16 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
          */
         when (navController.currentDestination?.id) {
             R.id.navigation_devices -> {
-                binding.addDevice.showIfNot()
+                binding.addDevice.show()
+                binding.navView.show()
                 binding.devicesCountCard.visibility = View.GONE
             }
             R.id.navigation_explorer -> {
-                binding.addDevice.hideIfNot()
+                binding.addDevice.hide()
                 binding.devicesCountCard.visibility = View.VISIBLE
             }
             else -> {
-                binding.addDevice.hideIfNot()
+                binding.addDevice.hide()
                 binding.devicesCountCard.visibility = View.GONE
             }
         }

@@ -236,14 +236,14 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
             when (device.attributes?.isActive) {
                 true -> {
                     binding.errorCard.hide()
-                    R.color.successTint
+                    R.color.success
                 }
                 false -> {
                     binding.errorCard.setErrorMessageWithUrl(
                         R.string.error_user_device_offline,
                         device.profile
                     )
-                    R.color.errorTint
+                    R.color.error
                 }
                 null -> {
                     R.color.midGrey

@@ -1,5 +1,6 @@
 package com.weatherxm.ui.common
 
+import android.animation.Animator.AnimatorListener
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -22,15 +23,21 @@ sealed class Animation {
     }
 }
 
-fun View.show(animation: Animation.ShowAnimation? = Animation.ShowAnimation.FadeIn) {
-    if (animation == null) this.visibility = VISIBLE else animate(this, animation)
+fun View.show(
+    animation: Animation.ShowAnimation? = Animation.ShowAnimation.FadeIn,
+    listener: AnimatorListener? = null
+) {
+    if (animation == null) this.visibility = VISIBLE else animate(this, animation, listener)
 }
 
-fun View.hide(animation: Animation.HideAnimation? = Animation.HideAnimation.FadeOut) {
-    if (animation == null) this.visibility = VISIBLE else animate(this, animation)
+fun View.hide(
+    animation: Animation.HideAnimation? = Animation.HideAnimation.FadeOut,
+    listener: AnimatorListener? = null
+) {
+    if (animation == null) this.visibility = GONE else animate(this, animation, listener)
 }
 
-fun animate(view: View, animation: Animation) {
+fun animate(view: View, animation: Animation, listener: AnimatorListener? = null) {
     when (animation) {
         is Animation.ShowAnimation -> {
             val animator = view.animate()
@@ -49,6 +56,9 @@ fun animate(view: View, animation: Animation) {
                     animator.translationY(0F)
                 }
                 else -> Unit
+            }
+            listener?.let {
+                animator.setListener(it)
             }
             animator.start()
         }
@@ -69,6 +79,9 @@ fun animate(view: View, animation: Animation) {
                     animator.translationY(-view.height.toFloat())
                 }
                 else -> Unit
+            }
+            listener?.let {
+                animator.setListener(it)
             }
             animator.start()
         }

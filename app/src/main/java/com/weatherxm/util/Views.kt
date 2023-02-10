@@ -23,16 +23,10 @@ import androidx.core.text.HtmlCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.components.MarkerView
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
-import com.weatherxm.ui.common.hide
-import com.weatherxm.ui.common.show
 import dev.chrisbanes.insetter.applyInsetter
 
 @Suppress("EmptyFunctionBlock")
@@ -69,12 +63,6 @@ fun ImageView.setNoDevicesFoundDrawable(context: Context) {
     this.setImageDrawable(drawable)
 }
 
-fun MaterialButton.disable(context: Context) {
-    this.isEnabled = false
-    this.setBackgroundColor(resources.getColor(R.color.midGrey, context.theme))
-    this.setTextColor(resources.getColor(R.color.darkGrey, context.theme))
-}
-
 @Suppress("EmptyFunctionBlock")
 fun TabLayout.onTabSelected(callback: (TabLayout.Tab) -> Unit) {
     this.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -108,30 +96,6 @@ fun ViewGroup.applyInsets(top: Boolean = true, bottom: Boolean = true) {
         type(navigationBars = bottom) {
             padding(left = false, top = false, right = false, bottom = true)
         }
-    }
-}
-
-fun FloatingActionButton.showIfNot() {
-    if (this.isOrWillBeHidden) {
-        this.show()
-    }
-}
-
-fun FloatingActionButton.hideIfNot() {
-    if (this.isOrWillBeShown) {
-        this.hide()
-    }
-}
-
-fun BottomNavigationView.showIfNot() {
-    if (!this.isShown) {
-        this.show()
-    }
-}
-
-fun BottomNavigationView.hideIfNot() {
-    if (this.isShown) {
-        this.hide()
     }
 }
 
@@ -174,11 +138,6 @@ fun Activity.hideKeyboard() {
 
 fun ChipGroup.setChildrenEnabled(enable: Boolean) {
     children.forEach { it.isEnabled = enable }
-}
-
-fun MaterialCardView.setStroke(width: Int, @ColorRes color: Int) {
-    strokeWidth = width
-    strokeColor = context.getColor(color)
 }
 
 @Suppress("MagicNumber")
