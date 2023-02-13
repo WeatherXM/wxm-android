@@ -88,7 +88,7 @@ open class BaseMapFragment : Fragment() {
             Timber.d("MapBox is ready and style loaded")
 
             binding.mapView.gestures.rotateEnabled = false
-            binding.mapView.gestures.simultaneousRotateAndPinchToZoomEnabled = false
+            binding.mapView.gestures.pitchEnabled = false
             binding.mapView.scalebar.enabled = false
 
             with(binding.mapView.annotations) {

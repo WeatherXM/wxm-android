@@ -120,7 +120,7 @@
     </style>
 
     <style name="TextAppearance.WeatherXM.WeatherCard.Timezone" parent="TextAppearance.WeatherXM.WeatherCard">
-        <item name="android:textColor">@color/midGrey</item>
+        <item name="android:textColor">@color/darkGrey</item>
         <item name="android:textSize">10sp</item>
     </style>
 

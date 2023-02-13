@@ -57,6 +57,8 @@ class PublicDevicesListAdapter(
             if (item.currentWeather == null || item.currentWeather.isEmpty()) {
                 binding.weatherDataLayout.visibility = View.GONE
                 binding.noDataLayout.visibility = View.VISIBLE
+                binding.noDataMessage.text =
+                    resHelper.getString(R.string.no_data_message_public_device)
             } else {
                 setWeatherData(item)
             }

@@ -58,8 +58,6 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             if (item.currentWeather == null || item.currentWeather.isEmpty()) {
                 binding.weatherDataLayout.visibility = GONE
                 binding.noDataLayout.visibility = VISIBLE
-                binding.noDataMessage.text =
-                    resHelper.getString(R.string.no_data_message_public_device)
             } else {
                 setWeatherData(item)
             }
