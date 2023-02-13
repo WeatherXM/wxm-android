@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toEndOf="@id/value"
-            app:layout_constraintTop_toTopOf="@id/value"
+            app:layout_constraintBaseline_toBaselineOf="@id/value"
             tools:text="%" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
