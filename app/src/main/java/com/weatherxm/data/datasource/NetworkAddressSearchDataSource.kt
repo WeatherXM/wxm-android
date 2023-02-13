@@ -4,8 +4,6 @@ package com.weatherxm.data.datasource
 import android.location.Location
 import arrow.core.Either
 import com.mapbox.geojson.Point
-import com.mapbox.search.Country
-import com.mapbox.search.Language
 import com.mapbox.search.QueryType
 import com.mapbox.search.ResponseInfo
 import com.mapbox.search.SearchEngine
@@ -13,6 +11,8 @@ import com.mapbox.search.SearchOptions
 import com.mapbox.search.SearchSelectionCallback
 import com.mapbox.search.SearchSuggestionsCallback
 import com.mapbox.search.SelectOptions
+import com.mapbox.search.common.IsoCountryCode
+import com.mapbox.search.common.IsoLanguageCode
 import com.mapbox.search.common.SearchCancellationException
 import com.mapbox.search.result.SearchResult
 import com.mapbox.search.result.SearchSuggestion
@@ -34,7 +34,7 @@ class NetworkAddressSearchDataSource(
          * Limit of search results
          */
         private const val SEARCH_LIMIT = 10
-        private val SEARCH_LANGUAGES = mutableListOf(Language.ENGLISH)
+        private val SEARCH_LANGUAGES = mutableListOf(IsoLanguageCode.ENGLISH)
         private const val SEARCH_DEBOUNCE_MILLIS = 500
         private val SEARCH_TYPES = mutableListOf(
             QueryType.ADDRESS,
@@ -58,7 +58,7 @@ class NetworkAddressSearchDataSource(
                 .types(SEARCH_TYPES)
 
             countryCode?.let {
-                searchOptionsBuilder.countries(Country(countryCode))
+                searchOptionsBuilder.countries(IsoCountryCode(countryCode))
             }
 
             mapBoxSearchEngine.search(

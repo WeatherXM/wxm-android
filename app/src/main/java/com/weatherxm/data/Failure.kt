@@ -14,6 +14,7 @@ sealed class Failure(val code: String? = null) {
         const val CODE_JSON = "PARSE_JSON"
         const val CODE_BL_REJECTED = "BLUETOOTH_REJECTED"
         const val CODE_BL_CONNECTION_LOST = "BLUETOOTH_CONNECTION_LOST"
+        const val CODE_BL_GATT_REQUEST_REJECTED = "GATT_REQUEST_REJECTED"
         const val CODE_BL_DISABLED = "BLUETOOTH_DISABLED"
         const val CODE_BL_CANCELLATION = "BLUETOOTH_CANCELLATION"
         const val CODE_PERIPHERAL_ERROR = "PERIPHERAL_ERROR"
@@ -45,6 +46,11 @@ sealed class BluetoothError(code: String? = null, val message: String? = null) :
     class ConnectionRejectedError(code: String? = CODE_BL_REJECTED) : BluetoothError(code)
     class CancellationError(code: String? = CODE_BL_CANCELLATION) : BluetoothError(code)
     class ConnectionLostException(code: String? = CODE_BL_CONNECTION_LOST) : BluetoothError(code)
+    class GattRequestRejectedException(
+        code: String? =
+            CODE_BL_GATT_REQUEST_REJECTED
+    ) : BluetoothError(code)
+
     class BluetoothDisabledException(code: String? = CODE_BL_DISABLED) : BluetoothError(code)
     class DfuUpdateError(message: String? = null) : BluetoothError(message)
 
@@ -173,6 +179,7 @@ sealed class MapBoxError : Failure() {
         object SearchResultNotNearbyError : ReverseGeocodingError()
         object SearchResultAddressFormatError : ReverseGeocodingError()
     }
+
     object SuggestionLocationError : MapBoxError()
 }
 

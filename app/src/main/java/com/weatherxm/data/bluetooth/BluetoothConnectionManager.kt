@@ -129,6 +129,9 @@ class BluetoothConnectionManager(private val context: Context) {
         } catch (e: ConnectionLostException) {
             Timber.w(e, "Connection to peripheral failed with ConnectionLostException")
             Either.Left(BluetoothError.ConnectionLostException())
+        } catch (e: GattRequestRejectedException) {
+            Timber.w(e, "Connection to peripheral failed with GattRequestRejectedException")
+            Either.Left(BluetoothError.GattRequestRejectedException())
         }
     }
 
