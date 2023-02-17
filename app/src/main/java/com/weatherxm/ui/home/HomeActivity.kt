@@ -97,7 +97,9 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 }
                 else -> binding.addDevice.hide()
             }
-            binding.devicesCountCard.visibility = View.GONE
+            if(destination.id != R.id.navigation_explorer) {
+                binding.devicesCountCard.visibility = View.GONE
+            }
         }
 
         binding.addDevice.setOnClickListener {
