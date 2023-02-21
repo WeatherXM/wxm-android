@@ -148,7 +148,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_marginStart="@dimen/margin_normal"
                     android:layout_weight="1">
 
                     <com.airbnb.lottie.LottieAnimationView
@@ -218,7 +218,6 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_extra_large"
                     android:layout_weight="1">
 
                     <com.weatherxm.ui.widget.WeatherDataView

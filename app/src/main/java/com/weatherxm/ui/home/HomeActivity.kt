@@ -10,11 +10,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
+import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeDialogFragment
 import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.ui.explorer.ExplorerData
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.util.applyOnGlobalLayout
@@ -53,24 +55,7 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         }
 
         explorerModel.explorerState().observe(this) { resource ->
-            Timber.d("Status updated: ${resource.status}")
-            when (resource.status) {
-                Status.SUCCESS -> {
-                    if (navController.currentDestination?.id == R.id.navigation_explorer) {
-                        binding.devicesCount.text =
-                            getString(R.string.devices_count, resource.data?.totalDevices)
-                        binding.devicesCountCard.visibility = View.VISIBLE
-                    }
-                    snackbar?.dismiss()
-                }
-                Status.ERROR -> {
-                    Timber.d("Got error: $resource.message")
-                    resource.message?.let { showErrorOnMapLoading(it) }
-                }
-                Status.LOADING -> {
-                    snackbar?.dismiss()
-                }
-            }
+            onExplorerState(resource)
         }
 
         devicesViewModel.showOverlayViews().observe(this) { shouldShow ->
@@ -97,7 +82,7 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 }
                 else -> binding.addDevice.hide()
             }
-            if(destination.id != R.id.navigation_explorer) {
+            if (destination.id != R.id.navigation_explorer) {
                 binding.devicesCountCard.visibility = View.GONE
             }
         }
@@ -159,6 +144,27 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             else -> {
                 binding.addDevice.hide()
                 binding.devicesCountCard.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun onExplorerState(resource: Resource<ExplorerData>) {
+        Timber.d("Status updated: ${resource.status}")
+        when (resource.status) {
+            Status.SUCCESS -> {
+                if (navController.currentDestination?.id == R.id.navigation_explorer) {
+                    binding.devicesCount.text =
+                        getString(R.string.devices_count, resource.data?.totalDevices)
+                    binding.devicesCountCard.visibility = View.VISIBLE
+                }
+                snackbar?.dismiss()
+            }
+            Status.ERROR -> {
+                Timber.d("Got error: $resource.message")
+                resource.message?.let { showErrorOnMapLoading(it) }
+            }
+            Status.LOADING -> {
+                snackbar?.dismiss()
             }
         }
     }

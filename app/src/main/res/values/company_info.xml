@@ -15,7 +15,7 @@
     <string name="support_email_recipient">support@weatherxm.com</string>
     <string name="website">https://weatherxm.com</string>
     <string name="documentation_url">https://docs.weatherxm.com</string>
-    <string name="suggested_wallets_documentation">https://docs.weatherxm.com/wallet/add-edit-wallet-address#how-to-create-wallet-on-metamaskΦΦ</string>
+    <string name="suggested_wallets_documentation">https://docs.weatherxm.com/wallet/add-edit-wallet-address#how-to-create-wallet-on-metamask</string>
     <string name="terms_of_service_url">https://weatherxm.com/mobile/terms/</string>
     <string name="troubleshooting_m5_url">https://docs.weatherxm.com/wifi-m5-bundle/m5-troubleshooting</string>
     <string name="troubleshooting_helium_url">https://docs.weatherxm.com/helium-bundle/helium-troubleshooting</string>
