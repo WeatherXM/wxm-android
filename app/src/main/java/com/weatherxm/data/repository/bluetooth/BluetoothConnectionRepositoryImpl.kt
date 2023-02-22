@@ -42,4 +42,10 @@ class BluetoothConnectionRepositoryImpl(
     override suspend fun setFrequency(frequency: Frequency): Either<Failure, Unit> {
         return dataSource.setFrequency(frequency)
     }
+
+    override suspend fun reboot(): Either<Failure, Unit> {
+        return dataSource.reboot().onRight {
+            dataSource.disconnectFromPeripheral()
+        }
+    }
 }

@@ -11,11 +11,11 @@ import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyFragment
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyViewModel
 import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairFragment
-import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairViewModel
 import com.weatherxm.ui.claimdevice.helium.reset.ClaimHeliumResetFragment
+import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultFragment
+import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
-import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setIcon
@@ -26,12 +26,13 @@ class ClaimHeliumActivity : AppCompatActivity() {
         const val CURRENT_PAGE = "current_page"
         const val DEV_EUI = "dev_eui"
         const val DEV_KEY = "dev_key"
+        const val CLAIMED_DEVICE = "claimed_device"
     }
 
     private val model: ClaimHeliumViewModel by viewModels()
     private val locationModel: ClaimLocationViewModel by viewModels()
     private val frequencyModel: ClaimHeliumFrequencyViewModel by viewModels()
-    private val pairModel: ClaimHeliumPairViewModel by viewModels()
+    private val resultModel: ClaimHeliumResultViewModel by viewModels()
     private lateinit var binding: ActivityClaimHeliumDeviceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,15 +48,15 @@ class ClaimHeliumActivity : AppCompatActivity() {
         binding.pager.isUserInputEnabled = false
 
         onBackPressedDispatcher.addCallback {
-            finish()
+            finishClaiming()
         }
 
         binding.toolbar.setNavigationOnClickListener {
-            finish()
+            finishClaiming()
         }
 
         model.onCancel().observe(this) {
-            if (it) finish()
+            if (it) finishClaiming()
         }
 
         model.onNext().observe(this) {
@@ -76,12 +77,13 @@ class ClaimHeliumActivity : AppCompatActivity() {
             binding.pager.currentItem = it.getInt(CURRENT_PAGE, 0)
             model.setDeviceEUI(it.getString(DEV_EUI, ""))
             model.setDeviceKey(it.getString(DEV_KEY, ""))
+            model.setClaimedDevice(it.getParcelable(CLAIMED_DEVICE))
         }
     }
 
-    override fun onDestroy() {
-        pairModel.disconnectFromPeripheral()
-        super.onDestroy()
+    private fun finishClaiming() {
+        model.disconnectFromPeripheral()
+        finish()
     }
 
     private fun onNextPressed() {
@@ -104,7 +106,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
                     frequencyModel.getCountryAndFrequencies(locationModel.getInstallationLocation())
                 }
                 ClaimHeliumDevicePagerAdapter.PAGE_RESULT -> {
-                    model.claimDevice(locationModel.getInstallationLocation())
+                    resultModel.setFrequency(model.getFrequency())
                     fourthStep.setSuccessChip()
                 }
             }
@@ -115,6 +117,9 @@ class ClaimHeliumActivity : AppCompatActivity() {
         outState.putInt(CURRENT_PAGE, binding.pager.currentItem)
         outState.putString(DEV_EUI, model.getDevEUI())
         outState.putString(DEV_KEY, model.getDeviceKey())
+        model.onClaimResult().value?.data?.let {
+            outState.putParcelable(CLAIMED_DEVICE, it)
+        }
         super.onSaveInstanceState(outState)
     }
 
@@ -139,7 +144,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
                 PAGE_VERIFY_OR_PAIR -> ClaimHeliumPairFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.HELIUM)
                 PAGE_FREQUENCY -> ClaimHeliumFrequencyFragment()
-                PAGE_RESULT -> ClaimResultFragment()
+                PAGE_RESULT -> ClaimHeliumResultFragment()
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }
         }

@@ -162,7 +162,7 @@ class PublicDevicesListAdapter(
                 Weather.getFormattedPrecipitation(
                     device.currentWeather?.precipitation, includeUnit = false
                 ),
-                Weather.getPrecipitationPreferredUnit(true)
+                Weather.getPrecipitationPreferredUnit()
             )
         }
     }

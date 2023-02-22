@@ -5,11 +5,13 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.UserActionError
+import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.SharedPreferencesRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.common.TokenInfo
+import com.weatherxm.ui.common.UserDevice
 import com.weatherxm.util.isToday
 import com.weatherxm.util.isTomorrow
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +24,7 @@ import java.util.concurrent.TimeUnit
 
 class UserDeviceUseCaseImpl(
     private val deviceRepository: DeviceRepository,
+    private val deviceOTARepository: DeviceOTARepository,
     private val tokenRepository: TokenRepository,
     private val weatherForecastRepository: WeatherForecastRepository,
     private val preferencesRepository: SharedPreferencesRepository
@@ -45,8 +48,16 @@ class UserDeviceUseCaseImpl(
             .filter { key -> key in UNIT_PREF_KEYS }
     }
 
-    override suspend fun getUserDevices(): Either<Failure, List<Device>> {
-        return deviceRepository.getUserDevices()
+    override suspend fun getUserDevices(): Either<Failure, List<UserDevice>> {
+        return deviceRepository.getUserDevices().map {
+            it.map { device ->
+                val shouldShowOTAPrompt = deviceOTARepository.shouldShowOTAPrompt(
+                    device.id,
+                    device.attributes?.firmware?.assigned
+                )
+                UserDevice(shouldShowOTAPrompt, device)
+            }
+        }
     }
 
     override suspend fun getUserDevice(deviceId: String): Either<Failure, Device> {

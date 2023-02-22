@@ -17,7 +17,7 @@ import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.C
 import com.weatherxm.ui.claimdevice.m5.information.ClaimM5InformationFragment
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyFragment
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
-import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
+import com.weatherxm.ui.claimdevice.m5.result.ClaimM5ResultFragment
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setIcon
@@ -124,7 +124,7 @@ class ClaimM5Activity : AppCompatActivity() {
                 PAGE_INFORMATION -> ClaimM5InformationFragment()
                 PAGE_SERIAL_NUMBER -> ClaimM5VerifyFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.M5_WIFI)
-                PAGE_RESULT -> ClaimResultFragment()
+                PAGE_RESULT -> ClaimM5ResultFragment()
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }
         }

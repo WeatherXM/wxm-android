@@ -123,6 +123,7 @@
 
                     <com.weatherxm.ui.widget.InformationCardView
                         android:id="@+id/infoCard"
+                        style="@style/Widget.WeatherXM.MaterialCard.Info"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_large"

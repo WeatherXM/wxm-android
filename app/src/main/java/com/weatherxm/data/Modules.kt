@@ -54,6 +54,8 @@ import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
 import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
+import com.weatherxm.data.datasource.DeviceOTADataSource
+import com.weatherxm.data.datasource.DeviceOTADataSourceImpl
 import com.weatherxm.data.datasource.ExplorerDataSource
 import com.weatherxm.data.datasource.ExplorerDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
@@ -91,6 +93,8 @@ import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AppConfigRepositoryImpl
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.AuthRepositoryImpl
+import com.weatherxm.data.repository.DeviceOTARepository
+import com.weatherxm.data.repository.DeviceOTARepositoryImpl
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.DeviceRepositoryImpl
 import com.weatherxm.data.repository.ExplorerRepository
@@ -315,7 +319,7 @@ private val datasources = module {
     }
 
     single<BluetoothConnectionDataSource> {
-        BluetoothConnectionDataSourceImpl(get(), get())
+        BluetoothConnectionDataSourceImpl(get())
     }
 
     single<BluetoothUpdaterDataSource> {
@@ -324,6 +328,10 @@ private val datasources = module {
 
     single<BluetoothProvisionerDataSource> {
         BluetoothProvisionerDataSourceImpl(get())
+    }
+
+    single<DeviceOTADataSource> {
+        DeviceOTADataSourceImpl(get(), get())
     }
 }
 
@@ -376,6 +384,9 @@ private val repositories = module {
     single<BluetoothUpdaterRepository> {
         BluetoothUpdaterRepositoryImpl(get())
     }
+    single<DeviceOTARepository> {
+        DeviceOTARepositoryImpl(get())
+    }
 }
 
 private val usecases = module {
@@ -386,7 +397,7 @@ private val usecases = module {
         ExplorerUseCaseImpl(get(), get(), get(), get())
     }
     single<UserDeviceUseCase> {
-        UserDeviceUseCaseImpl(get(), get(), get(), get())
+        UserDeviceUseCaseImpl(get(), get(), get(), get(), get())
     }
     single<HistoryUseCase> {
         HistoryUseCaseImpl(androidContext(), get(), get())
@@ -431,7 +442,7 @@ private val usecases = module {
         BluetoothConnectionUseCaseImpl(get())
     }
     single<BluetoothUpdaterUseCase> {
-        BluetoothUpdaterUseCaseImpl(get())
+        BluetoothUpdaterUseCaseImpl(androidContext(), get(), get())
     }
     single<AnalyticsOptInUseCase> {
         AnalyticsOptInUseCaseImpl(get())
@@ -540,7 +551,7 @@ private val bluetooth = module {
         BluetoothScanner(get())
     }
     single<BluetoothConnectionManager> {
-        BluetoothConnectionManager(get())
+        BluetoothConnectionManager(get(), get())
     }
     single<BluetoothUpdater> {
         BluetoothUpdater(get(), get())
@@ -683,7 +694,7 @@ private val viewmodels = module {
         HistoryChartsViewModel(device = params.get())
     }
     viewModel { params ->
-        DeviceHeliumOTAViewModel(device = params.get())
+        DeviceHeliumOTAViewModel(device = params.get(), deviceIsBleConnected = params.get())
     }
 }
 

@@ -22,7 +22,8 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class DeviceHeliumOTAViewModel(
-    val device: Device
+    val device: Device,
+    val deviceIsBleConnected: Boolean
 ) : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val connectionUseCase: BluetoothConnectionUseCase by inject()
@@ -35,9 +36,6 @@ class DeviceHeliumOTAViewModel(
     private val onInstallingProgress = MutableLiveData<Int>()
     fun onInstallingProgress() = onInstallingProgress
 
-    private val onDownloadFile = MutableLiveData(false)
-    fun onDownloadFile() = onDownloadFile
-
     private var scannedDevice = ScannedDevice.empty()
 
     private fun deviceIsPaired(): Boolean {
@@ -46,6 +44,16 @@ class DeviceHeliumOTAViewModel(
 
     @Suppress("MagicNumber")
     fun startScan() {
+        /**
+         * If device is already connected we have no reason to BLE Scan again so we go directly
+         * to downloading and installing.
+         * But we want to launch this from here as when we get here it means that all necessary
+         * checks on bluetooth are successful.
+         */
+        if (deviceIsBleConnected) {
+            downloadFirmwareAndGetFileURI()
+            return
+        }
         onStatus.postValue(Resource.loading(State(OTAStatus.CONNECT_TO_STATION)))
         viewModelScope.launch {
             scanUseCase.startScanning().collect {
@@ -83,7 +91,7 @@ class DeviceHeliumOTAViewModel(
             connectionUseCase.setPeripheral(scannedDevice.address).tap {
                 connectionUseCase.connectToPeripheral().tap {
                     if (deviceIsPaired()) {
-                        downloadUpdate()
+                        downloadFirmwareAndGetFileURI()
                     } else {
                         onStatus.postValue(Resource.error("", State(OTAStatus.PAIR_STATION)))
                     }
@@ -103,7 +111,7 @@ class DeviceHeliumOTAViewModel(
     private fun connectToPeripheral() {
         viewModelScope.launch {
             connectionUseCase.connectToPeripheral().tap {
-                downloadUpdate()
+                downloadFirmwareAndGetFileURI()
             }.tapLeft {
                 onStatus.postValue(
                     Resource.error(it.getCode(), State(OTAStatus.CONNECT_TO_STATION))
@@ -112,12 +120,25 @@ class DeviceHeliumOTAViewModel(
         }
     }
 
-    private fun downloadUpdate() {
+    fun disconnectFromPeripheral() {
+        GlobalScope.launch {
+            connectionUseCase.disconnectFromPeripheral()
+        }
+    }
+
+    private fun downloadFirmwareAndGetFileURI() {
         onStatus.postValue(Resource.loading(State(OTAStatus.DOWNLOADING)))
         viewModelScope.launch {
-            // TODO: Download the update zip from the backend
-            // delay(2000L)
-            onDownloadFile.postValue(true)
+            updaterUseCase.downloadFirmwareAndGetFileURI(device.id).tap {
+                update(it)
+            }.tapLeft {
+                onStatus.postValue(
+                    Resource.error(
+                        resHelper.getString(R.string.error_helium_ota_download_failed),
+                        State(OTAStatus.DOWNLOADING)
+                    )
+                )
+            }
         }
     }
 
@@ -131,6 +152,9 @@ class DeviceHeliumOTAViewModel(
                     }
                     BluetoothOTAState.COMPLETED -> {
                         onStatus.postValue(Resource.success(State(OTAStatus.INSTALLING)))
+                        device.attributes?.firmware?.assigned?.let { versionInstalled ->
+                            updaterUseCase.onUpdateSuccess(device.id, versionInstalled)
+                        }
                     }
                     BluetoothOTAState.ABORTED -> {
                         onStatus.postValue(
@@ -161,11 +185,11 @@ class DeviceHeliumOTAViewModel(
     init {
         viewModelScope.launch {
             scanUseCase.registerOnScanning().collect {
-                // TODO: Check with Device's EUI
-//                if (it.name?.contains("40002F") == true) {
-//                    scannedDevice = it
-//                    scanUseCase.stopScanning()
-//                }
+                @Suppress("MagicNumber")
+                if (it.name?.contains(device.getLastCharsOfLabel(6)) == true) {
+                    scannedDevice = it
+                    scanUseCase.stopScanning()
+                }
             }
         }
 
@@ -173,7 +197,7 @@ class DeviceHeliumOTAViewModel(
             connectionUseCase.registerOnBondStatus().collect {
                 when (it) {
                     BluetoothDevice.BOND_BONDED -> {
-                        downloadUpdate()
+                        downloadFirmwareAndGetFileURI()
                     }
                     BluetoothDevice.BOND_NONE -> {
                         onStatus.postValue(Resource.error("", State(OTAStatus.PAIR_STATION)))

@@ -10,11 +10,9 @@ import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIError
-import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.ResourcesHelper
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -28,22 +26,20 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
 
     private val onBLEError = MutableLiveData<UIError>()
     private val onBLEConnectionLost = MutableLiveData<Boolean>()
-    private val onBLEDevEUI = MutableLiveData<String>()
-    private val onBLEClaimingKey = MutableLiveData<String>()
+    private val onBLEConnection = MutableLiveData<Boolean>()
     private val onNewScannedDevice = MutableLiveData<List<ScannedDevice>>()
     private val onScanStatus = MutableLiveData<Resource<Unit>>()
     private val onScanProgress = MutableLiveData<Int>()
 
     private var selectedDeviceMacAddress: String = ""
-    private var bleFetchStarted = false
+    private var bleConnectionStarted = false
 
     fun onNewScannedDevice(): LiveData<List<ScannedDevice>> = onNewScannedDevice
     fun onScanStatus(): LiveData<Resource<Unit>> = onScanStatus
     fun onScanProgress(): LiveData<Int> = onScanProgress
     fun onBLEError() = onBLEError
     fun onBLEConnectionLost() = onBLEConnectionLost
-    fun onBLEDevEUI() = onBLEDevEUI
-    fun onBLEClaimingKey() = onBLEClaimingKey
+    fun onBLEConnection() = onBLEConnection
 
     @Suppress("MagicNumber")
     fun scanBleDevices() {
@@ -51,14 +47,14 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
             onScanStatus.postValue(Resource.loading())
             scannedDevices.clear()
             scanDevicesUseCase.startScanning().collect {
-                it.tap { progress ->
+                it.onRight { progress ->
                     if (progress == 100) {
                         onScanProgress.postValue(progress)
                         onScanStatus.postValue(Resource.success(Unit))
                     } else {
                         onScanProgress.postValue(progress)
                     }
-                }.tapLeft {
+                }.onLeft {
                     onScanStatus.postValue(Resource.error(""))
                 }
             }
@@ -66,15 +62,15 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     }
 
     fun setupBluetoothClaiming(macAddress: String) {
-        if (bleFetchStarted) return
-        bleFetchStarted = true
+        if (bleConnectionStarted) return
+        bleConnectionStarted = true
 
         scanDevicesUseCase.stopScanning()
         selectedDeviceMacAddress = macAddress
-        connectionUseCase.setPeripheral(macAddress).tap {
+        connectionUseCase.setPeripheral(macAddress).onRight {
             connectToPeripheral()
-        }.tapLeft {
-            bleFetchStarted = false
+        }.onLeft {
+            bleConnectionStarted = false
             onBLEError.postValue(UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
                 setupBluetoothClaiming(macAddress)
             })
@@ -83,7 +79,7 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
 
     fun connectToPeripheral() {
         viewModelScope.launch {
-            connectionUseCase.connectToPeripheral().tapLeft {
+            connectionUseCase.connectToPeripheral().onLeft {
                 when (it) {
                     is BluetoothError.BluetoothDisabledException -> {
                         onBLEError.postValue(
@@ -103,51 +99,13 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
                         )
                     }
                 }
-            }.tap {
+            }.onRight {
                 if (connectionUseCase.getPairedDevices().any {
                         it.address == selectedDeviceMacAddress
                     }
                 ) {
-                    fetchDeviceEUI()
+                    onBLEConnection.postValue(true)
                 }
-            }
-        }
-    }
-
-    fun disconnectFromPeripheral() {
-        GlobalScope.launch {
-            connectionUseCase.disconnectFromPeripheral()
-        }
-    }
-
-    private fun fetchDeviceEUI() {
-        viewModelScope.launch {
-            connectionUseCase.fetchDeviceEUI().tap {
-                /**
-                 * BLE returns Dev EUI with `:` in between so we need to unmask it
-                 */
-                onBLEDevEUI.postValue(it.unmask())
-                fetchClaimingKey()
-            }.tapLeft {
-                onBLEError.postValue(UIError(
-                    resHelper.getString(R.string.helium_fetching_info_failed)
-                ) {
-                    fetchDeviceEUI()
-                })
-            }
-        }
-    }
-
-    private fun fetchClaimingKey() {
-        viewModelScope.launch {
-            connectionUseCase.fetchClaimingKey().tap {
-                onBLEClaimingKey.postValue(it)
-            }.tapLeft {
-                onBLEError.postValue(UIError(
-                    resHelper.getString(R.string.helium_fetching_info_failed)
-                ) {
-                    fetchClaimingKey()
-                })
             }
         }
     }
@@ -167,7 +125,7 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
             connectionUseCase.registerOnBondStatus().collect {
                 when (it) {
                     BluetoothDevice.BOND_BONDED -> {
-                        fetchDeviceEUI()
+                        onBLEConnection.postValue(true)
                     }
                     BluetoothDevice.BOND_NONE -> {
                         onBLEError.postValue(

@@ -2,29 +2,28 @@ package com.weatherxm.ui.widget
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.LinearLayout
+import android.widget.FrameLayout
 import androidx.annotation.StringRes
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewInformationCardBinding
 import com.weatherxm.util.setHtml
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
-class InformationCardView : LinearLayout {
+class InformationCardView : FrameLayout {
 
     private lateinit var binding: ViewInformationCardBinding
 
-    constructor(context: Context?) : super(context) {
+    constructor(context: Context) : super(context) {
         init(context)
     }
 
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         init(context, attrs)
     }
 
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context,
         attrs,
         defStyleAttr
@@ -32,19 +31,34 @@ class InformationCardView : LinearLayout {
         init(context, attrs)
     }
 
-    private fun init(context: Context?, attrs: AttributeSet? = null) {
+    private fun init(
+        context: Context?,
+        attrs: AttributeSet? = null,
+        defStyleAttr: Int = 0
+    ) {
         binding = ViewInformationCardBinding.inflate(LayoutInflater.from(context), this)
-        orientation = VERTICAL
-        gravity = Gravity.CENTER
 
-        this.context.theme.obtainStyledAttributes(attrs, R.styleable.InformationCardView, 0, 0)
-            .apply {
-                try {
-                    message(getString(R.styleable.InformationCardView_info_message))
-                } finally {
-                    recycle()
+        this.context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.InformationCardView,
+            defStyleAttr,
+            R.style.Widget_WeatherXM_MaterialCard_Info
+        ).apply {
+            try {
+                val text = getString(R.styleable.InformationCardView_info_message)
+                val htmlText = getString(R.styleable.InformationCardView_info_html_message)
+                if (text != null) {
+                    message(text)
+                } else if (htmlText != null) {
+                    htmlMessage(htmlText)
                 }
+                if (!getBoolean(R.styleable.InformationCardView_info_includes_stroke, false)) {
+                    binding.card.strokeWidth = 0
+                }
+            } finally {
+                recycle()
             }
+        }
     }
 
     fun message(@StringRes resId: Int): InformationCardView {
@@ -70,6 +84,30 @@ class InformationCardView : LinearLayout {
                 setHtml(resId)
             } else {
                 setHtml(resId, arg)
+            }
+            if (linkClickedListener != null) {
+                movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                    setOnLinkClickListener { _, _ ->
+                        linkClickedListener.invoke()
+                        return@setOnLinkClickListener true
+                    }
+                }
+            }
+            visibility = View.VISIBLE
+        }
+        return this
+    }
+
+    private fun htmlMessage(
+        message: String,
+        arg: String? = null,
+        linkClickedListener: (() -> Unit)? = null
+    ): InformationCardView {
+        binding.message.apply {
+            if (arg.isNullOrEmpty()) {
+                setHtml(message)
+            } else {
+                setHtml(message, arg)
             }
             if (linkClickedListener != null) {
                 movementMethod = BetterLinkMovementMethod.newInstance().apply {

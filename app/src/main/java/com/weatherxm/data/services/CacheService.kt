@@ -210,6 +210,26 @@ class CacheService(
         this.forecasts.clear()
     }
 
+    fun setDeviceLastOtaVersion(key: String, lastOtaVersion: String) {
+        preferences.edit().putString(key, lastOtaVersion).apply()
+    }
+
+    fun getDeviceLastOtaVersion(key: String): Either<Failure, String> {
+        val lastOtaVersion = preferences.getString(key, "")
+        return when {
+            lastOtaVersion.isNullOrEmpty() -> Either.Left(DataError.CacheMissError)
+            else -> Either.Right(lastOtaVersion)
+        }
+    }
+
+    fun setDeviceLastOtaTimestamp(key: String) {
+        preferences.edit().putLong(key, System.currentTimeMillis()).apply()
+    }
+
+    fun getDeviceLastOtaTimestamp(key: String): Long {
+        return preferences.getLong(key, 0L)
+    }
+
     fun clearAll() {
         this.walletAddress = null
         this.user = null
@@ -236,7 +256,8 @@ class CacheService(
         val savedWind = getPreferenceString(KEY_WIND, R.string.wind_speed_ms)
         val savedWindDir = getPreferenceString(KEY_WIND_DIR, R.string.wind_direction_cardinal)
         val savedPressure = getPreferenceString(KEY_PRESSURE, R.string.pressure_hpa)
-        val savedAnalyticsEnabled = preferences.getBoolean(resHelper.getString(KEY_ANALYTICS),false)
+        val savedAnalyticsEnabled =
+            preferences.getBoolean(resHelper.getString(KEY_ANALYTICS), false)
         val savedAnalyticsOptInOrOutTimestamp = preferences.getLong(
             KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, 0L
         )

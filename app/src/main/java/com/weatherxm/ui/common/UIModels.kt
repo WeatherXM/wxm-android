@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.LastAndDatedTxs
@@ -14,6 +15,7 @@ import java.time.ZonedDateTime
 @Keep
 data class UIError(
     var errorMessage: String,
+    var errorCode: String? = null,
     var retryFunction: (() -> Unit)? = null
 )
 
@@ -107,6 +109,14 @@ data class ScannedDevice(
         )
     }
 }
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class UserDevice(
+    val shouldShowOTAPrompt: Boolean = true,
+    val device: Device,
+) : Parcelable
 
 @Parcelize
 enum class DeviceType : Parcelable {

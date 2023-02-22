@@ -14,8 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimSetLocationBinding
-import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
-import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
@@ -23,8 +21,6 @@ import com.weatherxm.util.hideKeyboard
 import kotlinx.coroutines.launch
 
 class ClaimLocationFragment : Fragment() {
-    private val m5ParentModel: ClaimM5ViewModel by activityViewModels()
-    private val heliumParentModel: ClaimHeliumViewModel by activityViewModels()
     private val model: ClaimLocationViewModel by activityViewModels()
     private lateinit var binding: FragmentClaimSetLocationBinding
 
@@ -74,15 +70,10 @@ class ClaimLocationFragment : Fragment() {
 
         binding.confirm.setOnClickListener {
             model.confirmLocation()
-            if (model.getDeviceType() == DeviceType.M5_WIFI) {
-                m5ParentModel.next()
-            } else {
-                heliumParentModel.next()
-            }
         }
 
         model.onRequestUserLocation().observe(viewLifecycleOwner) {
-            if(it) {
+            if (it) {
                 requestLocationPermissions()
             }
         }

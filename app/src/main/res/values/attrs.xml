@@ -8,6 +8,8 @@
     </declare-styleable>
     <declare-styleable name="InformationCardView">
         <attr name="info_message" format="string" />
+        <attr name="info_html_message" format="string" />
+        <attr name="info_includes_stroke" format="boolean" />
     </declare-styleable>
     <declare-styleable name="ErrorCardView">
         <attr name="error_title" format="string" />
@@ -18,6 +20,7 @@
     <declare-styleable name="WarningCardView">
         <attr name="warning_title" format="string" />
         <attr name="warning_message" format="string" />
+        <attr name="warning_includes_close_button" format="boolean" />
     </declare-styleable>
     <declare-styleable name="StatusView">
         <attr name="status_title" format="string" />
@@ -34,5 +37,10 @@
     <declare-styleable name="WeatherDataView">
         <attr name="weather_data_title" format="string" />
         <attr name="weather_data_icon" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="BleActionFlowView">
+        <attr name="ble_action_flow_first_step" format="string" />
+        <attr name="ble_action_flow_second_step" format="string" />
+        <attr name="ble_action_flow_third_step" format="string" />
     </declare-styleable>
 </resources>

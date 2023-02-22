@@ -6,10 +6,11 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.UserActionError
 import com.weatherxm.ui.common.TokenInfo
+import com.weatherxm.ui.common.UserDevice
 import kotlinx.coroutines.flow.Flow
 
 interface UserDeviceUseCase {
-    suspend fun getUserDevices(): Either<Failure, List<Device>>
+    suspend fun getUserDevices(): Either<Failure, List<UserDevice>>
     suspend fun getUserDevice(deviceId: String): Either<Failure, Device>
     suspend fun getTodayAndTomorrowForecast(
         device: Device,

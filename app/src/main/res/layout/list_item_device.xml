@@ -23,8 +23,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/padding_normal"
             app:cardBackgroundColor="@color/devices_list_card_background"
-            app:cardElevation="1px"
-            app:layout_constraintTop_toTopOf="parent">
+            app:cardElevation="1px">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -94,8 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-24dp"
-            app:cardElevation="1px"
-            app:layout_constraintTop_toBottomOf="@id/header">
+            app:cardElevation="1px">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/noDataLayout"
@@ -260,12 +258,24 @@
             android:elevation="0dp"
             android:paddingHorizontal="@dimen/padding_normal"
             android:paddingTop="@dimen/padding_normal"
+            android:visibility="gone"
             app:error_includes_close_button="false"
             app:error_includes_stroke="false"
             app:error_title="@string/station_offline"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/content" />
+            tools:visibility="visible" />
+
+        <!-- TODO: Fix when both cards are visible -->
+        <com.weatherxm.ui.widget.WarningCardView
+            android:id="@+id/warning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-16dp"
+            android:background="@color/warningTint"
+            android:elevation="0dp"
+            android:visibility="gone"
+            app:warning_includes_close_button="false"
+            app:warning_message="@string/updated_needed_desc"
+            app:warning_title="@string/updated_needed_title" />
 
     </LinearLayout>
 

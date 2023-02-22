@@ -22,17 +22,19 @@
                 app:empty_animation="@raw/anim_loading"
                 app:empty_subtitle="@string/success_claim_device"
                 app:empty_title="@string/station_claimed"
-                app:layout_constraintBottom_toTopOf="@id/viewStation"
+                app:layout_constraintBottom_toTopOf="@id/viewStationOnlyBtn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/viewStation"
+                android:id="@+id/viewStationOnlyBtn"
                 style="@style/Widget.WeatherXM.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="2"
                 android:text="@string/action_view_station"
+                android:textAllCaps="false"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:visibility="visible" />
@@ -67,6 +69,6 @@
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

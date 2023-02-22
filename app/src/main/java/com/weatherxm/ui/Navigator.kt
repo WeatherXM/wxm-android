@@ -17,6 +17,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
+import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
@@ -287,16 +288,13 @@ class Navigator {
         )
     }
 
-    fun showDeviceHeliumOTA(
-        activityResultLauncher: ActivityResultLauncher<Intent>,
-        fragment: Fragment,
-        device: Device?
-    ) {
+    fun showDeviceHeliumOTA(fragment: Fragment, device: Device?, deviceIsBleConnected: Boolean) {
         fragment.context?.let {
-            activityResultLauncher.launch(
+            it.startActivity(
                 Intent(it, DeviceHeliumOTAActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(ARG_DEVICE, device)
+                    .putExtra(ARG_BLE_DEVICE_CONNECTED, deviceIsBleConnected)
             )
         }
     }

@@ -80,11 +80,11 @@ object Weather : KoinComponent {
 
     fun getFormattedPrecipitation(
         value: Float?,
-        isPrecipRate: Boolean = true,
+        isRainRate: Boolean = true,
         includeUnit: Boolean = true
     ): String {
         val unit = if (includeUnit) {
-            getPrecipitationPreferredUnit(isPrecipRate)
+            getPrecipitationPreferredUnit(isRainRate)
         } else {
             ""
         }
@@ -318,20 +318,20 @@ object Weather : KoinComponent {
         return defaultUnit
     }
 
-    fun getPrecipitationPreferredUnit(isPrecipRate: Boolean): String {
+    fun getPrecipitationPreferredUnit(isRainRate: Boolean = true): String {
         val keyOnSharedPref = resHelper.getString(KEY_PRECIP)
         val defaultUnitOnPreferences = resHelper.getString(R.string.precipitation_mm)
 
         val savedUnit = getPreferredUnit(keyOnSharedPref, defaultUnitOnPreferences)
 
         return if (defaultUnitOnPreferences == savedUnit) {
-            if (isPrecipRate) {
+            if (isRainRate) {
                 resHelper.getString(R.string.precipitation_mm_hour)
             } else {
                 resHelper.getString(R.string.precipitation_mm)
             }
         } else {
-            if (isPrecipRate) {
+            if (isRainRate) {
                 resHelper.getString(R.string.precipitation_in_hour)
             } else {
                 resHelper.getString(R.string.precipitation_in)

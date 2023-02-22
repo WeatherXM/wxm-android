@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true">
+    android:layout_height="wrap_content"
+    tools:parentTag="android.widget.FrameLayout">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
         style="@style/Widget.WeatherXM.MaterialCard.Info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
+        android:animateLayoutChanges="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
                 tools:text="You need to do something blah blah blah..." />
+
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

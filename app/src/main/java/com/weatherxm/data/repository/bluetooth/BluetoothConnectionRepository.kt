@@ -15,4 +15,5 @@ interface BluetoothConnectionRepository {
     suspend fun fetchClaimingKey(): Either<Failure, String>
     suspend fun fetchDeviceEUI(): Either<Failure, String>
     suspend fun setFrequency(frequency: Frequency): Either<Failure, Unit>
+    suspend fun reboot(): Either<Failure, Unit>
 }

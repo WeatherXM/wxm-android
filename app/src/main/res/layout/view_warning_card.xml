@@ -11,10 +11,7 @@
         android:id="@+id/card"
         style="@style/Widget.WeatherXM.MaterialCard.Warning"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:contentPadding="0dp"
-        app:contentPaddingBottom="0dp"
-        app:contentPaddingTop="0dp">
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -25,7 +22,6 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="@dimen/margin_normal"
                 android:src="@drawable/ic_warning"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -40,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
                 android:layout_marginTop="@dimen/margin_normal"
+                android:layout_marginEnd="@dimen/margin_normal"
                 app:layout_constraintEnd_toStartOf="@id/closeButton"
                 app:layout_constraintStart_toEndOf="@id/icon"
                 app:layout_constraintTop_toTopOf="parent"
@@ -73,14 +70,13 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/actionOutline"
                 style="@style/Widget.WeatherXM.Button.Subtle.Borders"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
-                android:textColor="@color/light_primary"
                 android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/title"
+                app:layout_constraintStart_toStartOf="@id/title"
                 app:layout_constraintTop_toBottomOf="@id/message"
-                app:strokeColor="@color/light_primary"
                 tools:text="Do something" />
 
             <com.google.android.material.button.MaterialButton

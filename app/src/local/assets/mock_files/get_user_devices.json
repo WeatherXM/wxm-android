@@ -3,13 +3,18 @@
         "id": "702d3cc0-10e9-11ec-877e-63751227e9ec",
         "name": "Crazy Canary Blizzard",
         "timezone": "Europe/Berlin",
+        "profile": "Helium",
         "label": null,
         "location": {
             "lat": 37.97521056577561,
             "lon": 23.726247807017884
         },
         "attributes": {
-            "isActive": true,
+            "isActive": false,
+            "firmware": {
+                "current": "1.0.0",
+                "assigned": "1.0.1"
+            },
             "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "831edafffffffff",
@@ -206,6 +211,7 @@
         "name": "Enormous Pilot Hurricane",
         "timezone": "America/Chicago",
         "label": null,
+        "profile": "M5",
         "location": {
             "lat": 35.51622463589852,
             "lon": 24.01903666307378
@@ -213,6 +219,10 @@
         "attributes": {
             "isActive": true,
             "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
+            "firmware": {
+                "current": "1.0.0",
+                "assigned": "1.0.1"
+            },
             "hex3": {
                 "index": "833f72fffffffff",
                 "polygon": [
@@ -307,12 +317,17 @@
         "name": "Acoustic Barrier Hail",
         "timezone": "Etc/GMT",
         "label": null,
+        "profile": "Helium",
         "location": {
             "lat": 35.51622463589852,
             "lon": 24.01903666307378
         },
         "attributes": {
             "isActive": true,
+            "firmware": {
+                "current": "1.0.0",
+                "assigned": "1.0.1"
+            },
             "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f72fffffffff",

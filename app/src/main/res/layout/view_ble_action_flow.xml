@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/margin_normal"
+    android:background="@color/colorSurface"
+    android:fitsSystemWindows="false"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <!-- Pairing Information -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/notPairedInfoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/notPairedTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/station_not_yet_paired"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/notPairedMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:text="@string/station_not_yet_paired_message"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            app:layout_constraintTop_toBottomOf="@id/notPairedTitle" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/pairFirstStep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:drawableStart="@drawable/ic_one_filled"
+            android:drawablePadding="@dimen/margin_normal"
+            android:drawableTint="@color/colorOnSurface"
+            android:text="@string/reset_ble_first_step"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            app:layout_constraintTop_toBottomOf="@id/notPairedMessage" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/pairSecondStep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:drawableStart="@drawable/ic_two_filled"
+            android:drawablePadding="@dimen/margin_normal"
+            android:drawableTint="@color/colorOnSurface"
+            android:text="@string/tap_pair_device_button"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            app:layout_constraintTop_toBottomOf="@id/pairFirstStep" />
+
+        <ImageView
+            android:id="@+id/resetIcon"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_reset_weather_station"
+            app:layout_constraintTop_toBottomOf="@id/pairSecondStep"
+            tools:ignore="ContentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Status View -->
+
+    <com.weatherxm.ui.widget.EmptyView
+        android:id="@+id/status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_normal"
+        app:empty_animation="@raw/anim_loading"
+        app:empty_title="@string/connecting_to_station"
+        app:layout_constraintBottom_toTopOf="@id/informationCard"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Updating Steps -->
+
+    <LinearLayout
+        android:id="@+id/steps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/status">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/firstStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:drawableStart="@drawable/ic_one_filled"
+            android:drawablePadding="@dimen/margin_normal"
+            android:drawableTint="@color/colorOnSurface"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            tools:text="@string/connect_to_station" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/secondStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:drawableStart="@drawable/ic_two_outlined"
+            android:drawablePadding="@dimen/margin_normal"
+            android:drawableTint="@color/colorOnSurface"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            android:visibility="gone"
+            tools:text="@string/download_firmware_update"
+            tools:visibility="visible" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/thirdStep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:drawableStart="@drawable/ic_three_outlined"
+            android:drawablePadding="@dimen/margin_normal"
+            android:drawableTint="@color/colorOnSurface"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            android:visibility="gone"
+            tools:text="@string/install_firmware_update"
+            tools:visibility="visible" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/installationProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:indeterminate="false"
+            android:indeterminateOnly="false"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
+    <com.weatherxm.ui.widget.InformationCardView
+        android:id="@+id/informationCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_normal"
+        android:visibility="invisible"
+        app:info_html_message="@string/update_prompt_on_claiming_flow"
+        app:info_includes_stroke="true"
+        app:layout_constraintBottom_toTopOf="@id/buttonsContainer"
+        tools:visibility="visible" />
+
+    <!-- Buttons -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttonsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/scanAgain"
+            style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/scan_again"
+            android:visibility="invisible"
+            app:icon="@drawable/ic_bluetooth"
+            app:iconGravity="textStart" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/pairDevice"
+            style="@style/Widget.WeatherXM.Button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/action_pair_device"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:id="@+id/successButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/successOneButtonOnly"
+                style="@style/Widget.WeatherXM.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:visibility="gone"
+                tools:text="@string/action_view_station" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/successSecondaryAction"
+                style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="@dimen/margin_normal"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:visibility="gone"
+                tools:text="@string/action_view_station"
+                tools:visibility="visible" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/successPrimaryAction"
+                style="@style/Widget.WeatherXM.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:visibility="gone"
+                tools:text="@string/action_update_firmware"
+                tools:visibility="visible" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/failureButtonsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:weightSum="2"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancel"
+                style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="@dimen/margin_normal"
+                android:layout_weight="1"
+                android:text="@string/action_cancel" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/retry"
+                style="@style/Widget.WeatherXM.Button"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                tools:text="@string/action_retry_updating" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</merge>

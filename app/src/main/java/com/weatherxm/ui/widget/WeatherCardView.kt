@@ -46,8 +46,7 @@ class WeatherCardView : LinearLayout {
             temperature.text =
                 Weather.getFormattedTemperature(weatherData?.temperature, decimalsOnTemp)
             feelsLike.text = Weather.getFormattedTemperature(weatherData?.feelsLike, decimalsOnTemp)
-            precipitationIntensity.text =
-                Weather.getFormattedPrecipitation(weatherData?.precipitation)
+            rainRate.text = Weather.getFormattedPrecipitation(weatherData?.precipitation)
             pressure.text = Weather.getFormattedPressure(weatherData?.pressure)
             humidity.text = Weather.getFormattedHumidity(weatherData?.humidity)
             wind.text = Weather.getFormattedWind(weatherData?.windSpeed, weatherData?.windDirection)

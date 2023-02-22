@@ -11,12 +11,14 @@ import com.weatherxm.data.TransactionsResponse
 import com.weatherxm.data.User
 import com.weatherxm.data.Wallet
 import com.weatherxm.data.WeatherData
+import okhttp3.ResponseBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.Streaming
 
 @Suppress("TooManyFunctions")
 interface ApiService {
@@ -168,4 +170,10 @@ interface ApiService {
         @Query("fromDate") fromDate: String? = null,
         @Query("toDate") toDate: String? = null,
     ): NetworkResponse<TransactionsResponse, ErrorResponse>
+
+    @GET("/api/v1/me/devices/{deviceId}/firmware")
+    @Streaming
+    suspend fun getFirmware(
+        @Path("deviceId") deviceId: String
+    ): NetworkResponse<ResponseBody, ErrorResponse>
 }

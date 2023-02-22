@@ -42,6 +42,7 @@
     <string name="error_search_suggestions">Search suggestions not available. Please try again later.</string>
     <string name="error_invalid_password">Invalid password</string>
     <string name="error_helium_ota_aborted">ABORTED</string>
+    <string name="error_helium_ota_download_failed">DOWNLOADING AND PREPARING DFU FILE FAILED</string>
     <string name="error_helium_ota_failed">FAILED: Error: %1$d - Type: %2$d - Message: %3$s</string>
 
     <!-- Warn Messages -->

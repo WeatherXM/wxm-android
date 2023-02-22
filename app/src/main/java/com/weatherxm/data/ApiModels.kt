@@ -95,8 +95,19 @@ data class Device(
         )
     }
 
+    fun needsUpdate(): Boolean {
+        val currentFirmware = attributes?.firmware?.current
+        val assignedFirmware = attributes?.firmware?.assigned
+        return !currentFirmware.equals(assignedFirmware) && !assignedFirmware.isNullOrEmpty()
+    }
+
     fun getNameOrLabel(): String {
         return attributes?.friendlyName ?: name
+    }
+
+    fun getLastCharsOfLabel(charCount: Int): String {
+        val cleanLabel = label?.replace(":", "")
+        return cleanLabel?.substring((cleanLabel.length - charCount), cleanLabel.length) ?: ""
     }
 
     fun isEmpty() = id == "" && name == ""
@@ -107,10 +118,19 @@ data class Device(
 @Parcelize
 data class Attributes(
     val isActive: Boolean?,
+    val firmware: Firmware?,
     val lastWeatherStationActivity: ZonedDateTime?,
     val friendlyName: String?,
     val hex3: Hex,
     val hex7: Hex,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class Firmware(
+    val current: String?,
+    val assigned: String?,
 ) : Parcelable
 
 @Keep

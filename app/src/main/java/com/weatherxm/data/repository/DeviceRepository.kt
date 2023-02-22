@@ -9,7 +9,7 @@ import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.StorageAddressDataSource
 import com.weatherxm.data.datasource.UserActionDataSource
 import timber.log.Timber
-import java.util.*
+import java.util.Date
 
 interface DeviceRepository {
     suspend fun getUserDevices(): Either<Failure, List<Device>>

@@ -1,7 +1,6 @@
 package com.weatherxm.ui.widget
 
 import android.content.Context
-import android.text.util.Linkify
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -104,10 +103,14 @@ class EmptyView : LinearLayout {
     }
 
     fun htmlSubtitle(
-        subtitle: String,
+        subtitle: String?,
         arg: String? = null,
         linkClickedListener: (() -> Unit)? = null
     ): EmptyView {
+        if (subtitle == null) {
+            visibility = GONE
+            return this
+        }
         binding.subtitle.apply {
             if (arg.isNullOrEmpty()) {
                 setHtml(subtitle)

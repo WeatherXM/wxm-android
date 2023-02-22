@@ -42,4 +42,8 @@ class BluetoothConnectionUseCaseImpl(
     override suspend fun setFrequency(frequency: Frequency): Either<Failure, Unit> {
         return bluetoothConnectionRepository.setFrequency(frequency)
     }
+
+    override suspend fun reboot(): Either<Failure, Unit> {
+        return bluetoothConnectionRepository.reboot()
+    }
 }

@@ -13,6 +13,7 @@ import com.weatherxm.data.network.DeleteDeviceBody
 import com.weatherxm.data.network.FriendlyNameBody
 import kotlinx.coroutines.delay
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 interface DeviceDataSource {
     suspend fun getUserDevices(): Either<Failure, List<Device>>
@@ -31,8 +32,9 @@ interface DeviceDataSource {
 
 class DeviceDataSourceImpl(private val apiService: ApiService) : DeviceDataSource {
     companion object {
-        const val CLAIM_MAX_RETRIES = 10
-        const val CLAIM_RETRY_DELAY_MS = 5000L
+        // 2.5 minutes in total
+        const val CLAIM_MAX_RETRIES = 30
+        val CLAIM_RETRY_DELAY = TimeUnit.SECONDS.toMillis(5L)
     }
 
     override suspend fun getUserDevices(): Either<Failure, List<Device>> {
@@ -54,7 +56,7 @@ class DeviceDataSourceImpl(private val apiService: ApiService) : DeviceDataSourc
             .handleErrorWith {
                 if (it is DeviceClaiming && numOfRetries < CLAIM_MAX_RETRIES) {
                     Timber.d("Claiming Failed with ${it.code}. Retrying after 5 seconds...")
-                    delay(CLAIM_RETRY_DELAY_MS)
+                    delay(CLAIM_RETRY_DELAY)
                     claimDevice(serialNumber, location, secret, numOfRetries + 1)
                 } else {
                     Either.Left(it)

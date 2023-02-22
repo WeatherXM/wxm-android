@@ -19,8 +19,10 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -40,7 +42,7 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class ClaimHeliumPairFragment : Fragment() {
-    private val model: ClaimHeliumPairViewModel by activityViewModels()
+    private val model: ClaimHeliumPairViewModel by viewModels()
     private val parentModel: ClaimHeliumViewModel by activityViewModels()
     private val navigator: Navigator by inject()
     private val bluetoothAdapter: BluetoothAdapter? by inject()
@@ -72,6 +74,7 @@ class ClaimHeliumPairFragment : Fragment() {
 
         adapter = ScannedDevicesListAdapter {
             model.setupBluetoothClaiming(it.address)
+            setEnabledScannedDevices(false)
             binding.progressBar.visibility = GONE
         }
 
@@ -135,26 +138,31 @@ class ClaimHeliumPairFragment : Fragment() {
         }
 
         model.onBLEError().observe(viewLifecycleOwner) {
+            setEnabledScannedDevices(true)
             showErrorDialog(it)
         }
 
         model.onBLEConnectionLost().observe(viewLifecycleOwner) {
             if (it) {
+                setEnabledScannedDevices(true)
                 binding.mainContainer.visibility = GONE
                 binding.connectionErrorContainer.visibility = VISIBLE
             }
         }
 
-        model.onBLEDevEUI().observe(viewLifecycleOwner) {
-            parentModel.setDeviceEUI(it)
-        }
-
-        model.onBLEClaimingKey().observe(viewLifecycleOwner) {
-            parentModel.setDeviceKey(it)
-            parentModel.next()
+        model.onBLEConnection().observe(viewLifecycleOwner) {
+            if (it) {
+                parentModel.next()
+            }
         }
 
         enableBluetoothAndScan()
+    }
+
+    private fun setEnabledScannedDevices(isEnabled: Boolean) {
+        binding.recycler.forEach { view ->
+            view.isEnabled = isEnabled
+        }
     }
 
     private fun showErrorDialog(uiError: UIError) {

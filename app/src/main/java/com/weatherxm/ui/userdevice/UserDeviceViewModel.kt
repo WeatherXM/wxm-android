@@ -178,6 +178,7 @@ class UserDeviceViewModel(var device: Device) : ViewModel(), KoinComponent {
                         is NoConnectionError, is ConnectionTimeoutError -> {
                             UIError(
                                 it.getDefaultMessage(R.string.error_reach_out_short),
+                                errorCode = null,
                                 ::fetchUserDevice
                             )
                         }
@@ -295,6 +296,7 @@ class UserDeviceViewModel(var device: Device) : ViewModel(), KoinComponent {
                         is NoConnectionError, is ConnectionTimeoutError -> {
                             UIError(
                                 it.getDefaultMessage(R.string.error_reach_out_short),
+                                errorCode = null,
                                 ::fetchUserDevice
                             )
                         }

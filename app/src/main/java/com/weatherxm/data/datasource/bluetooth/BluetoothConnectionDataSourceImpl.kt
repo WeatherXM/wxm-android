@@ -1,43 +1,51 @@
 package com.weatherxm.data.datasource.bluetooth
 
-import android.annotation.SuppressLint
-import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import arrow.core.Either
+import arrow.core.handleErrorWith
+import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_CLAIMING_KEY_COMMAND
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_DEV_EUI_COMMAND
+import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_REBOOT_COMMAND
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_SET_FREQUENCY_COMMAND
 import com.weatherxm.data.frequencyToHeliumBleBandValue
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.coroutines.suspendCoroutine
 
 class BluetoothConnectionDataSourceImpl(
-    private val connectionManager: BluetoothConnectionManager,
-    private val bluetoothAdapter: BluetoothAdapter?
+    private val connectionManager: BluetoothConnectionManager
 ) : BluetoothConnectionDataSource {
+    companion object {
+        const val CLAIM_MAX_RETRIES = 3
+        const val CLAIM_RETRY_DELAY_MS = 3000L
+    }
 
-    /**
-     * Suppress MissingPermission as we will call this function only after we have it granted
-     */
-    @SuppressLint("MissingPermission")
     override fun getPairedDevices(): List<BluetoothDevice> {
-        return bluetoothAdapter?.bondedDevices?.filter {
-            it.name.contains("WeatherXM")
-        } ?: mutableListOf()
+        return connectionManager.getPairedDevices()
     }
 
     override fun setPeripheral(address: String): Either<Failure, Unit> {
         return connectionManager.setPeripheral(address)
     }
 
-    override suspend fun connectToPeripheral(): Either<Failure, Unit> {
-        return connectionManager.connectToPeripheral()
+    override suspend fun connectToPeripheral(numOfRetries: Int): Either<Failure, Unit> {
+        return connectionManager.connectToPeripheral().handleErrorWith {
+            if (it is BluetoothError.ConnectionLostException && numOfRetries < CLAIM_MAX_RETRIES) {
+                Timber.d("Connection lost with BLE. Retrying after 3 seconds...")
+                delay(CLAIM_RETRY_DELAY_MS)
+                connectToPeripheral(numOfRetries + 1)
+            } else {
+                Either.Left(it)
+            }
+        }
     }
 
     override suspend fun disconnectFromPeripheral() {
@@ -80,6 +88,17 @@ class BluetoothConnectionDataSourceImpl(
                 val command =
                     "$AT_SET_FREQUENCY_COMMAND${frequencyToHeliumBleBandValue(frequency)}\r\n"
                 connectionManager.setATCommand(command) {
+                    continuation.resumeWith(Result.success(it))
+                }
+            }
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    override suspend fun reboot(): Either<Failure, Unit> {
+        return suspendCoroutine { continuation ->
+            GlobalScope.launch {
+                connectionManager.reboot(AT_REBOOT_COMMAND) {
                     continuation.resumeWith(Result.success(it))
                 }
             }

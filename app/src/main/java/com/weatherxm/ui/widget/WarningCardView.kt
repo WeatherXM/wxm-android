@@ -38,6 +38,9 @@ class WarningCardView : FrameLayout {
             try {
                 title(getString(R.styleable.WarningCardView_warning_title))
                 message(getString(R.styleable.WarningCardView_warning_message))
+                if (!getBoolean(R.styleable.WarningCardView_warning_includes_close_button, true)) {
+                    binding.closeButton.visibility = View.GONE
+                }
             } finally {
                 recycle()
             }

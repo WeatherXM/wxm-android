@@ -11,17 +11,23 @@ import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceClaiming
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.Device
+import com.weatherxm.data.Frequency
 import com.weatherxm.data.Resource
+import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
+// Suppress this as almost all functions are get/set methods
+@Suppress("TooManyFunctions")
 class ClaimHeliumViewModel : ViewModel(), KoinComponent {
     private val claimDeviceUseCase: ClaimDeviceUseCase by inject()
+    private val connectionUseCase: BluetoothConnectionUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
 
     private val onCancel = MutableLiveData(false)
@@ -39,6 +45,17 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
     private var userEmail: String? = null
     private var devEUI: String = ""
     private var deviceKey: String = ""
+    private var frequency: Frequency = Frequency.US915
+
+    fun disconnectFromPeripheral() {
+        GlobalScope.launch {
+            connectionUseCase.disconnectFromPeripheral()
+        }
+    }
+
+    fun setFrequency(frequency: Frequency) {
+        this.frequency = frequency
+    }
 
     fun setDeviceEUI(devEUI: String) {
         this.devEUI = devEUI
@@ -46,6 +63,10 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
 
     fun setDeviceKey(key: String) {
         deviceKey = key
+    }
+
+    fun getFrequency(): Frequency {
+        return frequency
     }
 
     fun getDevEUI(): String {
@@ -108,5 +129,9 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
                     )
                 }
         }
+    }
+
+    fun setClaimedDevice(device: Device?) {
+        device?.let { onClaimResult.postValue(Resource.success(device)) }
     }
 }

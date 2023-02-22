@@ -36,17 +36,21 @@ class ScannedDevicesListAdapter(
         init {
             binding.root.setOnClickListener {
                 listener(scannedDevice)
+                binding.typeIcon.visibility = View.INVISIBLE
+                binding.loadingConnection.visibility = View.VISIBLE
             }
         }
 
         fun bind(item: ScannedDevice, position: Int) {
             this.scannedDevice = item
-            binding.name.text = item.name
             if (item.type == DeviceType.HELIUM) {
                 binding.typeIcon.setImageResource(R.drawable.ic_helium)
+                binding.name.text = itemView.resources.getString(R.string.helium)
             } else {
                 binding.typeIcon.setImageResource(R.drawable.ic_wifi)
+                binding.name.text = itemView.resources.getString(R.string.m5)
             }
+            binding.description.text = item.name
 
             if (position == currentList.size - 1) {
                 binding.bottomBorder.visibility = View.INVISIBLE

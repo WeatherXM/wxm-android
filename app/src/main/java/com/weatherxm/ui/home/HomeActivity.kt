@@ -17,6 +17,7 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeDialogFragment
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.explorer.ExplorerData
+import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.util.applyOnGlobalLayout
@@ -82,9 +83,7 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 }
                 else -> binding.addDevice.hide()
             }
-            if (destination.id != R.id.navigation_explorer) {
-                binding.devicesCountCard.visibility = View.GONE
-            }
+            if(destination.id != R.id.navigation_explorer) binding.devicesCountCard.hide(null)
         }
 
         binding.addDevice.setOnClickListener {

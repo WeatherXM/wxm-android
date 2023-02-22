@@ -45,7 +45,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/chart_temperature"
-                    app:line_chart_title="@string/precipitation" />
+                    app:line_chart_title="@string/rain_rate" />
 
                 <com.weatherxm.ui.widget.LineChartView
                     android:id="@+id/chart_wind"
