@@ -21,7 +21,7 @@
     <!-- Weather Data & Units -->
     <string name="temperature">Temperature</string>
     <string name="humidity">Humidity</string>
-    <string name="rain_rate">Rain Rate</string>
+    <string name="precipitation_rate">Precipitation Rate</string>
     <string name="precipitation">Precipitation</string>
     <string name="precipitation_intensity">Precipitation</string>
     <string name="precipitation_probability">Precipitation %</string>

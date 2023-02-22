@@ -53,6 +53,7 @@
                     android:gravity="start|center"
                     android:lines="1"
                     tools:text="26.3°C" />
+
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -104,6 +105,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/feelsLikeTitle"
                             tools:text="27°C" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -126,7 +128,7 @@
                             style="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/rain_rate"
+                            android:text="@string/precipitation_rate"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/precipIcon" />
@@ -140,6 +142,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/rainRateTitle"
                             tools:text="1.0 mm" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -176,7 +179,9 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/windTitle"
                             tools:text="3,7 kmh/h NNW" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -221,6 +226,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/humidityTitle"
                             tools:text="45%" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -257,6 +263,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/pressureTitle"
                             tools:text="10 hpa" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -309,6 +316,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/measurementsTable"
                 tools:text="All displayed times are in Europe/Athens timezone." />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

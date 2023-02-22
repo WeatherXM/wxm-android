@@ -211,6 +211,7 @@
                         app:layout_constraintStart_toEndOf="@id/feelsLike"
                         app:layout_constraintTop_toTopOf="@id/feelsLike"
                         tools:text="°C" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -242,7 +243,8 @@
                         android:layout_marginTop="@dimen/margin_small"
                         app:layout_constraintTop_toBottomOf="@id/wind"
                         app:weather_data_icon="@drawable/ic_weather_precipitation"
-                        app:weather_data_title="@string/rain_rate" />
+                        app:weather_data_title="@string/precipitation_rate" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>

@@ -194,7 +194,7 @@ class HistoryUseCaseImpl(
                 feelsLikeEntries
             ),
             precipitation = LineChartData(
-                resHelper.getString(R.string.rain_rate),
+                resHelper.getString(R.string.precipitation_rate),
                 Weather.getPrecipitationPreferredUnit(),
                 times,
                 precipEntries
