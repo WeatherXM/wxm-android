@@ -202,7 +202,7 @@ dependencies {
 
     // Android Jetpack libraries
     implementation "androidx.activity:activity-ktx:1.6.1"
-    implementation "androidx.annotation:annotation:1.5.0"
+    implementation "androidx.annotation:annotation:1.6.0"
     implementation "androidx.appcompat:appcompat:1.6.1"
     implementation "androidx.browser:browser:1.5.0"
     implementation "androidx.collection:collection-ktx:1.2.0"
@@ -225,7 +225,7 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     // Material Components for Android
-    implementation "com.google.android.material:material:1.7.0"
+    implementation "com.google.android.material:material:1.8.0"
 
     // Google Play Services for Location & Maps
     implementation "com.google.android.gms:play-services-location:21.0.1"
@@ -272,13 +272,13 @@ dependencies {
 
     // Mapbox
     implementation "com.mapbox.maps:android:10.10.2"
-    implementation "com.mapbox.search:mapbox-search-android:1.0.0-beta.45"
+    implementation "com.mapbox.search:mapbox-search-android:1.0.0-rc.1"
 
     // Insetter
     implementation "dev.chrisbanes.insetter:insetter:0.6.1"
 
     // Import the Firebase BoM
-    implementation platform("com.google.firebase:firebase-bom:31.2.0")
+    implementation platform("com.google.firebase:firebase-bom:31.2.2")
     implementation "com.google.firebase:firebase-crashlytics-ktx"
     implementation "com.google.firebase:firebase-perf-ktx"
     implementation "com.google.firebase:firebase-config-ktx"
