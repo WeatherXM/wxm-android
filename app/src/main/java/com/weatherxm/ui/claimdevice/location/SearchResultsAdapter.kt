@@ -54,7 +54,7 @@ class SearchResultsAdapter(
         }
 
         fun bind(item: SearchSuggestion) {
-            val suggestion = MapboxUtils.parseSearchSuggestion(item)
+            val suggestion = item.fullAddress ?: MapboxUtils.parseSearchSuggestion(item)
             val formattedSuggestion = SpannableStringBuilder(suggestion)
             val boldToStart = suggestion.indexOf(query, ignoreCase = true)
             if (boldToStart < 0) {

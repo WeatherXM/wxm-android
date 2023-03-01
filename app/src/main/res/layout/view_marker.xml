@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_earth"
             android:drawablePadding="@dimen/padding_small"
+            android:drawableTint="@color/colorOnSurfaceVariant"
             android:gravity="center_vertical"
             tools:text="Chalkidikis 89" />
 
