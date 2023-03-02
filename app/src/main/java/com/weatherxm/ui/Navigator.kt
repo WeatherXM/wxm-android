@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
+import com.weatherxm.data.ClientIdentificationHelper
 import com.weatherxm.data.Device
 import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
@@ -46,7 +47,7 @@ import timber.log.Timber
 
 
 @Suppress("TooManyFunctions")
-class Navigator {
+class Navigator(private val clientIdentificationHelper: ClientIdentificationHelper) {
 
     fun showExplorer(context: Context) {
         context.startActivity(
@@ -316,7 +317,13 @@ class Navigator {
                 )
             )
             subject?.let { subject -> intent.putExtra(Intent.EXTRA_SUBJECT, subject) }
-            body?.let { body -> intent.putExtra(Intent.EXTRA_TEXT, body) }
+
+            val clientIdentifier = clientIdentificationHelper.getDeviceSupportEmailBody()
+            if (body.isNullOrEmpty()) {
+                intent.putExtra(Intent.EXTRA_TEXT, clientIdentifier)
+            } else {
+                intent.putExtra(Intent.EXTRA_TEXT, "$body\n$clientIdentifier")
+            }
             try {
                 it.startActivity(
                     Intent.createChooser(

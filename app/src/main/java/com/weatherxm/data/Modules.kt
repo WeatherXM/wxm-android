@@ -424,7 +424,7 @@ private val usecases = module {
         PreferencesUseCaseImpl(get(), get(), get())
     }
     single<SendFeedbackUseCase> {
-        SendFeedbackUseCaseImpl(get(), get())
+        SendFeedbackUseCaseImpl(get())
     }
     single<DeleteAccountUseCase> {
         DeleteAccountUseCaseImpl(get(), get())
@@ -470,7 +470,7 @@ private val network = module {
     }
 
     single<ClientIdentificationRequestInterceptor> {
-        ClientIdentificationRequestInterceptor(androidContext())
+        ClientIdentificationRequestInterceptor(get())
     }
 
     single<MoshiConverterFactory> {
@@ -497,16 +497,13 @@ private val network = module {
             .addInterceptor(get() as AuthRequestInterceptor)
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-            .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
-            .build()
+            .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS).build()
 
         // Create retrofit instance
         Retrofit.Builder()
             .baseUrl(BuildConfig.AUTH_URL)
             .addConverterFactory(get() as MoshiConverterFactory)
-            .addCallAdapterFactory(NetworkResponseAdapterFactory())
-            .client(client)
-            .build()
+            .addCallAdapterFactory(NetworkResponseAdapterFactory()).client(client).build()
     }
 
     single<Retrofit>(named(RETROFIT_API)) {
@@ -519,17 +516,13 @@ private val network = module {
             .authenticator(get() as AuthTokenAuthenticator)
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-            .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
-            .cache(get() as Cache)
-            .build()
+            .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS).cache(get() as Cache).build()
 
         // Create retrofit instance
         Retrofit.Builder()
             .baseUrl(BuildConfig.API_URL)
             .addConverterFactory(get() as MoshiConverterFactory)
-            .addCallAdapterFactory(NetworkResponseAdapterFactory())
-            .client(client)
-            .build()
+            .addCallAdapterFactory(NetworkResponseAdapterFactory()).client(client).build()
     }
 }
 
@@ -543,8 +536,7 @@ private val bluetooth = module {
     single<ESPDevice> {
         val espProvisionerManager = get() as ESPProvisionManager
         espProvisionerManager.createESPDevice(
-            ESPConstants.TransportType.TRANSPORT_BLE,
-            ESPConstants.SecurityType.SECURITY_0
+            ESPConstants.TransportType.TRANSPORT_BLE, ESPConstants.SecurityType.SECURITY_0
         )
     }
     single<BluetoothScanner> {
@@ -577,15 +569,13 @@ val firebase = module {
     single<FirebaseRemoteConfig> {
         // Init Firebase config
         Firebase.remoteConfig.apply {
-            setConfigSettingsAsync(
-                remoteConfigSettings {
-                    minimumFetchIntervalInSeconds = if (BuildConfig.DEBUG) {
-                        FIREBASE_CONFIG_FETCH_INTERVAL_DEBUG
-                    } else {
-                        FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE
-                    }
+            setConfigSettingsAsync(remoteConfigSettings {
+                minimumFetchIntervalInSeconds = if (BuildConfig.DEBUG) {
+                    FIREBASE_CONFIG_FETCH_INTERVAL_DEBUG
+                } else {
+                    FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE
                 }
-            )
+            })
             fetchAndActivate()
         }
     }
@@ -596,7 +586,7 @@ val firebase = module {
 
 val navigator = module {
     single {
-        Navigator()
+        Navigator(get())
     }
 }
 
@@ -609,8 +599,7 @@ val resourcesHelper = module {
 val database = module {
     single<AppDatabase> {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, APP_DATABASE_NAME)
-            .addTypeConverter(DatabaseConverters())
-            .build()
+            .addTypeConverter(DatabaseConverters()).build()
     }
     single<DeviceHistoryDao> {
         val database = get<AppDatabase>()
@@ -621,6 +610,12 @@ val database = module {
 val displayModeHelper = module {
     single {
         DisplayModeHelper(androidContext().resources, get())
+    }
+}
+
+val clientIdentificationHelper = module {
+    single {
+        ClientIdentificationHelper(androidContext())
     }
 }
 
@@ -642,18 +637,14 @@ private val utilities = module {
         )
     }
     single<Moshi> {
-        Moshi.Builder()
-            .add(ZonedDateTime::class.java, ZonedDateTimeJsonAdapter())
+        Moshi.Builder().add(ZonedDateTime::class.java, ZonedDateTimeJsonAdapter())
             .add(LocalDateTime::class.java, LocalDateTimeJsonAdapter())
-            .add(LocalDate::class.java, LocalDateJsonAdapter())
-            .build()
+            .add(LocalDate::class.java, LocalDateJsonAdapter()).build()
     }
 
     single<Gson> {
-        GsonBuilder()
-            .setPrettyPrinting()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .create()
+        GsonBuilder().setPrettyPrinting()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
     }
 
     single<UIHexJsonAdapter> {
@@ -714,6 +705,7 @@ val modules = listOf(
     database,
     displayModeHelper,
     analyticsHelper,
+    clientIdentificationHelper,
     utilities,
     viewmodels
 )

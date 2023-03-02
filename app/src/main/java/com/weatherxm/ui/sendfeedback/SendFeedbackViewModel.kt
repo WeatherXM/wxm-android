@@ -2,6 +2,7 @@ package com.weatherxm.ui.sendfeedback
 
 import androidx.lifecycle.ViewModel
 import com.weatherxm.R
+import com.weatherxm.data.ClientIdentificationHelper
 import com.weatherxm.usecases.SendFeedbackUseCase
 import com.weatherxm.util.ResourcesHelper
 import org.koin.core.component.KoinComponent
@@ -14,10 +15,11 @@ class SendFeedbackViewModel : ViewModel(), KoinComponent {
     }
 
     private val useCase: SendFeedbackUseCase by inject()
+    private val clientIdentificationHelper: ClientIdentificationHelper by inject()
     private val resHelper: ResourcesHelper by inject()
 
     fun getPrefilledSurveyFormUrl(isDeleteAccount: Boolean): String {
-        val clientIdentifier = useCase.getClientIdentifier()
+        val clientIdentifier = clientIdentificationHelper.getInterceptorClientIdentifier()
         val userId = useCase.getUserId()
         val feedbackUrl = if (isDeleteAccount) {
             resHelper.getString(R.string.delete_account_survey_url)

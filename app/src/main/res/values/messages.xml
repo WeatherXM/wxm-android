@@ -56,4 +56,5 @@
     <!-- Info Messages -->
     <string name="info_come_back_later">Please come back later!</string>
     <string name="session_expired">Your session has expired. Please login again.</string>
+    <string name="keep_lines_email">\n--- Please do not remove the above lines ----\n</string>
 </resources>
