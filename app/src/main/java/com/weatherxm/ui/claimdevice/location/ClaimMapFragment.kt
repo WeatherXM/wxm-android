@@ -34,7 +34,7 @@ class ClaimMapFragment : BaseMapFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         locationModel.onLocationConfirmed().observe(viewLifecycleOwner) {
-            if (it) {
+            if (it && this::marker::isInitialized.get()) {
                 val location = viewManager.getViewAnnotationOptionsByView(marker)?.geometry as Point
                 locationModel.setInstallationLocation(location.latitude(), location.longitude())
 

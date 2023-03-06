@@ -112,7 +112,7 @@ class BluetoothConnectionManager(
     @SuppressLint("MissingPermission")
     fun getPairedDevices(): List<BluetoothDevice> {
         return bluetoothAdapter?.bondedDevices?.filter {
-            it.name.contains("WeatherXM")
+            it.name != null && it.name.contains("WeatherXM")
         } ?: mutableListOf()
     }
 
