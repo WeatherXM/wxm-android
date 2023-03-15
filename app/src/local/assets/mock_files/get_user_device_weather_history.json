@@ -1,10 +1,11 @@
 [
     {
         "tz": "Europe/Athens",
-        "date": "2022-10-03",
+        "date": "2023-03-07",
         "hourly": [
             {
                 "precipitation": 0,
+                "precipitation_accumulated": 0,
                 "temperature": 22.809049615565623,
                 "wind_speed": 0.35551132503619953,
                 "wind_direction": 135,
@@ -14,10 +15,11 @@
                 "wind_gust": 2.039999962,
                 "icon": "partly-cloudy-night",
                 "feels_like": 22.809049615565623,
-                "timestamp": "2022-10-03T00:00:00+03:00"
+                "timestamp": "2023-03-07T00:00:00+03:00"
             },
             {
                 "precipitation": 0,
+                "precipitation_accumulated": 0.2,
                 "temperature": 22.186607368482132,
                 "wind_speed": 0.3087750101517859,
                 "wind_direction": 169,
@@ -27,10 +29,11 @@
                 "wind_gust": 2.039999962,
                 "icon": "partly-cloudy-night",
                 "feels_like": 22.186607368482132,
-                "timestamp": "2022-10-03T01:00:00+03:00"
+                "timestamp": "2023-03-07T01:00:00+03:00"
             },
             {
                 "precipitation": 0,
+                "precipitation_accumulated": 0.5,
                 "temperature": 22.25707763945206,
                 "wind_speed": 0.09351233239269409,
                 "wind_direction": 181,
@@ -40,10 +43,11 @@
                 "wind_gust": 1.019999981,
                 "icon": "partly-cloudy-night",
                 "feels_like": 22.25707763945206,
-                "timestamp": "2022-10-03T02:00:00+03:00"
+                "timestamp": "2023-03-07T02:00:00+03:00"
             },
             {
                 "precipitation": 0,
+                "precipitation_accumulated": 0.6,
                 "temperature": 22.140909393181808,
                 "wind_speed": 0.18558909865454565,
                 "wind_direction": 165,
@@ -53,10 +57,11 @@
                 "wind_gust": 1.019999981,
                 "icon": "partly-cloudy-night",
                 "feels_like": 22.140909393181808,
-                "timestamp": "2022-10-03T03:00:00+03:00"
+                "timestamp": "2023-03-07T03:00:00+03:00"
             },
             {
-                "precipitation": 0,
+                "precipitation": 0.5,
+                "precipitation_accumulated": 0.9,
                 "temperature": 21.904128363669727,
                 "wind_speed": 0.3881724904266057,
                 "wind_direction": 176,
@@ -66,10 +71,11 @@
                 "wind_gust": 1.529999971,
                 "icon": "partly-cloudy-night",
                 "feels_like": 21.904128363669727,
-                "timestamp": "2022-10-03T04:00:00+03:00"
+                "timestamp": "2023-03-07T04:00:00+03:00"
             },
             {
-                "precipitation": 0,
+                "precipitation": 0.8,
+                "precipitation_accumulated": 0.9,
                 "temperature": 21.616818461636356,
                 "wind_speed": 0.46777820045454604,
                 "wind_direction": 187,
@@ -79,10 +85,11 @@
                 "wind_gust": 2.039999962,
                 "icon": "partly-cloudy-night",
                 "feels_like": 21.616818461636356,
-                "timestamp": "2022-10-03T05:00:00+03:00"
+                "timestamp": "2023-03-07T05:00:00+03:00"
             },
             {
-                "precipitation": 0,
+                "precipitation": 0.7,
+                "precipitation_accumulated": 0.9,
                 "temperature": 21.874999740094353,
                 "wind_speed": 0.33718869231603793,
                 "wind_direction": 161,
@@ -92,10 +99,11 @@
                 "wind_gust": 1.529999971,
                 "icon": "partly-cloudy-night",
                 "feels_like": 21.874999740094353,
-                "timestamp": "2022-10-03T06:00:00+03:00"
+                "timestamp": "2023-03-07T06:00:00+03:00"
             },
             {
                 "precipitation": 0,
+                "precipitation_accumulated": 0.9,
                 "temperature": 22.3972603,
                 "wind_speed": 0.26436348115981756,
                 "wind_direction": 184,
@@ -105,10 +113,11 @@
                 "wind_gust": 1.019999981,
                 "icon": "partly-cloudy-day",
                 "feels_like": 22.3972603,
-                "timestamp": "2022-10-03T07:00:00+03:00"
+                "timestamp": "2023-03-07T07:00:00+03:00"
             },
             {
                 "precipitation": 0,
+                "precipitation_accumulated": 0.9,
                 "temperature": 23.221973239013447,
                 "wind_speed": 0.11984753834977585,
                 "wind_direction": 79,
@@ -118,10 +127,11 @@
                 "wind_gust": 1.019999981,
                 "icon": "partly-cloudy-day",
                 "feels_like": 23.221973239013447,
-                "timestamp": "2022-10-03T08:00:00+03:00"
+                "timestamp": "2023-03-07T08:00:00+03:00"
             },
             {
                 "precipitation": 0,
+                "precipitation_accumulated": 1.2,
                 "temperature": 24.971621667837837,
                 "wind_speed": 0.21147568381981985,
                 "wind_direction": 141,
@@ -131,10 +141,11 @@
                 "wind_gust": 1.019999981,
                 "icon": "partly-cloudy-day",
                 "feels_like": 24.971621667837837,
-                "timestamp": "2022-10-03T09:00:00+03:00"
+                "timestamp": "2023-03-07T09:00:00+03:00"
             },
             {
                 "precipitation": 0,
+                "precipitation_accumulated": 1.2,
                 "temperature": 27.341176443076925,
                 "wind_speed": 0.3709556707104076,
                 "wind_direction": 88,
@@ -144,10 +155,11 @@
                 "wind_gust": 1.529999971,
                 "icon": "partly-cloudy-day",
                 "feels_like": 29.324881234622318,
-                "timestamp": "2022-10-03T10:00:00+03:00"
+                "timestamp": "2023-03-07T10:00:00+03:00"
             },
             {
                 "precipitation": 0,
+                "precipitation_accumulated": 3.2,
                 "temperature": 27.765454552363636,
                 "wind_speed": 0.45606910794090977,
                 "wind_direction": 72,
@@ -157,10 +169,67 @@
                 "wind_gust": 2.039999962,
                 "icon": "partly-cloudy-day",
                 "feels_like": 29.790368688310892,
-                "timestamp": "2022-10-03T15:00:00+03:00"
+                "timestamp": "2023-03-07T11:00:00+03:00"
             },
             {
                 "precipitation": 0,
+                "precipitation_accumulated": 3.2,
+                "temperature": 27.765454552363636,
+                "wind_speed": 0.45606910794090977,
+                "wind_direction": 72,
+                "humidity": 64,
+                "uv_index": 1,
+                "pressure": 1005.0230188363633,
+                "wind_gust": 2.039999962,
+                "icon": "partly-cloudy-day",
+                "feels_like": 29.790368688310892,
+                "timestamp": "2023-03-07T12:00:00+03:00"
+            },
+            {
+                "precipitation": 0,
+                "precipitation_accumulated": 3.2,
+                "temperature": 27.765454552363636,
+                "wind_speed": 0.45606910794090977,
+                "wind_direction": 72,
+                "humidity": 64,
+                "uv_index": 1,
+                "pressure": 1005.0230188363633,
+                "wind_gust": 2.039999962,
+                "icon": "partly-cloudy-day",
+                "feels_like": 29.790368688310892,
+                "timestamp": "2023-03-07T13:00:00+03:00"
+            },
+            {
+                "precipitation": 0,
+                "precipitation_accumulated": 3.2,
+                "temperature": 27.765454552363636,
+                "wind_speed": 0.45606910794090977,
+                "wind_direction": 72,
+                "humidity": 64,
+                "uv_index": 1,
+                "pressure": 1005.0230188363633,
+                "wind_gust": 2.039999962,
+                "icon": "partly-cloudy-day",
+                "feels_like": 29.790368688310892,
+                "timestamp": "2023-03-07T14:00:00+03:00"
+            },
+            {
+                "precipitation": 0,
+                "precipitation_accumulated": 3.2,
+                "temperature": 27.765454552363636,
+                "wind_speed": 0.45606910794090977,
+                "wind_direction": 72,
+                "humidity": 64,
+                "uv_index": 1,
+                "pressure": 1005.0230188363633,
+                "wind_gust": 2.039999962,
+                "icon": "partly-cloudy-day",
+                "feels_like": 29.790368688310892,
+                "timestamp": "2023-03-07T15:00:00+03:00"
+            },
+            {
+                "precipitation": 0,
+                "precipitation_accumulated": 5.2,
                 "temperature": 25.660986434618835,
                 "wind_speed": 0.9486726778385651,
                 "wind_direction": 168,
@@ -170,10 +239,11 @@
                 "wind_gust": 3.569999933,
                 "icon": "partly-cloudy-day",
                 "feels_like": 25.660986434618835,
-                "timestamp": "2022-10-03T16:00:00+03:00"
+                "timestamp": "2023-03-07T16:00:00+03:00"
             },
             {
-                "precipitation": 0,
+                "precipitation": 3.1,
+                "precipitation_accumulated": 5.2,
                 "temperature": 27.946046359627914,
                 "wind_speed": 0.37771350356744215,
                 "wind_direction": 136,
@@ -183,10 +253,11 @@
                 "wind_gust": 2.039999962,
                 "icon": "partly-cloudy-day",
                 "feels_like": 29.727620411551314,
-                "timestamp": "2022-10-03T17:00:00+03:00"
+                "timestamp": "2023-03-07T17:00:00+03:00"
             },
             {
-                "precipitation": 0,
+                "precipitation": 2.22222,
+                "precipitation_accumulated": 5.2,
                 "temperature": 27.96045443836364,
                 "wind_speed": 0.3638600145136369,
                 "wind_direction": 77,
@@ -196,10 +267,11 @@
                 "wind_gust": 1.529999971,
                 "icon": "partly-cloudy-day",
                 "feels_like": 30.1070610105705,
-                "timestamp": "2022-10-03T18:00:00+03:00"
+                "timestamp": "2023-03-07T18:00:00+03:00"
             },
             {
-                "precipitation": 0,
+                "precipitation": 3.5,
+                "precipitation_accumulated": 5.2,
                 "temperature": 25.966063193665164,
                 "wind_speed": 0.27566697828054343,
                 "wind_direction": 91,
@@ -209,10 +281,11 @@
                 "wind_gust": 1.019999981,
                 "icon": "partly-cloudy-day",
                 "feels_like": 25.966063193665164,
-                "timestamp": "2022-10-03T19:00:00+03:00"
+                "timestamp": "2023-03-07T19:00:00+03:00"
             },
             {
-                "precipitation": 0,
+                "precipitation": 4.1,
+                "precipitation_accumulated": 5.2,
                 "temperature": 24.802252382342335,
                 "wind_speed": 0.04931531702702701,
                 "wind_direction": 62,
@@ -222,10 +295,11 @@
                 "wind_gust": 0.50999999,
                 "icon": "partly-cloudy-night",
                 "feels_like": 24.802252382342335,
-                "timestamp": "2022-10-03T20:00:00+03:00"
+                "timestamp": "2023-03-07T20:00:00+03:00"
             },
             {
-                "precipitation": 0,
+                "precipitation": 4.2,
+                "precipitation_accumulated": 5.2,
                 "temperature": 24.437113594020616,
                 "wind_speed": 0.02921237227835052,
                 "wind_direction": 139,
@@ -235,10 +309,11 @@
                 "wind_gust": 0.50999999,
                 "icon": "partly-cloudy-night",
                 "feels_like": 24.437113594020616,
-                "timestamp": "2022-10-03T21:00:00+03:00"
+                "timestamp": "2023-03-07T21:00:00+03:00"
             },
             {
-                "precipitation": 0,
+                "precipitation": 4.3,
+                "precipitation_accumulated": 5.8,
                 "temperature": 23.975115112811064,
                 "wind_speed": 0.09585806862672813,
                 "wind_direction": 177,
@@ -248,10 +323,11 @@
                 "wind_gust": 1.529999971,
                 "icon": "partly-cloudy-night",
                 "feels_like": 23.975115112811064,
-                "timestamp": "2022-10-03T22:00:00+03:00"
+                "timestamp": "2023-03-07T22:00:00+03:00"
             },
             {
                 "precipitation": 0,
+                "precipitation_accumulated": 5.9,
                 "temperature": 23.4953270228972,
                 "wind_speed": 0.20764486756074785,
                 "wind_direction": 175,
@@ -261,7 +337,7 @@
                 "wind_gust": 1.019999981,
                 "icon": "partly-cloudy-night",
                 "feels_like": 23.4953270228972,
-                "timestamp": "2022-10-03T23:00:00+03:00"
+                "timestamp": "2023-03-07T23:00:00+03:00"
             }
         ]
     }

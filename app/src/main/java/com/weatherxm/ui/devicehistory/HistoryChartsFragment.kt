@@ -142,7 +142,7 @@ class HistoryChartsFragment : Fragment() {
         initWindChart(historyCharts.windSpeed, historyCharts.windGust, historyCharts.windDirection)
 
         // Init Precipitation Chart
-        initPrecipitationChart(historyCharts.precipitation)
+        initPrecipitationChart(historyCharts.precipitation, historyCharts.precipitationAccumulated)
 
         // Init Humidity Chart
         initHumidityChart(historyCharts.humidity)
@@ -193,10 +193,10 @@ class HistoryChartsFragment : Fragment() {
         }
     }
 
-    private fun initPrecipitationChart(data: LineChartData) {
-        if (data.isDataValid()) {
+    private fun initPrecipitationChart(rateData: LineChartData, accumulatedData: LineChartData) {
+        if (rateData.isDataValid() && accumulatedData.isDataValid()) {
             binding.chartPrecipitation.getChart()
-                .initializePrecipitation24hChart(data)
+                .initializePrecipitation24hChart(rateData, accumulatedData)
         } else {
             showNoDataText(binding.chartPrecipitation.getChart())
         }

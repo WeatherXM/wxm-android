@@ -23,6 +23,7 @@
     <string name="humidity">Humidity</string>
     <string name="precipitation_rate">Precipitation Rate</string>
     <string name="precipitation">Precipitation</string>
+    <string name="daily_precipitation">Daily Precipitation</string>
     <string name="precipitation_intensity">Precipitation</string>
     <string name="precipitation_probability">Precipitation %</string>
     <string name="wind">Wind</string>

@@ -38,6 +38,7 @@
     <color name="chart_popup_background">@color/light_darkest_blue</color>
     <color name="chart_popup_text_color">@color/light_top</color>
     <color name="chart_secondary_line">@color/light_lightest_blue</color>
+    <color name="chart_fill_collor">@color/light_lightest_blue</color>
 
     <!-- Devices List -->
     <color name="devices_list_card_background">@color/light_light2</color>

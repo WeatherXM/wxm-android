@@ -93,6 +93,51 @@ class CustomTemperatureMarkerView(
 }
 
 // Custom implementation of https://weeklycoding.com/mpandroidchart-documentation/markerview/
+class CustomPrecipitationMarkerView(
+    context: Context,
+    private val times: MutableList<String>?,
+    private val accumulationEntries: MutableList<Entry>?,
+    private val rateEntries: MutableList<Entry>?,
+    private val accumulationTitle: String,
+    private val rateTitle: String
+) : MarkerView(context, R.layout.view_two_values_chart_marker) {
+    private var timeView: TextView = findViewById(R.id.time)
+    private var accumulationView: TextView = findViewById(R.id.value)
+    private var rateView: TextView = findViewById(R.id.secondValue)
+
+    // callbacks everytime the MarkerView is redrawn, can be used to update the
+    // content (user-interface)
+    @SuppressLint("SetTextI18n")
+    override fun refreshContent(entryClicked: Entry, highlight: Highlight?) {
+        /*
+            We find the relevant timestamp, wind gust and wind direction by
+            using the same index as the wind speed to get the value in the relevant list
+         */
+        timeView.text = times?.get(entryClicked.x.toInt()) ?: ""
+
+        // Get the correct rate and accumulation formatted with the correct decimal separator
+        val decimalsToShow = Weather.getDecimalsPrecipitation()
+
+        val formattedAccumulation =
+            "%.${decimalsToShow}f".format(accumulationEntries?.get(entryClicked.x.toInt())?.y)
+        val formattedRate =
+            "%.${decimalsToShow}f".format(rateEntries?.get(entryClicked.x.toInt())?.y)
+
+        accumulationView.text = "$accumulationTitle: $formattedAccumulation${
+            Weather.getPrecipitationPreferredUnit(false)
+        }"
+        rateView.text = "$rateTitle: $formattedRate${Weather.getPrecipitationPreferredUnit()}"
+
+        // this will perform necessary layouting
+        super.refreshContent(entryClicked, highlight)
+    }
+
+    override fun draw(canvas: Canvas, posx: Float, posy: Float) {
+        this.customDraw(canvas, posx, posy)
+    }
+}
+
+// Custom implementation of https://weeklycoding.com/mpandroidchart-documentation/markerview/
 class CustomWindMarkerView(
     context: Context,
     private val times: MutableList<String>?,

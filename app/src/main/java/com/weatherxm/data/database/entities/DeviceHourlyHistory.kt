@@ -15,6 +15,8 @@ data class DeviceHourlyHistory(
     val temperature: Float?,
     @ColumnInfo(name = "precipitation_intensity")
     val precipitationIntensity: Float?,
+    @ColumnInfo(name = "precipitation_accumulated")
+    val precipAccumulated: Float?,
     @ColumnInfo(name = "precipitation_probability")
     val precipProbability: Int?,
     @ColumnInfo(name = "feels_like")
@@ -40,6 +42,7 @@ data class DeviceHourlyHistory(
                 hourlyWeather.timestamp,
                 hourlyWeather.temperature,
                 hourlyWeather.precipitation,
+                hourlyWeather.precipAccumulated,
                 hourlyWeather.precipProbability,
                 hourlyWeather.feelsLike,
                 hourlyWeather.windDirection,

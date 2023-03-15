@@ -204,6 +204,8 @@ data class WeatherData(
 data class HourlyWeather(
     var timestamp: ZonedDateTime,
     val precipitation: Float?,
+    @Json(name = "precipitation_accumulated")
+    val precipAccumulated: Float?,
     val temperature: Float?,
     @Json(name = "feels_like")
     val feelsLike: Float?,

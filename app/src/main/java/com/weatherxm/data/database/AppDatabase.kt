@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import com.weatherxm.data.database.dao.DeviceHistoryDao
 import com.weatherxm.data.database.entities.DeviceHourlyHistory
 
-@Database(entities = [DeviceHourlyHistory::class], version = 1)
+@Database(entities = [DeviceHourlyHistory::class], version = 2)
 @TypeConverters(DatabaseConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun deviceHistoryDao(): DeviceHistoryDao

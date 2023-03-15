@@ -14,6 +14,7 @@ data class HistoryCharts(
     var temperature: LineChartData,
     var feelsLike: LineChartData,
     var precipitation: LineChartData,
+    var precipitationAccumulated: LineChartData,
     var windSpeed: LineChartData,
     var windGust: LineChartData,
     var windDirection: LineChartData,
@@ -23,8 +24,8 @@ data class HistoryCharts(
 ) {
     fun isEmpty(): Boolean {
         return !temperature.isDataValid() && !feelsLike.isDataValid()
-            && !precipitation.isDataValid() && !windSpeed.isDataValid()
-            && !windGust.isDataValid() && !windDirection.isDataValid()
+            && !precipitation.isDataValid() && !precipitationAccumulated.isDataValid()
+            && !windSpeed.isDataValid() && !windGust.isDataValid() && !windDirection.isDataValid()
             && !humidity.isDataValid() && !pressure.isDataValid() && !uvIndex.isDataValid()
     }
 }

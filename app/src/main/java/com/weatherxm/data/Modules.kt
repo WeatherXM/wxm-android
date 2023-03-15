@@ -599,7 +599,9 @@ val resourcesHelper = module {
 val database = module {
     single<AppDatabase> {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, APP_DATABASE_NAME)
-            .addTypeConverter(DatabaseConverters()).build()
+            .fallbackToDestructiveMigration()
+            .addTypeConverter(DatabaseConverters())
+            .build()
     }
     single<DeviceHistoryDao> {
         val database = get<AppDatabase>()

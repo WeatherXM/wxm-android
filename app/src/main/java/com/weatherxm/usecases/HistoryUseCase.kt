@@ -61,6 +61,7 @@ class HistoryUseCaseImpl(
         val temperatureEntries = mutableListOf<Entry>()
         val feelsLikeEntries = mutableListOf<Entry>()
         val precipEntries = mutableListOf<Entry>()
+        val precipAccumulatedEntries = mutableListOf<Entry>()
         val windSpeedEntries = mutableListOf<Entry>()
         val windGustEntries = mutableListOf<Entry>()
         val windDirectionEntries = mutableListOf<Entry>()
@@ -71,6 +72,7 @@ class HistoryUseCaseImpl(
         var temperatureFound: Boolean
         var feelsLikeFound: Boolean
         var precipitationFound: Boolean
+        var precipAccumulatedFound: Boolean
         var windSpeedFound: Boolean
         var windGustFound: Boolean
         var windDirectionFound: Boolean
@@ -85,6 +87,7 @@ class HistoryUseCaseImpl(
             temperatureFound = false
             feelsLikeFound = false
             precipitationFound = false
+            precipAccumulatedFound = false
             windSpeedFound = false
             windGustFound = false
             windDirectionFound = false
@@ -110,6 +113,15 @@ class HistoryUseCaseImpl(
                     hourlyWeather.precipitation?.let {
                         precipEntries.add(Entry(counter, Weather.convertPrecipitation(it) as Float))
                         precipitationFound = true
+                    }
+                    hourlyWeather.precipAccumulated?.let {
+                        precipAccumulatedEntries.add(
+                            Entry(
+                                counter,
+                                Weather.convertPrecipitation(it) as Float
+                            )
+                        )
+                        precipAccumulatedFound = true
                     }
 
                     // Get the wind speed and direction formatted
@@ -165,6 +177,7 @@ class HistoryUseCaseImpl(
             if (!temperatureFound) temperatureEntries.add(Entry(counter, Float.NaN))
             if (!feelsLikeFound) feelsLikeEntries.add(Entry(counter, Float.NaN))
             if (!precipitationFound) precipEntries.add(Entry(counter, Float.NaN))
+            if (!precipAccumulatedFound) precipAccumulatedEntries.add(Entry(counter, Float.NaN))
             if (!windSpeedFound) windSpeedEntries.add(Entry(counter, Float.NaN))
             if (!windGustFound) windGustEntries.add(Entry(counter, Float.NaN))
             if (!windDirectionFound) windDirectionEntries.add(Entry(counter, Float.NaN))
@@ -198,6 +211,12 @@ class HistoryUseCaseImpl(
                 Weather.getPrecipitationPreferredUnit(),
                 times,
                 precipEntries
+            ),
+            precipitationAccumulated = LineChartData(
+                resHelper.getString(R.string.daily_precipitation),
+                Weather.getPrecipitationPreferredUnit(false),
+                times,
+                precipAccumulatedEntries
             ),
             windSpeed = LineChartData(
                 resHelper.getString(R.string.wind_speed),

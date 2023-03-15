@@ -29,6 +29,7 @@ class DatabaseWeatherHistoryDataSource(
                 HourlyWeather(
                     timestamp = it.timestamp,
                     precipitation = it.precipitationIntensity,
+                    precipAccumulated = it.precipAccumulated,
                     temperature = it.temperature,
                     feelsLike = it.feelsLike,
                     windDirection = it.windDirection,
