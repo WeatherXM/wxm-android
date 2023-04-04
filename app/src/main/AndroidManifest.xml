@@ -5,10 +5,10 @@
 
     <uses-permission
         android:name="android.permission.ACCESS_COARSE_LOCATION"
-        tools:node="replace"/>
+        tools:node="replace" />
     <uses-permission
         android:name="android.permission.ACCESS_FINE_LOCATION"
-        tools:node="replace"/>
+        tools:node="replace" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -150,6 +150,18 @@
             android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.analytics.AnalyticsOptInActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.stationsettings.StationSettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.stationsettings.reboot.RebootActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.stationsettings.changefrequency.ChangeFrequencyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
 

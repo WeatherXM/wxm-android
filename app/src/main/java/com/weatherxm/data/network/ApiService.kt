@@ -5,6 +5,7 @@ import co.infinum.retromock.meta.MockBehavior
 import co.infinum.retromock.meta.MockResponse
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.data.Device
+import com.weatherxm.data.DeviceInfo
 import com.weatherxm.data.PublicDevice
 import com.weatherxm.data.PublicHex
 import com.weatherxm.data.TransactionsResponse
@@ -43,7 +44,7 @@ interface ApiService {
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @MockResponse(code = 204, body = "mock_files/empty_response.json")
     @POST("/api/v1/me/devices/disclaim")
-    suspend fun deleteDevice(
+    suspend fun removeDevice(
         @Body address: DeleteDeviceBody,
     ): NetworkResponse<Unit, ErrorResponse>
 
@@ -54,6 +55,14 @@ interface ApiService {
     suspend fun getUserDevice(
         @Path("deviceId") deviceId: String,
     ): NetworkResponse<Device, ErrorResponse>
+
+    @Mock
+    @MockResponse(body = "mock_files/get_user_device_info.json")
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @GET("/api/v1/me/devices/{deviceId}/info")
+    suspend fun getUserDeviceInfo(
+        @Path("deviceId") deviceId: String,
+    ): NetworkResponse<DeviceInfo, ErrorResponse>
 
     @Mock
     @MockBehavior(durationDeviation = 300, durationMillis = 1000)

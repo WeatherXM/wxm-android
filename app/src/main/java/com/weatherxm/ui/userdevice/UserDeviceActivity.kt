@@ -2,10 +2,8 @@ package com.weatherxm.ui.userdevice
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -31,7 +29,7 @@ import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickListener {
+class UserDeviceActivity : AppCompatActivity(), KoinComponent {
     private val model: UserDeviceViewModel by viewModel {
         parametersOf(getParcelableExtra(ARG_DEVICE, Device.empty()))
     }
@@ -76,8 +74,6 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
             return
         }
 
-        binding.toolbar.setOnMenuItemClickListener(this)
-
         // Initialize the adapter with empty data
         hourlyAdapter = HourlyAdapter()
         binding.recycler.adapter = hourlyAdapter
@@ -96,6 +92,10 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
+        }
+
+        binding.settingsBtn.setOnClickListener {
+            navigator.showStationSettings(this, model.device)
         }
 
         binding.swiperefresh.setOnRefreshListener {
@@ -139,13 +139,6 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
             binding.tokenCard.setTokenInfo(it, model.device.rewards?.totalRewards)
         }
 
-        model.onEditNameChange().observe(this) {
-            if (it) {
-                model.fetchUserDevice()
-                setResult(Activity.RESULT_OK)
-            }
-        }
-
         model.onUnitPreferenceChanged().observe(this) {
             if (it) {
                 binding.currentWeatherCard.updateCurrentWeatherUI(model.device.timezone)
@@ -172,28 +165,6 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent, OnMenuItemClickLi
     private fun onDeviceUpdated(device: Device) {
         updateDeviceInfo(device)
         binding.currentWeatherCard.setData(device.currentWeather, device.timezone)
-    }
-
-    override fun onMenuItemClick(menuItem: MenuItem?): Boolean {
-        return when (menuItem?.itemId) {
-            R.id.settings -> {
-                navigator.showPreferences(this)
-                true
-            }
-            R.id.edit_name -> {
-                model.canChangeFriendlyName()
-                    .fold({
-                        toast(it.errorMessage)
-                    }, {
-                        // This cannot be false, by design
-                        FriendlyNameDialogFragment(model.device.attributes?.friendlyName) {
-                            model.setOrClearFriendlyName(it)
-                        }.show(this)
-                    })
-                true
-            }
-            else -> false
-        }
     }
 
     private fun onForecastDateSelected(dateTabSelected: TabLayout.Tab) {

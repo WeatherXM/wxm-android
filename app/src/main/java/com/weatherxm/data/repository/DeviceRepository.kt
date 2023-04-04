@@ -2,6 +2,7 @@ package com.weatherxm.data.repository
 
 import arrow.core.Either
 import com.weatherxm.data.Device
+import com.weatherxm.data.DeviceInfo
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 import com.weatherxm.data.datasource.DeviceDataSource
@@ -24,7 +25,8 @@ interface DeviceRepository {
     suspend fun setFriendlyName(deviceId: String, friendlyName: String): Either<Failure, Unit>
     suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit>
     suspend fun getLastFriendlyNameChanged(deviceId: String): Long
-    suspend fun deleteDevice(serialNumber: String): Either<Failure, Unit>
+    suspend fun removeDevice(serialNumber: String): Either<Failure, Unit>
+    suspend fun getDeviceInfo(deviceId: String): Either<Failure, DeviceInfo>
 }
 
 class DeviceRepositoryImpl(
@@ -112,7 +114,11 @@ class DeviceRepositoryImpl(
         return userActionDataSource.getLastFriendlyNameChanged(deviceId)
     }
 
-    override suspend fun deleteDevice(serialNumber: String): Either<Failure, Unit> {
-        return deviceDataSource.deleteDevice(serialNumber)
+    override suspend fun removeDevice(serialNumber: String): Either<Failure, Unit> {
+        return deviceDataSource.removeDevice(serialNumber)
+    }
+
+    override suspend fun getDeviceInfo(deviceId: String): Either<Failure, DeviceInfo> {
+        return deviceDataSource.getDeviceInfo(deviceId)
     }
 }

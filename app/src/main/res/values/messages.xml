@@ -44,6 +44,7 @@
     <string name="error_helium_ota_aborted">ABORTED</string>
     <string name="error_helium_ota_download_failed">DOWNLOADING AND PREPARING DFU FILE FAILED</string>
     <string name="error_helium_ota_failed">FAILED: Error: %1$d - Type: %2$d - Message: %3$s</string>
+    <string name="error_invalid_device_identifier">Invalid Device Identifier</string>
 
     <!-- Warn Messages -->
     <string name="warn_validation_invalid_email">Not a valid email</string>

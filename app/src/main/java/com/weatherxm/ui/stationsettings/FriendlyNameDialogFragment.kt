@@ -1,4 +1,4 @@
-package com.weatherxm.ui.userdevice
+package com.weatherxm.ui.stationsettings
 
 import android.app.Dialog
 import android.os.Bundle

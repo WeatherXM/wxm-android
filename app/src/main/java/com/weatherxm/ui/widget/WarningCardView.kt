@@ -6,10 +6,17 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.TextView
+import android.widget.TextView.BufferType.SPANNABLE
 import androidx.annotation.StringRes
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import com.google.android.material.button.MaterialButton.ICON_GRAVITY_END
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewWarningCardBinding
+import com.weatherxm.ui.common.hide
+import com.weatherxm.util.setHtml
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 class WarningCardView : FrameLayout {
 
@@ -36,8 +43,14 @@ class WarningCardView : FrameLayout {
 
         this.context.theme.obtainStyledAttributes(attrs, R.styleable.WarningCardView, 0, 0).apply {
             try {
-                title(getString(R.styleable.WarningCardView_warning_title))
-                message(getString(R.styleable.WarningCardView_warning_message))
+                getString(R.styleable.WarningCardView_warning_title)?.let {
+                    title(it)
+                } ?: binding.title.hide(null)
+
+                getString(R.styleable.WarningCardView_warning_message)?.let {
+                    message(it)
+                } ?: binding.message.hide(null)
+
                 if (!getBoolean(R.styleable.WarningCardView_warning_includes_close_button, true)) {
                     binding.closeButton.visibility = View.GONE
                 }
@@ -65,10 +78,52 @@ class WarningCardView : FrameLayout {
         return this
     }
 
-    fun message(subtitle: String?): WarningCardView {
+    fun message(message: String?): WarningCardView {
         binding.message.apply {
-            text = subtitle
-            visibility = if (subtitle != null) View.VISIBLE else View.GONE
+            text = message
+            visibility = if (message != null) View.VISIBLE else View.GONE
+        }
+        return this
+    }
+    fun htmlMessage(
+        html: String,
+        linkClickedListener: (() -> Unit)? = null
+    ): WarningCardView {
+        binding.message.apply {
+            setText(HtmlCompat.fromHtml(html, FROM_HTML_MODE_LEGACY), SPANNABLE)
+            if (linkClickedListener != null) {
+                movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                    setOnLinkClickListener { _, _ ->
+                        linkClickedListener.invoke()
+                        return@setOnLinkClickListener true
+                    }
+                }
+            }
+            visibility = View.VISIBLE
+        }
+        return this
+    }
+
+    fun htmlMessage(
+        @StringRes resId: Int,
+        arg: String? = null,
+        linkClickedListener: (() -> Unit)? = null
+    ): WarningCardView {
+        binding.message.apply {
+            if (arg.isNullOrEmpty()) {
+                setHtml(resId)
+            } else {
+                setHtml(resId, arg)
+            }
+            if (linkClickedListener != null) {
+                movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                    setOnLinkClickListener { _, _ ->
+                        linkClickedListener.invoke()
+                        return@setOnLinkClickListener true
+                    }
+                }
+            }
+            visibility = View.VISIBLE
         }
         return this
     }

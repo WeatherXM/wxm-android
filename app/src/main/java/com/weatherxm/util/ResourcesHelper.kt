@@ -29,6 +29,10 @@ class ResourcesHelper(private val resources: Resources) {
         return resources.getString(stringRes, formatArgs)
     }
 
+    fun getHtml(@StringRes stringResId: Int, vararg args: Any): String {
+        return resources.getText(stringResId).toString().format(*args)
+    }
+
     fun getWindDirectionDrawable(index: Int): Drawable {
         val windDirectionDrawable = ResourcesCompat.getDrawable(
             resources,

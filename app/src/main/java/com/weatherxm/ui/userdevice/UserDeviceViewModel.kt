@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.Either
 import com.weatherxm.R
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Device
@@ -42,8 +41,6 @@ class UserDeviceViewModel(var device: Device) : ViewModel(), KoinComponent {
 
     private val onDeviceSet = MutableLiveData<Device>()
 
-    private val onEditNameChange = MutableLiveData<Boolean>()
-
     private val onLoading = MutableLiveData<Boolean>()
 
     private val onError = MutableLiveData<UIError>()
@@ -55,8 +52,6 @@ class UserDeviceViewModel(var device: Device) : ViewModel(), KoinComponent {
     private val onUnitPreferenceChanged = MutableLiveData(false)
 
     fun onDeviceSet(): LiveData<Device> = onDeviceSet
-
-    fun onEditNameChange(): LiveData<Boolean> = onEditNameChange
 
     fun onLoading(): LiveData<Boolean> = onLoading
 
@@ -263,25 +258,6 @@ class UserDeviceViewModel(var device: Device) : ViewModel(), KoinComponent {
         return position
     }
 
-    fun setOrClearFriendlyName(friendlyName: String?) {
-        if (friendlyName == null) {
-            clearFriendlyName()
-        } else {
-            setFriendlyName(friendlyName)
-        }
-    }
-
-    fun canChangeFriendlyName(): Either<UIError, Boolean> {
-        return userDeviceUseCase.canChangeFriendlyName(device.id)
-            .mapLeft {
-                Timber.d(it.message)
-                UIError(
-                    resHelper.getString(R.string.error_friendly_name_change_rate_limit),
-                    null
-                )
-            }
-    }
-
     suspend fun deviceAutoRefresh() = refreshHandler.flow()
         .map {
             userDeviceUseCase.getUserDevice(device.id)
@@ -309,48 +285,6 @@ class UserDeviceViewModel(var device: Device) : ViewModel(), KoinComponent {
                     onError.postValue(it)
                 }
         }
-
-    private fun setFriendlyName(friendlyName: String) {
-        if (friendlyName.isNotEmpty() && friendlyName != device.attributes?.friendlyName) {
-            onLoading.postValue(true)
-            viewModelScope.launch {
-                userDeviceUseCase.setFriendlyName(device.id, friendlyName)
-                    .map {
-                        onEditNameChange.postValue(true)
-                    }
-                    .mapLeft {
-                        onError.postValue(
-                            UIError(
-                                resHelper.getString(R.string.error_reach_out_short),
-                                null
-                            )
-                        )
-                    }
-                onLoading.postValue(false)
-            }
-        }
-    }
-
-    private fun clearFriendlyName() {
-        if (device.attributes?.friendlyName?.isNotEmpty() == true) {
-            onLoading.postValue(true)
-            viewModelScope.launch {
-                userDeviceUseCase.clearFriendlyName(device.id)
-                    .map {
-                        onEditNameChange.postValue(true)
-                    }
-                    .mapLeft {
-                        onError.postValue(
-                            UIError(
-                                resHelper.getString(R.string.error_reach_out_short),
-                                null
-                            )
-                        )
-                    }
-                onLoading.postValue(false)
-            }
-        }
-    }
 
     init {
         viewModelScope.launch {

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_normal">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/title"
+        style="@style/TextAppearance.WeatherXM.Default.BodySmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textIsSelectable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Station’s Default Name (Name in Explorer)" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/value"
+        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:textIsSelectable="true"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        tools:text="LaBlublius Smelly Tornado" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/actionBtn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_small"
+        android:visibility="gone"
+        app:iconGravity="textStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/value"
+        tools:text="@string/action_update_firmware"
+        tools:visibility="visible" />
+
+    <com.weatherxm.ui.widget.WarningCardView
+        android:id="@+id/warningBox"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_small"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionBtn"
+        app:warning_includes_close_button="false"
+        app:warning_message="@string/installation_location_warning_text"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/bottomBorder"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:background="@color/midGrey"
+        app:layout_constraintTop_toBottomOf="@id/warningBox" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

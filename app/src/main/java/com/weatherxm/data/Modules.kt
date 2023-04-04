@@ -127,6 +127,9 @@ import com.weatherxm.ui.deviceforecast.ForecastViewModel
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
 import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
 import com.weatherxm.ui.explorer.UIHexJsonAdapter
+import com.weatherxm.ui.stationsettings.StationSettingsViewModel
+import com.weatherxm.ui.stationsettings.changefrequency.ChangeFrequencyViewModel
+import com.weatherxm.ui.stationsettings.reboot.RebootViewModel
 import com.weatherxm.ui.userdevice.UserDeviceViewModel
 import com.weatherxm.usecases.AnalyticsOptInUseCase
 import com.weatherxm.usecases.AnalyticsOptInUseCaseImpl
@@ -160,6 +163,8 @@ import com.weatherxm.usecases.SendFeedbackUseCase
 import com.weatherxm.usecases.SendFeedbackUseCaseImpl
 import com.weatherxm.usecases.StartupUseCase
 import com.weatherxm.usecases.StartupUseCaseImpl
+import com.weatherxm.usecases.StationSettingsUseCase
+import com.weatherxm.usecases.StationSettingsUseCaseImpl
 import com.weatherxm.usecases.TokenUseCase
 import com.weatherxm.usecases.TokenUseCaseImpl
 import com.weatherxm.usecases.UserDeviceUseCase
@@ -447,6 +452,9 @@ private val usecases = module {
     single<AnalyticsOptInUseCase> {
         AnalyticsOptInUseCaseImpl(get())
     }
+    single<StationSettingsUseCase> {
+        StationSettingsUseCaseImpl(get(), get(), get())
+    }
 }
 
 private val location = module {
@@ -679,6 +687,15 @@ private val utilities = module {
 private val viewmodels = module {
     viewModel { params ->
         UserDeviceViewModel(device = params.get())
+    }
+    viewModel { params ->
+        StationSettingsViewModel(device = params.get())
+    }
+    viewModel { params ->
+        RebootViewModel(device = params.get())
+    }
+    viewModel { params ->
+        ChangeFrequencyViewModel(device = params.get())
     }
     viewModel { params ->
         ForecastViewModel(device = params.get())

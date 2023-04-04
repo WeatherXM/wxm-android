@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:fitsSystemWindows="false">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/station_settings" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_scrollFlags="noScroll"
+            tools:visibility="visible" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/basicActionsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_normal"
+                app:cardElevation="@dimen/elevation_small"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/stationNameTitle"
+                        style="@style/TextAppearance.WeatherXM.TitleSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/station_name"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/stationName"
+                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        app:layout_constraintTop_toBottomOf="@id/stationNameTitle"
+                        tools:text="Macho Sangria Easterlies" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/changeStationNameBtn"
+                        style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:text="@string/change_station_name"
+                        app:layout_constraintTop_toBottomOf="@id/stationName" />
+
+                    <View
+                        android:id="@+id/dividerBelowStationName"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:background="@color/midGrey"
+                        app:layout_constraintTop_toBottomOf="@id/changeStationNameBtn" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/frequencyTitle"
+                        style="@style/TextAppearance.WeatherXM.TitleSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:text="@string/station_frequency"
+                        app:layout_constraintTop_toBottomOf="@id/dividerBelowStationName" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/frequencyDesc"
+                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        app:layout_constraintTop_toBottomOf="@id/frequencyTitle"
+                        tools:text="@string/change_station_frequency_helium" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/changeFrequencyBtn"
+                        style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:text="@string/change_frequency"
+                        app:layout_constraintTop_toBottomOf="@id/frequencyDesc" />
+
+                    <View
+                        android:id="@+id/dividerBelowFrequency"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:background="@color/midGrey"
+                        app:layout_constraintTop_toBottomOf="@id/changeFrequencyBtn" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/rebootStationContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        app:layout_constraintTop_toBottomOf="@id/dividerBelowFrequency">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/rebootStationTitle"
+                            style="@style/TextAppearance.WeatherXM.TitleSmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/reboot_station"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/rebootStationDesc"
+                            style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:text="@string/reboot_station_desc"
+                            app:layout_constraintTop_toBottomOf="@id/rebootStationTitle" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/rebootStationBtn"
+                            style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_normal"
+                            android:text="@string/reboot_station"
+                            app:layout_constraintTop_toBottomOf="@id/rebootStationDesc" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/reconfigureWifiContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        app:layout_constraintTop_toBottomOf="@id/rebootStationContainer">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/reconfigureWifiTitle"
+                            style="@style/TextAppearance.WeatherXM.TitleSmall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/reconfigure_wifi"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/reconfigureWifiDesc"
+                            style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:text="@string/reconfigure_wifi_desc"
+                            app:layout_constraintTop_toBottomOf="@id/reconfigureWifiTitle" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/reconfigureWifiBtn"
+                            style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_normal"
+                            android:text="@string/reconfigure_wifi"
+                            app:layout_constraintTop_toBottomOf="@id/reconfigureWifiDesc" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/deleteStationCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_normal"
+                app:cardElevation="@dimen/elevation_small"
+                app:layout_constraintTop_toBottomOf="@id/basicActionsCard">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/removeStationTitle"
+                        style="@style/TextAppearance.WeatherXM.TitleSmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/remove_station"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/removeStationDesc"
+                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        app:layout_constraintTop_toBottomOf="@id/removeStationTitle"
+                        tools:text="@string/remove_station_desc" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/removeStationWarning"
+                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:gravity="center_vertical"
+                        android:text="@string/remove_station_warning"
+                        android:textStyle="bold"
+                        app:drawableStartCompat="@drawable/ic_warn"
+                        app:drawableTint="@color/error"
+                        app:layout_constraintTop_toBottomOf="@id/removeStationDesc" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/removeStationBtn"
+                        style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:text="@string/remove_station"
+                        android:textColor="@color/colorPrimaryVariant"
+                        app:backgroundTint="@color/errorTint"
+                        app:layout_constraintTop_toBottomOf="@id/removeStationWarning"
+                        app:strokeColor="@color/error" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/stationInformationCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_normal"
+                app:cardElevation="@dimen/elevation_small"
+                app:contentPaddingTop="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/deleteStationCard">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/stationInformation"
+                        style="@style/TextAppearance.WeatherXM.TitleSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/station_information"
+                        app:layout_constraintBottom_toBottomOf="@id/shareBtn"
+                        app:layout_constraintEnd_toStartOf="@id/shareBtn"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/shareBtn" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/shareBtn"
+                        style="@style/Widget.WeatherXM.TextButton.Subtle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/share"
+                        app:icon="@drawable/ic_share"
+                        app:iconPadding="@dimen/padding_small"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerStationInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        android:overScrollMode="never"
+                        android:scrollbars="vertical"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintTop_toBottomOf="@id/shareBtn"
+                        tools:listitem="@layout/list_item_station_info" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/contactSupportBtn"
+                        style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:text="@string/title_contact_support"
+                        app:layout_constraintTop_toBottomOf="@id/recyclerStationInfo" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

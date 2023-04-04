@@ -4,7 +4,6 @@ import arrow.core.Either
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
-import com.weatherxm.data.UserActionError
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.SharedPreferencesRepository
@@ -16,11 +15,9 @@ import com.weatherxm.util.isToday
 import com.weatherxm.util.isTomorrow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.runBlocking
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class UserDeviceUseCaseImpl(
     private val deviceRepository: DeviceRepository,
@@ -31,9 +28,6 @@ class UserDeviceUseCaseImpl(
 ) : UserDeviceUseCase {
 
     companion object {
-        // Allow device friendly name change once in 10 minutes
-        val FRIENDLY_NAME_TIME_LIMIT = TimeUnit.MINUTES.toMillis(10)
-
         val UNIT_PREF_KEYS = arrayOf(
             "temperature_unit",
             "precipitation_unit",
@@ -93,34 +87,6 @@ class UserDeviceUseCaseImpl(
                 .filter { it.date.isToday() || it.date.isTomorrow() }
                 .mapNotNull { it.hourly }
                 .flatten()
-        }
-    }
-
-    override suspend fun setFriendlyName(
-        deviceId: String,
-        friendlyName: String
-    ): Either<Failure, Unit> {
-        return deviceRepository.setFriendlyName(deviceId, friendlyName)
-    }
-
-    override suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit> {
-        return deviceRepository.clearFriendlyName(deviceId)
-    }
-
-    override fun canChangeFriendlyName(deviceId: String): Either<UserActionError, Boolean> {
-        // Check if user has already set a friendly name within a predefined time window
-        val lastFriendlyNameChanged = runBlocking {
-            deviceRepository.getLastFriendlyNameChanged(deviceId)
-        }
-        val diff = Date().time - lastFriendlyNameChanged
-        return if (diff >= FRIENDLY_NAME_TIME_LIMIT) {
-            Either.Right(true)
-        } else {
-            Either.Left(
-                UserActionError.UserActionRateLimitedError(
-                    "${diff}ms passed since last name change [Limit ${FRIENDLY_NAME_TIME_LIMIT}ms]"
-                )
-            )
         }
     }
 }

@@ -40,6 +40,9 @@ import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
+import com.weatherxm.ui.stationsettings.StationSettingsActivity
+import com.weatherxm.ui.stationsettings.changefrequency.ChangeFrequencyActivity
+import com.weatherxm.ui.stationsettings.reboot.RebootActivity
 import com.weatherxm.ui.token.TokenActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.ui.userdevice.UserDeviceActivity
@@ -125,14 +128,6 @@ class Navigator(private val clientIdentificationHelper: ClientIdentificationHelp
         modalBottomSheet.show(fragmentManager, PublicDeviceDetailFragment.TAG)
     }
 
-    fun showPreferences(context: Context) {
-        context.startActivity(
-            Intent(
-                context, PreferenceActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        )
-    }
-
     fun showPreferences(fragment: Fragment) {
         fragment.context?.let {
             it.startActivity(
@@ -165,6 +160,24 @@ class Navigator(private val clientIdentificationHelper: ClientIdentificationHelp
                     .putExtra(ARG_DEVICE, device)
             )
         }
+    }
+
+    fun showStationSettings(context: Context?, device: Device) {
+        context?.let {
+            it.startActivity(
+                Intent(it, StationSettingsActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_DEVICE, device)
+            )
+        }
+    }
+
+    fun openShare(context: Context, text: String) {
+        val intent = Intent()
+        intent.action = Intent.ACTION_SEND
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, text)
+        context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
     }
 
     fun showSendFeedback(
@@ -298,6 +311,31 @@ class Navigator(private val clientIdentificationHelper: ClientIdentificationHelp
                     .putExtra(ARG_BLE_DEVICE_CONNECTED, deviceIsBleConnected)
             )
         }
+    }
+
+    fun showDeviceHeliumOTA(context: Context, device: Device?, deviceIsBleConnected: Boolean) {
+        context.startActivity(
+            Intent(context, DeviceHeliumOTAActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_DEVICE, device)
+                .putExtra(ARG_BLE_DEVICE_CONNECTED, deviceIsBleConnected)
+        )
+    }
+
+    fun showRebootStation(context: Context, device: Device?) {
+        context.startActivity(
+            Intent(context, RebootActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_DEVICE, device)
+        )
+    }
+
+    fun showChangeFrequency(context: Context, device: Device?) {
+        context.startActivity(
+            Intent(context, ChangeFrequencyActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_DEVICE, device)
+        )
     }
 
     fun sendSupportEmail(

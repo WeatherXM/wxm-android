@@ -1,4 +1,4 @@
-package com.weatherxm.ui.deviceheliumota
+package com.weatherxm.ui.stationsettings.changefrequency
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -8,6 +8,8 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
@@ -15,36 +17,36 @@ import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
-import com.weatherxm.databinding.ActivityHeliumOtaBinding
+import com.weatherxm.databinding.ActivityChangeFrequencyStationBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
-import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.getParcelableExtra
+import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.stationsettings.ChangeFrequencyState
+import com.weatherxm.ui.stationsettings.FrequencyStatus
 import com.weatherxm.util.applyInsets
+import com.weatherxm.util.setHtml
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
-    private lateinit var binding: ActivityHeliumOtaBinding
+class ChangeFrequencyActivity : AppCompatActivity(), KoinComponent {
+    private lateinit var binding: ActivityChangeFrequencyStationBinding
     private val bluetoothAdapter: BluetoothAdapter? by inject()
     private val navigator: Navigator by inject()
 
-    private val model: DeviceHeliumOTAViewModel by viewModel {
-        parametersOf(
-            getParcelableExtra(ARG_DEVICE, Device.empty()),
-            intent.getBooleanExtra(ARG_BLE_DEVICE_CONNECTED, false)
-        )
+    private val model: ChangeFrequencyViewModel by viewModel {
+        parametersOf(getParcelableExtra(Contracts.ARG_DEVICE, Device.empty()))
     }
 
     private val enableBluetoothLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
-                startScan()
+                scanConnectAndReboot()
             } else {
                 binding.bleActionFlow.onError(true, R.string.bluetooth_not_enabled)
             }
@@ -52,63 +54,101 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHeliumOtaBinding.inflate(layoutInflater)
+        binding = ActivityChangeFrequencyStationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.root.applyInsets()
 
         if (model.device.isEmpty()) {
-            Timber.d("Could not start DeviceHeliumOTAActivity. Device is null.")
+            Timber.d("Could not start ChangeFrequencyActivity. Device is null.")
             toast(R.string.error_generic_message)
             finish()
             return
         }
 
         with(binding.toolbar) {
-            setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+            setNavigationOnClickListener { finishActivity() }
             subtitle = model.device.name
         }
 
+        with(binding.description) {
+            movementMethod =
+                me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {
+                    setOnLinkClickListener { _, url ->
+                        navigator.openWebsite(context, url)
+                        return@setOnLinkClickListener true
+                    }
+                }
+            setHtml(R.string.set_frequency_desc, getString(R.string.helium_frequencies_mapping_url))
+        }
+
         setListeners()
+
+        model.onFrequencies().observe(this) { result ->
+            if (result.country.isNullOrEmpty()) {
+                binding.frequencySelectedText.visibility = View.GONE
+            } else {
+                binding.frequencySelectedText.text = getString(
+                    R.string.changing_frequency_selected_text, result.country
+                )
+            }
+
+            binding.frequenciesSelector.adapter = ArrayAdapter(
+                this, android.R.layout.simple_spinner_dropdown_item, result.frequencies
+            )
+        }
 
         model.onStatus().observe(this) {
             onNewStatus(it)
         }
 
-        model.onInstallingProgress().observe(this) {
-            binding.bleActionFlow.onProgressChanged(it)
-        }
-
-        initBluetoothAndStart()
+        model.getCountryAndFrequencies()
     }
 
-    override fun onDestroy() {
-        model.disconnectFromPeripheral()
-        super.onDestroy()
+    private fun finishActivity() {
+        model.scanningJob.cancel()
+        finish()
     }
 
     private fun setListeners() {
+        binding.confirmFrequencyToggle.setOnCheckedChangeListener { _, checked ->
+            binding.changeFrequencyBtn.isEnabled = checked
+        }
+
+        binding.backButton.setOnClickListener {
+            finishActivity()
+        }
+
+        binding.changeFrequencyBtn.setOnClickListener {
+            model.setSelectedFrequency(binding.frequenciesSelector.selectedItemPosition)
+            initBluetoothAndStart()
+            binding.frequencySelectorContainer.hide(null)
+            binding.bleActionFlow.show()
+        }
+
         binding.bleActionFlow.setListeners(onScanClicked = {
             initBluetoothAndStart()
         }, onPairClicked = {
             model.pairDevice()
         }, onSuccessPrimaryButtonClicked = {
-            navigator.showUserDevice(this, model.device)
-            finish()
+            finishActivity()
         }, onCancelButtonClicked = {
-            finish()
+            finishActivity()
         }, onRetryButtonClicked = {
-            model.setPeripheral()
+            model.scanConnectAndChangeFrequency()
         })
     }
 
-    private fun onNewStatus(it: Resource<State>) {
+    private fun onNewStatus(it: Resource<ChangeFrequencyState>) {
         when (it.status) {
             Status.SUCCESS -> {
                 binding.bleActionFlow.onSuccess(
-                    title = R.string.station_updated,
-                    message = getString(R.string.station_updated_subtitle),
-                    primaryActionText = getString(R.string.action_view_station)
+                    title = R.string.frequency_changed,
+                    message = getString(
+                        R.string.frequency_changed_subtitle,
+                        model.getSelectedFrequency()
+                    ),
+                    primaryActionText = getString(R.string.back_to_settings)
                 )
             }
             Status.LOADING -> {
@@ -120,9 +160,9 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
         }
     }
 
-    private fun onErrorStatusUpdate(resource: Resource<State>) {
+    private fun onErrorStatusUpdate(resource: Resource<ChangeFrequencyState>) {
         when (resource.data?.status) {
-            OTAStatus.SCAN_FOR_STATION -> {
+            FrequencyStatus.SCAN_FOR_STATION -> {
                 val title = if (resource.data.failure is BluetoothError.DeviceNotFound) {
                     R.string.station_not_in_range
                 } else {
@@ -130,26 +170,16 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
                 }
                 binding.bleActionFlow.onError(true, title, message = resource.message)
             }
-            OTAStatus.PAIR_STATION -> {
+            FrequencyStatus.PAIR_STATION -> {
                 binding.bleActionFlow.onNotPaired()
             }
-            OTAStatus.CONNECT_TO_STATION, OTAStatus.DOWNLOADING, OTAStatus.INSTALLING -> {
-                val errorCode = if (resource.data.otaError != null) {
-                    getString(
-                        R.string.error_helium_ota_failed,
-                        resource.data.otaError,
-                        resource.data.otaErrorType,
-                        resource.data.otaErrorMessage
-                    )
-                } else {
-                    resource.message
-                }
+            FrequencyStatus.CONNECT_TO_STATION, FrequencyStatus.CHANGING_FREQUENCY -> {
                 binding.bleActionFlow.onError(
                     false,
-                    R.string.update_failed,
-                    getString(R.string.action_retry_updating),
-                    getString(R.string.update_failed_message),
-                    errorCode
+                    R.string.frequency_changed_failed,
+                    getString(R.string.action_retry),
+                    getString(R.string.changing_frequency_failed_message),
+                    resource.message
                 ) {
                     sendSupportEmail(it)
                 }
@@ -160,39 +190,26 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
         }
     }
 
-    private fun onLoadingStatusUpdate(status: OTAStatus?) {
+    private fun onLoadingStatusUpdate(status: FrequencyStatus?) {
         with(binding.bleActionFlow) {
             when (status) {
-                OTAStatus.CONNECT_TO_STATION -> {
+                FrequencyStatus.CONNECT_TO_STATION -> {
                     onStep(0, R.string.connecting_to_station)
                 }
-                OTAStatus.DOWNLOADING -> {
-                    onStep(1, R.string.downloading_update, R.string.downloading_update_subtitle)
+                FrequencyStatus.CHANGING_FREQUENCY -> {
+                    onStep(1, R.string.changing_frequency)
                 }
                 else -> {
-                    onStep(2, R.string.installing_update, R.string.installing_update_subtitle, true)
+                    onStep(0, R.string.connecting_to_station)
                 }
             }
         }
     }
 
-    private fun sendSupportEmail(errorCode: String?) {
-        navigator.sendSupportEmail(
-            this,
-            recipient = getString(R.string.support_email_recipient),
-            subject = getString(R.string.support_email_subject_helium_ota_failed),
-            body = getString(
-                R.string.support_email_body_helium_failed,
-                model.device.name,
-                errorCode ?: getString(R.string.unknown)
-            )
-        )
-    }
-
     private fun initBluetoothAndStart() {
         bluetoothAdapter?.let {
             if (it.isEnabled) {
-                startScan()
+                scanConnectAndReboot()
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     checkPermissionsAndThen(permissions = arrayOf(BLUETOOTH_CONNECT),
@@ -211,13 +228,15 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
         } ?: run { binding.bleActionFlow.onError(true, R.string.no_bluetooth_available) }
     }
 
-    private fun startScan() {
+    private fun scanConnectAndReboot() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             checkPermissionsAndThen(permissions = arrayOf(BLUETOOTH_SCAN, BLUETOOTH_CONNECT),
                 rationaleTitle = getString(R.string.permission_bluetooth_title),
                 rationaleMessage = getString(R.string.perm_bluetooth_scanning_desc),
-                onGranted = { model.startScan() },
-                onDenied = { binding.bleActionFlow.onError(true, R.string.no_bluetooth_access) })
+                onGranted = { model.scanConnectAndChangeFrequency() },
+                onDenied = {
+                    binding.bleActionFlow.onError(true, R.string.no_bluetooth_access)
+                })
         } else {
             checkPermissionsAndThen(permissions = arrayOf(
                 ACCESS_FINE_LOCATION,
@@ -225,8 +244,23 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
             ),
                 rationaleTitle = getString(R.string.permission_location_title),
                 rationaleMessage = getString(R.string.perm_location_scanning_desc),
-                onGranted = { model.startScan() },
-                onDenied = { binding.bleActionFlow.onError(true, R.string.no_bluetooth_access) })
+                onGranted = { model.scanConnectAndChangeFrequency() },
+                onDenied = {
+                    binding.bleActionFlow.onError(true, R.string.no_bluetooth_access)
+                })
         }
+    }
+
+    private fun sendSupportEmail(errorCode: String?) {
+        navigator.sendSupportEmail(
+            this,
+            recipient = getString(R.string.support_email_recipient),
+            subject = getString(R.string.support_email_subject_helium_changing_frequency_failed),
+            body = getString(
+                R.string.support_email_body_helium_failed,
+                model.device.name,
+                errorCode ?: getString(R.string.unknown)
+            )
+        )
     }
 }

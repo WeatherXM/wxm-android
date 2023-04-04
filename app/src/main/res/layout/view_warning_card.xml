@@ -22,37 +22,43 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_warning"
+                android:src="@drawable/ic_warn"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/warning"
                 tools:ignore="ContentDescription" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/title"
-                style="@style/TextAppearance.WeatherXM.MaterialCard.Messages.Title"
+            <LinearLayout
+                android:id="@+id/textContainers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/margin_normal"
                 android:layout_marginEnd="@dimen/margin_normal"
+                android:orientation="vertical"
                 app:layout_constraintEnd_toStartOf="@id/closeButton"
                 app:layout_constraintStart_toEndOf="@id/icon"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Warning title here." />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/message"
-                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:autoLink="all"
-                app:layout_constraintEnd_toEndOf="@id/title"
-                app:layout_constraintStart_toStartOf="@id/title"
-                app:layout_constraintTop_toBottomOf="@id/title"
-                tools:text="Warning message here." />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/title"
+                    style="@style/TextAppearance.WeatherXM.MaterialCard.Messages.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:layout_marginBottom="@dimen/margin_normal"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Warning title here." />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/message"
+                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoLink="all"
+                    app:layout_constraintTop_toBottomOf="@id/title"
+                    tools:text="Warning message here." />
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/action"
@@ -62,8 +68,8 @@
                 android:layout_marginBottom="@dimen/margin_normal"
                 android:paddingHorizontal="0dp"
                 android:visibility="gone"
-                app:layout_constraintStart_toStartOf="@id/title"
-                app:layout_constraintTop_toBottomOf="@id/message"
+                app:layout_constraintStart_toStartOf="@id/textContainers"
+                app:layout_constraintTop_toBottomOf="@id/textContainers"
                 tools:text="Do something"
                 tools:visibility="visible" />
 
@@ -74,9 +80,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@id/title"
-                app:layout_constraintStart_toStartOf="@id/title"
-                app:layout_constraintTop_toBottomOf="@id/message"
+                app:layout_constraintEnd_toEndOf="@id/textContainers"
+                app:layout_constraintStart_toStartOf="@id/textContainers"
+                app:layout_constraintTop_toBottomOf="@id/textContainers"
                 tools:text="Do something" />
 
             <com.google.android.material.button.MaterialButton

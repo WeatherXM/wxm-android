@@ -2,7 +2,6 @@ package com.weatherxm.ui.common
 
 import android.app.Activity
 import android.content.Context
-import android.text.Html
 import android.text.Editable
 import android.widget.Toast
 import androidx.annotation.IntDef
@@ -15,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.tabs.TabLayout
+import java.util.Locale
 
 @IntDef(value = [Toast.LENGTH_SHORT, Toast.LENGTH_LONG])
 @Retention(AnnotationRetention.SOURCE)
@@ -100,3 +100,20 @@ fun Editable?.unmask(): String = this.toString().unmask()
  * Remove colon ":" character from Serial Number text
  */
 fun String.unmask(): String = this.toString().replace(":", "")
+
+/**
+ * hello world ---> Hello World
+ */
+fun String.capitalizeWords(): String {
+    return split(" ").joinToString(" ") { it.capitalized() }
+}
+
+fun String.capitalized(): String {
+    return this.replaceFirstChar {
+        if (it.isLowerCase()) {
+            it.titlecase(Locale.getDefault())
+        } else {
+            it.toString()
+        }
+    }
+}

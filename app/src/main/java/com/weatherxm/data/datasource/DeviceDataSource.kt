@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.handleErrorWith
 import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceClaiming
 import com.weatherxm.data.Device
+import com.weatherxm.data.DeviceInfo
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 import com.weatherxm.data.map
@@ -27,7 +28,8 @@ interface DeviceDataSource {
 
     suspend fun setFriendlyName(deviceId: String, friendlyName: String): Either<Failure, Unit>
     suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit>
-    suspend fun deleteDevice(serialNumber: String): Either<Failure, Unit>
+    suspend fun removeDevice(serialNumber: String): Either<Failure, Unit>
+    suspend fun getDeviceInfo(deviceId: String): Either<Failure, DeviceInfo>
 }
 
 class DeviceDataSourceImpl(private val apiService: ApiService) : DeviceDataSource {
@@ -75,7 +77,11 @@ class DeviceDataSourceImpl(private val apiService: ApiService) : DeviceDataSourc
         return apiService.clearFriendlyName(deviceId).map()
     }
 
-    override suspend fun deleteDevice(serialNumber: String): Either<Failure, Unit> {
-        return apiService.deleteDevice(DeleteDeviceBody(serialNumber)).map()
+    override suspend fun removeDevice(serialNumber: String): Either<Failure, Unit> {
+        return apiService.removeDevice(DeleteDeviceBody(serialNumber)).map()
+    }
+
+    override suspend fun getDeviceInfo(deviceId: String): Either<Failure, DeviceInfo> {
+        return apiService.getUserDeviceInfo(deviceId).map()
     }
 }

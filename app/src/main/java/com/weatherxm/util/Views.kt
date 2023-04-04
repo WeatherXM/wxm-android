@@ -46,7 +46,7 @@ fun EditText.clear() {
 }
 
 fun ImageView.setWarningDrawable(context: Context) {
-    val drawable = getDrawable(resources, R.drawable.ic_warning, context.theme)
+    val drawable = getDrawable(resources, R.drawable.ic_warn, context.theme)
     drawable?.setTint(getColor(resources, R.color.warning, context.theme))
     this.setImageDrawable(drawable)
 }

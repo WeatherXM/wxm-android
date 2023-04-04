@@ -275,8 +275,62 @@ data class PublicHex(
     val polygon: List<Location>,
 ) : Parcelable
 
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceInfo(
+    val name: String,
+    @Json(name = "claimed_at")
+    val claimedAt: ZonedDateTime?,
+    val gateway: Gateway?,
+    @Json(name = "weather_station")
+    val weatherStation: WeatherStation?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class Gateway(
+    val model: String?,
+    val firmware: Firmware?,
+    @Json(name = "last_activity")
+    val lastActivity: ZonedDateTime?,
+    @Json(name = "serial_number")
+    val serialNumber: String?,
+    @Json(name = "gps_sats")
+    val gpsSats: String?,
+    @Json(name = "wifi_rssi")
+    val wifiRssi: String?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class WeatherStation(
+    val model: String?,
+    val firmware: Firmware?,
+    @Json(name = "last_activity")
+    val lastActivity: ZonedDateTime?,
+    @Json(name = "dev_eui")
+    val devEUI: String?,
+    @Json(name = "hw_version")
+    val hwVersion: String?,
+    @Json(name = "last_hs_name")
+    val lastHotspot: String?,
+    @Json(name = "last_tx_rssi")
+    val lastTxRssi: String?,
+    @Json(name = "bat_state")
+    val batteryState: BatteryState?
+) : Parcelable
+
 enum class DeviceProfile {
     M5,
     Helium
+}
+
+@Suppress("EnumNaming")
+enum class BatteryState {
+    low,
+    ok
 }
 

@@ -1,0 +1,18 @@
+{
+    "name": "Office #14",
+    "claimed_at": "2023-03-21T16:37:37+02:00",
+    "gateway": {
+        "model": "WG1000",
+        "serial_number": "01:23:C9:8B:DD:D0:02:40:01",
+        "firmware": {
+            "current": "0.3.34",
+            "assigned": "0.3.13"
+        },
+        "gps_sats": "3",
+        "last_activity": "2023-03-20T18:20:30+02:00"
+    },
+    "weather_station": {
+        "model": "WS1000",
+        "last_activity": "2100-08-02T10:48:22+03:00"
+    }
+}

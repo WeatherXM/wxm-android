@@ -111,6 +111,12 @@ data class ScannedDevice(
 }
 
 @Keep
+data class FrequencyState(
+    val country: String?,
+    val frequencies: List<String>
+)
+
+@Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class UserDevice(

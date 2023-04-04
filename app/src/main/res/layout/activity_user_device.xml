@@ -112,8 +112,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 app:layout_collapseMode="pin"
-                app:menu="@menu/device_detail_menu"
-                app:navigationIcon="@drawable/ic_back" />
+                app:navigationIcon="@drawable/ic_back">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/settingsBtn"
+                    style="@style/Widget.WeatherXM.IconButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    app:icon="@drawable/ic_settings"
+                    app:iconTint="@color/colorPrimary" />
+            </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

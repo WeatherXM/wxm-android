@@ -88,7 +88,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:ignore="ContentDescription"
-                            tools:src="@drawable/ic_warning" />
+                            tools:src="@drawable/ic_warn" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/infoTitle"

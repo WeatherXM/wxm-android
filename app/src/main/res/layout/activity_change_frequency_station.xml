@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@color/colorSurface"
+    android:fitsSystemWindows="false">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/change_frequency" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <com.weatherxm.ui.widget.BleActionFlowView
+            android:id="@+id/bleActionFlow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin_normal"
+            android:visibility="gone"
+            app:ble_action_flow_first_step="@string/connect_to_station"
+            app:ble_action_flow_second_step="@string/changing_frequency" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/frequencySelectorContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:paddingHorizontal="@dimen/padding_large"
+                android:paddingTop="@dimen/padding_normal"
+                app:layout_constraintBottom_toTopOf="@id/toggleButtonsContainer"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintVertical_chainStyle="packed">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/description"
+                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/set_frequency_desc"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/frequencyTitle"
+                        style="@style/TextAppearance.WeatherXM.TextInput.Title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:text="@string/frequency"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@id/description" />
+
+                    <Spinner
+                        android:id="@+id/frequenciesSelector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="@dimen/padding_large"
+                        app:layout_constraintTop_toBottomOf="@id/frequencyTitle" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/frequencySelectedText"
+                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:text="@string/changing_frequency_selected_text"
+                        app:layout_constraintTop_toBottomOf="@id/frequenciesSelector" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/toggleButtonsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorSurface"
+                android:elevation="@dimen/elevation_normal"
+                android:padding="@dimen/padding_large"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/confirmFrequencyToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/confirmFrequencyText"
+                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_normal"
+                    android:text="@string/set_frequency_toggle_desc"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/confirmFrequencyToggle"
+                    app:layout_constraintTop_toTopOf="@id/confirmFrequencyToggle" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    app:layout_constraintTop_toBottomOf="@id/confirmFrequencyText">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/backButton"
+                        style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_normal"
+                        android:layout_weight="1"
+                        android:text="@string/action_back"
+                        android:textAllCaps="false"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/changeFrequencyBtn"
+                        style="@style/Widget.WeatherXM.Button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:text="@string/action_change"
+                        android:textAllCaps="false"
+                        app:layout_constraintBottom_toBottomOf="parent" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
