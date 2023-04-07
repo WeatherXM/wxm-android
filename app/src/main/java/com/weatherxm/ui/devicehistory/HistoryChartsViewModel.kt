@@ -13,6 +13,7 @@ import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.util.DateTimeHelper.getDateRangeFromToday
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
+import com.weatherxm.util.isToday
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -42,6 +43,20 @@ class HistoryChartsViewModel(
     fun charts(): LiveData<Resource<HistoryCharts>> = charts
 
     private var updateWeatherHistoryJob: Job? = null
+    private var currentDateShown: LocalDate = LocalDate.now()
+
+    fun isTodayShown(): Boolean {
+        return currentDateShown.isToday()
+    }
+
+    fun getLatestChartEntry(lineChartData: LineChartData): Float {
+        val firstNaN = lineChartData.entries.firstOrNull { it.y.isNaN() }?.x
+        return if (firstNaN != null && firstNaN > 0F) {
+            firstNaN - 1
+        } else {
+            0F
+        }
+    }
 
     private fun fetchWeatherHistory(date: LocalDate, forceUpdate: Boolean = false) {
         // If this the first data update, force a network update
@@ -58,14 +73,14 @@ class HistoryChartsViewModel(
             charts.postValue(Resource.loading())
 
             Timber.d("Fetching data for $date [forced=$shouldForceUpdate]")
-
+            currentDateShown = date
             // Fetch fresh data
             historyUseCase.getWeatherHistory(device, date, shouldForceUpdate)
-                .tap {
+                .onRight {
                     Timber.d("Returning history charts for [${it.date}]")
                     charts.postValue(Resource.success(it))
                 }
-                .tapLeft {
+                .onLeft {
                     charts.postValue(
                         Resource.error(
                             resHelper.getString(

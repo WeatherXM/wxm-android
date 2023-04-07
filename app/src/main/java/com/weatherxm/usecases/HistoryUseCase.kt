@@ -3,7 +3,6 @@ package com.weatherxm.usecases
 import android.content.Context
 import android.graphics.drawable.Drawable
 import arrow.core.Either
-import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.weatherxm.R
 import com.weatherxm.data.Device
@@ -14,7 +13,6 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
-import com.weatherxm.ui.devicehistory.BarChartData
 import com.weatherxm.ui.devicehistory.HistoryCharts
 import com.weatherxm.ui.devicehistory.LineChartData
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
@@ -67,7 +65,7 @@ class HistoryUseCaseImpl(
         val windDirectionEntries = mutableListOf<Entry>()
         val humidityEntries = mutableListOf<Entry>()
         val pressureEntries = mutableListOf<Entry>()
-        val uvIndexEntries = mutableListOf<BarEntry>()
+        val uvEntries = mutableListOf<Entry>()
         val times = mutableListOf<String>()
         var temperatureFound: Boolean
         var feelsLikeFound: Boolean
@@ -78,7 +76,7 @@ class HistoryUseCaseImpl(
         var windDirectionFound: Boolean
         var pressureFound: Boolean
         var humidityFound: Boolean
-        var uvIndexFound: Boolean
+        var uvFound: Boolean
 
         LocalDateTimeRange(
             date.atStartOfDay(),
@@ -93,7 +91,7 @@ class HistoryUseCaseImpl(
             windDirectionFound = false
             pressureFound = false
             humidityFound = false
-            uvIndexFound = false
+            uvFound = false
             val counter = i.toFloat()
 
             // Set showMinutes12Format as false
@@ -168,8 +166,8 @@ class HistoryUseCaseImpl(
                     }
 
                     hourlyWeather.uvIndex?.let {
-                        uvIndexEntries.add(BarEntry(counter, it.toFloat()))
-                        uvIndexFound = true
+                        uvEntries.add(Entry(counter, it.toFloat()))
+                        uvFound = true
                     }
                 }
             }
@@ -183,7 +181,7 @@ class HistoryUseCaseImpl(
             if (!windDirectionFound) windDirectionEntries.add(Entry(counter, Float.NaN))
             if (!pressureFound) pressureEntries.add(Entry(counter, Float.NaN))
             if (!humidityFound) humidityEntries.add(Entry(counter, Float.NaN))
-            if (!uvIndexFound) uvIndexEntries.add(BarEntry(counter, Float.MIN_VALUE))
+            if (!uvFound) uvEntries.add(Entry(counter, Float.NaN))
         }
 
         return HistoryCharts(
@@ -260,11 +258,11 @@ class HistoryUseCaseImpl(
                 times,
                 pressureEntries
             ),
-            uvIndex = BarChartData(
+            uv = LineChartData(
                 resHelper.getString(R.string.uv_index),
                 resHelper.getString(R.string.uv_index_unit),
                 times,
-                uvIndexEntries
+                uvEntries
             )
         )
     }

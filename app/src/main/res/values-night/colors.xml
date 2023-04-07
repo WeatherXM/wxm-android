@@ -35,6 +35,7 @@
     <color name="date_tab_selected_background">@color/dark_dark2</color>
 
     <!-- History Chart -->
+    <color name="chart_title_background">@color/dark_dark2</color>
     <color name="chart_popup_background">@color/dark_darkest</color>
     <color name="chart_popup_text_color">@color/dark_top</color>
     <color name="chart_secondary_line">@color/dark_darkest</color>

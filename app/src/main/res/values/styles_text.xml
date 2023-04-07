@@ -172,9 +172,8 @@
         Charts
     -->
     <style name="TextAppearance.WeatherXM.Chart.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="TextAppearance.WeatherXM.Chart.MarkerView.Time" parent="TextAppearance.WeatherXM.Default.BodyLarge">

@@ -305,6 +305,13 @@
     <string name="history">History</string>
     <string name="see_historical_charts">See Historical Charts</string>
     <string name="empty_history_day_title">Oops! No weather data.</string>
+    <string name="daily_precip">Daily Precip.</string>
+    <string name="precip_rate">Precip. Rate</string>
+    <string name="daily">Daily</string>
+    <string name="rate">Rate</string>
+    <string name="gust">Gust</string>
+    <string name="speed">Speed</string>
+    <string name="highlight_data_divider">/</string>
     <string name="empty_history_day_subtitle">No weather data found for your device for this day.</string>
     <string name="empty_history_day_subtitle_with_day">No weather data found for your device for %s.</string>
 

@@ -30,9 +30,19 @@
     </declare-styleable>
     <declare-styleable name="LineChartView">
         <attr name="line_chart_title" format="string" />
+        <attr name="line_chart_title_icon" format="reference" />
+        <attr name="line_chart_primary_line_name" format="string" />
+        <attr name="line_chart_secondary_line_name" format="string" />
+        <attr name="line_chart_primary_highlight_name" format="string" />
+        <attr name="line_chart_secondary_highlight_name" format="string" />
     </declare-styleable>
     <declare-styleable name="BarChartView">
         <attr name="bar_chart_title" format="string" />
+        <attr name="bar_chart_title_icon" format="reference" />
+        <attr name="bar_chart_primary_line_name" format="string" />
+        <attr name="bar_chart_secondary_line_name" format="string" />
+        <attr name="bar_chart_primary_highlight_name" format="string" />
+        <attr name="bar_chart_secondary_highlight_name" format="string" />
     </declare-styleable>
     <declare-styleable name="WeatherDataView">
         <attr name="weather_data_title" format="string" />

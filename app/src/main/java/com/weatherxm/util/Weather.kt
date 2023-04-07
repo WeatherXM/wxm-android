@@ -56,7 +56,8 @@ object Weather : KoinComponent {
         value: Float?,
         decimals: Int = 0,
         fullUnit: Boolean = true,
-        includeUnit: Boolean = true
+        includeUnit: Boolean = true,
+        ignoreConversion: Boolean = false
     ): String {
         val unit = if (fullUnit && includeUnit) {
             getPreferredUnit(
@@ -73,15 +74,22 @@ object Weather : KoinComponent {
             return "$EMPTY_VALUE$unit"
         }
 
-        val valueToReturn = convertTemp(value, decimals)
-
-        return "$valueToReturn$unit"
+        return if (ignoreConversion) {
+            if (decimals == 0) {
+                "${roundToInt(value)}$unit"
+            } else {
+                "${roundToDecimals(value)}$unit"
+            }
+        } else {
+            "${convertTemp(value, decimals)}$unit"
+        }
     }
 
     fun getFormattedPrecipitation(
         value: Float?,
         isRainRate: Boolean = true,
-        includeUnit: Boolean = true
+        includeUnit: Boolean = true,
+        ignoreConversion: Boolean = false
     ): String {
         val unit = if (includeUnit) {
             getPrecipitationPreferredUnit(isRainRate)
@@ -93,9 +101,11 @@ object Weather : KoinComponent {
             return "$EMPTY_VALUE$unit"
         }
 
-        val valueToReturn = convertPrecipitation(value)
-
-        return "$valueToReturn$unit"
+        return if (ignoreConversion) {
+            "${roundToDecimals(value, getDecimalsPrecipitation())}$unit"
+        } else {
+            "${convertPrecipitation(value)}$unit"
+        }
     }
 
     fun getFormattedPrecipitationProbability(value: Int?, includeUnit: Boolean = true): String {
@@ -139,7 +149,11 @@ object Weather : KoinComponent {
         return "$value$unit"
     }
 
-    fun getFormattedPressure(value: Float?, includeUnit: Boolean = true): String {
+    fun getFormattedPressure(
+        value: Float?,
+        includeUnit: Boolean = true,
+        ignoreConversion: Boolean = false
+    ): String {
         val unit = if (includeUnit) {
             getPreferredUnit(
                 resHelper.getString(KEY_PRESSURE),
@@ -153,12 +167,18 @@ object Weather : KoinComponent {
             return "$EMPTY_VALUE$unit"
         }
 
-        val valueToReturn = convertPressure(value)
-
-        return "$valueToReturn$unit"
+        return if (ignoreConversion) {
+            "${roundToDecimals(value, getDecimalsPressure())}$unit"
+        } else {
+            "${convertPressure(value)}$unit"
+        }
     }
 
-    private fun getFormattedWindSpeed(value: Float?, includeUnit: Boolean = true): String {
+    private fun getFormattedWindSpeed(
+        value: Float?,
+        includeUnit: Boolean = true,
+        ignoreConversion: Boolean = false
+    ): String {
         val unit = if (includeUnit) {
             getPreferredUnit(
                 resHelper.getString(KEY_WIND),
@@ -171,9 +191,16 @@ object Weather : KoinComponent {
             return "$EMPTY_VALUE$unit"
         }
 
-        val valueToReturn = convertWindSpeed(value)
-
-        return "$valueToReturn$unit"
+        return if (ignoreConversion) {
+            val beaufortUsed = unit == resHelper.getString(R.string.wind_speed_beaufort)
+            if (beaufortUsed) {
+                "${roundToInt(value)}$unit"
+            } else {
+                "${roundToDecimals(value)}$unit"
+            }
+        } else {
+            "${convertWindSpeed(value)}$unit"
+        }
     }
 
     fun getFormattedWindDirection(value: Int): String {
@@ -191,12 +218,12 @@ object Weather : KoinComponent {
     fun getFormattedWind(
         windSpeed: Float?,
         windDirection: Int?,
-        includeUnits: Boolean = true
+        includeUnits: Boolean = true,
+        ignoreConversion: Boolean = false
     ): String {
         val windUnit = if (includeUnits) {
             getPreferredUnit(
-                resHelper.getString(KEY_WIND),
-                resHelper.getString(R.string.wind_speed_ms)
+                resHelper.getString(KEY_WIND), resHelper.getString(R.string.wind_speed_ms)
             )
         } else {
             ""
@@ -204,9 +231,11 @@ object Weather : KoinComponent {
 
         return if (windSpeed != null && windDirection != null) {
             if (includeUnits) {
-                "${getFormattedWindSpeed(windSpeed)} ${getFormattedWindDirection(windDirection)}"
+                "${getFormattedWindSpeed(windSpeed, ignoreConversion = ignoreConversion)} ${
+                    getFormattedWindDirection(windDirection)
+                }"
             } else {
-                getFormattedWindSpeed(windSpeed, false)
+                getFormattedWindSpeed(windSpeed, false, ignoreConversion = ignoreConversion)
             }
         } else "$EMPTY_VALUE$windUnit"
     }
@@ -352,7 +381,7 @@ object Weather : KoinComponent {
         }
     }
 
-    fun getDecimalsPressure(): Int {
+    private fun getDecimalsPressure(): Int {
         val unit = getPreferredUnit(
             resHelper.getString(KEY_PRESSURE), resHelper.getString(R.string.pressure_hpa)
         )

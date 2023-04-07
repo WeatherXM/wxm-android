@@ -3,40 +3,188 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:animateLayoutChanges="true"
-    tools:layout_height="200dp"
     tools:orientation="vertical"
     tools:parentTag="LinearLayout">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/chart_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/chart_title_background"
+        app:cardElevation="@dimen/elevation_small"
+        app:contentPadding="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/chart_title"
-                style="@style/TextAppearance.WeatherXM.Chart.Title"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/topBarContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="Chart Title" />
+                app:layout_constraintTop_toTopOf="parent">
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/chart"
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/chart_title"
+                    style="@style/TextAppearance.WeatherXM.Chart.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_normal"
+                    android:drawablePadding="@dimen/padding_extra_small"
+                    android:gravity="center_vertical"
+                    app:drawableTint="@color/colorOnSurface"
+                    app:layout_constraintEnd_toStartOf="@id/primaryLineName"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:drawableStart="@drawable/ic_weather_precipitation"
+                    tools:text="Chart Title" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/primaryLineName"
+                    style="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_normal"
+                    app:layout_constraintEnd_toStartOf="@id/secondaryLineName"
+                    app:layout_constraintTop_toTopOf="@id/chart_title"
+                    tools:text="Temperature" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/primaryLineColor"
+                    style="@style/Widget.WeatherXM.Chip.Status"
+                    android:layout_width="40dp"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    app:chipBackgroundColor="@color/colorPrimary"
+                    app:layout_constraintStart_toStartOf="@id/primaryLineName"
+                    app:layout_constraintTop_toBottomOf="@id/primaryLineName" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/secondaryLineName"
+                    style="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Feels Like" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/secondaryLineColor"
+                    style="@style/Widget.WeatherXM.Chip.Status"
+                    android:layout_width="40dp"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="@dimen/margin_extra_small"
+                    app:chipBackgroundColor="@color/chart_secondary_line"
+                    app:layout_constraintStart_toStartOf="@id/secondaryLineName"
+                    app:layout_constraintTop_toBottomOf="@id/secondaryLineName" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/chartContainer"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
-                android:layout_weight="1" />
+                app:contentPadding="@dimen/padding_normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/topBarContainer">
 
-        </LinearLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/highlightContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="@color/chart_title_background"
+                        app:cardCornerRadius="@dimen/card_corner_radius_small"
+                        app:contentPadding="@dimen/padding_small"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/time"
+                                style="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/margin_extra_small"
+                                android:textColor="@color/colorPrimaryVariant"
+                                android:textStyle="bold"
+                                tools:text="12 am" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/primaryDataName"
+                                style="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/margin_extra_small"
+                                android:textColor="@color/colorPrimaryVariant"
+                                tools:text="Speed:" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/primaryDataValue"
+                                style="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/margin_extra_small"
+                                android:textColor="@color/colorPrimaryVariant"
+                                android:textStyle="bold"
+                                tools:text="4 km/h SSW" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/divider"
+                                style="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/margin_extra_small"
+                                android:text="@string/highlight_data_divider"
+                                android:textColor="@color/colorPrimaryVariant" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/secondaryDataName"
+                                style="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/margin_extra_small"
+                                android:textColor="@color/colorPrimaryVariant"
+                                tools:text="Gust:" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/secondaryDataValue"
+                                style="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/margin_extra_small"
+                                android:textColor="@color/colorPrimaryVariant"
+                                android:textStyle="bold"
+                                tools:text="40 km/h SSW" />
+
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/highlightContainer" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
