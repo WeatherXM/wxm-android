@@ -198,28 +198,28 @@ dependencies {
     androidTestImplementation "androidx.test:rules:1.5.0"
 
     // Desugaring for Java8 feature support
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.2"
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.3"
 
     // Android Jetpack libraries
-    implementation "androidx.activity:activity-ktx:1.6.1"
+    implementation "androidx.activity:activity-ktx:1.7.0"
     implementation "androidx.annotation:annotation:1.6.0"
     implementation "androidx.appcompat:appcompat:1.6.1"
     implementation "androidx.browser:browser:1.5.0"
     implementation "androidx.collection:collection-ktx:1.2.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
-    implementation "androidx.core:core-ktx:1.9.0"
+    implementation "androidx.core:core-ktx:1.10.0"
     implementation "androidx.core:core-splashscreen:1.0.0"
-    implementation "androidx.fragment:fragment-ktx:1.5.5"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.5.1"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
+    implementation "androidx.fragment:fragment-ktx:1.5.6"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
     implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
     implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
     implementation "androidx.paging:paging-runtime-ktx:3.1.1"
     implementation "androidx.preference:preference-ktx:1.2.0"
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
-    implementation "androidx.room:room-runtime:2.5.0"
-    kapt "androidx.room:room-compiler:2.5.0"
+    implementation "androidx.room:room-runtime:2.5.1"
+    kapt "androidx.room:room-compiler:2.5.1"
     implementation "androidx.security:security-crypto:1.0.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.viewpager2:viewpager2:1.0.0"
@@ -253,7 +253,7 @@ dependencies {
     implementation "com.auth0.android:jwtdecode:2.0.2"
 
     // Animations
-    implementation "com.airbnb.android:lottie:5.2.0"
+    implementation "com.airbnb.android:lottie:6.0.0"
 
     // Charts
     implementation "com.github.PhilJay:MPAndroidChart:v3.1.0"
@@ -262,7 +262,7 @@ dependencies {
     implementation "com.github.fondesa:kpermissions:3.4.0"
 
     // Dependency Injection
-    implementation "io.insert-koin:koin-android:3.3.3"
+    implementation "io.insert-koin:koin-android:3.4.0"
 
     // Data types and more
     implementation platform("io.arrow-kt:arrow-stack:1.1.5")
@@ -270,14 +270,14 @@ dependencies {
     implementation "io.arrow-kt:arrow-fx-coroutines"
 
     // Mapbox
-    implementation "com.mapbox.maps:android:10.10.2"
-    implementation "com.mapbox.search:mapbox-search-android:1.0.0-rc.1"
+    implementation "com.mapbox.maps:android:10.12.2"
+    implementation "com.mapbox.search:mapbox-search-android:1.0.0-rc.2"
 
     // Insetter
     implementation "dev.chrisbanes.insetter:insetter:0.6.1"
 
     // Import the Firebase BoM
-    implementation platform("com.google.firebase:firebase-bom:31.2.2")
+    implementation platform("com.google.firebase:firebase-bom:31.4.0")
     implementation "com.google.firebase:firebase-crashlytics-ktx"
     implementation "com.google.firebase:firebase-perf-ktx"
     implementation "com.google.firebase:firebase-config-ktx"
@@ -297,7 +297,7 @@ dependencies {
     implementation "me.saket:better-link-movement-method:2.2.0"
 
     // BLE Scanning and Communication
-    implementation "com.juul.kable:core:0.21.0"
+    implementation "com.juul.kable:core:0.22.0"
     implementation "com.github.espressif:esp-idf-provisioning-android:lib-2.1.1"
     implementation "no.nordicsemi.android:dfu:2.3.0"
 }
