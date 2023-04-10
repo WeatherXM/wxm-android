@@ -85,23 +85,27 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 }
             )
 
-            binding.status.setCardBackgroundColor(
-                itemView.context.getColor(
-                    when (item.device.attributes?.isActive) {
-                        true -> {
-                            binding.statusIcon.setColor(R.color.success)
-                            R.color.successTint
+            with(itemView.context) {
+                binding.status.setCardBackgroundColor(
+                    getColor(
+                        when (item.device.attributes?.isActive) {
+                            true -> {
+                                binding.statusIcon.setColor(R.color.success)
+                                binding.status.strokeColor = getColor(R.color.success)
+                                R.color.successTint
+                            }
+                            false -> {
+                                binding.statusIcon.setColor(R.color.error)
+                                binding.status.strokeColor = getColor(R.color.error)
+                                R.color.errorTint
+                            }
+                            null -> {
+                                R.color.midGrey
+                            }
                         }
-                        false -> {
-                            binding.statusIcon.setColor(R.color.error)
-                            R.color.errorTint
-                        }
-                        null -> {
-                            R.color.midGrey
-                        }
-                    }
+                    )
                 )
-            )
+            }
         }
 
         private fun setAlerts(item: UserDevice) {

@@ -184,7 +184,7 @@ data class Transaction(
         * Have this very small number to use when a day is null or zero,
         * in order to have a bar in the chart in the token card view
          */
-        const val VERY_SMALL_NUMBER_FOR_CHART = 0.001F
+        const val VERY_SMALL_NUMBER_FOR_CHART = 0.1F
     }
 }
 
@@ -223,13 +223,17 @@ data class HourlyWeather(
     val uvIndex: Int?,
     @Json(name = "cloud_cover")
     val cloudCover: Int?,
-    val pressure: Float?
+    val pressure: Float?,
+    @Json(name = "dew_point")
+    val dewPoint: Float?,
+    @Json(name = "solar_irradiance")
+    val solarIrradiance: Float?
 ) : Parcelable {
     fun isEmpty(): Boolean {
         return precipitation == null && temperature == null && feelsLike == null
             && windDirection == null && humidity == null && windSpeed == null && windGust == null
             && icon.isNullOrEmpty() && precipProbability == null && uvIndex == null
-            && cloudCover == null && pressure == null
+            && cloudCover == null && pressure == null && dewPoint == null && solarIrradiance == null
     }
 }
 

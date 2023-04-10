@@ -92,12 +92,13 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/infoTitle"
-                            style="@style/TextAppearance.WeatherXM.BluetoothScanning.InfoTitle"
+                            style="@style/TextAppearance.WeatherXM.TitleSmall"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_normal"
                             android:layout_marginBottom="@dimen/margin_normal"
                             android:gravity="center"
+                            android:textStyle="bold"
                             app:layout_constraintBottom_toTopOf="@id/infoSubtitle"
                             app:layout_constraintTop_toBottomOf="@id/infoIcon"
                             tools:text="@string/no_devices_found" />

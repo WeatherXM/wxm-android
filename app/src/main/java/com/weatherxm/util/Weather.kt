@@ -16,7 +16,7 @@ import java.math.BigDecimal
 @Suppress("TooManyFunctions")
 object Weather : KoinComponent {
 
-    private const val EMPTY_VALUE = "?"
+    const val EMPTY_VALUE = "?"
     private val resHelper: ResourcesHelper by inject()
     private val sharedPref: SharedPreferences by inject()
 
@@ -145,7 +145,6 @@ object Weather : KoinComponent {
             return "$EMPTY_VALUE$unit"
         }
 
-
         return "$value$unit"
     }
 
@@ -172,6 +171,20 @@ object Weather : KoinComponent {
         } else {
             "${convertPressure(value)}$unit"
         }
+    }
+
+    fun getFormattedSolarRadiation(value: Float?, includeUnit: Boolean = true): String {
+        val unit = if (includeUnit) {
+            resHelper.getString(R.string.solar_radiation_unit)
+        } else {
+            ""
+        }
+
+        if (value == null) {
+            return "$EMPTY_VALUE$unit"
+        }
+
+        return "${roundToDecimals(value, 1)}"
     }
 
     private fun getFormattedWindSpeed(

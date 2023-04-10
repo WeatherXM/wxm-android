@@ -1,10 +1,5 @@
 <resources>
 
-    <style name="ThemeOverlay.WeatherXM.TabLayout" parent="Widget.Material3.TabLayout">
-        <item name="colorSurface">@color/transparent</item>
-        <item name="android:background">@color/transparent</item>
-    </style>
-
     <style name="ThemeOverlay.WeatherXM.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
         <item name="colorSurface">@color/colorSurfaceVariant</item>
         <item name="bottomSheetStyle">@style/Widget.WeatherXM.BottomSheet.Dialog</item>
@@ -21,10 +16,18 @@
     </style>
 
     <style name="ThemeOverlay.WeatherXM.AlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="materialAlertDialogTitleTextStyle">@style/Widget.WeatherXM.AlertDialog.Title</item>
-        <item name="materialAlertDialogBodyTextStyle">@style/Widget.WeatherXM.AlertDialog.Body</item>
-        <item name="buttonBarPositiveButtonStyle">@style/Widget.WeatherXM.AlertDialog.Button.Positive</item>
-        <item name="buttonBarNegativeButtonStyle">@style/Widget.WeatherXM.AlertDialog.Button.Negative</item>
-        <item name="buttonBarNeutralButtonStyle">@style/Widget.WeatherXM.AlertDialog.Button.Neutral</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/Widget.WeatherXM.AlertDialog.Title
+        </item>
+        <item name="materialAlertDialogBodyTextStyle">@style/Widget.WeatherXM.AlertDialog.Body
+        </item>
+        <item name="buttonBarPositiveButtonStyle">
+            @style/Widget.WeatherXM.AlertDialog.Button.Positive
+        </item>
+        <item name="buttonBarNegativeButtonStyle">
+            @style/Widget.WeatherXM.AlertDialog.Button.Negative
+        </item>
+        <item name="buttonBarNeutralButtonStyle">
+            @style/Widget.WeatherXM.AlertDialog.Button.Neutral
+        </item>
     </style>
 </resources>

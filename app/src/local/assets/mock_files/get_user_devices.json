@@ -86,6 +86,7 @@
         "current_weather": {
             "timestamp": "2022-01-13T22:00:00+02:00",
             "precipitation": 0,
+            "precipitation_accumulated": 14.10000022,
             "temperature": -38.8,
             "feels_like": 16.0,
             "wind_direction": 321,

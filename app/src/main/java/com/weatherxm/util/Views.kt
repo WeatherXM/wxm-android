@@ -7,6 +7,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
@@ -22,12 +24,14 @@ import androidx.core.content.res.ResourcesCompat.getDrawable
 import androidx.core.text.HtmlCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.components.MarkerView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
 import dev.chrisbanes.insetter.applyInsetter
+import kotlin.math.abs
 
 @Suppress("EmptyFunctionBlock")
 fun EditText.onTextChanged(callback: (String) -> Unit) {
@@ -163,4 +167,40 @@ fun MarkerView.customDraw(canvas: Canvas, posx: Float, posy: Float) {
 private fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+// https://stackoverflow.com/a/46165723/5403137
+class HorizontalScrollGestureListener(
+    private val recyclerView: RecyclerView
+) : GestureDetector.SimpleOnGestureListener() {
+    companion object {
+        const val SCROLL_Y = 10
+    }
+
+    override fun onDown(e: MotionEvent): Boolean {
+        // Prevent ViewPager from intercepting touch events as soon as a DOWN is detected.
+        // If we don't do this the next MOVE event may trigger the ViewPager to switch
+        // tabs before this view can intercept the event.
+        recyclerView.requestDisallowInterceptTouchEvent(true)
+        return super.onDown(e)
+    }
+
+    override fun onScroll(
+        e1: MotionEvent,
+        e2: MotionEvent,
+        distanceX: Float,
+        distanceY: Float
+    ): Boolean {
+        if (abs(distanceX) > abs(distanceY)) {
+            // Detected a horizontal scroll, prevent the viewpager from switching tabs
+            recyclerView.requestDisallowInterceptTouchEvent(true)
+        } else if (abs(distanceY) > SCROLL_Y) {
+            // Detected a vertical scroll of large enough magnitude so allow the the event
+            // to propagate to ancestor views to allow vertical scrolling.  Without the buffer
+            // a tab swipe would be triggered while holding finger still while glow effect was
+            // visible.
+            recyclerView.requestDisallowInterceptTouchEvent(false)
+        }
+        return super.onScroll(e1, e2, distanceX, distanceY)
+    }
 }

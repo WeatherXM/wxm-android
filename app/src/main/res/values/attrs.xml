@@ -47,10 +47,14 @@
     <declare-styleable name="WeatherDataView">
         <attr name="weather_data_title" format="string" />
         <attr name="weather_data_icon" format="reference" />
+        <attr name="weather_data_description" format="string" />
     </declare-styleable>
     <declare-styleable name="BleActionFlowView">
         <attr name="ble_action_flow_first_step" format="string" />
         <attr name="ble_action_flow_second_step" format="string" />
         <attr name="ble_action_flow_third_step" format="string" />
+    </declare-styleable>
+    <declare-styleable name="CompactWeatherDataView">
+        <attr name="compact_weather_data_icon" format="reference" />
     </declare-styleable>
 </resources>

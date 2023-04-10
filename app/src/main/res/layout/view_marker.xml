@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.WeatherXM.MaterialCard.ChartMarker"
     android:layout_width="wrap_content"
@@ -10,10 +11,11 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/addressContainer"
-        style="@style/Widget.WeatherXM.MaterialCard.AddressOnMap"
+        style="@style/Widget.WeatherXM.MaterialCard.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        app:cardElevation="@dimen/elevation_normal">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/address"

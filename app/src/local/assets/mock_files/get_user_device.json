@@ -3,6 +3,7 @@
     "name": "Weatherwise Wintergreen Stratocumulus",
     "label": null,
     "timezone": "Europe/Athens",
+    "profile": "Helium",
     "location": {
         "lat": 35.51622463589852,
         "lon": 24.01903666307378
@@ -80,6 +81,7 @@
     "current_weather": {
         "timestamp": "2022-01-13T22:00:00+02:00",
         "precipitation": 0.03,
+        "precipitation_accumulated": 14.10000022,
         "temperature": -108.8,
         "feels_like": 16.0,
         "wind_direction": 54,

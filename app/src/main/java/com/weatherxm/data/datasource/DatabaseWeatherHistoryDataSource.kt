@@ -41,6 +41,8 @@ class DatabaseWeatherHistoryDataSource(
                     uvIndex = it.uvIndex,
                     cloudCover = null,
                     pressure = it.pressure,
+                    dewPoint = it.dewPoint,
+                    solarIrradiance = it.solarIrradiance
                 )
             }
             .right()

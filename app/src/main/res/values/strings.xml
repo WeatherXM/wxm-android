@@ -29,6 +29,7 @@
     <string name="no">No</string>
     <string name="action_scan_qr">Scan QR Code</string>
     <string name="important_message">Important Message</string>
+    <string name="action_toggle_expand">Toggle Expand</string>
 
     <!-- Permissions -->
     <string name="permission_location_title">Access to your location</string>
@@ -72,6 +73,9 @@
     <string name="unknown_address">Unknown Address</string>
     <string name="no_data">No Data</string>
     <string name="no_data_message">We\’re unable to show updated station data. Please make sure your station is operational and connected to the internet.</string>
+    <string name="observations">Observations</string>
+    <string name="forecast">Forecast</string>
+    <string name="feels_like_with_value"><![CDATA[Feels Like <b>%s</b>]]></string>
     <string name="no_data_message_public_device">We\’re unable to show updated station data.</string>
 
     <!-- Update (Bluetooth OTA) Station -->
@@ -303,7 +307,7 @@
 
     <!-- Device History -->
     <string name="history">History</string>
-    <string name="see_historical_charts">See Historical Charts</string>
+    <string name="view_historical_data">View Historical Data</string>
     <string name="empty_history_day_title">Oops! No weather data.</string>
     <string name="daily_precip">Daily Precip.</string>
     <string name="precip_rate">Precip. Rate</string>

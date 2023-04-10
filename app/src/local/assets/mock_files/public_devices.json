@@ -2,6 +2,7 @@
     {
         "id": "003749c0-a8f5-11ec-900c-abdec1c57354",
         "name": "Best Gingerbread Horizon",
+        "profile": "Helium",
         "timezone": "Europe/Athens",
         "current_weather": {
             "timestamp": "2022-02-11T19:43:21+02:00",

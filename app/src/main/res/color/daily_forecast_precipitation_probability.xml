@@ -1,4 +1,0 @@
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/colorPrimaryVariant" android:state_activated="true" />
-    <item android:color="@color/colorOnSurfaceVariant" />
-</selector>

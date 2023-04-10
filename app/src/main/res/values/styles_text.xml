@@ -61,7 +61,7 @@
     <!--
         Devices List
     -->
-    <style name="TextAppearance.WeatherXM.Devices.List.LastSeen" parent="TextAppearance.WeatherXM.Default.BodyLarge">
+    <style name="TextAppearance.WeatherXM.Devices.List.LastSeen" parent="TextAppearance.WeatherXM.Default.BodyMedium">
         <item name="android:textColor">@color/colorOnSurfaceVariant</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
@@ -73,7 +73,7 @@
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.Devices.List.WeatherData.Unit" parent="TextAppearance.WeatherXM.Default.BodyMedium">
+    <style name="TextAppearance.WeatherXM.Devices.List.WeatherData.Unit" parent="TextAppearance.WeatherXM.Default.BodySmall">
         <item name="android:textColor">@color/darkGrey</item>
     </style>
 
@@ -83,80 +83,37 @@
     </style>
 
     <!--
-        Device Details
-    -->
-    <style name="TextAppearance.WeatherXM.Device.Details.Title" parent="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
-        <item name="android:textColor">@color/colorOnBackground</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Device.Details.Subtitle" parent="@style/TextAppearance.WeatherXM.Default.HeadlineSmall">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/colorOnBackground</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Device.Details.Address" parent="@style/TextAppearance.WeatherXM.Device.Details.Subtitle">
-        <item name="android:alpha">0.8</item>
-    </style>
-
-    <!--
         Weather Card
     -->
-    <style name="TextAppearance.WeatherXM.WeatherCard" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
-        <item name="android:textSize">18sp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.WeatherCard.Temperature" parent="TextAppearance.WeatherXM.WeatherCard">
-        <item name="autoSizeTextType">uniform</item>
-        <item name="autoSizeMaxTextSize">48sp</item>
-        <item name="autoSizeMinTextSize">24sp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.WeatherCard.Data" parent="TextAppearance.WeatherXM.WeatherCard">
+    <style name="TextAppearance.WeatherXM.WeatherCard.Data" parent="TextAppearance.WeatherXM.Default.BodyLarge">
         <item name="android:gravity">center</item>
         <item name="android:lines">1</item>
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.WeatherCard.Data.Subtitle" parent="TextAppearance.WeatherXM.WeatherCard">
+    <style name="TextAppearance.WeatherXM.WeatherCard.Data.Subtitle" parent="TextAppearance.WeatherXM.Default.BodyLarge">
         <item name="android:textColor">@color/colorPrimaryVariant</item>
         <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.WeatherCard.Timezone" parent="TextAppearance.WeatherXM.WeatherCard">
-        <item name="android:textColor">@color/darkGrey</item>
-        <item name="android:textSize">10sp</item>
     </style>
 
     <!--
         Token Card
     -->
-    <style name="TextAppearance.WeatherXM.TokenCard" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
-        <item name="android:textSize">20sp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.TokenCard.Title" parent="TextAppearance.WeatherXM.TokenCard">
-        <item name="android:textSize">18sp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.TokenCard.MaxReward" parent="TextAppearance.WeatherXM.TokenCard">
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.TokenCard.TokenValue" parent="TextAppearance.WeatherXM.TokenCard">
+    <style name="TextAppearance.WeatherXM.TokenCard.TokenValue" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
         <item name="android:lines">1</item>
         <item name="autoSizeTextType">uniform</item>
         <item name="autoSizeMaxTextSize">24sp</item>
         <item name="autoSizeMinTextSize">8sp</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.TokenCard.RewardScore" parent="TextAppearance.WeatherXM.TokenCard">
+    <style name="TextAppearance.WeatherXM.TokenCard.RewardScore" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
         <item name="android:lines">1</item>
         <item name="autoSizeTextType">uniform</item>
         <item name="autoSizeMaxTextSize">12sp</item>
         <item name="autoSizeMinTextSize">10sp</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.TokenCard.RewardTimestamp" parent="TextAppearance.WeatherXM.TokenCard">
+    <style name="TextAppearance.WeatherXM.TokenCard.RewardTimestamp" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
         <item name="android:lines">1</item>
         <item name="autoSizeTextType">uniform</item>
         <item name="autoSizeMaxTextSize">12sp</item>
@@ -164,7 +121,7 @@
         <item name="android:alpha">0.7</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.TokenCard.Total" parent="TextAppearance.WeatherXM.TokenCard">
+    <style name="TextAppearance.WeatherXM.TokenCard.Total" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
         <item name="android:textSize">10sp</item>
     </style>
 
@@ -188,50 +145,6 @@
     </style>
 
     <!--
-        Forecast Screen
-    -->
-    <style name="TextAppearance.WeatherXM.Forecast.Day" parent="TextAppearance.WeatherXM.Default.BodyLarge">
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:lines">1</item>
-        <item name="autoSizeTextType">uniform</item>
-        <item name="autoSizeMaxTextSize">16sp</item>
-        <item name="autoSizeMinTextSize">8sp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Forecast.Date" parent="TextAppearance.WeatherXM.Default.BodyLarge">
-        <item name="android:textColor">@color/colorPrimaryVariant</item>
-        <item name="android:lines">1</item>
-        <item name="autoSizeTextType">uniform</item>
-        <item name="autoSizeMaxTextSize">12sp</item>
-        <item name="autoSizeMinTextSize">8sp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Forecast.Temperature.Max" parent="TextAppearance.WeatherXM.Default.BodyMedium">
-        <item name="android:textStyle">bold</item>
-        <item name="autoSizeTextType">uniform</item>
-        <item name="android:lines">1</item>
-        <item name="autoSizeMinTextSize">8sp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Forecast.Precipitation" parent="TextAppearance.WeatherXM.Default.BodyMedium">
-        <item name="drawableStartCompat">@drawable/ic_weather_precip_prob_small</item>
-        <item name="android:drawablePadding">2dp</item>
-        <item name="drawableTint">@color/daily_forecast_precipitation_probability</item>
-        <item name="android:textColor">@color/daily_forecast_precipitation_probability</item>
-        <item name="android:textStyle">bold</item>
-        <item name="autoSizeTextType">uniform</item>
-        <item name="autoSizeMinTextSize">8sp</item>
-        <item name="android:lines">1</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Forecast.Temperature.Min" parent="TextAppearance.WeatherXM.Default.BodySmall">
-        <item name="autoSizeTextType">uniform</item>
-        <item name="android:lines">1</item>
-        <item name="autoSizeMinTextSize">8sp</item>
-    </style>
-
-    <!--
         Transaction Screen
     -->
     <style name="TextAppearance.WeatherXM.Transaction.Date" parent="TextAppearance.WeatherXM.Default.BodyLarge">
@@ -249,42 +162,6 @@
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="android:textStyle">italic</item>
         <item name="android:alpha">0.5</item>
-    </style>
-
-    <!--
-        Hourly Card
-    -->
-    <style name="TextAppearance.WeatherXM.HourlyCard.Data" parent="TextAppearance.WeatherXM.Default.BodyLarge">
-        <item name="autoSizeTextType">uniform</item>
-        <item name="autoSizeMinTextSize">10sp</item>
-        <item name="autoSizeMaxTextSize">14sp</item>
-        <item name="android:maxLines">1</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.HourlyCard.Data.Precipitation" parent="TextAppearance.WeatherXM.Default.BodyLarge">
-        <item name="android:textColor">@color/colorOnSurfaceVariant</item>
-        <item name="drawableStartCompat">@drawable/ic_weather_precip_prob_extra_small</item>
-        <item name="drawableTint">@color/colorOnSurfaceVariant</item>
-        <item name="android:drawablePadding">2dp</item>
-        <item name="autoSizeTextType">uniform</item>
-        <item name="autoSizeMinTextSize">8sp</item>
-        <item name="autoSizeMaxTextSize">12sp</item>
-        <item name="android:maxLines">1</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.HourlyCard.Data.Time" parent="TextAppearance.WeatherXM.Default.BodyLarge">
-        <item name="autoSizeTextType">uniform</item>
-        <item name="autoSizeMinTextSize">8sp</item>
-        <item name="autoSizeMaxTextSize">12sp</item>
-        <item name="android:maxLines">1</item>
-    </style>
-
-    <!--
-        Bluetooth Scanning
-    -->
-    <style name="TextAppearance.WeatherXM.BluetoothScanning.InfoTitle" parent="TextAppearance.WeatherXM.Default.BodyLarge">
-        <item name="android:textColor">@color/colorPrimaryVariant</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <!--
@@ -333,14 +210,6 @@
         <item name="android:textColor">@color/light_top</item>
         <item name="android:textColorLink">@color/light_top</item>
         <item name="android:textStyle">bold</item>
-    </style>
-
-    <!--
-        Warning Text (used inside warning cards)
-    -->
-    <style name="TextAppearance.WeatherXM.Warning" parent="TextAppearance.WeatherXM.Default.BodyMedium">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/light_top</item>
     </style>
 
     <!--

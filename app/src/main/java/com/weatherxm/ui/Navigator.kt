@@ -26,7 +26,6 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
-import com.weatherxm.ui.deviceforecast.ForecastActivity
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.explorer.ExplorerActivity
@@ -238,14 +237,6 @@ class Navigator(private val clientIdentificationHelper: ClientIdentificationHelp
     fun showHistoryActivity(context: Context, device: Device?) {
         context.startActivity(
             Intent(context, HistoryActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(ARG_DEVICE, device)
-        )
-    }
-
-    fun showForecast(context: Context, device: Device?) {
-        context.startActivity(
-            Intent(context, ForecastActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_DEVICE, device)
         )

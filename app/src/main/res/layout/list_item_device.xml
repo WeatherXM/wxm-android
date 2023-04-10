@@ -59,6 +59,9 @@
                     style="@style/Widget.WeatherXM.MaterialCard.Small.Status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:strokeWidth="1dp"
+                    app:cardCornerRadius="@dimen/card_corner_radius_small"
+                    tools:strokeColor="@color/success"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:cardBackgroundColor="@color/successTint">
@@ -76,11 +79,9 @@
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/name"
                     style="@style/TextAppearance.WeatherXM.Default.PrimaryColor"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
-                    app:layout_constraintEnd_toStartOf="@id/status"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/status"
                     tools:text="My Weather Station" />
 

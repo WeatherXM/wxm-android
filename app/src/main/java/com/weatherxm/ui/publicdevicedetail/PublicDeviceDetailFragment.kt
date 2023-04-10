@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weatherxm.R
+import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentPublicDeviceDetailsBinding
@@ -67,7 +68,7 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
         * onBackPressed or other solutions aren't available yet on BottomSheetDialogFragment so
         * this "hack" is the ugly solution here
          */
-        dialog?.setOnKeyListener { dialogInterface, keyCode, keyEvent ->
+        dialog?.setOnKeyListener { _, keyCode, keyEvent ->
             if (keyCode == KeyEvent.KEYCODE_BACK && keyEvent.action == KeyEvent.ACTION_UP) {
                 explorerModel.openListOfDevicesOfHex()
                 dismiss()
@@ -85,9 +86,10 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
         }
 
         binding.name.text = device?.name
-        with(binding.address) {
-            text = device?.address
-            visibility = if (device?.address.isNullOrEmpty()) GONE else VISIBLE
+        binding.address.text = if (device?.address.isNullOrEmpty()) {
+            getString(R.string.unknown_address)
+        } else {
+            device?.address
         }
 
         model.fetchDevice(device?.cellIndex, device?.id)
@@ -98,10 +100,7 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
             Status.SUCCESS -> {
                 binding.empty.visibility = GONE
                 updateDeviceInfo(resource.data)
-                binding.currentWeatherCard.setData(
-                    resource.data?.currentWeather,
-                    resource.data?.timezone
-                )
+                binding.currentWeatherCard.setData(resource.data?.currentWeather)
                 binding.currentWeatherCard.show()
                 resource.data?.tokenInfo?.let {
                     binding.tokenCard.setTokenInfo(it, null)
@@ -112,7 +111,6 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
                 Timber.d(resource.message, resource.message)
                 binding.currentWeatherCard.hide()
                 binding.tokenCard.hide()
-                binding.statusIcon.visibility = GONE
                 binding.empty.clear()
                 binding.empty.animation(R.raw.anim_error)
                 binding.empty.title(getString(R.string.error_generic_message))
@@ -122,7 +120,6 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
             Status.LOADING -> {
                 binding.currentWeatherCard.hide()
                 binding.tokenCard.hide()
-                binding.statusIcon.visibility = GONE
                 binding.empty.clear()
                 binding.empty.animation(R.raw.anim_loading)
                 binding.empty.visibility = VISIBLE
@@ -131,28 +128,38 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
     }
 
     private fun updateDeviceInfo(device: UIDevice?) {
-        binding.statusIcon.setColor(
-            when (device?.isActive) {
-                true -> R.color.success
-                false -> R.color.error
-                null -> R.color.midGrey
+        binding.statusIcon.setImageResource(
+            if (device?.profile == DeviceProfile.Helium) {
+                R.drawable.ic_helium
+            } else {
+                R.drawable.ic_wifi
             }
         )
-        binding.statusIcon.visibility = VISIBLE
 
-        binding.lastActive.text = device?.lastWeatherStationActivity?.let {
-            getString(
-                R.string.last_active,
-                it.getRelativeFormattedTime(getString(R.string.last_active_just_now))
+        with(binding.status) {
+            setCardBackgroundColor(
+                context.getColor(
+                    when (device?.isActive) {
+                        true -> {
+                            binding.statusIcon.setColor(R.color.success)
+                            binding.status.strokeColor = context.getColor(R.color.success)
+                            R.color.successTint
+                        }
+                        false -> {
+                            binding.statusIcon.setColor(R.color.error)
+                            binding.status.strokeColor = context.getColor(R.color.error)
+                            R.color.errorTint
+                        }
+                        null -> R.color.midGrey
+                    }
+                )
             )
         }
 
-        binding.statusLabel.text = getString(
-            when (device?.isActive) {
-                true -> R.string.online
-                false -> R.string.offline
-                null -> R.string.unknown
-            }
-        )
+        with(binding.lastSeen) {
+            text = device?.lastWeatherStationActivity?.getRelativeFormattedTime(
+                fallbackIfTooSoon = context.getString(R.string.just_now)
+            )
+        }
     }
 }

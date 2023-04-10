@@ -31,7 +31,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/connection"
-            style="@style/Widget.WeatherXM.Navigation.Chip"
+            style="@style/Widget.WeatherXM.NavigationInfo.Chip"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -40,7 +40,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/verify"
-            style="@style/Widget.WeatherXM.Navigation.Chip"
+            style="@style/Widget.WeatherXM.NavigationInfo.Chip"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="-25dp"
@@ -50,7 +50,7 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/location"
-            style="@style/Widget.WeatherXM.Navigation.Chip"
+            style="@style/Widget.WeatherXM.NavigationInfo.Chip"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="-25dp"

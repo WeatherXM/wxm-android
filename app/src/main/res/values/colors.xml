@@ -10,7 +10,6 @@
     <color name="colorOnSurfaceVariant">@color/light_dark_grey</color>
 
     <color name="colorBackground">@color/light_background</color>
-    <color name="colorOnBackground">@color/dark_background</color>
 
     <color name="successTint">@color/light_success_tint</color>
     <color name="errorTint">@color/light_error_tint</color>
@@ -24,6 +23,9 @@
 
     <!-- List Divider -->
     <color name="list_divider">@color/light_light2</color>
+
+    <!-- Device Details -->
+    <color name="secondary_card_background">@color/light_light2</color>
 
     <!-- Google Analytics -->
     <color name="google_analytics_icon_background">@color/light_light2</color>
@@ -55,4 +57,11 @@
 
     <!-- Info Card -->
     <color name="info_card_background">@color/light_blue_tint</color>
+    <color name="info_card_icon_color">@color/light_darkest_blue</color>
+
+    <!-- Error Card -->
+    <color name="error_card_close_button_color">@color/light_dark_grey</color>
+
+    <!-- Dialog -->
+    <color name="title">@color/light_darkest_blue</color>
 </resources>

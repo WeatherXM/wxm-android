@@ -11,54 +11,30 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardUseCompatPadding="true">
+        app:cardElevation="@dimen/elevation_normal">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
-                android:id="@+id/titleDashedLineContainer"
-                android:layout_width="match_parent"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/maxReward"
+                style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:orientation="horizontal"
-                android:weightSum="2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="650 WXM" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/rewardsTitle"
-                    style="@style/TextAppearance.WeatherXM.TokenCard.Title"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="@string/rewards" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingTop="@dimen/padding_large">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/maxReward"
-                        style="@style/TextAppearance.WeatherXM.TokenCard.MaxReward"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintBottom_toTopOf="@+id/dashedLine"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        tools:text="650 WXM" />
-
-                    <View
-                        android:id="@+id/dashedLine"
-                        android:layout_width="match_parent"
-                        android:layout_height="5dp"
-                        android:background="@drawable/dotted_line"
-                        app:layout_constraintBottom_toBottomOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
+            <View
+                android:id="@+id/dashedLine"
+                android:layout_width="0dp"
+                android:layout_height="5dp"
+                android:background="@drawable/dotted_line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/maxReward"
+                app:layout_constraintWidth_percent="0.5" />
 
             <LinearLayout
                 android:id="@+id/lastRewardAndChartContainer"
@@ -67,7 +43,7 @@
                 android:baselineAligned="false"
                 android:orientation="horizontal"
                 android:weightSum="2"
-                app:layout_constraintTop_toBottomOf="@id/titleDashedLineContainer">
+                app:layout_constraintTop_toBottomOf="@id/dashedLine">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/titleAndValue"
@@ -124,14 +100,13 @@
                     android:layout_marginStart="@dimen/margin_normal"
                     android:layout_weight="1">
 
-                    <com.db.williamchart.view.BarChartView
-                        android:id="@+id/tokenChart"
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/chart"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
-                        app:chart_axis="none"
-                        app:chart_barsColor="@color/midGrey"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:visibility="invisible"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:visibility="visible" />
 
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/tokenOptions"
@@ -140,7 +115,7 @@
                         android:layout_marginTop="@dimen/margin_normal"
                         app:checkedChip="@id/option7D"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tokenChart"
+                        app:layout_constraintTop_toBottomOf="@id/chart"
                         app:selectionRequired="true"
                         app:singleSelection="true">
 

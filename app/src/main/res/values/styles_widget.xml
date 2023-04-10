@@ -77,7 +77,6 @@
     </style>
 
     <style name="Widget.WeatherXM.IconButton" parent="@style/Widget.Material3.Button.IconButton">
-        <!--<item name="android:background">@color/transparent</item>-->
         <item name="iconTint">@color/colorOnSurface</item>
     </style>
 
@@ -132,24 +131,6 @@
         <item name="cardCornerRadius">0dp</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.Login" parent="Widget.WeatherXM.MaterialCard">
-        <item name="cardElevation">@dimen/card_elevation</item>
-        <item name="cardMaxElevation">@dimen/card_elevation</item>
-        <item name="contentPadding">@dimen/padding_normal</item>
-    </style>
-
-    <style name="Widget.WeatherXM.MaterialCard.ForecastAndHistory" parent="Widget.WeatherXM.MaterialCard.NoRadius">
-        <item name="cardBackgroundColor">@color/transparent</item>
-        <item name="contentPadding">0dp</item>
-        <item name="contentPaddingTop">@dimen/padding_small</item>
-        <item name="contentPaddingBottom">@dimen/padding_small</item>
-    </style>
-
-    <style name="Widget.WeatherXM.MaterialCard.HourlyForecast" parent="Widget.WeatherXM.MaterialCard.NoRadius.Small">
-        <item name="cardBackgroundColor">@color/transparent</item>
-        <item name="android:stateListAnimator">@animator/weather_forecast_tile_elevation</item>
-    </style>
-
     <style name="Widget.WeatherXM.MaterialCard.ChartMarker" parent="Widget.WeatherXM.MaterialCard.Small">
         <item name="cardBackgroundColor">@color/chart_popup_background</item>
     </style>
@@ -182,10 +163,6 @@
         <item name="strokeColor">@color/colorPrimaryVariant</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.AddressOnMap" parent="Widget.WeatherXM.MaterialCard.Small">
-        <item name="cardElevation">@dimen/card_selected_elevation</item>
-    </style>
-
     <!--
         PopupMenu
     -->
@@ -208,7 +185,9 @@
         <item name="android:minHeight">56dp</item>
         <item name="labelVisibilityMode">unlabeled</item>
         <item name="itemIconTint">@color/bottom_navigation_view_item_icon_color</item>
-        <item name="itemActiveIndicatorStyle">@style/Widget.WeatherXM.BottomNavigationView.ActiveIndicator</item>
+        <item name="itemActiveIndicatorStyle">
+            @style/Widget.WeatherXM.BottomNavigationView.ActiveIndicator
+        </item>
         <item name="elevation">@dimen/elevation_normal</item>
         <item name="android:outlineAmbientShadowColor" tools:targetApi="p">@color/black</item>
         <item name="android:outlineSpotShadowColor" tools:targetApi="p">@color/black</item>
@@ -227,7 +206,7 @@
         <item name="android:clipToPadding">false</item>
     </style>
 
-    <style name="Widget.WeatherXM.Navigation.Chip" parent="Widget.Material3.Chip.Assist">
+    <style name="Widget.WeatherXM.NavigationInfo.Chip" parent="Widget.Material3.Chip.Assist">
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="chipBackgroundColor">@color/colorSurface</item>
         <item name="chipIconTint">@color/colorOnSurface</item>
@@ -239,16 +218,6 @@
         <item name="chipStrokeWidth">2dp</item>
         <item name="chipStrokeColor">?android:windowBackground</item>
         <item name="chipCornerRadius">20dp</item>
-    </style>
-
-    <style name="Widget.WeatherXM.Chip.Status" parent="Widget.Material3.Chip.Assist">
-        <item name="android:textColor">@color/dark_background</item>
-        <item name="android:textSize">12sp</item>
-        <item name="chipMinTouchTargetSize">0dp</item>
-        <item name="android:clickable">false</item>
-        <item name="chipStrokeWidth">0dp</item>
-        <item name="chipCornerRadius">20dp</item>
-        <item name="chipIconSize">20dp</item>
     </style>
 
     <style name="Widget.WeatherXM.Chip.Token" parent="Widget.Material3.Chip.Assist">
@@ -285,6 +254,16 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Widget.WeatherXM.Chip.Status" parent="Widget.Material3.Chip.Assist">
+        <item name="android:textColor">@color/dark_background</item>
+        <item name="android:textSize">12sp</item>
+        <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="android:clickable">false</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipCornerRadius">20dp</item>
+        <item name="chipIconSize">20dp</item>
+    </style>
+
     <style name="Widget.WeatherXM.Chip.TransactionHash" parent="Widget.Material3.Chip.Filter">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/colorPrimary</item>
@@ -299,13 +278,23 @@
         Tab Layout
     -->
     <style name="Widget.WeatherXM.TabLayout" parent="Widget.Material3.TabLayout">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.WeatherXM.TabLayout</item>
+        <item name="colorSurface">@color/transparent</item>
         <item name="tabMode">scrollable</item>
         <item name="tabBackground">@drawable/dates_background_selector</item>
         <item name="tabTextAppearance">@style/TextAppearance.WeatherXM.Tabs</item>
         <item name="tabTextColor">@color/colorPrimary</item>
         <item name="tabSelectedTextColor">@color/colorPrimaryVariant</item>
         <item name="tabPadding">@dimen/padding_extra_small</item>
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="Widget.WeatherXM.TabLayout.Navigation" parent="Widget.Material3.TabLayout">
+        <item name="tabMode">scrollable</item>
+        <item name="tabBackground">@drawable/navigation_tab_background_selector</item>
+        <item name="tabTextColor">@color/colorPrimary</item>
+        <item name="tabSelectedTextColor">@color/colorOnPrimary</item>
+        <item name="tabPadding">0dp</item>
         <item name="tabIndicatorHeight">0dp</item>
         <item name="android:background">@color/transparent</item>
     </style>

@@ -12,11 +12,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
         android:paddingVertical="@dimen/padding_normal">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/title"
-            style="@style/TextAppearance.WeatherXM.Device.Details.Title"
+            style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/card_side_margin"
@@ -25,12 +26,13 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/location"
-            style="@style/TextAppearance.WeatherXM.Device.Details.Address"
+            style="@style/TextAppearance.WeatherXM.Default.BodySmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/card_side_margin"
-            android:visibility="gone"
+            android:alpha="0.8"
             android:paddingBottom="@dimen/padding_small"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/title"
             tools:text="Athens, GR"
             tools:visibility="visible" />

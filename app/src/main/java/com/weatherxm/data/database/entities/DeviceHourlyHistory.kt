@@ -32,7 +32,11 @@ data class DeviceHourlyHistory(
     @ColumnInfo(name = "uv_index")
     val uvIndex: Int?,
     @ColumnInfo(name = "pressure")
-    val pressure: Float?
+    val pressure: Float?,
+    @ColumnInfo(name = "dew_point")
+    val dewPoint: Float?,
+    @ColumnInfo(name = "solar_irradiance")
+    val solarIrradiance: Float?
 ) : BaseModel() {
 
     companion object {
@@ -50,7 +54,9 @@ data class DeviceHourlyHistory(
                 hourlyWeather.windSpeed,
                 hourlyWeather.windGust,
                 hourlyWeather.uvIndex,
-                hourlyWeather.pressure
+                hourlyWeather.pressure,
+                hourlyWeather.dewPoint,
+                hourlyWeather.solarIrradiance
             )
         }
     }

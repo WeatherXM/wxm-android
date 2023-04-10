@@ -1,15 +1,18 @@
 package com.weatherxm.usecases
 
+import android.content.Context
 import arrow.core.Either
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
-import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.UserActionError
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.SharedPreferencesRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.common.TokenInfo
+import com.weatherxm.ui.common.UIForecast
+import com.weatherxm.util.DateTimeHelper.getFormattedRelativeDay
 import com.weatherxm.ui.common.UserDevice
 import com.weatherxm.util.isToday
 import com.weatherxm.util.isTomorrow
@@ -24,7 +27,8 @@ class UserDeviceUseCaseImpl(
     private val deviceOTARepository: DeviceOTARepository,
     private val tokenRepository: TokenRepository,
     private val weatherForecastRepository: WeatherForecastRepository,
-    private val preferencesRepository: SharedPreferencesRepository
+    private val preferencesRepository: SharedPreferencesRepository,
+    private val context: Context
 ) : UserDeviceUseCase {
 
     companion object {
@@ -71,22 +75,32 @@ class UserDeviceUseCaseImpl(
         }
     }
 
-    override suspend fun getTodayAndTomorrowForecast(
+    @Suppress("MagicNumber")
+    override suspend fun getForecast(
         device: Device,
         forceRefresh: Boolean
-    ): Either<Failure, List<HourlyWeather>> {
+    ): Either<Failure, List<UIForecast>> {
         val dateStart = ZonedDateTime.now(ZoneId.of(device.timezone))
-        val dateEnd = dateStart.plusDays(1)
+        val dateEnd = dateStart.plusDays(7)
         return weatherForecastRepository.getDeviceForecast(
             device.id,
             dateStart,
             dateEnd,
             forceRefresh
-        ).map { response ->
-            response
-                .filter { it.date.isToday() || it.date.isTomorrow() }
-                .mapNotNull { it.hourly }
-                .flatten()
+        ).map { result ->
+            result.map {
+                UIForecast(
+                    nameOfDayAndDate = it.date.getFormattedRelativeDay(context, true),
+                    icon = it.daily?.icon,
+                    maxTemp = it.daily?.temperatureMax,
+                    minTemp = it.daily?.temperatureMin,
+                    precipProbability = it.daily?.precipProbability,
+                    windSpeed = it.daily?.windSpeed,
+                    windDirection = it.daily?.windDirection,
+                    humidity = it.daily?.humidity,
+                    hourlyWeather = it.hourly
+                )
+            }
         }
     }
 }

@@ -1,27 +1,28 @@
 package com.weatherxm.ui.userdevice
 
-import android.app.Activity
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.SimpleItemAnimator
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import com.weatherxm.R
 import com.weatherxm.data.Device
+import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityUserDeviceBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.getParcelableExtra
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.userdevice.current.CurrentFragment
+import com.weatherxm.ui.userdevice.forecast.ForecastFragment
+import com.weatherxm.ui.userdevice.rewards.RewardsFragment
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setColor
-import com.weatherxm.util.setHtml
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
@@ -34,14 +35,12 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent {
         parametersOf(getParcelableExtra(ARG_DEVICE, Device.empty()))
     }
     private lateinit var binding: ActivityUserDeviceBinding
-    private lateinit var hourlyAdapter: HourlyAdapter
-    private lateinit var layoutManagerOfRecycler: LinearLayoutManager
     private val navigator: Navigator by inject()
-    private var snackbar: Snackbar? = null
 
     companion object {
-        const val TAB_TODAY = 0
-        const val TAB_TOMORROW = 1
+        private const val OBSERVATIONS = 0
+        private const val FORECAST_TAB_POSITION = 1
+        private const val REWARDS_TAB_POSITION = 2
     }
 
     init {
@@ -52,8 +51,8 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent {
                 Timber.d("Starting device polling")
                 // Trigger the flow for refreshing device data in the background
                 model.deviceAutoRefresh().collect {
-                    it.tap { device ->
-                        onDeviceUpdated(device)
+                    it.onRight { device ->
+                        updateDeviceInfo(device)
                     }
                 }
             }
@@ -74,22 +73,6 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent {
             return
         }
 
-        // Initialize the adapter with empty data
-        hourlyAdapter = HourlyAdapter()
-        binding.recycler.adapter = hourlyAdapter
-
-        // Initialize the layout manager
-        layoutManagerOfRecycler = binding.recycler.layoutManager as LinearLayoutManager
-
-        binding.recycler.setOnScrollChangeListener { _, _, _, _, _ ->
-            onHourlyForecastScroll()
-        }
-
-        // Fix flickering on item selection
-        (binding.recycler.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
-
-        binding.dateTabs.addOnTabSelectedListener(onForecastDateSelectedListener)
-
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -98,175 +81,80 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent {
             navigator.showStationSettings(this, model.device)
         }
 
-        binding.swiperefresh.setOnRefreshListener {
-            model.fetchTokensForecastData(forceRefresh = true)
-            model.fetchUserDevice()
-            setResult(Activity.RESULT_OK)
-        }
+        val adapter = ViewPagerAdapter(this)
+        binding.viewPager.adapter = adapter
 
-        binding.historicalCharts.setOnClickListener {
-            navigator.showHistoryActivity(this, model.device)
-        }
-
-        binding.forecastNextDays.setOnClickListener {
-            navigator.showForecast(this, model.device)
-        }
-
-        binding.tokenRewards.setOnClickListener {
-            navigator.showTokenScreen(this, model.device)
-        }
-
-        binding.tokenNotice.setHtml(R.string.device_detail_token_notice)
-
-        // onCreate was too big. Handle the initialization of the observers in a separate function
-        initObservers()
-        onDeviceUpdated(model.device)
-
-        // Fetch data
-        model.fetchTokensForecastData()
-    }
-
-    private fun initObservers() {
-        model.onDeviceSet().observe(this) {
-            onDeviceUpdated(it)
-        }
-
-        model.onForecast().observe(this) {
-            hourlyAdapter.submitList(it)
-        }
-
-        model.onTokens().observe(this) {
-            binding.tokenCard.setTokenInfo(it, model.device.rewards?.totalRewards)
-        }
-
-        model.onUnitPreferenceChanged().observe(this) {
-            if (it) {
-                binding.currentWeatherCard.updateCurrentWeatherUI(model.device.timezone)
-                hourlyAdapter.notifyDataSetChanged()
+        @Suppress("UseCheckOrError")
+        TabLayoutMediator(binding.navigatorGroup, binding.viewPager) { tab, position ->
+            tab.text = when (position) {
+                OBSERVATIONS -> getString(R.string.observations)
+                FORECAST_TAB_POSITION -> resources.getString(R.string.forecast)
+                REWARDS_TAB_POSITION -> resources.getString(R.string.rewards)
+                else -> throw IllegalStateException("Oops! You forgot to add a tab here.")
             }
-        }
+        }.attach()
 
-        model.onLoading().observe(this) {
-            if (it && binding.swiperefresh.isRefreshing) {
-                binding.progress.visibility = View.INVISIBLE
-            } else if (it) {
-                binding.progress.visibility = View.VISIBLE
-            } else {
-                binding.swiperefresh.isRefreshing = false
-                binding.progress.visibility = View.INVISIBLE
-            }
-        }
-
-        model.onError().observe(this) {
-            showSnackbarMessage(it.errorMessage, it.retryFunction)
-        }
+        updateDeviceInfo()
     }
 
-    private fun onDeviceUpdated(device: Device) {
-        updateDeviceInfo(device)
-        binding.currentWeatherCard.setData(device.currentWeather, device.timezone)
-    }
-
-    private fun onForecastDateSelected(dateTabSelected: TabLayout.Tab) {
-        when (dateTabSelected.position) {
-            TAB_TODAY -> {
-                layoutManagerOfRecycler.scrollToPosition(0)
-            }
-            TAB_TOMORROW -> {
-                layoutManagerOfRecycler.scrollToPositionWithOffset(
-                    model.getPositionOfTomorrowFirstItem(hourlyAdapter.currentList), 0
-                )
-            }
-        }
-    }
-
-    private fun onHourlyForecastScroll() {
-        val dateTabs = binding.dateTabs
-        val firstItemVisiblePosition = layoutManagerOfRecycler.findFirstVisibleItemPosition()
-        val firstItemHourlyWeather = hourlyAdapter.getItemFromPosition(firstItemVisiblePosition)
-        val isFirstItemTomorrow = model.isHourlyWeatherTomorrow(firstItemHourlyWeather)
-
-        // Disable tab listener first
-        binding.dateTabs.removeOnTabSelectedListener(onForecastDateSelectedListener)
-
-        if (isFirstItemTomorrow && dateTabs.selectedTabPosition == TAB_TODAY) {
-            dateTabs.getTabAt(TAB_TOMORROW)?.select()
-        } else if (!isFirstItemTomorrow && dateTabs.selectedTabPosition == TAB_TOMORROW) {
-            dateTabs.getTabAt(TAB_TODAY)?.select()
-        }
-
-        // Re-enable listener
-        binding.dateTabs.addOnTabSelectedListener(onForecastDateSelectedListener)
-    }
-
-    private fun updateDeviceInfo(device: Device) {
+    private fun updateDeviceInfo(device: Device = model.device) {
         binding.name.text = device.getNameOrLabel()
-        binding.collapsingToolbar.title = device.getNameOrLabel()
 
-        binding.statusIcon.setColor(
-            when (device.attributes?.isActive) {
-                true -> {
-                    binding.errorCard.hide()
-                    R.color.success
-                }
-                false -> {
-                    binding.errorCard.setErrorMessageWithUrl(
-                        R.string.error_user_device_offline,
-                        device.profile
-                    )
-                    R.color.error
-                }
-                null -> {
-                    R.color.midGrey
-                }
-            }
-        )
-
-        val lastActive = device.attributes?.lastWeatherStationActivity?.let {
-            getString(
-                R.string.last_active,
-                it.getRelativeFormattedTime(getString(R.string.last_active_just_now))
+        with(binding.lastSeen) {
+            text = device.attributes?.lastWeatherStationActivity?.getRelativeFormattedTime(
+                fallbackIfTooSoon = context.getString(R.string.just_now)
             )
         }
 
-        binding.address.text = device.address
-        binding.lastActive.text = lastActive
-        binding.statusLabel.text = getString(
-            when (device.attributes?.isActive) {
-                true -> R.string.online
-                false -> R.string.offline
-                null -> R.string.unknown
+        binding.statusIcon.setImageResource(
+            if (device.profile == DeviceProfile.Helium) {
+                R.drawable.ic_helium
+            } else {
+                R.drawable.ic_wifi
             }
         )
-    }
 
-    private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {
-        if (snackbar?.isShown == true) {
-            snackbar?.dismiss()
-        }
+        binding.status.setCardBackgroundColor(
+            getColor(
+                when (device.attributes?.isActive) {
+                    true -> {
+                        binding.statusIcon.setColor(R.color.success)
+                        binding.status.strokeColor = getColor(R.color.success)
+                        R.color.successTint
+                    }
+                    false -> {
+                        binding.statusIcon.setColor(R.color.error)
+                        binding.status.strokeColor = getColor(R.color.error)
+                        R.color.errorTint
+                    }
+                    null -> {
+                        R.color.midGrey
+                    }
+                }
+            )
+        )
 
-        if (callback != null) {
-            snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_INDEFINITE)
-            snackbar?.setAction(R.string.action_retry) {
-                callback()
-            }
+        binding.address.text = if (device.address.isNullOrEmpty()) {
+            getString(R.string.unknown_address)
         } else {
-            snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+            device.address
         }
-        snackbar?.show()
     }
 
-    private val onForecastDateSelectedListener = object : TabLayout.OnTabSelectedListener {
-        override fun onTabSelected(tab: TabLayout.Tab?) {
-            tab?.let { onForecastDateSelected(it) }
+    class ViewPagerAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+
+        override fun getItemCount(): Int {
+            return 3
         }
 
-        override fun onTabUnselected(tab: TabLayout.Tab?) {
-            // No-op
-        }
-
-        override fun onTabReselected(tab: TabLayout.Tab?) {
-            // No-op
+        @Suppress("UseCheckOrError")
+        override fun createFragment(position: Int): Fragment {
+            return when (position) {
+                OBSERVATIONS -> CurrentFragment()
+                FORECAST_TAB_POSITION -> ForecastFragment()
+                REWARDS_TAB_POSITION -> RewardsFragment()
+                else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
+            }
         }
     }
 }

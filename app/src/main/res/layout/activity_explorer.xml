@@ -84,9 +84,11 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/login_signup_view"
-            style="@style/Widget.WeatherXM.MaterialCard.Login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:elevation="@dimen/elevation_extra_small"
+            app:cardMaxElevation="@dimen/elevation_extra_small"
+            app:contentPadding="@dimen/padding_normal"
             android:layout_marginTop="@dimen/margin_normal"
             app:layout_constraintTop_toBottomOf="@id/devices_count_card">
 

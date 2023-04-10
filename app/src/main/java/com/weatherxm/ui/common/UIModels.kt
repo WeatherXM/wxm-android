@@ -2,6 +2,7 @@ package com.weatherxm.ui.common
 
 import android.os.Parcelable
 import androidx.annotation.Keep
+import com.github.mikephil.charting.data.BarEntry
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.weatherxm.data.Device
@@ -24,11 +25,12 @@ data class UIError(
 @Parcelize
 data class TokenInfo(
     var lastReward: Transaction? = null,
+    var chartTimestamps: MutableList<String> = mutableListOf(),
+    var chart7dEntries: MutableList<BarEntry> = mutableListOf(),
     var total7d: Float = 0.0F,
-    var chart7d: TokenValuesChart = TokenValuesChart(mutableListOf()),
     var max7dReward: Float? = null,
     var total30d: Float = 0.0F,
-    var chart30d: TokenValuesChart = TokenValuesChart(mutableListOf()),
+    var chart30dEntries: MutableList<BarEntry> = mutableListOf(),
     var max30dReward: Float? = null
 ) : Parcelable {
     @Suppress("MagicNumber")
@@ -36,47 +38,38 @@ data class TokenInfo(
         lastReward = lastAndDatedTxs.lastTx
         total7d = 0.0F
         total30d = 0.0F
-        chart7d = TokenValuesChart(mutableListOf())
-        chart30d = TokenValuesChart(mutableListOf())
+        chart7dEntries = mutableListOf()
+        chart30dEntries = mutableListOf()
 
         /*
         * Populate the totals and the chart data from latest -> earliest
-         */
-        for ((position, datedTx) in lastAndDatedTxs.datedTxs.withIndex()) {
-            if (position <= 6) {
+        * We need to reverse the order in the chart data because we have saved them
+        * from latest -> earliest but we need the earliest -> latest for proper
+        * displaying them as bars
+        */
+        val reversedLastAndDatedTxs = lastAndDatedTxs.datedTxs.reversed()
+
+        for ((position, datedTx) in reversedLastAndDatedTxs.withIndex()) {
+            if (position in 23..30) {
                 if (datedTx.second > Transaction.VERY_SMALL_NUMBER_FOR_CHART) {
                     total7d = total7d.plus(datedTx.second)
                 }
-                chart7d.values.add(datedTx)
+                chart7dEntries.add(BarEntry(position.toFloat(), datedTx.second))
             }
             if (datedTx.second > Transaction.VERY_SMALL_NUMBER_FOR_CHART) {
                 total30d = total30d.plus(datedTx.second)
             }
-            chart30d.values.add(datedTx)
+            chart30dEntries.add(BarEntry(position.toFloat(), datedTx.second))
+            chartTimestamps.add(datedTx.first)
         }
 
         // Find the maximum 7 and 30 day rewards (AKA the biggest bar on the chart)
-        max7dReward = chart7d.values.maxOfOrNull { it.second }
-        max30dReward = chart30d.values.maxOfOrNull { it.second }
-
-        /*
-        * We need to reverse the order in the chart data because we have saved them
-        * from latest -> earliest but we need the earliest -> latest for proper
-        * displaying them
-        */
-        chart7d.values = chart7d.values.reversed().toMutableList()
-        chart30d.values = chart30d.values.reversed().toMutableList()
+        max7dReward = chart7dEntries.maxOfOrNull { it.y }
+        max30dReward = chart30dEntries.maxOfOrNull { it.y }
 
         return this
     }
 }
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class TokenValuesChart(
-    var values: MutableList<Pair<String, Float>>
-) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -129,3 +122,17 @@ enum class DeviceType : Parcelable {
     M5_WIFI,
     HELIUM
 }
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class UIForecast(
+    var nameOfDayAndDate: String = "",
+    var icon: String? = null,
+    var minTemp: Float? = null,
+    var maxTemp: Float? = null,
+    var precipProbability: Int? = null,
+    var windSpeed: Float? = null,
+    var windDirection: Int? = null,
+    var humidity: Int? = null,
+    var hourlyWeather: List<HourlyWeather>?
+)

@@ -4,39 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/margin_small"
     android:clipChildren="false"
     android:clipToOutline="false"
     android:clipToPadding="false"
-    tools:layout_height="180dp"
+    tools:layout_height="300dp"
     tools:targetApi="s">
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
-        style="@style/Widget.WeatherXM.MaterialCard.HourlyForecast"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/Widget.WeatherXM.MaterialCard.NoRadius.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="@color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/time"
-                style="@style/TextAppearance.WeatherXM.HourlyCard.Data.Time"
+                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:layout_width="match_parent"
-                android:layout_height="24dp"
+                android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 tools:text="13:37 am" />
 
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/icon"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
                 android:layout_marginVertical="@dimen/margin_small"
                 android:scaleType="centerInside"
                 app:lottie_autoPlay="false"
@@ -45,22 +46,63 @@
                 tools:lottie_rawRes="@raw/anim_weather_clear_day" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/precipitation"
-                style="@style/TextAppearance.WeatherXM.HourlyCard.Data.Precipitation"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center"
-                tools:text="100%" />
-
-            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/temperature"
-                style="@style/TextAppearance.WeatherXM.HourlyCard.Data"
+                style="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
-                android:layout_marginTop="@dimen/margin_small"
                 android:gravity="center_horizontal"
-                tools:text="26°" />
+                android:textStyle="bold"
+                tools:text="26°C" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/feelsLike"
+                style="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:gravity="center_horizontal"
+                tools:text="Feels Like 26°" />
+
+            <com.weatherxm.ui.widget.CompactWeatherDataView
+                android:id="@+id/precipitation_probability"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                app:compact_weather_data_icon="@drawable/ic_weather_precip_probability" />
+
+            <com.weatherxm.ui.widget.CompactWeatherDataView
+                android:id="@+id/precipitation_accumulated"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                app:compact_weather_data_icon="@drawable/ic_weather_precipitation" />
+
+            <com.weatherxm.ui.widget.CompactWeatherDataView
+                android:id="@+id/wind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                app:compact_weather_data_icon="@drawable/ic_wind_direction" />
+
+            <com.weatherxm.ui.widget.CompactWeatherDataView
+                android:id="@+id/humidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                app:compact_weather_data_icon="@drawable/ic_weather_humidity" />
+
+            <com.weatherxm.ui.widget.CompactWeatherDataView
+                android:id="@+id/pressure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                app:compact_weather_data_icon="@drawable/ic_weather_pressure" />
+
+            <com.weatherxm.ui.widget.CompactWeatherDataView
+                android:id="@+id/uv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                app:compact_weather_data_icon="@drawable/ic_weather_solar" />
 
         </LinearLayout>
 

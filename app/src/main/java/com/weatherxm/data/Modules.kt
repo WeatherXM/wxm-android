@@ -123,7 +123,6 @@ import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepository
 import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepositoryImpl
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.deviceforecast.ForecastViewModel
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
 import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
 import com.weatherxm.ui.explorer.UIHexJsonAdapter
@@ -131,6 +130,9 @@ import com.weatherxm.ui.stationsettings.StationSettingsViewModel
 import com.weatherxm.ui.stationsettings.changefrequency.ChangeFrequencyViewModel
 import com.weatherxm.ui.stationsettings.reboot.RebootViewModel
 import com.weatherxm.ui.userdevice.UserDeviceViewModel
+import com.weatherxm.ui.userdevice.current.CurrentViewModel
+import com.weatherxm.ui.userdevice.forecast.ForecastViewModel
+import com.weatherxm.ui.userdevice.rewards.RewardsViewModel
 import com.weatherxm.usecases.AnalyticsOptInUseCase
 import com.weatherxm.usecases.AnalyticsOptInUseCaseImpl
 import com.weatherxm.usecases.AuthUseCase
@@ -149,8 +151,6 @@ import com.weatherxm.usecases.DeleteAccountUseCase
 import com.weatherxm.usecases.DeleteAccountUseCaseImpl
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.ExplorerUseCaseImpl
-import com.weatherxm.usecases.ForecastUseCase
-import com.weatherxm.usecases.ForecastUseCaseImpl
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
 import com.weatherxm.usecases.PasswordPromptUseCase
@@ -402,13 +402,10 @@ private val usecases = module {
         ExplorerUseCaseImpl(get(), get(), get(), get())
     }
     single<UserDeviceUseCase> {
-        UserDeviceUseCaseImpl(get(), get(), get(), get(), get())
+        UserDeviceUseCaseImpl(get(), get(), get(), get(), get(), androidContext())
     }
     single<HistoryUseCase> {
         HistoryUseCaseImpl(androidContext(), get(), get())
-    }
-    single<ForecastUseCase> {
-        ForecastUseCaseImpl(androidContext(), get())
     }
     single<ClaimDeviceUseCase> {
         ClaimDeviceUseCaseImpl(get(), get(), get())
@@ -698,7 +695,13 @@ private val viewmodels = module {
         ChangeFrequencyViewModel(device = params.get())
     }
     viewModel { params ->
+        CurrentViewModel(device = params.get())
+    }
+    viewModel { params ->
         ForecastViewModel(device = params.get())
+    }
+    viewModel { params ->
+        RewardsViewModel(device = params.get())
     }
     viewModel { params ->
         HistoryChartsViewModel(device = params.get())

@@ -36,13 +36,18 @@ class WeatherDataView : LinearLayout {
                 binding.icon.setImageDrawable(
                     getDrawable(R.styleable.WeatherDataView_weather_data_icon)
                 )
+                val description = getString(R.styleable.WeatherDataView_weather_data_description)
+                description?.let {
+                    binding.description.text = it
+                    binding.description.visibility = VISIBLE
+                }
             } finally {
                 recycle()
             }
         }
     }
 
-    fun setData(value: String, unit: String) {
+    fun setData(value: String, unit: String? = null) {
         binding.value.text = value
         binding.unit.text = unit
     }

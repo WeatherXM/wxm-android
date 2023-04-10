@@ -10,7 +10,6 @@
     <color name="colorOnSurfaceVariant">@color/dark_dark_grey</color>
 
     <color name="colorBackground">@color/dark_background</color>
-    <color name="colorOnBackground">@color/light_top</color>
 
     <color name="successTint">@color/dark_success_tint</color>
     <color name="errorTint">@color/dark_error_tint</color>
@@ -24,6 +23,9 @@
 
     <!-- List Divider -->
     <color name="list_divider">@color/dark_dark2</color>
+
+    <!-- Device Details -->
+    <color name="secondary_card_background">@color/dark_dark2</color>
 
     <!-- Google Analytics -->
     <color name="google_analytics_icon_background">@color/dark_dark2</color>

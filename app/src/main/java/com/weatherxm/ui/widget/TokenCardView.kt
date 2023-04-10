@@ -11,12 +11,13 @@ import com.weatherxm.data.Transaction
 import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.databinding.ViewTokenCardBinding
 import com.weatherxm.ui.common.TokenInfo
-import com.weatherxm.ui.common.TokenValuesChart
+import com.weatherxm.ui.common.show
 import com.weatherxm.util.DateTimeHelper.getFormattedDay
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Tokens
 import com.weatherxm.util.Tokens.formatTokens
 import com.weatherxm.util.Tokens.formatValue
+import com.weatherxm.util.initializeTokenChart
 import com.weatherxm.util.setChildrenEnabled
 
 open class TokenCardView : LinearLayout {
@@ -52,10 +53,18 @@ open class TokenCardView : LinearLayout {
         binding.tokenOptions.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.option7D -> {
-                    setChartData(tokenInfo?.chart7d, tokenInfo?.max7dReward)
+                    binding.chart.clear()
+                    tokenInfo?.chart7dEntries?.let {
+                        binding.chart.initializeTokenChart(it)
+                    }
+                    setMaxReward(tokenInfo?.max7dReward)
                 }
                 R.id.option30D -> {
-                    setChartData(tokenInfo?.chart30d, tokenInfo?.max30dReward)
+                    binding.chart.clear()
+                    tokenInfo?.chart30dEntries?.let {
+                        binding.chart.initializeTokenChart(it)
+                    }
+                    setMaxReward(tokenInfo?.max30dReward)
                 }
             }
         }
@@ -85,9 +94,17 @@ open class TokenCardView : LinearLayout {
         updateLastReward(tokenInfo?.lastReward)
 
         if (binding.tokenOptions.checkedChipId == R.id.option7D) {
-            setChartData(tokenInfo?.chart7d, tokenInfo?.max7dReward)
+            tokenInfo?.chart7dEntries?.let {
+                binding.chart.initializeTokenChart(it)
+                binding.chart.show(null)
+            }
+            setMaxReward(tokenInfo?.max7dReward)
         } else {
-            setChartData(tokenInfo?.chart30d, tokenInfo?.max30dReward)
+            tokenInfo?.chart30dEntries?.let {
+                binding.chart.initializeTokenChart(it)
+                binding.chart.show(null)
+            }
+            setMaxReward(tokenInfo?.max30dReward)
         }
     }
 
@@ -115,9 +132,7 @@ open class TokenCardView : LinearLayout {
         }
     }
 
-    private fun setChartData(data: TokenValuesChart?, maxReward: Float?) {
-        chart(data?.values)
-
+    private fun setMaxReward(maxReward: Float?) {
         if (maxReward != null) {
             if (maxReward > VERY_SMALL_NUMBER_FOR_CHART) {
                 binding.maxReward.text =
@@ -125,18 +140,6 @@ open class TokenCardView : LinearLayout {
             } else {
                 binding.maxReward.text = resources.getString(R.string.no_rewards)
             }
-        }
-    }
-
-    private fun chart(data: List<Pair<String, Float>>?) {
-        if (!data.isNullOrEmpty()) {
-            //  Necessary fix for a crash, found the fix on library's BarChartView.kt line 85
-            binding.tokenChart.barsColorsList =
-                List(data.size) { binding.tokenChart.barsColor }.toList()
-            binding.tokenChart.show(data)
-            binding.tokenChart.visibility = View.VISIBLE
-        } else {
-            binding.tokenChart.visibility = View.INVISIBLE
         }
     }
 

@@ -52,4 +52,8 @@
     <string name="pressure_inHg">&#160;inHg</string>
     <string name="percent" translatable="false">%</string>
     <string name="uv_index_unit" translatable="false">&#160;UV</string>
+    <string name="solar_radiation_unit" translatable="false">&#160;W/m2</string>
+    <string name="solar_radiation">Solar Radiation</string>
+    <string name="pressure_absolute">Pressure (abs)</string>
+    <string name="dew_point">Dew Point</string>
 </resources>

@@ -5,29 +5,33 @@ package com.weatherxm.util
 import android.content.Context
 import android.content.res.Resources
 import android.view.MotionEvent
+import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.weatherxm.R
+import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.ui.common.show
 import com.weatherxm.ui.devicehistory.LineChartData
 
 private const val CHART_OFFSET = 5F
 private const val LINE_WIDTH = 2F
 private const val POINT_SIZE = 2F
-private const val MAXIMUMS_GRID_LINES_Y_AXIS = 4
 private const val Y_AXIS_1_DECIMAL_GRANULARITY = 0.1F
 private const val Y_AXIS_PRECIP_INCHES_GRANULARITY = 0.01F
 private const val Y_AXIS_PRESSURE_INHG_GRANULARITY = 0.01F
 private const val X_AXIS_DEFAULT_TIME_GRANULARITY = 3F
 
 @Suppress("MagicNumber")
-private fun LineChart.setDefaultSettings(chartData: LineChartData) {
+private fun LineChart.setDefaultSettings() {
     // General Chart Settings
     description.isEnabled = false
     extraTopOffset = CHART_OFFSET
@@ -42,8 +46,8 @@ private fun LineChart.setDefaultSettings(chartData: LineChartData) {
 
     // Y Axis settings
     isScaleYEnabled = false
-    axisLeft.setDefaultSettings(context, chartData.unit)
-    axisRight.setDefaultSettings(context, chartData.unit)
+    axisLeft.setDefaultSettings()
+    axisRight.setDefaultSettings()
     axisRight.isEnabled = false
     axisLeft.isEnabled = false
 
@@ -120,15 +124,19 @@ private fun LineDataSet.setDefaultSettings(context: Context, resources: Resource
     setCircleColor(resources.getColor(R.color.colorPrimary, context.theme))
 }
 
-private fun YAxis.setDefaultSettings(context: Context, unit: String) {
+private fun YAxis.setDefaultSettings() {
     isGranularityEnabled = true
-    axisLineColor = context.getColor(R.color.colorOnSurfaceVariant)
-    gridColor = context.getColor(R.color.colorBackground)
-    textColor = context.getColor(R.color.colorOnSurface)
-    setLabelCount(MAXIMUMS_GRID_LINES_Y_AXIS, false)
     resetAxisMinimum()
     resetAxisMaximum()
-    valueFormatter = CustomYAxisFormatter(unit)
+
+    /**
+     * Y Axis are DISABLED so the following lines commented out are not needed
+     * axisLineColor = context.getColor(R.color.colorOnSurfaceVariant)
+     * gridColor = context.getColor(R.color.colorBackground)
+     * textColor = context.getColor(R.color.colorOnSurface)
+     * setLabelCount(MAXIMUMS_GRID_LINES_Y_AXIS, false)
+     * valueFormatter = CustomYAxisFormatter(unit)
+     */
 }
 
 private fun MutableList<LineDataSet>.secondaryLineInit(
@@ -172,7 +180,7 @@ fun LineChart.initializeTemperature24hChart(
     data = lineData
 
     // Set the default settings we want to all LineCharts
-    setDefaultSettings(temperatureData)
+    setDefaultSettings()
 
     // Y Axis settings
 
@@ -215,7 +223,7 @@ fun LineChart.initializeHumidity24hChart(chartData: LineChartData) {
     data = lineData
 
     // Set the default settings we want to all LineCharts
-    setDefaultSettings(chartData)
+    setDefaultSettings()
 
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(chartData.timestamps)
@@ -236,7 +244,7 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData) {
     data = lineData
 
     // Set the default settings we want to all LineCharts
-    setDefaultSettings(chartData)
+    setDefaultSettings()
 
     // Y Axis settings
 
@@ -253,7 +261,10 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData) {
                 axisMinimum = yMin - 0.1F
                 axisMaximum = yMax + 0.1F
                 granularity = Y_AXIS_PRESSURE_INHG_GRANULARITY
-                valueFormatter = CustomYAxisFormatter(chartData.unit, 2)
+                /**
+                 * Axis Left is DISABLED so the following lines commented out are not needed
+                 * valueFormatter = CustomYAxisFormatter(chartData.unit, 2)
+                 */
             } else {
                 axisMinimum = yMin - 1
                 axisMaximum = yMax + 1
@@ -301,8 +312,8 @@ fun LineChart.initializePrecipitation24hChart(
     data = lineData
 
     // Set the default settings we want to all LineCharts
-    setDefaultSettings(rateData)
-    setDefaultSettings(accumulatedData)
+    setDefaultSettings()
+    setDefaultSettings()
 
     // General Chart Settings
     val inchesUsed = rateData.unit == resources.getString(R.string.precipitation_in)
@@ -397,7 +408,7 @@ fun LineChart.initializeWind24hChart(
     data = lineData
 
     // Set the default settings we want to all LineCharts
-    setDefaultSettings(windSpeedData)
+    setDefaultSettings()
 
     // Y Axis settings
     /*
@@ -417,7 +428,11 @@ fun LineChart.initializeWind24hChart(
             axisLeft.axisMaximum = yMax + 1
         }
     }
-    axisLeft.valueFormatter = CustomYAxisFormatter(windSpeedData.unit)
+    /**
+     * Axis Left is DISABLED so the following lines commented out are not needed
+     *
+     * axisLeft.valueFormatter = CustomYAxisFormatter(windSpeedData.unit)
+     */
 
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(windGustData.timestamps)
@@ -445,7 +460,7 @@ fun LineChart.initializeUV24hChart(chartData: LineChartData) {
     data = lineData
 
     // Set the default settings we want to all LineCharts
-    setDefaultSettings(chartData)
+    setDefaultSettings()
 
     // Y Axis settings
     with(axisLeft) {
@@ -472,4 +487,49 @@ fun LineChart.clearHighlightValue() {
 
 fun LineChart.getDatasetsNumber(): Int {
     return if (data == null) 0 else data.dataSets.size
+}
+
+@Suppress("MagicNumber")
+fun BarChart.initializeTokenChart(entries: List<BarEntry>) {
+    val dataSet = BarDataSet(entries, "")
+    val barData = BarData(dataSet)
+    data = barData
+
+    // General Chart Settings
+    description.isEnabled = false
+    legend.isEnabled = false
+    setDrawMarkers(false)
+    minOffset = 0F
+
+    // Bar and highlight Settings
+    barData.setDrawValues(false)
+    dataSet.color = context.getColor(R.color.darkGrey)
+    isHighlightFullBarEnabled = false
+    isHighlightPerDragEnabled = false
+    isHighlightPerTapEnabled = false
+
+    // Y Axis settings
+    axisLeft.isEnabled = false
+    axisLeft.setDrawAxisLine(false)
+    axisLeft.setDrawGridLines(false)
+    xAxis.position = XAxis.XAxisPosition.BOTTOM
+    axisRight.isEnabled = false
+    axisRight.setDrawAxisLine(false)
+    axisRight.setDrawGridLines(false)
+    xAxis.isEnabled = false
+    xAxis.setDrawGridLines(false)
+    xAxis.setDrawAxisLine(false)
+    isScaleYEnabled = false
+    isScaleXEnabled = false
+
+    if (dataSet.yMax == VERY_SMALL_NUMBER_FOR_CHART) {
+        axisLeft.axisMinimum = VERY_SMALL_NUMBER_FOR_CHART
+        axisLeft.axisMaximum = VERY_SMALL_NUMBER_FOR_CHART + VERY_SMALL_NUMBER_FOR_CHART
+    } else {
+        axisLeft.axisMinimum = 0F
+        axisLeft.axisMaximum = dataSet.yMax
+    }
+
+    show()
+    notifyDataSetChanged()
 }
