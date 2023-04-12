@@ -234,7 +234,7 @@
 
     <style name="Widget.WeatherXM.Chip.TokenInfo" parent="Widget.WeatherXM.Chip.Token">
         <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="android:textSize">10sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:checkable">false</item>
         <item name="android:clickable">false</item>

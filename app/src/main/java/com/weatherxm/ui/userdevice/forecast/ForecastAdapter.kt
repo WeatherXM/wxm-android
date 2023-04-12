@@ -73,12 +73,17 @@ class ForecastAdapter : ListAdapter<UIForecast, ForecastAdapter.DailyForecastVie
             binding.hourlyRecycler.adapter = hourlyAdapter
             hourlyAdapter.submitList(item.hourlyWeather)
 
-            binding.rootCard.setOnClickListener {
-                onExpandClick()
-            }
+            if (!item.hourlyWeather.isNullOrEmpty()) {
+                binding.rootCard.setOnClickListener {
+                    onExpandClick()
+                }
 
-            binding.toggleExpand.setOnClickListener {
-                onExpandClick()
+                binding.toggleExpand.setOnClickListener {
+                    onExpandClick()
+                }
+                binding.toggleExpand.visibility = View.VISIBLE
+            } else {
+                binding.toggleExpand.visibility = View.INVISIBLE
             }
 
             binding.date.text = item.nameOfDayAndDate
@@ -104,7 +109,7 @@ class ForecastAdapter : ListAdapter<UIForecast, ForecastAdapter.DailyForecastVie
             binding.wind.text = Weather.getFormattedWind(item.windSpeed, item.windDirection)
             binding.humidity.text = Weather.getFormattedHumidity(item.humidity)
 
-            if (absoluteAdapterPosition == 0) {
+            if (absoluteAdapterPosition == 0 && !item.hourlyWeather.isNullOrEmpty()) {
                 onExpandClick()
             }
 

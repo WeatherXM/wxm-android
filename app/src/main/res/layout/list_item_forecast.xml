@@ -36,6 +36,7 @@
                 android:layout_height="wrap_content"
                 app:icon="@drawable/ic_expand_more"
                 android:paddingBottom="0dp"
+                android:paddingTop="0dp"
                 app:iconSize="32dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -159,7 +160,7 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/summaryCard"
                 tools:listitem="@layout/list_item_hourly_weather"
-                tools:visibility="visible"/>
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

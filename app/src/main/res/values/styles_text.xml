@@ -97,35 +97,6 @@
     </style>
 
     <!--
-        Token Card
-    -->
-    <style name="TextAppearance.WeatherXM.TokenCard.TokenValue" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
-        <item name="android:lines">1</item>
-        <item name="autoSizeTextType">uniform</item>
-        <item name="autoSizeMaxTextSize">24sp</item>
-        <item name="autoSizeMinTextSize">8sp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.TokenCard.RewardScore" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
-        <item name="android:lines">1</item>
-        <item name="autoSizeTextType">uniform</item>
-        <item name="autoSizeMaxTextSize">12sp</item>
-        <item name="autoSizeMinTextSize">10sp</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.TokenCard.RewardTimestamp" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
-        <item name="android:lines">1</item>
-        <item name="autoSizeTextType">uniform</item>
-        <item name="autoSizeMaxTextSize">12sp</item>
-        <item name="autoSizeMinTextSize">10sp</item>
-        <item name="android:alpha">0.7</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.TokenCard.Total" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
-        <item name="android:textSize">10sp</item>
-    </style>
-
-    <!--
         Charts
     -->
     <style name="TextAppearance.WeatherXM.Chart.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">

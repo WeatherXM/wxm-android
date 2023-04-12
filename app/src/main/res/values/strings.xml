@@ -352,7 +352,7 @@
     <string name="reconfigure_wifi">Reconfigure WiFi</string>
     <string name="reconfigure_wifi_desc">Update M5’s WiFi network connection</string>
     <string name="remove_station">Remove Station</string>
-    <string name="remove_station_desc"><![CDATA[Unclaim and remove this station from your account. You will not loose any rewards, but you will not be able to view its data and earn additional WXM from it.<br><a href=\"%1$s\">Learn more about it here.</a>]]></string>
+    <string name="remove_station_desc"><![CDATA[Unclaim and remove this station from your account. You will not lose any rewards, but you will not be able to view its data and earn additional WXM from it.<br><a href=\"%1$s\">Learn more about it here.</a>]]></string>
     <string name="remove_station_warning">This action is not reversible!</string>
     <string name="remove_station_password_message"><![CDATA[In order to remove your station you need to confirm you are the owner of this account.<br><b>Please type in your password to remove your station.</b>]]></string>
     <string name="station_information">Station Information</string>

@@ -28,20 +28,22 @@ class ClaimMapFragment : BaseMapFragment() {
     private val heliumParentModel: ClaimHeliumViewModel by activityViewModels()
     private val locationModel: ClaimLocationViewModel by activityViewModels()
 
-    private lateinit var marker: View
+    private var marker: View? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        locationModel.onLocationConfirmed().observe(viewLifecycleOwner) {
-            if (it && this::marker::isInitialized.get()) {
-                val location = viewManager.getViewAnnotationOptionsByView(marker)?.geometry as Point
-                locationModel.setInstallationLocation(location.latitude(), location.longitude())
+        locationModel.onLocationConfirmed().observe(viewLifecycleOwner) { locationConfirmed ->
+            marker?.let {
+                if (locationConfirmed) {
+                    val location = viewManager.getViewAnnotationOptionsByView(it)?.geometry as Point
+                    locationModel.setInstallationLocation(location.latitude(), location.longitude())
 
-                if (locationModel.getDeviceType() == DeviceType.M5_WIFI) {
-                    m5ParentModel.next()
-                } else {
-                    heliumParentModel.next()
+                    if (locationModel.getDeviceType() == DeviceType.M5_WIFI) {
+                        m5ParentModel.next()
+                    } else {
+                        heliumParentModel.next()
+                    }
                 }
             }
         }
@@ -78,7 +80,7 @@ class ClaimMapFragment : BaseMapFragment() {
      */
     @Suppress("MagicNumber")
     fun initMarkerAndListeners() {
-        lifecycleScope.launch() {
+        lifecycleScope.launch {
             delay(100L)
             val map = getMap()
 
@@ -94,22 +96,26 @@ class ClaimMapFragment : BaseMapFragment() {
                 }
             )
 
-            // Add map camera change listener
-            map.addOnCameraChangeListener {
-                viewManager.updateViewAnnotation(marker, viewAnnotationOptions {
-                    geometry(map.cameraState.center)
-                })
+            marker?.let {
+                // Add map camera change listener
+                map.addOnCameraChangeListener { _ ->
+                    viewManager.updateViewAnnotation(it, viewAnnotationOptions {
+                        geometry(map.cameraState.center)
+                    })
+                }
             }
 
             map.addOnMapIdleListener { locationModel.getAddressFromPoint(map.cameraState.center) }
 
-            locationModel.onReverseGeocodedAddress().observe(this@ClaimMapFragment) {
-                val container = marker.findViewById<MaterialCardView>(R.id.addressContainer)
-                if (it != null) {
-                    marker.findViewById<MaterialTextView>(R.id.address).text = it
-                    container.visibility = View.VISIBLE
-                } else {
-                    container.visibility = View.INVISIBLE
+            locationModel.onReverseGeocodedAddress().observe(this@ClaimMapFragment) { address ->
+                marker?.let {
+                    val container = it.findViewById<MaterialCardView>(R.id.addressContainer)
+                    if (address != null) {
+                        it.findViewById<MaterialTextView>(R.id.address).text = address
+                        container.visibility = View.VISIBLE
+                    } else {
+                        container.visibility = View.INVISIBLE
+                    }
                 }
             }
         }
