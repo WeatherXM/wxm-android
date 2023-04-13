@@ -79,6 +79,13 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
             binding.bleActionFlow.onProgressChanged(it)
         }
 
+        val currentFirmwareVersion = model.device.attributes?.firmware?.current
+        val assignedFirmwareVersion = model.device.attributes?.firmware?.assigned
+        binding.bleActionFlow.onShowStationUpdateMetadata(
+            model.device.getNameOrLabel(),
+            "$currentFirmwareVersion ➞ $assignedFirmwareVersion"
+        )
+
         initBluetoothAndStart()
     }
 

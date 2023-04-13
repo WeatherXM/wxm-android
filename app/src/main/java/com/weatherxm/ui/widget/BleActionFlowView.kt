@@ -159,7 +159,7 @@ class BleActionFlowView : ConstraintLayout {
         hideButtons()
         binding.steps.visibility = View.GONE
         binding.status.clear()
-        binding.status.animation(R.raw.anim_success)
+        binding.status.animation(R.raw.anim_success, false)
         binding.status.title(title)
         if (htmlMessage != null) {
             binding.status.htmlSubtitle(htmlMessage, argForHtmlMessage)
@@ -235,6 +235,14 @@ class BleActionFlowView : ConstraintLayout {
 
     fun onShowInformationCard() {
         binding.informationCard.visibility = View.VISIBLE
+    }
+
+    fun onShowStationUpdateMetadata(stationName: String, firmwareVersions: String) {
+        binding.stationName.text = stationName
+        binding.firmwareVersions.text = firmwareVersions
+        binding.stationName.visibility = View.VISIBLE
+        binding.firmwareVersionTitle.visibility = View.VISIBLE
+        binding.firmwareVersions.visibility = View.VISIBLE
     }
 
     private fun hideButtons() {
