@@ -315,6 +315,7 @@
     <string name="rate">Rate</string>
     <string name="gust">Gust</string>
     <string name="speed">Speed</string>
+    <string name="solar">Solar</string>
     <string name="highlight_data_divider">/</string>
     <string name="empty_history_day_subtitle">No weather data found for your device for this day.</string>
     <string name="empty_history_day_subtitle_with_day">No weather data found for your device for %s.</string>

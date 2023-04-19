@@ -35,6 +35,7 @@
         <attr name="line_chart_secondary_line_name" format="string" />
         <attr name="line_chart_primary_highlight_name" format="string" />
         <attr name="line_chart_secondary_highlight_name" format="string" />
+        <attr name="line_chart_secondary_line_color" format="reference" />
     </declare-styleable>
     <declare-styleable name="BarChartView">
         <attr name="bar_chart_title" format="string" />

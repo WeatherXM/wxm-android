@@ -91,7 +91,7 @@ class HourlyAdapter : ListAdapter<HourlyWeather, HourlyViewHolder>(HourlyDiffCal
                 Weather.getFormattedPressure(item.pressure, includeUnit = false),
                 pressureUnit
             )
-            binding.uv.setData(Weather.getFormattedUV(item.uvIndex, includeUnit = false))
+            binding.uv.setData(Weather.getFormattedUV(item.uvIndex))
         }
     }
 

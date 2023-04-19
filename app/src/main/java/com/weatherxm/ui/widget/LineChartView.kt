@@ -68,6 +68,13 @@ class LineChartView : LinearLayout {
                     binding.secondaryDataName.hide(null)
                     binding.divider.hide(null)
                 }
+
+                binding.secondaryLineColor.setChipBackgroundColorResource(
+                    getResourceId(
+                        R.styleable.LineChartView_line_chart_secondary_line_color,
+                        R.color.chart_secondary_line
+                    )
+                )
             } finally {
                 recycle()
             }

@@ -296,6 +296,7 @@ fun LineChart.initializePrecipitation24hChart(
         it.lineWidth = 0F
         it.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
         it.setDrawFilled(true)
+        it.color = resources.getColor(R.color.chart_fill_collor, context.theme)
         it.fillColor = context.getColor(R.color.chart_fill_collor)
     }
     dataSets.addAll(accumulatedDataEmptyLineDataSets)
@@ -312,7 +313,6 @@ fun LineChart.initializePrecipitation24hChart(
     data = lineData
 
     // Set the default settings we want to all LineCharts
-    setDefaultSettings()
     setDefaultSettings()
 
     // General Chart Settings
@@ -440,21 +440,38 @@ fun LineChart.initializeWind24hChart(
     notifyDataSetChanged()
 }
 
+
 @Suppress("MagicNumber")
-fun LineChart.initializeUV24hChart(chartData: LineChartData) {
-    val lineDataSetsWithValues = chartData.getLineDataSetsWithValues()
-    val emptyLineDataSets = chartData.getEmptyLineDataSets()
+fun LineChart.initializeSolarChart(
+    uvData: LineChartData, radiationData: LineChartData
+) {
+    val uvLineDataSetsWithValues = uvData.getLineDataSetsWithValues()
+    val uvEmptyLineDataSets = uvData.getEmptyLineDataSets()
+    val radiationDataLineDataSetsWithValues = radiationData.getLineDataSetsWithValues()
+    val radiationDataEmptyLineDataSets = radiationData.getEmptyLineDataSets()
     val dataSets = mutableListOf<ILineDataSet>()
 
-    dataSets.addAll(lineDataSetsWithValues.primaryLineInit(context, resources))
-    dataSets.addAll(emptyLineDataSets)
-
-    lineDataSetsWithValues.forEach {
+    dataSets.addAll(radiationDataLineDataSetsWithValues.secondaryLineInit(context, resources))
+    radiationDataLineDataSetsWithValues.forEach {
+        // Radiation Settings
+        it.setDrawCircles(false)
         it.setDrawFilled(true)
+        it.lineWidth = 0.2F
+        it.axisDependency = YAxis.AxisDependency.RIGHT
+        it.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+        it.color = resources.getColor(R.color.chart_fill_collor, context.theme)
         it.fillColor = context.getColor(R.color.chart_fill_collor)
+    }
+    dataSets.addAll(radiationDataEmptyLineDataSets)
+
+    dataSets.addAll(uvLineDataSetsWithValues.primaryLineInit(context, resources))
+    uvLineDataSetsWithValues.forEach {
+        // UV Settings
+        it.axisDependency = YAxis.AxisDependency.LEFT
         it.setDrawCircles(false)
         it.mode = LineDataSet.Mode.STEPPED
     }
+    dataSets.addAll(uvEmptyLineDataSets)
 
     val lineData = LineData(dataSets)
     data = lineData
@@ -462,7 +479,6 @@ fun LineChart.initializeUV24hChart(chartData: LineChartData) {
     // Set the default settings we want to all LineCharts
     setDefaultSettings()
 
-    // Y Axis settings
     with(axisLeft) {
         axisMinimum = 0F
         isGranularityEnabled = true
@@ -471,7 +487,7 @@ fun LineChart.initializeUV24hChart(chartData: LineChartData) {
     axisLeft.isEnabled = false
 
     // X axis settings
-    xAxis.valueFormatter = CustomXAxisFormatter(chartData.timestamps)
+    xAxis.valueFormatter = CustomXAxisFormatter(uvData.timestamps)
     show()
     notifyDataSetChanged()
 }

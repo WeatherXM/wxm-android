@@ -102,7 +102,7 @@ class WeatherCardView : LinearLayout, KoinComponent {
                 Weather.getFormattedPressure(weatherData?.pressure, includeUnit = false),
                 pressureUnit
             )
-            binding.uv.setData(Weather.getFormattedUV(weatherData?.uvIndex, includeUnit = false))
+            binding.uv.setData(Weather.getFormattedUV(weatherData?.uvIndex))
             binding.solarRadiation.setData(
                 Weather.getFormattedSolarRadiation(weatherData?.solarIrradiance, false),
                 context.getString(R.string.solar_radiation_unit)

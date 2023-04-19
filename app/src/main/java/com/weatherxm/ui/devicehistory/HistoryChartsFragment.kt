@@ -20,8 +20,8 @@ import com.weatherxm.util.getDatasetsNumber
 import com.weatherxm.util.initializeHumidity24hChart
 import com.weatherxm.util.initializePrecipitation24hChart
 import com.weatherxm.util.initializePressure24hChart
+import com.weatherxm.util.initializeSolarChart
 import com.weatherxm.util.initializeTemperature24hChart
-import com.weatherxm.util.initializeUV24hChart
 import com.weatherxm.util.initializeWind24hChart
 import com.weatherxm.util.onHighlightValue
 import timber.log.Timber
@@ -102,7 +102,7 @@ class HistoryChartsFragment : Fragment() {
                             initPrecipitationChart(it.precipitation, it.precipitationAccumulated)
                             initHumidityChart(it.humidity)
                             initPressureChart(it.pressure)
-                            initUvChart(it.uv)
+                            initSolarChart(it.uv, it.solarRadiation)
                             if (model.isTodayShown()) {
                                 // Auto highlight latest entry
                                 autoHighlightCharts(model.getLatestChartEntry(it.temperature))
@@ -158,9 +158,9 @@ class HistoryChartsFragment : Fragment() {
         binding.chartWind.onClearHighlight()
         binding.chartWind.getChart().clearHighlightValue()
         binding.chartWind.getChart().clear()
-        binding.chartUv.onClearHighlight()
-        binding.chartUv.getChart().clearHighlightValue()
-        binding.chartUv.getChart().clear()
+        binding.chartSolar.onClearHighlight()
+        binding.chartSolar.getChart().clearHighlightValue()
+        binding.chartSolar.getChart().clear()
     }
 
     private fun initTemperatureChart(temperatureData: LineChartData, feelsLikeData: LineChartData) {
@@ -257,20 +257,23 @@ class HistoryChartsFragment : Fragment() {
         }
     }
 
-    private fun initUvChart(data: LineChartData) {
-        if (data.isDataValid()) {
-            binding.chartUv.getChart().initializeUV24hChart(data)
-            binding.chartUv.getChart().setOnChartValueSelectedListener(
+    private fun initSolarChart(uvData: LineChartData, radiationData: LineChartData) {
+        if (uvData.isDataValid() && radiationData.isDataValid()) {
+            binding.chartSolar.getChart().initializeSolarChart(uvData, radiationData)
+            binding.chartSolar.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
                         if (e != null) {
-                            val time = data.timestamps[e.x.toInt()]
+                            val time = uvData.timestamps[e.x.toInt()]
                             val uv = Weather.getFormattedUV(e.y.toInt())
-                            binding.chartUv.onHighlightedData(time, uv)
+                            val radiation = Weather.getFormattedSolarRadiation(
+                                radiationData.entries[e.x.toInt()].y
+                            )
+                            binding.chartSolar.onHighlightedData(time, uv, radiation)
 
                             autoHighlightCharts(e.x)
                         } else {
-                            binding.chartUv.onClearHighlight()
+                            binding.chartSolar.onClearHighlight()
                         }
                     }
 
@@ -279,7 +282,7 @@ class HistoryChartsFragment : Fragment() {
                     }
                 })
         } else {
-            showNoDataText(binding.chartUv.getChart())
+            showNoDataText(binding.chartSolar.getChart())
         }
     }
 
@@ -373,7 +376,7 @@ class HistoryChartsFragment : Fragment() {
             chartWind.getChart().onHighlightValue(x, chartWind.getChart().getDatasetsNumber() / 2)
             chartHumidity.getChart().onHighlightValue(x, 0)
             chartPressure.getChart().onHighlightValue(x, 0)
-            chartUv.getChart().onHighlightValue(x, 0)
+            chartSolar.getChart().onHighlightValue(x, chartSolar.getChart().getDatasetsNumber() / 2)
         }
         onAutoHighlighting = false
     }

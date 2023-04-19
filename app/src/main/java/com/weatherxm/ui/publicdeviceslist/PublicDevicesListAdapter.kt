@@ -88,10 +88,12 @@ class PublicDevicesListAdapter(
                     when (item.isActive) {
                         true -> {
                             binding.statusIcon.setColor(R.color.success)
+                            binding.status.strokeColor = itemView.context.getColor(R.color.success)
                             R.color.successTint
                         }
                         false -> {
                             binding.statusIcon.setColor(R.color.error)
+                            binding.status.strokeColor = itemView.context.getColor(R.color.error)
                             R.color.errorTint
                         }
                         null -> {

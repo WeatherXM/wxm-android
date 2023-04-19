@@ -66,6 +66,7 @@ class HistoryUseCaseImpl(
         val humidityEntries = mutableListOf<Entry>()
         val pressureEntries = mutableListOf<Entry>()
         val uvEntries = mutableListOf<Entry>()
+        val solarRadiationEntries = mutableListOf<Entry>()
         val times = mutableListOf<String>()
         var temperatureFound: Boolean
         var feelsLikeFound: Boolean
@@ -77,6 +78,7 @@ class HistoryUseCaseImpl(
         var pressureFound: Boolean
         var humidityFound: Boolean
         var uvFound: Boolean
+        var solarRadiationFound: Boolean
 
         LocalDateTimeRange(
             date.atStartOfDay(),
@@ -92,6 +94,7 @@ class HistoryUseCaseImpl(
             pressureFound = false
             humidityFound = false
             uvFound = false
+            solarRadiationFound = false
             val counter = i.toFloat()
 
             // Set showMinutes12Format as false
@@ -169,6 +172,11 @@ class HistoryUseCaseImpl(
                         uvEntries.add(Entry(counter, it.toFloat()))
                         uvFound = true
                     }
+
+                    hourlyWeather.solarIrradiance?.let {
+                        solarRadiationEntries.add(Entry(counter, Weather.roundToDecimals(it)))
+                        solarRadiationFound = true
+                    }
                 }
             }
 
@@ -182,6 +190,7 @@ class HistoryUseCaseImpl(
             if (!pressureFound) pressureEntries.add(Entry(counter, Float.NaN))
             if (!humidityFound) humidityEntries.add(Entry(counter, Float.NaN))
             if (!uvFound) uvEntries.add(Entry(counter, Float.NaN))
+            if (!solarRadiationFound) solarRadiationEntries.add(Entry(counter, Float.NaN))
         }
 
         return HistoryCharts(
@@ -263,6 +272,12 @@ class HistoryUseCaseImpl(
                 resHelper.getString(R.string.uv_index_unit),
                 times,
                 uvEntries
+            ),
+            solarRadiation = LineChartData(
+                resHelper.getString(R.string.solar_radiation),
+                resHelper.getString(R.string.solar_radiation_unit),
+                times,
+                solarRadiationEntries
             )
         )
     }

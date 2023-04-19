@@ -54,6 +54,7 @@
                     app:line_chart_primary_highlight_name="@string/rate"
                     app:line_chart_primary_line_name="@string/precip_rate"
                     app:line_chart_secondary_highlight_name="@string/daily"
+                    app:line_chart_secondary_line_color="@color/chart_fill_collor"
                     app:line_chart_secondary_line_name="@string/daily_precip"
                     app:line_chart_title="@string/precipitation"
                     app:line_chart_title_icon="@drawable/ic_weather_precipitation" />
@@ -98,7 +99,7 @@
                     app:line_chart_title_icon="@drawable/ic_weather_pressure" />
 
                 <com.weatherxm.ui.widget.LineChartView
-                    android:id="@+id/chart_uv"
+                    android:id="@+id/chart_solar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
@@ -106,7 +107,11 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/chart_pressure"
                     app:line_chart_primary_highlight_name="@string/uv_index"
-                    app:line_chart_title="@string/uv_index"
+                    app:line_chart_primary_line_name="@string/uv_index"
+                    app:line_chart_secondary_highlight_name="@string/solar_radiation"
+                    app:line_chart_secondary_line_color="@color/chart_fill_collor"
+                    app:line_chart_secondary_line_name="@string/solar_radiation"
+                    app:line_chart_title="@string/solar"
                     app:line_chart_title_icon="@drawable/ic_weather_solar" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -116,7 +121,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
                     android:padding="@dimen/padding_extra_small"
-                    app:layout_constraintTop_toBottomOf="@id/chart_uv"
+                    app:layout_constraintTop_toBottomOf="@id/chart_solar"
                     tools:text="All displayed times are in EEST." />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

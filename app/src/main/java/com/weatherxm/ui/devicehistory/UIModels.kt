@@ -1,7 +1,6 @@
 package com.weatherxm.ui.devicehistory
 
 import androidx.annotation.Keep
-import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.squareup.moshi.JsonClass
@@ -20,13 +19,15 @@ data class HistoryCharts(
     var windDirection: LineChartData,
     var humidity: LineChartData,
     var pressure: LineChartData,
-    var uv: LineChartData
+    var uv: LineChartData,
+    var solarRadiation: LineChartData
 ) {
     fun isEmpty(): Boolean {
         return !temperature.isDataValid() && !feelsLike.isDataValid()
             && !precipitation.isDataValid() && !precipitationAccumulated.isDataValid()
             && !windSpeed.isDataValid() && !windGust.isDataValid() && !windDirection.isDataValid()
-            && !humidity.isDataValid() && !pressure.isDataValid() && !uv.isDataValid()
+            && !humidity.isDataValid() && !pressure.isDataValid()
+            && !uv.isDataValid() && !solarRadiation.isDataValid()
     }
 }
 
@@ -121,18 +122,5 @@ data class LineChartData(
         }
 
         return dataSets
-    }
-}
-
-@Keep
-@JsonClass(generateAdapter = true)
-data class BarChartData(
-    var name: String,
-    var unit: String,
-    var timestamps: MutableList<String>,
-    var entries: MutableList<BarEntry>
-) {
-    fun isDataValid(): Boolean {
-        return timestamps.isNotEmpty() && entries.filterNot { it.y == Float.MIN_VALUE }.isNotEmpty()
     }
 }
