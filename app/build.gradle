@@ -19,8 +19,9 @@ def getGitCommitHash = { ->
 }
 
 android {
+    namespace "com.weatherxm"
     compileSdkVersion 33
-    buildToolsVersion "33.0.0"
+    buildToolsVersion "33.0.2"
 
     defaultConfig {
         applicationId "com.weatherxm.app"
@@ -170,8 +171,8 @@ android {
         // Enable support for the new language APIs
         coreLibraryDesugaringEnabled true
 
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     packagingOptions {
@@ -184,7 +185,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 
     lint {
@@ -271,13 +272,13 @@ dependencies {
 
     // Mapbox
     implementation "com.mapbox.maps:android:10.12.2"
-    implementation "com.mapbox.search:mapbox-search-android:1.0.0-rc.2"
+    implementation "com.mapbox.search:mapbox-search-android:1.0.0-rc.3"
 
     // Insetter
     implementation "dev.chrisbanes.insetter:insetter:0.6.1"
 
     // Import the Firebase BoM
-    implementation platform("com.google.firebase:firebase-bom:31.4.0")
+    implementation platform("com.google.firebase:firebase-bom:31.5.0")
     implementation "com.google.firebase:firebase-crashlytics-ktx"
     implementation "com.google.firebase:firebase-perf-ktx"
     implementation "com.google.firebase:firebase-config-ktx"
@@ -297,7 +298,7 @@ dependencies {
     implementation "me.saket:better-link-movement-method:2.2.0"
 
     // BLE Scanning and Communication
-    implementation "com.juul.kable:core:0.22.0"
-    implementation "com.github.espressif:esp-idf-provisioning-android:lib-2.1.1"
+    implementation "com.juul.kable:core:0.23.0"
+    implementation "com.github.espressif:esp-idf-provisioning-android:lib-2.1.2"
     implementation "no.nordicsemi.android:dfu:2.3.0"
 }
