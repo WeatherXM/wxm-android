@@ -60,8 +60,8 @@ android {
             dimension "server"
             applicationIdSuffix ".mock"
             resValue "string", "app_name", "WXM Remote Mock"
-            buildConfigField("String", "API_URL", "\"https://wxm-api-mock.herokuapp.com\"")
-            buildConfigField("String", "AUTH_URL", "\"https://wxm-api-mock.herokuapp.com\"")
+            buildConfigField("String", "API_URL", "\"https://api-mock.weatherxm.com\"")
+            buildConfigField("String", "AUTH_URL", "\"https://api-mock.weatherxm.com\"")
         }
         staging {
             dimension "server"
