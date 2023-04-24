@@ -5,9 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.ActivityHistoryBinding
-import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.getLastTab
-import com.weatherxm.ui.common.getParcelableExtra
 import com.weatherxm.ui.common.getSelectedTab
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.devicehistory.HistoryChartsFragment.SwipeRefreshCallback
@@ -26,7 +25,7 @@ class HistoryActivity : AppCompatActivity(), KoinComponent, SwipeRefreshCallback
     private lateinit var binding: ActivityHistoryBinding
 
     private val model: HistoryChartsViewModel by viewModel {
-        parametersOf(getParcelableExtra(ARG_DEVICE, Device.empty()))
+        parametersOf(intent.getParcelableExtra<Device>(Contracts.ARG_DEVICE))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

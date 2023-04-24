@@ -20,7 +20,6 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.checkPermissionsAndThen
-import com.weatherxm.ui.common.getParcelableExtra
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
 import org.koin.android.ext.android.inject
@@ -36,7 +35,7 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
 
     private val model: DeviceHeliumOTAViewModel by viewModel {
         parametersOf(
-            getParcelableExtra(ARG_DEVICE, Device.empty()),
+            intent.getParcelableExtra<Device>(ARG_DEVICE),
             intent.getBooleanExtra(ARG_BLE_DEVICE_CONNECTED, false)
         )
     }

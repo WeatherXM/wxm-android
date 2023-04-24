@@ -14,8 +14,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityUserDeviceBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.Contracts.ARG_DEVICE
-import com.weatherxm.ui.common.getParcelableExtra
+import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.userdevice.current.CurrentFragment
 import com.weatherxm.ui.userdevice.forecast.ForecastFragment
@@ -32,7 +31,7 @@ import timber.log.Timber
 
 class UserDeviceActivity : AppCompatActivity(), KoinComponent {
     private val model: UserDeviceViewModel by viewModel {
-        parametersOf(getParcelableExtra(ARG_DEVICE, Device.empty()))
+        parametersOf(intent.getParcelableExtra<Device>(Contracts.ARG_DEVICE))
     }
     private lateinit var binding: ActivityUserDeviceBinding
     private val navigator: Navigator by inject()

@@ -9,8 +9,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityStationSettingsBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.Contracts.ARG_DEVICE
-import com.weatherxm.ui.common.getParcelableExtra
+import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.applyInsets
@@ -23,7 +22,7 @@ import timber.log.Timber
 
 class StationSettingsActivity : AppCompatActivity(), KoinComponent {
     private val model: StationSettingsViewModel by viewModel {
-        parametersOf(getParcelableExtra(ARG_DEVICE, Device.empty()))
+        parametersOf(intent.getParcelableExtra<Device>(Contracts.ARG_DEVICE))
     }
     private lateinit var binding: ActivityStationSettingsBinding
     private val navigator: Navigator by inject()
