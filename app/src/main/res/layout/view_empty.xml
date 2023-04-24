@@ -21,23 +21,23 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
-        style="@style/TextAppearance.WeatherXM.EmptyView.Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_normal"
         android:gravity="center_horizontal"
+        android:textAppearance="@style/TextAppearance.WeatherXM.EmptyView.Title"
         tools:text="Nothing here!" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/subtitle"
-        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_extra_small"
         android:autoLink="all"
         android:gravity="center_horizontal"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
         tools:text="Honestly, something is wrong" />
 
     <com.google.android.material.button.MaterialButton

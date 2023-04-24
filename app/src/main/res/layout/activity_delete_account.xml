@@ -40,46 +40,46 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/quickDescription"
-                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/deletion_account_quick_description"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/deletedData"
-                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_large"
                     android:text="@string/deletion_account_what_is_deleted"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     app:layout_constraintTop_toBottomOf="@id/quickDescription" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/notDeletedData"
-                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_large"
                     android:text="@string/deletion_account_what_is_not_deleted"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     app:layout_constraintTop_toBottomOf="@id/deletedData" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/doNotCollectData"
-                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_large"
                     android:text="@string/deletion_account_do_not_collect_data"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     app:layout_constraintTop_toBottomOf="@id/notDeletedData" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/askSupport"
-                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingVertical="@dimen/margin_normal"
                     android:text="@string/deletion_account_ask_support"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     app:layout_constraintTop_toBottomOf="@id/doNotCollectData" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -146,10 +146,10 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/checkboxText"
-                            style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/understand_deletion_checkbox_message"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             app:layout_constraintTop_toTopOf="parent" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

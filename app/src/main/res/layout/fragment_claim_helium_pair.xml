@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/margin_normal"
-        app:cardBackgroundColor="@color/select_device_card_color"
+        app:cardBackgroundColor="@color/layer1"
         app:contentPadding="0dp">
 
         <androidx.core.widget.NestedScrollView
@@ -43,20 +43,20 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/title"
-                            style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/select_device_to_pair"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/description"
-                            style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_normal"
                             android:text="@string/select_device_desc"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             app:layout_constraintTop_toBottomOf="@id/title" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -92,12 +92,12 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/infoTitle"
-                            style="@style/TextAppearance.WeatherXM.TitleSmall"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_normal"
                             android:layout_marginBottom="@dimen/margin_normal"
                             android:gravity="center"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toTopOf="@id/infoSubtitle"
                             app:layout_constraintTop_toBottomOf="@id/infoIcon"
@@ -165,7 +165,7 @@
                             android:indeterminate="false"
                             android:indeterminateOnly="false"
                             android:visibility="gone"
-                            app:indicatorColor="@color/progress_color_in_button"
+                            app:indicatorColor="@color/lightestBlue"
                             app:trackColor="@color/transparent"
                             app:trackThickness="54dp"
                             tools:visibility="visible" />
@@ -204,23 +204,23 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/connectionLostTitle"
-                style="@style/TextAppearance.WeatherXM.EmptyView.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/margin_large"
                 android:gravity="center_horizontal"
                 android:text="@string/ble_connection_lost"
+                android:textAppearance="@style/TextAppearance.WeatherXM.EmptyView.Title"
                 app:layout_constraintBottom_toTopOf="@id/connectionLostSubtitle" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/connectionLostSubtitle"
-                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/margin_large"
                 android:gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 app:layout_constraintBottom_toTopOf="@id/contactSupport"
                 tools:text="@string/ble_connection_lost_description" />
 

@@ -13,10 +13,11 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card"
-        style="@style/Widget.WeatherXM.MaterialCard.NoRadius.Small"
+        style="@style/Widget.WeatherXM.MaterialCard.Small"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:cardBackgroundColor="@color/transparent"
+        app:cardCornerRadius="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -27,10 +28,10 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/time"
-                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 tools:text="13:37 am" />
 
             <com.airbnb.lottie.LottieAnimationView
@@ -47,19 +48,19 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/temperature"
-                style="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
                 android:gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textStyle="bold"
                 tools:text="26°C" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/feelsLike"
-                style="@style/TextAppearance.WeatherXM.Default.BodySmall"
                 android:layout_width="wrap_content"
                 android:layout_height="24dp"
                 android:gravity="center_horizontal"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                 tools:text="Feels Like 26°" />
 
             <com.weatherxm.ui.widget.CompactWeatherDataView

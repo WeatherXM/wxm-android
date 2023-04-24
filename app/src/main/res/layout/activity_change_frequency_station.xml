@@ -58,19 +58,19 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/description"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/set_frequency_desc"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/frequencyTitle"
-                        style="@style/TextAppearance.WeatherXM.TextInput.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal"
                         android:text="@string/frequency"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.TextInput.Title"
                         android:textStyle="bold"
                         app:layout_constraintTop_toBottomOf="@id/description" />
 
@@ -83,11 +83,11 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/frequencySelectedText"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
                         android:text="@string/changing_frequency_selected_text"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintTop_toBottomOf="@id/frequenciesSelector" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -113,11 +113,11 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/confirmFrequencyText"
-                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_normal"
                     android:text="@string/set_frequency_toggle_desc"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/confirmFrequencyToggle"
                     app:layout_constraintTop_toTopOf="@id/confirmFrequencyToggle" />

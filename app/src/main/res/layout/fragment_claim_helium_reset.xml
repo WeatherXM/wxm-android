@@ -32,10 +32,10 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/resetTitle"
-                        style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/reset_station"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,11 +53,11 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/firstStep"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_normal"
                         android:text="@string/reset_ble_first_step"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/firstStepIcon"
                         app:layout_constraintTop_toTopOf="@id/firstStepIcon" />
@@ -76,11 +76,11 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/secondStep"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_normal"
                         android:text="@string/reset_second_step"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/secondStepIcon"
                         app:layout_constraintTop_toTopOf="@id/secondStepIcon" />

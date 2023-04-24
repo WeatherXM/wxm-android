@@ -12,7 +12,7 @@
         android:id="@+id/chart_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/chart_title_background"
+        app:cardBackgroundColor="@color/layer1"
         app:cardElevation="@dimen/elevation_small"
         app:contentPadding="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,12 +31,13 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/chart_title"
-                    style="@style/TextAppearance.WeatherXM.Chart.Title"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_normal"
                     android:drawablePadding="@dimen/padding_extra_small"
                     android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    android:textStyle="bold"
                     app:drawableTint="@color/colorOnSurface"
                     app:layout_constraintEnd_toStartOf="@id/primaryLineName"
                     app:layout_constraintStart_toStartOf="parent"
@@ -46,10 +47,10 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/primaryLineName"
-                    style="@style/TextAppearance.WeatherXM.Default.BodySmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_normal"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                     app:layout_constraintEnd_toStartOf="@id/secondaryLineName"
                     app:layout_constraintTop_toTopOf="@id/chart_title"
                     tools:text="Temperature" />
@@ -66,10 +67,10 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/secondaryLineName"
-                    style="@style/TextAppearance.WeatherXM.Default.BodySmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/margin_normal"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Feels Like" />
@@ -103,7 +104,7 @@
                         android:id="@+id/highlightContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:cardBackgroundColor="@color/chart_title_background"
+                        app:cardBackgroundColor="@color/layer1"
                         app:cardCornerRadius="@dimen/card_corner_radius_small"
                         app:contentPadding="@dimen/padding_small"
                         app:layout_constraintTop_toTopOf="parent">
@@ -115,57 +116,57 @@
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/time"
-                                style="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/margin_extra_small"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 android:textColor="@color/colorPrimaryVariant"
                                 android:textStyle="bold"
                                 tools:text="12 am" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/primaryDataName"
-                                style="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/margin_extra_small"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 android:textColor="@color/colorPrimaryVariant"
                                 tools:text="Speed:" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/primaryDataValue"
-                                style="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/margin_extra_small"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 android:textColor="@color/colorPrimaryVariant"
                                 android:textStyle="bold"
                                 tools:text="4 km/h SSW" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/divider"
-                                style="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/margin_extra_small"
                                 android:text="@string/highlight_data_divider"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 android:textColor="@color/colorPrimaryVariant" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/secondaryDataName"
-                                style="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/margin_extra_small"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 android:textColor="@color/colorPrimaryVariant"
                                 tools:text="Gust:" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/secondaryDataValue"
-                                style="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="@dimen/margin_extra_small"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 android:textColor="@color/colorPrimaryVariant"
                                 android:textStyle="bold"
                                 tools:text="40 km/h SSW" />

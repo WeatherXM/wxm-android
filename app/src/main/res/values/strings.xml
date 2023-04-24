@@ -9,7 +9,6 @@
     <string name="action_ok">OK</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_change">Change</string>
-    <string name="action_next">Next</string>
     <string name="action_confirm">Confirm</string>
     <string name="action_back">Back</string>
     <string name="action_logout">Logout</string>
@@ -18,7 +17,6 @@
     <string name="action_verify">Verify</string>
     <string name="action_pair">Pair</string>
     <string name="action_reset">Reset</string>
-    <string name="action_select">Select</string>
     <string name="action_have_reset_device">I\’ve Reset My Device</string>
     <string name="action_pair_device">Pair Device</string>
     <string name="action_retry_updating">Retry Updating</string>
@@ -29,7 +27,7 @@
     <string name="no">No</string>
     <string name="action_scan_qr">Scan QR Code</string>
     <string name="important_message">Important Message</string>
-    <string name="action_toggle_expand">Toggle Expand</string>
+    <string name="unknown">Unknown</string>
 
     <!-- Permissions -->
     <string name="permission_location_title">Access to your location</string>
@@ -61,12 +59,7 @@
     <!-- Weather Station(s) -->
     <string name="weather_stations">Weather Stations</string>
     <string name="add_weather_station">Claim your WXM device by clicking the + button.</string>
-    <string name="last_active">Last seen %s</string>
-    <string name="last_active_just_now">just now</string>
     <string name="just_now">Just now</string>
-    <string name="online">Online</string>
-    <string name="offline">Offline</string>
-    <string name="unknown">Unknown</string>
     <string name="empty_weather_stations">Oh, no! No WXM devices yet?</string>
     <string name="displayed_times">All displayed times are in %s timezone.</string>
     <string name="station_offline">Station Offline</string>
@@ -170,7 +163,6 @@
     <string name="signup_instructions">Signup with your email and your account will be created shortly.</string>
     <string name="success_signup_text">Thanks for joining WeatherXM! We have sent you an account activation link to %s. Please, set a password and then try to sign in.</string>
     <string name="info_registration_contact_support">Not receiving an activation email? Contact our support team.</string>
-    <string name="prompt_login"><![CDATA[Already a user? <span style=\"color: #2599df\">SIGN IN</span>]]></string>
 
     <!-- Tokens -->
     <string name="title_device_rewards">Detailed WXM Rewards</string>
@@ -178,10 +170,6 @@
     <string name="no_transactions_title">Oh, no! No transactions yet?</string>
     <string name="no_rewards">No rewards</string>
     <string name="rewards">Rewards</string>
-    <string name="wxm">WXM</string>
-    <string name="tokens_last">Last:</string>
-    <string name="tokens_total">Total:</string>
-    <string name="button_24h">24H</string>
     <string name="button_7d">7D</string>
     <string name="button_30d">30D</string>
     <string name="total">total</string>
@@ -190,7 +178,7 @@
     <string name="reward">+ %s WXM</string>
     <string name="score">%.2f</string>
     <string name="score_unknown">N/A</string>
-    <string name="validation_score">Reward Score</string>
+    <string name="reward_score">Reward Score</string>
     <string name="network_max_reward">Network Max</string>
     <string name="transaction_hash">Transaction hash: %s</string>
 
@@ -201,7 +189,6 @@
     <string name="perm_location_scanning_desc">We will need to access your location in order to utilise it in connecting and communicating to your WeatherXM Device.</string>
     <string name="select_device_to_pair">Select Device to Pair</string>
     <string name="select_device_desc">Select your device from the list below.</string>
-    <string name="claim_manually">Claim Device Manually</string>
     <string name="scan_again">Scan Again</string>
     <string name="no_bluetooth_available">No Bluetooth</string>
     <string name="no_bluetooth_available_desc"><![CDATA[No Bluetooth found. Cannot proceed.]]></string>
@@ -225,10 +212,7 @@
     <string name="helium_type_title">WS2000 | Helium</string>
     <string name="helium_type_desc">Claim Device via Bluetooth</string>
 
-
     <!-- Claim device -->
-    <string name="action_claim">Claim</string>
-    <string name="info_claim_contact_support">Trouble claiming your device? Contact our support team.</string>
     <string name="device_serial_number_title">Device Serial Number</string>
     <string name="device_serial_number_hint">Enter the device\'s serial number</string>
     <string name="device_serial_number_instructions"><![CDATA[Device\'s serial number can be found in the M5 (shown after automatic reboot, or in the settings screen - swipe right to view). You can also find this information on the box of your station.<br><br>It is 18 characters long and looks like this: <strong>12:34:56:78:9A:BC:DE:F0:12</strong>. Please type only the letters and numbers.]]></string>
@@ -280,12 +264,8 @@
     <string name="reset_station">Reset Station</string>
     <string name="reset">Reset</string>
     <string name="reset_ble_first_step"><![CDATA[Push the <b>RESET button</b> on the bottom of your WeatherXM device to enable Bluetooth pairing. <b>This will expire in 5 minutes. After that, you will need to push it again to restart the pairing!</b>]]></string>
-    <string name="reset_manual_first_step"><![CDATA[Press the <b>RESET hole</b> on the bottom of your WeatherXM device.]]></string>
     <string name="reset_second_step"><![CDATA[Tap the \"I\'ve Reset My Device\" button below.]]></string>
-    <string name="pairing_device">Pairing Device</string>
-    <string name="pairing_device_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to the Helium\'s network bandwidth limitations!<b>]]></string>
     <string name="pairing_failed">Pairing Failed</string>
-    <string name="pairing_failed_desc"><![CDATA[Pairing failed, please try again!<br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a><br><br>Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
     <string name="helium_pairing_failed_desc">The Pairing process with WS2000 has failed. Please try again, and if the problem persists, contact support.</string>
     <string name="helium_fetching_info_failed">Fetching device\'s info failed. Please try again, and if the problem persists, contact support.</string>
     <string name="helium_bluetooth_disabled">The Pairing process with WS2000 has failed. Bluetooth is disabled. Please enable it and try again.</string>
@@ -297,12 +277,9 @@
     <string name="recommended_frequency_for">Recommended for %s</string>
     <string name="set_frequency_desc"><![CDATA[Helium\'s LoRaWAN Network requires that you set your station\’s frequency for gateway configuration for the country you\’ve installed your station.<br><br>A list of the countries and their respective frequencies can be <a href=\"%1$s\">found here.</a>]]></string>
     <string name="set_frequency_toggle_desc">I hereby acknowledge that the frequency selected above is the correct on for the country \’ve installed and will operate this station.</string>
-    <string name="set_frequency_failed_title">Setting Frequency Failed</string>
     <string name="set_frequency_failed_desc"><![CDATA[Setting device\'s frequency failed. Please try again, and if the problem persists, contact support. Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
 
     <!-- Forecast -->
-    <string name="forecast_7_day">7 Day Forecast</string>
-    <string name="next_7_days">Next 7 Days</string>
     <string name="forecast_empty">Oops! No forecast weather data could not be found.</string>
 
     <!-- Device History -->

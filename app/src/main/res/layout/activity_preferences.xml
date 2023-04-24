@@ -58,11 +58,11 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/survey_title"
-                        style="@style/TextAppearance.WeatherXM.MaterialCard.Messages.Title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_normal"
                         android:text="@string/short_app_survey"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.MaterialCard.Messages.Title"
                         app:layout_constraintBottom_toBottomOf="@id/close_survey_prompt_button"
                         app:layout_constraintEnd_toStartOf="@id/close_survey_prompt_button"
                         app:layout_constraintStart_toEndOf="@id/icon"

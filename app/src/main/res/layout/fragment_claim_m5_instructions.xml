@@ -26,9 +26,9 @@
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:padding="@dimen/padding_large"
                 android:clipChildren="false"
                 android:clipToPadding="false"
+                android:padding="@dimen/padding_large"
                 app:layout_constraintBottom_toTopOf="@id/button_bar"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -38,10 +38,10 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/title"
-                        style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/connect_m5_wifi"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,10 +59,10 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/firstStep"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_normal"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/firstStepIcon"
                         app:layout_constraintTop_toTopOf="@id/firstStepIcon"
@@ -82,10 +82,10 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/secondStep"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_normal"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/secondStepIcon"
                         app:layout_constraintTop_toTopOf="@id/secondStepIcon"
@@ -105,11 +105,11 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/thirdStep"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_normal"
                         android:text="@string/connect_m5_wifi_third_step"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/thirdStepIcon"
                         app:layout_constraintTop_toTopOf="@id/thirdStepIcon"
@@ -117,11 +117,11 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/watchVideoText"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal"
                         android:text="@string/connect_m5_wifi_watch_video"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:textStyle="bold"
                         app:layout_constraintTop_toBottomOf="@id/thirdStep" />
 

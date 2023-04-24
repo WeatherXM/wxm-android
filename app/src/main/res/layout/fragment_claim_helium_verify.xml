@@ -28,20 +28,20 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/verifyDevice"
-                        style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/verify_device"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/devEUITitle"
-                        style="@style/TextAppearance.WeatherXM.TextInput.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_large"
                         android:text="@string/dev_eui"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.TextInput.Title"
                         app:layout_constraintTop_toBottomOf="@id/verifyDevice" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -70,11 +70,11 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/devKeyTitle"
-                        style="@style/TextAppearance.WeatherXM.TextInput.Title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_large"
                         android:text="@string/device_key"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.TextInput.Title"
                         app:layout_constraintTop_toBottomOf="@id/devEUIContainer" />
 
                     <com.google.android.material.textfield.TextInputLayout

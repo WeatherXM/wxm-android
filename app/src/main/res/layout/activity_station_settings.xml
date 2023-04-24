@@ -54,18 +54,18 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/stationNameTitle"
-                        style="@style/TextAppearance.WeatherXM.TitleSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/station_name"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/stationName"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintTop_toBottomOf="@id/stationNameTitle"
                         tools:text="Macho Sangria Easterlies" />
 
@@ -88,19 +88,19 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/frequencyTitle"
-                        style="@style/TextAppearance.WeatherXM.TitleSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal"
                         android:text="@string/station_frequency"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
                         app:layout_constraintTop_toBottomOf="@id/dividerBelowStationName" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/frequencyDesc"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintTop_toBottomOf="@id/frequencyTitle"
                         tools:text="@string/change_station_frequency_helium" />
 
@@ -130,19 +130,19 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/rebootStationTitle"
-                            style="@style/TextAppearance.WeatherXM.TitleSmall"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/reboot_station"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/rebootStationDesc"
-                            style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_small"
                             android:text="@string/reboot_station_desc"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             app:layout_constraintTop_toBottomOf="@id/rebootStationTitle" />
 
                         <com.google.android.material.button.MaterialButton
@@ -164,19 +164,19 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/reconfigureWifiTitle"
-                            style="@style/TextAppearance.WeatherXM.TitleSmall"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/reconfigure_wifi"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/reconfigureWifiDesc"
-                            style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_small"
                             android:text="@string/reconfigure_wifi_desc"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             app:layout_constraintTop_toBottomOf="@id/reconfigureWifiTitle" />
 
                         <com.google.android.material.button.MaterialButton
@@ -206,29 +206,29 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/removeStationTitle"
-                        style="@style/TextAppearance.WeatherXM.TitleSmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/remove_station"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/removeStationDesc"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintTop_toBottomOf="@id/removeStationTitle"
                         tools:text="@string/remove_station_desc" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/removeStationWarning"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
                         android:gravity="center_vertical"
                         android:text="@string/remove_station_warning"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:textStyle="bold"
                         app:drawableStartCompat="@drawable/ic_warn"
                         app:drawableTint="@color/error"
@@ -266,10 +266,10 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/stationInformation"
-                        style="@style/TextAppearance.WeatherXM.TitleSmall"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:text="@string/station_information"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
                         app:layout_constraintBottom_toBottomOf="@id/shareBtn"
                         app:layout_constraintEnd_toStartOf="@id/shareBtn"
                         app:layout_constraintStart_toStartOf="parent"

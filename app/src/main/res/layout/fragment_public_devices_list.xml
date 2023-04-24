@@ -17,21 +17,21 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/title"
-            style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/card_side_margin"
             android:text="@string/weather_stations"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/location"
-            style="@style/TextAppearance.WeatherXM.Default.BodySmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/card_side_margin"
             android:alpha="0.8"
             android:paddingBottom="@dimen/padding_small"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/title"
             tools:text="Athens, GR"

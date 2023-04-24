@@ -37,11 +37,11 @@
         <androidx.core.widget.NestedScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:paddingHorizontal="@dimen/padding_normal"
-            android:paddingVertical="@dimen/padding_normal"
             android:layout_height="0dp"
             android:clipChildren="false"
             android:clipToPadding="false"
+            android:paddingHorizontal="@dimen/padding_normal"
+            android:paddingVertical="@dimen/padding_normal"
             app:layout_constraintBottom_toTopOf="@id/checkBoxesAndButtonContainer"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -64,10 +64,10 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/enterAddress"
-                            style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/enter_your_wallet_address"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             android:textStyle="bold"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -121,10 +121,10 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/suggestedWallet"
-                            style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/suggested_wallets"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             app:layout_constraintBottom_toTopOf="@id/createMetamask" />
 
                         <com.google.android.material.button.MaterialButton
@@ -156,14 +156,14 @@
         </androidx.core.widget.NestedScrollView>
 
         <LinearLayout
-            android:elevation="@dimen/elevation_small"
-            android:background="@color/colorSurface"
             android:id="@+id/checkBoxesAndButtonContainer"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorSurface"
+            android:elevation="@dimen/elevation_small"
+            android:orientation="vertical"
             android:paddingHorizontal="@dimen/padding_normal"
             android:paddingVertical="@dimen/padding_normal"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <LinearLayout

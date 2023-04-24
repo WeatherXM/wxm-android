@@ -32,32 +32,32 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
-                style="@style/TextAppearance.WeatherXM.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:gravity="center"
                 android:text="@string/google_analytics_title"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Title"
                 app:layout_constraintTop_toBottomOf="@id/icon" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/message"
-                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:gravity="center"
                 android:text="@string/google_analytics_explanation_message"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 app:layout_constraintTop_toBottomOf="@id/title" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/collectTitle"
-                style="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:layout_marginEnd="@dimen/margin_small"
                 android:text="@string/what_we_collect"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textColor="@color/colorPrimaryVariant"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@id/doNotCollectTitle"
@@ -66,11 +66,11 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/doNotCollectTitle"
-                style="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:text="@string/what_we_do_not_collect"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textColor="@color/colorPrimaryVariant"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +79,6 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/appUsageData"
-                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
@@ -87,12 +86,12 @@
                 android:drawableStart="@drawable/ic_checkmark"
                 android:drawablePadding="@dimen/drawable_padding_small"
                 android:text="@string/app_usage_data"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 app:layout_constraintStart_toStartOf="@id/collectTitle"
                 app:layout_constraintTop_toBottomOf="@id/collectTitle" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/systemVersion"
-                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
@@ -100,31 +99,32 @@
                 android:drawableStart="@drawable/ic_checkmark"
                 android:drawablePadding="@dimen/drawable_padding_small"
                 android:text="@string/system_version"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 app:layout_constraintStart_toStartOf="@id/collectTitle"
                 app:layout_constraintTop_toBottomOf="@id/appUsageData" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/personalData"
-                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:drawableStart="@drawable/ic_cross"
                 android:drawablePadding="@dimen/drawable_padding_small"
                 android:text="@string/personal_data"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 app:layout_constraintEnd_toEndOf="@id/doNotCollectTitle"
                 app:layout_constraintStart_toStartOf="@id/doNotCollectTitle"
                 app:layout_constraintTop_toBottomOf="@id/doNotCollectTitle" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/identifyingInformation"
-                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:drawableStart="@drawable/ic_cross"
                 android:drawablePadding="@dimen/drawable_padding_small"
                 android:text="@string/identifying_information"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 app:layout_constraintEnd_toEndOf="@id/doNotCollectTitle"
                 app:layout_constraintStart_toStartOf="@id/doNotCollectTitle"
                 app:layout_constraintTop_toBottomOf="@id/personalData" />
@@ -154,11 +154,11 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/updatePreferencesMessage"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="@dimen/margin_small"
                         android:text="@string/you_can_always_update_preferences"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/accountIcon" />
                 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,32 +5,37 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="purple">#9D1F63</color>
+    <color name="green">#46D163</color>
 
     <!-- Color Palette/Library Design Team -->
 
+    <color name="light_text">#1B1C22</color>
     <color name="light_mid_grey">#C6C6D0</color>
     <color name="light_dark_grey">#45464F</color>
     <color name="light_top">#FEFBFF</color>
-    <color name="light_light2">#EAEBF9</color>
-    <color name="light_light1">#D3D9F2</color>
+    <color name="light_layer1">#EAEBF9</color>
+    <color name="light_layer2">#D3D9F2</color>
     <color name="light_background">#DFE2F6</color>
     <color name="light_darkest_blue">#00164D</color>
     <color name="light_primary">#0A3FAD</color>
     <color name="light_lightest_blue">#B5C4FF</color>
     <color name="light_blue_tint">#EFF0FF</color>
     <color name="light_accent">#800162</color>
+    <color name="light_crypto">#3A3F6A</color>
 
+    <color name="dark_text">#FEFBFF</color>
     <color name="dark_mid_grey">#5D5E67</color>
     <color name="dark_dark_grey">#C6C6D0</color>
     <color name="dark_top">#31364A</color>
-    <color name="dark_dark2">#272C3A</color>
-    <color name="dark_dark1">#23252F</color>
+    <color name="dark_layer1">#272C3A</color>
+    <color name="dark_layer2">#23252F</color>
     <color name="dark_background">#1B1C22</color>
-    <color name="dark_darkest">#DCE1FF</color>
+    <color name="dark_darkest_blue">#DCE1FF</color>
     <color name="dark_primary">#B5C4FF</color>
     <color name="dark_lightest_blue">#00297B</color>
     <color name="dark_blue_tint">#1E2438</color>
     <color name="dark_accent">#CD9EFC</color>
+    <color name="dark_crypto">#8C97F5</color>
 
     <color name="success">#00E676</color>
     <color name="light_success_tint">#D8F8EA</color>
@@ -44,13 +49,10 @@
 
     <!-- Explorer -->
     <color name="hex_fill_color">#3388ff</color>
-    <color name="hex_fill_outline_color">@color/white</color>
-    <color name="explorer_devices_count_background">#88000000</color>
-    <color name="explorer_devices_count_title">#CAC4CF</color>
-    <color name="explorer_devices_count_value">#46D163</color>
+    <color name="explorer_devices_count_background">#801C1B1E</color>
 
     <!-- Reward Scores -->
-    <color name="reward_score_very_high">#46D163</color>
+    <color name="reward_score_very_high">@color/green</color>
     <color name="reward_score_high">#E1CA60</color>
     <color name="reward_score_average">#F3AD4E</color>
     <color name="reward_score_low">#EF8B4F</color>

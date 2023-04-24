@@ -38,10 +38,12 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/date"
-        style="@style/TextAppearance.WeatherXM.Transaction.Date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_normal"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+        android:textColor="@color/colorOnSurfaceVariant"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/date_point"
         app:layout_constraintStart_toEndOf="@id/date_point"
         app:layout_constraintTop_toTopOf="@id/date_point"
@@ -73,11 +75,11 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/timestamp"
-                style="@style/TextAppearance.WeatherXM.Transaction.Timestamp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="end|center_vertical"
                 android:text="@string/reward"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Transaction.Timestamp"
                 app:layout_constraintBottom_toBottomOf="@id/tx_hash"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/tx_hash"
@@ -86,11 +88,11 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/reward"
-                style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:text="@string/reward"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/tx_hash"
                 tools:text="+ 2000 WXM" />
@@ -121,10 +123,10 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/score"
-                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_extra_small"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 app:layout_constraintBottom_toBottomOf="@id/score_icon"
                 app:layout_constraintStart_toEndOf="@id/score_icon"
                 app:layout_constraintTop_toTopOf="@id/score_icon"
@@ -132,11 +134,12 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/score_description"
-                style="@style/TextAppearance.WeatherXM.Transaction.Descriptions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_extra_small"
-                android:text="@string/validation_score"
+                android:text="@string/reward_score"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                android:textColor="@color/colorOnSurfaceVariant"
                 app:layout_constraintStart_toStartOf="@id/score"
                 app:layout_constraintTop_toBottomOf="@id/score" />
 
@@ -154,10 +157,10 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/max_reward"
-                style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_extra_small"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 app:layout_constraintBottom_toBottomOf="@id/max_reward_icon"
                 app:layout_constraintStart_toEndOf="@id/max_reward_icon"
                 app:layout_constraintTop_toTopOf="@id/max_reward_icon"
@@ -165,11 +168,12 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/max_reward_description"
-                style="@style/TextAppearance.WeatherXM.Transaction.Descriptions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_extra_small"
                 android:text="@string/network_max_reward"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                android:textColor="@color/colorOnSurfaceVariant"
                 app:layout_constraintStart_toStartOf="@id/max_reward"
                 app:layout_constraintTop_toBottomOf="@id/max_reward" />
 

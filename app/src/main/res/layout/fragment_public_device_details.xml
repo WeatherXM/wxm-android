@@ -28,11 +28,11 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/name"
-                style="@style/TextAppearance.WeatherXM.Default.PrimaryColor"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_extra_large"
                 android:layout_marginEnd="@dimen/margin_normal"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.PrimaryColor"
                 android:textIsSelectable="true"
                 android:textSize="24sp"
                 android:textStyle="normal"
@@ -66,7 +66,6 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/address"
-                    style="@style/TextAppearance.WeatherXM.Devices.List.Address"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_normal"
@@ -74,6 +73,7 @@
                     android:drawablePadding="@dimen/drawable_padding_small"
                     android:drawableTint="@color/colorPrimary"
                     android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.Address"
                     android:textColor="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@id/lastSeen"
                     app:layout_constraintEnd_toStartOf="@id/lastSeen"
@@ -83,11 +83,11 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/lastSeen"
-                    style="@style/TextAppearance.WeatherXM.Devices.List.LastSeen"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_small"
                     android:gravity="end"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.LastSeen"
                     app:layout_constraintBottom_toBottomOf="@id/status"
                     app:layout_constraintEnd_toStartOf="@id/status"
                     app:layout_constraintTop_toTopOf="@id/status"
@@ -138,12 +138,12 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/currentConditions"
-                    style="@style/TextAppearance.WeatherXM.Title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_normal"
                     android:layout_marginTop="@dimen/margin_extra_large"
                     android:text="@string/observations"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Title"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.card.MaterialCardView
@@ -165,12 +165,12 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/rewardsTitle"
-                    style="@style/TextAppearance.WeatherXM.Title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_normal"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:text="@string/rewards"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Title"
                     app:layout_constraintTop_toBottomOf="@id/currentWeatherCardContainer" />
 
                 <com.weatherxm.ui.widget.TokenCardView

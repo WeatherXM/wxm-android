@@ -34,11 +34,11 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/title"
-                            style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="@dimen/margin_normal"
                             android:text="@string/location_of_installation"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -54,11 +54,11 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/toggleDescription"
-                            style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="@dimen/margin_normal"
                             android:text="@string/installation_toggle_unchecked"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="@id/installationToggle"
                             app:layout_constraintStart_toEndOf="@id/installationToggle"
@@ -66,11 +66,11 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/needHelpInstallation"
-                            style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/margin_normal"
                             android:text="@string/need_help_installation"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                             android:visibility="gone"
                             app:layout_constraintTop_toBottomOf="@id/installationToggle" />
 
@@ -135,11 +135,11 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/confirmLocationText"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_normal"
                         android:text="@string/confirm_location_description"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/confirmLocationToggle"
                         app:layout_constraintTop_toTopOf="@id/confirmLocationToggle" />

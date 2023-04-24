@@ -4,7 +4,7 @@
     android:viewportWidth="144"
     android:viewportHeight="144">
     <path
-        android:fillColor="@color/google_analytics_icon_background"
+        android:fillColor="@color/layer1"
         android:pathData="M72,72m-72,0a72,72 0,1 1,144 0a72,72 0,1 1,-144 0" />
     <path
         android:fillColor="@color/colorOnSurfaceVariant"

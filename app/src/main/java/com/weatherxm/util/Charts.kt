@@ -321,8 +321,8 @@ fun LineChart.initializePrecipitation24hChart(
         it.lineWidth = 0F
         it.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
         it.setDrawFilled(true)
-        it.color = resources.getColor(R.color.chart_fill_collor, context.theme)
-        it.fillColor = context.getColor(R.color.chart_fill_collor)
+        it.color = resources.getColor(R.color.lightestBlue, context.theme)
+        it.fillColor = context.getColor(R.color.lightestBlue)
     }
     dataSets.addAll(accumulatedDataEmptyLineDataSets)
     dataSets.addAll(rateLineDataSetsWithValues.primaryLineInit(context, resources))
@@ -494,8 +494,8 @@ fun LineChart.initializeSolarChart(
         it.lineWidth = 0.2F
         it.axisDependency = YAxis.AxisDependency.RIGHT
         it.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
-        it.color = resources.getColor(R.color.chart_fill_collor, context.theme)
-        it.fillColor = context.getColor(R.color.chart_fill_collor)
+        it.color = resources.getColor(R.color.lightestBlue, context.theme)
+        it.fillColor = context.getColor(R.color.lightestBlue)
     }
     dataSets.addAll(radiationDataEmptyLineDataSets)
 
@@ -514,6 +514,7 @@ fun LineChart.initializeSolarChart(
     // Set the default settings we want to all LineCharts
     setDefaultSettings()
 
+    // Y Axis settings
     with(axisLeft) {
         axisMinimum = 0F
         isGranularityEnabled = true

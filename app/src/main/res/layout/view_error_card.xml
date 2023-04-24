@@ -34,19 +34,19 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/title"
-                    style="@style/TextAppearance.WeatherXM.MaterialCard.Messages.Title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.MaterialCard.Messages.Title"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Error title here." />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/message"
-                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:autoLink="all"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                     app:layout_constraintStart_toStartOf="@id/title"
                     app:layout_constraintTop_toBottomOf="@id/title"
                     tools:text="Error description here." />

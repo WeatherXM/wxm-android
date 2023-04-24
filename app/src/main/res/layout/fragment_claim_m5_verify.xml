@@ -7,13 +7,13 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/margin_normal"
-            app:layout_constraintBottom_toTopOf="@+id/next"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/margin_normal"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        app:layout_constraintBottom_toTopOf="@+id/next"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -22,20 +22,20 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
-                style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/verify_your_device"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/serial_number_title"
-                style="@style/TextAppearance.WeatherXM.TextInput.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
                 android:text="@string/device_serial_number_title"
+                android:textAppearance="@style/TextAppearance.WeatherXM.TextInput.Title"
                 app:layout_constraintTop_toBottomOf="@id/title" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -43,8 +43,8 @@
                 style="@style/Widget.WeatherXM.TextInputEditText.OutlinedBox.Dense"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:hintEnabled="false"
                 app:helperTextEnabled="true"
+                app:hintEnabled="false"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/serial_number_title">
@@ -54,11 +54,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:digits="0123456789ABCDEFabcdef:"
+                    android:hint="@string/device_serial_number_hint"
                     android:imeOptions="actionNext"
                     android:inputType="text|textCapCharacters"
                     android:singleLine="true"
                     android:text="@string/claim_device_serial_number_placeholder"
-                    android:hint="@string/device_serial_number_hint"
                     android:textSize="18sp" />
 
             </com.google.android.material.textfield.TextInputLayout>

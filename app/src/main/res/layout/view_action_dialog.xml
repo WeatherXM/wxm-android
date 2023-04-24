@@ -10,18 +10,18 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/errorTitle"
-            style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Pairing Failed!" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/errorDesc"
-            style="@style/TextAppearance.WeatherXM.Default.BodyLarge"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
             app:layout_constraintTop_toBottomOf="@id/errorTitle"
             tools:text="Something went wrong with blah blah blah blah" />
 

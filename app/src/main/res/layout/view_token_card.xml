@@ -19,9 +19,9 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/maxReward"
-                style="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -54,21 +54,21 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/rewardTimestamp"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:alpha="0.7"
                         android:gravity="center_vertical"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="16/06/2022, 14:45" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/lastReward"
-                        style="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintTop_toBottomOf="@id/rewardTimestamp"
@@ -86,10 +86,10 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/score"
-                        style="@style/TextAppearance.WeatherXM.Default.BodySmall"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginStart="@dimen/margin_extra_small"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                         app:layout_constraintBottom_toBottomOf="@id/score_icon"
                         app:layout_constraintStart_toEndOf="@id/score_icon"
                         app:layout_constraintTop_toTopOf="@id/score_icon"
@@ -160,11 +160,11 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/total7D_WXM"
-                    style="@style/TextAppearance.WeatherXM.Default.BodySmall"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/margin_extra_small"
                     android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/total7D"
                     app:layout_constraintTop_toTopOf="parent"
@@ -182,11 +182,11 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/total30D_WXM"
-                    style="@style/TextAppearance.WeatherXM.Default.BodySmall"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/margin_extra_small"
                     android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/total30d"
                     app:layout_constraintTop_toTopOf="parent"
@@ -204,11 +204,11 @@
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/totalAll_WXM"
-                    style="@style/TextAppearance.WeatherXM.Default.BodySmall"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/margin_extra_small"
                     android:gravity="center_vertical"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/totalAll"
                     app:layout_constraintTop_toTopOf="parent"

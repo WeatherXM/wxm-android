@@ -11,7 +11,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/secondary_card_background"
+        app:cardBackgroundColor="@color/layer1"
         app:contentPadding="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,10 +52,10 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/temperature"
-                            style="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_small"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                             android:textSize="32sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
@@ -64,9 +64,9 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/temperatureUnit"
-                            style="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
                             android:textSize="32sp"
                             app:layout_constraintStart_toEndOf="@id/temperature"
                             app:layout_constraintTop_toTopOf="@id/temperature"
@@ -74,29 +74,29 @@
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/feelsLikeTitle"
-                            style="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Subtitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/feels_like"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Subtitle"
                             app:layout_constraintBottom_toBottomOf="@id/feelsLike"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@id/feelsLike" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/feelsLike"
-                            style="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/margin_small"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                             app:layout_constraintStart_toEndOf="@id/feelsLikeTitle"
                             app:layout_constraintTop_toBottomOf="@id/temperature"
                             tools:text="26" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/feelsLikeUnit"
-                            style="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
                             android:textSize="16sp"
                             app:layout_constraintStart_toEndOf="@id/feelsLike"
                             app:layout_constraintTop_toTopOf="@id/feelsLike"
@@ -147,12 +147,13 @@
                 android:elevation="0dp"
                 android:paddingHorizontal="@dimen/padding_normal"
                 android:paddingTop="@dimen/padding_normal"
-                app:cardBackgroundColor="@color/secondary_card_background"
+                app:cardBackgroundColor="@color/layer1"
                 app:layout_constraintTop_toBottomOf="@id/mainCard">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:baselineAligned="false"
                     android:orientation="horizontal"
                     android:weightSum="2">
 

@@ -75,11 +75,11 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/stationName"
-        style="@style/TextAppearance.WeatherXM.Default.BodyLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_extra_small"
         android:gravity="center"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
         android:textColor="@color/darkGrey"
         android:textStyle="bold"
         android:visibility="gone"
@@ -88,21 +88,21 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/firmwareVersionTitle"
-        style="@style/TextAppearance.WeatherXM.Default.BodySmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_extra_small"
         android:gravity="center"
         android:text="@string/firmware_version"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/firmwareVersions" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/firmwareVersions"
-        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/status"

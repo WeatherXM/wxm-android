@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.WeatherXM.MaterialCard.ChartMarker"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:clipChildren="false"
@@ -19,13 +18,13 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/address"
-            style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_earth"
             android:drawablePadding="@dimen/padding_small"
             android:drawableTint="@color/colorOnSurfaceVariant"
             android:gravity="center_vertical"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
             tools:text="Chalkidikis 89" />
 
     </com.google.android.material.card.MaterialCardView>

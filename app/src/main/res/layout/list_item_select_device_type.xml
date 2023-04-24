@@ -17,10 +17,10 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/title"
-        style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_small"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
         app:layout_constraintBottom_toBottomOf="@id/typeIcon"
         app:layout_constraintStart_toEndOf="@id/typeIcon"
         app:layout_constraintTop_toTopOf="@id/typeIcon"
@@ -28,10 +28,10 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/desc"
-        style="@style/TextAppearance.WeatherXM.Default.PrimaryColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.PrimaryColor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/typeIcon"
         tools:text="@string/m5_ws1000_desc" />

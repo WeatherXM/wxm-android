@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">@color/dark_primary</color>
-    <color name="colorPrimaryVariant">@color/dark_darkest</color>
+    <color name="colorPrimaryVariant">@color/darkestBlue</color>
     <color name="colorOnPrimary">@color/dark_background</color>
 
     <color name="colorSurface">@color/dark_top</color>
-    <color name="colorSurfaceVariant">@color/dark_dark1</color>
-    <color name="colorOnSurface">@color/light_top</color>
-    <color name="colorOnSurfaceVariant">@color/dark_dark_grey</color>
+    <color name="colorSurfaceVariant">@color/layer2</color>
+    <color name="colorOnSurface">@color/textColor</color>
+    <color name="colorOnSurfaceVariant">@color/darkGrey</color>
 
     <color name="colorBackground">@color/dark_background</color>
 
@@ -16,45 +16,17 @@
     <color name="warningTint">@color/dark_warning_tint</color>
     <color name="midGrey">@color/dark_mid_grey</color>
     <color name="darkGrey">@color/dark_dark_grey</color>
+    <color name="layer1">@color/dark_layer1</color>
+    <color name="layer2">@color/dark_layer2</color>
+    <color name="blueTint">@color/dark_blue_tint</color>
+    <color name="lightestBlue">@color/dark_lightest_blue</color>
+    <color name="darkestBlue">@color/dark_darkest_blue</color>
+    <color name="textColor">@color/dark_text</color>
 
     <!-- System and Launcher -->
     <color name="ic_launcher_background">#1B75BA</color>
     <color name="status_bar_color">#80003b77</color>
 
-    <!-- List Divider -->
-    <color name="list_divider">@color/dark_dark2</color>
-
-    <!-- Device Details -->
-    <color name="secondary_card_background">@color/dark_dark2</color>
-
-    <!-- Google Analytics -->
-    <color name="google_analytics_icon_background">@color/dark_dark2</color>
-
-    <!-- Bluetooth Scanning -->
-    <color name="progress_color_in_button">@color/dark_lightest_blue</color>
-
-    <!-- Dates Tabs -->
-    <color name="date_tab_selected_background">@color/dark_dark2</color>
-
     <!-- History Chart -->
-    <color name="chart_title_background">@color/dark_dark2</color>
-    <color name="chart_popup_background">@color/dark_darkest</color>
-    <color name="chart_popup_text_color">@color/dark_top</color>
-    <color name="chart_secondary_line">@color/dark_darkest</color>
-    <color name="chart_fill_collor">@color/dark_lightest_blue</color>
-
-    <!-- Devices List -->
-    <color name="devices_list_card_background">@color/dark_dark2</color>
-
-    <!-- Claiming Flow -->
-    <color name="select_device_card_color">@color/dark_dark2</color>
-
-    <!-- Token Chart -->
-    <color name="token_info_chip_background_color">@color/dark_dark2</color>
-
-    <!-- Transactions -->
-    <color name="token_transaction_hash_background">@color/dark_blue_tint</color>
-
-    <!-- Info Card -->
-    <color name="info_card_background">@color/dark_blue_tint</color>
+    <color name="chart_secondary_line">@color/dark_darkest_blue</color>
 </resources>

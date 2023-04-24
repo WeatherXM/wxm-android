@@ -76,7 +76,7 @@ class ExplorerUseCaseImpl(
                 PolygonAnnotationOptions()
                     .withFillColor(resHelper.getColor(R.color.hex_fill_color))
                     .withFillOpacity(FILL_OPACITY_HEXAGONS)
-                    .withFillOutlineColor(resHelper.getColor(R.color.hex_fill_outline_color))
+                    .withFillOutlineColor(resHelper.getColor(R.color.white))
                     .withData(gson.toJsonTree(UIHex(publicHex.index, publicHex.center)))
                     .withPoints(polygonPointsToLatLng(publicHex.polygon))
             }

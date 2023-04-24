@@ -113,10 +113,6 @@
         <item name="contentPadding">@dimen/padding_small</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.Small.Status" parent="Widget.WeatherXM.MaterialCard.Small">
-        <item name="cardCornerRadius">@dimen/card_corner_radius_small</item>
-    </style>
-
     <style name="Widget.WeatherXM.MaterialCard.Messages" parent="Widget.WeatherXM.MaterialCard">
         <item name="contentPadding">@dimen/padding_small</item>
         <item name="contentPaddingTop">@dimen/padding_normal</item>
@@ -127,20 +123,12 @@
         <item name="cardCornerRadius">0dp</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.NoRadius.Small" parent="Widget.WeatherXM.MaterialCard.Small">
-        <item name="cardCornerRadius">0dp</item>
-    </style>
-
-    <style name="Widget.WeatherXM.MaterialCard.ChartMarker" parent="Widget.WeatherXM.MaterialCard.Small">
-        <item name="cardBackgroundColor">@color/chart_popup_background</item>
-    </style>
-
     <style name="Widget.WeatherXM.MaterialCard.DevicesCount" parent="Widget.WeatherXM.MaterialCard.Small">
         <item name="cardBackgroundColor">@color/explorer_devices_count_background</item>
     </style>
 
     <style name="Widget.WeatherXM.MaterialCard.Warning" parent="Widget.WeatherXM.MaterialCard.Messages">
-        <item name="android:textColor">@color/dark_background</item>
+        <item name="android:textColor">@color/light_text</item>
         <item name="cardBackgroundColor">@color/warningTint</item>
     </style>
 
@@ -158,7 +146,7 @@
     </style>
 
     <style name="Widget.WeatherXM.MaterialCard.Info" parent="Widget.WeatherXM.MaterialCard.Messages">
-        <item name="cardBackgroundColor">@color/info_card_background</item>
+        <item name="cardBackgroundColor">@color/blueTint</item>
         <item name="strokeWidth">1dp</item>
         <item name="strokeColor">@color/colorPrimaryVariant</item>
     </style>
@@ -239,8 +227,8 @@
         <item name="android:checkable">false</item>
         <item name="android:clickable">false</item>
         <item name="chipStrokeWidth">0dp</item>
-        <item name="chipSurfaceColor">@color/token_info_chip_background_color</item>
-        <item name="chipBackgroundColor">@color/token_info_chip_background_color</item>
+        <item name="chipSurfaceColor">@color/layer1</item>
+        <item name="chipBackgroundColor">@color/layer1</item>
         <item name="android:paddingTop">6dp</item>
         <item name="android:paddingBottom">6dp</item>
         <item name="ensureMinTouchTargetSize">false</item>
@@ -267,7 +255,7 @@
     <style name="Widget.WeatherXM.Chip.TransactionHash" parent="Widget.Material3.Chip.Filter">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/colorPrimary</item>
-        <item name="chipBackgroundColor">@color/token_transaction_hash_background</item>
+        <item name="chipBackgroundColor">@color/blueTint</item>
         <item name="fontFamily">monospace</item>
         <item name="chipStrokeWidth">0dp</item>
         <item name="chipMinTouchTargetSize">0dp</item>

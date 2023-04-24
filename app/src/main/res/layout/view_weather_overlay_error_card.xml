@@ -46,11 +46,11 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/error_text"
-                style="@style/TextAppearance.WeatherXM.OverlayCard.Error"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_normal"
                 android:gravity="center_horizontal"
+                android:padding="@dimen/padding_normal"
+                android:textAppearance="@style/TextAppearance.WeatherXM.OverlayCard.Error"
                 app:layout_constraintTop_toBottomOf="@id/error_icon"
                 tools:text="Your weather station hasn\'t connected for a while. Please, visit our troubleshooting guide." />
 

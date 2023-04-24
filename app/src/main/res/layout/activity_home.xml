@@ -33,17 +33,18 @@
 
             <TextView
                 android:id="@+id/title_devices_count"
-                style="@style/TextAppearance.WeatherXM.Explorer.DevicesCount.Title"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="@dimen/margin_normal"
-                android:text="@string/title_devices_count" />
+                android:text="@string/title_devices_count"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:textColor="@color/dark_dark_grey" />
 
             <TextView
                 android:id="@+id/devices_count"
-                style="@style/TextAppearance.WeatherXM.Explorer.DevicesCount.Value"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Explorer.DevicesCount.Value"
                 tools:text="600" />
 
         </LinearLayout>
