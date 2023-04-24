@@ -115,6 +115,7 @@ class HistoryChartsFragment : Fragment() {
                         binding.chartsView.visibility = View.VISIBLE
                     }
                 }
+
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
                     binding.swiperefresh.isRefreshing = false
@@ -127,6 +128,7 @@ class HistoryChartsFragment : Fragment() {
                     binding.empty.listener { callback?.onSwipeRefresh() }
                     binding.empty.visibility = View.VISIBLE
                 }
+
                 Status.LOADING -> {
                     if (binding.swiperefresh.isRefreshing) {
                         binding.empty.clear()
@@ -165,7 +167,7 @@ class HistoryChartsFragment : Fragment() {
 
     private fun initTemperatureChart(temperatureData: LineChartData, feelsLikeData: LineChartData) {
         if (temperatureData.isDataValid() && feelsLikeData.isDataValid()) {
-            binding.chartTemperature
+            model.temperatureDataSets = binding.chartTemperature
                 .getChart()
                 .initializeTemperature24hChart(temperatureData, feelsLikeData)
             binding.chartTemperature.getChart().setOnChartValueSelectedListener(
@@ -206,7 +208,8 @@ class HistoryChartsFragment : Fragment() {
 
     private fun initHumidityChart(data: LineChartData) {
         if (data.isDataValid()) {
-            binding.chartHumidity.getChart().initializeHumidity24hChart(data)
+            model.humidityDataSets =
+                binding.chartHumidity.getChart().initializeHumidity24hChart(data)
             binding.chartHumidity.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
@@ -232,7 +235,8 @@ class HistoryChartsFragment : Fragment() {
 
     private fun initPressureChart(data: LineChartData) {
         if (data.isDataValid()) {
-            binding.chartPressure.getChart().initializePressure24hChart(data)
+            model.pressureDataSets =
+                binding.chartPressure.getChart().initializePressure24hChart(data)
             binding.chartPressure.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
@@ -259,7 +263,8 @@ class HistoryChartsFragment : Fragment() {
 
     private fun initSolarChart(uvData: LineChartData, radiationData: LineChartData) {
         if (uvData.isDataValid() && radiationData.isDataValid()) {
-            binding.chartSolar.getChart().initializeSolarChart(uvData, radiationData)
+            model.solarDataSets =
+                binding.chartSolar.getChart().initializeSolarChart(uvData, radiationData)
             binding.chartSolar.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
@@ -288,7 +293,7 @@ class HistoryChartsFragment : Fragment() {
 
     private fun initPrecipitationChart(rateData: LineChartData, accumulatedData: LineChartData) {
         if (rateData.isDataValid() && accumulatedData.isDataValid()) {
-            binding.chartPrecipitation
+            model.precipDataSets = binding.chartPrecipitation
                 .getChart()
                 .initializePrecipitation24hChart(rateData, accumulatedData)
             binding.chartPrecipitation.getChart().setOnChartValueSelectedListener(
@@ -330,7 +335,7 @@ class HistoryChartsFragment : Fragment() {
             && windGustData.isDataValid()
             && windDirectionData.isDataValid()
         ) {
-            binding.chartWind
+            model.windDataSets = binding.chartWind
                 .getChart()
                 .initializeWind24hChart(windSpeedData, windGustData)
             binding.chartWind.getChart().setOnChartValueSelectedListener(
@@ -369,14 +374,29 @@ class HistoryChartsFragment : Fragment() {
         if (onAutoHighlighting) return
         onAutoHighlighting = true
         with(binding) {
-            chartTemperature.getChart()
-                .onHighlightValue(x, chartTemperature.getChart().getDatasetsNumber() / 2)
-            chartPrecipitation.getChart()
-                .onHighlightValue(x, chartPrecipitation.getChart().getDatasetsNumber() / 2)
-            chartWind.getChart().onHighlightValue(x, chartWind.getChart().getDatasetsNumber() / 2)
-            chartHumidity.getChart().onHighlightValue(x, 0)
-            chartPressure.getChart().onHighlightValue(x, 0)
-            chartSolar.getChart().onHighlightValue(x, chartSolar.getChart().getDatasetsNumber() / 2)
+            val temperatureDataSetIndex = model.getDataSetIndexForHighlight(
+                x, model.temperatureDataSets, chartTemperature.getChart().getDatasetsNumber() / 2
+            )
+            val precipDataSetIndex = model.getDataSetIndexForHighlight(
+                x, model.precipDataSets, chartPrecipitation.getChart().getDatasetsNumber() / 2
+            )
+            val windDataSetIndex = model.getDataSetIndexForHighlight(
+                x, model.windDataSets, chartWind.getChart().getDatasetsNumber() / 2
+            )
+            val humidityDataSetIndex =
+                model.getDataSetIndexForHighlight(x, model.humidityDataSets, 0)
+            val pressureDataSetIndex =
+                model.getDataSetIndexForHighlight(x, model.pressureDataSets, 0)
+            val solarDataSetIndex = model.getDataSetIndexForHighlight(
+                x, model.solarDataSets, chartSolar.getChart().getDatasetsNumber() / 2
+            )
+
+            chartTemperature.getChart().onHighlightValue(x, temperatureDataSetIndex)
+            chartPrecipitation.getChart().onHighlightValue(x, precipDataSetIndex)
+            chartWind.getChart().onHighlightValue(x, windDataSetIndex)
+            chartHumidity.getChart().onHighlightValue(x, humidityDataSetIndex)
+            chartPressure.getChart().onHighlightValue(x, pressureDataSetIndex)
+            chartSolar.getChart().onHighlightValue(x, solarDataSetIndex)
         }
         onAutoHighlighting = false
     }

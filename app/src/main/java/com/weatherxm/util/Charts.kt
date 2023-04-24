@@ -162,9 +162,25 @@ private fun MutableList<LineDataSet>.primaryLineInit(
     return this
 }
 
+private fun createDataSetToXPointsMap(
+    initialSize: Int,
+    dataSet: MutableList<LineDataSet>
+): MutableMap<Int, List<Float>> {
+    val dataSetIndexToXPoints = mutableMapOf<Int, List<Float>>()
+    var dataSetIndex = initialSize
+    dataSet.forEach {
+        val xPoints = it.values.map { entry ->
+            entry.x
+        }
+        dataSetIndexToXPoints[dataSetIndex] = xPoints
+        dataSetIndex++
+    }
+    return dataSetIndexToXPoints
+}
+
 fun LineChart.initializeTemperature24hChart(
     temperatureData: LineChartData, feelsLikeData: LineChartData
-) {
+): MutableMap<Int, List<Float>> {
     val temperatureLineDataSetsWithValues = temperatureData.getLineDataSetsWithValues()
     val temperatureEmptyLineDataSets = temperatureData.getEmptyLineDataSets()
     val feelsLikeLineDataSetsWithValues = feelsLikeData.getLineDataSetsWithValues()
@@ -210,9 +226,14 @@ fun LineChart.initializeTemperature24hChart(
     xAxis.valueFormatter = CustomXAxisFormatter(temperatureData.timestamps)
     show()
     notifyDataSetChanged()
+
+    return createDataSetToXPointsMap(
+        feelsLikeLineDataSetsWithValues.size + feelsLikeEmptyLineDataSets.size,
+        temperatureLineDataSetsWithValues
+    )
 }
 
-fun LineChart.initializeHumidity24hChart(chartData: LineChartData) {
+fun LineChart.initializeHumidity24hChart(chartData: LineChartData): MutableMap<Int, List<Float>> {
     val lineDataSetsWithValues = chartData.getLineDataSetsWithValues()
     val emptyLineDataSets = chartData.getEmptyLineDataSets()
     val dataSets = mutableListOf<ILineDataSet>()
@@ -229,10 +250,12 @@ fun LineChart.initializeHumidity24hChart(chartData: LineChartData) {
     xAxis.valueFormatter = CustomXAxisFormatter(chartData.timestamps)
     show()
     notifyDataSetChanged()
+
+    return createDataSetToXPointsMap(0, lineDataSetsWithValues)
 }
 
 @Suppress("MagicNumber")
-fun LineChart.initializePressure24hChart(chartData: LineChartData) {
+fun LineChart.initializePressure24hChart(chartData: LineChartData): MutableMap<Int, List<Float>> {
     val lineDataSetsWithValues = chartData.getLineDataSetsWithValues()
     val emptyLineDataSets = chartData.getEmptyLineDataSets()
     val dataSets = mutableListOf<ILineDataSet>()
@@ -276,12 +299,14 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData) {
     xAxis.valueFormatter = CustomXAxisFormatter(chartData.timestamps)
     show()
     notifyDataSetChanged()
+
+    return createDataSetToXPointsMap(0, lineDataSetsWithValues)
 }
 
 @Suppress("MagicNumber")
 fun LineChart.initializePrecipitation24hChart(
     rateData: LineChartData, accumulatedData: LineChartData
-) {
+): MutableMap<Int, List<Float>> {
     val rateLineDataSetsWithValues = rateData.getLineDataSetsWithValues()
     val rateEmptyLineDataSets = rateData.getEmptyLineDataSets()
     val accumulatedDataLineDataSetsWithValues = accumulatedData.getLineDataSetsWithValues()
@@ -386,13 +411,18 @@ fun LineChart.initializePrecipitation24hChart(
     xAxis.valueFormatter = CustomXAxisFormatter(rateData.timestamps)
     show()
     notifyDataSetChanged()
+
+    return createDataSetToXPointsMap(
+        rateLineDataSetsWithValues.size + rateEmptyLineDataSets.size,
+        accumulatedDataLineDataSetsWithValues
+    )
 }
 
 @Suppress("MagicNumber")
 fun LineChart.initializeWind24hChart(
     windSpeedData: LineChartData,
     windGustData: LineChartData
-) {
+): MutableMap<Int, List<Float>> {
     val windSpeedLineDataSetsWithValues = windSpeedData.getLineDataSetsWithValues()
     val windSpeedEmptyLineDataSets = windSpeedData.getEmptyLineDataSets()
     val windGustLineDataSetsWithValues = windGustData.getLineDataSetsWithValues()
@@ -438,13 +468,18 @@ fun LineChart.initializeWind24hChart(
     xAxis.valueFormatter = CustomXAxisFormatter(windGustData.timestamps)
     show()
     notifyDataSetChanged()
+
+    return createDataSetToXPointsMap(
+        windGustLineDataSetsWithValues.size + windGustEmptyLineDataSets.size,
+        windSpeedLineDataSetsWithValues
+    )
 }
 
 
 @Suppress("MagicNumber")
 fun LineChart.initializeSolarChart(
     uvData: LineChartData, radiationData: LineChartData
-) {
+): MutableMap<Int, List<Float>> {
     val uvLineDataSetsWithValues = uvData.getLineDataSetsWithValues()
     val uvEmptyLineDataSets = uvData.getEmptyLineDataSets()
     val radiationDataLineDataSetsWithValues = radiationData.getLineDataSetsWithValues()
@@ -490,10 +525,15 @@ fun LineChart.initializeSolarChart(
     xAxis.valueFormatter = CustomXAxisFormatter(uvData.timestamps)
     show()
     notifyDataSetChanged()
+
+    return createDataSetToXPointsMap(
+        radiationDataLineDataSetsWithValues.size + radiationDataEmptyLineDataSets.size,
+        uvLineDataSetsWithValues
+    )
 }
 
-fun LineChart.onHighlightValue(x: Float, dataSetIndex: Int) {
-    if (data == null) return
+fun LineChart.onHighlightValue(x: Float, dataSetIndex: Int?) {
+    if (data == null || dataSetIndex == null) return
     highlightValue(x, dataSetIndex)
 }
 

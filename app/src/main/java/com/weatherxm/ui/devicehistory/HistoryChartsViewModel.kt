@@ -45,6 +45,13 @@ class HistoryChartsViewModel(
     private var updateWeatherHistoryJob: Job? = null
     private var currentDateShown: LocalDate = LocalDate.now()
 
+    lateinit var temperatureDataSets: MutableMap<Int, List<Float>>
+    lateinit var precipDataSets: MutableMap<Int, List<Float>>
+    lateinit var windDataSets: MutableMap<Int, List<Float>>
+    lateinit var humidityDataSets: MutableMap<Int, List<Float>>
+    lateinit var pressureDataSets: MutableMap<Int, List<Float>>
+    lateinit var solarDataSets: MutableMap<Int, List<Float>>
+
     fun isTodayShown(): Boolean {
         return currentDateShown.isToday()
     }
@@ -88,6 +95,7 @@ class HistoryChartsViewModel(
                                     is InvalidFromDate, is InvalidToDate -> {
                                         R.string.error_history_generic_message
                                     }
+
                                     else -> it.getDefaultMessageResId()
                                 }
                             )
@@ -105,5 +113,21 @@ class HistoryChartsViewModel(
 
     fun onDateSelected(date: LocalDate, forceUpdate: Boolean = false) {
         fetchWeatherHistory(date, forceUpdate)
+    }
+
+    fun getDataSetIndexForHighlight(
+        x: Float,
+        dataSet: MutableMap<Int, List<Float>>,
+        fallback: Int
+    ): Int {
+        return dataSet.filterValues {
+            it.contains(x)
+        }.keys.let {
+            if (it.isNotEmpty()) {
+                it.first()
+            } else {
+                fallback
+            }
+        }
     }
 }
