@@ -50,6 +50,7 @@ class CacheService(
     private var user: User? = null
     private var userId: String = ""
     private var walletAddress: String? = null
+    private var installationId: String? = null
     private var forecasts: ArrayMap<String, TimedForecastData> = ArrayMap()
     private var suggestions: ArrayMap<String, List<SearchSuggestion>> = ArrayMap()
     private var locations: ArrayMap<String, Location> = ArrayMap()
@@ -69,6 +70,14 @@ class CacheService(
             putString(KEY_ACCESS, token.access)
             putString(KEY_REFRESH, token.refresh)
         }.apply()
+    }
+
+    fun getInstallationId(): Either<Failure, String> {
+        return installationId?.let { Either.Right(it) } ?: Either.Left(DataError.CacheMissError)
+    }
+
+    fun setInstallationId(installationId: String) {
+        this.installationId = installationId
     }
 
     fun getLastRemindedVersion(): Int {

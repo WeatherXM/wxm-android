@@ -20,6 +20,7 @@ import com.google.android.gms.location.SettingsClient
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -369,7 +370,7 @@ private val repositories = module {
         WeatherHistoryRepositoryImpl(get(), get())
     }
     single<AppConfigRepository> {
-        AppConfigRepositoryImpl(get())
+        AppConfigRepositoryImpl(get(), get())
     }
     single<SharedPreferencesRepository> {
         SharedPreferenceRepositoryImpl(get())
@@ -587,6 +588,9 @@ val firebase = module {
     single<FirebaseCrashlytics> {
         FirebaseCrashlytics.getInstance()
     }
+    single<FirebaseInstallations> {
+        FirebaseInstallations.getInstance()
+    }
 }
 
 val navigator = module {
@@ -622,7 +626,7 @@ val displayModeHelper = module {
 
 val clientIdentificationHelper = module {
     single {
-        ClientIdentificationHelper(androidContext())
+        ClientIdentificationHelper(androidContext(), get())
     }
 }
 

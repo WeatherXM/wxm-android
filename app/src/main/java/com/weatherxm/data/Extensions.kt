@@ -1,6 +1,7 @@
 package com.weatherxm.data
 
 import arrow.core.Either
+import com.google.android.gms.tasks.Task
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.squareup.moshi.JsonDataException
 import com.weatherxm.data.ApiError.AuthError.InvalidAccessToken
@@ -48,6 +49,8 @@ import com.weatherxm.data.network.ErrorResponse.Companion.UNAUTHORIZED
 import com.weatherxm.data.network.ErrorResponse.Companion.USER_ALREADY_EXISTS
 import com.weatherxm.data.network.ErrorResponse.Companion.USER_NOT_FOUND
 import com.weatherxm.data.network.ErrorResponse.Companion.VALIDATION
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 import okhttp3.Request
 import okhttp3.Response
 import timber.log.Timber
@@ -119,5 +122,16 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
     } catch (exception: JsonDataException) {
         Timber.w(exception, "Could not parse json response")
         Either.Left(ParseJsonError())
+    }
+}
+
+/**
+ * Await the completion of the task, blocking the thread.
+ * Returns the result, wrapped in [Either.Right], if the task is successful,
+ * or a throwable, wrapped in [Either.Left], if the task fails.
+ */
+fun <T> Task<T>.safeAwait(): Either<Throwable, T> = Either.catch {
+    runBlocking {
+        this@safeAwait.await()
     }
 }

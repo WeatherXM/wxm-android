@@ -1,8 +1,10 @@
 package com.weatherxm.data.repository
 
-import com.weatherxm.R
+import arrow.core.handleErrorWith
+import com.google.firebase.installations.FirebaseInstallations
 import com.weatherxm.data.datasource.AppConfigDataSource
-import com.weatherxm.util.ResourcesHelper
+import com.weatherxm.data.safeAwait
+import timber.log.Timber
 
 interface AppConfigRepository {
     fun shouldUpdate(): Boolean
@@ -11,10 +13,12 @@ interface AppConfigRepository {
     fun setLastRemindedVersion()
     fun hasUserOptInOrOut(): Boolean
     fun setAnalyticsEnabled(enabled: Boolean)
+    fun getInstallationId(): String?
 }
 
 class AppConfigRepositoryImpl(
-    private val appConfigDataSource: AppConfigDataSource
+    private val appConfigDataSource: AppConfigDataSource,
+    private val firebaseInstallations: FirebaseInstallations
 ) : AppConfigRepository {
 
     override fun shouldUpdate(): Boolean {
@@ -42,5 +46,20 @@ class AppConfigRepositoryImpl(
 
     override fun setAnalyticsEnabled(enabled: Boolean) {
         appConfigDataSource.setAnalyticsEnabled(enabled)
+    }
+
+    /**
+     * Get the installation id from the cache if exists, or else from Firebase.
+     * Return null if both fail.
+     */
+    override fun getInstallationId(): String? {
+        return appConfigDataSource.getInstallationId()
+            .handleErrorWith {
+                firebaseInstallations.id.safeAwait().onRight {
+                    Timber.d("Installation ID: $it")
+                    appConfigDataSource.setInstallationId(it)
+                }
+            }
+            .getOrNull()
     }
 }

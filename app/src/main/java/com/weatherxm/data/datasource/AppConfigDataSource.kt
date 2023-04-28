@@ -1,7 +1,9 @@
 package com.weatherxm.data.datasource
 
+import arrow.core.Either
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.weatherxm.BuildConfig
+import com.weatherxm.data.Failure
 import com.weatherxm.data.services.CacheService
 
 interface AppConfigDataSource {
@@ -13,6 +15,8 @@ interface AppConfigDataSource {
     fun getLastRemoteVersionCode(): Int
     fun getAnalyticsOptInTimestamp(): Long
     fun setAnalyticsEnabled(enabled: Boolean)
+    fun setInstallationId(installationId: String)
+    fun getInstallationId(): Either<Failure, String>
 }
 
 class AppConfigDataSourceImpl(
@@ -65,5 +69,13 @@ class AppConfigDataSourceImpl(
     override fun setLastRemindedVersion() {
         val lastVersion = firebaseRemoteConfig.getDouble(REMOTE_CONFIG_VERSION_CODE).toInt()
         cacheService.setLastRemindedVersion(lastVersion)
+    }
+
+    override fun setInstallationId(installationId: String) {
+        cacheService.setInstallationId(installationId)
+    }
+
+    override fun getInstallationId(): Either<Failure, String> {
+        return cacheService.getInstallationId()
     }
 }

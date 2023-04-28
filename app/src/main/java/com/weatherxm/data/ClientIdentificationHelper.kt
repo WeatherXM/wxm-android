@@ -5,9 +5,13 @@ import android.content.pm.PackageManager
 import android.os.Build
 import com.weatherxm.BuildConfig
 import com.weatherxm.R
+import com.weatherxm.data.repository.AppConfigRepository
 import timber.log.Timber
 
-class ClientIdentificationHelper(private val context: Context) {
+class ClientIdentificationHelper(
+    private val context: Context,
+    private val appConfigRepository: AppConfigRepository
+) {
 
     fun getDeviceSupportEmailBody(): String {
         val keepLinesWarning = context.getString(R.string.keep_lines_email)
@@ -27,7 +31,8 @@ class ClientIdentificationHelper(private val context: Context) {
             } else {
                 packageInfo.versionCode
             }
-            "wxm-android (${context.applicationInfo.packageName}); $name ($code)"
+            val installationId = appConfigRepository.getInstallationId() ?: "N/A"
+            "wxm-android (${context.applicationInfo.packageName}); $name ($code); $installationId"
         } catch (e: PackageManager.NameNotFoundException) {
             Timber.d("Could not resolve application info: $e")
             "${context.applicationInfo.packageName} N/A (N/A)"

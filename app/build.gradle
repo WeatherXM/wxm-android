@@ -284,6 +284,7 @@ dependencies {
     implementation "com.google.firebase:firebase-config-ktx"
     implementation "com.google.firebase:firebase-messaging-ktx"
     implementation "com.google.firebase:firebase-analytics-ktx"
+    implementation "com.google.firebase:firebase-installations"
 
     // QR Code Scanner
     implementation "com.journeyapps:zxing-android-embedded:4.3.0"
