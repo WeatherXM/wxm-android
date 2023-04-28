@@ -15,7 +15,8 @@ class ClientIdentificationHelper(
 
     fun getDeviceSupportEmailBody(): String {
         val keepLinesWarning = context.getString(R.string.keep_lines_email)
-        return "${androidInfo()}\n${deviceInfo()}\n${appVersionInfo()}\n${keepLinesWarning}"
+        return "${androidInfo()}\n${deviceInfo()}\n${installationId()}" +
+            "\n${appVersionInfo()}\n${keepLinesWarning}"
     }
 
     fun getInterceptorClientIdentifier(): String {
@@ -37,6 +38,10 @@ class ClientIdentificationHelper(
             Timber.d("Could not resolve application info: $e")
             "${context.applicationInfo.packageName} N/A (N/A)"
         }
+    }
+
+    private fun installationId(): String {
+        return "Installation ID: ${appConfigRepository.getInstallationId() ?: "N/A"}"
     }
 
     private fun appVersionInfo(): String {
