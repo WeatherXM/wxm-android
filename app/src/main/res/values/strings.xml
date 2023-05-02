@@ -69,7 +69,7 @@
     <string name="observations">Observations</string>
     <string name="forecast">Forecast</string>
     <string name="feels_like_with_value"><![CDATA[Feels Like <b>%s</b>]]></string>
-    <string name="no_data_message_public_device">We\’re unable to show updated station data.</string>
+    <string name="no_data_message_public_device">We\’re unable to show live station data. Please check back later for further updates.</string>
 
     <!-- Update (Bluetooth OTA) Station -->
     <string name="updated_needed_title">Station must be updated</string>
@@ -343,6 +343,7 @@
     <string name="last_tx_rssi">Last Tx RSSI</string>
     <string name="wifi_rssi">WiFi Signal (RSSI)</string>
     <string name="rssi">%s dBm</string>
+    <string name="claimed_at">Claimed At</string>
     <string name="battery_level">Battery Level</string>
     <string name="battery_level_ok">Good</string>
     <string name="battery_level_low">Low</string>

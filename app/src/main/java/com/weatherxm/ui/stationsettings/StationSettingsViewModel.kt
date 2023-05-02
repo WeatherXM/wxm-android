@@ -19,6 +19,8 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent {
     private val usecase: StationSettingsUseCase by inject()
@@ -191,6 +193,15 @@ class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent 
                 device.label?.unmask()?.let {
                     add(StationInfo(resHelper.getString(R.string.device_serial_number_title), it))
                 }
+            }
+
+            device.attributes?.claimedAt?.let {
+                add(
+                    StationInfo(
+                        resHelper.getString(R.string.claimed_at),
+                        it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+                    )
+                )
             }
             device.attributes?.firmware?.current?.let { current ->
                 val assigned = device.attributes?.firmware?.assigned

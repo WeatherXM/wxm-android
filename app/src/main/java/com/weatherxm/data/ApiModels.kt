@@ -120,6 +120,7 @@ data class Attributes(
     val isActive: Boolean?,
     val firmware: Firmware?,
     val lastWeatherStationActivity: ZonedDateTime?,
+    val claimedAt: ZonedDateTime?,
     val friendlyName: String?,
     val hex3: Hex,
     val hex7: Hex,
