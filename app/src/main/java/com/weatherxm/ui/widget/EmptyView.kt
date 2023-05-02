@@ -153,14 +153,6 @@ class EmptyView : LinearLayout {
         return this
     }
 
-    fun show() {
-        visibility = VISIBLE
-    }
-
-    fun hide() {
-        visibility = GONE
-    }
-
     fun clear(): EmptyView {
         title(null)
         subtitle(null)

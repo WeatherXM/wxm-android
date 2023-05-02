@@ -113,14 +113,20 @@ data class FrequencyState(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class UserDevice(
-    val shouldShowOTAPrompt: Boolean = true,
     val device: Device,
+    val alerts: List<DeviceAlert> = listOf()
 ) : Parcelable
 
 @Parcelize
 enum class DeviceType : Parcelable {
     M5_WIFI,
     HELIUM
+}
+
+@Parcelize
+enum class DeviceAlert : Parcelable {
+    OFFLINE,
+    NEEDS_UPDATE
 }
 
 @Keep
@@ -136,3 +142,5 @@ data class UIForecast(
     var humidity: Int? = null,
     var hourlyWeather: List<HourlyWeather>?
 )
+
+

@@ -51,12 +51,4 @@ class WeatherDataView : LinearLayout {
         binding.value.text = value
         binding.unit.text = unit
     }
-
-    fun show() {
-        visibility = VISIBLE
-    }
-
-    fun hide() {
-        visibility = GONE
-    }
 }

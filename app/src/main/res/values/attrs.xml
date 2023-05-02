@@ -6,21 +6,15 @@
         <attr name="empty_action" format="string" />
         <attr name="empty_animation" format="reference" />
     </declare-styleable>
-    <declare-styleable name="InformationCardView">
-        <attr name="info_message" format="string" />
-        <attr name="info_html_message" format="string" />
-        <attr name="info_includes_stroke" format="boolean" />
-    </declare-styleable>
-    <declare-styleable name="ErrorCardView">
-        <attr name="error_title" format="string" />
-        <attr name="error_message" format="string" />
-        <attr name="error_includes_close_button" format="boolean" />
-        <attr name="error_includes_stroke" format="boolean" />
-    </declare-styleable>
-    <declare-styleable name="WarningCardView">
-        <attr name="warning_title" format="string" />
-        <attr name="warning_message" format="string" />
-        <attr name="warning_includes_close_button" format="boolean" />
+    <declare-styleable name="MessageCardView">
+        <attr name="message_title" format="string" />
+        <attr name="message_message" format="string" />
+        <attr name="message_html_message" format="string" />
+        <attr name="message_includes_close_button" format="boolean" />
+        <attr name="message_icon" format="reference" />
+        <attr name="message_icon_color" format="reference" />
+        <attr name="message_stroke_color" format="color" />
+        <attr name="message_background_tint" format="color" />
     </declare-styleable>
     <declare-styleable name="StatusView">
         <attr name="status_title" format="string" />

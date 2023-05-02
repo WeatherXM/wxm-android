@@ -43,15 +43,19 @@
                 android:layout_height="match_parent"
                 android:clipChildren="false">
 
-                <com.weatherxm.ui.widget.WarningCardView
+                <com.weatherxm.ui.widget.MessageCardView
                     android:id="@+id/walletWarning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_normal"
                     android:visibility="gone"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:warning_message="@string/wallet_address_missing_desc"
-                    app:warning_title="@string/wallet_address_missing"
+                    app:message_background_tint="@color/warningTint"
+                    app:message_icon="@drawable/ic_warn"
+                    app:message_icon_color="@color/warning"
+                    app:message_includes_close_button="true"
+                    app:message_message="@string/wallet_address_missing_desc"
+                    app:message_title="@string/wallet_address_missing"
                     tools:visibility="visible" />
 
                 <androidx.recyclerview.widget.RecyclerView

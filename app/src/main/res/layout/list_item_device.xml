@@ -252,33 +252,47 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.weatherxm.ui.widget.ErrorCardView
+        <com.weatherxm.ui.widget.AlertsErrorCardView
+            android:id="@+id/alertsError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-8dp"
+            android:background="@color/errorTint"
+            android:elevation="0dp"
+            android:paddingTop="8dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <com.weatherxm.ui.widget.MessageCardView
             android:id="@+id/error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-16dp"
+            android:layout_marginTop="-8dp"
+            android:paddingTop="8dp"
             android:background="@color/errorTint"
             android:elevation="0dp"
-            android:paddingHorizontal="@dimen/padding_normal"
-            android:paddingTop="@dimen/padding_normal"
             android:visibility="gone"
-            app:error_includes_close_button="false"
-            app:error_includes_stroke="false"
-            app:error_title="@string/station_offline"
-            tools:visibility="visible" />
+            app:message_background_tint="@color/errorTint"
+            app:message_icon="@drawable/ic_error"
+            app:message_icon_color="@color/error"
+            app:message_includes_close_button="false"
+            app:message_title="@string/station_offline" />
 
-        <!-- TODO: Fix when both cards are visible -->
-        <com.weatherxm.ui.widget.WarningCardView
+        <com.weatherxm.ui.widget.MessageCardView
             android:id="@+id/warning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-16dp"
+            android:layout_marginTop="-8dp"
+            android:paddingTop="8dp"
             android:background="@color/warningTint"
             android:elevation="0dp"
             android:visibility="gone"
-            app:warning_includes_close_button="false"
-            app:warning_message="@string/updated_needed_desc"
-            app:warning_title="@string/updated_needed_title" />
+            app:message_background_tint="@color/warningTint"
+            app:message_icon="@drawable/ic_warn"
+            app:message_icon_color="@color/warning"
+            app:message_includes_close_button="false"
+            app:message_message="@string/updated_needed_desc"
+            app:message_title="@string/updated_needed_title" />
 
     </LinearLayout>
 

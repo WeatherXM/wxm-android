@@ -23,6 +23,7 @@
     <string name="action_deny">Deny</string>
     <string name="action_sounds_good">Sounds good!</string>
     <string name="action_update_firmware">Update Firmware</string>
+    <string name="action_view_more">View More</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="action_scan_qr">Scan QR Code</string>
@@ -359,4 +360,9 @@
     <string name="frequency_changed_subtitle">Your station’s frequency changed and it’s now %s.</string>
     <string name="frequency_changed_failed">Frequency Change Failed</string>
     <string name="changing_frequency_failed_message"><![CDATA[Station frequency change failed, please try again! If the problem persists, please contact our support team at <b><a>support@weatherxm.com</a></b>.<br><br>Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
+
+    <!-- Alerts -->
+    <string name="alerts">Alerts</string>
+    <string name="issues">%s Issues</string>
+    <string name="station_offline_alert_message">The station is offline. Check that it has batteries and internet connection. If the problem persists, contact our support team at support@weatherxm.com</string>
 </resources>

@@ -114,12 +114,4 @@ class WeatherCardView : LinearLayout, KoinComponent {
         weatherData = data
         updateCurrentWeatherUI()
     }
-
-    fun show() {
-        visibility = VISIBLE
-    }
-
-    fun hide() {
-        visibility = GONE
-    }
 }

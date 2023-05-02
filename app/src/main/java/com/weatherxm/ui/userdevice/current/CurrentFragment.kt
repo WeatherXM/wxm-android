@@ -14,6 +14,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.databinding.FragmentUserDeviceCurrentBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.userdevice.UserDeviceViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -98,7 +99,7 @@ class CurrentFragment : Fragment(), KoinComponent {
         binding.progress.visibility = View.INVISIBLE
         when (device.attributes?.isActive) {
             true -> {
-                binding.errorCard.hide()
+                binding.errorCard.setVisible(false)
             }
             false -> {
                 binding.errorCard.setErrorMessageWithUrl(

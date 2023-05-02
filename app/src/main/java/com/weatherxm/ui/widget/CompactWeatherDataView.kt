@@ -49,12 +49,4 @@ class CompactWeatherDataView : ConstraintLayout {
             binding.icon.setImageDrawable(it)
         }
     }
-
-    fun show() {
-        visibility = VISIBLE
-    }
-
-    fun hide() {
-        visibility = GONE
-    }
 }

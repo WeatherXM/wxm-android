@@ -31,8 +31,6 @@ class ClaimM5VerifyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.infoCard.htmlMessage(R.string.device_serial_number_instructions)
-
         // Convert typed characters to uppercase
         binding.serialNumber.filters = arrayOf(InputFilter.AllCaps())
 

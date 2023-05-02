@@ -38,7 +38,7 @@ class WeatherOverlayErrorCardView : LinearLayout, KoinComponent {
     private fun init(context: Context?) {
         binding = ViewWeatherOverlayErrorCardBinding.inflate(LayoutInflater.from(context), this)
         binding.closeButton.setOnClickListener {
-            hide()
+            visibility = GONE
         }
         orientation = VERTICAL
         gravity = Gravity.CENTER
@@ -63,14 +63,6 @@ class WeatherOverlayErrorCardView : LinearLayout, KoinComponent {
                 )
             }
         }
-        show()
-    }
-
-    fun show() {
         visibility = VISIBLE
-    }
-
-    fun hide() {
-        visibility = GONE
     }
 }

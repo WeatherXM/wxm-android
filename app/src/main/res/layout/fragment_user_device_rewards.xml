@@ -54,15 +54,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tokenCard" />
 
-            <com.weatherxm.ui.widget.InformationCardView
+            <com.weatherxm.ui.widget.MessageCardView
                 android:id="@+id/tokenNotice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal"
                 android:layout_marginTop="@dimen/margin_small"
-                android:padding="@dimen/padding_extra_small"
-                app:info_html_message="@string/device_detail_token_notice"
-                app:layout_constraintTop_toBottomOf="@id/tokenRewards" />
+                app:layout_constraintTop_toBottomOf="@id/tokenRewards"
+                app:message_background_tint="@color/blueTint"
+                app:message_html_message="@string/device_detail_token_notice"
+                app:message_icon="@drawable/ic_info"
+                app:message_icon_color="@color/colorPrimaryVariant"
+                app:message_includes_close_button="false" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

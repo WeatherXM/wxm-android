@@ -76,14 +76,18 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.weatherxm.ui.widget.WarningCardView
+                    <com.weatherxm.ui.widget.MessageCardView
                         android:id="@+id/warningBox"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@id/needHelpInstallation"
-                        app:warning_message="@string/installation_location_warning_text"
-                        app:warning_title="@string/important_message" />
+                        app:message_background_tint="@color/warningTint"
+                        app:message_icon="@drawable/ic_warn"
+                        app:message_icon_color="@color/warning"
+                        app:message_includes_close_button="true"
+                        app:message_message="@string/installation_location_warning_text"
+                        app:message_title="@string/important_message" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>

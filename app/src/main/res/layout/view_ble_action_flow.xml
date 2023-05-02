@@ -178,15 +178,19 @@
 
     </LinearLayout>
 
-    <com.weatherxm.ui.widget.InformationCardView
+    <com.weatherxm.ui.widget.MessageCardView
         android:id="@+id/informationCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_normal"
         android:visibility="invisible"
-        app:info_html_message="@string/update_prompt_on_claiming_flow"
-        app:info_includes_stroke="true"
         app:layout_constraintBottom_toTopOf="@id/buttonsContainer"
+        app:message_background_tint="@color/blueTint"
+        app:message_html_message="@string/update_prompt_on_claiming_flow"
+        app:message_icon="@drawable/ic_info"
+        app:message_icon_color="@color/colorPrimaryVariant"
+        app:message_includes_close_button="false"
+        app:message_stroke_color="@color/colorPrimaryVariant"
         tools:visibility="visible" />
 
     <!-- Buttons -->

@@ -10,7 +10,6 @@ import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.snackbar.Snackbar
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
-import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -18,6 +17,7 @@ import com.weatherxm.databinding.ActivityConnectWalletBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.AlertDialogFragment
 import com.weatherxm.ui.common.getRichText
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Mask
 import com.weatherxm.util.Validator
 import com.weatherxm.util.applyInsets
@@ -54,7 +54,6 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         binding.root.applyInsets()
 
         binding.walletCompatibilityCard
-            .htmlMessage(R.string.wallet_compatibility_desc)
             .action(
                 getString(R.string.check_wallet_compatibility),
                 ResourcesCompat.getDrawable(resources, R.drawable.ic_open_new, this.theme)
@@ -167,7 +166,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         binding.checkBoxesAndButtonContainer.visibility = View.VISIBLE
         binding.ownershipCheckbox.isEnabled = true
         binding.termsCheckbox.isEnabled = true
-        binding.walletCompatibilityCard.show()
+        binding.walletCompatibilityCard.setVisible(true)
     }
 
     private fun onAddressUpdateUI(address: String?) {
@@ -182,7 +181,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             binding.addressContainer.isCounterEnabled = false
             binding.scanQR.visibility = View.GONE
             binding.checkBoxesAndButtonContainer.visibility = View.GONE
-            binding.walletCompatibilityCard.hide()
+            binding.walletCompatibilityCard.setVisible(false)
         }
     }
 

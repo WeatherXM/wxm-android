@@ -22,6 +22,7 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.hide
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.stationsettings.ChangeFrequencyState
 import com.weatherxm.ui.stationsettings.FrequencyStatus
@@ -122,7 +123,7 @@ class ChangeFrequencyActivity : AppCompatActivity(), KoinComponent {
             model.setSelectedFrequency(binding.frequenciesSelector.selectedItemPosition)
             initBluetoothAndStart()
             binding.frequencySelectorContainer.hide(null)
-            binding.bleActionFlow.show()
+            binding.bleActionFlow.setVisible(true)
         }
 
         binding.bleActionFlow.setListeners(onScanClicked = {

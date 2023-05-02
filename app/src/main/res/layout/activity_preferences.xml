@@ -31,76 +31,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/survey_prompt"
-                style="@style/Widget.WeatherXM.MaterialCard.Info"
+            <com.weatherxm.ui.widget.MessageCardView
+                android:id="@+id/surveyPrompt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal"
-                app:cardUseCompatPadding="false"
-                app:contentPadding="@dimen/padding_small"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/icon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_survey"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/colorPrimary"
-                        tools:ignore="ContentDescription" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/survey_title"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_normal"
-                        android:text="@string/short_app_survey"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.MaterialCard.Messages.Title"
-                        app:layout_constraintBottom_toBottomOf="@id/close_survey_prompt_button"
-                        app:layout_constraintEnd_toStartOf="@id/close_survey_prompt_button"
-                        app:layout_constraintStart_toEndOf="@id/icon"
-                        app:layout_constraintTop_toTopOf="@id/close_survey_prompt_button" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/close_survey_prompt_button"
-                        style="@style/Widget.WeatherXM.IconButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:icon="@drawable/ic_close"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:ignore="SpeakableTextPresentCheck" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/showSurveyButton"
-                        style="@style/Widget.WeatherXM.TextButton.Subtle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="start|center_vertical"
-                        android:paddingStart="0dp"
-                        android:text="@string/short_app_survey_prompt_desc"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@id/survey_title"
-                        app:layout_constraintTop_toBottomOf="@id/close_survey_prompt_button"
-                        tools:ignore="RtlSymmetry" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.card.MaterialCardView>
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:message_background_tint="@color/blueTint"
+                app:message_icon="@drawable/ic_survey"
+                app:message_icon_color="@color/colorPrimaryVariant"
+                app:message_includes_close_button="true"
+                app:message_stroke_color="@color/colorPrimaryVariant"
+                app:message_title="@string/short_app_survey"
+                tools:visibility="visible" />
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/preferencesFragment"
                 android:name="com.weatherxm.ui.preferences.PreferenceFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_constraintTop_toBottomOf="@id/survey_prompt" />
+                app:layout_constraintTop_toBottomOf="@id/surveyPrompt" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

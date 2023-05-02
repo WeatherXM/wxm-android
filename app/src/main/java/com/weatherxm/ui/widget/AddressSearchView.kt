@@ -67,12 +67,4 @@ class AddressSearchView : LinearLayout {
         adapter.updateData("", mutableListOf())
         binding.recycler.visibility = GONE
     }
-
-    fun show() {
-        visibility = VISIBLE
-    }
-
-    fun hide() {
-        visibility = GONE
-    }
 }

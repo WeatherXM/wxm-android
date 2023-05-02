@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.annotation.ColorRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,9 @@ import com.weatherxm.R
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
+import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.UserDevice
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
@@ -109,38 +112,31 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
         }
 
         private fun setAlerts(item: UserDevice) {
-            binding.error.visibility =
-                if (item.device.attributes?.isActive == false) VISIBLE else GONE
-
-            if (deviceNeedsOTAPrompt(item)) {
-                binding.warning.action(
-                    resHelper.getString(R.string.update_station_now), actionWithBorders = true
-                ) {
+            binding.alertsError.setVisible(false)
+            binding.error.setVisible(false)
+            binding.warning.setVisible(false)
+            setCardStroke(R.color.transparent, 0)
+            if (item.alerts.size > 1) {
+                setCardStroke(R.color.error, 1)
+                binding.alertsError.title(
+                    itemView.context.getString(R.string.issues, item.alerts.size.toString())
+                ).action {
+                    deviceListener.onAlertsClicked(item)
+                }.setVisible(true)
+            } else if (item.alerts.contains(DeviceAlert.OFFLINE)) {
+                setCardStroke(R.color.error, 1)
+                binding.error.setVisible(true)
+            } else if (item.alerts.contains(DeviceAlert.NEEDS_UPDATE)) {
+                setCardStroke(R.color.warning, 1)
+                binding.warning.action(resHelper.getString(R.string.update_station_now)) {
                     deviceListener.onUpdateStationClicked(item)
-                }.show()
-            } else {
-                binding.warning.hide()
-            }
-
-            with(binding.root) {
-                if (item.device.attributes?.isActive == false) {
-                    strokeColor = itemView.context.getColor(R.color.error)
-                    strokeWidth = itemView.resources.getDimensionPixelSize(R.dimen.card_stroke)
-                } else if (deviceNeedsOTAPrompt(item)) {
-                    strokeColor = itemView.context.getColor(R.color.warning)
-                    strokeWidth = itemView.resources.getDimensionPixelSize(R.dimen.card_stroke)
-                } else {
-                    strokeColor = itemView.context.getColor(R.color.transparent)
-                    strokeWidth = 0
-                }
+                }.setVisible(true)
             }
         }
 
-        private fun deviceNeedsOTAPrompt(userDevice: UserDevice): Boolean {
-            return userDevice.shouldShowOTAPrompt &&
-                userDevice.device.attributes?.isActive == true &&
-                userDevice.device.profile == DeviceProfile.Helium &&
-                userDevice.device.needsUpdate()
+        private fun setCardStroke(@ColorRes colorResId: Int, width: Int) {
+            binding.root.strokeColor = itemView.context.getColor(colorResId)
+            binding.root.strokeWidth = width
         }
 
         private fun setWeatherData(item: UserDevice) {
@@ -207,10 +203,11 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 oldDevice.currentWeather?.timestamp == newDevice.currentWeather?.timestamp &&
                 oldDevice.profile == newDevice.profile &&
                 oldDevice.needsUpdate() == newDevice.needsUpdate() &&
-                oldItem.shouldShowOTAPrompt == newItem.shouldShowOTAPrompt &&
+                oldItem.alerts == newItem.alerts &&
                 oldDevice.attributes?.firmware?.current == newDevice.attributes?.firmware?.current &&
                 oldDevice.attributes?.firmware?.assigned == newDevice.attributes?.firmware?.assigned &&
                 oldDevice.attributes?.friendlyName == newDevice.attributes?.friendlyName &&
+                oldDevice.attributes?.lastWeatherStationActivity == newDevice.attributes?.lastWeatherStationActivity &&
                 oldDevice.attributes?.isActive == newDevice.attributes?.isActive
         }
     }
@@ -219,4 +216,5 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
 interface DeviceListener {
     fun onDeviceClicked(userDevice: UserDevice)
     fun onUpdateStationClicked(userDevice: UserDevice)
+    fun onAlertsClicked(userDevice: UserDevice)
 }

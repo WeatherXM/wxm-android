@@ -19,6 +19,7 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentPublicDeviceDetailsBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.setColor
@@ -101,16 +102,16 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
                 binding.empty.visibility = GONE
                 updateDeviceInfo(resource.data)
                 binding.currentWeatherCard.setData(resource.data?.currentWeather)
-                binding.currentWeatherCard.show()
+                binding.currentWeatherCard.setVisible(true)
                 resource.data?.tokenInfo?.let {
                     binding.tokenCard.setTokenInfo(it, null)
-                    binding.tokenCard.show()
+                    binding.tokenCard.setVisible(true)
                 }
             }
             Status.ERROR -> {
                 Timber.d(resource.message, resource.message)
-                binding.currentWeatherCard.hide()
-                binding.tokenCard.hide()
+                binding.currentWeatherCard.setVisible(false)
+                binding.tokenCard.setVisible(false)
                 binding.empty.clear()
                 binding.empty.animation(R.raw.anim_error)
                 binding.empty.title(getString(R.string.error_generic_message))
@@ -118,8 +119,8 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
                 binding.empty.visibility = VISIBLE
             }
             Status.LOADING -> {
-                binding.currentWeatherCard.hide()
-                binding.tokenCard.hide()
+                binding.currentWeatherCard.setVisible(false)
+                binding.tokenCard.setVisible(false)
                 binding.empty.clear()
                 binding.empty.animation(R.raw.anim_loading)
                 binding.empty.visibility = VISIBLE

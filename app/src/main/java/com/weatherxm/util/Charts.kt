@@ -7,6 +7,7 @@ import android.content.res.Resources
 import android.view.MotionEvent
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
@@ -14,6 +15,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
@@ -590,3 +592,27 @@ fun BarChart.initializeTokenChart(entries: List<BarEntry>) {
     show()
     notifyDataSetChanged()
 }
+
+class CustomXAxisFormatter(private val times: MutableList<String>?) : ValueFormatter() {
+    override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+        return times?.getOrNull(value.toInt()) ?: value.toString()
+    }
+}
+
+/**
+ * We have hidden the Y Axis on our charts so the following class is not needed.
+ *
+ * TODO: Remove everything regarding Y Axis when we are sure we will not use them again.
+ */
+//class CustomYAxisFormatter(
+//    private val weatherUnit: String,
+//    private val decimals: Int = 0
+//) : ValueFormatter() {
+//    override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+//        return if (decimals > 0) {
+//            "%.${decimals}f$weatherUnit".format(value)
+//        } else {
+//            "${value.roundToInt()}$weatherUnit"
+//        }
+//    }
+//}

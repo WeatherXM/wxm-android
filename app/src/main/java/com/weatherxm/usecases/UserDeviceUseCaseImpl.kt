@@ -3,19 +3,18 @@ package com.weatherxm.usecases
 import android.content.Context
 import arrow.core.Either
 import com.weatherxm.data.Device
+import com.weatherxm.data.DeviceProfile.Helium
 import com.weatherxm.data.Failure
-import com.weatherxm.data.UserActionError
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.SharedPreferencesRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.WeatherForecastRepository
+import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.TokenInfo
 import com.weatherxm.ui.common.UIForecast
-import com.weatherxm.util.DateTimeHelper.getFormattedRelativeDay
 import com.weatherxm.ui.common.UserDevice
-import com.weatherxm.util.isToday
-import com.weatherxm.util.isTomorrow
+import com.weatherxm.util.DateTimeHelper.getFormattedRelativeDay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import java.time.ZoneId
@@ -53,7 +52,15 @@ class UserDeviceUseCaseImpl(
                     device.id,
                     device.attributes?.firmware?.assigned
                 )
-                UserDevice(shouldShowOTAPrompt, device)
+                val alerts = mutableListOf<DeviceAlert>()
+                if (device.attributes?.isActive == false) {
+                    alerts.add(DeviceAlert.OFFLINE)
+                }
+
+                if (shouldShowOTAPrompt && device.profile == Helium && device.needsUpdate()) {
+                    alerts.add(DeviceAlert.NEEDS_UPDATE)
+                }
+                UserDevice(device, alerts)
             }
         }
     }

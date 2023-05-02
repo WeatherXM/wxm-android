@@ -113,14 +113,6 @@
     </style>
 
     <!--
-        Survey Prompt on Preferences Screen
-    -->
-    <style name="TextAppearance.WeatherXM.MaterialCard.Messages.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <!--
         EmptyView
     -->
     <style name="TextAppearance.WeatherXM.EmptyView.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">

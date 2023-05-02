@@ -142,12 +142,4 @@ open class TokenCardView : LinearLayout {
             }
         }
     }
-
-    fun show() {
-        visibility = VISIBLE
-    }
-
-    fun hide() {
-        visibility = GONE
-    }
 }

@@ -39,17 +39,20 @@
         tools:text="@string/action_update_firmware"
         tools:visibility="visible" />
 
-    <com.weatherxm.ui.widget.WarningCardView
+    <com.weatherxm.ui.widget.MessageCardView
         android:id="@+id/warningBox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_small"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/actionBtn"
-        app:warning_includes_close_button="false"
-        app:warning_message="@string/installation_location_warning_text"
+        app:message_background_tint="@color/warningTint"
+        app:message_icon="@drawable/ic_warn"
+        app:message_icon_color="@color/warning"
+        app:message_includes_close_button="false"
+        app:message_message="@string/updated_needed_desc"
         tools:visibility="visible" />
 
     <View

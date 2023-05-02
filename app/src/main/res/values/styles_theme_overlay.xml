@@ -16,6 +16,13 @@
     </style>
 
     <style name="ThemeOverlay.WeatherXM.AlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="dialogCornerRadius">0dp</item>
+        <item name="android:bottomLeftRadius">0dp</item>
+        <item name="android:bottomRightRadius">0dp</item>
+        <item name="android:dialogCornerRadius">0dp</item>
+        <item name="android:topLeftRadius">0dp</item>
+        <item name="android:topRightRadius">0dp</item>
+
         <item name="materialAlertDialogTitleTextStyle">@style/Widget.WeatherXM.AlertDialog.Title
         </item>
         <item name="materialAlertDialogBodyTextStyle">@style/Widget.WeatherXM.AlertDialog.Body

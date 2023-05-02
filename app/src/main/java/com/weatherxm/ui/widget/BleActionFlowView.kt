@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewBleActionFlowBinding
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.show
 import com.weatherxm.util.setHtml
 
@@ -111,7 +112,7 @@ class BleActionFlowView : ConstraintLayout {
     fun onNotPaired() {
         hideButtons()
         binding.steps.visibility = View.GONE
-        binding.status.hide()
+        binding.status.setVisible(false)
         binding.notPairedInfoContainer.visibility = View.VISIBLE
         binding.pairDevice.visibility = View.VISIBLE
     }
@@ -252,13 +253,5 @@ class BleActionFlowView : ConstraintLayout {
         binding.failureButtonsContainer.visibility = View.INVISIBLE
         binding.scanAgain.visibility = View.INVISIBLE
         binding.pairDevice.visibility = View.INVISIBLE
-    }
-
-    fun show() {
-        visibility = VISIBLE
-    }
-
-    fun hide() {
-        visibility = GONE
     }
 }

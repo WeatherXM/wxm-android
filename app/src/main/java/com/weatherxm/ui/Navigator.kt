@@ -23,9 +23,11 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UserDevice
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
+import com.weatherxm.ui.devicealerts.DeviceAlertsActivity
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.explorer.ExplorerActivity
@@ -327,6 +329,16 @@ class Navigator(private val clientIdentificationHelper: ClientIdentificationHelp
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_DEVICE, device)
         )
+    }
+
+    fun showDeviceAlerts(fragment: Fragment, userDevice: UserDevice?) {
+        fragment.context?.let {
+            it.startActivity(
+                Intent(it, DeviceAlertsActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_DEVICE, userDevice)
+            )
+        }
     }
 
     fun sendSupportEmail(

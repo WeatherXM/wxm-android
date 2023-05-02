@@ -37,6 +37,10 @@ fun View.hide(
     if (animation == null) this.visibility = GONE else animate(this, animation, listener)
 }
 
+fun View.setVisible(visible: Boolean) {
+    if (visible) this.visibility = VISIBLE else this.visibility = GONE
+}
+
 fun animate(view: View, animation: Animation, listener: AnimatorListener? = null) {
     when (animation) {
         is Animation.ShowAnimation -> {

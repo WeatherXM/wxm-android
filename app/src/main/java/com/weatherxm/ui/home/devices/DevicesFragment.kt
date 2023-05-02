@@ -14,6 +14,7 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.UserDevice
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
@@ -118,12 +119,11 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                 binding.walletWarning.action(getString(R.string.add_wallet_now)) {
                     navigator.showConnectWallet(connectWalletLauncher, this)
                 }.closeButton {
-                    binding.walletWarning.hide()
+                    binding.walletWarning.setVisible(false)
                     parentModel.setWalletWarningDismissTimestamp()
-                }.show()
-            } else {
-                binding.walletWarning.hide()
+                }
             }
+            binding.walletWarning.setVisible(it)
         }
         return binding.root
     }
@@ -134,5 +134,9 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
 
     override fun onUpdateStationClicked(userDevice: UserDevice) {
         navigator.showDeviceHeliumOTA(this, userDevice.device, false)
+    }
+
+    override fun onAlertsClicked(userDevice: UserDevice) {
+        navigator.showDeviceAlerts(this, userDevice)
     }
 }
