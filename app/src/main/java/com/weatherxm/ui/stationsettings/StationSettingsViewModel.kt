@@ -128,7 +128,7 @@ class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent 
                 deviceInfo.weatherStation?.batteryState?.let {
                     if (it == BatteryState.low) {
                         stationInfo.add(
-                            1,
+                            2,
                             StationInfo(
                                 resHelper.getString(R.string.battery_level),
                                 resHelper.getString(R.string.battery_level_low),
@@ -137,7 +137,7 @@ class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent 
                         )
                     } else {
                         stationInfo.add(
-                            1,
+                            2,
                             StationInfo(
                                 resHelper.getString(R.string.battery_level),
                                 resHelper.getString(R.string.battery_level_ok)
@@ -185,6 +185,14 @@ class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent 
     private fun getStationInfoFromDevice(): MutableList<StationInfo> {
         return mutableListOf<StationInfo>().apply {
             add(StationInfo(resHelper.getString(R.string.station_default_name), device.name))
+            device.attributes?.claimedAt?.let {
+                add(
+                    StationInfo(
+                        resHelper.getString(R.string.claimed_at),
+                        it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+                    )
+                )
+            }
             if (device.profile == DeviceProfile.Helium) {
                 device.label?.unmask()?.let {
                     add(StationInfo(resHelper.getString(R.string.dev_eui), it))
@@ -193,15 +201,6 @@ class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent 
                 device.label?.unmask()?.let {
                     add(StationInfo(resHelper.getString(R.string.device_serial_number_title), it))
                 }
-            }
-
-            device.attributes?.claimedAt?.let {
-                add(
-                    StationInfo(
-                        resHelper.getString(R.string.claimed_at),
-                        it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
-                    )
-                )
             }
             device.attributes?.firmware?.current?.let { current ->
                 val assigned = device.attributes?.firmware?.assigned
