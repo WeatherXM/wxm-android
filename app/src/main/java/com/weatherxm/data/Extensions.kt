@@ -5,6 +5,7 @@ import com.google.android.gms.tasks.Task
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.squareup.moshi.JsonDataException
 import com.weatherxm.data.ApiError.AuthError.InvalidAccessToken
+import com.weatherxm.data.ApiError.AuthError.InvalidActivationToken
 import com.weatherxm.data.ApiError.AuthError.InvalidUsername
 import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidCredentials
 import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidPassword
@@ -34,6 +35,7 @@ import com.weatherxm.data.network.ErrorResponse.Companion.DEVICE_CLAIMING
 import com.weatherxm.data.network.ErrorResponse.Companion.DEVICE_NOT_FOUND
 import com.weatherxm.data.network.ErrorResponse.Companion.FORBIDDEN
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_ACCESS_TOKEN
+import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_ACTIVATION_TOKEN
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_CLAIM_ID
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_CLAIM_LOCATION
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_CREDENTIALS
@@ -86,6 +88,7 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
                         INVALID_CREDENTIALS -> InvalidCredentials(code, this.body?.message)
                         USER_ALREADY_EXISTS -> UserAlreadyExists(code, this.body?.message)
                         INVALID_ACCESS_TOKEN -> InvalidAccessToken(code, this.body?.message)
+                        INVALID_ACTIVATION_TOKEN -> InvalidActivationToken(code, this.body?.message)
                         DEVICE_NOT_FOUND -> DeviceNotFound(code, this.body?.message)
                         INVALID_WALLET_ADDRESS -> InvalidWalletAddress(code, this.body?.message)
                         INVALID_FRIENDLY_NAME -> InvalidFriendlyName(code, this.body?.message)

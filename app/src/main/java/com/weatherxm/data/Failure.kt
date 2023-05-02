@@ -83,6 +83,10 @@ sealed class ApiError(code: String?, val message: String? = null) : Failure(code
 
         class InvalidUsername(code: String?, message: String? = null) : AuthError(code, message)
         class InvalidAccessToken(code: String?, message: String? = null) : AuthError(code, message)
+        class InvalidActivationToken(
+            code: String?,
+            message: String? = null
+        ) : AuthError(code, message)
     }
 
     class DeviceNotFound(code: String?, message: String? = null) : ApiError(code, message)

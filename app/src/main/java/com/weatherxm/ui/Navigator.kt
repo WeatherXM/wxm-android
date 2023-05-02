@@ -63,10 +63,10 @@ class Navigator(private val clientIdentificationHelper: ClientIdentificationHelp
 
     fun showLogin(
         context: Context,
-        isForcedLogout: Boolean = false,
+        newTask: Boolean = false,
         userMessage: String? = null
     ) {
-        val intentFlags = if (isForcedLogout) {
+        val intentFlags = if (newTask) {
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         } else {
             Intent.FLAG_ACTIVITY_SINGLE_TOP

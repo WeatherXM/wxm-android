@@ -48,6 +48,7 @@
     <string name="warn_validation_invalid_password">Password must be >5 characters</string>
     <string name="warn_validation_invalid_address">Invalid Address</string>
     <string name="warn_validation_invalid_friendly_name">Invalid Friendly Name</string>
+    <string name="warn_validation_password_does_not_match">Passwords are not the same</string>
 
     <!-- Info Messages -->
     <string name="info_come_back_later">Please come back later!</string>

@@ -219,13 +219,13 @@
                     app:layout_constraintBottom_toBottomOf="parent">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/goToSignIn"
+                        android:id="@+id/goToLogin"
                         style="@style/Widget.WeatherXM.Button.Subtle.Borders"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_normal"
                         android:layout_weight="1"
-                        android:text="@string/go_to_sign_in_screen"
+                        android:text="@string/go_to_login_screen"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 

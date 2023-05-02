@@ -26,6 +26,7 @@ class UserRepositoryImpl(
                 return networkUserDataSource.getUser().tap {
                     Timber.d("Got user from network [${it.email}].")
                     cacheUserDataSource.setUser(it)
+                    cacheUserDataSource.setUserUsername(it.email)
                 }
             }
     }

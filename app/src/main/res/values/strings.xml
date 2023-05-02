@@ -4,7 +4,7 @@
     <string name="hint_password">Password</string>
     <string name="success">Success</string>
     <string name="action_save">Save</string>
-    <string name="action_sign_in">Sign In</string>
+    <string name="action_login">Login</string>
     <string name="action_retry">Retry</string>
     <string name="action_ok">OK</string>
     <string name="action_cancel">Cancel</string>
@@ -126,7 +126,7 @@
     <string name="cancel_deletion">Cancel Deletion</string>
     <string name="retry_deleting_account">Retry Deleting Account</string>
     <string name="validating_password">Validating Password…</string>
-    <string name="go_to_sign_in_screen">Go to Sign In screen</string>
+    <string name="go_to_login_screen">Go to Login screen</string>
     <string name="take_short_survey">Take a Short Survey</string>
 
     <!-- Password Prompt -->
@@ -162,7 +162,7 @@
     <string name="signup_hint_last_name">Last Name</string>
     <string name="signup_text">Don\'t have an account?</string>
     <string name="signup_instructions">Signup with your email and your account will be created shortly.</string>
-    <string name="success_signup_text">Thanks for joining WeatherXM! We have sent you an account activation link to %s. Please, set a password and then try to sign in.</string>
+    <string name="success_signup_text">Thanks for joining WeatherXM! We have sent you an account activation link to %s. Please, set a password and then try to login.</string>
     <string name="info_registration_contact_support">Not receiving an activation email? Contact our support team.</string>
 
     <!-- Tokens -->

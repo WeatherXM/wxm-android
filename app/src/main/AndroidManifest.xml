@@ -65,6 +65,7 @@
 
         <activity
             android:name="com.weatherxm.ui.startup.StartupActivity"
+            android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM.Startup" />
         <activity
@@ -73,8 +74,22 @@
             android:theme="@style/Theme.WeatherXM.Explorer" />
         <activity
             android:name="com.weatherxm.ui.login.LoginActivity"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WeatherXM" />
+            android:theme="@style/Theme.WeatherXM">
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="${auth_host}"
+                    android:pathPattern="/login"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.weatherxm.ui.signup.SignupActivity"
             android:screenOrientation="portrait"

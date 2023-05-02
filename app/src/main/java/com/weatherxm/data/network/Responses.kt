@@ -38,6 +38,7 @@ data class ErrorResponse(
         const val INVALID_CREDENTIALS = "InvalidCredentials"
         const val USER_ALREADY_EXISTS = "UserAlreadyExists"
         const val INVALID_ACCESS_TOKEN = "InvalidAccessToken"
+        const val INVALID_ACTIVATION_TOKEN = "InvalidActivationToken"
         const val DEVICE_NOT_FOUND = "DeviceNotFound"
         const val INVALID_WALLET_ADDRESS = "InvalidWalletAddress"
         const val INVALID_FRIENDLY_NAME = "InvalidFriendlyName"
