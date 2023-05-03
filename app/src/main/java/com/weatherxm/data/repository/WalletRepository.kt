@@ -21,11 +21,11 @@ class WalletRepositoryImpl(
      */
     override suspend fun getWalletAddress(): Either<Failure, String?> {
         return cacheWalletDataSource.getWalletAddress()
-            .tap {
+            .onRight {
                 Timber.d("Got wallet from cache [$it].")
             }
             .mapLeft {
-                return networkWalletDataSource.getWalletAddress().tap { address ->
+                return networkWalletDataSource.getWalletAddress().onRight { address ->
                     Timber.d("Got wallet from network [$address].")
                     address?.let {
                         cacheWalletDataSource.setWalletAddress(it)
@@ -39,7 +39,7 @@ class WalletRepositoryImpl(
      */
     override suspend fun setWalletAddress(address: String): Either<Failure, Unit> {
         return networkWalletDataSource.setWalletAddress(address)
-            .tap {
+            .onRight {
                 Timber.d("Saved new wallet address [$address].")
                 // Save also in cache, if network operation was successful
                 cacheWalletDataSource.setWalletAddress(address)

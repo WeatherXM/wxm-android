@@ -1,8 +1,10 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
-import arrow.core.filterOrElse
+import arrow.core.flatMap
 import arrow.core.handleErrorWith
+import arrow.core.left
+import arrow.core.right
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
@@ -45,8 +47,11 @@ class WeatherHistoryRepositoryImpl(
                     hourly.timestamp.toLocalDate().toEpochDay() == date.toEpochDay()
                 }
             }
-            .filterOrElse({ isDateComplete(date, it) }, { DataError.DatabaseMissError })
-            .tapLeft {
+            .flatMap { b ->
+                b.takeIf({ isDateComplete(date, it) })?.right()
+                    ?: DataError.DatabaseMissError.left<Failure>()
+            }
+            .onLeft {
                 Timber.d("No data in db for $date")
             }
     }
@@ -57,7 +62,7 @@ class WeatherHistoryRepositoryImpl(
     ): Either<Failure, List<HourlyWeather>> {
         Timber.d("Get device history from network")
         return networkSource.getWeatherHistory(deviceId, date, date)
-            .tap {
+            .onRight {
                 if (it.isNotEmpty()) {
                     Timber.d("Save data in db ${it.first().timestamp..it.last().timestamp}")
                     databaseSource.setWeatherHistory(deviceId, it)

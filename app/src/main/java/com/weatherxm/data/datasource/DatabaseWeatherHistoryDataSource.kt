@@ -1,7 +1,8 @@
 package com.weatherxm.data.datasource
 
 import arrow.core.Either
-import arrow.core.filterOrElse
+import arrow.core.flatMap
+import arrow.core.left
 import arrow.core.right
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
@@ -47,7 +48,10 @@ class DatabaseWeatherHistoryDataSource(
             }
             .right()
             // Return DatabaseMissError if list is empty
-            .filterOrElse({ it.isNotEmpty() }, { DataError.DatabaseMissError })
+            .flatMap { b ->
+                b.takeIf({ it.isNotEmpty() })?.right()
+                    ?: DataError.DatabaseMissError.left<DataError.DatabaseMissError>()
+            }
     }
 
     override suspend fun setWeatherHistory(deviceId: String, data: List<HourlyWeather>) {

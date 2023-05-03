@@ -47,11 +47,11 @@ class WeatherForecastRepositoryImpl(
         }
 
         return cacheSource.getForecast(deviceId, fromDate, to)
-            .tap {
+            .onRight {
                 Timber.d("Got forecast from cache [$fromDate to $to].")
             }
             .mapLeft {
-                return networkSource.getForecast(deviceId, fromDate, to).tap {
+                return networkSource.getForecast(deviceId, fromDate, to).onRight {
                     Timber.d("Got forecast from network [$fromDate to $to].")
                     cacheSource.setForecast(deviceId, it)
                 }

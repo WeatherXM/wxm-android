@@ -4,7 +4,8 @@ import android.location.Location
 import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.handleErrorWith
-import arrow.core.rightIfNotNull
+import arrow.core.left
+import arrow.core.right
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.ResultAccuracy
 import com.mapbox.search.result.SearchAddress
@@ -49,7 +50,7 @@ class AddressRepositoryImpl(
         var retriedWithoutCountryLimit = false
 
         return cacheSearch.getSearchSuggestions(query, countryCode)
-            .tap {
+            .onRight {
                 Timber.d("Found suggestions in cache [query=$query]")
             }
             .handleErrorWith {
@@ -57,11 +58,11 @@ class AddressRepositoryImpl(
                     // If no results, search again globally without country limitations
                     if (countryResults.isEmpty() && !retriedWithoutCountryLimit) {
                         retriedWithoutCountryLimit = true
-                        networkSearch.getSearchSuggestions(query).tap { globalResults ->
+                        networkSearch.getSearchSuggestions(query).onRight { globalResults ->
                             Timber.d("Saving suggestions in cache [query=$query]")
                             cacheSearch.setSearchSuggestions(query, globalResults)
                             return@flatMap Either.Right(globalResults)
-                        }.tapLeft {
+                        }.onLeft {
                             return@flatMap Either.Left(it)
                         }
                     } else {
@@ -77,12 +78,12 @@ class AddressRepositoryImpl(
         suggestion: SearchSuggestion
     ): Either<Failure, Location> {
         return cacheSearch.getSuggestionLocation(suggestion)
-            .tap {
+            .onRight {
                 Timber.d("Found suggestion location in cache [$suggestion]")
             }
             .handleErrorWith {
                 networkSearch.getSuggestionLocation(suggestion)
-                    .tap {
+                    .onRight {
                         Timber.d("Saving suggestion location in cache [$suggestion]")
                         cacheSearch.setSuggestionLocation(suggestion, it)
                     }
@@ -97,9 +98,7 @@ class AddressRepositoryImpl(
                 } else if (!it.isNearby()) {
                     Either.Left(ReverseGeocodingError.SearchResultNotNearbyError)
                 } else {
-                    it.address.rightIfNotNull {
-                        ReverseGeocodingError.SearchResultNoAddressError
-                    }
+                    it.address?.right() ?: ReverseGeocodingError.SearchResultNoAddressError.left()
                 }
             }
     }

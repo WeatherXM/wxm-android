@@ -88,9 +88,9 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
     fun geocoding(query: String) {
         viewModelScope.launch {
             usecase.getSearchSuggestions(query)
-                .tap { suggestions ->
+                .onRight { suggestions ->
                     onSearchResults.postValue(suggestions)
-                }.tapLeft {
+                }.onLeft {
                     onSearchResults.postValue(null)
                 }
         }
@@ -99,7 +99,7 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
     fun getLocationFromSearchSuggestion(suggestion: SearchSuggestion) {
         viewModelScope.launch {
             usecase.getSuggestionLocation(suggestion)
-                .tap { location ->
+                .onRight { location ->
                     onSelectedSearchLocation.postValue(location)
                 }
         }
@@ -115,10 +115,10 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
         reverseGeocodingJob = viewModelScope.launch {
             delay(REVERSE_GEOCODING_DELAY)
             usecase.getAddressFromPoint(point)
-                .tap {
+                .onRight {
                     onReverseGeocodedAddress.postValue(it)
                 }
-                .tapLeft {
+                .onLeft {
                     onReverseGeocodedAddress.postValue(null)
                 }
         }

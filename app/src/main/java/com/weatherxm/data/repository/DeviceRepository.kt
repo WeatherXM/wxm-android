@@ -74,13 +74,13 @@ class DeviceRepositoryImpl(
 
         device.attributes?.hex7?.let { hex ->
             storageAddressDataSource.getLocationAddress(hex.index, hex.center)
-                .tap { address ->
+                .onRight { address ->
                     Timber.d("Got location address from database [$address].")
                     hexAddress = address
                 }
                 .mapLeft {
                     networkAddressDataSource.getLocationAddress(hex.index, hex.center)
-                        .tap { address ->
+                        .onRight { address ->
                             Timber.d("Got location address from network [$it].")
                             hexAddress = address
                             address?.let {
@@ -98,14 +98,14 @@ class DeviceRepositoryImpl(
         friendlyName: String
     ): Either<Failure, Unit> {
         return deviceDataSource.setFriendlyName(deviceId, friendlyName)
-            .tap {
+            .onRight {
                 userActionDataSource.setLastFriendlyNameChanged(deviceId, Date().time)
             }
     }
 
     override suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit> {
         return deviceDataSource.clearFriendlyName(deviceId)
-            .tap {
+            .onRight {
                 userActionDataSource.setLastFriendlyNameChanged(deviceId, Date().time)
             }
     }

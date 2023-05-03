@@ -24,10 +24,10 @@ class HomeViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             onWalletMissingWarning.postValue(userUseCase.shouldShowWalletMissingWarning())
             userUseCase.getWalletAddress()
-                .tap {
+                .onRight {
                     onWalletMissing.postValue(it.isEmpty())
                 }
-                .tapLeft {
+                .onLeft {
                     onWalletMissing.postValue(it is DataError.NoWalletAddressError)
                 }
         }

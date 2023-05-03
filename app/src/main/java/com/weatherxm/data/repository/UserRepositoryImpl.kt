@@ -19,11 +19,11 @@ class UserRepositoryImpl(
      */
     override suspend fun getUser(): Either<Failure, User> {
         return cacheUserDataSource.getUser()
-            .tap {
+            .onRight {
                 Timber.d("Got user from cache [${it.email}].")
             }
             .mapLeft {
-                return networkUserDataSource.getUser().tap {
+                return networkUserDataSource.getUser().onRight {
                     Timber.d("Got user from network [${it.email}].")
                     cacheUserDataSource.setUser(it)
                     cacheUserDataSource.setUserUsername(it.email)

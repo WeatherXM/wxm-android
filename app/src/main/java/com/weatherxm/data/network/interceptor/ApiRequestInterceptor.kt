@@ -1,6 +1,6 @@
 package com.weatherxm.data.network.interceptor
 
-import arrow.core.getOrHandle
+import arrow.core.getOrElse
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor.Companion.AUTH_HEADER
 import com.weatherxm.data.path
@@ -43,7 +43,7 @@ private fun Request.signedRequest(cacheAuthDataSource: CacheAuthDataSource): Req
         // Get stored auth token
         val authToken = runBlocking {
             cacheAuthDataSource.getAuthToken()
-        }.getOrHandle {
+        }.getOrElse {
             throw Error("Auth Token not found.")
         }
 

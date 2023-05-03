@@ -327,7 +327,7 @@
     <string name="change_station_frequency_m5"><![CDATA[You must set your M5’s frequency to be the same as your station’s in order to receive and transmit data.<br><br><b>Setting the wrong frequency will result in loss of communication with your station, and will affect your WXM rewards!</b>]]></string>
     <string name="change_frequency">Change Frequency</string>
     <string name="reboot_station">Reboot Station</string>
-    <string name="reboot_station_desc">This action will enable other devices to pair via bluetooth with the Station. Up to 7 devices can be paired with this station.\n\nUsing a previously paired device, get in proximity to your station, and tap the button bellow.</string>
+    <string name="reboot_station_desc">This action will enable other devices to pair via bluetooth with the Station. Up to 7 devices can be paired with this station.\n\nUsing a previously paired device, get in proximity to your station, and tap the button below.</string>
     <string name="reconfigure_wifi">Reconfigure WiFi</string>
     <string name="reconfigure_wifi_desc">Update M5’s WiFi network connection</string>
     <string name="remove_station">Remove Station</string>

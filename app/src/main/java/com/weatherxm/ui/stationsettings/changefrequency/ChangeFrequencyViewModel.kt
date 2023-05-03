@@ -18,6 +18,7 @@ import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getCode
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -147,6 +148,7 @@ class ChangeFrequencyViewModel(var device: Device) : ViewModel(), KoinComponent 
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun disconnectFromPeripheral() {
         GlobalScope.launch {
             connectionUseCase.disconnectFromPeripheral()

@@ -4,7 +4,8 @@ import android.location.Location
 import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.handleErrorWith
-import arrow.core.rightIfNotNull
+import arrow.core.left
+import arrow.core.right
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.SearchAddress
 import com.mapbox.search.result.SearchSuggestion
@@ -76,9 +77,8 @@ class ClaimDeviceUseCaseImpl(
     override suspend fun getAddressFromPoint(point: Point): Either<Failure, String> {
         return addressRepository.getAddressFromPoint(point)
             .flatMap {
-                it.formattedAddress(SearchAddress.FormatStyle.Medium).rightIfNotNull {
-                    ReverseGeocodingError.SearchResultAddressFormatError
-                }
+                it.formattedAddress(SearchAddress.FormatStyle.Medium)?.right()
+                    ?: ReverseGeocodingError.SearchResultAddressFormatError.left()
             }
     }
 

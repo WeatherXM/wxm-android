@@ -20,7 +20,7 @@ class AuthRepositoryImpl(
 ) : AuthRepository {
 
     override suspend fun login(username: String, password: String): Either<Failure, AuthToken> {
-        return networkAuthDataSource.login(username, password).tap {
+        return networkAuthDataSource.login(username, password).onRight {
             Timber.d("Login success. Saving username [username = $username].")
             cacheUserDataSource.setUserUsername(username)
         }
@@ -48,7 +48,7 @@ class AuthRepositoryImpl(
         firstName: String?,
         lastName: String?
     ): Either<Failure, Unit> {
-        return networkAuthDataSource.signup(username, firstName, lastName).tap {
+        return networkAuthDataSource.signup(username, firstName, lastName).onRight {
             Timber.d("Signup success. Email sent to user: $username")
         }
     }

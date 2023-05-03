@@ -6,7 +6,8 @@ import androidx.annotation.StringRes
 import androidx.collection.ArrayMap
 import arrow.core.Either
 import arrow.core.flatMap
-import arrow.core.rightIfNotNull
+import arrow.core.left
+import arrow.core.right
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.R
 import com.weatherxm.data.DataError
@@ -159,9 +160,7 @@ class CacheService(
     }
 
     fun getForecast(deviceId: String): Either<Failure, List<WeatherData>> {
-        return forecasts[deviceId].rightIfNotNull {
-            DataError.CacheMissError
-        }.flatMap {
+        return (forecasts[deviceId]?.right() ?: DataError.CacheMissError.left()).flatMap {
             if (it.isExpired()) {
                 Either.Left(DataError.CacheExpiredError)
             } else {
@@ -175,11 +174,7 @@ class CacheService(
     }
 
     fun getSearchSuggestions(query: String): Either<Failure, List<SearchSuggestion>> {
-        return suggestions[query].rightIfNotNull {
-            DataError.CacheMissError
-        }.flatMap {
-            Either.Right(it)
-        }
+        return (suggestions[query]?.right() ?: DataError.CacheMissError.left())
     }
 
     fun setSearchSuggestions(query: String, suggestions: List<SearchSuggestion>) {
@@ -187,11 +182,7 @@ class CacheService(
     }
 
     fun getSuggestionLocation(suggestion: SearchSuggestion): Either<Failure, Location> {
-        return locations[suggestion.id].rightIfNotNull {
-            DataError.CacheMissError
-        }.flatMap {
-            Either.Right(it)
-        }
+        return locations[suggestion.id]?.right() ?: DataError.CacheMissError.left()
     }
 
     fun setSuggestionLocation(suggestion: SearchSuggestion, location: Location) {

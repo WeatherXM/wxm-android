@@ -34,9 +34,9 @@ class PasswordPromptViewModel : ViewModel(), KoinComponent {
 
         // Check with the server if the password is correct
         viewModelScope.launch {
-            usecase.isPasswordCorrect(password).tap {
+            usecase.isPasswordCorrect(password).onRight {
                 onValidPassword.postValue(Resource.success(Unit))
-            }.tapLeft {
+            }.onLeft {
                 onValidPassword.postValue(
                     Resource.error(it.getDefaultMessage(R.string.error_invalid_password))
                 )

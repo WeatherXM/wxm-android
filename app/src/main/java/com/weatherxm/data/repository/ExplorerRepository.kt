@@ -42,12 +42,12 @@ class ExplorerRepositoryImpl(
         var hexAddress: String? = null
 
         storageAddressDataSource.getLocationAddress(hexIndex, location)
-            .tap { address ->
+            .onRight { address ->
                 Timber.d("Got location address from database [$address].")
                 hexAddress = address
             }
             .mapLeft {
-                networkAddressDataSource.getLocationAddress(hexIndex, location).tap { address ->
+                networkAddressDataSource.getLocationAddress(hexIndex, location).onRight { address ->
                     Timber.d("Got location address from network [$it].")
                     hexAddress = address
                     address?.let {

@@ -19,7 +19,7 @@ class DeleteAccountUseCaseImpl(
     }
 
     override suspend fun deleteAccount(): Either<Failure, Unit> {
-        return userRepository.deleteAccount().tap {
+        return userRepository.deleteAccount().onRight {
             authRepository.logout()
         }
     }

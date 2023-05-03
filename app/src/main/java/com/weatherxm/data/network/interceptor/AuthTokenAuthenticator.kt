@@ -42,7 +42,7 @@ class AuthTokenAuthenticator(
             if (!this@AuthTokenAuthenticator::refreshJob.isInitialized || !refreshJob.isActive) {
                 refreshJob = async {
                     refresh(request)
-                        .tapLeft {
+                        .onLeft {
                             Timber.w("[${request.path()}] Failed to authenticate. Forced Logout.")
                             runBlocking {
                                 authService.logout()
@@ -54,7 +54,7 @@ class AuthTokenAuthenticator(
                                 )
                             }
                         }
-                        .orNull()
+                        .getOrNull()
                 }
             }
 
@@ -79,17 +79,17 @@ class AuthTokenAuthenticator(
     private fun refresh(request: Request): Either<Failure, AuthToken> {
         Timber.d("[${request.path()}] Trying refresh & retry.")
         return getAuthToken()
-            .tapLeft {
+            .onLeft {
                 Timber.d("[${request.path()}] Invalid refresh token. Cannot refresh.")
             }
             .flatMap { authToken ->
                 Timber.d("[${request.path()}] Trying to refresh token.")
                 runBlocking {
                     authService.refresh(RefreshBody(authToken.refresh)).map()
-                        .tapLeft {
+                        .onLeft {
                             Timber.d("[${request.path()}] Token refresh failed.")
                         }
-                        .tap {
+                        .onRight {
                             Timber.d("[${request.path()}] Token refresh success.")
                         }
                 }

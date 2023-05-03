@@ -16,6 +16,7 @@ import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.usecases.BluetoothUpdaterUseCase
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getCode
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -57,11 +58,11 @@ class DeviceHeliumOTAViewModel(
         onStatus.postValue(Resource.loading(State(OTAStatus.CONNECT_TO_STATION)))
         viewModelScope.launch {
             scanUseCase.startScanning().collect {
-                it.tap { progress ->
+                it.onRight { progress ->
                     if (progress == 100) {
                         checkIfDevicePaired()
                     }
-                }.tapLeft {
+                }.onLeft {
                     onStatus.postValue(Resource.error("", State(OTAStatus.SCAN_FOR_STATION)))
                 }
             }
@@ -88,8 +89,8 @@ class DeviceHeliumOTAViewModel(
 
     fun pairDevice() {
         viewModelScope.launch {
-            connectionUseCase.setPeripheral(scannedDevice.address).tap {
-                connectionUseCase.connectToPeripheral().tap {
+            connectionUseCase.setPeripheral(scannedDevice.address).onRight {
+                connectionUseCase.connectToPeripheral().onRight {
                     if (deviceIsPaired()) {
                         downloadFirmwareAndGetFileURI()
                     } else {
@@ -101,18 +102,18 @@ class DeviceHeliumOTAViewModel(
     }
 
     fun setPeripheral() {
-        connectionUseCase.setPeripheral(scannedDevice.address).tap {
+        connectionUseCase.setPeripheral(scannedDevice.address).onRight {
             connectToPeripheral()
-        }.tapLeft {
+        }.onLeft {
             onStatus.postValue(Resource.error(it.getCode(), State(OTAStatus.CONNECT_TO_STATION)))
         }
     }
 
     private fun connectToPeripheral() {
         viewModelScope.launch {
-            connectionUseCase.connectToPeripheral().tap {
+            connectionUseCase.connectToPeripheral().onRight {
                 downloadFirmwareAndGetFileURI()
-            }.tapLeft {
+            }.onLeft {
                 onStatus.postValue(
                     Resource.error(it.getCode(), State(OTAStatus.CONNECT_TO_STATION))
                 )
@@ -120,6 +121,7 @@ class DeviceHeliumOTAViewModel(
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun disconnectFromPeripheral() {
         GlobalScope.launch {
             connectionUseCase.disconnectFromPeripheral()
@@ -129,9 +131,9 @@ class DeviceHeliumOTAViewModel(
     private fun downloadFirmwareAndGetFileURI() {
         onStatus.postValue(Resource.loading(State(OTAStatus.DOWNLOADING)))
         viewModelScope.launch {
-            updaterUseCase.downloadFirmwareAndGetFileURI(device.id).tap {
+            updaterUseCase.downloadFirmwareAndGetFileURI(device.id).onRight {
                 update(it)
-            }.tapLeft {
+            }.onLeft {
                 onStatus.postValue(
                     Resource.error(
                         resHelper.getString(R.string.error_helium_ota_download_failed),
@@ -142,6 +144,7 @@ class DeviceHeliumOTAViewModel(
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun update(uri: Uri) {
         GlobalScope.launch {
             onStatus.postValue(Resource.loading(State(OTAStatus.INSTALLING)))

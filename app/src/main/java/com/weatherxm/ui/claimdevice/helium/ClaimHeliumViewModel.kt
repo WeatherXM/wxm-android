@@ -17,6 +17,7 @@ import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -47,6 +48,7 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
     private var deviceKey: String = ""
     private var frequency: Frequency = Frequency.US915
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun disconnectFromPeripheral() {
         GlobalScope.launch {
             connectionUseCase.disconnectFromPeripheral()

@@ -9,7 +9,7 @@ import timber.log.Timber
 class CrashReportingTree : Timber.Tree(), KoinComponent {
     private val firebaseCrashlytics: FirebaseCrashlytics by inject()
 
-    override fun log(priority: Int, tag: String?, message: String, throwable: Throwable?) {
+    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         // Only log on WARN and ERROR
         if (priority != Log.WARN || priority != Log.ERROR) {
             return
@@ -19,7 +19,7 @@ class CrashReportingTree : Timber.Tree(), KoinComponent {
         firebaseCrashlytics.log(message)
 
         // Log exception
-        throwable?.let {
+        t?.let {
             firebaseCrashlytics.recordException(it)
         }
     }

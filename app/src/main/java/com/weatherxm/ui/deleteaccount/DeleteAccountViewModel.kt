@@ -51,9 +51,9 @@ class DeleteAccountViewModel : ViewModel(), KoinComponent {
             onStatus.postValue(Resource.loading(State(Status.PASSWORD_VERIFICATION)))
             // Intentional delay for UX purposes
             delay(1000L)
-            deleteAccountUseCase.isPasswordCorrect(password).tap {
+            deleteAccountUseCase.isPasswordCorrect(password).onRight {
                 deleteAccount()
-            }.tapLeft {
+            }.onLeft {
                 when (it) {
                     is InvalidCredentials -> {
                         onStatus.postValue(
@@ -78,10 +78,10 @@ class DeleteAccountViewModel : ViewModel(), KoinComponent {
     private suspend fun deleteAccount() {
         onStatus.postValue(Resource.loading(State(Status.ACCOUNT_DELETION)))
         deleteAccountUseCase.deleteAccount()
-            .tap {
+            .onRight {
                 onStatus.postValue(Resource.success(State(Status.ACCOUNT_DELETION)))
             }
-            .tapLeft {
+            .onLeft {
                 onStatus.postValue(Resource.error(it.getCode(), State(Status.ACCOUNT_DELETION)))
             }
     }
