@@ -12,10 +12,12 @@ import com.weatherxm.data.TransactionsResponse
 import com.weatherxm.data.User
 import com.weatherxm.data.Wallet
 import com.weatherxm.data.WeatherData
+import com.weatherxm.data.network.interceptor.ApiRequestInterceptor.Companion.NO_AUTH_HEADER
 import okhttp3.ResponseBody
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -148,12 +150,14 @@ interface ApiService {
     @MockResponse(body = "mock_files/public_hexes.json")
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @GET("/api/v1/cells")
+    @Headers(NO_AUTH_HEADER)
     suspend fun getPublicHexes(): NetworkResponse<List<PublicHex>, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/public_devices.json")
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @GET("/api/v1/cells/{index}/devices")
+    @Headers(NO_AUTH_HEADER)
     suspend fun getPublicDevicesOfHex(
         @Path("index") index: String
     ): NetworkResponse<List<PublicDevice>, ErrorResponse>
@@ -162,6 +166,7 @@ interface ApiService {
     @MockResponse(body = "mock_files/public_device.json")
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @GET("/api/v1/cells/{index}/devices/{deviceId}")
+    @Headers(NO_AUTH_HEADER)
     suspend fun getPublicDevice(
         @Path("index") index: String,
         @Path("deviceId") deviceId: String
@@ -171,6 +176,7 @@ interface ApiService {
     @Mock
     @MockResponse(body = "mock_files/get_user_device_transactions.json")
     @GET("/api/v1/devices/{deviceId}/tokens/transactions")
+    @Headers(NO_AUTH_HEADER)
     suspend fun getPublicTransactions(
         @Path("deviceId") deviceId: String,
         @Query("page") page: Int? = null,
