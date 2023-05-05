@@ -44,7 +44,8 @@ class ClaimM5VerifyFragment : Fragment() {
                 override fun onTextChanged(
                     maskFilled: Boolean,
                     extractedValue: String,
-                    formattedValue: String
+                    formattedValue: String,
+                    tailPlaceholder: String
                 ) {
                     binding.serialNumberContainer.error = null
                     binding.serialNumberContainer.helperText =

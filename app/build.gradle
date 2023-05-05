@@ -206,15 +206,15 @@ dependencies {
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.3"
 
     // Android Jetpack libraries
-    implementation "androidx.activity:activity-ktx:1.7.0"
+    implementation "androidx.activity:activity-ktx:1.7.1"
     implementation "androidx.annotation:annotation:1.6.0"
     implementation "androidx.appcompat:appcompat:1.6.1"
     implementation "androidx.browser:browser:1.5.0"
     implementation "androidx.collection:collection-ktx:1.2.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     implementation "androidx.core:core-ktx:1.10.0"
-    implementation "androidx.core:core-splashscreen:1.0.0"
-    implementation "androidx.fragment:fragment-ktx:1.5.6"
+    implementation "androidx.core:core-splashscreen:1.0.1"
+    implementation "androidx.fragment:fragment-ktx:1.5.7"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
@@ -230,7 +230,7 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     // Material Components for Android
-    implementation "com.google.android.material:material:1.8.0"
+    implementation "com.google.android.material:material:1.9.0"
 
     // Google Play Services for Location & Maps
     implementation "com.google.android.gms:play-services-location:21.0.1"
@@ -247,7 +247,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
 
-    implementation platform("com.squareup.okhttp3:okhttp-bom:4.10.0")
+    implementation platform("com.squareup.okhttp3:okhttp-bom:4.11.0")
     implementation "com.squareup.okhttp3:okhttp"
     implementation "com.squareup.okhttp3:logging-interceptor"
 
@@ -282,7 +282,7 @@ dependencies {
     implementation "dev.chrisbanes.insetter:insetter:0.6.1"
 
     // Import the Firebase BoM
-    implementation platform("com.google.firebase:firebase-bom:31.5.0")
+    implementation platform("com.google.firebase:firebase-bom:32.0.0")
     implementation "com.google.firebase:firebase-crashlytics-ktx"
     implementation "com.google.firebase:firebase-perf-ktx"
     implementation "com.google.firebase:firebase-config-ktx"
@@ -297,7 +297,7 @@ dependencies {
     implementation "co.infinum:retromock:1.1.1"
 
     // Input masking (for Serial Number input)
-    implementation "com.github.RedMadRobot:input-mask-android:6.1.0"
+    implementation "com.redmadrobot:input-mask-android:7.2.4"
 
     // Better link handling in text views
     implementation "me.saket:better-link-movement-method:2.2.0"
