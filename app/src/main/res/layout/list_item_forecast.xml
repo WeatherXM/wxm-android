@@ -63,7 +63,7 @@
 
                     <com.google.android.material.slider.RangeSlider
                         android:id="@+id/temperature"
-                        style="@style/Widget.WeatherXM.Slider.Forecast.Temperature"
+                        style="@style/Widget.WeatherXM.Slider"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:enabled="false"
@@ -71,8 +71,8 @@
                         app:layout_constraintEnd_toStartOf="@id/max_temperature"
                         app:layout_constraintStart_toEndOf="@id/min_temperature"
                         app:layout_constraintTop_toTopOf="@id/min_temperature"
+                        app:trackColorActive="@color/colorPrimary"
                         app:values="@array/temperature_slider_sample_values"
-                        tools:trackColorInactive="@color/light_mid_grey"
                         tools:valueFrom="10"
                         tools:valueTo="25" />
 

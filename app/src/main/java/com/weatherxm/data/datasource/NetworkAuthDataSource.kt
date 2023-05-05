@@ -3,6 +3,7 @@ package com.weatherxm.data.datasource
 import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.map
+import com.weatherxm.data.network.AccessTokenBody
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.AuthService
 import com.weatherxm.data.network.AuthToken
@@ -32,8 +33,8 @@ class NetworkAuthDataSource(
         return authService.register(RegistrationBody(username, firstName, lastName)).map()
     }
 
-    override suspend fun logout(): Either<Failure, Unit> {
-        return authService.logout().map()
+    override suspend fun logout(accessToken: String): Either<Failure, Unit> {
+        return authService.logout(AccessTokenBody(accessToken)).map()
     }
 
     // We use apiService because authService and its interceptor are not needed

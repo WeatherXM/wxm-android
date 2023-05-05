@@ -52,7 +52,7 @@
 
         <!-- Empty -->
 
-        <com.weatherxm.ui.widget.EmptyView
+        <com.weatherxm.ui.components.EmptyView
             android:id="@+id/empty"
             android:layout_width="match_parent"
             android:layout_height="0dp"

@@ -40,7 +40,9 @@ interface ApiService {
     @MockResponse(body = "mock_files/get_user_devices.json")
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @GET("/api/v1/me/devices")
-    suspend fun getUserDevices(): NetworkResponse<List<Device>, ErrorResponse>
+    suspend fun getUserDevices(
+        @Query("ids") deviceIds: String? = null,
+    ): NetworkResponse<List<Device>, ErrorResponse>
 
     @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)

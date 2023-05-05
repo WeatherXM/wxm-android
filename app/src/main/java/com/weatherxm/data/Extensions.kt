@@ -1,6 +1,7 @@
 package com.weatherxm.data
 
 import arrow.core.Either
+import com.auth0.android.jwt.JWT
 import com.google.android.gms.tasks.Task
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.squareup.moshi.JsonDataException
@@ -51,6 +52,7 @@ import com.weatherxm.data.network.ErrorResponse.Companion.UNAUTHORIZED
 import com.weatherxm.data.network.ErrorResponse.Companion.USER_ALREADY_EXISTS
 import com.weatherxm.data.network.ErrorResponse.Companion.USER_NOT_FOUND
 import com.weatherxm.data.network.ErrorResponse.Companion.VALIDATION
+import com.weatherxm.util.Mask
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import okhttp3.Request
@@ -137,4 +139,8 @@ fun <T> Task<T>.safeAwait(): Either<Throwable, T> = Either.catch {
     runBlocking {
         this@safeAwait.await()
     }
+}
+
+fun JWT.details(): String {
+    return "token=${Mask.maskHash(this.toString())}, expires=${this.expiresAt}"
 }

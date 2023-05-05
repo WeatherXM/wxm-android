@@ -28,6 +28,12 @@ data class RefreshBody(
 
 @JsonClass(generateAdapter = true)
 @Parcelize
+data class AccessTokenBody(
+    val accessToken: String
+) : Parcelable
+
+@JsonClass(generateAdapter = true)
+@Parcelize
 data class AddressBody(
     val address: String
 ) : Parcelable

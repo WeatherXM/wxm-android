@@ -99,7 +99,7 @@
 
             <com.google.android.material.slider.RangeSlider
                 android:id="@+id/reward_slider"
-                style="@style/Widget.WeatherXM.Slider.Transaction.Score"
+                style="@style/Widget.WeatherXM.Slider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
@@ -107,6 +107,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/reward"
+                tools:trackColorActive="@color/green"
                 tools:valueFrom="0"
                 tools:valueTo="2000"
                 tools:values="@array/reward_slider_default_values" />

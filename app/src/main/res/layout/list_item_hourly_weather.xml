@@ -63,42 +63,42 @@
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                 tools:text="Feels Like 26°" />
 
-            <com.weatherxm.ui.widget.CompactWeatherDataView
+            <com.weatherxm.ui.components.CompactWeatherDataView
                 android:id="@+id/precipitation_probability"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 app:compact_weather_data_icon="@drawable/ic_weather_precip_probability" />
 
-            <com.weatherxm.ui.widget.CompactWeatherDataView
+            <com.weatherxm.ui.components.CompactWeatherDataView
                 android:id="@+id/precipitation_accumulated"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 app:compact_weather_data_icon="@drawable/ic_weather_precipitation" />
 
-            <com.weatherxm.ui.widget.CompactWeatherDataView
+            <com.weatherxm.ui.components.CompactWeatherDataView
                 android:id="@+id/wind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 app:compact_weather_data_icon="@drawable/ic_wind_direction" />
 
-            <com.weatherxm.ui.widget.CompactWeatherDataView
+            <com.weatherxm.ui.components.CompactWeatherDataView
                 android:id="@+id/humidity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 app:compact_weather_data_icon="@drawable/ic_weather_humidity" />
 
-            <com.weatherxm.ui.widget.CompactWeatherDataView
+            <com.weatherxm.ui.components.CompactWeatherDataView
                 android:id="@+id/pressure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 app:compact_weather_data_icon="@drawable/ic_weather_pressure" />
 
-            <com.weatherxm.ui.widget.CompactWeatherDataView
+            <com.weatherxm.ui.components.CompactWeatherDataView
                 android:id="@+id/uv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

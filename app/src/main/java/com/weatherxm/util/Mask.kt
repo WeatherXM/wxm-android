@@ -1,14 +1,13 @@
 package com.weatherxm.util
 
-class Mask {
-    companion object {
-        const val DEFAULT_OFFSET_START = 5
-        const val DEFAULT_OFFSET_END = 5
-        const val DEFAULT_MASKED_CHARACTERS_TO_SHOW = 5
-        const val DEFAULT_MASK_CHARACTER = '*'
-    }
+object Mask {
 
-    fun maskHash(
+    private const val DEFAULT_OFFSET_START = 5
+    private const val DEFAULT_OFFSET_END = 5
+    private const val DEFAULT_MASKED_CHARACTERS_TO_SHOW = 5
+    private const val DEFAULT_MASK_CHARACTER = '*'
+
+    public fun maskHash(
         hash: String,
         offsetStart: Int = DEFAULT_OFFSET_START,
         offsetEnd: Int = DEFAULT_OFFSET_END,

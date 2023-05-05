@@ -17,7 +17,7 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 interface DeviceDataSource {
-    suspend fun getUserDevices(): Either<Failure, List<Device>>
+    suspend fun getUserDevices(deviceIds: String? = null): Either<Failure, List<Device>>
     suspend fun getUserDevice(deviceId: String): Either<Failure, Device>
     suspend fun claimDevice(
         serialNumber: String,
@@ -39,8 +39,8 @@ class DeviceDataSourceImpl(private val apiService: ApiService) : DeviceDataSourc
         val CLAIM_RETRY_DELAY = TimeUnit.SECONDS.toMillis(5L)
     }
 
-    override suspend fun getUserDevices(): Either<Failure, List<Device>> {
-        return apiService.getUserDevices().map()
+    override suspend fun getUserDevices(deviceIds: String?): Either<Failure, List<Device>> {
+        return apiService.getUserDevices(deviceIds).map()
     }
 
     override suspend fun getUserDevice(deviceId: String): Either<Failure, Device> {

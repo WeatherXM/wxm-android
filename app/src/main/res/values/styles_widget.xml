@@ -286,16 +286,7 @@
         <item name="thumbRadius">0dp</item>
         <item name="tickVisible">false</item>
         <item name="trackHeight">@dimen/slider_default_track_height</item>
-    </style>
-
-    <style name="Widget.WeatherXM.Slider.Forecast.Temperature" parent="Widget.WeatherXM.Slider">
-        <item name="trackColorActive">@color/colorPrimaryVariant</item>
-        <item name="trackColorInactive">@color/colorSurfaceVariant</item>
-    </style>
-
-    <style name="Widget.WeatherXM.Slider.Transaction.Score" parent="Widget.WeatherXM.Slider">
-        <item name="trackColorActive">@color/reward_score_very_high</item>
-        <item name="trackColorInactive">@color/colorSurfaceVariant</item>
+        <item name="trackColorInactive">@color/colorBackground</item>
     </style>
 
     <!--

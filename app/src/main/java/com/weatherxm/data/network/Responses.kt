@@ -4,6 +4,7 @@ import com.auth0.android.jwt.DecodeException
 import com.auth0.android.jwt.JWT
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.weatherxm.data.details
 import timber.log.Timber
 
 @JsonClass(generateAdapter = true)
@@ -17,7 +18,10 @@ data class AuthToken(
 
     private fun isTokenValid(token: String): Boolean {
         return try {
-            !JWT(token).isExpired(0)
+            val jwt = JWT(token)
+            val isExpired = jwt.isExpired(0)
+            Timber.d("Token ${if (isExpired) "expired" else "valid"} [${jwt.details()}]")
+            !isExpired
         } catch (e: DecodeException) {
             Timber.w(e, "Invalid auth token.")
             false

@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         app:contentPadding="0dp">
 
-        <com.weatherxm.ui.widget.BleActionFlowView
+        <com.weatherxm.ui.components.BleActionFlowView
             android:id="@+id/bleActionFlow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

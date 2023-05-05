@@ -52,6 +52,32 @@ object Weather : KoinComponent {
         }
     }
 
+    /*
+     * Suppress ComplexMethod because it is just a bunch of "when statements"
+     */
+    @Suppress("ComplexMethod")
+    @RawRes
+    fun getWeatherStaticIcon(icon: String?): Int? {
+        return when (icon) {
+            "clear-day" -> R.drawable.ic_weather_clear_day
+            "clear-night" -> R.drawable.ic_weather_clear_night
+            "partly-cloudy-day" -> R.drawable.ic_weather_partly_cloudy_day
+            "partly-cloudy-night" -> R.drawable.ic_weather_partly_cloudy_night
+            "overcast-day" -> R.drawable.ic_weather_overcast_day
+            "overcast-night" -> R.drawable.ic_weather_overcast_night
+            "drizzle" -> R.drawable.ic_weather_drizzle
+            "rain" -> R.drawable.ic_weather_rain
+            "thunderstorms-rain" -> R.drawable.ic_weather_thunderstorms_rain
+            "snow" -> R.drawable.ic_weather_snow
+            "sleet" -> R.drawable.ic_weather_sleet
+            // The 3 following cases are for backward compatibility
+            "wind" -> R.drawable.ic_weather_windy
+            "fog" -> R.drawable.ic_weather_fog
+            "cloudy" -> R.drawable.ic_weather_cloudy
+            else -> null
+        }
+    }
+
     fun getFormattedTemperature(
         value: Float?,
         decimals: Int = 0,

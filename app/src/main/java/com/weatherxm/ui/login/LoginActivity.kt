@@ -1,5 +1,7 @@
 package com.weatherxm.ui.login
 
+import android.appwidget.AppWidgetManager
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -11,8 +13,10 @@ import com.weatherxm.data.Status
 import com.weatherxm.data.User
 import com.weatherxm.databinding.ActivityLoginBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.util.Validator
+import com.weatherxm.util.WidgetHelper
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.hideKeyboard
 import com.weatherxm.util.onTextChanged
@@ -24,6 +28,7 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
 
     private val navigator: Navigator by inject()
     private val validator: Validator by inject()
+    private val widgetHelper: WidgetHelper by inject()
     private val model: LoginViewModel by viewModels()
     private lateinit var binding: ActivityLoginBinding
 
@@ -123,6 +128,17 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
                 val user = result.data
                 Timber.d("User: $user")
                 navigator.showHome(this)
+
+                widgetHelper.getWidgetIds().onRight {
+                    val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+                    val ids = it.map { id ->
+                        id.toInt()
+                    }
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids.toIntArray())
+                    intent.putExtra(Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
+                    this.sendBroadcast(intent)
+                }
+
                 finish()
             }
             Status.ERROR -> {

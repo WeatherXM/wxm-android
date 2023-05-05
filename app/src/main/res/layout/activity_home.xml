@@ -58,7 +58,7 @@
         app:layout_anchor="@id/nav_view"
         app:layout_anchorGravity="top|center_horizontal" />
 
-    <com.weatherxm.ui.widget.HidingBottomNavigationView
+    <com.weatherxm.ui.components.HidingBottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="240dp"
         android:layout_height="wrap_content"

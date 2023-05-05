@@ -1,4 +1,4 @@
-package com.weatherxm.ui.widget
+package com.weatherxm.ui.components
 
 import android.animation.Animator
 import android.animation.Animator.AnimatorListener

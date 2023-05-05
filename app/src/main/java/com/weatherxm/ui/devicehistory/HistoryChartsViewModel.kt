@@ -45,12 +45,12 @@ class HistoryChartsViewModel(
     private var updateWeatherHistoryJob: Job? = null
     private var currentDateShown: LocalDate = LocalDate.now()
 
-    lateinit var temperatureDataSets: MutableMap<Int, List<Float>>
-    lateinit var precipDataSets: MutableMap<Int, List<Float>>
-    lateinit var windDataSets: MutableMap<Int, List<Float>>
-    lateinit var humidityDataSets: MutableMap<Int, List<Float>>
-    lateinit var pressureDataSets: MutableMap<Int, List<Float>>
-    lateinit var solarDataSets: MutableMap<Int, List<Float>>
+    var temperatureDataSets: MutableMap<Int, List<Float>> = mutableMapOf()
+    var precipDataSets: MutableMap<Int, List<Float>> = mutableMapOf()
+    var windDataSets: MutableMap<Int, List<Float>> = mutableMapOf()
+    var humidityDataSets: MutableMap<Int, List<Float>> = mutableMapOf()
+    var pressureDataSets: MutableMap<Int, List<Float>> = mutableMapOf()
+    var solarDataSets: MutableMap<Int, List<Float>> = mutableMapOf()
 
     fun isTodayShown(): Boolean {
         return currentDateShown.isToday()

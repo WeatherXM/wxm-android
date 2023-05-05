@@ -34,5 +34,7 @@ interface AuthService {
     @Mock
     @MockResponse(body = "mock_files/empty_response.json")
     @POST("/api/v1/auth/logout")
-    suspend fun logout(): NetworkResponse<Unit, ErrorResponse>
+    suspend fun logout(
+        @Body accessToken: AccessTokenBody,
+    ): NetworkResponse<Unit, ErrorResponse>
 }

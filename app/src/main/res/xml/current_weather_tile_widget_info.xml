@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="com.weatherxm.ui.widgets.selectstation.SelectStationActivity"
+    android:description="@string/current_weather_widget_description"
+    android:initialKeyguardLayout="@layout/widget_current_weather_tile"
+    android:initialLayout="@layout/widget_current_weather_tile"
+    android:minWidth="125dp"
+    android:minHeight="120dp"
+    android:previewImage="@layout/widget_preview_current_weather_tile"
+    android:previewLayout="@layout/widget_preview_current_weather_tile"
+    android:resizeMode="vertical|horizontal"
+    android:targetCellWidth="2"
+    android:targetCellHeight="2"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen|keyguard" />

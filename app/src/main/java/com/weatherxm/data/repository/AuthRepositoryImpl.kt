@@ -27,7 +27,9 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun logout() {
-        networkAuthDataSource.logout()
+        cacheService.getAuthToken().onRight {
+            networkAuthDataSource.logout(it.access)
+        }
         cacheService.clearAll()
     }
 

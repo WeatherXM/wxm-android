@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.weatherxm.ui.widget.MessageCardView
+            <com.weatherxm.ui.components.MessageCardView
                 android:id="@+id/surveyPrompt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

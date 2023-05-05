@@ -56,12 +56,12 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <com.weatherxm.ui.widget.WeatherCardView
+                        <com.weatherxm.ui.components.WeatherCardView
                             android:id="@+id/currentWeatherCard"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
 
-                        <com.weatherxm.ui.widget.WeatherOverlayErrorCardView
+                        <com.weatherxm.ui.components.WeatherOverlayErrorCardView
                             android:id="@+id/errorCard"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"

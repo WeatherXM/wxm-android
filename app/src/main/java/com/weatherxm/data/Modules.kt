@@ -75,6 +75,8 @@ import com.weatherxm.data.datasource.TokenDataSource
 import com.weatherxm.data.datasource.TokenDataSourceImpl
 import com.weatherxm.data.datasource.UserActionDataSource
 import com.weatherxm.data.datasource.UserActionDataSourceImpl
+import com.weatherxm.data.datasource.WidgetDataSource
+import com.weatherxm.data.datasource.WidgetDataSourceImpl
 import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSource
 import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSourceImpl
 import com.weatherxm.data.datasource.bluetooth.BluetoothProvisionerDataSource
@@ -114,6 +116,8 @@ import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.data.repository.WeatherForecastRepositoryImpl
 import com.weatherxm.data.repository.WeatherHistoryRepository
 import com.weatherxm.data.repository.WeatherHistoryRepositoryImpl
+import com.weatherxm.data.repository.WidgetRepository
+import com.weatherxm.data.repository.WidgetRepositoryImpl
 import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepository
 import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepositoryImpl
 import com.weatherxm.data.repository.bluetooth.BluetoothProvisionerRepository
@@ -172,11 +176,15 @@ import com.weatherxm.usecases.UserDeviceUseCase
 import com.weatherxm.usecases.UserDeviceUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.usecases.UserUseCaseImpl
+import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
+import com.weatherxm.usecases.WidgetCurrentWeatherUseCaseImpl
+import com.weatherxm.usecases.WidgetSelectStationUseCase
+import com.weatherxm.usecases.WidgetSelectStationUseCaseImpl
 import com.weatherxm.util.AnalyticsHelper
 import com.weatherxm.util.DisplayModeHelper
-import com.weatherxm.util.Mask
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Validator
+import com.weatherxm.util.WidgetHelper
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -339,6 +347,10 @@ private val datasources = module {
     single<DeviceOTADataSource> {
         DeviceOTADataSourceImpl(get(), get())
     }
+
+    single<WidgetDataSource> {
+        WidgetDataSourceImpl(get())
+    }
 }
 
 private val repositories = module {
@@ -393,6 +405,9 @@ private val repositories = module {
     single<DeviceOTARepository> {
         DeviceOTARepositoryImpl(get())
     }
+    single<WidgetRepository> {
+        WidgetRepositoryImpl(get())
+    }
 }
 
 private val usecases = module {
@@ -412,7 +427,7 @@ private val usecases = module {
         ClaimDeviceUseCaseImpl(get(), get(), get())
     }
     single<TokenUseCase> {
-        TokenUseCaseImpl(get(), get())
+        TokenUseCaseImpl(get())
     }
     single<AuthUseCase> {
         AuthUseCaseImpl(get(), get())
@@ -453,6 +468,12 @@ private val usecases = module {
     single<StationSettingsUseCase> {
         StationSettingsUseCaseImpl(get(), get(), get())
     }
+    single<WidgetSelectStationUseCase> {
+        WidgetSelectStationUseCaseImpl(get(), get(), get())
+    }
+    single<WidgetCurrentWeatherUseCase> {
+        WidgetCurrentWeatherUseCaseImpl(get(), get(), get())
+    }
 }
 
 private val location = module {
@@ -484,7 +505,7 @@ private val network = module {
     }
 
     single<AuthTokenAuthenticator> {
-        AuthTokenAuthenticator(get(), get(), get(), get(), get())
+        AuthTokenAuthenticator(get(), get(), get(), get(), get(), get())
     }
 
     single<ApiRequestInterceptor> {
@@ -636,6 +657,11 @@ val analyticsHelper = module {
     }
 }
 
+val widgetHelper = module {
+    single {
+        WidgetHelper(get())
+    }
+}
 
 private val utilities = module {
     single<CacheService> {
@@ -666,9 +692,6 @@ private val utilities = module {
         AuthTokenJsonAdapter(get())
     }
 
-    single<Mask> {
-        Mask()
-    }
     single<DateTimeFormatter>(named(HOUR_FORMAT_24H)) {
         DateTimeFormatter.ofPattern(HOUR_FORMAT_24H)
     }
@@ -733,5 +756,6 @@ val modules = listOf(
     analyticsHelper,
     clientIdentificationHelper,
     utilities,
+    widgetHelper,
     viewmodels
 )

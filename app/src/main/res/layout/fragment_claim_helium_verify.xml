@@ -112,7 +112,7 @@
                         app:iconGravity="textStart"
                         app:layout_constraintTop_toBottomOf="@id/devKeyContainer" />
 
-                    <com.weatherxm.ui.widget.MessageCardView
+                    <com.weatherxm.ui.components.MessageCardView
                         android:id="@+id/errorCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
                         app:message_stroke_color="@color/error"
                         app:message_title="@string/wrong_combination" />
 
-                    <com.weatherxm.ui.widget.MessageCardView
+                    <com.weatherxm.ui.components.MessageCardView
                         android:id="@+id/infoCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

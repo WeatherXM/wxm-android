@@ -19,8 +19,7 @@ interface TokenUseCase {
 }
 
 class TokenUseCaseImpl(
-    private val tokenRepository: TokenRepository,
-    private val mask: Mask
+    private val tokenRepository: TokenRepository
 ) : TokenUseCase {
     private val dateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
     private val timestampFormat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
@@ -51,7 +50,7 @@ class TokenUseCaseImpl(
                             formattedTimestamp = tx.timestamp.format(timestampFormat),
                             txHash = tx.txHash,
                             txHashMasked = tx.txHash?.let { hash ->
-                                mask.maskHash(
+                                Mask.maskHash(
                                     hash = hash,
                                     offsetStart = 8,
                                     offsetEnd = 8,

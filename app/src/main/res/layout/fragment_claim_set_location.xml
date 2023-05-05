@@ -76,7 +76,7 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <com.weatherxm.ui.widget.MessageCardView
+                    <com.weatherxm.ui.components.MessageCardView
                         android:id="@+id/warningBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
                     android:layout_height="match_parent"
                     tools:layout="@layout/fragment_map" />
 
-                <com.weatherxm.ui.widget.AddressSearchView
+                <com.weatherxm.ui.components.AddressSearchView
                     android:id="@+id/addressSearchView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

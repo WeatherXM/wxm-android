@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:clipChildren="false">
 
-                <com.weatherxm.ui.widget.LineChartView
+                <com.weatherxm.ui.components.LineChartView
                     android:id="@+id/chart_temperature"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
                     app:line_chart_title="@string/temperature"
                     app:line_chart_title_icon="@drawable/ic_weather_temperature" />
 
-                <com.weatherxm.ui.widget.LineChartView
+                <com.weatherxm.ui.components.LineChartView
                     android:id="@+id/chart_precipitation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
                     app:line_chart_title="@string/precipitation"
                     app:line_chart_title_icon="@drawable/ic_weather_precipitation" />
 
-                <com.weatherxm.ui.widget.LineChartView
+                <com.weatherxm.ui.components.LineChartView
                     android:id="@+id/chart_wind"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -74,7 +74,7 @@
                     app:line_chart_title="@string/wind"
                     app:line_chart_title_icon="@drawable/ic_weather_wind" />
 
-                <com.weatherxm.ui.widget.LineChartView
+                <com.weatherxm.ui.components.LineChartView
                     android:id="@+id/chart_humidity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -86,7 +86,7 @@
                     app:line_chart_title="@string/humidity"
                     app:line_chart_title_icon="@drawable/ic_weather_humidity" />
 
-                <com.weatherxm.ui.widget.LineChartView
+                <com.weatherxm.ui.components.LineChartView
                     android:id="@+id/chart_pressure"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                     app:line_chart_title="@string/pressure"
                     app:line_chart_title_icon="@drawable/ic_weather_pressure" />
 
-                <com.weatherxm.ui.widget.LineChartView
+                <com.weatherxm.ui.components.LineChartView
                     android:id="@+id/chart_solar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
 
     <!-- Empty -->
 
-    <com.weatherxm.ui.widget.EmptyView
+    <com.weatherxm.ui.components.EmptyView
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

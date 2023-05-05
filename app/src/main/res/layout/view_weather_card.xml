@@ -108,7 +108,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1">
 
-                        <com.weatherxm.ui.widget.WeatherDataView
+                        <com.weatherxm.ui.components.WeatherDataView
                             android:id="@+id/humidity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
                             app:weather_data_icon="@drawable/ic_weather_humidity"
                             app:weather_data_title="@string/humidity" />
 
-                        <com.weatherxm.ui.widget.WeatherDataView
+                        <com.weatherxm.ui.components.WeatherDataView
                             android:id="@+id/wind"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                             app:weather_data_icon="@drawable/ic_weather_wind"
                             app:weather_data_title="@string/wind" />
 
-                        <com.weatherxm.ui.widget.WeatherDataView
+                        <com.weatherxm.ui.components.WeatherDataView
                             android:id="@+id/rainRate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -164,7 +164,7 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <com.weatherxm.ui.widget.WeatherDataView
+                        <com.weatherxm.ui.components.WeatherDataView
                             android:id="@+id/windGust"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -172,7 +172,7 @@
                             app:weather_data_icon="@drawable/ic_weather_wind"
                             app:weather_data_title="@string/wind_gust" />
 
-                        <com.weatherxm.ui.widget.WeatherDataView
+                        <com.weatherxm.ui.components.WeatherDataView
                             android:id="@+id/pressure"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -180,7 +180,7 @@
                             app:weather_data_icon="@drawable/ic_weather_pressure"
                             app:weather_data_title="@string/pressure_absolute" />
 
-                        <com.weatherxm.ui.widget.WeatherDataView
+                        <com.weatherxm.ui.components.WeatherDataView
                             android:id="@+id/solarRadiation"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -197,7 +197,7 @@
                         android:layout_weight="1"
                         android:orientation="vertical">
 
-                        <com.weatherxm.ui.widget.WeatherDataView
+                        <com.weatherxm.ui.components.WeatherDataView
                             android:id="@+id/precipitationAccumulated"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -205,7 +205,7 @@
                             app:weather_data_icon="@drawable/ic_weather_precipitation"
                             app:weather_data_title="@string/daily_precipitation" />
 
-                        <com.weatherxm.ui.widget.WeatherDataView
+                        <com.weatherxm.ui.components.WeatherDataView
                             android:id="@+id/dewPoint"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -213,7 +213,7 @@
                             app:weather_data_icon="@drawable/ic_weather_dew_point"
                             app:weather_data_title="@string/dew_point" />
 
-                        <com.weatherxm.ui.widget.WeatherDataView
+                        <com.weatherxm.ui.components.WeatherDataView
                             android:id="@+id/uv"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

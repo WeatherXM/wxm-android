@@ -43,7 +43,7 @@
                 android:layout_height="match_parent"
                 android:clipChildren="false">
 
-                <com.weatherxm.ui.widget.MessageCardView
+                <com.weatherxm.ui.components.MessageCardView
                     android:id="@+id/walletWarning"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
 
     <!-- Empty -->
 
-    <com.weatherxm.ui.widget.EmptyView
+    <com.weatherxm.ui.components.EmptyView
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

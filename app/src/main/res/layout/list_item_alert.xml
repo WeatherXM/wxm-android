@@ -7,7 +7,7 @@
     android:layout_marginBottom="@dimen/margin_small_to_normal"
     android:orientation="vertical">
 
-    <com.weatherxm.ui.widget.MessageCardView
+    <com.weatherxm.ui.components.MessageCardView
         android:id="@+id/error"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         app:message_includes_close_button="false"
         tools:visibility="visible" />
 
-    <com.weatherxm.ui.widget.MessageCardView
+    <com.weatherxm.ui.components.MessageCardView
         android:id="@+id/warning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

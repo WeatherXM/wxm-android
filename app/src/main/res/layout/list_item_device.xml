@@ -220,7 +220,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <com.weatherxm.ui.widget.WeatherDataView
+                    <com.weatherxm.ui.components.WeatherDataView
                         android:id="@+id/humidity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -228,7 +228,7 @@
                         app:weather_data_icon="@drawable/ic_weather_humidity"
                         app:weather_data_title="@string/humidity" />
 
-                    <com.weatherxm.ui.widget.WeatherDataView
+                    <com.weatherxm.ui.components.WeatherDataView
                         android:id="@+id/wind"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -237,7 +237,7 @@
                         app:weather_data_icon="@drawable/ic_weather_wind"
                         app:weather_data_title="@string/wind" />
 
-                    <com.weatherxm.ui.widget.WeatherDataView
+                    <com.weatherxm.ui.components.WeatherDataView
                         android:id="@+id/rain"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -252,7 +252,7 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.weatherxm.ui.widget.AlertsErrorCardView
+        <com.weatherxm.ui.components.AlertsErrorCardView
             android:id="@+id/alertsError"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -263,7 +263,7 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
-        <com.weatherxm.ui.widget.MessageCardView
+        <com.weatherxm.ui.components.MessageCardView
             android:id="@+id/error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -278,7 +278,7 @@
             app:message_includes_close_button="false"
             app:message_title="@string/station_offline" />
 
-        <com.weatherxm.ui.widget.MessageCardView
+        <com.weatherxm.ui.components.MessageCardView
             android:id="@+id/warning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <com.weatherxm.ui.widget.BleActionFlowView
+        <com.weatherxm.ui.components.BleActionFlowView
             android:id="@+id/bleActionFlow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

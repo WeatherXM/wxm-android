@@ -157,7 +157,7 @@
                     app:contentPadding="0dp"
                     app:layout_constraintTop_toBottomOf="@id/currentConditions">
 
-                    <com.weatherxm.ui.widget.WeatherCardView
+                    <com.weatherxm.ui.components.WeatherCardView
                         android:id="@+id/currentWeatherCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
@@ -173,7 +173,7 @@
                     android:textAppearance="@style/TextAppearance.WeatherXM.Title"
                     app:layout_constraintTop_toBottomOf="@id/currentWeatherCardContainer" />
 
-                <com.weatherxm.ui.widget.TokenCardView
+                <com.weatherxm.ui.components.TokenCardView
                     android:id="@+id/tokenCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -189,7 +189,7 @@
 
     <!-- Empty -->
 
-    <com.weatherxm.ui.widget.EmptyView
+    <com.weatherxm.ui.components.EmptyView
         android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

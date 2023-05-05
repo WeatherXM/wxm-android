@@ -108,7 +108,7 @@
         app:layout_constraintBottom_toTopOf="@id/status"
         tools:text="0.1.0 ➞ 0.2.0" />
 
-    <com.weatherxm.ui.widget.EmptyView
+    <com.weatherxm.ui.components.EmptyView
         android:id="@+id/status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -178,7 +178,7 @@
 
     </LinearLayout>
 
-    <com.weatherxm.ui.widget.MessageCardView
+    <com.weatherxm.ui.components.MessageCardView
         android:id="@+id/informationCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
