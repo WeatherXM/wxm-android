@@ -7,7 +7,7 @@ object Mask {
     private const val DEFAULT_MASKED_CHARACTERS_TO_SHOW = 5
     private const val DEFAULT_MASK_CHARACTER = '*'
 
-    public fun maskHash(
+    fun maskHash(
         hash: String,
         offsetStart: Int = DEFAULT_OFFSET_START,
         offsetEnd: Int = DEFAULT_OFFSET_END,

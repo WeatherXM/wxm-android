@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.Either
 import arrow.core.flatMap
 import com.weatherxm.R
 import com.weatherxm.data.ApiError.AuthError.InvalidUsername
@@ -16,6 +17,7 @@ import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -26,14 +28,27 @@ class LoginViewModel : ViewModel(), KoinComponent {
     private val authUseCase: AuthUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
 
-    private val isLoggedIn = MutableLiveData<Resource<Unit>>()
-    fun isLoggedIn() = isLoggedIn
+    private val onLogin = MutableLiveData<Resource<Unit>>()
+    fun onLogin() = onLogin
 
     private val user = MutableLiveData<Resource<User>>()
     fun user(): LiveData<Resource<User>> = user
 
+    /*
+    * Needed for checking if the user is logged in or not for a race condition where a user
+    * that has added a widget, logs in to a 2nd account and taps the "Login" button in the Widget
+     */
+    private val isLoggedIn = MutableLiveData<Either<Failure, Boolean>>().apply {
+        Timber.d("Checking if user is logged in in the background")
+        viewModelScope.launch(Dispatchers.IO) {
+            postValue(authUseCase.isLoggedIn())
+        }
+    }
+
+    fun isLoggedIn(): LiveData<Either<Failure, Boolean>> = isLoggedIn
+
     fun login(username: String, password: String) {
-        isLoggedIn.postValue(Resource.loading())
+        onLogin.postValue(Resource.loading())
         viewModelScope.launch {
             authUseCase.login(username, password)
                 .mapLeft {
@@ -41,7 +56,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
                     return@launch
                 }
                 .flatMap {
-                    isLoggedIn.postValue(Resource.success(Unit))
+                    onLogin.postValue(Resource.success(Unit))
                     authUseCase.getUser()
                 }
                 .mapLeft {
@@ -55,7 +70,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
     }
 
     private fun handleLoginFailure(failure: Failure) {
-        isLoggedIn.postValue(
+        onLogin.postValue(
             Resource.error(
                 resHelper.getString(
                     when (failure) {

@@ -31,7 +31,6 @@ import timber.log.Timber
 class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityConnectWalletBinding
     private val model: ConnectWalletViewModel by viewModels()
-    private val mask: Mask by inject()
     private val validator: Validator by inject()
     private val navigator: Navigator by inject()
     private var snackbar: Snackbar? = null
@@ -176,7 +175,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             binding.checkBoxesAndButtonContainer.visibility = View.VISIBLE
         } else {
             binding.editWallet.visibility = View.VISIBLE
-            binding.address.setText(mask.maskHash(address))
+            binding.address.setText(Mask.maskHash(address))
             binding.address.isEnabled = false
             binding.addressContainer.isCounterEnabled = false
             binding.scanQR.visibility = View.GONE

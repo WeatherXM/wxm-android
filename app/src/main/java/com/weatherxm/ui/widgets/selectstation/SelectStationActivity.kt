@@ -101,6 +101,9 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
     private fun onConfirmClicked(appWidgetId: Int, resultValue: Intent) {
         model.saveWidgetData(appWidgetId)
 
+        /**
+         * Broadcast a custom intent in order to update the widget that was just added.
+         */
         val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         intent.putExtra(
@@ -110,6 +113,9 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
         intent.putExtra(Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
         this.sendBroadcast(intent)
 
+        /**
+         * Initialize the WorkManager.
+         */
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()

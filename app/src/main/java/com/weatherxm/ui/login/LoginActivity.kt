@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import arrow.core.getOrElse
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.data.Resource
@@ -15,6 +16,7 @@ import com.weatherxm.databinding.ActivityLoginBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
+import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Validator
 import com.weatherxm.util.WidgetHelper
 import com.weatherxm.util.applyInsets
@@ -47,6 +49,24 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
 
         intent?.extras?.getString(ARG_USER_MESSAGE)?.let {
             showSnackbarMessage(it)
+        }
+
+        // Listen for login state change
+        model.onLogin().observe(this) {
+            onLoginResult(it)
+        }
+
+        // Listen for user's wallet existence
+        model.user().observe(this) {
+            onUserResult(it)
+        }
+
+        model.isLoggedIn().observe(this) { result ->
+            if (result.getOrElse { false }) {
+                Timber.d("Already Logged In. Finish the activity.")
+                toast(R.string.already_logged_in)
+                finish()
+            }
         }
 
         binding.username.onTextChanged {
@@ -88,16 +108,6 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
 
             // Perform login
             model.login(username, password)
-        }
-
-        // Listen for login state change
-        model.isLoggedIn().observe(this) {
-            onLoginResult(it)
-        }
-
-        // Listen for user's wallet existence
-        model.user().observe(this) {
-            onUserResult(it)
         }
     }
 

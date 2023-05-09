@@ -23,7 +23,10 @@ class CurrentWeatherWidgetWorkerUpdate(
 ) : CoroutineWorker(context, workerParams), KoinComponent {
     companion object {
         const val UPDATE_INTERVAL_IN_MINS = 15L
+        const val NOTIFICATION_TIMEOUT = 1000L
     }
+
+    private val notificationId = R.string.updating_weather_notification_id
 
     private val widgetHelper: WidgetHelper by inject()
 
@@ -44,12 +47,14 @@ class CurrentWeatherWidgetWorkerUpdate(
 
             setForeground(createForegroundInfo())
 
+            notificationManager.cancel(notificationId)
+
             Result.success()
         }
     }
 
     private fun createForegroundInfo(): ForegroundInfo {
-        val id = applicationContext.getString(R.string.updating_weather_notification_id)
+        val id = applicationContext.getString(notificationId)
         val title = applicationContext.getString(R.string.updating_weather_notification_title)
 
         // Create a Notification channel if necessary
@@ -66,7 +71,9 @@ class CurrentWeatherWidgetWorkerUpdate(
             .setTicker(title)
             .setPriority(PRIORITY_HIGH)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSilent(true)
             .setOngoing(false)
+            .setTimeoutAfter(NOTIFICATION_TIMEOUT)
             .build()
 
         return ForegroundInfo(0, notification)

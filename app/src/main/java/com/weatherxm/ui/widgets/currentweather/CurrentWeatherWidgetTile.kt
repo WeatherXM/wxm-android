@@ -28,6 +28,7 @@ import com.weatherxm.ui.userdevice.UserDeviceActivity
 import com.weatherxm.ui.widgets.WidgetType
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
+import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Weather
 import com.weatherxm.util.WidgetHelper
 import kotlinx.coroutines.GlobalScope
@@ -224,12 +225,8 @@ class CurrentWeatherWidgetTile : AppWidgetProvider(), KoinComponent {
 
         views.setTextViewText(R.id.name, device.getNameOrLabel())
         views.setTextViewText(R.id.address, device.address)
-        views.setTextViewText(
-            R.id.lastSeen,
-            device.attributes?.lastWeatherStationActivity?.getFormattedTime(context)
-        )
 
-        setStatusIcon(context, views, device)
+        setStatus(context, views, device)
 
         if (device.currentWeather == null || device.currentWeather.isEmpty()) {
             views.setViewPadding(R.id.root, 2, 2, 2, 2)
@@ -252,7 +249,7 @@ class CurrentWeatherWidgetTile : AppWidgetProvider(), KoinComponent {
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 
-    private fun setStatusIcon(context: Context, views: RemoteViews, device: Device) {
+    private fun setStatus(context: Context, views: RemoteViews, device: Device) {
         views.setImageViewResource(
             R.id.status_icon,
             if (device.profile == DeviceProfile.Helium) {
@@ -263,6 +260,10 @@ class CurrentWeatherWidgetTile : AppWidgetProvider(), KoinComponent {
         )
         when (device.attributes?.isActive) {
             true -> {
+                views.setTextViewText(
+                    R.id.lastSeen,
+                    device.attributes.lastWeatherStationActivity?.getFormattedTime(context)
+                )
                 views.setInt(
                     R.id.status,
                     "setBackgroundResource",
@@ -276,6 +277,12 @@ class CurrentWeatherWidgetTile : AppWidgetProvider(), KoinComponent {
             }
 
             false -> {
+                views.setTextViewText(
+                    R.id.lastSeen,
+                    device.attributes.lastWeatherStationActivity?.getRelativeFormattedTime(
+                        context.getString(R.string.just_now)
+                    )
+                )
                 views.setInt(
                     R.id.status,
                     "setBackgroundResource",
