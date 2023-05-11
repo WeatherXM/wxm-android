@@ -29,4 +29,5 @@
     <string name="market_url">market://details?id=%s</string>
     <string name="m5_connect_wifi_instructional_video">https://www.youtube.com/watch?v=sUJEwuFq1CE</string>
     <string name="helium_frequencies_mapping_url">https://docs.helium.com/lorawan-on-helium/region-plans/</string>
+    <string name="wallet_explorer">https://mumbai.polygonscan.com/address/%s#tokentxns</string>
 </resources>

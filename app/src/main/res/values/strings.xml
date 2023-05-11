@@ -154,6 +154,8 @@
     <string name="confirm_wallet_ownership_title">Confirm Wallet Ownership</string>
     <string name="confirm_wallet_ownership_desc">Please make sure you have the complete ownership of the Wallet ending in <b>%1$s</b>.\n\nIf you don\’t, you will lose all WXM rewards from now on!</string>
     <string name="edit_wallet_password_prompt_desc"><![CDATA[In order to edit the Wallet Address you need to confirm you are the owner of this account.<br><b>Please type in your password to edit Wallet Address.</b>]]></string>
+    <string name="wallet_token_notice">IMPORTANT: During beta phase, WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after WXM mainnet token launch.</string>
+    <string name="view_transaction_history">View Transaction History</string>
 
     <!-- Registration -->
     <string name="action_signup">Sign Up</string>

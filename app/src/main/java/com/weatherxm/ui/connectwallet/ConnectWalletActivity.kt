@@ -2,7 +2,6 @@ package com.weatherxm.ui.connectwallet
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -108,6 +107,12 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             navigator.openWebsite(this, getString(R.string.suggested_wallets_documentation))
         }
 
+        binding.viewTransactionHistoryBtn.setOnClickListener {
+            navigator.openWebsite(
+                this, getString(R.string.wallet_explorer, model.currentAddress().value)
+            )
+        }
+
         // Listen to current address for UI update
         model.currentAddress().observe(this) {
             onAddressUpdateUI(it)
@@ -154,15 +159,17 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
     }
 
     private fun onEditClicked() {
-        binding.editWallet.visibility = View.GONE
+        binding.editWallet.setVisible(false)
+        binding.tokenNoticeCard.setVisible(false)
+        binding.viewTransactionHistoryBtn.setVisible(false)
         binding.addressContainer.isEnabled = true
         binding.addressContainer.isCounterEnabled = true
         binding.address.setText(model.currentAddress().value)
         binding.termsCheckbox.isChecked = false
         binding.ownershipCheckbox.isChecked = false
         binding.saveBtn.isEnabled = false
-        binding.scanQR.visibility = View.VISIBLE
-        binding.checkBoxesAndButtonContainer.visibility = View.VISIBLE
+        binding.scanQR.setVisible(true)
+        binding.checkBoxesAndButtonContainer.setVisible(true)
         binding.ownershipCheckbox.isEnabled = true
         binding.termsCheckbox.isEnabled = true
         binding.walletCompatibilityCard.setVisible(true)
@@ -170,17 +177,21 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
 
     private fun onAddressUpdateUI(address: String?) {
         if (address.isNullOrEmpty()) {
-            binding.editWallet.visibility = View.GONE
-            binding.scanQR.visibility = View.VISIBLE
-            binding.checkBoxesAndButtonContainer.visibility = View.VISIBLE
+            binding.editWallet.setVisible(false)
+            binding.tokenNoticeCard.setVisible(false)
+            binding.viewTransactionHistoryBtn.setVisible(false)
+            binding.scanQR.setVisible(true)
+            binding.checkBoxesAndButtonContainer.setVisible(true)
         } else {
-            binding.editWallet.visibility = View.VISIBLE
+            binding.editWallet.setVisible(true)
             binding.address.setText(Mask.maskHash(address))
             binding.address.isEnabled = false
             binding.addressContainer.isCounterEnabled = false
-            binding.scanQR.visibility = View.GONE
-            binding.checkBoxesAndButtonContainer.visibility = View.GONE
+            binding.scanQR.setVisible(false)
+            binding.checkBoxesAndButtonContainer.setVisible(false)
             binding.walletCompatibilityCard.setVisible(false)
+            binding.tokenNoticeCard.setVisible(true)
+            binding.viewTransactionHistoryBtn.setVisible(true)
         }
     }
 
@@ -191,18 +202,18 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
                 result.data?.let {
                     showSnackbarMessage(it)
                 }
-                binding.loading.visibility = View.GONE
+                binding.loading.setVisible(false)
                 setResult(Activity.RESULT_OK)
             }
             Status.ERROR -> {
                 result.message?.let {
                     showSnackbarMessage(it)
                 }
-                binding.loading.visibility = View.GONE
+                binding.loading.setVisible(false)
                 setInputEnabled(true)
             }
             Status.LOADING -> {
-                binding.loading.visibility = View.VISIBLE
+                binding.loading.setVisible(true)
                 setInputEnabled(false)
             }
         }

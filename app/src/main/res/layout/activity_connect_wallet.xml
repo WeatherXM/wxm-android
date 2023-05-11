@@ -52,10 +52,20 @@
                 android:clipToPadding="false"
                 android:orientation="vertical">
 
+                <com.weatherxm.ui.components.MessageCardView
+                    android:id="@+id/tokenNoticeCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:message_background_tint="@color/blueTint"
+                    app:message_icon="@drawable/ic_info"
+                    app:message_icon_color="@color/colorPrimaryVariant"
+                    app:message_includes_close_button="false"
+                    app:message_message="@string/wallet_token_notice" />
+
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardElevation="@dimen/elevation_extra_small">
+                    android:layout_marginTop="@dimen/margin_normal">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -143,6 +153,15 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/viewTransactionHistoryBtn"
+                    style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/margin_normal"
+                    android:text="@string/view_transaction_history"
+                    app:backgroundTint="@color/colorSurface" />
+
                 <com.weatherxm.ui.components.MessageCardView
                     android:id="@+id/walletCompatibilityCard"
                     android:layout_width="match_parent"
@@ -150,10 +169,10 @@
                     android:layout_marginVertical="@dimen/margin_normal"
                     android:visibility="gone"
                     app:message_background_tint="@color/errorTint"
+                    app:message_html_message="@string/wallet_compatibility_desc"
                     app:message_icon="@drawable/ic_error"
                     app:message_icon_color="@color/error"
                     app:message_includes_close_button="true"
-                    app:message_html_message="@string/wallet_compatibility_desc"
                     app:message_stroke_color="@color/error"
                     app:message_title="@string/wallet_compatibility" />
 
