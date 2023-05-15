@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityUpdatePromptBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setHtml
 import org.koin.core.component.KoinComponent
@@ -16,6 +17,7 @@ import org.koin.core.component.inject
 class UpdatePromptActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityUpdatePromptBinding
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
     private val model: UpdatePromptViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,5 +55,13 @@ class UpdatePromptActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.changelog.text = model.getChangelog()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.APP_UPDATE_PROMPT,
+            UpdatePromptActivity::class.simpleName
+        )
     }
 }

@@ -19,13 +19,16 @@ import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
 import com.weatherxm.ui.widgets.currentweather.CurrentWeatherWidgetWorkerUpdate
 import com.weatherxm.ui.widgets.currentweather.CurrentWeatherWidgetWorkerUpdate.Companion.UPDATE_INTERVAL_IN_MINS
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.util.concurrent.TimeUnit
 
 class SelectStationActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityWidgetSelectStationBinding
     private val model: SelectStationViewModel by viewModels()
+    private val analytics: Analytics by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,6 +99,14 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
         }
 
         model.checkIfLoggedInAndProceed()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.WIDGET_SELECT_STATION,
+            SelectStationActivity::class.simpleName
+        )
     }
 
     private fun onConfirmClicked(appWidgetId: Int, resultValue: Intent) {

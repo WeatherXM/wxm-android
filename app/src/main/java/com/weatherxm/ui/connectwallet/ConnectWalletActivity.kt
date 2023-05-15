@@ -17,6 +17,7 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.AlertDialogFragment
 import com.weatherxm.ui.common.getRichText
 import com.weatherxm.ui.common.setVisible
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.Mask
 import com.weatherxm.util.Validator
 import com.weatherxm.util.applyInsets
@@ -32,6 +33,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
     private val model: ConnectWalletViewModel by viewModels()
     private val validator: Validator by inject()
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
     private var snackbar: Snackbar? = null
 
     // Register the launcher and result handler for QR code scanner
@@ -137,6 +139,14 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         onBackPressedDispatcher.addCallback {
             finish()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.WALLET,
+            ConnectWalletActivity::class.simpleName
+        )
     }
 
     private fun showConfirmWalletDialog(address: String) {

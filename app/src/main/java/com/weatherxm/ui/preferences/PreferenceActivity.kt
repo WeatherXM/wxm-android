@@ -10,8 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityPreferencesBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.setVisible
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.WidgetHelper
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
@@ -23,6 +24,7 @@ class PreferenceActivity : AppCompatActivity(), KoinComponent {
     private val model: PreferenceViewModel by viewModels()
     private val navigator: Navigator by inject()
     private val widgetHelper: WidgetHelper by inject()
+    private val analytics: Analytics by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +74,14 @@ class PreferenceActivity : AppCompatActivity(), KoinComponent {
                 navigator.showStartup(this)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.SETTINGS,
+            PreferenceActivity::class.simpleName
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

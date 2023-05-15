@@ -11,6 +11,7 @@ import com.weatherxm.R
 import com.weatherxm.databinding.FragmentUserDeviceRewardsBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.userdevice.UserDeviceViewModel
+import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -23,6 +24,7 @@ class RewardsFragment : Fragment(), KoinComponent {
         parametersOf(parentModel.device)
     }
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
     private var snackbar: Snackbar? = null
 
     override fun onCreateView(
@@ -66,6 +68,14 @@ class RewardsFragment : Fragment(), KoinComponent {
         }
 
         model.fetchTokenDetails()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.REWARDS,
+            RewardsFragment::class.simpleName
+        )
     }
 
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {

@@ -55,6 +55,10 @@
         <!--                android:resource="@xml/current_weather_tile_widget_info" />-->
         <!--        </receiver>-->
 
+        <!-- Disable screen view tracking -->
+        <meta-data
+            android:name="google_analytics_automatic_screen_reporting_enabled"
+            android:value="false" />
         <!-- Disable collection of Google Analytics Advertising ID -->
         <meta-data
             android:name="google_analytics_adid_collection_enabled"

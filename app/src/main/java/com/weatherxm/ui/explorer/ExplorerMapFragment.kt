@@ -25,9 +25,10 @@ import com.weatherxm.ui.common.show
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.USER_LOCATION_DEFAULT_ZOOM_LEVEL
+import com.weatherxm.util.Analytics
 import dev.chrisbanes.insetter.applyInsetter
+import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import timber.log.Timber
 
 class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
@@ -35,8 +36,9 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
         Use activityViewModels because we use this model to communicate with the parent activity
         so it needs to be the same model as the parent's one.
     */
-    private val navigator: Navigator by inject()
     private val model: ExplorerViewModel by activityViewModels()
+    private val analytics: Analytics by inject()
+    private val navigator: Navigator by inject()
 
     override fun onMapReady(map: MapboxMap) {
         binding.appBar.applyInsetter {
@@ -59,11 +61,9 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
             model.setCurrentCamera(map.cameraState.zoom, map.cameraState.center)
         }
 
-        getMapView().let {
-            it.location.updateSettings {
-                enabled = true
-                pulsingEnabled = true
-            }
+        getMapView().location.updateSettings {
+            enabled = true
+            pulsingEnabled = true
         }
 
         model.showMapOverlayViews().observe(this) {
@@ -109,12 +109,7 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
 
         // Set camera to the last saved location the user was at
         model.getCurrentCamera()?.let {
-            map.setCamera(
-                CameraOptions.Builder()
-                    .center(it.center)
-                    .zoom(it.zoom)
-                    .build()
-            )
+            map.setCamera(CameraOptions.Builder().center(it.center).zoom(it.zoom).build())
         }
 
         binding.myLocationButton.setOnClickListener {
@@ -123,6 +118,21 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
 
         // Fetch data
         model.fetch()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (model.isExplorerAfterLoggedIn()) {
+            analytics.trackScreen(
+                Analytics.Screen.EXPLORER,
+                ExplorerMapFragment::class.simpleName
+            )
+        } else {
+            analytics.trackScreen(
+                Analytics.Screen.EXPLORER_LANDING,
+                ExplorerMapFragment::class.simpleName
+            )
+        }
     }
 
     private fun onShowMapOverlayViews(shouldShow: Boolean) {

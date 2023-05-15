@@ -10,12 +10,15 @@ import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentUserDeviceForecastBinding
 import com.weatherxm.ui.userdevice.UserDeviceViewModel
+import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
 class ForecastFragment : Fragment(), KoinComponent {
     private lateinit var binding: FragmentUserDeviceForecastBinding
+    private val analytics: Analytics by inject()
     private val parentModel: UserDeviceViewModel by activityViewModels()
     private val model: ForecastViewModel by viewModel {
         parametersOf(parentModel.device)
@@ -73,6 +76,14 @@ class ForecastFragment : Fragment(), KoinComponent {
 
         // Fetch data
         model.fetchForecast()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.FORECAST,
+            ForecastFragment::class.simpleName
+        )
     }
 
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {

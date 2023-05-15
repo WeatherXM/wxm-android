@@ -16,6 +16,7 @@ import com.weatherxm.databinding.FragmentUserDeviceCurrentBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.userdevice.UserDeviceViewModel
+import com.weatherxm.util.Analytics
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
@@ -30,6 +31,7 @@ class CurrentFragment : Fragment(), KoinComponent {
         parametersOf(parentModel.device)
     }
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
     private var snackbar: Snackbar? = null
 
     init {
@@ -93,6 +95,14 @@ class CurrentFragment : Fragment(), KoinComponent {
         binding.historicalCharts.setOnClickListener {
             navigator.showHistoryActivity(requireContext(), model.device)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.CURRENT_WEATHER,
+            CurrentFragment::class.simpleName
+        )
     }
 
     private fun onDeviceUpdated(device: Device) {

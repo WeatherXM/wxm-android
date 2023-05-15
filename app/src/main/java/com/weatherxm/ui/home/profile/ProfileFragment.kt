@@ -19,6 +19,7 @@ import com.weatherxm.databinding.FragmentProfileBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.home.HomeViewModel
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import org.koin.android.ext.android.inject
 import timber.log.Timber
@@ -28,6 +29,7 @@ class ProfileFragment : Fragment() {
     private val model: ProfileViewModel by viewModels()
     private val parentModel: HomeViewModel by activityViewModels()
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
 
     // Register the launcher for the connect wallet activity and wait for a possible result
     private val connectWalletLauncher =
@@ -81,6 +83,14 @@ class ProfileFragment : Fragment() {
         parentModel.onWalletMissing().observe(viewLifecycleOwner) {
             binding.connectWalletNotification.visibility = if (it) VISIBLE else GONE
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.PROFILE,
+            ProfileFragment::class.simpleName
+        )
     }
 
     private fun updateUI(user: User?, showProgressBar: Boolean) {

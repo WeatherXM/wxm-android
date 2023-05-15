@@ -8,6 +8,7 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.UserDevice
 import com.weatherxm.ui.common.toast
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -16,6 +17,7 @@ import timber.log.Timber
 class DeviceAlertsActivity : AppCompatActivity(), KoinComponent, DeviceAlertListener {
     private lateinit var binding: ActivityDeviceAlertsBinding
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
 
     private var userDevice: UserDevice? = null
 
@@ -43,6 +45,14 @@ class DeviceAlertsActivity : AppCompatActivity(), KoinComponent, DeviceAlertList
         binding.recycler.adapter = adapter
 
         adapter.submitList(userDevice?.alerts)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.DEVICE_ALERTS,
+            DeviceAlertsActivity::class.simpleName
+        )
     }
 
     override fun onUpdateStationClicked() {

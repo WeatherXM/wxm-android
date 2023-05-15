@@ -21,6 +21,7 @@ import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,6 +33,7 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityHeliumOtaBinding
     private val bluetoothAdapter: BluetoothAdapter? by inject()
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
 
     private val model: DeviceHeliumOTAViewModel by viewModel {
         parametersOf(
@@ -86,6 +88,14 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
         )
 
         initBluetoothAndStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.HELIUM_OTA,
+            DeviceHeliumOTAActivity::class.simpleName
+        )
     }
 
     override fun onDestroy() {

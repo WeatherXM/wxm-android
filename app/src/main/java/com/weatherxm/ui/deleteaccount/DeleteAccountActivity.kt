@@ -15,6 +15,7 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityDeleteAccountBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.onTextChanged
 import com.weatherxm.util.setHtml
@@ -24,6 +25,7 @@ import org.koin.core.component.inject
 
 class DeleteAccountActivity : AppCompatActivity(), KoinComponent {
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
     private lateinit var binding: ActivityDeleteAccountBinding
     private val model: DeleteAccountViewModel by viewModels()
 
@@ -54,6 +56,14 @@ class DeleteAccountActivity : AppCompatActivity(), KoinComponent {
                 onPasswordVerification(it)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.DELETE_ACCOUNT,
+            DeleteAccountActivity::class.simpleName
+        )
     }
 
     private fun initHtmlText() {

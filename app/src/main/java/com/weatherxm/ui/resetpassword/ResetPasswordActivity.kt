@@ -8,6 +8,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityResetPasswordBinding
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.Validator
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.onTextChanged
@@ -17,6 +18,7 @@ import org.koin.core.component.KoinComponent
 class ResetPasswordActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityResetPasswordBinding
     private val validator: Validator by inject()
+    private val analytics: Analytics by inject()
     private val model: ResetPasswordViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +50,14 @@ class ResetPasswordActivity : AppCompatActivity(), KoinComponent {
         model.isEmailSent().observe(this) { result ->
             onEmailSentResult(result)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.PASSWORD_RESET,
+            ResetPasswordActivity::class.simpleName
+        )
     }
 
     private fun onEmailSentResult(result: Resource<Unit>) {

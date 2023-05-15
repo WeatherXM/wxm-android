@@ -180,7 +180,7 @@ import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCaseImpl
 import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.usecases.WidgetSelectStationUseCaseImpl
-import com.weatherxm.util.AnalyticsHelper
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Validator
@@ -651,9 +651,9 @@ val clientIdentificationHelper = module {
     }
 }
 
-val analyticsHelper = module {
+val analytics = module {
     single(createdAtStart = true) {
-        AnalyticsHelper(get(), get())
+        Analytics(get(), get())
     }
 }
 
@@ -753,7 +753,7 @@ val modules = listOf(
     apiServiceModule,
     database,
     displayModeHelper,
-    analyticsHelper,
+    analytics,
     clientIdentificationHelper,
     utilities,
     widgetHelper,

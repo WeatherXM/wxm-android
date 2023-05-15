@@ -17,6 +17,7 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.toast
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.Validator
 import com.weatherxm.util.WidgetHelper
 import com.weatherxm.util.applyInsets
@@ -31,6 +32,7 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
     private val navigator: Navigator by inject()
     private val validator: Validator by inject()
     private val widgetHelper: WidgetHelper by inject()
+    private val analytics: Analytics by inject()
     private val model: LoginViewModel by viewModels()
     private lateinit var binding: ActivityLoginBinding
 
@@ -109,6 +111,14 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
             // Perform login
             model.login(username, password)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.LOGIN,
+            LoginActivity::class.simpleName
+        )
     }
 
     private fun onLoginResult(result: Resource<Unit>) {

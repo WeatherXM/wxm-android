@@ -12,6 +12,7 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.toast
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -26,6 +27,7 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
     }
     private lateinit var binding: ActivityStationSettingsBinding
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
     private var snackbar: Snackbar? = null
     private lateinit var adapter: StationInfoAdapter
 
@@ -115,6 +117,14 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
                 this, recipient = getString(R.string.support_email_recipient)
             )
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.STATION_SETTINGS,
+            StationSettingsActivity::class.simpleName
+        )
     }
 
     private fun setupInfo() {

@@ -13,6 +13,7 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.token.TokenViewModel.Companion.TransactionExplorer
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
@@ -22,6 +23,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityTokenBinding
     private val model: TokenViewModel by viewModels()
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
 
     private lateinit var adapter: TransactionsAdapter
     private lateinit var deviceId: String
@@ -61,6 +63,14 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
         }
 
         model.fetchFirstPageTransactions(deviceId)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.REWARD_TRANSACTIONS,
+            TokenActivity::class.simpleName
+        )
     }
 
     private fun updateUIFirstPage(resource: Resource<List<UITransaction>>) {

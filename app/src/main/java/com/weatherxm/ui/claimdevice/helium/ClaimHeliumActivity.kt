@@ -17,9 +17,11 @@ import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setIcon
 import com.weatherxm.util.setSuccessChip
+import org.koin.android.ext.android.inject
 
 class ClaimHeliumActivity : AppCompatActivity() {
     companion object {
@@ -29,6 +31,7 @@ class ClaimHeliumActivity : AppCompatActivity() {
         const val CLAIMED_DEVICE = "claimed_device"
     }
 
+    private val analytics: Analytics by inject()
     private val model: ClaimHeliumViewModel by viewModels()
     private val locationModel: ClaimLocationViewModel by viewModels()
     private val frequencyModel: ClaimHeliumFrequencyViewModel by viewModels()
@@ -79,6 +82,14 @@ class ClaimHeliumActivity : AppCompatActivity() {
             model.setDeviceKey(it.getString(DEV_KEY, ""))
             model.setClaimedDevice(it.getParcelable(CLAIMED_DEVICE))
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.CLAIM_HELIUM,
+            ClaimHeliumActivity::class.simpleName
+        )
     }
 
     private fun finishClaiming() {

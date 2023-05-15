@@ -10,6 +10,7 @@ import com.weatherxm.ui.common.getLastTab
 import com.weatherxm.ui.common.getSelectedTab
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.devicehistory.HistoryChartsFragment.SwipeRefreshCallback
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getFormattedRelativeDay
 import com.weatherxm.util.LocalDateRange
 import com.weatherxm.util.applyInsets
@@ -17,12 +18,14 @@ import com.weatherxm.util.applyOnGlobalLayout
 import com.weatherxm.util.onTabSelected
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 import java.time.LocalDate
 
 class HistoryActivity : AppCompatActivity(), KoinComponent, SwipeRefreshCallback {
     private lateinit var binding: ActivityHistoryBinding
+    private val analytics: Analytics by inject()
 
     private val model: HistoryChartsViewModel by viewModel {
         parametersOf(intent.getParcelableExtra<Device>(Contracts.ARG_DEVICE))
@@ -58,6 +61,14 @@ class HistoryActivity : AppCompatActivity(), KoinComponent, SwipeRefreshCallback
             Timber.d("Got new dates: $dates")
             updateDateStrip(dates)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.HISTORY,
+            HistoryActivity::class.simpleName
+        )
     }
 
     // Update dates in tab strip

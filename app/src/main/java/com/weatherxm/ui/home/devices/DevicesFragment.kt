@@ -16,6 +16,7 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.UserDevice
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.home.HomeViewModel
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -25,6 +26,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
     private val parentModel: HomeViewModel by activityViewModels()
     private val model: DevicesViewModel by activityViewModels()
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
     private lateinit var binding: FragmentDevicesBinding
 
     private val userDeviceLauncher =
@@ -126,6 +128,14 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
             binding.walletWarning.setVisible(it)
         }
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.DEVICES_LIST,
+            DevicesFragment::class.simpleName
+        )
     }
 
     override fun onDeviceClicked(userDevice: UserDevice) {

@@ -15,13 +15,15 @@ import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.C
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_SERIAL_NUMBER
 import com.weatherxm.ui.claimdevice.m5.information.ClaimM5InformationFragment
+import com.weatherxm.ui.claimdevice.m5.result.ClaimM5ResultFragment
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyFragment
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
-import com.weatherxm.ui.claimdevice.m5.result.ClaimM5ResultFragment
 import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setIcon
 import com.weatherxm.util.setSuccessChip
+import org.koin.android.ext.android.inject
 
 class ClaimM5Activity : AppCompatActivity() {
     companion object {
@@ -29,6 +31,7 @@ class ClaimM5Activity : AppCompatActivity() {
         const val SERIAL_NUMBER = "serial_number"
     }
 
+    private val analytics: Analytics by inject()
     private lateinit var binding: ActivityClaimM5DeviceBinding
     private val model: ClaimM5ViewModel by viewModels()
     private val locationModel: ClaimLocationViewModel by viewModels()
@@ -71,6 +74,14 @@ class ClaimM5Activity : AppCompatActivity() {
                 verifyModel.setSerialNumber(savedSn)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.CLAIM_M5,
+            ClaimM5Activity::class.simpleName
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

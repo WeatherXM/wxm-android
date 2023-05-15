@@ -9,12 +9,13 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivitySignupBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.Validator
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.hideKeyboard
 import com.weatherxm.util.onTextChanged
-import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import timber.log.Timber
 
 class SignupActivity : AppCompatActivity(), KoinComponent {
@@ -22,6 +23,7 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
     private val model: SignupViewModel by viewModels()
     private val navigator: Navigator by inject()
     private val validator: Validator by inject()
+    private val analytics: Analytics by inject()
     private lateinit var binding: ActivitySignupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,6 +80,14 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
         model.isSignedUp().observe(this) { result ->
             onSignupResult(result)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.SIGNUP,
+            SignupActivity::class.simpleName
+        )
     }
 
     private fun onSignupResult(result: Resource<String>) {
