@@ -212,7 +212,7 @@ dependencies {
     implementation "androidx.browser:browser:1.5.0"
     implementation "androidx.collection:collection-ktx:1.2.0"
     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
-    implementation "androidx.core:core-ktx:1.10.0"
+    implementation "androidx.core:core-ktx:1.10.1"
     implementation "androidx.core:core-splashscreen:1.0.1"
     implementation "androidx.fragment:fragment-ktx:1.5.7"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
@@ -228,7 +228,7 @@ dependencies {
     implementation "androidx.security:security-crypto:1.0.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.viewpager2:viewpager2:1.0.0"
-    implementation "androidx.work:work-runtime-ktx:2.8.0"
+    implementation "androidx.work:work-runtime-ktx:2.8.1"
 
     // Material Components for Android
     implementation "com.google.android.material:material:1.9.0"
@@ -240,7 +240,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:5.0.1"
 
     // JSON serialization/deserialization
-    implementation "com.squareup.moshi:moshi:1.14.0"
+    implementation "com.squareup.moshi:moshi:1.15.0"
     implementation "com.squareup.moshi:moshi-adapters:1.14.0"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:1.14.0"
 
@@ -276,8 +276,8 @@ dependencies {
     implementation "io.arrow-kt:arrow-fx-coroutines"
 
     // Mapbox
-    implementation "com.mapbox.maps:android:10.12.2"
-    implementation "com.mapbox.search:mapbox-search-android:1.0.0-rc.3"
+    implementation "com.mapbox.maps:android:10.13.0"
+    implementation "com.mapbox.search:mapbox-search-android:1.0.0-rc.4"
 
     // Insetter
     implementation "dev.chrisbanes.insetter:insetter:0.6.1"
