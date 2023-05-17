@@ -1,12 +1,3 @@
-/**
- * Load key-values from ".env" properties file into extension properties (ext)
- */
-if (file(".env").exists()) {
-    def env = new Properties()
-    env.load(new FileInputStream(".env"))
-    env.each { key, value -> ext[key] = value }
-}
-
 buildscript {
     repositories {
         google()
@@ -22,6 +13,20 @@ buildscript {
         classpath "com.google.firebase:perf-plugin:1.4.2"
     }
 }
+
+plugins {
+    id "com.google.devtools.ksp" version "1.8.21-1.0.11" apply false
+}
+
+/**
+ * Load key-values from ".env" properties file into extension properties (ext)
+ */
+if (file(".env").exists()) {
+    def env = new Properties()
+    env.load(new FileInputStream(".env"))
+    env.each { key, value -> ext[key] = value }
+}
+
 
 allprojects {
     repositories {

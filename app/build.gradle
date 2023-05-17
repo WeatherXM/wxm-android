@@ -3,6 +3,7 @@ plugins {
     id "kotlin-android"
     id "kotlin-kapt"
     id "kotlin-parcelize"
+    id "com.google.devtools.ksp"
     id "com.google.gms.google-services"
     id "com.google.firebase.crashlytics"
     id "com.google.firebase.appdistribution"
@@ -224,7 +225,7 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.2.0"
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
     implementation "androidx.room:room-runtime:2.5.1"
-    kapt "androidx.room:room-compiler:2.5.1"
+    ksp "androidx.room:room-compiler:2.5.1"
     implementation "androidx.security:security-crypto:1.0.0"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.viewpager2:viewpager2:1.0.0"
@@ -242,7 +243,7 @@ dependencies {
     // JSON serialization/deserialization
     implementation "com.squareup.moshi:moshi:1.15.0"
     implementation "com.squareup.moshi:moshi-adapters:1.14.0"
-    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.14.0"
+    ksp "com.squareup.moshi:moshi-kotlin-codegen:1.14.0"
 
     // HTTP client
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
