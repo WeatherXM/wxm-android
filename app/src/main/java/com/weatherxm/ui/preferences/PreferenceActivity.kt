@@ -69,6 +69,7 @@ class PreferenceActivity : AppCompatActivity(), KoinComponent {
                     }
                     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids.toIntArray())
                     intent.putExtra(Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
+                    intent.putExtra(Contracts.ARG_WIDGET_SHOULD_LOGIN, true)
                     this.sendBroadcast(intent)
                 }
                 navigator.showStartup(this)

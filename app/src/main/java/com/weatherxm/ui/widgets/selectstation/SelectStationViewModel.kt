@@ -1,14 +1,11 @@
 package com.weatherxm.ui.widgets.selectstation
 
-import android.appwidget.AppWidgetManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
-import com.weatherxm.ui.widgets.WidgetType
 import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.Dispatchers
@@ -27,11 +24,13 @@ class SelectStationViewModel : ViewModel(), KoinComponent {
     fun devices(): LiveData<Resource<List<Device>>> = devices
     fun isNotLoggedIn(): LiveData<Unit> = isNotLoggedIn
 
-    private var currentStationSelected = ""
+    private var currentStationSelected = Device.empty()
 
-    fun setStationSelected(stationId: String) {
-        currentStationSelected = stationId
+    fun setStationSelected(device: Device) {
+        currentStationSelected = device
     }
+
+    fun getStationSelected() = currentStationSelected
 
     fun checkIfLoggedInAndProceed() {
         Timber.d("Checking if user is logged in in the background")
@@ -64,15 +63,7 @@ class SelectStationViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun getWidgetTypeById(appWidgetManager: AppWidgetManager, appWidgetId: Int): WidgetType {
-        return when (appWidgetManager.getAppWidgetInfo(appWidgetId).initialLayout) {
-            R.layout.widget_current_weather -> WidgetType.CURRENT_WEATHER
-            R.layout.widget_current_weather_tile -> WidgetType.CURRENT_WEATHER_TILE
-            else -> WidgetType.CURRENT_WEATHER
-        }
-    }
-
     fun saveWidgetData(widgetId: Int) {
-        usecase.saveWidgetData(widgetId, currentStationSelected)
+        usecase.saveWidgetData(widgetId, currentStationSelected.id)
     }
 }

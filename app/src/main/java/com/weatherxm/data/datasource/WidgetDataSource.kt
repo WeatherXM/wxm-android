@@ -5,46 +5,46 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.services.CacheService
 
 interface WidgetDataSource {
-    fun getDeviceOfWidget(widgetId: Int): Either<Failure, String>
-    fun setDeviceOfWidget(widgetId: Int, deviceId: String)
-    fun setWidgetIds(widgetId: String)
-    fun removeWidgetId(widgetId: String)
+    fun getWidgetDevice(widgetId: Int): Either<Failure, String>
+    fun setWidgetDevice(widgetId: Int, deviceId: String)
+    fun setWidgetId(widgetId: Int)
+    fun removeWidgetId(widgetId: Int)
 }
 
 class WidgetDataSourceImpl(
     private val cacheService: CacheService
 ) : WidgetDataSource {
 
-    override fun getDeviceOfWidget(widgetId: Int): Either<Failure, String> {
+    override fun getWidgetDevice(widgetId: Int): Either<Failure, String> {
         val key = cacheService.getWidgetFormattedKey(widgetId)
-        return cacheService.getDeviceOfWidget(key)
+        return cacheService.getWidgetDevice(key)
     }
 
-    override fun setDeviceOfWidget(widgetId: Int, deviceId: String) {
+    override fun setWidgetDevice(widgetId: Int, deviceId: String) {
         val key = cacheService.getWidgetFormattedKey(widgetId)
-        cacheService.setDeviceOfWidget(key, deviceId)
+        cacheService.setWidgetDevice(key, deviceId)
     }
 
-    override fun setWidgetIds(widgetId: String) {
+    override fun setWidgetId(widgetId: Int) {
         val currentWidgetIds = cacheService.getWidgetIds().fold({
             mutableListOf()
         }) {
             it.toMutableList()
         }
-        currentWidgetIds.add(widgetId)
+        currentWidgetIds.add(widgetId.toString())
         cacheService.setWidgetIds(currentWidgetIds)
     }
 
-    override fun removeWidgetId(widgetId: String) {
-        cacheService.removeDeviceOfWidget(cacheService.getWidgetFormattedKey(widgetId.toInt()))
+    override fun removeWidgetId(widgetId: Int) {
+        cacheService.removeDeviceOfWidget(cacheService.getWidgetFormattedKey(widgetId))
 
         val currentWidgetIds = cacheService.getWidgetIds().fold({
             mutableListOf()
         }) {
             it.toMutableList()
         }
-        if (currentWidgetIds.contains(widgetId)) {
-            currentWidgetIds.remove(widgetId)
+        if (currentWidgetIds.contains(widgetId.toString())) {
+            currentWidgetIds.remove(widgetId.toString())
         }
         cacheService.setWidgetIds(currentWidgetIds)
     }

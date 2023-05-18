@@ -1,82 +1,84 @@
 package com.weatherxm.ui.widgets.currentweather
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationCompat.PRIORITY_HIGH
 import androidx.work.CoroutineWorker
-import androidx.work.ForegroundInfo
+import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.weatherxm.R
+import arrow.core.Either
+import arrow.core.flatMap
+import arrow.core.getOrElse
+import arrow.core.right
+import com.weatherxm.data.UserActionError.UserNotLoggedInError
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE
+import com.weatherxm.ui.common.Contracts.ARG_WIDGET_ID
+import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
+import com.weatherxm.usecases.AuthUseCase
+import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.util.WidgetHelper
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import timber.log.Timber
 
 class CurrentWeatherWidgetWorkerUpdate(
     private val context: Context,
-    workerParams: WorkerParameters
+    private val workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams), KoinComponent {
     companion object {
         const val UPDATE_INTERVAL_IN_MINS = 15L
-        const val NOTIFICATION_TIMEOUT = 1000L
     }
 
-    private val notificationId = R.string.updating_weather_notification_id
-
+    private val widgetUseCase: WidgetCurrentWeatherUseCase by inject()
+    private val authUseCase: AuthUseCase by inject()
     private val widgetHelper: WidgetHelper by inject()
 
-    private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as
-        NotificationManager
-
     override suspend fun doWork(): Result {
-        return widgetHelper.getWidgetIds().fold({
-            Result.failure()
-        }) {
-            val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
-            val ids = it.map { id ->
-                id.toInt()
+        val widgetId = workerParams.inputData.getInt(ARG_WIDGET_ID, INVALID_APPWIDGET_ID)
+        val deviceId = workerParams.inputData.getString(ARG_DEVICE_ID)
+        val isWidgetActive = widgetHelper.getWidgetIds()
+            .getOrElse { mutableListOf() }
+            .contains(widgetId.toString())
+
+        if (widgetId == INVALID_APPWIDGET_ID || deviceId.isNullOrEmpty() || !isWidgetActive) {
+            Timber.d("Cancelling WorkManager for Widget [$widgetId].")
+            WorkManager.getInstance(context).cancelWorkById(workerParams.id)
+            return Result.failure()
+        }
+
+        val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        intent.putExtra(ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
+        intent.putExtra(
+            ARG_WIDGET_TYPE,
+            widgetHelper.getWidgetTypeById(AppWidgetManager.getInstance(context), widgetId)
+        )
+
+        return authUseCase.isLoggedIn()
+            .flatMap { isLoggedIn ->
+                if (isLoggedIn) {
+                    true.right()
+                } else {
+                    Either.Left(UserNotLoggedInError())
+                }
             }
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids.toIntArray())
-            intent.putExtra(ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
-            context.sendBroadcast(intent)
-
-            setForeground(createForegroundInfo())
-
-            notificationManager.cancel(notificationId)
-
-            Result.success()
-        }
+            .flatMap {
+                widgetUseCase.getUserDevice(deviceId).map { device ->
+                    Timber.d("Got device for [$widgetId].")
+                    intent.putExtra(ARG_DEVICE, device)
+                    context.sendBroadcast(intent)
+                    Result.success()
+                }
+            }
+            .getOrElse { failure ->
+                Timber.w(
+                    Exception("Fetching user device for widget failed: ${failure.code}"),
+                    "Could not get user device for widget [$widgetId]"
+                )
+                if (failure is UserNotLoggedInError) Result.success() else Result.retry()
+            }
     }
-
-    private fun createForegroundInfo(): ForegroundInfo {
-        val id = applicationContext.getString(notificationId)
-        val title = applicationContext.getString(R.string.updating_weather_notification_title)
-
-        // Create a Notification channel if necessary
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Create the NotificationChannel.
-            val mChannel = NotificationChannel(id, title, NotificationManager.IMPORTANCE_HIGH)
-            // Register the channel with the system. You can't change the importance
-            // or other notification behaviors after this.
-            notificationManager.createNotificationChannel(mChannel)
-        }
-
-        val notification = NotificationCompat.Builder(applicationContext, id)
-            .setContentTitle(title)
-            .setTicker(title)
-            .setPriority(PRIORITY_HIGH)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setSilent(true)
-            .setOngoing(false)
-            .setTimeoutAfter(NOTIFICATION_TIMEOUT)
-            .build()
-
-        return ForegroundInfo(0, notification)
-    }
-
 }

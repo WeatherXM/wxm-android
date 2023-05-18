@@ -13,6 +13,8 @@ class Validator {
         const val REGEX_SERIAL_NUMBER = "^[a-fA-F0-9]{18}\$"
         const val REGEX_FRIENDLY_NAME = "^(?!\\s*\$).+"
         const val REGEX_DEV_EUI_KEY = "^[a-fA-F0-9]{16}\$"
+        val LATITUDE_BOUNDS = -90.0..90.0
+        val LONGITUDE_BOUNDS = -180.0..180.0
     }
 
     fun validateUsername(username: String): Boolean {
@@ -21,6 +23,10 @@ class Validator {
 
     fun validatePassword(password: String): Boolean {
         return password.length >= MINIMUM_PASSWORD_LENGTH
+    }
+
+    fun validateLocation(lat: Double, lon: Double): Boolean {
+        return lat in LATITUDE_BOUNDS && lon in LONGITUDE_BOUNDS
     }
 
     fun validateEthAddress(address: String?): Boolean {

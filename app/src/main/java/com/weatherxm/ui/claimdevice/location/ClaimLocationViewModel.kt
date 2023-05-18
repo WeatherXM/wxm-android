@@ -13,6 +13,7 @@ import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.LocationHelper.getLocationAndThen
+import com.weatherxm.util.Validator
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -32,6 +33,7 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
     }
 
     private val usecase: ClaimDeviceUseCase by inject()
+    private val validator: Validator by inject()
     private var reverseGeocodingJob: Job? = null
     private var installationLocation = Location("").apply {
         latitude = 0.0
@@ -67,6 +69,10 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
 
     fun getDeviceType(): DeviceType {
         return deviceType
+    }
+
+    fun validateLocation(lat: Double, lon: Double): Boolean {
+        return validator.validateLocation(lat, lon)
     }
 
     fun setInstallationLocation(lat: Double, lon: Double) {

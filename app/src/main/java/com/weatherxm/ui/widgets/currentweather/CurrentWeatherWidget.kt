@@ -7,7 +7,6 @@ import android.app.TaskStackBuilder
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.ACTION_APPWIDGET_UPDATE
 import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_ID
-import android.appwidget.AppWidgetManager.EXTRA_APPWIDGET_IDS
 import android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID
 import android.appwidget.AppWidgetProvider
 import android.content.Context
@@ -15,14 +14,21 @@ import android.content.Intent
 import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import androidx.work.Constraints
+import androidx.work.Data
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.services.CacheService
-import com.weatherxm.data.services.CacheService.Companion.WIDGET_CURRENT_WEATHER_PREFIX
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE
+import com.weatherxm.ui.common.Contracts.ARG_WIDGET_ON_LOGGED_IN
+import com.weatherxm.ui.common.Contracts.ARG_WIDGET_SHOULD_LOGIN
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.userdevice.UserDeviceActivity
@@ -33,13 +39,12 @@ import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Weather
 import com.weatherxm.util.WidgetHelper
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 /**
  * Implementation of Current Weather Widget functionality.
@@ -47,7 +52,6 @@ import timber.log.Timber
 class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
     private val usecase: WidgetCurrentWeatherUseCase by inject()
     private val widgetHelper: WidgetHelper by inject()
-    private val firebaseCrashlytics: FirebaseCrashlytics by inject()
 
     /**
      * OnReceive is the receiver for catching specific intents
@@ -57,37 +61,32 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
     override fun onReceive(context: Context, intent: Intent?) {
         super.onReceive(context, intent)
 
-        // These 2 variables are useful for when we first add the widget
+        // These variables are useful for identifying what type of update to do
+        val extras = intent?.extras
         val appWidgetId =
-            intent?.extras?.getInt(EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID) ?: INVALID_APPWIDGET_ID
-        val isValidWidgetType =
-            intent?.extras?.getSerializable(ARG_WIDGET_TYPE) == WidgetType.CURRENT_WEATHER
+            extras?.getInt(EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID) ?: INVALID_APPWIDGET_ID
+        val device = extras?.getParcelable<Device>(ARG_DEVICE)
+        val shouldLogin = extras?.getBoolean(ARG_WIDGET_SHOULD_LOGIN, false)
+        val onJustLoggedIn = extras?.getBoolean(ARG_WIDGET_ON_LOGGED_IN, false)
+        val widgetIdsFromIntent = extras?.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS)
 
-        // Only update widget on actions we have triggered
-        val shouldUpdate = intent?.action == ACTION_APPWIDGET_UPDATE && intent.extras?.getBoolean(
-            ARG_IS_CUSTOM_APPWIDGET_UPDATE
-        ) ?: false
+        val validWidgetTypeForUpdate =
+            extras?.getSerializable(ARG_WIDGET_TYPE) == WidgetType.CURRENT_WEATHER
 
         /*
-         * This should not be empty on each work manager trigger or on logged in/out trigger.
-         *
-         * The "getWidgetsOfType" is returning all widget ids of this type (CurrentWeatherWidget.kt)
-         * in order to update them afterwards.
+        * Only update widget on actions we have triggered:
+        * a. Creation of widget
+        * b. Login/Logout
+        * c. Work Manager Update
          */
-        val idsOfWidgetsToUpdate = widgetHelper.getWidgetsOfType(
-            intent?.extras?.getIntArray(EXTRA_APPWIDGET_IDS),
-            WIDGET_CURRENT_WEATHER_PREFIX
-        )
+        val shouldUpdate = intent?.action == ACTION_APPWIDGET_UPDATE
+            && intent.extras?.getBoolean(ARG_IS_CUSTOM_APPWIDGET_UPDATE) ?: false
 
-        /**
-         * The first "if" should run when we first add the widget and we have a specific widget id.
-         *
-         * The "else if" should run on each ARG_IS_CUSTOM_APPWIDGET_UPDATE like on logged in/out
-         * or when the WorkManager triggers by broadcasting an explicit intent containing
-         * the respective data.
-         */
-        if (appWidgetId != INVALID_APPWIDGET_ID && shouldUpdate && isValidWidgetType) {
-            Timber.d("Widget added.")
+        if (!shouldUpdate) {
+            return
+        }
+
+        if (appWidgetId != INVALID_APPWIDGET_ID && validWidgetTypeForUpdate) {
             /**
              * Fix when adding a widget for the first time, without this delay that widget won't be
              * able to render correctly. So the delay here is an ugly, but working fix.
@@ -97,46 +96,14 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
             widgetHelper.getWidgetIds().onRight {
                 if (it.size == 1) {
                     runBlocking {
-                        delay(1000L)
+                        delay(500L)
                     }
                 }
             }
 
-            /**
-             * We need to save the widgetId with its type like CurrentWeatherWidget.kt,
-             * or the tile widget etc by saving it in the cache,
-             * so we do it here when we have just added the widget.
-             */
-            widgetHelper.setWidgetOfType(appWidgetId, WIDGET_CURRENT_WEATHER_PREFIX)
-
-            GlobalScope.launch {
-                usecase.isLoggedIn().onRight {
-                    if (it) {
-                        getDeviceAndUpdate(context, appWidgetId)
-                    } else {
-                        onShouldSignIn(context, AppWidgetManager.getInstance(context), appWidgetId)
-                    }
-                }.onLeft {
-                    onShouldSignIn(context, AppWidgetManager.getInstance(context), appWidgetId)
-                }
-            }
-        } else if (idsOfWidgetsToUpdate.isNotEmpty() && shouldUpdate) {
-            Timber.d("Widget Work Manager or Logged In Triggered.")
-            GlobalScope.launch {
-                usecase.isLoggedIn().onRight {
-                    if (it) {
-                        getDevicesAndUpdate(context, idsOfWidgetsToUpdate)
-                    } else {
-                        idsOfWidgetsToUpdate.forEach { widgetId ->
-                            onShouldSignIn(context, AppWidgetManager.getInstance(context), widgetId)
-                        }
-                    }
-                }.onLeft {
-                    idsOfWidgetsToUpdate.forEach { widgetId ->
-                        onShouldSignIn(context, AppWidgetManager.getInstance(context), widgetId)
-                    }
-                }
-            }
+            updateWidget(context, shouldLogin, device, appWidgetId)
+        } else if (widgetIdsFromIntent != null && widgetIdsFromIntent.isNotEmpty()) {
+            updateAllWidgets(context, shouldLogin, onJustLoggedIn, widgetIdsFromIntent)
         }
     }
 
@@ -144,93 +111,49 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         super.onDeleted(context, appWidgetIds)
         if (appWidgetIds != null && appWidgetIds.isNotEmpty()) {
             usecase.removeWidgetId(appWidgetIds[0])
-            widgetHelper.setWidgetOfType(appWidgetIds[0], WIDGET_CURRENT_WEATHER_PREFIX, false)
         }
     }
 
-    private suspend fun getDevicesAndUpdate(context: Context, appWidgetIds: List<Int>) {
-        val deviceIds = mutableListOf<String>()
-        val deviceIdsWithWidgetIds = mutableMapOf<String, MutableList<Int>>()
-        /**
-         * For each appWidgetId, we search in cache to get the deviceId associated with this widget,
-         * and
-         *
-         * 1. We add that deviceId to the `deviceIds` list in order to make 1 API call for all
-         * 2. We populate the `deviceIdsWithWidgetIds`. For each deviceId we find
-         * (specified by the `String` key in the map above) we save all the widgetIds
-         */
-        appWidgetIds.forEach {
-            usecase.getDeviceOfWidget(it).onRight { deviceId ->
-                deviceIds.add(deviceId)
-                val widgetIds = deviceIdsWithWidgetIds.getOrDefault(deviceId, mutableListOf())
-                widgetIds.add(it)
-                deviceIdsWithWidgetIds[deviceId] = widgetIds
-            }.onLeft { failure ->
-                Timber.w("Fetching device ID of widget failed: $failure")
-                // TODO: Remove these custom logs when we find the root of the onError being shown
-                firebaseCrashlytics.recordException(
-                    Exception("Fetching device ID of widget failed: $it")
-                )
-                onError(context, AppWidgetManager.getInstance(context), it)
-            }
+    private fun updateWidget(
+        context: Context,
+        shouldLogin: Boolean?,
+        device: Device?,
+        appWidgetId: Int
+    ) {
+        val widgetManager = AppWidgetManager.getInstance(context)
+
+        if (shouldLogin == true) {
+            onShouldLogin(context, widgetManager, appWidgetId)
+        } else if (device == null) {
+            onError(context, widgetManager, appWidgetId)
+        } else {
+            onDevice(context, widgetManager, appWidgetId, device)
+        }
+    }
+
+    private fun updateAllWidgets(
+        context: Context,
+        shouldLogin: Boolean?,
+        onJustLoggedIn: Boolean?,
+        widgetIdsFromIntent: IntArray
+    ) {
+        val widgetManager = AppWidgetManager.getInstance(context)
+        val widgetsToUpdate = widgetIdsFromIntent.filter {
+            widgetHelper.getWidgetTypeById(widgetManager, it) == WidgetType.CURRENT_WEATHER
         }
 
-        usecase.getUserDevices(deviceIds).onRight { devices ->
-            /**
-             * For each device we get, update the respective widget
-             * by using the map we populated before.
-             */
-            devices.forEach {
-                deviceIdsWithWidgetIds[it.id]?.forEach { widgetId ->
-                    updateWidget(
-                        context,
-                        AppWidgetManager.getInstance(context),
-                        widgetId,
-                        it
-                    )
-                }
+        if (shouldLogin == true) {
+            widgetsToUpdate.forEach {
+                onShouldLogin(context, widgetManager, it)
             }
-        }.onLeft {
-            Timber.w("Fetching user devices for widgets failed: $it")
-            firebaseCrashlytics.recordException(
-                Exception("Fetching user devices for widgets failed: $it")
-            )
-            appWidgetIds.forEach { appWidgetId ->
-                onError(context, AppWidgetManager.getInstance(context), appWidgetId)
+        } else if (onJustLoggedIn == true) {
+            widgetsToUpdate.forEach {
+                onLoggedIn(context, it, usecase.getWidgetDevice(it))
             }
         }
     }
 
-    /**
-     * This runs only when we first add the widget when we want to update it for the first time
-     * (i.e. without the "batch updating" we do on `getDevicesAndUpdate`)
-     */
-    private suspend fun getDeviceAndUpdate(context: Context, appWidgetId: Int) {
-        usecase.getDeviceOfWidget(appWidgetId).onRight { deviceId ->
-            usecase.getUserDevice(deviceId).onRight { device ->
-                updateWidget(
-                    context,
-                    AppWidgetManager.getInstance(context),
-                    appWidgetId,
-                    device
-                )
-            }.onLeft {
-                Timber.w("Fetching user device for widget failed: $it")
-                firebaseCrashlytics.recordException(
-                    Exception("Fetching user device for widget failed: $it")
-                )
-                onError(context, AppWidgetManager.getInstance(context), appWidgetId)
-            }
-        }.onLeft {
-            Timber.w("Fetching device ID of widget failed: $it")
-            firebaseCrashlytics.recordException(
-                Exception("Fetching device ID of widget failed: $it")
-            )
-            onError(context, AppWidgetManager.getInstance(context), appWidgetId)
-        }
-    }
-
-    private fun onShouldSignIn(
+    private fun onShouldLogin(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int
@@ -254,6 +177,31 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 
+    private fun onLoggedIn(context: Context, appWidgetId: Int, deviceId: String?) {
+        /**
+         * Restart the WorkManager in order to force update the widget.
+         */
+        Timber.d("User logged in... Updating Work Manager for widget [$appWidgetId].")
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+        val data = Data.Builder()
+            .putInt(Contracts.ARG_WIDGET_ID, appWidgetId)
+            .putString(Contracts.ARG_DEVICE_ID, deviceId)
+            .build()
+
+        val widgetUpdateRequest = PeriodicWorkRequestBuilder<CurrentWeatherWidgetWorkerUpdate>(
+            CurrentWeatherWidgetWorkerUpdate.UPDATE_INTERVAL_IN_MINS,
+            TimeUnit.MINUTES
+        ).setConstraints(constraints).setInputData(data).build()
+
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+            "CURRENT_WEATHER_UPDATE_WORK_$appWidgetId",
+            ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+            widgetUpdateRequest
+        )
+    }
+
     private fun onError(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -269,7 +217,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 
-    private fun updateWidget(
+    private fun onDevice(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int,
@@ -282,8 +230,8 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         views.setViewVisibility(R.id.signInLayout, View.GONE)
         views.setViewVisibility(R.id.deviceLayout, View.VISIBLE)
 
-        val userDeviceActivity = Intent(context, UserDeviceActivity::class.java)
-            .putExtra(Contracts.ARG_DEVICE, device)
+        val userDeviceActivity =
+            Intent(context, UserDeviceActivity::class.java).putExtra(ARG_DEVICE, device)
 
         val pendingIntent: PendingIntent = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(userDeviceActivity)

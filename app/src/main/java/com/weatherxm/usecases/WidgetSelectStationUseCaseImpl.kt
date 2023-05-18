@@ -22,7 +22,7 @@ class WidgetSelectStationUseCaseImpl(
     }
 
     override fun saveWidgetData(widgetId: Int, deviceId: String) {
-        widgetRepository.setDeviceOfWidget(widgetId, deviceId)
-        widgetRepository.setWidgetIds(widgetId)
+        widgetRepository.setWidgetDevice(widgetId, deviceId)
+        widgetRepository.setWidgetId(widgetId)
     }
 }

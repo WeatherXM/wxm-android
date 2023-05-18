@@ -156,6 +156,7 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
                     }
                     intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids.toIntArray())
                     intent.putExtra(Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
+                    intent.putExtra(Contracts.ARG_WIDGET_ON_LOGGED_IN, true)
                     this.sendBroadcast(intent)
                 }
 

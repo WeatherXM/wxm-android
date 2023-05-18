@@ -18,6 +18,7 @@ sealed class Failure(val code: String? = null) {
         const val CODE_BL_DISABLED = "BLUETOOTH_DISABLED"
         const val CODE_BL_CANCELLATION = "BLUETOOTH_CANCELLATION"
         const val CODE_PERIPHERAL_ERROR = "PERIPHERAL_ERROR"
+        const val CODE_USER_NOT_LOGGED_IN = "USER_NOT_LOGGED_IN"
     }
 
     object NoGeocoderError : Failure()
@@ -172,6 +173,7 @@ sealed class DataError : Failure() {
 @Keep
 sealed class UserActionError(val message: String? = null) : Failure() {
     class UserActionRateLimitedError(message: String? = null) : UserActionError(message)
+    class UserNotLoggedInError(code: String = CODE_USER_NOT_LOGGED_IN) : Failure(code)
 }
 
 @Keep

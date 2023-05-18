@@ -65,6 +65,7 @@ class AuthTokenAuthenticator(
                                         ids.toIntArray()
                                     )
                                     intent.putExtra(Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
+                                    intent.putExtra(Contracts.ARG_WIDGET_SHOULD_LOGIN, true)
                                     context.sendBroadcast(intent)
                                 }
                                 navigator.showLogin(

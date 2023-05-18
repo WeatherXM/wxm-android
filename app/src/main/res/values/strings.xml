@@ -242,6 +242,7 @@
     <string name="setting_station_frequency">Setting Station Frequency</string>
     <string name="rebooting_station">Rebooting Station</string>
     <string name="claiming_station_step">Claiming Station</string>
+    <string name="invalid_location">Invalid Location</string>
 
     <!-- Claim M5 -->
     <string name="title_claim_ws1000_device">Claim WS1000 Device</string>

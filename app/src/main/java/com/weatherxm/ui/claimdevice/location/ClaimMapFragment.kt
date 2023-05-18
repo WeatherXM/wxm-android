@@ -34,17 +34,21 @@ class ClaimMapFragment : BaseMapFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         locationModel.onLocationConfirmed().observe(viewLifecycleOwner) { locationConfirmed ->
+            if (!locationConfirmed) return@observe
             marker?.let {
-                if (locationConfirmed) {
-                    val location = viewManager.getViewAnnotationOptionsByView(it)?.geometry as Point
-                    locationModel.setInstallationLocation(location.latitude(), location.longitude())
+                val loc = viewManager.getViewAnnotationOptionsByView(it)?.geometry as Point
 
-                    if (locationModel.getDeviceType() == DeviceType.M5_WIFI) {
-                        m5ParentModel.next()
-                    } else {
-                        heliumParentModel.next()
-                    }
+                if (!locationModel.validateLocation(loc.latitude(), loc.longitude())) {
+                    activity?.toast(R.string.invalid_location)
+                    return@observe
                 }
+
+                if (locationModel.getDeviceType() == DeviceType.M5_WIFI) {
+                    m5ParentModel.next()
+                } else {
+                    heliumParentModel.next()
+                }
+
             }
         }
     }

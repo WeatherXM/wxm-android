@@ -36,8 +36,6 @@ class CacheService(
         const val KEY_WALLET_WARNING_DISMISSED_TIMESTAMP = "wallet_warning_dismissed_timestamp"
         const val KEY_CURRENT_WEATHER_WIDGET_IDS = "current_weather_widget_ids"
         const val WIDGET_ID = "widget_id"
-        const val WIDGET_CURRENT_WEATHER_PREFIX = "curr_weather"
-        const val WIDGET_CURRENT_WEATHER_TILE_PREFIX = "curr_weather_tile"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -60,12 +58,8 @@ class CacheService(
     private var suggestions: ArrayMap<String, List<SearchSuggestion>> = ArrayMap()
     private var locations: ArrayMap<String, Location> = ArrayMap()
 
-    fun getWidgetFormattedKey(widgetId: Int, prefix: String? = null): String {
-        return if (prefix != null) {
-            "${prefix}_${WIDGET_ID}_${widgetId}"
-        } else {
-            "${WIDGET_ID}_${widgetId}"
-        }
+    fun getWidgetFormattedKey(widgetId: Int): String {
+        return "${WIDGET_ID}_${widgetId}"
     }
 
     fun getAuthToken(): Either<Failure, AuthToken> {
@@ -242,28 +236,20 @@ class CacheService(
         return preferences.getLong(key, 0L)
     }
 
-    fun setDeviceOfWidget(key: String, deviceId: String) {
-        preferences.edit().putString(key, deviceId).apply()
-    }
-
     fun removeDeviceOfWidget(key: String) {
         preferences.edit().remove(key).apply()
     }
 
-    fun getDeviceOfWidget(key: String): Either<Failure, String> {
+    fun setWidgetDevice(key: String, deviceId: String) {
+        preferences.edit().putString(key, deviceId).apply()
+    }
+
+    fun getWidgetDevice(key: String): Either<Failure, String> {
         val deviceId = preferences.getString(key, "")
         return when {
             deviceId.isNullOrEmpty() -> Either.Left(DataError.CacheMissError)
             else -> Either.Right(deviceId)
         }
-    }
-
-    fun setWidgetOfType(widgetId: Int, prefix: String, enabled: Boolean = true) {
-        preferences.edit().putBoolean(getWidgetFormattedKey(widgetId, prefix), enabled).apply()
-    }
-
-    fun hasWidgetOfType(widgetId: Int, prefix: String): Boolean {
-        return preferences.getBoolean(getWidgetFormattedKey(widgetId, prefix), false)
     }
 
     fun getWidgetIds(): Either<Failure, List<String>> {
@@ -311,24 +297,11 @@ class CacheService(
         )
         val widgetIds = preferences.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, setOf())
         val devicesOfWidgets = mutableMapOf<String, String>()
-        val widgetWithTypeKeys = mutableListOf<String>()
         widgetIds?.forEach {
             val key = getWidgetFormattedKey(it.toInt())
             val deviceOfWidget = preferences.getString(key, null)
             if (deviceOfWidget != null) {
                 devicesOfWidgets[key] = deviceOfWidget
-            }
-
-            getWidgetFormattedKey(it.toInt(), WIDGET_CURRENT_WEATHER_PREFIX).apply {
-                if (preferences.getBoolean(this, false)) {
-                    widgetWithTypeKeys.add(this)
-                }
-            }
-
-            getWidgetFormattedKey(it.toInt(), WIDGET_CURRENT_WEATHER_TILE_PREFIX).apply {
-                if (preferences.getBoolean(this, false)) {
-                    widgetWithTypeKeys.add(this)
-                }
             }
         }
 
@@ -345,9 +318,6 @@ class CacheService(
 
         devicesOfWidgets.forEach {
             preferences.edit().putString(it.key, it.value).apply()
-        }
-        widgetWithTypeKeys.forEach {
-            preferences.edit().putBoolean(it, true).apply()
         }
     }
 

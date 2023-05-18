@@ -5,9 +5,9 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.WidgetDataSource
 
 interface WidgetRepository {
-    fun getDeviceOfWidget(widgetId: Int): Either<Failure, String>
-    fun setDeviceOfWidget(widgetId: Int, deviceId: String)
-    fun setWidgetIds(widgetId: Int)
+    fun getWidgetDevice(widgetId: Int): Either<Failure, String>
+    fun setWidgetDevice(widgetId: Int, deviceId: String)
+    fun setWidgetId(widgetId: Int)
     fun removeWidgetId(widgetId: Int)
 }
 
@@ -15,19 +15,19 @@ class WidgetRepositoryImpl(
     private val dataSource: WidgetDataSource
 ) : WidgetRepository {
 
-    override fun getDeviceOfWidget(widgetId: Int): Either<Failure, String> {
-        return dataSource.getDeviceOfWidget(widgetId)
+    override fun getWidgetDevice(widgetId: Int): Either<Failure, String> {
+        return dataSource.getWidgetDevice(widgetId)
     }
 
-    override fun setDeviceOfWidget(widgetId: Int, deviceId: String) {
-        dataSource.setDeviceOfWidget(widgetId, deviceId)
+    override fun setWidgetDevice(widgetId: Int, deviceId: String) {
+        dataSource.setWidgetDevice(widgetId, deviceId)
     }
 
-    override fun setWidgetIds(widgetId: Int) {
-        dataSource.setWidgetIds(widgetId.toString())
+    override fun setWidgetId(widgetId: Int) {
+        dataSource.setWidgetId(widgetId)
     }
 
     override fun removeWidgetId(widgetId: Int) {
-        dataSource.removeWidgetId(widgetId.toString())
+        dataSource.removeWidgetId(widgetId)
     }
 }
