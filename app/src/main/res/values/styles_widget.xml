@@ -115,7 +115,7 @@
         <item name="cardBackgroundColor">@color/colorSurface</item>
         <item name="cardCornerRadius">@dimen/card_corner_radius</item>
         <item name="cardPreventCornerOverlap">false</item>
-        <item name="contentPadding">@dimen/padding_large</item>
+        <item name="contentPadding">@dimen/padding_normal_to_large</item>
     </style>
 
     <style name="Widget.WeatherXM.MaterialCard.Small" parent="Widget.WeatherXM.MaterialCard">

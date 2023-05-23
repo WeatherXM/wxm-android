@@ -319,7 +319,7 @@ fun LineChart.initializePrecipitation24hChart(
     accumulatedDataLineDataSetsWithValues.forEach {
         // Precipitation Accumulated Settings
         it.axisDependency = YAxis.AxisDependency.LEFT
-        it.setDrawCircles(false)
+        if (it.values.size > 1) it.setDrawCircles(false)
         it.lineWidth = 0F
         it.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
         it.setDrawFilled(true)
@@ -330,7 +330,7 @@ fun LineChart.initializePrecipitation24hChart(
     dataSets.addAll(rateLineDataSetsWithValues.primaryLineInit(context, resources))
     rateLineDataSetsWithValues.forEach {
         // Precipitation Intensity Settings
-        it.setDrawCircles(false)
+        if (it.values.size > 1) it.setDrawCircles(false)
         it.axisDependency = YAxis.AxisDependency.RIGHT
         it.mode = LineDataSet.Mode.STEPPED
     }
@@ -491,7 +491,7 @@ fun LineChart.initializeSolarChart(
     dataSets.addAll(radiationDataLineDataSetsWithValues.secondaryLineInit(context, resources))
     radiationDataLineDataSetsWithValues.forEach {
         // Radiation Settings
-        it.setDrawCircles(false)
+        if (it.values.size > 1) it.setDrawCircles(false)
         it.setDrawFilled(true)
         it.lineWidth = 0.2F
         it.axisDependency = YAxis.AxisDependency.RIGHT
@@ -505,7 +505,7 @@ fun LineChart.initializeSolarChart(
     uvLineDataSetsWithValues.forEach {
         // UV Settings
         it.axisDependency = YAxis.AxisDependency.LEFT
-        it.setDrawCircles(false)
+        if (it.values.size > 1) it.setDrawCircles(false)
         it.mode = LineDataSet.Mode.STEPPED
     }
     dataSets.addAll(uvEmptyLineDataSets)

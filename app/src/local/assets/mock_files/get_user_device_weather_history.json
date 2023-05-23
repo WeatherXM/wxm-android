@@ -1,7 +1,7 @@
 [
     {
         "tz": "Europe/Athens",
-        "date": "2023-04-15",
+        "date": "2023-05-23",
         "hourly": [
             {
                 "precipitation_accumulated": 0,
@@ -18,7 +18,7 @@
                 "feels_like": 18.961538461538453,
                 "solar_irradiance": 0,
                 "dew_point": 4.322278532673389,
-                "timestamp": "2023-04-15T00:00:00+03:00"
+                "timestamp": "2023-05-23T00:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -35,7 +35,7 @@
                 "feels_like": 19.438288288288284,
                 "solar_irradiance": 0,
                 "dew_point": 3.9746432505879503,
-                "timestamp": "2023-04-15T01:00:00+03:00"
+                "timestamp": "2023-05-23T01:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -52,7 +52,7 @@
                 "feels_like": 18.91488372093024,
                 "solar_irradiance": 0,
                 "dew_point": 5.718142796222107,
-                "timestamp": "2023-04-15T02:00:00+03:00"
+                "timestamp": "2023-05-23T02:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -69,7 +69,7 @@
                 "feels_like": 17.96923076923079,
                 "solar_irradiance": 0,
                 "dew_point": 11.524077151944436,
-                "timestamp": "2023-04-15T03:00:00+03:00"
+                "timestamp": "2023-05-23T03:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -86,7 +86,7 @@
                 "feels_like": 17.405855855855897,
                 "solar_irradiance": 0,
                 "dew_point": 12.515865601692797,
-                "timestamp": "2023-04-15T04:00:00+03:00"
+                "timestamp": "2023-05-23T04:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -103,7 +103,7 @@
                 "feels_like": 16.821917808219162,
                 "solar_irradiance": 0,
                 "dew_point": 13.730666430455821,
-                "timestamp": "2023-04-15T05:00:00+03:00"
+                "timestamp": "2023-05-23T05:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -120,7 +120,7 @@
                 "feels_like": 16.60223214285715,
                 "solar_irradiance": 0.2580503512880562,
                 "dew_point": 13.137310211909028,
-                "timestamp": "2023-04-15T06:00:00+03:00"
+                "timestamp": "2023-05-23T06:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -137,7 +137,7 @@
                 "feels_like": 17.258215962441348,
                 "solar_irradiance": 19.27310859693681,
                 "dew_point": 11.95135088291355,
-                "timestamp": "2023-04-15T07:00:00+03:00"
+                "timestamp": "2023-05-23T07:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -154,7 +154,7 @@
                 "feels_like": 18.167873303167415,
                 "solar_irradiance": 90.421815889029,
                 "dew_point": 12.166123830358467,
-                "timestamp": "2023-04-15T08:00:00+03:00"
+                "timestamp": "2023-05-23T08:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -171,7 +171,7 @@
                 "feels_like": 18.713824884792636,
                 "solar_irradiance": 166.96245372818615,
                 "dew_point": 13.348052752821564,
-                "timestamp": "2023-04-15T09:00:00+03:00"
+                "timestamp": "2023-05-23T09:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -188,7 +188,7 @@
                 "feels_like": 19.929729729729743,
                 "solar_irradiance": 249.65031014621178,
                 "dew_point": 14.295034940833366,
-                "timestamp": "2023-04-15T10:00:00+03:00"
+                "timestamp": "2023-05-23T10:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -205,7 +205,7 @@
                 "feels_like": 21.403636363636355,
                 "solar_irradiance": 380.7677347242921,
                 "dew_point": 14.553186662800234,
-                "timestamp": "2023-04-15T11:00:00+03:00"
+                "timestamp": "2023-05-23T11:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -222,7 +222,7 @@
                 "feels_like": 21.52374429223744,
                 "solar_irradiance": 466.2163709858522,
                 "dew_point": 15.13786586720627,
-                "timestamp": "2023-04-15T12:00:00+03:00"
+                "timestamp": "2023-05-23T12:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -239,7 +239,7 @@
                 "feels_like": 20.997272727272712,
                 "solar_irradiance": 445.50558867362145,
                 "dew_point": 14.167588790270676,
-                "timestamp": "2023-04-15T13:00:00+03:00"
+                "timestamp": "2023-05-23T13:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -256,7 +256,7 @@
                 "feels_like": 21.531651376146783,
                 "solar_irradiance": 619.3289968416303,
                 "dew_point": 13.181697663768386,
-                "timestamp": "2023-04-15T14:00:00+03:00"
+                "timestamp": "2023-05-23T14:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -273,7 +273,7 @@
                 "feels_like": 20.94587155963303,
                 "solar_irradiance": 418.9793201985261,
                 "dew_point": 13.142005585342462,
-                "timestamp": "2023-04-15T15:00:00+03:00"
+                "timestamp": "2023-05-23T15:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -290,7 +290,7 @@
                 "feels_like": 20.88721461187214,
                 "solar_irradiance": 423.62044314694214,
                 "dew_point": 12.833876822736258,
-                "timestamp": "2023-04-15T16:00:00+03:00"
+                "timestamp": "2023-05-23T16:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -307,7 +307,7 @@
                 "feels_like": 19.582727272727283,
                 "solar_irradiance": 171.38863636363635,
                 "dew_point": 12.34833929134884,
-                "timestamp": "2023-04-15T17:00:00+03:00"
+                "timestamp": "2023-05-23T17:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -324,24 +324,7 @@
                 "feels_like": 18.986301369863032,
                 "solar_irradiance": 118.84119320308406,
                 "dew_point": 12.258928970494107,
-                "timestamp": "2023-04-15T18:00:00+03:00"
-            },
-            {
-                "precipitation_accumulated": 0,
-                "temperature": 17.75495495495497,
-                "wind_speed": 0.20527027027027048,
-                "wind_direction": 57,
-                "humidity": 70,
-                "uv_index": 0,
-                "pressure": 1008.7983783783776,
-                "illuminance": 2577.1846846846847,
-                "wind_gust": 1.02,
-                "precipitation": 0,
-                "icon": "partly-cloudy-day",
-                "feels_like": 17.75495495495497,
-                "solar_irradiance": 21.12446462856299,
-                "dew_point": 12.212091070075475,
-                "timestamp": "2023-04-15T19:00:00+03:00"
+                "timestamp": "2023-05-23T18:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -358,24 +341,7 @@
                 "feels_like": 16.895813953488343,
                 "solar_irradiance": 0.11578345406023637,
                 "dew_point": 12.02477838453084,
-                "timestamp": "2023-04-15T20:00:00+03:00"
-            },
-            {
-                "precipitation_accumulated": 0,
-                "temperature": 16.609090909090913,
-                "wind_speed": 0.1750454545454546,
-                "wind_direction": 269,
-                "humidity": 74,
-                "uv_index": 0,
-                "pressure": 1009.3615454545443,
-                "illuminance": 0,
-                "wind_gust": 1.53,
-                "precipitation": 0,
-                "icon": "partly-cloudy-night",
-                "feels_like": 16.609090909090913,
-                "solar_irradiance": 0,
-                "dew_point": 11.955054433114904,
-                "timestamp": "2023-04-15T21:00:00+03:00"
+                "timestamp": "2023-05-23T20:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -392,7 +358,7 @@
                 "feels_like": 15.954298642533974,
                 "solar_irradiance": 0,
                 "dew_point": 11.323496673781024,
-                "timestamp": "2023-04-15T22:00:00+03:00"
+                "timestamp": "2023-05-23T22:00:00+03:00"
             },
             {
                 "precipitation_accumulated": 0,
@@ -409,7 +375,7 @@
                 "feels_like": 15.95318181818182,
                 "solar_irradiance": 0,
                 "dew_point": 11.32241942980586,
-                "timestamp": "2023-04-15T23:00:00+03:00"
+                "timestamp": "2023-05-23T23:00:00+03:00"
             }
         ]
     },

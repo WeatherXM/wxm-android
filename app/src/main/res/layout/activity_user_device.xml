@@ -66,13 +66,14 @@
             android:id="@+id/deviceInfoCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-24dp"
+            android:layout_marginTop="-28dp"
             app:cardCornerRadius="@dimen/card_corner_radius_big"
             app:cardElevation="@dimen/elevation_small">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/padding_small">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/address"

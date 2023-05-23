@@ -146,17 +146,18 @@
                 android:orientation="horizontal"
                 android:weightSum="2">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_normal"
                     android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="@dimen/padding_normal">
 
                     <com.airbnb.lottie.LottieAnimationView
                         android:id="@+id/icon"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:lottie_autoPlay="true"
@@ -164,63 +165,74 @@
                         tools:background="#88212121"
                         tools:lottie_rawRes="@raw/anim_weather_clear_day" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/temperature"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-                        android:textSize="32sp"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/icon"
-                        tools:text="26" />
+                        android:gravity="center">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/temperatureUnit"
-                        android:layout_width="wrap_content"
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/temperature"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                            android:textSize="32sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="26" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/temperatureUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
+                            android:textSize="32sp"
+                            app:layout_constraintStart_toEndOf="@id/temperature"
+                            app:layout_constraintTop_toTopOf="@id/temperature"
+                            tools:text="°C" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
-                        android:textSize="32sp"
-                        app:layout_constraintStart_toEndOf="@id/temperature"
-                        app:layout_constraintTop_toTopOf="@id/temperature"
-                        tools:text="°C" />
+                        android:gravity="center">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/feelsLikeTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/feels_like"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Subtitle"
-                        app:layout_constraintBottom_toBottomOf="@id/feelsLike"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/feelsLike" />
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/feelsLikeTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/feels_like"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Subtitle"
+                            app:layout_constraintBottom_toBottomOf="@id/feelsLike"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/feelsLike" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/feelsLike"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_small"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-                        app:layout_constraintStart_toEndOf="@id/feelsLikeTitle"
-                        app:layout_constraintTop_toBottomOf="@id/temperature"
-                        tools:text="26" />
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/feelsLike"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_small"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                            app:layout_constraintStart_toEndOf="@id/feelsLikeTitle"
+                            app:layout_constraintTop_toBottomOf="@id/temperature"
+                            tools:text="26" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/feelsLikeUnit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
-                        android:textSize="16sp"
-                        app:layout_constraintStart_toEndOf="@id/feelsLike"
-                        app:layout_constraintTop_toTopOf="@id/feelsLike"
-                        tools:text="°C" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/feelsLikeUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
+                            android:textSize="16sp"
+                            app:layout_constraintStart_toEndOf="@id/feelsLike"
+                            app:layout_constraintTop_toTopOf="@id/feelsLike"
+                            tools:text="°C" />
+                    </LinearLayout>
+                </LinearLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:padding="@dimen/padding_normal">
 
@@ -236,7 +248,7 @@
                         android:id="@+id/wind"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
+                        app:layout_constraintBottom_toTopOf="@id/rain"
                         app:layout_constraintTop_toBottomOf="@id/humidity"
                         app:weather_data_icon="@drawable/ic_weather_wind"
                         app:weather_data_title="@string/wind" />
@@ -245,8 +257,7 @@
                         android:id="@+id/rain"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
-                        app:layout_constraintTop_toBottomOf="@id/wind"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:weather_data_icon="@drawable/ic_weather_precipitation"
                         app:weather_data_title="@string/precipitation_rate" />
                 </androidx.constraintlayout.widget.ConstraintLayout>

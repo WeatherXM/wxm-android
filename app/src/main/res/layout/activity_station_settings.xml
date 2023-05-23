@@ -45,6 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_normal"
+                android:visibility="gone"
                 app:cardElevation="@dimen/elevation_small"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -266,23 +267,25 @@
                         android:id="@+id/stationInformation"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_normal_to_large"
                         android:text="@string/station_information"
                         android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
-                        app:layout_constraintBottom_toBottomOf="@id/shareBtn"
                         app:layout_constraintEnd_toStartOf="@id/shareBtn"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/shareBtn" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/shareBtn"
                         style="@style/Widget.WeatherXM.TextButton.Subtle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="-12dp"
                         android:text="@string/share"
                         app:icon="@drawable/ic_share"
                         app:iconPadding="@dimen/padding_small"
+                        app:layout_constraintBottom_toBottomOf="@id/stationInformation"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="@id/stationInformation" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerStationInfo"
