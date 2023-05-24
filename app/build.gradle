@@ -28,7 +28,7 @@ android {
         applicationId "com.weatherxm.app"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 41
+        versionCode 42
         versionName "3.5.1"
 
         // Resource value fields
