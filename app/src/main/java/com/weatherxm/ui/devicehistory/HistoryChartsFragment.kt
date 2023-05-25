@@ -1,31 +1,27 @@
 package com.weatherxm.ui.devicehistory
 
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentHistoryChartsBinding
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Weather
-import com.weatherxm.util.clearHighlightValue
-import com.weatherxm.util.getDatasetsNumber
-import com.weatherxm.util.initializeHumidity24hChart
-import com.weatherxm.util.initializePrecipitation24hChart
-import com.weatherxm.util.initializePressure24hChart
-import com.weatherxm.util.initializeSolarChart
-import com.weatherxm.util.initializeTemperature24hChart
-import com.weatherxm.util.initializeWind24hChart
-import com.weatherxm.util.onHighlightValue
+import com.weatherxm.util.initHumidity24hChart
+import com.weatherxm.util.initPrecipitation24hChart
+import com.weatherxm.util.initPressure24hChart
+import com.weatherxm.util.initSolarChart
+import com.weatherxm.util.initTemperature24hChart
+import com.weatherxm.util.initWind24hChart
 import timber.log.Timber
-import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter.ofLocalizedDate
 import java.time.format.FormatStyle
 
 class HistoryChartsFragment : Fragment() {
@@ -40,13 +36,12 @@ class HistoryChartsFragment : Fragment() {
 
     private var onAutoHighlighting = false
 
-    @Suppress("SwallowedException")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         try {
             callback = activity as SwipeRefreshCallback
         } catch (e: ClassCastException) {
-            Timber.w("${activity?.localClassName} does not implement SwipeRefreshCallback")
+            Timber.w(e, "${activity?.localClassName} does not implement SwipeRefreshCallback")
         }
     }
 
@@ -63,10 +58,10 @@ class HistoryChartsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(binding.displayTimeNotice) {
-            visibility = model.device.timezone?.let {
+            model.device.timezone?.let {
                 text = getString(R.string.displayed_times, it)
-                View.VISIBLE
-            } ?: View.GONE
+                setVisible(true)
+            } ?: setVisible(false)
         }
 
         binding.swiperefresh.setOnRefreshListener {
@@ -78,66 +73,59 @@ class HistoryChartsFragment : Fragment() {
             when (resource.status) {
                 Status.SUCCESS -> {
                     binding.swiperefresh.isRefreshing = false
-                    val isEmpty = resource.data == null || resource.data.isEmpty()
-                    if (isEmpty) {
-                        binding.chartsView.visibility = View.GONE
+                    val data = resource.data
+                    if (data == null || data.isEmpty()) {
+                        binding.chartsView.setVisible(false)
                         binding.empty.clear()
-                        binding.empty.title(getString(R.string.empty_history_day_title))
-                        binding.empty.subtitle(
-                            resource.data?.date?.let {
-                                getString(
-                                    R.string.empty_history_day_subtitle_with_day,
-                                    it.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
-                                )
-                            } ?: getString(R.string.empty_history_day_subtitle)
-                        )
-                        binding.empty.animation(R.raw.anim_empty_generic)
-                        binding.empty.visibility = View.VISIBLE
+                            .title(getString(R.string.empty_history_day_title))
+                            .subtitle(
+                                resource.data?.date?.let {
+                                    getString(
+                                        R.string.empty_history_day_subtitle_with_day,
+                                        it.format(ofLocalizedDate(FormatStyle.MEDIUM))
+                                    )
+                                } ?: getString(R.string.empty_history_day_subtitle)
+                            )
+                            .animation(R.raw.anim_empty_generic)
+                            .setVisible(true)
                     } else {
-                        resource.data?.let {
-                            Timber.d("Updating charts for ${it.date}")
-                            clearCharts()
-                            initTemperatureChart(it.temperature, it.feelsLike)
-                            initWindChart(it.windSpeed, it.windGust, it.windDirection)
-                            initPrecipitationChart(it.precipitation, it.precipitationAccumulated)
-                            initHumidityChart(it.humidity)
-                            initPressureChart(it.pressure)
-                            initSolarChart(it.uv, it.solarRadiation)
-                            if (model.isTodayShown()) {
-                                // Auto highlight latest entry
-                                autoHighlightCharts(model.getLatestChartEntry(it.temperature))
-                            } else {
-                                // Auto highlight past dates on 00:00
-                                autoHighlightCharts(0F)
-                            }
+                        Timber.d("Updating charts for ${data.date}")
+                        clearCharts()
+                        initTemperatureChart(data.temperature, data.feelsLike)
+                        initWindChart(data.windSpeed, data.windGust, data.windDirection)
+                        initPrecipitationChart(data.precipitation, data.precipitationAccumulated)
+                        initHumidityChart(data.humidity)
+                        initPressureChart(data.pressure)
+                        initSolarChart(data.uv, data.solarRadiation)
+                        if (model.isTodayShown()) {
+                            // Auto highlight latest entry
+                            autoHighlightCharts(model.getLatestChartEntry(data.temperature))
+                        } else {
+                            // Auto highlight past dates on 00:00
+                            autoHighlightCharts(0F)
                         }
-                        binding.empty.visibility = View.GONE
-                        binding.chartsView.visibility = View.VISIBLE
+                        binding.empty.setVisible(false)
+                        binding.chartsView.setVisible(true)
                     }
                 }
-
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
                     binding.swiperefresh.isRefreshing = false
-                    binding.chartsView.visibility = View.GONE
+                    binding.chartsView.setVisible(false)
                     binding.empty.clear()
-                    binding.empty.animation(R.raw.anim_error)
-                    binding.empty.title(getString(R.string.error_history_no_data_on_day))
-                    binding.empty.subtitle(resource.message)
-                    binding.empty.action(getString(R.string.action_retry))
-                    binding.empty.listener { callback?.onSwipeRefresh() }
-                    binding.empty.visibility = View.VISIBLE
+                        .animation(R.raw.anim_error)
+                        .title(getString(R.string.error_history_no_data_on_day))
+                        .subtitle(resource.message)
+                        .action(getString(R.string.action_retry))
+                        .listener { callback?.onSwipeRefresh() }
+                        .setVisible(true)
                 }
-
                 Status.LOADING -> {
                     if (binding.swiperefresh.isRefreshing) {
-                        binding.empty.clear()
-                        binding.empty.visibility = View.GONE
+                        binding.empty.clear().setVisible(false)
                     } else {
                         binding.chartsView.visibility = View.GONE
-                        binding.empty.clear()
-                        binding.empty.animation(R.raw.anim_loading)
-                        binding.empty.visibility = View.VISIBLE
+                        binding.empty.clear().animation(R.raw.anim_loading).setVisible(true)
                     }
                 }
             }
@@ -145,31 +133,19 @@ class HistoryChartsFragment : Fragment() {
     }
 
     private fun clearCharts() {
-        binding.chartTemperature.onClearHighlight()
-        binding.chartTemperature.getChart().clearHighlightValue()
-        binding.chartTemperature.getChart().clear()
-        binding.chartPressure.onClearHighlight()
-        binding.chartPressure.getChart().clearHighlightValue()
-        binding.chartPressure.getChart().clear()
-        binding.chartHumidity.onClearHighlight()
-        binding.chartHumidity.getChart().clearHighlightValue()
-        binding.chartHumidity.getChart().clear()
-        binding.chartPrecipitation.onClearHighlight()
-        binding.chartPrecipitation.getChart().clearHighlightValue()
-        binding.chartPrecipitation.getChart().clear()
-        binding.chartWind.onClearHighlight()
-        binding.chartWind.getChart().clearHighlightValue()
-        binding.chartWind.getChart().clear()
-        binding.chartSolar.onClearHighlight()
-        binding.chartSolar.getChart().clearHighlightValue()
-        binding.chartSolar.getChart().clear()
+        binding.chartTemperature.clearChart()
+        binding.chartPressure.clearChart()
+        binding.chartHumidity.clearChart()
+        binding.chartPrecipitation.clearChart()
+        binding.chartWind.clearChart()
+        binding.chartSolar.clearChart()
     }
 
     private fun initTemperatureChart(temperatureData: LineChartData, feelsLikeData: LineChartData) {
         if (temperatureData.isDataValid() && feelsLikeData.isDataValid()) {
             model.temperatureDataSets = binding.chartTemperature
                 .getChart()
-                .initializeTemperature24hChart(temperatureData, feelsLikeData)
+                .initTemperature24hChart(temperatureData, feelsLikeData)
             binding.chartTemperature.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
@@ -202,14 +178,13 @@ class HistoryChartsFragment : Fragment() {
                     }
                 })
         } else {
-            showNoDataText(binding.chartTemperature.getChart())
+            binding.chartTemperature.showNoDataText()
         }
     }
 
     private fun initHumidityChart(data: LineChartData) {
         if (data.isDataValid()) {
-            model.humidityDataSets =
-                binding.chartHumidity.getChart().initializeHumidity24hChart(data)
+            model.humidityDataSets = binding.chartHumidity.getChart().initHumidity24hChart(data)
             binding.chartHumidity.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
@@ -229,14 +204,13 @@ class HistoryChartsFragment : Fragment() {
                     }
                 })
         } else {
-            showNoDataText(binding.chartHumidity.getChart())
+            binding.chartHumidity.showNoDataText()
         }
     }
 
     private fun initPressureChart(data: LineChartData) {
         if (data.isDataValid()) {
-            model.pressureDataSets =
-                binding.chartPressure.getChart().initializePressure24hChart(data)
+            model.pressureDataSets = binding.chartPressure.getChart().initPressure24hChart(data)
             binding.chartPressure.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
@@ -257,14 +231,14 @@ class HistoryChartsFragment : Fragment() {
                     }
                 })
         } else {
-            showNoDataText(binding.chartPressure.getChart())
+            binding.chartPressure.showNoDataText()
         }
     }
 
     private fun initSolarChart(uvData: LineChartData, radiationData: LineChartData) {
         if (uvData.isDataValid() && radiationData.isDataValid()) {
             model.solarDataSets =
-                binding.chartSolar.getChart().initializeSolarChart(uvData, radiationData)
+                binding.chartSolar.getChart().initSolarChart(uvData, radiationData)
             binding.chartSolar.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
@@ -287,7 +261,7 @@ class HistoryChartsFragment : Fragment() {
                     }
                 })
         } else {
-            showNoDataText(binding.chartSolar.getChart())
+            binding.chartSolar.showNoDataText()
         }
     }
 
@@ -295,7 +269,7 @@ class HistoryChartsFragment : Fragment() {
         if (rateData.isDataValid() && accumulatedData.isDataValid()) {
             model.precipDataSets = binding.chartPrecipitation
                 .getChart()
-                .initializePrecipitation24hChart(rateData, accumulatedData)
+                .initPrecipitation24hChart(rateData, accumulatedData)
             binding.chartPrecipitation.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
@@ -324,7 +298,7 @@ class HistoryChartsFragment : Fragment() {
                     }
                 })
         } else {
-            showNoDataText(binding.chartPrecipitation.getChart())
+            binding.chartPrecipitation.showNoDataText()
         }
     }
 
@@ -337,7 +311,7 @@ class HistoryChartsFragment : Fragment() {
         ) {
             model.windDataSets = binding.chartWind
                 .getChart()
-                .initializeWind24hChart(windSpeedData, windGustData)
+                .initWind24hChart(windSpeedData, windGustData)
             binding.chartWind.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
@@ -366,7 +340,7 @@ class HistoryChartsFragment : Fragment() {
                     }
                 })
         } else {
-            showNoDataText(binding.chartWind.getChart())
+            binding.chartWind.showNoDataText()
         }
     }
 
@@ -375,37 +349,29 @@ class HistoryChartsFragment : Fragment() {
         onAutoHighlighting = true
         with(binding) {
             val temperatureDataSetIndex = model.getDataSetIndexForHighlight(
-                x, model.temperatureDataSets, chartTemperature.getChart().getDatasetsNumber() / 2
+                x, model.temperatureDataSets, chartTemperature.getDatasetsSize() / 2
             )
             val precipDataSetIndex = model.getDataSetIndexForHighlight(
-                x, model.precipDataSets, chartPrecipitation.getChart().getDatasetsNumber() / 2
+                x, model.precipDataSets, chartPrecipitation.getDatasetsSize() / 2
             )
             val windDataSetIndex = model.getDataSetIndexForHighlight(
-                x, model.windDataSets, chartWind.getChart().getDatasetsNumber() / 2
+                x, model.windDataSets, chartWind.getDatasetsSize() / 2
             )
             val humidityDataSetIndex =
                 model.getDataSetIndexForHighlight(x, model.humidityDataSets, 0)
             val pressureDataSetIndex =
                 model.getDataSetIndexForHighlight(x, model.pressureDataSets, 0)
             val solarDataSetIndex = model.getDataSetIndexForHighlight(
-                x, model.solarDataSets, chartSolar.getChart().getDatasetsNumber() / 2
+                x, model.solarDataSets, chartSolar.getDatasetsSize() / 2
             )
 
-            chartTemperature.getChart().onHighlightValue(x, temperatureDataSetIndex)
-            chartPrecipitation.getChart().onHighlightValue(x, precipDataSetIndex)
-            chartWind.getChart().onHighlightValue(x, windDataSetIndex)
-            chartHumidity.getChart().onHighlightValue(x, humidityDataSetIndex)
-            chartPressure.getChart().onHighlightValue(x, pressureDataSetIndex)
-            chartSolar.getChart().onHighlightValue(x, solarDataSetIndex)
+            chartTemperature.onHighlightValue(x, temperatureDataSetIndex)
+            chartPrecipitation.onHighlightValue(x, precipDataSetIndex)
+            chartWind.onHighlightValue(x, windDataSetIndex)
+            chartHumidity.onHighlightValue(x, humidityDataSetIndex)
+            chartPressure.onHighlightValue(x, pressureDataSetIndex)
+            chartSolar.onHighlightValue(x, solarDataSetIndex)
         }
         onAutoHighlighting = false
-    }
-
-    private fun showNoDataText(lineChart: LineChart) {
-        lineChart.setNoDataText(getString(R.string.error_history_no_data_chart_found))
-        context?.getColor(R.color.colorOnSurface)?.let {
-            lineChart.setNoDataTextColor(it)
-        }
-        lineChart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
     }
 }

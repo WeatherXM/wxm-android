@@ -23,6 +23,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.ui.common.show
 import com.weatherxm.ui.devicehistory.LineChartData
+import com.weatherxm.util.Weather.getDecimalsPressure
 
 private const val CHART_OFFSET = 5F
 private const val LINE_WIDTH = 2F
@@ -180,13 +181,16 @@ private fun createDataSetToXPointsMap(
     return dataSetIndexToXPoints
 }
 
-fun LineChart.initializeTemperature24hChart(
+fun LineChart.initTemperature24hChart(
     temperatureData: LineChartData, feelsLikeData: LineChartData
 ): MutableMap<Int, List<Float>> {
-    val temperatureLineDataSetsWithValues = temperatureData.getLineDataSetsWithValues()
-    val temperatureEmptyLineDataSets = temperatureData.getEmptyLineDataSets()
-    val feelsLikeLineDataSetsWithValues = feelsLikeData.getLineDataSetsWithValues()
-    val feelsLikeEmptyLineDataSets = feelsLikeData.getEmptyLineDataSets()
+    val tempLabel = resources.getString(R.string.temperature)
+    val feelsLikeLabel = resources.getString(R.string.feels_like)
+
+    val temperatureLineDataSetsWithValues = temperatureData.getLineDataSetsWithValues(tempLabel)
+    val temperatureEmptyLineDataSets = temperatureData.getEmptyLineDataSets(tempLabel)
+    val feelsLikeLineDataSetsWithValues = feelsLikeData.getLineDataSetsWithValues(feelsLikeLabel)
+    val feelsLikeEmptyLineDataSets = feelsLikeData.getEmptyLineDataSets(feelsLikeLabel)
     val dataSets = mutableListOf<ILineDataSet>()
 
     dataSets.addAll(feelsLikeLineDataSetsWithValues.secondaryLineInit(context, resources))
@@ -200,9 +204,9 @@ fun LineChart.initializeTemperature24hChart(
     // Set the default settings we want to all LineCharts
     setDefaultSettings()
 
-    // Y Axis settings
-
     /*
+    * Y Axis settings
+    *
     * If max - min < 2 that means that the values are probably too close together.
     * Which causes a bug not showing labels on Y axis because granularity is set 1.
     * So this is a custom fix to add custom minimum and maximum values on the Y Axis
@@ -211,17 +215,15 @@ fun LineChart.initializeTemperature24hChart(
     val yMaxTemperature = temperatureLineDataSetsWithValues.maxOf { it.yMax }
     val yMinFeelsLike = feelsLikeLineDataSetsWithValues.minOf { it.yMin }
     val yMaxFeelsLike = feelsLikeLineDataSetsWithValues.maxOf { it.yMax }
-    with(axisLeft) {
-        axisMinimum = if (yMinFeelsLike < yMinTemperature) {
-            yMinFeelsLike - 1
-        } else {
-            yMinTemperature - 1
-        }
-        axisMaximum = if (yMaxFeelsLike > yMaxTemperature) {
-            yMaxFeelsLike + 1
-        } else {
-            yMaxTemperature + 1
-        }
+    axisLeft.axisMinimum = if (yMinFeelsLike < yMinTemperature) {
+        yMinFeelsLike - 1
+    } else {
+        yMinTemperature - 1
+    }
+    axisLeft.axisMaximum = if (yMaxFeelsLike > yMaxTemperature) {
+        yMaxFeelsLike + 1
+    } else {
+        yMaxTemperature + 1
     }
 
     // X axis settings
@@ -235,9 +237,11 @@ fun LineChart.initializeTemperature24hChart(
     )
 }
 
-fun LineChart.initializeHumidity24hChart(chartData: LineChartData): MutableMap<Int, List<Float>> {
-    val lineDataSetsWithValues = chartData.getLineDataSetsWithValues()
-    val emptyLineDataSets = chartData.getEmptyLineDataSets()
+fun LineChart.initHumidity24hChart(chartData: LineChartData): MutableMap<Int, List<Float>> {
+    val label = resources.getString(R.string.humidity)
+
+    val lineDataSetsWithValues = chartData.getLineDataSetsWithValues(label)
+    val emptyLineDataSets = chartData.getEmptyLineDataSets(label)
     val dataSets = mutableListOf<ILineDataSet>()
 
     dataSets.addAll(lineDataSetsWithValues.primaryLineInit(context, resources))
@@ -257,9 +261,10 @@ fun LineChart.initializeHumidity24hChart(chartData: LineChartData): MutableMap<I
 }
 
 @Suppress("MagicNumber")
-fun LineChart.initializePressure24hChart(chartData: LineChartData): MutableMap<Int, List<Float>> {
-    val lineDataSetsWithValues = chartData.getLineDataSetsWithValues()
-    val emptyLineDataSets = chartData.getEmptyLineDataSets()
+fun LineChart.initPressure24hChart(chartData: LineChartData): MutableMap<Int, List<Float>> {
+    val label = resources.getString(R.string.pressure)
+    val lineDataSetsWithValues = chartData.getLineDataSetsWithValues(label)
+    val emptyLineDataSets = chartData.getEmptyLineDataSets(label)
     val dataSets = mutableListOf<ILineDataSet>()
 
     dataSets.addAll(lineDataSetsWithValues.primaryLineInit(context, resources))
@@ -271,29 +276,27 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData): MutableMap<I
     // Set the default settings we want to all LineCharts
     setDefaultSettings()
 
-    // Y Axis settings
-
     /*
+    * Y Axis settings
+    *
     * If max - min < 2 that means that the values are probably too close together.
     * Which causes a bug not showing labels on Y axis because granularity is set 1.
     * So this is a custom fix to add custom minimum and maximum values on the Y Axis
     */
-    with(axisLeft) {
-        val yMin = lineDataSetsWithValues.minOf { it.yMin }
-        val yMax = lineDataSetsWithValues.maxOf { it.yMax }
-        if (yMax - yMin < 2) {
-            if (chartData.unit == resources.getString(R.string.pressure_inHg)) {
-                axisMinimum = yMin - 0.1F
-                axisMaximum = yMax + 0.1F
-                granularity = Y_AXIS_PRESSURE_INHG_GRANULARITY
-                /**
-                 * Axis Left is DISABLED so the following lines commented out are not needed
-                 * valueFormatter = CustomYAxisFormatter(chartData.unit, 2)
-                 */
-            } else {
-                axisMinimum = yMin - 1
-                axisMaximum = yMax + 1
-            }
+    val yMin = lineDataSetsWithValues.minOf { it.yMin }
+    val yMax = lineDataSetsWithValues.maxOf { it.yMax }
+    if (yMax - yMin < 2) {
+        if (getDecimalsPressure() == 2) {
+            axisLeft.axisMinimum = yMin - 0.1F
+            axisLeft.axisMaximum = yMax + 0.1F
+            axisLeft.granularity = Y_AXIS_PRESSURE_INHG_GRANULARITY
+            /**
+             * Axis Left is DISABLED so the following lines commented out are not needed
+             * valueFormatter = CustomYAxisFormatter(chartData.unit, 2)
+             */
+        } else {
+            axisLeft.axisMinimum = yMin - 1
+            axisLeft.axisMaximum = yMax + 1
         }
     }
 
@@ -305,14 +308,18 @@ fun LineChart.initializePressure24hChart(chartData: LineChartData): MutableMap<I
     return createDataSetToXPointsMap(0, lineDataSetsWithValues)
 }
 
-@Suppress("MagicNumber")
-fun LineChart.initializePrecipitation24hChart(
+@Suppress("MagicNumber", "LongMethod")
+fun LineChart.initPrecipitation24hChart(
     rateData: LineChartData, accumulatedData: LineChartData
 ): MutableMap<Int, List<Float>> {
-    val rateLineDataSetsWithValues = rateData.getLineDataSetsWithValues()
-    val rateEmptyLineDataSets = rateData.getEmptyLineDataSets()
-    val accumulatedDataLineDataSetsWithValues = accumulatedData.getLineDataSetsWithValues()
-    val accumulatedDataEmptyLineDataSets = accumulatedData.getEmptyLineDataSets()
+    val rateLabel = resources.getString(R.string.precipitation_rate)
+    val accumulationLabel = resources.getString(R.string.daily_precipitation)
+
+    val rateLineDataSetsWithValues = rateData.getLineDataSetsWithValues(rateLabel)
+    val rateEmptyLineDataSets = rateData.getEmptyLineDataSets(rateLabel)
+    val accumulatedDataLineDataSetsWithValues =
+        accumulatedData.getLineDataSetsWithValues(accumulationLabel)
+    val accumulatedDataEmptyLineDataSets = accumulatedData.getEmptyLineDataSets(accumulationLabel)
     val dataSets = mutableListOf<ILineDataSet>()
 
     dataSets.addAll(accumulatedDataLineDataSetsWithValues.secondaryLineInit(context, resources))
@@ -343,12 +350,12 @@ fun LineChart.initializePrecipitation24hChart(
     setDefaultSettings()
 
     // General Chart Settings
-    val inchesUsed = rateData.unit == resources.getString(R.string.precipitation_in)
+    val decimals = Weather.getDecimalsPressure()
 
     // Y Axis settings
-    val customNumberForMinMax = if (inchesUsed) 0.01F else 0.1F
+    val customNumberForMinMax = if (decimals == 2) 0.01F else 0.1F
     with(axisLeft) {
-        granularity = if (inchesUsed) {
+        granularity = if (decimals == 2) {
             Y_AXIS_PRECIP_INCHES_GRANULARITY
         } else {
             Y_AXIS_1_DECIMAL_GRANULARITY
@@ -388,7 +395,7 @@ fun LineChart.initializePrecipitation24hChart(
          * setDrawGridLines(false)
          * valueFormatter = CustomYAxisFormatter(rateData.unit, Weather.getDecimalsPrecipitation())
          */
-        granularity = if (inchesUsed) {
+        granularity = if (decimals == 2) {
             Y_AXIS_PRECIP_INCHES_GRANULARITY
         } else {
             Y_AXIS_1_DECIMAL_GRANULARITY
@@ -421,14 +428,17 @@ fun LineChart.initializePrecipitation24hChart(
 }
 
 @Suppress("MagicNumber")
-fun LineChart.initializeWind24hChart(
+fun LineChart.initWind24hChart(
     windSpeedData: LineChartData,
     windGustData: LineChartData
 ): MutableMap<Int, List<Float>> {
-    val windSpeedLineDataSetsWithValues = windSpeedData.getLineDataSetsWithValues()
-    val windSpeedEmptyLineDataSets = windSpeedData.getEmptyLineDataSets()
-    val windGustLineDataSetsWithValues = windGustData.getLineDataSetsWithValues()
-    val windGustEmptyLineDataSets = windGustData.getEmptyLineDataSets()
+    val speedLabel = resources.getString(R.string.wind_speed)
+    val gustLabel = resources.getString(R.string.wind_gust)
+
+    val windSpeedLineDataSetsWithValues = windSpeedData.getLineDataSetsWithValues(speedLabel)
+    val windSpeedEmptyLineDataSets = windSpeedData.getEmptyLineDataSets(speedLabel)
+    val windGustLineDataSetsWithValues = windGustData.getLineDataSetsWithValues(gustLabel)
+    val windGustEmptyLineDataSets = windGustData.getEmptyLineDataSets(gustLabel)
     val dataSets = mutableListOf<ILineDataSet>()
 
     dataSets.addAll(windGustLineDataSetsWithValues.secondaryLineInit(context, resources))
@@ -442,8 +452,9 @@ fun LineChart.initializeWind24hChart(
     // Set the default settings we want to all LineCharts
     setDefaultSettings()
 
-    // Y Axis settings
     /*
+    * Y AXIS SETTINGS
+    *
     * If max - min < 2 that means that the values are probably too close together.
     * Which causes a bug not showing labels on Y axis because granularity is set 1.
     * So this is a custom fix to add custom minimum and maximum values on the Y Axis
@@ -479,13 +490,16 @@ fun LineChart.initializeWind24hChart(
 
 
 @Suppress("MagicNumber")
-fun LineChart.initializeSolarChart(
+fun LineChart.initSolarChart(
     uvData: LineChartData, radiationData: LineChartData
 ): MutableMap<Int, List<Float>> {
-    val uvLineDataSetsWithValues = uvData.getLineDataSetsWithValues()
-    val uvEmptyLineDataSets = uvData.getEmptyLineDataSets()
-    val radiationDataLineDataSetsWithValues = radiationData.getLineDataSetsWithValues()
-    val radiationDataEmptyLineDataSets = radiationData.getEmptyLineDataSets()
+    val uvLabel = resources.getString(R.string.uv_index)
+    val solarLabel = resources.getString(R.string.solar_radiation)
+
+    val uvLineDataSetsWithValues = uvData.getLineDataSetsWithValues(uvLabel)
+    val uvEmptyLineDataSets = uvData.getEmptyLineDataSets(uvLabel)
+    val radiationDataLineDataSetsWithValues = radiationData.getLineDataSetsWithValues(solarLabel)
+    val radiationDataEmptyLineDataSets = radiationData.getEmptyLineDataSets(solarLabel)
     val dataSets = mutableListOf<ILineDataSet>()
 
     dataSets.addAll(radiationDataLineDataSetsWithValues.secondaryLineInit(context, resources))
@@ -522,7 +536,6 @@ fun LineChart.initializeSolarChart(
         isGranularityEnabled = true
         granularity = 1F
     }
-    axisLeft.isEnabled = false
 
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(uvData.timestamps)
@@ -533,19 +546,6 @@ fun LineChart.initializeSolarChart(
         radiationDataLineDataSetsWithValues.size + radiationDataEmptyLineDataSets.size,
         uvLineDataSetsWithValues
     )
-}
-
-fun LineChart.onHighlightValue(x: Float, dataSetIndex: Int?) {
-    if (data == null || dataSetIndex == null) return
-    highlightValue(x, dataSetIndex)
-}
-
-fun LineChart.clearHighlightValue() {
-    highlightValue(null)
-}
-
-fun LineChart.getDatasetsNumber(): Int {
-    return if (data == null) 0 else data.dataSets.size
 }
 
 @Suppress("MagicNumber")

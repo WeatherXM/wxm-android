@@ -4,15 +4,10 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import arrow.core.Either
 import com.github.mikephil.charting.data.Entry
-import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.repository.WeatherHistoryRepository
-import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
-import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
-import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
-import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
 import com.weatherxm.ui.devicehistory.HistoryCharts
 import com.weatherxm.ui.devicehistory.LineChartData
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
@@ -68,217 +63,113 @@ class HistoryUseCaseImpl(
         val uvEntries = mutableListOf<Entry>()
         val solarRadiationEntries = mutableListOf<Entry>()
         val times = mutableListOf<String>()
-        var temperatureFound: Boolean
-        var feelsLikeFound: Boolean
-        var precipitationFound: Boolean
-        var precipAccumulatedFound: Boolean
-        var windSpeedFound: Boolean
-        var windGustFound: Boolean
-        var windDirectionFound: Boolean
-        var pressureFound: Boolean
-        var humidityFound: Boolean
-        var uvFound: Boolean
-        var solarRadiationFound: Boolean
 
         LocalDateTimeRange(
             date.atStartOfDay(),
             date.plusDays(1).atStartOfDay().minusHours(1)
         ).forEachIndexed { i, localDateTime ->
-            temperatureFound = false
-            feelsLikeFound = false
-            precipitationFound = false
-            precipAccumulatedFound = false
-            windSpeedFound = false
-            windGustFound = false
-            windDirectionFound = false
-            pressureFound = false
-            humidityFound = false
-            uvFound = false
-            solarRadiationFound = false
             val counter = i.toFloat()
+            val emptyEntry = Entry(counter, Float.NaN)
 
             // Set showMinutes12Format as false
             // on hourly data they don't matter and they cause UI issues
             times.add(localDateTime.getFormattedTime(context, false))
 
-            hourlyWeatherData.forEach { hourlyWeather ->
-                if (hourlyWeather.timestamp.toLocalDateTime() == localDateTime) {
-                    hourlyWeather.temperature?.let {
-                        temperatureEntries.add(Entry(counter, Weather.convertTemp(it, 1) as Float))
-                        temperatureFound = true
-                    }
-                    hourlyWeather.feelsLike?.let {
-                        feelsLikeEntries.add(Entry(counter, Weather.convertTemp(it, 1) as Float))
-                        feelsLikeFound = true
-                    }
-                    hourlyWeather.precipitation?.let {
-                        precipEntries.add(Entry(counter, Weather.convertPrecipitation(it) as Float))
-                        precipitationFound = true
-                    }
-                    hourlyWeather.precipAccumulated?.let {
-                        precipAccumulatedEntries.add(
-                            Entry(
-                                counter,
-                                Weather.convertPrecipitation(it) as Float
-                            )
-                        )
-                        precipAccumulatedFound = true
-                    }
+            hourlyWeatherData.firstOrNull {
+                it.timestamp.toLocalDateTime() == localDateTime
+            }?.let { hourlyWeather ->
+                hourlyWeather.temperature?.let {
+                    temperatureEntries.add(Entry(counter, Weather.convertTemp(it, 1) as Float))
+                } ?: temperatureEntries.add(emptyEntry)
 
-                    // Get the wind speed and direction formatted
-                    val windSpeedValue =
-                        Weather.convertWindSpeed(hourlyWeather.windSpeed)?.toFloat()
-                    val windGustValue = Weather.convertWindSpeed(hourlyWeather.windGust)?.toFloat()
-                    var windDirection: Drawable? = null
-                    hourlyWeather.windDirection?.let {
-                        val index = UnitConverter.getIndexOfCardinal(it)
-                        windDirection = resHelper.getWindDirectionDrawable(index)
-                        windDirectionEntries.add(Entry(counter, it.toFloat()))
-                        windDirectionFound = true
-                    }
+                hourlyWeather.feelsLike?.let {
+                    feelsLikeEntries.add(Entry(counter, Weather.convertTemp(it, 1) as Float))
+                } ?: feelsLikeEntries.add(emptyEntry)
 
-                    /**
-                     * Show wind direction only when
-                     * the icon is available &&
-                     * wind speed || wind gust are not null and greater than zero
-                     */
-                    val shouldShowDirection = windDirection != null &&
-                        (((windSpeedValue ?: 0.0F) > 0) || ((windGustValue ?: 0.0F) > 0))
+                hourlyWeather.precipitation?.let {
+                    precipEntries.add(Entry(counter, Weather.convertPrecipitation(it) as Float))
+                } ?: precipEntries.add(emptyEntry)
 
-                    windSpeedValue?.let {
-                        if (shouldShowDirection) {
-                            windSpeedEntries.add(Entry(counter, it, windDirection))
-                        } else {
-                            windSpeedEntries.add(Entry(counter, it))
-                        }
-                        windSpeedFound = true
-                    }
+                hourlyWeather.precipAccumulated?.let {
+                    precipAccumulatedEntries.add(
+                        Entry(counter, Weather.convertPrecipitation(it) as Float)
+                    )
+                } ?: windSpeedEntries.add(emptyEntry)
 
-                    windGustValue?.let {
-                        windGustEntries.add(Entry(counter, it))
-                        windGustFound = true
-                    }
+                // Get the wind speed and direction formatted
+                val windSpeedValue = Weather.convertWindSpeed(hourlyWeather.windSpeed)?.toFloat()
+                val windGustValue = Weather.convertWindSpeed(hourlyWeather.windGust)?.toFloat()
+                var windDirection: Drawable? = null
+                hourlyWeather.windDirection?.let {
+                    val index = UnitConverter.getIndexOfCardinal(it)
+                    windDirection = resHelper.getWindDirectionDrawable(index)
+                    windDirectionEntries.add(Entry(counter, it.toFloat()))
+                } ?: windDirectionEntries.add(emptyEntry)
 
-                    hourlyWeather.pressure?.let {
-                        pressureEntries.add(Entry(counter, Weather.convertPressure(it) as Float))
-                        pressureFound = true
-                    }
-                    hourlyWeather.humidity?.let {
-                        humidityEntries.add(Entry(counter, it.toFloat()))
-                        humidityFound = true
-                    }
+                /**
+                 * Show wind direction only when
+                 * the icon is available &&
+                 * wind speed || wind gust are not null and greater than zero
+                 */
+                val shouldShowDirection = windDirection != null &&
+                    (((windSpeedValue ?: 0.0F) > 0) || ((windGustValue ?: 0.0F) > 0))
 
-                    hourlyWeather.uvIndex?.let {
-                        uvEntries.add(Entry(counter, it.toFloat()))
-                        uvFound = true
+                windSpeedValue?.let {
+                    if (shouldShowDirection) {
+                        windSpeedEntries.add(Entry(counter, it, windDirection))
+                    } else {
+                        windSpeedEntries.add(Entry(counter, it))
                     }
+                } ?: windSpeedEntries.add(emptyEntry)
 
-                    hourlyWeather.solarIrradiance?.let {
-                        solarRadiationEntries.add(Entry(counter, Weather.roundToDecimals(it)))
-                        solarRadiationFound = true
-                    }
-                }
+                windGustValue?.let {
+                    windGustEntries.add(Entry(counter, it))
+                } ?: windGustEntries.add(emptyEntry)
+
+                hourlyWeather.pressure?.let {
+                    pressureEntries.add(Entry(counter, Weather.convertPressure(it) as Float))
+                } ?: pressureEntries.add(emptyEntry)
+
+                hourlyWeather.humidity?.let {
+                    humidityEntries.add(Entry(counter, it.toFloat()))
+                } ?: humidityEntries.add(emptyEntry)
+
+                hourlyWeather.uvIndex?.let {
+                    uvEntries.add(Entry(counter, it.toFloat()))
+                } ?: uvEntries.add(emptyEntry)
+
+                hourlyWeather.solarIrradiance?.let {
+                    solarRadiationEntries.add(Entry(counter, Weather.roundToDecimals(it)))
+                } ?: solarRadiationEntries.add(Entry(counter, Float.NaN))
+
+            } ?: kotlin.run {
+                temperatureEntries.add(emptyEntry)
+                feelsLikeEntries.add(emptyEntry)
+                precipEntries.add(emptyEntry)
+                precipAccumulatedEntries.add(emptyEntry)
+                windSpeedEntries.add(emptyEntry)
+                windGustEntries.add(emptyEntry)
+                windDirectionEntries.add(emptyEntry)
+                pressureEntries.add(emptyEntry)
+                humidityEntries.add(emptyEntry)
+                uvEntries.add(emptyEntry)
+                solarRadiationEntries.add(emptyEntry)
             }
-
-            if (!temperatureFound) temperatureEntries.add(Entry(counter, Float.NaN))
-            if (!feelsLikeFound) feelsLikeEntries.add(Entry(counter, Float.NaN))
-            if (!precipitationFound) precipEntries.add(Entry(counter, Float.NaN))
-            if (!precipAccumulatedFound) precipAccumulatedEntries.add(Entry(counter, Float.NaN))
-            if (!windSpeedFound) windSpeedEntries.add(Entry(counter, Float.NaN))
-            if (!windGustFound) windGustEntries.add(Entry(counter, Float.NaN))
-            if (!windDirectionFound) windDirectionEntries.add(Entry(counter, Float.NaN))
-            if (!pressureFound) pressureEntries.add(Entry(counter, Float.NaN))
-            if (!humidityFound) humidityEntries.add(Entry(counter, Float.NaN))
-            if (!uvFound) uvEntries.add(Entry(counter, Float.NaN))
-            if (!solarRadiationFound) solarRadiationEntries.add(Entry(counter, Float.NaN))
         }
 
         return HistoryCharts(
             date = date,
-            temperature = LineChartData(
-                resHelper.getString(R.string.temperature),
-                Weather.getPreferredUnit(
-                    resHelper.getString(KEY_TEMPERATURE),
-                    resHelper.getString(R.string.temperature_celsius)
-                ),
-                times,
-                temperatureEntries
-            ),
-            feelsLike = LineChartData(
-                resHelper.getString(R.string.feels_like),
-                Weather.getPreferredUnit(
-                    resHelper.getString(KEY_TEMPERATURE),
-                    resHelper.getString(R.string.temperature_celsius)
-                ),
-                times,
-                feelsLikeEntries
-            ),
-            precipitation = LineChartData(
-                resHelper.getString(R.string.precipitation_rate),
-                Weather.getPrecipitationPreferredUnit(),
-                times,
-                precipEntries
-            ),
-            precipitationAccumulated = LineChartData(
-                resHelper.getString(R.string.daily_precipitation),
-                Weather.getPrecipitationPreferredUnit(false),
-                times,
-                precipAccumulatedEntries
-            ),
-            windSpeed = LineChartData(
-                resHelper.getString(R.string.wind_speed),
-                Weather.getPreferredUnit(
-                    resHelper.getString(KEY_WIND),
-                    resHelper.getString(R.string.wind_speed_ms)
-                ),
-                times,
-                windSpeedEntries
-            ),
-            windGust = LineChartData(
-                resHelper.getString(R.string.wind_gust),
-                Weather.getPreferredUnit(
-                    resHelper.getString(KEY_WIND),
-                    resHelper.getString(R.string.wind_speed_ms)
-                ),
-                times,
-                windGustEntries
-            ),
-            windDirection = LineChartData(
-                resHelper.getString(R.string.wind_direction),
-                Weather.getPreferredUnit(
-                    resHelper.getString(KEY_WIND_DIR),
-                    resHelper.getString(R.string.wind_direction_cardinal)
-                ),
-                times,
-                windDirectionEntries
-            ),
-            humidity = LineChartData(
-                resHelper.getString(R.string.humidity),
-                resHelper.getString(R.string.percent),
-                times,
-                humidityEntries
-            ),
-            pressure = LineChartData(
-                resHelper.getString(R.string.pressure),
-                Weather.getPreferredUnit(
-                    resHelper.getString(KEY_PRESSURE),
-                    resHelper.getString(R.string.pressure_hpa)
-                ),
-                times,
-                pressureEntries
-            ),
-            uv = LineChartData(
-                resHelper.getString(R.string.uv_index),
-                resHelper.getString(R.string.uv_index_unit),
-                times,
-                uvEntries
-            ),
-            solarRadiation = LineChartData(
-                resHelper.getString(R.string.solar_radiation),
-                resHelper.getString(R.string.solar_radiation_unit),
-                times,
-                solarRadiationEntries
-            )
+            temperature = LineChartData(times, temperatureEntries),
+            feelsLike = LineChartData(times, feelsLikeEntries),
+            precipitation = LineChartData(times, precipEntries),
+            precipitationAccumulated = LineChartData(times, precipAccumulatedEntries),
+            windSpeed = LineChartData(times, windSpeedEntries),
+            windGust = LineChartData(times, windGustEntries),
+            windDirection = LineChartData(times, windDirectionEntries),
+            humidity = LineChartData(times, humidityEntries),
+            pressure = LineChartData(times, pressureEntries),
+            uv = LineChartData(times, uvEntries),
+            solarRadiation = LineChartData(times, solarRadiationEntries)
         )
     }
 }

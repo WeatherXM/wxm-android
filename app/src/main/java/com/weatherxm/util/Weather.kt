@@ -414,7 +414,7 @@ object Weather : KoinComponent {
         }
     }
 
-    private fun getDecimalsPressure(): Int {
+    fun getDecimalsPressure(): Int {
         val unit = getPreferredUnit(
             resHelper.getString(KEY_PRESSURE), resHelper.getString(R.string.pressure_hpa)
         )

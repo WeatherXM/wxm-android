@@ -34,8 +34,6 @@ data class HistoryCharts(
 @Keep
 @JsonClass(generateAdapter = true)
 data class LineChartData(
-    var name: String,
-    var unit: String,
     var timestamps: MutableList<String>,
     var entries: MutableList<Entry>
 ) {
@@ -48,7 +46,7 @@ data class LineChartData(
      * This is the implementation here. Source:
      * https://github.com/PhilJay/MPAndroidChart/issues/1435
      */
-    fun getLineDataSetsWithValues(): MutableList<LineDataSet> {
+    fun getLineDataSetsWithValues(label: String): MutableList<LineDataSet> {
         val dataSets = mutableListOf<LineDataSet>()
         var tempEntries = mutableListOf<Entry>()
 
@@ -70,7 +68,7 @@ data class LineChartData(
                  * list of continuous (with no gaps) entries
                  */
                 if (tempEntries.isNotEmpty() && tempEntries.last().x != (it.x - 1)) {
-                    dataSets.add(LineDataSet(tempEntries, name))
+                    dataSets.add(LineDataSet(tempEntries, label))
                     tempEntries = mutableListOf()
                 }
                 tempEntries.add(it)
@@ -80,13 +78,13 @@ data class LineChartData(
          * If we reached the end of the entries list and we have a pending LineDataSet to add
          */
         if (tempEntries.isNotEmpty()) {
-            dataSets.add(LineDataSet(tempEntries, name))
+            dataSets.add(LineDataSet(tempEntries, label))
         }
 
         return dataSets
     }
 
-    fun getEmptyLineDataSets(): MutableList<LineDataSet> {
+    fun getEmptyLineDataSets(label: String): MutableList<LineDataSet> {
         val dataSets = mutableListOf<LineDataSet>()
         var tempEntries = mutableListOf<Entry>()
 
@@ -108,7 +106,7 @@ data class LineChartData(
                  * list of continuous gap entries
                  */
                 if (tempEntries.isNotEmpty() && tempEntries.last().x != (it.x - 1)) {
-                    dataSets.add(LineDataSet(tempEntries, name))
+                    dataSets.add(LineDataSet(tempEntries, label))
                     tempEntries = mutableListOf()
                 }
                 tempEntries.add(it)
@@ -118,7 +116,7 @@ data class LineChartData(
          * If we reached the end of the entries list and we have a pending LineDataSet to add
          */
         if (tempEntries.isNotEmpty()) {
-            dataSets.add(LineDataSet(tempEntries, name))
+            dataSets.add(LineDataSet(tempEntries, label))
         }
 
         return dataSets

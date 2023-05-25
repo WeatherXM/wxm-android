@@ -2,6 +2,7 @@ package com.weatherxm.ui.components
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
@@ -83,6 +84,15 @@ class LineChartView : LinearLayout {
 
     fun getChart(): LineChart = binding.chart
 
+    fun getDatasetsSize(): Int {
+        return if (binding.chart.data == null) 0 else binding.chart.data.dataSets.size
+    }
+
+    fun onHighlightValue(x: Float, dataSetIndex: Int?) {
+        if (binding.chart.data == null || dataSetIndex == null) return
+        binding.chart.highlightValue(x, dataSetIndex)
+    }
+
     fun onHighlightedData(time: String, primaryData: String, secondaryData: String = "") {
         binding.time.text = time
         binding.primaryDataValue.text = primaryData
@@ -93,5 +103,17 @@ class LineChartView : LinearLayout {
         binding.time.text = ""
         binding.primaryDataValue.text = ""
         binding.secondaryDataValue.text = ""
+    }
+
+    fun clearChart() {
+        onClearHighlight()
+        getChart().highlightValue(null)
+        getChart().clear()
+    }
+
+    fun showNoDataText() {
+        binding.chart.setNoDataText(resources.getString(R.string.error_history_no_data_chart_found))
+        binding.chart.setNoDataTextColor(context.getColor(R.color.colorOnSurface))
+        binding.chart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
     }
 }
