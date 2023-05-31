@@ -37,4 +37,11 @@ interface AuthService {
     suspend fun logout(
         @Body accessToken: AccessTokenBody,
     ): NetworkResponse<Unit, ErrorResponse>
+
+    @Mock
+    @MockResponse(code = 200, body = "mock_files/empty_response.json")
+    @POST("/api/v1/auth/resetPassword")
+    suspend fun resetPassword(
+        @Body resetPasswordBody: ResetPasswordBody,
+    ): NetworkResponse<Unit, ErrorResponse>
 }

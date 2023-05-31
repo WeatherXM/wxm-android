@@ -281,7 +281,7 @@ private val datasources = module {
     }
 
     single<NetworkAuthDataSource> {
-        NetworkAuthDataSource(get(), get())
+        NetworkAuthDataSource(get())
     }
 
     single<CacheAuthDataSource> {

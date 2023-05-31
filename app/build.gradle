@@ -24,6 +24,14 @@ android {
     compileSdkVersion 33
     buildToolsVersion "33.0.2"
 
+    packagingOptions {
+        pickFirst '/armeabi-v7a/libmapbox-common.so'
+        pickFirst '/x86/libmapbox-common.so'
+        pickFirst '/arm64-v8a/libmapbox-common.so'
+        pickFirst '/x86_64/libmapbox-common.so'
+        pickFirst '**/x86/libmapbox-common.so'
+    }
+
     defaultConfig {
         applicationId "com.weatherxm.app"
         minSdkVersion 23

@@ -149,7 +149,7 @@ class HistoryChartsFragment : Fragment() {
             binding.chartTemperature.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
-                        if (e != null) {
+                        if (e != null && !e.y.isNaN()) {
                             val time = temperatureData.timestamps[e.x.toInt()]
 
                             /**
@@ -188,7 +188,7 @@ class HistoryChartsFragment : Fragment() {
             binding.chartHumidity.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
-                        if (e != null) {
+                        if (e != null && !e.y.isNaN()) {
                             val time = data.timestamps[e.x.toInt()]
                             val humidity = Weather.getFormattedHumidity(e.y.toInt())
                             binding.chartHumidity.onHighlightedData(time, humidity)
@@ -214,7 +214,7 @@ class HistoryChartsFragment : Fragment() {
             binding.chartPressure.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
-                        if (e != null) {
+                        if (e != null && !e.y.isNaN()) {
                             val time = data.timestamps[e.x.toInt()]
                             val pressure =
                                 Weather.getFormattedPressure(e.y, ignoreConversion = true)
@@ -242,7 +242,7 @@ class HistoryChartsFragment : Fragment() {
             binding.chartSolar.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
-                        if (e != null) {
+                        if (e != null && !e.y.isNaN()) {
                             val time = uvData.timestamps[e.x.toInt()]
                             val uv = Weather.getFormattedUV(e.y.toInt())
                             val radiation = Weather.getFormattedSolarRadiation(
@@ -273,7 +273,7 @@ class HistoryChartsFragment : Fragment() {
             binding.chartPrecipitation.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
-                        if (e != null) {
+                        if (e != null && !e.y.isNaN()) {
                             val time = accumulatedData.timestamps[e.x.toInt()]
                             val accumulated = Weather.getFormattedPrecipitation(
                                 accumulatedData.entries[e.x.toInt()].y,
@@ -315,7 +315,7 @@ class HistoryChartsFragment : Fragment() {
             binding.chartWind.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
-                        if (e != null) {
+                        if (e != null && !e.y.isNaN()) {
                             val time = windSpeedData.timestamps[e.x.toInt()]
                             val windSpeed = Weather.getFormattedWind(
                                 e.y,

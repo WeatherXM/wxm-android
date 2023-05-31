@@ -275,7 +275,7 @@ class BluetoothConnectionManager(
             }.onCompletion {
                 Timber.d("[BLE Communication] Full Response: $fullResponse")
                 if (failed) {
-                    listener.invoke(Either.Left(BluetoothError.ATCommandError))
+                    listener.invoke(Either.Left(BluetoothError.ATCommandError()))
                 } else {
                     listener.invoke(Either.Right(fullResponse))
                 }
@@ -310,11 +310,11 @@ class BluetoothConnectionManager(
                 if (isSuccess) {
                     listener.invoke(Either.Right(Unit))
                 } else {
-                    listener.invoke(Either.Left(BluetoothError.ATCommandError))
+                    listener.invoke(Either.Left(BluetoothError.ATCommandError()))
                 }
             }.catch {
                 Timber.e(it)
-                listener.invoke(Either.Left(BluetoothError.ATCommandError))
+                listener.invoke(Either.Left(BluetoothError.ATCommandError()))
             }.collect()
         }
     }

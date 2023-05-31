@@ -119,6 +119,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/dataContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipChildren="false"

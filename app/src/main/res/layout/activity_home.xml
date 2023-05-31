@@ -65,6 +65,7 @@
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginVertical="@dimen/margin_normal"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        app:layout_dodgeInsetEdges="bottom"
         app:menu="@menu/bottom_nav_menu" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

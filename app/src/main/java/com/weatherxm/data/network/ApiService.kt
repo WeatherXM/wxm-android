@@ -83,14 +83,6 @@ interface ApiService {
     ): NetworkResponse<Unit, ErrorResponse>
 
     @Mock
-    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
-    @MockResponse(code = 200, body = "mock_files/empty_response.json")
-    @POST("/api/v1/auth/resetPassword")
-    suspend fun resetPassword(
-        @Body resetPasswordBody: ResetPasswordBody,
-    ): NetworkResponse<Unit, ErrorResponse>
-
-    @Mock
     @MockResponse(body = "mock_files/get_user_device_weather_forecast.json")
     @GET("/api/v1/me/devices/{deviceId}/forecast")
     suspend fun getForecast(

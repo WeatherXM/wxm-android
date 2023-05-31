@@ -76,7 +76,7 @@ class CurrentWeatherWidgetWorkerUpdate(
             .getOrElse { failure ->
                 Timber.w(
                     Exception("Fetching user device for widget failed: ${failure.code}"),
-                    "Could not get user device for widget [$widgetId]"
+                    failure.toString()
                 )
                 if (failure is UserNotLoggedInError) Result.success() else Result.retry()
             }
