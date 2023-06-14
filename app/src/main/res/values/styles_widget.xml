@@ -266,7 +266,7 @@
     </style>
 
     <style name="Widget.WeatherXM.TabLayout.Navigation" parent="Widget.Material3.TabLayout">
-        <item name="tabMode">scrollable</item>
+        <item name="tabMode">fixed</item>
         <item name="tabBackground">@drawable/navigation_tab_background_selector</item>
         <item name="tabTextColor">@color/colorPrimary</item>
         <item name="tabSelectedTextColor">@color/colorOnPrimary</item>
