@@ -616,7 +616,7 @@ val firebase = module {
 
 val navigator = module {
     single {
-        Navigator(get())
+        Navigator(get(), get())
     }
 }
 
@@ -653,7 +653,7 @@ val clientIdentificationHelper = module {
 
 val analytics = module {
     single(createdAtStart = true) {
-        Analytics(get(), get())
+        Analytics(get(), get(), get(), get(), get())
     }
 }
 

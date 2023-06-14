@@ -70,6 +70,12 @@ class ResetPasswordActivity : AppCompatActivity(), KoinComponent {
                     .subtitle(getString(R.string.success_reset_password_text))
                 binding.form.visibility = View.GONE
                 binding.status.visibility = View.VISIBLE
+
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.SEND_EMAIL_FORGOT_PASSWORD.paramValue,
+                    contentId = Analytics.ParamValue.SEND_EMAIL_FORGOT_PASSWORD_ID.paramValue,
+                    success = 1L
+                )
             }
             Status.ERROR -> {
                 binding.statusView
@@ -82,6 +88,12 @@ class ResetPasswordActivity : AppCompatActivity(), KoinComponent {
                         binding.form.visibility = View.VISIBLE
                         binding.status.visibility = View.GONE
                     }
+
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.SEND_EMAIL_FORGOT_PASSWORD.paramValue,
+                    contentId = Analytics.ParamValue.SEND_EMAIL_FORGOT_PASSWORD_ID.paramValue,
+                    success = 0L
+                )
             }
             Status.LOADING -> {
                 binding.statusView

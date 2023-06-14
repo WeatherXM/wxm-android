@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentUserDeviceForecastBinding
 import com.weatherxm.ui.userdevice.UserDeviceViewModel
@@ -45,12 +46,23 @@ class ForecastFragment : Fragment(), KoinComponent {
         }
 
         // Initialize the adapter with empty data
-        forecastAdapter = ForecastAdapter()
+        forecastAdapter = ForecastAdapter { index, state ->
+            val stateParam = if (state) {
+                Pair(Analytics.CustomParam.STATE.paramName, Analytics.ParamValue.OPEN.paramValue)
+            } else {
+                Pair(Analytics.CustomParam.STATE.paramName, Analytics.ParamValue.CLOSE.paramValue)
+            }
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.FORECAST_DAY.paramValue,
+                Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
+                stateParam,
+                index = index.toLong()
+            )
+        }
         binding.forecastRecycler.adapter = forecastAdapter
 
         model.onForecast().observe(viewLifecycleOwner) {
             forecastAdapter.submitList(it)
-
         }
 
         model.onLoading().observe(viewLifecycleOwner) {

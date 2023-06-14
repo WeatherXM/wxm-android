@@ -15,7 +15,7 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
-import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.util.Analytics
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -26,6 +26,7 @@ class ClaimM5ResultFragment : Fragment(), KoinComponent {
     private val locationModel: ClaimLocationViewModel by activityViewModels()
     private lateinit var binding: FragmentClaimM5ResultBinding
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +41,14 @@ class ClaimM5ResultFragment : Fragment(), KoinComponent {
         super.onViewCreated(view, savedInstanceState)
 
         binding.quit.setOnClickListener {
+            analytics.trackEventUserAction(
+                actionName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
+                contentType = Analytics.ParamValue.CLAIMING.paramValue,
+                Pair(
+                    Analytics.CustomParam.ACTION.paramName,
+                    Analytics.ParamValue.QUIT.paramValue
+                )
+            )
             m5ParentModel.cancel()
         }
 
@@ -67,12 +76,25 @@ class ClaimM5ResultFragment : Fragment(), KoinComponent {
                 val device = resource.data
                 if (device != null) {
                     binding.viewStationOnlyBtn.setOnClickListener {
+                        analytics.trackEventUserAction(
+                            actionName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
+                            contentType = Analytics.ParamValue.CLAIMING.paramValue,
+                            Pair(
+                                Analytics.CustomParam.ACTION.paramName,
+                                Analytics.ParamValue.VIEW_STATION.paramValue
+                            )
+                        )
                         navigator.showUserDevice(activity, device)
                         activity?.finish()
                     }
                     binding.viewStationOnlyBtn.visibility = View.VISIBLE
                 }
                 binding.failureButtons.visibility = View.GONE
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
+                    contentId = Analytics.ParamValue.CLAIMING_RESULT_ID.paramValue,
+                    success = 1L
+                )
             }
             Status.ERROR -> {
                 binding.statusView.animation(R.raw.anim_error, false)
@@ -87,6 +109,11 @@ class ClaimM5ResultFragment : Fragment(), KoinComponent {
                     sendSupportEmail(resource.error?.code)
                 }
                 binding.failureButtons.visibility = View.VISIBLE
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
+                    contentId = Analytics.ParamValue.CLAIMING_RESULT_ID.paramValue,
+                    success = 0L
+                )
             }
             Status.LOADING -> {
                 binding.statusView.clear()

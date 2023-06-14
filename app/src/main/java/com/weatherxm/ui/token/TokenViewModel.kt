@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.TokenUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import com.weatherxm.util.toISODate
 import kotlinx.coroutines.launch
@@ -22,6 +23,7 @@ class TokenViewModel : ViewModel(), KoinComponent {
     }
 
     private val tokenUseCase: TokenUseCase by inject()
+    private val analytics: Analytics by inject()
 
     private var currentPage = 0
     private var hasNextPage = false
@@ -53,6 +55,7 @@ class TokenViewModel : ViewModel(), KoinComponent {
                     onFirstPageTransactions.postValue(Resource.success(currentShownTransactions))
                 }
                 .mapLeft {
+                    analytics.trackEventFailure(it.code)
                     handleFailure(it)
                 }
         }
@@ -85,6 +88,8 @@ class TokenViewModel : ViewModel(), KoinComponent {
                     } else {
                         onNewTransactionsPage.postValue(Resource.success(null))
                     }
+                }.onLeft {
+                    analytics.trackEventFailure(it.code)
                 }
 
                 blockNewPageRequest = false
@@ -118,6 +123,8 @@ class TokenViewModel : ViewModel(), KoinComponent {
                     } else {
                         onNewTransactionsPage.postValue(Resource.success(null))
                     }
+                }.onLeft {
+                    analytics.trackEventFailure(it.code)
                 }
                 blockNewPageRequest = false
             }

@@ -7,11 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
+import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -20,6 +22,7 @@ import timber.log.Timber
 
 class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
+    private val analytics: Analytics by inject()
     private val scanDevicesUseCase: BluetoothScannerUseCase by inject()
     private val connectionUseCase: BluetoothConnectionUseCase by inject()
     private var scannedDevices: MutableList<ScannedDevice> = mutableListOf()
@@ -54,7 +57,8 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
                     } else {
                         onScanProgress.postValue(progress)
                     }
-                }.onLeft {
+                }.onLeft { failure ->
+                    analytics.trackEventFailure(failure.code)
                     onScanStatus.postValue(Resource.error(""))
                 }
             }
@@ -70,6 +74,7 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
         connectionUseCase.setPeripheral(macAddress).onRight {
             connectToPeripheral()
         }.onLeft {
+            analytics.trackEventFailure(it.code)
             bleConnectionStarted = false
             onBLEError.postValue(UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
                 setupBluetoothClaiming(macAddress)
@@ -80,6 +85,7 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
     fun connectToPeripheral() {
         viewModelScope.launch {
             connectionUseCase.connectToPeripheral().onLeft {
+                analytics.trackEventFailure(it.code)
                 when (it) {
                     is BluetoothError.BluetoothDisabledException -> {
                         onBLEError.postValue(
@@ -128,6 +134,7 @@ class ClaimHeliumPairViewModel : ViewModel(), KoinComponent {
                         onBLEConnection.postValue(true)
                     }
                     BluetoothDevice.BOND_NONE -> {
+                        analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
                         onBLEError.postValue(
                             UIError(resHelper.getString(R.string.helium_pairing_failed_desc)) {
                                 connectToPeripheral()

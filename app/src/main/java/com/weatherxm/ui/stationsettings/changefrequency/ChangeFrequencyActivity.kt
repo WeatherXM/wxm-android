@@ -26,6 +26,7 @@ import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.stationsettings.ChangeFrequencyState
 import com.weatherxm.ui.stationsettings.FrequencyStatus
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setHtml
 import org.koin.android.ext.android.inject
@@ -38,6 +39,7 @@ class ChangeFrequencyActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityChangeFrequencyStationBinding
     private val bluetoothAdapter: BluetoothAdapter? by inject()
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
 
     private val model: ChangeFrequencyViewModel by viewModel {
         parametersOf(intent.getParcelableExtra<Device>(Contracts.ARG_DEVICE))
@@ -75,6 +77,9 @@ class ChangeFrequencyActivity : AppCompatActivity(), KoinComponent {
             movementMethod =
                 me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {
                     setOnLinkClickListener { _, url ->
+                        analytics.trackEventSelectContent(
+                            Analytics.ParamValue.DOCUMENTATION_FREQUENCY.paramValue
+                        )
                         navigator.openWebsite(context, url)
                         return@setOnLinkClickListener true
                     }
@@ -105,6 +110,15 @@ class ChangeFrequencyActivity : AppCompatActivity(), KoinComponent {
         model.getCountryAndFrequencies()
     }
 
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.CHANGE_STATION_FREQUENCY,
+            ChangeFrequencyActivity::class.simpleName,
+            model.device.id
+        )
+    }
+
     private fun finishActivity() {
         model.scanningJob.cancel()
         finish()
@@ -116,10 +130,20 @@ class ChangeFrequencyActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.backButton.setOnClickListener {
+            analytics.trackEventUserAction(
+                actionName = Analytics.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
+                contentType = Analytics.ParamValue.CHANGE_FREQUENCY.paramValue,
+                Pair(Analytics.CustomParam.ACTION.paramName, Analytics.ParamValue.CANCEL.paramValue)
+            )
             finishActivity()
         }
 
         binding.changeFrequencyBtn.setOnClickListener {
+            analytics.trackEventUserAction(
+                actionName = Analytics.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
+                contentType = Analytics.ParamValue.CHANGE_FREQUENCY.paramValue,
+                Pair(Analytics.CustomParam.ACTION.paramName, Analytics.ParamValue.CHANGE.paramValue)
+            )
             model.setSelectedFrequency(binding.frequenciesSelector.selectedItemPosition)
             initBluetoothAndStart()
             binding.frequencySelectorContainer.hide(null)
@@ -127,6 +151,7 @@ class ChangeFrequencyActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.bleActionFlow.setListeners(onScanClicked = {
+            analytics.trackEventSelectContent(Analytics.ParamValue.BLE_SCAN_AGAIN.paramValue)
             initBluetoothAndStart()
         }, onPairClicked = {
             model.pairDevice()
@@ -150,12 +175,22 @@ class ChangeFrequencyActivity : AppCompatActivity(), KoinComponent {
                     ),
                     primaryActionText = getString(R.string.back_to_settings)
                 )
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
+                    contentId = Analytics.ParamValue.CHANGE_FREQUENCY_RESULT_ID.paramValue,
+                    success = 1L
+                )
             }
             Status.LOADING -> {
                 onLoadingStatusUpdate(it.data?.status)
             }
             Status.ERROR -> {
                 onErrorStatusUpdate(it)
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
+                    contentId = Analytics.ParamValue.CHANGE_FREQUENCY_RESULT_ID.paramValue,
+                    success = 0L
+                )
             }
         }
     }

@@ -11,6 +11,7 @@ import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimHeliumFrequencyBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.setHtml
 import org.koin.android.ext.android.inject
 
@@ -18,6 +19,7 @@ class ClaimHeliumFrequencyFragment : Fragment() {
     private val parentModel: ClaimHeliumViewModel by activityViewModels()
     private val model: ClaimHeliumFrequencyViewModel by activityViewModels()
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
     private lateinit var binding: FragmentClaimHeliumFrequencyBinding
 
     override fun onCreateView(
@@ -36,6 +38,9 @@ class ClaimHeliumFrequencyFragment : Fragment() {
             movementMethod =
                 me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {
                     setOnLinkClickListener { _, url ->
+                        analytics.trackEventSelectContent(
+                            Analytics.ParamValue.DOCUMENTATION_FREQUENCY.paramValue
+                        )
                         navigator.openWebsite(context, url)
                         return@setOnLinkClickListener true
                     }

@@ -16,6 +16,7 @@ import com.weatherxm.databinding.ListItemDeviceBinding
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.UserDevice
 import com.weatherxm.ui.common.setVisible
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
@@ -27,6 +28,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
     ListAdapter<UserDevice, DeviceAdapter.DeviceViewHolder>(DeviceDiffCallback()), KoinComponent {
 
     val resHelper: ResourcesHelper by inject()
+    val analytics: Analytics by inject()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
         val binding =
@@ -131,6 +133,11 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 binding.warning.action(resHelper.getString(R.string.update_station_now)) {
                     deviceListener.onUpdateStationClicked(item)
                 }.setVisible(true)
+                analytics.trackEventPrompt(
+                    Analytics.ParamValue.OTA_AVAILABLE.paramValue,
+                    Analytics.ParamValue.WARN.paramValue,
+                    Analytics.ParamValue.VIEW.paramValue
+                )
             }
         }
 

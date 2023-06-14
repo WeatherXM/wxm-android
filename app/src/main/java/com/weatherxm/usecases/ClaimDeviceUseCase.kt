@@ -78,7 +78,7 @@ class ClaimDeviceUseCaseImpl(
         return addressRepository.getAddressFromPoint(point)
             .flatMap {
                 it.formattedAddress(SearchAddress.FormatStyle.Medium)?.right()
-                    ?: ReverseGeocodingError.SearchResultAddressFormatError.left()
+                    ?: ReverseGeocodingError.SearchResultAddressFormatError().left()
             }
     }
 

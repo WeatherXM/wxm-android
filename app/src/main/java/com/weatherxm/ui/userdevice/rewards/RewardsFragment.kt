@@ -41,7 +41,7 @@ class RewardsFragment : Fragment(), KoinComponent {
         super.onViewCreated(view, savedInstanceState)
 
         model.onTokens().observe(viewLifecycleOwner) {
-            binding.tokenCard.setTokenInfo(it, model.device.rewards?.totalRewards)
+            binding.tokenCard.setTokenInfo(it, model.device.rewards?.totalRewards, model.device.id)
         }
 
         model.onLoading().observe(viewLifecycleOwner) {

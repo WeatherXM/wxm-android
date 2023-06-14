@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import arrow.core.getOrElse
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -129,6 +130,12 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
                 binding.loading.visibility = View.INVISIBLE
             }
             Status.ERROR -> {
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.LOGIN.paramValue,
+                    contentId = Analytics.ParamValue.LOGIN_ID.paramValue,
+                    Pair(FirebaseAnalytics.Param.METHOD, Analytics.ParamValue.EMAIL.paramValue),
+                    success = 0L
+                )
                 setInputEnabled(true)
                 binding.loading.visibility = View.INVISIBLE
                 result.message?.let { showSnackbarMessage(it) }
@@ -149,6 +156,18 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
                 Timber.d("User: $user")
                 navigator.showHome(this)
 
+                /*
+                * We track successful login here because we chain `login`->`getUser` calls
+                * and then we proceed to the next screen. So the final chained call (`getUser`)
+                * should track the successful login event.
+                 */
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.LOGIN.paramValue,
+                    contentId = Analytics.ParamValue.LOGIN_ID.paramValue,
+                    Pair(FirebaseAnalytics.Param.METHOD, Analytics.ParamValue.EMAIL.paramValue),
+                    success = 1L
+                )
+
                 widgetHelper.getWidgetIds().onRight {
                     val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
                     val ids = it.map { id ->
@@ -163,6 +182,12 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
                 finish()
             }
             Status.ERROR -> {
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.LOGIN.paramValue,
+                    contentId = Analytics.ParamValue.LOGIN_ID.paramValue,
+                    Pair(FirebaseAnalytics.Param.METHOD, Analytics.ParamValue.EMAIL.paramValue),
+                    success = 0L
+                )
                 binding.loading.visibility = View.INVISIBLE
                 showSnackbarMessage("${result.message}.")
                 setInputEnabled(true)

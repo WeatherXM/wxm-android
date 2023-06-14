@@ -20,7 +20,7 @@ import com.weatherxm.data.countryToFrequency
 import com.weatherxm.data.otherFrequencies
 import timber.log.Timber
 import java.io.IOException
-import java.util.*
+import java.util.Locale
 import kotlin.coroutines.suspendCoroutine
 
 class NetworkAddressDataSource(
@@ -105,7 +105,7 @@ class NetworkAddressDataSource(
                         } else {
                             Timber.w(e, "Reverse Geocoding failure [point=$point]")
                             continuation.resumeWith(
-                                Result.success(Either.Left(MapBoxError.GeocodingError))
+                                Result.success(Either.Left(MapBoxError.GeocodingError()))
                             )
                         }
                     }
@@ -118,7 +118,7 @@ class NetworkAddressDataSource(
                             Result.success(
                                 results.firstOrNull()?.let {
                                     Either.Right(it)
-                                } ?: Either.Left(MapBoxError.GeocodingError)
+                                } ?: Either.Left(MapBoxError.GeocodingError())
                             )
                         )
                     }

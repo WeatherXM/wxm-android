@@ -7,12 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Device
+import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.stationsettings.RebootState
 import com.weatherxm.ui.stationsettings.RebootStatus
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getCode
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -27,6 +29,7 @@ class RebootViewModel(var device: Device) : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val connectionUseCase: BluetoothConnectionUseCase by inject()
     private val scanUseCase: BluetoothScannerUseCase by inject()
+    private val analytics: Analytics by inject()
 
     private val onStatus = MutableLiveData<Resource<RebootState>>()
     fun onStatus() = onStatus
@@ -61,6 +64,7 @@ class RebootViewModel(var device: Device) : ViewModel(), KoinComponent {
         if (deviceIsPaired()) {
             connectAndReboot()
         } else {
+            analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
             onStatus.postValue(Resource.error("", RebootState(RebootStatus.PAIR_STATION)))
         }
     }
@@ -74,7 +78,8 @@ class RebootViewModel(var device: Device) : ViewModel(), KoinComponent {
                     if (progress == 100) {
                         checkIfDevicePaired()
                     }
-                }.onLeft {
+                }.onLeft { failure ->
+                    analytics.trackEventFailure(failure.code)
                     onStatus.postValue(
                         Resource.error("", RebootState(RebootStatus.SCAN_FOR_STATION))
                     )
@@ -91,6 +96,7 @@ class RebootViewModel(var device: Device) : ViewModel(), KoinComponent {
                     if (deviceIsPaired()) {
                         reboot()
                     } else {
+                        analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
                         onStatus.postValue(
                             Resource.error("", RebootState(RebootStatus.PAIR_STATION))
                         )
@@ -113,12 +119,14 @@ class RebootViewModel(var device: Device) : ViewModel(), KoinComponent {
                 connectionUseCase.connectToPeripheral().onRight {
                     reboot()
                 }.onLeft {
+                    analytics.trackEventFailure(it.code)
                     onStatus.postValue(
                         Resource.error(it.getCode(), RebootState(RebootStatus.CONNECT_TO_STATION))
                     )
                 }
             }
         }.onLeft {
+            analytics.trackEventFailure(it.code)
             onStatus.postValue(
                 Resource.error(it.getCode(), RebootState(RebootStatus.CONNECT_TO_STATION))
             )
@@ -131,6 +139,7 @@ class RebootViewModel(var device: Device) : ViewModel(), KoinComponent {
             connectionUseCase.reboot().onRight {
                 onStatus.postValue(Resource.success(RebootState(RebootStatus.REBOOTING)))
             }.onLeft {
+                analytics.trackEventFailure(it.code)
                 Resource.error(it.getCode(), RebootState(RebootStatus.REBOOTING))
             }
         }
@@ -144,6 +153,7 @@ class RebootViewModel(var device: Device) : ViewModel(), KoinComponent {
                         reboot()
                     }
                     BluetoothDevice.BOND_NONE -> {
+                        analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
                         onStatus.postValue(
                             Resource.error("", RebootState(RebootStatus.PAIR_STATION))
                         )

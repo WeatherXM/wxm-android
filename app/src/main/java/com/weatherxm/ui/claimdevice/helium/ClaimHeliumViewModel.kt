@@ -15,6 +15,7 @@ import com.weatherxm.data.Frequency
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -30,6 +31,7 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
     private val claimDeviceUseCase: ClaimDeviceUseCase by inject()
     private val connectionUseCase: BluetoothConnectionUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
+    private val analytics: Analytics by inject()
 
     private val onCancel = MutableLiveData(false)
     private val onNext = MutableLiveData(false)
@@ -114,6 +116,7 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
                     onClaimResult.postValue(Resource.success(it))
                 }
                 .mapLeft {
+                    analytics.trackEventFailure(it.code)
                     onClaimResult.postValue(
                         Resource.error(
                             msg = resHelper.getString(

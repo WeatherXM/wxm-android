@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UserDevice
 import com.weatherxm.usecases.UserDeviceUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ class DevicesViewModel : ViewModel(), KoinComponent {
 
     private val userDeviceUseCase: UserDeviceUseCase by inject()
     private val sharedPreferences: SharedPreferences by inject()
+    private val analytics: Analytics by inject()
 
     private val sharedPreferenceChangeListener = OnSharedPreferenceChangeListener { _, _ ->
         this@DevicesViewModel.preferenceChanged.postValue(true)
@@ -50,6 +52,7 @@ class DevicesViewModel : ViewModel(), KoinComponent {
                     this@DevicesViewModel.devices.postValue(Resource.success(devices))
                 }
                 .mapLeft {
+                    analytics.trackEventFailure(it.code)
                     this@DevicesViewModel.devices.postValue(Resource.error(it.getDefaultMessage()))
                 }
         }

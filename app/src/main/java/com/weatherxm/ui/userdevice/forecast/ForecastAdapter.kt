@@ -18,10 +18,10 @@ import com.weatherxm.util.HorizontalScrollGestureListener
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.roundToDecimals
 
-
-class ForecastAdapter : ListAdapter<UIForecast, ForecastAdapter.DailyForecastViewHolder>(
-    UIForecastDiffCallback()
-) {
+class ForecastAdapter(private val onExpandToggle: (Int, Boolean) -> Unit) :
+    ListAdapter<UIForecast, ForecastAdapter.DailyForecastViewHolder>(
+        UIForecastDiffCallback()
+    ) {
 
     private var minTemperature: Float = Float.MAX_VALUE
     private var maxTemperature: Float = Float.MIN_VALUE
@@ -110,7 +110,7 @@ class ForecastAdapter : ListAdapter<UIForecast, ForecastAdapter.DailyForecastVie
             binding.humidity.text = Weather.getFormattedHumidity(item.humidity)
 
             if (absoluteAdapterPosition == 0 && !item.hourlyWeather.isNullOrEmpty()) {
-                onExpandClick()
+                onExpandClick(ignoreEvent = true)
             }
 
             handleHourlyForecastSwiping()
@@ -142,7 +142,12 @@ class ForecastAdapter : ListAdapter<UIForecast, ForecastAdapter.DailyForecastVie
             })
         }
 
-        private fun onExpandClick() {
+        private fun onExpandClick(ignoreEvent: Boolean = false) {
+            /*
+             * We define a new variable here because toggleVisibility uses an animation and has a
+             * delay so we cannot use `binding.hourlyRecycler.isVisible` directly`.
+             */
+            val willBeExpanded = !binding.hourlyRecycler.isVisible
             if (binding.hourlyRecycler.isVisible) {
                 binding.toggleExpand.icon =
                     AppCompatResources.getDrawable(itemView.context, R.drawable.ic_expand_more)
@@ -151,6 +156,10 @@ class ForecastAdapter : ListAdapter<UIForecast, ForecastAdapter.DailyForecastVie
                     AppCompatResources.getDrawable(itemView.context, R.drawable.ic_expand_less)
             }
             binding.hourlyRecycler.toggleVisibility()
+
+            if (!ignoreEvent) {
+                onExpandToggle.invoke(absoluteAdapterPosition, willBeExpanded)
+            }
         }
     }
 

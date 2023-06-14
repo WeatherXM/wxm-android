@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Device
@@ -105,6 +106,7 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
 
     private fun setListeners() {
         binding.bleActionFlow.setListeners(onScanClicked = {
+            analytics.trackEventSelectContent(Analytics.ParamValue.BLE_SCAN_AGAIN.paramValue)
             initBluetoothAndStart()
         }, onPairClicked = {
             model.pairDevice()
@@ -126,12 +128,24 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
                     message = getString(R.string.station_updated_subtitle),
                     primaryActionText = getString(R.string.action_view_station)
                 )
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.OTA_RESULT.paramValue,
+                    contentId = Analytics.ParamValue.OTA_RESULT_ID.paramValue,
+                    Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
+                    success = 1L
+                )
             }
             Status.LOADING -> {
                 onLoadingStatusUpdate(it.data?.status)
             }
             Status.ERROR -> {
                 onErrorStatusUpdate(it)
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.OTA_RESULT.paramValue,
+                    contentId = Analytics.ParamValue.OTA_RESULT_ID.paramValue,
+                    Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
+                    success = 0L
+                )
             }
         }
     }
@@ -174,6 +188,23 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
                 toast(R.string.error_reach_out_short)
             }
         }
+
+        analytics.trackEventViewContent(
+            contentName = Analytics.ParamValue.OTA_ERROR.paramValue,
+            contentId = Analytics.ParamValue.OTA_ERROR_ID.paramValue,
+            Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
+            Pair(
+                Analytics.CustomParam.STEP.paramName,
+                when (resource.data?.status) {
+                    OTAStatus.SCAN_FOR_STATION -> Analytics.ParamValue.SCAN.paramValue
+                    OTAStatus.PAIR_STATION -> Analytics.ParamValue.PAIR.paramValue
+                    OTAStatus.CONNECT_TO_STATION -> Analytics.ParamValue.CONNECT.paramValue
+                    OTAStatus.DOWNLOADING -> Analytics.ParamValue.DOWNLOAD.paramValue
+                    OTAStatus.INSTALLING -> Analytics.ParamValue.INSTALL.paramValue
+                    null -> ""
+                }
+            )
+        )
     }
 
     private fun onLoadingStatusUpdate(status: OTAStatus?) {

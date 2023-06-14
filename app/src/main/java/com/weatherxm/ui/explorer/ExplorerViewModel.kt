@@ -17,6 +17,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.SingleLiveEvent
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.ExplorerUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.LocationHelper.getLocationAndThen
 import com.weatherxm.util.MapboxUtils
 import com.weatherxm.util.UIErrors.getDefaultMessage
@@ -36,6 +37,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     }
 
     private val explorerUseCase: ExplorerUseCase by inject()
+    private val analytics: Analytics by inject()
 
     // All public devices shown on map
     private val state = MutableLiveData<Resource<ExplorerData>>().apply {
@@ -196,6 +198,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
                     state.postValue(Resource.success(it))
                 }
                 .mapLeft {
+                    analytics.trackEventFailure(it.code)
                     state.postValue(
                         Resource.error(it.getDefaultMessage(R.string.error_reach_out_short))
                     )

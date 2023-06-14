@@ -22,6 +22,7 @@ import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.stationsettings.RebootState
 import com.weatherxm.ui.stationsettings.RebootStatus
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,6 +33,7 @@ import timber.log.Timber
 class RebootActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityRebootStationBinding
     private val bluetoothAdapter: BluetoothAdapter? by inject()
+    private val analytics: Analytics by inject()
     private val navigator: Navigator by inject()
 
     private val model: RebootViewModel by viewModel {
@@ -73,6 +75,15 @@ class RebootActivity : AppCompatActivity(), KoinComponent {
         }
 
         initBluetoothAndStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.REBOOT_STATION,
+            RebootActivity::class.simpleName,
+            model.device.id
+        )
     }
 
     private fun onNewStatus(it: Resource<RebootState>) {
@@ -146,6 +157,7 @@ class RebootActivity : AppCompatActivity(), KoinComponent {
 
     private fun setListeners() {
         binding.bleActionFlow.setListeners(onScanClicked = {
+            analytics.trackEventSelectContent(Analytics.ParamValue.BLE_SCAN_AGAIN.paramValue)
             initBluetoothAndStart()
         }, onPairClicked = {
             model.pairDevice()

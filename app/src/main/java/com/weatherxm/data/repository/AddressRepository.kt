@@ -94,11 +94,11 @@ class AddressRepositoryImpl(
         return networkAddress.getAddressFromPoint(point)
             .flatMap {
                 if (!it.isAccurate()) {
-                    Either.Left(ReverseGeocodingError.SearchResultNotAccurateError)
+                    Either.Left(ReverseGeocodingError.SearchResultNotAccurateError())
                 } else if (!it.isNearby()) {
-                    Either.Left(ReverseGeocodingError.SearchResultNotNearbyError)
+                    Either.Left(ReverseGeocodingError.SearchResultNotNearbyError())
                 } else {
-                    it.address?.right() ?: ReverseGeocodingError.SearchResultNoAddressError.left()
+                    it.address?.right() ?: ReverseGeocodingError.SearchResultNoAddressError().left()
                 }
             }
     }

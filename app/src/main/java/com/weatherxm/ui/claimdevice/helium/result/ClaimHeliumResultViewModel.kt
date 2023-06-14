@@ -9,6 +9,7 @@ import com.weatherxm.data.Frequency
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.BluetoothConnectionUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -24,6 +25,7 @@ class ClaimHeliumResultViewModel : ViewModel(), KoinComponent {
 
     private val resHelper: ResourcesHelper by inject()
     private val connectionUseCase: BluetoothConnectionUseCase by inject()
+    private val analytics: Analytics by inject()
 
     private val onBLEError = MutableLiveData<UIError>()
     private val onBLEConnection = MutableLiveData<Boolean>()
@@ -42,6 +44,7 @@ class ClaimHeliumResultViewModel : ViewModel(), KoinComponent {
             connectionUseCase.setFrequency(frequency).onRight {
                 reboot()
             }.onLeft {
+                analytics.trackEventFailure(it.code)
                 onBLEError.postValue(
                     UIError(resHelper.getString(R.string.set_frequency_failed_desc), it.code) {
                         setFrequency(frequency)
@@ -57,6 +60,7 @@ class ClaimHeliumResultViewModel : ViewModel(), KoinComponent {
             connectionUseCase.reboot().onRight {
                 connectToPeripheral()
             }.onLeft {
+                analytics.trackEventFailure(it.code)
                 onBLEError.postValue(
                     UIError(resHelper.getString(R.string.helium_reboot_failed), it.code) {
                         reboot()
@@ -71,6 +75,7 @@ class ClaimHeliumResultViewModel : ViewModel(), KoinComponent {
             onBLEConnection.postValue(true)
             delay(CONNECT_DELAY_ON_REBOOT)
             connectionUseCase.connectToPeripheral().onLeft {
+                analytics.trackEventFailure(it.code)
                 onBLEError.postValue(when (it) {
                     is BluetoothError.BluetoothDisabledException -> {
                         UIError(
@@ -110,6 +115,7 @@ class ClaimHeliumResultViewModel : ViewModel(), KoinComponent {
                 onBLEDevEUI.postValue(it.unmask())
                 fetchClaimingKey()
             }.onLeft {
+                analytics.trackEventFailure(it.code)
                 onBLEError.postValue(
                     UIError(resHelper.getString(R.string.helium_fetching_info_failed), it.code) {
                         fetchDeviceEUI()
@@ -124,6 +130,7 @@ class ClaimHeliumResultViewModel : ViewModel(), KoinComponent {
             connectionUseCase.fetchClaimingKey().onRight {
                 onBLEClaimingKey.postValue(it)
             }.onLeft {
+                analytics.trackEventFailure(it.code)
                 onBLEError.postValue(
                     UIError(resHelper.getString(R.string.helium_fetching_info_failed), it.code) {
                         fetchClaimingKey()

@@ -8,6 +8,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.ExplorerUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -18,6 +19,7 @@ import timber.log.Timber
 class PublicDeviceDetailViewModel : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val explorerUseCase: ExplorerUseCase by inject()
+    private val analytics: Analytics by inject()
     private val onPublicDevice = MutableLiveData<Resource<UIDevice>>()
 
     fun onPublicDevice(): LiveData<Resource<UIDevice>> = onPublicDevice
@@ -48,6 +50,7 @@ class PublicDeviceDetailViewModel : ViewModel(), KoinComponent {
                     uiDevice = it
                 }
                 .mapLeft {
+                    analytics.trackEventFailure(it.code)
                     Timber.w("Getting public device details failed")
                     onPublicDevice.postValue(
                         Resource.error(resHelper.getString(R.string.error_public_device_no_data))
@@ -61,6 +64,7 @@ class PublicDeviceDetailViewModel : ViewModel(), KoinComponent {
                     uiDevice?.tokenInfo = it
                 }
                 .mapLeft {
+                    analytics.trackEventFailure(it.code)
                     Timber.w("Getting public device token data failed")
                     onPublicDevice.postValue(
                         Resource.error(resHelper.getString(R.string.error_public_device_no_data))

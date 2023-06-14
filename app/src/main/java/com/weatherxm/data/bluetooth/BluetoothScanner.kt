@@ -62,7 +62,7 @@ class BluetoothScanner(private val espProvisionManager: ESPProvisionManager) {
         espProvisionManager.searchBleEspDevices(object : BleScanListener {
             override fun scanStartFailed() {
                 isScanningRunning = false
-                progress.tryEmit(Either.Left(BluetoothError.ScanningError))
+                progress.tryEmit(Either.Left(BluetoothError.ScanningError()))
             }
 
             override fun onPeripheralFound(device: BluetoothDevice?, scanResult: ScanResult?) {
@@ -86,7 +86,7 @@ class BluetoothScanner(private val espProvisionManager: ESPProvisionManager) {
             override fun onFailure(e: Exception?) {
                 Timber.w(e, "[BLE Scanning]: Failure")
                 isScanningRunning = false
-                progress.tryEmit(Either.Left(BluetoothError.ScanningError))
+                progress.tryEmit(Either.Left(BluetoothError.ScanningError()))
             }
         })
         return progress

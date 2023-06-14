@@ -10,6 +10,7 @@ import com.weatherxm.data.ApiError.UserError.WalletError.InvalidWalletAddress
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.ConnectWalletUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
 
     private val connectWalletUseCase: ConnectWalletUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
+    private val analytics: Analytics by inject()
 
     private var currentAddress = MutableLiveData("")
     fun currentAddress() = currentAddress
@@ -37,6 +39,7 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             connectWalletUseCase.setWalletAddress(address)
                 .mapLeft {
+                    analytics.trackEventFailure(it.code)
                     handleFailure(it)
                 }.map {
                     isAddressSaved.postValue(

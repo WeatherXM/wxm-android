@@ -62,6 +62,7 @@ class PreferenceActivity : AppCompatActivity(), KoinComponent {
 
         model.onLogout().observe(this) { hasLoggedOut ->
             if (hasLoggedOut) {
+                analytics.trackEventSelectContent(Analytics.ParamValue.LOGOUT.paramValue)
                 widgetHelper.getWidgetIds().onRight {
                     val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
                     val ids = it.map { id ->

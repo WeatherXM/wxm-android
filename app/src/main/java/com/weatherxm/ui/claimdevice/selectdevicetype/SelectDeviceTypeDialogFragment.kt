@@ -15,6 +15,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weatherxm.databinding.FragmentClaimSelectDeviceTypeBinding
 import com.weatherxm.ui.common.ActionDialogFragment
 import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.util.Analytics
+import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 
 class SelectDeviceTypeDialogFragment : BottomSheetDialogFragment(), KoinComponent {
@@ -24,6 +26,7 @@ class SelectDeviceTypeDialogFragment : BottomSheetDialogFragment(), KoinComponen
     }
 
     private val model: SelectDeviceTypeViewModel by viewModels()
+    private val analytics: Analytics by inject()
 
     private lateinit var binding: FragmentClaimSelectDeviceTypeBinding
     private lateinit var adapter: AvailableDeviceTypesAdapter
@@ -71,6 +74,14 @@ class SelectDeviceTypeDialogFragment : BottomSheetDialogFragment(), KoinComponen
         }
 
         adapter.submitList(model.getAvailableDeviceTypes())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.CLAIM_DEVICE_TYPE_SELECTION,
+            SelectDeviceTypeDialogFragment::class.simpleName
+        )
     }
 
     fun show(fragment: Fragment) {

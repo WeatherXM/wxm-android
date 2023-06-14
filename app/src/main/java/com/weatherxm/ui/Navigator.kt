@@ -11,6 +11,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.ClientIdentificationHelper
@@ -47,11 +48,15 @@ import com.weatherxm.ui.stationsettings.reboot.RebootActivity
 import com.weatherxm.ui.token.TokenActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.ui.userdevice.UserDeviceActivity
+import com.weatherxm.util.Analytics
 import timber.log.Timber
 
 
 @Suppress("TooManyFunctions")
-class Navigator(private val clientIdentificationHelper: ClientIdentificationHelper) {
+class Navigator(
+    private val clientIdentificationHelper: ClientIdentificationHelper,
+    private val analytics: Analytics
+) {
 
     fun showExplorer(context: Context) {
         context.startActivity(
@@ -345,8 +350,14 @@ class Navigator(private val clientIdentificationHelper: ClientIdentificationHelp
         context: Context?,
         recipient: String? = null,
         subject: String? = null,
-        body: String? = null
+        body: String? = null,
+        source: String = Analytics.ParamValue.ERROR.paramValue
     ) {
+        analytics.trackEventSelectContent(
+            Analytics.ParamValue.CONTACT_SUPPORT.paramValue,
+            Pair(FirebaseAnalytics.Param.SOURCE, source)
+        )
+
         context?.let {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:") // Only email apps should handle this

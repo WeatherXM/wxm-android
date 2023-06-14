@@ -13,11 +13,14 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentPublicDevicesListBinding
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.ExplorerViewModel
+import com.weatherxm.util.Analytics
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class PublicDevicesListFragment : BottomSheetDialogFragment() {
     private val explorerModel: ExplorerViewModel by activityViewModels()
     private val model: PublicDevicesListViewModel by viewModels()
+    private val analytics: Analytics by inject()
     private lateinit var binding: FragmentPublicDevicesListBinding
     private lateinit var adapter: PublicDevicesListAdapter
 
@@ -58,6 +61,15 @@ class PublicDevicesListFragment : BottomSheetDialogFragment() {
         }
 
         model.fetchDevices(explorerModel.getCurrentHexSelected())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.EXPLORER_CELL,
+            PublicDevicesListFragment::class.simpleName,
+            explorerModel.getCurrentHexSelected()?.index
+        )
     }
 
     private fun updateUI(response: Resource<List<UIDevice>>) {

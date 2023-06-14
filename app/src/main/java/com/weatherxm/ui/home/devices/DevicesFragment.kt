@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
@@ -117,17 +118,36 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
         }
 
         parentModel.onWalletMissingWarning().observe(viewLifecycleOwner) {
-            if (it) {
-                binding.walletWarning.action(getString(R.string.add_wallet_now)) {
-                    navigator.showConnectWallet(connectWalletLauncher, this)
-                }.closeButton {
-                    binding.walletWarning.setVisible(false)
-                    parentModel.setWalletWarningDismissTimestamp()
-                }
-            }
-            binding.walletWarning.setVisible(it)
+            onWalletMissingWarning(it)
         }
         return binding.root
+    }
+
+    private fun onWalletMissingWarning(walletMissing: Boolean) {
+        if (walletMissing) {
+            binding.walletWarning.action(getString(R.string.add_wallet_now)) {
+                analytics.trackEventPrompt(
+                    Analytics.ParamValue.WALLET_MISSING.paramValue,
+                    Analytics.ParamValue.WARN.paramValue,
+                    Analytics.ParamValue.ACTION.paramValue
+                )
+                navigator.showConnectWallet(connectWalletLauncher, this)
+            }.closeButton {
+                analytics.trackEventPrompt(
+                    Analytics.ParamValue.WALLET_MISSING.paramValue,
+                    Analytics.ParamValue.WARN.paramValue,
+                    Analytics.ParamValue.DISMISS.paramValue
+                )
+                binding.walletWarning.setVisible(false)
+                parentModel.setWalletWarningDismissTimestamp()
+            }
+            analytics.trackEventPrompt(
+                Analytics.ParamValue.WALLET_MISSING.paramValue,
+                Analytics.ParamValue.WARN.paramValue,
+                Analytics.ParamValue.VIEW.paramValue
+            )
+        }
+        binding.walletWarning.setVisible(walletMissing)
     }
 
     override fun onResume() {
@@ -140,9 +160,20 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
 
     override fun onDeviceClicked(userDevice: UserDevice) {
         navigator.showUserDevice(userDeviceLauncher, this, userDevice.device)
+
+        analytics.trackEventUserAction(
+            actionName = Analytics.ParamValue.SELECT_DEVICE.paramValue,
+            contentType = Analytics.ParamValue.USER_DEVICE_LIST.paramValue,
+            Pair(FirebaseAnalytics.Param.ITEM_LIST_ID, userDevice.device.id)
+        )
     }
 
     override fun onUpdateStationClicked(userDevice: UserDevice) {
+        analytics.trackEventPrompt(
+            Analytics.ParamValue.OTA_AVAILABLE.paramValue,
+            Analytics.ParamValue.WARN.paramValue,
+            Analytics.ParamValue.ACTION.paramValue
+        )
         navigator.showDeviceHeliumOTA(this, userDevice.device, false)
     }
 

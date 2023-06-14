@@ -14,6 +14,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.data.User
 import com.weatherxm.usecases.AuthUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
@@ -27,6 +28,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
 
     private val authUseCase: AuthUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
+    private val analytics: Analytics by inject()
 
     private val onLogin = MutableLiveData<Resource<Unit>>()
     fun onLogin() = onLogin
@@ -52,6 +54,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             authUseCase.login(username, password)
                 .mapLeft {
+                    analytics.trackEventFailure(it.code)
                     handleLoginFailure(it)
                     return@launch
                 }
@@ -60,6 +63,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
                     authUseCase.getUser()
                 }
                 .mapLeft {
+                    analytics.trackEventFailure(it.code)
                     Timber.d("Got error when fetching the user on Login Screen: $it")
                     handleUserFailure(it)
                 }

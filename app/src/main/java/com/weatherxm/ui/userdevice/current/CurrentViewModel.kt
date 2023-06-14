@@ -11,6 +11,7 @@ import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.usecases.UserDeviceUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,7 @@ import timber.log.Timber
 class CurrentViewModel(var device: Device) : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val userDeviceUseCase: UserDeviceUseCase by inject()
+    private val analytics: Analytics by inject()
 
     private val onDevice = MutableLiveData<Device>()
 
@@ -45,6 +47,7 @@ class CurrentViewModel(var device: Device) : ViewModel(), KoinComponent {
                     onDevice.postValue(device)
                 }
                 .mapLeft {
+                    analytics.trackEventFailure(it.code)
                     when (it) {
                         is ApiError.DeviceNotFound -> {
                             UIError(resHelper.getString(R.string.error_user_device_not_found))

@@ -14,6 +14,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.ClaimDeviceUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
 import kotlinx.coroutines.launch
@@ -24,6 +25,7 @@ import timber.log.Timber
 class ClaimM5ViewModel : ViewModel(), KoinComponent {
     private val claimDeviceUseCase: ClaimDeviceUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
+    private val analytics: Analytics by inject()
 
     private var userEmail: String? = null
 
@@ -70,6 +72,7 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
                     onClaimResult.postValue(Resource.success(it))
                 }
                 .mapLeft {
+                    analytics.trackEventFailure(it.code)
                     handleFailure(it)
                 }
         }

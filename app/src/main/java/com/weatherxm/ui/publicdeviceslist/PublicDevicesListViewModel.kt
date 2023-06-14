@@ -9,6 +9,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.UIHex
 import com.weatherxm.usecases.ExplorerUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,6 +20,7 @@ import timber.log.Timber
 class PublicDevicesListViewModel : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val explorerUseCase: ExplorerUseCase by inject()
+    private val analytics: Analytics by inject()
     private val onPublicDevices = MutableLiveData<Resource<List<UIDevice>>>(Resource.loading())
     private val address = MutableLiveData<String>()
 
@@ -48,6 +50,7 @@ class PublicDevicesListViewModel : ViewModel(), KoinComponent {
 
                 }
                 .mapLeft {
+                    analytics.trackEventFailure(it.code)
                     onPublicDevices.postValue(
                         Resource.error(resHelper.getString(R.string.error_public_devices_no_data))
                     )

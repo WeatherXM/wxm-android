@@ -7,6 +7,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.User
 import com.weatherxm.usecases.UserUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -15,6 +16,7 @@ import org.koin.core.component.inject
 class ProfileViewModel : ViewModel(), KoinComponent {
 
     private val userUseCase: UserUseCase by inject()
+    private val analytics: Analytics by inject()
 
     private val user = MutableLiveData<Resource<User>>()
     fun user() = user
@@ -25,6 +27,7 @@ class ProfileViewModel : ViewModel(), KoinComponent {
                 .map {
                     user.postValue(Resource.success(it))
                 }.mapLeft {
+                    analytics.trackEventFailure(it.code)
                     user.postValue(
                         Resource.error(it.getDefaultMessage(R.string.error_reach_out_short))
                     )

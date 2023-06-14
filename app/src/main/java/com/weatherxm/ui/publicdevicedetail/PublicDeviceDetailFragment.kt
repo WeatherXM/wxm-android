@@ -21,14 +21,17 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.explorer.ExplorerViewModel
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.setColor
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import timber.log.Timber
 
 class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
     private val explorerModel: ExplorerViewModel by activityViewModels()
     private val model: PublicDeviceDetailViewModel by viewModels()
+    private val analytics: Analytics by inject()
     private lateinit var binding: FragmentPublicDeviceDetailsBinding
     private var device: UIDevice? = null
 
@@ -96,6 +99,15 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
         model.fetchDevice(device?.cellIndex, device?.id)
     }
 
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.EXPLORER_DEVICE,
+            PublicDeviceDetailFragment::class.simpleName,
+            device?.id
+        )
+    }
+
     private fun updateUI(resource: Resource<UIDevice>) {
         when (resource.status) {
             Status.SUCCESS -> {
@@ -103,7 +115,7 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
                 updateDeviceInfo(resource.data)
                 binding.currentWeatherCard.setData(resource.data?.currentWeather)
                 resource.data?.tokenInfo?.let {
-                    binding.tokenCard.setTokenInfo(it, null)
+                    binding.tokenCard.setTokenInfo(it, null, device?.id)
                 }
                 binding.dataContainer.setVisible(true)
             }

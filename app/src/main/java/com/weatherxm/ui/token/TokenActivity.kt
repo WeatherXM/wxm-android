@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
@@ -131,6 +132,13 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
         uiTransaction.txHash?.let { hash ->
             navigator.openWebsite(this, "$TransactionExplorer$hash")
         }
+
+        analytics.trackEventUserAction(
+            actionName = Analytics.ParamValue.TRANSACTION_ON_EXPLORER.paramValue,
+            contentType = Analytics.ParamValue.DEVICE_TRANSACTIONS.paramValue,
+            Pair(FirebaseAnalytics.Param.ITEM_LIST_ID, uiTransaction.txHash ?: ""),
+            Pair(FirebaseAnalytics.Param.ITEM_ID, deviceId)
+        )
     }
 
     private fun endOfDataListener() {

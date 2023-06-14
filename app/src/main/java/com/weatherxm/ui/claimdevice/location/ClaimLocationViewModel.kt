@@ -12,6 +12,7 @@ import com.mapbox.geojson.Point
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.usecases.ClaimDeviceUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.LocationHelper.getLocationAndThen
 import com.weatherxm.util.Validator
 import kotlinx.coroutines.CancellationException
@@ -33,6 +34,7 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
     }
 
     private val usecase: ClaimDeviceUseCase by inject()
+    private val analytics: Analytics by inject()
     private val validator: Validator by inject()
     private var reverseGeocodingJob: Job? = null
     private var installationLocation = Location("").apply {
@@ -107,6 +109,8 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
             usecase.getSuggestionLocation(suggestion)
                 .onRight { location ->
                     onSelectedSearchLocation.postValue(location)
+                }.onLeft {
+                    analytics.trackEventFailure(it.code)
                 }
         }
     }
@@ -125,6 +129,7 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
                     onReverseGeocodedAddress.postValue(it)
                 }
                 .onLeft {
+                    analytics.trackEventFailure(it.code)
                     onReverseGeocodedAddress.postValue(null)
                 }
         }

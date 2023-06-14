@@ -6,6 +6,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.SingleLiveEvent
 import com.weatherxm.usecases.PasswordPromptUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import com.weatherxm.util.Validator
@@ -17,6 +18,7 @@ class PasswordPromptViewModel : ViewModel(), KoinComponent {
     private val usecase: PasswordPromptUseCase by inject()
     private val validator: Validator by inject()
     private val resHelper: ResourcesHelper by inject()
+    private val analytics: Analytics by inject()
 
     private val onValidPassword = SingleLiveEvent<Resource<Unit>>()
     fun onValidPassword() = onValidPassword
@@ -37,6 +39,7 @@ class PasswordPromptViewModel : ViewModel(), KoinComponent {
             usecase.isPasswordCorrect(password).onRight {
                 onValidPassword.postValue(Resource.success(Unit))
             }.onLeft {
+                analytics.trackEventFailure(it.code)
                 onValidPassword.postValue(
                     Resource.error(it.getDefaultMessage(R.string.error_invalid_password))
                 )

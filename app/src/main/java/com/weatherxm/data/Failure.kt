@@ -17,9 +17,19 @@ sealed class Failure(val code: String? = null) {
         const val CODE_BL_GATT_REQUEST_REJECTED = "GATT_REQUEST_REJECTED"
         const val CODE_BL_DISABLED = "BLUETOOTH_DISABLED"
         const val CODE_BL_CANCELLATION = "BLUETOOTH_CANCELLATION"
+        const val CODE_BL_SCANNING_ERROR = "BLUETOOTH_CANCELLATION"
+        const val CODE_BL_DEVICE_NOT_PAIRED = "BLUETOOTH_DEVICE_NOT_PAIRED"
+        const val CODE_BL_OTA_FAILED = "BLUETOOTH_OTA_FAILED"
         const val CODE_PERIPHERAL_ERROR = "PERIPHERAL_ERROR"
         const val CODE_AT_COMMAND_ERROR = "AT_COMMAND_ERROR"
         const val CODE_USER_NOT_LOGGED_IN = "USER_NOT_LOGGED_IN"
+        const val CODE_USER_RATE_LIMITED = "USER_RATE_LIMITED"
+        const val CODE_GEOCODING_ERROR = "GEOCODING_ERROR"
+        const val CODE_SEARCH_RESULT_NO_ADDRESS = "EARCH_RESULT_NO_ADDRESS"
+        const val CODE_SEARCH_RESULT_NOT_ACCURATE = "RESULT_NOT_ACCURATE"
+        const val CODE_SEARCH_RESULT_NOT_NEARBY = "SEARCH_RESULT_NOT_NEARBY"
+        const val CODE_SEARCH_RESULT_ADDRESS_FORMAT_ERROR = "SEARCH_RESULT_ADDRESS_FORMAT_ERROR"
+        const val CODE_SUGGESTION_LOCATION_ERROR = "SUGGESTION_LOCATION_ERROR"
     }
 
     object NoGeocoderError : Failure()
@@ -39,7 +49,7 @@ sealed class NetworkError(code: String?) : Failure(code) {
 
 @Keep
 sealed class BluetoothError(code: String? = null, val message: String? = null) : Failure(code) {
-    object ScanningError : BluetoothError()
+    class ScanningError(code: String? = CODE_BL_SCANNING_ERROR) : BluetoothError(code)
     object DeviceNotFound : BluetoothError()
     object DfuAborted : BluetoothError()
 
@@ -171,22 +181,34 @@ sealed class DataError : Failure() {
 }
 
 @Keep
-sealed class UserActionError(val message: String? = null) : Failure() {
-    class UserActionRateLimitedError(message: String? = null) : UserActionError(message)
-    class UserNotLoggedInError(code: String = CODE_USER_NOT_LOGGED_IN) : Failure(code)
+sealed class UserActionError(code: String, val message: String? = null) : Failure(code) {
+    class UserActionRateLimitedError(
+        code: String = CODE_USER_RATE_LIMITED,
+        message: String? = null
+    ) : UserActionError(code, message)
+
+    class UserNotLoggedInError(code: String = CODE_USER_NOT_LOGGED_IN) : UserActionError(code)
 }
 
 @Keep
-sealed class MapBoxError : Failure() {
-    object GeocodingError : MapBoxError()
-    sealed class ReverseGeocodingError : MapBoxError() {
-        object SearchResultNoAddressError : ReverseGeocodingError()
-        object SearchResultNotAccurateError : ReverseGeocodingError()
-        object SearchResultNotNearbyError : ReverseGeocodingError()
-        object SearchResultAddressFormatError : ReverseGeocodingError()
+sealed class MapBoxError(code: String) : Failure(code) {
+    class GeocodingError(code: String = CODE_GEOCODING_ERROR) : MapBoxError(code)
+    sealed class ReverseGeocodingError(code: String) : MapBoxError(code) {
+        class SearchResultNoAddressError(code: String = CODE_SEARCH_RESULT_NO_ADDRESS) :
+            ReverseGeocodingError(code)
+
+        class SearchResultNotAccurateError(code: String = CODE_SEARCH_RESULT_NOT_ACCURATE) :
+            ReverseGeocodingError(code)
+
+        class SearchResultNotNearbyError(code: String = CODE_SEARCH_RESULT_NOT_NEARBY) :
+            ReverseGeocodingError(code)
+
+        class SearchResultAddressFormatError(
+            code: String = CODE_SEARCH_RESULT_ADDRESS_FORMAT_ERROR
+        ) : ReverseGeocodingError(code)
     }
 
-    object SuggestionLocationError : MapBoxError()
+    class SuggestionLocationError(code: String = CODE_SUGGESTION_LOCATION_ERROR) : MapBoxError(code)
 }
 
 @Keep

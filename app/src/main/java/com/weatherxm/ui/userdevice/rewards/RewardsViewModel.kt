@@ -13,6 +13,7 @@ import com.weatherxm.data.NetworkError.NoConnectionError
 import com.weatherxm.ui.common.TokenInfo
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.usecases.UserDeviceUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.launch
@@ -22,6 +23,7 @@ import org.koin.core.component.inject
 class RewardsViewModel(var device: Device) : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val userDeviceUseCase: UserDeviceUseCase by inject()
+    private val analytics: Analytics by inject()
 
     private val onLoading = MutableLiveData<Boolean>()
 
@@ -39,8 +41,13 @@ class RewardsViewModel(var device: Device) : ViewModel(), KoinComponent {
         onLoading.postValue(true)
         viewModelScope.launch {
             userDeviceUseCase.getTokenInfoLast30D(device.id)
-                .map { onTokens.postValue(it) }
-                .mapLeft { handleTokenFailure(it) }
+                .map {
+                    onTokens.postValue(it)
+                }
+                .mapLeft {
+                    analytics.trackEventFailure(it.code)
+                    handleTokenFailure(it)
+                }
             onLoading.postValue(false)
         }
     }

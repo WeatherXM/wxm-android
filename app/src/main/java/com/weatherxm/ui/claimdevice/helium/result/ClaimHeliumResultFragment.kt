@@ -17,6 +17,7 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.common.ActionDialogFragment
+import com.weatherxm.util.Analytics
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -26,6 +27,7 @@ class ClaimHeliumResultFragment : Fragment(), KoinComponent {
     private val model: ClaimHeliumResultViewModel by activityViewModels()
     private lateinit var binding: FragmentClaimHeliumResultBinding
     private val navigator: Navigator by inject()
+    private val analytics: Analytics by inject()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,6 +99,14 @@ class ClaimHeliumResultFragment : Fragment(), KoinComponent {
         }, onSuccessPrimaryButtonClicked = {
             // We will define this later when we show it
         }, onCancelButtonClicked = {
+            analytics.trackEventUserAction(
+                actionName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
+                contentType = Analytics.ParamValue.CLAIMING.paramValue,
+                Pair(
+                    Analytics.CustomParam.ACTION.paramName,
+                    Analytics.ParamValue.CANCEL.paramValue
+                )
+            )
             parentModel.cancel()
         }, onRetryButtonClicked = {
             // We will define this later when we show it
@@ -108,6 +118,11 @@ class ClaimHeliumResultFragment : Fragment(), KoinComponent {
             Status.SUCCESS -> {
                 val device = resource.data
                 if (device != null && device.profile == Helium && device.needsUpdate()) {
+                    analytics.trackEventPrompt(
+                        Analytics.ParamValue.OTA_AVAILABLE.paramValue,
+                        Analytics.ParamValue.WARN.paramValue,
+                        Analytics.ParamValue.VIEW.paramValue
+                    )
                     binding.bleActionFlow.setSuccessPrimaryButtonListener {
                         onUpdate(device)
                     }
@@ -135,9 +150,22 @@ class ClaimHeliumResultFragment : Fragment(), KoinComponent {
                         primaryActionText = getString(R.string.action_view_station)
                     )
                 }
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
+                    contentId = Analytics.ParamValue.CLAIMING_RESULT_ID.paramValue,
+                    success = 1L
+                )
             }
             Status.ERROR -> {
                 binding.bleActionFlow.setRetryButtonListener {
+                    analytics.trackEventUserAction(
+                        actionName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
+                        contentType = Analytics.ParamValue.CLAIMING.paramValue,
+                        Pair(
+                            Analytics.CustomParam.ACTION.paramName,
+                            Analytics.ParamValue.RETRY.paramValue
+                        )
+                    )
                     parentModel.claimDevice(locationModel.getInstallationLocation())
                 }
                 binding.bleActionFlow.onError(
@@ -149,6 +177,11 @@ class ClaimHeliumResultFragment : Fragment(), KoinComponent {
                 ) {
                     sendSupportEmail(it)
                 }
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
+                    contentId = Analytics.ParamValue.CLAIMING_RESULT_ID.paramValue,
+                    success = 0L
+                )
             }
             Status.LOADING -> {
                 // Do nothing
@@ -171,12 +204,25 @@ class ClaimHeliumResultFragment : Fragment(), KoinComponent {
     }
 
     private fun onViewDevice(device: Device) {
+        analytics.trackEventUserAction(
+            actionName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
+            contentType = Analytics.ParamValue.CLAIMING.paramValue,
+            Pair(
+                Analytics.CustomParam.ACTION.paramName,
+                Analytics.ParamValue.VIEW_STATION.paramValue
+            )
+        )
         parentModel.disconnectFromPeripheral()
         navigator.showUserDevice(activity, device)
         activity?.finish()
     }
 
     private fun onUpdate(device: Device) {
+        analytics.trackEventPrompt(
+            Analytics.ParamValue.OTA_AVAILABLE.paramValue,
+            Analytics.ParamValue.WARN.paramValue,
+            Analytics.ParamValue.ACTION.paramValue
+        )
         navigator.showDeviceHeliumOTA(this, device, true)
         activity?.finish()
     }

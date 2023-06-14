@@ -14,6 +14,7 @@ import com.weatherxm.R
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.AlertDialogFragment
 import com.weatherxm.ui.common.toast
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.DisplayModeHelper
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
@@ -23,6 +24,7 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
     private val model: PreferenceViewModel by activityViewModels()
     private val navigator: Navigator by inject()
     private val displayModeHelper: DisplayModeHelper by inject()
+    private val analytics: Analytics by inject()
 
     companion object {
         const val TAG = "PreferenceFragment"
@@ -56,11 +58,12 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
             findPreference<SwitchPreferenceCompat>(getString(R.string.key_google_analytics))
 
         openDocumentationButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            analytics.trackEventSelectContent(Analytics.ParamValue.DOCUMENTATION.paramValue)
             navigator.openWebsite(context, getString(R.string.documentation_url))
             true
         }
         contactSupportButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            navigator.sendSupportEmail(context)
+            navigator.sendSupportEmail(context, source = Analytics.ParamValue.SETTINGS.paramValue)
             true
         }
         userResearchButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {

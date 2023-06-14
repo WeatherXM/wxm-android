@@ -79,7 +79,7 @@ class NetworkAddressSearchDataSource(
                         } else {
                             Timber.w(e, "Geocoding failure [query=$query]")
                             continuation.resumeWith(
-                                Result.success(Either.Left(MapBoxError.GeocodingError))
+                                Result.success(Either.Left(MapBoxError.GeocodingError()))
                             )
                         }
                     }
@@ -116,7 +116,7 @@ class NetworkAddressSearchDataSource(
                     override fun onError(e: Exception) {
                         Timber.w(e, "Suggestion location search error.")
                         continuation.resumeWith(
-                            Result.success(Either.Left(MapBoxError.SuggestionLocationError))
+                            Result.success(Either.Left(MapBoxError.SuggestionLocationError()))
                         )
                     }
 

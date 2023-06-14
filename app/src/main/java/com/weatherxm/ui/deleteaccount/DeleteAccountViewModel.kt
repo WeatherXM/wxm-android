@@ -8,6 +8,7 @@ import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidCredentials
 import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidPassword
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.DeleteAccountUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getCode
 import com.weatherxm.util.UIErrors.getDefaultMessage
@@ -22,6 +23,7 @@ class DeleteAccountViewModel : ViewModel(), KoinComponent {
     private val validator: Validator by inject()
     private val resHelper: ResourcesHelper by inject()
     private val deleteAccountUseCase: DeleteAccountUseCase by inject()
+    private val analytics: Analytics by inject()
 
     private val onStatus = MutableLiveData<Resource<State>>()
     fun onStatus() = onStatus
@@ -54,6 +56,7 @@ class DeleteAccountViewModel : ViewModel(), KoinComponent {
             deleteAccountUseCase.isPasswordCorrect(password).onRight {
                 deleteAccount()
             }.onLeft {
+                analytics.trackEventFailure(it.code)
                 when (it) {
                     is InvalidCredentials -> {
                         onStatus.postValue(
@@ -82,6 +85,7 @@ class DeleteAccountViewModel : ViewModel(), KoinComponent {
                 onStatus.postValue(Resource.success(State(Status.ACCOUNT_DELETION)))
             }
             .onLeft {
+                analytics.trackEventFailure(it.code)
                 onStatus.postValue(Resource.error(it.getCode(), State(Status.ACCOUNT_DELETION)))
             }
     }

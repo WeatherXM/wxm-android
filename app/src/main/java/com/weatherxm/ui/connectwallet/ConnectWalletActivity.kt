@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.weatherxm.R
@@ -53,23 +54,74 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
 
         binding.root.applyInsets()
 
+        setListeners()
+
+        onBackPressedDispatcher.addCallback {
+            finish()
+        }
+
         binding.walletCompatibilityCard
             .action(
                 getString(R.string.check_wallet_compatibility),
                 ResourcesCompat.getDrawable(resources, R.drawable.ic_open_new, this.theme)
             ) {
                 navigator.openWebsite(this, getString(R.string.suggested_wallets_documentation))
+                analytics.trackEventPrompt(
+                    Analytics.ParamValue.WALLET_COMPATIBILITY.paramValue,
+                    Analytics.ParamValue.INFO.paramValue,
+                    Analytics.ParamValue.ACTION.paramValue
+                )
             }
 
+        binding.walletCompatibilityCard.closeButton {
+            analytics.trackEventPrompt(
+                Analytics.ParamValue.WALLET_COMPATIBILITY.paramValue,
+                Analytics.ParamValue.INFO.paramValue,
+                Analytics.ParamValue.DISMISS.paramValue
+            )
+        }
+
+        with(binding.termsCheckboxDesc) {
+            movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                setOnLinkClickListener { _, url ->
+                    analytics.trackEventSelectContent(Analytics.ParamValue.WALLET_TERMS.paramValue)
+                    navigator.openWebsite(this@ConnectWalletActivity, url)
+                    return@setOnLinkClickListener true
+                }
+            }
+            setHtml(R.string.accept_terms, getString(R.string.terms_of_service_url))
+        }
+
+        // Listen to current address for UI update
+        model.currentAddress().observe(this) {
+            onAddressUpdateUI(it)
+        }
+
+        // Listen for newly saved address state change
+        model.isAddressSaved().observe(this) { result ->
+            onNewAddressSaved(result)
+        }
+
+        binding.address.onTextChanged {
+            binding.addressContainer.error = null
+        }
+    }
+
+    private fun setListeners() {
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
         binding.scanQR.setOnClickListener {
+            analytics.trackEventSelectContent(Analytics.ParamValue.WALLET_SCAN_QR.paramValue)
             navigator.showQRScanner(barcodeLauncher)
         }
 
         binding.editWallet.setOnClickListener {
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.EDIT_WALLET.paramValue,
+                Pair(FirebaseAnalytics.Param.ITEM_ID, model.currentAddress().value ?: "")
+            )
             navigator.showPasswordPrompt(
                 this,
                 R.string.edit_wallet_password_prompt_desc
@@ -83,10 +135,6 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
-        binding.address.onTextChanged {
-            binding.addressContainer.error = null
-        }
-
         binding.termsCheckbox.setOnCheckedChangeListener { _, isChecked ->
             binding.saveBtn.isEnabled = binding.ownershipCheckbox.isChecked && isChecked
         }
@@ -95,17 +143,11 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             binding.saveBtn.isEnabled = binding.termsCheckbox.isChecked && isChecked
         }
 
-        with(binding.termsCheckboxDesc) {
-            movementMethod = BetterLinkMovementMethod.newInstance().apply {
-                setOnLinkClickListener { _, url ->
-                    navigator.openWebsite(this@ConnectWalletActivity, url)
-                    return@setOnLinkClickListener true
-                }
-            }
-            setHtml(R.string.accept_terms, getString(R.string.terms_of_service_url))
-        }
-
         binding.createMetamask.setOnClickListener {
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.CREATE_METAMASK.paramValue,
+                Pair(FirebaseAnalytics.Param.ITEM_ID, model.currentAddress().value ?: "")
+            )
             navigator.openWebsite(this, getString(R.string.suggested_wallets_documentation))
         }
 
@@ -113,11 +155,10 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             navigator.openWebsite(
                 this, getString(R.string.wallet_explorer, model.currentAddress().value)
             )
-        }
-
-        // Listen to current address for UI update
-        model.currentAddress().observe(this) {
-            onAddressUpdateUI(it)
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.WALLET_TRANSACTIONS.paramValue,
+                Pair(FirebaseAnalytics.Param.ITEM_ID, model.currentAddress().value ?: "")
+            )
         }
 
         binding.saveBtn.setOnClickListener {
@@ -129,15 +170,6 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             }
 
             showConfirmWalletDialog(address)
-        }
-
-        // Listen for newly saved address state change
-        model.isAddressSaved().observe(this) { result ->
-            onNewAddressSaved(result)
-        }
-
-        onBackPressedDispatcher.addCallback {
-            finish()
         }
     }
 
@@ -183,6 +215,12 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         binding.ownershipCheckbox.isEnabled = true
         binding.termsCheckbox.isEnabled = true
         binding.walletCompatibilityCard.setVisible(true)
+
+        analytics.trackEventPrompt(
+            Analytics.ParamValue.WALLET_COMPATIBILITY.paramValue,
+            Analytics.ParamValue.INFO.paramValue,
+            Analytics.ParamValue.VIEW.paramValue
+        )
     }
 
     private fun onAddressUpdateUI(address: String?) {
@@ -192,6 +230,12 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             binding.viewTransactionHistoryBtn.setVisible(false)
             binding.scanQR.setVisible(true)
             binding.checkBoxesAndButtonContainer.setVisible(true)
+
+            analytics.trackEventPrompt(
+                Analytics.ParamValue.WALLET_COMPATIBILITY.paramValue,
+                Analytics.ParamValue.INFO.paramValue,
+                Analytics.ParamValue.VIEW.paramValue
+            )
         } else {
             binding.editWallet.setVisible(true)
             binding.address.setText(Mask.maskHash(address))

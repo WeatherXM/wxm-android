@@ -34,6 +34,7 @@ import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.show
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.setBluetoothDrawable
 import com.weatherxm.util.setHtml
 import com.weatherxm.util.setNoDevicesFoundDrawable
@@ -46,6 +47,7 @@ class ClaimHeliumPairFragment : Fragment() {
     private val parentModel: ClaimHeliumViewModel by activityViewModels()
     private val navigator: Navigator by inject()
     private val bluetoothAdapter: BluetoothAdapter? by inject()
+    private val analytics: Analytics by inject()
     private lateinit var binding: FragmentClaimHeliumPairBinding
     private lateinit var adapter: ScannedDevicesListAdapter
 
@@ -111,6 +113,7 @@ class ClaimHeliumPairFragment : Fragment() {
         }
 
         binding.scanAgain.setOnClickListener {
+            analytics.trackEventSelectContent(Analytics.ParamValue.BLE_SCAN_AGAIN.paramValue)
             adapter.submitList(mutableListOf())
             enableBluetoothAndScan()
         }
@@ -172,13 +175,34 @@ class ClaimHeliumPairFragment : Fragment() {
                 message = uiError.errorMessage
             )
             .onNegativeClick(getString(R.string.action_quit_claiming)) {
+                analytics.trackEventUserAction(
+                    actionName = Analytics.ParamValue.HELIUM_BLE_POPUP_ERROR.paramValue,
+                    contentType = Analytics.ParamValue.HELIUM_BLE_POPUP.paramValue,
+                    Pair(
+                        Analytics.CustomParam.ACTION.paramName,
+                        Analytics.ParamValue.CANCEL.paramValue
+                    )
+                )
                 parentModel.cancel()
             }
             .onPositiveClick(getString(R.string.action_try_again)) {
+                analytics.trackEventUserAction(
+                    actionName = Analytics.ParamValue.HELIUM_BLE_POPUP_ERROR.paramValue,
+                    contentType = Analytics.ParamValue.HELIUM_BLE_POPUP.paramValue,
+                    Pair(
+                        Analytics.CustomParam.ACTION.paramName,
+                        Analytics.ParamValue.TRY_AGAIN.paramValue
+                    )
+                )
                 uiError.retryFunction?.invoke()
             }
             .build()
             .show(this)
+
+        analytics.trackScreen(
+            Analytics.Screen.BLE_CONNECTION_POPUP_ERROR,
+            ClaimHeliumPairFragment::class.simpleName
+        )
     }
 
     private fun updateUI(result: Resource<Unit>) {

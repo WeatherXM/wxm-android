@@ -18,9 +18,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentPasswordPromptBinding
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.onTextChanged
 import com.weatherxm.util.setHtml
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 class PasswordPromptFragment : BottomSheetDialogFragment() {
 
@@ -30,6 +32,7 @@ class PasswordPromptFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentPasswordPromptBinding
     private val model: PasswordPromptViewModel by viewModels()
+    private val analytics: Analytics by inject()
 
     private var messageResId: Int? = null
 
@@ -102,6 +105,14 @@ class PasswordPromptFragment : BottomSheetDialogFragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            Analytics.Screen.PASSWORD_CONFIRM,
+            PasswordPromptFragment::class.simpleName
+        )
     }
 
     private fun setResult(result: Boolean) {

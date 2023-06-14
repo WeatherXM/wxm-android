@@ -4,12 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.HistoryUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getDateRangeFromToday
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
@@ -35,6 +37,7 @@ class HistoryChartsViewModel(
 
     private val historyUseCase: HistoryUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
+    private val analytics: Analytics by inject()
 
     private val dates = MutableLiveData(getDateRangeFromToday(DAYS_TO_SHOW))
     fun dates() = dates
@@ -81,6 +84,13 @@ class HistoryChartsViewModel(
 
             Timber.d("Fetching data for $date [forced=$shouldForceUpdate]")
             currentDateShown = date
+
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.HISTORY_DAY.paramValue,
+                Pair(FirebaseAnalytics.Param.ITEM_ID, device.id),
+                Pair(Analytics.CustomParam.DATE.paramName, date.toString())
+            )
+
             // Fetch fresh data
             historyUseCase.getWeatherHistory(device, date, shouldForceUpdate)
                 .onRight {
@@ -88,6 +98,7 @@ class HistoryChartsViewModel(
                     charts.postValue(Resource.success(it))
                 }
                 .onLeft {
+                    analytics.trackEventFailure(it.code)
                     charts.postValue(
                         Resource.error(
                             resHelper.getString(

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile
@@ -47,6 +48,11 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
 
         adapter = StationInfoAdapter {
             if (it == ActionType.UPDATE_FIRMWARE) {
+                analytics.trackEventPrompt(
+                    Analytics.ParamValue.OTA_AVAILABLE.paramValue,
+                    Analytics.ParamValue.WARN.paramValue,
+                    Analytics.ParamValue.ACTION.paramValue
+                )
                 navigator.showDeviceHeliumOTA(this, model.device, false)
                 finish()
             }
@@ -82,18 +88,14 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.changeStationNameBtn.setOnClickListener {
-            model.canChangeFriendlyName()
-                .fold({
-                    toast(it.errorMessage)
-                }, {
-                    // This cannot be false, by design
-                    FriendlyNameDialogFragment(model.device.attributes?.friendlyName) {
-                        model.setOrClearFriendlyName(it)
-                    }.show(this)
-                })
+            onChangeStationName()
         }
 
         binding.removeStationBtn.setOnClickListener {
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.REMOVE_DEVICE.paramValue,
+                Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
+            )
             navigator.showPasswordPrompt(this, R.string.remove_station_password_message) {
                 if (it) {
                     Timber.d("Password confirmation success!")
@@ -114,9 +116,26 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
 
         binding.contactSupportBtn.setOnClickListener {
             navigator.sendSupportEmail(
-                this, recipient = getString(R.string.support_email_recipient)
+                this,
+                recipient = getString(R.string.support_email_recipient),
+                source = Analytics.ParamValue.DEVICE_INFO.paramValue
             )
         }
+    }
+
+    private fun onChangeStationName() {
+        model.canChangeFriendlyName()
+            .fold({
+                toast(it.errorMessage)
+            }, {
+                // This cannot be false, by design
+                FriendlyNameDialogFragment(
+                    model.device.attributes?.friendlyName,
+                    model.device.id
+                ) {
+                    model.setOrClearFriendlyName(it)
+                }.show(this)
+            })
     }
 
     override fun onResume() {
@@ -174,10 +193,31 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
         }
 
         model.onStationInfo().observe(this) { stationInfo ->
+            if (stationInfo.any { it.warning != null }) {
+                analytics.trackEventPrompt(
+                    Analytics.ParamValue.LOW_BATTERY.paramValue,
+                    Analytics.ParamValue.WARN.paramValue,
+                    Analytics.ParamValue.VIEW.paramValue,
+                    Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
+                )
+            }
+            if (stationInfo.any { it.action?.actionType == ActionType.UPDATE_FIRMWARE }) {
+                analytics.trackEventPrompt(
+                    Analytics.ParamValue.OTA_AVAILABLE.paramValue,
+                    Analytics.ParamValue.WARN.paramValue,
+                    Analytics.ParamValue.VIEW.paramValue
+                )
+            }
             adapter.submitList(stationInfo)
 
             binding.shareBtn.setOnClickListener {
                 navigator.openShare(this, model.parseStationInfoToShare(stationInfo))
+
+                analytics.trackEventUserAction(
+                    actionName = Analytics.ParamValue.SHARE_STATION_INFO.paramValue,
+                    contentType = Analytics.ParamValue.STATION_INFO.paramValue,
+                    Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
+                )
             }
         }
 

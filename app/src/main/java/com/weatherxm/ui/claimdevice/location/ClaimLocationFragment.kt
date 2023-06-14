@@ -12,16 +12,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimSetLocationBinding
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.hideKeyboard
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 class ClaimLocationFragment : Fragment() {
     private val model: ClaimLocationViewModel by activityViewModels()
+    private val analytics: Analytics by inject()
     private lateinit var binding: FragmentClaimSetLocationBinding
 
     companion object {
@@ -95,6 +99,12 @@ class ClaimLocationFragment : Fragment() {
         val adapter = SearchResultsAdapter {
             model.getLocationFromSearchSuggestion(it)
             hideKeyboard()
+
+            analytics.trackEventUserAction(
+                actionName = Analytics.ParamValue.SEARCH_LOCATION.paramValue,
+                contentType = Analytics.ParamValue.CLAIMING_ADDRESS_SEARCH.paramValue,
+                Pair(FirebaseAnalytics.Param.LOCATION, it.name)
+            )
         }
 
         binding.addressSearchView.setAdapter(adapter,

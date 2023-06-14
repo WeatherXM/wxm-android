@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Device
+import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.FrequencyState
@@ -16,6 +17,7 @@ import com.weatherxm.ui.stationsettings.FrequencyStatus
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.usecases.StationSettingsUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getCode
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -31,6 +33,7 @@ class ChangeFrequencyViewModel(var device: Device) : ViewModel(), KoinComponent 
     private val usecase: StationSettingsUseCase by inject()
     private val connectionUseCase: BluetoothConnectionUseCase by inject()
     private val scanUseCase: BluetoothScannerUseCase by inject()
+    private val analytics: Analytics by inject()
 
     private val frequenciesInOrder = mutableListOf<Frequency>()
     private var selectedFrequency = Frequency.US915
@@ -100,6 +103,7 @@ class ChangeFrequencyViewModel(var device: Device) : ViewModel(), KoinComponent 
         if (deviceIsPaired()) {
             connectAndReboot()
         } else {
+            analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
             onStatus.postValue(
                 Resource.error(
                     "",
@@ -120,7 +124,8 @@ class ChangeFrequencyViewModel(var device: Device) : ViewModel(), KoinComponent 
                     if (progress == 100) {
                         checkIfDevicePaired()
                     }
-                }.onLeft {
+                }.onLeft { failure ->
+                    analytics.trackEventFailure(failure.code)
                     onStatus.postValue(
                         Resource.error("", ChangeFrequencyState(FrequencyStatus.SCAN_FOR_STATION))
                     )
@@ -139,6 +144,7 @@ class ChangeFrequencyViewModel(var device: Device) : ViewModel(), KoinComponent 
                     if (deviceIsPaired()) {
                         changeFrequency()
                     } else {
+                        analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
                         onStatus.postValue(
                             Resource.error("", ChangeFrequencyState(FrequencyStatus.PAIR_STATION))
                         )
@@ -161,6 +167,7 @@ class ChangeFrequencyViewModel(var device: Device) : ViewModel(), KoinComponent 
                 connectionUseCase.connectToPeripheral().onRight {
                     changeFrequency()
                 }.onLeft {
+                    analytics.trackEventFailure(it.code)
                     onStatus.postValue(
                         Resource.error(
                             it.getCode(),
@@ -170,6 +177,7 @@ class ChangeFrequencyViewModel(var device: Device) : ViewModel(), KoinComponent 
                 }
             }
         }.onLeft {
+            analytics.trackEventFailure(it.code)
             onStatus.postValue(
                 Resource.error(
                     it.getCode(),
@@ -189,6 +197,7 @@ class ChangeFrequencyViewModel(var device: Device) : ViewModel(), KoinComponent 
                     Resource.success(ChangeFrequencyState(FrequencyStatus.CHANGING_FREQUENCY))
                 )
             }.onLeft {
+                analytics.trackEventFailure(it.code)
                 Resource.error(
                     it.getCode(), ChangeFrequencyState(FrequencyStatus.CHANGING_FREQUENCY)
                 )
@@ -204,6 +213,7 @@ class ChangeFrequencyViewModel(var device: Device) : ViewModel(), KoinComponent 
                         changeFrequency()
                     }
                     BluetoothDevice.BOND_NONE -> {
+                        analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
                         onStatus.postValue(
                             Resource.error("", ChangeFrequencyState(FrequencyStatus.PAIR_STATION))
                         )

@@ -6,12 +6,14 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Transaction
 import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.databinding.ViewTokenCardBinding
 import com.weatherxm.ui.common.TokenInfo
 import com.weatherxm.ui.common.show
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getFormattedDay
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Tokens
@@ -19,12 +21,17 @@ import com.weatherxm.util.Tokens.formatTokens
 import com.weatherxm.util.Tokens.formatValue
 import com.weatherxm.util.initializeTokenChart
 import com.weatherxm.util.setChildrenEnabled
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-open class TokenCardView : LinearLayout {
+open class TokenCardView : LinearLayout, KoinComponent {
 
     private lateinit var binding: ViewTokenCardBinding
 
     private var tokenInfo: TokenInfo? = null
+    private val analytics: Analytics by inject()
+
+    private var deviceId = ""
 
     constructor(context: Context?) : super(context) {
         init(context)
@@ -58,6 +65,7 @@ open class TokenCardView : LinearLayout {
                         binding.chart.initializeTokenChart(it)
                     }
                     setMaxReward(tokenInfo?.max7dReward)
+                    trackRangeToggle(Analytics.ParamValue.DAYS_30.paramValue)
                 }
                 R.id.option30D -> {
                     binding.chart.clear()
@@ -65,13 +73,15 @@ open class TokenCardView : LinearLayout {
                         binding.chart.initializeTokenChart(it)
                     }
                     setMaxReward(tokenInfo?.max30dReward)
+                    trackRangeToggle(Analytics.ParamValue.DAYS_30.paramValue)
                 }
             }
         }
     }
 
-    fun setTokenInfo(data: TokenInfo, totalAllTime: Float?) {
+    fun setTokenInfo(data: TokenInfo, totalAllTime: Float?, deviceId: String?) {
         this.tokenInfo = data
+        this.deviceId = deviceId ?: ""
         updateUI(totalAllTime)
     }
 
@@ -141,5 +151,13 @@ open class TokenCardView : LinearLayout {
                 binding.maxReward.text = resources.getString(R.string.no_rewards)
             }
         }
+    }
+
+    private fun trackRangeToggle(newRange: String) {
+        analytics.trackEventSelectContent(
+            Analytics.ParamValue.REWARDS_CARD.paramValue,
+            Pair(FirebaseAnalytics.Param.ITEM_ID, deviceId),
+            Pair(Analytics.CustomParam.STATE.paramName, newRange)
+        )
     }
 }

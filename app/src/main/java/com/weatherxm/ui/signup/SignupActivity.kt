@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -76,7 +77,7 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
             )
         }
 
-        // Listen for login state change
+        // Listen for signup state change
         model.isSignedUp().observe(this) { result ->
             onSignupResult(result)
         }
@@ -103,6 +104,13 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
                 binding.status.visibility = View.VISIBLE
                 binding.contactSupport.visibility = View.VISIBLE
                 binding.done.visibility = View.VISIBLE
+
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.SIGNUP.paramValue,
+                    contentId = Analytics.ParamValue.SIGNUP_ID.paramValue,
+                    Pair(FirebaseAnalytics.Param.METHOD, Analytics.ParamValue.EMAIL.paramValue),
+                    success = 1L
+                )
             }
             Status.ERROR -> {
                 binding.statusView
@@ -120,6 +128,13 @@ class SignupActivity : AppCompatActivity(), KoinComponent {
                 binding.status.visibility = View.VISIBLE
                 binding.contactSupport.visibility = View.INVISIBLE
                 binding.done.visibility = View.INVISIBLE
+
+                analytics.trackEventViewContent(
+                    contentName = Analytics.ParamValue.SIGNUP.paramValue,
+                    contentId = Analytics.ParamValue.SIGNUP_ID.paramValue,
+                    Pair(FirebaseAnalytics.Param.METHOD, Analytics.ParamValue.EMAIL.paramValue),
+                    success = 0L
+                )
             }
             Status.LOADING -> {
                 binding.statusView

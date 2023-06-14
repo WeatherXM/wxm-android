@@ -114,6 +114,8 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
 
         binding.myLocationButton.setOnClickListener {
             requestLocationPermissions()
+
+            analytics.trackEventUserAction(actionName = Analytics.ParamValue.MY_LOCATION.paramValue)
         }
 
         // Fetch data

@@ -9,6 +9,7 @@ import com.weatherxm.data.ApiError.AuthError.SignupError.UserAlreadyExists
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.AuthUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ class SignupViewModel : ViewModel(), KoinComponent {
 
     private val authUseCase: AuthUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
+    private val analytics: Analytics by inject()
 
     private val isSignedUp = MutableLiveData<Resource<String>>()
     fun isSignedUp() = isSignedUp
@@ -31,6 +33,7 @@ class SignupViewModel : ViewModel(), KoinComponent {
             val last = if (lastName.isNullOrEmpty()) null else lastName
             authUseCase.signup(username, first, last)
                 .mapLeft {
+                    analytics.trackEventFailure(it.code)
                     Timber.d("Signup Error: $it")
                     handleFailure(it, username)
                 }.map {

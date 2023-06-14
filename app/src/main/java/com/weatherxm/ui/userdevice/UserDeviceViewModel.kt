@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Device
 import com.weatherxm.usecases.UserDeviceUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.RefreshHandler
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ class UserDeviceViewModel(var device: Device) : ViewModel(), KoinComponent {
     }
 
     private val userDeviceUseCase: UserDeviceUseCase by inject()
+    private val analytics: Analytics by inject()
     private val refreshHandler = RefreshHandler(
         refreshIntervalMillis = TimeUnit.SECONDS.toMillis(REFRESH_INTERVAL_SECONDS)
     )
@@ -33,6 +35,8 @@ class UserDeviceViewModel(var device: Device) : ViewModel(), KoinComponent {
             userDeviceUseCase.getUserDevice(device.id)
                 .onRight {
                     Timber.d("Got User Device using polling: ${it.name}")
+                }.onLeft {
+                    analytics.trackEventFailure(it.code)
                 }
         }
 

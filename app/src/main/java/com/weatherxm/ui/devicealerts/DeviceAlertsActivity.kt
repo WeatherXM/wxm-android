@@ -6,6 +6,7 @@ import com.weatherxm.R
 import com.weatherxm.databinding.ActivityDeviceAlertsBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.UserDevice
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Analytics
@@ -44,6 +45,13 @@ class DeviceAlertsActivity : AppCompatActivity(), KoinComponent, DeviceAlertList
         val adapter = DeviceAlertsAdapter(this)
         binding.recycler.adapter = adapter
 
+        if (userDevice?.alerts?.contains(DeviceAlert.NEEDS_UPDATE) == true) {
+            analytics.trackEventPrompt(
+                Analytics.ParamValue.OTA_AVAILABLE.paramValue,
+                Analytics.ParamValue.WARN.paramValue,
+                Analytics.ParamValue.VIEW.paramValue
+            )
+        }
         adapter.submitList(userDevice?.alerts)
     }
 
@@ -56,6 +64,11 @@ class DeviceAlertsActivity : AppCompatActivity(), KoinComponent, DeviceAlertList
     }
 
     override fun onUpdateStationClicked() {
+        analytics.trackEventPrompt(
+            Analytics.ParamValue.OTA_AVAILABLE.paramValue,
+            Analytics.ParamValue.WARN.paramValue,
+            Analytics.ParamValue.ACTION.paramValue
+        )
         navigator.showDeviceHeliumOTA(this, userDevice?.device, false)
         finish()
     }
@@ -64,7 +77,8 @@ class DeviceAlertsActivity : AppCompatActivity(), KoinComponent, DeviceAlertList
         navigator.sendSupportEmail(
             this,
             subject = getString(R.string.support_email_subject_device_offline),
-            body = getString(R.string.support_email_body_device_name, userDevice?.device?.name)
+            body = getString(R.string.support_email_body_device_name, userDevice?.device?.name),
+            source = Analytics.ParamValue.DEVICE_ALERTS.paramValue
         )
         finish()
     }

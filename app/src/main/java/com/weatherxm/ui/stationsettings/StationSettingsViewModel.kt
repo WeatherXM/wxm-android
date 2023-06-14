@@ -14,6 +14,7 @@ import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.capitalizeWords
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.StationSettingsUseCase
+import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -25,6 +26,7 @@ import java.time.format.FormatStyle
 class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent {
     private val usecase: StationSettingsUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
+    private val analytics: Analytics by inject()
 
     private val onEditNameChange = MutableLiveData<String>()
     private val onDeviceRemoved = MutableLiveData<Boolean>()
@@ -41,6 +43,7 @@ class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent 
     fun canChangeFriendlyName(): Either<UIError, Boolean> {
         return usecase.canChangeFriendlyName(device.id)
             .mapLeft {
+                analytics.trackEventFailure(it.code)
                 Timber.d(it.message)
                 UIError(resHelper.getString(R.string.error_friendly_name_change_rate_limit))
             }
@@ -60,9 +63,20 @@ class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent 
             viewModelScope.launch {
                 usecase.setFriendlyName(device.id, friendlyName)
                     .map {
+                        analytics.trackEventViewContent(
+                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
+                            success = 1L
+                        )
                         onEditNameChange.postValue(friendlyName)
                     }
                     .mapLeft {
+                        analytics.trackEventFailure(it.code)
+                        analytics.trackEventViewContent(
+                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
+                            success = 0L
+                        )
                         onError.postValue(
                             UIError(resHelper.getString(R.string.error_reach_out_short))
                         )
@@ -78,9 +92,20 @@ class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent 
             viewModelScope.launch {
                 usecase.clearFriendlyName(device.id)
                     .map {
+                        analytics.trackEventViewContent(
+                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
+                            success = 1L
+                        )
                         onEditNameChange.postValue(device.name)
                     }
                     .mapLeft {
+                        analytics.trackEventFailure(it.code)
+                        analytics.trackEventViewContent(
+                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
+                            success = 0L
+                        )
                         onError.postValue(
                             UIError(resHelper.getString(R.string.error_reach_out_short))
                         )
@@ -100,6 +125,7 @@ class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent 
                         onDeviceRemoved.postValue(true)
                     }
                     .mapLeft {
+                        analytics.trackEventFailure(it.code)
                         Timber.e("Error when trying to remove device: $it")
                         val error = when (it) {
                             is ApiError.UserError.ClaimError.InvalidClaimId -> {
@@ -121,6 +147,7 @@ class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent 
         onLoading.postValue(true)
         viewModelScope.launch {
             usecase.getDeviceInfo(device.id).onLeft {
+                analytics.trackEventFailure(it.code)
                 Timber.d("$it: Fetching remote device info failed for device: $device")
                 onStationInfo.postValue(stationInfo)
             }.onRight { deviceInfo ->

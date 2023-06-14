@@ -32,6 +32,14 @@ class UpdatePromptActivity : AppCompatActivity(), KoinComponent {
         }
 
         onBackPressedDispatcher.addCallback {
+            analytics.trackEventUserAction(
+                actionName = Analytics.ParamValue.APP_UPDATE_PROMPT_RESULT.paramValue,
+                contentType = Analytics.ParamValue.APP_UPDATE_PROMPT.paramValue,
+                Pair(
+                    Analytics.CustomParam.ACTION.paramName,
+                    Analytics.ParamValue.DISCARD.paramValue
+                )
+            )
             if (!model.isUpdateMandatory()) {
                 navigator.showStartup(this@UpdatePromptActivity)
             }
@@ -46,10 +54,23 @@ class UpdatePromptActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.updateBtn.setOnClickListener {
+            analytics.trackEventUserAction(
+                actionName = Analytics.ParamValue.APP_UPDATE_PROMPT_RESULT.paramValue,
+                contentType = Analytics.ParamValue.APP_UPDATE_PROMPT.paramValue,
+                Pair(Analytics.CustomParam.ACTION.paramName, Analytics.ParamValue.UPDATE.paramValue)
+            )
             navigator.openPlayStore(this, getString(R.string.market_url, packageName))
         }
 
         binding.continueWithoutUpdatingBtn.setOnClickListener {
+            analytics.trackEventUserAction(
+                actionName = Analytics.ParamValue.APP_UPDATE_PROMPT_RESULT.paramValue,
+                contentType = Analytics.ParamValue.APP_UPDATE_PROMPT.paramValue,
+                Pair(
+                    Analytics.CustomParam.ACTION.paramName,
+                    Analytics.ParamValue.DISCARD.paramValue
+                )
+            )
             navigator.showStartup(this)
             finish()
         }

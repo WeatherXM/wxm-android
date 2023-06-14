@@ -40,6 +40,12 @@ class DisplayModeHelper(
         )
     }
 
+    fun getDisplayMode(): String {
+        val displayModeKey = resources.getString(R.string.key_theme)
+        val defaultMode = resources.getString(R.string.system_value)
+        return sharedPreferences.getString(displayModeKey, defaultMode) ?: defaultMode
+    }
+
     fun isDarkModeEnabled(): Boolean {
         val displayModeKey = resources.getString(R.string.key_theme)
         val defaultMode = resources.getString(R.string.system_value)
