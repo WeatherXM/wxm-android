@@ -36,8 +36,8 @@ android {
         applicationId "com.weatherxm.app"
         minSdkVersion 23
         targetSdkVersion 33
-        versionCode 42
-        versionName "3.5.1"
+        versionCode 43
+        versionName "3.5.2"
 
         // Resource value fields
         resValue("string", "mapbox_access_token", "$MAPBOX_ACCESS_TOKEN")
@@ -250,8 +250,8 @@ dependencies {
 
     // JSON serialization/deserialization
     implementation "com.squareup.moshi:moshi:1.15.0"
-    implementation "com.squareup.moshi:moshi-adapters:1.14.0"
-    ksp "com.squareup.moshi:moshi-kotlin-codegen:1.14.0"
+    implementation "com.squareup.moshi:moshi-adapters:1.15.0"
+    ksp "com.squareup.moshi:moshi-kotlin-codegen:1.15.0"
 
     // HTTP client
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
