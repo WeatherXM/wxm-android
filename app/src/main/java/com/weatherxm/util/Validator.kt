@@ -1,6 +1,7 @@
 package com.weatherxm.util
 
 import android.util.Patterns
+import com.weatherxm.data.Location
 
 class Validator {
     companion object {
@@ -15,6 +16,7 @@ class Validator {
         const val REGEX_DEV_EUI_KEY = "^[a-fA-F0-9]{16}\$"
         val LATITUDE_BOUNDS = -90.0..90.0
         val LONGITUDE_BOUNDS = -180.0..180.0
+        val EMPTY_LOCATION = Location(0.0, 0.0)
     }
 
     fun validateUsername(username: String): Boolean {
@@ -27,6 +29,7 @@ class Validator {
 
     fun validateLocation(lat: Double, lon: Double): Boolean {
         return lat in LATITUDE_BOUNDS && lon in LONGITUDE_BOUNDS
+            && Location(lat, lon) != EMPTY_LOCATION
     }
 
     fun validateEthAddress(address: String?): Boolean {

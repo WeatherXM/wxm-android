@@ -2,6 +2,7 @@ package com.weatherxm.util
 
 import androidx.annotation.StringRes
 import com.weatherxm.R
+import com.weatherxm.data.ApiError.GenericError.ValidationError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
@@ -17,6 +18,7 @@ object UIErrors : KoinComponent {
         return when (this) {
             is NoConnectionError -> R.string.error_network_generic
             is ConnectionTimeoutError -> R.string.error_network_timed_out
+            is ValidationError -> R.string.error_server_validation
             else -> fallback ?: R.string.error_reach_out
         }
     }

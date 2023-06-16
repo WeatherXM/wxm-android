@@ -42,6 +42,7 @@ class ClaimMapFragment : BaseMapFragment() {
                     activity?.toast(R.string.invalid_location)
                     return@observe
                 }
+                locationModel.setInstallationLocation(loc.latitude(), loc.longitude())
 
                 if (locationModel.getDeviceType() == DeviceType.M5_WIFI) {
                     m5ParentModel.next()
