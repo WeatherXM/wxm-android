@@ -45,53 +45,33 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/devices_count_card"
-            style="@style/Widget.WeatherXM.MaterialCard.DevicesCount"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/networkStatsBtn"
+            style="@style/Widget.WeatherXM.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_normal"
-            android:visibility="gone"
+            android:text="@string/network_stats"
+            android:textColor="@color/light_text"
+            android:textStyle="normal"
+            app:backgroundTint="@color/dark_primary"
+            app:cornerRadius="@dimen/card_corner_radius"
+            app:icon="@drawable/ic_network_stats"
+            app:iconPadding="@dimen/padding_normal"
+            app:iconTint="@color/light_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/map_debug_info_container"
-            tools:visibility="visible">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/title_devices_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@string/title_devices_count"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                    android:textColor="@color/dark_dark_grey"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/devices_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Explorer.DevicesCount.Value"
-                    app:layout_constraintStart_toEndOf="@id/title_devices_count"
-                    tools:text="600" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </com.google.android.material.card.MaterialCardView>
+            app:layout_constraintTop_toBottomOf="@id/map_debug_info_container" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/login_signup_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_large"
             app:cardMaxElevation="@dimen/elevation_extra_small"
-            app:contentPadding="@dimen/padding_normal"
+            app:contentPadding="@dimen/padding_normal_to_large"
+            app:contentPaddingBottom="0dp"
             app:elevation="@dimen/elevation_extra_small"
-            app:layout_constraintTop_toBottomOf="@id/devices_count_card">
+            app:layout_constraintTop_toBottomOf="@id/networkStatsBtn">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

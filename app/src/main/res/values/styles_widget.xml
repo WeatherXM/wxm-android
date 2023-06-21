@@ -126,10 +126,6 @@
         <item name="cardCornerRadius">0dp</item>
     </style>
 
-    <style name="Widget.WeatherXM.MaterialCard.DevicesCount" parent="Widget.WeatherXM.MaterialCard.Small">
-        <item name="cardBackgroundColor">@color/explorer_devices_count_background</item>
-    </style>
-
     <style name="Widget.WeatherXM.MaterialCard.Error.Overlay" parent="Widget.WeatherXM.MaterialCard">
         <item name="cardBackgroundColor">@color/error</item>
         <item name="android:alpha">0.9</item>
@@ -287,6 +283,13 @@
         <item name="tickVisible">false</item>
         <item name="trackHeight">@dimen/slider_default_track_height</item>
         <item name="trackColorInactive">@color/colorBackground</item>
+    </style>
+
+    <style name="Widget.WeatherXM.Slider.NetworkStats" parent="Widget.WeatherXM.Slider">
+        <item name="android:stepSize">1</item>
+        <item name="trackHeight">18dp</item>
+        <item name="trackColorInactive">@color/colorSurface</item>
+        <item name="trackColorActive">@color/network_stats_slider</item>
     </style>
 
     <!--

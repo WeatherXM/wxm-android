@@ -3,6 +3,8 @@ package com.weatherxm.data
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.SharedPreferences
+import android.icu.text.CompactDecimalFormat
+import android.icu.text.NumberFormat
 import android.text.format.DateFormat
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
@@ -70,6 +72,8 @@ import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
 import com.weatherxm.data.datasource.SharedPreferencesDataSource
 import com.weatherxm.data.datasource.SharedPreferencesDataSourceImpl
+import com.weatherxm.data.datasource.StatsDataSource
+import com.weatherxm.data.datasource.StatsDataSourceImpl
 import com.weatherxm.data.datasource.StorageAddressDataSource
 import com.weatherxm.data.datasource.TokenDataSource
 import com.weatherxm.data.datasource.TokenDataSourceImpl
@@ -106,6 +110,8 @@ import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.data.repository.LocationRepositoryImpl
 import com.weatherxm.data.repository.SharedPreferenceRepositoryImpl
 import com.weatherxm.data.repository.SharedPreferencesRepository
+import com.weatherxm.data.repository.StatsRepository
+import com.weatherxm.data.repository.StatsRepositoryImpl
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.TokenRepositoryImpl
 import com.weatherxm.data.repository.UserRepository
@@ -170,6 +176,8 @@ import com.weatherxm.usecases.StartupUseCase
 import com.weatherxm.usecases.StartupUseCaseImpl
 import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.usecases.StationSettingsUseCaseImpl
+import com.weatherxm.usecases.StatsUseCase
+import com.weatherxm.usecases.StatsUseCaseImpl
 import com.weatherxm.usecases.TokenUseCase
 import com.weatherxm.usecases.TokenUseCaseImpl
 import com.weatherxm.usecases.UserDeviceUseCase
@@ -351,6 +359,10 @@ private val datasources = module {
     single<WidgetDataSource> {
         WidgetDataSourceImpl(get())
     }
+
+    single<StatsDataSource> {
+        StatsDataSourceImpl(get())
+    }
 }
 
 private val repositories = module {
@@ -407,6 +419,9 @@ private val repositories = module {
     }
     single<WidgetRepository> {
         WidgetRepositoryImpl(get())
+    }
+    single<StatsRepository> {
+        StatsRepositoryImpl(get())
     }
 }
 
@@ -473,6 +488,9 @@ private val usecases = module {
     }
     single<WidgetCurrentWeatherUseCase> {
         WidgetCurrentWeatherUseCaseImpl(get(), get())
+    }
+    single<StatsUseCase> {
+        StatsUseCaseImpl(get())
     }
 }
 
@@ -667,7 +685,15 @@ private val utilities = module {
     single<CacheService> {
         CacheService(get(), get<SharedPreferences>(named(PREFERENCES_AUTH_TOKEN)), get(), get())
     }
-
+    single<CompactDecimalFormat> {
+        CompactDecimalFormat.getInstance(
+            Locale.getDefault(),
+            CompactDecimalFormat.CompactStyle.SHORT
+        )
+    }
+    single<NumberFormat> {
+        NumberFormat.getInstance()
+    }
     single<SearchEngine> {
         SearchEngine.createSearchEngine(
             SearchEngineSettings(androidContext().resources.getString(R.string.mapbox_access_token))
@@ -678,20 +704,16 @@ private val utilities = module {
             .add(LocalDateTime::class.java, LocalDateTimeJsonAdapter())
             .add(LocalDate::class.java, LocalDateJsonAdapter()).build()
     }
-
     single<Gson> {
         GsonBuilder().setPrettyPrinting()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
     }
-
     single<UIHexJsonAdapter> {
         UIHexJsonAdapter(get())
     }
-
     single<AuthTokenJsonAdapter> {
         AuthTokenJsonAdapter(get())
     }
-
     single<DateTimeFormatter>(named(HOUR_FORMAT_24H)) {
         DateTimeFormatter.ofPattern(HOUR_FORMAT_24H)
     }

@@ -69,10 +69,7 @@ class ExplorerUseCaseImpl(
                 }
             ))
 
-            var totalDevices = 0
             val polygonPoints = it.map { publicHex ->
-                totalDevices += publicHex.deviceCount ?: 0
-
                 PolygonAnnotationOptions()
                     .withFillColor(resHelper.getColor(R.color.hex_fill_color))
                     .withFillOpacity(FILL_OPACITY_HEXAGONS)
@@ -81,7 +78,7 @@ class ExplorerUseCaseImpl(
                     .withPoints(polygonPointsToLatLng(publicHex.polygon))
             }
 
-            ExplorerData(totalDevices, geoJsonSource, polygonPoints)
+            ExplorerData(geoJsonSource, polygonPoints)
         }
     }
 

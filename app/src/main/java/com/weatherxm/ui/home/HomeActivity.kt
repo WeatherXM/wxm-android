@@ -16,8 +16,8 @@ import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeDialogFragment
 import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.explorer.ExplorerData
-import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import com.weatherxm.util.applyOnGlobalLayout
@@ -83,7 +83,7 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 }
                 else -> binding.addDevice.hide()
             }
-            if(destination.id != R.id.navigation_explorer) binding.devicesCountCard.hide(null)
+            binding.networkStatsBtn.setVisible(destination.id == R.id.navigation_explorer)
         }
 
         binding.addDevice.setOnClickListener {
@@ -95,6 +95,10 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                     navigator.showClaimM5Flow(this)
                 }
             }.show(this)
+        }
+
+        binding.networkStatsBtn.setOnClickListener {
+            navigator.showNetworkStats(this)
         }
 
         model.onWalletMissing().observe(this) {
@@ -112,11 +116,9 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
 
         // Fix spacer's height to act as margin for the device count card
         binding.space.applyOnGlobalLayout {
-            val navViewHeight = binding.navView.height
-            val deviceCountCardHeight = binding.devicesCountCard.height
             val margin = resources.getDimensionPixelOffset(R.dimen.margin_large)
             val params = (binding.space.layoutParams as CoordinatorLayout.LayoutParams)
-            params.height = navViewHeight + deviceCountCardHeight + margin
+            params.height = binding.navView.height + binding.networkStatsBtn.height + margin
         }
     }
 
@@ -134,15 +136,15 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             R.id.navigation_devices -> {
                 binding.addDevice.show()
                 binding.navView.show()
-                binding.devicesCountCard.visibility = View.GONE
+                binding.networkStatsBtn.visibility = View.GONE
             }
             R.id.navigation_explorer -> {
                 binding.addDevice.hide()
-                binding.devicesCountCard.visibility = View.VISIBLE
+                binding.networkStatsBtn.visibility = View.VISIBLE
             }
             else -> {
                 binding.addDevice.hide()
-                binding.devicesCountCard.visibility = View.GONE
+                binding.networkStatsBtn.visibility = View.GONE
             }
         }
     }
@@ -151,11 +153,6 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         Timber.d("Status updated: ${resource.status}")
         when (resource.status) {
             Status.SUCCESS -> {
-                if (navController.currentDestination?.id == R.id.navigation_explorer) {
-                    binding.devicesCount.text =
-                        getString(R.string.devices_count, resource.data?.totalDevices)
-                    binding.devicesCountCard.visibility = View.VISIBLE
-                }
                 snackbar?.dismiss()
             }
             Status.ERROR -> {

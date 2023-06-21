@@ -1,0 +1,668 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:fitsSystemWindows="false">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/network_stats" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/dataContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/dataCard"
+                style="@style/Widget.WeatherXM.MaterialCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+                app:cardElevation="@dimen/elevation_small"
+                app:contentPadding="@dimen/padding_small_to_normal"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/dataTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small_to_normal"
+                        android:text="@string/data_days"
+                        android:textAllCaps="true"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/dataInfoBtn"
+                        style="@style/Widget.WeatherXM.IconButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        app:icon="@drawable/ic_info"
+                        app:iconSize="14dp"
+                        app:iconTint="@color/colorOnSurface"
+                        app:layout_constraintBottom_toBottomOf="@id/dataTitle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/dataTitle" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        app:layout_constraintTop_toBottomOf="@id/dataTitle">
+
+                        <LinearLayout
+                            android:id="@+id/dataInfoContainer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="@dimen/margin_normal"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/totalDataDays"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                tools:text="90.2K" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/lastDataDays"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                                android:textColor="@color/reward_score_very_high"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                tools:text="+25K" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/yesterday"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                                android:textColor="@color/darkGrey" />
+                        </LinearLayout>
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/dataChart"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginStart="@dimen/margin_normal"
+                            android:layout_marginEnd="@dimen/margin_normal_to_large"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/dataInfoContainer"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/rewardsCard"
+                style="@style/Widget.WeatherXM.MaterialCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+                android:layout_marginTop="@dimen/margin_normal"
+                app:cardElevation="@dimen/elevation_small"
+                app:contentPadding="@dimen/padding_small_to_normal"
+                app:layout_constraintTop_toBottomOf="@id/dataCard">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/rewardsTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small_to_normal"
+                        android:text="@string/total_allocated_rewards"
+                        android:textAllCaps="true"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/rewardsInfoBtn"
+                        style="@style/Widget.WeatherXM.IconButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        app:icon="@drawable/ic_info"
+                        app:iconSize="14dp"
+                        app:iconTint="@color/colorOnSurface"
+                        app:layout_constraintBottom_toBottomOf="@id/rewardsTitle"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/rewardsTitle" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/rewardsMainData"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        app:layout_constraintTop_toBottomOf="@id/rewardsTitle">
+
+                        <LinearLayout
+                            android:id="@+id/rewardsInfoContainer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="@dimen/margin_normal"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/totalRewards"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                tools:text="90.2K" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/lastRewards"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                                android:textColor="@color/reward_score_very_high"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                tools:text="+25K" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/yesterday"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                                android:textColor="@color/darkGrey" />
+                        </LinearLayout>
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/rewardsChart"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginStart="@dimen/margin_normal"
+                            android:layout_marginEnd="@dimen/margin_normal_to_large"
+                            android:paddingEnd="@dimen/padding_normal_to_large"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/rewardsInfoContainer"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small_to_normal"
+                        android:orientation="horizontal"
+                        android:weightSum="2"
+                        app:layout_constraintTop_toBottomOf="@id/rewardsMainData">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/supplyCard"
+                            style="@style/Widget.WeatherXM.MaterialCard"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="6dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/layer1"
+                            app:cardCornerRadius="@dimen/card_corner_radius_small"
+                            app:contentPadding="@dimen/padding_normal"
+                            app:contentPaddingBottom="@dimen/padding_small_to_normal"
+                            app:contentPaddingTop="@dimen/padding_small_to_normal">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/supplyTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/total_supply"
+                                    android:textAllCaps="true"
+                                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/supplyInfoBtn"
+                                    style="@style/Widget.WeatherXM.IconButton"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    app:icon="@drawable/ic_info"
+                                    app:iconGravity="textStart"
+                                    app:iconSize="14dp"
+                                    app:iconTint="@color/colorOnSurface"
+                                    app:layout_constraintBottom_toBottomOf="@id/supplyTitle"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@id/supplyTitle" />
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/totalSupply"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_small_to_normal"
+                                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                                    android:textSize="22sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/supplyTitle"
+                                    tools:text="100M" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/mintedCard"
+                            style="@style/Widget.WeatherXM.MaterialCard"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            app:cardBackgroundColor="@color/layer1"
+                            app:cardCornerRadius="@dimen/card_corner_radius_small"
+                            app:contentPadding="@dimen/padding_normal"
+                            app:contentPaddingBottom="@dimen/padding_small_to_normal"
+                            app:contentPaddingTop="@dimen/padding_small_to_normal">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/dailyMintedTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/daily_minted"
+                                    android:textAllCaps="true"
+                                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/dailyMintedInfoBtn"
+                                    style="@style/Widget.WeatherXM.IconButton"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    app:icon="@drawable/ic_info"
+                                    app:iconGravity="textStart"
+                                    app:iconSize="14dp"
+                                    app:layout_constraintBottom_toBottomOf="@id/dailyMintedTitle"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="@id/dailyMintedTitle" />
+
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/dailyMinted"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/margin_small_to_normal"
+                                    android:textAllCaps="true"
+                                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                                    android:textSize="22sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/dailyMintedTitle"
+                                    tools:text="30,012" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </com.google.android.material.card.MaterialCardView>
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/buyCard"
+                style="@style/Widget.WeatherXM.MaterialCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+                android:layout_marginTop="@dimen/margin_normal"
+                app:cardBackgroundColor="@color/blueTint"
+                app:cardElevation="@dimen/elevation_small"
+                app:contentPadding="@dimen/padding_small_to_normal"
+                app:contentPaddingLeft="@dimen/padding_large"
+                app:layout_constraintTop_toBottomOf="@id/rewardsCard">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toStartOf="@id/buyStationBtn"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/buyStationPrompt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/margin_normal"
+                            android:text="@string/buy_station_prompt"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall" />
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/buyStationBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/padding_normal"
+                        android:paddingEnd="@dimen/padding_normal"
+                        android:text="@string/action_buy_station"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/stationsCard"
+                style="@style/Widget.WeatherXM.MaterialCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:layout_marginBottom="@dimen/margin_small"
+                app:cardElevation="@dimen/elevation_small"
+                app:contentPadding="@dimen/padding_small_to_normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/buyCard">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/stations"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small_to_normal"
+                        android:text="@string/weather_stations"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small_to_normal"
+                        android:text="@string/yesterday"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/darkGrey"
+                        app:layout_constraintBottom_toBottomOf="@id/stations"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/stations" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/totalsCard"
+                        style="@style/Widget.WeatherXM.MaterialCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small_to_normal"
+                        app:cardBackgroundColor="@color/layer1"
+                        app:cardCornerRadius="@dimen/card_corner_radius_small"
+                        app:contentPadding="@dimen/padding_small_to_normal"
+                        app:contentPaddingBottom="@dimen/padding_extra_small"
+                        app:layout_constraintTop_toBottomOf="@id/stations">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/totalsTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/total"
+                                android:textAllCaps="true"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/totalInfoBtn"
+                                style="@style/Widget.WeatherXM.IconButton"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                app:icon="@drawable/ic_info"
+                                app:iconGravity="textStart"
+                                app:iconSize="14dp"
+                                app:iconTint="@color/colorOnSurface"
+                                app:layout_constraintBottom_toBottomOf="@id/totalsTitle"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@id/totalsTitle" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/totalsRecycler"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/margin_large"
+                                android:clipChildren="false"
+                                android:clipToPadding="false"
+                                android:scrollbars="vertical"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                app:layout_constraintEnd_toStartOf="@id/totals"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/totalsTitle"
+                                tools:listitem="@layout/list_item_network_station_stats" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/totals"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_large"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toBottomOf="@id/totalsRecycler"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@id/totalsRecycler"
+                                tools:text="5,246" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/claimedCard"
+                        style="@style/Widget.WeatherXM.MaterialCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small_to_normal"
+                        app:cardBackgroundColor="@color/layer1"
+                        app:cardCornerRadius="@dimen/card_corner_radius_small"
+                        app:contentPadding="@dimen/padding_small_to_normal"
+                        app:contentPaddingBottom="@dimen/padding_extra_small"
+                        app:layout_constraintTop_toBottomOf="@id/totalsCard">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/claimedTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/claimed"
+                                android:textAllCaps="true"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/claimedInfoBtn"
+                                style="@style/Widget.WeatherXM.IconButton"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                app:icon="@drawable/ic_info"
+                                app:iconGravity="textStart"
+                                app:iconSize="14dp"
+                                app:iconTint="@color/colorOnSurface"
+                                app:layout_constraintBottom_toBottomOf="@id/claimedTitle"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@id/claimedTitle" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/claimedRecycler"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/margin_large"
+                                android:clipChildren="false"
+                                android:clipToPadding="false"
+                                android:scrollbars="vertical"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                app:layout_constraintEnd_toStartOf="@id/claimed"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/claimedTitle"
+                                tools:listitem="@layout/list_item_network_station_stats" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/claimed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_large"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toBottomOf="@id/claimedRecycler"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@id/claimedRecycler"
+                                tools:text="5,246" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/activeCard"
+                        style="@style/Widget.WeatherXM.MaterialCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small_to_normal"
+                        app:cardBackgroundColor="@color/layer1"
+                        app:cardCornerRadius="@dimen/card_corner_radius_small"
+                        app:contentPadding="@dimen/padding_small_to_normal"
+                        app:contentPaddingBottom="@dimen/padding_extra_small"
+                        app:layout_constraintTop_toBottomOf="@id/claimedCard">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/activeTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/active"
+                                android:textAllCaps="true"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/activeInfoBtn"
+                                style="@style/Widget.WeatherXM.IconButton"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                app:icon="@drawable/ic_info"
+                                app:iconGravity="textStart"
+                                app:iconSize="14dp"
+                                app:iconTint="@color/colorOnSurface"
+                                app:layout_constraintBottom_toBottomOf="@id/activeTitle"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@id/activeTitle" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/activeRecycler"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/margin_large"
+                                android:clipChildren="false"
+                                android:clipToPadding="false"
+                                android:scrollbars="vertical"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                app:layout_constraintEnd_toStartOf="@id/active"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/activeTitle"
+                                tools:listitem="@layout/list_item_network_station_stats" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/active"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/margin_large"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toBottomOf="@id/activeRecycler"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@id/activeRecycler"
+                                tools:text="5,246" />
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Empty -->
+
+    <com.weatherxm.ui.components.EmptyView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:padding="@dimen/padding_extra_large"
+        android:visibility="gone"
+        app:empty_animation="@raw/anim_empty_devices"
+        tools:empty_subtitle="How are you?"
+        tools:empty_title="Nothing here" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

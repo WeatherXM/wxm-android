@@ -29,7 +29,7 @@ class PublicDevicesListFragment : BottomSheetDialogFragment() {
     }
 
     override fun getTheme(): Int {
-        return R.style.ThemeOverlay_WeatherXM_BottomSheetDialog_Explorer_Devices
+        return R.style.ThemeOverlay_WeatherXM_BottomSheetDialog
     }
 
     override fun onCreateView(

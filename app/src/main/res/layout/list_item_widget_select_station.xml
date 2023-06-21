@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/margin_normal"
-    android:layout_marginVertical="@dimen/card_vertical_margin"
+    android:layout_marginVertical="@dimen/margin_small_to_normal"
     app:cardBackgroundColor="@color/layer1"
     app:contentPadding="0dp"
     app:strokeColor="@color/select_station_stroke_selector"

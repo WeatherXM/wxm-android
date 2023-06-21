@@ -14,47 +14,26 @@
         app:navGraph="@navigation/bottom_navigation"
         tools:ignore="FragmentTagUsage" />
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/devices_count_card"
-        style="@style/Widget.WeatherXM.MaterialCard.DevicesCount"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/networkStatsBtn"
+        style="@style/Widget.WeatherXM.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:cardUseCompatPadding="false"
+        android:text="@string/network_stats"
+        android:textColor="@color/light_text"
+        android:textStyle="normal"
+        app:backgroundTint="@color/dark_primary"
+        app:cornerRadius="@dimen/card_corner_radius"
+        app:icon="@drawable/ic_network_stats"
+        app:iconPadding="@dimen/padding_normal"
+        app:iconTint="@color/light_text"
         app:layout_anchor="@id/space"
-        app:layout_anchorGravity="top|center_horizontal"
-        tools:visibility="visible">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="@dimen/padding_small">
-
-            <TextView
-                android:id="@+id/title_devices_count"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/margin_normal"
-                android:text="@string/title_devices_count"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                android:textColor="@color/dark_dark_grey" />
-
-            <TextView
-                android:id="@+id/devices_count"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Explorer.DevicesCount.Value"
-                tools:text="600" />
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+        app:layout_anchorGravity="top|center_horizontal" />
 
     <Space
         android:id="@+id/space"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/margin_extra_extra_large"
+        android:layout_height="74dp"
         app:layout_anchor="@id/nav_view"
         app:layout_anchorGravity="top|center_horizontal" />
 

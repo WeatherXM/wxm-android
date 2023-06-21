@@ -48,19 +48,14 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent,
             Timber.d("Status updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
-                    binding.devicesCount.text =
-                        getString(R.string.devices_count, resource.data?.totalDevices)
-                    binding.devicesCountCard.visibility = VISIBLE
                     snackbar?.dismiss()
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
                     resource.message?.let { showErrorOnMapLoading(it) }
-                    binding.devicesCountCard.visibility = GONE
                 }
                 Status.LOADING -> {
                     snackbar?.dismiss()
-                    binding.devicesCountCard.visibility = GONE
                 }
             }
         }
@@ -71,6 +66,10 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent,
 
         model.onPublicDeviceSelected().observe(this) {
             navigator.showDeviceDetails(supportFragmentManager, it)
+        }
+
+        binding.networkStatsBtn.setOnClickListener {
+            navigator.showNetworkStats(this)
         }
 
         binding.login.setOnClickListener {

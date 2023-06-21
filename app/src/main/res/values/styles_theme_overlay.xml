@@ -5,8 +5,8 @@
         <item name="bottomSheetStyle">@style/Widget.WeatherXM.BottomSheet.Dialog</item>
     </style>
 
-    <style name="ThemeOverlay.WeatherXM.BottomSheetDialog.Explorer.Devices" parent="ThemeOverlay.WeatherXM.BottomSheetDialog">
-        <item name="colorSurface">@color/colorSurfaceVariant</item>
+    <style name="ThemeOverlay.WeatherXM.BottomSheetDialog.Layer1" parent="ThemeOverlay.WeatherXM.BottomSheetDialog">
+        <item name="colorSurface">@color/layer1</item>
     </style>
 
     <style name="ThemeOverlay.WeatherXM.Toolbar" parent="ThemeOverlay.Material3.Toolbar.Surface">

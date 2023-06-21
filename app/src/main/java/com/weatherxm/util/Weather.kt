@@ -16,7 +16,7 @@ import java.math.BigDecimal
 @Suppress("TooManyFunctions")
 object Weather : KoinComponent {
 
-    private const val EMPTY_VALUE = "?"
+    const val EMPTY_VALUE = "?"
     private val resHelper: ResourcesHelper by inject()
     private val sharedPref: SharedPreferences by inject()
 

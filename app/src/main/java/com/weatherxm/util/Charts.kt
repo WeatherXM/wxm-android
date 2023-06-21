@@ -13,6 +13,7 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
@@ -549,6 +550,37 @@ fun LineChart.initSolarChart(
 }
 
 @Suppress("MagicNumber")
+fun LineChart.initializeNetworkStatsChart(entries: List<Entry>) {
+    val dataSet = LineDataSet(entries, "")
+    val lineData = LineData(dataSet)
+    data = lineData
+
+    // General Chart Settings
+    description.isEnabled = false
+    legend.isEnabled = false
+    setDrawMarkers(false)
+    minOffset = 0F
+
+    // Line and highlight Settings
+    dataSet.color = context.getColor(R.color.network_stats_chart_primary)
+    lineData.setDrawValues(false)
+    dataSet.setDrawCircles(false)
+    dataSet.lineWidth = LINE_WIDTH
+    dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+    isHighlightPerDragEnabled = false
+    isHighlightPerTapEnabled = false
+
+    // Y Axis settings
+    axisLeft.isEnabled = false
+    axisRight.isEnabled = false
+    xAxis.isEnabled = false
+    isScaleYEnabled = false
+    isScaleXEnabled = false
+
+    show()
+    notifyDataSetChanged()
+}
+
 fun BarChart.initializeTokenChart(entries: List<BarEntry>) {
     val dataSet = BarDataSet(entries, "")
     val barData = BarData(dataSet)

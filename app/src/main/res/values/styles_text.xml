@@ -46,15 +46,6 @@
     </style>
 
     <!--
-        Explorer
-    -->
-    <style name="TextAppearance.WeatherXM.Explorer.DevicesCount.Value" parent="TextAppearance.Material3.BodyMedium">
-        <item name="android:textColor">@color/green</item>
-        <item name="fontFamily">monospace</item>
-        <item name="fontWeight">700</item>
-    </style>
-
-    <!--
         Devices List
     -->
     <style name="TextAppearance.WeatherXM.Devices.List.LastSeen" parent="TextAppearance.WeatherXM.Default.BodySmall">

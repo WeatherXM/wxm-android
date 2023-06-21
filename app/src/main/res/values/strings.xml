@@ -24,11 +24,13 @@
     <string name="action_sounds_good">Sounds good!</string>
     <string name="action_update_firmware">Update Firmware</string>
     <string name="action_view_more">View More</string>
+    <string name="action_buy_station">Buy Station</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="action_scan_qr">Scan QR Code</string>
     <string name="important_message">Important Message</string>
     <string name="unknown">Unknown</string>
+    <string name="buy_station_prompt">Ready to join the people’s weather network? Buy a station now!</string>
 
     <!-- Permissions -->
     <string name="permission_location_title">Access to your location</string>
@@ -50,9 +52,28 @@
     <string name="title_profile">Profile</string>
 
     <!-- Explorer -->
-    <string name="title_devices_count">Online Stations</string>
-    <string name="devices_count">%d</string>
     <string name="search_location">Search for location</string>
+
+    <!-- Network Stats -->
+    <string name="network_stats">Network Statistics</string>
+    <string name="claimed">Claimed</string>
+    <string name="active">Active</string>
+    <string name="ws1000">WS1000</string>
+    <string name="ws2000">WS2000</string>
+    <string name="data_days">Data Days</string>
+    <string name="data_days_explanation">This number represents the amount of weather data produced overall.</string>
+    <string name="total_allocated_rewards">Total Allocated Rewards</string>
+    <string name="total_allocated_rewards_explanation">This number represents the amount of WXM tokens that is allocated for weather station owners.</string>
+    <string name="total_supply">Total Supply</string>
+    <string name="total_supply_explanation">This number represents the amount of WXM tokens in existence (minus tokens verifiably burned).</string>
+    <string name="daily_minted">Daily Minted</string>
+    <string name="daily_minted_explanation">This number represents the amount of WXM tokens that were minted yesterday.</string>
+    <string name="total_weather_stations">Total Weather Stations</string>
+    <string name="total_weather_stations_explanation">This number represents the amount of weather stations manufactured.</string>
+    <string name="claimed_weather_stations">Claimed Weather Stations</string>
+    <string name="claimed_weather_stations_explanation">This number represents the amount of weather stations claimed by users.</string>
+    <string name="active_weather_stations">Active Weather Stations</string>
+    <string name="active_weather_stations_explanation">This number represents the amount of weather stations that were active yesterday.</string>
 
     <!-- Profile -->
     <string name="hello">Hello</string>

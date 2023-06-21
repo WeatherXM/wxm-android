@@ -1,8 +1,5 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="card_side_margin">12dp</dimen>
-    <dimen name="card_vertical_margin">12dp</dimen>
-    <dimen name="card_vertical_padding">12dp</dimen>
     <dimen name="card_corner_radius_big">30dp</dimen>
     <dimen name="card_corner_radius">20dp</dimen>
     <dimen name="card_corner_radius_small">10dp</dimen>
@@ -13,6 +10,7 @@
     <dimen name="margin_extra_extra_large">62dp</dimen>
     <dimen name="margin_extra_large">48dp</dimen>
     <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_normal_to_large">20dp</dimen>
     <dimen name="margin_normal">16dp</dimen>
     <dimen name="margin_small_to_normal">12dp</dimen>
     <dimen name="margin_small">8dp</dimen>
@@ -25,6 +23,7 @@
     <dimen name="padding_large">24dp</dimen>
     <dimen name="padding_normal_to_large">20dp</dimen>
     <dimen name="padding_normal">16dp</dimen>
+    <dimen name="padding_small_to_normal">12dp</dimen>
     <dimen name="padding_small">8dp</dimen>
     <dimen name="padding_extra_small">4dp</dimen>
 
@@ -36,4 +35,8 @@
 
     <dimen name="token_chip_corner_radius">5dp</dimen>
     <dimen name="slider_default_track_height">16dp</dimen>
+
+    <!-- Overrides -->
+    <dimen name="mtrl_slider_widget_height" tools:override="true">20dp</dimen>
+
 </resources>

@@ -30,4 +30,7 @@
 
     <!-- History Charts -->
     <color name="chart_secondary_line">@color/light_lightest_blue</color>
+
+    <!-- Network Stats -->
+    <color name="network_stats_slider">@color/network_stats_slider_light</color>
 </resources>

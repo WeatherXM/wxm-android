@@ -328,9 +328,85 @@ data class WeatherStation(
     val batteryState: BatteryState?
 ) : Parcelable
 
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsResponse(
+    @Json(name = "weather_stations")
+    val weatherStations: NetworkStatsWeatherStations,
+    @Json(name = "data_days")
+    val dataDays: List<NetworkStatsTimeseries>?,
+    val tokens: NetworkStatsTokens?,
+    val customers: NetworkStatsCustomers?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsWeatherStations(
+    val onboarded: NetworkStatsStation?,
+    val claimed: NetworkStatsStation?,
+    val active: NetworkStatsStation?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsStation(
+    val total: Int?,
+    val details: List<NetworkStatsStationDetails>?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsStationDetails(
+    val model: String?,
+    val connectivity: Connectivity?,
+    val url: String?,
+    val amount: Int?,
+    val percentage: Double?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsTokens(
+    @Json(name = "total_supply")
+    val totalSupply: Int?,
+    @Json(name = "daily_minted")
+    val dailyMinted: Int?,
+    @Json(name = "allocated_per_day")
+    val allocatedPerDay: List<NetworkStatsTimeseries>?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsCustomers(
+    val total: Int?,
+    @Json(name = "with_wallet")
+    val withWallet: Int?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkStatsTimeseries(
+    val ts: ZonedDateTime?,
+    val value: Double?
+) : Parcelable
+
 enum class DeviceProfile {
     M5,
     Helium
+}
+
+@Suppress("EnumNaming")
+enum class Connectivity {
+    wifi,
+    helium,
+    cellular
 }
 
 @Suppress("EnumNaming")

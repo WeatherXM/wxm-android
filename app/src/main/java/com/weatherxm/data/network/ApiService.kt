@@ -6,6 +6,7 @@ import co.infinum.retromock.meta.MockResponse
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceInfo
+import com.weatherxm.data.NetworkStatsResponse
 import com.weatherxm.data.PublicDevice
 import com.weatherxm.data.PublicHex
 import com.weatherxm.data.TransactionsResponse
@@ -185,4 +186,11 @@ interface ApiService {
     suspend fun getFirmware(
         @Path("deviceId") deviceId: String
     ): NetworkResponse<ResponseBody, ErrorResponse>
+
+    @Mock
+    @MockResponse(body = "mock_files/get_network_stats.json")
+    @GET("/api/v1/network/stats")
+    @Headers(NO_AUTH_HEADER)
+    suspend fun getNetworkStats(
+    ): NetworkResponse<NetworkStatsResponse, ErrorResponse>
 }

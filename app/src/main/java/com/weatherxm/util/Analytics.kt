@@ -49,7 +49,8 @@ class Analytics(
         REBOOT_STATION("Reboot Station"),
         EXPLORER_CELL("Explorer Cell"),
         EXPLORER_DEVICE("Explorer Device"),
-        BLE_CONNECTION_POPUP_ERROR("BLE Connection Popup Error")
+        BLE_CONNECTION_POPUP_ERROR("BLE Connection Popup Error"),
+        NETWORK_STATS("Network Stats")
     }
 
     // Custom Event Names
@@ -155,17 +156,30 @@ class Analytics(
         LOGOUT("Logout"),
         DOCUMENTATION("Documentation"),
         BLE_SCAN_AGAIN("BLE Scan Again"),
-        DOCUMENTATION_FREQUENCY("Frequency Documentation")
+        DOCUMENTATION_FREQUENCY("Frequency Documentation"),
+        OPEN_SHOP("Open Shop"),
+        OPEN_STATION_SHOP("Open Station Shop"),
+        TOTAL("total"),
+        CLAIMED("claimed"),
+        ACTIVE("active"),
+        LEARN_MORE("Learn More"),
+        DATA_DAYS("data_days"),
+        ALLOCATED_REWARDS("allocated_rewards"),
+        TOTAL_SUPPLY("total_supply"),
+        DAILY_MINTED("daily_minted"),
+        TOTAL_STATIONS("total_stations"),
+        CLAIMED_STATIONS("claimed_stations"),
+        ACTIVE_STATIONS("active_stations")
     }
 
     // Custom Param Names
     enum class UserProperty(val propertyName: String) {
         THEME("theme"),
-        UNIT_TEMPERATURE("Unit Temperature"),
-        UNIT_WIND("Unit Wind"),
-        UNIT_WIND_DIRECTION("Unit Wind Direction"),
-        UNIT_PRECIPITATION("Unit Precipitation"),
-        UNIT_PRESSURE("Unit Pressure"),
+        UNIT_TEMPERATURE("UNIT_TEMPERATURE"),
+        UNIT_WIND("UNIT_WIND"),
+        UNIT_WIND_DIRECTION("UNIT_WIND_DIRECTION"),
+        UNIT_PRECIPITATION("UNIT_PRECIPITATION"),
+        UNIT_PRESSURE("UNIT_PRESSURE"),
         DARK("dark"),
         LIGHT("light"),
         SYSTEM("system"),

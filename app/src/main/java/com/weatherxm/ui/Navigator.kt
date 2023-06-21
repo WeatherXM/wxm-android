@@ -23,6 +23,7 @@ import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
+import com.weatherxm.ui.common.MessageDialogFragment
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UserDevice
 import com.weatherxm.ui.common.toast
@@ -34,6 +35,7 @@ import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.explorer.ExplorerActivity
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
+import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.publicdevicedetail.PublicDeviceDetailFragment
@@ -111,6 +113,14 @@ class Navigator(
             Intent(
                 context, AnalyticsOptInActivity::class.java
             ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        )
+    }
+
+    fun showNetworkStats(context: Context) {
+        context.startActivity(
+            Intent(
+                context, NetworkStatsActivity::class.java
+            ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
     }
 
@@ -344,6 +354,15 @@ class Navigator(
                     .putExtra(ARG_DEVICE, userDevice)
             )
         }
+    }
+
+    fun showMessageDialog(
+        fragmentManager: FragmentManager,
+        title: String?,
+        message: String?
+    ) {
+        MessageDialogFragment.newInstance(title, message)
+            .show(fragmentManager, MessageDialogFragment.TAG)
     }
 
     fun sendSupportEmail(

@@ -51,7 +51,11 @@
 
     <!-- Explorer -->
     <color name="hex_fill_color">#3388ff</color>
-    <color name="explorer_devices_count_background">#801C1B1E</color>
+
+    <!-- Network Stats -->
+    <color name="network_stats_chart_primary">#2780FF</color>
+    <color name="network_stats_slider_light">#BED6FF</color>
+    <color name="network_stats_slider_dark">#2E4C80</color>
 
     <!-- Reward Scores -->
     <color name="reward_score_very_high">@color/green</color>
