@@ -42,6 +42,7 @@
     <string name="error_helium_ota_failed">FAILED: Error: %1$d - Type: %2$d - Message: %3$s</string>
     <string name="error_invalid_device_identifier">Invalid Device Identifier</string>
     <string name="error_server_validation">Validation of the request failed on the server.</string>
+    <string name="error_helium_ota_133_suffix">STATION NOT IN RANGE</string>
 
     <!-- Warn Messages -->
     <string name="warn_validation_invalid_email">Not a valid email</string>

@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import com.juul.kable.identifier
+import com.weatherxm.R
 import com.weatherxm.data.BluetoothOTAState
 import com.weatherxm.data.OTAState
 import com.weatherxm.service.DfuService
@@ -35,87 +36,96 @@ class BluetoothUpdater(
                 .setKeepBond(true)
                 .setPrepareDataObjectDelay(300L)
 
-        DfuServiceListenerHelper.registerProgressListener(
-            context, object : DfuProgressListener {
-                override fun onDeviceConnecting(deviceAddress: String) {
-                    Timber.d("[BLE Updater]: onDeviceConnecting: $deviceAddress")
-                }
+        DfuServiceListenerHelper.registerProgressListener(context, object : DfuProgressListener {
+            override fun onDeviceConnecting(deviceAddress: String) {
+                Timber.d("[BLE Updater]: onDeviceConnecting: $deviceAddress")
+            }
 
-                override fun onDeviceConnected(deviceAddress: String) {
-                    Timber.d("[BLE Updater]: onDeviceConnected: $deviceAddress")
-                }
+            override fun onDeviceConnected(deviceAddress: String) {
+                Timber.d("[BLE Updater]: onDeviceConnected: $deviceAddress")
+            }
 
-                override fun onDfuProcessStarting(deviceAddress: String) {
-                    Timber.d("[BLE Updater]: onDfuProcessStarting: $deviceAddress")
-                }
+            override fun onDfuProcessStarting(deviceAddress: String) {
+                Timber.d("[BLE Updater]: onDfuProcessStarting: $deviceAddress")
+            }
 
-                override fun onDfuProcessStarted(deviceAddress: String) {
-                    Timber.d("[BLE Updater]: onDfuProcessStarted: $deviceAddress")
-                }
+            override fun onDfuProcessStarted(deviceAddress: String) {
+                Timber.d("[BLE Updater]: onDfuProcessStarted: $deviceAddress")
+            }
 
-                override fun onEnablingDfuMode(deviceAddress: String) {
-                    Timber.d("[BLE Updater]: onEnablingDfuMode: $deviceAddress")
-                }
+            override fun onEnablingDfuMode(deviceAddress: String) {
+                Timber.d("[BLE Updater]: onEnablingDfuMode: $deviceAddress")
+            }
 
-                override fun onProgressChanged(
-                    deviceAddress: String,
-                    percent: Int,
-                    speed: Float,
-                    avgSpeed: Float,
-                    currentPart: Int,
-                    partsTotal: Int
-                ) {
-                    Timber.d(
-                        "[BLE Updater]: onProgressChanged: $deviceAddress, " +
-                            "percent: $percent%, speed: $speed, avgSpeed: $avgSpeed, " +
-                            "currentPart: $currentPart, partsTotal: $partsTotal"
+            override fun onProgressChanged(
+                deviceAddress: String,
+                percent: Int,
+                speed: Float,
+                avgSpeed: Float,
+                currentPart: Int,
+                partsTotal: Int
+            ) {
+                Timber.d(
+                    "[BLE Updater]: onProgressChanged: $deviceAddress, " +
+                        "percent: $percent%, speed: $speed, avgSpeed: $avgSpeed, " +
+                        "currentPart: $currentPart, partsTotal: $partsTotal"
+                )
+                onOTAState.tryEmit(OTAState(BluetoothOTAState.IN_PROGRESS, percent))
+            }
+
+            override fun onFirmwareValidating(deviceAddress: String) {
+                Timber.d("[BLE Updater]: onFirmwareValidating: $deviceAddress")
+            }
+
+            override fun onDeviceDisconnecting(deviceAddress: String?) {
+                Timber.d("[BLE Updater]: onDeviceDisconnecting: $deviceAddress")
+            }
+
+            override fun onDeviceDisconnected(deviceAddress: String) {
+                Timber.d("[BLE Updater]: onDeviceDisconnected: $deviceAddress")
+            }
+
+            override fun onDfuCompleted(deviceAddress: String) {
+                Timber.d("[BLE Updater]: onDfuCompleted: $deviceAddress")
+                onOTAState.tryEmit(OTAState(BluetoothOTAState.COMPLETED, 100))
+            }
+
+            override fun onDfuAborted(deviceAddress: String) {
+                Timber.d("[BLE Updater]: onDfuAborted: $deviceAddress")
+                onOTAState.tryEmit(OTAState(BluetoothOTAState.ABORTED, 0))
+            }
+
+            override fun onError(
+                deviceAddress: String,
+                error: Int,
+                errorType: Int,
+                message: String?
+            ) {
+                Timber.e(
+                    "[BLE Updater]: onError: $deviceAddress, " +
+                        "error: $error, errorType: $errorType, message: $message"
+                )
+                onOTAState.tryEmit(
+                    OTAState(
+                        BluetoothOTAState.FAILED,
+                        0,
+                        error,
+                        errorType,
+                        createErrorMessage(error, message)
                     )
-                    onOTAState.tryEmit(OTAState(BluetoothOTAState.IN_PROGRESS, percent))
-                }
+                )
+            }
+        })
+    }
 
-                    override fun onFirmwareValidating(deviceAddress: String) {
-                        Timber.d("[BLE Updater]: onFirmwareValidating: $deviceAddress")
-                    }
-
-                    override fun onDeviceDisconnecting(deviceAddress: String?) {
-                        Timber.d("[BLE Updater]: onDeviceDisconnecting: $deviceAddress")
-                    }
-
-                    override fun onDeviceDisconnected(deviceAddress: String) {
-                        Timber.d("[BLE Updater]: onDeviceDisconnected: $deviceAddress")
-                    }
-
-                    override fun onDfuCompleted(deviceAddress: String) {
-                        Timber.d("[BLE Updater]: onDfuCompleted: $deviceAddress")
-                        onOTAState.tryEmit(OTAState(BluetoothOTAState.COMPLETED, 100))
-                    }
-
-                    override fun onDfuAborted(deviceAddress: String) {
-                        Timber.d("[BLE Updater]: onDfuAborted: $deviceAddress")
-                        onOTAState.tryEmit(OTAState(BluetoothOTAState.ABORTED, 0))
-                    }
-
-                    override fun onError(
-                        deviceAddress: String,
-                        error: Int,
-                        errorType: Int,
-                        message: String?
-                    ) {
-                        Timber.e(
-                            "[BLE Updater]: onError: $deviceAddress, " +
-                                "error: $error, errorType: $errorType, message: $message"
-                        )
-                        onOTAState.tryEmit(
-                            OTAState(
-                                BluetoothOTAState.FAILED,
-                                0,
-                                error,
-                                errorType,
-                                message
-                            )
-                        )
-                    }
-            })
+    @Suppress("MagicNumber")
+    private fun createErrorMessage(errorCode: Int, defaultMessage: String?): String? {
+        return when (errorCode) {
+            133 -> {
+                "$defaultMessage - ${context.getString(R.string.error_helium_ota_133_suffix)}"
+            }
+            else -> defaultMessage
+        }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
