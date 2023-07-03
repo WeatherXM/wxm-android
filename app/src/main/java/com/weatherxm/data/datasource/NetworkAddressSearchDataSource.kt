@@ -113,6 +113,14 @@ class NetworkAddressSearchDataSource(
                         )
                     }
 
+                    override fun onResults(
+                        suggestion: SearchSuggestion,
+                        results: List<SearchResult>,
+                        responseInfo: ResponseInfo
+                    ) {
+                        /* Do nothing */
+                    }
+
                     override fun onError(e: Exception) {
                         Timber.w(e, "Suggestion location search error.")
                         continuation.resumeWith(
@@ -122,14 +130,6 @@ class NetworkAddressSearchDataSource(
 
                     override fun onSuggestions(
                         suggestions: List<SearchSuggestion>,
-                        responseInfo: ResponseInfo
-                    ) {
-                        /* Do nothing */
-                    }
-
-                    override fun onCategoryResult(
-                        suggestion: SearchSuggestion,
-                        results: List<SearchResult>,
                         responseInfo: ResponseInfo
                     ) {
                         /* Do nothing */

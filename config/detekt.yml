@@ -11,13 +11,11 @@ complexity:
         thresholdInEnums: 15
 
 style:
-    MandatoryBracesIfStatements:
-        active: true
     MandatoryBracesLoops:
         active: true
     MaxLineLength:
         maxLineLength: 100
     ForbiddenComment:
-        values:
+        comments:
             - FIXME
             - STOPSHIP

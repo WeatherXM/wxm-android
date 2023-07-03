@@ -82,6 +82,7 @@ class UserDeviceActivity : AppCompatActivity(), KoinComponent {
 
         val adapter = ViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
+        binding.viewPager.offscreenPageLimit = adapter.itemCount - 1
 
         @Suppress("UseCheckOrError")
         TabLayoutMediator(binding.navigatorGroup, binding.viewPager) { tab, position ->
