@@ -17,6 +17,7 @@ class Validator {
         val LATITUDE_BOUNDS = -90.0..90.0
         val LONGITUDE_BOUNDS = -180.0..180.0
         val EMPTY_LOCATION = Location(0.0, 0.0)
+        const val MINIMUM_NETWORK_SEARCH_QUERY = 2
     }
 
     fun validateUsername(username: String): Boolean {
@@ -25,6 +26,10 @@ class Validator {
 
     fun validatePassword(password: String): Boolean {
         return password.length >= MINIMUM_PASSWORD_LENGTH
+    }
+
+    fun validateNetworkSearchQuery(query: String): Boolean {
+        return query.trim().length >= MINIMUM_NETWORK_SEARCH_QUERY
     }
 
     fun validateLocation(lat: Double, lon: Double): Boolean {

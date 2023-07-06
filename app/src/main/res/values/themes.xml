@@ -48,32 +48,10 @@
         <item name="postSplashScreenTheme">@style/Theme.WeatherXM</item>
     </style>
 
-    <style name="Theme.WeatherXM.Explorer" parent="@style/Theme.Material3.Dark.NoActionBar">
-        <!-- Brand colors -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
-        <item name="colorPrimaryContainer">@color/colorPrimary</item>
-        <item name="colorOnPrimary">@color/colorOnPrimary</item>
-        <item name="colorSurface">@color/colorSurface</item>
-        <item name="colorSurfaceVariant">@color/colorSurfaceVariant</item>
-        <item name="colorOnSurface">@color/colorOnSurface</item>
-        <item name="colorOnBackground">@color/colorOnSurface</item>
-        <item name="colorError">@color/error</item>
-        <item name="colorOnError">@color/light_top</item>
-
+    <style name="Theme.WeatherXM.Explorer" parent="Theme.WeatherXM">
         <!-- System UI styles -->
         <item name="android:windowTranslucentStatus">@bool/use_transparent_status_bar</item>
         <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:statusBarColor">@color/status_bar_color</item>
-
-        <!-- Style overrides -->
-        <item name="materialButtonStyle">@style/Widget.WeatherXM.Button</item>
-        <item name="materialCardViewElevatedStyle">@style/Widget.WeatherXM.MaterialCard</item>
-        <item name="materialCardViewStyle">?materialCardViewElevatedStyle</item>
-        <item name="elevationOverlayEnabled">false</item>
-        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.WeatherXM.BottomSheetDialog</item>
-        <item name="toolbarStyle">@style/Widget.WeatherXM.ToolBar.Explorer</item>
-        <item name="appBarLayoutStyle">@style/Widget.WeatherXM.AppBar</item>
     </style>
 
     <style name="ShapeAppearance.WeatherXM.BottomSheet.Dialog" parent="ShapeAppearance.Material3.LargeComponent">
@@ -82,5 +60,13 @@
         <item name="cornerSizeTopLeft">16dp</item>
         <item name="cornerSizeBottomRight">0dp</item>
         <item name="cornerSizeBottomLeft">0dp</item>
+    </style>
+
+    <style name="ShapeAppearance.WeatherXM.MyLocation" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">50dp</item>
+        <item name="cornerSizeTopLeft">50dp</item>
+        <item name="cornerSizeBottomRight">50dp</item>
+        <item name="cornerSizeBottomLeft">50dp</item>
     </style>
 </resources>

@@ -62,8 +62,14 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
      */
     private val onPublicDeviceSelected = SingleLiveEvent<UIDevice>()
 
+    // Needed for passing info to the fragment to handle when my location button is clicked
+    private val onMyLocationClicked = MutableLiveData(false)
+
     // Needed for passing info to the activity to show/hide elements when onMapClick
     private val showMapOverlayViews = MutableLiveData(true)
+
+    // Needed for passing info to the activity to show/hide elements when search view is opened
+    private val onSearchOpenStatus = MutableLiveData(false)
 
     // Current Hex clicked/selected as it's needed by other fragments
     private var currentHexSelected: UIHex? = null
@@ -176,7 +182,9 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
         }
     }
 
+    fun onMyLocationClicked() = onMyLocationClicked
     fun showMapOverlayViews() = showMapOverlayViews
+    fun onSearchOpenStatus() = onSearchOpenStatus
     fun explorerState(): LiveData<Resource<ExplorerData>> = state
     fun onHexSelected(): LiveData<String> = onHexSelected
     fun onPublicDeviceSelected(): LiveData<UIDevice> = onPublicDeviceSelected
@@ -187,6 +195,10 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
 
     fun isExplorerAfterLoggedIn(): Boolean {
         return explorerAfterLoggedIn
+    }
+
+    fun onMyLocation() {
+        onMyLocationClicked.postValue(true)
     }
 
     fun fetch() {
@@ -211,6 +223,10 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
         showMapOverlayViews.postValue(!current)
     }
 
+    fun onSearchOpenStatus(isOpen: Boolean) {
+        onSearchOpenStatus.postValue(isOpen)
+    }
+
     /**
      * Handler for polygon clicks. Show devices list for that hex.
      */
@@ -222,6 +238,29 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     fun onPublicDeviceClicked(uiHex: UIHex?, device: UIDevice) {
         currentHexSelected = uiHex
         onPublicDeviceSelected.postValue(device)
+    }
+
+    fun onSearchedDeviceClicked(searchedDevice: SearchResult) {
+        val index = searchedDevice.stationCellIndex ?: currentHexSelected?.index ?: ""
+        val center = searchedDevice.center
+            ?: currentHexSelected?.center
+            ?: com.weatherxm.data.Location(0.0, 0.0)
+
+        currentHexSelected = UIHex(index, center)
+        onPublicDeviceSelected.postValue(
+            UIDevice(
+                id = searchedDevice.stationId ?: "",
+                name = searchedDevice.name ?: "",
+                cellIndex = searchedDevice.stationCellIndex,
+                profile = null,
+                isActive = null,
+                lastWeatherStationActivity = null,
+                timezone = null,
+                address = null,
+                currentWeather = null,
+                tokenInfo = null
+            )
+        )
     }
 
     fun openListOfDevicesOfHex() {

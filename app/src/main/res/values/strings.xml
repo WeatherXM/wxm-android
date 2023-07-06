@@ -51,9 +51,6 @@
     <string name="title_devices">Devices</string>
     <string name="title_profile">Profile</string>
 
-    <!-- Explorer -->
-    <string name="search_location">Search for location</string>
-
     <!-- Network Stats -->
     <string name="network_stats">Network Statistics</string>
     <string name="claimed">Claimed</string>
@@ -74,6 +71,17 @@
     <string name="claimed_weather_stations_explanation">This number represents the amount of weather stations claimed by users.</string>
     <string name="active_weather_stations">Active Weather Stations</string>
     <string name="active_weather_stations_explanation">This number represents the amount of weather stations that were active yesterday.</string>
+
+    <!-- Network Stats & Search -->
+    <string name="search_station_name_address">Search for station name or address</string>
+    <string name="recent">Recent</string>
+    <string name="search_no_results">Your search returned no results</string>
+    <string name="search_no_results_message">Try searching for something else or check for spelling mistakes.</string>
+    <string name="search_no_recent_results">No recent search results</string>
+    <string name="search_no_recent_results_message">Search for station name or address. Most recent results appear here.</string>
+    <string name="network_search_validation_error">The search query must be at least 2 characters long.</string>
+    <string name="go_to_your_location">Go to your location</string>
+    <string name="search_error">Search error</string>
 
     <!-- Profile -->
     <string name="hello">Hello</string>
@@ -242,6 +250,7 @@
     <string name="device_serial_number_hint">Enter the device\'s serial number</string>
     <string name="device_serial_number_instructions"><![CDATA[Device\'s serial number can be found in the M5 (shown after automatic reboot, or in the settings screen - swipe right to view). You can also find this information on the box of your station.<br><br>It is 18 characters long and looks like this: <strong>12:34:56:78:9A:BC:DE:F0:12</strong>. Please type only the letters and numbers.]]></string>
     <string name="location_of_installation">Location of Installation</string>
+    <string name="search_location">Search for location</string>
     <string name="installation_toggle_unchecked">Not yet, will install at a later time!</string>
     <string name="installation_toggle_checked">Installed and ready!</string>
     <string name="need_help_installation"><![CDATA[Need help with proper weather station installation?<br><b><a href=\"%1$s\">View our installation guide</a></b>]]></string>

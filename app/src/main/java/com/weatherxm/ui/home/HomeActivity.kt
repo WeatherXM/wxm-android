@@ -1,10 +1,8 @@
 package com.weatherxm.ui.home
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -20,7 +18,6 @@ import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.explorer.ExplorerData
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
-import com.weatherxm.util.applyOnGlobalLayout
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -59,6 +56,18 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             onExplorerState(resource)
         }
 
+        explorerModel.onSearchOpenStatus().observe(this) { isOpened ->
+            if (isOpened) {
+                binding.navView.hide()
+                binding.networkStatsBtn.hide()
+                binding.myLocationBtn.hide()
+            } else {
+                binding.navView.show()
+                binding.networkStatsBtn.show()
+                binding.myLocationBtn.show()
+            }
+        }
+
         devicesViewModel.showOverlayViews().observe(this) { shouldShow ->
             if (shouldShow) {
                 binding.addDevice.show()
@@ -83,7 +92,13 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 }
                 else -> binding.addDevice.hide()
             }
+            binding.navView.show()
             binding.networkStatsBtn.setVisible(destination.id == R.id.navigation_explorer)
+            binding.myLocationBtn.setVisible(destination.id == R.id.navigation_explorer)
+        }
+
+        binding.myLocationBtn.setOnClickListener {
+            explorerModel.onMyLocation()
         }
 
         binding.addDevice.setOnClickListener {
@@ -113,13 +128,6 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 margin(bottom = true)
             }
         }
-
-        // Fix spacer's height to act as margin for the device count card
-        binding.space.applyOnGlobalLayout {
-            val margin = resources.getDimensionPixelOffset(R.dimen.margin_large)
-            val params = (binding.space.layoutParams as CoordinatorLayout.LayoutParams)
-            params.height = binding.navView.height + binding.networkStatsBtn.height + margin
-        }
     }
 
     override fun onResume() {
@@ -136,15 +144,18 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
             R.id.navigation_devices -> {
                 binding.addDevice.show()
                 binding.navView.show()
-                binding.networkStatsBtn.visibility = View.GONE
+                binding.networkStatsBtn.setVisible(false)
+                binding.myLocationBtn.setVisible(false)
             }
             R.id.navigation_explorer -> {
                 binding.addDevice.hide()
-                binding.networkStatsBtn.visibility = View.VISIBLE
+                binding.networkStatsBtn.setVisible(true)
+                binding.myLocationBtn.setVisible(true)
             }
             else -> {
                 binding.addDevice.hide()
-                binding.networkStatsBtn.visibility = View.GONE
+                binding.networkStatsBtn.setVisible(false)
+                binding.myLocationBtn.setVisible(false)
             }
         }
     }

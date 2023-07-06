@@ -6,6 +6,7 @@ import com.weatherxm.BuildConfig
 import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.datasource.CacheUserDataSource
+import com.weatherxm.data.datasource.DatabaseExplorerDataSource
 import com.weatherxm.data.datasource.NetworkAuthDataSource
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.services.CacheService
@@ -16,6 +17,7 @@ class AuthRepositoryImpl(
     private val cacheAuthDataSource: CacheAuthDataSource,
     private val networkAuthDataSource: NetworkAuthDataSource,
     private val cacheUserDataSource: CacheUserDataSource,
+    private val databaseExplorerDataSource: DatabaseExplorerDataSource,
     private val cacheService: CacheService
 ) : AuthRepository {
 
@@ -30,6 +32,7 @@ class AuthRepositoryImpl(
         cacheService.getAuthToken().onRight {
             networkAuthDataSource.logout(it.access)
         }
+        databaseExplorerDataSource.deleteAll()
         cacheService.clearAll()
     }
 

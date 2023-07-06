@@ -7,12 +7,12 @@ import com.weatherxm.data.CountryAndFrequencies
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 import com.weatherxm.data.services.CacheService
-import java.util.*
+import java.util.Locale
 
 /**
  * Simple shared preference database with key and value both strings.
  */
-class StorageAddressDataSource(private val cacheService: CacheService) : AddressDataSource {
+class CacheAddressDataSource(private val cacheService: CacheService) : AddressDataSource {
 
     override suspend fun getLocationAddress(
         hexIndex: String,

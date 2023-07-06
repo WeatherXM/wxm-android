@@ -20,20 +20,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_margin="@dimen/margin_normal"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/padding_normal"
         app:layout_dodgeInsetEdges="bottom">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/map_debug_info_container"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_normal"
             app:cardBackgroundColor="@color/transparent"
             app:cardCornerRadius="@dimen/card_corner_radius"
             app:cardUseCompatPadding="false"
             app:contentPadding="@dimen/padding_small"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintBottom_toTopOf="@id/login_signup_view"
+            app:layout_constraintEnd_toStartOf="@id/networkStatsBtn"
+            app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/map_debug_info"
@@ -45,32 +48,50 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/networkStatsBtn"
-            style="@style/Widget.WeatherXM.Button"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/myLocationBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/network_stats"
-            android:textColor="@color/light_text"
-            android:textStyle="normal"
-            app:backgroundTint="@color/dark_primary"
-            app:cornerRadius="@dimen/card_corner_radius"
-            app:icon="@drawable/ic_network_stats"
-            app:iconPadding="@dimen/padding_normal"
-            app:iconTint="@color/light_text"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:contentDescription="@string/go_to_your_location"
+            android:elevation="@dimen/elevation_small"
+            android:src="@drawable/ic_my_location"
+            app:backgroundTint="@color/colorSurface"
+            app:layout_anchor="@id/login_signup_view"
+            app:layout_anchorGravity="top"
+            app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/map_debug_info_container" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearance.WeatherXM.MyLocation"
+            app:tint="@color/colorOnSurface" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/networkStatsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:contentDescription="@string/network_stats"
+            android:elevation="@dimen/elevation_small"
+            android:src="@drawable/ic_network_stats"
+            app:backgroundTint="@color/network_stats_button"
+            app:layout_anchor="@id/login_signup_view"
+            app:layout_anchorGravity="top"
+            app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/myLocationBtn"
+            app:tint="@color/light_text" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/login_signup_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_normal"
             android:layout_marginTop="@dimen/margin_large"
-            app:cardMaxElevation="@dimen/elevation_extra_small"
+            app:cardElevation="@dimen/elevation_small"
             app:contentPadding="@dimen/padding_normal_to_large"
             app:contentPaddingBottom="0dp"
-            app:elevation="@dimen/elevation_extra_small"
+            app:elevation="@dimen/elevation_small"
             app:layout_constraintTop_toBottomOf="@id/networkStatsBtn">
 
             <androidx.constraintlayout.widget.ConstraintLayout

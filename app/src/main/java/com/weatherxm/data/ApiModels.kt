@@ -397,6 +397,36 @@ data class NetworkStatsTimeseries(
     val value: Double?
 ) : Parcelable
 
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkSearchResults(
+    val devices: List<NetworkSearchDeviceResult>?,
+    val addresses: List<NetworkSearchAddressResult>?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkSearchDeviceResult(
+    val id: String?,
+    val name: String?,
+    val connectivity: Connectivity?,
+    @Json(name = "cell_index")
+    val cellIndex: String?,
+    @Json(name = "cell_center")
+    val cellCenter: Location?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class NetworkSearchAddressResult(
+    val name: String?,
+    val place: String?,
+    val center: Location?
+) : Parcelable
+
 enum class DeviceProfile {
     M5,
     Helium

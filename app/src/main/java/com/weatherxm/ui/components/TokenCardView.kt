@@ -65,7 +65,7 @@ open class TokenCardView : LinearLayout, KoinComponent {
                         binding.chart.initializeTokenChart(it)
                     }
                     setMaxReward(tokenInfo?.max7dReward)
-                    trackRangeToggle(Analytics.ParamValue.DAYS_30.paramValue)
+                    trackRangeToggle(Analytics.ParamValue.DAYS_7.paramValue)
                 }
                 R.id.option30D -> {
                     binding.chart.clear()

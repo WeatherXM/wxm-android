@@ -15,6 +15,19 @@
         <item name="navigationIconTint">@color/colorPrimary</item>
     </style>
 
+    <style name="ThemeOverlay.WeatherXM.SearchBar" parent="ThemeOverlay.WeatherXM.Toolbar">
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="navigationIconTint">@color/colorOnSurface</item>
+        <item name="android:textColorHint">@color/darkGrey</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherXM.SearchView" parent="ThemeOverlay.WeatherXM.Toolbar">
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="navigationIconTint">@color/colorOnSurface</item>
+        <item name="android:textColorHint">@color/darkGrey</item>
+        <item name="colorOutline">@color/midGrey</item>
+    </style>
+
     <style name="ThemeOverlay.WeatherXM.AlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="dialogCornerRadius">0dp</item>
         <item name="android:bottomLeftRadius">0dp</item>

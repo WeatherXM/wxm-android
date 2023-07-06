@@ -46,7 +46,7 @@ class PreferenceViewModel : ViewModel(), KoinComponent {
     }
 
     fun logout() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             preferencesUseCase.logout()
             onLogout.postValue(true)
         }

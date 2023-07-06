@@ -8,6 +8,7 @@ import arrow.core.flatMap
 import com.weatherxm.R
 import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.CacheAuthDataSource
+import com.weatherxm.data.datasource.DatabaseExplorerDataSource
 import com.weatherxm.data.map
 import com.weatherxm.data.network.AccessTokenBody
 import com.weatherxm.data.network.AuthService
@@ -28,9 +29,11 @@ import okhttp3.Response
 import okhttp3.Route
 import timber.log.Timber
 
+@Suppress("LongParameterList")
 class AuthTokenAuthenticator(
     private val authService: AuthService,
     private val cacheAuthDataSource: CacheAuthDataSource,
+    private val databaseExplorerDataSource: DatabaseExplorerDataSource,
     private val cacheService: CacheService,
     private val navigator: Navigator,
     private val context: Context,
@@ -54,6 +57,7 @@ class AuthTokenAuthenticator(
                                 cacheService.getAuthToken().onRight {
                                     authService.logout(AccessTokenBody(it.access))
                                 }
+                                databaseExplorerDataSource.deleteAll()
                                 cacheService.clearAll()
                                 widgetHelper.getWidgetIds().onRight {
                                     val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)

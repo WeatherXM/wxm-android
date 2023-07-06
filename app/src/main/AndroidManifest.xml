@@ -74,8 +74,8 @@
             android:resource="@color/colorPrimary" /> <!-- Activities -->
         <activity
             android:name="com.weatherxm.ui.startup.StartupActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM.Startup" /> <!-- Alias for the launcher activity so that we may change it in the future without problems -->
         <activity-alias
             android:name=".Home"

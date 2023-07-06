@@ -18,6 +18,7 @@ import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel.Companion.ZOOM_LEVEL
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -49,7 +50,6 @@ class ClaimMapFragment : BaseMapFragment() {
                 } else {
                     heliumParentModel.next()
                 }
-
             }
         }
     }
@@ -60,7 +60,8 @@ class ClaimMapFragment : BaseMapFragment() {
             return
         }
 
-        binding.myLocationButton.visibility = View.GONE
+        binding.appBar.setVisible(false)
+        binding.searchView.setVisible(false)
 
         locationModel.onDeviceLocation().observe(this) {
             Timber.d("Got user location: $it")

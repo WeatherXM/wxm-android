@@ -13,47 +13,118 @@
         tools:context=".ui.BaseMapFragment" />
 
     <!-- Header -->
-
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        tools:visibility="visible">
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/searchBar"
+            style="@style/Widget.WeatherXM.SearchBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:menu="@menu/explorer_menu">
-
-            <ImageView
-                android:id="@+id/logo"
-                android:layout_width="144dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_normal"
-                android:adjustViewBounds="true"
-                android:contentDescription="@string/app_name"
-                android:scaleType="fitStart"
-                android:src="@drawable/app_logo_wide_no_tagline"
-                app:tint="@color/white" />
-
-        </com.google.android.material.appbar.MaterialToolbar>
+            android:hint="@string/search_station_name_address"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+            app:defaultScrollFlagsEnabled="false"
+            app:menu="@menu/explorer_menu"
+            app:navigationIcon="@drawable/ic_logo"
+            app:tintNavigationIcon="false" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/myLocationButton"
-        style="@style/Widget.WeatherXM.Button.Location.Toggle"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="top|end"
-        android:layout_marginEnd="@dimen/margin_normal"
-        app:icon="@drawable/ic_my_location"
-        app:iconSize="24dp"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        app:layout_constraintTop_toTopOf="@id/mapView"
-        tools:ignore="SpeakableTextPresentCheck" />
+    <com.google.android.material.search.SearchView
+        android:id="@+id/searchView"
+        style="@style/Widget.WeatherXM.SearchView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:imeOptions="actionSend"
+        app:autoShowKeyboard="true"
+        app:closeIcon="@drawable/ic_close"
+        app:iconifiedByDefault="true"
+        app:layout_anchor="@id/searchBar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/searchProgress"
+                style="@style/Widget.WeatherXM.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/recent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+                android:layout_marginTop="@dimen/margin_normal_to_large"
+                android:text="@string/recent"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/resultsRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/margin_normal_to_large"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:scrollbars="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recent"
+                tools:listitem="@layout/list_item_network_search_result" />
+
+            <LinearLayout
+                android:id="@+id/searchEmptyResultsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_normal_to_large"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_normal_to_large"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/recent">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/searchEmptyResultsTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/search_no_results"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/searchEmptyResultsDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:gravity="center"
+                    android:text="@string/search_no_results_message"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+            </LinearLayout>
+
+            <com.weatherxm.ui.components.EmptyView
+                android:id="@+id/searchResultsStatusView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_normal_to_large"
+                android:padding="@dimen/padding_normal_to_large"
+                android:visibility="gone"
+                app:empty_animation="@raw/anim_loading"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.search.SearchView>
 
     <!-- Progress -->
     <com.google.android.material.progressindicator.LinearProgressIndicator

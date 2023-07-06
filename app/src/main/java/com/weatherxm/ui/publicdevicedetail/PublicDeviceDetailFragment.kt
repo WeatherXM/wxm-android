@@ -89,14 +89,13 @@ class PublicDeviceDetailFragment : BottomSheetDialogFragment() {
             updateUI(it)
         }
 
-        binding.name.text = device?.name
-        binding.address.text = if (device?.address.isNullOrEmpty()) {
-            getString(R.string.unknown_address)
-        } else {
-            device?.address
+        model.address().observe(this) {
+            binding.address.text = it ?: getString(R.string.unknown_address)
         }
 
-        model.fetchDevice(device?.cellIndex, device?.id)
+        binding.name.text = device?.name
+
+        model.fetchDevice(device, explorerModel.getCurrentHexSelected())
     }
 
     override fun onResume() {

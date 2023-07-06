@@ -47,25 +47,27 @@ import com.weatherxm.data.bluetooth.BluetoothUpdater
 import com.weatherxm.data.database.AppDatabase
 import com.weatherxm.data.database.DatabaseConverters
 import com.weatherxm.data.database.dao.DeviceHistoryDao
+import com.weatherxm.data.database.dao.NetworkSearchRecentDao
 import com.weatherxm.data.datasource.AppConfigDataSource
 import com.weatherxm.data.datasource.AppConfigDataSourceImpl
+import com.weatherxm.data.datasource.CacheAddressDataSource
 import com.weatherxm.data.datasource.CacheAddressSearchDataSource
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
+import com.weatherxm.data.datasource.DatabaseExplorerDataSource
 import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
 import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.DeviceDataSourceImpl
 import com.weatherxm.data.datasource.DeviceOTADataSource
 import com.weatherxm.data.datasource.DeviceOTADataSourceImpl
-import com.weatherxm.data.datasource.ExplorerDataSource
-import com.weatherxm.data.datasource.ExplorerDataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
 import com.weatherxm.data.datasource.NetworkAuthDataSource
+import com.weatherxm.data.datasource.NetworkExplorerDataSource
 import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
@@ -74,7 +76,6 @@ import com.weatherxm.data.datasource.SharedPreferencesDataSource
 import com.weatherxm.data.datasource.SharedPreferencesDataSourceImpl
 import com.weatherxm.data.datasource.StatsDataSource
 import com.weatherxm.data.datasource.StatsDataSourceImpl
-import com.weatherxm.data.datasource.StorageAddressDataSource
 import com.weatherxm.data.datasource.TokenDataSource
 import com.weatherxm.data.datasource.TokenDataSourceImpl
 import com.weatherxm.data.datasource.UserActionDataSource
@@ -300,16 +301,20 @@ private val datasources = module {
         AppConfigDataSourceImpl(get(), get())
     }
 
-    single<ExplorerDataSource> {
-        ExplorerDataSourceImpl(get())
+    single<NetworkExplorerDataSource> {
+        NetworkExplorerDataSource(get())
+    }
+
+    single<DatabaseExplorerDataSource> {
+        DatabaseExplorerDataSource(get())
     }
 
     single<NetworkAddressDataSource> {
         NetworkAddressDataSource(androidContext(), get())
     }
 
-    single<StorageAddressDataSource> {
-        StorageAddressDataSource(get())
+    single<CacheAddressDataSource> {
+        CacheAddressDataSource(get())
     }
 
     single<UserActionDataSource> {
@@ -367,7 +372,7 @@ private val datasources = module {
 
 private val repositories = module {
     single<AuthRepository> {
-        AuthRepositoryImpl(get(), get(), get(), get())
+        AuthRepositoryImpl(get(), get(), get(), get(), get())
     }
     single<LocationRepository> {
         LocationRepositoryImpl(get())
@@ -382,7 +387,7 @@ private val repositories = module {
         DeviceRepositoryImpl(get(), get(), get(), get())
     }
     single<ExplorerRepository> {
-        ExplorerRepositoryImpl(get(), get(), get())
+        ExplorerRepositoryImpl(get(), get(), get(), get())
     }
     single<TokenRepository> {
         TokenRepositoryImpl(get())
@@ -523,7 +528,7 @@ private val network = module {
     }
 
     single<AuthTokenAuthenticator> {
-        AuthTokenAuthenticator(get(), get(), get(), get(), get(), get())
+        AuthTokenAuthenticator(get(), get(), get(), get(), get(), get(), get())
     }
 
     single<ApiRequestInterceptor> {
@@ -651,6 +656,10 @@ val database = module {
             .addTypeConverter(DatabaseConverters())
             .build()
     }
+    single<NetworkSearchRecentDao> {
+        val database = get<AppDatabase>()
+        database.networkSearchRecentDao()
+    }
     single<DeviceHistoryDao> {
         val database = get<AppDatabase>()
         database.deviceHistoryDao()
@@ -689,7 +698,10 @@ private val utilities = module {
         CompactDecimalFormat.getInstance(
             Locale.getDefault(),
             CompactDecimalFormat.CompactStyle.SHORT
-        )
+        ).apply {
+            minimumFractionDigits = 0
+            maximumFractionDigits = 1
+        }
     }
     single<NumberFormat> {
         NumberFormat.getInstance()

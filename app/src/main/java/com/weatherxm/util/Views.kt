@@ -5,8 +5,13 @@ package com.weatherxm.util
 import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Typeface
 import android.text.Editable
+import android.text.SpannableStringBuilder
+import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
 import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -103,6 +108,34 @@ fun ViewGroup.applyInsets(top: Boolean = true, bottom: Boolean = true) {
     }
 }
 
+fun TextView.highlightText(
+    originalText: String,
+    queryStartIndex: Int,
+    queryEndIndex: Int,
+    @ColorRes defaultColorResId: Int,
+    @ColorRes highlightColorResId: Int
+) {
+    val newText = SpannableStringBuilder(originalText)
+
+    val defaultColor = ForegroundColorSpan(context.getColor(defaultColorResId))
+    val highlightColor = ForegroundColorSpan(context.getColor(highlightColorResId))
+
+    newText.setSpan(defaultColor, 0, originalText.length, SPAN_EXCLUSIVE_EXCLUSIVE)
+    newText.setSpan(
+        highlightColor,
+        queryStartIndex,
+        queryEndIndex,
+        SPAN_EXCLUSIVE_EXCLUSIVE
+    )
+    newText.setSpan(
+        StyleSpan(Typeface.BOLD),
+        queryStartIndex,
+        queryEndIndex,
+        SPAN_EXCLUSIVE_EXCLUSIVE
+    )
+    text = newText
+}
+
 fun TextView.setHtml(
     @StringRes resId: Int,
     vararg args: Any = emptyArray(),
@@ -130,6 +163,10 @@ fun View.applyOnGlobalLayout(listener: () -> Unit) {
             listener()
         }
     })
+}
+
+fun View?.hideKeyboard() {
+    this?.let { this.context?.hideKeyboard(it) }
 }
 
 fun Fragment.hideKeyboard() {

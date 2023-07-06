@@ -14,28 +14,36 @@
         app:navGraph="@navigation/bottom_navigation"
         tools:ignore="FragmentTagUsage" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/networkStatsBtn"
-        style="@style/Widget.WeatherXM.Button"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/myLocationBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/network_stats"
-        android:textColor="@color/light_text"
-        android:textStyle="normal"
-        app:backgroundTint="@color/dark_primary"
-        app:cornerRadius="@dimen/card_corner_radius"
-        app:icon="@drawable/ic_network_stats"
-        app:iconPadding="@dimen/padding_normal"
-        app:iconTint="@color/light_text"
-        app:layout_anchor="@id/space"
-        app:layout_anchorGravity="top|center_horizontal" />
+        android:layout_gravity="top|center"
+        android:contentDescription="@string/go_to_your_location"
+        android:elevation="@dimen/elevation_small"
+        android:src="@drawable/ic_my_location"
+        android:translationY="-20dp"
+        app:backgroundTint="@color/colorSurface"
+        app:layout_anchor="@id/networkStatsBtn"
+        app:layout_anchorGravity="top|center"
+        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+        app:shapeAppearance="@style/ShapeAppearance.WeatherXM.MyLocation"
+        app:tint="@color/colorOnSurface" />
 
-    <Space
-        android:id="@+id/space"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/networkStatsBtn"
         android:layout_width="wrap_content"
-        android:layout_height="74dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="@dimen/margin_normal"
+        android:contentDescription="@string/network_stats"
+        android:elevation="@dimen/elevation_small"
+        android:src="@drawable/ic_network_stats"
+        app:backgroundTint="@color/network_stats_button"
         app:layout_anchor="@id/nav_view"
-        app:layout_anchorGravity="top|center_horizontal" />
+        app:layout_anchorGravity="top|end"
+        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+        app:tint="@color/light_text" />
 
     <com.weatherxm.ui.components.HidingBottomNavigationView
         android:id="@+id/nav_view"

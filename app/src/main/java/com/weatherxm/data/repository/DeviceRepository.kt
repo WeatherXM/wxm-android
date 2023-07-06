@@ -5,9 +5,9 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceInfo
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
+import com.weatherxm.data.datasource.CacheAddressDataSource
 import com.weatherxm.data.datasource.DeviceDataSource
 import com.weatherxm.data.datasource.NetworkAddressDataSource
-import com.weatherxm.data.datasource.StorageAddressDataSource
 import com.weatherxm.data.datasource.UserActionDataSource
 import timber.log.Timber
 import java.util.Date
@@ -30,7 +30,7 @@ interface DeviceRepository {
 class DeviceRepositoryImpl(
     private val deviceDataSource: DeviceDataSource,
     private val networkAddressDataSource: NetworkAddressDataSource,
-    private val storageAddressDataSource: StorageAddressDataSource,
+    private val cacheAddressDataSource: CacheAddressDataSource,
     private val userActionDataSource: UserActionDataSource
 ) : DeviceRepository {
 
@@ -66,7 +66,7 @@ class DeviceRepositoryImpl(
         var hexAddress: String? = null
 
         device.attributes?.hex7?.let { hex ->
-            storageAddressDataSource.getLocationAddress(hex.index, hex.center).onRight { address ->
+            cacheAddressDataSource.getLocationAddress(hex.index, hex.center).onRight { address ->
                 Timber.d("Got location address from database [$address].")
                 hexAddress = address
             }.mapLeft {
@@ -75,7 +75,7 @@ class DeviceRepositoryImpl(
                         Timber.d("Got location address from network [$it].")
                         hexAddress = address
                         address?.let {
-                            storageAddressDataSource.setLocationAddress(hex.index, it)
+                            cacheAddressDataSource.setLocationAddress(hex.index, it)
                         }
                     }
             }

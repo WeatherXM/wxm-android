@@ -16,12 +16,16 @@
         <item name="android:elevation">0dp</item>
     </style>
 
-    <style name="Widget.WeatherXM.ToolBar.Explorer" parent="Widget.Material3.Toolbar.OnSurface">
-        <item name="popupTheme">@style/ThemeOverlay.Material3.Dark</item>
-    </style>
-
     <style name="Widget.WeatherXM.AppBar" parent="Widget.Material3.AppBarLayout">
         <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="Widget.WeatherXM.SearchBar" parent="Widget.Material3.SearchBar">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.WeatherXM.SearchBar</item>
+    </style>
+
+    <style name="Widget.WeatherXM.SearchView" parent="Widget.Material3.SearchView">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.WeatherXM.SearchView</item>
     </style>
 
     <!--
@@ -286,7 +290,7 @@
     </style>
 
     <style name="Widget.WeatherXM.Slider.NetworkStats" parent="Widget.WeatherXM.Slider">
-        <item name="android:stepSize">1</item>
+        <item name="android:stepSize">0</item>
         <item name="trackHeight">18dp</item>
         <item name="trackColorInactive">@color/colorSurface</item>
         <item name="trackColorActive">@color/network_stats_slider</item>

@@ -72,6 +72,24 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent,
             navigator.showNetworkStats(this)
         }
 
+        model.onSearchOpenStatus().observe(this) { isOpened ->
+            if (isOpened) {
+                binding.overlayContainer.hide(SlideOutToBottom)
+                binding.networkStatsBtn.hide()
+            } else {
+                binding.overlayContainer.show(SlideInFromBottom)
+                binding.networkStatsBtn.show()
+            }
+        }
+
+        binding.myLocationBtn.setOnClickListener {
+            model.onMyLocation()
+        }
+
+        binding.networkStatsBtn.setOnClickListener {
+            navigator.showNetworkStats(this)
+        }
+
         binding.login.setOnClickListener {
             navigator.showLogin(this)
         }

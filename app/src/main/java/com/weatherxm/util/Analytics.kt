@@ -50,7 +50,8 @@ class Analytics(
         EXPLORER_CELL("Explorer Cell"),
         EXPLORER_DEVICE("Explorer Device"),
         BLE_CONNECTION_POPUP_ERROR("BLE Connection Popup Error"),
-        NETWORK_STATS("Network Stats")
+        NETWORK_STATS("Network Stats"),
+        NETWORK_SEARCH("Network Search")
     }
 
     // Custom Event Names
@@ -169,7 +170,13 @@ class Analytics(
         DAILY_MINTED("daily_minted"),
         TOTAL_STATIONS("total_stations"),
         CLAIMED_STATIONS("claimed_stations"),
-        ACTIVE_STATIONS("active_stations")
+        ACTIVE_STATIONS("active_stations"),
+        EXPLORER_SEARCH("Explorer Search"),
+        NETWORK_SEARCH("Network Search"),
+        RECENT("recent"),
+        SEARCH("search"),
+        LOCATION("location"),
+        STATION("station")
     }
 
     // Custom Param Names

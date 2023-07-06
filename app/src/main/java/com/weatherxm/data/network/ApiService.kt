@@ -6,6 +6,7 @@ import co.infinum.retromock.meta.MockResponse
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceInfo
+import com.weatherxm.data.NetworkSearchResults
 import com.weatherxm.data.NetworkStatsResponse
 import com.weatherxm.data.PublicDevice
 import com.weatherxm.data.PublicHex
@@ -166,6 +167,15 @@ interface ApiService {
         @Path("index") index: String,
         @Path("deviceId") deviceId: String
     ): NetworkResponse<PublicDevice, ErrorResponse>
+
+    @Mock
+    @MockResponse(body = "mock_files/get_network_search_results.json")
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @GET("/api/v1/network/search")
+    @Headers(NO_AUTH_HEADER)
+    suspend fun networkSearch(
+        @Query("query") query: String,
+    ): NetworkResponse<NetworkSearchResults, ErrorResponse>
 
     @Suppress("LongParameterList")
     @Mock

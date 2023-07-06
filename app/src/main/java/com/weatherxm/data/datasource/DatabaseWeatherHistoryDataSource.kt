@@ -49,8 +49,7 @@ class DatabaseWeatherHistoryDataSource(
             .right()
             // Return DatabaseMissError if list is empty
             .flatMap { b ->
-                b.takeIf({ it.isNotEmpty() })?.right()
-                    ?: DataError.DatabaseMissError.left<DataError.DatabaseMissError>()
+                b.takeIf { it.isNotEmpty() }?.right() ?: DataError.DatabaseMissError.left()
             }
     }
 

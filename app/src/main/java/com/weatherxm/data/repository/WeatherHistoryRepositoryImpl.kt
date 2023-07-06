@@ -48,7 +48,7 @@ class WeatherHistoryRepositoryImpl(
                 }
             }
             .flatMap { b ->
-                b.takeIf({ isDateComplete(date, it) })?.right()
+                b.takeIf { isDateComplete(date, it) }?.right()
                     ?: DataError.DatabaseMissError.left<Failure>()
             }
             .onLeft {

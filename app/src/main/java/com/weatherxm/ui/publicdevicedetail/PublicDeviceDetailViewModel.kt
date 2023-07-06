@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.explorer.UIHex
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
@@ -21,25 +22,35 @@ class PublicDeviceDetailViewModel : ViewModel(), KoinComponent {
     private val explorerUseCase: ExplorerUseCase by inject()
     private val analytics: Analytics by inject()
     private val onPublicDevice = MutableLiveData<Resource<UIDevice>>()
+    private val address = MutableLiveData<String?>()
 
     fun onPublicDevice(): LiveData<Resource<UIDevice>> = onPublicDevice
+    fun address(): LiveData<String?> = address
 
-    fun fetchDevice(index: String?, deviceId: String?) {
+    fun fetchDevice(device: UIDevice?, currentHexSelected: UIHex?) {
         onPublicDevice.postValue(Resource.loading())
         viewModelScope.launch {
-            if (deviceId == null || index == null) {
+            if (device?.id == null || device.cellIndex == null) {
                 Timber.w("Getting public device details failed: null")
                 onPublicDevice.postValue(
                     Resource.error(resHelper.getString(R.string.error_public_device_no_data))
                 )
                 return@launch
             }
+            if (device.address.isNullOrEmpty() && currentHexSelected != null) {
+                launch {
+                    fetchAddressFromHex(currentHexSelected)
+                }
+            } else if (!device.address.isNullOrEmpty()) {
+                address.postValue(device.address)
+            }
+
             val publicDevice = async {
-                explorerUseCase.getPublicDevice(index, deviceId)
+                explorerUseCase.getPublicDevice(device.cellIndex, device.id)
             }
 
             val tokensDeferred = async {
-                explorerUseCase.getTokenInfoLast30D(deviceId)
+                explorerUseCase.getTokenInfoLast30D(device.id)
             }
 
             var uiDevice: UIDevice? = null
@@ -74,5 +85,9 @@ class PublicDeviceDetailViewModel : ViewModel(), KoinComponent {
 
             onPublicDevice.postValue(Resource.success(uiDevice))
         }
+    }
+
+    private suspend fun fetchAddressFromHex(currentHexSelected: UIHex) {
+        address.postValue(explorerUseCase.getAddressOfHex(currentHexSelected))
     }
 }

@@ -44,6 +44,7 @@
             android:insetBottom="0dp"
             app:icon="@drawable/ic_my_location"
             app:iconSize="24dp"
+            app:iconTint="@color/colorOnSurface"
             app:layout_constraintBottom_toBottomOf="@id/searchBoxContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/searchBoxContainer"
