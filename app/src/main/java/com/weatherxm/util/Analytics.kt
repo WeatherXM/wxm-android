@@ -166,17 +166,20 @@ class Analytics(
         LEARN_MORE("Learn More"),
         DATA_DAYS("data_days"),
         ALLOCATED_REWARDS("allocated_rewards"),
-        TOTAL_SUPPLY("total_supply"),
-        DAILY_MINTED("daily_minted"),
         TOTAL_STATIONS("total_stations"),
         CLAIMED_STATIONS("claimed_stations"),
         ACTIVE_STATIONS("active_stations"),
+        BUY_STATION("buy_station"),
+        MANUFACTURER("Open Manufacturer Contact"),
         EXPLORER_SEARCH("Explorer Search"),
+        EXPLORER_SETTINGS("Explorer Settings"),
         NETWORK_SEARCH("Network Search"),
         RECENT("recent"),
         SEARCH("search"),
         LOCATION("location"),
-        STATION("station")
+        STATION("station"),
+        TOKENOMICS("Tokenomics"),
+        NETWORK_STATS("network_stats")
     }
 
     // Custom Param Names

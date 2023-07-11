@@ -7,11 +7,14 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Typeface
 import android.text.Editable
+import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+import android.text.TextPaint
 import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
+import android.text.style.URLSpan
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -152,6 +155,19 @@ fun TextView.setHtml(
 ) {
     val html = message.format(*args)
     setText(HtmlCompat.fromHtml(html, flags), TextView.BufferType.SPANNABLE)
+}
+
+fun TextView.removeLinksUnderline() {
+    val spannable = SpannableString(text)
+    spannable.getSpans(0, spannable.length, URLSpan::class.java).forEach {
+        spannable.setSpan(object : URLSpan(it.url) {
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.isUnderlineText = false
+            }
+        }, spannable.getSpanStart(it), spannable.getSpanEnd(it), 0)
+    }
+    text = spannable
 }
 
 fun View.applyOnGlobalLayout(listener: () -> Unit) {

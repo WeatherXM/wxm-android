@@ -1,5 +1,6 @@
 package com.weatherxm.usecases
 
+import android.content.Context
 import arrow.core.Either
 import com.github.mikephil.charting.data.Entry
 import com.weatherxm.data.Failure
@@ -8,29 +9,54 @@ import com.weatherxm.data.NetworkStatsTimeseries
 import com.weatherxm.data.repository.StatsRepository
 import com.weatherxm.ui.networkstats.NetworkStationStats
 import com.weatherxm.ui.networkstats.NetworkStats
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
+import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.NumberUtils.compactNumber
 import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.Weather.EMPTY_VALUE
+import java.time.ZoneId
 
-class StatsUseCaseImpl(private val repository: StatsRepository) : StatsUseCase {
+class StatsUseCaseImpl(
+    private val repository: StatsRepository,
+    private val context: Context
+) : StatsUseCase {
 
     override suspend fun getNetworkStats(): Either<Failure, NetworkStats> {
         return repository.getNetworkStats().map { stats ->
+            val timestampInUserTz = stats.lastUpdated?.withZoneSameInstant(ZoneId.systemDefault())
+            val lastUpdatedDate = timestampInUserTz?.getFormattedDate(includeYear = true)
+            val lastUpdatedTime = timestampInUserTz?.getFormattedTime(context)
+
             return@map NetworkStats(
                 totalDataDays = compactNumber(stats.dataDays?.last()?.value),
+                totalDataDays30D = compactNumber(
+                    (stats.dataDays?.last()?.value ?: 0.0) - (stats.dataDays?.first()?.value ?: 0.0)
+                ),
                 lastDataDays = getLastOfTimeseries(stats.dataDays),
                 dataDaysEntries = getEntriesOfTimeseries(stats.dataDays),
+                dataDaysStartMonth = stats.dataDays?.first()?.ts?.getFormattedDate() ?: "",
+                dataDaysEndMonth = stats.dataDays?.last()?.ts?.getFormattedDate() ?: "",
                 totalRewards = compactNumber(stats.tokens?.allocatedPerDay?.last()?.value),
+                totalRewards30D = compactNumber(
+                    (stats.tokens?.allocatedPerDay?.last()?.value ?: 0.0)
+                        - (stats.tokens?.allocatedPerDay?.first()?.value ?: 0.0)
+                ),
                 lastRewards = getLastOfTimeseries(stats.tokens?.allocatedPerDay),
                 rewardsEntries = getEntriesOfTimeseries(stats.tokens?.allocatedPerDay),
+                rewardsStartMonth = stats.tokens?.allocatedPerDay?.first()?.ts?.getFormattedDate()
+                    ?: "",
+                rewardsEndMonth = stats.tokens?.allocatedPerDay?.last()?.ts?.getFormattedDate()
+                    ?: "",
+                rewardsAvgMonthly = formatNumber(stats.tokens?.avgMonthly, maxDecimals = 1),
                 totalSupply = compactNumber(stats.tokens?.totalSupply),
-                dailyMinted = formatNumber(stats.tokens?.dailyMinted),
+                dailyMinted = compactNumber(stats.tokens?.dailyMinted),
                 totalStations = formatNumber(stats.weatherStations.onboarded?.total),
                 totalStationStats = createStationStats(stats.weatherStations.onboarded?.details),
                 claimedStations = formatNumber(stats.weatherStations.claimed?.total),
                 claimedStationStats = createStationStats(stats.weatherStations.claimed?.details),
                 activeStations = formatNumber(stats.weatherStations.active?.total),
-                activeStationStats = createStationStats(stats.weatherStations.active?.details)
+                activeStationStats = createStationStats(stats.weatherStations.active?.details),
+                lastUpdated = "$lastUpdatedDate, $lastUpdatedTime"
             )
         }
     }

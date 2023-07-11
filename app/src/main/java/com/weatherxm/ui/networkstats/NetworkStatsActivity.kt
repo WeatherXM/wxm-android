@@ -14,6 +14,9 @@ import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.initializeNetworkStatsChart
+import com.weatherxm.util.removeLinksUnderline
+import com.weatherxm.util.setHtml
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -53,6 +56,8 @@ class NetworkStatsActivity : AppCompatActivity(), KoinComponent {
         }
         binding.activeRecycler.adapter = activeAdapter
 
+        formatTokenInfo()
+
         binding.buyCard.setOnClickListener {
             navigator.openWebsite(this, getString(R.string.shop_url))
         }
@@ -60,6 +65,11 @@ class NetworkStatsActivity : AppCompatActivity(), KoinComponent {
         binding.buyStationBtn.setOnClickListener {
             navigator.openWebsite(this, getString(R.string.shop_url))
             analytics.trackEventSelectContent(Analytics.ParamValue.OPEN_SHOP.paramValue)
+        }
+
+        binding.contactUsBtn.setOnClickListener {
+            navigator.openWebsite(this, getString(R.string.website_contact))
+            analytics.trackEventSelectContent(Analytics.ParamValue.MANUFACTURER.paramValue)
         }
 
         setInfoButtonListeners()
@@ -93,6 +103,26 @@ class NetworkStatsActivity : AppCompatActivity(), KoinComponent {
         model.getNetworkStats()
     }
 
+    private fun formatTokenInfo() {
+        with(binding.tokenQuickInfo) {
+            movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                setOnLinkClickListener { _, url ->
+                    analytics.trackEventSelectContent(
+                        Analytics.ParamValue.TOKENOMICS.paramValue,
+                        Pair(
+                            FirebaseAnalytics.Param.SOURCE,
+                            Analytics.ParamValue.NETWORK_STATS.paramValue
+                        )
+                    )
+                    navigator.openWebsite(this@NetworkStatsActivity, url)
+                    return@setOnLinkClickListener true
+                }
+            }
+            setHtml(R.string.token_quick_info, getString(R.string.documentation_url_tokenomics))
+            removeLinksUnderline()
+        }
+    }
+
     private fun openStationShop(stationDetails: NetworkStationStats, categoryName: String) {
         analytics.trackEventSelectContent(
             Analytics.ParamValue.OPEN_STATION_SHOP.paramValue,
@@ -113,25 +143,17 @@ class NetworkStatsActivity : AppCompatActivity(), KoinComponent {
 
         binding.rewardsInfoBtn.setOnClickListener {
             openMessageDialog(
-                R.string.total_allocated_rewards,
-                R.string.total_allocated_rewards_explanation,
+                R.string.wxm_rewards,
+                R.string.rewards_explanation,
                 Analytics.ParamValue.ALLOCATED_REWARDS.paramValue
             )
         }
 
-        binding.supplyInfoBtn.setOnClickListener {
+        binding.earnWxmInfoBtn.setOnClickListener {
             openMessageDialog(
-                R.string.total_supply,
-                R.string.total_supply_explanation,
-                Analytics.ParamValue.TOTAL_SUPPLY.paramValue
-            )
-        }
-
-        binding.dailyMintedInfoBtn.setOnClickListener {
-            openMessageDialog(
-                R.string.daily_minted,
-                R.string.daily_minted_explanation,
-                Analytics.ParamValue.DAILY_MINTED.paramValue
+                null,
+                R.string.average_monthly_rewards_explanation,
+                Analytics.ParamValue.BUY_STATION.paramValue
             )
         }
 
@@ -161,12 +183,12 @@ class NetworkStatsActivity : AppCompatActivity(), KoinComponent {
     }
 
     private fun openMessageDialog(
-        @StringRes titleResId: Int,
+        @StringRes titleResId: Int?,
         @StringRes messageResId: Int,
         messageSource: String
     ) {
         navigator.showMessageDialog(
-            supportFragmentManager, getString(titleResId), getString(messageResId)
+            supportFragmentManager, titleResId?.let { getString(it) }, getString(messageResId)
         )
         analytics.trackEventSelectContent(
             Analytics.ParamValue.LEARN_MORE.paramValue,
@@ -185,16 +207,24 @@ class NetworkStatsActivity : AppCompatActivity(), KoinComponent {
     @SuppressLint("SetTextI18n")
     private fun updateUI(data: NetworkStats) {
         with(binding) {
+            totalDataDays30D.text = data.totalDataDays30D
             totalDataDays.text = data.totalDataDays
             lastDataDays.text = "+${data.lastDataDays}"
             dataChart.initializeNetworkStatsChart(data.dataDaysEntries)
+            dataStartMonth.text = data.dataDaysStartMonth
+            dataEndMonth.text = data.dataDaysEndMonth
 
+            totalRewards30D.text = data.totalRewards30D
             totalRewards.text = data.totalRewards
-            lastRewards.text = "+${data.lastRewards}"
+            rewardsLastDay.text = "+${data.lastRewards}"
             rewardsChart.initializeNetworkStatsChart(data.rewardsEntries)
+            rewardsStartMonth.text = data.rewardsStartMonth
+            rewardsEndMonth.text = data.rewardsEndMonth
+
+            earnWxm.text = getString(R.string.earn_wxm, data.rewardsAvgMonthly)
 
             totalSupply.text = data.totalSupply
-            dailyMinted.text = data.dailyMinted
+            dailyMinted.text = "+${data.dailyMinted}"
             totals.text = data.totalStations
             claimed.text = data.claimedStations
             active.text = data.activeStations
@@ -202,6 +232,8 @@ class NetworkStatsActivity : AppCompatActivity(), KoinComponent {
             totalsAdapter.submitList(data.totalStationStats)
             claimedAdapter.submitList(data.claimedStationStats)
             activeAdapter.submitList(data.activeStationStats)
+
+            lastUpdated.text = getString(R.string.last_updated, data.lastUpdated)
         }
     }
 }

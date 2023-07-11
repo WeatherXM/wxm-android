@@ -218,7 +218,6 @@ class RebootActivity : AppCompatActivity(), KoinComponent {
     private fun sendSupportEmail(errorCode: String?) {
         navigator.sendSupportEmail(
             this,
-            recipient = getString(R.string.support_email_recipient),
             subject = getString(R.string.support_email_subject_helium_reboot_failed),
             body = getString(
                 R.string.support_email_body_helium_failed,

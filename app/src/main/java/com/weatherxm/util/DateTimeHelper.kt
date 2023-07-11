@@ -16,6 +16,8 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
+import java.util.Locale
 import kotlin.math.absoluteValue
 
 object DateTimeHelper : KoinComponent {
@@ -70,6 +72,14 @@ object DateTimeHelper : KoinComponent {
                 }
                 "$nameOfDay ${format(formatterMonthDay)}"
             }
+        }
+    }
+
+    fun ZonedDateTime.getFormattedDate(includeYear: Boolean = false): String {
+        return if (includeYear) {
+            "${month.getDisplayName(TextStyle.SHORT, Locale.US)} $dayOfMonth, $year"
+        } else {
+            "${month.getDisplayName(TextStyle.SHORT, Locale.US)} $dayOfMonth"
         }
     }
 

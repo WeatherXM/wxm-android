@@ -117,7 +117,6 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
         binding.contactSupportBtn.setOnClickListener {
             navigator.sendSupportEmail(
                 this,
-                recipient = getString(R.string.support_email_recipient),
                 source = Analytics.ParamValue.DEVICE_INFO.paramValue
             )
         }

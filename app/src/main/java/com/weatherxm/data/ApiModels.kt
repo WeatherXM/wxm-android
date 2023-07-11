@@ -337,7 +337,9 @@ data class NetworkStatsResponse(
     @Json(name = "data_days")
     val dataDays: List<NetworkStatsTimeseries>?,
     val tokens: NetworkStatsTokens?,
-    val customers: NetworkStatsCustomers?
+    val customers: NetworkStatsCustomers?,
+    @Json(name = "last_updated")
+    val lastUpdated: ZonedDateTime?
 ) : Parcelable
 
 @Keep
@@ -377,7 +379,9 @@ data class NetworkStatsTokens(
     @Json(name = "daily_minted")
     val dailyMinted: Int?,
     @Json(name = "allocated_per_day")
-    val allocatedPerDay: List<NetworkStatsTimeseries>?
+    val allocatedPerDay: List<NetworkStatsTimeseries>?,
+    @Json(name = "avg_monthly")
+    val avgMonthly: Double?,
 ) : Parcelable
 
 @Keep

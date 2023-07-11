@@ -34,8 +34,10 @@ class MessageDialogFragment : BottomSheetDialogFragment() {
         lifecycleScope.launch {
             whenCreated {
                 val args = requireArguments()
-                if (args.containsKey(ARG_TITLE) && args.containsKey(ARG_MESSAGE)) {
+                if (args.containsKey(ARG_TITLE)) {
                     title = args.getString(ARG_TITLE)
+                }
+                if (args.containsKey(ARG_MESSAGE)) {
                     message = args.getString(ARG_MESSAGE)
                 }
             }
@@ -60,7 +62,7 @@ class MessageDialogFragment : BottomSheetDialogFragment() {
 
         title?.let {
             binding.title.text = it
-        }
+        } ?: binding.title.setVisible(false)
 
         message?.let {
             binding.message.text = it

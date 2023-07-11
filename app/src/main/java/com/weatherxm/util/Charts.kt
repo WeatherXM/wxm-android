@@ -559,12 +559,14 @@ fun LineChart.initializeNetworkStatsChart(entries: List<Entry>) {
     description.isEnabled = false
     legend.isEnabled = false
     setDrawMarkers(false)
-    minOffset = 0F
+    minOffset = 2F
 
     // Line and highlight Settings
-    dataSet.color = context.getColor(R.color.network_stats_chart_primary)
     lineData.setDrawValues(false)
-    dataSet.setDrawCircles(false)
+    dataSet.color = context.getColor(R.color.network_stats_chart_primary)
+    dataSet.setCircleColor(context.getColor(R.color.network_stats_chart_primary))
+    dataSet.setDrawCircleHole(false)
+    dataSet.circleRadius = 1F
     dataSet.lineWidth = LINE_WIDTH
     dataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
     isHighlightPerDragEnabled = false

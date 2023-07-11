@@ -234,7 +234,7 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
         return when (menuItem.itemId) {
             R.id.settings -> {
                 analytics.trackEventSelectContent(
-                    contentType = Analytics.ParamValue.SETTINGS.paramValue
+                    contentType = Analytics.ParamValue.EXPLORER_SETTINGS.paramValue
                 )
                 navigator.showPreferences(this)
                 true

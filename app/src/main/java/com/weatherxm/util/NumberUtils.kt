@@ -16,8 +16,9 @@ object NumberUtils : KoinComponent {
         } ?: EMPTY_VALUE
     }
 
-    fun formatNumber(number: Number?): String {
+    fun formatNumber(number: Number?, maxDecimals: Int = 0): String {
         return number?.let {
+            numberFormat.maximumFractionDigits = maxDecimals
             numberFormat.format(it)
         } ?: EMPTY_VALUE
     }

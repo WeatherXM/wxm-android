@@ -367,10 +367,10 @@ class Navigator(
 
     fun sendSupportEmail(
         context: Context?,
-        recipient: String? = null,
         subject: String? = null,
         body: String? = null,
-        source: String = Analytics.ParamValue.ERROR.paramValue
+        source: String = Analytics.ParamValue.ERROR.paramValue,
+        withClientIdentifier: Boolean = true
     ) {
         analytics.trackEventSelectContent(
             Analytics.ParamValue.CONTACT_SUPPORT.paramValue,
@@ -381,18 +381,14 @@ class Navigator(
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:") // Only email apps should handle this
             intent.putExtra(
-                Intent.EXTRA_EMAIL, arrayOf(
-                    if (recipient.isNullOrEmpty()) {
-                        it.getString(R.string.support_email_recipient)
-                    } else recipient
-                )
+                Intent.EXTRA_EMAIL, arrayOf(it.getString(R.string.support_email_recipient))
             )
             subject?.let { subject -> intent.putExtra(Intent.EXTRA_SUBJECT, subject) }
 
             val clientIdentifier = clientIdentificationHelper.getDeviceSupportEmailBody()
-            if (body.isNullOrEmpty()) {
+            if (body.isNullOrEmpty() && withClientIdentifier) {
                 intent.putExtra(Intent.EXTRA_TEXT, clientIdentifier)
-            } else {
+            } else if (withClientIdentifier) {
                 intent.putExtra(Intent.EXTRA_TEXT, "$body\n$clientIdentifier")
             }
             try {

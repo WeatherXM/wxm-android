@@ -8,9 +8,10 @@
     android:fitsSystemWindows="false"
     tools:context=".ui.common.MessageDialogFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:paddingHorizontal="@dimen/padding_normal_to_large"
         android:paddingBottom="@dimen/padding_normal_to_large">
 
@@ -27,9 +28,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_normal"
+            android:layout_marginBottom="@dimen/margin_normal"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/dragHandler"
             tools:text="Message Title" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -37,11 +38,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_normal"
-            android:layout_marginTop="@dimen/margin_normal"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-            app:layout_constraintTop_toBottomOf="@id/title"
             tools:text="Message" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

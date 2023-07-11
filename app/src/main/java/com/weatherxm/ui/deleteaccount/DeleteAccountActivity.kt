@@ -77,7 +77,6 @@ class DeleteAccountActivity : AppCompatActivity(), KoinComponent {
                     setOnLinkClickListener { _, _ ->
                         navigator.sendSupportEmail(
                             context,
-                            getString(R.string.support_email_recipient),
                             getString(R.string.support_email_subject_delete_account)
                         )
                         return@setOnLinkClickListener true
@@ -190,7 +189,6 @@ class DeleteAccountActivity : AppCompatActivity(), KoinComponent {
                     empty.htmlSubtitle(R.string.deletion_failure_message, result.message) {
                         navigator.sendSupportEmail(
                             this@DeleteAccountActivity,
-                            getString(R.string.support_email_recipient),
                             getString(R.string.support_email_subject_delete_account)
                         )
                     }
@@ -198,7 +196,6 @@ class DeleteAccountActivity : AppCompatActivity(), KoinComponent {
                     empty.listener {
                         navigator.sendSupportEmail(
                             this@DeleteAccountActivity,
-                            getString(R.string.support_email_recipient),
                             getString(R.string.support_email_subject_delete_account)
                         )
                     }
