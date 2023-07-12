@@ -25,7 +25,7 @@
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="650 WXM" />
+                tools:text="650 $WXM" />
 
             <View
                 android:id="@+id/dashedLine"
@@ -72,7 +72,7 @@
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintTop_toBottomOf="@id/rewardTimestamp"
-                        tools:text="+ 100,73 WXM" />
+                        tools:text="+ 100,73 $WXM" />
 
                     <ImageView
                         android:id="@+id/score_icon"

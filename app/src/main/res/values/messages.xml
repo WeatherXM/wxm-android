@@ -30,7 +30,7 @@
     <string name="error_claim_gps_failed">Could not get current location.</string>
     <string name="error_public_device_no_data">Failed to get the details of the device: No Data</string>
     <string name="error_public_devices_no_data">Failed to get the public devices.</string>
-    <string name="error_transactions_no_data">Oops! WXM transactions could not be fetched.</string>
+    <string name="error_transactions_no_data">Oops! $WXM transactions could not be fetched.</string>
     <string name="error_support_cannot_send_email">Oops! Could not send email!</string>
     <string name="error_open_website_support_cannot_open_url">Oops! Could not open %s</string>
     <string name="error_cannot_open_play_store">Oops! Could not open Play Store.</string>

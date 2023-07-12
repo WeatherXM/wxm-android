@@ -95,7 +95,7 @@
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/tx_hash"
-                tools:text="+ 2000 WXM" />
+                tools:text="+ 2000 $WXM" />
 
             <com.google.android.material.slider.RangeSlider
                 android:id="@+id/reward_slider"
@@ -165,7 +165,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/max_reward_icon"
                 app:layout_constraintStart_toEndOf="@id/max_reward_icon"
                 app:layout_constraintTop_toTopOf="@id/max_reward_icon"
-                tools:text="2000 WXM" />
+                tools:text="2000 $WXM" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/max_reward_description"
