@@ -38,6 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+                android:layout_marginTop="@dimen/margin_extra_small"
                 app:cardElevation="@dimen/elevation_small"
                 app:contentPadding="@dimen/padding_small_to_normal"
                 app:contentPaddingTop="0dp"
@@ -59,15 +60,12 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <ImageButton
                         android:id="@+id/dataInfoBtn"
-                        style="@style/Widget.WeatherXM.IconButton"
+                        style="@style/Widget.WeatherXM.ImageButton"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        app:icon="@drawable/ic_learn_more_info"
-                        app:iconGravity="textStart"
-                        app:iconSize="14dp"
-                        app:iconTint="@color/colorOnSurface"
+                        android:src="@drawable/ic_learn_more_info"
                         app:layout_constraintBottom_toBottomOf="@id/dataTitle"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/dataTitle" />
@@ -267,15 +265,12 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.button.MaterialButton
+                    <ImageButton
                         android:id="@+id/rewardsInfoBtn"
-                        style="@style/Widget.WeatherXM.IconButton"
+                        style="@style/Widget.WeatherXM.ImageButton"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        app:icon="@drawable/ic_learn_more_info"
-                        app:iconGravity="textStart"
-                        app:iconSize="14dp"
-                        app:iconTint="@color/colorOnSurface"
+                        android:src="@drawable/ic_learn_more_info"
                         app:layout_constraintBottom_toBottomOf="@id/rewardsTitle"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/rewardsTitle" />
@@ -480,7 +475,6 @@
                             android:text="@string/earn_wxm"
                             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                             android:textColor="@color/darkestBlue"
-                            android:textSize="20sp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -493,22 +487,18 @@
                             android:text="@string/earn_wxm_per_month"
                             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                             android:textColor="@color/darkestBlue"
-                            android:textSize="20sp"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/earnWxm" />
 
-                        <com.google.android.material.button.MaterialButton
+                        <ImageButton
                             android:id="@+id/earnWxmInfoBtn"
-                            style="@style/Widget.WeatherXM.IconButton"
+                            style="@style/Widget.WeatherXM.ImageButton"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_marginStart="@dimen/margin_extra_small"
-                            app:icon="@drawable/ic_learn_more_info"
-                            app:iconGravity="textStart"
-                            app:iconSize="14dp"
-                            app:iconTint="@color/colorOnSurface"
+                            android:src="@drawable/ic_learn_more_info"
                             app:layout_constraintBottom_toBottomOf="@id/earnWxmPerMonth"
                             app:layout_constraintStart_toEndOf="@id/earnWxmPerMonth"
                             app:layout_constraintTop_toTopOf="@id/earnWxmPerMonth" />
@@ -721,15 +711,13 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <com.google.android.material.button.MaterialButton
+                            <ImageButton
                                 android:id="@+id/totalInfoBtn"
-                                style="@style/Widget.WeatherXM.IconButton"
+                                style="@style/Widget.WeatherXM.ImageButton"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                app:icon="@drawable/ic_learn_more_info"
-                                app:iconGravity="textStart"
-                                app:iconSize="14dp"
-                                app:iconTint="@color/colorOnSurface"
+                                android:layout_marginStart="@dimen/margin_extra_small"
+                                android:src="@drawable/ic_learn_more_info"
                                 app:layout_constraintBottom_toBottomOf="@id/totalsTitle"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@id/totalsTitle" />
@@ -792,15 +780,13 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <com.google.android.material.button.MaterialButton
+                            <ImageButton
                                 android:id="@+id/claimedInfoBtn"
-                                style="@style/Widget.WeatherXM.IconButton"
+                                style="@style/Widget.WeatherXM.ImageButton"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                app:icon="@drawable/ic_learn_more_info"
-                                app:iconGravity="textStart"
-                                app:iconSize="14dp"
-                                app:iconTint="@color/colorOnSurface"
+                                android:layout_marginStart="@dimen/margin_extra_small"
+                                android:src="@drawable/ic_learn_more_info"
                                 app:layout_constraintBottom_toBottomOf="@id/claimedTitle"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@id/claimedTitle" />
@@ -864,15 +850,13 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <com.google.android.material.button.MaterialButton
+                            <ImageButton
                                 android:id="@+id/activeInfoBtn"
-                                style="@style/Widget.WeatherXM.IconButton"
+                                style="@style/Widget.WeatherXM.ImageButton"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                app:icon="@drawable/ic_learn_more_info"
-                                app:iconGravity="textStart"
-                                app:iconSize="14dp"
-                                app:iconTint="@color/colorOnSurface"
+                                android:layout_marginStart="@dimen/margin_extra_small"
+                                android:src="@drawable/ic_learn_more_info"
                                 app:layout_constraintBottom_toBottomOf="@id/activeTitle"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@id/activeTitle" />

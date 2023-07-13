@@ -398,10 +398,11 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
                         if (it == null) {
                             context.toast(R.string.error_claim_gps_failed)
                         } else {
-                            binding.mapView.getMapboxMap().setCamera(
+                            binding.mapView.getMapboxMap().flyTo(
                                 CameraOptions.Builder()
                                     .zoom(USER_LOCATION_DEFAULT_ZOOM_LEVEL)
-                                    .center(Point.fromLngLat(it.longitude, it.latitude))
+                                    .center(Point.fromLngLat(it.longitude, it.latitude)).build(),
+                                MapAnimationOptions.Builder().duration(CAMERA_ANIMATION_DURATION)
                                     .build()
                             )
                         }

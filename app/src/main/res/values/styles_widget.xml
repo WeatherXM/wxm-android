@@ -89,10 +89,6 @@
         <item name="android:insetTop">0dp</item>
     </style>
 
-    <style name="Widget.WeatherXM.IconButton" parent="@style/Widget.Material3.Button.IconButton">
-        <item name="iconTint">@color/colorOnSurface</item>
-    </style>
-
     <style name="Widget.WeatherXM.TextButton.Profile.Elements" parent="@style/Widget.Material3.Button.TextButton">
         <item name="android:minHeight">?listPreferredItemHeight</item>
         <item name="iconTint">@color/colorOnSurface</item>
@@ -110,6 +106,13 @@
         <item name="strokeWidth">1dp</item>
         <item name="strokeColor">@color/midGrey</item>
         <item name="cornerRadius">@dimen/button_corner_radius</item>
+    </style>
+
+    <style name="Widget.WeatherXM.ImageButton" parent="@style/Widget.AppCompat.ImageButton">
+        <item name="android:padding">0dp</item>
+        <item name="android:scaleType">centerInside</item>
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="tint">@color/colorOnSurface</item>
     </style>
 
     <!--

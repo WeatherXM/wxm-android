@@ -27,14 +27,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:navigationIcon="@drawable/ic_back">
 
-                <com.google.android.material.button.MaterialButton
+                <ImageButton
                     android:id="@+id/settingsBtn"
-                    style="@style/Widget.WeatherXM.IconButton"
+                    style="@style/Widget.WeatherXM.ImageButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    app:icon="@drawable/ic_settings"
-                    app:iconTint="@color/colorPrimary" />
+                    android:padding="@dimen/padding_normal"
+                    android:src="@drawable/ic_settings"
+                    app:layout_constraintBottom_toBottomOf="@id/dataTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/dataTitle"
+                    app:tint="@color/colorPrimary" />
             </com.google.android.material.appbar.MaterialToolbar>
 
             <com.google.android.material.textview.MaterialTextView

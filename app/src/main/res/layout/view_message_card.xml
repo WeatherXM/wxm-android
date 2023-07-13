@@ -80,14 +80,14 @@
                 tools:text="Do something"
                 tools:visibility="visible" />
 
-            <com.google.android.material.button.MaterialButton
+            <ImageButton
                 android:id="@+id/closeButton"
-                style="@style/Widget.WeatherXM.IconButton"
+                style="@style/Widget.WeatherXM.ImageButton"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:padding="2dp"
+                android:src="@drawable/ic_close"
                 android:visibility="gone"
-                app:icon="@drawable/ic_close"
-                app:iconGravity="textStart"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:visibility="visible" />

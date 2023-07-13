@@ -17,15 +17,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.button.MaterialButton
+            <ImageButton
                 android:id="@+id/closeButton"
-                style="@style/Widget.WeatherXM.IconButton"
+                style="@style/Widget.WeatherXM.ImageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:icon="@drawable/ic_close"
-                app:iconTint="@color/light_top"
+                android:padding="@dimen/padding_small_to_normal"
+                android:src="@drawable/ic_close"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/light_top" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

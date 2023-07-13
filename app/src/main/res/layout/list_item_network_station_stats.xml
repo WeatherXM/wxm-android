@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/padding_small"
-    android:paddingBottom="@dimen/padding_small"
     android:background="?selectableItemBackground"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/padding_small"
+    android:paddingBottom="@dimen/padding_small">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/stationName"
@@ -19,15 +19,13 @@
         android:textColor="@color/darkGrey"
         tools:text="WS1000" />
 
-    <com.google.android.material.button.MaterialButton
+    <ImageButton
         android:id="@+id/stationShopBtn"
-        style="@style/Widget.WeatherXM.IconButton"
-        android:layout_width="14dp"
-        android:layout_height="17dp"
+        style="@style/Widget.WeatherXM.ImageButton"
+        android:layout_width="12dp"
+        android:layout_height="16dp"
         android:clickable="false"
-        app:icon="@drawable/ic_open_new"
-        app:iconGravity="textStart"
-        app:iconSize="12dp" />
+        android:src="@drawable/ic_open_new" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="120dp"
