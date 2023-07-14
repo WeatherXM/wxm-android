@@ -34,6 +34,7 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.appwidget.action.EXTRA_APPWIDGET_IDS" />
             </intent-filter>
 
             <meta-data

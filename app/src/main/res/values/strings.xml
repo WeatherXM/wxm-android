@@ -73,7 +73,7 @@
     <string name="earn_wxm">Earn %s $WXM</string>
     <string name="earn_wxm_per_month">per month</string>
     <string name="wxm_token">$WXM Token</string>
-    <string name="token_quick_info"><![CDATA[Deployed on Testnet - <a href=\%1$s\">Read more here</a>]]></string>
+    <string name="token_quick_info"><![CDATA[Deployed on Testnet - <a href="%1$s">Read more here</a>]]></string>
     <string name="total_supply">Total Supply</string>
     <string name="daily_minted">Daily Minted</string>
     <string name="manufacturer_title">Are you a manufacturer?</string>
@@ -154,7 +154,7 @@
     <string name="deletion_account_what_is_deleted"><![CDATA[This <b>will delete</b> the following data:<br>&#8226; Your name.<br>&#8226; Your email address.<br>&#8226; Your station(s) details, their location, and their token rewards history]]></string>
     <string name="deletion_account_what_is_not_deleted"><![CDATA[This <b>will not delete:</b><br>&#8226; The weather data you’ve shared with the network.<br>&#8226; The $WXM rewards you’ve collected. These are yours forever!]]></string>
     <string name="deletion_account_do_not_collect_data">We do not collect nor store any personal data!</string>
-    <string name="deletion_account_ask_support"><![CDATA[If you have any questions regarding your data and the deletion of your account, please contact our support team at <a href=\%1$s\">support@weatherxm.com</a>.]]></string>
+    <string name="deletion_account_ask_support"><![CDATA[If you have any questions regarding your data and the deletion of your account, please contact our support team at <a href="%1$s">support@weatherxm.com</a>.]]></string>
     <string name="understand_deletion_checkbox_message">I understand what deleting my WeatherXM account means.</string>
     <string name="deleting_account">Deleting Account…</string>
     <string name="deletion_success_title">Account Deleted</string>
@@ -185,7 +185,7 @@
     <string name="hint_wxm_address">E.g., 0xDe1f*****B7F5 </string>
     <string name="create_metamask">Create a MetaMask wallet here</string>
     <string name="ownership_wallet">I acknowledge that I have ownership and full access to this wallet.</string>
-    <string name="accept_terms"><![CDATA[I have read and accept the <a href=\"%1$s\">Terms of Service</a>.]]></string>
+    <string name="accept_terms"><![CDATA[I have read and accept the <a href="%1$s">Terms of Service</a>.]]></string>
     <string name="address_saved">Success: Address Saved.</string>
     <string name="action_save_wallet_address">Save Wallet Address</string>
     <string name="confirm_wallet_ownership_title">Confirm Wallet Ownership</string>
@@ -261,7 +261,7 @@
     <string name="search_location">Search for location</string>
     <string name="installation_toggle_unchecked">Not yet, will install at a later time!</string>
     <string name="installation_toggle_checked">Installed and ready!</string>
-    <string name="need_help_installation"><![CDATA[Need help with proper weather station installation?<br><b><a href=\"%1$s\">View our installation guide</a></b>]]></string>
+    <string name="need_help_installation"><![CDATA[Need help with proper weather station installation?<br><b><a href="%1$s">View our installation guide</a></b>]]></string>
     <string name="installation_location">Installation Location</string>
     <string name="installation_location_warning_text">Your device will be claimed, but until you properly install it, it will not get any $WXM rewards.\n\nOnce you do so, you can enable your device by switching the toggle to “Installed and ready!” on your device details screen.</string>
     <string name="confirm_and_proceed">Confirm and Proceed</string>
@@ -276,7 +276,7 @@
     <string name="claiming_station_helium_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to the Helium\'s network bandwidth limitations!<b>]]></string>
     <string name="success_claim_device"><![CDATA[Your station is claimed under your account:<br><b>%s</b>]]></string>
     <string name="ble_connection_lost">Connection Failed</string>
-    <string name="ble_connection_lost_description"><![CDATA[Something went wrong with the connection. Make sure you are <b>near your weather station</b> and retry claiming. If connection still fails, please <b>unpair the station and restart the claiming process</b>. For more details check our <a href=\"%1$s\">troubleshooting guide</a>.<br><br>Alternatively, you can contact our support.]]></string>
+    <string name="ble_connection_lost_description"><![CDATA[Something went wrong with the connection. Make sure you are <b>near your weather station</b> and retry claiming. If connection still fails, please <b>unpair the station and restart the claiming process</b>. For more details check our <a href="%1$s">troubleshooting guide</a>.<br><br>Alternatively, you can contact our support.]]></string>
     <string name="setting_station_frequency">Setting Station Frequency</string>
     <string name="rebooting_station">Rebooting Station</string>
     <string name="claiming_station_step">Claiming Station</string>
@@ -318,7 +318,7 @@
     <string name="frequency_selected_text">Given the location of installation you defined in the previous step, we\’ve selected the appropriate frequency for %s.</string>
     <string name="set_frequency">Set Your Station\'s Frequency</string>
     <string name="recommended_frequency_for">Recommended for %s</string>
-    <string name="set_frequency_desc"><![CDATA[Helium\'s LoRaWAN Network requires that you set your station\’s frequency for gateway configuration for the country you\’ve installed your station.<br><br>A list of the countries and their respective frequencies can be <a href=\"%1$s\">found here.</a>]]></string>
+    <string name="set_frequency_desc"><![CDATA[Helium\'s LoRaWAN Network requires that you set your station\’s frequency for gateway configuration for the country you\’ve installed your station.<br><br>A list of the countries and their respective frequencies can be <a href="%1$s">found here.</a>]]></string>
     <string name="set_frequency_toggle_desc">I hereby acknowledge that the frequency selected above is the correct on for the country \’ve installed and will operate this station.</string>
     <string name="set_frequency_failed_desc"><![CDATA[Setting device\'s frequency failed. Please try again, and if the problem persists, contact support. Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
 
@@ -365,7 +365,7 @@
     <string name="station_name">Station’s Name</string>
     <string name="change_station_name">Change Station’s Name</string>
     <string name="station_frequency">Station\'s Frequency</string>
-    <string name="change_station_frequency_helium"><![CDATA[Change the frequency this station operates. To do this, make sure you’re close to your station, and that you’ve selected the appropriate frequency for your country.<br><br>A list of the countries and their respective frequencies can be <a href=\"%1$s\">found here.</a>]]></string>
+    <string name="change_station_frequency_helium"><![CDATA[Change the frequency this station operates. To do this, make sure you’re close to your station, and that you’ve selected the appropriate frequency for your country.<br><br>A list of the countries and their respective frequencies can be <a href="%1$s">found here.</a>]]></string>
     <string name="change_station_frequency_m5"><![CDATA[You must set your M5’s frequency to be the same as your station’s in order to receive and transmit data.<br><br><b>Setting the wrong frequency will result in loss of communication with your station, and will affect your $WXM rewards!</b>]]></string>
     <string name="change_frequency">Change Frequency</string>
     <string name="reboot_station">Reboot Station</string>
@@ -373,7 +373,7 @@
     <string name="reconfigure_wifi">Reconfigure WiFi</string>
     <string name="reconfigure_wifi_desc">Update M5’s WiFi network connection</string>
     <string name="remove_station">Remove Station</string>
-    <string name="remove_station_desc"><![CDATA[Unclaim and remove this station from your account. You will not lose any rewards, but you will not be able to view its data and earn additional $WXM from it.<br><a href=\"%1$s\">Learn more about it here.</a>]]></string>
+    <string name="remove_station_desc"><![CDATA[Unclaim and remove this station from your account. You will not lose any rewards, but you will not be able to view its data and earn additional $WXM from it.<br><a href="%1$s">Learn more about it here.</a>]]></string>
     <string name="remove_station_warning">This action is not reversible!</string>
     <string name="remove_station_password_message"><![CDATA[In order to remove your station you need to confirm you are the owner of this account.<br><b>Please type in your password to remove your station.</b>]]></string>
     <string name="station_information">Station Information</string>

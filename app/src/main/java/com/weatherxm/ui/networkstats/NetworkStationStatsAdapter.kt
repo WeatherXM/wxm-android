@@ -10,6 +10,7 @@ import com.weatherxm.databinding.ListItemNetworkStationStatsBinding
 import com.weatherxm.util.ResourcesHelper
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import kotlin.math.roundToInt
 
 class NetworkStationStatsAdapter(
     private val onStationClicked: (NetworkStationStats) -> Unit
@@ -46,7 +47,7 @@ class NetworkStationStatsAdapter(
             binding.stationAmount.text = item.amount
 
             val percentage = item.percentage.coerceIn(0.0, 100.0)
-            binding.stationPercentage.text = "${percentage.toInt()}%"
+            binding.stationPercentage.text = "${percentage.roundToInt()}%"
             binding.stationSlider.values = listOf(percentage.toFloat())
         }
     }
