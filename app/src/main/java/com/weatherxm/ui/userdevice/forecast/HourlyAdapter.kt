@@ -48,7 +48,7 @@ class HourlyAdapter : ListAdapter<HourlyWeather, HourlyViewHolder>(HourlyDiffCal
             binding.temperature.text = Weather.getFormattedTemperature(item.temperature)
             binding.feelsLike.setHtml(
                 R.string.feels_like_with_value,
-                Weather.getFormattedTemperature(item.temperature, fullUnit = false)
+                Weather.getFormattedTemperature(item.feelsLike, fullUnit = false)
             )
             binding.precipitationProbability.setData(
                 Weather.getFormattedPrecipitationProbability(item.precipProbability, false),
