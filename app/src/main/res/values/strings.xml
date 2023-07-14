@@ -66,17 +66,17 @@
     <string name="claimed_weather_stations">Claimed Weather Stations</string>
     <string name="claimed_weather_stations_explanation">The number of weather stations already claimed by users.</string>
     <string name="active_weather_stations">Active Weather Stations</string>
-    <string name="active_weather_stations_explanation">The number of weather stations that were active on the network last day.</string>
-    <string name="average_monthly_rewards_explanation">The average amount of tokens rewarded to a weather station during a month.</string>
+    <string name="active_weather_stations_explanation">The number of weather stations that were active during the last day.</string>
+    <string name="average_monthly_rewards_explanation">The average amount of tokens rewarded to a weather station in the last 30 days.</string>
     <string name="last_day">Last Day</string>
     <string name="last_30_days">Last 30 Days</string>
-    <string name="earn_wxm">Earn %s $WXM</string>
-    <string name="earn_wxm_per_month">per month</string>
+    <string name="earn_prompt">Join the weather revolution</string>
+    <string name="earn_wxm">Earn %s $WXM/mo</string>
     <string name="wxm_token">$WXM Token</string>
     <string name="token_quick_info"><![CDATA[Deployed on Testnet - <a href="%1$s">Read more here</a>]]></string>
     <string name="total_supply">Total Supply</string>
     <string name="daily_minted">Daily Minted</string>
-    <string name="manufacturer_title">Are you a manufacturer?</string>
+    <string name="manufacturer_title">Are you a station manufacturer?</string>
     <string name="manufacturer_prompt">Join the ecosystem</string>
     <string name="last_updated">Last Updated on %s</string>
 

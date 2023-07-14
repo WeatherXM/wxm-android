@@ -221,7 +221,7 @@ class NetworkStatsActivity : AppCompatActivity(), KoinComponent {
             rewardsStartMonth.text = data.rewardsStartMonth
             rewardsEndMonth.text = data.rewardsEndMonth
 
-            earnWxm.text = getString(R.string.earn_wxm, data.rewardsAvgMonthly)
+            earnWxmPerMonth.text = getString(R.string.earn_wxm, data.rewardsAvgMonthly)
 
             totalSupply.text = data.totalSupply
             dailyMinted.text = "+${data.dailyMinted}"

@@ -472,10 +472,8 @@
                             android:id="@+id/earnWxm"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/earn_wxm"
-                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-                            android:textColor="@color/darkestBlue"
-                            android:textStyle="bold"
+                            android:text="@string/earn_prompt"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -484,7 +482,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/margin_small"
-                            android:text="@string/earn_wxm_per_month"
+                            android:text="@string/earn_wxm"
                             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                             android:textColor="@color/darkestBlue"
                             android:textStyle="bold"
@@ -497,11 +495,11 @@
                             style="@style/Widget.WeatherXM.ImageButton"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:layout_marginStart="@dimen/margin_extra_small"
                             android:src="@drawable/ic_learn_more_info"
                             app:layout_constraintBottom_toBottomOf="@id/earnWxmPerMonth"
                             app:layout_constraintStart_toEndOf="@id/earnWxmPerMonth"
                             app:layout_constraintTop_toTopOf="@id/earnWxmPerMonth" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <com.google.android.material.button.MaterialButton

@@ -47,7 +47,7 @@ class StatsUseCaseImpl(
                     ?: "",
                 rewardsEndMonth = stats.tokens?.allocatedPerDay?.last()?.ts?.getFormattedDate()
                     ?: "",
-                rewardsAvgMonthly = formatNumber(stats.tokens?.avgMonthly, maxDecimals = 1),
+                rewardsAvgMonthly = formatNumber(stats.tokens?.avgMonthly),
                 totalSupply = compactNumber(stats.tokens?.totalSupply),
                 dailyMinted = compactNumber(stats.tokens?.dailyMinted),
                 totalStations = formatNumber(stats.weatherStations.onboarded?.total),
