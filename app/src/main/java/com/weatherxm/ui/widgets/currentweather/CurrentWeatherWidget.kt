@@ -14,17 +14,10 @@ import android.content.Intent
 import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
-import androidx.work.Constraints
-import androidx.work.Data
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.weatherxm.R
 import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.services.CacheService
-import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_ON_LOGGED_IN
@@ -38,13 +31,10 @@ import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Weather
 import com.weatherxm.util.WidgetHelper
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 /**
  * Implementation of Current Weather Widget functionality.
@@ -56,7 +46,6 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
     /**
      * OnReceive is the receiver for catching specific intents
      */
-    @OptIn(DelicateCoroutinesApi::class)
     @Suppress("MagicNumber")
     override fun onReceive(context: Context, intent: Intent?) {
         super.onReceive(context, intent)
@@ -107,6 +96,23 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         }
     }
 
+    /**
+     * TODO: Remove this if the issue with the widgets reset is fixed through the BroadcastReceiver
+     * If not, re-enable this and change the updatePeriodMillis in current_weather_widget_info.xml
+     */
+//    override fun onUpdate(
+//        context: Context?,
+//        appWidgetManager: AppWidgetManager?,
+//        appWidgetIds: IntArray?
+//    ) {
+//        if (appWidgetIds?.isNotEmpty() == true && context != null) {
+//            usecase.getWidgetDevice(appWidgetIds[0])?.let {
+//                Timber.d("Restart Work Manager through onUpdate on Widget.")
+//                CurrentWeatherWidgetWorkerUpdate.initAndStart(context, appWidgetIds[0], it)
+//            }
+//        }
+//    }
+
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
         super.onDeleted(context, appWidgetIds)
         if (appWidgetIds != null && appWidgetIds.isNotEmpty()) {
@@ -148,7 +154,11 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
             }
         } else if (onJustLoggedIn == true) {
             widgetsToUpdate.forEach {
-                onLoggedIn(context, it, usecase.getWidgetDevice(it))
+                CurrentWeatherWidgetWorkerUpdate.initAndStart(
+                    context,
+                    it,
+                    usecase.getWidgetDevice(it) ?: ""
+                )
             }
         }
     }
@@ -175,31 +185,6 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views)
-    }
-
-    private fun onLoggedIn(context: Context, appWidgetId: Int, deviceId: String?) {
-        /**
-         * Restart the WorkManager in order to force update the widget.
-         */
-        Timber.d("User logged in... Updating Work Manager for widget [$appWidgetId].")
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-        val data = Data.Builder()
-            .putInt(Contracts.ARG_WIDGET_ID, appWidgetId)
-            .putString(Contracts.ARG_DEVICE_ID, deviceId)
-            .build()
-
-        val widgetUpdateRequest = PeriodicWorkRequestBuilder<CurrentWeatherWidgetWorkerUpdate>(
-            CurrentWeatherWidgetWorkerUpdate.UPDATE_INTERVAL_IN_MINS,
-            TimeUnit.MINUTES
-        ).setConstraints(constraints).setInputData(data).build()
-
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-            "CURRENT_WEATHER_UPDATE_WORK_$appWidgetId",
-            ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
-            widgetUpdateRequest
-        )
     }
 
     private fun onError(

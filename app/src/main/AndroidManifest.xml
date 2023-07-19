@@ -30,11 +30,18 @@
         tools:ignore="UnusedAttribute,LockedOrientationActivity">
 
         <receiver
+            android:name=".service.receivers.AppUpdateReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
             android:name=".ui.widgets.currentweather.CurrentWeatherWidget"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="android.appwidget.action.EXTRA_APPWIDGET_IDS" />
             </intent-filter>
 
             <meta-data

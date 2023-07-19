@@ -48,6 +48,10 @@ class CacheService(
         const val KEY_WIND = R.string.key_wind_speed_preference
         const val KEY_WIND_DIR = R.string.key_wind_direction_preference
         const val KEY_PRESSURE = R.string.key_pressure_preference
+
+        fun getWidgetFormattedKey(widgetId: Int): String {
+            return "${WIDGET_ID}_${widgetId}"
+        }
     }
 
     private var user: User? = null
@@ -57,10 +61,6 @@ class CacheService(
     private var forecasts: ArrayMap<String, TimedForecastData> = ArrayMap()
     private var suggestions: ArrayMap<String, List<SearchSuggestion>> = ArrayMap()
     private var locations: ArrayMap<String, Location> = ArrayMap()
-
-    fun getWidgetFormattedKey(widgetId: Int): String {
-        return "${WIDGET_ID}_${widgetId}"
-    }
 
     fun getAuthToken(): Either<Failure, AuthToken> {
         val access = encryptedPreferences.getString(KEY_ACCESS, null)

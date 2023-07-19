@@ -7,27 +7,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.work.Constraints
-import androidx.work.Data
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityWidgetSelectStationBinding
 import com.weatherxm.ui.common.Contracts
-import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
-import com.weatherxm.ui.common.Contracts.ARG_WIDGET_ID
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
 import com.weatherxm.ui.widgets.currentweather.CurrentWeatherWidgetWorkerUpdate
-import com.weatherxm.ui.widgets.currentweather.CurrentWeatherWidgetWorkerUpdate.Companion.UPDATE_INTERVAL_IN_MINS
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.WidgetHelper
 import com.weatherxm.util.applyInsets
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.util.concurrent.TimeUnit
 
 class SelectStationActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityWidgetSelectStationBinding
@@ -134,24 +124,12 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
         /**
          * Initialize the WorkManager.
          */
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-        val data = Data.Builder()
-            .putInt(ARG_WIDGET_ID, appWidgetId)
-            .putString(ARG_DEVICE_ID, model.getStationSelected().id)
-            .build()
-
-        val widgetUpdateRequest = PeriodicWorkRequestBuilder<CurrentWeatherWidgetWorkerUpdate>(
-            UPDATE_INTERVAL_IN_MINS,
-            TimeUnit.MINUTES
-        ).setConstraints(constraints).setInputData(data).build()
-
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            "CURRENT_WEATHER_UPDATE_WORK_$appWidgetId",
-            ExistingPeriodicWorkPolicy.KEEP,
-            widgetUpdateRequest
+        CurrentWeatherWidgetWorkerUpdate.initAndStart(
+            this,
+            appWidgetId,
+            model.getStationSelected().id
         )
+
         setResult(Activity.RESULT_OK, resultValue)
         finish()
     }

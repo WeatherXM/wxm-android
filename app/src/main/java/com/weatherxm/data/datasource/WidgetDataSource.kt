@@ -16,12 +16,12 @@ class WidgetDataSourceImpl(
 ) : WidgetDataSource {
 
     override fun getWidgetDevice(widgetId: Int): Either<Failure, String> {
-        val key = cacheService.getWidgetFormattedKey(widgetId)
+        val key = CacheService.getWidgetFormattedKey(widgetId)
         return cacheService.getWidgetDevice(key)
     }
 
     override fun setWidgetDevice(widgetId: Int, deviceId: String) {
-        val key = cacheService.getWidgetFormattedKey(widgetId)
+        val key = CacheService.getWidgetFormattedKey(widgetId)
         cacheService.setWidgetDevice(key, deviceId)
     }
 
@@ -36,7 +36,7 @@ class WidgetDataSourceImpl(
     }
 
     override fun removeWidgetId(widgetId: Int) {
-        cacheService.removeDeviceOfWidget(cacheService.getWidgetFormattedKey(widgetId))
+        cacheService.removeDeviceOfWidget(CacheService.getWidgetFormattedKey(widgetId))
 
         val currentWidgetIds = cacheService.getWidgetIds().fold({
             mutableListOf()

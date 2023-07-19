@@ -4,7 +4,12 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID
 import android.content.Context
 import android.content.Intent
+import androidx.work.Constraints
 import androidx.work.CoroutineWorker
+import androidx.work.Data
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import arrow.core.Either
@@ -23,6 +28,7 @@ import com.weatherxm.util.WidgetHelper
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 class CurrentWeatherWidgetWorkerUpdate(
     private val context: Context,
@@ -30,6 +36,28 @@ class CurrentWeatherWidgetWorkerUpdate(
 ) : CoroutineWorker(context, workerParams), KoinComponent {
     companion object {
         const val UPDATE_INTERVAL_IN_MINS = 15L
+
+        fun initAndStart(context: Context, appWidgetId: Int, deviceId: String) {
+            Timber.d("Updating Work Manager for widget [$appWidgetId].")
+            val constraints = Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build()
+            val data = Data.Builder()
+                .putInt(ARG_WIDGET_ID, appWidgetId)
+                .putString(ARG_DEVICE_ID, deviceId)
+                .build()
+
+            val widgetUpdateRequest = PeriodicWorkRequestBuilder<CurrentWeatherWidgetWorkerUpdate>(
+                UPDATE_INTERVAL_IN_MINS,
+                TimeUnit.MINUTES
+            ).setConstraints(constraints).setInputData(data).build()
+
+            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+                "CURRENT_WEATHER_UPDATE_WORK_$appWidgetId",
+                ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+                widgetUpdateRequest
+            )
+        }
     }
 
     private val widgetUseCase: WidgetCurrentWeatherUseCase by inject()
