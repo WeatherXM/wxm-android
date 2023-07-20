@@ -116,7 +116,7 @@ class DeleteAccountActivity : AppCompatActivity(), KoinComponent {
                 finish()
             }
 
-            goToLogin.setOnClickListener {
+            finishBtn.setOnClickListener {
                 navigator.showStartup(this@DeleteAccountActivity)
                 finish()
             }

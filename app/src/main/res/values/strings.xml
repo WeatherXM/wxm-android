@@ -24,6 +24,7 @@
     <string name="action_sounds_good">Sounds good!</string>
     <string name="action_update_firmware">Update Firmware</string>
     <string name="action_view_more">View More</string>
+    <string name="action_finish">Finish</string>
     <string name="action_buy_station">Buy Station</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -164,7 +165,6 @@
     <string name="cancel_deletion">Cancel Deletion</string>
     <string name="retry_deleting_account">Retry Deleting Account</string>
     <string name="validating_password">Validating Password…</string>
-    <string name="go_to_login_screen">Go to Login screen</string>
     <string name="take_short_survey">Take a Short Survey</string>
 
     <!-- Password Prompt -->
