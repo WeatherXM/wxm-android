@@ -96,22 +96,10 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         }
     }
 
-    /**
-     * TODO: Remove this if the issue with the widgets reset is fixed through the BroadcastReceiver
-     * If not, re-enable this and change the updatePeriodMillis in current_weather_widget_info.xml
-     */
-//    override fun onUpdate(
-//        context: Context?,
-//        appWidgetManager: AppWidgetManager?,
-//        appWidgetIds: IntArray?
-//    ) {
-//        if (appWidgetIds?.isNotEmpty() == true && context != null) {
-//            usecase.getWidgetDevice(appWidgetIds[0])?.let {
-//                Timber.d("Restart Work Manager through onUpdate on Widget.")
-//                CurrentWeatherWidgetWorkerUpdate.initAndStart(context, appWidgetIds[0], it)
-//            }
-//        }
-//    }
+    override fun onEnabled(context: Context) {
+        super.onEnabled(context)
+        CurrentWeatherWidgetWorkerUpdate.restartAllWorkers(context)
+    }
 
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
         super.onDeleted(context, appWidgetIds)

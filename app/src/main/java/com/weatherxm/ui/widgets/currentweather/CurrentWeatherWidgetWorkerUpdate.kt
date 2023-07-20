@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID
 import android.content.Context
 import android.content.Intent
+import androidx.preference.PreferenceManager
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.Data
@@ -17,6 +18,8 @@ import arrow.core.flatMap
 import arrow.core.getOrElse
 import arrow.core.right
 import com.weatherxm.data.UserActionError.UserNotLoggedInError
+import com.weatherxm.data.services.CacheService
+import com.weatherxm.data.services.CacheService.Companion.KEY_CURRENT_WEATHER_WIDGET_IDS
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE
@@ -36,6 +39,18 @@ class CurrentWeatherWidgetWorkerUpdate(
 ) : CoroutineWorker(context, workerParams), KoinComponent {
     companion object {
         const val UPDATE_INTERVAL_IN_MINS = 15L
+
+        fun restartAllWorkers(context: Context) {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+            val ids = prefs.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, setOf())
+
+            ids?.forEach {
+                val deviceId = prefs.getString(CacheService.getWidgetFormattedKey(it.toInt()), "")
+                if (!deviceId.isNullOrEmpty()) {
+                    initAndStart(context, it.toInt(), deviceId)
+                }
+            }
+        }
 
         fun initAndStart(context: Context, appWidgetId: Int, deviceId: String) {
             Timber.d("Updating Work Manager for widget [$appWidgetId].")

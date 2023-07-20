@@ -91,6 +91,11 @@ class CurrentWeatherWidgetTile : AppWidgetProvider(), KoinComponent {
         }
     }
 
+    override fun onEnabled(context: Context) {
+        super.onEnabled(context)
+        CurrentWeatherWidgetWorkerUpdate.restartAllWorkers(context)
+    }
+
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
         super.onDeleted(context, appWidgetIds)
         if (appWidgetIds != null && appWidgetIds.isNotEmpty()) {
