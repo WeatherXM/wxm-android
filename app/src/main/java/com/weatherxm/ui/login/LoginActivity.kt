@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import arrow.core.getOrElse
@@ -78,10 +79,24 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
                 !binding.username.text.isNullOrEmpty() && !binding.password.text.isNullOrEmpty()
         }
 
+        binding.username.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                binding.password.requestFocus()
+            }
+            true
+        }
+
         binding.password.onTextChanged {
             binding.passwordContainer.error = null
             binding.login.isEnabled =
                 !binding.username.text.isNullOrEmpty() && !binding.password.text.isNullOrEmpty()
+        }
+
+        binding.password.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                validateAndLogin()
+            }
+            true
         }
 
         binding.forgotPassword.setOnClickListener {
@@ -89,29 +104,33 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.login.setOnClickListener {
-            val username = binding.username.text.toString().trim().lowercase()
-            val password = binding.password.text.toString().trim()
-
-            if (!validator.validateUsername(username)) {
-                binding.usernameContainer.error = getString(R.string.warn_validation_invalid_email)
-                return@setOnClickListener
-            }
-
-            if (!validator.validatePassword(password)) {
-                binding.passwordContainer.error =
-                    getString(R.string.warn_validation_invalid_password)
-                return@setOnClickListener
-            }
-
-            // Hide keyboard, if showing
-            hideKeyboard()
-
-            // Disable input
-            setInputEnabled(false)
-
-            // Perform login
-            model.login(username, password)
+            validateAndLogin()
         }
+    }
+
+    private fun validateAndLogin() {
+        val username = binding.username.text.toString().trim().lowercase()
+        val password = binding.password.text.toString().trim()
+
+        if (!validator.validateUsername(username)) {
+            binding.usernameContainer.error = getString(R.string.warn_validation_invalid_email)
+            return
+        }
+
+        if (!validator.validatePassword(password)) {
+            binding.passwordContainer.error =
+                getString(R.string.warn_validation_invalid_password)
+            return
+        }
+
+        // Hide keyboard, if showing
+        hideKeyboard()
+
+        // Disable input
+        setInputEnabled(false)
+
+        // Perform login
+        model.login(username, password)
     }
 
     override fun onResume() {
