@@ -331,8 +331,8 @@ fun LineChart.initPrecipitation24hChart(
         it.lineWidth = 0F
         it.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
         it.setDrawFilled(true)
-        it.color = resources.getColor(R.color.lightestBlue, context.theme)
-        it.fillColor = context.getColor(R.color.lightestBlue)
+        it.color = resources.getColor(R.color.chart_secondary_line, context.theme)
+        it.fillColor = context.getColor(R.color.chart_secondary_line)
     }
     dataSets.addAll(accumulatedDataEmptyLineDataSets)
     dataSets.addAll(rateLineDataSetsWithValues.primaryLineInit(context, resources))
@@ -351,7 +351,7 @@ fun LineChart.initPrecipitation24hChart(
     setDefaultSettings()
 
     // General Chart Settings
-    val decimals = Weather.getDecimalsPressure()
+    val decimals = getDecimalsPressure()
 
     // Y Axis settings
     val customNumberForMinMax = if (decimals == 2) 0.01F else 0.1F
@@ -511,8 +511,8 @@ fun LineChart.initSolarChart(
         it.lineWidth = 0.2F
         it.axisDependency = YAxis.AxisDependency.RIGHT
         it.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
-        it.color = resources.getColor(R.color.lightestBlue, context.theme)
-        it.fillColor = context.getColor(R.color.lightestBlue)
+        it.color = resources.getColor(R.color.chart_secondary_line, context.theme)
+        it.fillColor = context.getColor(R.color.chart_secondary_line)
     }
     dataSets.addAll(radiationDataEmptyLineDataSets)
 
