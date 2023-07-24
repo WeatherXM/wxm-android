@@ -29,13 +29,13 @@ fun getStringProperty(name: String): String {
 
 android {
     namespace = "com.weatherxm"
-    compileSdk = 33
-    buildToolsVersion = "33.0.2"
+    compileSdk = 34
+    buildToolsVersion = "34.0.0"
 
     defaultConfig {
         applicationId = "com.weatherxm.app"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 47
         versionName = "3.5.3"
 
@@ -227,8 +227,6 @@ android {
 }
 
 dependencies {
-    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
-
     // Instrumented Tests
     androidTestImplementation("androidx.test:runner:1.5.2")
     androidTestImplementation("androidx.test:rules:1.5.0")
@@ -243,6 +241,7 @@ dependencies {
     implementation("androidx.browser:browser:1.5.0")
     implementation("androidx.collection:collection-ktx:1.2.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.fragment:fragment-ktx:1.6.0")
@@ -290,7 +289,7 @@ dependencies {
     implementation("com.auth0.android:jwtdecode:2.0.2")
 
     // Animations
-    implementation("com.airbnb.android:lottie:6.0.0")
+    implementation("com.airbnb.android:lottie:6.1.0")
 
     // Charts
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
@@ -302,7 +301,7 @@ dependencies {
     implementation("io.insert-koin:koin-android:3.4.2")
 
     // Data types and more
-    implementation(platform("io.arrow-kt:arrow-stack:1.1.5"))
+    implementation(platform("io.arrow-kt:arrow-stack:1.2.0"))
     implementation("io.arrow-kt:arrow-core")
     implementation("io.arrow-kt:arrow-fx-coroutines")
 
@@ -314,7 +313,7 @@ dependencies {
     implementation("dev.chrisbanes.insetter:insetter:0.6.1")
 
     // Import the Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:32.1.1"))
+    implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-perf-ktx")
     implementation("com.google.firebase:firebase-config-ktx")
