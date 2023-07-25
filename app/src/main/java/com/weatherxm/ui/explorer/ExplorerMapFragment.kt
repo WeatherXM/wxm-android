@@ -79,10 +79,14 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
             model.onSearchOpenStatus(false)
             searchModel.onSearchClicked(it)
             it.center?.let { location ->
-                onSelectedSearchedLocation(Point.fromLngLat(location.lon, location.lat))
+                cameraFly(Point.fromLngLat(location.lon, location.lat))
             }
             if (it.stationId != null) {
-                model.onSearchedDeviceClicked(it)
+                navigator.showDeviceDetails(
+                    context,
+                    cellDevice = model.onSearchedDeviceClicked(it),
+                    isUserDevice = false
+                )
             }
             trackOnSearchResult(it.stationId != null)
         }
@@ -126,17 +130,7 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
         }
 
         searchModel.onRecentSearches().observe(this) {
-            if (it.isEmpty()) {
-                binding.resultsRecycler.setVisible(false)
-                binding.searchEmptyResultsTitle.text = getString(R.string.search_no_recent_results)
-                binding.searchEmptyResultsDesc.text =
-                    getString(R.string.search_no_recent_results_message)
-                binding.searchEmptyResultsContainer.setVisible(true)
-            } else {
-                binding.resultsRecycler.setVisible(true)
-                binding.searchEmptyResultsContainer.setVisible(false)
-                adapter.updateData("", it)
-            }
+            handleRecentSearches(it)
         }
 
         model.onMyLocationClicked().observe(this) {
@@ -161,12 +155,32 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
             map.setCamera(CameraOptions.Builder().center(it.center).zoom(it.zoom).build())
         }
 
+        // Fly the camera to the center of the hex selected
+        model.onNavigateToLocation().observe(this) { location ->
+            location?.let {
+                cameraFly(Point.fromLngLat(it.lon, it.lat))
+            }
+        }
+
         // Fetch data
         model.fetch()
     }
 
-    private fun onSelectedSearchedLocation(center: Point) {
-        model.setCurrentCamera(USER_LOCATION_DEFAULT_ZOOM_LEVEL, center)
+    private fun handleRecentSearches(searchResults: List<SearchResult>) {
+        if (searchResults.isEmpty()) {
+            binding.resultsRecycler.setVisible(false)
+            binding.searchEmptyResultsTitle.text = getString(R.string.search_no_recent_results)
+            binding.searchEmptyResultsDesc.text =
+                getString(R.string.search_no_recent_results_message)
+            binding.searchEmptyResultsContainer.setVisible(true)
+        } else {
+            binding.resultsRecycler.setVisible(true)
+            binding.searchEmptyResultsContainer.setVisible(false)
+            adapter.updateData("", searchResults)
+        }
+    }
+
+    private fun cameraFly(center: Point) {
         binding.mapView.getMapboxMap().flyTo(
             CameraOptions.Builder().zoom(USER_LOCATION_DEFAULT_ZOOM_LEVEL).center(center).build(),
             MapAnimationOptions.Builder().duration(CAMERA_ANIMATION_DURATION).build()
@@ -398,13 +412,7 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
                         if (it == null) {
                             context.toast(R.string.error_claim_gps_failed)
                         } else {
-                            binding.mapView.getMapboxMap().flyTo(
-                                CameraOptions.Builder()
-                                    .zoom(USER_LOCATION_DEFAULT_ZOOM_LEVEL)
-                                    .center(Point.fromLngLat(it.longitude, it.latitude)).build(),
-                                MapAnimationOptions.Builder().duration(CAMERA_ANIMATION_DURATION)
-                                    .build()
-                            )
+                            cameraFly(Point.fromLngLat(it.longitude, it.latitude))
                         }
                     }
                 },

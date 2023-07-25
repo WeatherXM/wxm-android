@@ -15,6 +15,7 @@ import com.weatherxm.data.CountryAndFrequencies
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
 import com.weatherxm.data.MapBoxError.ReverseGeocodingError
+import com.weatherxm.data.datasource.CacheAddressDataSource
 import com.weatherxm.data.datasource.CacheAddressSearchDataSource
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.NetworkAddressDataSource
@@ -27,10 +28,15 @@ interface AddressRepository {
     suspend fun getSuggestionLocation(suggestion: SearchSuggestion): Either<Failure, Location>
     suspend fun getAddressFromPoint(point: Point): Either<Failure, SearchAddress>
     suspend fun getCountryAndFrequencies(location: Location): CountryAndFrequencies
+    suspend fun getAddressFromLocation(
+        hexIndex: String,
+        location: com.weatherxm.data.Location
+    ): String?
 }
 
 class AddressRepositoryImpl(
     private val networkAddress: NetworkAddressDataSource,
+    private val cacheAddressDataSource: CacheAddressDataSource,
     private val networkSearch: NetworkAddressSearchDataSource,
     private val cacheSearch: CacheAddressSearchDataSource,
     private val locationDataSource: LocationDataSource
@@ -125,5 +131,24 @@ class AddressRepositoryImpl(
      */
     private fun SearchResult.isNearby(): Boolean {
         return distanceMeters?.let { it <= MAX_GEOCODING_DISTANCE_METERS } ?: false
+    }
+
+    override suspend fun getAddressFromLocation(
+        hexIndex: String,
+        location: com.weatherxm.data.Location
+    ): String? {
+        return cacheAddressDataSource.getLocationAddress(hexIndex, location)
+            .onRight { address ->
+                Timber.d("Got location address from cache [$address].")
+            }
+            .mapLeft {
+                networkAddress.getLocationAddress(hexIndex, location)
+                    .onRight { address ->
+                        Timber.d("Got location address from network [$address].")
+                        Timber.d("Saving location address to cache [$address].")
+                        cacheAddressDataSource.setLocationAddress(hexIndex, address)
+                    }
+            }
+            .getOrNull()
     }
 }

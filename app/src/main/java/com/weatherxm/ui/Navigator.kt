@@ -17,11 +17,15 @@ import com.weatherxm.R
 import com.weatherxm.data.ClientIdentificationHelper
 import com.weatherxm.data.Device
 import com.weatherxm.ui.analytics.AnalyticsOptInActivity
+import com.weatherxm.ui.cellinfo.CellInfoActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
 import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
+import com.weatherxm.ui.common.Contracts.ARG_CELL_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
+import com.weatherxm.ui.common.Contracts.ARG_IS_USER_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.MessageDialogFragment
 import com.weatherxm.ui.common.UIDevice
@@ -30,16 +34,16 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
 import com.weatherxm.ui.devicealerts.DeviceAlertsActivity
+import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.explorer.ExplorerActivity
+import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.preferences.PreferenceActivity
-import com.weatherxm.ui.publicdevicedetail.PublicDeviceDetailFragment
-import com.weatherxm.ui.publicdeviceslist.PublicDevicesListFragment
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
 import com.weatherxm.ui.signup.SignupActivity
@@ -49,7 +53,6 @@ import com.weatherxm.ui.stationsettings.changefrequency.ChangeFrequencyActivity
 import com.weatherxm.ui.stationsettings.reboot.RebootActivity
 import com.weatherxm.ui.token.TokenActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
-import com.weatherxm.ui.userdevice.UserDeviceActivity
 import com.weatherxm.util.Analytics
 import timber.log.Timber
 
@@ -62,9 +65,8 @@ class Navigator(
 
     fun showExplorer(context: Context) {
         context.startActivity(
-            Intent(
-                context, ExplorerActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            Intent(context, ExplorerActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         )
     }
 
@@ -86,41 +88,36 @@ class Navigator(
 
     fun showSignup(context: Context) {
         context.startActivity(
-            Intent(
-                context, SignupActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            Intent(context, SignupActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
         )
     }
 
     fun showHome(context: Context) {
         context.startActivity(
-            Intent(
-                context, HomeActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            Intent(context, HomeActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
     }
 
     fun showUpdatePrompt(context: Context) {
         context.startActivity(
-            Intent(
-                context, UpdatePromptActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            Intent(context, UpdatePromptActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
     }
 
     fun showAnalyticsOptIn(context: Context) {
         context.startActivity(
-            Intent(
-                context, AnalyticsOptInActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            Intent(context, AnalyticsOptInActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
     }
 
     fun showNetworkStats(context: Context) {
         context.startActivity(
-            Intent(
-                context, NetworkStatsActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            Intent(context, NetworkStatsActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
     }
 
@@ -134,46 +131,38 @@ class Navigator(
         }
     }
 
-    fun showPublicDevicesList(fragmentManager: FragmentManager) {
-        val modalBottomSheet = PublicDevicesListFragment()
-        modalBottomSheet.show(fragmentManager, PublicDevicesListFragment.TAG)
-    }
-
-    fun showDeviceDetails(fragmentManager: FragmentManager, device: UIDevice) {
-        val modalBottomSheet = PublicDeviceDetailFragment.newInstance(device)
-        modalBottomSheet.show(fragmentManager, PublicDeviceDetailFragment.TAG)
+    fun showCellInfo(context: Context?, cell: UICell) {
+        context?.let {
+            it.startActivity(
+                Intent(it, CellInfoActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_EXPLORER_CELL, cell)
+            )
+        }
     }
 
     fun showPreferences(fragment: Fragment) {
         fragment.context?.let {
             it.startActivity(
-                Intent(
-                    it, PreferenceActivity::class.java
-                ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                Intent(it, PreferenceActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             )
         }
     }
 
-    fun showUserDevice(context: Context?, device: Device) {
+    fun showDeviceDetails(
+        context: Context?,
+        device: Device = Device.empty(),
+        cellDevice: UIDevice = UIDevice.empty(),
+        isUserDevice: Boolean = true
+    ) {
         context?.let {
             it.startActivity(
-                Intent(it, UserDeviceActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                Intent(it, DeviceDetailsActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra(ARG_DEVICE, device)
-            )
-        }
-    }
-
-    fun showUserDevice(
-        activityResultLauncher: ActivityResultLauncher<Intent>,
-        fragment: Fragment,
-        device: Device
-    ) {
-        fragment.context?.let {
-            activityResultLauncher.launch(
-                Intent(it, UserDeviceActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(ARG_DEVICE, device)
+                    .putExtra(ARG_CELL_DEVICE, cellDevice)
+                    .putExtra(ARG_IS_USER_DEVICE, isUserDevice)
             )
         }
     }
@@ -217,18 +206,16 @@ class Navigator(
 
     fun showResetPassword(context: Context) {
         context.startActivity(
-            Intent(
-                context, ResetPasswordActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            Intent(context, ResetPasswordActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
     }
 
     fun showDeleteAccount(fragment: Fragment) {
         fragment.context?.let {
             it.startActivity(
-                Intent(
-                    it, DeleteAccountActivity::class.java
-                ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                Intent(it, DeleteAccountActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             )
         }
     }
@@ -236,18 +223,16 @@ class Navigator(
     fun showResetPassword(fragment: Fragment) {
         fragment.context?.let {
             it.startActivity(
-                Intent(
-                    it, ResetPasswordActivity::class.java
-                ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                Intent(it, ResetPasswordActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             )
         }
     }
 
     fun showStartup(context: Context) {
         context.startActivity(
-            Intent(
-                context, StartupActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            Intent(context, StartupActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         )
     }
 
@@ -285,9 +270,8 @@ class Navigator(
     ) {
         fragment.context?.let {
             activityResultLauncher.launch(
-                Intent(
-                    it, SendFeedbackActivity::class.java
-                ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                Intent(it, SendFeedbackActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             )
         }
     }
@@ -295,18 +279,16 @@ class Navigator(
     fun showClaimHeliumFlow(context: Context) {
         // Launch claim activity
         context.startActivity(
-            Intent(
-                context, ClaimHeliumActivity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            Intent(context, ClaimHeliumActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
     }
 
     fun showClaimM5Flow(context: Context) {
         // Launch claim activity
         context.startActivity(
-            Intent(
-                context, ClaimM5Activity::class.java
-            ).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            Intent(context, ClaimM5Activity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
     }
 

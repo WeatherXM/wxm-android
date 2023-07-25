@@ -84,7 +84,7 @@ class ClaimM5ResultFragment : Fragment(), KoinComponent {
                                 Analytics.ParamValue.VIEW_STATION.paramValue
                             )
                         )
-                        navigator.showUserDevice(activity, device)
+                        navigator.showDeviceDetails(activity, device = device)
                         activity?.finish()
                     }
                     binding.viewStationOnlyBtn.visibility = View.VISIBLE

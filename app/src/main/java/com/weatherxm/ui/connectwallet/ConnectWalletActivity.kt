@@ -74,6 +74,7 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
             }
 
         binding.walletCompatibilityCard.closeButton {
+            binding.walletCompatibilityCard.setVisible(false)
             analytics.trackEventPrompt(
                 Analytics.ParamValue.WALLET_COMPATIBILITY.paramValue,
                 Analytics.ParamValue.INFO.paramValue,

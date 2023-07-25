@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UserDevice
-import com.weatherxm.usecases.UserDeviceUseCase
+import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +19,7 @@ import timber.log.Timber
 
 class DevicesViewModel : ViewModel(), KoinComponent {
 
-    private val userDeviceUseCase: UserDeviceUseCase by inject()
+    private val deviceDetailsUseCase: DeviceDetailsUseCase by inject()
     private val sharedPreferences: SharedPreferences by inject()
     private val analytics: Analytics by inject()
 
@@ -46,7 +46,7 @@ class DevicesViewModel : ViewModel(), KoinComponent {
     fun fetch() {
         this@DevicesViewModel.devices.postValue(Resource.loading())
         viewModelScope.launch(Dispatchers.IO) {
-            userDeviceUseCase.getUserDevices()
+            deviceDetailsUseCase.getUserDevices()
                 .map { devices ->
                     Timber.d("Got ${devices.size} devices")
                     this@DevicesViewModel.devices.postValue(Resource.success(devices))

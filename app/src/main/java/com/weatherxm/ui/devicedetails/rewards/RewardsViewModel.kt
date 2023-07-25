@@ -1,4 +1,4 @@
-package com.weatherxm.ui.userdevice.rewards
+package com.weatherxm.ui.devicedetails.rewards
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,18 +11,25 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
 import com.weatherxm.ui.common.TokenInfo
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
-import com.weatherxm.usecases.UserDeviceUseCase
+import com.weatherxm.usecases.DeviceDetailsUseCase
+import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import timber.log.Timber
 
-class RewardsViewModel(var device: Device) : ViewModel(), KoinComponent {
+class RewardsViewModel(
+    var device: Device = Device.empty(),
+    var cellDevice: UIDevice = UIDevice.empty(),
+) : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
-    private val userDeviceUseCase: UserDeviceUseCase by inject()
+    private val deviceDetailsUseCase: DeviceDetailsUseCase by inject()
+    private val explorerUseCase: ExplorerUseCase by inject()
     private val analytics: Analytics by inject()
 
     private val onLoading = MutableLiveData<Boolean>()
@@ -40,12 +47,28 @@ class RewardsViewModel(var device: Device) : ViewModel(), KoinComponent {
     fun fetchTokenDetails() {
         onLoading.postValue(true)
         viewModelScope.launch {
-            userDeviceUseCase.getTokenInfoLast30D(device.id)
+            deviceDetailsUseCase.getTokenInfoLast30D(device.id)
                 .map {
                     onTokens.postValue(it)
                 }
                 .mapLeft {
                     analytics.trackEventFailure(it.code)
+                    handleTokenFailure(it)
+                }
+            onLoading.postValue(false)
+        }
+    }
+
+    fun fetchCellDeviceTokenDetails() {
+        onLoading.postValue(true)
+        viewModelScope.launch {
+            explorerUseCase.getTokenInfoLast30D(cellDevice.id)
+                .map {
+                    onTokens.postValue(it)
+                }
+                .mapLeft {
+                    analytics.trackEventFailure(it.code)
+                    Timber.w("Getting cell device token data failed")
                     handleTokenFailure(it)
                 }
             onLoading.postValue(false)

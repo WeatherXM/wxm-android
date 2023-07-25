@@ -45,22 +45,19 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     }
 
     /*
-     * The list of a devices in a hex.
+     * The cell info.
      *
      * We use SingleLiveEvent because MutableLiveData persists and re-posts the value
      * to the observers on configuration change (like a theme change) and the effects of the
      * observers happen again (like re-opening a closed BottomSheetDialog).
      */
-    private val onHexSelected = SingleLiveEvent<String>()
+    private val onCellSelected = SingleLiveEvent<UICell>()
 
-    /*
-     * The details/data of a public device
-     *
-     * We use SingleLiveEvent because MutableLiveData persists and re-posts the value
-     * to the observers on configuration change (like a theme change) and the effects of the
-     * observers happen again (like re-opening a closed BottomSheetDialog).
+    /**
+     * Needed for passing info to the fragment to handle when a prefilled location is used
+     * so we want the camera to move directly to that point
      */
-    private val onPublicDeviceSelected = SingleLiveEvent<UIDevice>()
+    private val onNavigateToLocation = SingleLiveEvent<com.weatherxm.data.Location>()
 
     // Needed for passing info to the fragment to handle when my location button is clicked
     private val onMyLocationClicked = MutableLiveData(false)
@@ -70,9 +67,6 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
 
     // Needed for passing info to the activity to show/hide elements when search view is opened
     private val onSearchOpenStatus = MutableLiveData(false)
-
-    // Current Hex clicked/selected as it's needed by other fragments
-    private var currentHexSelected: UIHex? = null
 
     // Save the current explorer camera zoom and center
     private var currentCamera: ExplorerCamera? = null
@@ -183,11 +177,11 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     }
 
     fun onMyLocationClicked() = onMyLocationClicked
+    fun onNavigateToLocation() = onNavigateToLocation
     fun showMapOverlayViews() = showMapOverlayViews
     fun onSearchOpenStatus() = onSearchOpenStatus
     fun explorerState(): LiveData<Resource<ExplorerData>> = state
-    fun onHexSelected(): LiveData<String> = onHexSelected
-    fun onPublicDeviceSelected(): LiveData<UIDevice> = onPublicDeviceSelected
+    fun onCellSelected(): LiveData<UICell> = onCellSelected
 
     fun setExplorerAfterLoggedIn(isAfterLoggedIn: Boolean) {
         explorerAfterLoggedIn = isAfterLoggedIn
@@ -205,7 +199,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
         state.postValue(Resource.loading())
 
         viewModelScope.launch {
-            explorerUseCase.getPublicHexes()
+            explorerUseCase.getCells()
                 .map {
                     state.postValue(Resource.success(it))
                 }
@@ -231,46 +225,26 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
      * Handler for polygon clicks. Show devices list for that hex.
      */
     fun onPolygonClick(polygon: PolygonAnnotation) {
-        currentHexSelected = MapboxUtils.getCustomData(polygon)
-        onHexSelected.postValue(currentHexSelected?.index)
-    }
-
-    fun onPublicDeviceClicked(uiHex: UIHex?, device: UIDevice) {
-        currentHexSelected = uiHex
-        onPublicDeviceSelected.postValue(device)
-    }
-
-    fun onSearchedDeviceClicked(searchedDevice: SearchResult) {
-        val index = searchedDevice.stationCellIndex ?: currentHexSelected?.index ?: ""
-        val center = searchedDevice.center
-            ?: currentHexSelected?.center
-            ?: com.weatherxm.data.Location(0.0, 0.0)
-
-        currentHexSelected = UIHex(index, center)
-        onPublicDeviceSelected.postValue(
-            UIDevice(
-                id = searchedDevice.stationId ?: "",
-                name = searchedDevice.name ?: "",
-                cellIndex = searchedDevice.stationCellIndex,
-                profile = null,
-                isActive = null,
-                lastWeatherStationActivity = null,
-                timezone = null,
-                address = null,
-                currentWeather = null,
-                tokenInfo = null
-            )
-        )
-    }
-
-    fun openListOfDevicesOfHex() {
-        currentHexSelected?.let {
-            onHexSelected.postValue(it.index)
+        MapboxUtils.getCustomData(polygon)?.let {
+            onCellSelected.postValue(it)
         }
     }
 
-    fun getCurrentHexSelected(): UIHex? {
-        return currentHexSelected
+    // TODO: Remove this when we use one UI Model for devices and use something better.
+    fun onSearchedDeviceClicked(searchedDevice: SearchResult): UIDevice {
+        return UIDevice(
+            id = searchedDevice.stationId ?: "",
+            name = searchedDevice.name ?: "",
+            cellIndex = searchedDevice.stationCellIndex ?: "",
+            cellCenter = searchedDevice.center,
+            profile = null,
+            isActive = null,
+            lastWeatherStationActivity = null,
+            timezone = null,
+            address = null,
+            currentWeather = null,
+            tokenInfo = null
+        )
     }
 
     fun setCurrentCamera(zoom: Double, center: Point) {

@@ -41,6 +41,8 @@ data class Location(
     companion object {
         fun empty() = Location(0.0, 0.0)
     }
+
+    fun isEmpty(): Boolean = this.lat == 0.0 && this.lon == 0.0
 }
 
 @Keep
@@ -53,7 +55,7 @@ data class PublicDevice(
     val profile: DeviceProfile?,
     val isActive: Boolean?,
     val lastWeatherStationActivity: ZonedDateTime?,
-    val cellIndex: String?,
+    val cellIndex: String,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
 ) : Parcelable {
@@ -63,6 +65,7 @@ data class PublicDevice(
             name,
             profile,
             cellIndex,
+            null,
             isActive,
             lastWeatherStationActivity,
             timezone,

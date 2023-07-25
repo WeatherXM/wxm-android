@@ -32,7 +32,12 @@ sealed class Failure(val code: String? = null) {
         const val CODE_SUGGESTION_LOCATION_ERROR = "SUGGESTION_LOCATION_ERROR"
     }
 
-    object NoGeocoderError : Failure()
+    sealed class GeocoderError: Failure() {
+        object NoGeocoderError : GeocoderError()
+        object NoGeocodedAddressError : GeocoderError()
+        object GeocoderIOError : GeocoderError()
+    }
+
     object LocationAddressNotFound : Failure()
     object CountryNotFound : Failure()
     object FrequencyMappingNotFound : Failure()

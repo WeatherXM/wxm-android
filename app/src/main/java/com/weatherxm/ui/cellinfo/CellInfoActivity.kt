@@ -1,74 +1,67 @@
-package com.weatherxm.ui.publicdeviceslist
+package com.weatherxm.ui.cellinfo
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
-import com.weatherxm.databinding.FragmentPublicDevicesListBinding
+import com.weatherxm.databinding.ActivityCellInfoBinding
+import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.explorer.ExplorerViewModel
+import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.applyInsets
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class PublicDevicesListFragment : BottomSheetDialogFragment() {
-    private val explorerModel: ExplorerViewModel by activityViewModels()
-    private val model: PublicDevicesListViewModel by viewModels()
+class CellInfoActivity : AppCompatActivity(), KoinComponent {
+    private lateinit var binding: ActivityCellInfoBinding
+    private val model: CellInfoViewModel by viewModel {
+        parametersOf(intent.getParcelableExtra<UICell>(Contracts.ARG_EXPLORER_CELL))
+    }
+    private val navigator: Navigator by inject()
     private val analytics: Analytics by inject()
-    private lateinit var binding: FragmentPublicDevicesListBinding
-    private lateinit var adapter: PublicDevicesListAdapter
+    private lateinit var adapter: CellDeviceListAdapter
 
-    companion object {
-        const val TAG = "PublicDevicesListFragment"
-    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityCellInfoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-    override fun getTheme(): Int {
-        return R.style.ThemeOverlay_WeatherXM_BottomSheetDialog
-    }
+        binding.root.applyInsets()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentPublicDevicesListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        adapter = PublicDevicesListAdapter {
-            explorerModel.onPublicDeviceClicked(explorerModel.getCurrentHexSelected(), it)
-            dismiss()
+        adapter = CellDeviceListAdapter {
+            navigator.showDeviceDetails(this, cellDevice = it, isUserDevice = false)
         }
 
         binding.recycler.adapter = adapter
 
-        model.onPublicDevices().observe(this) {
+        model.onCellDevices().observe(this) {
             updateUI(it)
         }
 
         model.address().observe(this) {
-            binding.location.text = it
-            binding.location.visibility = View.VISIBLE
+            binding.toolbar.subtitle = it
         }
 
-        model.fetchDevices(explorerModel.getCurrentHexSelected())
+        model.fetchDevices()
     }
 
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
             Analytics.Screen.EXPLORER_CELL,
-            PublicDevicesListFragment::class.simpleName,
-            explorerModel.getCurrentHexSelected()?.index
+            CellInfoActivity::class.simpleName,
+            model.cell.index
         )
     }
 

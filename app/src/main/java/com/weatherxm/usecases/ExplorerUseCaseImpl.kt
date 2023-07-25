@@ -12,6 +12,7 @@ import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.weatherxm.R
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
+import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.ui.common.TokenInfo
@@ -20,12 +21,13 @@ import com.weatherxm.ui.explorer.ExplorerData
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
 import com.weatherxm.ui.explorer.SearchResult
-import com.weatherxm.ui.explorer.UIHex
+import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.util.ResourcesHelper
 import java.time.ZonedDateTime
 
 class ExplorerUseCaseImpl(
     private val explorerRepository: ExplorerRepository,
+    private val addressRepository: AddressRepository,
     private val tokenRepository: TokenRepository,
     private val gson: Gson,
     private val resHelper: ResourcesHelper
@@ -45,8 +47,8 @@ class ExplorerUseCaseImpl(
         return latLongs
     }
 
-    override suspend fun getPublicHexes(): Either<Failure, ExplorerData> {
-        return explorerRepository.getPublicHexes().map {
+    override suspend fun getCells(): Either<Failure, ExplorerData> {
+        return explorerRepository.getCells().map {
             val geoJsonSource = heatmap.featureCollection(FeatureCollection.fromFeatures(
                 it.map { hex ->
                     Feature.fromGeometry(Point.fromLngLat(hex.center.lon, hex.center.lat)).apply {
@@ -63,7 +65,7 @@ class ExplorerUseCaseImpl(
                     .withFillColor(resHelper.getColor(R.color.hex_fill_color))
                     .withFillOpacity(FILL_OPACITY_HEXAGONS)
                     .withFillOutlineColor(resHelper.getColor(R.color.white))
-                    .withData(gson.toJsonTree(UIHex(publicHex.index, publicHex.center)))
+                    .withData(gson.toJsonTree(UICell(publicHex.index, publicHex.center)))
                     .withPoints(polygonPointsToLatLng(publicHex.polygon))
             }
 
@@ -71,12 +73,13 @@ class ExplorerUseCaseImpl(
         }
     }
 
-    override suspend fun getPublicDevicesOfHex(uiHex: UIHex): Either<Failure, List<UIDevice>> {
-        return explorerRepository.getPublicDevicesOfHex(uiHex.index).map {
-            val address = explorerRepository.getAddressFromLocation(uiHex.index, uiHex.center)
+    override suspend fun getCellDevices(cell: UICell): Either<Failure, List<UIDevice>> {
+        return explorerRepository.getCellDevices(cell.index).map {
+            val address = addressRepository.getAddressFromLocation(cell.index, cell.center)
 
             it.map { publicDevice ->
                 publicDevice.toUIDevice().apply {
+                    this.cellCenter = cell.center
                     this.address = address
                 }
             }.sortedWith(
@@ -85,15 +88,11 @@ class ExplorerUseCaseImpl(
         }
     }
 
-    override suspend fun getAddressOfHex(uiHex: UIHex): String? {
-        return explorerRepository.getAddressFromLocation(uiHex.index, uiHex.center)
-    }
-
-    override suspend fun getPublicDevice(
+    override suspend fun getCellDevice(
         index: String,
         deviceId: String
     ): Either<Failure, UIDevice> {
-        return explorerRepository.getPublicDevice(index, deviceId).map {
+        return explorerRepository.getCellDevice(index, deviceId).map {
             it.toUIDevice()
         }
     }

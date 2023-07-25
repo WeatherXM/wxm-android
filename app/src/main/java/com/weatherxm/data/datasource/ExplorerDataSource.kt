@@ -8,9 +8,9 @@ import com.weatherxm.data.PublicHex
 import com.weatherxm.ui.explorer.SearchResult
 
 interface ExplorerDataSource {
-    suspend fun getPublicHexes(): Either<Failure, List<PublicHex>>
-    suspend fun getPublicDevicesOfHex(index: String): Either<Failure, List<PublicDevice>>
-    suspend fun getPublicDevice(index: String, deviceId: String): Either<Failure, PublicDevice>
+    suspend fun getCells(): Either<Failure, List<PublicHex>>
+    suspend fun getCellDevices(index: String): Either<Failure, List<PublicDevice>>
+    suspend fun getCellDevice(index: String, deviceId: String): Either<Failure, PublicDevice>
     suspend fun networkSearch(query: String): Either<Failure, NetworkSearchResults>
     suspend fun getRecentSearches(): Either<Failure, List<SearchResult>>
     suspend fun setRecentSearch(search: SearchResult)

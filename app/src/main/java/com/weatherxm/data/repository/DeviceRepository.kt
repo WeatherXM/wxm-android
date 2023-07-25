@@ -63,25 +63,20 @@ class DeviceRepositoryImpl(
     }
 
     override suspend fun getDeviceAddress(device: Device): String? {
-        var hexAddress: String? = null
-
-        device.attributes?.hex7?.let { hex ->
-            cacheAddressDataSource.getLocationAddress(hex.index, hex.center).onRight { address ->
-                Timber.d("Got location address from database [$address].")
-                hexAddress = address
-            }.mapLeft {
-                networkAddressDataSource.getLocationAddress(hex.index, hex.center)
-                    .onRight { address ->
-                        Timber.d("Got location address from network [$it].")
-                        hexAddress = address
-                        address?.let {
-                            cacheAddressDataSource.setLocationAddress(hex.index, it)
+        return device.attributes?.hex7?.let { hex ->
+            cacheAddressDataSource.getLocationAddress(hex.index, hex.center)
+                .onRight { address ->
+                    Timber.d("Got location address from cache [$address].")
+                }
+                .mapLeft {
+                    networkAddressDataSource.getLocationAddress(hex.index, hex.center)
+                        .onRight { address ->
+                            Timber.d("Got location address from network [$address].")
+                            Timber.d("Saving location address to cache [$address].")
+                            cacheAddressDataSource.setLocationAddress(hex.index, address)
                         }
-                    }
-            }
-        }
-
-        return hexAddress
+                }
+        }?.getOrNull()
     }
 
     override suspend fun setFriendlyName(

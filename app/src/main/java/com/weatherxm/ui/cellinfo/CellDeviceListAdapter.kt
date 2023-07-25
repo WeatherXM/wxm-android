@@ -1,4 +1,4 @@
-package com.weatherxm.ui.publicdeviceslist
+package com.weatherxm.ui.cellinfo
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
@@ -12,7 +12,6 @@ import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.publicdeviceslist.PublicDevicesListAdapter.PublicDeviceViewHolder
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
@@ -20,23 +19,24 @@ import com.weatherxm.util.setColor
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class PublicDevicesListAdapter(
-    private val publicDeviceListener: (UIDevice) -> Unit
-) : ListAdapter<UIDevice, PublicDeviceViewHolder>(PublicDeviceDiffCallback()), KoinComponent {
+class CellDeviceListAdapter(
+    private val listener: (UIDevice) -> Unit
+) : ListAdapter<UIDevice, CellDeviceListAdapter.CellDeviceViewHolder>(CellDeviceDiffCallback()),
+    KoinComponent {
 
     val resHelper: ResourcesHelper by inject()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PublicDeviceViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CellDeviceViewHolder {
         val binding = ListItemDeviceBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
-        return PublicDeviceViewHolder(binding, publicDeviceListener)
+        return CellDeviceViewHolder(binding, listener)
     }
 
-    override fun onBindViewHolder(holder: PublicDeviceViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CellDeviceViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class PublicDeviceViewHolder(
+    inner class CellDeviceViewHolder(
         private val binding: ListItemDeviceBinding,
         private val listener: (UIDevice) -> Unit
     ) :
@@ -169,7 +169,7 @@ class PublicDevicesListAdapter(
         }
     }
 
-    class PublicDeviceDiffCallback : DiffUtil.ItemCallback<UIDevice>() {
+    class CellDeviceDiffCallback : DiffUtil.ItemCallback<UIDevice>() {
 
         override fun areItemsTheSame(oldItem: UIDevice, newItem: UIDevice): Boolean {
             return oldItem.id == newItem.id

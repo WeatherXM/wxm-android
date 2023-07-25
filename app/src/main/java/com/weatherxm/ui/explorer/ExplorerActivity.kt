@@ -60,12 +60,8 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent,
             }
         }
 
-        model.onHexSelected().observe(this) {
-            navigator.showPublicDevicesList(supportFragmentManager)
-        }
-
-        model.onPublicDeviceSelected().observe(this) {
-            navigator.showDeviceDetails(supportFragmentManager, it)
+        model.onCellSelected().observe(this) {
+            navigator.showCellInfo(this, it)
         }
 
         binding.networkStatsBtn.setOnClickListener {

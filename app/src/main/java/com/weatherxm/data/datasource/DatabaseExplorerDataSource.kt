@@ -19,15 +19,15 @@ import com.weatherxm.ui.explorer.SearchResult
 class DatabaseExplorerDataSource(
     private val dao: NetworkSearchRecentDao
 ) : ExplorerDataSource {
-    override suspend fun getPublicHexes(): Either<Failure, List<PublicHex>> {
+    override suspend fun getCells(): Either<Failure, List<PublicHex>> {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 
-    override suspend fun getPublicDevicesOfHex(index: String): Either<Failure, List<PublicDevice>> {
+    override suspend fun getCellDevices(index: String): Either<Failure, List<PublicDevice>> {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 
-    override suspend fun getPublicDevice(
+    override suspend fun getCellDevice(
         index: String,
         deviceId: String
     ): Either<Failure, PublicDevice> {

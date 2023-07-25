@@ -1,4 +1,4 @@
-package com.weatherxm.ui.userdevice.forecast
+package com.weatherxm.ui.devicedetails.forecast
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,9 +10,10 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.UIForecast
-import com.weatherxm.usecases.UserDeviceUseCase
+import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
@@ -21,9 +22,12 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
-class ForecastViewModel(var device: Device) : ViewModel(), KoinComponent {
+class ForecastViewModel(
+    var device: Device = Device.empty(),
+    var cellDevice: UIDevice = UIDevice.empty(),
+) : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
-    private val userDeviceUseCase: UserDeviceUseCase by inject()
+    private val deviceDetailsUseCase: DeviceDetailsUseCase by inject()
     private val analytics: Analytics by inject()
 
     private val onLoading = MutableLiveData<Boolean>()
@@ -41,7 +45,7 @@ class ForecastViewModel(var device: Device) : ViewModel(), KoinComponent {
     fun fetchForecast(forceRefresh: Boolean = false) {
         onLoading.postValue(true)
         viewModelScope.launch {
-            userDeviceUseCase.getForecast(device, forceRefresh)
+            deviceDetailsUseCase.getForecast(device, forceRefresh)
                 .map {
                     Timber.d("Got forecast $it")
                     if (it.isEmpty()) {

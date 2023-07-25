@@ -1,4 +1,4 @@
-package com.weatherxm.ui.publicdeviceslist
+package com.weatherxm.ui.cellinfo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.explorer.UIHex
+import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
@@ -17,33 +17,33 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
-class PublicDevicesListViewModel : ViewModel(), KoinComponent {
+class CellInfoViewModel(val cell: UICell) : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val explorerUseCase: ExplorerUseCase by inject()
     private val analytics: Analytics by inject()
-    private val onPublicDevices = MutableLiveData<Resource<List<UIDevice>>>(Resource.loading())
+    private val onCellDevices = MutableLiveData<Resource<List<UIDevice>>>(Resource.loading())
     private val address = MutableLiveData<String>()
 
-    fun onPublicDevices(): LiveData<Resource<List<UIDevice>>> = onPublicDevices
+    fun onCellDevices(): LiveData<Resource<List<UIDevice>>> = onCellDevices
     fun address(): LiveData<String> = address
 
-    fun fetchDevices(uiHex: UIHex?) {
-        onPublicDevices.postValue(Resource.loading())
+    fun fetchDevices() {
+        onCellDevices.postValue(Resource.loading())
         viewModelScope.launch(Dispatchers.IO) {
-            if (uiHex == null || uiHex.index.isEmpty()) {
-                Timber.w("Getting public devices failed: hexIndex = null")
-                onPublicDevices.postValue(
-                    Resource.error(resHelper.getString(R.string.error_public_devices_no_data))
+            if (cell.index.isEmpty()) {
+                Timber.w("Getting cell devices failed: cell index = null")
+                onCellDevices.postValue(
+                    Resource.error(resHelper.getString(R.string.error_cell_devices_no_data))
                 )
                 return@launch
             }
 
-            explorerUseCase.getPublicDevicesOfHex(uiHex)
+            explorerUseCase.getCellDevices(cell)
                 .map {
-                    onPublicDevices.postValue(Resource.success(it))
+                    onCellDevices.postValue(Resource.success(it))
                     it.forEach { device ->
                         device.address?.let { address ->
-                            this@PublicDevicesListViewModel.address.postValue(address)
+                            this@CellInfoViewModel.address.postValue(address)
                             return@forEach
                         }
                     }
@@ -51,8 +51,8 @@ class PublicDevicesListViewModel : ViewModel(), KoinComponent {
                 }
                 .mapLeft {
                     analytics.trackEventFailure(it.code)
-                    onPublicDevices.postValue(
-                        Resource.error(resHelper.getString(R.string.error_public_devices_no_data))
+                    onCellDevices.postValue(
+                        Resource.error(resHelper.getString(R.string.error_cell_devices_no_data))
                     )
                 }
         }

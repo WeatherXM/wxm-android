@@ -135,16 +135,17 @@ import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepository
 import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepositoryImpl
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.cellinfo.CellInfoViewModel
+import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
+import com.weatherxm.ui.devicedetails.current.CurrentViewModel
+import com.weatherxm.ui.devicedetails.forecast.ForecastViewModel
+import com.weatherxm.ui.devicedetails.rewards.RewardsViewModel
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
 import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
-import com.weatherxm.ui.explorer.UIHexJsonAdapter
+import com.weatherxm.ui.explorer.UICellJsonAdapter
 import com.weatherxm.ui.stationsettings.StationSettingsViewModel
 import com.weatherxm.ui.stationsettings.changefrequency.ChangeFrequencyViewModel
 import com.weatherxm.ui.stationsettings.reboot.RebootViewModel
-import com.weatherxm.ui.userdevice.UserDeviceViewModel
-import com.weatherxm.ui.userdevice.current.CurrentViewModel
-import com.weatherxm.ui.userdevice.forecast.ForecastViewModel
-import com.weatherxm.ui.userdevice.rewards.RewardsViewModel
 import com.weatherxm.usecases.AnalyticsOptInUseCase
 import com.weatherxm.usecases.AnalyticsOptInUseCaseImpl
 import com.weatherxm.usecases.AuthUseCase
@@ -161,6 +162,8 @@ import com.weatherxm.usecases.ConnectWalletUseCase
 import com.weatherxm.usecases.ConnectWalletUseCaseImpl
 import com.weatherxm.usecases.DeleteAccountUseCase
 import com.weatherxm.usecases.DeleteAccountUseCaseImpl
+import com.weatherxm.usecases.DeviceDetailsUseCase
+import com.weatherxm.usecases.DeviceDetailsUseCaseImpl
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.ExplorerUseCaseImpl
 import com.weatherxm.usecases.HistoryUseCase
@@ -181,8 +184,6 @@ import com.weatherxm.usecases.StatsUseCase
 import com.weatherxm.usecases.StatsUseCaseImpl
 import com.weatherxm.usecases.TokenUseCase
 import com.weatherxm.usecases.TokenUseCaseImpl
-import com.weatherxm.usecases.UserDeviceUseCase
-import com.weatherxm.usecases.UserDeviceUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.usecases.UserUseCaseImpl
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
@@ -387,7 +388,7 @@ private val repositories = module {
         DeviceRepositoryImpl(get(), get(), get(), get())
     }
     single<ExplorerRepository> {
-        ExplorerRepositoryImpl(get(), get(), get(), get())
+        ExplorerRepositoryImpl(get(), get())
     }
     single<TokenRepository> {
         TokenRepositoryImpl(get())
@@ -405,7 +406,7 @@ private val repositories = module {
         SharedPreferenceRepositoryImpl(get())
     }
     single<AddressRepository> {
-        AddressRepositoryImpl(get(), get(), get(), get())
+        AddressRepositoryImpl(get(), get(), get(), get(), get())
     }
     single<BluetoothScannerRepository> {
         BluetoothScannerRepositoryImpl(get())
@@ -435,10 +436,10 @@ private val usecases = module {
         StartupUseCaseImpl(get(), get())
     }
     single<ExplorerUseCase> {
-        ExplorerUseCaseImpl(get(), get(), get(), get())
+        ExplorerUseCaseImpl(get(), get(), get(), get(), get())
     }
-    single<UserDeviceUseCase> {
-        UserDeviceUseCaseImpl(get(), get(), get(), get(), get(), androidContext())
+    single<DeviceDetailsUseCase> {
+        DeviceDetailsUseCaseImpl(get(), get(), get(), get(), get(), get(), androidContext())
     }
     single<HistoryUseCase> {
         HistoryUseCaseImpl(androidContext(), get(), get())
@@ -720,8 +721,8 @@ private val utilities = module {
         GsonBuilder().setPrettyPrinting()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
     }
-    single<UIHexJsonAdapter> {
-        UIHexJsonAdapter(get())
+    single<UICellJsonAdapter> {
+        UICellJsonAdapter(get())
     }
     single<AuthTokenJsonAdapter> {
         AuthTokenJsonAdapter(get())
@@ -744,7 +745,11 @@ private val utilities = module {
 
 private val viewmodels = module {
     viewModel { params ->
-        UserDeviceViewModel(device = params.get())
+        DeviceDetailsViewModel(
+            device = params.get(),
+            cellDevice = params.get(),
+            isUserDevice = params.get()
+        )
     }
     viewModel { params ->
         StationSettingsViewModel(device = params.get())
@@ -756,19 +761,22 @@ private val viewmodels = module {
         ChangeFrequencyViewModel(device = params.get())
     }
     viewModel { params ->
-        CurrentViewModel(device = params.get())
+        CurrentViewModel(device = params.get(), cellDevice = params.get())
     }
     viewModel { params ->
-        ForecastViewModel(device = params.get())
+        ForecastViewModel(device = params.get(), cellDevice = params.get())
     }
     viewModel { params ->
-        RewardsViewModel(device = params.get())
+        RewardsViewModel(device = params.get(), cellDevice = params.get())
     }
     viewModel { params ->
         HistoryChartsViewModel(device = params.get())
     }
     viewModel { params ->
         DeviceHeliumOTAViewModel(device = params.get(), deviceIsBleConnected = params.get())
+    }
+    viewModel { params ->
+        CellInfoViewModel(cell = params.get())
     }
 }
 

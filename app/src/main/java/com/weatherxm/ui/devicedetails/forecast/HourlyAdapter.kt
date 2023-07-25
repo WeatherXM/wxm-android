@@ -1,4 +1,4 @@
-package com.weatherxm.ui.userdevice.forecast
+package com.weatherxm.ui.devicedetails.forecast
 
 import android.graphics.drawable.LayerDrawable
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import com.weatherxm.R
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemHourlyWeatherBinding
-import com.weatherxm.ui.userdevice.forecast.HourlyAdapter.HourlyViewHolder
+import com.weatherxm.ui.devicedetails.forecast.HourlyAdapter.HourlyViewHolder
 import com.weatherxm.util.DateTimeHelper.getHourMinutesFromISO
 import com.weatherxm.util.UnitConverter
 import com.weatherxm.util.Weather

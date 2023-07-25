@@ -18,7 +18,7 @@ class CacheAddressDataSource(private val cacheService: CacheService) : AddressDa
         hexIndex: String,
         location: Location,
         locale: Locale
-    ): Either<Failure, String?> {
+    ): Either<Failure, String> {
         return cacheService.getLocationAddress(hexIndex)
     }
 

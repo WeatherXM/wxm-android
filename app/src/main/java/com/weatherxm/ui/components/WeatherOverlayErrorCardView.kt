@@ -44,6 +44,11 @@ class WeatherOverlayErrorCardView : LinearLayout, KoinComponent {
         gravity = Gravity.CENTER
     }
 
+    fun setErrorMessage(errorMessage: String) {
+        binding.errorText.text = errorMessage
+        visibility = VISIBLE
+    }
+
     fun setErrorMessageWithUrl(@StringRes errorMessageResId: Int, profile: DeviceProfile?) {
         with(binding.errorText) {
             movementMethod = BetterLinkMovementMethod.newInstance().apply {

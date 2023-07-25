@@ -1,5 +1,6 @@
 package com.weatherxm.ui.explorer
 
+import android.os.Parcelable
 import androidx.annotation.Keep
 import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
@@ -7,6 +8,7 @@ import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.squareup.moshi.JsonClass
 import com.weatherxm.data.Connectivity
 import com.weatherxm.data.Location
+import kotlinx.parcelize.Parcelize
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -17,10 +19,11 @@ data class ExplorerData(
 
 @Keep
 @JsonClass(generateAdapter = true)
-data class UIHex(
+@Parcelize
+data class UICell(
     var index: String,
     var center: Location
-)
+) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)

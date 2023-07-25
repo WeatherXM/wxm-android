@@ -21,8 +21,8 @@ import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
+import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.login.LoginActivity
-import com.weatherxm.ui.userdevice.UserDeviceActivity
 import com.weatherxm.ui.widgets.WidgetType
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
@@ -180,11 +180,11 @@ class CurrentWeatherWidgetTile : AppWidgetProvider(), KoinComponent {
         views.setViewVisibility(R.id.signInLayout, View.GONE)
         views.setViewVisibility(R.id.deviceLayout, View.VISIBLE)
 
-        val userDeviceActivity = Intent(context, UserDeviceActivity::class.java)
+        val deviceDetailsActivity = Intent(context, DeviceDetailsActivity::class.java)
             .putExtra(Contracts.ARG_DEVICE, device)
 
         val pendingIntent: PendingIntent = TaskStackBuilder.create(context).run {
-            addNextIntentWithParentStack(userDeviceActivity)
+            addNextIntentWithParentStack(deviceDetailsActivity)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 getPendingIntent(appWidgetId, FLAG_CANCEL_CURRENT or FLAG_MUTABLE)
             } else {

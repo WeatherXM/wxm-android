@@ -213,7 +213,7 @@ class ClaimHeliumResultFragment : Fragment(), KoinComponent {
             )
         )
         parentModel.disconnectFromPeripheral()
-        navigator.showUserDevice(activity, device)
+        navigator.showDeviceDetails(activity, device = device)
         activity?.finish()
     }
 

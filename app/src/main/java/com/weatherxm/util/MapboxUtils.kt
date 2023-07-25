@@ -3,8 +3,8 @@ package com.weatherxm.util
 import com.google.gson.JsonObject
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.mapbox.search.result.SearchSuggestion
-import com.weatherxm.ui.explorer.UIHex
-import com.weatherxm.ui.explorer.UIHexJsonAdapter
+import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.ui.explorer.UICellJsonAdapter
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -13,9 +13,9 @@ fun PolygonAnnotation.getCustomData(): JsonObject {
 }
 
 object MapboxUtils : KoinComponent {
-    private val adapter: UIHexJsonAdapter by inject()
+    private val adapter: UICellJsonAdapter by inject()
 
-    fun getCustomData(polygonAnnotation: PolygonAnnotation): UIHex? {
+    fun getCustomData(polygonAnnotation: PolygonAnnotation): UICell? {
         val data = polygonAnnotation.getCustomData()
         return adapter.fromJson(data.toString())
     }

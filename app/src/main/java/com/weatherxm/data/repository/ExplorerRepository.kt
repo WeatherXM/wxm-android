@@ -2,22 +2,17 @@ package com.weatherxm.data.repository
 
 import arrow.core.Either
 import com.weatherxm.data.Failure
-import com.weatherxm.data.Location
 import com.weatherxm.data.NetworkSearchResults
 import com.weatherxm.data.PublicDevice
 import com.weatherxm.data.PublicHex
-import com.weatherxm.data.datasource.CacheAddressDataSource
 import com.weatherxm.data.datasource.DatabaseExplorerDataSource
-import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.NetworkExplorerDataSource
 import com.weatherxm.ui.explorer.SearchResult
-import timber.log.Timber
 
 interface ExplorerRepository {
-    suspend fun getPublicHexes(): Either<Failure, List<PublicHex>>
-    suspend fun getPublicDevicesOfHex(index: String): Either<Failure, List<PublicDevice>>
-    suspend fun getPublicDevice(index: String, deviceId: String): Either<Failure, PublicDevice>
-    suspend fun getAddressFromLocation(hexIndex: String, location: Location): String?
+    suspend fun getCells(): Either<Failure, List<PublicHex>>
+    suspend fun getCellDevices(index: String): Either<Failure, List<PublicDevice>>
+    suspend fun getCellDevice(index: String, deviceId: String): Either<Failure, PublicDevice>
     suspend fun networkSearch(query: String): Either<Failure, NetworkSearchResults>
     suspend fun getRecentSearches(): Either<Failure, List<SearchResult>>
     suspend fun setRecentSearch(search: SearchResult)
@@ -25,48 +20,25 @@ interface ExplorerRepository {
 
 class ExplorerRepositoryImpl(
     private val networkExplorerDataSource: NetworkExplorerDataSource,
-    private val databaseExplorerDataSource: DatabaseExplorerDataSource,
-    private val networkAddressDataSource: NetworkAddressDataSource,
-    private val cacheAddressDataSource: CacheAddressDataSource
+    private val databaseExplorerDataSource: DatabaseExplorerDataSource
 ) : ExplorerRepository {
     companion object {
         const val RECENTS_MAX_ENTRIES = 10
     }
 
-    override suspend fun getPublicHexes(): Either<Failure, List<PublicHex>> {
-        return networkExplorerDataSource.getPublicHexes()
+    override suspend fun getCells(): Either<Failure, List<PublicHex>> {
+        return networkExplorerDataSource.getCells()
     }
 
-    override suspend fun getPublicDevicesOfHex(index: String): Either<Failure, List<PublicDevice>> {
-        return networkExplorerDataSource.getPublicDevicesOfHex(index)
+    override suspend fun getCellDevices(index: String): Either<Failure, List<PublicDevice>> {
+        return networkExplorerDataSource.getCellDevices(index)
     }
 
-    override suspend fun getPublicDevice(
+    override suspend fun getCellDevice(
         index: String,
         deviceId: String
     ): Either<Failure, PublicDevice> {
-        return networkExplorerDataSource.getPublicDevice(index, deviceId)
-    }
-
-    override suspend fun getAddressFromLocation(hexIndex: String, location: Location): String? {
-        var hexAddress: String? = null
-
-        cacheAddressDataSource.getLocationAddress(hexIndex, location)
-            .onRight { address ->
-                Timber.d("Got location address from database [$address].")
-                hexAddress = address
-            }
-            .mapLeft {
-                networkAddressDataSource.getLocationAddress(hexIndex, location).onRight { address ->
-                    Timber.d("Got location address from network [$it].")
-                    hexAddress = address
-                    address?.let {
-                        cacheAddressDataSource.setLocationAddress(hexIndex, it)
-                    }
-                }
-            }
-
-        return hexAddress
+        return networkExplorerDataSource.getCellDevice(index, deviceId)
     }
 
     override suspend fun networkSearch(query: String): Either<Failure, NetworkSearchResults> {

@@ -120,10 +120,8 @@ class CacheService(
         preferences.edit().putLong(key, timestamp).apply()
     }
 
-    fun getLocationAddress(hexIndex: String): Either<Failure, String?> {
-        return preferences.getString(hexIndex, null)?.let {
-            Either.Right(it)
-        } ?: Either.Left(DataError.CacheMissError)
+    fun getLocationAddress(hexIndex: String): Either<Failure, String> {
+        return preferences.getString(hexIndex, null)?.right() ?: DataError.CacheMissError.left()
     }
 
     fun setLocationAddress(hexIndex: String, address: String) {

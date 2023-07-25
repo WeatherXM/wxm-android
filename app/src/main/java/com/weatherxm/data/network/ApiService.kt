@@ -147,14 +147,14 @@ interface ApiService {
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @GET("/api/v1/cells")
     @Headers(NO_AUTH_HEADER)
-    suspend fun getPublicHexes(): NetworkResponse<List<PublicHex>, ErrorResponse>
+    suspend fun getCells(): NetworkResponse<List<PublicHex>, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/public_devices.json")
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @GET("/api/v1/cells/{index}/devices")
     @Headers(NO_AUTH_HEADER)
-    suspend fun getPublicDevicesOfHex(
+    suspend fun getCellDevices(
         @Path("index") index: String
     ): NetworkResponse<List<PublicDevice>, ErrorResponse>
 
@@ -163,7 +163,7 @@ interface ApiService {
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @GET("/api/v1/cells/{index}/devices/{deviceId}")
     @Headers(NO_AUTH_HEADER)
-    suspend fun getPublicDevice(
+    suspend fun getCellDevice(
         @Path("index") index: String,
         @Path("deviceId") deviceId: String
     ): NetworkResponse<PublicDevice, ErrorResponse>

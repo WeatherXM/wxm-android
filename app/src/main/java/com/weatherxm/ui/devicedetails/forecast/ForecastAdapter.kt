@@ -1,4 +1,4 @@
-package com.weatherxm.ui.userdevice.forecast
+package com.weatherxm.ui.devicedetails.forecast
 
 import android.view.GestureDetector
 import android.view.LayoutInflater

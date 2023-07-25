@@ -9,6 +9,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.LastAndDatedTxs
+import com.weatherxm.data.Location
 import com.weatherxm.data.Transaction
 import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
@@ -78,7 +79,8 @@ data class UIDevice(
     val id: String,
     val name: String,
     var profile: DeviceProfile?,
-    val cellIndex: String?,
+    val cellIndex: String,
+    var cellCenter: Location?,
     val isActive: Boolean?,
     val lastWeatherStationActivity: ZonedDateTime?,
     val timezone: String?,
@@ -86,7 +88,15 @@ data class UIDevice(
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
     var tokenInfo: TokenInfo?
-) : Parcelable
+) : Parcelable {
+    companion object {
+        fun empty() = UIDevice(
+            "", "", null, "", null, null, null, null, null, null, null
+        )
+    }
+
+    fun isEmpty(): Boolean = id.isEmpty() && name.isEmpty() && cellIndex.isEmpty()
+}
 
 @Keep
 @JsonClass(generateAdapter = true)

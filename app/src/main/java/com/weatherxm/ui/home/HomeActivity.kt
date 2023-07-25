@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
@@ -44,12 +45,8 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
         // Setup navigation view
         binding.navView.setupWithNavController(navController)
 
-        explorerModel.onHexSelected().observe(this) {
-            navigator.showPublicDevicesList(supportFragmentManager)
-        }
-
-        explorerModel.onPublicDeviceSelected().observe(this) {
-            navigator.showDeviceDetails(supportFragmentManager, it)
+        explorerModel.onCellSelected().observe(this) {
+            navigator.showCellInfo(this, it)
         }
 
         explorerModel.explorerState().observe(this) { resource ->
@@ -83,18 +80,7 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
          * based on selected navigation item and dismiss snackbar if shown
          */
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (snackbar?.isShown == true) snackbar?.dismiss()
-            when (destination.id) {
-                R.id.navigation_devices -> binding.addDevice.show()
-                R.id.navigation_explorer -> {
-                    explorerModel.setExplorerAfterLoggedIn(true)
-                    binding.addDevice.hide()
-                }
-                else -> binding.addDevice.hide()
-            }
-            binding.navView.show()
-            binding.networkStatsBtn.setVisible(destination.id == R.id.navigation_explorer)
-            binding.myLocationBtn.setVisible(destination.id == R.id.navigation_explorer)
+            onNavigationChanged(destination)
         }
 
         binding.myLocationBtn.setOnClickListener {
@@ -128,6 +114,21 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 margin(bottom = true)
             }
         }
+    }
+
+    private fun onNavigationChanged(destination: NavDestination) {
+        if (snackbar?.isShown == true) snackbar?.dismiss()
+        when (destination.id) {
+            R.id.navigation_devices -> binding.addDevice.show()
+            R.id.navigation_explorer -> {
+                explorerModel.setExplorerAfterLoggedIn(true)
+                binding.addDevice.hide()
+            }
+            else -> binding.addDevice.hide()
+        }
+        binding.navView.show()
+        binding.networkStatsBtn.setVisible(destination.id == R.id.navigation_explorer)
+        binding.myLocationBtn.setVisible(destination.id == R.id.navigation_explorer)
     }
 
     override fun onResume() {

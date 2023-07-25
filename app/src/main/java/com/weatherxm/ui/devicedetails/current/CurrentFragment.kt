@@ -1,4 +1,4 @@
-package com.weatherxm.ui.userdevice.current
+package com.weatherxm.ui.devicedetails.current
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,10 +12,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.data.Device
-import com.weatherxm.databinding.FragmentUserDeviceCurrentBinding
+import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setVisible
-import com.weatherxm.ui.userdevice.UserDeviceViewModel
+import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.Analytics
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,10 +26,10 @@ import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 class CurrentFragment : Fragment(), KoinComponent {
-    private lateinit var binding: FragmentUserDeviceCurrentBinding
-    private val parentModel: UserDeviceViewModel by activityViewModels()
+    private lateinit var binding: FragmentDeviceDetailsCurrentBinding
+    private val parentModel: DeviceDetailsViewModel by activityViewModels()
     private val model: CurrentViewModel by viewModel {
-        parametersOf(parentModel.device)
+        parametersOf(parentModel.device, parentModel.cellDevice)
     }
     private val navigator: Navigator by inject()
     private val analytics: Analytics by inject()
@@ -39,11 +40,13 @@ class CurrentFragment : Fragment(), KoinComponent {
             // Launch the block in a new coroutine every time the lifecycle
             // is in the RESUMED state (or above) and cancel it when it's STOPPED.
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                Timber.d("Starting device polling")
-                // Trigger the flow for refreshing device data in the background
-                parentModel.deviceAutoRefresh().collect {
-                    it.onRight { device ->
-                        onDeviceUpdated(device)
+                if (parentModel.isUserDevice) {
+                    Timber.d("Starting device polling")
+                    // Trigger the flow for refreshing device data in the background
+                    parentModel.deviceAutoRefresh().collect {
+                        it.onRight { device ->
+                            onDeviceUpdated(device)
+                        }
                     }
                 }
             }
@@ -55,7 +58,7 @@ class CurrentFragment : Fragment(), KoinComponent {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentUserDeviceCurrentBinding.inflate(inflater, container, false)
+        binding = FragmentDeviceDetailsCurrentBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -71,6 +74,10 @@ class CurrentFragment : Fragment(), KoinComponent {
 
         model.onDevice().observe(viewLifecycleOwner) {
             onDeviceUpdated(it)
+        }
+
+        model.onCellDevice().observe(viewLifecycleOwner) {
+            onCellDeviceUpdated(it)
         }
 
         model.onLoading().observe(viewLifecycleOwner) {
@@ -89,11 +96,16 @@ class CurrentFragment : Fragment(), KoinComponent {
         }
 
         binding.swiperefresh.setOnRefreshListener {
-            model.fetchUserDevice()
+            model.fetchDevice()
         }
 
         binding.historicalCharts.setOnClickListener {
             navigator.showHistoryActivity(requireContext(), model.device)
+        }
+
+        if (!parentModel.isUserDevice) {
+            binding.historicalCharts.setVisible(false)
+            model.fetchCellDevice()
         }
     }
 
@@ -122,6 +134,22 @@ class CurrentFragment : Fragment(), KoinComponent {
             }
         }
         binding.currentWeatherCard.setData(device.currentWeather)
+    }
+
+    private fun onCellDeviceUpdated(cellDevice: UIDevice) {
+        binding.progress.visibility = View.INVISIBLE
+        when (cellDevice.isActive) {
+            true -> {
+                binding.errorCard.setVisible(false)
+            }
+            false -> {
+                binding.errorCard.setErrorMessage(getString(R.string.no_data_message_public_device))
+            }
+            null -> {
+                // Do nothing here
+            }
+        }
+        binding.currentWeatherCard.setData(cellDevice.currentWeather)
     }
 
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {

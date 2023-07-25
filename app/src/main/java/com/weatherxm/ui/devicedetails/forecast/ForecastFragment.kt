@@ -1,4 +1,4 @@
-package com.weatherxm.ui.userdevice.forecast
+package com.weatherxm.ui.devicedetails.forecast
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
-import com.weatherxm.databinding.FragmentUserDeviceForecastBinding
-import com.weatherxm.ui.userdevice.UserDeviceViewModel
+import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
+import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
@@ -18,11 +18,11 @@ import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 
 class ForecastFragment : Fragment(), KoinComponent {
-    private lateinit var binding: FragmentUserDeviceForecastBinding
+    private lateinit var binding: FragmentDeviceDetailsForecastBinding
     private val analytics: Analytics by inject()
-    private val parentModel: UserDeviceViewModel by activityViewModels()
+    private val parentModel: DeviceDetailsViewModel by activityViewModels()
     private val model: ForecastViewModel by viewModel {
-        parametersOf(parentModel.device)
+        parametersOf(parentModel.device, parentModel.cellDevice)
     }
     private var snackbar: Snackbar? = null
 
@@ -33,7 +33,7 @@ class ForecastFragment : Fragment(), KoinComponent {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentUserDeviceForecastBinding.inflate(inflater, container, false)
+        binding = FragmentDeviceDetailsForecastBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -42,7 +42,9 @@ class ForecastFragment : Fragment(), KoinComponent {
         super.onViewCreated(view, savedInstanceState)
 
         binding.swiperefresh.setOnRefreshListener {
-            model.fetchForecast(true)
+            if (parentModel.isUserDevice) {
+                model.fetchForecast(true)
+            }
         }
 
         // Initialize the adapter with empty data
@@ -87,7 +89,9 @@ class ForecastFragment : Fragment(), KoinComponent {
         }
 
         // Fetch data
-        model.fetchForecast()
+        if (parentModel.isUserDevice) {
+            model.fetchForecast()
+        }
     }
 
     override fun onResume() {

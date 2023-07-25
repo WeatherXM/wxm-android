@@ -111,7 +111,7 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
         }, onPairClicked = {
             model.pairDevice()
         }, onSuccessPrimaryButtonClicked = {
-            navigator.showUserDevice(this, model.device)
+            navigator.showDeviceDetails(this, device = model.device)
             finish()
         }, onCancelButtonClicked = {
             finish()

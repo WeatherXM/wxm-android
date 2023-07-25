@@ -30,13 +30,6 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
     private val analytics: Analytics by inject()
     private lateinit var binding: FragmentDevicesBinding
 
-    private val userDeviceLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                model.fetch()
-            }
-        }
-
     // Register the launcher for the connect wallet activity and wait for a possible result
     private val connectWalletLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -159,7 +152,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
     }
 
     override fun onDeviceClicked(userDevice: UserDevice) {
-        navigator.showUserDevice(userDeviceLauncher, this, userDevice.device)
+        navigator.showDeviceDetails(context, device = userDevice.device)
 
         analytics.trackEventUserAction(
             actionName = Analytics.ParamValue.SELECT_DEVICE.paramValue,

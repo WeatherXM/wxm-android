@@ -10,19 +10,19 @@ import com.weatherxm.data.network.ApiService
 import com.weatherxm.ui.explorer.SearchResult
 
 class NetworkExplorerDataSource(private val apiService: ApiService) : ExplorerDataSource {
-    override suspend fun getPublicHexes(): Either<Failure, List<PublicHex>> {
-        return apiService.getPublicHexes().map()
+    override suspend fun getCells(): Either<Failure, List<PublicHex>> {
+        return apiService.getCells().map()
     }
 
-    override suspend fun getPublicDevicesOfHex(index: String): Either<Failure, List<PublicDevice>> {
-        return apiService.getPublicDevicesOfHex(index).map()
+    override suspend fun getCellDevices(index: String): Either<Failure, List<PublicDevice>> {
+        return apiService.getCellDevices(index).map()
     }
 
-    override suspend fun getPublicDevice(
+    override suspend fun getCellDevice(
         index: String,
         deviceId: String
     ): Either<Failure, PublicDevice> {
-        return apiService.getPublicDevice(index, deviceId).map()
+        return apiService.getCellDevice(index, deviceId).map()
     }
 
     override suspend fun networkSearch(query: String): Either<Failure, NetworkSearchResults> {

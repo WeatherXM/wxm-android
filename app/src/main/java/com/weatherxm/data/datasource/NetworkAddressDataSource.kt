@@ -1,8 +1,10 @@
 package com.weatherxm.data.datasource
 
 import android.content.Context
-import android.location.Geocoder
 import arrow.core.Either
+import arrow.core.flatMap
+import arrow.core.left
+import arrow.core.right
 import com.mapbox.geojson.Point
 import com.mapbox.search.QueryType
 import com.mapbox.search.ResponseInfo
@@ -18,8 +20,8 @@ import com.weatherxm.data.Location
 import com.weatherxm.data.MapBoxError
 import com.weatherxm.data.countryToFrequency
 import com.weatherxm.data.otherFrequencies
+import com.weatherxm.util.GeocoderCompat
 import timber.log.Timber
-import java.io.IOException
 import java.util.Locale
 import kotlin.coroutines.suspendCoroutine
 
@@ -46,44 +48,19 @@ class NetworkAddressDataSource(
         hexIndex: String,
         location: Location,
         locale: Locale
-    ): Either<Failure, String?> {
-        /*
-        * Google Says: https://developer.android.com/reference/android/location/Geocoder
-        * This method was deprecated in API level Tiramisu.
-        * Use getFromLocation(double, double, int, android.location.Geocoder.GeocodeListener)
-        * instead to avoid blocking a thread waiting for results.
-        * ---
-        * But, is that the case here? We already run this function outside of the UI thread,
-        * and we need to wait for the results actually.
-        */
-        return if (Geocoder.isPresent()) {
-            try {
-                val geocoderAddresses =
-                    Geocoder(context, locale).getFromLocation(location.lat, location.lon, 1)
-
-                if (geocoderAddresses.isNullOrEmpty()) {
-                    Either.Left(Failure.LocationAddressNotFound)
+    ): Either<Failure, String> {
+        return GeocoderCompat.getFromLocation(context, location.lat, location.lon, locale)
+            .map { address ->
+                if (address.locality != null) {
+                    "${address.locality}, ${address.countryCode}"
+                } else if (address.subAdminArea != null) {
+                    "${address.subAdminArea}, ${address.countryCode}"
+                } else if (address.adminArea != null) {
+                    "${address.adminArea}, ${address.countryCode}"
                 } else {
-                    val geocoderAddress = geocoderAddresses[0]
-                    Either.Right(
-                        if (geocoderAddress.locality != null) {
-                            "${geocoderAddress.locality}, ${geocoderAddress.countryCode}"
-                        } else if (geocoderAddress.subAdminArea != null) {
-                            "${geocoderAddress.subAdminArea}, ${geocoderAddress.countryCode}"
-                        } else if (geocoderAddress.adminArea != null) {
-                            "${geocoderAddress.adminArea}, ${geocoderAddress.countryCode}"
-                        } else {
-                            geocoderAddress.countryName
-                        }
-                    )
+                    address.countryName
                 }
-            } catch (exception: IOException) {
-                Timber.w(exception, "Geocoder failed with: IOException.")
-                Either.Left(Failure.UnknownError)
             }
-        } else {
-            Either.Left(Failure.NoGeocoderError)
-        }
     }
 
     override suspend fun setLocationAddress(
@@ -131,34 +108,16 @@ class NetworkAddressDataSource(
         location: android.location.Location,
         locale: Locale
     ): Either<Failure, CountryAndFrequencies> {
-        if (!Geocoder.isPresent()) {
-            return Either.Left(Failure.NoGeocoderError)
-        }
-
-        return try {
-            val geocoderAddresses = Geocoder(context, locale).getFromLocation(
-                location.latitude, location.longitude, 1
-            )
-
-            if (geocoderAddresses.isNullOrEmpty()) {
-                Either.Left(Failure.CountryNotFound)
-            } else {
-                val geocoderAddress = geocoderAddresses[0]
-                val frequency = countryToFrequency(context, geocoderAddress.countryCode)
-
-                if (frequency == null) {
-                    Either.Left(Failure.FrequencyMappingNotFound)
-                } else {
-                    Either.Right(
-                        CountryAndFrequencies(
-                            geocoderAddress.countryName, frequency, otherFrequencies(frequency)
-                        )
-                    )
-                }
+        return GeocoderCompat.getFromLocation(context, location, locale)
+            .flatMap { address ->
+                countryToFrequency(context, address.countryCode)?.let { frequency ->
+                    CountryAndFrequencies(
+                        address.countryName, frequency, otherFrequencies(frequency)
+                    ).right()
+                } ?: Failure.FrequencyMappingNotFound.left()
             }
-        } catch (exception: IOException) {
-            Timber.w(exception, "Geocoder failed with: IOException.")
-            Either.Left(Failure.UnknownError)
-        }
+            .mapLeft {
+                Failure.CountryNotFound
+            }
     }
 }

@@ -152,7 +152,7 @@
             android:screenOrientation="portrait"
             tools:replace="screenOrientation" />
         <activity
-            android:name="com.weatherxm.ui.userdevice.UserDeviceActivity"
+            android:name="com.weatherxm.ui.devicedetails.DeviceDetailsActivity"
             android:parentActivityName=".ui.home.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
@@ -219,6 +219,10 @@
             android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.networkstats.NetworkStatsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.cellinfo.CellInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
 

@@ -5,6 +5,7 @@ import arrow.core.Either
 import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile.Helium
 import com.weatherxm.data.Failure
+import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.SharedPreferencesRepository
@@ -14,6 +15,7 @@ import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.TokenInfo
 import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UserDevice
+import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.util.DateTimeHelper.getFormattedRelativeDay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
@@ -21,14 +23,16 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
 
-class UserDeviceUseCaseImpl(
+@Suppress("LongParameterList")
+class DeviceDetailsUseCaseImpl(
     private val deviceRepository: DeviceRepository,
     private val deviceOTARepository: DeviceOTARepository,
     private val tokenRepository: TokenRepository,
     private val weatherForecastRepository: WeatherForecastRepository,
+    private val addressRepository: AddressRepository,
     private val preferencesRepository: SharedPreferencesRepository,
     private val context: Context
-) : UserDeviceUseCase {
+) : DeviceDetailsUseCase {
 
     companion object {
         val UNIT_PREF_KEYS = arrayOf(
@@ -109,5 +113,9 @@ class UserDeviceUseCaseImpl(
                 )
             }
         }
+    }
+
+    override suspend fun getAddressOfCell(cell: UICell): String? {
+        return addressRepository.getAddressFromLocation(cell.index, cell.center)
     }
 }
