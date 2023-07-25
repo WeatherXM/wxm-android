@@ -23,7 +23,7 @@ env:
     GRADLE_USER_HOME: ${GITHUB_WORKSPACE}/.gradle
     GLOBAL_GRADLE_CACHE: gradle-cache-${GITHUB_REPOSITORY}
 jobs:
-    staging_distribution:
+    pre_release_distribution:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
@@ -46,7 +46,7 @@ jobs:
                 with:
                     distribution: 'temurin'
                     java-version: '17'
-            -   name: Build staging release and distribute on Firebase
+            -   name: Build production release and distribute on Firebase
                 run: |
-                    ./gradlew :app:assembleRemoteStagingRelease :app:appDistributionUploadRemoteStagingRelease
+                    ./gradlew :app:assembleRemoteProdRelease :app:appDistributionUploadRemoteProdRelease
                     rm ./ci-service-account.json
