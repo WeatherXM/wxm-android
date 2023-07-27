@@ -5,6 +5,7 @@ import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.handleErrorWith
 import arrow.core.left
+import arrow.core.recover
 import arrow.core.right
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.ResultAccuracy
@@ -141,13 +142,13 @@ class AddressRepositoryImpl(
             .onRight { address ->
                 Timber.d("Got location address from cache [$address].")
             }
-            .mapLeft {
+            .recover {
                 networkAddress.getLocationAddress(hexIndex, location)
                     .onRight { address ->
                         Timber.d("Got location address from network [$address].")
                         Timber.d("Saving location address to cache [$address].")
                         cacheAddressDataSource.setLocationAddress(hexIndex, address)
-                    }
+                    }.bind()
             }
             .getOrNull()
     }

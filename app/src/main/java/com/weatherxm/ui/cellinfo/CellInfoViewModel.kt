@@ -39,17 +39,15 @@ class CellInfoViewModel(val cell: UICell) : ViewModel(), KoinComponent {
             }
 
             explorerUseCase.getCellDevices(cell)
-                .map {
+                .onRight {
                     onCellDevices.postValue(Resource.success(it))
-                    it.forEach { device ->
-                        device.address?.let { address ->
-                            this@CellInfoViewModel.address.postValue(address)
-                            return@forEach
-                        }
+                    it.firstOrNull { device ->
+                        !device.address.isNullOrEmpty()
+                    }?.address?.let { address ->
+                        this@CellInfoViewModel.address.postValue(address)
                     }
-
                 }
-                .mapLeft {
+                .onLeft {
                     analytics.trackEventFailure(it.code)
                     onCellDevices.postValue(
                         Resource.error(resHelper.getString(R.string.error_cell_devices_no_data))
