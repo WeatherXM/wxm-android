@@ -4,10 +4,10 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import arrow.core.Either
 import com.github.mikephil.charting.data.Entry
-import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.repository.WeatherHistoryRepository
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.devicehistory.HistoryCharts
 import com.weatherxm.ui.devicehistory.LineChartData
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
@@ -19,7 +19,7 @@ import java.time.LocalDate
 
 interface HistoryUseCase {
     suspend fun getWeatherHistory(
-        device: Device,
+        device: UIDevice,
         date: LocalDate,
         forceUpdate: Boolean = false
     ): Either<Failure, HistoryCharts>
@@ -32,7 +32,7 @@ class HistoryUseCaseImpl(
 ) : HistoryUseCase {
 
     override suspend fun getWeatherHistory(
-        device: Device,
+        device: UIDevice,
         date: LocalDate,
         forceUpdate: Boolean
     ): Either<Failure, HistoryCharts> {

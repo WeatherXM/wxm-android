@@ -71,6 +71,7 @@ android {
             applicationIdSuffix = ".mock"
             resValue("string", "app_name", "WXM Remote Mock")
             manifestPlaceholders["auth_host"] = "app-mock.weatherxm.com"
+            manifestPlaceholders["explorer_host"] = "explorer-mock.weatherxm.com"
             buildConfigField("String", "API_URL", "\"https://api-mock.weatherxm.com\"")
             buildConfigField("String", "AUTH_URL", "\"https://api-mock.weatherxm.com\"")
         }
@@ -79,6 +80,7 @@ android {
             applicationIdSuffix = ".staging"
             resValue("string", "app_name", "WXM Staging")
             manifestPlaceholders["auth_host"] = "app-staging.weatherxm.com"
+            manifestPlaceholders["explorer_host"] = "explorer-staging.weatherxm.com"
             buildConfigField("String", "API_URL", "\"https://api-staging.weatherxm.com\"")
             buildConfigField("String", "AUTH_URL", "\"https://api-staging.weatherxm.com\"")
             firebaseAppDistribution {
@@ -93,6 +95,7 @@ android {
             applicationIdSuffix = ".dev"
             resValue("string", "app_name", "WXM Dev")
             manifestPlaceholders["auth_host"] = "app-dev.weatherxm.com"
+            manifestPlaceholders["explorer_host"] = "explorer-dev.weatherxm.com"
             buildConfigField("String", "API_URL", "\"https://api-dev.weatherxm.com\"")
             buildConfigField("String", "AUTH_URL", "\"https://api-dev.weatherxm.com\"")
             firebaseAppDistribution {
@@ -106,6 +109,7 @@ android {
             dimension = "server"
             resValue("string", "app_name", "WeatherXM")
             manifestPlaceholders["auth_host"] = "app.weatherxm.com"
+            manifestPlaceholders["explorer_host"] = "explorer.weatherxm.com"
             buildConfigField("String", "API_URL", "\"https://api.weatherxm.com\"")
             buildConfigField("String", "AUTH_URL", "\"https://api.weatherxm.com\"")
             firebaseAppDistribution {

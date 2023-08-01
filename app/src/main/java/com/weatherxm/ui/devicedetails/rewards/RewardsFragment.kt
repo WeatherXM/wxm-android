@@ -10,7 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentDeviceDetailsRewardsBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.DeviceOwnershipStatus
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -22,7 +22,7 @@ class RewardsFragment : Fragment(), KoinComponent {
     private lateinit var binding: FragmentDeviceDetailsRewardsBinding
     private val parentModel: DeviceDetailsViewModel by activityViewModels()
     private val model: RewardsViewModel by viewModel {
-        parametersOf(parentModel.device, parentModel.cellDevice)
+        parametersOf(parentModel.device)
     }
     private val navigator: Navigator by inject()
     private val analytics: Analytics by inject()
@@ -42,14 +42,14 @@ class RewardsFragment : Fragment(), KoinComponent {
         super.onViewCreated(view, savedInstanceState)
 
         model.onTokens().observe(viewLifecycleOwner) {
-            if (parentModel.isUserDevice) {
+            if (model.device.ownershipStatus == DeviceOwnershipStatus.OWNED) {
                 binding.tokenCard.setTokenInfo(
                     it,
-                    model.device.rewards?.totalRewards,
+                    model.device.rewardsInfo?.totalRewards,
                     model.device.id
                 )
             } else {
-                binding.tokenCard.setTokenInfo(it, null, model.cellDevice.id)
+                binding.tokenCard.setTokenInfo(it, null, model.device.id)
             }
         }
 
@@ -69,18 +69,14 @@ class RewardsFragment : Fragment(), KoinComponent {
         }
 
         binding.swiperefresh.setOnRefreshListener {
-            fetchTokenDetails()
+            model.fetchTokenDetails()
         }
 
         binding.tokenRewards.setOnClickListener {
             navigator.showTokenScreen(requireContext(), model.device)
         }
 
-        if (!parentModel.isUserDevice) {
-            binding.tokenRewards.setVisible(false)
-        }
-
-        fetchTokenDetails()
+        model.fetchTokenDetails()
     }
 
     override fun onResume() {
@@ -89,14 +85,6 @@ class RewardsFragment : Fragment(), KoinComponent {
             Analytics.Screen.REWARDS,
             RewardsFragment::class.simpleName
         )
-    }
-
-    private fun fetchTokenDetails() {
-        if (parentModel.isUserDevice) {
-            model.fetchTokenDetails()
-        } else {
-            model.fetchCellDeviceTokenDetails()
-        }
     }
 
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {

@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.weatherxm.ui.common.RewardsInfo
 import com.weatherxm.ui.common.UIDevice
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
@@ -61,17 +62,24 @@ data class PublicDevice(
 ) : Parcelable {
     fun toUIDevice(): UIDevice {
         return UIDevice(
-            id,
-            name,
-            profile,
-            cellIndex,
-            null,
-            isActive,
-            lastWeatherStationActivity,
-            timezone,
-            null,
-            currentWeather,
-            null
+            id = id,
+            name = name,
+            cellIndex = cellIndex,
+            profile = profile,
+            isActive = isActive,
+            lastWeatherStationActivity = lastWeatherStationActivity,
+            timezone = timezone,
+            currentWeather = currentWeather,
+            ownershipStatus = null,
+            label = null,
+            friendlyName = null,
+            location = null,
+            currentFirmware = null,
+            cellCenter = null,
+            assignedFirmware = null,
+            claimedAt = null,
+            address = null,
+            rewardsInfo = null
         )
     }
 }
@@ -98,19 +106,27 @@ data class Device(
         )
     }
 
-    fun needsUpdate(): Boolean {
-        val currentFirmware = attributes?.firmware?.current
-        val assignedFirmware = attributes?.firmware?.assigned
-        return !currentFirmware.equals(assignedFirmware) && !assignedFirmware.isNullOrEmpty()
-    }
-
-    fun getNameOrLabel(): String {
-        return attributes?.friendlyName ?: name
-    }
-
-    fun getLastCharsOfLabel(charCount: Int): String {
-        val cleanLabel = label?.replace(":", "")
-        return cleanLabel?.substring((cleanLabel.length - charCount), cleanLabel.length) ?: ""
+    fun toUIDevice(): UIDevice {
+        return UIDevice(
+            id = id,
+            name = name,
+            cellIndex = attributes?.hex7?.index ?: "",
+            cellCenter = attributes?.hex7?.center,
+            profile = profile,
+            isActive = attributes?.isActive,
+            lastWeatherStationActivity = attributes?.lastWeatherStationActivity,
+            timezone = timezone,
+            ownershipStatus = null,
+            label = label,
+            friendlyName = attributes?.friendlyName,
+            location = location,
+            currentFirmware = attributes?.firmware?.current,
+            assignedFirmware = attributes?.firmware?.assigned,
+            claimedAt = attributes?.claimedAt,
+            address = address,
+            currentWeather = currentWeather,
+            rewardsInfo = RewardsInfo(totalRewards = rewards?.totalRewards)
+        )
     }
 
     fun isEmpty() = id == "" && name == ""

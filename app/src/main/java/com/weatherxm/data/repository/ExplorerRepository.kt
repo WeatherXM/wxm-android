@@ -13,7 +13,12 @@ interface ExplorerRepository {
     suspend fun getCells(): Either<Failure, List<PublicHex>>
     suspend fun getCellDevices(index: String): Either<Failure, List<PublicDevice>>
     suspend fun getCellDevice(index: String, deviceId: String): Either<Failure, PublicDevice>
-    suspend fun networkSearch(query: String): Either<Failure, NetworkSearchResults>
+    suspend fun networkSearch(
+        query: String,
+        exact: Boolean? = null,
+        exclude: String? = null
+    ): Either<Failure, NetworkSearchResults>
+
     suspend fun getRecentSearches(): Either<Failure, List<SearchResult>>
     suspend fun setRecentSearch(search: SearchResult)
 }
@@ -24,6 +29,7 @@ class ExplorerRepositoryImpl(
 ) : ExplorerRepository {
     companion object {
         const val RECENTS_MAX_ENTRIES = 10
+        const val EXCLUDE_PLACES = "places"
     }
 
     override suspend fun getCells(): Either<Failure, List<PublicHex>> {
@@ -41,8 +47,12 @@ class ExplorerRepositoryImpl(
         return networkExplorerDataSource.getCellDevice(index, deviceId)
     }
 
-    override suspend fun networkSearch(query: String): Either<Failure, NetworkSearchResults> {
-        return networkExplorerDataSource.networkSearch(query.trim())
+    override suspend fun networkSearch(
+        query: String,
+        exact: Boolean?,
+        exclude: String?
+    ): Either<Failure, NetworkSearchResults> {
+        return networkExplorerDataSource.networkSearch(query.trim(), exact, exclude)
     }
 
     override suspend fun getRecentSearches(): Either<Failure, List<SearchResult>> {

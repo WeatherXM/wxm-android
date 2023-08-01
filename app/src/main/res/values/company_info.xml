@@ -33,4 +33,5 @@
     <string name="wallet_explorer">https://mumbai.polygonscan.com/address/%s#tokentxns</string>
     <string name="shop_url">https://shop.weatherxm.com/</string>
     <string name="documentation_url_tokenomics">https://docs.weatherxm.com/tokenomics</string>
+    <string name="share_station_url">https://explorer.weatherxm.com/stations/%s</string>
 </resources>

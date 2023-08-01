@@ -53,6 +53,7 @@ import com.weatherxm.data.datasource.AppConfigDataSourceImpl
 import com.weatherxm.data.datasource.CacheAddressDataSource
 import com.weatherxm.data.datasource.CacheAddressSearchDataSource
 import com.weatherxm.data.datasource.CacheAuthDataSource
+import com.weatherxm.data.datasource.CacheFollowDataSource
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
@@ -68,6 +69,7 @@ import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
 import com.weatherxm.data.datasource.NetworkAuthDataSource
 import com.weatherxm.data.datasource.NetworkExplorerDataSource
+import com.weatherxm.data.datasource.NetworkFollowDataSource
 import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
@@ -107,6 +109,8 @@ import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.DeviceRepositoryImpl
 import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.ExplorerRepositoryImpl
+import com.weatherxm.data.repository.FollowRepository
+import com.weatherxm.data.repository.FollowRepositoryImpl
 import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.data.repository.LocationRepositoryImpl
 import com.weatherxm.data.repository.SharedPreferenceRepositoryImpl
@@ -369,6 +373,14 @@ private val datasources = module {
     single<StatsDataSource> {
         StatsDataSourceImpl(get())
     }
+
+    single<NetworkFollowDataSource> {
+        NetworkFollowDataSource(get())
+    }
+
+    single<CacheFollowDataSource> {
+        CacheFollowDataSource(get())
+    }
 }
 
 private val repositories = module {
@@ -429,6 +441,9 @@ private val repositories = module {
     single<StatsRepository> {
         StatsRepositoryImpl(get())
     }
+    single<FollowRepository> {
+        FollowRepositoryImpl(get(), get())
+    }
 }
 
 private val usecases = module {
@@ -436,10 +451,10 @@ private val usecases = module {
         StartupUseCaseImpl(get(), get())
     }
     single<ExplorerUseCase> {
-        ExplorerUseCaseImpl(get(), get(), get(), get(), get())
+        ExplorerUseCaseImpl(get(), get(), get(), get())
     }
     single<DeviceDetailsUseCase> {
-        DeviceDetailsUseCaseImpl(get(), get(), get(), get(), get(), get(), androidContext())
+        DeviceDetailsUseCaseImpl(get(), get(), get(), get(), get(), get(), get(), androidContext())
     }
     single<HistoryUseCase> {
         HistoryUseCaseImpl(androidContext(), get(), get())
@@ -747,8 +762,7 @@ private val viewmodels = module {
     viewModel { params ->
         DeviceDetailsViewModel(
             device = params.get(),
-            cellDevice = params.get(),
-            isUserDevice = params.get()
+            openExplorerOnBack = params.get()
         )
     }
     viewModel { params ->
@@ -761,13 +775,13 @@ private val viewmodels = module {
         ChangeFrequencyViewModel(device = params.get())
     }
     viewModel { params ->
-        CurrentViewModel(device = params.get(), cellDevice = params.get())
+        CurrentViewModel(device = params.get())
     }
     viewModel { params ->
-        ForecastViewModel(device = params.get(), cellDevice = params.get())
+        ForecastViewModel(device = params.get())
     }
     viewModel { params ->
-        RewardsViewModel(device = params.get(), cellDevice = params.get())
+        RewardsViewModel(device = params.get())
     }
     viewModel { params ->
         HistoryChartsViewModel(device = params.get())

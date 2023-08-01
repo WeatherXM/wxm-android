@@ -34,7 +34,11 @@ class DatabaseExplorerDataSource(
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 
-    override suspend fun networkSearch(query: String): Either<Failure, NetworkSearchResults> {
+    override suspend fun networkSearch(
+        query: String,
+        exact: Boolean?,
+        exclude: String?
+    ): Either<Failure, NetworkSearchResults> {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 

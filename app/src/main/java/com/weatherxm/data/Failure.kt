@@ -32,7 +32,7 @@ sealed class Failure(val code: String? = null) {
         const val CODE_SUGGESTION_LOCATION_ERROR = "SUGGESTION_LOCATION_ERROR"
     }
 
-    sealed class GeocoderError: Failure() {
+    sealed class GeocoderError : Failure() {
         object NoGeocoderError : GeocoderError()
         object NoGeocodedAddressError : GeocoderError()
         object GeocoderIOError : GeocoderError()
@@ -106,6 +106,7 @@ sealed class ApiError(code: String?, val message: String? = null) : Failure(code
     }
 
     class DeviceNotFound(code: String?, message: String? = null) : ApiError(code, message)
+    class MaxFollowed(code: String?, message: String? = null) : ApiError(code, message)
     class InvalidFriendlyName(code: String?, message: String? = null) : ApiError(code, message)
 
     sealed class UserError(code: String?, message: String? = null) : ApiError(code, message) {

@@ -25,8 +25,12 @@ class NetworkExplorerDataSource(private val apiService: ApiService) : ExplorerDa
         return apiService.getCellDevice(index, deviceId).map()
     }
 
-    override suspend fun networkSearch(query: String): Either<Failure, NetworkSearchResults> {
-        return apiService.networkSearch(query).map()
+    override suspend fun networkSearch(
+        query: String,
+        exact: Boolean?,
+        exclude: String?
+    ): Either<Failure, NetworkSearchResults> {
+        return apiService.networkSearch(query, exact, exclude).map()
     }
 
     override suspend fun getRecentSearches(): Either<Failure, List<SearchResult>> {

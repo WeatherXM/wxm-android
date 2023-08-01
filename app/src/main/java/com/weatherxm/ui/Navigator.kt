@@ -15,21 +15,20 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.ClientIdentificationHelper
-import com.weatherxm.data.Device
+import com.weatherxm.data.Location
 import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.cellinfo.CellInfoActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
 import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
-import com.weatherxm.ui.common.Contracts.ARG_CELL_DEVICE
+import com.weatherxm.ui.common.Contracts.ARG_CELL_CENTER
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
-import com.weatherxm.ui.common.Contracts.ARG_IS_USER_DEVICE
+import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.MessageDialogFragment
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.UserDevice
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
@@ -63,10 +62,11 @@ class Navigator(
     private val analytics: Analytics
 ) {
 
-    fun showExplorer(context: Context) {
+    fun showExplorer(context: Context, cellCenter: Location? = null) {
         context.startActivity(
             Intent(context, ExplorerActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                .putExtra(ARG_CELL_CENTER, cellCenter)
         )
     }
 
@@ -93,10 +93,11 @@ class Navigator(
         )
     }
 
-    fun showHome(context: Context) {
+    fun showHome(context: Context, cellCenter: Location? = null) {
         context.startActivity(
             Intent(context, HomeActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                .putExtra(ARG_CELL_CENTER, cellCenter)
         )
     }
 
@@ -152,22 +153,20 @@ class Navigator(
 
     fun showDeviceDetails(
         context: Context?,
-        device: Device = Device.empty(),
-        cellDevice: UIDevice = UIDevice.empty(),
-        isUserDevice: Boolean = true
+        device: UIDevice = UIDevice.empty(),
+        openExplorerOnBack: Boolean = false
     ) {
         context?.let {
             it.startActivity(
                 Intent(it, DeviceDetailsActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     .putExtra(ARG_DEVICE, device)
-                    .putExtra(ARG_CELL_DEVICE, cellDevice)
-                    .putExtra(ARG_IS_USER_DEVICE, isUserDevice)
+                    .putExtra(ARG_OPEN_EXPLORER_ON_BACK, openExplorerOnBack)
             )
         }
     }
 
-    fun showStationSettings(context: Context?, device: Device) {
+    fun showStationSettings(context: Context?, device: UIDevice) {
         context?.let {
             it.startActivity(
                 Intent(it, StationSettingsActivity::class.java)
@@ -236,7 +235,7 @@ class Navigator(
         )
     }
 
-    fun showHistoryActivity(context: Context, device: Device?) {
+    fun showHistoryActivity(context: Context, device: UIDevice?) {
         context.startActivity(
             Intent(context, HistoryActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -244,7 +243,7 @@ class Navigator(
         )
     }
 
-    fun showTokenScreen(context: Context, device: Device?) {
+    fun showTokenScreen(context: Context, device: UIDevice?) {
         context.startActivity(
             Intent(context, TokenActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -292,7 +291,7 @@ class Navigator(
         )
     }
 
-    fun showDeviceHeliumOTA(fragment: Fragment, device: Device?, deviceIsBleConnected: Boolean) {
+    fun showDeviceHeliumOTA(fragment: Fragment, device: UIDevice?, deviceIsBleConnected: Boolean) {
         fragment.context?.let {
             it.startActivity(
                 Intent(it, DeviceHeliumOTAActivity::class.java)
@@ -303,7 +302,7 @@ class Navigator(
         }
     }
 
-    fun showDeviceHeliumOTA(context: Context, device: Device?, deviceIsBleConnected: Boolean) {
+    fun showDeviceHeliumOTA(context: Context, device: UIDevice?, deviceIsBleConnected: Boolean) {
         context.startActivity(
             Intent(context, DeviceHeliumOTAActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -312,7 +311,7 @@ class Navigator(
         )
     }
 
-    fun showRebootStation(context: Context, device: Device?) {
+    fun showRebootStation(context: Context, device: UIDevice?) {
         context.startActivity(
             Intent(context, RebootActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -320,7 +319,7 @@ class Navigator(
         )
     }
 
-    fun showChangeFrequency(context: Context, device: Device?) {
+    fun showChangeFrequency(context: Context, device: UIDevice?) {
         context.startActivity(
             Intent(context, ChangeFrequencyActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -328,12 +327,12 @@ class Navigator(
         )
     }
 
-    fun showDeviceAlerts(fragment: Fragment, userDevice: UserDevice?) {
+    fun showDeviceAlerts(fragment: Fragment, device: UIDevice?) {
         fragment.context?.let {
             it.startActivity(
                 Intent(it, DeviceAlertsActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(ARG_DEVICE, userDevice)
+                    .putExtra(ARG_DEVICE, device)
             )
         }
     }

@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.weatherxm.R
-import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile.Helium
 import com.weatherxm.data.DeviceProfile.M5
 import com.weatherxm.data.Resource
@@ -17,6 +16,7 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.common.ActionDialogFragment
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.util.Analytics
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -113,7 +113,7 @@ class ClaimHeliumResultFragment : Fragment(), KoinComponent {
         })
     }
 
-    private fun updateUI(resource: Resource<Device>) {
+    private fun updateUI(resource: Resource<UIDevice>) {
         when (resource.status) {
             Status.SUCCESS -> {
                 val device = resource.data
@@ -203,7 +203,7 @@ class ClaimHeliumResultFragment : Fragment(), KoinComponent {
         )
     }
 
-    private fun onViewDevice(device: Device) {
+    private fun onViewDevice(device: UIDevice) {
         analytics.trackEventUserAction(
             actionName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
             contentType = Analytics.ParamValue.CLAIMING.paramValue,
@@ -217,7 +217,7 @@ class ClaimHeliumResultFragment : Fragment(), KoinComponent {
         activity?.finish()
     }
 
-    private fun onUpdate(device: Device) {
+    private fun onUpdate(device: UIDevice) {
         analytics.trackEventPrompt(
             Analytics.ParamValue.OTA_AVAILABLE.paramValue,
             Analytics.ParamValue.WARN.paramValue,
@@ -227,7 +227,7 @@ class ClaimHeliumResultFragment : Fragment(), KoinComponent {
         activity?.finish()
     }
 
-    private fun showConfirmBypassOTADialog(device: Device) {
+    private fun showConfirmBypassOTADialog(device: UIDevice) {
         ActionDialogFragment
             .Builder(
                 title = getString(R.string.action_update_firmware),

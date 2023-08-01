@@ -7,7 +7,7 @@ import com.weatherxm.databinding.ActivityDeviceAlertsBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceAlert
-import com.weatherxm.ui.common.UserDevice
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
@@ -20,7 +20,7 @@ class DeviceAlertsActivity : AppCompatActivity(), KoinComponent, DeviceAlertList
     private val navigator: Navigator by inject()
     private val analytics: Analytics by inject()
 
-    private var userDevice: UserDevice? = null
+    private var device: UIDevice? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +29,9 @@ class DeviceAlertsActivity : AppCompatActivity(), KoinComponent, DeviceAlertList
 
         binding.root.applyInsets()
 
-        userDevice = intent?.extras?.getParcelable(ARG_DEVICE)
-        if (userDevice == null) {
-            Timber.d("Could not start DeviceAlertsActivity. UserDevice is null.")
+        device = intent?.extras?.getParcelable(ARG_DEVICE)
+        if (device == null) {
+            Timber.d("Could not start DeviceAlertsActivity. Device is null.")
             toast(R.string.error_generic_message)
             finish()
             return
@@ -39,20 +39,20 @@ class DeviceAlertsActivity : AppCompatActivity(), KoinComponent, DeviceAlertList
 
         with(binding.toolbar) {
             setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
-            subtitle = userDevice?.device?.getNameOrLabel()
+            subtitle = device?.getDefaultOrFriendlyName()
         }
 
         val adapter = DeviceAlertsAdapter(this)
         binding.recycler.adapter = adapter
 
-        if (userDevice?.alerts?.contains(DeviceAlert.NEEDS_UPDATE) == true) {
+        if (device?.alerts?.contains(DeviceAlert.NEEDS_UPDATE) == true) {
             analytics.trackEventPrompt(
                 Analytics.ParamValue.OTA_AVAILABLE.paramValue,
                 Analytics.ParamValue.WARN.paramValue,
                 Analytics.ParamValue.VIEW.paramValue
             )
         }
-        adapter.submitList(userDevice?.alerts)
+        adapter.submitList(device?.alerts)
     }
 
     override fun onResume() {
@@ -69,7 +69,7 @@ class DeviceAlertsActivity : AppCompatActivity(), KoinComponent, DeviceAlertList
             Analytics.ParamValue.WARN.paramValue,
             Analytics.ParamValue.ACTION.paramValue
         )
-        navigator.showDeviceHeliumOTA(this, userDevice?.device, false)
+        navigator.showDeviceHeliumOTA(this, device, false)
         finish()
     }
 
@@ -77,7 +77,7 @@ class DeviceAlertsActivity : AppCompatActivity(), KoinComponent, DeviceAlertList
         navigator.sendSupportEmail(
             this,
             subject = getString(R.string.support_email_subject_device_offline),
-            body = getString(R.string.support_email_body_device_name, userDevice?.device?.name),
+            body = getString(R.string.support_email_body_device_name, device?.name),
             source = Analytics.ParamValue.DEVICE_ALERTS.paramValue
         )
         finish()

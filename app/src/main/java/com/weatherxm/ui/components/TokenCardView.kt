@@ -11,7 +11,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Transaction
 import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.databinding.ViewTokenCardBinding
-import com.weatherxm.ui.common.TokenInfo
+import com.weatherxm.ui.common.RewardsInfo
 import com.weatherxm.ui.common.show
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getFormattedDay
@@ -28,7 +28,7 @@ open class TokenCardView : LinearLayout, KoinComponent {
 
     private lateinit var binding: ViewTokenCardBinding
 
-    private var tokenInfo: TokenInfo? = null
+    private var tokenInfo: RewardsInfo? = null
     private val analytics: Analytics by inject()
 
     private var deviceId = ""
@@ -79,7 +79,7 @@ open class TokenCardView : LinearLayout, KoinComponent {
         }
     }
 
-    fun setTokenInfo(data: TokenInfo, totalAllTime: Float?, deviceId: String?) {
+    fun setTokenInfo(data: RewardsInfo, totalAllTime: Float?, deviceId: String?) {
         this.tokenInfo = data
         this.deviceId = deviceId ?: ""
         updateUI(totalAllTime)

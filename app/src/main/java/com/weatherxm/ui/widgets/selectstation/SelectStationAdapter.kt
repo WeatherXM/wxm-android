@@ -8,20 +8,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
-import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemWidgetSelectStationBinding
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
-import com.weatherxm.util.setColor
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class SelectStationAdapter(private val stationListener: (Device) -> Unit) :
-    ListAdapter<Device, SelectStationAdapter.SelectStationViewHolder>(SelectStationDiffCallback()),
-    KoinComponent {
+class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
+    ListAdapter<UIDevice, SelectStationAdapter.SelectStationViewHolder>(
+        SelectStationDiffCallback()
+    ), KoinComponent {
 
     val resHelper: ResourcesHelper by inject()
 
@@ -43,10 +43,10 @@ class SelectStationAdapter(private val stationListener: (Device) -> Unit) :
 
     inner class SelectStationViewHolder(
         private val binding: ListItemWidgetSelectStationBinding,
-        private val stationListener: (Device) -> Unit,
+        private val stationListener: (UIDevice) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private lateinit var device: Device
+        private lateinit var device: UIDevice
 
         init {
             binding.root.setOnClickListener {
@@ -63,7 +63,7 @@ class SelectStationAdapter(private val stationListener: (Device) -> Unit) :
         }
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: Device, isSelected: Boolean) {
+        fun bind(item: UIDevice, isSelected: Boolean) {
             binding.root.isSelected = isSelected
             binding.selectedIcon.visibility = if (isSelected) {
                 View.VISIBLE
@@ -72,7 +72,7 @@ class SelectStationAdapter(private val stationListener: (Device) -> Unit) :
             }
 
             this.device = item
-            binding.name.text = item.getNameOrLabel()
+            binding.name.text = item.getDefaultOrFriendlyName()
 
             binding.address.text = if (item.address.isNullOrEmpty()) {
                 resHelper.getString(R.string.unknown_address)
@@ -90,9 +90,9 @@ class SelectStationAdapter(private val stationListener: (Device) -> Unit) :
             setStatus(item)
         }
 
-        private fun setStatus(device: Device) {
+        private fun setStatus(device: UIDevice) {
             with(binding.lastSeen) {
-                text = device.attributes?.lastWeatherStationActivity?.getRelativeFormattedTime(
+                text = device.lastWeatherStationActivity?.getRelativeFormattedTime(
                     fallbackIfTooSoon = context.getString(R.string.just_now)
                 )
             }
@@ -105,28 +105,18 @@ class SelectStationAdapter(private val stationListener: (Device) -> Unit) :
                 }
             )
 
-            binding.status.setCardBackgroundColor(
+            binding.statusCard.setCardBackgroundColor(
                 itemView.context.getColor(
-                    when (device.attributes?.isActive) {
-                        true -> {
-                            binding.statusIcon.setColor(R.color.success)
-                            binding.status.strokeColor = itemView.context.getColor(R.color.success)
-                            R.color.successTint
-                        }
-                        false -> {
-                            binding.statusIcon.setColor(R.color.error)
-                            binding.status.strokeColor = itemView.context.getColor(R.color.error)
-                            R.color.errorTint
-                        }
-                        null -> {
-                            R.color.midGrey
-                        }
+                    when (device.isActive) {
+                        true -> R.color.successTint
+                        false -> R.color.errorTint
+                        else -> R.color.midGrey
                     }
                 )
             )
         }
 
-        private fun setWeatherData(device: Device) {
+        private fun setWeatherData(device: UIDevice) {
             binding.icon.setAnimation(Weather.getWeatherAnimation(device.currentWeather?.icon))
             binding.temperature.text = Weather.getFormattedTemperature(
                 device.currentWeather?.temperature, 1, includeUnit = false
@@ -169,14 +159,14 @@ class SelectStationAdapter(private val stationListener: (Device) -> Unit) :
         }
     }
 
-    class SelectStationDiffCallback : DiffUtil.ItemCallback<Device>() {
+    class SelectStationDiffCallback : DiffUtil.ItemCallback<UIDevice>() {
 
-        override fun areItemsTheSame(oldItem: Device, newItem: Device): Boolean {
+        override fun areItemsTheSame(oldItem: UIDevice, newItem: UIDevice): Boolean {
             return oldItem.id == newItem.id
         }
 
         @Suppress("MaxLineLength", "CyclomaticComplexMethod")
-        override fun areContentsTheSame(oldItem: Device, newItem: Device): Boolean {
+        override fun areContentsTheSame(oldItem: UIDevice, newItem: UIDevice): Boolean {
             return oldItem.id == newItem.id &&
                 oldItem.name == newItem.name &&
                 oldItem.address == newItem.address

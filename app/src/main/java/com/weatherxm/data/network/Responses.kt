@@ -58,6 +58,7 @@ data class ErrorResponse(
         const val FORBIDDEN = "Forbidden"
         const val VALIDATION = "Validation"
         const val NOT_FOUND = "NotFound"
+        const val MAX_FOLLOWED = "MaxFollowed"
     }
 
     override fun toString(): String {

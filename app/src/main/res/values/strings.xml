@@ -18,6 +18,7 @@
     <string name="action_pair">Pair</string>
     <string name="action_reset">Reset</string>
     <string name="action_have_reset_device">I\’ve Reset My Device</string>
+    <string name="action_favorite">Favorite</string>
     <string name="action_pair_device">Pair Device</string>
     <string name="action_retry_updating">Retry Updating</string>
     <string name="action_deny">Deny</string>
@@ -97,6 +98,7 @@
     <string name="hello_user">Hello, %s</string>
 
     <!-- Weather Station(s) -->
+    <string name="my_stations_list">My Stations List</string>
     <string name="weather_stations">Weather Stations</string>
     <string name="add_weather_station">Claim your WXM device by clicking the + button.</string>
     <string name="just_now">Just now</string>
@@ -417,4 +419,15 @@
     <string name="updating_weather_notification_title">Updating Weather…</string>
     <string name="please_sign_in">Please Sign In</string>
     <string name="please_sign_in_desc">In order to see WeatherXM data, you need to be signed in.</string>
+
+    <!-- Share/Follow Station -->
+    <string name="share_station">Share Station</string>
+    <string name="total_with_placeholder">%s Total</string>
+    <string name="owned_with_placeholder">%s Owned</string>
+    <string name="following_with_placeholder">%s Followed</string>
+    <string name="favorites_prompt_desc">Want to get updates for this station?</string>
+    <string name="favorites_prompt">Add station to your favorites</string>
+    <string name="parsing_url_failed">Parsing the URL failed</string>
+    <string name="could_not_parse_url">Could not parse the requested URL. Invalid.</string>
+    <string name="more_than_one_results">Invalid URL. Multiple results returned that could not be parsed.</string>
 </resources>

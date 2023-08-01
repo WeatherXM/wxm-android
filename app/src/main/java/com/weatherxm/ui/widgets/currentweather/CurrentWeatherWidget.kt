@@ -15,16 +15,14 @@ import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
 import com.weatherxm.R
-import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.services.CacheService
-import com.weatherxm.ui.common.Contracts.ARG_CELL_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE
-import com.weatherxm.ui.common.Contracts.ARG_IS_USER_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_ON_LOGGED_IN
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_SHOULD_LOGIN
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
+import com.weatherxm.ui.common.DeviceOwnershipStatus
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.login.LoginActivity
@@ -57,7 +55,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         val extras = intent?.extras
         val appWidgetId =
             extras?.getInt(EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID) ?: INVALID_APPWIDGET_ID
-        val device = extras?.getParcelable<Device>(ARG_DEVICE)
+        val device = extras?.getParcelable<UIDevice>(ARG_DEVICE)
         val shouldLogin = extras?.getBoolean(ARG_WIDGET_SHOULD_LOGIN, false)
         val onJustLoggedIn = extras?.getBoolean(ARG_WIDGET_ON_LOGGED_IN, false)
         val widgetIdsFromIntent = extras?.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS)
@@ -114,7 +112,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
     private fun updateWidget(
         context: Context,
         shouldLogin: Boolean?,
-        device: Device?,
+        device: UIDevice?,
         appWidgetId: Int
     ) {
         val widgetManager = AppWidgetManager.getInstance(context)
@@ -197,7 +195,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int,
-        device: Device
+        device: UIDevice
     ) {
         if (device.isEmpty() || appWidgetId == INVALID_APPWIDGET_ID) return
 
@@ -208,8 +206,6 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
 
         val deviceDetailsActivity = Intent(context, DeviceDetailsActivity::class.java)
             .putExtra(ARG_DEVICE, device)
-            .putExtra(ARG_CELL_DEVICE, UIDevice.empty())
-            .putExtra(ARG_IS_USER_DEVICE, true)
 
         val pendingIntent: PendingIntent = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(deviceDetailsActivity)
@@ -221,8 +217,19 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         }
         views.setOnClickPendingIntent(R.id.root, pendingIntent)
 
-        views.setTextViewText(R.id.name, device.getNameOrLabel())
+        views.setTextViewText(R.id.name, device.getDefaultOrFriendlyName())
         views.setTextViewText(R.id.address, device.address)
+
+        @Suppress("UseCheckOrError")
+        views.setImageViewResource(
+            R.id.stationHomeFollowIcon,
+            when (device.ownershipStatus) {
+                DeviceOwnershipStatus.OWNED -> R.drawable.ic_home
+                DeviceOwnershipStatus.FOLLOWED -> R.drawable.ic_favorite
+                DeviceOwnershipStatus.UNFOLLOWED -> R.drawable.ic_favorite_outline
+                null -> throw IllegalStateException("Oops! No ownership status here.")
+            }
+        )
 
         setStatus(context, views, device)
 
@@ -245,55 +252,45 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         appWidgetManager.updateAppWidget(appWidgetId, views)
     }
 
-    private fun setStatus(context: Context, views: RemoteViews, device: Device) {
+    private fun setStatus(context: Context, views: RemoteViews, device: UIDevice) {
         views.setImageViewResource(
-            R.id.status_icon,
+            R.id.statusIcon,
             if (device.profile == DeviceProfile.Helium) {
                 R.drawable.ic_helium
             } else {
                 R.drawable.ic_wifi
             }
         )
-        when (device.attributes?.isActive) {
+        when (device.isActive) {
             true -> {
                 views.setTextViewText(
                     R.id.lastSeen,
-                    device.attributes.lastWeatherStationActivity?.getFormattedTime(context)
+                    device.lastWeatherStationActivity?.getFormattedTime(context)
                 )
                 views.setInt(
-                    R.id.status,
+                    R.id.statusCard,
                     "setBackgroundResource",
                     R.drawable.background_rounded_corners_success
-                )
-                views.setInt(
-                    R.id.status_icon,
-                    "setColorFilter",
-                    context.getColor(R.color.success)
                 )
             }
             false -> {
                 views.setTextViewText(
                     R.id.lastSeen,
-                    device.attributes.lastWeatherStationActivity?.getRelativeFormattedTime(
+                    device.lastWeatherStationActivity?.getRelativeFormattedTime(
                         context.getString(R.string.just_now)
                     )
                 )
                 views.setInt(
-                    R.id.status,
+                    R.id.statusCard,
                     "setBackgroundResource",
                     R.drawable.background_rounded_corners_error
-                )
-                views.setInt(
-                    R.id.status_icon,
-                    "setColorFilter",
-                    context.getColor(R.color.error)
                 )
             }
             else -> {}
         }
     }
 
-    private fun setWeatherData(context: Context, views: RemoteViews, device: Device) {
+    private fun setWeatherData(context: Context, views: RemoteViews, device: UIDevice) {
         Weather.getWeatherStaticIcon(device.currentWeather?.icon)?.let {
             views.setImageViewResource(R.id.weatherIcon, it)
         }

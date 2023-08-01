@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.weatherxm.data.Device
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.RefreshHandler
@@ -18,49 +18,64 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class DeviceDetailsViewModel(
-    var device: Device = Device.empty(),
-    var cellDevice: UIDevice = UIDevice.empty(),
-    var isUserDevice: Boolean
+    var device: UIDevice = UIDevice.empty(),
+    var openExplorerOnBack: Boolean
 ) : ViewModel(), KoinComponent {
     companion object {
         private const val REFRESH_INTERVAL_SECONDS = 30L
     }
 
     private val deviceDetailsUseCase: DeviceDetailsUseCase by inject()
+    private val authUseCase: AuthUseCase by inject()
     private val analytics: Analytics by inject()
+
     private val refreshHandler = RefreshHandler(
         refreshIntervalMillis = TimeUnit.SECONDS.toMillis(REFRESH_INTERVAL_SECONDS)
     )
 
     private val onUnitPreferenceChanged = MutableLiveData(false)
     private val address = MutableLiveData<String?>()
+    private var isLoggedIn: Boolean? = null
+    private val onDevicePolling = MutableLiveData<UIDevice>()
 
+    fun onDevicePolling(): LiveData<UIDevice> = onDevicePolling
     fun onUnitPreferenceChanged(): LiveData<Boolean> = onUnitPreferenceChanged
     fun address(): LiveData<String?> = address
 
+    fun isLoggedIn() = isLoggedIn
+
     suspend fun deviceAutoRefresh() = refreshHandler.flow()
         .map {
-            deviceDetailsUseCase.getUserDevice(device.id)
+            deviceDetailsUseCase.getUserDevice(device)
                 .onRight {
-                    Timber.d("Got User Device using polling: ${it.name}")
+                    Timber.d("Got Device using polling: ${it.name}")
+                    onDevicePolling.postValue(it)
                 }.onLeft {
                     analytics.trackEventFailure(it.code)
                 }
         }
 
     fun fetchAddressFromCell() {
-        if (!cellDevice.address.isNullOrEmpty()) {
-            address.postValue(cellDevice.address)
+        if (!device.address.isNullOrEmpty()) {
+            address.postValue(device.address)
             return
         }
         viewModelScope.launch {
-            cellDevice.cellCenter?.let {
+            device.cellCenter?.let {
                 address.postValue(
                     deviceDetailsUseCase.getAddressOfCell(
-                        UICell(cellDevice.cellIndex, it)
+                        UICell(device.cellIndex, it)
                     )
                 )
             }
+        }
+    }
+
+    fun createNormalizedName(): String {
+        return if (!device.isEmpty()) {
+            device.toNormalizedName()
+        } else {
+            ""
         }
     }
 
@@ -71,6 +86,11 @@ class DeviceDetailsViewModel(
                     Timber.d("Unit preference key changed: $it. Triggering data update.")
                     onUnitPreferenceChanged.postValue(true)
                 }
+        }
+        viewModelScope.launch {
+            isLoggedIn = authUseCase.isLoggedIn().fold({ false }) {
+                it
+            }
         }
     }
 }

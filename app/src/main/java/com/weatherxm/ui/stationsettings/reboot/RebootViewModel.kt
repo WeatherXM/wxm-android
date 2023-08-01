@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
-import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.ScannedDevice
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.stationsettings.RebootState
 import com.weatherxm.ui.stationsettings.RebootStatus
 import com.weatherxm.usecases.BluetoothConnectionUseCase
@@ -25,7 +25,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Suppress("TooManyFunctions")
-class RebootViewModel(var device: Device) : ViewModel(), KoinComponent {
+class RebootViewModel(var device: UIDevice) : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val connectionUseCase: BluetoothConnectionUseCase by inject()
     private val scanUseCase: BluetoothScannerUseCase by inject()

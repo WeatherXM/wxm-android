@@ -12,12 +12,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
-import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityRebootStationBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.stationsettings.RebootState
@@ -37,7 +37,7 @@ class RebootActivity : AppCompatActivity(), KoinComponent {
     private val navigator: Navigator by inject()
 
     private val model: RebootViewModel by viewModel {
-        parametersOf(intent.getParcelableExtra<Device>(Contracts.ARG_DEVICE))
+        parametersOf(intent.getParcelableExtra<UIDevice>(Contracts.ARG_DEVICE))
     }
 
     private val enableBluetoothLauncher =

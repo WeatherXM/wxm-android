@@ -11,6 +11,8 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.databinding.ViewWeatherCardBinding
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
+import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getPrecipitationPreferredUnit
 import org.koin.core.component.KoinComponent
@@ -113,5 +115,9 @@ class WeatherCardView : LinearLayout, KoinComponent {
     fun setData(data: HourlyWeather?) {
         weatherData = data
         updateCurrentWeatherUI()
+        val lastUpdatedDate = data?.timestamp?.getFormattedDate(includeYear = true)
+        val lastUpdatedTime = data?.timestamp?.getFormattedTime(context)
+        binding.lastUpdatedOn.text =
+            context.getString(R.string.last_updated, "$lastUpdatedDate, $lastUpdatedTime")
     }
 }

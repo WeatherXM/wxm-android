@@ -26,10 +26,7 @@ class BluetoothUpdaterUseCaseImpl(
             val updateFile = withContext(Dispatchers.IO) {
                 File.createTempFile("ota_${deviceId}_file", ".zip", context.cacheDir)
             }
-            // TODO: @stratos to confirm this is OK.
             updateFile.sink().write(Buffer().write(it), it.size.toLong())
-            //updateFile.writeBytes(it)
-
             updateFile.toUri()
         }
     }

@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Resource
-import com.weatherxm.ui.common.UserDevice
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.UIErrors.getDefaultMessage
@@ -27,7 +27,7 @@ class DevicesViewModel : ViewModel(), KoinComponent {
         this@DevicesViewModel.preferenceChanged.postValue(true)
     }
 
-    private val devices = MutableLiveData<Resource<List<UserDevice>>>().apply {
+    private val devices = MutableLiveData<Resource<List<UIDevice>>>().apply {
         value = Resource.loading()
     }
 
@@ -37,7 +37,7 @@ class DevicesViewModel : ViewModel(), KoinComponent {
     // Needed for passing info to the fragment to notify the adapter that it needs updating
     private val preferenceChanged = MutableLiveData(false)
 
-    fun devices(): LiveData<Resource<List<UserDevice>>> = devices
+    fun devices(): LiveData<Resource<List<UIDevice>>> = devices
 
     fun showOverlayViews() = showOverlayViews
 

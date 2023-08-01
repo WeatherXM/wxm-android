@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--
         Defaults
@@ -45,16 +45,15 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="TextAppearance.WeatherXM.CollapsedToolbar.Title" parent="TextAppearance.WeatherXM.Default.PrimaryColor">
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <!--
         Devices List
     -->
-    <style name="TextAppearance.WeatherXM.Devices.List.LastSeen" parent="TextAppearance.WeatherXM.Default.BodySmall">
-        <item name="android:textColor">@color/colorOnSurfaceVariant</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="TextAppearance.WeatherXM.Devices.List.Address" parent="TextAppearance.WeatherXM.Default.BodyMedium">
-        <item name="android:textColor">@color/colorPrimaryVariant</item>
+    <style name="TextAppearance.WeatherXM.Devices.List.Address" parent="TextAppearance.WeatherXM.Default.BodySmall">
+        <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
     </style>
@@ -65,13 +64,13 @@
 
     <style name="TextAppearance.WeatherXM.Devices.List.WeatherData.Subtitle" parent="TextAppearance.WeatherXM.Default.BodySmall">
         <item name="android:textColor">@color/colorPrimaryVariant</item>
-        <item name="android:textSize">12sp</item>
     </style>
 
     <!--
         Weather Card
     -->
     <style name="TextAppearance.WeatherXM.WeatherCard.Data" parent="TextAppearance.WeatherXM.Default.BodyLarge">
+        <item name="android:textStyle">bold</item>
         <item name="android:gravity">center</item>
         <item name="android:lines">1</item>
     </style>
@@ -94,6 +93,10 @@
     -->
     <style name="TextAppearance.WeatherXM.Tabs" parent="TextAppearance.WeatherXM.Default.BodyLarge">
         <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Navigation.Tabs" parent="TextAppearance.WeatherXM.Default.BodyMedium">
+        <item name="android:textFontWeight" tools:targetApi="p">500</item>
     </style>
 
     <!--

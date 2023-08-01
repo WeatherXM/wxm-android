@@ -8,14 +8,17 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
+import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityWidgetSelectStationBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.widgets.currentweather.CurrentWeatherWidgetWorkerUpdate
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.WidgetHelper
 import com.weatherxm.util.applyInsets
+import com.weatherxm.util.onTabSelected
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -24,6 +27,8 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
     private val model: SelectStationViewModel by viewModels()
     private val analytics: Analytics by inject()
     private val widgetHelper: WidgetHelper by inject()
+
+    private lateinit var adapter: SelectStationAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,44 +45,30 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
         val resultValue = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         setResult(Activity.RESULT_CANCELED, resultValue)
 
-        val adapter = SelectStationAdapter {
+        adapter = SelectStationAdapter {
             model.setStationSelected(it)
             binding.confirmBtn.isEnabled = true
         }
         binding.recycler.adapter = adapter
 
-        model.devices().observe(this) { devicesResource ->
-            when (devicesResource.status) {
-                Status.SUCCESS -> {
-                    if (!devicesResource.data.isNullOrEmpty()) {
-                        adapter.submitList(devicesResource.data)
-                        binding.recycler.visibility = View.VISIBLE
-                        binding.empty.visibility = View.GONE
-                    } else {
-                        binding.empty.animation(R.raw.anim_empty_devices, false)
-                        binding.empty.title(getString(R.string.empty_weather_stations))
-                        binding.empty.subtitle(getString(R.string.empty_select_station))
-                        binding.empty.listener(null)
-                        binding.empty.visibility = View.VISIBLE
-                        binding.recycler.visibility = View.GONE
-                    }
+        initTabs()
+
+        binding.navigationTabs.onTabSelected {
+            when (it.position) {
+                0 -> {
+                    // TODO: Implement this
                 }
-                Status.ERROR -> {
-                    binding.empty.animation(R.raw.anim_error, false)
-                    binding.empty.title(getString(R.string.error_generic_message))
-                    binding.empty.subtitle(devicesResource.message)
-                    binding.empty.action(getString(R.string.action_retry))
-                    binding.empty.listener { model.fetch() }
-                    binding.empty.visibility = View.VISIBLE
-                    binding.recycler.visibility = View.GONE
+                1 -> {
+                    // TODO: Implement this
                 }
-                Status.LOADING -> {
-                    binding.recycler.visibility = View.GONE
-                    binding.empty.clear()
-                    binding.empty.animation(R.raw.anim_loading)
-                    binding.empty.visibility = View.VISIBLE
+                2 -> {
+                    // TODO: Implement this
                 }
             }
+        }
+
+        model.devices().observe(this) {
+            onDevices(it)
         }
 
         model.isNotLoggedIn().observe(this) {
@@ -102,6 +93,74 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
             Analytics.Screen.WIDGET_SELECT_STATION,
             SelectStationActivity::class.simpleName
         )
+    }
+
+    private fun onDevices(devices: Resource<List<UIDevice>>) {
+        when (devices.status) {
+            Status.SUCCESS -> {
+                if (!devices.data.isNullOrEmpty()) {
+                    // TODO: Change the numbers in all different tabs
+                    binding.navigationTabs.getTabAt(0)?.text = getString(
+                        R.string.total_with_placeholder,
+                        devices.data.size.toString()
+                    )
+                    binding.navigationTabs.getTabAt(1)?.text = getString(
+                        R.string.owned_with_placeholder,
+                        devices.data.size.toString()
+                    )
+                    binding.navigationTabs.getTabAt(2)?.text = getString(
+                        R.string.following_with_placeholder,
+                        devices.data.size.toString()
+                    )
+                    adapter.submitList(devices.data)
+                    binding.recycler.visibility = View.VISIBLE
+                    binding.empty.visibility = View.GONE
+                } else {
+                    binding.empty.animation(R.raw.anim_empty_devices, false)
+                    binding.empty.title(getString(R.string.empty_weather_stations))
+                    binding.empty.subtitle(getString(R.string.empty_select_station))
+                    binding.empty.listener(null)
+                    binding.empty.visibility = View.VISIBLE
+                    binding.recycler.visibility = View.GONE
+                }
+            }
+            Status.ERROR -> {
+                binding.empty.animation(R.raw.anim_error, false)
+                binding.empty.title(getString(R.string.error_generic_message))
+                binding.empty.subtitle(devices.message)
+                binding.empty.action(getString(R.string.action_retry))
+                binding.empty.listener { model.fetch() }
+                binding.empty.visibility = View.VISIBLE
+                binding.recycler.visibility = View.GONE
+            }
+            Status.LOADING -> {
+                binding.recycler.visibility = View.GONE
+                binding.empty.clear()
+                binding.empty.animation(R.raw.anim_loading)
+                binding.empty.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun initTabs() {
+        with(binding.navigationTabs) {
+            addTab(
+                newTab().apply {
+                    text = getString(R.string.total_with_placeholder, "?")
+                },
+                true
+            )
+            addTab(
+                newTab().apply {
+                    text = getString(R.string.owned_with_placeholder, "?")
+                }
+            )
+            addTab(
+                newTab().apply {
+                    text = getString(R.string.following_with_placeholder, "?")
+                }
+            )
+        }
     }
 
     private fun onConfirmClicked(appWidgetId: Int, resultValue: Intent) {

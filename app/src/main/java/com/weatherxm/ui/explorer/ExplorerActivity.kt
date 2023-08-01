@@ -9,12 +9,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.mapbox.geojson.Point
 import com.weatherxm.BuildConfig
 import com.weatherxm.R
+import com.weatherxm.data.Location
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityExplorerBinding
 import com.weatherxm.ui.BaseMapFragment
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Animation.HideAnimation.SlideOutToBottom
 import com.weatherxm.ui.common.Animation.ShowAnimation.SlideInFromBottom
+import com.weatherxm.ui.common.Contracts.ARG_CELL_CENTER
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.show
 import dev.chrisbanes.insetter.applyInsetter
@@ -103,6 +105,12 @@ class ExplorerActivity : AppCompatActivity(), KoinComponent,
         }
 
         binding.mapDebugInfoContainer.visibility = if (BuildConfig.DEBUG) VISIBLE else GONE
+
+        with(intent.getParcelableExtra<Location>(ARG_CELL_CENTER)) {
+            this?.let {
+                model.navigateToLocation(it)
+            }
+        }
     }
 
     @Suppress("MagicNumber")

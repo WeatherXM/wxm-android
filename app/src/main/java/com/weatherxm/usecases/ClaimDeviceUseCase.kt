@@ -11,12 +11,12 @@ import com.mapbox.search.result.SearchAddress
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.data.CancellationError
 import com.weatherxm.data.CountryAndFrequencies
-import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.MapBoxError.ReverseGeocodingError
 import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.UserRepository
+import com.weatherxm.ui.common.UIDevice
 
 interface ClaimDeviceUseCase {
     suspend fun claimDevice(
@@ -24,7 +24,7 @@ interface ClaimDeviceUseCase {
         lat: Double,
         lon: Double,
         secret: String? = null
-    ): Either<Failure, Device>
+    ): Either<Failure, UIDevice>
 
     suspend fun fetchUserEmail(): Either<Failure, String>
     suspend fun getSearchSuggestions(query: String): Either<Failure, List<SearchSuggestion>>
@@ -44,12 +44,14 @@ class ClaimDeviceUseCaseImpl(
         lat: Double,
         lon: Double,
         secret: String?
-    ): Either<Failure, Device> {
+    ): Either<Failure, UIDevice> {
         return deviceRepository.claimDevice(
             serialNumber,
             com.weatherxm.data.Location(lat, lon),
             secret
-        )
+        ).map {
+            it.toUIDevice()
+        }
     }
 
     override suspend fun fetchUserEmail(): Either<Failure, String> {

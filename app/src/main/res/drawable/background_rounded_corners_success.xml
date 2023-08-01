@@ -3,6 +3,5 @@
 
     <solid android:color="@color/successTint" />
     <corners android:radius="@dimen/card_corner_radius_small" />
-    <stroke android:width="1dp" android:color="@color/success"/>
 
 </shape>

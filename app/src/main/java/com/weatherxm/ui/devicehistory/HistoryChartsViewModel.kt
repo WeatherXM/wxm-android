@@ -8,8 +8,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
-import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getDateRangeFromToday
@@ -27,7 +27,7 @@ import timber.log.Timber
 import java.time.LocalDate
 
 class HistoryChartsViewModel(
-    val device: Device
+    val device: UIDevice
 ) : ViewModel(), KoinComponent {
 
     companion object {

@@ -10,9 +10,9 @@ import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceAlreadyClaimed
 import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceClaiming
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
-import com.weatherxm.data.Device
 import com.weatherxm.data.Frequency
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.Analytics
@@ -36,7 +36,7 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
     private val onCancel = MutableLiveData(false)
     private val onNext = MutableLiveData(false)
     private val onBackToLocation = MutableLiveData(false)
-    private val onClaimResult = MutableLiveData<Resource<Device>>().apply {
+    private val onClaimResult = MutableLiveData<Resource<UIDevice>>().apply {
         value = Resource.loading()
     }
 
@@ -136,7 +136,7 @@ class ClaimHeliumViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun setClaimedDevice(device: Device?) {
+    fun setClaimedDevice(device: UIDevice?) {
         device?.let { onClaimResult.postValue(Resource.success(device)) }
     }
 }

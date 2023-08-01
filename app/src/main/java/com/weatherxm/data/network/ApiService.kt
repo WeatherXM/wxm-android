@@ -175,6 +175,8 @@ interface ApiService {
     @Headers(NO_AUTH_HEADER)
     suspend fun networkSearch(
         @Query("query") query: String,
+        @Query("exact") exact: Boolean? = null,
+        @Query("exclude") exclude: String? = null,
     ): NetworkResponse<NetworkSearchResults, ErrorResponse>
 
     @Suppress("LongParameterList")
@@ -203,4 +205,20 @@ interface ApiService {
     @Headers(NO_AUTH_HEADER)
     suspend fun getNetworkStats(
     ): NetworkResponse<NetworkStatsResponse, ErrorResponse>
+
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 200, body = "mock_files/empty_response.json")
+    @POST("/api/v1/me/devices/{deviceId}/follow")
+    suspend fun followStation(
+        @Path("deviceId") deviceId: String
+    ): NetworkResponse<Unit, ErrorResponse>
+
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 200, body = "mock_files/empty_response.json")
+    @DELETE("/api/v1/me/devices/{deviceId}/follow")
+    suspend fun unfollowStation(
+        @Path("deviceId") deviceId: String
+    ): NetworkResponse<Unit, ErrorResponse>
 }

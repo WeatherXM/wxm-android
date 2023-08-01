@@ -14,18 +14,18 @@ import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
 import com.weatherxm.ui.common.DeviceAlert
-import com.weatherxm.ui.common.UserDevice
+import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
-import com.weatherxm.util.setColor
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class DeviceAdapter(private val deviceListener: DeviceListener) :
-    ListAdapter<UserDevice, DeviceAdapter.DeviceViewHolder>(DeviceDiffCallback()), KoinComponent {
+    ListAdapter<UIDevice, DeviceAdapter.DeviceViewHolder>(DeviceDiffCallback()), KoinComponent {
 
     val resHelper: ResourcesHelper by inject()
     val analytics: Analytics by inject()
@@ -45,75 +45,72 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
         listener: DeviceListener,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private lateinit var userDevice: UserDevice
+        private lateinit var device: UIDevice
 
         init {
             binding.root.setOnClickListener {
-                listener.onDeviceClicked(userDevice)
+                listener.onDeviceClicked(device)
             }
         }
 
         @SuppressLint("SetTextI18n")
-        fun bind(item: UserDevice) {
-            this.userDevice = item
-            binding.name.text = item.device.getNameOrLabel()
+        fun bind(item: UIDevice) {
+            this.device = item
+            binding.name.text = item.getDefaultOrFriendlyName()
 
-            if (item.device.currentWeather == null || item.device.currentWeather.isEmpty()) {
+            if (item.currentWeather == null || item.currentWeather.isEmpty()) {
                 binding.weatherDataLayout.visibility = GONE
                 binding.noDataLayout.visibility = VISIBLE
             } else {
                 setWeatherData(item)
             }
 
-            binding.address.text = if (item.device.address.isNullOrEmpty()) {
+            binding.address.text = if (item.address.isNullOrEmpty()) {
                 resHelper.getString(R.string.unknown_address)
             } else {
-                item.device.address
+                item.address
             }
+
+            @Suppress("UseCheckOrError")
+            binding.stationFollowHomeIcon.setImageResource(
+                when (item.ownershipStatus) {
+                    DeviceOwnershipStatus.OWNED -> R.drawable.ic_home
+                    DeviceOwnershipStatus.FOLLOWED -> R.drawable.ic_favorite
+                    DeviceOwnershipStatus.UNFOLLOWED -> R.drawable.ic_favorite_outline
+                    null -> throw IllegalStateException("Oops! No ownership status here.")
+                }
+            )
 
             setStatus(item)
             setAlerts(item)
         }
 
-        private fun setStatus(item: UserDevice) {
+        private fun setStatus(item: UIDevice) {
             with(binding.lastSeen) {
-                text = item.device.attributes?.lastWeatherStationActivity?.getRelativeFormattedTime(
+                text = item.lastWeatherStationActivity?.getRelativeFormattedTime(
                     fallbackIfTooSoon = context.getString(R.string.just_now)
                 )
             }
 
             binding.statusIcon.setImageResource(
-                if (item.device.profile == DeviceProfile.Helium) {
+                if (item.profile == DeviceProfile.Helium) {
                     R.drawable.ic_helium
                 } else {
                     R.drawable.ic_wifi
                 }
             )
-
-            with(itemView.context) {
-                binding.status.setCardBackgroundColor(
-                    getColor(
-                        when (item.device.attributes?.isActive) {
-                            true -> {
-                                binding.statusIcon.setColor(R.color.success)
-                                binding.status.strokeColor = getColor(R.color.success)
-                                R.color.successTint
-                            }
-                            false -> {
-                                binding.statusIcon.setColor(R.color.error)
-                                binding.status.strokeColor = getColor(R.color.error)
-                                R.color.errorTint
-                            }
-                            null -> {
-                                R.color.midGrey
-                            }
-                        }
-                    )
+            binding.statusCard.setCardBackgroundColor(
+                itemView.context.getColor(
+                    when (item.isActive) {
+                        true -> R.color.successTint
+                        false -> R.color.errorTint
+                        else -> R.color.midGrey
+                    }
                 )
-            }
+            )
         }
 
-        private fun setAlerts(item: UserDevice) {
+        private fun setAlerts(item: UIDevice) {
             binding.alertsError.setVisible(false)
             binding.error.setVisible(false)
             binding.warning.setVisible(false)
@@ -146,82 +143,79 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             binding.root.strokeWidth = width
         }
 
-        private fun setWeatherData(item: UserDevice) {
-            binding.icon.setAnimation(Weather.getWeatherAnimation(item.device.currentWeather?.icon))
+        private fun setWeatherData(item: UIDevice) {
+            binding.icon.setAnimation(Weather.getWeatherAnimation(item.currentWeather?.icon))
             binding.temperature.text = Weather.getFormattedTemperature(
-                item.device.currentWeather?.temperature, 1, includeUnit = false
+                item.currentWeather?.temperature, 1, includeUnit = false
             )
             binding.temperatureUnit.text = Weather.getPreferredUnit(
                 resHelper.getString(CacheService.KEY_TEMPERATURE),
                 resHelper.getString(R.string.temperature_celsius)
             )
             binding.feelsLike.text = Weather.getFormattedTemperature(
-                item.device.currentWeather?.feelsLike, 1, includeUnit = false
+                item.currentWeather?.feelsLike, 1, includeUnit = false
             )
             binding.feelsLikeUnit.text = Weather.getPreferredUnit(
                 resHelper.getString(CacheService.KEY_TEMPERATURE),
                 resHelper.getString(R.string.temperature_celsius)
             )
             binding.humidity.setData(
-                Weather.getFormattedHumidity(
-                    item.device.currentWeather?.humidity, includeUnit = false
-                ), "%"
+                Weather.getFormattedHumidity(item.currentWeather?.humidity, includeUnit = false),
+                "%"
             )
             val windValue = Weather.getFormattedWind(
-                item.device.currentWeather?.windSpeed,
-                item.device.currentWeather?.windDirection,
+                item.currentWeather?.windSpeed,
+                item.currentWeather?.windDirection,
                 includeUnits = false
             )
             val windUnit = Weather.getPreferredUnit(
                 resHelper.getString(CacheService.KEY_WIND),
                 resHelper.getString(R.string.wind_speed_ms)
             )
-            val windDirectionUnit = item.device.currentWeather?.windDirection?.let {
+            val windDirectionUnit = item.currentWeather?.windDirection?.let {
                 Weather.getFormattedWindDirection(it)
             } ?: ""
             binding.wind.setData(windValue, "$windUnit $windDirectionUnit")
 
             binding.rain.setData(
                 Weather.getFormattedPrecipitation(
-                    item.device.currentWeather?.precipitation, includeUnit = false
+                    item.currentWeather?.precipitation, includeUnit = false
                 ), Weather.getPrecipitationPreferredUnit()
             )
         }
     }
 
-    class DeviceDiffCallback : DiffUtil.ItemCallback<UserDevice>() {
+    class DeviceDiffCallback : DiffUtil.ItemCallback<UIDevice>() {
 
-        override fun areItemsTheSame(oldItem: UserDevice, newItem: UserDevice): Boolean {
-            return oldItem.device.id == newItem.device.id
+        override fun areItemsTheSame(oldItem: UIDevice, newItem: UIDevice): Boolean {
+            return oldItem.id == newItem.id
         }
 
         @Suppress("MaxLineLength", "CyclomaticComplexMethod")
-        override fun areContentsTheSame(oldItem: UserDevice, newItem: UserDevice): Boolean {
-            val oldDevice = oldItem.device
-            val newDevice = newItem.device
-            return oldDevice.name == newDevice.name &&
-                oldDevice.currentWeather?.icon == newDevice.currentWeather?.icon &&
-                oldDevice.currentWeather?.temperature == newDevice.currentWeather?.temperature &&
-                oldDevice.currentWeather?.humidity == newDevice.currentWeather?.humidity &&
-                oldDevice.currentWeather?.precipitation == newDevice.currentWeather?.precipitation &&
-                oldDevice.currentWeather?.windSpeed == newDevice.currentWeather?.windSpeed &&
-                oldDevice.currentWeather?.windDirection == newDevice.currentWeather?.windDirection &&
-                oldDevice.currentWeather?.feelsLike == newDevice.currentWeather?.feelsLike &&
-                oldDevice.currentWeather?.timestamp == newDevice.currentWeather?.timestamp &&
-                oldDevice.profile == newDevice.profile &&
-                oldDevice.needsUpdate() == newDevice.needsUpdate() &&
+        override fun areContentsTheSame(oldItem: UIDevice, newItem: UIDevice): Boolean {
+            return oldItem.name == newItem.name &&
+                oldItem.currentWeather?.icon == newItem.currentWeather?.icon &&
+                oldItem.currentWeather?.temperature == newItem.currentWeather?.temperature &&
+                oldItem.currentWeather?.humidity == newItem.currentWeather?.humidity &&
+                oldItem.currentWeather?.precipitation == newItem.currentWeather?.precipitation &&
+                oldItem.currentWeather?.windSpeed == newItem.currentWeather?.windSpeed &&
+                oldItem.currentWeather?.windDirection == newItem.currentWeather?.windDirection &&
+                oldItem.currentWeather?.feelsLike == newItem.currentWeather?.feelsLike &&
+                oldItem.currentWeather?.timestamp == newItem.currentWeather?.timestamp &&
+                oldItem.profile == newItem.profile &&
+                oldItem.needsUpdate() == newItem.needsUpdate() &&
                 oldItem.alerts == newItem.alerts &&
-                oldDevice.attributes?.firmware?.current == newDevice.attributes?.firmware?.current &&
-                oldDevice.attributes?.firmware?.assigned == newDevice.attributes?.firmware?.assigned &&
-                oldDevice.attributes?.friendlyName == newDevice.attributes?.friendlyName &&
-                oldDevice.attributes?.lastWeatherStationActivity == newDevice.attributes?.lastWeatherStationActivity &&
-                oldDevice.attributes?.isActive == newDevice.attributes?.isActive
+                oldItem.currentFirmware == newItem.currentFirmware &&
+                oldItem.assignedFirmware == newItem.assignedFirmware &&
+                oldItem.friendlyName == newItem.friendlyName &&
+                oldItem.lastWeatherStationActivity == newItem.lastWeatherStationActivity &&
+                oldItem.isActive == newItem.isActive
         }
     }
 }
 
 interface DeviceListener {
-    fun onDeviceClicked(userDevice: UserDevice)
-    fun onUpdateStationClicked(userDevice: UserDevice)
-    fun onAlertsClicked(userDevice: UserDevice)
+    fun onDeviceClicked(device: UIDevice)
+    fun onUpdateStationClicked(device: UIDevice)
+    fun onAlertsClicked(device: UIDevice)
 }

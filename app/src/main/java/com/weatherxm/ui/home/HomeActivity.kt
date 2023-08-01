@@ -8,12 +8,16 @@ import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
+import com.mapbox.geojson.Point
 import com.weatherxm.R
+import com.weatherxm.data.Location
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityHomeBinding
+import com.weatherxm.ui.BaseMapFragment
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeDialogFragment
+import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.explorer.ExplorerData
@@ -24,7 +28,8 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
-class HomeActivity : AppCompatActivity(), KoinComponent {
+class HomeActivity : AppCompatActivity(), KoinComponent,
+    BaseMapFragment.OnMapDebugInfoListener {
     private val navigator: Navigator by inject()
     private val model: HomeViewModel by viewModels()
     private val explorerModel: ExplorerViewModel by viewModels()
@@ -114,6 +119,13 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 margin(bottom = true)
             }
         }
+
+        with(intent.getParcelableExtra<Location>(Contracts.ARG_CELL_CENTER)) {
+            this?.let {
+                navController.navigate(R.id.navigation_explorer)
+                explorerModel.navigateToLocation(it)
+            }
+        }
     }
 
     private fun onNavigationChanged(destination: NavDestination) {
@@ -195,5 +207,9 @@ class HomeActivity : AppCompatActivity(), KoinComponent {
                 explorerModel.fetch()
             }
         snackbar?.show()
+    }
+
+    override fun onMapDebugInfoUpdated(zoom: Double, center: Point) {
+        // Do nothing
     }
 }

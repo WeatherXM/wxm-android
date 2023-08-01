@@ -5,7 +5,6 @@ import androidx.annotation.Keep
 import com.github.mikephil.charting.data.BarEntry
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.LastAndDatedTxs
@@ -24,7 +23,7 @@ data class UIError(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class TokenInfo(
+data class RewardsInfo(
     var lastReward: Transaction? = null,
     var chartTimestamps: MutableList<String> = mutableListOf(),
     var chart7dEntries: MutableList<BarEntry> = mutableListOf(),
@@ -32,10 +31,11 @@ data class TokenInfo(
     var max7dReward: Float? = null,
     var total30d: Float = 0.0F,
     var chart30dEntries: MutableList<BarEntry> = mutableListOf(),
-    var max30dReward: Float? = null
+    var max30dReward: Float? = null,
+    val totalRewards: Float? = null
 ) : Parcelable {
     @Suppress("MagicNumber")
-    fun fromLastAndDatedTxs(lastAndDatedTxs: LastAndDatedTxs): TokenInfo {
+    fun fromLastAndDatedTxs(lastAndDatedTxs: LastAndDatedTxs): RewardsInfo {
         lastReward = lastAndDatedTxs.lastTx
         total7d = 0.0F
         total30d = 0.0F
@@ -78,24 +78,66 @@ data class TokenInfo(
 data class UIDevice(
     val id: String,
     val name: String,
-    var profile: DeviceProfile?,
     val cellIndex: String,
+    var ownershipStatus: DeviceOwnershipStatus?,
+    val label: String?,
+    val friendlyName: String?,
+    var profile: DeviceProfile?,
+    val location: Location?,
     var cellCenter: Location?,
     val isActive: Boolean?,
+    val currentFirmware: String?,
+    val assignedFirmware: String?,
+    val claimedAt: ZonedDateTime?,
     val lastWeatherStationActivity: ZonedDateTime?,
     val timezone: String?,
     var address: String?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
-    var tokenInfo: TokenInfo?
+    var rewardsInfo: RewardsInfo?,
+    var alerts: List<DeviceAlert> = listOf()
 ) : Parcelable {
     companion object {
         fun empty() = UIDevice(
-            "", "", null, "", null, null, null, null, null, null, null
+            "",
+            "",
+            "",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
         )
     }
 
-    fun isEmpty(): Boolean = id.isEmpty() && name.isEmpty() && cellIndex.isEmpty()
+    fun needsUpdate(): Boolean {
+        return !currentFirmware.equals(assignedFirmware) && !assignedFirmware.isNullOrEmpty()
+    }
+
+    fun getDefaultOrFriendlyName(): String {
+        return friendlyName ?: name
+    }
+
+    fun getLastCharsOfLabel(charCount: Int): String {
+        val cleanLabel = label?.replace(":", "")
+        return cleanLabel?.substring((cleanLabel.length - charCount), cleanLabel.length) ?: ""
+    }
+
+    fun toNormalizedName(): String {
+        return name.replace(" ", "-").lowercase()
+    }
+
+    fun isEmpty() = id.isEmpty() && name.isEmpty() && cellIndex.isEmpty()
 }
 
 @Keep
@@ -119,18 +161,17 @@ data class FrequencyState(
     val frequencies: List<String>
 )
 
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class UserDevice(
-    val device: Device,
-    val alerts: List<DeviceAlert> = listOf()
-) : Parcelable
-
 @Parcelize
 enum class DeviceType : Parcelable {
     M5_WIFI,
     HELIUM
+}
+
+@Parcelize
+enum class DeviceOwnershipStatus : Parcelable {
+    OWNED,
+    FOLLOWED,
+    UNFOLLOWED
 }
 
 @Parcelize

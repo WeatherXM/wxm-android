@@ -14,8 +14,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.ExplorerRepository
-import com.weatherxm.data.repository.TokenRepository
-import com.weatherxm.ui.common.TokenInfo
+import com.weatherxm.ui.common.DeviceOwnershipStatus
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.ExplorerData
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
@@ -23,12 +22,10 @@ import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
 import com.weatherxm.ui.explorer.SearchResult
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.util.ResourcesHelper
-import java.time.ZonedDateTime
 
 class ExplorerUseCaseImpl(
     private val explorerRepository: ExplorerRepository,
     private val addressRepository: AddressRepository,
-    private val tokenRepository: TokenRepository,
     private val gson: Gson,
     private val resHelper: ResourcesHelper
 ) : ExplorerUseCase {
@@ -81,6 +78,8 @@ class ExplorerUseCaseImpl(
                 publicDevice.toUIDevice().apply {
                     this.cellCenter = cell.center
                     this.address = address
+                    // TODO: Change this when we implement the feature
+                    this.ownershipStatus = DeviceOwnershipStatus.UNFOLLOWED
                 }
             }.sortedWith(
                 compareByDescending<UIDevice> { it.lastWeatherStationActivity }.thenBy { it.name }
@@ -93,25 +92,18 @@ class ExplorerUseCaseImpl(
         deviceId: String
     ): Either<Failure, UIDevice> {
         return explorerRepository.getCellDevice(index, deviceId).map {
-            it.toUIDevice()
+            it.toUIDevice().apply {
+                // TODO: Change this when we implement the feature
+                this.ownershipStatus = DeviceOwnershipStatus.UNFOLLOWED
+            }
         }
     }
 
-    // We suppress magic number because we use specific numbers to check last month and last week
-    @Suppress("MagicNumber")
-    override suspend fun getTokenInfoLast30D(deviceId: String): Either<Failure, TokenInfo> {
-        // Last 29 days of transactions + today = 30 days
-        val fromDate = ZonedDateTime.now().minusDays(29).toLocalDate().toString()
-
-        return tokenRepository.getAllPublicTransactionsInRange(
-            deviceId = deviceId,
-            fromDate = fromDate
-        ).map {
-            TokenInfo().fromLastAndDatedTxs(it)
-        }
-    }
-
-    override suspend fun networkSearch(query: String): Either<Failure, List<SearchResult>> {
+    override suspend fun networkSearch(
+        query: String,
+        exact: Boolean?,
+        exclude: String?
+    ): Either<Failure, List<SearchResult>> {
         return explorerRepository.networkSearch(query).map {
             mutableListOf<SearchResult>().apply {
                 addAll(

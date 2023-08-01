@@ -40,7 +40,7 @@ class CellInfoActivity : AppCompatActivity(), KoinComponent {
         }
 
         adapter = CellDeviceListAdapter {
-            navigator.showDeviceDetails(this, cellDevice = it, isUserDevice = false)
+            navigator.showDeviceDetails(this, device = it)
         }
 
         binding.recycler.adapter = adapter

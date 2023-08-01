@@ -82,11 +82,7 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
                 cameraFly(Point.fromLngLat(location.lon, location.lat))
             }
             if (it.stationId != null) {
-                navigator.showDeviceDetails(
-                    context,
-                    cellDevice = model.onSearchedDeviceClicked(it),
-                    isUserDevice = false
-                )
+                navigator.showDeviceDetails(context, device = it.toUIDevice())
             }
             trackOnSearchResult(it.stationId != null)
         }

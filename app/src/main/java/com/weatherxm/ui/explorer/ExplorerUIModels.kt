@@ -8,6 +8,7 @@ import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.squareup.moshi.JsonClass
 import com.weatherxm.data.Connectivity
 import com.weatherxm.data.Location
+import com.weatherxm.ui.common.UIDevice
 import kotlinx.parcelize.Parcelize
 
 @Keep
@@ -41,4 +42,27 @@ data class SearchResult(
     var stationConnectivity: Connectivity? = null,
     var stationCellIndex: String? = null,
     var stationId: String? = null,
-)
+) {
+    fun toUIDevice(): UIDevice {
+        return UIDevice(
+            id = stationId ?: "",
+            name = name ?: "",
+            cellIndex = stationCellIndex ?: "",
+            cellCenter = center,
+            profile = null,
+            isActive = null,
+            lastWeatherStationActivity = null,
+            timezone = null,
+            address = addressPlace,
+            currentWeather = null,
+            assignedFirmware = null,
+            currentFirmware = null,
+            claimedAt = null,
+            friendlyName = null,
+            label = null,
+            location = null,
+            ownershipStatus = null,
+            rewardsInfo = null
+        )
+    }
+}

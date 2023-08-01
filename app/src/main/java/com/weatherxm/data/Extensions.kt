@@ -19,6 +19,7 @@ import com.weatherxm.data.ApiError.GenericError.NotFoundError
 import com.weatherxm.data.ApiError.GenericError.UnknownError
 import com.weatherxm.data.ApiError.GenericError.ValidationError
 import com.weatherxm.data.ApiError.InvalidFriendlyName
+import com.weatherxm.data.ApiError.MaxFollowed
 import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceAlreadyClaimed
 import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceClaiming
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
@@ -47,6 +48,7 @@ import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_TIMEZONE
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_TO_DATE
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_USERNAME
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_WALLET_ADDRESS
+import com.weatherxm.data.network.ErrorResponse.Companion.MAX_FOLLOWED
 import com.weatherxm.data.network.ErrorResponse.Companion.NOT_FOUND
 import com.weatherxm.data.network.ErrorResponse.Companion.UNAUTHORIZED
 import com.weatherxm.data.network.ErrorResponse.Companion.USER_ALREADY_EXISTS
@@ -92,6 +94,7 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
                         INVALID_ACCESS_TOKEN -> InvalidAccessToken(code, this.body?.message)
                         INVALID_ACTIVATION_TOKEN -> InvalidActivationToken(code, this.body?.message)
                         DEVICE_NOT_FOUND -> DeviceNotFound(code, this.body?.message)
+                        MAX_FOLLOWED -> MaxFollowed(code, this.body?.message)
                         INVALID_WALLET_ADDRESS -> InvalidWalletAddress(code, this.body?.message)
                         INVALID_FRIENDLY_NAME -> InvalidFriendlyName(code, this.body?.message)
                         INVALID_FROM_DATE -> InvalidFromDate(code, this.body?.message)

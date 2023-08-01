@@ -3,7 +3,6 @@ package com.weatherxm.usecases
 import android.location.Location
 import arrow.core.Either
 import com.weatherxm.data.CountryAndFrequencies
-import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceInfo
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Failure
@@ -13,6 +12,7 @@ import com.weatherxm.data.otherFrequencies
 import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
+import com.weatherxm.ui.common.UIDevice
 import kotlinx.coroutines.runBlocking
 import java.util.Date
 import java.util.concurrent.TimeUnit
@@ -59,10 +59,9 @@ class StationSettingsUseCaseImpl(
         return deviceRepository.removeDevice(serialNumber)
     }
 
-    override fun shouldShowOTAPrompt(device: Device): Boolean {
-        return deviceOTARepository.shouldShowOTAPrompt(
-            device.id, device.attributes?.firmware?.assigned
-        ) && device.profile?.equals(DeviceProfile.Helium) == true
+    override fun shouldShowOTAPrompt(device: UIDevice): Boolean {
+        return deviceOTARepository.shouldShowOTAPrompt(device.id, device.assignedFirmware)
+            && device.profile?.equals(DeviceProfile.Helium) == true
     }
 
     override suspend fun getCountryAndFrequencies(

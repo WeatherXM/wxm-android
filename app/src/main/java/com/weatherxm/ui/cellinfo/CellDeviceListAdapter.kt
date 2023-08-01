@@ -1,6 +1,5 @@
 package com.weatherxm.ui.cellinfo
 
-import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +10,11 @@ import com.weatherxm.R
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
+import com.weatherxm.ui.common.DeviceOwnershipStatus
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
-import com.weatherxm.util.setColor
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -54,6 +53,16 @@ class CellDeviceListAdapter(
             this.device = item
             binding.name.text = item.name
 
+            @Suppress("UseCheckOrError")
+            binding.stationFollowHomeIcon.setImageResource(
+                when (item.ownershipStatus) {
+                    DeviceOwnershipStatus.OWNED -> R.drawable.ic_home
+                    DeviceOwnershipStatus.FOLLOWED -> R.drawable.ic_favorite
+                    DeviceOwnershipStatus.UNFOLLOWED -> R.drawable.ic_favorite_outline
+                    null -> throw IllegalStateException("Oops! No ownership status here.")
+                }
+            )
+
             if (item.currentWeather == null || item.currentWeather.isEmpty()) {
                 binding.weatherDataLayout.visibility = View.GONE
                 binding.noDataLayout.visibility = View.VISIBLE
@@ -83,45 +92,15 @@ class CellDeviceListAdapter(
                 }
             )
 
-            binding.status.setCardBackgroundColor(
+            binding.statusCard.setCardBackgroundColor(
                 itemView.context.getColor(
                     when (item.isActive) {
-                        true -> {
-                            binding.statusIcon.setColor(R.color.success)
-                            binding.status.strokeColor = itemView.context.getColor(R.color.success)
-                            R.color.successTint
-                        }
-                        false -> {
-                            binding.statusIcon.setColor(R.color.error)
-                            binding.status.strokeColor = itemView.context.getColor(R.color.error)
-                            R.color.errorTint
-                        }
-                        null -> {
-                            R.color.midGrey
-                        }
+                        true -> R.color.successTint
+                        false -> R.color.errorTint
+                        null -> R.color.midGrey
                     }
                 )
             )
-
-            binding.error.visibility = if (item.isActive == false) View.VISIBLE else View.GONE
-            binding.root.setStrokeColor(
-                ColorStateList.valueOf(
-                    itemView.context.getColor(
-                        when (item.isActive) {
-                            false -> {
-                                R.color.error
-                            }
-                            else -> {
-                                R.color.transparent
-                            }
-                        }
-                    )
-                )
-            )
-
-            binding.root.strokeWidth = if (item.isActive == false) {
-                itemView.resources.getDimensionPixelSize(R.dimen.card_stroke)
-            } else 0
         }
 
         private fun setWeatherData(device: UIDevice) {

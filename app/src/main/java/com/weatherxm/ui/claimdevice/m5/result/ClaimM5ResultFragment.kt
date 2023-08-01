@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.weatherxm.R
-import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentClaimM5ResultBinding
@@ -15,6 +14,7 @@ import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.util.Analytics
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -64,7 +64,7 @@ class ClaimM5ResultFragment : Fragment(), KoinComponent {
         }
     }
 
-    private fun updateUI(resource: Resource<Device>) {
+    private fun updateUI(resource: Resource<UIDevice>) {
         when (resource.status) {
             Status.SUCCESS -> {
                 binding.statusView.animation(R.raw.anim_success, false)

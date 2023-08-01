@@ -211,7 +211,7 @@
         <item name="chipBackgroundColor">@color/token_chip_background_list</item>
     </style>
 
-    <style name="Widget.WeatherXM.Chip.TokenInfo" parent="Widget.WeatherXM.Chip.Token">
+    <style name="Widget.WeatherXM.Chip.RewardsInfo" parent="Widget.WeatherXM.Chip.Token">
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textAllCaps">true</item>
@@ -269,12 +269,13 @@
     </style>
 
     <style name="Widget.WeatherXM.TabLayout.Navigation" parent="Widget.Material3.TabLayout">
+        <item name="tabTextAppearance">@style/TextAppearance.WeatherXM.Navigation.Tabs</item>
         <item name="tabMode">fixed</item>
-        <item name="tabBackground">@drawable/navigation_tab_background_selector</item>
-        <item name="tabTextColor">@color/colorPrimary</item>
-        <item name="tabSelectedTextColor">@color/colorOnPrimary</item>
+        <item name="tabTextColor">@color/darkGrey</item>
+        <item name="tabBackground">@color/transparent</item>
         <item name="tabPadding">0dp</item>
-        <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabSelectedTextColor">@color/colorPrimary</item>
+        <item name="tabIndicatorHeight">3dp</item>
         <item name="android:background">@color/transparent</item>
     </style>
 

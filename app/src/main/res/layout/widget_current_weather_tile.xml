@@ -28,30 +28,31 @@
                 android:gravity="end|center_vertical"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/lastSeen"
-                    style="@style/TextAppearance.WeatherXM.Devices.List.LastSeen"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_small"
-                    android:drawablePadding="@dimen/padding_small"
-                    android:gravity="end"
-                    tools:text="15:45" />
-
                 <LinearLayout
-                    android:id="@+id/status"
+                    android:id="@+id/statusContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_extra_small"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:paddingHorizontal="@dimen/padding_small"
+                    android:paddingVertical="@dimen/padding_extra_small"
                     tools:background="@drawable/background_rounded_corners_success">
 
                     <ImageView
-                        android:id="@+id/status_icon"
+                        android:id="@+id/statusIcon"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_wifi"
-                        tools:ignore="ContentDescription"
-                        tools:tint="@color/success" />
+                        android:tint="@color/colorPrimary"
+                        tools:ignore="ContentDescription,UseAppTint" />
+
+                    <TextView
+                        android:id="@+id/lastSeen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/colorPrimary"
+                        tools:text="15:45" />
 
                 </LinearLayout>
 

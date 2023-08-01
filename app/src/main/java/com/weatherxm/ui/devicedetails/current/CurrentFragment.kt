@@ -6,52 +6,29 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
-import com.weatherxm.data.Device
 import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.DeviceOwnershipStatus
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.Analytics
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 class CurrentFragment : Fragment(), KoinComponent {
     private lateinit var binding: FragmentDeviceDetailsCurrentBinding
     private val parentModel: DeviceDetailsViewModel by activityViewModels()
     private val model: CurrentViewModel by viewModel {
-        parametersOf(parentModel.device, parentModel.cellDevice)
+        parametersOf(parentModel.device)
     }
     private val navigator: Navigator by inject()
     private val analytics: Analytics by inject()
     private var snackbar: Snackbar? = null
-
-    init {
-        lifecycleScope.launch {
-            // Launch the block in a new coroutine every time the lifecycle
-            // is in the RESUMED state (or above) and cancel it when it's STOPPED.
-            repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                if (parentModel.isUserDevice) {
-                    Timber.d("Starting device polling")
-                    // Trigger the flow for refreshing device data in the background
-                    parentModel.deviceAutoRefresh().collect {
-                        it.onRight { device ->
-                            onDeviceUpdated(device)
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,12 +49,12 @@ class CurrentFragment : Fragment(), KoinComponent {
             }
         }
 
-        model.onDevice().observe(viewLifecycleOwner) {
+        parentModel.onDevicePolling().observe(viewLifecycleOwner) {
             onDeviceUpdated(it)
         }
 
-        model.onCellDevice().observe(viewLifecycleOwner) {
-            onCellDeviceUpdated(it)
+        model.onDevice().observe(viewLifecycleOwner) {
+            onDeviceUpdated(it)
         }
 
         model.onLoading().observe(viewLifecycleOwner) {
@@ -102,11 +79,6 @@ class CurrentFragment : Fragment(), KoinComponent {
         binding.historicalCharts.setOnClickListener {
             navigator.showHistoryActivity(requireContext(), model.device)
         }
-
-        if (!parentModel.isUserDevice) {
-            binding.historicalCharts.setVisible(false)
-            model.fetchCellDevice()
-        }
     }
 
     override fun onResume() {
@@ -117,39 +89,29 @@ class CurrentFragment : Fragment(), KoinComponent {
         )
     }
 
-    private fun onDeviceUpdated(device: Device) {
+    private fun onDeviceUpdated(device: UIDevice) {
         binding.progress.visibility = View.INVISIBLE
-        when (device.attributes?.isActive) {
+        when (device.isActive) {
             true -> {
                 binding.errorCard.setVisible(false)
             }
             false -> {
-                binding.errorCard.setErrorMessageWithUrl(
-                    R.string.error_user_device_offline,
-                    device.profile
-                )
+                if (model.device.ownershipStatus == DeviceOwnershipStatus.OWNED) {
+                    binding.errorCard.setErrorMessageWithUrl(
+                        R.string.error_user_device_offline,
+                        device.profile
+                    )
+                } else {
+                    binding.errorCard.setErrorMessage(
+                        getString(R.string.no_data_message_public_device)
+                    )
+                }
             }
-            null -> {
+            else -> {
                 // Do nothing here
             }
         }
         binding.currentWeatherCard.setData(device.currentWeather)
-    }
-
-    private fun onCellDeviceUpdated(cellDevice: UIDevice) {
-        binding.progress.visibility = View.INVISIBLE
-        when (cellDevice.isActive) {
-            true -> {
-                binding.errorCard.setVisible(false)
-            }
-            false -> {
-                binding.errorCard.setErrorMessage(getString(R.string.no_data_message_public_device))
-            }
-            null -> {
-                // Do nothing here
-            }
-        }
-        binding.currentWeatherCard.setData(cellDevice.currentWeather)
     }
 
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {

@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.Dispatchers
@@ -18,15 +18,15 @@ class SelectStationViewModel : ViewModel(), KoinComponent {
 
     private val usecase: WidgetSelectStationUseCase by inject()
 
-    private val devices = MutableLiveData<Resource<List<Device>>>()
+    private val devices = MutableLiveData<Resource<List<UIDevice>>>()
     private val isNotLoggedIn = MutableLiveData<Unit>()
 
-    fun devices(): LiveData<Resource<List<Device>>> = devices
+    fun devices(): LiveData<Resource<List<UIDevice>>> = devices
     fun isNotLoggedIn(): LiveData<Unit> = isNotLoggedIn
 
-    private var currentStationSelected = Device.empty()
+    private var currentStationSelected = UIDevice.empty()
 
-    fun setStationSelected(device: Device) {
+    fun setStationSelected(device: UIDevice) {
         currentStationSelected = device
     }
 

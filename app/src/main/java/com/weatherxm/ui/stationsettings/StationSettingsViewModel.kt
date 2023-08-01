@@ -8,8 +8,9 @@ import arrow.core.Either
 import com.weatherxm.R
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.BatteryState
-import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile
+import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.capitalizeWords
 import com.weatherxm.ui.common.unmask
@@ -23,7 +24,7 @@ import timber.log.Timber
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent {
+class StationSettingsViewModel(var device: UIDevice) : ViewModel(), KoinComponent {
     private val usecase: StationSettingsUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
     private val analytics: Analytics by inject()
@@ -58,7 +59,7 @@ class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent 
     }
 
     private fun setFriendlyName(friendlyName: String) {
-        if (friendlyName.isNotEmpty() && friendlyName != device.attributes?.friendlyName) {
+        if (friendlyName.isNotEmpty() && friendlyName != device.friendlyName) {
             onLoading.postValue(true)
             viewModelScope.launch {
                 usecase.setFriendlyName(device.id, friendlyName)
@@ -87,7 +88,7 @@ class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent 
     }
 
     private fun clearFriendlyName() {
-        if (device.attributes?.friendlyName?.isNotEmpty() == true) {
+        if (device.friendlyName?.isNotEmpty() == true) {
             onLoading.postValue(true)
             viewModelScope.launch {
                 usecase.clearFriendlyName(device.id)
@@ -212,7 +213,7 @@ class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent 
     private fun getStationInfoFromDevice(): MutableList<StationInfo> {
         return mutableListOf<StationInfo>().apply {
             add(StationInfo(resHelper.getString(R.string.station_default_name), device.name))
-            device.attributes?.claimedAt?.let {
+            device.claimedAt?.let {
                 add(
                     StationInfo(
                         resHelper.getString(R.string.claimed_at),
@@ -229,15 +230,14 @@ class StationSettingsViewModel(var device: Device) : ViewModel(), KoinComponent 
                     add(StationInfo(resHelper.getString(R.string.device_serial_number_title), it))
                 }
             }
-            device.attributes?.firmware?.current?.let { current ->
-                val assigned = device.attributes?.firmware?.assigned
-                if (!assigned.isNullOrEmpty() && current != assigned
+            device.currentFirmware?.let { current ->
+                if (device.needsUpdate() && device.ownershipStatus == DeviceOwnershipStatus.OWNED
                     && usecase.shouldShowOTAPrompt(device)
                 ) {
                     add(
                         StationInfo(
                             resHelper.getString(R.string.firmware_version),
-                            "$current ➞ $assigned",
+                            "$current ➞ ${device.assignedFirmware}",
                             StationAction(
                                 resHelper.getString(R.string.action_update_firmware),
                                 ActionType.UPDATE_FIRMWARE

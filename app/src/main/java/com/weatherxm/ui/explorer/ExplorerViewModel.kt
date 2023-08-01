@@ -15,7 +15,6 @@ import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.SingleLiveEvent
-import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.LocationHelper.getLocationAndThen
@@ -183,6 +182,10 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     fun explorerState(): LiveData<Resource<ExplorerData>> = state
     fun onCellSelected(): LiveData<UICell> = onCellSelected
 
+    fun navigateToLocation(location: com.weatherxm.data.Location) {
+        onNavigateToLocation.postValue(location)
+    }
+
     fun setExplorerAfterLoggedIn(isAfterLoggedIn: Boolean) {
         explorerAfterLoggedIn = isAfterLoggedIn
     }
@@ -228,23 +231,6 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
         MapboxUtils.getCustomData(polygon)?.let {
             onCellSelected.postValue(it)
         }
-    }
-
-    // TODO: Remove this when we use one UI Model for devices and use something better.
-    fun onSearchedDeviceClicked(searchedDevice: SearchResult): UIDevice {
-        return UIDevice(
-            id = searchedDevice.stationId ?: "",
-            name = searchedDevice.name ?: "",
-            cellIndex = searchedDevice.stationCellIndex ?: "",
-            cellCenter = searchedDevice.center,
-            profile = null,
-            isActive = null,
-            lastWeatherStationActivity = null,
-            timezone = null,
-            address = null,
-            currentWeather = null,
-            tokenInfo = null
-        )
     }
 
     fun setCurrentCamera(zoom: Double, center: Point) {

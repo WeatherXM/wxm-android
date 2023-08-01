@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.ApiError
-import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
@@ -22,10 +21,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
-class ForecastViewModel(
-    var device: Device = Device.empty(),
-    var cellDevice: UIDevice = UIDevice.empty(),
-) : ViewModel(), KoinComponent {
+class ForecastViewModel(var device: UIDevice = UIDevice.empty()) : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val deviceDetailsUseCase: DeviceDetailsUseCase by inject()
     private val analytics: Analytics by inject()

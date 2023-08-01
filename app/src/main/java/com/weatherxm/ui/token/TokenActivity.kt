@@ -6,12 +6,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
-import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityTokenBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.token.TokenViewModel.Companion.TransactionExplorer
 import com.weatherxm.util.Analytics
@@ -40,7 +40,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        val device = intent?.extras?.getParcelable<Device>(ARG_DEVICE)
+        val device = intent?.extras?.getParcelable<UIDevice>(ARG_DEVICE)
         if (device == null) {
             Timber.d("Could not start TokenActivity. Device is null.")
             toast(R.string.error_generic_message)
@@ -49,7 +49,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
         }
 
         deviceId = device.id
-        binding.toolbar.subtitle = device.getNameOrLabel()
+        binding.toolbar.subtitle = device.getDefaultOrFriendlyName()
 
         // Initialize the adapter with empty data
         adapter = TransactionsAdapter({ transactionListener(it) }) { endOfDataListener() }

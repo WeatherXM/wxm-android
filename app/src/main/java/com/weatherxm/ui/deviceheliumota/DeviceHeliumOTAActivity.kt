@@ -13,13 +13,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
-import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityHeliumOtaBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Analytics
@@ -38,7 +38,7 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
 
     private val model: DeviceHeliumOTAViewModel by viewModel {
         parametersOf(
-            intent.getParcelableExtra<Device>(ARG_DEVICE),
+            intent.getParcelableExtra<UIDevice>(ARG_DEVICE),
             intent.getBooleanExtra(ARG_BLE_DEVICE_CONNECTED, false)
         )
     }
@@ -81,11 +81,9 @@ class DeviceHeliumOTAActivity : AppCompatActivity(), KoinComponent {
             binding.bleActionFlow.onProgressChanged(it)
         }
 
-        val currentFirmwareVersion = model.device.attributes?.firmware?.current
-        val assignedFirmwareVersion = model.device.attributes?.firmware?.assigned
         binding.bleActionFlow.onShowStationUpdateMetadata(
-            model.device.getNameOrLabel(),
-            "$currentFirmwareVersion ➞ $assignedFirmwareVersion"
+            model.device.getDefaultOrFriendlyName(),
+            "${model.device.currentFirmware} ➞ ${model.device.assignedFirmware}"
         )
 
         initBluetoothAndStart()

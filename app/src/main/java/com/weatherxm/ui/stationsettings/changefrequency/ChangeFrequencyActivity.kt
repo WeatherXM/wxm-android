@@ -14,12 +14,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
-import com.weatherxm.data.Device
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityChangeFrequencyStationBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.setVisible
@@ -42,7 +42,7 @@ class ChangeFrequencyActivity : AppCompatActivity(), KoinComponent {
     private val analytics: Analytics by inject()
 
     private val model: ChangeFrequencyViewModel by viewModel {
-        parametersOf(intent.getParcelableExtra<Device>(Contracts.ARG_DEVICE))
+        parametersOf(intent.getParcelableExtra<UIDevice>(Contracts.ARG_DEVICE))
     }
 
     private val enableBluetoothLauncher =

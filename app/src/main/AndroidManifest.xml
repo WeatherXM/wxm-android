@@ -107,6 +107,23 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.weatherxm.ui.urlrouteractivity.UrlRouterActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM">
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="${explorer_host}"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.weatherxm.ui.explorer.ExplorerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM.Explorer" />

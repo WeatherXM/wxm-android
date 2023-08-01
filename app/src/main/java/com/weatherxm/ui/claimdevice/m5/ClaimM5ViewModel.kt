@@ -10,9 +10,9 @@ import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceAlreadyClaimed
 import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceClaiming
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
-import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
@@ -31,7 +31,7 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
 
     private val onNext = MutableLiveData(false)
     private val onCancel = MutableLiveData(false)
-    private val onClaimResult = MutableLiveData<Resource<Device>>().apply {
+    private val onClaimResult = MutableLiveData<Resource<UIDevice>>().apply {
         value = Resource.loading()
     }
 

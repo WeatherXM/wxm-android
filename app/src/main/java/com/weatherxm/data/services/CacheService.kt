@@ -35,6 +35,7 @@ class CacheService(
         const val KEY_DISMISSED_SURVEY_PROMPT = "dismissed_survey_prompt"
         const val KEY_WALLET_WARNING_DISMISSED_TIMESTAMP = "wallet_warning_dismissed_timestamp"
         const val KEY_CURRENT_WEATHER_WIDGET_IDS = "current_weather_widget_ids"
+        const val KEY_FOLLOWED_STATIONS_IDS = "followed_stations_ids"
         const val WIDGET_ID = "widget_id"
 
         // Default in-memory cache expiration time 15 minutes
@@ -260,6 +261,18 @@ class CacheService(
 
     fun setWidgetIds(ids: List<String>) {
         preferences.edit().putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, ids.toSet()).apply()
+    }
+
+    fun getFollowedStationIds(): Either<Failure, List<String>> {
+        val ids = preferences.getStringSet(KEY_FOLLOWED_STATIONS_IDS, setOf())
+        return when {
+            ids.isNullOrEmpty() -> Either.Left(DataError.CacheMissError)
+            else -> Either.Right(ids.toList())
+        }
+    }
+
+    fun setFollowedStationIds(ids: List<String>) {
+        preferences.edit().putStringSet(KEY_FOLLOWED_STATIONS_IDS, ids.toSet()).apply()
     }
 
     fun clearAll() {

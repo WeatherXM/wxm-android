@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
-import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.FrequencyState
 import com.weatherxm.ui.common.ScannedDevice
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.stationsettings.ChangeFrequencyState
 import com.weatherxm.ui.stationsettings.FrequencyStatus
 import com.weatherxm.usecases.BluetoothConnectionUseCase
@@ -28,7 +28,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 @Suppress("TooManyFunctions")
-class ChangeFrequencyViewModel(var device: Device) : ViewModel(), KoinComponent {
+class ChangeFrequencyViewModel(var device: UIDevice) : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
     private val usecase: StationSettingsUseCase by inject()
     private val connectionUseCase: BluetoothConnectionUseCase by inject()

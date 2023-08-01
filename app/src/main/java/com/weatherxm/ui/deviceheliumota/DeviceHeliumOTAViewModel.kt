@@ -8,10 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.BluetoothOTAState
-import com.weatherxm.data.Device
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.ScannedDevice
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.usecases.BluetoothUpdaterUseCase
@@ -25,7 +25,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class DeviceHeliumOTAViewModel(
-    val device: Device,
+    val device: UIDevice,
     val deviceIsBleConnected: Boolean
 ) : ViewModel(), KoinComponent {
     private val resHelper: ResourcesHelper by inject()
@@ -167,7 +167,7 @@ class DeviceHeliumOTAViewModel(
                     }
                     BluetoothOTAState.COMPLETED -> {
                         onStatus.postValue(Resource.success(State(OTAStatus.INSTALLING)))
-                        device.attributes?.firmware?.assigned?.let { versionInstalled ->
+                        device.assignedFirmware?.let { versionInstalled ->
                             updaterUseCase.onUpdateSuccess(device.id, versionInstalled)
                         }
                     }

@@ -10,6 +10,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
+import com.weatherxm.ui.common.DeviceOwnershipStatus
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -22,7 +23,7 @@ class ForecastFragment : Fragment(), KoinComponent {
     private val analytics: Analytics by inject()
     private val parentModel: DeviceDetailsViewModel by activityViewModels()
     private val model: ForecastViewModel by viewModel {
-        parametersOf(parentModel.device, parentModel.cellDevice)
+        parametersOf(parentModel.device)
     }
     private var snackbar: Snackbar? = null
 
@@ -42,7 +43,7 @@ class ForecastFragment : Fragment(), KoinComponent {
         super.onViewCreated(view, savedInstanceState)
 
         binding.swiperefresh.setOnRefreshListener {
-            if (parentModel.isUserDevice) {
+            if (model.device.ownershipStatus != DeviceOwnershipStatus.UNFOLLOWED) {
                 model.fetchForecast(true)
             }
         }
@@ -89,7 +90,7 @@ class ForecastFragment : Fragment(), KoinComponent {
         }
 
         // Fetch data
-        if (parentModel.isUserDevice) {
+        if (model.device.ownershipStatus != DeviceOwnershipStatus.UNFOLLOWED) {
             model.fetchForecast()
         }
     }

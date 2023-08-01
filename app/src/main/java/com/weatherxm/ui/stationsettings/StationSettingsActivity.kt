@@ -6,11 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
-import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityStationSettingsBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Analytics
@@ -24,7 +25,7 @@ import timber.log.Timber
 
 class StationSettingsActivity : AppCompatActivity(), KoinComponent {
     private val model: StationSettingsViewModel by viewModel {
-        parametersOf(intent.getParcelableExtra<Device>(Contracts.ARG_DEVICE))
+        parametersOf(intent.getParcelableExtra<UIDevice>(Contracts.ARG_DEVICE))
     }
     private lateinit var binding: ActivityStationSettingsBinding
     private val navigator: Navigator by inject()
@@ -129,7 +130,7 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
             }, {
                 // This cannot be false, by design
                 FriendlyNameDialogFragment(
-                    model.device.attributes?.friendlyName,
+                    model.device.friendlyName,
                     model.device.id
                 ) {
                     model.setOrClearFriendlyName(it)
@@ -146,10 +147,18 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
     }
 
     private fun setupInfo() {
-        binding.stationName.text = model.device.getNameOrLabel()
+        binding.stationName.text = model.device.getDefaultOrFriendlyName()
 
         // TODO: Remove this when we implement this
         binding.reconfigureWifiContainer.hide(null)
+
+        if (model.device.ownershipStatus != DeviceOwnershipStatus.OWNED) {
+            binding.deleteStationCard.hide(null)
+            binding.frequencyTitle.hide(null)
+            binding.frequencyDesc.hide(null)
+            binding.changeFrequencyBtn.hide(null)
+            binding.rebootStationContainer.hide(null)
+        }
 
         if (model.device.profile == DeviceProfile.Helium) {
             // binding.reconfigureWifiContainer.hide(null)

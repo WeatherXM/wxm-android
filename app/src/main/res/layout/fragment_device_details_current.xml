@@ -30,8 +30,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="invisible"
-                app:layout_scrollFlags="noScroll"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_scrollFlags="noScroll"
                 tools:visibility="visible" />
 
             <com.google.android.material.card.MaterialCardView
@@ -74,6 +74,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/margin_normal"
+                        android:backgroundTint="@color/colorSurface"
                         android:text="@string/view_historical_data"
                         app:layout_constraintTop_toBottomOf="@id/weatherCardWithError" />
                 </androidx.constraintlayout.widget.ConstraintLayout>

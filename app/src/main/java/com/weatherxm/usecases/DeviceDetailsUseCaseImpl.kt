@@ -2,19 +2,20 @@ package com.weatherxm.usecases
 
 import android.content.Context
 import arrow.core.Either
-import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceProfile.Helium
 import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
+import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.SharedPreferencesRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.common.DeviceAlert
-import com.weatherxm.ui.common.TokenInfo
+import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.ui.common.RewardsInfo
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
-import com.weatherxm.ui.common.UserDevice
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.util.DateTimeHelper.getFormattedRelativeDay
 import kotlinx.coroutines.flow.Flow
@@ -31,6 +32,7 @@ class DeviceDetailsUseCaseImpl(
     private val weatherForecastRepository: WeatherForecastRepository,
     private val addressRepository: AddressRepository,
     private val preferencesRepository: SharedPreferencesRepository,
+    private val explorerRepository: ExplorerRepository,
     private val context: Context
 ) : DeviceDetailsUseCase {
 
@@ -49,46 +51,75 @@ class DeviceDetailsUseCaseImpl(
             .filter { key -> key in UNIT_PREF_KEYS }
     }
 
-    override suspend fun getUserDevices(): Either<Failure, List<UserDevice>> {
-        return deviceRepository.getUserDevices().map {
-            it.map { device ->
+    override suspend fun getUserDevices(): Either<Failure, List<UIDevice>> {
+        return deviceRepository.getUserDevices().map { devices ->
+            devices.map {
+                val device = it.toUIDevice()
                 val shouldShowOTAPrompt = deviceOTARepository.shouldShowOTAPrompt(
                     device.id,
-                    device.attributes?.firmware?.assigned
+                    device.assignedFirmware
                 )
                 val alerts = mutableListOf<DeviceAlert>()
-                if (device.attributes?.isActive == false) {
+                if (device.isActive == false) {
                     alerts.add(DeviceAlert.OFFLINE)
                 }
 
                 if (shouldShowOTAPrompt && device.profile == Helium && device.needsUpdate()) {
                     alerts.add(DeviceAlert.NEEDS_UPDATE)
                 }
-                UserDevice(device, alerts)
+                device.apply {
+                    // TODO: Remove this when we have the API info in the response
+                    this.ownershipStatus = DeviceOwnershipStatus.OWNED
+                    this.alerts = alerts
+                }
             }
         }
     }
 
-    override suspend fun getUserDevice(deviceId: String): Either<Failure, Device> {
-        return deviceRepository.getUserDevice(deviceId)
+    override suspend fun getUserDevice(device: UIDevice): Either<Failure, UIDevice> {
+        return if (device.ownershipStatus == DeviceOwnershipStatus.UNFOLLOWED) {
+            explorerRepository.getCellDevice(device.cellIndex, device.id).map {
+                it.toUIDevice().apply {
+                    // TODO: Remove this when we have the API info in the response
+                    this.ownershipStatus = DeviceOwnershipStatus.UNFOLLOWED
+                }
+            }
+        } else {
+            deviceRepository.getUserDevice(device.id).map {
+                it.toUIDevice().apply {
+                    // TODO: Remove this when we have the API info in the response
+                    this.ownershipStatus = DeviceOwnershipStatus.OWNED
+                }
+            }
+        }
     }
 
     // We suppress magic number because we use specific numbers to check last month and last week
     @Suppress("MagicNumber")
-    override suspend fun getTokenInfoLast30D(deviceId: String): Either<Failure, TokenInfo> {
+    override suspend fun getTokenInfoLast30D(device: UIDevice): Either<Failure, RewardsInfo> {
         // Last 29 days of transactions + today = 30 days
         val fromDate = ZonedDateTime.now().minusDays(29).toLocalDate().toString()
-        return tokenRepository.getAllTransactionsInRange(
-            deviceId = deviceId,
-            fromDate = fromDate
-        ).map {
-            TokenInfo().fromLastAndDatedTxs(it)
+
+        return if (device.ownershipStatus == DeviceOwnershipStatus.UNFOLLOWED) {
+            tokenRepository.getAllPublicTransactionsInRange(
+                deviceId = device.id,
+                fromDate = fromDate
+            ).map {
+                RewardsInfo().fromLastAndDatedTxs(it)
+            }
+        } else {
+            tokenRepository.getAllTransactionsInRange(
+                deviceId = device.id,
+                fromDate = fromDate
+            ).map {
+                RewardsInfo().fromLastAndDatedTxs(it)
+            }
         }
     }
 
     @Suppress("MagicNumber")
     override suspend fun getForecast(
-        device: Device,
+        device: UIDevice,
         forceRefresh: Boolean
     ): Either<Failure, List<UIForecast>> {
         val dateStart = ZonedDateTime.now(ZoneId.of(device.timezone))

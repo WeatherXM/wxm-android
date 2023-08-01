@@ -150,7 +150,7 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/total7D"
-                    style="@style/Widget.WeatherXM.Chip.TokenInfo"
+                    style="@style/Widget.WeatherXM.Chip.RewardsInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/button_7d"
@@ -173,7 +173,7 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/total30d"
-                    style="@style/Widget.WeatherXM.Chip.TokenInfo"
+                    style="@style/Widget.WeatherXM.Chip.RewardsInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/margin_normal"
@@ -195,7 +195,7 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/totalAll"
-                    style="@style/Widget.WeatherXM.Chip.TokenInfo"
+                    style="@style/Widget.WeatherXM.Chip.RewardsInfo"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginStart="@dimen/margin_normal"
