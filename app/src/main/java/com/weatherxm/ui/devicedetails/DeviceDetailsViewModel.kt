@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.getOrElse
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.usecases.AuthUseCase
@@ -88,9 +89,7 @@ class DeviceDetailsViewModel(
                 }
         }
         viewModelScope.launch {
-            isLoggedIn = authUseCase.isLoggedIn().fold({ false }) {
-                it
-            }
+            isLoggedIn = authUseCase.isLoggedIn().getOrElse { false }
         }
     }
 }

@@ -2,7 +2,6 @@ package com.weatherxm.ui.claimdevice.m5
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -58,10 +57,6 @@ class ClaimM5Activity : AppCompatActivity() {
         }
 
         binding.toolbar.setNavigationOnClickListener {
-            finish()
-        }
-
-        onBackPressedDispatcher.addCallback {
             finish()
         }
 

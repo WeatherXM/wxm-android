@@ -82,9 +82,11 @@ class CurrentWeatherWidgetWorkerUpdate(
     override suspend fun doWork(): Result {
         val widgetId = workerParams.inputData.getInt(ARG_WIDGET_ID, INVALID_APPWIDGET_ID)
         val deviceId = workerParams.inputData.getString(ARG_DEVICE_ID)
-        val isWidgetActive = widgetHelper.getWidgetIds()
-            .getOrElse { mutableListOf() }
-            .contains(widgetId.toString())
+        val widgetType =
+            widgetHelper.getWidgetTypeById(AppWidgetManager.getInstance(context), widgetId)
+        val isWidgetActive =
+            widgetHelper.getWidgetIds().getOrElse { mutableListOf() }.contains(widgetId.toString())
+                && widgetType != null
 
         if (widgetId == INVALID_APPWIDGET_ID || deviceId.isNullOrEmpty() || !isWidgetActive) {
             Timber.d("Cancelling WorkManager for Widget [$widgetId].")
@@ -95,10 +97,7 @@ class CurrentWeatherWidgetWorkerUpdate(
         val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
         intent.putExtra(ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
-        intent.putExtra(
-            ARG_WIDGET_TYPE,
-            widgetHelper.getWidgetTypeById(AppWidgetManager.getInstance(context), widgetId)
-        )
+        intent.putExtra(ARG_WIDGET_TYPE, widgetType)
 
         return authUseCase.isLoggedIn()
             .flatMap { isLoggedIn ->

@@ -134,7 +134,9 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
     ) {
         val widgetManager = AppWidgetManager.getInstance(context)
         val widgetsToUpdate = widgetIdsFromIntent.filter {
-            widgetHelper.getWidgetTypeById(widgetManager, it) == WidgetType.CURRENT_WEATHER
+            widgetHelper.getWidgetTypeById(widgetManager, it).apply {
+                if (this == null) usecase.removeWidgetId(it)
+            } == WidgetType.CURRENT_WEATHER
         }
 
         if (shouldLogin == true) {

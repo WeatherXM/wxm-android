@@ -2,7 +2,6 @@ package com.weatherxm.ui.connectwallet
 
 import android.app.Activity
 import android.os.Bundle
-import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -55,10 +54,6 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         binding.root.applyInsets()
 
         setListeners()
-
-        onBackPressedDispatcher.addCallback {
-            finish()
-        }
 
         binding.walletCompatibilityCard
             .action(

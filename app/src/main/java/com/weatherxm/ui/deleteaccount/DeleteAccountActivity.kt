@@ -130,7 +130,7 @@ class DeleteAccountActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
-        onBackPressedDispatcher.addCallback {
+        onBackPressedDispatcher.addCallback(this, false) {
             if (model.isOnSafeState()) {
                 if (model.isAccountedDeleted()) {
                     navigator.showStartup(this@DeleteAccountActivity)

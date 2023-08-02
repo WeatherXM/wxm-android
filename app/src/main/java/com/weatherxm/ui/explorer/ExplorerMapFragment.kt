@@ -116,7 +116,7 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
 
         setSearchListeners()
 
-        activity?.onBackPressedDispatcher?.addCallback {
+        activity?.onBackPressedDispatcher?.addCallback(this, false) {
             if (model.onSearchOpenStatus().value == true) {
                 binding.searchView.hide()
                 model.onSearchOpenStatus(false)

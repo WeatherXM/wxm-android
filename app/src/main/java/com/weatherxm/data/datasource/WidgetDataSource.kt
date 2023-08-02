@@ -1,6 +1,7 @@
 package com.weatherxm.data.datasource
 
 import arrow.core.Either
+import arrow.core.getOrElse
 import com.weatherxm.data.Failure
 import com.weatherxm.data.services.CacheService
 
@@ -26,11 +27,9 @@ class WidgetDataSourceImpl(
     }
 
     override fun setWidgetId(widgetId: Int) {
-        val currentWidgetIds = cacheService.getWidgetIds().fold({
+        val currentWidgetIds = cacheService.getWidgetIds().getOrElse {
             mutableListOf()
-        }) {
-            it.toMutableList()
-        }
+        }.toMutableList()
         currentWidgetIds.add(widgetId.toString())
         cacheService.setWidgetIds(currentWidgetIds)
     }
@@ -38,11 +37,9 @@ class WidgetDataSourceImpl(
     override fun removeWidgetId(widgetId: Int) {
         cacheService.removeDeviceOfWidget(CacheService.getWidgetFormattedKey(widgetId))
 
-        val currentWidgetIds = cacheService.getWidgetIds().fold({
+        val currentWidgetIds = cacheService.getWidgetIds().getOrElse {
             mutableListOf()
-        }) {
-            it.toMutableList()
-        }
+        }.toMutableList()
         if (currentWidgetIds.contains(widgetId.toString())) {
             currentWidgetIds.remove(widgetId.toString())
         }
