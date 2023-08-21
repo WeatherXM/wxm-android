@@ -195,6 +195,7 @@ import com.weatherxm.usecases.WidgetCurrentWeatherUseCaseImpl
 import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.usecases.WidgetSelectStationUseCaseImpl
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.CrashReportingTree
 import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Validator
@@ -209,6 +210,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
@@ -234,6 +236,19 @@ private const val READ_TIMEOUT = 30L
 private const val WRITE_TIMEOUT = 60L
 private const val FIREBASE_CONFIG_FETCH_INTERVAL_DEBUG = 30L
 private const val FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE = 3600L
+
+private val logging = module {
+    single(createdAtStart = true) {
+        Timber.also {
+            // Setup debug logs on DEBUG builds (before all other statements,
+            // since we're using Timber for logging everywhere)
+            if (BuildConfig.DEBUG) {
+                Timber.plant(Timber.DebugTree())
+            }
+            Timber.d("Initialized Timber logging")
+        }
+    }
+}
 
 private val preferences = module {
     single<SharedPreferences> {
@@ -626,12 +641,37 @@ val validator = module {
 }
 
 val firebase = module {
-    single<FirebaseAnalytics> {
+    single<FirebaseAnalytics>(createdAtStart = true) {
         Firebase.analytics
     }
-    single<FirebaseMessaging> {
-        FirebaseMessaging.getInstance()
+
+    single<FirebaseCrashlytics>(createdAtStart = true) {
+        FirebaseCrashlytics.getInstance().also {
+            // Setup crash reporting on RELEASE builds
+            if (!BuildConfig.DEBUG) {
+                Timber.plant(CrashReportingTree(get()))
+                Timber.d("Enabled Crashlytics crash reporting")
+            } else {
+                Timber.d("Crashlytics crash reporting disabled in DEBUG builds")
+            }
+        }
     }
+
+    single<FirebaseMessaging>(createdAtStart = true) {
+        FirebaseMessaging.getInstance().also {
+            if (BuildConfig.DEBUG) {
+                // Log Firebase Cloud Messaging token for testing
+                it.token
+                    .addOnSuccessListener { token ->
+                        Timber.d("FCM registration token: $token")
+                    }
+                    .addOnFailureListener { e ->
+                        Timber.w(e, "Could not get FCM token.")
+                    }
+            }
+        }
+    }
+
     single<FirebaseRemoteConfig> {
         // Init Firebase config
         Firebase.remoteConfig.apply {
@@ -645,9 +685,7 @@ val firebase = module {
             fetchAndActivate()
         }
     }
-    single<FirebaseCrashlytics> {
-        FirebaseCrashlytics.getInstance()
-    }
+
     single<FirebaseInstallations> {
         FirebaseInstallations.getInstance()
     }
@@ -683,8 +721,11 @@ val database = module {
 }
 
 val displayModeHelper = module {
-    single {
-        DisplayModeHelper(androidContext().resources, get())
+    single(createdAtStart = true) {
+        DisplayModeHelper(androidContext().resources, get()).also {
+            // Set light/dark theme at startup
+            it.setDisplayMode()
+        }
     }
 }
 
@@ -795,6 +836,8 @@ private val viewmodels = module {
 }
 
 val modules = listOf(
+    logging,
+    analytics,
     preferences,
     network,
     bluetooth,
@@ -809,7 +852,6 @@ val modules = listOf(
     apiServiceModule,
     database,
     displayModeHelper,
-    analytics,
     clientIdentificationHelper,
     utilities,
     widgetHelper,

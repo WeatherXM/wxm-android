@@ -260,6 +260,7 @@ dependencies {
     implementation("androidx.room:room-runtime:2.5.2")
     ksp("androidx.room:room-compiler:2.5.2")
     implementation("androidx.security:security-crypto:1.0.0")
+    implementation("androidx.startup:startup-runtime:1.1.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
