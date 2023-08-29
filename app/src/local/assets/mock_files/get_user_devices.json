@@ -5,6 +5,7 @@
         "timezone": "Europe/Berlin",
         "profile": "Helium",
         "label": null,
+        "relation": "owned",
         "location": {
             "lat": 37.97521056577561,
             "lon": 23.726247807017884
@@ -110,6 +111,7 @@
         "id": "76d13810-10e9-11ec-877e-63751227e9ec",
         "name": "Exotic Pecan Aurora",
         "timezone": "America/New_York",
+        "relation": "owned",
         "label": null,
         "location": {
             "lat": 35.51622463589852,
@@ -211,6 +213,7 @@
         "id": "76d13810-10e9-11ec-877e-63751227e9ea",
         "name": "Enormous Pilot Hurricane",
         "timezone": "America/Chicago",
+        "relation": "owned",
         "label": null,
         "profile": "M5",
         "location": {
@@ -318,6 +321,7 @@
         "name": "Acoustic Barrier Hail",
         "timezone": "Etc/GMT",
         "label": null,
+        "relation": "owned",
         "profile": "Helium",
         "location": {
             "lat": 35.51622463589852,
@@ -424,6 +428,7 @@
         "name": "Brutal Fatality Lightning",
         "timezone": "America/Toronto",
         "label": null,
+        "relation": "owned",
         "location": {
             "lat": 35.51622463589852,
             "lon": 24.01903666307378

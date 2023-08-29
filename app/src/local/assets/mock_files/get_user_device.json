@@ -4,6 +4,7 @@
     "label": null,
     "timezone": "Europe/Athens",
     "profile": "Helium",
+    "relation": "owned",
     "location": {
         "lat": 35.51622463589852,
         "lon": 24.01903666307378

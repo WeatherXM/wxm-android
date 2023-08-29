@@ -401,7 +401,7 @@ object Weather : KoinComponent {
         }
     }
 
-    private fun getDecimalsPrecipitation(): Int {
+    fun getDecimalsPrecipitation(): Int {
         val keyOnSharedPref = resHelper.getString(KEY_PRECIP)
         val defaultUnit = resHelper.getString(R.string.precipitation_mm)
 
@@ -430,7 +430,7 @@ object Weather : KoinComponent {
         return value.toFloat().toBigDecimal().setScale(decimals, BigDecimal.ROUND_HALF_UP).toFloat()
     }
 
-    private fun roundToInt(value: Number): Int {
+    fun roundToInt(value: Number): Int {
         return value.toFloat().toBigDecimal().setScale(0, BigDecimal.ROUND_HALF_UP).toInt()
     }
 }
