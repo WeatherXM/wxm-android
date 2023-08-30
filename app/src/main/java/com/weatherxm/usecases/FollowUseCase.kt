@@ -1,11 +1,9 @@
-package com.weatherxm.data.datasource
+package com.weatherxm.usecases
 
 import arrow.core.Either
 import com.weatherxm.data.Failure
 
-interface FollowDataSource {
+interface FollowUseCase {
     suspend fun followStation(deviceId: String): Either<Failure, Unit>
     suspend fun unfollowStation(deviceId: String): Either<Failure, Unit>
-    suspend fun getFollowedDevicesIds(): List<String>
-    suspend fun setFollowedDevicesIds(ids: List<String>)
 }

@@ -1,6 +1,5 @@
 package com.weatherxm.ui.widgets.selectstation
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,13 +7,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemWidgetSelectStationBinding
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
+import com.weatherxm.util.setStatusChip
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -62,7 +61,6 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
             }
         }
 
-        @SuppressLint("SetTextI18n")
         fun bind(item: UIDevice, isSelected: Boolean) {
             binding.root.isSelected = isSelected
             binding.selectedIcon.visibility = if (isSelected) {
@@ -74,7 +72,7 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
             this.device = item
             binding.name.text = item.getDefaultOrFriendlyName()
 
-            binding.address.text = if (item.address.isNullOrEmpty()) {
+            binding.addressChip.text = if (item.address.isNullOrEmpty()) {
                 resHelper.getString(R.string.unknown_address)
             } else {
                 item.address
@@ -87,33 +85,15 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
                 setWeatherData(item)
             }
 
-            setStatus(item)
-        }
-
-        private fun setStatus(device: UIDevice) {
-            with(binding.lastSeen) {
-                text = device.lastWeatherStationActivity?.getRelativeFormattedTime(
-                    fallbackIfTooSoon = context.getString(R.string.just_now)
+            with(binding.statusChip) {
+                setStatusChip(
+                    item.lastWeatherStationActivity?.getRelativeFormattedTime(
+                        fallbackIfTooSoon = context.getString(R.string.just_now)
+                    ),
+                    item.profile,
+                    item.isActive,
                 )
             }
-
-            binding.statusIcon.setImageResource(
-                if (device.profile == DeviceProfile.Helium) {
-                    R.drawable.ic_helium
-                } else {
-                    R.drawable.ic_wifi
-                }
-            )
-
-            binding.statusCard.setCardBackgroundColor(
-                itemView.context.getColor(
-                    when (device.isActive) {
-                        true -> R.color.successTint
-                        false -> R.color.errorTint
-                        else -> R.color.midGrey
-                    }
-                )
-            )
         }
 
         private fun setWeatherData(device: UIDevice) {

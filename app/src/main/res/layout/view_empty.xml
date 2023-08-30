@@ -47,6 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_large"
+        android:backgroundTint="@color/colorSurface"
         android:minWidth="128dp"
         tools:text="Retry?" />
 

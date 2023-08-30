@@ -1,6 +1,5 @@
 package com.weatherxm.ui.home.devices
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -10,17 +9,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
 import com.weatherxm.ui.common.DeviceAlert
-import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
+import com.weatherxm.util.setColor
+import com.weatherxm.util.setStatusChip
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -42,7 +42,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
 
     inner class DeviceViewHolder(
         private val binding: ListItemDeviceBinding,
-        listener: DeviceListener,
+        private val listener: DeviceListener,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private lateinit var device: UIDevice
@@ -53,9 +53,36 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             }
         }
 
-        @SuppressLint("SetTextI18n")
         fun bind(item: UIDevice) {
             this.device = item
+
+            with(binding.follow) {
+                when (item.relation) {
+                    DeviceRelation.OWNED -> {
+                        setImageResource(R.drawable.ic_home)
+                        setColor(R.color.colorOnSurface)
+                        isEnabled = false
+                    }
+                    DeviceRelation.FOLLOWED -> {
+                        setOnClickListener {
+                            listener.onFollowBtnClicked(device)
+                        }
+                        setImageResource(R.drawable.ic_favorite)
+                        setColor(R.color.follow_heart_color)
+                        isEnabled = true
+                    }
+                    DeviceRelation.UNFOLLOWED -> {
+                        setOnClickListener {
+                            listener.onFollowBtnClicked(device)
+                        }
+                        setImageResource(R.drawable.ic_favorite_outline)
+                        setColor(R.color.follow_heart_color)
+                        isEnabled = true
+                    }
+                    null -> setVisible(false)
+                }
+            }
+
             binding.name.text = item.getDefaultOrFriendlyName()
 
             if (item.currentWeather == null || item.currentWeather.isEmpty()) {
@@ -71,43 +98,16 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 item.address
             }
 
-            @Suppress("UseCheckOrError")
-            binding.stationFollowHomeIcon.setImageResource(
-                when (item.ownershipStatus) {
-                    DeviceOwnershipStatus.OWNED -> R.drawable.ic_home
-                    DeviceOwnershipStatus.FOLLOWED -> R.drawable.ic_favorite
-                    DeviceOwnershipStatus.UNFOLLOWED -> R.drawable.ic_favorite_outline
-                    null -> throw IllegalStateException("Oops! No ownership status here.")
-                }
-            )
-
-            setStatus(item)
-            setAlerts(item)
-        }
-
-        private fun setStatus(item: UIDevice) {
-            with(binding.lastSeen) {
-                text = item.lastWeatherStationActivity?.getRelativeFormattedTime(
-                    fallbackIfTooSoon = context.getString(R.string.just_now)
+            with(binding.status) {
+                setStatusChip(
+                    item.lastWeatherStationActivity?.getRelativeFormattedTime(
+                        fallbackIfTooSoon = context.getString(R.string.just_now)
+                    ),
+                    item.profile,
+                    item.isActive,
                 )
             }
-
-            binding.statusIcon.setImageResource(
-                if (item.profile == DeviceProfile.Helium) {
-                    R.drawable.ic_helium
-                } else {
-                    R.drawable.ic_wifi
-                }
-            )
-            binding.statusCard.setCardBackgroundColor(
-                itemView.context.getColor(
-                    when (item.isActive) {
-                        true -> R.color.successTint
-                        false -> R.color.errorTint
-                        else -> R.color.midGrey
-                    }
-                )
-            )
+            setAlerts(item)
         }
 
         private fun setAlerts(item: UIDevice) {
@@ -218,4 +218,5 @@ interface DeviceListener {
     fun onDeviceClicked(device: UIDevice)
     fun onUpdateStationClicked(device: UIDevice)
     fun onAlertsClicked(device: UIDevice)
+    fun onFollowBtnClicked(device: UIDevice)
 }

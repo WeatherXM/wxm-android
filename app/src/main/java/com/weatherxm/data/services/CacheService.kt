@@ -62,6 +62,8 @@ class CacheService(
     private var forecasts: ArrayMap<String, TimedForecastData> = ArrayMap()
     private var suggestions: ArrayMap<String, List<SearchSuggestion>> = ArrayMap()
     private var locations: ArrayMap<String, Location> = ArrayMap()
+    private var followedStationsIds = listOf<String>()
+    private var userStationsIds = listOf<String>()
 
     fun getAuthToken(): Either<Failure, AuthToken> {
         val access = encryptedPreferences.getString(KEY_ACCESS, null)
@@ -111,14 +113,6 @@ class CacheService(
 
     fun setAnalyticsEnabled(enabled: Boolean) {
         preferences.edit().putBoolean(resHelper.getString(KEY_ANALYTICS), enabled).apply()
-    }
-
-    fun getLastFriendlyNameChanged(key: String): Long {
-        return preferences.getLong(key, 0L)
-    }
-
-    fun setLastFriendlyNameChanged(key: String, timestamp: Long) {
-        preferences.edit().putLong(key, timestamp).apply()
     }
 
     fun getLocationAddress(hexIndex: String): Either<Failure, String> {
@@ -263,16 +257,20 @@ class CacheService(
         preferences.edit().putStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, ids.toSet()).apply()
     }
 
-    fun getFollowedStationIds(): Either<Failure, List<String>> {
-        val ids = preferences.getStringSet(KEY_FOLLOWED_STATIONS_IDS, setOf())
-        return when {
-            ids.isNullOrEmpty() -> Either.Left(DataError.CacheMissError)
-            else -> Either.Right(ids.toList())
-        }
+    fun getFollowedDevicesIds(): List<String> {
+        return followedStationsIds
     }
 
-    fun setFollowedStationIds(ids: List<String>) {
-        preferences.edit().putStringSet(KEY_FOLLOWED_STATIONS_IDS, ids.toSet()).apply()
+    fun setFollowedDevicesIds(ids: List<String>) {
+        followedStationsIds = ids
+    }
+
+    fun getUserDevicesIds(): List<String> {
+        return userStationsIds
+    }
+
+    fun setUserDevicesIds(ids: List<String>) {
+        userStationsIds = ids
     }
 
     fun clearAll() {
@@ -281,6 +279,9 @@ class CacheService(
         this.forecasts.clear()
         this.suggestions.clear()
         this.locations.clear()
+        this.followedStationsIds = listOf()
+        this.userStationsIds = listOf()
+
         okHttpCache.evictAll()
         encryptedPreferences.edit().clear().apply()
         clearUserPreferences()

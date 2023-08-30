@@ -34,7 +34,6 @@
     <string name="error_support_cannot_send_email">Oops! Could not send email!</string>
     <string name="error_open_website_support_cannot_open_url">Oops! Could not open %s</string>
     <string name="error_cannot_open_play_store">Oops! Could not open Play Store.</string>
-    <string name="error_friendly_name_change_rate_limit">You can only change your device\'s friendly name once in 10 minutes.</string>
     <string name="error_search_suggestions">Search suggestions not available. Please try again later.</string>
     <string name="error_invalid_password">Invalid password</string>
     <string name="error_helium_ota_aborted">ABORTED</string>
@@ -43,6 +42,7 @@
     <string name="error_invalid_device_identifier">Invalid Device Identifier</string>
     <string name="error_server_validation">Validation of the request failed on the server.</string>
     <string name="error_helium_ota_133_suffix">STATION NOT IN RANGE</string>
+    <string name="error_max_followed">Max followed stations threshold reached.</string>
 
     <!-- Warn Messages -->
     <string name="warn_validation_invalid_email">Not a valid email</string>

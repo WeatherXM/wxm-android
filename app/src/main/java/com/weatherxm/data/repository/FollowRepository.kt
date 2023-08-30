@@ -8,35 +8,34 @@ import com.weatherxm.data.datasource.NetworkFollowDataSource
 interface FollowRepository {
     suspend fun followStation(deviceId: String): Either<Failure, Unit>
     suspend fun unfollowStation(deviceId: String): Either<Failure, Unit>
-    suspend fun getFollowedStationIds(): Either<Failure, List<String>>
-    suspend fun setFollowedStationIds(ids: List<String>)
+    suspend fun getFollowedDevicesIds(): List<String>
+    suspend fun setFollowedDevicesIds(ids: List<String>)
 }
 
 class FollowRepositoryImpl(
     private val networkDataSource: NetworkFollowDataSource,
-    private val cacheDataSource: CacheFollowDataSource
+    private val cacheFollowDataSource: CacheFollowDataSource
 ) : FollowRepository {
     override suspend fun followStation(deviceId: String): Either<Failure, Unit> {
-        cacheDataSource.followStation(deviceId)
-        return networkDataSource.followStation(deviceId).onLeft {
-            // Something went wrong with the API, set as unfollowed again in cache
-            cacheDataSource.unfollowStation(deviceId)
+        return networkDataSource.followStation(deviceId).onRight {
+            cacheFollowDataSource.followStation(deviceId)
         }
     }
 
     override suspend fun unfollowStation(deviceId: String): Either<Failure, Unit> {
-        cacheDataSource.unfollowStation(deviceId)
-        return networkDataSource.followStation(deviceId).onLeft {
-            // Something went wrong with the API, set as followed again in cache
-            cacheDataSource.followStation(deviceId)
+        return networkDataSource.unfollowStation(deviceId).onLeft {
+            // Unfollowing failed on the API, set as followed again in our cache
+            cacheFollowDataSource.followStation(deviceId)
+        }.onRight {
+            cacheFollowDataSource.unfollowStation(deviceId)
         }
     }
 
-    override suspend fun getFollowedStationIds(): Either<Failure, List<String>> {
-        return cacheDataSource.getFollowedStationIds()
+    override suspend fun getFollowedDevicesIds(): List<String> {
+        return cacheFollowDataSource.getFollowedDevicesIds()
     }
 
-    override suspend fun setFollowedStationIds(ids: List<String>) {
-        cacheDataSource.setFollowedStationIds(ids)
+    override suspend fun setFollowedDevicesIds(ids: List<String>) {
+        cacheFollowDataSource.setFollowedDevicesIds(ids)
     }
 }

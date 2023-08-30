@@ -35,115 +35,64 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_small"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.PrimaryColor"
+                        android:gravity="center_vertical"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                         android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="@id/stationFollowHomeCard"
-                        app:layout_constraintEnd_toStartOf="@id/stationFollowHomeCard"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@id/follow"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/stationFollowHomeCard"
+                        app:layout_constraintTop_toTopOf="parent"
                         tools:text="My Weather Station" />
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/stationFollowHomeCard"
-                        style="@style/Widget.WeatherXM.MaterialCard.Small"
+                    <ImageButton
+                        android:id="@+id/follow"
+                        style="@style/Widget.WeatherXM.ImageButton"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
+                        android:layout_gravity="center"
                         android:layout_marginStart="@dimen/margin_small"
-                        app:cardBackgroundColor="@color/blueTint"
-                        app:cardCornerRadius="@dimen/card_corner_radius_small"
+                        android:importantForAccessibility="no"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="@id/name"
+                        app:layout_constraintBottom_toBottomOf="@id/name"
+                        tools:src="@drawable/ic_favorite"
+                        tools:tint="@color/follow_heart_color" />
 
-                        <ImageView
-                            android:id="@+id/stationFollowHomeIcon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            app:tint="@color/colorPrimary"
-                            tools:ignore="ContentDescription"
-                            tools:src="@drawable/ic_home" />
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/addressCard"
-                        style="@style/Widget.WeatherXM.MaterialCard.Small"
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/address"
+                        style="@style/Widget.WeatherXM.Chip.Status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
-                        app:cardBackgroundColor="@color/blueTint"
-                        app:cardCornerRadius="@dimen/card_corner_radius_small"
-                        app:contentPaddingBottom="@dimen/padding_extra_small"
-                        app:contentPaddingLeft="@dimen/padding_small"
-                        app:contentPaddingRight="@dimen/padding_small"
-                        app:contentPaddingTop="@dimen/padding_extra_small"
+                        android:ellipsize="end"
+                        app:chipBackgroundColor="@color/blueTint"
+                        app:chipIcon="@drawable/ic_hex"
+                        app:chipIconSize="12dp"
+                        app:chipIconTint="@color/colorOnSurface"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintEnd_toStartOf="@id/status"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/stationFollowHomeCard">
+                        app:layout_constraintTop_toBottomOf="@id/name"
+                        tools:ignore="KeyboardInaccessibleWidget"
+                        tools:text="Athens, GR" />
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="12dp"
-                                android:layout_height="12dp"
-                                android:src="@drawable/ic_hex"
-                                app:tint="@color/colorPrimary"
-                                tools:ignore="ContentDescription" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/address"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/margin_small"
-                                android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.Address"
-                                tools:text="Athens, GR" />
-                        </LinearLayout>
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/statusCard"
-                        style="@style/Widget.WeatherXM.MaterialCard.Small"
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/status"
+                        style="@style/Widget.WeatherXM.Chip.Status"
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:layout_marginStart="@dimen/margin_small"
-                        app:cardCornerRadius="@dimen/card_corner_radius_small"
-                        app:contentPaddingBottom="@dimen/padding_extra_small"
-                        app:contentPaddingLeft="@dimen/padding_small"
-                        app:contentPaddingRight="@dimen/padding_small"
-                        app:contentPaddingTop="@dimen/padding_extra_small"
-                        app:layout_constraintBottom_toBottomOf="@id/addressCard"
-                        app:layout_constraintStart_toEndOf="@id/addressCard"
-                        app:layout_constraintTop_toTopOf="@id/addressCard"
-                        tools:cardBackgroundColor="@color/successTint">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:id="@+id/statusIcon"
-                                android:layout_width="15dp"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/ic_wifi"
-                                app:tint="@color/colorPrimary"
-                                tools:ignore="ContentDescription" />
-
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/lastSeen"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/margin_small"
-                                android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.Address"
-                                tools:text="5 mins ago" />
-                        </LinearLayout>
-
-                    </com.google.android.material.card.MaterialCardView>
+                        android:layout_marginTop="@dimen/margin_small"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/address"
+                        app:layout_constraintTop_toBottomOf="@id/name"
+                        tools:chipBackgroundColor="@color/status_chip_background_online"
+                        tools:chipIcon="@drawable/ic_wifi"
+                        tools:chipIconTint="@color/status_chip_content_online"
+                        tools:text="5 mins ago"
+                        tools:textColor="@color/status_chip_content_online" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

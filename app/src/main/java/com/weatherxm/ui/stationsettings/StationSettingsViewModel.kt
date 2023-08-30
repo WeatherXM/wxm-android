@@ -4,12 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.Either
 import com.weatherxm.R
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.BatteryState
 import com.weatherxm.data.DeviceProfile
-import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.capitalizeWords
@@ -40,15 +39,6 @@ class StationSettingsViewModel(var device: UIDevice) : ViewModel(), KoinComponen
     fun onStationInfo(): LiveData<List<StationInfo>> = onStationInfo
     fun onError(): LiveData<UIError> = onError
     fun onLoading(): LiveData<Boolean> = onLoading
-
-    fun canChangeFriendlyName(): Either<UIError, Boolean> {
-        return usecase.canChangeFriendlyName(device.id)
-            .mapLeft {
-                analytics.trackEventFailure(it.code)
-                Timber.d(it.message)
-                UIError(resHelper.getString(R.string.error_friendly_name_change_rate_limit))
-            }
-    }
 
     fun setOrClearFriendlyName(friendlyName: String?) {
         if (friendlyName == null) {
@@ -120,7 +110,7 @@ class StationSettingsViewModel(var device: UIDevice) : ViewModel(), KoinComponen
         onLoading.postValue(true)
         viewModelScope.launch {
             device.label?.let { serialNumber ->
-                usecase.removeDevice(serialNumber.unmask())
+                usecase.removeDevice(serialNumber.unmask(), device.id)
                     .map {
                         Timber.d("Device ${device.name} removed.")
                         onDeviceRemoved.postValue(true)
@@ -231,7 +221,7 @@ class StationSettingsViewModel(var device: UIDevice) : ViewModel(), KoinComponen
                 }
             }
             device.currentFirmware?.let { current ->
-                if (device.needsUpdate() && device.ownershipStatus == DeviceOwnershipStatus.OWNED
+                if (device.needsUpdate() && device.relation == DeviceRelation.OWNED
                     && usecase.shouldShowOTAPrompt(device)
                 ) {
                     add(

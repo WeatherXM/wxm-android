@@ -5,12 +5,13 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceInfo
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
+import com.weatherxm.data.Relation
 import com.weatherxm.data.datasource.CacheAddressDataSource
-import com.weatherxm.data.datasource.DeviceDataSource
+import com.weatherxm.data.datasource.CacheDeviceDataSource
+import com.weatherxm.data.datasource.CacheFollowDataSource
 import com.weatherxm.data.datasource.NetworkAddressDataSource
-import com.weatherxm.data.datasource.UserActionDataSource
+import com.weatherxm.data.datasource.NetworkDeviceDataSource
 import timber.log.Timber
-import java.util.Date
 
 interface DeviceRepository {
     suspend fun getUserDevices(deviceIds: List<String>? = null): Either<Failure, List<Device>>
@@ -22,16 +23,17 @@ interface DeviceRepository {
     suspend fun getDeviceAddress(device: Device): String?
     suspend fun setFriendlyName(deviceId: String, friendlyName: String): Either<Failure, Unit>
     suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit>
-    suspend fun getLastFriendlyNameChanged(deviceId: String): Long
-    suspend fun removeDevice(serialNumber: String): Either<Failure, Unit>
+    suspend fun removeDevice(serialNumber: String, id: String): Either<Failure, Unit>
     suspend fun getDeviceInfo(deviceId: String): Either<Failure, DeviceInfo>
+    suspend fun getUserDevicesIds(): List<String>
 }
 
 class DeviceRepositoryImpl(
-    private val deviceDataSource: DeviceDataSource,
+    private val networkDeviceDataSource: NetworkDeviceDataSource,
+    private val cacheDeviceDataSource: CacheDeviceDataSource,
     private val networkAddressDataSource: NetworkAddressDataSource,
     private val cacheAddressDataSource: CacheAddressDataSource,
-    private val userActionDataSource: UserActionDataSource
+    private val cacheFollowDataSource: CacheFollowDataSource
 ) : DeviceRepository {
 
     override suspend fun getUserDevices(deviceIds: List<String>?): Either<Failure, List<Device>> {
@@ -41,15 +43,26 @@ class DeviceRepositoryImpl(
             null
         }
 
-        return deviceDataSource.getUserDevices(ids).map { devices ->
+        return networkDeviceDataSource.getUserDevices(ids).map { devices ->
             devices.onEach {
                 it.address = getDeviceAddress(it)
+            }.apply {
+                cacheDeviceDataSource.setUserDevicesIds(this.filter {
+                    it.relation == Relation.owned
+                }.map {
+                    it.id
+                })
+                cacheFollowDataSource.setFollowedDevicesIds(this.filter {
+                    it.relation == Relation.followed
+                }.map {
+                    it.id
+                })
             }
         }
     }
 
     override suspend fun getUserDevice(deviceId: String): Either<Failure, Device> {
-        return deviceDataSource.getUserDevice(deviceId).map { device ->
+        return networkDeviceDataSource.getUserDevice(deviceId).map { device ->
             device.apply {
                 this.address = getDeviceAddress(this)
             }
@@ -59,7 +72,11 @@ class DeviceRepositoryImpl(
     override suspend fun claimDevice(
         serialNumber: String, location: Location, secret: String?
     ): Either<Failure, Device> {
-        return deviceDataSource.claimDevice(serialNumber, location, secret)
+        return networkDeviceDataSource.claimDevice(serialNumber, location, secret).onRight {
+            val userDevicesIds = cacheDeviceDataSource.getUserDevicesIds().toMutableList()
+            userDevicesIds.add(it.id)
+            cacheDeviceDataSource.setUserDevicesIds(userDevicesIds)
+        }
     }
 
     override suspend fun getDeviceAddress(device: Device): String? {
@@ -82,26 +99,26 @@ class DeviceRepositoryImpl(
     override suspend fun setFriendlyName(
         deviceId: String, friendlyName: String
     ): Either<Failure, Unit> {
-        return deviceDataSource.setFriendlyName(deviceId, friendlyName).onRight {
-            userActionDataSource.setLastFriendlyNameChanged(deviceId, Date().time)
-        }
+        return networkDeviceDataSource.setFriendlyName(deviceId, friendlyName)
     }
 
     override suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit> {
-        return deviceDataSource.clearFriendlyName(deviceId).onRight {
-            userActionDataSource.setLastFriendlyNameChanged(deviceId, Date().time)
+        return networkDeviceDataSource.clearFriendlyName(deviceId)
+    }
+
+    override suspend fun removeDevice(serialNumber: String, id: String): Either<Failure, Unit> {
+        return networkDeviceDataSource.removeDevice(serialNumber).onRight {
+            val userDevicesIds = cacheDeviceDataSource.getUserDevicesIds().toMutableList()
+            userDevicesIds.remove(id)
+            cacheDeviceDataSource.setUserDevicesIds(userDevicesIds)
         }
     }
 
-    override suspend fun getLastFriendlyNameChanged(deviceId: String): Long {
-        return userActionDataSource.getLastFriendlyNameChanged(deviceId)
-    }
-
-    override suspend fun removeDevice(serialNumber: String): Either<Failure, Unit> {
-        return deviceDataSource.removeDevice(serialNumber)
-    }
-
     override suspend fun getDeviceInfo(deviceId: String): Either<Failure, DeviceInfo> {
-        return deviceDataSource.getDeviceInfo(deviceId)
+        return networkDeviceDataSource.getDeviceInfo(deviceId)
+    }
+
+    override suspend fun getUserDevicesIds(): List<String> {
+        return cacheDeviceDataSource.getUserDevicesIds()
     }
 }

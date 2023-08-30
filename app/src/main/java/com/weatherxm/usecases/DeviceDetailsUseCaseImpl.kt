@@ -12,7 +12,7 @@ import com.weatherxm.data.repository.SharedPreferencesRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.common.DeviceAlert
-import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.RewardsInfo
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
@@ -58,7 +58,7 @@ class DeviceDetailsUseCaseImpl(
                 val shouldShowOTAPrompt = deviceOTARepository.shouldShowOTAPrompt(
                     device.id,
                     device.assignedFirmware
-                )
+                ) && device.relation == DeviceRelation.OWNED
                 val alerts = mutableListOf<DeviceAlert>()
                 if (device.isActive == false) {
                     alerts.add(DeviceAlert.OFFLINE)
@@ -68,8 +68,6 @@ class DeviceDetailsUseCaseImpl(
                     alerts.add(DeviceAlert.NEEDS_UPDATE)
                 }
                 device.apply {
-                    // TODO: Remove this when we have the API info in the response
-                    this.ownershipStatus = DeviceOwnershipStatus.OWNED
                     this.alerts = alerts
                 }
             }
@@ -77,19 +75,15 @@ class DeviceDetailsUseCaseImpl(
     }
 
     override suspend fun getUserDevice(device: UIDevice): Either<Failure, UIDevice> {
-        return if (device.ownershipStatus == DeviceOwnershipStatus.UNFOLLOWED) {
+        return if (device.relation == DeviceRelation.UNFOLLOWED) {
             explorerRepository.getCellDevice(device.cellIndex, device.id).map {
                 it.toUIDevice().apply {
-                    // TODO: Remove this when we have the API info in the response
-                    this.ownershipStatus = DeviceOwnershipStatus.UNFOLLOWED
+                    this.relation = DeviceRelation.UNFOLLOWED
                 }
             }
         } else {
             deviceRepository.getUserDevice(device.id).map {
-                it.toUIDevice().apply {
-                    // TODO: Remove this when we have the API info in the response
-                    this.ownershipStatus = DeviceOwnershipStatus.OWNED
-                }
+                it.toUIDevice()
             }
         }
     }
@@ -100,7 +94,7 @@ class DeviceDetailsUseCaseImpl(
         // Last 29 days of transactions + today = 30 days
         val fromDate = ZonedDateTime.now().minusDays(29).toLocalDate().toString()
 
-        return if (device.ownershipStatus == DeviceOwnershipStatus.UNFOLLOWED) {
+        return if (device.relation == DeviceRelation.UNFOLLOWED) {
             tokenRepository.getAllPublicTransactionsInRange(
                 deviceId = device.id,
                 fromDate = fromDate

@@ -33,16 +33,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
+                    android:background="@drawable/background_rounded_corners_status_success"
                     android:paddingHorizontal="@dimen/padding_small"
-                    android:paddingVertical="@dimen/padding_extra_small"
-                    android:background="@drawable/background_rounded_corners_success">
+                    android:paddingVertical="@dimen/padding_extra_small">
 
                     <ImageView
                         android:id="@+id/statusIcon"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_wifi"
-                        android:tint="@color/colorPrimary"
+                        android:tint="@color/status_chip_content_online"
                         tools:ignore="ContentDescription,UseAppTint" />
 
                     <TextView
@@ -50,9 +50,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_small"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                        android:textColor="@color/colorPrimary"
                         android:text="10:45 am"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/status_chip_content_online"
                         tools:ignore="HardcodedText" />
 
                 </LinearLayout>
@@ -66,8 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_normal"
             android:text="My Weather Station"
-            android:textAppearance="@style/TextAppearance.WeatherXM.Default.PrimaryColor"
-            android:textSize="12sp"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
             tools:ignore="HardcodedText" />
 
         <LinearLayout

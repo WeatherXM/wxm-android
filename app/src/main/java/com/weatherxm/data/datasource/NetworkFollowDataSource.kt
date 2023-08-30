@@ -14,11 +14,11 @@ class NetworkFollowDataSource(private val apiService: ApiService) : FollowDataSo
         return apiService.unfollowStation(deviceId).map()
     }
 
-    override suspend fun getFollowedStationIds(): Either<Failure, List<String>> {
+    override suspend fun getFollowedDevicesIds(): List<String> {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 
-    override suspend fun setFollowedStationIds(ids: List<String>) {
+    override suspend fun setFollowedDevicesIds(ids: List<String>) {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 }

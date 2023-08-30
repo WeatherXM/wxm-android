@@ -53,14 +53,13 @@ import com.weatherxm.data.datasource.AppConfigDataSourceImpl
 import com.weatherxm.data.datasource.CacheAddressDataSource
 import com.weatherxm.data.datasource.CacheAddressSearchDataSource
 import com.weatherxm.data.datasource.CacheAuthDataSource
+import com.weatherxm.data.datasource.CacheDeviceDataSource
 import com.weatherxm.data.datasource.CacheFollowDataSource
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.DatabaseExplorerDataSource
 import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
-import com.weatherxm.data.datasource.DeviceDataSource
-import com.weatherxm.data.datasource.DeviceDataSourceImpl
 import com.weatherxm.data.datasource.DeviceOTADataSource
 import com.weatherxm.data.datasource.DeviceOTADataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
@@ -68,6 +67,7 @@ import com.weatherxm.data.datasource.LocationDataSourceImpl
 import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
 import com.weatherxm.data.datasource.NetworkAuthDataSource
+import com.weatherxm.data.datasource.NetworkDeviceDataSource
 import com.weatherxm.data.datasource.NetworkExplorerDataSource
 import com.weatherxm.data.datasource.NetworkFollowDataSource
 import com.weatherxm.data.datasource.NetworkUserDataSource
@@ -80,8 +80,6 @@ import com.weatherxm.data.datasource.StatsDataSource
 import com.weatherxm.data.datasource.StatsDataSourceImpl
 import com.weatherxm.data.datasource.TokenDataSource
 import com.weatherxm.data.datasource.TokenDataSourceImpl
-import com.weatherxm.data.datasource.UserActionDataSource
-import com.weatherxm.data.datasource.UserActionDataSourceImpl
 import com.weatherxm.data.datasource.WidgetDataSource
 import com.weatherxm.data.datasource.WidgetDataSourceImpl
 import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSource
@@ -170,6 +168,8 @@ import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCaseImpl
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.ExplorerUseCaseImpl
+import com.weatherxm.usecases.FollowUseCase
+import com.weatherxm.usecases.FollowUseCaseImpl
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
 import com.weatherxm.usecases.PasswordPromptUseCase
@@ -293,8 +293,12 @@ private val datasources = module {
         CacheUserDataSource(get())
     }
 
-    single<DeviceDataSource> {
-        DeviceDataSourceImpl(get())
+    single<NetworkDeviceDataSource> {
+        NetworkDeviceDataSource(get())
+    }
+
+    single<CacheDeviceDataSource> {
+        CacheDeviceDataSource(get())
     }
 
     single<NetworkWalletDataSource> {
@@ -335,10 +339,6 @@ private val datasources = module {
 
     single<CacheAddressDataSource> {
         CacheAddressDataSource(get())
-    }
-
-    single<UserActionDataSource> {
-        UserActionDataSourceImpl(get())
     }
 
     single<SharedPreferencesDataSource> {
@@ -412,7 +412,7 @@ private val repositories = module {
         WalletRepositoryImpl(get(), get())
     }
     single<DeviceRepository> {
-        DeviceRepositoryImpl(get(), get(), get(), get())
+        DeviceRepositoryImpl(get(), get(), get(), get(), get())
     }
     single<ExplorerRepository> {
         ExplorerRepositoryImpl(get(), get())
@@ -466,10 +466,19 @@ private val usecases = module {
         StartupUseCaseImpl(get(), get())
     }
     single<ExplorerUseCase> {
-        ExplorerUseCaseImpl(get(), get(), get(), get())
+        ExplorerUseCaseImpl(get(), get(), get(), get(), get(), get())
     }
     single<DeviceDetailsUseCase> {
-        DeviceDetailsUseCaseImpl(get(), get(), get(), get(), get(), get(), get(), androidContext())
+        DeviceDetailsUseCaseImpl(
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            androidContext()
+        )
     }
     single<HistoryUseCase> {
         HistoryUseCaseImpl(androidContext(), get(), get())
@@ -527,6 +536,9 @@ private val usecases = module {
     }
     single<StatsUseCase> {
         StatsUseCaseImpl(get(), get())
+    }
+    single<FollowUseCase> {
+        FollowUseCaseImpl(get())
     }
 }
 
@@ -649,7 +661,7 @@ val firebase = module {
         FirebaseCrashlytics.getInstance().also {
             // Setup crash reporting on RELEASE builds
             if (!BuildConfig.DEBUG) {
-                Timber.plant(CrashReportingTree(get()))
+                Timber.plant(CrashReportingTree(it))
                 Timber.d("Enabled Crashlytics crash reporting")
             } else {
                 Timber.d("Crashlytics crash reporting disabled in DEBUG builds")

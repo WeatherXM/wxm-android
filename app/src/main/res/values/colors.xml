@@ -15,6 +15,7 @@
     <color name="errorTint">@color/light_error_tint</color>
     <color name="warningTint">@color/light_warning_tint</color>
     <color name="midGrey">@color/light_mid_grey</color>
+    <color name="midGreyDisabled">@color/light_mid_grey_disabled</color>
     <color name="darkGrey">@color/light_dark_grey</color>
     <color name="layer1">@color/light_layer1</color>
     <color name="layer2">@color/light_layer2</color>
@@ -30,6 +31,12 @@
 
     <!-- History Charts -->
     <color name="chart_secondary_line">@color/light_lightest_blue</color>
+
+    <!-- Status Chip (last seen) -->
+    <color name="status_chip_background_online">@color/light_success_tint</color>
+    <color name="status_chip_background_offline">@color/light_error_tint</color>
+    <color name="status_chip_content_online">@color/textColor</color>
+    <color name="status_chip_content_offline">@color/textColor</color>
 
     <!-- Network Stats -->
     <color name="network_stats_slider">@color/network_stats_slider_light</color>

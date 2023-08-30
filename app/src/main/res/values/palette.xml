@@ -10,6 +10,7 @@
     <!-- Color Palette/Library Design Team -->
 
     <color name="light_text">#1B1C22</color>
+    <color name="light_mid_grey_disabled">#27C6C6D0</color>
     <color name="light_mid_grey">#C6C6D0</color>
     <color name="light_dark_grey">#45464F</color>
     <color name="light_top">#FEFBFF</color>
@@ -25,6 +26,7 @@
     <color name="light_translucent">#33FEFBFF</color>
 
     <color name="dark_text">#FEFBFF</color>
+    <color name="dark_mid_grey_disabled">#275D5E67</color>
     <color name="dark_mid_grey">#5D5E67</color>
     <color name="dark_dark_grey">#C6C6D0</color>
     <color name="dark_top">#31364A</color>
@@ -51,6 +53,7 @@
 
     <!-- Explorer -->
     <color name="hex_fill_color">#3388ff</color>
+    <color name="follow_heart_color">#FF9AAE</color>
 
     <!-- Network Stats -->
     <color name="network_stats_chart_primary">#2780FF</color>

@@ -65,6 +65,7 @@
                             android:id="@+id/errorCard"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:paddingBottom="@dimen/padding_normal"
                             android:visibility="gone" />
                     </FrameLayout>
 
@@ -74,10 +75,58 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/margin_normal"
-                        android:backgroundTint="@color/colorSurface"
+                        android:backgroundTint="@color/subtle_button_background_color"
                         android:text="@string/view_historical_data"
-                        app:layout_constraintTop_toBottomOf="@id/weatherCardWithError" />
+                        android:textColor="@color/subtle_button_text_stroke_color"
+                        app:layout_constraintTop_toBottomOf="@id/weatherCardWithError"
+                        app:strokeColor="@color/subtle_button_text_stroke_color" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/followCard"
+                style="@style/Widget.WeatherXM.MaterialCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:visibility="gone"
+                app:cardElevation="0dp"
+                app:contentPadding="@dimen/padding_small"
+                app:contentPaddingLeft="@dimen/padding_normal"
+                app:layout_constraintTop_toBottomOf="@id/currentWeatherCardContainer"
+                tools:visibility="visible">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/followPrompt"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_normal"
+                        android:text="@string/follow_prompt"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/followPromptBtn"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/followPromptBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/padding_normal"
+                        android:paddingEnd="@dimen/padding_normal"
+                        android:text="@string/action_favorite"
+                        app:icon="@drawable/ic_favorite_outline"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </com.google.android.material.card.MaterialCardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

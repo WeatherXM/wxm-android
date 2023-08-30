@@ -29,13 +29,6 @@
     </style>
 
     <style name="ThemeOverlay.WeatherXM.AlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="dialogCornerRadius">0dp</item>
-        <item name="android:bottomLeftRadius">0dp</item>
-        <item name="android:bottomRightRadius">0dp</item>
-        <item name="android:dialogCornerRadius">0dp</item>
-        <item name="android:topLeftRadius">0dp</item>
-        <item name="android:topRightRadius">0dp</item>
-
         <item name="materialAlertDialogTitleTextStyle">@style/Widget.WeatherXM.AlertDialog.Title
         </item>
         <item name="materialAlertDialogBodyTextStyle">@style/Widget.WeatherXM.AlertDialog.Body
@@ -44,10 +37,10 @@
             @style/Widget.WeatherXM.AlertDialog.Button.Positive
         </item>
         <item name="buttonBarNegativeButtonStyle">
-            @style/Widget.WeatherXM.AlertDialog.Button.Negative
+            @style/Widget.WeatherXM.TextButton.Subtle
         </item>
         <item name="buttonBarNeutralButtonStyle">
-            @style/Widget.WeatherXM.AlertDialog.Button.Neutral
+            @style/Widget.WeatherXM.TextButton.Subtle
         </item>
     </style>
 </resources>

@@ -11,6 +11,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.weatherxm.databinding.ViewActionDialogBinding
+import com.weatherxm.util.setHtml
 import timber.log.Timber
 
 class ActionDialogFragment : DialogFragment() {
@@ -23,6 +24,7 @@ class ActionDialogFragment : DialogFragment() {
     class Builder(
         var title: String? = null,
         var message: String? = null,
+        var htmlMessage: String? = null,
         var positive: String? = null,
         var negative: String? = null,
         var onPositiveClickListener: OnDialogActionClickListener? = null,
@@ -47,11 +49,12 @@ class ActionDialogFragment : DialogFragment() {
         }
 
         fun build(): ActionDialogFragment {
-            Timber.d("Building AlertDialogFragment with params: $this")
+            Timber.d("Building ActionDialogFragment with params: $this")
             return ActionDialogFragment().apply {
                 arguments = bundleOf(
                     ARG_TITLE to this@Builder.title,
                     ARG_MESSAGE to this@Builder.message,
+                    ARG_HTML_MESSAGE to this@Builder.htmlMessage,
                     ARG_POSITIVE to this@Builder.positive,
                     ARG_NEGATIVE to this@Builder.negative
                 )
@@ -72,6 +75,7 @@ class ActionDialogFragment : DialogFragment() {
 
         private const val ARG_TITLE = "title"
         private const val ARG_MESSAGE = "message"
+        private const val ARG_HTML_MESSAGE = "html_message"
         private const val ARG_POSITIVE = "positive"
         private const val ARG_NEGATIVE = "negative"
     }
@@ -88,11 +92,15 @@ class ActionDialogFragment : DialogFragment() {
         builder.setView(binding.root)
 
         arguments?.getString(ARG_TITLE)?.let {
-            binding.errorTitle.text = it
+            binding.title.text = it
         }
 
         arguments?.getString(ARG_MESSAGE)?.let {
-            binding.errorDesc.text = it
+            binding.message.text = it
+        }
+
+        arguments?.getString(ARG_HTML_MESSAGE)?.let {
+            binding.message.setHtml(it)
         }
 
         arguments?.getString(ARG_POSITIVE)?.let {

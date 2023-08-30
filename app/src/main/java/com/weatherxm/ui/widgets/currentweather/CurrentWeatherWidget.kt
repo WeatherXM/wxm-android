@@ -22,7 +22,7 @@ import com.weatherxm.ui.common.Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_ON_LOGGED_IN
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_SHOULD_LOGIN
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
-import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.login.LoginActivity
@@ -225,11 +225,11 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         @Suppress("UseCheckOrError")
         views.setImageViewResource(
             R.id.stationHomeFollowIcon,
-            when (device.ownershipStatus) {
-                DeviceOwnershipStatus.OWNED -> R.drawable.ic_home
-                DeviceOwnershipStatus.FOLLOWED -> R.drawable.ic_favorite
-                DeviceOwnershipStatus.UNFOLLOWED -> R.drawable.ic_favorite_outline
-                null -> throw IllegalStateException("Oops! No ownership status here.")
+            when (device.relation) {
+                DeviceRelation.OWNED -> R.drawable.ic_home
+                DeviceRelation.FOLLOWED -> R.drawable.ic_favorite
+                DeviceRelation.UNFOLLOWED -> R.drawable.ic_favorite_outline
+                null -> throw IllegalStateException("Oops! No device relation here.")
             }
         )
 
@@ -269,10 +269,19 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
                     R.id.lastSeen,
                     device.lastWeatherStationActivity?.getFormattedTime(context)
                 )
+                views.setTextColor(
+                    R.id.lastSeen,
+                    context.getColor(R.color.status_chip_content_online)
+                )
                 views.setInt(
-                    R.id.statusCard,
+                    R.id.statusIcon,
+                    "setColorFilter",
+                    context.getColor(R.color.status_chip_content_online)
+                )
+                views.setInt(
+                    R.id.statusContainer,
                     "setBackgroundResource",
-                    R.drawable.background_rounded_corners_success
+                    R.drawable.background_rounded_corners_status_success
                 )
             }
             false -> {
@@ -282,10 +291,19 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
                         context.getString(R.string.just_now)
                     )
                 )
+                views.setTextColor(
+                    R.id.lastSeen,
+                    context.getColor(R.color.status_chip_content_offline)
+                )
                 views.setInt(
-                    R.id.statusCard,
+                    R.id.statusIcon,
+                    "setColorFilter",
+                    context.getColor(R.color.status_chip_content_offline)
+                )
+                views.setInt(
+                    R.id.statusContainer,
                     "setBackgroundResource",
-                    R.drawable.background_rounded_corners_error
+                    R.drawable.background_rounded_corners_blue_tint
                 )
             }
             else -> {}

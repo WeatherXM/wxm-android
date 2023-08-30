@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:fitsSystemWindows="false">
 
     <androidx.core.widget.NestedScrollView
@@ -30,9 +30,55 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="invisible"
-                app:layout_scrollFlags="noScroll"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_scrollFlags="noScroll"
                 tools:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/hiddenContentContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_lock_outline"
+                    tools:ignore="ContentDescription" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:gravity="center"
+                    android:text="@string/hidden_content"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
+                    android:textSize="22sp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/hiddenContentText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small_to_normal"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    tools:text="Add Perky Magenta Clothes to your favorites to see historical &amp; forecast data." />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/hiddenContentBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:paddingStart="@dimen/padding_normal_to_large"
+                    android:paddingEnd="@dimen/padding_normal_to_large"
+                    android:text="@string/action_favorite"
+                    app:icon="@drawable/ic_favorite_outline" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/forecastRecycler"

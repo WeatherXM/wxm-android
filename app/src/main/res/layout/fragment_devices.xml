@@ -20,8 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:title="@string/my_stations_list"
-            app:titleTextColor="@color/colorPrimary" />
+            app:title="@string/my_stations_list" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

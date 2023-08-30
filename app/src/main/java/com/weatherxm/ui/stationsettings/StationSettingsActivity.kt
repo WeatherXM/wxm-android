@@ -10,7 +10,7 @@ import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityStationSettingsBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
-import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.toast
@@ -121,21 +121,16 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
                 source = Analytics.ParamValue.DEVICE_INFO.paramValue
             )
         }
+
+        if (model.device.relation == DeviceRelation.FOLLOWED) {
+            binding.contactSupportBtn.text = getString(R.string.see_something_wrong_contact_support)
+        }
     }
 
     private fun onChangeStationName() {
-        model.canChangeFriendlyName()
-            .fold({
-                toast(it.errorMessage)
-            }, {
-                // This cannot be false, by design
-                FriendlyNameDialogFragment(
-                    model.device.friendlyName,
-                    model.device.id
-                ) {
-                    model.setOrClearFriendlyName(it)
-                }.show(this)
-            })
+        FriendlyNameDialogFragment(model.device.friendlyName, model.device.id) {
+            model.setOrClearFriendlyName(it)
+        }.show(this)
     }
 
     override fun onResume() {
@@ -152,7 +147,7 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
         // TODO: Remove this when we implement this
         binding.reconfigureWifiContainer.hide(null)
 
-        if (model.device.ownershipStatus != DeviceOwnershipStatus.OWNED) {
+        if (model.device.relation != DeviceRelation.OWNED) {
             binding.deleteStationCard.hide(null)
             binding.frequencyTitle.hide(null)
             binding.frequencyDesc.hide(null)

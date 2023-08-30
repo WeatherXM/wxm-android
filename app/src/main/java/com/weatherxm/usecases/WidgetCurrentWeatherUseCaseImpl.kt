@@ -4,7 +4,6 @@ import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.WidgetRepository
-import com.weatherxm.ui.common.DeviceOwnershipStatus
 import com.weatherxm.ui.common.UIDevice
 
 class WidgetCurrentWeatherUseCaseImpl(
@@ -21,10 +20,7 @@ class WidgetCurrentWeatherUseCaseImpl(
 
     override suspend fun getUserDevice(deviceId: String): Either<Failure, UIDevice> {
         return deviceRepository.getUserDevice(deviceId).map {
-            it.toUIDevice().apply {
-                // TODO: Remove this when we have the API info in the response
-                this.ownershipStatus = DeviceOwnershipStatus.OWNED
-            }
+            it.toUIDevice()
         }
     }
 
@@ -34,10 +30,7 @@ class WidgetCurrentWeatherUseCaseImpl(
     ): Either<Failure, List<UIDevice>> {
         return deviceRepository.getUserDevices(deviceIds).map {
             it.map { device ->
-                device.toUIDevice().apply {
-                    // TODO: Remove this when we have the API info in the response
-                    this.ownershipStatus = DeviceOwnershipStatus.OWNED
-                }
+                device.toUIDevice()
             }
         }
     }

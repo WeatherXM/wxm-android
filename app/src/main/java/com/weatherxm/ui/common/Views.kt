@@ -93,7 +93,7 @@ fun TabLayout.getSelectedTab(): TabLayout.Tab? {
 fun Activity.getRichText(
     @StringRes resId: Int,
     vararg args: Any = emptyArray()
-) = getText(resId).toSpanned().toHtml().format(*args).parseAsHtml().trim()
+) = getText(resId).toSpanned().toHtml().format(*args).parseAsHtml().trim().toString()
 
 /**
  * Remove colon ":" character from Serial Number text

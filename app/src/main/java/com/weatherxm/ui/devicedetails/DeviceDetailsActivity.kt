@@ -1,24 +1,30 @@
 package com.weatherxm.ui.devicedetails
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.removeItemAt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import com.weatherxm.R
-import com.weatherxm.data.DeviceProfile
+import com.weatherxm.data.Resource
+import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityDeviceDetailsBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
-import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.devicedetails.current.CurrentFragment
 import com.weatherxm.ui.devicedetails.forecast.ForecastFragment
@@ -27,6 +33,8 @@ import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.applyInsets
+import com.weatherxm.util.setColor
+import com.weatherxm.util.setStatusChip
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
@@ -74,6 +82,8 @@ class DeviceDetailsActivity : AppCompatActivity(), KoinComponent {
 
         binding.root.applyInsets()
 
+        val dialogOverlay = MaterialAlertDialogBuilder(this).create()
+
         if (model.device.isEmpty()) {
             Timber.d("Could not start DeviceDetailsActivity. Device is null.")
             toast(R.string.error_generic_message)
@@ -98,10 +108,6 @@ class DeviceDetailsActivity : AppCompatActivity(), KoinComponent {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        if (model.device.ownershipStatus == DeviceOwnershipStatus.UNFOLLOWED) {
-            binding.toolbar.menu.removeItemAt(1)
-        }
-
         binding.toolbar.setOnMenuItemClickListener {
             onMenuItem(it)
         }
@@ -110,6 +116,14 @@ class DeviceDetailsActivity : AppCompatActivity(), KoinComponent {
             model.device.cellCenter?.let { location ->
                 navigator.showCellInfo(this, UICell(model.device.cellIndex, location))
             }
+        }
+
+        model.onFollowStatus().observe(this) {
+            onFollowStatus(it, dialogOverlay)
+        }
+
+        model.onUpdatedDevice().observe(this) {
+            updateDeviceInfo(it)
         }
 
         model.address().observe(this) {
@@ -130,17 +144,36 @@ class DeviceDetailsActivity : AppCompatActivity(), KoinComponent {
             }
         }.attach()
 
+        binding.follow.setOnClickListener {
+            handleFollowClick()
+        }
+
         updateDeviceInfo()
     }
 
     override fun onResume() {
         super.onResume()
-        if (model.device.ownershipStatus != DeviceOwnershipStatus.OWNED) {
+        if (model.device.relation != DeviceRelation.OWNED) {
             analytics.trackScreen(
                 Analytics.Screen.EXPLORER_DEVICE,
                 DeviceDetailsActivity::class.simpleName,
                 model.device.id
             )
+        }
+    }
+
+    private fun onFollowStatus(followStatus: Resource<Unit>, dialogOverlay: AlertDialog) {
+        model.onFollowStatus().observe(this) {
+            binding.loadingAnimation.setVisible(followStatus.status == Status.LOADING)
+            when (followStatus.status) {
+                Status.SUCCESS -> dialogOverlay.cancel()
+                Status.ERROR -> {
+                    toast(it.message ?: getString(R.string.error_reach_out_short))
+                    dialogOverlay.cancel()
+                }
+
+                Status.LOADING -> dialogOverlay.show()
+            }
         }
     }
 
@@ -153,6 +186,7 @@ class DeviceDetailsActivity : AppCompatActivity(), KoinComponent {
                 )
                 true
             }
+
             R.id.settings -> {
                 navigator.showStationSettings(this, model.device)
                 true
@@ -163,48 +197,91 @@ class DeviceDetailsActivity : AppCompatActivity(), KoinComponent {
     }
 
     private fun updateDeviceInfo(device: UIDevice = model.device) {
-        binding.name.text = device.getDefaultOrFriendlyName()
-        binding.publicName.text = device.name
-        binding.collapsingToolbar.title = device.getDefaultOrFriendlyName()
-
-        @Suppress("UseCheckOrError")
-        binding.stationFollowHomeIcon.setImageResource(
-            when (device.ownershipStatus) {
-                DeviceOwnershipStatus.OWNED -> R.drawable.ic_home
-                DeviceOwnershipStatus.FOLLOWED -> R.drawable.ic_favorite
-                DeviceOwnershipStatus.UNFOLLOWED -> R.drawable.ic_favorite_outline
-                null -> throw IllegalStateException("Oops! No ownership status here.")
-            }
-        )
-
-        with(binding.lastSeen) {
-            text = device.lastWeatherStationActivity?.getRelativeFormattedTime(
-                fallbackIfTooSoon = context.getString(R.string.just_now)
-            )
+        with(device.getDefaultOrFriendlyName()) {
+            binding.collapsingToolbar.title = this
+            binding.name.text = this
+            binding.publicName.text = device.name
+            binding.publicName.visibility = if (this != device.name) VISIBLE else INVISIBLE
         }
 
-        binding.statusIcon.setImageResource(
-            if (device.profile == DeviceProfile.Helium) {
-                R.drawable.ic_helium
-            } else {
-                R.drawable.ic_wifi
-            }
-        )
-
-        binding.statusCard.setCardBackgroundColor(
-            getColor(
-                when (device.isActive) {
-                    true -> R.color.successTint
-                    false -> R.color.errorTint
-                    else -> R.color.midGrey
+        with(binding.follow) {
+            when (device.relation) {
+                DeviceRelation.OWNED -> {
+                    setOnClickListener {
+                        // NO-OP
+                    }
+                    setImageResource(R.drawable.ic_home)
+                    setColor(R.color.colorOnSurface)
+                    isEnabled = false
                 }
-            )
+
+                DeviceRelation.FOLLOWED -> {
+                    setOnClickListener {
+                        handleFollowClick()
+                    }
+                    setImageResource(R.drawable.ic_favorite)
+                    setColor(R.color.follow_heart_color)
+                    isEnabled = true
+                }
+
+                DeviceRelation.UNFOLLOWED -> {
+                    setOnClickListener {
+                        handleFollowClick()
+                    }
+                    setImageResource(R.drawable.ic_favorite_outline)
+                    setColor(R.color.follow_heart_color)
+                    isEnabled = true
+                }
+
+                null -> setVisible(false)
+            }
+        }
+
+        with(binding.toolbar) {
+            if (device.relation == DeviceRelation.FOLLOWED) {
+                if (menu.findItem(R.id.settings) == null) {
+                    menu.add(Menu.NONE, R.id.settings, 1, R.string.station_settings)
+                }
+            } else if (device.relation == DeviceRelation.UNFOLLOWED) {
+                menu.removeItem(R.id.settings)
+            }
+        }
+
+        binding.status.setStatusChip(
+            device.lastWeatherStationActivity?.getRelativeFormattedTime(
+                fallbackIfTooSoon = getString(R.string.just_now)
+            ),
+            device.profile,
+            device.isActive,
         )
 
         if (device.address.isNullOrEmpty()) {
             model.fetchAddressFromCell()
         } else {
             binding.address.text = device.address
+        }
+    }
+
+    private fun handleFollowClick() {
+        if (model.isLoggedIn() == false) {
+            navigator.showLoginDialog(
+                fragmentActivity = this,
+                title = getString(R.string.add_favorites),
+                htmlMessage = getString(R.string.hidden_content_login_prompt, model.device.name)
+            )
+            return
+        }
+
+        if (model.device.relation == DeviceRelation.FOLLOWED) {
+            navigator.showHandleFollowDialog(this, false, model.device.name) {
+                model.unFollowStation()
+            }
+        } else if (model.device.relation == DeviceRelation.UNFOLLOWED && !model.device.isOnline()) {
+            navigator.showHandleFollowDialog(this, true, model.device.name) {
+                model.followStation()
+            }
+        } else if (model.device.relation == DeviceRelation.UNFOLLOWED) {
+            model.followStation()
         }
     }
 

@@ -293,6 +293,7 @@
                         android:clipChildren="false"
                         android:clipToPadding="false"
                         android:overScrollMode="never"
+                        android:paddingBottom="@dimen/padding_small"
                         android:scrollbars="vertical"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_constraintTop_toBottomOf="@id/shareBtn"
@@ -303,7 +304,7 @@
                         style="@style/Widget.WeatherXM.Button.Subtle.Borders"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_normal"
+                        android:layout_marginTop="@dimen/margin_small_to_normal"
                         android:text="@string/title_contact_support"
                         app:layout_constraintTop_toBottomOf="@id/recyclerStationInfo" />
 

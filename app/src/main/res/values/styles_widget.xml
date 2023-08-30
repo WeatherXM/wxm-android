@@ -234,6 +234,18 @@
     </style>
 
     <style name="Widget.WeatherXM.Chip.Status" parent="Widget.Material3.Chip.Assist">
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAppearance">@style/TextAppearance.WeatherXM.Default.BodySmall</item>
+        <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="android:clickable">false</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipMinHeight">30dp</item>
+        <item name="chipCornerRadius">@dimen/card_corner_radius_small</item>
+        <item name="chipIconSize">15dp</item>
+    </style>
+
+    <style name="Widget.WeatherXM.Chip.ChartLines" parent="Widget.Material3.Chip.Assist">
         <item name="android:textColor">@color/dark_background</item>
         <item name="android:textSize">12sp</item>
         <item name="chipMinTouchTargetSize">0dp</item>
@@ -310,14 +322,11 @@
     </style>
 
     <style name="Widget.WeatherXM.AlertDialog.Body" parent="MaterialAlertDialog.Material3.Body.Text">
-        <item name="android:textAppearance">@style/TextAppearance.WeatherXM.AlertDialog.Body</item>
+        <item name="android:textAppearance">@style/TextAppearance.WeatherXM.Default.BodyMedium
+        </item>
     </style>
 
     <style name="Widget.WeatherXM.AlertDialog.Button.Positive" parent="Widget.WeatherXM.Button">
         <item name="android:layout_marginLeft">@dimen/margin_normal</item>
     </style>
-
-    <style name="Widget.WeatherXM.AlertDialog.Button.Negative" parent="Widget.WeatherXM.TextButton.Subtle" />
-
-    <style name="Widget.WeatherXM.AlertDialog.Button.Neutral" parent="Widget.WeatherXM.TextButton.Subtle" />
 </resources>

@@ -9,10 +9,14 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
-import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.setHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -21,6 +25,7 @@ import org.koin.core.parameter.parametersOf
 class ForecastFragment : Fragment(), KoinComponent {
     private lateinit var binding: FragmentDeviceDetailsForecastBinding
     private val analytics: Analytics by inject()
+    private val navigator: Navigator by inject()
     private val parentModel: DeviceDetailsViewModel by activityViewModels()
     private val model: ForecastViewModel by viewModel {
         parametersOf(parentModel.device)
@@ -43,10 +48,12 @@ class ForecastFragment : Fragment(), KoinComponent {
         super.onViewCreated(view, savedInstanceState)
 
         binding.swiperefresh.setOnRefreshListener {
-            if (model.device.ownershipStatus != DeviceOwnershipStatus.UNFOLLOWED) {
+            if (model.device.relation != UNFOLLOWED) {
                 model.fetchForecast(true)
             }
         }
+
+        initHiddenContent()
 
         // Initialize the adapter with empty data
         forecastAdapter = ForecastAdapter { index, state ->
@@ -64,8 +71,16 @@ class ForecastFragment : Fragment(), KoinComponent {
         }
         binding.forecastRecycler.adapter = forecastAdapter
 
+        parentModel.onFollowStatus().observe(viewLifecycleOwner) {
+            if (it.status == Status.SUCCESS) {
+                model.device = parentModel.device
+                fetchOrHideContent()
+            }
+        }
+
         model.onForecast().observe(viewLifecycleOwner) {
             forecastAdapter.submitList(it)
+            binding.forecastRecycler.setVisible(true)
         }
 
         model.onLoading().observe(viewLifecycleOwner) {
@@ -89,10 +104,7 @@ class ForecastFragment : Fragment(), KoinComponent {
             }
         }
 
-        // Fetch data
-        if (model.device.ownershipStatus != DeviceOwnershipStatus.UNFOLLOWED) {
-            model.fetchForecast()
-        }
+        fetchOrHideContent()
     }
 
     override fun onResume() {
@@ -101,6 +113,37 @@ class ForecastFragment : Fragment(), KoinComponent {
             Analytics.Screen.FORECAST,
             ForecastFragment::class.simpleName
         )
+    }
+
+    private fun fetchOrHideContent() {
+        if (model.device.relation != UNFOLLOWED) {
+            binding.hiddenContentContainer.setVisible(false)
+            model.fetchForecast()
+        } else if (model.device.relation == UNFOLLOWED) {
+            binding.forecastRecycler.setVisible(false)
+            binding.hiddenContentContainer.setVisible(true)
+        }
+    }
+
+    private fun initHiddenContent() {
+        binding.hiddenContentText.setHtml(R.string.hidden_content_prompt, model.device.name)
+        binding.hiddenContentBtn.setOnClickListener {
+            if (parentModel.isLoggedIn() == true) {
+                if (model.device.relation == UNFOLLOWED && !model.device.isOnline()) {
+                    navigator.showHandleFollowDialog(activity, true, model.device.name) {
+                        parentModel.followStation()
+                    }
+                } else {
+                    parentModel.followStation()
+                }
+            } else {
+                navigator.showLoginDialog(
+                    fragmentActivity = activity,
+                    title = getString(R.string.add_favorites),
+                    htmlMessage = getString(R.string.hidden_content_login_prompt, model.device.name)
+                )
+            }
+        }
     }
 
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {

@@ -79,7 +79,7 @@ data class UIDevice(
     val id: String,
     val name: String,
     val cellIndex: String,
-    var ownershipStatus: DeviceOwnershipStatus?,
+    var relation: DeviceRelation?,
     val label: String?,
     val friendlyName: String?,
     var profile: DeviceProfile?,
@@ -138,6 +138,8 @@ data class UIDevice(
     }
 
     fun isEmpty() = id.isEmpty() && name.isEmpty() && cellIndex.isEmpty()
+
+    fun isOnline() = isActive != null && isActive == true
 }
 
 @Keep
@@ -168,7 +170,7 @@ enum class DeviceType : Parcelable {
 }
 
 @Parcelize
-enum class DeviceOwnershipStatus : Parcelable {
+enum class DeviceRelation : Parcelable {
     OWNED,
     FOLLOWED,
     UNFOLLOWED
@@ -193,5 +195,27 @@ data class UIForecast(
     var humidity: Int? = null,
     var hourlyWeather: List<HourlyWeather>?
 )
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class UserDevices(
+    var devices: List<UIDevice>,
+    var totalDevices: Int,
+    var ownedDevices: Int,
+    var followedDevices: Int
+) : Parcelable {
+    fun getOwnedDevices(): List<UIDevice> {
+        return devices.filter {
+            it.relation == DeviceRelation.OWNED
+        }
+    }
+
+    fun getFollowedDevices(): List<UIDevice> {
+        return devices.filter {
+            it.relation == DeviceRelation.FOLLOWED
+        }
+    }
+}
 
 

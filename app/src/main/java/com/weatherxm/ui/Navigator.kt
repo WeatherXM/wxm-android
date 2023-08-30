@@ -20,6 +20,7 @@ import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.cellinfo.CellInfoActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
+import com.weatherxm.ui.common.ActionDialogFragment
 import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
 import com.weatherxm.ui.common.Contracts.ARG_CELL_CENTER
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
@@ -30,6 +31,7 @@ import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.MessageDialogFragment
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.components.LoginPromptDialogFragment
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
 import com.weatherxm.ui.devicealerts.DeviceAlertsActivity
@@ -344,6 +346,53 @@ class Navigator(
     ) {
         MessageDialogFragment.newInstance(title, message)
             .show(fragmentManager, MessageDialogFragment.TAG)
+    }
+
+    fun showHandleFollowDialog(
+        fragmentActivity: FragmentActivity?,
+        isFollowDialog: Boolean,
+        deviceName: String,
+        onConfirm: () -> Unit
+    ) {
+        var title = R.string.add_favorites
+        var message = R.string.add_favorites_desc
+        if (!isFollowDialog) {
+            title = R.string.remove_favorites
+            message = R.string.remove_favorites_desc
+        }
+        fragmentActivity?.let {
+            ActionDialogFragment
+                .Builder(
+                    title = it.getString(title),
+                    htmlMessage = it.getString(message, deviceName),
+                    negative = it.getString(R.string.action_cancel),
+                )
+                .onPositiveClick(it.getString(R.string.action_confirm)) {
+                    onConfirm.invoke()
+                }
+                .build()
+                .show(it)
+        }
+    }
+
+    fun showLoginDialog(
+        fragmentActivity: FragmentActivity?,
+        title: String,
+        message: String? = null,
+        htmlMessage: String? = null,
+    ) {
+        fragmentActivity?.let {
+            LoginPromptDialogFragment(title,
+                message,
+                htmlMessage,
+                onLogin = {
+                    showLogin(it)
+                },
+                onSignup = {
+                    showSignup(it)
+                }
+            ).show(it)
+        }
     }
 
     fun sendSupportEmail(

@@ -13,8 +13,10 @@ import com.weatherxm.R
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 import com.weatherxm.data.repository.AddressRepository
+import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
-import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.data.repository.FollowRepository
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.ExplorerData
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
@@ -26,6 +28,8 @@ import com.weatherxm.util.ResourcesHelper
 class ExplorerUseCaseImpl(
     private val explorerRepository: ExplorerRepository,
     private val addressRepository: AddressRepository,
+    private val followRepository: FollowRepository,
+    private val deviceRepository: DeviceRepository,
     private val gson: Gson,
     private val resHelper: ResourcesHelper
 ) : ExplorerUseCase {
@@ -73,13 +77,11 @@ class ExplorerUseCaseImpl(
     override suspend fun getCellDevices(cell: UICell): Either<Failure, List<UIDevice>> {
         return explorerRepository.getCellDevices(cell.index).map {
             val address = addressRepository.getAddressFromLocation(cell.index, cell.center)
-
             it.map { publicDevice ->
                 publicDevice.toUIDevice().apply {
                     this.cellCenter = cell.center
                     this.address = address
-                    // TODO: Change this when we implement the feature
-                    this.ownershipStatus = DeviceOwnershipStatus.UNFOLLOWED
+                    this.relation = getRelation(this.id)
                 }
             }.sortedWith(
                 compareByDescending<UIDevice> { it.lastWeatherStationActivity }.thenBy { it.name }
@@ -93,8 +95,7 @@ class ExplorerUseCaseImpl(
     ): Either<Failure, UIDevice> {
         return explorerRepository.getCellDevice(index, deviceId).map {
             it.toUIDevice().apply {
-                // TODO: Change this when we implement the feature
-                this.ownershipStatus = DeviceOwnershipStatus.UNFOLLOWED
+                this.relation = getRelation(this.id)
             }
         }
     }
@@ -104,7 +105,7 @@ class ExplorerUseCaseImpl(
         exact: Boolean?,
         exclude: String?
     ): Either<Failure, List<SearchResult>> {
-        return explorerRepository.networkSearch(query).map {
+        return explorerRepository.networkSearch(query, exact).map {
             mutableListOf<SearchResult>().apply {
                 addAll(
                     it.devices?.map { device ->
@@ -113,10 +114,10 @@ class ExplorerUseCaseImpl(
                             center = device.cellCenter,
                             stationId = device.id,
                             stationCellIndex = device.cellIndex,
-                            stationConnectivity = device.connectivity
+                            stationConnectivity = device.connectivity,
+                            relation = getRelation(device.id)
                         )
                     } ?: mutableListOf())
-
                 addAll(
                     it.addresses?.map { address ->
                         SearchResult(
@@ -130,11 +131,25 @@ class ExplorerUseCaseImpl(
     }
 
     override suspend fun getRecentSearches(): List<SearchResult> {
-        return explorerRepository.getRecentSearches().getOrElse { mutableListOf() }
+        return explorerRepository.getRecentSearches().getOrElse { mutableListOf() }.onEach {
+            it.relation = getRelation(it.stationId)
+        }
     }
 
     override suspend fun setRecentSearch(search: SearchResult) {
         explorerRepository.setRecentSearch(search)
+    }
+
+    private suspend fun getRelation(deviceId: String?): DeviceRelation {
+        val followedDevices = followRepository.getFollowedDevicesIds()
+        val userDevices = deviceRepository.getUserDevicesIds()
+        return if (userDevices.contains(deviceId)) {
+            DeviceRelation.OWNED
+        } else if (followedDevices.contains(deviceId)) {
+            DeviceRelation.FOLLOWED
+        } else {
+            DeviceRelation.UNFOLLOWED
+        }
     }
 }
 

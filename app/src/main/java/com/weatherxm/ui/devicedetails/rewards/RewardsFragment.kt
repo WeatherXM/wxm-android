@@ -8,9 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
+import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsRewardsBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -41,8 +42,15 @@ class RewardsFragment : Fragment(), KoinComponent {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        parentModel.onFollowStatus().observe(viewLifecycleOwner) {
+            if (it.status == Status.SUCCESS) {
+                model.device = parentModel.device
+                model.fetchTokenDetails()
+            }
+        }
+
         model.onTokens().observe(viewLifecycleOwner) {
-            if (model.device.ownershipStatus == DeviceOwnershipStatus.OWNED) {
+            if (model.device.relation == DeviceRelation.OWNED) {
                 binding.tokenCard.setTokenInfo(
                     it,
                     model.device.rewardsInfo?.totalRewards,
@@ -51,6 +59,7 @@ class RewardsFragment : Fragment(), KoinComponent {
             } else {
                 binding.tokenCard.setTokenInfo(it, null, model.device.id)
             }
+            binding.tokenRewards.isEnabled = model.device.relation != DeviceRelation.UNFOLLOWED
         }
 
         model.onLoading().observe(viewLifecycleOwner) {
@@ -75,6 +84,8 @@ class RewardsFragment : Fragment(), KoinComponent {
         binding.tokenRewards.setOnClickListener {
             navigator.showTokenScreen(requireContext(), model.device)
         }
+
+        binding.tokenRewards.isEnabled = model.device.relation != DeviceRelation.UNFOLLOWED
 
         model.fetchTokenDetails()
     }

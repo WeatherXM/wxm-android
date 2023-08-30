@@ -6,7 +6,6 @@ import timber.log.Timber
 
 class MessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        // TODO: Handle FCM messages here
         Timber.d("From: ${remoteMessage.from}")
 
         // Check if message contains a data payload.

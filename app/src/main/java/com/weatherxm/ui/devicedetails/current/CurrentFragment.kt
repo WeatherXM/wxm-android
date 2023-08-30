@@ -8,9 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
+import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -49,11 +50,19 @@ class CurrentFragment : Fragment(), KoinComponent {
             }
         }
 
+        parentModel.onFollowStatus().observe(viewLifecycleOwner) {
+            if (it.status == Status.SUCCESS) {
+                model.device = parentModel.device
+                model.fetchDevice()
+            }
+        }
+
         parentModel.onDevicePolling().observe(viewLifecycleOwner) {
             onDeviceUpdated(it)
         }
 
         model.onDevice().observe(viewLifecycleOwner) {
+            parentModel.updateDevice(it)
             onDeviceUpdated(it)
         }
 
@@ -79,6 +88,16 @@ class CurrentFragment : Fragment(), KoinComponent {
         binding.historicalCharts.setOnClickListener {
             navigator.showHistoryActivity(requireContext(), model.device)
         }
+
+        binding.followCard.setVisible(
+            model.device.relation == DeviceRelation.UNFOLLOWED
+        )
+        binding.historicalCharts.isEnabled =
+            model.device.relation != DeviceRelation.UNFOLLOWED
+
+        binding.followPromptBtn.setOnClickListener {
+            handleFollowClick()
+        }
     }
 
     override fun onResume() {
@@ -89,6 +108,25 @@ class CurrentFragment : Fragment(), KoinComponent {
         )
     }
 
+    private fun handleFollowClick() {
+        if (parentModel.isLoggedIn() == false) {
+            navigator.showLoginDialog(
+                fragmentActivity = activity,
+                title = getString(R.string.add_favorites),
+                htmlMessage = getString(R.string.hidden_content_login_prompt, model.device.name)
+            )
+            return
+        }
+
+        if (model.device.relation == DeviceRelation.UNFOLLOWED && !model.device.isOnline()) {
+            navigator.showHandleFollowDialog(activity, true, model.device.name) {
+                parentModel.followStation()
+            }
+        } else if (model.device.relation == DeviceRelation.UNFOLLOWED) {
+            parentModel.followStation()
+        }
+    }
+
     private fun onDeviceUpdated(device: UIDevice) {
         binding.progress.visibility = View.INVISIBLE
         when (device.isActive) {
@@ -96,7 +134,7 @@ class CurrentFragment : Fragment(), KoinComponent {
                 binding.errorCard.setVisible(false)
             }
             false -> {
-                if (model.device.ownershipStatus == DeviceOwnershipStatus.OWNED) {
+                if (model.device.relation == DeviceRelation.OWNED) {
                     binding.errorCard.setErrorMessageWithUrl(
                         R.string.error_user_device_offline,
                         device.profile
@@ -112,6 +150,12 @@ class CurrentFragment : Fragment(), KoinComponent {
             }
         }
         binding.currentWeatherCard.setData(device.currentWeather)
+
+        binding.followCard.setVisible(
+            device.relation == DeviceRelation.UNFOLLOWED
+        )
+        binding.historicalCharts.isEnabled =
+            device.relation != DeviceRelation.UNFOLLOWED
     }
 
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {

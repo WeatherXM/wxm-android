@@ -5,7 +5,6 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.WidgetRepository
-import com.weatherxm.ui.common.DeviceOwnershipStatus
 import com.weatherxm.ui.common.UIDevice
 
 class WidgetSelectStationUseCaseImpl(
@@ -21,10 +20,7 @@ class WidgetSelectStationUseCaseImpl(
     override suspend fun getUserDevices(): Either<Failure, List<UIDevice>> {
         return deviceRepository.getUserDevices().map {
             it.map { device ->
-                device.toUIDevice().apply {
-                    // TODO: Remove this when we have the API info in the response
-                    this.ownershipStatus = DeviceOwnershipStatus.OWNED
-                }
+                device.toUIDevice()
             }
         }
     }

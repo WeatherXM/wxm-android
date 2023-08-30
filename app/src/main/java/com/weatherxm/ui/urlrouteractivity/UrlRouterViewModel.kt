@@ -5,11 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.data.ApiError
+import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_PLACES
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.SearchResult
+import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
@@ -23,6 +26,7 @@ class UrlRouterViewModel : ViewModel(), KoinComponent {
     }
 
     private val usecase: ExplorerUseCase by inject()
+    private val devicesUseCase: DeviceDetailsUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
 
     private val onError = MutableLiveData<String>()
@@ -47,11 +51,12 @@ class UrlRouterViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             usecase.networkSearch(deviceName, exact = true, exclude = EXCLUDE_PLACES)
                 .onRight {
-                    // TODO: Remove this if we go with the "exact" parameter and use it.size == 1
-                    if (it.isNotEmpty()) {
+                    if (it.size == 1) {
                         getDevice(it[0])
-                    } else {
+                    } else if (it.size > 1) {
                         onError.postValue(resHelper.getString(R.string.more_than_one_results))
+                    } else {
+                        onError.postValue(resHelper.getString(R.string.share_url_no_results))
                     }
                 }
                 .onLeft {
@@ -61,19 +66,29 @@ class UrlRouterViewModel : ViewModel(), KoinComponent {
     }
 
     private suspend fun getDevice(searchResult: SearchResult) {
-        usecase.getCellDevice(searchResult.stationCellIndex ?: "", searchResult.stationId ?: "")
-            .onRight {
-                it.cellCenter = searchResult.center
-                onDevice.postValue(it)
+        devicesUseCase.getUserDevices().getOrElse { mutableListOf() }.firstOrNull {
+            it.id == searchResult.stationId
+        }?.let {
+            onDevice.postValue(it)
+        } ?: kotlin.run {
+            usecase.getCellDevice(searchResult.stationCellIndex ?: "", searchResult.stationId ?: "")
+                .onRight {
+                    it.cellCenter = searchResult.center
+                    onDevice.postValue(it)
+                }
+                .onLeft {
+                    handleError(it)
+                }
+        }
+    }
+
+    private fun handleError(failure: Failure) {
+        onError.postValue(
+            if (failure is ApiError.DeviceNotFound) {
+                resHelper.getString(R.string.error_device_not_found)
+            } else {
+                failure.getDefaultMessage(R.string.error_reach_out)
             }
-            .onLeft {
-                onError.postValue(
-                    if (it is ApiError.DeviceNotFound) {
-                        resHelper.getString(R.string.error_device_not_found)
-                    } else {
-                        it.getDefaultMessage(R.string.error_reach_out)
-                    }
-                )
-            }
+        )
     }
 }

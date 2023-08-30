@@ -26,6 +26,7 @@
     <string name="action_update_firmware">Update Firmware</string>
     <string name="action_view_more">View More</string>
     <string name="action_finish">Finish</string>
+    <string name="action_sign_in">Sign In</string>
     <string name="action_buy_station">Buy Station</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -100,9 +101,13 @@
     <!-- Weather Station(s) -->
     <string name="my_stations_list">My Stations List</string>
     <string name="weather_stations">Weather Stations</string>
-    <string name="add_weather_station">Claim your WXM device by clicking the + button.</string>
+    <string name="add_weather_station"><![CDATA[Claim your WXM device by clicking the <b>+ button.</b>]]></string>
+    <string name="add_weather_station_or_browser_map"><![CDATA[Claim your WXM device by clicking the <b>+ button</b> or browse the map and add stations to your favorites.</b>]]></string>
+    <string name="browser_map">Browse the explorer map and add stations to your favorites. They will show up here.</string>
     <string name="just_now">Just now</string>
-    <string name="empty_weather_stations">Oh, no! No WXM devices yet?</string>
+    <string name="empty_weather_stations">No stations yet?</string>
+    <string name="empty_favorites">No favorites yet?</string>
+    <string name="view_explorer_map">View Explorer Map</string>
     <string name="displayed_times">All displayed times are in %s timezone.</string>
     <string name="station_offline">Station Offline</string>
     <string name="unknown_address">Unknown Address</string>
@@ -215,7 +220,7 @@
     <string name="rewards">Rewards</string>
     <string name="button_7d">7D</string>
     <string name="button_30d">30D</string>
-    <string name="total">total</string>
+    <string name="total">Total</string>
     <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, $WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after $WXM mainnet token launch. Actual rewards may differ from the ones you see in the chart above.]]></string>
     <string name="wxm_amount">%s $WXM</string>
     <string name="reward">+ %s $WXM</string>
@@ -424,10 +429,20 @@
     <string name="share_station">Share Station</string>
     <string name="total_with_placeholder">%s Total</string>
     <string name="owned_with_placeholder">%s Owned</string>
-    <string name="following_with_placeholder">%s Followed</string>
-    <string name="favorites_prompt_desc">Want to get updates for this station?</string>
-    <string name="favorites_prompt">Add station to your favorites</string>
+    <string name="owned">Owned</string>
+    <string name="favorites_with_placeholder">%s Favorites</string>
+    <string name="favorites">Favorites</string>
+    <string name="add_favorites">Add to favorites?</string>
+    <string name="add_favorites_desc"><![CDATA[<b>%s</b> seems offline at the moment. You can still add it to your favorites, but keep in mind that its data may not be correct.]]></string>
+    <string name="remove_favorites">Remove from favorites?</string>
+    <string name="remove_favorites_desc"><![CDATA[Are you sure you want to remove <b>%s</b> from your favorites list?]]></string>
+    <string name="follow_prompt">Add weather station on your favorites to see historical &amp; forecast data</string>
     <string name="parsing_url_failed">Parsing the URL failed</string>
     <string name="could_not_parse_url">Could not parse the requested URL. Invalid.</string>
     <string name="more_than_one_results">Invalid URL. Multiple results returned that could not be parsed.</string>
+    <string name="share_url_no_results">Invalid URL. No results returned.</string>
+    <string name="see_something_wrong_contact_support">See something wrong? Contact Support</string>
+    <string name="hidden_content">Hidden Content</string>
+    <string name="hidden_content_prompt"><![CDATA[Add <b>%s</b> to your favorites to see historical & forecast data.]]></string>
+    <string name="hidden_content_login_prompt"><![CDATA[Login to add <b>%s</b> to your favorites to see historical & forecast data.]]></string>
 </resources>

@@ -12,7 +12,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.weatherxm.R
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.AlertDialogFragment
+import com.weatherxm.ui.common.ActionDialogFragment
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.DisplayModeHelper
@@ -128,11 +128,11 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
     }
 
     private fun showLogoutDialog() {
-        AlertDialogFragment
+        ActionDialogFragment
             .Builder(
                 title = getString(R.string.title_dialog_logout),
                 message = getString(R.string.message_dialog_logout),
-                negative = getString(R.string.no)
+                negative = getString(R.string.no),
             )
             .onPositiveClick(getString(R.string.yes)) {
                 model.logout()

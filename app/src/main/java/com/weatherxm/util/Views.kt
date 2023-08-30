@@ -38,6 +38,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
+import com.weatherxm.data.DeviceProfile
 import dev.chrisbanes.insetter.applyInsetter
 import kotlin.math.abs
 
@@ -94,6 +95,34 @@ fun Chip.setIcon(@DrawableRes drawable: Int) {
 fun Chip.setSuccessChip() {
     this.setChipBackgroundColorResource(R.color.successTint)
     this.chipIcon = getDrawable(resources, R.drawable.ic_checkmark, context.theme)
+}
+
+fun Chip.setStatusChip(lastSeen: String?, profile: DeviceProfile?, isActive: Boolean?) {
+    text = lastSeen
+    setIcon(
+        if (profile == DeviceProfile.Helium) {
+            R.drawable.ic_helium
+        } else {
+            R.drawable.ic_wifi
+        }
+    )
+    when (isActive) {
+        true -> {
+            setChipBackgroundColorResource(R.color.status_chip_background_online)
+            setTextColor(context.getColor(R.color.status_chip_content_online))
+            setChipIconTintResource(R.color.status_chip_content_online)
+        }
+        false -> {
+            setChipBackgroundColorResource(R.color.status_chip_background_offline)
+            setTextColor(context.getColor(R.color.status_chip_content_offline))
+            setChipIconTintResource(R.color.status_chip_content_offline)
+        }
+        else -> {
+            setChipBackgroundColorResource(R.color.midGrey)
+            setTextColor(context.getColor(R.color.midGrey))
+            setChipIconTintResource(R.color.midGrey)
+        }
+    }
 }
 
 fun ImageView.setColor(@ColorRes color: Int) {

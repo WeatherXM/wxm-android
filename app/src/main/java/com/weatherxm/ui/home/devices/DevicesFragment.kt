@@ -7,16 +7,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UserDevices
 import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
@@ -32,6 +37,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
     private val analytics: Analytics by inject()
     private lateinit var binding: FragmentDevicesBinding
     private lateinit var adapter: DeviceAdapter
+    private lateinit var dialogOverlay: AlertDialog
 
     // Register the launcher for the connect wallet activity and wait for a possible result
     private val connectWalletLauncher =
@@ -61,29 +67,31 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
         initTabs()
 
         binding.navigationTabs.onTabSelected {
-            when (it.position) {
-                0 -> {
-                    // TODO: Implement this
+            if (model.getUserDevices() == null) return@onTabSelected
+            onTabSelected(
+                when (it.position) {
+                    0 -> model.getUserDevices()?.devices
+                    1 -> model.getUserDevices()?.getOwnedDevices()
+                    2 -> model.getUserDevices()?.getFollowedDevices()
+                    else -> mutableListOf()
                 }
-                1 -> {
-                    // TODO: Implement this
-                }
-                2 -> {
-                    // TODO: Implement this
-                }
-            }
+            )
         }
 
         binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
             model.onScroll(scrollY - oldScrollY)
         }
 
-        model.devices().observe(viewLifecycleOwner) { devicesResource ->
-            onDevices(devicesResource)
+        model.devices().observe(viewLifecycleOwner) {
+            onDevices(it)
         }
 
         model.preferenceChanged().observe(viewLifecycleOwner) {
             if (it) adapter.notifyDataSetChanged()
+        }
+
+        model.onFollowStatus().observe(viewLifecycleOwner) {
+            onFollowStatus(it)
         }
 
         parentModel.onWalletMissingWarning().observe(viewLifecycleOwner) {
@@ -92,86 +100,152 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        dialogOverlay = MaterialAlertDialogBuilder(requireContext()).create()
+    }
+
+    private fun onFollowStatus(status: Resource<Unit>) {
+        when (status.status) {
+            Status.SUCCESS -> {
+                binding.empty.setVisible(false)
+                dialogOverlay.cancel()
+            }
+            Status.ERROR -> {
+                context.toast(status.message ?: getString(R.string.error_reach_out_short))
+                binding.empty.setVisible(false)
+                dialogOverlay.cancel()
+            }
+            Status.LOADING -> {
+                binding.empty.animation(R.raw.anim_loading).setVisible(true)
+                dialogOverlay.show()
+            }
+        }
+    }
+
+    private fun onTabSelected(devicesOfTab: List<UIDevice>?) {
+        if (devicesOfTab.isNullOrEmpty()) {
+            onEmptyState()
+        } else {
+            adapter.submitList(devicesOfTab)
+            binding.empty.setVisible(false)
+            binding.recycler.setVisible(true)
+        }
+    }
+
     private fun initTabs() {
         with(binding.navigationTabs) {
             addTab(
                 newTab().apply {
-                    text = getString(R.string.total_with_placeholder, "?")
+                    text = getString(R.string.total)
                 },
                 true
             )
             addTab(
                 newTab().apply {
-                    text = getString(R.string.owned_with_placeholder, "?")
+                    text = getString(R.string.owned)
                 }
             )
             addTab(
                 newTab().apply {
-                    text = getString(R.string.following_with_placeholder, "?")
+                    text = getString(R.string.favorites)
                 }
             )
         }
     }
 
-    private fun onDevices(devicesResource: Resource<List<UIDevice>>) {
-        when (devicesResource.status) {
+    private fun onDevices(userDevices: Resource<UserDevices>) {
+        when (userDevices.status) {
             Status.SUCCESS -> {
                 binding.swiperefresh.isRefreshing = false
-                if (!devicesResource.data.isNullOrEmpty()) {
-                    // TODO: Change the numbers in all different tabs
+                if (!userDevices.data?.devices.isNullOrEmpty()) {
                     binding.navigationTabs.getTabAt(0)?.text = getString(
                         R.string.total_with_placeholder,
-                        devicesResource.data.size.toString()
+                        userDevices.data?.totalDevices?.toString() ?: "?"
                     )
                     binding.navigationTabs.getTabAt(1)?.text = getString(
                         R.string.owned_with_placeholder,
-                        devicesResource.data.size.toString()
+                        userDevices.data?.ownedDevices?.toString() ?: "?"
                     )
                     binding.navigationTabs.getTabAt(2)?.text = getString(
-                        R.string.following_with_placeholder,
-                        devicesResource.data.size.toString()
+                        R.string.favorites_with_placeholder,
+                        userDevices.data?.followedDevices?.toString() ?: "?"
                     )
 
-                    adapter.submitList(devicesResource.data)
-                    adapter.notifyDataSetChanged()
-                    binding.recycler.visibility = View.VISIBLE
-                    binding.empty.visibility = View.GONE
+                    when (binding.navigationTabs.selectedTabPosition) {
+                        1 -> onTabSelected(model.getUserDevices()?.getOwnedDevices())
+                        2 -> onTabSelected(model.getUserDevices()?.getFollowedDevices())
+                        else -> {
+                            adapter.submitList(userDevices.data?.devices)
+                            adapter.notifyDataSetChanged()
+                            binding.empty.setVisible(false)
+                            binding.recycler.setVisible(true)
+                        }
+                    }
                     parentModel.getWalletMissing()
                 } else {
-                    binding.empty.animation(R.raw.anim_empty_devices, false)
-                    binding.empty.title(getString(R.string.empty_weather_stations))
-                    binding.empty.subtitle(getString(R.string.add_weather_station))
-                    binding.empty.listener(null)
-                    binding.empty.visibility = View.VISIBLE
-                    binding.recycler.visibility = View.GONE
+                    onEmptyState()
                 }
             }
             Status.ERROR -> {
                 binding.swiperefresh.isRefreshing = false
                 binding.empty.animation(R.raw.anim_error, false)
                 binding.empty.title(getString(R.string.error_generic_message))
-                binding.empty.subtitle(devicesResource.message)
+                binding.empty.subtitle(userDevices.message)
                 binding.empty.action(getString(R.string.action_retry))
                 binding.empty.listener { model.fetch() }
-                binding.empty.visibility = View.VISIBLE
-                binding.recycler.visibility = View.GONE
+                binding.empty.setVisible(true)
+                binding.recycler.setVisible(false)
             }
             Status.LOADING -> {
                 if (binding.swiperefresh.isRefreshing) {
                     binding.empty.clear()
-                    binding.empty.visibility = View.GONE
+                    binding.empty.setVisible(false)
                 } else if (adapter.currentList.isNotEmpty()) {
                     binding.empty.clear()
-                    binding.empty.visibility = View.GONE
+                    binding.empty.setVisible(false)
                     binding.swiperefresh.isRefreshing = true
                 } else {
-                    binding.recycler.visibility = View.GONE
+                    binding.recycler.setVisible(false)
                     binding.empty.clear()
                     binding.empty.animation(R.raw.anim_loading)
-                    binding.empty.visibility = View.VISIBLE
+                    binding.empty.setVisible(true)
                 }
             }
         }
+    }
+
+    private fun onEmptyState() {
+        with(binding.empty) {
+            clear()
+            animation(R.raw.anim_empty_devices, false)
+            listener(null)
+            when (binding.navigationTabs.selectedTabPosition) {
+                0 -> {
+                    title(getString(R.string.empty_weather_stations))
+                    htmlSubtitle(getString(R.string.add_weather_station_or_browser_map))
+                    action(getString(R.string.view_explorer_map))
+                    listener {
+                        parentModel.openExplorer()
+                    }
+                }
+                1 -> {
+                    title(getString(R.string.empty_weather_stations))
+                    htmlSubtitle(getString(R.string.add_weather_station))
+                }
+                2 -> {
+                    title(getString(R.string.empty_favorites))
+                    htmlSubtitle(getString(R.string.browser_map))
+                    action(getString(R.string.view_explorer_map))
+                    listener {
+                        parentModel.openExplorer()
+                    }
+                }
+            }
+            visibility = View.VISIBLE
+        }
+        adapter.submitList(mutableListOf())
+        binding.recycler.setVisible(false)
     }
 
     private fun onWalletMissingWarning(walletMissing: Boolean) {
@@ -230,5 +304,13 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
 
     override fun onAlertsClicked(device: UIDevice) {
         navigator.showDeviceAlerts(this, device)
+    }
+
+    override fun onFollowBtnClicked(device: UIDevice) {
+        if (device.relation == DeviceRelation.FOLLOWED) {
+            navigator.showHandleFollowDialog(activity, false, device.name) {
+                model.unFollowStation(device.id)
+            }
+        }
     }
 }

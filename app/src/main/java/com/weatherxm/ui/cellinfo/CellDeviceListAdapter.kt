@@ -7,19 +7,21 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
-import com.weatherxm.ui.common.DeviceOwnershipStatus
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
+import com.weatherxm.util.setColor
+import com.weatherxm.util.setStatusChip
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class CellDeviceListAdapter(
-    private val listener: (UIDevice) -> Unit
+    private val cellDeviceListener: CellDeviceListener
 ) : ListAdapter<UIDevice, CellDeviceListAdapter.CellDeviceViewHolder>(CellDeviceDiffCallback()),
     KoinComponent {
 
@@ -28,7 +30,7 @@ class CellDeviceListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CellDeviceViewHolder {
         val binding = ListItemDeviceBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
-        return CellDeviceViewHolder(binding, listener)
+        return CellDeviceViewHolder(binding, cellDeviceListener)
     }
 
     override fun onBindViewHolder(holder: CellDeviceViewHolder, position: Int) {
@@ -37,7 +39,7 @@ class CellDeviceListAdapter(
 
     inner class CellDeviceViewHolder(
         private val binding: ListItemDeviceBinding,
-        private val listener: (UIDevice) -> Unit
+        private val listener: CellDeviceListener
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -45,23 +47,39 @@ class CellDeviceListAdapter(
 
         init {
             binding.root.setOnClickListener {
-                listener(device)
+                listener.onDeviceClicked(device)
             }
         }
 
         fun bind(item: UIDevice) {
             this.device = item
-            binding.name.text = item.name
 
-            @Suppress("UseCheckOrError")
-            binding.stationFollowHomeIcon.setImageResource(
-                when (item.ownershipStatus) {
-                    DeviceOwnershipStatus.OWNED -> R.drawable.ic_home
-                    DeviceOwnershipStatus.FOLLOWED -> R.drawable.ic_favorite
-                    DeviceOwnershipStatus.UNFOLLOWED -> R.drawable.ic_favorite_outline
-                    null -> throw IllegalStateException("Oops! No ownership status here.")
+            with(binding.follow) {
+                isEnabled = item.relation != DeviceRelation.OWNED
+                when (item.relation) {
+                    DeviceRelation.OWNED -> {
+                        setImageResource(R.drawable.ic_home)
+                        setColor(R.color.colorOnSurface)
+                    }
+                    DeviceRelation.FOLLOWED -> {
+                        setOnClickListener {
+                            listener.onFollowBtnClicked(device)
+                        }
+                        setImageResource(R.drawable.ic_favorite)
+                        setColor(R.color.follow_heart_color)
+                    }
+                    DeviceRelation.UNFOLLOWED -> {
+                        setOnClickListener {
+                            listener.onFollowBtnClicked(device)
+                        }
+                        setImageResource(R.drawable.ic_favorite_outline)
+                        setColor(R.color.follow_heart_color)
+                    }
+                    null -> setVisible(false)
                 }
-            )
+            }
+
+            binding.name.text = item.name
 
             if (item.currentWeather == null || item.currentWeather.isEmpty()) {
                 binding.weatherDataLayout.visibility = View.GONE
@@ -78,29 +96,15 @@ class CellDeviceListAdapter(
                 item.address
             }
 
-            with(binding.lastSeen) {
-                text = item.lastWeatherStationActivity?.getRelativeFormattedTime(
-                    fallbackIfTooSoon = context.getString(R.string.just_now)
+            with(binding.status) {
+                setStatusChip(
+                    item.lastWeatherStationActivity?.getRelativeFormattedTime(
+                        fallbackIfTooSoon = context.getString(R.string.just_now)
+                    ),
+                    item.profile,
+                    item.isActive,
                 )
             }
-
-            binding.statusIcon.setImageResource(
-                if (device.profile == DeviceProfile.Helium) {
-                    R.drawable.ic_helium
-                } else {
-                    R.drawable.ic_wifi
-                }
-            )
-
-            binding.statusCard.setCardBackgroundColor(
-                itemView.context.getColor(
-                    when (item.isActive) {
-                        true -> R.color.successTint
-                        false -> R.color.errorTint
-                        null -> R.color.midGrey
-                    }
-                )
-            )
         }
 
         private fun setWeatherData(device: UIDevice) {
@@ -160,7 +164,14 @@ class CellDeviceListAdapter(
                 oldItem.currentWeather?.temperature == newItem.currentWeather?.temperature &&
                 oldItem.currentWeather?.timestamp == newItem.currentWeather?.timestamp &&
                 oldItem.lastWeatherStationActivity == newItem.lastWeatherStationActivity &&
+                oldItem.relation == newItem.relation &&
+                oldItem.address == newItem.address &&
                 oldItem.isActive == newItem.isActive
         }
     }
+}
+
+interface CellDeviceListener {
+    fun onDeviceClicked(device: UIDevice)
+    fun onFollowBtnClicked(device: UIDevice)
 }

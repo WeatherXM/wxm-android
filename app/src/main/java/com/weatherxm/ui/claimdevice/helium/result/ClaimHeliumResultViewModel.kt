@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit
 
 class ClaimHeliumResultViewModel : ViewModel(), KoinComponent {
     companion object {
-        // TODO: Reconsider this. 
         val CONNECT_DELAY_ON_REBOOT = TimeUnit.SECONDS.toMillis(10L)
     }
 

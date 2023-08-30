@@ -57,7 +57,7 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/primaryLineColor"
-                    style="@style/Widget.WeatherXM.Chip.Status"
+                    style="@style/Widget.WeatherXM.Chip.ChartLines"
                     android:layout_width="40dp"
                     android:layout_height="10dp"
                     android:layout_marginTop="@dimen/margin_extra_small"
@@ -77,7 +77,7 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/secondaryLineColor"
-                    style="@style/Widget.WeatherXM.Chip.Status"
+                    style="@style/Widget.WeatherXM.Chip.ChartLines"
                     android:layout_width="40dp"
                     android:layout_height="10dp"
                     android:layout_marginTop="@dimen/margin_extra_small"

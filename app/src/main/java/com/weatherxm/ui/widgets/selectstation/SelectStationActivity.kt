@@ -13,7 +13,7 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityWidgetSelectStationBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
-import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UserDevices
 import com.weatherxm.ui.widgets.currentweather.CurrentWeatherWidgetWorkerUpdate
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.WidgetHelper
@@ -55,15 +55,9 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
 
         binding.navigationTabs.onTabSelected {
             when (it.position) {
-                0 -> {
-                    // TODO: Implement this
-                }
-                1 -> {
-                    // TODO: Implement this
-                }
-                2 -> {
-                    // TODO: Implement this
-                }
+                0 -> model.getUserDevices().devices
+                1 -> model.getUserDevices().getOwnedDevices()
+                2 -> model.getUserDevices().getFollowedDevices()
             }
         }
 
@@ -95,24 +89,23 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
         )
     }
 
-    private fun onDevices(devices: Resource<List<UIDevice>>) {
-        when (devices.status) {
+    private fun onDevices(userDevices: Resource<UserDevices>) {
+        when (userDevices.status) {
             Status.SUCCESS -> {
-                if (!devices.data.isNullOrEmpty()) {
-                    // TODO: Change the numbers in all different tabs
+                if (!userDevices.data?.devices.isNullOrEmpty()) {
                     binding.navigationTabs.getTabAt(0)?.text = getString(
                         R.string.total_with_placeholder,
-                        devices.data.size.toString()
+                        userDevices.data?.totalDevices?.toString() ?: "?"
                     )
                     binding.navigationTabs.getTabAt(1)?.text = getString(
                         R.string.owned_with_placeholder,
-                        devices.data.size.toString()
+                        userDevices.data?.ownedDevices?.toString() ?: "?"
                     )
                     binding.navigationTabs.getTabAt(2)?.text = getString(
-                        R.string.following_with_placeholder,
-                        devices.data.size.toString()
+                        R.string.favorites_with_placeholder,
+                        userDevices.data?.followedDevices?.toString() ?: "?"
                     )
-                    adapter.submitList(devices.data)
+                    adapter.submitList(userDevices.data?.devices)
                     binding.recycler.visibility = View.VISIBLE
                     binding.empty.visibility = View.GONE
                 } else {
@@ -127,7 +120,7 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
             Status.ERROR -> {
                 binding.empty.animation(R.raw.anim_error, false)
                 binding.empty.title(getString(R.string.error_generic_message))
-                binding.empty.subtitle(devices.message)
+                binding.empty.subtitle(userDevices.message)
                 binding.empty.action(getString(R.string.action_retry))
                 binding.empty.listener { model.fetch() }
                 binding.empty.visibility = View.VISIBLE
@@ -146,18 +139,18 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
         with(binding.navigationTabs) {
             addTab(
                 newTab().apply {
-                    text = getString(R.string.total_with_placeholder, "?")
+                    text = getString(R.string.total)
                 },
                 true
             )
             addTab(
                 newTab().apply {
-                    text = getString(R.string.owned_with_placeholder, "?")
+                    text = getString(R.string.owned)
                 }
             )
             addTab(
                 newTab().apply {
-                    text = getString(R.string.following_with_placeholder, "?")
+                    text = getString(R.string.favorites)
                 }
             )
         }

@@ -26,27 +26,23 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginTop="@dimen/margin_extra_small"
                 android:layout_marginEnd="@dimen/margin_small"
-                android:layout_toStartOf="@id/stationHomeFollowContainer"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.PrimaryColor"
-                android:textSize="17sp"
+                android:layout_toStartOf="@id/stationHomeFollowIcon"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 tools:text="My Weather Station" />
 
-            <LinearLayout
-                android:id="@+id/stationHomeFollowContainer"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+            <ImageView
+                android:id="@+id/stationHomeFollowIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/name"
+                android:layout_alignBottom="@id/name"
                 android:layout_alignParentEnd="true"
-                android:background="@drawable/background_rounded_corners_blue_tint"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/stationHomeFollowIcon"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
-                    android:src="@drawable/ic_home"
-                    android:tint="@color/colorPrimary"
-                    tools:ignore="ContentDescription,UseAppTint" />
-            </LinearLayout>
+                android:gravity="center"
+                android:src="@drawable/ic_home"
+                android:tint="@color/colorOnSurface"
+                tools:ignore="ContentDescription,UseAppTint" />
         </RelativeLayout>
 
         <LinearLayout
@@ -71,7 +67,7 @@
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:src="@drawable/ic_hex"
-                    android:tint="@color/colorPrimary"
+                    android:tint="@color/colorOnSurface"
                     tools:ignore="ContentDescription,UseAppTint" />
 
                 <TextView
@@ -79,7 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.Address"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                     tools:text="Athens, GR" />
             </LinearLayout>
 
@@ -91,14 +87,14 @@
                 android:gravity="center"
                 android:paddingHorizontal="@dimen/padding_small"
                 android:paddingVertical="@dimen/padding_extra_small"
-                tools:background="@drawable/background_rounded_corners_success">
+                tools:background="@drawable/background_rounded_corners_status_success">
 
                 <ImageView
                     android:id="@+id/statusIcon"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:src="@drawable/ic_wifi"
-                    android:tint="@color/colorPrimary"
+                    android:tint="@color/colorOnSurface"
                     tools:ignore="ContentDescription,UseAppTint" />
 
                 <TextView
@@ -107,7 +103,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
                     android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                    android:textColor="@color/colorPrimary"
                     tools:text="15:45" />
 
             </LinearLayout>
@@ -117,10 +112,10 @@
             android:id="@+id/weatherDataLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small_to_normal"
             android:background="@drawable/surface_rounded_corners"
             android:baselineAligned="false"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/margin_small_to_normal"
             android:paddingBottom="@dimen/padding_small_to_normal"
             android:weightSum="2">
 

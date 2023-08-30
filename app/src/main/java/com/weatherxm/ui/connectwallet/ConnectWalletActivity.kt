@@ -14,7 +14,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityConnectWalletBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.AlertDialogFragment
+import com.weatherxm.ui.common.ActionDialogFragment
 import com.weatherxm.ui.common.getRichText
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Analytics
@@ -178,19 +178,17 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
     }
 
     private fun showConfirmWalletDialog(address: String) {
-        AlertDialogFragment
+        ActionDialogFragment
             .Builder(
                 title = getString(R.string.confirm_wallet_ownership_title),
                 message = getRichText(
                     R.string.confirm_wallet_ownership_desc,
                     model.getLastPartOfAddress(address)
-                )
+                ),
+                negative = getString(R.string.action_confirm)
             )
-            .onPositiveClick(getString(R.string.action_confirm)) {
+            .onPositiveClick(getString(R.string.action_cancel)) {
                 model.saveAddress(address)
-            }
-            .onNegativeClick(getString(R.string.action_cancel)) {
-                // Do nothing
             }
             .build()
             .show(this)

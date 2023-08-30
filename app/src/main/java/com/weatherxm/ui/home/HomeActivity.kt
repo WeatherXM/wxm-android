@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.snackbar.Snackbar
 import com.mapbox.geojson.Point
@@ -109,6 +110,14 @@ class HomeActivity : AppCompatActivity(), KoinComponent,
 
         model.onWalletMissing().observe(this) {
             handleBadge(it)
+        }
+
+        model.onOpenExplorer().observe(this) {
+            if (it == true) {
+                NavigationUI.onNavDestinationSelected(
+                    binding.navView.menu.findItem(R.id.navigation_explorer), navController
+                )
+            }
         }
 
         // Disable BottomNavigationView bottom padding, added by default, and add margin

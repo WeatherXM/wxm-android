@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.DataError
+import com.weatherxm.data.SingleLiveEvent
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Analytics
 import kotlinx.coroutines.launch
@@ -18,9 +19,15 @@ class HomeViewModel : ViewModel(), KoinComponent {
     // Needed for passing info to show the wallet missing warning card and badges
     private val onWalletMissingWarning = MutableLiveData(false)
     private val onWalletMissing = MutableLiveData(false)
+    private val onOpenExplorer = SingleLiveEvent<Boolean>()
 
     fun onWalletMissingWarning() = onWalletMissingWarning
     fun onWalletMissing() = onWalletMissing
+    fun onOpenExplorer() = onOpenExplorer
+
+    fun openExplorer() {
+        onOpenExplorer.postValue(true)
+    }
 
     fun getWalletMissing() {
         viewModelScope.launch {

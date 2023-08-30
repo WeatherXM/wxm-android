@@ -52,12 +52,6 @@
     <!--
         Devices List
     -->
-    <style name="TextAppearance.WeatherXM.Devices.List.Address" parent="TextAppearance.WeatherXM.Default.BodySmall">
-        <item name="android:textColor">@color/colorPrimary</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:ellipsize">end</item>
-    </style>
-
     <style name="TextAppearance.WeatherXM.Devices.List.WeatherData.Unit" parent="TextAppearance.WeatherXM.Default.BodySmall">
         <item name="android:textColor">@color/darkGrey</item>
     </style>
@@ -122,10 +116,5 @@
         <item name="android:textColorLink">@color/light_top</item>
         <item name="android:textStyle">bold</item>
     </style>
-
-    <!--
-        AlertDialog
-    -->
-    <style name="TextAppearance.WeatherXM.AlertDialog.Body" parent="TextAppearance.WeatherXM.Default.BodyLarge" />
 
 </resources>

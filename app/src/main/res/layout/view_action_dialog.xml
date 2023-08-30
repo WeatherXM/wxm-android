@@ -9,7 +9,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/errorTitle"
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
@@ -17,12 +17,12 @@
             tools:text="Pairing Failed!" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/errorDesc"
+            android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-            app:layout_constraintTop_toBottomOf="@id/errorTitle"
+            app:layout_constraintTop_toBottomOf="@id/title"
             tools:text="Something went wrong with blah blah blah blah" />
 
         <com.google.android.material.button.MaterialButton
@@ -33,7 +33,7 @@
             android:layout_marginTop="@dimen/margin_normal"
             android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/errorDesc"
+            app:layout_constraintTop_toBottomOf="@id/message"
             tools:text="@string/action_try_again" />
 
         <com.google.android.material.button.MaterialButton

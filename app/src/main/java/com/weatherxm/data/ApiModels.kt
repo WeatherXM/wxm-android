@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.RewardsInfo
 import com.weatherxm.ui.common.UIDevice
 import kotlinx.parcelize.Parcelize
@@ -70,7 +71,7 @@ data class PublicDevice(
             lastWeatherStationActivity = lastWeatherStationActivity,
             timezone = timezone,
             currentWeather = currentWeather,
-            ownershipStatus = null,
+            relation = null,
             label = null,
             friendlyName = null,
             location = null,
@@ -98,15 +99,23 @@ data class Device(
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
     var address: String?,
-    val rewards: Rewards?
+    val rewards: Rewards?,
+    val relation: Relation?
 ) : Parcelable {
     companion object {
         fun empty() = Device(
-            "", "", null, null, null, null, null, null, null, null
+            "", "", null, null, null, null, null, null, null, null, null
         )
     }
 
     fun toUIDevice(): UIDevice {
+        val deviceRelation = if (relation == Relation.followed) {
+            DeviceRelation.FOLLOWED
+        } else if (relation == Relation.owned) {
+            DeviceRelation.OWNED
+        } else {
+            DeviceRelation.UNFOLLOWED
+        }
         return UIDevice(
             id = id,
             name = name,
@@ -116,7 +125,7 @@ data class Device(
             isActive = attributes?.isActive,
             lastWeatherStationActivity = attributes?.lastWeatherStationActivity,
             timezone = timezone,
-            ownershipStatus = null,
+            relation = deviceRelation,
             label = label,
             friendlyName = attributes?.friendlyName,
             location = location,
@@ -466,5 +475,11 @@ enum class Connectivity {
 enum class BatteryState {
     low,
     ok
+}
+
+@Suppress("EnumNaming")
+enum class Relation {
+    owned,
+    followed
 }
 

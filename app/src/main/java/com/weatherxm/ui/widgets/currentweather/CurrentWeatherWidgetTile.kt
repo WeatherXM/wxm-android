@@ -236,10 +236,14 @@ class CurrentWeatherWidgetTile : AppWidgetProvider(), KoinComponent {
                     R.id.lastSeen,
                     device.lastWeatherStationActivity?.getFormattedTime(context)
                 )
+                views.setTextColor(
+                    R.id.lastSeen,
+                    context.getColor(R.color.status_chip_content_online)
+                )
                 views.setInt(
-                    R.id.statusCard,
+                    R.id.statusContainer,
                     "setBackgroundResource",
-                    R.drawable.background_rounded_corners_success
+                    R.drawable.background_rounded_corners_status_success
                 )
             }
 
@@ -250,10 +254,14 @@ class CurrentWeatherWidgetTile : AppWidgetProvider(), KoinComponent {
                         context.getString(R.string.just_now)
                     )
                 )
+                views.setTextColor(
+                    R.id.lastSeen,
+                    context.getColor(R.color.status_chip_content_offline)
+                )
                 views.setInt(
-                    R.id.statusCard,
+                    R.id.statusContainer,
                     "setBackgroundResource",
-                    R.drawable.background_rounded_corners_error
+                    R.drawable.background_rounded_corners_blue_tint
                 )
             }
 
