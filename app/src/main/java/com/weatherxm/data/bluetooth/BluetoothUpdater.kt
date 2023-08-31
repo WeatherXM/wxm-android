@@ -3,7 +3,6 @@ package com.weatherxm.data.bluetooth
 import android.content.Context
 import android.net.Uri
 import android.os.Build
-import com.juul.kable.identifier
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothOTAState
 import com.weatherxm.data.OTAState

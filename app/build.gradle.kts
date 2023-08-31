@@ -242,20 +242,20 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.7.2")
     implementation("androidx.annotation:annotation:1.6.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.browser:browser:1.5.0")
+    implementation("androidx.browser:browser:1.6.0")
     implementation("androidx.collection:collection-ktx:1.2.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.fragment:fragment-ktx:1.6.0")
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
-    implementation("androidx.paging:paging-runtime-ktx:3.1.1")
-    implementation("androidx.preference:preference-ktx:1.2.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.1")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.1")
+    implementation("androidx.paging:paging-runtime-ktx:3.2.0")
+    implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
     implementation("androidx.room:room-runtime:2.5.2")
     ksp("androidx.room:room-compiler:2.5.2")
@@ -303,7 +303,7 @@ dependencies {
     implementation("com.github.fondesa:kpermissions:3.4.0")
 
     // Dependency Injection
-    implementation("io.insert-koin:koin-android:3.4.2")
+    implementation("io.insert-koin:koin-android:3.4.3")
 
     // Data types and more
     implementation(platform("io.arrow-kt:arrow-stack:1.2.0"))
@@ -311,14 +311,14 @@ dependencies {
     implementation("io.arrow-kt:arrow-fx-coroutines")
 
     // Mapbox
-    implementation("com.mapbox.maps:android:10.14.1")
+    implementation("com.mapbox.maps:android:10.15.1")
     implementation("com.mapbox.search:mapbox-search-android:1.0.0-rc.7")
 
     // Insetter
     implementation("dev.chrisbanes.insetter:insetter:0.6.1")
 
     // Import the Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
+    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-perf-ktx")
     implementation("com.google.firebase:firebase-config-ktx")
@@ -339,7 +339,7 @@ dependencies {
     implementation("me.saket:better-link-movement-method:2.2.0")
 
     // BLE Scanning and Communication
-    implementation("com.juul.kable:core:0.24.0")
+    implementation("com.juul.kable:core:0.26.0")
     implementation("com.github.espressif:esp-idf-provisioning-android:lib-2.1.2")
     implementation("no.nordicsemi.android:dfu:2.3.0")
 }
