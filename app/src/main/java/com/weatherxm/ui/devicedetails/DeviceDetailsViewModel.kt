@@ -99,6 +99,10 @@ class DeviceDetailsViewModel(
     }
 
     fun followStation() {
+        analytics.trackEventUserAction(
+            Analytics.ParamValue.DEVICE_DETAILS_FOLLOW.paramValue,
+            Analytics.ParamValue.FOLLOW.paramValue
+        )
         onFollowStatus.postValue(Resource.loading())
         viewModelScope.launch {
             followUseCase.followStation(device.id).onRight {
@@ -113,6 +117,10 @@ class DeviceDetailsViewModel(
     }
 
     fun unFollowStation() {
+        analytics.trackEventUserAction(
+            Analytics.ParamValue.DEVICE_DETAILS_FOLLOW.paramValue,
+            Analytics.ParamValue.UNFOLLOW.paramValue
+        )
         onFollowStatus.postValue(Resource.loading())
         viewModelScope.launch {
             followUseCase.unfollowStation(device.id).onRight {

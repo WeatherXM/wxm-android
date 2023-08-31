@@ -113,6 +113,7 @@ class DeviceDetailsActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.address.setOnClickListener {
+            analytics.trackEventUserAction(Analytics.ParamValue.DEVICE_DETAILS_ADDRESS.paramValue)
             model.device.cellCenter?.let { location ->
                 navigator.showCellInfo(this, UICell(model.device.cellIndex, location))
             }
@@ -180,6 +181,7 @@ class DeviceDetailsActivity : AppCompatActivity(), KoinComponent {
     private fun onMenuItem(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.share_station -> {
+                analytics.trackEventUserAction(Analytics.ParamValue.DEVICE_DETAILS_SHARE.paramValue)
                 navigator.openShare(
                     this,
                     getString(R.string.share_station_url, model.createNormalizedName())

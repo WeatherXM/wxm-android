@@ -76,6 +76,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                     else -> mutableListOf()
                 }
             )
+            trackScreenView()
         }
 
         binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
@@ -277,10 +278,30 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(
-            Analytics.Screen.DEVICES_LIST,
-            DevicesFragment::class.simpleName
-        )
+        trackScreenView()
+    }
+
+    private fun trackScreenView() {
+        when (binding.navigationTabs.selectedTabPosition) {
+            0 -> {
+                analytics.trackScreen(
+                    Analytics.Screen.DEVICES_LIST_TOTAL,
+                    DevicesFragment::class.simpleName
+                )
+            }
+            1 -> {
+                analytics.trackScreen(
+                    Analytics.Screen.DEVICES_LIST_OWNED,
+                    DevicesFragment::class.simpleName
+                )
+            }
+            2 -> {
+                analytics.trackScreen(
+                    Analytics.Screen.DEVICES_LIST_FOLLOWING,
+                    DevicesFragment::class.simpleName
+                )
+            }
+        }
     }
 
     override fun onDeviceClicked(device: UIDevice) {
@@ -308,6 +329,10 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
 
     override fun onFollowBtnClicked(device: UIDevice) {
         if (device.relation == DeviceRelation.FOLLOWED) {
+            analytics.trackEventUserAction(
+                Analytics.ParamValue.DEVICE_LIST_FOLLOW.paramValue,
+                Analytics.ParamValue.UNFOLLOW.paramValue
+            )
             navigator.showHandleFollowDialog(activity, false, device.name) {
                 model.unFollowStation(device.id)
             }

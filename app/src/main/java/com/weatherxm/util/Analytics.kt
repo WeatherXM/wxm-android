@@ -29,7 +29,9 @@ class Analytics(
         DEVICE_ALERTS("Device Alerts"),
         HELIUM_OTA("OTA Update"),
         HISTORY("Device History"),
-        DEVICES_LIST("Device List"),
+        DEVICES_LIST_TOTAL("Device List Total"),
+        DEVICES_LIST_OWNED("Device List Owned"),
+        DEVICES_LIST_FOLLOWING("Device List Following"),
         SETTINGS("App Settings"),
         LOGIN("Login"),
         SIGNUP("Sign Up"),
@@ -179,7 +181,14 @@ class Analytics(
         LOCATION("location"),
         STATION("station"),
         TOKENOMICS("Tokenomics"),
-        NETWORK_STATS("network_stats")
+        NETWORK_STATS("network_stats"),
+        DEVICE_DETAILS_FOLLOW("Device Details Follow"),
+        DEVICE_DETAILS_SHARE("Device Details Share"),
+        DEVICE_DETAILS_ADDRESS("Device Details Address"),
+        DEVICE_LIST_FOLLOW("Device List Follow"),
+        EXPLORER_DEVICE_LIST_FOLLOW("Explorer Device List Follow"),
+        FOLLOW("follow"),
+        UNFOLLOW("unfollow")
     }
 
     // Custom Param Names

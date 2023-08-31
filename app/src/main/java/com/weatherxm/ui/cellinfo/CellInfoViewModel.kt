@@ -71,6 +71,10 @@ class CellInfoViewModel(val cell: UICell) : ViewModel(), KoinComponent {
     }
 
     fun followStation(deviceId: String) {
+        analytics.trackEventUserAction(
+            Analytics.ParamValue.EXPLORER_DEVICE_LIST_FOLLOW.paramValue,
+            Analytics.ParamValue.FOLLOW.paramValue
+        )
         onFollowStatus.postValue(Resource.loading())
         viewModelScope.launch {
             followUseCase.followStation(deviceId).onRight {
@@ -85,6 +89,10 @@ class CellInfoViewModel(val cell: UICell) : ViewModel(), KoinComponent {
     }
 
     fun unFollowStation(deviceId: String) {
+        analytics.trackEventUserAction(
+            Analytics.ParamValue.EXPLORER_DEVICE_LIST_FOLLOW.paramValue,
+            Analytics.ParamValue.UNFOLLOW.paramValue
+        )
         onFollowStatus.postValue(Resource.loading())
         viewModelScope.launch {
             followUseCase.unfollowStation(deviceId).onRight {
