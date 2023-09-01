@@ -94,19 +94,6 @@ interface ApiService {
         @Query("exclude") exclude: String? = null,
     ): NetworkResponse<List<WeatherData>, ErrorResponse>
 
-    @Suppress("LongParameterList")
-    @Mock
-    @MockResponse(body = "mock_files/get_user_device_transactions.json")
-    @GET("/api/v1/me/devices/{deviceId}/tokens/transactions")
-    suspend fun getTransactions(
-        @Path("deviceId") deviceId: String,
-        @Query("page") page: Int? = null,
-        @Query("pageSize") pageSize: Int? = null,
-        @Query("timezone") timezone: String? = null,
-        @Query("fromDate") fromDate: String? = null,
-        @Query("toDate") toDate: String? = null,
-    ): NetworkResponse<TransactionsResponse, ErrorResponse>
-
     @Mock
     @MockResponse(body = "mock_files/get_user_device_weather_history.json")
     @GET("/api/v1/me/devices/{deviceId}/history")
@@ -184,7 +171,7 @@ interface ApiService {
     @MockResponse(body = "mock_files/get_user_device_transactions.json")
     @GET("/api/v1/devices/{deviceId}/tokens/transactions")
     @Headers(NO_AUTH_HEADER)
-    suspend fun getPublicTransactions(
+    suspend fun getTransactions(
         @Path("deviceId") deviceId: String,
         @Query("page") page: Int? = null,
         @Query("pageSize") pageSize: Int? = null,

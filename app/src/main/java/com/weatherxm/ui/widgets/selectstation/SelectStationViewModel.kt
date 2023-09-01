@@ -27,7 +27,8 @@ class SelectStationViewModel : ViewModel(), KoinComponent {
     fun isNotLoggedIn(): LiveData<Unit> = isNotLoggedIn
 
     private var currentStationSelected = UIDevice.empty()
-    private lateinit var userDevices: UserDevices
+
+    private var userDevices: UserDevices? = null
 
     fun setStationSelected(device: UIDevice) {
         currentStationSelected = device

@@ -287,9 +287,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
             false -> {
                 views.setTextViewText(
                     R.id.lastSeen,
-                    device.lastWeatherStationActivity?.getRelativeFormattedTime(
-                        context.getString(R.string.just_now)
-                    )
+                    device.lastWeatherStationActivity?.getFormattedTime(context)
                 )
                 views.setTextColor(
                     R.id.lastSeen,
@@ -303,7 +301,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
                 views.setInt(
                     R.id.statusContainer,
                     "setBackgroundResource",
-                    R.drawable.background_rounded_corners_blue_tint
+                    R.drawable.background_rounded_corners_status_error
                 )
             }
             else -> {}

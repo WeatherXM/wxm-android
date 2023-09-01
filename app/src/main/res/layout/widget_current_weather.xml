@@ -41,7 +41,6 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="center"
                 android:src="@drawable/ic_home"
-                android:tint="@color/colorOnSurface"
                 tools:ignore="ContentDescription,UseAppTint" />
         </RelativeLayout>
 

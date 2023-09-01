@@ -94,20 +94,11 @@ class DeviceDetailsUseCaseImpl(
         // Last 29 days of transactions + today = 30 days
         val fromDate = ZonedDateTime.now().minusDays(29).toLocalDate().toString()
 
-        return if (device.relation == DeviceRelation.UNFOLLOWED) {
-            tokenRepository.getAllPublicTransactionsInRange(
-                deviceId = device.id,
-                fromDate = fromDate
-            ).map {
-                RewardsInfo().fromLastAndDatedTxs(it)
-            }
-        } else {
-            tokenRepository.getAllTransactionsInRange(
-                deviceId = device.id,
-                fromDate = fromDate
-            ).map {
-                RewardsInfo().fromLastAndDatedTxs(it)
-            }
+        return tokenRepository.getTransactionsInRange(
+            deviceId = device.id,
+            fromDate = fromDate
+        ).map {
+            RewardsInfo().fromLastAndDatedTxs(it)
         }
     }
 

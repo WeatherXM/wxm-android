@@ -59,7 +59,6 @@ class RewardsFragment : Fragment(), KoinComponent {
             } else {
                 binding.tokenCard.setTokenInfo(it, null, model.device.id)
             }
-            binding.tokenRewards.isEnabled = model.device.relation != DeviceRelation.UNFOLLOWED
         }
 
         model.onLoading().observe(viewLifecycleOwner) {
@@ -84,8 +83,6 @@ class RewardsFragment : Fragment(), KoinComponent {
         binding.tokenRewards.setOnClickListener {
             navigator.showTokenScreen(requireContext(), model.device)
         }
-
-        binding.tokenRewards.isEnabled = model.device.relation != DeviceRelation.UNFOLLOWED
 
         model.fetchTokenDetails()
     }

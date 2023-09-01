@@ -13,7 +13,9 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityWidgetSelectStationBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UserDevices
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.widgets.currentweather.CurrentWeatherWidgetWorkerUpdate
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.WidgetHelper
@@ -54,11 +56,15 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
         initTabs()
 
         binding.navigationTabs.onTabSelected {
-            when (it.position) {
-                0 -> model.getUserDevices().devices
-                1 -> model.getUserDevices().getOwnedDevices()
-                2 -> model.getUserDevices().getFollowedDevices()
-            }
+            if (model.getUserDevices() == null) return@onTabSelected
+            onTabSelected(
+                when (it.position) {
+                    0 -> model.getUserDevices()?.devices
+                    1 -> model.getUserDevices()?.getOwnedDevices()
+                    2 -> model.getUserDevices()?.getFollowedDevices()
+                    else -> mutableListOf()
+                }
+            )
         }
 
         model.devices().observe(this) {
@@ -89,6 +95,16 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
         )
     }
 
+    private fun onTabSelected(devicesOfTab: List<UIDevice>?) {
+        if (devicesOfTab.isNullOrEmpty()) {
+            onEmptyState()
+        } else {
+            adapter.submitList(devicesOfTab)
+            binding.empty.setVisible(false)
+            binding.recycler.setVisible(true)
+        }
+    }
+
     private fun onDevices(userDevices: Resource<UserDevices>) {
         when (userDevices.status) {
             Status.SUCCESS -> {
@@ -105,16 +121,19 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
                         R.string.favorites_with_placeholder,
                         userDevices.data?.followedDevices?.toString() ?: "?"
                     )
-                    adapter.submitList(userDevices.data?.devices)
-                    binding.recycler.visibility = View.VISIBLE
-                    binding.empty.visibility = View.GONE
+
+                    when (binding.navigationTabs.selectedTabPosition) {
+                        1 -> onTabSelected(model.getUserDevices()?.getOwnedDevices())
+                        2 -> onTabSelected(model.getUserDevices()?.getFollowedDevices())
+                        else -> {
+                            adapter.submitList(userDevices.data?.devices)
+                            adapter.notifyDataSetChanged()
+                            binding.empty.setVisible(false)
+                            binding.recycler.setVisible(true)
+                        }
+                    }
                 } else {
-                    binding.empty.animation(R.raw.anim_empty_devices, false)
-                    binding.empty.title(getString(R.string.empty_weather_stations))
-                    binding.empty.subtitle(getString(R.string.empty_select_station))
-                    binding.empty.listener(null)
-                    binding.empty.visibility = View.VISIBLE
-                    binding.recycler.visibility = View.GONE
+                    onEmptyState()
                 }
             }
             Status.ERROR -> {
@@ -133,6 +152,15 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
                 binding.empty.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun onEmptyState() {
+        binding.empty.animation(R.raw.anim_empty_devices, false)
+        binding.empty.title(getString(R.string.empty_weather_stations))
+        binding.empty.subtitle(getString(R.string.empty_select_station))
+        binding.empty.listener(null)
+        binding.empty.visibility = View.VISIBLE
+        binding.recycler.visibility = View.GONE
     }
 
     private fun initTabs() {

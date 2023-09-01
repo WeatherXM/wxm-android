@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal"
                 android:layout_marginTop="@dimen/margin_normal"
-                android:backgroundTint="@color/subtle_button_background_color"
+                android:backgroundTint="@color/colorSurface"
                 android:text="@string/see_wxm_rewards"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

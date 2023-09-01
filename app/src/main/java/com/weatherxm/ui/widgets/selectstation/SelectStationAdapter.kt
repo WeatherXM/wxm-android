@@ -9,10 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemWidgetSelectStationBinding
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
+import com.weatherxm.util.setColor
 import com.weatherxm.util.setStatusChip
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -67,6 +70,22 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
                 View.VISIBLE
             } else {
                 View.GONE
+            }
+
+            with(binding.relationIcon) {
+                when (item.relation) {
+                    DeviceRelation.OWNED -> {
+                        setImageResource(R.drawable.ic_home)
+                        setColor(R.color.colorOnSurface)
+                        isEnabled = false
+                    }
+                    DeviceRelation.FOLLOWED -> {
+                        setImageResource(R.drawable.ic_favorite)
+                        setColor(R.color.follow_heart_color)
+                        isEnabled = true
+                    }
+                    else -> setVisible(false)
+                }
             }
 
             this.device = item
