@@ -1,11 +1,11 @@
 package com.weatherxm.ui.claimdevice.helium.frequency
 
-import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.Frequency
+import com.weatherxm.data.Location
 import com.weatherxm.ui.common.FrequencyState
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.ResourcesHelper

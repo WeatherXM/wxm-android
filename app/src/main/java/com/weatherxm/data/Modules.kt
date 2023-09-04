@@ -109,8 +109,6 @@ import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.ExplorerRepositoryImpl
 import com.weatherxm.data.repository.FollowRepository
 import com.weatherxm.data.repository.FollowRepositoryImpl
-import com.weatherxm.data.repository.LocationRepository
-import com.weatherxm.data.repository.LocationRepositoryImpl
 import com.weatherxm.data.repository.SharedPreferenceRepositoryImpl
 import com.weatherxm.data.repository.SharedPreferencesRepository
 import com.weatherxm.data.repository.StatsRepository
@@ -274,7 +272,7 @@ private val preferences = module {
 
 private val datasources = module {
     single<LocationDataSource> {
-        LocationDataSourceImpl(get(), androidContext())
+        LocationDataSourceImpl(androidContext())
     }
 
     single<NetworkWeatherHistoryDataSource> {
@@ -401,9 +399,6 @@ private val datasources = module {
 private val repositories = module {
     single<AuthRepository> {
         AuthRepositoryImpl(get(), get(), get(), get(), get())
-    }
-    single<LocationRepository> {
-        LocationRepositoryImpl(get())
     }
     single<UserRepository> {
         UserRepositoryImpl(get(), get())
@@ -546,7 +541,6 @@ private val location = module {
     single<FusedLocationProviderClient> {
         LocationServices.getFusedLocationProviderClient(androidContext())
     }
-
     single<SettingsClient> {
         LocationServices.getSettingsClient(androidContext())
     }

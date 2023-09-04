@@ -1,9 +1,6 @@
 package com.weatherxm.data.datasource
 
-
-import android.location.Location
 import arrow.core.Either
-import com.mapbox.geojson.Point
 import com.mapbox.search.QueryType
 import com.mapbox.search.ResponseInfo
 import com.mapbox.search.SearchEngine
@@ -18,6 +15,7 @@ import com.mapbox.search.result.SearchResult
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.data.CancellationError
 import com.weatherxm.data.Failure
+import com.weatherxm.data.Location
 import com.weatherxm.data.MapBoxError
 import timber.log.Timber
 import kotlin.coroutines.suspendCoroutine
@@ -108,9 +106,9 @@ class NetworkAddressSearchDataSource(
                         result: SearchResult,
                         responseInfo: ResponseInfo
                     ) {
-                        continuation.resumeWith(
-                            Result.success(Either.Right(result.coordinate.toLocation()))
-                        )
+                        val lat = result.coordinate.latitude()
+                        val lon = result.coordinate.longitude()
+                        continuation.resumeWith(Result.success(Either.Right(Location(lat, lon))))
                     }
 
                     override fun onResults(
@@ -140,12 +138,5 @@ class NetworkAddressSearchDataSource(
 
     override suspend fun setSuggestionLocation(suggestion: SearchSuggestion, location: Location) {
         throw NotImplementedError()
-    }
-
-    private fun Point.toLocation(): Location {
-        return Location("Search").apply {
-            latitude = latitude()
-            longitude = longitude()
-        }
     }
 }

@@ -1,7 +1,6 @@
 package com.weatherxm.data.services
 
 import android.content.SharedPreferences
-import android.location.Location
 import androidx.annotation.StringRes
 import androidx.collection.ArrayMap
 import arrow.core.Either
@@ -12,6 +11,7 @@ import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.R
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
+import com.weatherxm.data.Location
 import com.weatherxm.data.User
 import com.weatherxm.data.WeatherData
 import com.weatherxm.data.network.AuthToken

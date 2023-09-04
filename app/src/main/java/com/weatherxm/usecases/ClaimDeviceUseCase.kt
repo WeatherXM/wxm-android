@@ -1,6 +1,5 @@
 package com.weatherxm.usecases
 
-import android.location.Location
 import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.handleErrorWith
@@ -12,6 +11,7 @@ import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.data.CancellationError
 import com.weatherxm.data.CountryAndFrequencies
 import com.weatherxm.data.Failure
+import com.weatherxm.data.Location
 import com.weatherxm.data.MapBoxError.ReverseGeocodingError
 import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceRepository
@@ -45,11 +45,7 @@ class ClaimDeviceUseCaseImpl(
         lon: Double,
         secret: String?
     ): Either<Failure, UIDevice> {
-        return deviceRepository.claimDevice(
-            serialNumber,
-            com.weatherxm.data.Location(lat, lon),
-            secret
-        ).map {
+        return deviceRepository.claimDevice(serialNumber, Location(lat, lon), secret).map {
             it.toUIDevice()
         }
     }

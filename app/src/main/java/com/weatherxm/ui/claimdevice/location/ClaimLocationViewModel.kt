@@ -3,13 +3,13 @@ package com.weatherxm.ui.claimdevice.location
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.Context
-import android.location.Location
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.SearchSuggestion
+import com.weatherxm.data.Location
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.Analytics
@@ -37,10 +37,7 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
     private val analytics: Analytics by inject()
     private val validator: Validator by inject()
     private var reverseGeocodingJob: Job? = null
-    private var installationLocation = Location("").apply {
-        latitude = 0.0
-        longitude = 0.0
-    }
+    private var installationLocation = Location(0.0, 0.0)
     private var deviceType = DeviceType.M5_WIFI
 
     private val onRequestUserLocation = MutableLiveData<Boolean>(false)
@@ -78,8 +75,8 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
     }
 
     fun setInstallationLocation(lat: Double, lon: Double) {
-        installationLocation.latitude = lat
-        installationLocation.longitude = lon
+        installationLocation.lat = lat
+        installationLocation.lon = lon
     }
 
     fun getInstallationLocation(): Location {

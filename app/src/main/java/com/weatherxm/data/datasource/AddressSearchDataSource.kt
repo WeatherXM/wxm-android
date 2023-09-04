@@ -1,9 +1,9 @@
 package com.weatherxm.data.datasource
 
-import android.location.Location
 import arrow.core.Either
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.data.Failure
+import com.weatherxm.data.Location
 
 interface AddressSearchDataSource {
 

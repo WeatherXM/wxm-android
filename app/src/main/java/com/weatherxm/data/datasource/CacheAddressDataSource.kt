@@ -35,7 +35,7 @@ class CacheAddressDataSource(private val cacheService: CacheService) : AddressDa
     }
 
     override suspend fun getCountryAndFrequencies(
-        location: android.location.Location,
+        location: Location,
         locale: Locale
     ): Either<Failure, CountryAndFrequencies> {
         throw NotImplementedError("Won't be implemented. Ignore this.")

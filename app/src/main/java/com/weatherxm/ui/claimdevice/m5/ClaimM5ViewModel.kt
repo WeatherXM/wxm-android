@@ -1,6 +1,5 @@
 package com.weatherxm.ui.claimdevice.m5
 
-import android.location.Location
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +10,7 @@ import com.weatherxm.data.ApiError.UserError.ClaimError.DeviceClaiming
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.Failure
+import com.weatherxm.data.Location
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.ClaimDeviceUseCase
@@ -66,7 +66,7 @@ class ClaimM5ViewModel : ViewModel(), KoinComponent {
     fun claimDevice(serialNumber: String, location: Location) {
         onClaimResult.postValue(Resource.loading())
         viewModelScope.launch {
-            claimDeviceUseCase.claimDevice(serialNumber, location.latitude, location.longitude)
+            claimDeviceUseCase.claimDevice(serialNumber, location.lat, location.lon)
                 .map {
                     Timber.d("Claimed device: $it")
                     onClaimResult.postValue(Resource.success(it))

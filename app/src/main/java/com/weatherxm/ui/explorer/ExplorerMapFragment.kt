@@ -48,7 +48,6 @@ import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
-
 class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
     companion object {
         const val CAMERA_ANIMATION_DURATION = 400L
@@ -329,11 +328,9 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
                 onPolygonPointsUpdated(resource.data.polygonPoints)
                 binding.progress.visibility = View.INVISIBLE
             }
-
             Status.ERROR -> {
                 binding.progress.visibility = View.INVISIBLE
             }
-
             Status.LOADING -> {
                 binding.progress.visibility = View.VISIBLE
             }
@@ -408,7 +405,7 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
                         if (it == null) {
                             context.toast(R.string.error_claim_gps_failed)
                         } else {
-                            cameraFly(Point.fromLngLat(it.longitude, it.latitude))
+                            cameraFly(Point.fromLngLat(it.lon, it.lat))
                         }
                     }
                 },

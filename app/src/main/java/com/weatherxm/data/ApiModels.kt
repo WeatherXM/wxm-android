@@ -37,8 +37,8 @@ data class Wallet(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class Location(
-    val lat: Double,
-    val lon: Double
+    var lat: Double,
+    var lon: Double
 ) : Parcelable {
     companion object {
         fun empty() = Location(0.0, 0.0)

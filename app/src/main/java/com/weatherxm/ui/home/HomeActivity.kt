@@ -145,6 +145,7 @@ class HomeActivity : AppCompatActivity(), KoinComponent,
                 explorerModel.setExplorerAfterLoggedIn(true)
                 binding.addDevice.hide()
             }
+
             else -> binding.addDevice.hide()
         }
         binding.navView.show()
@@ -162,24 +163,10 @@ class HomeActivity : AppCompatActivity(), KoinComponent,
         * Changing the theme from Profile -> Settings and going back to profile
         * shows the "Add Device" floating button visible again. This code is to fix this.
          */
-        when (navController.currentDestination?.id) {
-            R.id.navigation_devices -> {
-                binding.addDevice.show()
-                binding.navView.show()
-                binding.networkStatsBtn.setVisible(false)
-                binding.myLocationBtn.setVisible(false)
-            }
-            R.id.navigation_explorer -> {
-                binding.addDevice.hide()
-                binding.networkStatsBtn.setVisible(true)
-                binding.myLocationBtn.setVisible(true)
-            }
-            else -> {
-                binding.addDevice.hide()
-                binding.networkStatsBtn.setVisible(false)
-                binding.myLocationBtn.setVisible(false)
-            }
-        }
+        val navDestination = navController.currentDestination?.id
+        binding.networkStatsBtn.setVisible(navDestination == R.id.navigation_explorer)
+        binding.myLocationBtn.setVisible(navDestination == R.id.navigation_explorer)
+        binding.addDevice.setVisible(navDestination == R.id.navigation_devices)
     }
 
     private fun onExplorerState(resource: Resource<ExplorerData>) {

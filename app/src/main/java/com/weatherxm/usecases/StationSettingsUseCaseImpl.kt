@@ -1,12 +1,12 @@
 package com.weatherxm.usecases
 
-import android.location.Location
 import arrow.core.Either
 import com.weatherxm.data.CountryAndFrequencies
 import com.weatherxm.data.DeviceInfo
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
+import com.weatherxm.data.Location
 import com.weatherxm.data.otherFrequencies
 import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceOTARepository
@@ -45,10 +45,7 @@ class StationSettingsUseCaseImpl(
         if (lat == null || lon == null) {
             return CountryAndFrequencies(null, Frequency.US915, otherFrequencies(Frequency.US915))
         }
-        val location = Location(null)
-        location.longitude = lon
-        location.latitude = lat
-        return addressRepository.getCountryAndFrequencies(location)
+        return addressRepository.getCountryAndFrequencies(Location(lat, lon))
     }
 
     override suspend fun getDeviceInfo(deviceId: String): Either<Failure, DeviceInfo> {

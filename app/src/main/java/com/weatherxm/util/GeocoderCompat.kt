@@ -3,13 +3,13 @@ package com.weatherxm.util
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
-import android.location.Location
 import android.os.Build
 import androidx.annotation.RequiresApi
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.weatherxm.data.Failure.GeocoderError
+import com.weatherxm.data.Location
 import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import java.io.IOException
@@ -29,7 +29,7 @@ object GeocoderCompat {
         location: Location,
         locale: Locale = Locale.getDefault()
     ): Either<GeocoderError, Address> {
-        return getFromLocation(context, location.latitude, location.longitude, locale)
+        return getFromLocation(context, location.lat, location.lon, locale)
     }
 
     /**

@@ -105,7 +105,7 @@ class NetworkAddressDataSource(
     }
 
     override suspend fun getCountryAndFrequencies(
-        location: android.location.Location,
+        location: Location,
         locale: Locale
     ): Either<Failure, CountryAndFrequencies> {
         return GeocoderCompat.getFromLocation(context, location, locale)

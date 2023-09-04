@@ -2,7 +2,6 @@ package com.weatherxm.ui.explorer
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +12,7 @@ import com.mapbox.maps.extension.style.layers.generated.HeatmapLayer
 import com.mapbox.maps.extension.style.layers.generated.heatmapLayer
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.weatherxm.R
+import com.weatherxm.data.Location
 import com.weatherxm.data.Resource
 import com.weatherxm.data.SingleLiveEvent
 import com.weatherxm.usecases.ExplorerUseCase

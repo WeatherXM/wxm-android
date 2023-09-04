@@ -1,6 +1,5 @@
 package com.weatherxm.ui.claimdevice.location
 
-import android.location.Location
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
@@ -13,6 +12,7 @@ import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.ViewAnnotationAnchor
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.weatherxm.R
+import com.weatherxm.data.Location
 import com.weatherxm.ui.BaseMapFragment
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel.Companion.ZOOM_LEVEL
@@ -132,7 +132,7 @@ class ClaimMapFragment : BaseMapFragment() {
         map.setCamera(
             CameraOptions.Builder()
                 .zoom(ZOOM_LEVEL)
-                .center(Point.fromLngLat(location.longitude, location.latitude))
+                .center(Point.fromLngLat(location.lon, location.lat))
                 .build()
         )
     }

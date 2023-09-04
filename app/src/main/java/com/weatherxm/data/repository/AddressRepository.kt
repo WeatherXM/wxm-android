@@ -1,6 +1,5 @@
 package com.weatherxm.data.repository
 
-import android.location.Location
 import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.handleErrorWith
@@ -15,6 +14,7 @@ import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.data.CountryAndFrequencies
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
+import com.weatherxm.data.Location
 import com.weatherxm.data.MapBoxError.ReverseGeocodingError
 import com.weatherxm.data.datasource.CacheAddressDataSource
 import com.weatherxm.data.datasource.CacheAddressSearchDataSource
@@ -29,10 +29,7 @@ interface AddressRepository {
     suspend fun getSuggestionLocation(suggestion: SearchSuggestion): Either<Failure, Location>
     suspend fun getAddressFromPoint(point: Point): Either<Failure, SearchAddress>
     suspend fun getCountryAndFrequencies(location: Location): CountryAndFrequencies
-    suspend fun getAddressFromLocation(
-        hexIndex: String,
-        location: com.weatherxm.data.Location
-    ): String?
+    suspend fun getAddressFromLocation(hexIndex: String, location: Location): String?
 }
 
 class AddressRepositoryImpl(
@@ -136,7 +133,7 @@ class AddressRepositoryImpl(
 
     override suspend fun getAddressFromLocation(
         hexIndex: String,
-        location: com.weatherxm.data.Location
+        location: Location
     ): String? {
         return cacheAddressDataSource.getLocationAddress(hexIndex, location)
             .onRight { address ->

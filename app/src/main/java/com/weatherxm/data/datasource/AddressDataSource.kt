@@ -19,7 +19,7 @@ interface AddressDataSource {
 
     suspend fun getAddressFromPoint(point: Point): Either<Failure, SearchResult>
     suspend fun getCountryAndFrequencies(
-        location: android.location.Location,
+        location: Location,
         locale: Locale = Locale.getDefault()
     ): Either<Failure, CountryAndFrequencies>
 }
