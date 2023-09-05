@@ -76,6 +76,8 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                     else -> mutableListOf()
                 }
             )
+            binding.nestedScrollView.scrollTo(0,0)
+            binding.recycler.scrollTo(0,0)
             trackScreenView()
         }
 
