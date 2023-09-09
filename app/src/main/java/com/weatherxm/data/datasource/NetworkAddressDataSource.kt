@@ -22,7 +22,6 @@ import com.weatherxm.data.countryToFrequency
 import com.weatherxm.data.otherFrequencies
 import com.weatherxm.util.GeocoderCompat
 import timber.log.Timber
-import java.util.Locale
 import kotlin.coroutines.suspendCoroutine
 
 class NetworkAddressDataSource(
@@ -46,10 +45,9 @@ class NetworkAddressDataSource(
 
     override suspend fun getLocationAddress(
         hexIndex: String,
-        location: Location,
-        locale: Locale
+        location: Location
     ): Either<Failure, String> {
-        return GeocoderCompat.getFromLocation(context, location.lat, location.lon, locale)
+        return GeocoderCompat.getFromLocation(location.lat, location.lon)
             .map { address ->
                 if (address.locality != null) {
                     "${address.locality}, ${address.countryCode}"
@@ -105,10 +103,9 @@ class NetworkAddressDataSource(
     }
 
     override suspend fun getCountryAndFrequencies(
-        location: Location,
-        locale: Locale
+        location: Location
     ): Either<Failure, CountryAndFrequencies> {
-        return GeocoderCompat.getFromLocation(context, location, locale)
+        return GeocoderCompat.getFromLocation(location)
             .flatMap { address ->
                 countryToFrequency(context, address.countryCode)?.let { frequency ->
                     CountryAndFrequencies(

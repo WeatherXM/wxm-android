@@ -56,7 +56,7 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
 
                 // Change the selected state
                 val lastSelectedItem = selectedPosition
-                selectedPosition = adapterPosition
+                selectedPosition = absoluteAdapterPosition
 
                 // Notify unselected & selected items, to force UI update
                 notifyItemChanged(lastSelectedItem)

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.DataError
 import com.weatherxm.data.SingleLiveEvent
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Analytics
 import kotlinx.coroutines.launch
@@ -29,7 +30,8 @@ class HomeViewModel : ViewModel(), KoinComponent {
         onOpenExplorer.postValue(true)
     }
 
-    fun getWalletMissing() {
+    fun getWalletMissing(ownedDevices: List<UIDevice>?) {
+        if(ownedDevices.isNullOrEmpty()) return
         viewModelScope.launch {
             onWalletMissingWarning.postValue(userUseCase.shouldShowWalletMissingWarning())
             userUseCase.getWalletAddress()

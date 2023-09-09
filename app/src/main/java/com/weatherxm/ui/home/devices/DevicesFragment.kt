@@ -185,7 +185,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                             binding.recycler.setVisible(true)
                         }
                     }
-                    parentModel.getWalletMissing()
+                    parentModel.getWalletMissing(model.getUserDevices()?.getOwnedDevices())
                 } else {
                     onEmptyState()
                 }

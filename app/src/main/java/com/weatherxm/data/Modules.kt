@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothManager
 import android.content.SharedPreferences
 import android.icu.text.CompactDecimalFormat
 import android.icu.text.NumberFormat
+import android.location.Geocoder
 import android.text.format.DateFormat
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
@@ -485,7 +486,7 @@ private val usecases = module {
         TokenUseCaseImpl(get())
     }
     single<AuthUseCase> {
-        AuthUseCaseImpl(get(), get())
+        AuthUseCaseImpl(get(), get(), get())
     }
     single<UserUseCase> {
         UserUseCaseImpl(get(), get())
@@ -756,6 +757,9 @@ val widgetHelper = module {
 private val utilities = module {
     single<CacheService> {
         CacheService(get(), get<SharedPreferences>(named(PREFERENCES_AUTH_TOKEN)), get(), get())
+    }
+    single<Geocoder> {
+        Geocoder(androidContext(), Locale.getDefault())
     }
     single<CompactDecimalFormat> {
         CompactDecimalFormat.getInstance(

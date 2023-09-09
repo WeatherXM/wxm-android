@@ -7,7 +7,6 @@ import com.weatherxm.data.CountryAndFrequencies
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 import com.weatherxm.data.services.CacheService
-import java.util.Locale
 
 /**
  * Simple shared preference database with key and value both strings.
@@ -16,8 +15,7 @@ class CacheAddressDataSource(private val cacheService: CacheService) : AddressDa
 
     override suspend fun getLocationAddress(
         hexIndex: String,
-        location: Location,
-        locale: Locale
+        location: Location
     ): Either<Failure, String> {
         return cacheService.getLocationAddress(hexIndex)
     }
@@ -35,8 +33,7 @@ class CacheAddressDataSource(private val cacheService: CacheService) : AddressDa
     }
 
     override suspend fun getCountryAndFrequencies(
-        location: Location,
-        locale: Locale
+        location: Location
     ): Either<Failure, CountryAndFrequencies> {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }

@@ -2,8 +2,10 @@ package com.weatherxm.usecases
 
 import android.content.Context
 import arrow.core.Either
+import com.weatherxm.data.ApiError
 import com.weatherxm.data.DeviceProfile.Helium
 import com.weatherxm.data.Failure
+import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_TIMEZONE
 import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
@@ -107,6 +109,9 @@ class DeviceDetailsUseCaseImpl(
         device: UIDevice,
         forceRefresh: Boolean
     ): Either<Failure, List<UIForecast>> {
+        if(device.timezone.isNullOrEmpty()) {
+            return Either.Left(ApiError.UserError.InvalidTimezone(INVALID_TIMEZONE))
+        }
         val dateStart = ZonedDateTime.now(ZoneId.of(device.timezone))
         val dateEnd = dateStart.plusDays(7)
         return weatherForecastRepository.getDeviceForecast(

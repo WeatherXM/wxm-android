@@ -173,7 +173,11 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
                 binding.loading.visibility = View.INVISIBLE
                 val user = result.data
                 Timber.d("User: $user")
-                navigator.showHome(this)
+                if(model.hasUserOptInOrOut()) {
+                    navigator.showHome(this)
+                } else {
+                    navigator.showAnalyticsOptIn(this)
+                }
 
                 /*
                 * We track successful login here because we chain `login`->`getUser` calls

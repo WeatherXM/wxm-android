@@ -19,6 +19,7 @@
     <string name="error_device_not_found">Could not find the requested device</string>
     <string name="error_connect_wallet_invalid_address">Invalid wallet address</string>
     <string name="error_forecast_generic_message">Fetching forecast failed</string>
+    <string name="error_forecast_invalid_timezone">Fetching forecast failed: Invalid Timezone</string>
     <string name="error_claim_failed_title">Claiming Failed</string>
     <string name="error_claim_invalid_dev_eui"><![CDATA[Station claiming failed.<br><b>The Dev EUI is invalid</b>.<br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>
     <string name="error_claim_invalid_serial"><![CDATA[Station claiming failed.<br><b>The serial number is invalid</b>.<br>If the problem persists, please contact our support team at <a>support@weatherxm.com</a>]]></string>

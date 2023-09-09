@@ -36,6 +36,6 @@ object Tokens {
     }
 
     fun roundTokens(value: Number, decimals: Int = 2): Float {
-        return value.toFloat().toBigDecimal().setScale(decimals, BigDecimal.ROUND_HALF_UP).toFloat()
+        return value.toFloat().toBigDecimal().setScale(decimals, RoundingMode.HALF_UP).toFloat()
     }
 }

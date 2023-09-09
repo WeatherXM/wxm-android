@@ -63,6 +63,9 @@ class ForecastViewModel(var device: UIDevice = UIDevice.empty()) : ViewModel(), 
                 is ApiError.UserError.InvalidFromDate, is ApiError.UserError.InvalidToDate -> {
                     UIError(resHelper.getString(R.string.error_forecast_generic_message))
                 }
+                is ApiError.UserError.InvalidTimezone -> {
+                    UIError(resHelper.getString(R.string.error_forecast_invalid_timezone))
+                }
                 is NoConnectionError, is ConnectionTimeoutError -> {
                     UIError(failure.getDefaultMessage(R.string.error_reach_out_short)) {
                         fetchForecast()

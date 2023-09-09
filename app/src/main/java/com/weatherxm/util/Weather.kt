@@ -11,7 +11,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import java.math.BigDecimal
+import java.math.RoundingMode
 
 @Suppress("TooManyFunctions")
 object Weather : KoinComponent {
@@ -427,10 +427,10 @@ object Weather : KoinComponent {
     }
 
     fun roundToDecimals(value: Number, decimals: Int = 1): Float {
-        return value.toFloat().toBigDecimal().setScale(decimals, BigDecimal.ROUND_HALF_UP).toFloat()
+        return value.toFloat().toBigDecimal().setScale(decimals, RoundingMode.HALF_UP).toFloat()
     }
 
     fun roundToInt(value: Number): Int {
-        return value.toFloat().toBigDecimal().setScale(0, BigDecimal.ROUND_HALF_UP).toInt()
+        return value.toFloat().toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()
     }
 }

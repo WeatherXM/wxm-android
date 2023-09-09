@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
+import androidx.lifecycle.withCreated
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentMessageDialogBinding
@@ -32,7 +33,7 @@ class MessageDialogFragment : BottomSheetDialogFragment() {
 
     init {
         lifecycleScope.launch {
-            whenCreated {
+            withCreated {
                 val args = requireArguments()
                 if (args.containsKey(ARG_TITLE)) {
                     title = args.getString(ARG_TITLE)

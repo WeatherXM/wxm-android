@@ -91,4 +91,8 @@ class LoginViewModel : ViewModel(), KoinComponent {
     private fun handleUserFailure(failure: Failure) {
         user.postValue(Resource.error(failure.getDefaultMessage()))
     }
+
+    fun hasUserOptInOrOut(): Boolean {
+        return authUseCase.hasUserOptInOrOut()
+    }
 }

@@ -3,8 +3,6 @@ package com.weatherxm.ui.connectwallet
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.Validated
-import arrow.core.valueOr
 import com.weatherxm.R
 import com.weatherxm.data.ApiError.UserError.WalletError.InvalidWalletAddress
 import com.weatherxm.data.Failure
@@ -81,9 +79,7 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
 
     @Suppress("MagicNumber")
     private fun sanitize(address: String): String {
-        return Validated.Valid(address)
-            .map { it.substring(it.indexOf(ETH_ADDR_PREFIX)).slice(0..41) }
-            .valueOr { "" }
+        return address.substring(address.indexOf(ETH_ADDR_PREFIX)).slice(0..41)
     }
 
     init {
