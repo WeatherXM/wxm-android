@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimSelectDeviceTypeBinding
 import com.weatherxm.ui.common.ActionDialogFragment
 import com.weatherxm.ui.common.DeviceType
@@ -82,6 +83,10 @@ class SelectDeviceTypeDialogFragment : BottomSheetDialogFragment(), KoinComponen
             Analytics.Screen.CLAIM_DEVICE_TYPE_SELECTION,
             SelectDeviceTypeDialogFragment::class.simpleName
         )
+    }
+
+    override fun getTheme(): Int {
+        return R.style.ThemeOverlay_WeatherXM_BottomSheetDialog
     }
 
     fun show(fragment: Fragment) {

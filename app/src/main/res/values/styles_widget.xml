@@ -150,13 +150,6 @@
     </style>
 
     <!--
-        BottomSheetDialog
-    -->
-    <style name="Widget.WeatherXM.BottomSheet.Dialog" parent="Widget.Material3.BottomSheet">
-        <item name="shapeAppearance">@style/ShapeAppearance.WeatherXM.BottomSheet.Dialog</item>
-    </style>
-
-    <!--
         Bottom Navigation View
     -->
     <style name="Widget.WeatherXM.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">

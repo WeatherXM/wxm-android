@@ -1,8 +1,8 @@
 <resources>
 
     <style name="ThemeOverlay.WeatherXM.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
-        <item name="colorSurface">@color/colorSurfaceVariant</item>
-        <item name="bottomSheetStyle">@style/Widget.WeatherXM.BottomSheet.Dialog</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="ThemeOverlay.WeatherXM.BottomSheetDialog.Layer1" parent="ThemeOverlay.WeatherXM.BottomSheetDialog">
