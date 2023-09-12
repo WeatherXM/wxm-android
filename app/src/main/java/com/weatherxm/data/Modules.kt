@@ -225,6 +225,7 @@ const val HOUR_FORMAT_24H = "HH:mm"
 const val HOUR_FORMAT_12H_FULL = "h:mm a"
 const val HOUR_FORMAT_12H_HOUR_ONLY = "h a"
 const val DATE_FORMAT_MONTH_DAY = "d/M"
+const val DATE_FORMAT_FULL = "EEE d, MMM yy"
 private const val ENCRYPTED_PREFERENCES_KEY = "ENCRYPTED_PREFERENCES_KEY"
 private const val PREFERENCES_AUTH_TOKEN = "PREFERENCES_AUTH_TOKEN"
 private const val PREFERENCES_AUTH_TOKEN_FILE = "auth_token"
@@ -763,7 +764,7 @@ private val utilities = module {
     }
     single<CompactDecimalFormat> {
         CompactDecimalFormat.getInstance(
-            Locale.getDefault(),
+            Locale.US,
             CompactDecimalFormat.CompactStyle.SHORT
         ).apply {
             minimumFractionDigits = 0
@@ -806,6 +807,9 @@ private val utilities = module {
         val usersLocaleDateFormat =
             DateFormat.getBestDateTimePattern(Locale.getDefault(), DATE_FORMAT_MONTH_DAY)
         DateTimeFormatter.ofPattern(usersLocaleDateFormat)
+    }
+    single<DateTimeFormatter>(named(DATE_FORMAT_FULL)) {
+        DateTimeFormatter.ofPattern(DATE_FORMAT_FULL, Locale.US)
     }
 }
 

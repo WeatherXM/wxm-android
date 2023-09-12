@@ -68,6 +68,10 @@ class HistoryChartsFragment : Fragment() {
             callback?.onSwipeRefresh()
         }
 
+        model.onNewDate().observe(viewLifecycleOwner) {
+            binding.chartsView.scrollTo(0, 0)
+        }
+
         model.charts().observe(viewLifecycleOwner) { resource ->
             Timber.d("Charts updated: ${resource.status}")
             when (resource.status) {

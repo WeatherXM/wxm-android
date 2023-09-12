@@ -185,9 +185,9 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
                     R.string.confirm_wallet_ownership_desc,
                     model.getLastPartOfAddress(address)
                 ),
-                negative = getString(R.string.action_confirm)
+                negative = getString(R.string.action_cancel)
             )
-            .onPositiveClick(getString(R.string.action_cancel)) {
+            .onPositiveClick(getString(R.string.action_confirm)) {
                 model.saveAddress(address)
             }
             .build()

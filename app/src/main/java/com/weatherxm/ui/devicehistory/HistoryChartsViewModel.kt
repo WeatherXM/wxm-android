@@ -12,7 +12,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.util.Analytics
-import com.weatherxm.util.DateTimeHelper.getDateRangeFromToday
+import com.weatherxm.util.LocalDateRange
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessageResId
 import com.weatherxm.util.isToday
@@ -31,22 +31,21 @@ class HistoryChartsViewModel(
 ) : ViewModel(), KoinComponent {
 
     companion object {
-        // 7 days in the past (+ today)
-        private const val DAYS_TO_SHOW = -7
+        const val DATES_BACKOFF = 7L
     }
 
     private val historyUseCase: HistoryUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
     private val analytics: Analytics by inject()
 
-    private val dates = MutableLiveData(getDateRangeFromToday(DAYS_TO_SHOW))
-    fun dates() = dates
+    private var updateWeatherHistoryJob: Job? = null
+    private var currentDateShown: LocalDate = LocalDate.now()
 
     private val charts = MutableLiveData<Resource<HistoryCharts>>(Resource.loading())
     fun charts(): LiveData<Resource<HistoryCharts>> = charts
 
-    private var updateWeatherHistoryJob: Job? = null
-    private var currentDateShown: LocalDate = LocalDate.now()
+    private val onNewDate = MutableLiveData(currentDateShown)
+    fun onNewDate(): LiveData<LocalDate> = onNewDate
 
     var temperatureDataSets: MutableMap<Int, List<Float>> = mutableMapOf()
     var precipDataSets: MutableMap<Int, List<Float>> = mutableMapOf()
@@ -59,6 +58,14 @@ class HistoryChartsViewModel(
         return currentDateShown.isToday()
     }
 
+    fun getCurrentDateShown() = currentDateShown
+
+    fun selectNewDate(newDate: LocalDate) {
+        currentDateShown = newDate
+        onNewDate.postValue(newDate)
+        fetchWeatherHistory()
+    }
+
     fun getLatestChartEntry(lineChartData: LineChartData): Float {
         val firstNaN = lineChartData.entries.firstOrNull { it.y.isNaN() }?.x
         return if (firstNaN != null && firstNaN > 0F) {
@@ -68,7 +75,7 @@ class HistoryChartsViewModel(
         }
     }
 
-    private fun fetchWeatherHistory(date: LocalDate, forceUpdate: Boolean = false) {
+    fun fetchWeatherHistory(forceUpdate: Boolean = false) {
         // If this the first data update, force a network update
         val shouldForceUpdate = forceUpdate || updateWeatherHistoryJob == null
 
@@ -82,17 +89,16 @@ class HistoryChartsViewModel(
             // Post loading status
             charts.postValue(Resource.loading())
 
-            Timber.d("Fetching data for $date [forced=$shouldForceUpdate]")
-            currentDateShown = date
+            Timber.d("Fetching data for $currentDateShown [forced=$shouldForceUpdate]")
 
             analytics.trackEventSelectContent(
                 Analytics.ParamValue.HISTORY_DAY.paramValue,
                 Pair(FirebaseAnalytics.Param.ITEM_ID, device.id),
-                Pair(Analytics.CustomParam.DATE.paramName, date.toString())
+                Pair(Analytics.CustomParam.DATE.paramName, currentDateShown.toString())
             )
 
             // Fetch fresh data
-            historyUseCase.getWeatherHistory(device, date, shouldForceUpdate)
+            historyUseCase.getWeatherHistory(device, currentDateShown, shouldForceUpdate)
                 .onRight {
                     Timber.d("Returning history charts for [${it.date}]")
                     charts.postValue(Resource.success(it))
@@ -120,10 +126,6 @@ class HistoryChartsViewModel(
                 Timber.d("Cancelled running history job.")
             }
         }
-    }
-
-    fun onDateSelected(date: LocalDate, forceUpdate: Boolean = false) {
-        fetchWeatherHistory(date, forceUpdate)
     }
 
     fun getDataSetIndexForHighlight(

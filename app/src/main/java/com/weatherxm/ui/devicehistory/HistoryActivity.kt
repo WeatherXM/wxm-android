@@ -4,18 +4,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityHistoryBinding
+import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.getLastTab
-import com.weatherxm.ui.common.getSelectedTab
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.devicehistory.HistoryChartsFragment.SwipeRefreshCallback
+import com.weatherxm.ui.devicehistory.HistoryChartsViewModel.Companion.DATES_BACKOFF
 import com.weatherxm.util.Analytics
-import com.weatherxm.util.DateTimeHelper.getFormattedRelativeDay
-import com.weatherxm.util.LocalDateRange
 import com.weatherxm.util.applyInsets
-import com.weatherxm.util.applyOnGlobalLayout
-import com.weatherxm.util.onTabSelected
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -26,6 +22,7 @@ import java.time.LocalDate
 class HistoryActivity : AppCompatActivity(), KoinComponent, SwipeRefreshCallback {
     private lateinit var binding: ActivityHistoryBinding
     private val analytics: Analytics by inject()
+    private val navigator: Navigator by inject()
 
     private val model: HistoryChartsViewModel by viewModel {
         parametersOf(intent.getParcelableExtra<UIDevice>(Contracts.ARG_DEVICE))
@@ -50,54 +47,41 @@ class HistoryActivity : AppCompatActivity(), KoinComponent, SwipeRefreshCallback
             subtitle = model.device.address ?: model.device.name
         }
 
-        binding.dateTabs.onTabSelected {
-            val date = it.tag as LocalDate
-            Timber.d("Date selected on tab: $date")
-            model.onDateSelected(date)
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            return@setOnMenuItemClickListener if (menuItem.itemId == R.id.select_date) {
+                navigator.showDatePicker(
+                    this,
+                    selectedDate = model.getCurrentDateShown(),
+                    dateStart = model.device.claimedAt?.toLocalDate()
+                ) {
+                    model.selectNewDate(it)
+                }
+                true
+            } else {
+                false
+            }
         }
 
-        // Listen for changes in the date range
-        model.dates().observe(this) { dates ->
-            Timber.d("Got new dates: $dates")
-            updateDateStrip(dates)
+        model.onNewDate().observe(this) {
+            binding.dateNavigator.setCurrentDate(it, true)
         }
+
+        binding.dateNavigator.init(
+            model.device.claimedAt?.toLocalDate() ?: LocalDate.now().minusDays(DATES_BACKOFF),
+            LocalDate.now()
+        ) {
+            model.selectNewDate(it)
+        }
+
+        model.fetchWeatherHistory(true)
     }
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(
-            Analytics.Screen.HISTORY,
-            HistoryActivity::class.simpleName
-        )
-    }
-
-    // Update dates in tab strip
-    private fun updateDateStrip(dates: LocalDateRange) {
-        // Delete existing tabs
-        binding.dateTabs.removeAllTabs()
-
-        // Add tabs for dates
-        dates.forEach { date ->
-            binding.dateTabs.addTab(
-                binding.dateTabs.newTab().apply {
-                    text = date.getFormattedRelativeDay(this@HistoryActivity)
-                    // Save the LocalDate object as tag in the Tab, so that we can use it later
-                    tag = date
-                },
-                false
-            )
-        }
-
-        // Select last tab (TODAY) by default
-        binding.dateTabs.getLastTab()?.apply {
-            view.applyOnGlobalLayout { this.select() }
-        }
+        analytics.trackScreen(Analytics.Screen.HISTORY, HistoryActivity::class.simpleName)
     }
 
     override fun onSwipeRefresh() {
-        binding.dateTabs.getSelectedTab()?.let {
-            val date = it.tag as LocalDate
-            model.onDateSelected(date, true)
-        }
+        model.fetchWeatherHistory(true)
     }
 }

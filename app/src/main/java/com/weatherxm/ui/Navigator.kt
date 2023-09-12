@@ -11,6 +11,12 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.CalendarConstraints.DateValidator
+import com.google.android.material.datepicker.CompositeDateValidator
+import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
@@ -31,6 +37,7 @@ import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.MessageDialogFragment
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.components.DatePickerHelper
 import com.weatherxm.ui.components.LoginPromptDialogFragment
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
@@ -56,7 +63,7 @@ import com.weatherxm.ui.token.TokenActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.util.Analytics
 import timber.log.Timber
-
+import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
 class Navigator(
@@ -393,6 +400,16 @@ class Navigator(
                 }
             ).show(it)
         }
+    }
+
+    fun showDatePicker(
+        context: Context,
+        selectedDate: LocalDate? = null,
+        dateStart: LocalDate? = null,
+        dateEnd: LocalDate? = null,
+        listener: DatePickerHelper.OnDateSelectedListener
+    ) {
+        DatePickerHelper.show(context, selectedDate, dateStart, dateEnd, listener)
     }
 
     fun sendSupportEmail(

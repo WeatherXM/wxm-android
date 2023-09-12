@@ -11,29 +11,50 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorSurface">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:menu="@menu/history_menu"
             app:navigationIcon="@drawable/ic_back"
             app:title="@string/history"
             tools:subtitle="Athens, GR" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/date_tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/historyView"
-        android:name="com.weatherxm.ui.devicehistory.HistoryChartsFragment"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        tools:layout="@layout/fragment_history_charts" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/datePickerCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-28dp"
+            app:cardCornerRadius="@dimen/card_corner_radius_big"
+            app:contentPaddingBottom="0dp"
+            app:contentPaddingLeft="@dimen/padding_small"
+            app:contentPaddingRight="@dimen/padding_small">
+
+            <com.weatherxm.ui.components.DateNavigator
+                android:id="@+id/date_navigator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/historyView"
+            android:name="com.weatherxm.ui.devicehistory.HistoryChartsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/fragment_history_charts" />
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

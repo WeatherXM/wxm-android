@@ -51,6 +51,10 @@
     <color name="light_warning_tint">#FEEFE4</color>
     <color name="dark_warning_tint">#3D3125</color>
 
+    <!-- Fade -->
+    <color name="fade_light_top">#00FEFBFF</color>
+    <color name="fade_dark_top">#0031364A</color>
+
     <!-- Explorer -->
     <color name="hex_fill_color">#3388ff</color>
     <color name="follow_heart_color">#FF9AAE</color>

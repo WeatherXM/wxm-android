@@ -24,6 +24,7 @@
     <color name="darkestBlue">@color/light_darkest_blue</color>
     <color name="textColor">@color/light_text</color>
     <color name="translucent">@color/light_translucent</color>
+    <color name="fadeTop">@color/fade_light_top</color>
 
     <!-- System and Launcher -->
     <color name="ic_launcher_background">#1B75BA</color>
