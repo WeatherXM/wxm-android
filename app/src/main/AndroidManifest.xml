@@ -120,6 +120,7 @@
 
                 <data
                     android:host="${explorer_host}"
+                    android:pathPattern="/stations/.*"
                     android:scheme="https" />
             </intent-filter>
         </activity>

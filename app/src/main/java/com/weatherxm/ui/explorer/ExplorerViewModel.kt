@@ -56,7 +56,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
      * Needed for passing info to the fragment to handle when a prefilled location is used
      * so we want the camera to move directly to that point
      */
-    private val onNavigateToLocation = SingleLiveEvent<com.weatherxm.data.Location>()
+    private val onNavigateToLocation = SingleLiveEvent<Location>()
 
     // Needed for passing info to the fragment to handle when my location button is clicked
     private val onMyLocationClicked = MutableLiveData(false)
@@ -182,7 +182,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     fun explorerState(): LiveData<Resource<ExplorerData>> = state
     fun onCellSelected(): LiveData<UICell> = onCellSelected
 
-    fun navigateToLocation(location: com.weatherxm.data.Location) {
+    fun navigateToLocation(location: Location) {
         onNavigateToLocation.postValue(location)
     }
 

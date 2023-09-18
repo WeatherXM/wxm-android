@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
+import com.weatherxm.data.Location
 import com.weatherxm.databinding.ActivityUrlRouterBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.setVisible

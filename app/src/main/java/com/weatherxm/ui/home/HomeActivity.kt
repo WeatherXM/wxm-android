@@ -29,8 +29,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
 
-class HomeActivity : AppCompatActivity(), KoinComponent,
-    BaseMapFragment.OnMapDebugInfoListener {
+class HomeActivity : AppCompatActivity(), KoinComponent, BaseMapFragment.OnMapDebugInfoListener {
     private val navigator: Navigator by inject()
     private val model: HomeViewModel by viewModels()
     private val explorerModel: ExplorerViewModel by viewModels()
@@ -131,7 +130,9 @@ class HomeActivity : AppCompatActivity(), KoinComponent,
 
         with(intent.getParcelableExtra<Location>(Contracts.ARG_CELL_CENTER)) {
             this?.let {
-                navController.navigate(R.id.navigation_explorer)
+                NavigationUI.onNavDestinationSelected(
+                    binding.navView.menu.findItem(R.id.navigation_explorer), navController
+                )
                 explorerModel.navigateToLocation(it)
             }
         }
