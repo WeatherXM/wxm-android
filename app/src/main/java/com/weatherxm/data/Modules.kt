@@ -75,12 +75,12 @@ import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
-import com.weatherxm.data.datasource.SharedPreferencesDataSource
-import com.weatherxm.data.datasource.SharedPreferencesDataSourceImpl
 import com.weatherxm.data.datasource.StatsDataSource
 import com.weatherxm.data.datasource.StatsDataSourceImpl
 import com.weatherxm.data.datasource.TokenDataSource
 import com.weatherxm.data.datasource.TokenDataSourceImpl
+import com.weatherxm.data.datasource.UserPreferenceDataSource
+import com.weatherxm.data.datasource.UserPreferenceDataSourceImpl
 import com.weatherxm.data.datasource.WidgetDataSource
 import com.weatherxm.data.datasource.WidgetDataSourceImpl
 import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSource
@@ -110,12 +110,12 @@ import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.ExplorerRepositoryImpl
 import com.weatherxm.data.repository.FollowRepository
 import com.weatherxm.data.repository.FollowRepositoryImpl
-import com.weatherxm.data.repository.SharedPreferenceRepositoryImpl
-import com.weatherxm.data.repository.SharedPreferencesRepository
 import com.weatherxm.data.repository.StatsRepository
 import com.weatherxm.data.repository.StatsRepositoryImpl
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.TokenRepositoryImpl
+import com.weatherxm.data.repository.UserPreferencesRepository
+import com.weatherxm.data.repository.UserPreferencesRepositoryImpl
 import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.data.repository.UserRepositoryImpl
 import com.weatherxm.data.repository.WalletRepository
@@ -165,6 +165,8 @@ import com.weatherxm.usecases.DeleteAccountUseCase
 import com.weatherxm.usecases.DeleteAccountUseCaseImpl
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCaseImpl
+import com.weatherxm.usecases.DeviceListUseCase
+import com.weatherxm.usecases.DeviceListUseCaseImpl
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.ExplorerUseCaseImpl
 import com.weatherxm.usecases.FollowUseCase
@@ -325,6 +327,10 @@ private val datasources = module {
         AppConfigDataSourceImpl(get(), get())
     }
 
+    single<UserPreferenceDataSource> {
+        UserPreferenceDataSourceImpl(get())
+    }
+
     single<NetworkExplorerDataSource> {
         NetworkExplorerDataSource(get())
     }
@@ -339,10 +345,6 @@ private val datasources = module {
 
     single<CacheAddressDataSource> {
         CacheAddressDataSource(get())
-    }
-
-    single<SharedPreferencesDataSource> {
-        SharedPreferencesDataSourceImpl(get())
     }
 
     single<NetworkWeatherForecastDataSource> {
@@ -426,14 +428,14 @@ private val repositories = module {
     single<AppConfigRepository> {
         AppConfigRepositoryImpl(get(), get())
     }
-    single<SharedPreferencesRepository> {
-        SharedPreferenceRepositoryImpl(get())
-    }
     single<AddressRepository> {
         AddressRepositoryImpl(get(), get(), get(), get(), get())
     }
     single<BluetoothScannerRepository> {
         BluetoothScannerRepositoryImpl(get())
+    }
+    single<UserPreferencesRepository> {
+        UserPreferencesRepositoryImpl(get())
     }
     single<BluetoothConnectionRepository> {
         BluetoothConnectionRepositoryImpl(get())
@@ -460,15 +462,13 @@ private val repositories = module {
 
 private val usecases = module {
     single<StartupUseCase> {
-        StartupUseCaseImpl(get(), get())
+        StartupUseCaseImpl(get(), get(), get())
     }
     single<ExplorerUseCase> {
         ExplorerUseCaseImpl(get(), get(), get(), get(), get(), get())
     }
     single<DeviceDetailsUseCase> {
         DeviceDetailsUseCaseImpl(
-            get(),
-            get(),
             get(),
             get(),
             get(),
@@ -490,13 +490,13 @@ private val usecases = module {
         AuthUseCaseImpl(get(), get(), get())
     }
     single<UserUseCase> {
-        UserUseCaseImpl(get(), get())
+        UserUseCaseImpl(get(), get(), get())
     }
     single<ConnectWalletUseCase> {
         ConnectWalletUseCaseImpl(get())
     }
     single<PreferencesUseCase> {
-        PreferencesUseCaseImpl(get(), get(), get())
+        PreferencesUseCaseImpl(get(), get())
     }
     single<SendFeedbackUseCase> {
         SendFeedbackUseCaseImpl(get())
@@ -536,6 +536,9 @@ private val usecases = module {
     }
     single<FollowUseCase> {
         FollowUseCaseImpl(get())
+    }
+    single<DeviceListUseCase> {
+        DeviceListUseCaseImpl(get(), get(), get())
     }
 }
 

@@ -5,9 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Resource
-import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.UserDevices
 import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.Dispatchers
@@ -20,23 +18,19 @@ class SelectStationViewModel : ViewModel(), KoinComponent {
 
     private val usecase: WidgetSelectStationUseCase by inject()
 
-    private val devices = MutableLiveData<Resource<UserDevices>>()
+    private val devices = MutableLiveData<Resource<List<UIDevice>>>()
     private val isNotLoggedIn = MutableLiveData<Unit>()
 
-    fun devices(): LiveData<Resource<UserDevices>> = devices
+    fun devices(): LiveData<Resource<List<UIDevice>>> = devices
     fun isNotLoggedIn(): LiveData<Unit> = isNotLoggedIn
 
     private var currentStationSelected = UIDevice.empty()
-
-    private var userDevices: UserDevices? = null
 
     fun setStationSelected(device: UIDevice) {
         currentStationSelected = device
     }
 
     fun getStationSelected() = currentStationSelected
-
-    fun getUserDevices() = userDevices
 
     fun checkIfLoggedInAndProceed() {
         Timber.d("Checking if user is logged in in the background")
@@ -59,14 +53,7 @@ class SelectStationViewModel : ViewModel(), KoinComponent {
             usecase.getUserDevices()
                 .map { devices ->
                     Timber.d("Got ${devices.size} devices")
-                    val ownedDevices = devices.count { it.relation == DeviceRelation.OWNED }
-                    userDevices = UserDevices(
-                        devices,
-                        devices.size,
-                        ownedDevices,
-                        devices.size - ownedDevices
-                    )
-                    this@SelectStationViewModel.devices.postValue(Resource.success(userDevices))
+                    this@SelectStationViewModel.devices.postValue(Resource.success(devices))
                 }
                 .mapLeft {
                     this@SelectStationViewModel.devices.postValue(

@@ -1,7 +1,5 @@
 package com.weatherxm.ui.home.devices
 
-import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,9 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Resource
-import com.weatherxm.ui.common.DeviceRelation
-import com.weatherxm.ui.common.UserDevices
-import com.weatherxm.usecases.DeviceDetailsUseCase
+import com.weatherxm.ui.common.DevicesFilterType
+import com.weatherxm.ui.common.DevicesGroupBy
+import com.weatherxm.ui.common.DevicesSortFilterOptions
+import com.weatherxm.ui.common.DevicesSortOrder
+import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.FollowUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
@@ -24,19 +25,12 @@ import timber.log.Timber
 
 class DevicesViewModel : ViewModel(), KoinComponent {
 
-    private val deviceDetailsUseCase: DeviceDetailsUseCase by inject()
-    private val sharedPreferences: SharedPreferences by inject()
+    private val deviceListUseCase: DeviceListUseCase by inject()
     private val followUseCase: FollowUseCase by inject()
     private val analytics: Analytics by inject()
     private val resHelper: ResourcesHelper by inject()
 
-    private val sharedPreferenceChangeListener = OnSharedPreferenceChangeListener { _, _ ->
-        this@DevicesViewModel.preferenceChanged.postValue(true)
-    }
-
-    private var userDevices: UserDevices? = null
-
-    private val devices = MutableLiveData<Resource<UserDevices>>().apply {
+    private val devices = MutableLiveData<Resource<List<UIDevice>>>().apply {
         value = Resource.loading()
     }
     private val onFollowStatus = MutableLiveData<Resource<Unit>>()
@@ -44,29 +38,17 @@ class DevicesViewModel : ViewModel(), KoinComponent {
     // Needed for passing info to the activity to show/hide elements when scrolling on the list
     private val showOverlayViews = MutableLiveData(true)
 
-    // Needed for passing info to the fragment to notify the adapter that it needs updating
-    private val preferenceChanged = MutableLiveData(false)
-
-    fun devices(): LiveData<Resource<UserDevices>> = devices
+    fun devices(): LiveData<Resource<List<UIDevice>>> = devices
     fun onFollowStatus(): LiveData<Resource<Unit>> = onFollowStatus
     fun showOverlayViews() = showOverlayViews
-    fun preferenceChanged() = preferenceChanged
-    fun getUserDevices() = userDevices
 
     fun fetch() {
         this@DevicesViewModel.devices.postValue(Resource.loading())
         viewModelScope.launch(Dispatchers.IO) {
-            deviceDetailsUseCase.getUserDevices()
+            deviceListUseCase.getUserDevices()
                 .map { devices ->
                     Timber.d("Got ${devices.size} devices")
-                    val ownedDevices = devices.count { it.relation == DeviceRelation.OWNED }
-                    userDevices = UserDevices(
-                        devices,
-                        devices.size,
-                        ownedDevices,
-                        devices.size - ownedDevices
-                    )
-                    this@DevicesViewModel.devices.postValue(Resource.success(userDevices))
+                    this@DevicesViewModel.devices.postValue(Resource.success(devices))
                 }
                 .mapLeft {
                     analytics.trackEventFailure(it.code)
@@ -104,7 +86,35 @@ class DevicesViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    init {
-        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
+    fun setDevicesSortFilterOptions(
+        sortOrderId: Int,
+        filterId: Int,
+        groupById: Int
+    ) {
+        val sortOrder = when (sortOrderId) {
+            R.id.dateAdded -> DevicesSortOrder.DATE_ADDED
+            R.id.name -> DevicesSortOrder.NAME
+            else -> DevicesSortOrder.LAST_ACTIVE
+        }
+
+        val filterType = when (filterId) {
+            R.id.showAll -> DevicesFilterType.ALL
+            R.id.ownedOnly -> DevicesFilterType.OWNED
+            else -> DevicesFilterType.FAVORITES
+        }
+
+        val groupBy = when (groupById) {
+            R.id.noGrouping -> DevicesGroupBy.NO_GROUPING
+            R.id.relationship -> DevicesGroupBy.RELATIONSHIP
+            else -> DevicesGroupBy.STATUS
+        }
+
+        deviceListUseCase.setDevicesSortFilterOptions(
+            DevicesSortFilterOptions(sortOrder, filterType, groupBy)
+        )
+    }
+
+    fun getDevicesSortFilterOptions(): DevicesSortFilterOptions {
+        return deviceListUseCase.getDevicesSortFilterOptions()
     }
 }

@@ -2,9 +2,8 @@ package com.weatherxm.usecases
 
 import arrow.core.Either
 import com.weatherxm.data.Failure
-import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AuthRepository
-import com.weatherxm.data.repository.UserRepository
+import com.weatherxm.data.repository.UserPreferencesRepository
 
 interface PreferencesUseCase {
     suspend fun isLoggedIn(): Either<Failure, Boolean>
@@ -16,8 +15,7 @@ interface PreferencesUseCase {
 
 class PreferencesUseCaseImpl(
     private val authRepository: AuthRepository,
-    private val userRepository: UserRepository,
-    private val appConfigRepository: AppConfigRepository
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : PreferencesUseCase {
 
     override suspend fun isLoggedIn(): Either<Failure, Boolean> {
@@ -29,14 +27,14 @@ class PreferencesUseCaseImpl(
     }
 
     override fun hasDismissedSurveyPrompt(): Boolean {
-        return userRepository.hasDismissedSurveyPrompt()
+        return userPreferencesRepository.hasDismissedSurveyPrompt()
     }
 
     override fun dismissSurveyPrompt() {
-        return userRepository.dismissSurveyPrompt()
+        return userPreferencesRepository.dismissSurveyPrompt()
     }
 
     override fun setAnalyticsEnabled(enabled: Boolean) {
-        return appConfigRepository.setAnalyticsEnabled(enabled)
+        return userPreferencesRepository.setAnalyticsEnabled(enabled)
     }
 }

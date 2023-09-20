@@ -2,6 +2,7 @@ package com.weatherxm.usecases
 
 import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AuthRepository
+import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.ui.startup.StartupState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -21,6 +22,7 @@ interface StartupUseCase {
 
 class StartupUseCaseImpl(
     private val authRepository: AuthRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
     private val appConfigRepository: AppConfigRepository
 ) : StartupUseCase, KoinComponent {
 
@@ -41,7 +43,7 @@ class StartupUseCaseImpl(
                 authRepository.isLoggedIn()
                     .map {
                         Timber.d("Already logged in.")
-                        if (!appConfigRepository.hasUserOptInOrOut()) {
+                        if (!userPreferencesRepository.shouldShowAnalyticsOptIn()) {
                             trySend(StartupState.ShowAnalyticsOptIn)
                         } else {
                             trySend(StartupState.ShowHome)

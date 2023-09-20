@@ -3,78 +3,31 @@ package com.weatherxm.usecases
 import android.content.Context
 import arrow.core.Either
 import com.weatherxm.data.ApiError
-import com.weatherxm.data.DeviceProfile.Helium
 import com.weatherxm.data.Failure
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_TIMEZONE
 import com.weatherxm.data.repository.AddressRepository
-import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
-import com.weatherxm.data.repository.SharedPreferencesRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.WeatherForecastRepository
-import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.RewardsInfo
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.util.DateTimeHelper.getFormattedRelativeDay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filter
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
 
-@Suppress("LongParameterList")
 class DeviceDetailsUseCaseImpl(
     private val deviceRepository: DeviceRepository,
-    private val deviceOTARepository: DeviceOTARepository,
     private val tokenRepository: TokenRepository,
     private val weatherForecastRepository: WeatherForecastRepository,
     private val addressRepository: AddressRepository,
-    private val preferencesRepository: SharedPreferencesRepository,
     private val explorerRepository: ExplorerRepository,
     private val context: Context
 ) : DeviceDetailsUseCase {
-
-    companion object {
-        val UNIT_PREF_KEYS = arrayOf(
-            "temperature_unit",
-            "precipitation_unit",
-            "wind_speed_unit",
-            "wind_direction_unit",
-            "pressure_unit"
-        )
-    }
-
-    override fun getUnitPreferenceChangedFlow(): Flow<String> {
-        return preferencesRepository.getPreferenceChangeFlow()
-            .filter { key -> key in UNIT_PREF_KEYS }
-    }
-
-    override suspend fun getUserDevices(): Either<Failure, List<UIDevice>> {
-        return deviceRepository.getUserDevices().map { devices ->
-            devices.map {
-                val device = it.toUIDevice()
-                val shouldShowOTAPrompt = deviceOTARepository.shouldShowOTAPrompt(
-                    device.id,
-                    device.assignedFirmware
-                ) && device.relation == DeviceRelation.OWNED
-                val alerts = mutableListOf<DeviceAlert>()
-                if (device.isActive == false) {
-                    alerts.add(DeviceAlert.OFFLINE)
-                }
-
-                if (shouldShowOTAPrompt && device.profile == Helium && device.needsUpdate()) {
-                    alerts.add(DeviceAlert.NEEDS_UPDATE)
-                }
-                device.apply {
-                    this.alerts = alerts
-                }
-            }
-        }
-    }
 
     override suspend fun getUserDevice(device: UIDevice): Either<Failure, UIDevice> {
         return if (device.relation == DeviceRelation.UNFOLLOWED) {
@@ -109,7 +62,7 @@ class DeviceDetailsUseCaseImpl(
         device: UIDevice,
         forceRefresh: Boolean
     ): Either<Failure, List<UIForecast>> {
-        if(device.timezone.isNullOrEmpty()) {
+        if (device.timezone.isNullOrEmpty()) {
             return Either.Left(ApiError.UserError.InvalidTimezone(INVALID_TIMEZONE))
         }
         val dateStart = ZonedDateTime.now(ZoneId.of(device.timezone))

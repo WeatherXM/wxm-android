@@ -10,6 +10,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.badge.BadgeDrawable
+import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
@@ -19,13 +21,11 @@ import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.UserDevices
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
-import com.weatherxm.util.onTabSelected
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -47,6 +47,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
             }
         }
 
+    @com.google.android.material.badge.ExperimentalBadgeUtils
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,28 +58,25 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
 
         binding.root.applyInsets()
 
+        binding.toolbar.setOnMenuItemClickListener { menuItem ->
+            return@setOnMenuItemClickListener if (menuItem.itemId == R.id.sort_filter) {
+                SortFilterDialogFragment.newInstance().show(this)
+                true
+            } else {
+                false
+            }
+        }
+
         adapter = DeviceAdapter(this)
         binding.recycler.adapter = adapter
+        val filtersBadge = BadgeDrawable.create(requireContext()).apply {
+            context?.let {
+                backgroundColor = it.getColor(R.color.follow_heart_color)
+            }
+        }
 
         binding.swiperefresh.setOnRefreshListener {
             model.fetch()
-        }
-
-        initTabs()
-
-        binding.navigationTabs.onTabSelected {
-            if (model.getUserDevices() == null) return@onTabSelected
-            onTabSelected(
-                when (it.position) {
-                    0 -> model.getUserDevices()?.devices
-                    1 -> model.getUserDevices()?.getOwnedDevices()
-                    2 -> model.getUserDevices()?.getFollowedDevices()
-                    else -> mutableListOf()
-                }
-            )
-            binding.nestedScrollView.scrollTo(0,0)
-            binding.recycler.scrollTo(0,0)
-            trackScreenView()
         }
 
         binding.nestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
@@ -86,11 +84,12 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
         }
 
         model.devices().observe(viewLifecycleOwner) {
+            if (model.getDevicesSortFilterOptions().areDefaultFiltersOn()) {
+                BadgeUtils.detachBadgeDrawable(filtersBadge, binding.toolbar, R.id.sort_filter)
+            } else {
+                BadgeUtils.attachBadgeDrawable(filtersBadge, binding.toolbar, R.id.sort_filter)
+            }
             onDevices(it)
-        }
-
-        model.preferenceChanged().observe(viewLifecycleOwner) {
-            if (it) adapter.notifyDataSetChanged()
         }
 
         model.onFollowStatus().observe(viewLifecycleOwner) {
@@ -126,75 +125,38 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
         }
     }
 
-    private fun onTabSelected(devicesOfTab: List<UIDevice>?) {
-        if (devicesOfTab.isNullOrEmpty()) {
-            onEmptyState()
-        } else {
-            adapter.submitList(devicesOfTab)
-            binding.empty.setVisible(false)
-            binding.recycler.setVisible(true)
-        }
-    }
-
-    private fun initTabs() {
-        with(binding.navigationTabs) {
-            addTab(
-                newTab().apply {
-                    text = getString(R.string.total)
-                },
-                true
-            )
-            addTab(
-                newTab().apply {
-                    text = getString(R.string.owned)
-                }
-            )
-            addTab(
-                newTab().apply {
-                    text = getString(R.string.favorites)
-                }
-            )
-        }
-    }
-
-    private fun onDevices(userDevices: Resource<UserDevices>) {
-        when (userDevices.status) {
+    private fun onDevices(devices: Resource<List<UIDevice>>) {
+        when (devices.status) {
             Status.SUCCESS -> {
                 binding.swiperefresh.isRefreshing = false
-                if (!userDevices.data?.devices.isNullOrEmpty()) {
-                    binding.navigationTabs.getTabAt(0)?.text = getString(
-                        R.string.total_with_placeholder,
-                        userDevices.data?.totalDevices?.toString() ?: "?"
-                    )
-                    binding.navigationTabs.getTabAt(1)?.text = getString(
-                        R.string.owned_with_placeholder,
-                        userDevices.data?.ownedDevices?.toString() ?: "?"
-                    )
-                    binding.navigationTabs.getTabAt(2)?.text = getString(
-                        R.string.favorites_with_placeholder,
-                        userDevices.data?.followedDevices?.toString() ?: "?"
-                    )
-
-                    when (binding.navigationTabs.selectedTabPosition) {
-                        1 -> onTabSelected(model.getUserDevices()?.getOwnedDevices())
-                        2 -> onTabSelected(model.getUserDevices()?.getFollowedDevices())
-                        else -> {
-                            adapter.submitList(userDevices.data?.devices)
-                            adapter.notifyDataSetChanged()
-                            binding.empty.setVisible(false)
-                            binding.recycler.setVisible(true)
-                        }
-                    }
-                    parentModel.getWalletMissing(model.getUserDevices()?.getOwnedDevices())
+                if (!devices.data.isNullOrEmpty()) {
+                    adapter.submitList(devices.data)
+                    adapter.notifyDataSetChanged()
+                    binding.empty.setVisible(false)
+                    binding.recycler.setVisible(true)
+                    parentModel.getWalletMissing(devices.data)
                 } else {
-                    onEmptyState()
+                    with(binding.empty) {
+                        clear()
+                        animation(R.raw.anim_empty_devices, false)
+                        listener(null)
+                        title(getString(R.string.empty_weather_stations))
+                        htmlSubtitle(getString(R.string.add_weather_station_or_browser_map))
+                        action(getString(R.string.view_explorer_map))
+                        listener {
+                            parentModel.openExplorer()
+                        }
+                        visibility = View.VISIBLE
+                    }
+                    adapter.submitList(mutableListOf())
+                    binding.recycler.setVisible(false)
                 }
             }
             Status.ERROR -> {
                 binding.swiperefresh.isRefreshing = false
                 binding.empty.animation(R.raw.anim_error, false)
                 binding.empty.title(getString(R.string.error_generic_message))
-                binding.empty.subtitle(userDevices.message)
+                binding.empty.subtitle(devices.message)
                 binding.empty.action(getString(R.string.action_retry))
                 binding.empty.listener { model.fetch() }
                 binding.empty.setVisible(true)
@@ -216,39 +178,6 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                 }
             }
         }
-    }
-
-    private fun onEmptyState() {
-        with(binding.empty) {
-            clear()
-            animation(R.raw.anim_empty_devices, false)
-            listener(null)
-            when (binding.navigationTabs.selectedTabPosition) {
-                0 -> {
-                    title(getString(R.string.empty_weather_stations))
-                    htmlSubtitle(getString(R.string.add_weather_station_or_browser_map))
-                    action(getString(R.string.view_explorer_map))
-                    listener {
-                        parentModel.openExplorer()
-                    }
-                }
-                1 -> {
-                    title(getString(R.string.empty_weather_stations))
-                    htmlSubtitle(getString(R.string.add_weather_station))
-                }
-                2 -> {
-                    title(getString(R.string.empty_favorites))
-                    htmlSubtitle(getString(R.string.browser_map))
-                    action(getString(R.string.view_explorer_map))
-                    listener {
-                        parentModel.openExplorer()
-                    }
-                }
-            }
-            visibility = View.VISIBLE
-        }
-        adapter.submitList(mutableListOf())
-        binding.recycler.setVisible(false)
     }
 
     private fun onWalletMissingWarning(walletMissing: Boolean) {
@@ -280,30 +209,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
 
     override fun onResume() {
         super.onResume()
-        trackScreenView()
-    }
-
-    private fun trackScreenView() {
-        when (binding.navigationTabs.selectedTabPosition) {
-            0 -> {
-                analytics.trackScreen(
-                    Analytics.Screen.DEVICES_LIST_TOTAL,
-                    DevicesFragment::class.simpleName
-                )
-            }
-            1 -> {
-                analytics.trackScreen(
-                    Analytics.Screen.DEVICES_LIST_OWNED,
-                    DevicesFragment::class.simpleName
-                )
-            }
-            2 -> {
-                analytics.trackScreen(
-                    Analytics.Screen.DEVICES_LIST_FOLLOWING,
-                    DevicesFragment::class.simpleName
-                )
-            }
-        }
+        analytics.trackScreen(Analytics.Screen.DEVICES_LIST, DevicesFragment::class.simpleName)
     }
 
     override fun onDeviceClicked(device: UIDevice) {

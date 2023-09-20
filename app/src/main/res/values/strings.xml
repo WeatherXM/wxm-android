@@ -100,14 +100,12 @@
     <string name="hello_user">Hello, %s</string>
 
     <!-- Weather Station(s) -->
-    <string name="my_stations_list">My Stations List</string>
+    <string name="my_stations">My Stations</string>
     <string name="weather_stations">Weather Stations</string>
     <string name="add_weather_station"><![CDATA[Claim your WXM device by clicking the <b>+ button.</b>]]></string>
     <string name="add_weather_station_or_browser_map"><![CDATA[Claim your WXM device by clicking the <b>+ button</b> or browse the map and add stations to your favorites.</b>]]></string>
-    <string name="browser_map">Browse the explorer map and add stations to your favorites. They will show up here.</string>
     <string name="just_now">Just now</string>
     <string name="empty_weather_stations">No stations yet?</string>
-    <string name="empty_favorites">No favorites yet?</string>
     <string name="view_explorer_map">View Explorer Map</string>
     <string name="displayed_times">All displayed times are in %s timezone.</string>
     <string name="station_offline">Station Offline</string>
@@ -428,11 +426,6 @@
 
     <!-- Share/Follow Station -->
     <string name="share_station">Share Station</string>
-    <string name="total_with_placeholder">%s Total</string>
-    <string name="owned_with_placeholder">%s Owned</string>
-    <string name="owned">Owned</string>
-    <string name="favorites_with_placeholder">%s Favorites</string>
-    <string name="favorites">Favorites</string>
     <string name="add_favorites">Add to favorites?</string>
     <string name="add_favorites_desc"><![CDATA[<b>%s</b> seems offline at the moment. You can still add it to your favorites, but keep in mind that its data may not be correct.]]></string>
     <string name="remove_favorites">Remove from favorites?</string>

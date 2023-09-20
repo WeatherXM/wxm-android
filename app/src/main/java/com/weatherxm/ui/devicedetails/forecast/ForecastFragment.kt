@@ -98,12 +98,6 @@ class ForecastFragment : Fragment(), KoinComponent {
             showSnackbarMessage(it.errorMessage, it.retryFunction)
         }
 
-        parentModel.onUnitPreferenceChanged().observe(viewLifecycleOwner) {
-            if (it) {
-                forecastAdapter.notifyDataSetChanged()
-            }
-        }
-
         fetchOrHideContent()
     }
 

@@ -7,6 +7,7 @@ import arrow.core.right
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.User
+import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.data.repository.WalletRepository
 import java.util.concurrent.TimeUnit
@@ -20,6 +21,7 @@ interface UserUseCase {
 
 class UserUseCaseImpl(
     private val userRepository: UserRepository,
+    private val userPreferencesRepository: UserPreferencesRepository,
     private val walletRepository: WalletRepository
 ) : UserUseCase {
     companion object {
@@ -40,13 +42,13 @@ class UserUseCaseImpl(
             .flatMap { b -> b?.right() ?: DataError.NoWalletAddressError.left<Failure>() }
             .fold({ it !is DataError.NoWalletAddressError }, { it.isNotEmpty() })
 
-        val dismissTimestamp = userRepository.getWalletWarningDismissTimestamp()
+        val dismissTimestamp = userPreferencesRepository.getWalletWarningDismissTimestamp()
         val now = System.currentTimeMillis()
 
         return !hasWalletAddress && (now - dismissTimestamp) > WALLET_WARNING_DISMISS_EXPIRATION
     }
 
     override fun setWalletWarningDismissTimestamp() {
-        userRepository.setWalletWarningDismissTimestamp()
+        userPreferencesRepository.setWalletWarningDismissTimestamp()
     }
 }

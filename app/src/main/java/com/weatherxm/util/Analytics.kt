@@ -29,9 +29,7 @@ class Analytics(
         DEVICE_ALERTS("Device Alerts"),
         HELIUM_OTA("OTA Update"),
         HISTORY("Device History"),
-        DEVICES_LIST_TOTAL("Device List Total"),
-        DEVICES_LIST_OWNED("Device List Owned"),
-        DEVICES_LIST_FOLLOWING("Device List Following"),
+        DEVICES_LIST("Device List"),
         SETTINGS("App Settings"),
         LOGIN("Login"),
         SIGNUP("Sign Up"),
@@ -53,7 +51,8 @@ class Analytics(
         EXPLORER_DEVICE("Explorer Device"),
         BLE_CONNECTION_POPUP_ERROR("BLE Connection Popup Error"),
         NETWORK_STATS("Network Stats"),
-        NETWORK_SEARCH("Network Search")
+        NETWORK_SEARCH("Network Search"),
+        SORT_FILTER_DEVICES_OPTIONS("Sort & Filter Devices Options")
     }
 
     // Custom Event Names

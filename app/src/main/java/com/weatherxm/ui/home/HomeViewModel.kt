@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.DataError
 import com.weatherxm.data.SingleLiveEvent
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Analytics
@@ -30,8 +31,10 @@ class HomeViewModel : ViewModel(), KoinComponent {
         onOpenExplorer.postValue(true)
     }
 
-    fun getWalletMissing(ownedDevices: List<UIDevice>?) {
-        if(ownedDevices.isNullOrEmpty()) return
+    fun getWalletMissing(devices: List<UIDevice>?) {
+        if (devices?.firstOrNull { it.relation == DeviceRelation.OWNED } == null) {
+            return
+        }
         viewModelScope.launch {
             onWalletMissingWarning.postValue(userUseCase.shouldShowWalletMissingWarning())
             userUseCase.getWalletAddress()

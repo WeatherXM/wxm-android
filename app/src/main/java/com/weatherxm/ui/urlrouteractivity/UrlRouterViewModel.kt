@@ -12,7 +12,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_PLACES
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.SearchResult
-import com.weatherxm.usecases.DeviceDetailsUseCase
+import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.UIErrors.getDefaultMessage
@@ -26,7 +26,7 @@ class UrlRouterViewModel : ViewModel(), KoinComponent {
     }
 
     private val usecase: ExplorerUseCase by inject()
-    private val devicesUseCase: DeviceDetailsUseCase by inject()
+    private val devicesUseCase: DeviceListUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
 
     private val onError = MutableLiveData<String>()

@@ -13,8 +13,6 @@ interface AppConfigDataSource {
     fun getLastRemindedVersion(): Int
     fun setLastRemindedVersion()
     fun getLastRemoteVersionCode(): Int
-    fun getAnalyticsOptInTimestamp(): Long
-    fun setAnalyticsEnabled(enabled: Boolean)
     fun setInstallationId(installationId: String)
     fun getInstallationId(): Either<Failure, String>
 }
@@ -32,15 +30,6 @@ class AppConfigDataSourceImpl(
 
     override fun getLastRemoteVersionCode(): Int {
         return firebaseRemoteConfig.getDouble(REMOTE_CONFIG_VERSION_CODE).toInt()
-    }
-
-    override fun getAnalyticsOptInTimestamp(): Long {
-        return cacheService.getAnalyticsOptInTimestamp()
-    }
-
-    override fun setAnalyticsEnabled(enabled: Boolean) {
-        cacheService.setAnalyticsEnabled(enabled)
-        cacheService.setAnalyticsEnabledTimestamp()
     }
 
     override fun shouldUpdate(): Boolean {

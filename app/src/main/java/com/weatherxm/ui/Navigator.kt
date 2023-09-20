@@ -11,12 +11,6 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.CalendarConstraints.DateValidator
-import com.google.android.material.datepicker.CompositeDateValidator
-import com.google.android.material.datepicker.DateValidatorPointBackward
-import com.google.android.material.datepicker.DateValidatorPointForward
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R

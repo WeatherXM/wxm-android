@@ -44,12 +44,6 @@ class CurrentFragment : Fragment(), KoinComponent {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        parentModel.onUnitPreferenceChanged().observe(viewLifecycleOwner) {
-            if (it) {
-                binding.currentWeatherCard.updateCurrentWeatherUI()
-            }
-        }
-
         parentModel.onFollowStatus().observe(viewLifecycleOwner) {
             if (it.status == Status.SUCCESS) {
                 model.device = parentModel.device

@@ -13,96 +13,73 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorSurface">
+        android:background="@drawable/background_bottom_rounded_corners">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingEnd="@dimen/padding_small"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:title="@string/my_stations_list" />
+            app:menu="@menu/devices_list_menu"
+            app:title="@string/my_stations"
+            tools:ignore="RtlSymmetry" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- Content -->
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/navigationCard"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-20dp"
-            app:cardCornerRadius="@dimen/card_corner_radius"
-            app:cardElevation="@dimen/elevation_small"
-            app:contentPadding="@dimen/padding_normal"
-            app:contentPaddingBottom="0dp"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
+            android:clipChildren="false">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/navigationTabs"
-                style="@style/Widget.WeatherXM.TabLayout.Navigation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Content -->
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swiperefresh"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/navigationCard">
-
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/nestedScrollView"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipChildren="false">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <com.weatherxm.ui.components.MessageCardView
+                    android:id="@+id/walletWarning"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipChildren="false">
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:message_background_tint="@color/warningTint"
+                    app:message_icon="@drawable/ic_warn"
+                    app:message_icon_color="@color/warning"
+                    app:message_includes_close_button="true"
+                    app:message_message="@string/wallet_address_missing_desc"
+                    app:message_title="@string/wallet_address_missing"
+                    tools:visibility="visible" />
 
-                    <com.weatherxm.ui.components.MessageCardView
-                        android:id="@+id/walletWarning"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_normal"
-                        android:layout_marginTop="@dimen/margin_large"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:message_background_tint="@color/warningTint"
-                        app:message_icon="@drawable/ic_warn"
-                        app:message_icon_color="@color/warning"
-                        app:message_includes_close_button="true"
-                        app:message_message="@string/wallet_address_missing_desc"
-                        app:message_title="@string/wallet_address_missing"
-                        tools:visibility="visible" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small_to_normal"
+                    android:overScrollMode="never"
+                    android:scrollbars="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/walletWarning"
+                    tools:listitem="@layout/list_item_device" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycler"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small_to_normal"
-                        android:overScrollMode="never"
-                        android:scrollbars="vertical"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/walletWarning"
-                        tools:listitem="@layout/list_item_device" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
 
-            </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Empty -->
 

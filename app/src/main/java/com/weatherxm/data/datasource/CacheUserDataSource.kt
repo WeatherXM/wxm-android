@@ -27,22 +27,6 @@ class CacheUserDataSource(private val cacheService: CacheService) : UserDataSour
         cacheService.setUser(user)
     }
 
-    override fun hasDismissedSurveyPrompt(): Boolean {
-        return cacheService.hasDismissedSurveyPrompt()
-    }
-
-    override fun dismissSurveyPrompt() {
-        cacheService.dismissSurveyPrompt()
-    }
-
-    override fun setWalletWarningDismissTimestamp() {
-        cacheService.setWalletWarningDismissTimestamp()
-    }
-
-    override fun getWalletWarningDismissTimestamp(): Long {
-        return cacheService.getWalletWarningDismissTimestamp()
-    }
-
     override suspend fun deleteAccount(): Either<Failure, Unit> {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }

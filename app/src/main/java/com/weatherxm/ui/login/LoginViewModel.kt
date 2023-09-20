@@ -92,7 +92,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
         user.postValue(Resource.error(failure.getDefaultMessage()))
     }
 
-    fun hasUserOptInOrOut(): Boolean {
-        return authUseCase.hasUserOptInOrOut()
+    fun shouldShowAnalyticsOptIn(): Boolean {
+        return authUseCase.shouldShowAnalyticsOptIn()
     }
 }

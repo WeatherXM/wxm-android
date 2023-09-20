@@ -10,9 +10,5 @@ interface UserDataSource {
     suspend fun getUser(): Either<Failure, User>
     suspend fun setUser(user: User)
     suspend fun deleteAccount(): Either<Failure, Unit>
-    fun hasDismissedSurveyPrompt(): Boolean
-    fun dismissSurveyPrompt()
     fun getUserId(): String
-    fun setWalletWarningDismissTimestamp()
-    fun getWalletWarningDismissTimestamp(): Long
 }

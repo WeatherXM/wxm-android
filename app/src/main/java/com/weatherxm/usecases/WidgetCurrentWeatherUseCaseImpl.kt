@@ -23,15 +23,4 @@ class WidgetCurrentWeatherUseCaseImpl(
             it.toUIDevice()
         }
     }
-
-    override suspend fun getUserDevices(
-        deviceIds: List<String>,
-        numOfRetries: Int
-    ): Either<Failure, List<UIDevice>> {
-        return deviceRepository.getUserDevices(deviceIds).map {
-            it.map { device ->
-                device.toUIDevice()
-            }
-        }
-    }
 }

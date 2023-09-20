@@ -14,13 +14,11 @@ import com.weatherxm.databinding.ActivityWidgetSelectStationBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.UserDevices
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.widgets.currentweather.CurrentWeatherWidgetWorkerUpdate
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.WidgetHelper
 import com.weatherxm.util.applyInsets
-import com.weatherxm.util.onTabSelected
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -53,20 +51,6 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
         }
         binding.recycler.adapter = adapter
 
-        initTabs()
-
-        binding.navigationTabs.onTabSelected {
-            if (model.getUserDevices() == null) return@onTabSelected
-            onTabSelected(
-                when (it.position) {
-                    0 -> model.getUserDevices()?.devices
-                    1 -> model.getUserDevices()?.getOwnedDevices()
-                    2 -> model.getUserDevices()?.getFollowedDevices()
-                    else -> mutableListOf()
-                }
-            )
-        }
-
         model.devices().observe(this) {
             onDevices(it)
         }
@@ -95,51 +79,26 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
         )
     }
 
-    private fun onTabSelected(devicesOfTab: List<UIDevice>?) {
-        if (devicesOfTab.isNullOrEmpty()) {
-            onEmptyState()
-        } else {
-            adapter.submitList(devicesOfTab)
-            binding.empty.setVisible(false)
-            binding.recycler.setVisible(true)
-        }
-    }
-
-    private fun onDevices(userDevices: Resource<UserDevices>) {
-        when (userDevices.status) {
+    private fun onDevices(devices: Resource<List<UIDevice>>) {
+        when (devices.status) {
             Status.SUCCESS -> {
-                if (!userDevices.data?.devices.isNullOrEmpty()) {
-                    binding.navigationTabs.getTabAt(0)?.text = getString(
-                        R.string.total_with_placeholder,
-                        userDevices.data?.totalDevices?.toString() ?: "?"
-                    )
-                    binding.navigationTabs.getTabAt(1)?.text = getString(
-                        R.string.owned_with_placeholder,
-                        userDevices.data?.ownedDevices?.toString() ?: "?"
-                    )
-                    binding.navigationTabs.getTabAt(2)?.text = getString(
-                        R.string.favorites_with_placeholder,
-                        userDevices.data?.followedDevices?.toString() ?: "?"
-                    )
-
-                    when (binding.navigationTabs.selectedTabPosition) {
-                        1 -> onTabSelected(model.getUserDevices()?.getOwnedDevices())
-                        2 -> onTabSelected(model.getUserDevices()?.getFollowedDevices())
-                        else -> {
-                            adapter.submitList(userDevices.data?.devices)
-                            adapter.notifyDataSetChanged()
-                            binding.empty.setVisible(false)
-                            binding.recycler.setVisible(true)
-                        }
-                    }
+                if (!devices.data.isNullOrEmpty()) {
+                    adapter.submitList(devices.data)
+                    binding.empty.setVisible(false)
+                    binding.recycler.setVisible(true)
                 } else {
-                    onEmptyState()
+                    binding.empty.animation(R.raw.anim_empty_devices, false)
+                    binding.empty.title(getString(R.string.empty_weather_stations))
+                    binding.empty.subtitle(getString(R.string.empty_select_station))
+                    binding.empty.listener(null)
+                    binding.empty.visibility = View.VISIBLE
+                    binding.recycler.visibility = View.GONE
                 }
             }
             Status.ERROR -> {
                 binding.empty.animation(R.raw.anim_error, false)
                 binding.empty.title(getString(R.string.error_generic_message))
-                binding.empty.subtitle(userDevices.message)
+                binding.empty.subtitle(devices.message)
                 binding.empty.action(getString(R.string.action_retry))
                 binding.empty.listener { model.fetch() }
                 binding.empty.visibility = View.VISIBLE
@@ -151,36 +110,6 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
                 binding.empty.animation(R.raw.anim_loading)
                 binding.empty.visibility = View.VISIBLE
             }
-        }
-    }
-
-    private fun onEmptyState() {
-        binding.empty.animation(R.raw.anim_empty_devices, false)
-        binding.empty.title(getString(R.string.empty_weather_stations))
-        binding.empty.subtitle(getString(R.string.empty_select_station))
-        binding.empty.listener(null)
-        binding.empty.visibility = View.VISIBLE
-        binding.recycler.visibility = View.GONE
-    }
-
-    private fun initTabs() {
-        with(binding.navigationTabs) {
-            addTab(
-                newTab().apply {
-                    text = getString(R.string.total)
-                },
-                true
-            )
-            addTab(
-                newTab().apply {
-                    text = getString(R.string.owned)
-                }
-            )
-            addTab(
-                newTab().apply {
-                    text = getString(R.string.favorites)
-                }
-            )
         }
     }
 

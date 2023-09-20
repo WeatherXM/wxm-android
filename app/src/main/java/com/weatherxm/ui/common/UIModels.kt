@@ -198,24 +198,80 @@ data class UIForecast(
 
 @Keep
 @JsonClass(generateAdapter = true)
-@Parcelize
-data class UserDevices(
-    var devices: List<UIDevice>,
-    var totalDevices: Int,
-    var ownedDevices: Int,
-    var followedDevices: Int
-) : Parcelable {
-    fun getOwnedDevices(): List<UIDevice> {
-        return devices.filter {
-            it.relation == DeviceRelation.OWNED
+data class DevicesSortFilterOptions(
+    var sortOrder: DevicesSortOrder = DevicesSortOrder.DATE_ADDED,
+    var filterType: DevicesFilterType = DevicesFilterType.ALL,
+    var groupBy: DevicesGroupBy = DevicesGroupBy.NO_GROUPING
+) {
+    fun applySort(devices: List<UIDevice>): List<UIDevice> {
+        /**
+         * TODO: When we have the "date added" field on followed devices apply sorting here.
+         */
+        return when (sortOrder) {
+            DevicesSortOrder.DATE_ADDED -> devices
+            DevicesSortOrder.NAME -> devices.sortedBy { it.getDefaultOrFriendlyName() }
+            DevicesSortOrder.LAST_ACTIVE -> devices.sortedByDescending {
+                it.lastWeatherStationActivity
+            }
         }
     }
 
-    fun getFollowedDevices(): List<UIDevice> {
-        return devices.filter {
-            it.relation == DeviceRelation.FOLLOWED
+    fun applyFilter(devices: List<UIDevice>): List<UIDevice> {
+        return when (filterType) {
+            DevicesFilterType.ALL -> devices
+            DevicesFilterType.OWNED -> devices.filter {
+                it.relation == DeviceRelation.OWNED
+            }
+            DevicesFilterType.FAVORITES -> devices.filter {
+                it.relation == DeviceRelation.FOLLOWED
+            }
         }
     }
+
+    fun applyGroupBy(devices: List<UIDevice>): List<UIDevice> {
+        val groupedDevices = mutableListOf<UIDevice>()
+        when (groupBy) {
+            DevicesGroupBy.RELATIONSHIP -> devices.groupBy { it.relation }.forEach {
+                if (it.key == DeviceRelation.OWNED) {
+                    groupedDevices.addAll(0, it.value)
+                } else {
+                    groupedDevices.addAll(it.value)
+                }
+            }
+            DevicesGroupBy.STATUS -> devices.groupBy { it.isActive }.forEach {
+                groupedDevices.addAll(it.value)
+            }
+            else -> groupedDevices.addAll(devices)
+        }
+        return groupedDevices
+    }
+
+    fun areDefaultFiltersOn(): Boolean {
+        return sortOrder == DevicesSortOrder.DATE_ADDED &&
+            filterType == DevicesFilterType.ALL &&
+            groupBy == DevicesGroupBy.NO_GROUPING
+    }
+}
+
+@Parcelize
+enum class DevicesSortOrder : Parcelable {
+    DATE_ADDED,
+    NAME,
+    LAST_ACTIVE
+}
+
+@Parcelize
+enum class DevicesFilterType : Parcelable {
+    ALL,
+    OWNED,
+    FAVORITES
+}
+
+@Parcelize
+enum class DevicesGroupBy : Parcelable {
+    NO_GROUPING,
+    RELATIONSHIP,
+    STATUS
 }
 
 

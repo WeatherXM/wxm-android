@@ -44,7 +44,6 @@ class DeviceDetailsViewModel(
         refreshIntervalMillis = TimeUnit.SECONDS.toMillis(REFRESH_INTERVAL_SECONDS)
     )
 
-    private val onUnitPreferenceChanged = MutableLiveData(false)
     private val address = MutableLiveData<String?>()
     private val onFollowStatus = MutableLiveData<Resource<Unit>>()
     private var isLoggedIn: Boolean? = null
@@ -53,7 +52,6 @@ class DeviceDetailsViewModel(
 
     fun onDevicePolling(): LiveData<UIDevice> = onDevicePolling
     fun onUpdatedDevice(): LiveData<UIDevice> = onUpdatedDevice
-    fun onUnitPreferenceChanged(): LiveData<Boolean> = onUnitPreferenceChanged
     fun onFollowStatus(): LiveData<Resource<Unit>> = onFollowStatus
     fun address(): LiveData<String?> = address
 
@@ -146,13 +144,6 @@ class DeviceDetailsViewModel(
     }
 
     init {
-        viewModelScope.launch {
-            deviceDetailsUseCase.getUnitPreferenceChangedFlow()
-                .collect {
-                    Timber.d("Unit preference key changed: $it. Triggering data update.")
-                    onUnitPreferenceChanged.postValue(true)
-                }
-        }
         viewModelScope.launch {
             isLoggedIn = authUseCase.isLoggedIn().getOrElse { false }
         }

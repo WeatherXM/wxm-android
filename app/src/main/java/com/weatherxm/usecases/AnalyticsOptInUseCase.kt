@@ -1,6 +1,6 @@
 package com.weatherxm.usecases
 
-import com.weatherxm.data.repository.AppConfigRepository
+import com.weatherxm.data.repository.UserPreferencesRepository
 import org.koin.core.component.KoinComponent
 
 interface AnalyticsOptInUseCase {
@@ -8,10 +8,10 @@ interface AnalyticsOptInUseCase {
 }
 
 class AnalyticsOptInUseCaseImpl(
-    private val appConfigRepository: AppConfigRepository
+    private val userPreferencesRepository: UserPreferencesRepository
 ) : AnalyticsOptInUseCase, KoinComponent {
 
     override fun setAnalyticsEnabled(enabled: Boolean) {
-        appConfigRepository.setAnalyticsEnabled(enabled)
+        userPreferencesRepository.setAnalyticsEnabled(enabled)
     }
 }

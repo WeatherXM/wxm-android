@@ -173,7 +173,7 @@ class LoginActivity : AppCompatActivity(), KoinComponent {
                 binding.loading.visibility = View.INVISIBLE
                 val user = result.data
                 Timber.d("User: $user")
-                if(model.hasUserOptInOrOut()) {
+                if(model.shouldShowAnalyticsOptIn()) {
                     navigator.showHome(this)
                 } else {
                     navigator.showAnalyticsOptIn(this)

@@ -22,6 +22,21 @@
     <string name="short_app_survey_prompt_desc">Your feedback matters. Tap to take a very quick survey.</string>
     <string name="short_app_survey_desc">Share your feedback by taking the WeatherXM app quick survey. It only has 2 mandatory questions!</string>
 
+    <!-- Sorting & Filtering -->
+    <string name="sort_filter">Sort &amp; Filter</string>
+    <string name="sort_by">Sort by</string>
+    <string name="filter">Filter</string>
+    <string name="group_by">Group by</string>
+    <string name="date_added">Date added</string>
+    <string name="name">Name</string>
+    <string name="last_active">Last active</string>
+    <string name="show_all">Show all</string>
+    <string name="owned_only">Owned only</string>
+    <string name="favorites_only">Favorites only</string>
+    <string name="no_grouping">No grouping</string>
+    <string name="relationship_owned_favorites">Relationship (Owned, Favorite)</string>
+    <string name="status_active_inactive">Status (Active, Inactive)</string>
+
     <!-- Display -->
     <string name="display">Display</string>
     <string name="theme">Theme</string>

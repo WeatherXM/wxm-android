@@ -115,6 +115,10 @@
         <item name="tint">@color/colorOnSurface</item>
     </style>
 
+    <style name="Widget.WeatherXM.RadioButton" parent="@style/Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/colorPrimary</item>
+    </style>
+
     <!--
         Material Cards
     -->

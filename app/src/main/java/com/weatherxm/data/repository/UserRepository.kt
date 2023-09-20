@@ -8,9 +8,5 @@ interface UserRepository {
     suspend fun getUser(): Either<Failure, User>
     suspend fun getUserUsername(): Either<Failure, String>
     suspend fun deleteAccount(): Either<Failure, Unit>
-    fun hasDismissedSurveyPrompt(): Boolean
-    fun dismissSurveyPrompt()
-    fun setWalletWarningDismissTimestamp()
     fun getUserId(): String
-    fun getWalletWarningDismissTimestamp(): Long
 }

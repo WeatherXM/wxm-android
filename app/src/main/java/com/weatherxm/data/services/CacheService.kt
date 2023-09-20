@@ -35,7 +35,9 @@ class CacheService(
         const val KEY_DISMISSED_SURVEY_PROMPT = "dismissed_survey_prompt"
         const val KEY_WALLET_WARNING_DISMISSED_TIMESTAMP = "wallet_warning_dismissed_timestamp"
         const val KEY_CURRENT_WEATHER_WIDGET_IDS = "current_weather_widget_ids"
-        const val KEY_FOLLOWED_STATIONS_IDS = "followed_stations_ids"
+        const val KEY_DEVICES_SORT = "devices_sort"
+        const val KEY_DEVICES_FILTER = "devices_filter"
+        const val KEY_DEVICES_GROUP_BY = "devices_group_by"
         const val WIDGET_ID = "widget_id"
 
         // Default in-memory cache expiration time 15 minutes
@@ -223,6 +225,19 @@ class CacheService(
 
     fun setDeviceLastOtaTimestamp(key: String) {
         preferences.edit().putLong(key, System.currentTimeMillis()).apply()
+    }
+
+    fun getDevicesSortFilterOptions(): List<String> {
+        val sortOrder = preferences.getString(KEY_DEVICES_SORT, null)
+        val filterType = preferences.getString(KEY_DEVICES_FILTER, null)
+        val groupBy = preferences.getString(KEY_DEVICES_GROUP_BY, null)
+        return listOfNotNull(sortOrder, filterType, groupBy)
+    }
+
+    fun setDevicesSortFilterOptions(sortOrder: String, filter: String, groupBy: String) {
+        preferences.edit().putString(KEY_DEVICES_SORT, sortOrder).apply()
+        preferences.edit().putString(KEY_DEVICES_FILTER, filter).apply()
+        preferences.edit().putString(KEY_DEVICES_GROUP_BY, groupBy).apply()
     }
 
     fun getDeviceLastOtaTimestamp(key: String): Long {
