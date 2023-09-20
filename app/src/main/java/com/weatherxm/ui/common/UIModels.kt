@@ -10,6 +10,7 @@ import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.LastAndDatedTxs
 import com.weatherxm.data.Location
 import com.weatherxm.data.Transaction
+import com.weatherxm.util.Analytics
 import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
 
@@ -250,6 +251,32 @@ data class DevicesSortFilterOptions(
         return sortOrder == DevicesSortOrder.DATE_ADDED &&
             filterType == DevicesFilterType.ALL &&
             groupBy == DevicesGroupBy.NO_GROUPING
+    }
+
+    fun getSortAnalyticsValue(): String {
+        return when (sortOrder) {
+            DevicesSortOrder.DATE_ADDED -> Analytics.ParamValue.FILTERS_SORT_DATE_ADDED.paramValue
+            DevicesSortOrder.NAME -> Analytics.ParamValue.FILTERS_SORT_NAME.paramValue
+            DevicesSortOrder.LAST_ACTIVE -> Analytics.ParamValue.FILTERS_SORT_LAST_ACTIVE.paramValue
+        }
+    }
+
+    fun getFilterAnalyticsValue(): String {
+        return when (filterType) {
+            DevicesFilterType.ALL -> Analytics.ParamValue.FILTERS_FILTER_ALL.paramValue
+            DevicesFilterType.OWNED -> Analytics.ParamValue.FILTERS_FILTER_OWNED.paramValue
+            DevicesFilterType.FAVORITES -> Analytics.ParamValue.FILTERS_FILTER_FAVORITES.paramValue
+        }
+    }
+
+    fun getGroupByAnalyticsValue(): String {
+        return when (groupBy) {
+            DevicesGroupBy.NO_GROUPING -> Analytics.ParamValue.FILTERS_GROUP_NO_GROUPING.paramValue
+            DevicesGroupBy.RELATIONSHIP -> {
+                Analytics.ParamValue.FILTERS_GROUP_RELATIONSHIP.paramValue
+            }
+            DevicesGroupBy.STATUS -> Analytics.ParamValue.FILTERS_GROUP_STATUS.paramValue
+        }
     }
 }
 

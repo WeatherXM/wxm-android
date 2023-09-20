@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentDevicesSortFilterBinding
 import com.weatherxm.ui.common.ActionDialogFragment
@@ -46,10 +47,12 @@ class SortFilterDialogFragment : BottomSheetDialogFragment(), KoinComponent {
         super.onViewCreated(view, savedInstanceState)
 
         binding.cancelBtn.setOnClickListener {
+            analytics.trackEventUserAction(Analytics.ParamValue.FILTERS_CANCEL.paramValue)
             dismiss()
         }
 
         binding.resetBtn.setOnClickListener {
+            analytics.trackEventUserAction(Analytics.ParamValue.FILTERS_RESET.paramValue)
             binding.sortButtons.check(R.id.dateAdded)
             binding.filterButtons.check(R.id.showAll)
             binding.groupButtons.check(R.id.noGrouping)
@@ -62,6 +65,23 @@ class SortFilterDialogFragment : BottomSheetDialogFragment(), KoinComponent {
                 binding.groupButtons.checkedRadioButtonId
             )
             model.fetch()
+            analytics.trackEventUserAction(
+                Analytics.ParamValue.FILTERS_SAVE.paramValue,
+                customParams = arrayOf(
+                    Pair(
+                        Analytics.CustomParam.FILTERS_SORT.paramName,
+                        model.getDevicesSortFilterOptions().getSortAnalyticsValue()
+                    ),
+                    Pair(
+                        Analytics.CustomParam.FILTERS_FILTER.paramName,
+                        model.getDevicesSortFilterOptions().getFilterAnalyticsValue()
+                    ),
+                    Pair(
+                        Analytics.CustomParam.FILTERS_GROUP.paramName,
+                        model.getDevicesSortFilterOptions().getGroupByAnalyticsValue()
+                    )
+                )
+            )
             dismiss()
         }
 
@@ -88,6 +108,87 @@ class SortFilterDialogFragment : BottomSheetDialogFragment(), KoinComponent {
                 }
             )
         }
+
+        onOptionsChangeListeners()
+    }
+
+    private fun onOptionsChangeListeners() {
+        binding.sortButtons.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.dateAdded -> {
+                    trackUserOptionChange(
+                        Analytics.ParamValue.FILTERS_SORT.paramValue,
+                        Analytics.ParamValue.FILTERS_SORT_DATE_ADDED.paramValue
+                    )
+                }
+                R.id.name -> {
+                    trackUserOptionChange(
+                        Analytics.ParamValue.FILTERS_SORT.paramValue,
+                        Analytics.ParamValue.FILTERS_SORT_NAME.paramValue
+                    )
+                }
+                else -> {
+                    trackUserOptionChange(
+                        Analytics.ParamValue.FILTERS_SORT.paramValue,
+                        Analytics.ParamValue.FILTERS_SORT_LAST_ACTIVE.paramValue
+                    )
+                }
+            }
+        }
+        binding.filterButtons.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.showAll -> {
+                    trackUserOptionChange(
+                        Analytics.ParamValue.FILTERS_FILTER.paramValue,
+                        Analytics.ParamValue.FILTERS_FILTER_ALL.paramValue
+                    )
+                }
+                R.id.ownedOnly -> {
+                    trackUserOptionChange(
+                        Analytics.ParamValue.FILTERS_FILTER.paramValue,
+                        Analytics.ParamValue.FILTERS_FILTER_OWNED.paramValue
+                    )
+                }
+                else -> {
+                    trackUserOptionChange(
+                        Analytics.ParamValue.FILTERS_FILTER.paramValue,
+                        Analytics.ParamValue.FILTERS_FILTER_FAVORITES.paramValue
+                    )
+                }
+            }
+        }
+        binding.groupButtons.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.noGrouping -> {
+                    trackUserOptionChange(
+                        Analytics.ParamValue.FILTERS_GROUP.paramValue,
+                        Analytics.ParamValue.FILTERS_GROUP_NO_GROUPING.paramValue
+                    )
+                }
+                R.id.relationship -> {
+                    trackUserOptionChange(
+                        Analytics.ParamValue.FILTERS_GROUP.paramValue,
+                        Analytics.ParamValue.FILTERS_GROUP_RELATIONSHIP.paramValue
+                    )
+                }
+                else -> {
+                    trackUserOptionChange(
+                        Analytics.ParamValue.FILTERS_GROUP.paramValue,
+                        Analytics.ParamValue.FILTERS_GROUP_STATUS.paramValue
+                    )
+                }
+            }
+        }
+    }
+
+    private fun trackUserOptionChange(itemId: String, itemListId: String) {
+        analytics.trackEventSelectContent(
+            Analytics.ParamValue.FILTERS.paramValue,
+            customParams = arrayOf(
+                Pair(FirebaseAnalytics.Param.ITEM_ID, itemId),
+                Pair(FirebaseAnalytics.Param.ITEM_LIST_ID, itemListId)
+            )
+        )
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -99,7 +200,7 @@ class SortFilterDialogFragment : BottomSheetDialogFragment(), KoinComponent {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            Analytics.Screen.SORT_FILTER_DEVICES_OPTIONS,
+            Analytics.Screen.SORT_FILTER,
             SortFilterDialogFragment::class.simpleName
         )
     }

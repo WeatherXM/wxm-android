@@ -7,6 +7,10 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.weatherxm.BuildConfig
 import com.weatherxm.R
 import com.weatherxm.data.services.CacheService
+import com.weatherxm.ui.common.DevicesFilterType
+import com.weatherxm.ui.common.DevicesGroupBy
+import com.weatherxm.ui.common.DevicesSortFilterOptions
+import com.weatherxm.ui.common.DevicesSortOrder
 import timber.log.Timber
 
 class Analytics(
@@ -52,7 +56,7 @@ class Analytics(
         BLE_CONNECTION_POPUP_ERROR("BLE Connection Popup Error"),
         NETWORK_STATS("Network Stats"),
         NETWORK_SEARCH("Network Search"),
-        SORT_FILTER_DEVICES_OPTIONS("Sort & Filter Devices Options")
+        SORT_FILTER("Sort Filter")
     }
 
     // Custom Event Names
@@ -72,7 +76,10 @@ class Analytics(
         PROMPT_NAME("PROMPT_NAME"),
         PROMPT_TYPE("PROMPT_TYPE"),
         STATE("STATE"),
-        DATE("DATE")
+        DATE("DATE"),
+        FILTERS_SORT("SORT_BY"),
+        FILTERS_FILTER("FILTER"),
+        FILTERS_GROUP("GROUP_BY")
     }
 
     // Custom Param Names
@@ -187,7 +194,23 @@ class Analytics(
         DEVICE_LIST_FOLLOW("Device List Follow"),
         EXPLORER_DEVICE_LIST_FOLLOW("Explorer Device List Follow"),
         FOLLOW("follow"),
-        UNFOLLOW("unfollow")
+        UNFOLLOW("unfollow"),
+        FILTERS("Filters"),
+        FILTERS_SORT("sort_by"),
+        FILTERS_FILTER("filter"),
+        FILTERS_GROUP("group_by"),
+        FILTERS_RESET("Filters Reset"),
+        FILTERS_CANCEL("Filters Cancel"),
+        FILTERS_SAVE("Filters Save"),
+        FILTERS_SORT_DATE_ADDED("date_added"),
+        FILTERS_SORT_NAME("name"),
+        FILTERS_SORT_LAST_ACTIVE("last_active"),
+        FILTERS_FILTER_ALL("all"),
+        FILTERS_FILTER_OWNED("owned"),
+        FILTERS_FILTER_FAVORITES("favorites"),
+        FILTERS_GROUP_NO_GROUPING("no_grouping"),
+        FILTERS_GROUP_RELATIONSHIP("relationship"),
+        FILTERS_GROUP_STATUS("status")
     }
 
     // Custom Param Names
@@ -229,7 +252,7 @@ class Analytics(
     }
 
     // Suppress CyclomaticComplexMethod because it is just a bunch of if/when statements.
-    @Suppress("CyclomaticComplexMethod")
+    @Suppress("CyclomaticComplexMethod", "LongMethod")
     private fun setUserProperties() {
         firebaseAnalytics.setUserId(cacheService.getUserId())
 
@@ -319,6 +342,30 @@ class Analytics(
                 }
             )
         }
+
+        val sortFilterOptions = cacheService.getDevicesSortFilterOptions().let {
+            if (it.isEmpty()) {
+                DevicesSortFilterOptions()
+            } else {
+                DevicesSortFilterOptions(
+                    DevicesSortOrder.valueOf(it[0]),
+                    DevicesFilterType.valueOf(it[1]),
+                    DevicesGroupBy.valueOf(it[2])
+                )
+            }
+        }
+        firebaseAnalytics.setUserProperty(
+            CustomParam.FILTERS_SORT.paramName,
+            sortFilterOptions.getSortAnalyticsValue()
+        )
+        firebaseAnalytics.setUserProperty(
+            CustomParam.FILTERS_FILTER.paramName,
+            sortFilterOptions.getFilterAnalyticsValue()
+        )
+        firebaseAnalytics.setUserProperty(
+            CustomParam.FILTERS_GROUP.paramName,
+            sortFilterOptions.getGroupByAnalyticsValue()
+        )
     }
 
     fun setAnalyticsEnabled(enabled: Boolean = cacheService.getAnalyticsEnabled()) {
