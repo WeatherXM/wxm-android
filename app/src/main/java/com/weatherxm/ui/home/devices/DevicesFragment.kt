@@ -10,8 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.google.android.material.badge.BadgeDrawable
-import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
@@ -47,7 +45,6 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
             }
         }
 
-    @com.google.android.material.badge.ExperimentalBadgeUtils
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,11 +66,6 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
 
         adapter = DeviceAdapter(this)
         binding.recycler.adapter = adapter
-        val filtersBadge = BadgeDrawable.create(requireContext()).apply {
-            context?.let {
-                backgroundColor = it.getColor(R.color.follow_heart_color)
-            }
-        }
 
         binding.swiperefresh.setOnRefreshListener {
             model.fetch()
@@ -84,10 +76,12 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
         }
 
         model.devices().observe(viewLifecycleOwner) {
-            if (model.getDevicesSortFilterOptions().areDefaultFiltersOn()) {
-                BadgeUtils.detachBadgeDrawable(filtersBadge, binding.toolbar, R.id.sort_filter)
-            } else {
-                BadgeUtils.attachBadgeDrawable(filtersBadge, binding.toolbar, R.id.sort_filter)
+            with(binding.toolbar.menu.findItem(R.id.sort_filter).icon) {
+                if (model.getDevicesSortFilterOptions().areDefaultFiltersOn()) {
+                    this?.setTint(requireContext().getColor(R.color.colorOnSurface))
+                } else {
+                    this?.setTint(requireContext().getColor(R.color.colorPrimary))
+                }
             }
             onDevices(it)
         }
