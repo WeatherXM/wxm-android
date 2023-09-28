@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
+import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
 import com.weatherxm.ui.Navigator
@@ -16,6 +17,7 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.setCardStroke
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -123,21 +125,13 @@ class CurrentFragment : Fragment(), KoinComponent {
 
     private fun onDeviceUpdated(device: UIDevice) {
         binding.progress.visibility = View.INVISIBLE
+        binding.error.setVisible(device.isActive == false)
         when (device.isActive) {
             true -> {
-                binding.errorCard.setVisible(false)
+                binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.transparent, 0)
             }
             false -> {
-                if (model.device.relation == DeviceRelation.OWNED) {
-                    binding.errorCard.setErrorMessageWithUrl(
-                        R.string.error_user_device_offline,
-                        device.profile
-                    )
-                } else {
-                    binding.errorCard.setErrorMessage(
-                        getString(R.string.no_data_message_public_device)
-                    )
-                }
+                onDeviceOffline(device.relation, device.profile)
             }
             else -> {
                 // Do nothing here
@@ -150,6 +144,27 @@ class CurrentFragment : Fragment(), KoinComponent {
         )
         binding.historicalCharts.isEnabled =
             device.relation != DeviceRelation.UNFOLLOWED
+    }
+
+    private fun onDeviceOffline(relation: DeviceRelation?, profile: DeviceProfile?) {
+        if (relation == DeviceRelation.OWNED && profile == DeviceProfile.M5) {
+            val m5TroubleshootingUrl = getString(R.string.troubleshooting_m5_url)
+            binding.error.htmlMessage(
+                getString(R.string.error_user_device_offline, m5TroubleshootingUrl)
+            ) {
+                navigator.openWebsite(context, getString(R.string.troubleshooting_m5_url))
+            }
+        } else if (relation == DeviceRelation.OWNED && profile == DeviceProfile.Helium) {
+            val heliumTroubleshootingUrl = getString(R.string.troubleshooting_helium_url)
+            binding.error.htmlMessage(
+                getString(R.string.error_user_device_offline, heliumTroubleshootingUrl)
+            ) {
+                navigator.openWebsite(context, heliumTroubleshootingUrl)
+            }
+        } else {
+            binding.error.message(getString(R.string.no_data_message_public_device))
+        }
+        binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
     }
 
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {

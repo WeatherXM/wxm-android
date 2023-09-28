@@ -19,6 +19,7 @@ import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Weather
+import com.weatherxm.util.setCardStroke
 import com.weatherxm.util.setColor
 import com.weatherxm.util.setStatusChip
 import org.koin.core.component.KoinComponent
@@ -114,19 +115,19 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             binding.alertsError.setVisible(false)
             binding.error.setVisible(false)
             binding.warning.setVisible(false)
-            setCardStroke(R.color.transparent, 0)
+            binding.root.setCardStroke(R.color.transparent, 0)
             if (item.alerts.size > 1) {
-                setCardStroke(R.color.error, 1)
+                binding.root.setCardStroke(R.color.error, 2)
                 binding.alertsError.title(
                     itemView.context.getString(R.string.issues, item.alerts.size.toString())
                 ).action {
                     deviceListener.onAlertsClicked(item)
                 }.setVisible(true)
             } else if (item.alerts.contains(DeviceAlert.OFFLINE)) {
-                setCardStroke(R.color.error, 1)
+                binding.root.setCardStroke(R.color.error, 2)
                 binding.error.setVisible(true)
             } else if (item.alerts.contains(DeviceAlert.NEEDS_UPDATE)) {
-                setCardStroke(R.color.warning, 1)
+                binding.root.setCardStroke(R.color.warning, 2)
                 binding.warning.action(resHelper.getString(R.string.update_station_now)) {
                     deviceListener.onUpdateStationClicked(item)
                 }.setVisible(true)
@@ -136,11 +137,6 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                     Analytics.ParamValue.VIEW.paramValue
                 )
             }
-        }
-
-        private fun setCardStroke(@ColorRes colorResId: Int, width: Int) {
-            binding.root.strokeColor = itemView.context.getColor(colorResId)
-            binding.root.strokeWidth = width
         }
 
         private fun setWeatherData(item: UIDevice) {

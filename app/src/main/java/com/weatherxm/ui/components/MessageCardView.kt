@@ -7,14 +7,13 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.annotation.StringRes
-import androidx.core.text.HtmlCompat
 import com.google.android.material.button.MaterialButton.ICON_GRAVITY_END
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewMessageCardBinding
 import com.weatherxm.ui.common.hide
 import com.weatherxm.util.setColor
+import com.weatherxm.util.setHtml
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 class MessageCardView : LinearLayout {
@@ -127,10 +126,7 @@ class MessageCardView : LinearLayout {
         linkClickedListener: (() -> Unit)? = null
     ): MessageCardView {
         binding.message.apply {
-            setText(
-                HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY),
-                TextView.BufferType.SPANNABLE
-            )
+            setHtml(html)
             if (linkClickedListener != null) {
                 movementMethod = BetterLinkMovementMethod.newInstance().apply {
                     setOnLinkClickListener { _, _ ->

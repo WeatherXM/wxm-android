@@ -34,6 +34,7 @@ import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.components.MarkerView
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayout
@@ -224,6 +225,11 @@ fun Activity.hideKeyboard() {
 
 fun ChipGroup.setChildrenEnabled(enable: Boolean) {
     children.forEach { it.isEnabled = enable }
+}
+
+fun MaterialCardView.setCardStroke(@ColorRes colorResId: Int, width: Int) {
+    strokeColor = context.getColor(colorResId)
+    strokeWidth = width
 }
 
 @Suppress("MagicNumber")

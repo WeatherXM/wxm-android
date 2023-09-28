@@ -12,7 +12,7 @@
         style="@style/Widget.WeatherXM.MaterialCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:contentPadding="@dimen/padding_normal_to_large"
+        app:contentPadding="@dimen/padding_normal"
         tools:cardBackgroundColor="@color/warningTint">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -59,7 +59,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
-                        android:autoLink="all"
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         tools:text="Message message here." />
                 </LinearLayout>
