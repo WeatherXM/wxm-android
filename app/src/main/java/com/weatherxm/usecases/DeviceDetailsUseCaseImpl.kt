@@ -3,13 +3,16 @@ package com.weatherxm.usecases
 import android.content.Context
 import arrow.core.Either
 import com.weatherxm.data.ApiError
+import com.weatherxm.data.DeviceProfile.Helium
 import com.weatherxm.data.Failure
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_TIMEZONE
 import com.weatherxm.data.repository.AddressRepository
+import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.TokenRepository
 import com.weatherxm.data.repository.WeatherForecastRepository
+import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.RewardsInfo
 import com.weatherxm.ui.common.UIDevice
@@ -20,12 +23,14 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.util.*
 
+@Suppress("LongParameterList")
 class DeviceDetailsUseCaseImpl(
     private val deviceRepository: DeviceRepository,
     private val tokenRepository: TokenRepository,
     private val weatherForecastRepository: WeatherForecastRepository,
     private val addressRepository: AddressRepository,
     private val explorerRepository: ExplorerRepository,
+    private val deviceOTARepository: DeviceOTARepository,
     private val context: Context
 ) : DeviceDetailsUseCase {
 
@@ -39,6 +44,21 @@ class DeviceDetailsUseCaseImpl(
         } else {
             deviceRepository.getUserDevice(device.id).map {
                 it.toUIDevice()
+                val shouldShowOTAPrompt = deviceOTARepository.shouldShowOTAPrompt(
+                    device.id,
+                    device.assignedFirmware
+                ) && device.relation == DeviceRelation.OWNED
+                val alerts = mutableListOf<DeviceAlert>()
+                if (shouldShowOTAPrompt && device.profile == Helium && device.needsUpdate()) {
+                    alerts.add(DeviceAlert.NEEDS_UPDATE)
+                }
+
+                if (device.isActive == false) {
+                    alerts.add(DeviceAlert.OFFLINE)
+                }
+                device.apply {
+                    this.alerts = alerts
+                }
             }
         }
     }

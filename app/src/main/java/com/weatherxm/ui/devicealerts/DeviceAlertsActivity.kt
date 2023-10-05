@@ -42,7 +42,7 @@ class DeviceAlertsActivity : AppCompatActivity(), KoinComponent, DeviceAlertList
             subtitle = device?.getDefaultOrFriendlyName()
         }
 
-        val adapter = DeviceAlertsAdapter(this)
+        val adapter = DeviceAlertsAdapter(this, device)
         binding.recycler.adapter = adapter
 
         if (device?.alerts?.contains(DeviceAlert.NEEDS_UPDATE) == true) {

@@ -12,6 +12,7 @@ import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setVisible
@@ -125,18 +126,7 @@ class CurrentFragment : Fragment(), KoinComponent {
 
     private fun onDeviceUpdated(device: UIDevice) {
         binding.progress.visibility = View.INVISIBLE
-        binding.error.setVisible(device.isActive == false)
-        when (device.isActive) {
-            true -> {
-                binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.transparent, 0)
-            }
-            false -> {
-                onDeviceOffline(device.relation, device.profile)
-            }
-            else -> {
-                // Do nothing here
-            }
-        }
+        setAlerts(device)
         binding.currentWeatherCard.setData(device.currentWeather)
 
         binding.followCard.setVisible(
@@ -146,25 +136,53 @@ class CurrentFragment : Fragment(), KoinComponent {
             device.relation != DeviceRelation.UNFOLLOWED
     }
 
+    private fun setAlerts(device: UIDevice) {
+        binding.multipleAlertsView.setVisible(false)
+        binding.warningView.setVisible(false)
+        binding.errorView.setVisible(false)
+        binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.transparent, 0)
+        if (device.alerts.size > 1) {
+            binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
+            binding.multipleAlertsView.title(
+                getString(R.string.issues, device.alerts.size.toString())
+            ).action {
+                navigator.showDeviceAlerts(this, device)
+            }.setVisible(true)
+        } else if (device.alerts.contains(DeviceAlert.OFFLINE)) {
+            onDeviceOffline(device.relation, device.profile)
+        } else if (device.alerts.contains(DeviceAlert.NEEDS_UPDATE)) {
+            binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.warning, 2)
+            binding.warningView.action(getString(R.string.update_station_now)) {
+                analytics.trackEventPrompt(
+                    Analytics.ParamValue.OTA_AVAILABLE.paramValue,
+                    Analytics.ParamValue.WARN.paramValue,
+                    Analytics.ParamValue.ACTION.paramValue
+                )
+                navigator.showDeviceHeliumOTA(this, device, false)
+            }.setVisible(true)
+        }
+    }
+
     private fun onDeviceOffline(relation: DeviceRelation?, profile: DeviceProfile?) {
         if (relation == DeviceRelation.OWNED && profile == DeviceProfile.M5) {
             val m5TroubleshootingUrl = getString(R.string.troubleshooting_m5_url)
-            binding.error.htmlMessage(
+            binding.errorView.htmlMessage(
                 getString(R.string.error_user_device_offline, m5TroubleshootingUrl)
             ) {
                 navigator.openWebsite(context, getString(R.string.troubleshooting_m5_url))
             }
         } else if (relation == DeviceRelation.OWNED && profile == DeviceProfile.Helium) {
             val heliumTroubleshootingUrl = getString(R.string.troubleshooting_helium_url)
-            binding.error.htmlMessage(
+            binding.errorView.htmlMessage(
                 getString(R.string.error_user_device_offline, heliumTroubleshootingUrl)
             ) {
                 navigator.openWebsite(context, heliumTroubleshootingUrl)
             }
         } else {
-            binding.error.message(getString(R.string.no_data_message_public_device))
+            binding.errorView.message(getString(R.string.no_data_message_public_device))
         }
         binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
+        binding.errorView.setVisible(true)
     }
 
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {

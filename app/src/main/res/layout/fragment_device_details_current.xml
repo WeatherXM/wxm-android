@@ -43,7 +43,7 @@
                 app:cardElevation="@dimen/elevation_normal"
                 app:contentPadding="0dp"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:strokeColor="@color/error"
+                tools:strokeColor="@color/warning"
                 tools:strokeWidth="@dimen/card_stroke">
 
                 <LinearLayout
@@ -85,7 +85,7 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.weatherxm.ui.components.MessageCardView
-                        android:id="@+id/error"
+                        android:id="@+id/errorView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="-16dp"
@@ -99,6 +99,32 @@
                         app:message_includes_close_button="false"
                         app:message_title="@string/station_offline"
                         tools:visibility="visible" />
+
+                    <com.weatherxm.ui.components.MessageCardView
+                        android:id="@+id/warningView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-16dp"
+                        android:background="@color/warningTint"
+                        android:elevation="0dp"
+                        android:paddingTop="16dp"
+                        android:visibility="gone"
+                        app:message_background_tint="@color/warningTint"
+                        app:message_icon="@drawable/ic_warn"
+                        app:message_icon_color="@color/warning"
+                        app:message_includes_close_button="false"
+                        app:message_message="@string/updated_needed_desc"
+                        app:message_title="@string/updated_needed_title" />
+
+                    <com.weatherxm.ui.components.AlertsErrorCardView
+                        android:id="@+id/multipleAlertsView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-16dp"
+                        android:background="@color/errorTint"
+                        android:elevation="0dp"
+                        android:paddingTop="16dp"
+                        android:visibility="gone" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>

@@ -474,6 +474,7 @@ private val usecases = module {
             get(),
             get(),
             get(),
+            get(),
             androidContext()
         )
     }

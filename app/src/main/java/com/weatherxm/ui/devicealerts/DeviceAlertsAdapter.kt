@@ -8,12 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.databinding.ListItemAlertBinding
 import com.weatherxm.ui.common.DeviceAlert
+import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setVisible
 
-class DeviceAlertsAdapter(private val deviceAlertListener: DeviceAlertListener) :
-    ListAdapter<DeviceAlert, DeviceAlertsAdapter.DailyDeviceAlertsViewHolder>(
-        DeviceAlertsDiffCallback()
-    ) {
+class DeviceAlertsAdapter(
+    private val deviceAlertListener: DeviceAlertListener,
+    private val device: UIDevice?
+) : ListAdapter<DeviceAlert, DeviceAlertsAdapter.DailyDeviceAlertsViewHolder>(
+    DeviceAlertsDiffCallback()
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyDeviceAlertsViewHolder {
         val binding = ListItemAlertBinding.inflate(
@@ -41,9 +45,15 @@ class DeviceAlertsAdapter(private val deviceAlertListener: DeviceAlertListener) 
                     }
                 showWarningCard()
             } else if (item == DeviceAlert.OFFLINE) {
+                val messageResId = if (device?.relation == DeviceRelation.OWNED) {
+                    R.string.station_offline_alert_message
+                } else {
+                    R.string.no_data_message_public_device
+                }
+
                 binding.error
                     .title(R.string.station_offline)
-                    .message(R.string.station_offline_alert_message)
+                    .message(messageResId)
                     .action(itemView.context.getString(R.string.title_contact_support)) {
                         deviceAlertListener.onContactSupportClicked()
                     }
