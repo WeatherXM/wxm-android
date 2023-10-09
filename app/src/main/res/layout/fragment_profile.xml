@@ -77,7 +77,7 @@
                         android:id="@+id/connect_wallet_notification"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@drawable/ic_error"
+                        android:src="@drawable/ic_warn"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

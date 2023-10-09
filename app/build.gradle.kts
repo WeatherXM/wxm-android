@@ -266,7 +266,7 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.8.1")
 
     // Material Components for Android
-    implementation("com.google.android.material:material:1.9.0")
+    implementation("com.google.android.material:material:1.10.0")
 
     // Google Play Services for Location & Maps
     implementation("com.google.android.gms:play-services-location:21.0.1")
