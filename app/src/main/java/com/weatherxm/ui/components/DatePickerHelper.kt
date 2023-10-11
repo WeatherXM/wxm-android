@@ -3,6 +3,7 @@ package com.weatherxm.ui.components
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.CalendarConstraints.DateValidator
 import com.google.android.material.datepicker.CompositeDateValidator
 import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.DateValidatorPointForward
@@ -28,19 +29,17 @@ object DatePickerHelper {
         dateEnd: LocalDate? = null,
         listener: OnDateSelectedListener
     ): MaterialDatePicker<Long> {
-        val constraints = CalendarConstraints.Builder()
-            .setValidator(
-                CompositeDateValidator.allOf(
-                    listOf(
-                        DateValidatorPointForward.from(
-                            dateStart?.toUTCEpochMillis() ?: LocalDate.MIN.toUTCEpochMillis()
-                        ),
-                        DateValidatorPointBackward.before(
-                            dateEnd?.toUTCEpochMillis() ?: todayInUtcMilliseconds()
-                        )
-                    )
-                )
+        val validatorPoints = mutableListOf<DateValidator>()
+        (dateStart?.toUTCEpochMillis() ?: LocalDate.MIN.toUTCEpochMillis())?.let {
+            validatorPoints.add(DateValidatorPointForward.from(it))
+        }
+        validatorPoints.add(
+            DateValidatorPointBackward.before(
+                dateEnd?.toUTCEpochMillis() ?: todayInUtcMilliseconds()
             )
+        )
+        val constraints = CalendarConstraints.Builder()
+            .setValidator(CompositeDateValidator.allOf(validatorPoints))
             .build()
 
         val picker = MaterialDatePicker.Builder
