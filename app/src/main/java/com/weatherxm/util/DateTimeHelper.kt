@@ -12,6 +12,7 @@ import com.weatherxm.data.HOUR_FORMAT_24H
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
+import timber.log.Timber
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -22,7 +23,6 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
-import kotlin.math.absoluteValue
 
 object DateTimeHelper : KoinComponent {
 
@@ -123,12 +123,13 @@ object DateTimeHelper : KoinComponent {
         return Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault()).toLocalDate()
     }
 
-    fun LocalDate.toUTCEpochMillis(): Long {
-        return this.atStartOfDay(UTC).toInstant().toEpochMilli()
-    }
-
-    fun ZonedDateTime?.toUTCEpochMillis(): Long {
-        return this?.toInstant()?.toEpochMilli() ?: 0L
+    fun LocalDate.toUTCEpochMillis(): Long? {
+        return try {
+            this.atStartOfDay(UTC).toInstant().toEpochMilli()
+        } catch (e: ArithmeticException) {
+            Timber.e(e, this.toString())
+            null
+        }
     }
 
     fun LocalDate.getFormattedRelativeDay(
