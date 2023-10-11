@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Looper
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -14,16 +15,17 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.Priority
 import com.weatherxm.data.Location
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-object LocationHelper : KoinComponent {
-    private val locationClient: FusedLocationProviderClient by inject()
+class LocationHelper(
+    private val context: Context,
+    private val locationClient: FusedLocationProviderClient
+) : KoinComponent {
 
     @Suppress("MagicNumber")
     @RequiresPermission(anyOf = [ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION])
-    fun getLocationAndThen(context: Context, onLocation: (location: Location?) -> Unit) {
+    fun getLocationAndThen(onLocation: (location: Location?) -> Unit) {
         val priority = when (PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) -> {
                 Priority.PRIORITY_HIGH_ACCURACY
@@ -67,5 +69,11 @@ object LocationHelper : KoinComponent {
                     onLocation.invoke(null)
                 }
         }
+    }
+
+    fun hasLocationPermissions(): Boolean {
+        val permGrantedCode = PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) == permGrantedCode
+            || ContextCompat.checkSelfPermission(context, ACCESS_COARSE_LOCATION) == permGrantedCode
     }
 }

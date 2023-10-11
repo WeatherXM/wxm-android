@@ -110,6 +110,8 @@ import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.ExplorerRepositoryImpl
 import com.weatherxm.data.repository.FollowRepository
 import com.weatherxm.data.repository.FollowRepositoryImpl
+import com.weatherxm.data.repository.LocationRepository
+import com.weatherxm.data.repository.LocationRepositoryImpl
 import com.weatherxm.data.repository.StatsRepository
 import com.weatherxm.data.repository.StatsRepositoryImpl
 import com.weatherxm.data.repository.TokenRepository
@@ -198,6 +200,7 @@ import com.weatherxm.usecases.WidgetSelectStationUseCaseImpl
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.CrashReportingTree
 import com.weatherxm.util.DisplayModeHelper
+import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.ResourcesHelper
 import com.weatherxm.util.Validator
 import com.weatherxm.util.WidgetHelper
@@ -276,7 +279,7 @@ private val preferences = module {
 
 private val datasources = module {
     single<LocationDataSource> {
-        LocationDataSourceImpl(androidContext())
+        LocationDataSourceImpl(androidContext(), get())
     }
 
     single<NetworkWeatherHistoryDataSource> {
@@ -340,7 +343,7 @@ private val datasources = module {
     }
 
     single<NetworkAddressDataSource> {
-        NetworkAddressDataSource(androidContext(), get())
+        NetworkAddressDataSource(androidContext(), get(), get())
     }
 
     single<CacheAddressDataSource> {
@@ -458,6 +461,9 @@ private val repositories = module {
     single<FollowRepository> {
         FollowRepositoryImpl(get(), get())
     }
+    single<LocationRepository> {
+        LocationRepositoryImpl(get(), get(), get())
+    }
 }
 
 private val usecases = module {
@@ -465,7 +471,7 @@ private val usecases = module {
         StartupUseCaseImpl(get(), get(), get())
     }
     single<ExplorerUseCase> {
-        ExplorerUseCaseImpl(get(), get(), get(), get(), get(), get())
+        ExplorerUseCaseImpl(get(), get(), get(), get(), get(), get(), get())
     }
     single<DeviceDetailsUseCase> {
         DeviceDetailsUseCaseImpl(
@@ -741,6 +747,12 @@ val displayModeHelper = module {
     }
 }
 
+val locationHelper = module {
+    single(createdAtStart = true) {
+        LocationHelper(androidContext(), get())
+    }
+}
+
 val clientIdentificationHelper = module {
     single {
         ClientIdentificationHelper(androidContext(), get())
@@ -870,6 +882,7 @@ val modules = listOf(
     apiServiceModule,
     database,
     displayModeHelper,
+    locationHelper,
     clientIdentificationHelper,
     utilities,
     widgetHelper,

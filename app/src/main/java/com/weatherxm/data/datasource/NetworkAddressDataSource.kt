@@ -13,6 +13,7 @@ import com.mapbox.search.SearchCallback
 import com.mapbox.search.SearchEngine
 import com.mapbox.search.common.SearchCancellationException
 import com.mapbox.search.result.SearchResult
+import com.squareup.moshi.Moshi
 import com.weatherxm.data.CancellationError
 import com.weatherxm.data.CountryAndFrequencies
 import com.weatherxm.data.Failure
@@ -26,7 +27,8 @@ import kotlin.coroutines.suspendCoroutine
 
 class NetworkAddressDataSource(
     private val context: Context,
-    private val mapBoxSearchEngine: SearchEngine
+    private val mapBoxSearchEngine: SearchEngine,
+    private val moshi: Moshi
 ) : AddressDataSource {
     companion object {
         /**
@@ -107,7 +109,7 @@ class NetworkAddressDataSource(
     ): Either<Failure, CountryAndFrequencies> {
         return GeocoderCompat.getFromLocation(location)
             .flatMap { address ->
-                countryToFrequency(context, address.countryCode)?.let { frequency ->
+                countryToFrequency(context, address.countryCode, moshi)?.let { frequency ->
                     CountryAndFrequencies(
                         address.countryName, frequency, otherFrequencies(frequency)
                     ).right()

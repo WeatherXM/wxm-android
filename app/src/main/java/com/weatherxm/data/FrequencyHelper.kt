@@ -1,10 +1,11 @@
 package com.weatherxm.data
 
 import android.content.Context
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
 import org.json.JSONException
-import org.json.JSONObject
 import timber.log.Timber
-
 
 fun otherFrequencies(frequency: Frequency): List<Frequency> {
     return Frequency.values().toMutableList().apply {
@@ -14,23 +15,26 @@ fun otherFrequencies(frequency: Frequency): List<Frequency> {
     }
 }
 
-fun countryToFrequency(context: Context, countryCode: String): Frequency? {
+fun countryToFrequency(context: Context, countryCode: String, moshi: Moshi): Frequency? {
     return try {
-        val json = JSONObject(
-            context.assets.open("helium_countries_frequencies.json").bufferedReader()
-                .use { it.readText() })
+        val adapter: JsonAdapter<List<CountryInfo>> =
+            moshi.adapter(Types.newParameterizedType(List::class.java, CountryInfo::class.java))
 
-        if (!json.has(countryCode)) {
-            null
-        } else {
-            val frequencyName = json.getString(countryCode)
-
-            Frequency.values().firstOrNull {
-                it.name == frequencyName
+        val frequencyName = adapter
+            .fromJson(
+                context.assets.open("countries_information.json").bufferedReader().use {
+                    it.readText()
+                })
+            ?.firstOrNull {
+                it.code == countryCode
             }
+            ?.heliumFrequency
+
+        Frequency.values().firstOrNull {
+            it.name == frequencyName
         }
     } catch (e: JSONException) {
-        Timber.w(e, "Failure: JSON Parsing of countries & frequencies file")
+        Timber.w(e, "Failure: JSON Parsing of countries information")
         null
     }
 }

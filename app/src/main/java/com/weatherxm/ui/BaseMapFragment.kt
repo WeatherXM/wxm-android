@@ -28,6 +28,7 @@ open class BaseMapFragment : Fragment() {
         const val CURRENT_LAT = "current_lat"
         const val CURRENT_LON = "current_lon"
         const val CURRENT_ZOOM = "current_zoom"
+        const val DEFAULT_ZOOM_LEVEL: Double = 1.0
     }
 
     fun interface OnMapDebugInfoListener {
@@ -41,7 +42,6 @@ open class BaseMapFragment : Fragment() {
     protected lateinit var viewManager: ViewAnnotationManager
 
     private lateinit var debugInfoListener: OnMapDebugInfoListener
-    private var defaultStartingZoomLevel: Double = 1.0
     private lateinit var map: MapboxMap
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,7 +99,7 @@ open class BaseMapFragment : Fragment() {
             if (savedInstanceState != null) {
                 map.setCamera(
                     CameraOptions.Builder()
-                        .zoom(savedInstanceState.getDouble(CURRENT_ZOOM, defaultStartingZoomLevel))
+                        .zoom(savedInstanceState.getDouble(CURRENT_ZOOM, DEFAULT_ZOOM_LEVEL))
                         .center(
                             Point.fromLngLat(
                                 savedInstanceState.getDouble(CURRENT_LON, 0.0),
@@ -111,7 +111,7 @@ open class BaseMapFragment : Fragment() {
             } else {
                 map.setCamera(
                     CameraOptions.Builder()
-                        .zoom(defaultStartingZoomLevel)
+                        .zoom(DEFAULT_ZOOM_LEVEL)
                         .build()
                 )
             }

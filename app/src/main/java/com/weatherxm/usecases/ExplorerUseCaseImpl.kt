@@ -16,6 +16,7 @@ import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.FollowRepository
+import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.ExplorerData
@@ -25,12 +26,14 @@ import com.weatherxm.ui.explorer.SearchResult
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.util.ResourcesHelper
 
+@Suppress("LongParameterList")
 class ExplorerUseCaseImpl(
     private val explorerRepository: ExplorerRepository,
     private val addressRepository: AddressRepository,
     private val followRepository: FollowRepository,
     private val deviceRepository: DeviceRepository,
     private val gson: Gson,
+    private val locationRepository: LocationRepository,
     private val resHelper: ResourcesHelper
 ) : ExplorerUseCase {
     // Points and heatmap to paint
@@ -138,6 +141,10 @@ class ExplorerUseCaseImpl(
 
     override suspend fun setRecentSearch(search: SearchResult) {
         explorerRepository.setRecentSearch(search)
+    }
+
+    override fun getUserCountryLocation(): Location? {
+        return locationRepository.getUserCountryLocation()
     }
 
     private suspend fun getRelation(deviceId: String?): DeviceRelation {

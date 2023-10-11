@@ -129,7 +129,7 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
         }
 
         model.onMyLocationClicked().observe(this) {
-            if (it) {
+            if (it == true) {
                 requestLocationPermissions()
                 analytics.trackEventUserAction(
                     actionName = Analytics.ParamValue.MY_LOCATION.paramValue
@@ -157,6 +157,13 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
             }
         }
 
+        // Fly the camera to the starting location on a low zoom level
+        model.onStartingLocation().observe(this) { location ->
+            location?.let {
+                cameraFly(Point.fromLngLat(it.lon, it.lat), DEFAULT_ZOOM_LEVEL)
+            }
+        }
+
         // Fetch data
         model.fetch()
     }
@@ -175,9 +182,9 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
         }
     }
 
-    private fun cameraFly(center: Point) {
+    private fun cameraFly(center: Point, zoomLevel: Double = USER_LOCATION_DEFAULT_ZOOM_LEVEL) {
         binding.mapView.getMapboxMap().flyTo(
-            CameraOptions.Builder().zoom(USER_LOCATION_DEFAULT_ZOOM_LEVEL).center(center).build(),
+            CameraOptions.Builder().zoom(zoomLevel).center(center).build(),
             MapAnimationOptions.Builder().duration(CAMERA_ANIMATION_DURATION).build()
         )
     }
@@ -400,7 +407,7 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
                 rationaleMessage = getString(R.string.permission_location_rationale),
                 onGranted = {
                     // Get last location
-                    model.getLocation(context) {
+                    model.getLocation {
                         Timber.d("Got user location: $it")
                         if (it == null) {
                             context.toast(R.string.error_claim_gps_failed)

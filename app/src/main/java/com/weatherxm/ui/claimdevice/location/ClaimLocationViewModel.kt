@@ -2,7 +2,6 @@ package com.weatherxm.ui.claimdevice.location
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.content.Context
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +12,7 @@ import com.weatherxm.data.Location
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.Analytics
-import com.weatherxm.util.LocationHelper.getLocationAndThen
+import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.Validator
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
@@ -36,6 +35,7 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
     private val usecase: ClaimDeviceUseCase by inject()
     private val analytics: Analytics by inject()
     private val validator: Validator by inject()
+    private val locationHelper: LocationHelper by inject()
     private var reverseGeocodingJob: Job? = null
     private var installationLocation = Location(0.0, 0.0)
     private var deviceType = DeviceType.M5_WIFI
@@ -84,8 +84,8 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
     }
 
     @RequiresPermission(anyOf = [ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION])
-    fun getLocation(context: Context) {
-        getLocationAndThen(context) {
+    fun getLocation() {
+        locationHelper.getLocationAndThen {
             onDeviceLocation.postValue(it)
         }
     }

@@ -1,12 +1,13 @@
 @file:Suppress("MatchingDeclarationName")
+
 package com.weatherxm.data
 
 import android.os.Parcelable
 import androidx.annotation.Keep
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
 
-@Suppress("MagicNumber")
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
@@ -33,6 +34,17 @@ data class OTAState(
     var errorType: Int? = null,
     var message: String? = null
 )
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class CountryInfo(
+    val code: String,
+    @Json(name = "helium_frequency")
+    val heliumFrequency: String?,
+    @Json(name = "map_center")
+    var mapCenter: Location?,
+) : Parcelable
 
 enum class Frequency {
     EU868,

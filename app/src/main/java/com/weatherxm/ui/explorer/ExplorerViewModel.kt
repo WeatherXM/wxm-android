@@ -1,7 +1,6 @@
 package com.weatherxm.ui.explorer
 
 import android.annotation.SuppressLint
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,12 +16,13 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.SingleLiveEvent
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Analytics
-import com.weatherxm.util.LocationHelper.getLocationAndThen
+import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.MapboxUtils
 import com.weatherxm.util.UIErrors.getDefaultMessage
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import timber.log.Timber
 
 @Suppress("TooManyFunctions")
 class ExplorerViewModel : ViewModel(), KoinComponent {
@@ -37,6 +37,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
 
     private val explorerUseCase: ExplorerUseCase by inject()
     private val analytics: Analytics by inject()
+    private val locationHelper: LocationHelper by inject()
 
     // All public devices shown on map
     private val state = MutableLiveData<Resource<ExplorerData>>().apply {
@@ -58,8 +59,14 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
      */
     private val onNavigateToLocation = SingleLiveEvent<Location>()
 
+    /**
+     * Needed for passing info to the fragment to handle when a starting location is used
+     * so we want the camera to move directly to that point (usually country level but on low zoom)
+     */
+    private val onStartingLocation = SingleLiveEvent<Location>()
+
     // Needed for passing info to the fragment to handle when my location button is clicked
-    private val onMyLocationClicked = MutableLiveData(false)
+    private val onMyLocationClicked = SingleLiveEvent<Boolean>()
 
     // Needed for passing info to the activity to show/hide elements when onMapClick
     private val showMapOverlayViews = MutableLiveData(true)
@@ -177,6 +184,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
 
     fun onMyLocationClicked() = onMyLocationClicked
     fun onNavigateToLocation() = onNavigateToLocation
+    fun onStartingLocation() = onStartingLocation
     fun showMapOverlayViews() = showMapOverlayViews
     fun onSearchOpenStatus() = onSearchOpenStatus
     fun explorerState(): LiveData<Resource<ExplorerData>> = state
@@ -245,7 +253,22 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     fun getHeatMapLayer(): HeatmapLayer = heatmapLayer
 
     @SuppressLint("MissingPermission")
-    fun getLocation(context: Context, onLocation: (location: Location?) -> Unit) {
-        getLocationAndThen(context, onLocation)
+    fun getLocation(onLocation: (location: Location?) -> Unit) {
+        locationHelper.getLocationAndThen(onLocation)
+    }
+
+    init {
+        if (locationHelper.hasLocationPermissions()) {
+            getLocation {
+                it?.let {
+                    onStartingLocation.postValue(it)
+                }
+            }
+        } else {
+            explorerUseCase.getUserCountryLocation()?.let {
+                Timber.d("Got starting location [${it.lat}, ${it.lon}")
+                onStartingLocation.postValue(it)
+            }
+        }
     }
 }

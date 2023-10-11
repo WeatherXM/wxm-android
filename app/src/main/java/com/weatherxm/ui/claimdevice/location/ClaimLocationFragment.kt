@@ -125,7 +125,7 @@ class ClaimLocationFragment : Fragment() {
                 permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
                 rationaleTitle = getString(R.string.permission_location_title),
                 rationaleMessage = getString(R.string.permission_location_rationale),
-                onGranted = { model.getLocation(context) },
+                onGranted = { model.getLocation() },
                 onDenied = { context.toast(R.string.error_claim_gps_failed) }
             )
         }
