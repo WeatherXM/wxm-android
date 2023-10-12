@@ -27,7 +27,7 @@
     <color name="fadeTop">@color/fade_light_top</color>
 
     <!-- System and Launcher -->
-    <color name="ic_launcher_background">#1B75BA</color>
+    <color name="ic_launcher_background">@color/colorPrimary</color>
     <color name="status_bar_color">#80003b77</color>
 
     <!-- History Charts -->

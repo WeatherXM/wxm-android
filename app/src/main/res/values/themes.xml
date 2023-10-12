@@ -40,7 +40,7 @@
     </style>
 
     <style name="Theme.WeatherXM.Startup" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/colorBackground</item>
+        <item name="windowSplashScreenBackground">@color/light_primary</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_background</item>
         <item name="windowSplashScreenAnimationDuration">500</item>
         <item name="android:windowTranslucentStatus">true</item>
