@@ -39,24 +39,26 @@ class DeviceDetailsUseCaseImpl(
             explorerRepository.getCellDevice(device.cellIndex, device.id).map {
                 it.toUIDevice().apply {
                     this.relation = DeviceRelation.UNFOLLOWED
+                    if (isActive == false) {
+                        this.alerts = listOf(DeviceAlert.OFFLINE)
+                    }
                 }
             }
         } else {
             deviceRepository.getUserDevice(device.id).map {
-                it.toUIDevice()
-                val shouldShowOTAPrompt = deviceOTARepository.shouldShowOTAPrompt(
-                    device.id,
-                    device.assignedFirmware
-                ) && device.relation == DeviceRelation.OWNED
-                val alerts = mutableListOf<DeviceAlert>()
-                if (shouldShowOTAPrompt && device.profile == Helium && device.needsUpdate()) {
-                    alerts.add(DeviceAlert.NEEDS_UPDATE)
-                }
+                it.toUIDevice().apply {
+                    val shouldShowOTAPrompt = deviceOTARepository.shouldShowOTAPrompt(
+                        id,
+                        assignedFirmware
+                    ) && relation == DeviceRelation.OWNED
+                    val alerts = mutableListOf<DeviceAlert>()
+                    if (shouldShowOTAPrompt && profile == Helium && needsUpdate()) {
+                        alerts.add(DeviceAlert.NEEDS_UPDATE)
+                    }
 
-                if (device.isActive == false) {
-                    alerts.add(DeviceAlert.OFFLINE)
-                }
-                device.apply {
+                    if (isActive == false) {
+                        alerts.add(DeviceAlert.OFFLINE)
+                    }
                     this.alerts = alerts
                 }
             }
