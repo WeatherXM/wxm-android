@@ -235,9 +235,11 @@ class CacheService(
     }
 
     fun setDevicesSortFilterOptions(sortOrder: String, filter: String, groupBy: String) {
-        preferences.edit().putString(KEY_DEVICES_SORT, sortOrder).apply()
-        preferences.edit().putString(KEY_DEVICES_FILTER, filter).apply()
-        preferences.edit().putString(KEY_DEVICES_GROUP_BY, groupBy).apply()
+        with(preferences.edit()) {
+            putString(KEY_DEVICES_SORT, sortOrder)
+            putString(KEY_DEVICES_FILTER, filter)
+            putString(KEY_DEVICES_GROUP_BY, groupBy)
+        }.apply()
     }
 
     fun getDeviceLastOtaTimestamp(key: String): Long {
