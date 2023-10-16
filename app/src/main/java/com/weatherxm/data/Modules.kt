@@ -198,7 +198,7 @@ import com.weatherxm.usecases.WidgetCurrentWeatherUseCaseImpl
 import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.usecases.WidgetSelectStationUseCaseImpl
 import com.weatherxm.util.Analytics
-import com.weatherxm.util.CrashReportingTree
+import com.weatherxm.util.Crashlytics
 import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.ResourcesHelper
@@ -664,15 +664,7 @@ val firebase = module {
     }
 
     single<FirebaseCrashlytics>(createdAtStart = true) {
-        FirebaseCrashlytics.getInstance().also {
-            // Setup crash reporting on RELEASE builds
-            if (!BuildConfig.DEBUG) {
-                Timber.plant(CrashReportingTree(it))
-                Timber.d("Enabled Crashlytics crash reporting")
-            } else {
-                Timber.d("Crashlytics crash reporting disabled in DEBUG builds")
-            }
-        }
+        FirebaseCrashlytics.getInstance()
     }
 
     single<FirebaseMessaging>(createdAtStart = true) {
@@ -762,6 +754,12 @@ val clientIdentificationHelper = module {
 val analytics = module {
     single(createdAtStart = true) {
         Analytics(get(), get(), get(), get(), get())
+    }
+}
+
+val crashlytics = module {
+    single(createdAtStart = true) {
+        Crashlytics(get(), get(), get())
     }
 }
 
@@ -886,5 +884,6 @@ val modules = listOf(
     clientIdentificationHelper,
     utilities,
     widgetHelper,
+    crashlytics,
     viewmodels
 )

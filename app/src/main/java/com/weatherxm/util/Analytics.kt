@@ -17,7 +17,7 @@ class Analytics(
     private val firebaseAnalytics: FirebaseAnalytics,
     private val cacheService: CacheService,
     private val displayModeHelper: DisplayModeHelper,
-    private val preferences: SharedPreferences,
+    preferences: SharedPreferences,
     private val resHelper: ResourcesHelper
 ) {
     // Screen Names

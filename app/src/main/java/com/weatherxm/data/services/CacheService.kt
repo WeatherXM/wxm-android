@@ -39,6 +39,8 @@ class CacheService(
         const val KEY_DEVICES_FILTER = "devices_filter"
         const val KEY_DEVICES_GROUP_BY = "devices_group_by"
         const val WIDGET_ID = "widget_id"
+        const val KEY_USER_ID = "user_id"
+        const val KEY_INSTALLATION_ID = "installation_id"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -58,9 +60,7 @@ class CacheService(
     }
 
     private var user: User? = null
-    private var userId: String = ""
     private var walletAddress: String? = null
-    private var installationId: String? = null
     private var forecasts: ArrayMap<String, TimedForecastData> = ArrayMap()
     private var suggestions: ArrayMap<String, List<SearchSuggestion>> = ArrayMap()
     private var locations: ArrayMap<String, Location> = ArrayMap()
@@ -85,11 +85,15 @@ class CacheService(
     }
 
     fun getInstallationId(): Either<Failure, String> {
-        return installationId?.let { Either.Right(it) } ?: Either.Left(DataError.CacheMissError)
+        val installationId = preferences.getString(KEY_INSTALLATION_ID, null)
+        return when {
+            installationId.isNullOrEmpty() -> Either.Left(DataError.CacheMissError)
+            else -> Either.Right(installationId)
+        }
     }
 
     fun setInstallationId(installationId: String) {
-        this.installationId = installationId
+        preferences.edit().putString(KEY_INSTALLATION_ID, installationId).apply()
     }
 
     fun getLastRemindedVersion(): Int {
@@ -152,12 +156,12 @@ class CacheService(
     }
 
     fun setUser(user: User) {
-        this.userId = user.id
+        preferences.edit().putString(KEY_USER_ID, user.id).apply()
         this.user = user
     }
 
     fun getUserId(): String {
-        return userId
+        return preferences.getString(KEY_USER_ID, "") ?: ""
     }
 
     fun getForecast(deviceId: String): Either<Failure, List<WeatherData>> {
