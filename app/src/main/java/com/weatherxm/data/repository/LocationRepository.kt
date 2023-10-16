@@ -12,7 +12,7 @@ import timber.log.Timber
 
 interface LocationRepository {
     suspend fun getSuggestionLocation(suggestion: SearchSuggestion): Either<Failure, Location>
-    fun getUserCountryLocation(): Location?
+    suspend fun getUserCountryLocation(): Location?
 }
 
 class LocationRepositoryImpl(
@@ -37,7 +37,7 @@ class LocationRepositoryImpl(
             }
     }
 
-    override fun getUserCountryLocation(): Location? {
+    override suspend fun getUserCountryLocation(): Location? {
         return locationDataSource.getUserCountryLocation()
     }
 }

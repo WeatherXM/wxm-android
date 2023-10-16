@@ -8,17 +8,17 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.weatherxm.data.CountryInfo
 import com.weatherxm.data.Location
+import com.weatherxm.data.services.CacheService
 import org.json.JSONException
 import timber.log.Timber
 
 interface LocationDataSource {
     fun getUserCountry(): String?
-    fun getUserCountryLocation(): Location?
+    suspend fun getUserCountryLocation(): Location?
 }
 
 class LocationDataSourceImpl(
-    private val context: Context,
-    private val moshi: Moshi
+    private val context: Context, private val moshi: Moshi, private val cacheService: CacheService
 ) : LocationDataSource {
 
     // https://stackoverflow.com/questions/3659809/where-am-i-get-country
@@ -38,25 +38,30 @@ class LocationDataSourceImpl(
         }
     }
 
-    override fun getUserCountryLocation(): Location? {
+    override suspend fun getUserCountryLocation(): Location? {
         return getUserCountry()?.let { code ->
-            try {
-                val adapter: JsonAdapter<List<CountryInfo>> = moshi.adapter(
-                    Types.newParameterizedType(List::class.java, CountryInfo::class.java)
-                )
-                adapter
-                    .fromJson(
-                        context.assets.open("countries_information.json").bufferedReader().use {
-                            it.readText()
-                        })
-                    ?.firstOrNull {
-                        it.code == code && it.mapCenter != null
-                    }
-                    ?.mapCenter
-            } catch (e: JSONException) {
-                Timber.w(e, "Failure: JSON Parsing of countries information")
-                null
+            cacheService.getCountriesInfo().ifEmpty {
+                parseCountriesJson()
+            }?.firstOrNull {
+                it.code == code && it.mapCenter != null
+            }?.mapCenter
+        }
+    }
+
+    private fun parseCountriesJson(): List<CountryInfo>? {
+        return try {
+            val adapter: JsonAdapter<List<CountryInfo>> = moshi.adapter(
+                Types.newParameterizedType(List::class.java, CountryInfo::class.java)
+            )
+            adapter.fromJson(context.assets.open("countries_information.json")
+                .bufferedReader().use {
+                    it.readText()
+                }).apply {
+                cacheService.setCountriesInfo(this)
             }
+        } catch (e: JSONException) {
+            Timber.w(e, "Failure: JSON Parsing of countries information")
+            null
         }
     }
 }

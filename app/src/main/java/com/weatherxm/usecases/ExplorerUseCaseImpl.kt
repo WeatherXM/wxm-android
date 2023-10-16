@@ -143,7 +143,7 @@ class ExplorerUseCaseImpl(
         explorerRepository.setRecentSearch(search)
     }
 
-    override fun getUserCountryLocation(): Location? {
+    override suspend fun getUserCountryLocation(): Location? {
         return locationRepository.getUserCountryLocation()
     }
 

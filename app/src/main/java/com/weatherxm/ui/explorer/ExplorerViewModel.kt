@@ -19,6 +19,7 @@ import com.weatherxm.util.Analytics
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.MapboxUtils
 import com.weatherxm.util.UIErrors.getDefaultMessage
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -209,7 +210,7 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
     fun fetch() {
         state.postValue(Resource.loading())
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             explorerUseCase.getCells()
                 .map {
                     state.postValue(Resource.success(it))
@@ -265,9 +266,11 @@ class ExplorerViewModel : ViewModel(), KoinComponent {
                 }
             }
         } else {
-            explorerUseCase.getUserCountryLocation()?.let {
-                Timber.d("Got starting location [${it.lat}, ${it.lon}")
-                onStartingLocation.postValue(it)
+            viewModelScope.launch(Dispatchers.IO) {
+                explorerUseCase.getUserCountryLocation()?.let {
+                    Timber.d("Got starting location [${it.lat}, ${it.lon}")
+                    onStartingLocation.postValue(it)
+                }
             }
         }
     }

@@ -27,5 +27,5 @@ interface ExplorerUseCase {
 
     suspend fun getRecentSearches(): List<SearchResult>
     suspend fun setRecentSearch(search: SearchResult)
-    fun getUserCountryLocation(): Location?
+    suspend fun getUserCountryLocation(): Location?
 }

@@ -9,6 +9,7 @@ import arrow.core.left
 import arrow.core.right
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.R
+import com.weatherxm.data.CountryInfo
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
@@ -66,6 +67,7 @@ class CacheService(
     private var locations: ArrayMap<String, Location> = ArrayMap()
     private var followedStationsIds = listOf<String>()
     private var userStationsIds = listOf<String>()
+    private var countriesInfo = listOf<CountryInfo>()
 
     fun getAuthToken(): Either<Failure, AuthToken> {
         val access = encryptedPreferences.getString(KEY_ACCESS, null)
@@ -292,6 +294,14 @@ class CacheService(
 
     fun setUserDevicesIds(ids: List<String>) {
         userStationsIds = ids
+    }
+
+    fun getCountriesInfo(): List<CountryInfo> {
+        return countriesInfo
+    }
+
+    fun setCountriesInfo(info: List<CountryInfo>?) {
+        countriesInfo = info ?: mutableListOf()
     }
 
     fun clearAll() {

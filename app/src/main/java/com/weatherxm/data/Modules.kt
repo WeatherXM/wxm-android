@@ -279,7 +279,7 @@ private val preferences = module {
 
 private val datasources = module {
     single<LocationDataSource> {
-        LocationDataSourceImpl(androidContext(), get())
+        LocationDataSourceImpl(androidContext(), get(), get())
     }
 
     single<NetworkWeatherHistoryDataSource> {
