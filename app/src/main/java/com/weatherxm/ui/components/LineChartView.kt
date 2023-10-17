@@ -9,7 +9,7 @@ import android.widget.LinearLayout
 import com.github.mikephil.charting.charts.LineChart
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewLineChartBinding
-import com.weatherxm.ui.common.hide
+import com.weatherxm.ui.common.setVisible
 
 class LineChartView : LinearLayout {
 
@@ -46,28 +46,28 @@ class LineChartView : LinearLayout {
                 getString(R.styleable.LineChartView_line_chart_primary_line_name)?.let {
                     binding.primaryLineName.text = it
                 } ?: kotlin.run {
-                    binding.primaryLineName.hide(null)
-                    binding.primaryLineColor.hide(null)
+                    binding.primaryLineName.setVisible(false)
+                    binding.primaryLineColor.setVisible(false)
                 }
 
                 getString(R.styleable.LineChartView_line_chart_secondary_line_name)?.let {
                     binding.secondaryLineName.text = it
                 } ?: kotlin.run {
-                    binding.secondaryLineName.hide(null)
-                    binding.secondaryLineColor.hide(null)
+                    binding.secondaryLineName.setVisible(false)
+                    binding.secondaryLineColor.setVisible(false)
                 }
 
                 getString(R.styleable.LineChartView_line_chart_primary_highlight_name)?.let {
-                    binding.primaryDataName.text = "$it:"
+                    binding.primaryDataName.text = it
                 } ?: kotlin.run {
-                    binding.primaryDataName.hide(null)
+                    binding.primaryDataName.setVisible(false)
                 }
 
                 getString(R.styleable.LineChartView_line_chart_secondary_highlight_name)?.let {
-                    binding.secondaryDataName.text = "$it:"
+                    binding.secondaryDataName.text = it
                 } ?: kotlin.run {
-                    binding.secondaryDataName.hide(null)
-                    binding.divider.hide(null)
+                    binding.secondaryDataName.setVisible(false)
+                    binding.divider.setVisible(false)
                 }
 
                 binding.secondaryLineColor.setChipBackgroundColorResource(

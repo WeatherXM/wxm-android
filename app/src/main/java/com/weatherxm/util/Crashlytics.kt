@@ -34,7 +34,7 @@ class Crashlytics(
     }
 
     private fun FirebaseCrashlytics.setUserProperties() {
-        setCustomKey(KEY_USER_ID, cacheService.getUserId())
+        setUserId(cacheService.getUserId())
         cacheService.getInstallationId().onRight { installationId ->
             setCustomKey(KEY_INSTALLATION_ID, installationId)
         }
