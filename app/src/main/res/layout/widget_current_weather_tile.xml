@@ -12,59 +12,62 @@
         android:background="@color/colorSurface"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorSurface"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
             android:paddingHorizontal="@dimen/padding_normal"
-            android:paddingTop="@dimen/padding_normal"
-            android:weightSum="2">
+            android:paddingTop="@dimen/padding_normal">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/statusContainer"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end|center_vertical"
-                android:orientation="horizontal">
+                android:layout_marginEnd="@dimen/margin_small"
+                android:layout_alignParentStart="true"
+                android:paddingHorizontal="@dimen/padding_small"
+                android:paddingVertical="@dimen/padding_extra_small"
+                tools:background="@drawable/background_rounded_success">
 
-                <LinearLayout
-                    android:id="@+id/statusContainer"
+                <ImageView
+                    android:id="@+id/statusIcon"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_wifi"
+                    android:tint="@color/status_chip_content_online"
+                    tools:ignore="ContentDescription,UseAppTint" />
+
+                <TextView
+                    android:id="@+id/lastSeen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
-                    android:paddingHorizontal="@dimen/padding_small"
-                    android:paddingVertical="@dimen/padding_extra_small"
-                    tools:background="@drawable/background_rounded_corners_status_success">
-
-                    <ImageView
-                        android:id="@+id/statusIcon"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/ic_wifi"
-                        android:tint="@color/status_chip_content_online"
-                        tools:ignore="ContentDescription,UseAppTint" />
-
-                    <TextView
-                        android:id="@+id/lastSeen"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_small"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                        android:textColor="@color/status_chip_content_online"
-                        tools:text="15:45" />
-
-                </LinearLayout>
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                    android:textColor="@color/status_chip_content_online"
+                    tools:text="15:45 am" />
 
             </LinearLayout>
-        </LinearLayout>
+
+            <ImageView
+                android:id="@+id/stationHomeFollowIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/statusContainer"
+                android:layout_alignBottom="@id/statusContainer"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_home"
+                tools:ignore="ContentDescription,UseAppTint" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/name"
-            style="@style/TextAppearance.WeatherXM.Default.BodySmall"
+            style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            android:textStyle="bold"
             tools:text="My Weather Station" />
 
         <LinearLayout
@@ -76,7 +79,7 @@
             android:baselineAligned="false"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingVertical="@dimen/padding_small">
+            android:paddingBottom="@dimen/padding_small">
 
             <ImageView
                 android:id="@+id/weatherIcon"
@@ -142,10 +145,64 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/noDataLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:background="@drawable/background_rounded_surface"
+            android:baselineAligned="false"
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/padding_normal"
+            android:visibility="gone"
+            android:weightSum="4">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/margin_normal"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/noDataIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_no_data"
+                    android:tint="@color/colorOnSurface"
+                    tools:ignore="ContentDescription,UseAppTint" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/margin_normal"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/noDataTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/no_data"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.EmptyView.Title" />
+
+                <TextView
+                    android:id="@+id/noDataMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/no_data_message"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+            </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/signInLayout"
+        android:id="@+id/actionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorSurface"
@@ -156,6 +213,7 @@
         android:visibility="gone">
 
         <TextView
+            android:id="@+id/actionTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/please_sign_in"
@@ -163,6 +221,7 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/actionDesc"
             style="@style/TextAppearance.WeatherXM.Default.BodySmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -171,7 +230,7 @@
             android:text="@string/please_sign_in_desc" />
 
         <Button
-            android:id="@+id/loginBtn"
+            android:id="@+id/actionBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
@@ -180,6 +239,44 @@
             android:text="@string/action_login"
             android:textAllCaps="false"
             android:textColor="@color/colorOnPrimary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/errorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/errorTint"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/padding_normal"
+        android:paddingVertical="@dimen/padding_normal"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/errorIcon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_error"
+            android:tint="@color/error"
+            tools:ignore="ContentDescription,UseAppTint" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/error_user_device_data_failed"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Title"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:gravity="center"
+            android:text="@string/error_reach_out_short"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
     </LinearLayout>
 
 </LinearLayout>

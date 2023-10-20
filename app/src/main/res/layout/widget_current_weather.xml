@@ -4,7 +4,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/background_rounded_corners"
+    android:background="@drawable/background_rounded_surface"
     android:orientation="vertical">
 
     <LinearLayout
@@ -57,7 +57,7 @@
                 android:id="@+id/addressContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_rounded_corners_blue_tint"
+                android:background="@drawable/background_rounded_blue_tint"
                 android:gravity="center"
                 android:paddingHorizontal="@dimen/padding_small"
                 android:paddingVertical="@dimen/padding_extra_small">
@@ -86,7 +86,7 @@
                 android:gravity="center"
                 android:paddingHorizontal="@dimen/padding_small"
                 android:paddingVertical="@dimen/padding_extra_small"
-                tools:background="@drawable/background_rounded_corners_status_success">
+                tools:background="@drawable/background_rounded_success">
 
                 <ImageView
                     android:id="@+id/statusIcon"
@@ -112,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small_to_normal"
-            android:background="@drawable/surface_rounded_corners"
+            android:background="@drawable/background_rounded_surface"
             android:baselineAligned="false"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/padding_small_to_normal"
@@ -361,7 +361,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
-            android:background="@drawable/surface_rounded_corners"
+            android:background="@drawable/background_rounded_surface"
             android:baselineAligned="false"
             android:orientation="horizontal"
             android:paddingVertical="@dimen/padding_normal"
@@ -381,11 +381,8 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:src="@drawable/ic_no_data"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/colorOnSurface"
-                    tools:ignore="ContentDescription" />
+                    android:tint="@color/colorOnSurface"
+                    tools:ignore="ContentDescription,UseAppTint" />
             </LinearLayout>
 
             <LinearLayout
@@ -416,7 +413,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/signInLayout"
+        android:id="@+id/actionLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorSurface"
@@ -427,12 +424,14 @@
         android:visibility="gone">
 
         <TextView
+            android:id="@+id/actionTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/please_sign_in"
             android:textAppearance="@style/TextAppearance.WeatherXM.Title" />
 
         <TextView
+            android:id="@+id/actionDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -441,7 +440,7 @@
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge" />
 
         <Button
-            android:id="@+id/loginBtn"
+            android:id="@+id/actionBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"

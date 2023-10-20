@@ -12,61 +12,64 @@
         android:background="@color/colorSurface"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorSurface"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
             android:paddingHorizontal="@dimen/padding_normal"
-            android:paddingTop="@dimen/padding_normal"
-            android:weightSum="2">
+            android:paddingTop="@dimen/padding_normal">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/statusContainer"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="end|center_vertical"
-                android:orientation="horizontal">
+                android:layout_alignParentStart="true"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:background="@drawable/background_rounded_success"
+                android:paddingHorizontal="@dimen/padding_small"
+                android:paddingVertical="@dimen/padding_extra_small">
 
-                <LinearLayout
-                    android:id="@+id/statusContainer"
+                <ImageView
+                    android:id="@+id/statusIcon"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_wifi"
+                    android:tint="@color/status_chip_content_online"
+                    tools:ignore="ContentDescription,UseAppTint" />
+
+                <TextView
+                    android:id="@+id/lastSeen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
-                    android:background="@drawable/background_rounded_corners_status_success"
-                    android:paddingHorizontal="@dimen/padding_small"
-                    android:paddingVertical="@dimen/padding_extra_small">
-
-                    <ImageView
-                        android:id="@+id/statusIcon"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:src="@drawable/ic_wifi"
-                        android:tint="@color/status_chip_content_online"
-                        tools:ignore="ContentDescription,UseAppTint" />
-
-                    <TextView
-                        android:id="@+id/lastSeen"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_small"
-                        android:text="10:45 am"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                        android:textColor="@color/status_chip_content_online"
-                        tools:ignore="HardcodedText" />
-
-                </LinearLayout>
+                    android:text="15:45 am"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                    android:textColor="@color/status_chip_content_online"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
-        </LinearLayout>
+
+            <ImageView
+                android:id="@+id/stationHomeFollowIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/statusContainer"
+                android:layout_alignBottom="@id/statusContainer"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_home"
+                tools:ignore="ContentDescription,UseAppTint" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_extra_small"
             android:layout_marginHorizontal="@dimen/margin_normal"
             android:text="My Weather Station"
-            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            android:textStyle="bold"
             tools:ignore="HardcodedText" />
 
         <LinearLayout
@@ -78,7 +81,7 @@
             android:baselineAligned="false"
             android:gravity="center"
             android:orientation="vertical"
-            android:paddingVertical="@dimen/padding_small">
+            android:paddingBottom="@dimen/padding_small">
 
             <ImageView
                 android:id="@+id/weatherIcon"

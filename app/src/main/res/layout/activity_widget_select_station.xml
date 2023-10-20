@@ -51,8 +51,17 @@
         android:layout_gravity="bottom"
         android:background="@color/colorBackground"
         android:elevation="@dimen/elevation_small"
+        android:orientation="vertical"
         android:paddingHorizontal="@dimen/padding_normal"
         android:paddingVertical="@dimen/padding_normal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/signInBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="@string/action_sign_in"
+            android:visibility="gone" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/confirmBtn"

@@ -416,13 +416,17 @@
 
     <!-- Widgets -->
     <string name="select_station">Select Station for Widget</string>
-    <string name="current_weather_widget_description">Current Weather Widget</string>
+    <string name="current_weather_widget">Current Weather</string>
+    <string name="current_weather_widget_tile">Current Weather Tile</string>
+    <string name="current_weather_widget_detailed">Current Weather Detailed</string>
     <string name="empty_select_station">You cannot add this widget if you do not own or follow a WXM weather station.</string>
-    <string name="select_station_not_logged_in">You cannot add this widget if you are not logged in. Please login and try again.</string>
+    <string name="select_station_not_logged_in">Please sign in with your WeatherXM account to add a weather station widget.</string>
     <string name="updating_weather_notification_id" translatable="false">UPDATE_WEATHER_NOTIFICATION</string>
     <string name="updating_weather_notification_title">Updating Weather…</string>
     <string name="please_sign_in">Please Sign In</string>
     <string name="please_sign_in_desc">In order to see WeatherXM data, you need to be signed in.</string>
+    <string name="action_select_station">Select Station</string>
+    <string name="please_select_station_desc">You need to select a station you own or follow.</string>
 
     <!-- Share/Follow Station -->
     <string name="share_station">Share Station</string>

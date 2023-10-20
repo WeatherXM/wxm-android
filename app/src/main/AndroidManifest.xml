@@ -50,19 +50,29 @@
                 android:resource="@xml/current_weather_widget_info" />
         </receiver>
 
-        <!-- TODO: Uncomment the below for the small widget to show up on list -->
+        <receiver
+            android:name=".ui.widgets.currentweather.CurrentWeatherWidgetTile"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
 
-        <!--        <receiver-->
-        <!--            android:name=".ui.widgets.currentweather.CurrentWeatherWidgetTile"-->
-        <!--            android:exported="false">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />-->
-        <!--            </intent-filter>-->
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/current_weather_tile_widget_info" />
+        </receiver>
 
-        <!--            <meta-data-->
-        <!--                android:name="android.appwidget.provider"-->
-        <!--                android:resource="@xml/current_weather_tile_widget_info" />-->
-        <!--        </receiver>-->
+        <receiver
+            android:name=".ui.widgets.currentweather.CurrentWeatherWidgetDetailed"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/current_weather_detailed_widget_info" />
+        </receiver>
 
         <!-- Disable screen view tracking -->
         <meta-data

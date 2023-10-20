@@ -21,12 +21,14 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_ON_LOGGED_IN
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_SHOULD_LOGIN
+import com.weatherxm.ui.common.Contracts.ARG_WIDGET_SHOULD_SELECT_STATION
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.widgets.WidgetType
+import com.weatherxm.ui.widgets.selectstation.SelectStationActivity
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
@@ -57,6 +59,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
             extras?.getInt(EXTRA_APPWIDGET_ID, INVALID_APPWIDGET_ID) ?: INVALID_APPWIDGET_ID
         val device = extras?.getParcelable<UIDevice>(ARG_DEVICE)
         val shouldLogin = extras?.getBoolean(ARG_WIDGET_SHOULD_LOGIN, false)
+        val shouldSelectStation = extras?.getBoolean(ARG_WIDGET_SHOULD_SELECT_STATION, false)
         val onJustLoggedIn = extras?.getBoolean(ARG_WIDGET_ON_LOGGED_IN, false)
         val widgetIdsFromIntent = extras?.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS)
 
@@ -70,7 +73,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         * c. Work Manager Update
          */
         val shouldUpdate = intent?.action == ACTION_APPWIDGET_UPDATE
-            && intent.extras?.getBoolean(ARG_IS_CUSTOM_APPWIDGET_UPDATE) ?: false
+            && extras?.getBoolean(ARG_IS_CUSTOM_APPWIDGET_UPDATE) ?: false
 
         if (!shouldUpdate) {
             return
@@ -91,7 +94,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
                 }
             }
 
-            updateWidget(context, shouldLogin, device, appWidgetId)
+            updateWidget(context, shouldLogin, shouldSelectStation, device, appWidgetId)
         } else if (widgetIdsFromIntent != null && widgetIdsFromIntent.isNotEmpty()) {
             updateAllWidgets(context, shouldLogin, onJustLoggedIn, widgetIdsFromIntent)
         }
@@ -112,6 +115,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
     private fun updateWidget(
         context: Context,
         shouldLogin: Boolean?,
+        shouldSelectStation: Boolean?,
         device: UIDevice?,
         appWidgetId: Int
     ) {
@@ -119,6 +123,8 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
 
         if (shouldLogin == true) {
             onShouldLogin(context, widgetManager, appWidgetId)
+        } else if (shouldSelectStation == true) {
+            onShouldSelectStation(context, widgetManager, appWidgetId)
         } else if (device == null) {
             onError(context, widgetManager, appWidgetId)
         } else {
@@ -154,6 +160,38 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         }
     }
 
+    private fun onShouldSelectStation(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int
+    ) {
+        val views = RemoteViews(context.packageName, R.layout.widget_current_weather)
+
+        views.setViewVisibility(R.id.deviceLayout, View.GONE)
+        views.setViewVisibility(R.id.errorLayout, View.GONE)
+        views.setTextViewText(R.id.actionTitle, context.getString(R.string.action_select_station))
+        views.setTextViewText(
+            R.id.actionDesc,
+            context.getString(R.string.please_select_station_desc)
+        )
+        views.setTextViewText(R.id.actionBtn, context.getString(R.string.action_select_station))
+        views.setViewVisibility(R.id.actionLayout, View.VISIBLE)
+
+        val intent = Intent(context, SelectStationActivity::class.java)
+        intent.putExtra(EXTRA_APPWIDGET_ID, appWidgetId)
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+            context,
+            appWidgetId,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        views.setOnClickPendingIntent(R.id.root, pendingIntent)
+        views.setOnClickPendingIntent(R.id.actionBtn, pendingIntent)
+
+        // Instruct the widget manager to update the widget
+        appWidgetManager.updateAppWidget(appWidgetId, views)
+    }
+
     private fun onShouldLogin(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -163,7 +201,10 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
 
         views.setViewVisibility(R.id.deviceLayout, View.GONE)
         views.setViewVisibility(R.id.errorLayout, View.GONE)
-        views.setViewVisibility(R.id.signInLayout, View.VISIBLE)
+        views.setTextViewText(R.id.actionTitle, context.getString(R.string.please_sign_in))
+        views.setTextViewText(R.id.actionDesc, context.getString(R.string.please_sign_in_desc))
+        views.setTextViewText(R.id.actionBtn, context.getString(R.string.action_sign_in))
+        views.setViewVisibility(R.id.actionLayout, View.VISIBLE)
 
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
             context,
@@ -172,7 +213,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         views.setOnClickPendingIntent(R.id.root, pendingIntent)
-        views.setOnClickPendingIntent(R.id.loginBtn, pendingIntent)
+        views.setOnClickPendingIntent(R.id.actionBtn, pendingIntent)
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views)
@@ -186,7 +227,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         val views = RemoteViews(context.packageName, R.layout.widget_current_weather)
 
         views.setViewVisibility(R.id.deviceLayout, View.GONE)
-        views.setViewVisibility(R.id.signInLayout, View.GONE)
+        views.setViewVisibility(R.id.actionLayout, View.GONE)
         views.setViewVisibility(R.id.errorLayout, View.VISIBLE)
 
         // Instruct the widget manager to update the widget
@@ -203,7 +244,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
 
         val views = RemoteViews(context.packageName, R.layout.widget_current_weather)
         views.setViewVisibility(R.id.errorLayout, View.GONE)
-        views.setViewVisibility(R.id.signInLayout, View.GONE)
+        views.setViewVisibility(R.id.actionLayout, View.GONE)
         views.setViewVisibility(R.id.deviceLayout, View.VISIBLE)
 
         val deviceDetailsActivity = Intent(context, DeviceDetailsActivity::class.java)
@@ -242,10 +283,11 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
             views.setInt(
                 R.id.root,
                 "setBackgroundResource",
-                R.drawable.background_rounded_corners_error_stroke
+                R.drawable.background_rounded_error_stroke
             )
         } else {
-            views.setInt(R.id.root, "setBackgroundResource", R.drawable.background_rounded_corners)
+            views.setViewVisibility(R.id.noDataLayout, View.GONE)
+            views.setInt(R.id.root, "setBackgroundResource", R.drawable.background_rounded_surface)
             views.setViewPadding(R.id.root, 0, 0, 0, 0)
             setWeatherData(context, views, device)
         }
@@ -281,13 +323,13 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
                 views.setInt(
                     R.id.statusContainer,
                     "setBackgroundResource",
-                    R.drawable.background_rounded_corners_status_success
+                    R.drawable.background_rounded_success
                 )
             }
             false -> {
                 views.setTextViewText(
                     R.id.lastSeen,
-                    device.lastWeatherStationActivity?.getFormattedTime(context)
+                    device.lastWeatherStationActivity?.getRelativeFormattedTime()
                 )
                 views.setTextColor(
                     R.id.lastSeen,
@@ -301,7 +343,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
                 views.setInt(
                     R.id.statusContainer,
                     "setBackgroundResource",
-                    R.drawable.background_rounded_corners_status_error
+                    R.drawable.background_rounded_error
                 )
             }
             else -> {}

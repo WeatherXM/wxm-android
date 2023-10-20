@@ -4,13 +4,13 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityWidgetSelectStationBinding
+import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
 import com.weatherxm.ui.common.UIDevice
@@ -27,6 +27,7 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
     private val model: SelectStationViewModel by viewModels()
     private val analytics: Analytics by inject()
     private val widgetHelper: WidgetHelper by inject()
+    private val navigator: Navigator by inject()
 
     private lateinit var adapter: SelectStationAdapter
 
@@ -52,20 +53,30 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
         binding.recycler.adapter = adapter
 
         model.devices().observe(this) {
+            binding.signInBtn.setVisible(false)
+            binding.confirmBtn.setVisible(true)
             onDevices(it)
         }
 
         model.isNotLoggedIn().observe(this) {
-            binding.empty.animation(R.raw.anim_error, false)
-            binding.empty.title(getString(R.string.error_generic_message))
-            binding.empty.subtitle(R.string.select_station_not_logged_in)
-            binding.empty.listener(null)
-            binding.empty.visibility = View.VISIBLE
-            binding.recycler.visibility = View.GONE
+            binding.empty.clear()
+                .animation(R.raw.anim_warning)
+                .title(getString(R.string.action_sign_in))
+                .subtitle(R.string.select_station_not_logged_in)
+                .listener(null)
+            binding.confirmBtn.setVisible(false)
+            binding.recycler.setVisible(false)
+            binding.empty.setVisible(true)
+            binding.signInBtn.setVisible(true)
         }
 
         binding.confirmBtn.setOnClickListener {
             onConfirmClicked(appWidgetId, resultValue)
+        }
+
+        binding.signInBtn.setOnClickListener {
+            navigator.showLogin(this, true)
+            finish()
         }
 
         model.checkIfLoggedInAndProceed()
@@ -91,8 +102,8 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
                     binding.empty.title(getString(R.string.empty_weather_stations))
                     binding.empty.subtitle(getString(R.string.empty_select_station))
                     binding.empty.listener(null)
-                    binding.empty.visibility = View.VISIBLE
-                    binding.recycler.visibility = View.GONE
+                    binding.empty.setVisible(true)
+                    binding.recycler.setVisible(false)
                 }
             }
             Status.ERROR -> {
@@ -101,14 +112,14 @@ class SelectStationActivity : AppCompatActivity(), KoinComponent {
                 binding.empty.subtitle(devices.message)
                 binding.empty.action(getString(R.string.action_retry))
                 binding.empty.listener { model.fetch() }
-                binding.empty.visibility = View.VISIBLE
-                binding.recycler.visibility = View.GONE
+                binding.empty.setVisible(true)
+                binding.recycler.setVisible(false)
             }
             Status.LOADING -> {
-                binding.recycler.visibility = View.GONE
+                binding.recycler.setVisible(false)
                 binding.empty.clear()
                 binding.empty.animation(R.raw.anim_loading)
-                binding.empty.visibility = View.VISIBLE
+                binding.empty.setVisible(true)
             }
         }
     }

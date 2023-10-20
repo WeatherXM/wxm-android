@@ -4,7 +4,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="250dp"
-    android:background="@drawable/background_rounded_corners"
+    android:background="@drawable/background_rounded_surface"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -53,7 +53,7 @@
             android:id="@+id/addressContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/background_rounded_corners_blue_tint"
+            android:background="@drawable/background_rounded_blue_tint"
             android:paddingHorizontal="@dimen/padding_small"
             android:paddingVertical="@dimen/padding_extra_small">
 
@@ -79,7 +79,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
-            android:background="@drawable/background_rounded_corners_status_success"
+            android:background="@drawable/background_rounded_success"
             android:paddingHorizontal="@dimen/padding_small"
             android:paddingVertical="@dimen/padding_extra_small">
 
@@ -108,7 +108,7 @@
         android:id="@+id/weatherDataLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/surface_rounded_corners"
+        android:background="@drawable/background_rounded_surface"
         android:baselineAligned="false"
         android:orientation="horizontal"
         android:paddingTop="@dimen/padding_small_to_normal"

@@ -542,7 +542,7 @@ private val usecases = module {
         StatsUseCaseImpl(get(), get())
     }
     single<FollowUseCase> {
-        FollowUseCaseImpl(get())
+        FollowUseCaseImpl(get(), get())
     }
     single<DeviceListUseCase> {
         DeviceListUseCaseImpl(get(), get(), get())
@@ -765,7 +765,7 @@ val crashlytics = module {
 
 val widgetHelper = module {
     single {
-        WidgetHelper(get())
+        WidgetHelper(get(), get())
     }
 }
 
