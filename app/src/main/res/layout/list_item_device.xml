@@ -52,9 +52,9 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="@dimen/margin_small"
                         android:importantForAccessibility="no"
+                        app:layout_constraintBottom_toBottomOf="@id/name"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@id/name"
-                        app:layout_constraintBottom_toBottomOf="@id/name"
                         tools:src="@drawable/ic_favorite"
                         tools:tint="@color/follow_heart_color" />
 
