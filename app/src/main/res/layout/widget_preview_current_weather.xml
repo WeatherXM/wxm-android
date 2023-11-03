@@ -54,12 +54,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/background_rounded_blue_tint"
+            android:gravity="center"
             android:paddingHorizontal="@dimen/padding_small"
             android:paddingVertical="@dimen/padding_extra_small">
 
             <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
                 android:src="@drawable/ic_hex"
                 android:tint="@color/colorOnSurface"
                 tools:ignore="ContentDescription,UseAppTint" />
@@ -80,13 +81,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
             android:background="@drawable/background_rounded_success"
+            android:gravity="center"
             android:paddingHorizontal="@dimen/padding_small"
             android:paddingVertical="@dimen/padding_extra_small">
 
             <ImageView
                 android:id="@+id/statusIcon"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
                 android:src="@drawable/ic_wifi"
                 android:tint="@color/status_chip_content_online"
                 tools:ignore="ContentDescription,UseAppTint" />
@@ -97,8 +99,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_small"
                 android:text="10:45 am"
-                android:textColor="@color/status_chip_content_online"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                android:textColor="@color/status_chip_content_online"
                 tools:ignore="HardcodedText" />
 
         </LinearLayout>
@@ -311,13 +313,12 @@
                 android:layout_marginTop="@dimen/margin_small">
 
                 <LinearLayout
-                    android:id="@+id/precipitationIconContainer"
+                    android:id="@+id/rainRateIconContainer"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/precipitationIcon"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_weather_precipitation"
@@ -326,32 +327,32 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/precipitationTitle"
+                    android:id="@+id/rainRateTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_extra_small"
-                    android:layout_toEndOf="@id/precipitationIconContainer"
+                    android:layout_toEndOf="@id/rainRateIconContainer"
                     android:text="@string/precipitation_rate"
                     android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/precipitationValue"
+                    android:id="@+id/rainRateValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/precipitationTitle"
-                    android:layout_alignStart="@id/precipitationTitle"
+                    android:layout_below="@id/rainRateTitle"
+                    android:layout_alignStart="@id/rainRateTitle"
                     android:text="1"
                     android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    android:id="@+id/precipitationUnit"
+                    android:id="@+id/rainRateUnit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@id/precipitationValue"
-                    android:layout_toEndOf="@id/precipitationValue"
+                    android:layout_alignBaseline="@id/rainRateValue"
+                    android:layout_toEndOf="@id/rainRateValue"
                     android:text=" mm/h"
                     android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
                     tools:ignore="HardcodedText" />

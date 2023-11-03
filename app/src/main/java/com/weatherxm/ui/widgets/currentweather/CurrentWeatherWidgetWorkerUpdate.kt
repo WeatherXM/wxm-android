@@ -17,6 +17,7 @@ import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.getOrElse
 import arrow.core.right
+import com.weatherxm.data.ApiError.GenericError.JWTError.ForbiddenError
 import com.weatherxm.data.UserActionError.UserNotLoggedInError
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.data.services.CacheService.Companion.KEY_CURRENT_WEATHER_WIDGET_IDS
@@ -24,6 +25,7 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_ID
+import com.weatherxm.ui.common.Contracts.ARG_WIDGET_SHOULD_SELECT_STATION
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
@@ -120,7 +122,15 @@ class CurrentWeatherWidgetWorkerUpdate(
                     Exception("Fetching user device for widget failed: ${failure.code}"),
                     failure.toString()
                 )
-                if (failure is UserNotLoggedInError) Result.success() else Result.retry()
+                when (failure) {
+                    is UserNotLoggedInError -> Result.success()
+                    is ForbiddenError -> {
+                        intent.putExtra(ARG_WIDGET_SHOULD_SELECT_STATION, true)
+                        context.sendBroadcast(intent)
+                        Result.success()
+                    }
+                    else -> Result.retry()
+                }
             }
     }
 }
