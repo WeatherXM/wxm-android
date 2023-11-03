@@ -28,6 +28,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WeatherXM"
         android:usesCleartextTraffic="true"
+        android:enableOnBackInvokedCallback="true"
         tools:ignore="UnusedAttribute,LockedOrientationActivity">
 
         <receiver
