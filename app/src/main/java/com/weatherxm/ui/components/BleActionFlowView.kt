@@ -111,10 +111,13 @@ class BleActionFlowView : ConstraintLayout {
 
     fun onNotPaired() {
         hideButtons()
-        binding.steps.visibility = View.GONE
+        binding.stationName.setVisible(false)
+        binding.firmwareVersionTitle.setVisible(false)
+        binding.firmwareVersions.setVisible(false)
+        binding.steps.setVisible(false)
         binding.status.setVisible(false)
-        binding.notPairedInfoContainer.visibility = View.VISIBLE
-        binding.pairDevice.visibility = View.VISIBLE
+        binding.notPairedInfoContainer.setVisible(true)
+        binding.pairDevice.setVisible(true)
     }
 
     @Suppress("LongParameterList")
@@ -127,24 +130,21 @@ class BleActionFlowView : ConstraintLayout {
         onErrorAction: ((String?) -> Unit)? = null
     ) {
         hideButtons()
-        binding.steps.visibility = View.GONE
+        binding.steps.setVisible(false)
         binding.status.clear()
-        binding.status.animation(R.raw.anim_error)
-        binding.status.title(title)
+            .animation(R.raw.anim_error)
+            .title(title)
 
         if (isScanOrBleError) {
             binding.status.subtitle(message)
-            binding.scanAgain.visibility = View.VISIBLE
+            binding.scanAgain.setVisible(true)
         } else {
             binding.retry.text = retryActionText
-            binding.failureButtonsContainer.visibility = View.VISIBLE
-            binding.status.htmlSubtitle(message, errorCode) {
-                onErrorAction?.invoke(errorCode)
-            }
-            binding.status.action(resources.getString(R.string.title_contact_support))
-            binding.status.listener {
-                onErrorAction?.invoke(errorCode)
-            }
+            binding.failureButtonsContainer.setVisible(true)
+            binding.status
+                .htmlSubtitle(message, errorCode) { onErrorAction?.invoke(errorCode) }
+                .action(resources.getString(R.string.title_contact_support))
+                .listener { onErrorAction?.invoke(errorCode) }
         }
     }
 
@@ -158,24 +158,24 @@ class BleActionFlowView : ConstraintLayout {
         secondaryActionText: String? = null
     ) {
         hideButtons()
-        binding.steps.visibility = View.GONE
+        binding.steps.setVisible(false)
         binding.status.clear()
-        binding.status.animation(R.raw.anim_success, false)
-        binding.status.title(title)
+            .animation(R.raw.anim_success, false)
+            .title(title)
         if (htmlMessage != null) {
             binding.status.htmlSubtitle(htmlMessage, argForHtmlMessage)
         } else {
             binding.status.subtitle(message)
         }
         if (secondaryActionText != null) {
-            binding.successOneButtonOnly.visibility = View.GONE
+            binding.successOneButtonOnly.setVisible(false)
             binding.successPrimaryAction.text = primaryActionText
             binding.successSecondaryAction.text = secondaryActionText
-            binding.successPrimaryAction.visibility = View.VISIBLE
-            binding.successSecondaryAction.visibility = View.VISIBLE
+            binding.successPrimaryAction.setVisible(true)
+            binding.successSecondaryAction.setVisible(true)
         } else {
             binding.successOneButtonOnly.text = primaryActionText
-            binding.successOneButtonOnly.visibility = View.VISIBLE
+            binding.successOneButtonOnly.setVisible(true)
         }
     }
 
@@ -187,12 +187,15 @@ class BleActionFlowView : ConstraintLayout {
     ) {
         if (!binding.steps.isVisible) {
             hideButtons()
-            binding.notPairedInfoContainer.visibility = View.GONE
-            binding.installationProgressBar.visibility = View.GONE
-            binding.steps.visibility = View.VISIBLE
+            binding.notPairedInfoContainer.setVisible(false)
+            binding.installationProgressBar.setVisible(false)
+            binding.stationName.setVisible(true)
+            binding.firmwareVersions.setVisible(true)
+            binding.firmwareVersionTitle.setVisible(true)
+            binding.steps.setVisible(true)
             binding.status.clear()
-            binding.status.animation(R.raw.anim_loading)
-            binding.status.show()
+                .animation(R.raw.anim_loading)
+                .show()
         }
         binding.status.title(title)
         if (message != null) {
@@ -226,7 +229,7 @@ class BleActionFlowView : ConstraintLayout {
             }
         }
         if (showProgressBar) {
-            binding.installationProgressBar.visibility = View.VISIBLE
+            binding.installationProgressBar.setVisible(true)
         }
     }
 
@@ -235,21 +238,21 @@ class BleActionFlowView : ConstraintLayout {
     }
 
     fun onShowInformationCard() {
-        binding.informationCard.visibility = View.VISIBLE
+        binding.informationCard.setVisible(true)
     }
 
     fun onShowStationUpdateMetadata(stationName: String, firmwareVersions: String) {
         binding.stationName.text = stationName
         binding.firmwareVersions.text = firmwareVersions
-        binding.stationName.visibility = View.VISIBLE
-        binding.firmwareVersionTitle.visibility = View.VISIBLE
-        binding.firmwareVersions.visibility = View.VISIBLE
+        binding.stationName.setVisible(true)
+        binding.firmwareVersionTitle.setVisible(true)
+        binding.firmwareVersions.setVisible(true)
     }
 
     private fun hideButtons() {
         binding.successOneButtonOnly.visibility = View.INVISIBLE
-        binding.successPrimaryAction.visibility = View.GONE
-        binding.successSecondaryAction.visibility = View.GONE
+        binding.successPrimaryAction.setVisible(false)
+        binding.successSecondaryAction.setVisible(false)
         binding.failureButtonsContainer.visibility = View.INVISIBLE
         binding.scanAgain.visibility = View.INVISIBLE
         binding.pairDevice.visibility = View.INVISIBLE

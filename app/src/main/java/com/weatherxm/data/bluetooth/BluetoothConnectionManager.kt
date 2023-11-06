@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.IntentFilter.SYSTEM_HIGH_PRIORITY
+import android.os.Build
 import arrow.core.Either
 import com.juul.kable.BluetoothDisabledException
 import com.juul.kable.Characteristic
@@ -154,7 +155,14 @@ class BluetoothConnectionManager(
              */
             Timber.d("[BLE Communication]: Connecting to peripheral...")
             bondStateChangedFilter.priority = SYSTEM_HIGH_PRIORITY
-            context.registerReceiver(bondStateChangedReceiver, bondStateChangedFilter)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.registerReceiver(
+                    bondStateChangedReceiver, bondStateChangedFilter,
+                    Context.RECEIVER_EXPORTED
+                )
+            } else {
+                context.registerReceiver(bondStateChangedReceiver, bondStateChangedFilter)
+            }
             peripheral.connect()
 
             if (getPairedDevices().any { it.address == macAddress }) {

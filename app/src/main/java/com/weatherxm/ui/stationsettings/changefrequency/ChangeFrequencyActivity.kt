@@ -69,7 +69,10 @@ class ChangeFrequencyActivity : AppCompatActivity(), KoinComponent {
         }
 
         with(binding.toolbar) {
-            setNavigationOnClickListener { finishActivity() }
+            setNavigationOnClickListener {
+                model.disconnectFromPeripheral()
+                finishActivity()
+            }
             subtitle = model.device.name
         }
 
@@ -135,6 +138,7 @@ class ChangeFrequencyActivity : AppCompatActivity(), KoinComponent {
                 contentType = Analytics.ParamValue.CHANGE_FREQUENCY.paramValue,
                 Pair(Analytics.CustomParam.ACTION.paramName, Analytics.ParamValue.CANCEL.paramValue)
             )
+            model.disconnectFromPeripheral()
             finishActivity()
         }
 
@@ -158,9 +162,10 @@ class ChangeFrequencyActivity : AppCompatActivity(), KoinComponent {
         }, onSuccessPrimaryButtonClicked = {
             finishActivity()
         }, onCancelButtonClicked = {
+            model.disconnectFromPeripheral()
             finishActivity()
         }, onRetryButtonClicked = {
-            model.scanConnectAndChangeFrequency()
+            model.scan()
         })
     }
 
@@ -268,7 +273,7 @@ class ChangeFrequencyActivity : AppCompatActivity(), KoinComponent {
             checkPermissionsAndThen(permissions = arrayOf(BLUETOOTH_SCAN, BLUETOOTH_CONNECT),
                 rationaleTitle = getString(R.string.permission_bluetooth_title),
                 rationaleMessage = getString(R.string.perm_bluetooth_scanning_desc),
-                onGranted = { model.scanConnectAndChangeFrequency() },
+                onGranted = { model.scan() },
                 onDenied = {
                     binding.bleActionFlow.onError(true, R.string.no_bluetooth_access)
                 })
@@ -279,7 +284,7 @@ class ChangeFrequencyActivity : AppCompatActivity(), KoinComponent {
             ),
                 rationaleTitle = getString(R.string.permission_location_title),
                 rationaleMessage = getString(R.string.perm_location_scanning_desc),
-                onGranted = { model.scanConnectAndChangeFrequency() },
+                onGranted = { model.scan() },
                 onDenied = {
                     binding.bleActionFlow.onError(true, R.string.no_bluetooth_access)
                 })

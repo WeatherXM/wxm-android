@@ -101,7 +101,7 @@ class ChangeFrequencyViewModel(var device: UIDevice) : ViewModel(), KoinComponen
         }
 
         if (deviceIsPaired()) {
-            connectAndReboot()
+            connect()
         } else {
             analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
             onStatus.postValue(
@@ -114,7 +114,7 @@ class ChangeFrequencyViewModel(var device: UIDevice) : ViewModel(), KoinComponen
     }
 
     @Suppress("MagicNumber")
-    fun scanConnectAndChangeFrequency() {
+    fun scan() {
         onStatus.postValue(
             Resource.loading(ChangeFrequencyState(FrequencyStatus.CONNECT_TO_STATION))
         )
@@ -161,7 +161,7 @@ class ChangeFrequencyViewModel(var device: UIDevice) : ViewModel(), KoinComponen
         }
     }
 
-    private fun connectAndReboot() {
+    private fun connect() {
         connectionUseCase.setPeripheral(scannedDevice.address).onRight {
             viewModelScope.launch {
                 connectionUseCase.connectToPeripheral().onRight {
@@ -170,8 +170,7 @@ class ChangeFrequencyViewModel(var device: UIDevice) : ViewModel(), KoinComponen
                     analytics.trackEventFailure(it.code)
                     onStatus.postValue(
                         Resource.error(
-                            it.getCode(),
-                            ChangeFrequencyState(FrequencyStatus.CONNECT_TO_STATION)
+                            it.getCode(), ChangeFrequencyState(FrequencyStatus.CONNECT_TO_STATION)
                         )
                     )
                 }
@@ -196,6 +195,7 @@ class ChangeFrequencyViewModel(var device: UIDevice) : ViewModel(), KoinComponen
                 onStatus.postValue(
                     Resource.success(ChangeFrequencyState(FrequencyStatus.CHANGING_FREQUENCY))
                 )
+                connectionUseCase.reboot()
             }.onLeft {
                 analytics.trackEventFailure(it.code)
                 Resource.error(
