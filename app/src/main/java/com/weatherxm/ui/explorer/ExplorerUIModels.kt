@@ -57,6 +57,7 @@ data class SearchResult(
             lastWeatherStationActivity = null,
             timezone = null,
             address = addressPlace,
+            isDeviceFromSearchResult = true,
             currentWeather = null,
             assignedFirmware = null,
             currentFirmware = null,

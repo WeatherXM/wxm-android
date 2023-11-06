@@ -91,12 +91,13 @@ data class UIDevice(
     val assignedFirmware: String?,
     val claimedAt: ZonedDateTime?,
     val lastWeatherStationActivity: ZonedDateTime?,
-    val timezone: String?,
+    var timezone: String?,
     var address: String?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
     var rewardsInfo: RewardsInfo?,
-    var alerts: List<DeviceAlert> = listOf()
+    var alerts: List<DeviceAlert> = listOf(),
+    val isDeviceFromSearchResult: Boolean = false
 ) : Parcelable {
     companion object {
         fun empty() = UIDevice(

@@ -78,6 +78,11 @@ class ForecastFragment : Fragment(), KoinComponent {
             }
         }
 
+        parentModel.onDeviceFirstFetch().observe(viewLifecycleOwner) {
+            model.device = it
+            model.fetchForecast(true)
+        }
+
         model.onForecast().observe(viewLifecycleOwner) {
             forecastAdapter.submitList(it)
             binding.forecastRecycler.setVisible(true)

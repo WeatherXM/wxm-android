@@ -49,7 +49,9 @@ class DeviceDetailsViewModel(
     private var isLoggedIn: Boolean? = null
     private val onDevicePolling = MutableLiveData<UIDevice>()
     private val onUpdatedDevice = MutableLiveData<UIDevice>()
+    private val onDeviceFirstFetch = MutableLiveData<UIDevice>()
 
+    fun onDeviceFirstFetch(): LiveData<UIDevice> = onDeviceFirstFetch
     fun onDevicePolling(): LiveData<UIDevice> = onDevicePolling
     fun onUpdatedDevice(): LiveData<UIDevice> = onUpdatedDevice
     fun onFollowStatus(): LiveData<Resource<Unit>> = onFollowStatus
@@ -62,6 +64,9 @@ class DeviceDetailsViewModel(
             deviceDetailsUseCase.getUserDevice(device)
                 .onRight {
                     Timber.d("Got Device using polling: ${it.name}")
+                    if(device.isDeviceFromSearchResult) {
+                        onDeviceFirstFetch.postValue(it)
+                    }
                     this.device = it
                     onDevicePolling.postValue(it)
                 }.onLeft {

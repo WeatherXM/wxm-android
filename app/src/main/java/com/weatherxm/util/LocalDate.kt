@@ -49,15 +49,20 @@ operator fun LocalDate.rangeTo(other: LocalDate) = LocalDateRange(this, other)
 
 fun LocalDate.isYesterday(): Boolean {
     val now = LocalDate.now()
-    return now.minusDays(1).dayOfYear == this.dayOfYear
+    return now.minusDays(1).dayOfYear == this.dayOfYear && isSameYear()
 }
 
 fun LocalDate.isToday(): Boolean {
     val now = LocalDate.now()
-    return now.dayOfYear == this.dayOfYear
+    return now.dayOfYear == this.dayOfYear && isSameYear()
 }
 
 fun LocalDate.isTomorrow(): Boolean {
     val now = LocalDate.now()
-    return now.dayOfYear == this.minusDays(1).dayOfYear
+    return now.dayOfYear == this.minusDays(1).dayOfYear && isSameYear()
+}
+
+fun LocalDate.isSameYear(): Boolean {
+    val now = LocalDate.now()
+    return now.year == this.year
 }

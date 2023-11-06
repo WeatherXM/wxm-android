@@ -39,6 +39,13 @@ class ForecastViewModel(var device: UIDevice = UIDevice.empty()) : ViewModel(), 
     fun onForecast(): LiveData<List<UIForecast>> = onForecast
 
     fun fetchForecast(forceRefresh: Boolean = false) {
+        /**
+         * If we got here directly from a search result, wait for the activity to load the device,
+         * then proceed in fetching the forecast because the timezone property is null otherwise
+         */
+        if (device.isDeviceFromSearchResult) {
+            return
+        }
         onLoading.postValue(true)
         viewModelScope.launch {
             deviceDetailsUseCase.getForecast(device, forceRefresh)
