@@ -10,6 +10,8 @@ import com.weatherxm.data.NetworkSearchResults
 import com.weatherxm.data.NetworkStatsResponse
 import com.weatherxm.data.PublicDevice
 import com.weatherxm.data.PublicHex
+import com.weatherxm.data.Rewards
+import com.weatherxm.data.RewardsObject
 import com.weatherxm.data.TransactionsResponse
 import com.weatherxm.data.User
 import com.weatherxm.data.Wallet
@@ -179,6 +181,25 @@ interface ApiService {
         @Query("fromDate") fromDate: String? = null,
         @Query("toDate") toDate: String? = null,
     ): NetworkResponse<TransactionsResponse, ErrorResponse>
+
+    @Suppress("LongParameterList")
+    @Mock
+    @MockResponse(body = "mock_files/get_user_device_rewards.json")
+    @GET("/api/v1/devices/{deviceId}/tokens")
+    @Headers(NO_AUTH_HEADER)
+    suspend fun getRewards(
+        @Path("deviceId") deviceId: String
+    ): NetworkResponse<Rewards, ErrorResponse>
+
+    @Suppress("LongParameterList")
+    @Mock
+    @MockResponse(body = "mock_files/get_reward_details.json")
+    @GET("/api/v1/devices/{deviceId}/tokens/transactions/{txHash}")
+    @Headers(NO_AUTH_HEADER)
+    suspend fun getRewardDetails(
+        @Path("deviceId") deviceId: String,
+        @Path("txHash") txHash: String
+    ): NetworkResponse<RewardsObject, ErrorResponse>
 
     @GET("/api/v1/me/devices/{deviceId}/firmware")
     @Streaming

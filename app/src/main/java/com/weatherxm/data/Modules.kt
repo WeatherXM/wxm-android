@@ -75,10 +75,10 @@ import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
+import com.weatherxm.data.datasource.RewardsDataSource
+import com.weatherxm.data.datasource.RewardsDataSourceImpl
 import com.weatherxm.data.datasource.StatsDataSource
 import com.weatherxm.data.datasource.StatsDataSourceImpl
-import com.weatherxm.data.datasource.TokenDataSource
-import com.weatherxm.data.datasource.TokenDataSourceImpl
 import com.weatherxm.data.datasource.UserPreferenceDataSource
 import com.weatherxm.data.datasource.UserPreferenceDataSourceImpl
 import com.weatherxm.data.datasource.WidgetDataSource
@@ -112,10 +112,10 @@ import com.weatherxm.data.repository.FollowRepository
 import com.weatherxm.data.repository.FollowRepositoryImpl
 import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.data.repository.LocationRepositoryImpl
+import com.weatherxm.data.repository.RewardsRepository
+import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.data.repository.StatsRepository
 import com.weatherxm.data.repository.StatsRepositoryImpl
-import com.weatherxm.data.repository.TokenRepository
-import com.weatherxm.data.repository.TokenRepositoryImpl
 import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.data.repository.UserPreferencesRepositoryImpl
 import com.weatherxm.data.repository.UserRepository
@@ -179,6 +179,10 @@ import com.weatherxm.usecases.PasswordPromptUseCase
 import com.weatherxm.usecases.PasswordPromptUseCaseImpl
 import com.weatherxm.usecases.PreferencesUseCase
 import com.weatherxm.usecases.PreferencesUseCaseImpl
+import com.weatherxm.usecases.RewardDetailsUseCase
+import com.weatherxm.usecases.RewardDetailsUseCaseImpl
+import com.weatherxm.usecases.RewardsUseCase
+import com.weatherxm.usecases.RewardsUseCaseImpl
 import com.weatherxm.usecases.SelectDeviceTypeUseCase
 import com.weatherxm.usecases.SelectDeviceTypeUseCaseImpl
 import com.weatherxm.usecases.SendFeedbackUseCase
@@ -189,8 +193,6 @@ import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.usecases.StationSettingsUseCaseImpl
 import com.weatherxm.usecases.StatsUseCase
 import com.weatherxm.usecases.StatsUseCaseImpl
-import com.weatherxm.usecases.TokenUseCase
-import com.weatherxm.usecases.TokenUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.usecases.UserUseCaseImpl
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
@@ -314,8 +316,8 @@ private val datasources = module {
         CacheWalletDataSource(get())
     }
 
-    single<TokenDataSource> {
-        TokenDataSourceImpl(get())
+    single<RewardsDataSource> {
+        RewardsDataSourceImpl(get())
     }
 
     single<NetworkAuthDataSource> {
@@ -419,8 +421,8 @@ private val repositories = module {
     single<ExplorerRepository> {
         ExplorerRepositoryImpl(get(), get())
     }
-    single<TokenRepository> {
-        TokenRepositoryImpl(get())
+    single<RewardsRepository> {
+        RewardsRepositoryImpl(get())
     }
     single<WeatherForecastRepository> {
         WeatherForecastRepositoryImpl(get(), get())
@@ -490,8 +492,8 @@ private val usecases = module {
     single<ClaimDeviceUseCase> {
         ClaimDeviceUseCaseImpl(get(), get(), get())
     }
-    single<TokenUseCase> {
-        TokenUseCaseImpl(get())
+    single<RewardsUseCase> {
+        RewardsUseCaseImpl(get(), androidContext())
     }
     single<AuthUseCase> {
         AuthUseCaseImpl(get(), get(), get())
@@ -546,6 +548,9 @@ private val usecases = module {
     }
     single<DeviceListUseCase> {
         DeviceListUseCaseImpl(get(), get(), get())
+    }
+    single<RewardDetailsUseCase> {
+        RewardDetailsUseCaseImpl(get(), get())
     }
 }
 

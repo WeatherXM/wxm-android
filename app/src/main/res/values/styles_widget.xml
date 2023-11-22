@@ -199,7 +199,7 @@
         <item name="chipBackgroundColor">@color/token_chip_background_list</item>
     </style>
 
-    <style name="Widget.WeatherXM.Chip.RewardsInfo" parent="Widget.WeatherXM.Chip.Token">
+    <style name="Widget.WeatherXM.Chip.Rewards" parent="Widget.WeatherXM.Chip.Token">
         <item name="android:textColor">@color/colorOnSurface</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textAllCaps">true</item>
@@ -253,6 +253,18 @@
         <item name="android:clickable">false</item>
     </style>
 
+    <style name="Widget.WeatherXM.Chip.RewardStatus" parent="Widget.Material3.Chip.Assist">
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="chipMinTouchTargetSize">0dp</item>
+        <item name="android:clickable">false</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipMinHeight">30dp</item>
+        <item name="chipCornerRadius">@dimen/chip_corner_radius_big</item>
+        <item name="chipIconSize">15dp</item>
+    </style>
+
     <!--
         Tab Layout
     -->
@@ -279,6 +291,17 @@
         <item name="android:background">@color/transparent</item>
     </style>
 
+    <style name="Widget.WeatherXM.TabLayout.Rewards.Navigation" parent="Widget.Material3.TabLayout">
+        <item name="tabBackground">@drawable/navigation_tab_background_selector</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabTextColor">@color/colorPrimary</item>
+        <item name="tabSelectedTextColor">@color/colorOnPrimary</item>
+        <item name="tabPadding">0dp</item>
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="tabTextAppearance">@style/TextAppearance.WeatherXM.Default.BodyMedium</item>
+    </style>
+
     <!--
         Sliders
     -->
@@ -290,7 +313,7 @@
         <item name="thumbRadius">0dp</item>
         <item name="tickVisible">false</item>
         <item name="trackHeight">@dimen/slider_default_track_height</item>
-        <item name="trackColorInactive">@color/colorBackground</item>
+        <item name="trackColorInactive">@color/blueTint</item>
     </style>
 
     <style name="Widget.WeatherXM.Slider.NetworkStats" parent="Widget.WeatherXM.Slider">

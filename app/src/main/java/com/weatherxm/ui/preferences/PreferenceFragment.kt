@@ -59,7 +59,7 @@ class PreferenceFragment : KoinComponent, PreferenceFragmentCompat() {
 
         openDocumentationButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             analytics.trackEventSelectContent(Analytics.ParamValue.DOCUMENTATION.paramValue)
-            navigator.openWebsite(context, getString(R.string.documentation_url))
+            navigator.openWebsite(context, getString(R.string.docs_url))
             true
         }
         contactSupportButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {

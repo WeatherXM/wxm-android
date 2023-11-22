@@ -191,7 +191,7 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
                 }
             setHtml(
                 R.string.remove_station_desc,
-                getString(R.string.documentation_url)
+                getString(R.string.docs_url)
             )
         }
 

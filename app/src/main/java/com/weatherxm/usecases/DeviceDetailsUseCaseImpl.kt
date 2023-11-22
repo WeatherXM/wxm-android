@@ -10,13 +10,14 @@ import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
-import com.weatherxm.data.repository.TokenRepository
+import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceRelation
-import com.weatherxm.ui.common.RewardsInfo
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
+import com.weatherxm.ui.common.UIRewardObject
+import com.weatherxm.ui.common.UIRewards
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.util.DateTimeHelper.getFormattedRelativeDay
 import java.time.ZoneId
@@ -26,7 +27,7 @@ import java.util.*
 @Suppress("LongParameterList")
 class DeviceDetailsUseCaseImpl(
     private val deviceRepository: DeviceRepository,
-    private val tokenRepository: TokenRepository,
+    private val rewardsRepository: RewardsRepository,
     private val weatherForecastRepository: WeatherForecastRepository,
     private val addressRepository: AddressRepository,
     private val explorerRepository: ExplorerRepository,
@@ -65,20 +66,6 @@ class DeviceDetailsUseCaseImpl(
         }
     }
 
-    // We suppress magic number because we use specific numbers to check last month and last week
-    @Suppress("MagicNumber")
-    override suspend fun getTokenInfoLast30D(device: UIDevice): Either<Failure, RewardsInfo> {
-        // Last 29 days of transactions + today = 30 days
-        val fromDate = ZonedDateTime.now().minusDays(29).toLocalDate().toString()
-
-        return tokenRepository.getTransactionsInRange(
-            deviceId = device.id,
-            fromDate = fromDate
-        ).map {
-            RewardsInfo().fromLastAndDatedTxs(it)
-        }
-    }
-
     @Suppress("MagicNumber")
     override suspend fun getForecast(
         device: UIDevice,
@@ -114,5 +101,16 @@ class DeviceDetailsUseCaseImpl(
 
     override suspend fun getAddressOfCell(cell: UICell): String? {
         return addressRepository.getAddressFromLocation(cell.index, cell.center)
+    }
+
+    override suspend fun getRewards(deviceId: String): Either<Failure, UIRewards> {
+        return rewardsRepository.getRewards(deviceId).map { rewardsInfo ->
+            UIRewards(
+                allTimeRewards = rewardsInfo.totalRewards,
+                latest = rewardsInfo.latest?.let { UIRewardObject(context, it) },
+                weekly = rewardsInfo.weekly?.let { UIRewardObject(context, it, true) },
+                monthly = rewardsInfo.monthly?.let { UIRewardObject(context, it, true) }
+            )
+        }
     }
 }

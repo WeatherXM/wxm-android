@@ -6,14 +6,10 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Typeface
 import android.view.MotionEvent
-import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -22,7 +18,6 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.weatherxm.R
-import com.weatherxm.data.Transaction.Companion.VERY_SMALL_NUMBER_FOR_CHART
 import com.weatherxm.ui.common.show
 import com.weatherxm.ui.devicehistory.LineChartData
 import com.weatherxm.util.Weather.getDecimalsPressure
@@ -481,7 +476,6 @@ fun LineChart.initWind24hChart(
     )
 }
 
-
 @Suppress("MagicNumber")
 fun LineChart.initSolarChart(
     uvData: LineChartData, radiationData: LineChartData
@@ -577,50 +571,6 @@ fun LineChart.initializeNetworkStatsChart(entries: List<Entry>) {
     xAxis.isEnabled = false
     isScaleYEnabled = false
     isScaleXEnabled = false
-
-    show()
-    notifyDataSetChanged()
-}
-
-fun BarChart.initializeTokenChart(entries: List<BarEntry>) {
-    val dataSet = BarDataSet(entries, "")
-    val barData = BarData(dataSet)
-    data = barData
-
-    // General Chart Settings
-    description.isEnabled = false
-    legend.isEnabled = false
-    setDrawMarkers(false)
-    minOffset = 0F
-
-    // Bar and highlight Settings
-    barData.setDrawValues(false)
-    dataSet.color = context.getColor(R.color.darkGrey)
-    isHighlightFullBarEnabled = false
-    isHighlightPerDragEnabled = false
-    isHighlightPerTapEnabled = false
-
-    // Y Axis settings
-    axisLeft.isEnabled = false
-    axisLeft.setDrawAxisLine(false)
-    axisLeft.setDrawGridLines(false)
-    xAxis.position = XAxis.XAxisPosition.BOTTOM
-    axisRight.isEnabled = false
-    axisRight.setDrawAxisLine(false)
-    axisRight.setDrawGridLines(false)
-    xAxis.isEnabled = false
-    xAxis.setDrawGridLines(false)
-    xAxis.setDrawAxisLine(false)
-    isScaleYEnabled = false
-    isScaleXEnabled = false
-
-    if (dataSet.yMax == VERY_SMALL_NUMBER_FOR_CHART) {
-        axisLeft.axisMinimum = VERY_SMALL_NUMBER_FOR_CHART
-        axisLeft.axisMaximum = VERY_SMALL_NUMBER_FOR_CHART + VERY_SMALL_NUMBER_FOR_CHART
-    } else {
-        axisLeft.axisMinimum = 0F
-        axisLeft.axisMaximum = dataSet.yMax
-    }
 
     show()
     notifyDataSetChanged()

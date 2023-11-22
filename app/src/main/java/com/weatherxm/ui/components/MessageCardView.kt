@@ -7,11 +7,13 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
+import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.google.android.material.button.MaterialButton.ICON_GRAVITY_END
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewMessageCardBinding
 import com.weatherxm.ui.common.hide
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.setColor
 import com.weatherxm.util.setHtml
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
@@ -63,17 +65,17 @@ class MessageCardView : LinearLayout {
                 binding.message.hide(null)
             }
 
-            attributes.getBoolean(R.styleable.MessageCardView_message_includes_close_button, true)
-                .apply {
-                    if (this) {
-                        binding.closeButton.visibility = View.VISIBLE
-                    } else {
-                        binding.closeButton.visibility = View.GONE
-                    }
-                }
+            binding.closeButton.setVisible(
+                attributes.getBoolean(
+                    R.styleable.MessageCardView_message_includes_close_button, true
+                )
+            )
 
             attributes.getResourceId(R.styleable.MessageCardView_message_icon, 0).apply {
-                binding.icon.setImageResource(this)
+                if (this != 0) {
+                    binding.icon.setImageResource(this)
+                }
+                binding.icon.setVisible(this != 0)
             }
 
             attributes.getColor(R.styleable.MessageCardView_message_background_tint, 0).apply {
@@ -81,7 +83,15 @@ class MessageCardView : LinearLayout {
             }
 
             attributes.getResourceId(R.styleable.MessageCardView_message_icon_color, 0).apply {
-                binding.icon.setColor(this)
+                if (this != 0) {
+                    binding.icon.setColor(this)
+                }
+            }
+
+            attributes.getDimension(R.styleable.MessageCardView_message_card_radius, 0F).apply {
+                if (this != 0F) {
+                    binding.card.radius = this
+                }
             }
 
             attributes.getColor(R.styleable.MessageCardView_message_stroke_color, 0).apply {
@@ -118,6 +128,21 @@ class MessageCardView : LinearLayout {
             text = subtitle
             visibility = if (subtitle != null) View.VISIBLE else View.GONE
         }
+        return this
+    }
+
+    fun setBackground(@ColorRes colorResId: Int): MessageCardView {
+        binding.card.setCardBackgroundColor(context.getColor(colorResId))
+        return this
+    }
+
+    fun setIconColor(@ColorRes colorResId: Int): MessageCardView {
+        binding.icon.setColor(colorResId)
+        return this
+    }
+
+    fun setStrokeColor(@ColorRes colorResId: Int): MessageCardView {
+        binding.card.strokeColor = context.getColor(colorResId)
         return this
     }
 

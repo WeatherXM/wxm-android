@@ -15,4 +15,5 @@ object Contracts {
     const val ARG_EXPLORER_CELL = "explorer_cell"
     const val ARG_CELL_CENTER = "cell_center"
     const val ARG_OPEN_EXPLORER_ON_BACK = "open_explorer_on_back"
+    const val ARG_REWARDS_OBJECT = "rewards_object"
 }

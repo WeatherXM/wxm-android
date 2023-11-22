@@ -27,9 +27,11 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
+import com.weatherxm.ui.common.Contracts.ARG_REWARDS_OBJECT
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.MessageDialogFragment
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UIRewardObject
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.DatePickerHelper
 import com.weatherxm.ui.components.LoginPromptDialogFragment
@@ -47,13 +49,14 @@ import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
+import com.weatherxm.ui.rewarddetails.RewardDetailsActivity
+import com.weatherxm.ui.rewardslist.RewardsListActivity
 import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.stationsettings.StationSettingsActivity
 import com.weatherxm.ui.stationsettings.changefrequency.ChangeFrequencyActivity
 import com.weatherxm.ui.stationsettings.reboot.RebootActivity
-import com.weatherxm.ui.token.TokenActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.util.Analytics
 import timber.log.Timber
@@ -246,11 +249,20 @@ class Navigator(
         )
     }
 
-    fun showTokenScreen(context: Context, device: UIDevice?) {
+    fun showRewardsList(context: Context, device: UIDevice?) {
         context.startActivity(
-            Intent(context, TokenActivity::class.java)
+            Intent(context, RewardsListActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_DEVICE, device)
+        )
+    }
+
+    fun showRewardDetails(context: Context, device: UIDevice?, rewardsObject: UIRewardObject?) {
+        context.startActivity(
+            Intent(context, RewardDetailsActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_DEVICE, device)
+                .putExtra(ARG_REWARDS_OBJECT, rewardsObject)
         )
     }
 
@@ -264,6 +276,13 @@ class Navigator(
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             )
         }
+    }
+
+    fun showConnectWallet(context: Context) {
+        context.startActivity(
+            Intent(context, ConnectWalletActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        )
     }
 
     fun showSendFeedback(
@@ -343,9 +362,10 @@ class Navigator(
     fun showMessageDialog(
         fragmentManager: FragmentManager,
         title: String?,
-        message: String?
+        message: String? = null,
+        htmlMessage: String? = null
     ) {
-        MessageDialogFragment.newInstance(title, message)
+        MessageDialogFragment.newInstance(title, message, htmlMessage)
             .show(fragmentManager, MessageDialogFragment.TAG)
     }
 

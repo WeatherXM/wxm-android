@@ -11,14 +11,6 @@ import kotlinx.parcelize.Parcelize
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class LastAndDatedTxs(
-    val lastTx: Transaction?,
-    val datedTxs: List<Pair<String, Float>>,
-) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
 data class CountryAndFrequencies(
     val country: String?,
     val recommendedFrequency: Frequency,

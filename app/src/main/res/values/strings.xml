@@ -35,6 +35,11 @@
     <string name="unknown">Unknown</string>
     <string name="contact_us">Contact us</string>
     <string name="select_date">Select Date</string>
+    <string name="start_of_day_hour">12 am</string>
+    <string name="mid_of_day_hour">12 pm</string>
+    <string name="end_of_day_hour">11 pm</string>
+    <string name="read_more">Read More</string>
+    <string name="need_help_contact_support">Need more help? Contact Support</string>
 
     <!-- Permissions -->
     <string name="permission_location_title">Access to your location</string>
@@ -211,23 +216,84 @@
     <string name="success_signup_text">Thanks for joining WeatherXM! We have sent you an account activation link to %s. Please, set a password and then try to login.</string>
     <string name="info_registration_contact_support">Not receiving an activation email? Contact our support team.</string>
 
-    <!-- Tokens -->
+    <!-- Rewards -->
     <string name="title_device_rewards">Detailed $WXM Rewards</string>
     <string name="see_wxm_rewards">See Detailed $WXM Rewards</string>
     <string name="no_transactions_title">Oh, no! No transactions yet?</string>
-    <string name="no_rewards">No rewards</string>
     <string name="rewards">Rewards</string>
-    <string name="button_7d">7D</string>
-    <string name="button_30d">30D</string>
     <string name="total">Total</string>
-    <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, $WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after $WXM mainnet token launch. Actual rewards may differ from the ones you see in the chart above.]]></string>
+    <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, $WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after $WXM mainnet token launch. Actual rewards may differ from the ones you see above.]]></string>
     <string name="wxm_amount">%s $WXM</string>
     <string name="reward">+ %s $WXM</string>
     <string name="score">%.2f</string>
     <string name="score_unknown">N/A</string>
     <string name="reward_score">Reward Score</string>
-    <string name="network_max_reward">Network Max</string>
-    <string name="transaction_hash">Transaction hash: %s</string>
+    <string name="reward_score_desc"><![CDATA[A score from 0–1 (0–100&percnt;) which takes into account multiple factors in order to calculate the rewards you will earn on any given date. You can read more about these factors and our reward mechanism <a href="%1$s">here</a>.]]></string>
+    <string name="max_rewards">Max Rewards</string>
+    <string name="max_rewards_desc"><![CDATA[The maximum rewards you could earn in that reward distribution if you had a perfect 100&percnt; reward score. You can read more about our reward mechanism <a href="%1$s">here</a>.]]></string>
+    <string name="problems_found">Problems Found</string>
+    <string name="problems_found_desc"><![CDATA[<b>Lost %s $WXM</b> because of station problems.]]></string>
+    <string name="problems_found_desc_no_rewards"><![CDATA[<b>Did not earn any $WXM</b> because of station problems.]]></string>
+    <string name="problems_found_desc_without_lost_rewards">Some station problems found but did not lose any rewards.</string>
+    <string name="identify_fix_problems">Identify &amp; Fix Problems</string>
+    <string name="see_detailed_problems">See Detailed Problems</string>
+    <string name="rewards_got_all">Got 100%</string>
+    <string name="rewards_lost">Lost %d%%</string>
+    <string name="timeline_for">Timeline for</string>
+    <string name="timeline">Timeline</string>
+    <string name="timeline_desc"><![CDATA[Timeline for the reference day of the actual rewards, as these are calculated taking into account the performance of the weather station for that day. You can read more about our reward mechanism <a href="%1$s">here</a>.]]></string>
+    <string name="total_station_rewards">Total Station Rewards</string>
+    <string name="latest">Latest</string>
+    <string name="last_7d">Last 7D</string>
+    <string name="last_30d">Last 30D</string>
+    <string name="reward_details">Reward Details</string>
+    <string name="reward_details_error">Details could not be fetched!</string>
+    <string name="view_transaction">View Transaction</string>
+    <string name="annotation_obc">Values out of bounds</string>
+    <string name="annotation_obc_desc"><![CDATA[Some measurements (%s) were found to have out of bound values, compared to sensor specifications. <b>This could be due to a faulty sensor or outdated firmware.</b>]]></string>
+    <string name="annotation_spikes">Extreme spikes</string>
+    <string name="annotation_spikes_desc"><![CDATA[Abnormal spikes were detected in some weather measurements (%1$s). This could be due to a <b>faulty sensor or bad deployment.</b> Check our installation guide for more information about how to properly deploy your station.]]></string>
+    <string name="annotation_spikes_public_desc"><![CDATA[Abnormal spikes were detected in some weather measurements (%1$s). This could be due to a <b>faulty sensor or bad deployment.</b>]]></string>
+    <string name="annotation_no_median">Not enough data</string>
+    <string name="annotation_no_median_desc"><![CDATA[There seem to be gaps in the data of your station. This could be due to <b>connection issues.</b> Please, make sure that your station is properly connected. Read more on our troubleshooting guide.]]></string>
+    <string name="annotation_no_median_public_desc"><![CDATA[There seem to be gaps in the data of this station. This could be due to <b>connection issues.</b>]]></string>
+    <string name="annotation_no_data">No data</string>
+    <string name="annotation_no_data_desc"><![CDATA[Station sent no weather data in the aggregated time window. This could be due to <b>connection issues</b>, or your station’s batteries have run out. Please, make sure that your station is properly connected.]]></string>
+    <string name="annotation_no_data_public_desc"><![CDATA[No weather data found in the aggregated time window. <b>Possible connection issues.</b>]]></string>
+    <string name="annotation_short_const">Constant values</string>
+    <string name="annotation_short_const_desc"><![CDATA[Some weather measurements (%s) have not changed in the aggregated time window. This could be due to a <b>faulty sensor or bad deployment.</b> Read more on our troubleshooting guide.]]></string>
+    <string name="annotation_short_const_public_desc"><![CDATA[Some weather measurements (%s) have not changed in the aggregated time window. This could be due to a <b>faulty sensor or bad deployment.</b>]]></string>
+    <string name="annotation_long_const">Constant values</string>
+    <string name="annotation_long_const_desc"><![CDATA[Some weather measurements (%s) have not changed for 24 hours. This could be due to a <b>faulty sensor or bad deployment.</b> Read more on our troubleshooting guide.]]></string>
+    <string name="annotation_long_const_public_desc"><![CDATA[Some weather measurements (%s) have not changed for 24 hours. This could be due to a <b>faulty sensor or bad deployment.</b>]]></string>
+    <string name="annotation_frozen_sensor">Frozen sensor</string>
+    <string name="annotation_frozen_sensor_desc"><![CDATA[Could not measure wind speed, wind direction is constant and the temperature is below zero. <b>Frozen sensor.</b>]]></string>
+    <string name="annotation_anom_increase">Anomalous increase</string>
+    <string name="annotation_anom_increase_desc"><![CDATA[Anomalies were detected in some weather measurements (%1$s). This could be due to <b>bad deployment, or sometimes due to faulty sensor.</b> Check our installation guide for more information about how to properly deploy your station.]]></string>
+    <string name="annotation_anom_increase_public_desc"><![CDATA[Anomalies were detected in some weather measurements (%1$s). This could be due to <b>bad deployment, or sometimes due to faulty sensor.</b>]]></string>
+    <string name="annotation_location_not_verified">Location not verified</string>
+    <string name="annotation_location_not_verified_desc"><![CDATA[Station reported a GPS location, but it is different from the location set during station claiming.]]></string>
+    <string name="annotation_no_location">No location</string>
+    <string name="annotation_no_location_public_desc"><![CDATA[Station did not report <b>any GPS location</b> in the aggregated time window.]]></string>
+    <string name="annotation_no_location_m5_desc"><![CDATA[Station did not report <b>any GPS location</b> in the aggregated time window. Make sure your station is properly deployed and the GPS antenna is connected. Check our installation guide for more information about how to properly deploy your station.]]></string>
+    <string name="annotation_no_location_helium_desc"><![CDATA[Station did not report <b>any GPS location</b> in the aggregated time window. Make sure your station is properly deployed. Check our installation guide for more information about how to properly deploy your station.]]></string>
+    <string name="annotation_no_wallet">No wallet</string>
+    <string name="annotation_no_wallet_desc"><![CDATA[In order to participate in our daily reward scheme you need to connect a wallet.]]></string>
+    <string name="annotation_no_wallet_public_desc"><![CDATA[This station did not receive any rewards because the owner has not added a wallet.]]></string>
+    <string name="annotation_cell_capacity_reached">Cell capacity reached</string>
+    <string name="annotation_cell_capacity_reached_desc"><![CDATA[Station excluded from rewards because the cell’s capacity was reached. <b>You need to relocate your station to a different cell.</b>]]></string>
+    <string name="annotation_cell_capacity_reached_public_desc"><![CDATA[Station excluded from rewards because the cell’s capacity was reached.]]></string>
+    <string name="annotation_relocated">Station relocated</string>
+    <string name="annotation_relocated_desc"><![CDATA[Station was temporarily excluded from rewards because it was relocated from its initial location.]]></string>
+    <string name="annotation_pol_threshold">PoL threshold not reached</string>
+    <string name="annotation_pol_threshold_desc"><![CDATA[Station excluded from rewards because its Proof-of-Location (PoL) score was too low. This can happen if the station is not reporting any GPS data, or the GPS location doesn’t match the location set during claiming. Read more about the PoL algorithm.]]></string>
+    <string name="annotation_pol_threshold_public_desc"><![CDATA[Station excluded from rewards because its Proof-of-Location (PoL) score was too low.]]></string>
+    <string name="annotation_qod_threshold">QoD threshold not reached</string>
+    <string name="annotation_qod_threshold_desc"><![CDATA[Station excluded from rewards because its Quality-of-Data (QoD) score was too low. This might be due to bad deployment or faulty sensors. Read more about the QoD algorithm.]]></string>
+    <string name="annotation_qod_threshold_public_desc"><![CDATA[Station excluded from rewards because its Quality-of-Data (QoD) score was too low.]]></string>
+    <string name="annotation_unknown">Unknown error</string>
+    <string name="annotation_unknown_desc"><![CDATA[There seems to be an unknown issue with your station. Please make sure you are running the latest version of our mobile app and your station is upgraded to the latest firmware.]]></string>
+    <string name="annotation_unknown_public_desc"><![CDATA[There seems to be an unknown issue with this station. Please make sure you are running the latest version of our mobile app.]]></string>
 
     <!-- Scan Devices -->
     <string name="helium">Helium</string>

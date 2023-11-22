@@ -15,6 +15,7 @@
         <attr name="message_icon_color" format="reference" />
         <attr name="message_stroke_color" format="color" />
         <attr name="message_background_tint" format="color" />
+        <attr name="message_card_radius" format="reference" />
     </declare-styleable>
     <declare-styleable name="StatusView">
         <attr name="status_title" format="string" />

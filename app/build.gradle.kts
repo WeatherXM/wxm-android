@@ -36,8 +36,8 @@ android {
         applicationId = "com.weatherxm.app"
         minSdk = 24
         targetSdk = 34
-        versionCode = 54
-        versionName = "3.5.9"
+        versionCode = 55
+        versionName = "3.6.0"
 
         // Resource value fields
         resValue("string", "mapbox_access_token", getStringProperty("MAPBOX_ACCESS_TOKEN"))
@@ -144,7 +144,13 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3"
+    }
+
 
     // Filter out specific build variants
     androidComponents {
@@ -244,6 +250,8 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.browser:browser:1.6.0")
     implementation("androidx.collection:collection-ktx:1.2.0")
+    implementation("androidx.compose.foundation:foundation:1.5.4")
+    implementation("androidx.compose.material3:material3:1.1.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
     implementation("androidx.core:core-ktx:1.12.0")

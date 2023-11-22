@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/margin_normal"
+    android:orientation="vertical">
+
+    <com.weatherxm.ui.components.MessageCardView
+        android:id="@+id/error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:message_background_tint="@color/errorTint"
+        app:message_card_radius="@dimen/card_corner_radius_small"
+        app:message_icon="@drawable/ic_warn"
+        app:message_icon_color="@color/error"
+        app:message_includes_close_button="false"
+        app:message_stroke_color="@color/error"
+        tools:message_message="Your station didn’t send any data for the 50% of the previous day. Please check that it is properly connected to the internet and the batteries are OK."
+        tools:message_title="Connectivity" />
+</LinearLayout>

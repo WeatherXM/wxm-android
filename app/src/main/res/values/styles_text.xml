@@ -74,15 +74,6 @@
     </style>
 
     <!--
-        Transaction Screen
-    -->
-    <style name="TextAppearance.WeatherXM.Transaction.Timestamp" parent="TextAppearance.Material3.LabelSmall">
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="android:textStyle">italic</item>
-        <item name="android:alpha">0.5</item>
-    </style>
-
-    <!--
         Tabs
     -->
     <style name="TextAppearance.WeatherXM.Tabs" parent="TextAppearance.WeatherXM.Default.BodyLarge">

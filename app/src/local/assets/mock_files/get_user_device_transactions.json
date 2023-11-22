@@ -6,7 +6,37 @@
             "daily_reward": 105.61090909090909,
             "actual_reward": 105.61090909090909,
             "total_rewards": 6193.4687866115555,
-            "validation_score": 1
+            "lost_rewards": 0,
+            "timeline": {
+                "reference_date": "2022-06-03T14:45:06+02:00",
+                "reward_scores": [
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    26,
+                    100,
+                    100,
+                    10,
+                    100,
+                    100,
+                    100,
+                    0,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    85,
+                    100,
+                    100,
+                    100
+                ]
+            },
+            "reward_score": 100
         },
         {
             "timestamp": "2022-06-03T11:00:03+00:00",
@@ -14,239 +44,149 @@
             "daily_reward": 75.86281588447653,
             "actual_reward": 53.10397111913357,
             "total_rewards": 3191.7288233139766,
-            "validation_score": 0.7
+            "lost_rewards": 22.75884476534296,
+            "reward_score": 70,
+            "timeline": {
+                "reference_date": "2022-06-03T14:45:06+02:00",
+                "reward_scores": [
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    26,
+                    100,
+                    100,
+                    10,
+                    100,
+                    100,
+                    100,
+                    0,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    85,
+                    100,
+                    100,
+                    100
+                ]
+            },
+            "annotations": {
+                "qod": [
+                    {
+                        "annotation": "SPIKES",
+                        "affects": [
+                            {
+                                "parameter": "temperature",
+                                "ratio": 70
+                            },
+                            {
+                                "parameter": "wind_speed",
+                                "ratio": 50
+                            }
+                        ]
+                    },
+                    {
+                        "annotation": "SHORT_CONST",
+                        "affects": [
+                            {
+                                "parameter": "precipitation",
+                                "ratio": 70
+                            }
+                        ]
+                    }
+                ],
+                "pol": [
+                    {
+                        "annotation": "LOCATION_NOT_VERIFIED",
+                        "ratio": 80
+                    }
+                ],
+                "rm": [
+                    {
+                        "annotation": "NO_WALLET"
+                    }
+                ]
+            }
         },
         {
             "timestamp": "2022-06-02T12:00:02+00:00",
             "tx_hash": "0x19d0175a7d1bd74b583a344cae73a037d85ccf7d3cec01cf0400bef821fe96c1",
             "daily_reward": 103.61090909090909,
             "actual_reward": 10.361090909090909,
+            "lost_rewards": 93.24981819,
             "total_rewards": 6089.857877520646,
-            "validation_score": 0.1
-        },
-        {
-            "timestamp": "2022-06-01T12:00:03+00:00",
-            "tx_hash": "0x7d772698e75859dc8cc2198191521ae0ad694de057f05703684c73680ce54327",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 51.80545454545454,
-            "total_rewards": 5986.246968429737,
-            "validation_score": 0.5
-        },
-        {
-            "timestamp": "2022-05-31T12:00:04+00:00",
-            "tx_hash": "0x7a06c13b6f7c8b7797ee9e69ae55c672ad8974e120f26cf72af8c3887876f5c0",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 93.24981818181818,
-            "total_rewards": 5882.636059338827,
-            "validation_score": 0.9
-        },
-        {
-            "timestamp": "2022-05-31T12:00:02+00:00",
-            "tx_hash": "0x2b3f30cf8eb90c305e56b5f538835ee7558b72c51188ff82129e32bd787d20e3",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 5779.025150247918,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-31T12:00:03+00:00",
-            "tx_hash": "0x0e8ce1f0fa1790bf286fb598b79afcecb8b5c88d5e7ca38b0e4b753f6a72c69d",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 5675.414241157008,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-28T12:00:03+00:00",
-            "tx_hash": "0xf73f4d936ca79087fc43635faad0d517e4222e78c9900d32ce6fab5df4d6bbbb",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 5571.803332066099,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-27T12:00:03+00:00",
-            "tx_hash": "0x540447fff82a6dc047684324650d53305baa79bc4a4cbdc07dde53f0df359623",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 5468.192422975189,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-26T12:00:02+00:00",
-            "tx_hash": "0x7678906ff375146145bcde50aa18d161a1eb9f03a977e1c7efff6fca1ce66a2b",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 5364.58151388428,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-25T12:00:03+00:00",
-            "tx_hash": "0xccf0d784b6356880327357c4d932ac0a31ffb0073f09a7ea11d4377ac9fe15e7",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 5260.9706047933705,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-24T12:00:29+00:00",
-            "tx_hash": "0xbfd0da8b8fcc2b19da305f12644b7331eeeee191b53f36912d43c9cd6fab3329",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 5157.359695702461,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-23T12:00:02+00:00",
-            "tx_hash": "0x9308baa83c5964dfed150f965bb1c5a65d1c8cc6e34b7662aec306f02ae3be0d",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 5053.748786611552,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-22T12:00:21+00:00",
-            "tx_hash": "0xb988cee7e294494c27538fb6422efd5b4d947e6a20c82e1660ba4c59e606b2f1",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 4950.137877520642,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-21T12:00:04+00:00",
-            "tx_hash": "0x77bbf1a9f4d13a66a6d3b9dbe9f1c4b78c00616f4aaf29eb1378fd82d0b57e07",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 4846.526968429733,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-20T12:00:02+00:00",
-            "tx_hash": "0x752a7acd4741bae036d83c69cc7e7f328abc0389fea96920ec8746b4c1bab2c9",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 4742.916059338823,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-19T12:00:02+00:00",
-            "tx_hash": "0x6a6b15bf6fe254e6d606d9c1d6c41637967f453ba87f28cf12191311404181dc",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 4639.305150247914,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-18T12:00:02+00:00",
-            "tx_hash": "0x6611a161b1b9809e724b59e7c8315a5989633d2458a3a9c0017945b64301f0eb",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 4535.694241157004,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-17T12:00:03+00:00",
-            "tx_hash": "0xec300c70ce4e33d48e284b9b39cff7c1d64b514f36aef345fd1f89e43046091d",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 4432.083332066095,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-16T12:00:03+00:00",
-            "tx_hash": "0xe5c6f857780acab8e6be19b26938b0322161c994f45aab637a0816f93b0942a2",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 4328.4724229751855,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-15T12:00:02+00:00",
-            "tx_hash": "0xedc76f1282d831118a0ec81004ae42f5a4a00cd5ac280ded66bf5d94182bc6de",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 4224.861513884276,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-14T12:00:02+00:00",
-            "tx_hash": "0x74fedd1c58906a697a663192e4f277fa54b4fc224974db4fbf1090e023289738",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 4121.250604793367,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-13T12:00:02+00:00",
-            "tx_hash": "0x5760182bbd1432ff691cadb6346eb21772b9ff13cce7b886050ab11a726f3928",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 4017.6396957024576,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-12T12:00:02+00:00",
-            "tx_hash": "0xed0e39d58e1928f1a835b33a251a1aaa169b5ca6847c0d3b83cdb0ea26129c1b",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 3914.0287866115486,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-11T12:00:02+00:00",
-            "tx_hash": "0x414262ec78b77bf9e0796b3d804770be02a00e60fefa178e08f5afaaaa72b9ea",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 3810.4178775206396,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-10T12:00:03+00:00",
-            "tx_hash": "0x67d3bacb5c07f1c28b700b2ade5030a42443ae19a212b1908d5dace6e4bf1fd4",
-            "daily_reward": 103.61090909090909,
-            "actual_reward": 103.61090909090909,
-            "total_rewards": 3706.8069684297307,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-09T12:00:02+00:00",
-            "tx_hash": "0xb6ee217e70ad856f35161ba830d3b071f80126410cd6db241456d2de29e68afe",
-            "daily_reward": 103.23550724637681,
-            "actual_reward": 103.23550724637681,
-            "total_rewards": 3603.1960593388217,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-08T12:00:03+00:00",
-            "tx_hash": "0xaead7372dbec62ace4c23a3bd0215bfaea9a3ac062d2edacabf189cec28ed83c",
-            "daily_reward": 103.23550724637681,
-            "actual_reward": 103.23550724637681,
-            "total_rewards": 3499.9605520924447,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-07T12:00:02+00:00",
-            "tx_hash": "0xbea23dfcc0ad2318e2141965a1fcde7196884986faad394455e945af9f7bafa0",
-            "daily_reward": 103.23550724637681,
-            "actual_reward": 103.23550724637681,
-            "total_rewards": 3396.7250448460677,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-06T12:00:03+00:00",
-            "tx_hash": "0x794305f2f064e810a71b9b00e03a670c3734b1387f70c84d2f419d139bf3b89e",
-            "daily_reward": 121.76071428571429,
-            "actual_reward": 121.76071428571429,
-            "total_rewards": 3293.4895375996907,
-            "validation_score": 1
-        },
-        {
-            "timestamp": "2022-05-05T12:00:02+00:00",
-            "tx_hash": "0x03bdd2562125a1063807283b8001b3e4ae7caaf5fdce0089dd73b844968ba29d",
-            "daily_reward": 75.86281588447653,
-            "actual_reward": 75.86281588447653,
-            "total_rewards": 3191.7288233139766,
-            "validation_score": 1
+            "reward_score": 10,
+            "timeline": {
+                "timestamp": "2022-06-03T14:45:06+02:00",
+                "reward_scores": [
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    26,
+                    100,
+                    100,
+                    10,
+                    100,
+                    100,
+                    100,
+                    0,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    85,
+                    100,
+                    100,
+                    100
+                ]
+            },
+            "annotations": {
+                "qod": [
+                    {
+                        "annotation": "SPIKES",
+                        "affects": [
+                            {
+                                "parameter": "temperature",
+                                "ratio": 70
+                            },
+                            {
+                                "parameter": "wind_speed",
+                                "ratio": 50
+                            }
+                        ]
+                    },
+                    {
+                        "annotation": "SHORT_CONST",
+                        "affects": [
+                            {
+                                "parameter": "precipitation",
+                                "ratio": 70
+                            }
+                        ]
+                    }
+                ],
+                "pol": [
+                    {
+                        "annotation": "location_not_verified",
+                        "ratio": 80
+                    }
+                ],
+                "rm": [
+                    {
+                        "annotation": "no_wallet"
+                    }
+                ]
+            }
         }
     ],
     "total_pages": 1,

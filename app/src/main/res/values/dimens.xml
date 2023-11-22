@@ -7,6 +7,8 @@
 
     <dimen name="button_corner_radius">10dp</dimen>
 
+    <dimen name="chip_corner_radius_big">40dp</dimen>
+
     <dimen name="margin_extra_extra_large">62dp</dimen>
     <dimen name="margin_extra_large">48dp</dimen>
     <dimen name="margin_large">24dp</dimen>
@@ -26,6 +28,7 @@
     <dimen name="padding_small_to_normal">12dp</dimen>
     <dimen name="padding_small">8dp</dimen>
     <dimen name="padding_extra_small">4dp</dimen>
+    <dimen name="padding_extra_extra_small">2dp</dimen>
 
     <dimen name="drawable_padding_small">4dp</dimen>
 

@@ -204,7 +204,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.weatherxm.ui.token.TokenActivity"
+            android:name="com.weatherxm.ui.rewardslist.RewardsListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
@@ -254,6 +254,10 @@
             android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.cellinfo.CellInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.rewarddetails.RewardDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
 

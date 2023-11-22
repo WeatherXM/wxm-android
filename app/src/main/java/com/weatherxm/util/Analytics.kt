@@ -41,9 +41,9 @@ class Analytics(
         PROFILE("Account"),
         CURRENT_WEATHER("Device Current Weather"),
         FORECAST("Device Forecast"),
-        REWARDS("Device Rewards"),
+        DEVICE_REWARDS("Device Rewards"),
         STATION_SETTINGS("Device Settings"),
-        REWARD_TRANSACTIONS("Device Reward Transactions"),
+        DEVICE_REWARD_TRANSACTIONS("Device Reward Transactions"),
         APP_UPDATE_PROMPT("App Update Prompt"),
         WIDGET_SELECT_STATION("Widget Station Selection"),
         CLAIM_DEVICE_TYPE_SELECTION("Claim Device Type Selection"),
@@ -56,7 +56,8 @@ class Analytics(
         BLE_CONNECTION_POPUP_ERROR("BLE Connection Popup Error"),
         NETWORK_STATS("Network Stats"),
         NETWORK_SEARCH("Network Search"),
-        SORT_FILTER("Sort Filter")
+        SORT_FILTER("Sort Filter"),
+        DEVICE_REWARD_DETAILS("Device Rewards Details")
     }
 
     // Custom Event Names
@@ -92,7 +93,6 @@ class Analytics(
         SELECT_DEVICE("Select Device"),
         USER_DEVICE_LIST("User Device List"),
         TRANSACTION_ON_EXPLORER("Transaction on Explorer"),
-        DEVICE_TRANSACTIONS("Device Transactions"),
         WIDGET("Widget"),
         CLAIMING_RESULT("Claiming Result"),
         CLAIMING("Claiming"),
@@ -148,6 +148,7 @@ class Analytics(
         OPEN("open"),
         CLOSE("close"),
         REWARDS_CARD("Rewards Card"),
+        LATEST("Latest"),
         DAYS_7("7D"),
         DAYS_30("30D"),
         REMOVE_DEVICE("Remove Device"),
@@ -210,7 +211,14 @@ class Analytics(
         FILTERS_FILTER_FAVORITES("favorites"),
         FILTERS_GROUP_NO_GROUPING("no_grouping"),
         FILTERS_GROUP_RELATIONSHIP("relationship"),
-        FILTERS_GROUP_STATUS("status")
+        FILTERS_GROUP_STATUS("status"),
+        IDENTIFY_PROBLEMS("Identify Problems"),
+        REWARD_ANNOTATIONS("Reward Annotations"),
+        REWARD_DETAILS_VIEW_TX("Reward Details View Transaction"),
+        REWARD_DETAILS_READ_MORE("Reward Details Read More"),
+        REWARDS_SCORE("rewards_score"),
+        MAX_REWARDS("max_rewards"),
+        TIMELINE("timeline")
     }
 
     // Custom Param Names

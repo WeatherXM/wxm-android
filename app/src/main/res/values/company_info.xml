@@ -17,9 +17,10 @@
     <string name="support_email_body_helium_failed">Device Name: %1$s\nError Code: %2$s\n\n</string>
     <string name="support_email_body_device_name">Weather Station Name: %1$s</string>
     <string name="support_email_recipient">support@weatherxm.com</string>
+    <string name="support_email_rewards_subject">Station Rewards v1.5</string>
+    <string name="support_email_rewards_body">Device S/N: %1$s\nError: %2$s</string>
     <string name="website">https://weatherxm.com</string>
     <string name="website_contact">https://weatherxm.com/contact/</string>
-    <string name="documentation_url">https://docs.weatherxm.com</string>
     <string name="suggested_wallets_documentation">https://docs.weatherxm.com/wallet/add-edit-wallet-address#how-to-create-wallet-on-metamask</string>
     <string name="terms_of_service_url">https://weatherxm.com/mobile/terms/</string>
     <string name="troubleshooting_m5_url">https://docs.weatherxm.com/wifi-m5-bundle/m5-troubleshooting</string>
@@ -31,7 +32,14 @@
     <string name="m5_connect_wifi_instructional_video">https://www.youtube.com/watch?v=sUJEwuFq1CE</string>
     <string name="helium_frequencies_mapping_url">https://docs.helium.com/iot/lorawan-region-plans/</string>
     <string name="wallet_explorer">https://mumbai.polygonscan.com/address/%s#tokentxns</string>
+    <string name="blockchain_explorer">https://mumbai.polygonscan.com/tx/</string>
     <string name="shop_url">https://shop.weatherxm.com/</string>
-    <string name="documentation_url_tokenomics">https://docs.weatherxm.com/tokenomics</string>
+    <string name="docs_url">https://docs.weatherxm.com</string>
+    <string name="docs_url_troubleshooting">https://docs.weatherxm.com/faqs#troubleshooting</string>
+    <string name="docs_url_cell_capacity">https://docs.weatherxm.com/project/cell-capacity</string>
+    <string name="docs_url_tokenomics">https://docs.weatherxm.com/tokenomics</string>
+    <string name="docs_url_reward_mechanism">https://docs.weatherxm.com/reward-mechanism</string>
+    <string name="docs_url_pol_algorithm">https://docs.weatherxm.com/project/proof-of-location</string>
+    <string name="docs_url_qod_algorithm">https://docs.weatherxm.com/project/quality-of-data</string>
     <string name="share_station_url">https://explorer.weatherxm.com/stations/%s</string>
 </resources>

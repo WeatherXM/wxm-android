@@ -40,6 +40,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
 import com.weatherxm.data.DeviceProfile
+import com.weatherxm.util.Rewards.REWARDS_WARNING_LIMIT
 import dev.chrisbanes.insetter.applyInsetter
 import kotlin.math.abs
 
@@ -123,6 +124,28 @@ fun Chip.setStatusChip(lastSeen: String?, profile: DeviceProfile?, isActive: Boo
             setTextColor(context.getColor(R.color.midGrey))
             setChipIconTintResource(R.color.midGrey)
         }
+    }
+}
+
+@Suppress("MagicNumber")
+fun Chip.setRewardStatusChip(rewardScore: Int) {
+    if (rewardScore == 100) {
+        text = context.getString(R.string.rewards_got_all)
+        setChipBackgroundColorResource(R.color.successTint)
+        setIcon(R.drawable.ic_checkmark_alt)
+        setChipIconTintResource(R.color.darkestBlue)
+    } else if (rewardScore >= REWARDS_WARNING_LIMIT) {
+        val rewardsLost = 100 - rewardScore
+        text = context.getString(R.string.rewards_lost, rewardsLost)
+        setChipBackgroundColorResource(R.color.warningTint)
+        setIcon(R.drawable.ic_warn_triangle)
+        setChipIconTintResource(R.color.warning)
+    } else {
+        val rewardsLost = 100 - rewardScore
+        text = context.getString(R.string.rewards_lost, rewardsLost)
+        setChipBackgroundColorResource(R.color.errorTint)
+        setIcon(R.drawable.ic_warn_triangle)
+        setChipIconTintResource(R.color.error)
     }
 }
 

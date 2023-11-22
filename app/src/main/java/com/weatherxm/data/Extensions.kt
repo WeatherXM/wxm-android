@@ -5,6 +5,7 @@ import com.auth0.android.jwt.JWT
 import com.google.android.gms.tasks.Task
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.squareup.moshi.JsonDataException
+import com.weatherxm.R
 import com.weatherxm.data.ApiError.AuthError.InvalidAccessToken
 import com.weatherxm.data.ApiError.AuthError.InvalidActivationToken
 import com.weatherxm.data.ApiError.AuthError.InvalidUsername

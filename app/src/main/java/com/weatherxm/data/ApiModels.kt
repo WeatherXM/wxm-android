@@ -4,10 +4,11 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.weatherxm.ui.common.AnnotationCode
 import com.weatherxm.ui.common.DeviceRelation
-import com.weatherxm.ui.common.RewardsInfo
 import com.weatherxm.ui.common.UIDevice
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -79,8 +80,7 @@ data class PublicDevice(
             cellCenter = null,
             assignedFirmware = null,
             claimedAt = null,
-            address = null,
-            rewardsInfo = null
+            address = null
         )
     }
 }
@@ -109,12 +109,10 @@ data class Device(
     }
 
     fun toUIDevice(): UIDevice {
-        val deviceRelation = if (relation == Relation.followed) {
-            DeviceRelation.FOLLOWED
-        } else if (relation == Relation.owned) {
-            DeviceRelation.OWNED
-        } else {
-            DeviceRelation.UNFOLLOWED
+        val deviceRelation = when (relation) {
+            Relation.followed -> DeviceRelation.FOLLOWED
+            Relation.owned -> DeviceRelation.OWNED
+            else -> DeviceRelation.UNFOLLOWED
         }
         return UIDevice(
             id = id,
@@ -133,8 +131,7 @@ data class Device(
             assignedFirmware = attributes?.firmware?.assigned,
             claimedAt = attributes?.claimedAt,
             address = address,
-            currentWeather = currentWeather,
-            rewardsInfo = RewardsInfo(totalRewards = rewards?.totalRewards)
+            currentWeather = currentWeather
         )
     }
 
@@ -174,16 +171,6 @@ data class Hex(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class Rewards(
-    @Json(name = "total_rewards")
-    val totalRewards: Float?,
-    @Json(name = "actual_reward")
-    val actualReward: Float?
-) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
 data class TransactionsResponse(
     val data: List<Transaction>,
     @Json(name = "total_pages")
@@ -199,23 +186,19 @@ data class Transaction(
     val timestamp: ZonedDateTime,
     @Json(name = "tx_hash")
     val txHash: String?,
-    @Json(name = "validation_score")
-    val validationScore: Float?,
+    @Json(name = "reward_score")
+    val rewardScore: Int?,
     @Json(name = "daily_reward")
     val dailyReward: Float?,
     @Json(name = "actual_reward")
     val actualReward: Float?,
     @Json(name = "total_rewards")
     val totalRewards: Float?,
-) : Parcelable {
-    companion object {
-        /*
-        * Have this very small number to use when a day is null or zero,
-        * in order to have a bar in the chart in the token card view
-         */
-        const val VERY_SMALL_NUMBER_FOR_CHART = 0.1F
-    }
-}
+    @Json(name = "lost_rewards")
+    val lostRewards: Float?,
+    val timeline: RewardsTimeline?,
+    val annotations: RewardsAnnotations?
+) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -457,6 +440,85 @@ data class NetworkSearchAddressResult(
     val name: String?,
     val place: String?,
     val center: Location?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class Rewards(
+    @Json(name = "total_rewards")
+    val totalRewards: Float?,
+    val latest: RewardsObject?,
+    val weekly: RewardsObject?,
+    val monthly: RewardsObject?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class RewardsObject(
+    val timestamp: ZonedDateTime?,
+    @Json(name = "from_date")
+    val fromDate: ZonedDateTime?,
+    @Json(name = "to_date")
+    val toDate: ZonedDateTime?,
+    @Json(name = "tx_hash")
+    val txHash: String?,
+    @Json(name = "reward_score")
+    val rewardScore: Int?,
+    @Json(name = "period_max_reward")
+    val periodMaxReward: Float?,
+    @Json(name = "actual_reward")
+    val actualReward: Float?,
+    @Json(name = "lost_rewards")
+    val lostRewards: Float?,
+    val timeline: RewardsTimeline?,
+    val annotations: RewardsAnnotations?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class RewardsTimeline(
+    @Json(name = "reference_date")
+    val referenceDate: ZonedDateTime?,
+    @Json(name = "reward_scores")
+    val rewardScores: List<Int>?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class RewardsAnnotations(
+    val qod: List<RewardsAnnotation>?,
+    val pol: List<RewardsAnnotation>?,
+    val rm: List<RewardsAnnotation>?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class RewardsAnnotation(
+    val annotation: String?,
+    val ratio: Int?,
+    val affects: List<QoDErrorAffects>?,
+) : Parcelable {
+    fun toAnnotationCode(): AnnotationCode {
+        return try {
+            AnnotationCode.valueOf(annotation ?: "")
+        } catch (e: IllegalArgumentException) {
+            Timber.w(e)
+            AnnotationCode.UNKNOWN
+        }
+    }
+}
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class QoDErrorAffects(
+    val parameter: String?,
+    val ratio: Int?,
 ) : Parcelable
 
 enum class DeviceProfile {

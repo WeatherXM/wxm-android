@@ -118,7 +118,7 @@ class NetworkStatsActivity : AppCompatActivity(), KoinComponent {
                     return@setOnLinkClickListener true
                 }
             }
-            setHtml(R.string.token_quick_info, getString(R.string.documentation_url_tokenomics))
+            setHtml(R.string.token_quick_info, getString(R.string.docs_url_tokenomics))
             removeLinksUnderline()
         }
     }
@@ -188,7 +188,9 @@ class NetworkStatsActivity : AppCompatActivity(), KoinComponent {
         messageSource: String
     ) {
         navigator.showMessageDialog(
-            supportFragmentManager, titleResId?.let { getString(it) }, getString(messageResId)
+            supportFragmentManager,
+            title = titleResId?.let { getString(it) },
+            message = getString(messageResId)
         )
         analytics.trackEventSelectContent(
             Analytics.ParamValue.LEARN_MORE.paramValue,

@@ -64,8 +64,7 @@ data class SearchResult(
             claimedAt = null,
             friendlyName = null,
             label = null,
-            location = null,
-            rewardsInfo = null
+            location = null
         )
     }
 }

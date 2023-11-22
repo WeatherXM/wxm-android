@@ -39,7 +39,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/loadingNewPage"
             app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/list_item_token_transaction" />
+            tools:listitem="@layout/list_item_reward" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/loadingNewPage"

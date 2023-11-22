@@ -15,25 +15,26 @@ import com.weatherxm.ui.common.setVisible
 class DeviceAlertsAdapter(
     private val deviceAlertListener: DeviceAlertListener,
     private val device: UIDevice?
-) : ListAdapter<DeviceAlert, DeviceAlertsAdapter.DailyDeviceAlertsViewHolder>(
+) : ListAdapter<DeviceAlert, DeviceAlertsAdapter.DeviceAlertsViewHolder>(
     DeviceAlertsDiffCallback()
 ) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyDeviceAlertsViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceAlertsViewHolder {
         val binding = ListItemAlertBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return DailyDeviceAlertsViewHolder(binding)
+        return DeviceAlertsViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: DailyDeviceAlertsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: DeviceAlertsViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class DailyDeviceAlertsViewHolder(private val binding: ListItemAlertBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class DeviceAlertsViewHolder(
+        private val binding: ListItemAlertBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: DeviceAlert) {
             if (item == DeviceAlert.NEEDS_UPDATE) {

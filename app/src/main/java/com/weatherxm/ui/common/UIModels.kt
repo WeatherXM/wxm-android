@@ -1,16 +1,24 @@
 package com.weatherxm.ui.common
 
+import android.content.Context
 import android.os.Parcelable
 import androidx.annotation.Keep
-import com.github.mikephil.charting.data.BarEntry
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.weatherxm.R
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.HourlyWeather
-import com.weatherxm.data.LastAndDatedTxs
 import com.weatherxm.data.Location
+import com.weatherxm.data.QoDErrorAffects
+import com.weatherxm.data.RewardsAnnotations
+import com.weatherxm.data.RewardsObject
 import com.weatherxm.data.Transaction
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
+import com.weatherxm.util.DateTimeHelper.getFormattedDay
+import com.weatherxm.util.DateTimeHelper.getFormattedTime
+import com.weatherxm.util.isToday
+import com.weatherxm.util.isYesterday
 import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
 
@@ -24,52 +32,128 @@ data class UIError(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class RewardsInfo(
-    var lastReward: Transaction? = null,
-    var chartTimestamps: MutableList<String> = mutableListOf(),
-    var chart7dEntries: MutableList<BarEntry> = mutableListOf(),
-    var total7d: Float = 0.0F,
-    var max7dReward: Float? = null,
-    var total30d: Float = 0.0F,
-    var chart30dEntries: MutableList<BarEntry> = mutableListOf(),
-    var max30dReward: Float? = null,
-    val totalRewards: Float? = null
+data class UIRewards(
+    val allTimeRewards: Float? = null,
+    var latest: UIRewardObject? = null,
+    var weekly: UIRewardObject? = null,
+    var monthly: UIRewardObject? = null,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class UIRewardObject(
+    var rewardTimestamp: String? = null,
+    var rewardFormattedDate: String? = null,
+    var fromDate: String? = null,
+    var toDate: String? = null,
+    var actualReward: Float? = null,
+    var lostRewards: Float? = null,
+    var rewardScore: Int? = null,
+    var periodMaxReward: Float? = null,
+    var txHash: String? = null,
+    var timelineTitle: String? = null,
+    var timelineScores: List<Int> = emptyList(),
+    var annotations: MutableList<UIRewardsAnnotation> = mutableListOf()
 ) : Parcelable {
-    @Suppress("MagicNumber")
-    fun fromLastAndDatedTxs(lastAndDatedTxs: LastAndDatedTxs): RewardsInfo {
-        lastReward = lastAndDatedTxs.lastTx
-        total7d = 0.0F
-        total30d = 0.0F
-        chart7dEntries = mutableListOf()
-        chart30dEntries = mutableListOf()
-
-        /*
-        * Populate the totals and the chart data from latest -> earliest
-        * We need to reverse the order in the chart data because we have saved them
-        * from latest -> earliest but we need the earliest -> latest for proper
-        * displaying them as bars
-        */
-        val reversedLastAndDatedTxs = lastAndDatedTxs.datedTxs.reversed()
-
-        for ((position, datedTx) in reversedLastAndDatedTxs.withIndex()) {
-            if (position in 23..30) {
-                if (datedTx.second > Transaction.VERY_SMALL_NUMBER_FOR_CHART) {
-                    total7d = total7d.plus(datedTx.second)
-                }
-                chart7dEntries.add(BarEntry(position.toFloat(), datedTx.second))
+    constructor(context: Context, rewards: RewardsObject, isRange: Boolean = false) : this() {
+        rewardTimestamp = if (isRange) {
+            "${rewards.fromDate?.getFormattedDate()} - ${rewards.toDate?.getFormattedDate()}"
+        } else {
+            rewards.timestamp?.let { timestamp ->
+                val day = timestamp.getFormattedDay(context, true)
+                val time = timestamp.getFormattedTime(context)
+                listOf(day, time).joinToString(separator = ", ")
             }
-            if (datedTx.second > Transaction.VERY_SMALL_NUMBER_FOR_CHART) {
-                total30d = total30d.plus(datedTx.second)
-            }
-            chart30dEntries.add(BarEntry(position.toFloat(), datedTx.second))
-            chartTimestamps.add(datedTx.first)
         }
 
-        // Find the maximum 7 and 30 day rewards (AKA the biggest bar on the chart)
-        max7dReward = chart7dEntries.maxOfOrNull { it.y }
-        max30dReward = chart30dEntries.maxOfOrNull { it.y }
+        fromDate = rewards.fromDate?.getFormattedDate()
+        toDate = rewards.toDate?.getFormattedDate()
+        actualReward = rewards.actualReward
+        lostRewards = rewards.lostRewards
+        rewardScore = rewards.rewardScore
+        periodMaxReward = rewards.periodMaxReward
+        txHash = rewards.txHash
+        setTimelineTitle(context, rewards.timeline?.referenceDate)
+        timelineScores = rewards.timeline?.rewardScores ?: mutableListOf()
+        setAnnotations(rewards.annotations)
+    }
 
-        return this
+    constructor(
+        context: Context,
+        rewardFormattedDate: String?,
+        rewardFormattedTimestamp: String?,
+        tx: Transaction
+    ) : this() {
+        rewardTimestamp = rewardFormattedTimestamp
+        this.rewardFormattedDate = rewardFormattedDate
+
+        actualReward = tx.actualReward
+        lostRewards = tx.lostRewards
+        rewardScore = tx.rewardScore
+        periodMaxReward = tx.dailyReward
+        txHash = tx.txHash
+        setTimelineTitle(context, tx.timeline?.referenceDate)
+        timelineScores = tx.timeline?.rewardScores ?: mutableListOf()
+        setAnnotations(tx.annotations)
+    }
+
+    private fun setTimelineTitle(context: Context, referenceDate: ZonedDateTime?) {
+        timelineTitle = referenceDate?.let {
+            val todayOrYesterday = if (it.isToday() || it.isYesterday()) {
+                it.getFormattedDay(context)
+            } else {
+                null
+            }
+            val timelineDate = it.getFormattedDate(true)
+            if (todayOrYesterday.isNullOrEmpty()) {
+                "${context.getString(R.string.timeline_for)} $timelineDate"
+            } else {
+                "${context.getString(R.string.timeline_for)} $todayOrYesterday, $timelineDate"
+            }
+        }
+    }
+
+    private fun setAnnotations(annotations: RewardsAnnotations?) {
+        this.annotations = mutableListOf()
+        annotations?.pol?.forEach {
+            this.annotations.add(UIRewardsAnnotation(it.toAnnotationCode(), it.ratio))
+        }
+        annotations?.rm?.forEach {
+            this.annotations.add(UIRewardsAnnotation(it.toAnnotationCode(), it.ratio))
+        }
+        annotations?.qod?.forEach {
+            val qodRewardsAnnotation = UIRewardsAnnotation(it.toAnnotationCode(), it.ratio)
+            it.affects?.let { affectedParameters ->
+                qodRewardsAnnotation.qodParametersAffected = affectedParameters
+            }
+            this.annotations.add(qodRewardsAnnotation)
+        }
+    }
+}
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class UIRewardsList(
+    var rewards: List<UIRewardObject>,
+    var hasNextPage: Boolean = false,
+    var reachedTotal: Boolean = false
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class UIRewardsAnnotation(
+    var annotation: AnnotationCode?,
+    var ratioOfAnnotation: Int? = null,
+    var qodParametersAffected: List<QoDErrorAffects> = emptyList(),
+) : Parcelable {
+    fun getAffectedParameters(): String {
+        return qodParametersAffected
+            .map {
+                it.parameter?.replace("_", " ")
+            }
+            .joinToString(", ")
     }
 }
 
@@ -95,7 +179,6 @@ data class UIDevice(
     var address: String?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
-    var rewardsInfo: RewardsInfo?,
     var alerts: List<DeviceAlert> = listOf(),
     val isDeviceFromSearchResult: Boolean = false
 ) : Parcelable {
@@ -104,7 +187,6 @@ data class UIDevice(
             "",
             "",
             "",
-            null,
             null,
             null,
             null,
@@ -303,4 +385,22 @@ enum class DevicesGroupBy : Parcelable {
     STATUS
 }
 
-
+@Parcelize
+enum class AnnotationCode : Parcelable {
+    OBC,
+    SPIKE_INST,
+    NO_DATA,
+    NO_MEDIAN,
+    SHORT_CONST,
+    LONG_CONST,
+    FROZEN_SENSOR,
+    ANOMALOUS_INCREASE,
+    LOCATION_NOT_VERIFIED,
+    NO_LOCATION_DATA,
+    NO_WALLET,
+    CELL_CAPACITY_REACHED,
+    RELOCATED,
+    POL_THRESHOLD_NOT_REACHED,
+    QOD_THRESHOLD_NOT_REACHED,
+    UNKNOWN
+}

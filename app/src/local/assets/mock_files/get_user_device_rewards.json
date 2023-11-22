@@ -1,0 +1,197 @@
+{
+    "total_rewards": 1252.0,
+    "latest": {
+        "timestamp": "2022-08-03T14:45:06+02:00",
+        "tx_hash": "0xa01f5fab82632244d7a554ccbc9617a13ca64c201e1f34d9920a35cb3a450ce1",
+        "reward_score": 100,
+        "period_max_reward": 70.89,
+        "actual_reward": 70.89,
+        "lost_rewards": 0,
+        "timeline": {
+            "reference_date": "2022-06-03T14:45:06+02:00",
+            "reward_scores": [
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100,
+                100
+            ]
+        },
+        "annotations": {
+            "qod": [
+                {
+                    "annotation": "SPIKE_INST",
+                    "affects": [
+                        {
+                            "parameter": "temperature",
+                            "ratio": 70
+                        },
+                        {
+                            "parameter": "wind_speed",
+                            "ratio": 50
+                        }
+                    ]
+                },
+                {
+                    "annotation": "ANOMALOUS_INCREASE",
+                    "affects": [
+                        {
+                            "parameter": "temperature",
+                            "ratio": 70
+                        },
+                        {
+                            "parameter": "wind_speed",
+                            "ratio": 50
+                        }
+                    ]
+                },
+                {
+                    "annotation": "OBC",
+                    "affects": [
+                        {
+                            "parameter": "temperature",
+                            "ratio": 70
+                        },
+                        {
+                            "parameter": "humidity",
+                            "ratio": 50
+                        }
+                    ]
+                },
+                {
+                    "annotation": "SHORT_CONST",
+                    "affects": [
+                        {
+                            "parameter": "precipitation",
+                            "ratio": 70
+                        }
+                    ]
+                },
+                {
+                    "annotation": "LONG_CONST",
+                    "affects": [
+                        {
+                            "parameter": "pressure",
+                            "ratio": 70
+                        }
+                    ]
+                },
+                {
+                    "annotation": "NO_DATA"
+                },
+                {
+                    "annotation": "NO_MEDIAN"
+                },
+                {
+                    "annotation": "FROZEN_SENSOR"
+                }
+            ],
+            "pol": [
+                {
+                    "annotation": "LOCATION_NOT_VERIFIED",
+                    "ratio": 0.8
+                },
+                {
+                    "annotation": "NO_LOCATION_DATA",
+                    "ratio": 0.8
+                }
+            ],
+            "rm": [
+                {
+                    "annotation": "NO_WALLET"
+                },
+                {
+                    "annotation": "CELL_CAPACITY_REACHED"
+                },
+                {
+                    "annotation": "POL_THRESHOLD_NOT_REACHED"
+                },
+                {
+                    "annotation": "QOD_THRESHOLD_NOT_REACHED"
+                }
+            ]
+        }
+    },
+    "weekly": {
+        "total_rewards": 1252.0,
+        "from_date": "2022-07-03T14:45:06+02:00",
+        "to_date": "2022-08-10T14:45:06+02:00",
+        "reward_score": 50,
+        "period_max_reward": 71.4,
+        "actual_reward": 250.00,
+        "lost_rewards": 250.00,
+        "timeline": {
+            "reward_scores": [
+                100,
+                26,
+                100,
+                10,
+                100,
+                85,
+                100
+            ]
+        }
+    },
+    "monthly": {
+        "total_rewards": 1252.0,
+        "from_date": "2022-07-03T14:45:06+02:00",
+        "to_date": "2022-08-03T14:45:06+02:00",
+        "reward_score": 20,
+        "period_max_reward": 71.4,
+        "actual_reward": 428.4,
+        "lost_rewards": 1713.6,
+        "timeline": {
+            "reward_scores": [
+                70,
+                0,
+                100,
+                50,
+                100,
+                0.26,
+                0.26,
+                0.26,
+                0.26,
+                100,
+                100,
+                10,
+                100,
+                100,
+                0,
+                0,
+                100,
+                100,
+                0,
+                100,
+                0,
+                0,
+                100,
+                85,
+                85,
+                85,
+                100,
+                100,
+                100,
+                85
+            ]
+        }
+    }
+}

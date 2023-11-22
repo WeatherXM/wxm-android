@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsRewardsBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.onTabSelected
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -30,9 +33,7 @@ class RewardsFragment : Fragment(), KoinComponent {
     private var snackbar: Snackbar? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentDeviceDetailsRewardsBinding.inflate(inflater, container, false)
 
@@ -45,19 +46,42 @@ class RewardsFragment : Fragment(), KoinComponent {
         parentModel.onFollowStatus().observe(viewLifecycleOwner) {
             if (it.status == Status.SUCCESS) {
                 model.device = parentModel.device
-                model.fetchTokenDetails()
+                model.fetchRewardsFromNetwork(
+                    RewardsViewModel.TabSelected.entries[binding.selectorGroup.selectedTabPosition]
+                )
             }
         }
 
-        model.onTokens().observe(viewLifecycleOwner) {
-            if (model.device.relation == DeviceRelation.OWNED) {
-                binding.tokenCard.setTokenInfo(
-                    it,
-                    model.device.rewardsInfo?.totalRewards,
-                    model.device.id
-                )
-            } else {
-                binding.tokenCard.setTokenInfo(it, null, model.device.id)
+        model.onRewardsObject().observe(viewLifecycleOwner) {
+            binding.rewardsContentCard.updateUI(
+                it,
+                model.device.relation,
+                RewardsViewModel.TabSelected.entries[binding.selectorGroup.selectedTabPosition],
+                onInfoButton = { title, htmlMessage ->
+                    navigator.showMessageDialog(
+                        childFragmentManager, title = title, htmlMessage = htmlMessage
+                    )
+                },
+                onProblems = {
+                    val tabSelected =
+                        RewardsViewModel.TabSelected.entries[binding.selectorGroup.selectedTabPosition]
+                    analytics.trackEventUserAction(
+                        Analytics.ParamValue.IDENTIFY_PROBLEMS.paramValue,
+                        Analytics.Screen.DEVICE_REWARDS.screenName,
+                        Pair(FirebaseAnalytics.Param.ITEM_ID, tabSelected.analyticsValue)
+                    )
+                    if (tabSelected == RewardsViewModel.TabSelected.LATEST) {
+                        navigator.showRewardDetails(requireContext(), model.device, it)
+                    } else {
+                        navigator.showRewardsList(requireContext(), model.device)
+                    }
+                })
+            binding.rewardsMainCard.setVisible(true)
+        }
+
+        model.onTotalRewards().observe(viewLifecycleOwner) { rewards ->
+            rewards?.let {
+                binding.totalRewards.text = getString(R.string.wxm_amount, formatTokens(rewards))
             }
         }
 
@@ -65,6 +89,7 @@ class RewardsFragment : Fragment(), KoinComponent {
             if (it && binding.swiperefresh.isRefreshing) {
                 binding.progress.visibility = View.INVISIBLE
             } else if (it) {
+                binding.rewardsMainCard.setVisible(false)
                 binding.progress.visibility = View.VISIBLE
             } else {
                 binding.swiperefresh.isRefreshing = false
@@ -73,25 +98,32 @@ class RewardsFragment : Fragment(), KoinComponent {
         }
 
         model.onError().observe(viewLifecycleOwner) {
+            binding.rewardsMainCard.setVisible(false)
             showSnackbarMessage(it.errorMessage, it.retryFunction)
         }
 
         binding.swiperefresh.setOnRefreshListener {
-            model.fetchTokenDetails()
+            model.fetchRewardsFromNetwork(
+                RewardsViewModel.TabSelected.entries[binding.selectorGroup.selectedTabPosition]
+            )
         }
 
-        binding.tokenRewards.setOnClickListener {
-            navigator.showTokenScreen(requireContext(), model.device)
+        binding.selectorGroup.onTabSelected {
+            trackRangeToggle(RewardsViewModel.TabSelected.entries[it.position].analyticsValue)
+            model.fetchRewards(RewardsViewModel.TabSelected.entries[it.position])
         }
 
-        model.fetchTokenDetails()
+        binding.seeDetailedRewards.setOnClickListener {
+            navigator.showRewardsList(requireContext(), model.device)
+        }
+
+        model.fetchRewardsFromNetwork()
     }
 
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            Analytics.Screen.REWARDS,
-            RewardsFragment::class.simpleName
+            Analytics.Screen.DEVICE_REWARDS, RewardsFragment::class.simpleName
         )
     }
 
@@ -109,5 +141,13 @@ class RewardsFragment : Fragment(), KoinComponent {
             snackbar = Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
         }
         snackbar?.show()
+    }
+
+    private fun trackRangeToggle(newRange: String) {
+        analytics.trackEventSelectContent(
+            Analytics.ParamValue.REWARDS_CARD.paramValue,
+            Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
+            Pair(Analytics.CustomParam.STATE.paramName, newRange)
+        )
     }
 }

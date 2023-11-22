@@ -113,7 +113,7 @@ class SortFilterDialogFragment : BottomSheetDialogFragment(), KoinComponent {
     }
 
     private fun onOptionsChangeListeners() {
-        binding.sortButtons.setOnCheckedChangeListener { group, checkedId ->
+        binding.sortButtons.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.dateAdded -> {
                     trackUserOptionChange(

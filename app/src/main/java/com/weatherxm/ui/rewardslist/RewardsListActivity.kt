@@ -1,4 +1,4 @@
-package com.weatherxm.ui.token
+package com.weatherxm.ui.rewardslist
 
 import android.os.Bundle
 import android.view.View
@@ -8,30 +8,30 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
-import com.weatherxm.databinding.ActivityTokenBinding
+import com.weatherxm.databinding.ActivityRewardsListBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UIRewardObject
 import com.weatherxm.ui.common.toast
-import com.weatherxm.ui.token.TokenViewModel.Companion.TransactionExplorer
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import org.koin.android.ext.android.inject
 import org.koin.core.component.KoinComponent
 import timber.log.Timber
 
-class TokenActivity : AppCompatActivity(), KoinComponent {
-    private lateinit var binding: ActivityTokenBinding
-    private val model: TokenViewModel by viewModels()
+class RewardsListActivity : AppCompatActivity(), KoinComponent {
+    private lateinit var binding: ActivityRewardsListBinding
+    private val model: RewardsListViewModel by viewModels()
     private val navigator: Navigator by inject()
     private val analytics: Analytics by inject()
 
-    private lateinit var adapter: TransactionsAdapter
+    private lateinit var adapter: RewardsListAdapter
     private lateinit var deviceId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityTokenBinding.inflate(layoutInflater)
+        binding = ActivityRewardsListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.root.applyInsets()
@@ -52,29 +52,39 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
         binding.toolbar.subtitle = device.getDefaultOrFriendlyName()
 
         // Initialize the adapter with empty data
-        adapter = TransactionsAdapter({ transactionListener(it) }) { endOfDataListener() }
+        adapter = RewardsListAdapter(
+            device.relation,
+            onRewardDetails = {
+                analytics.trackEventUserAction(
+                    Analytics.ParamValue.IDENTIFY_PROBLEMS.paramValue,
+                    Analytics.Screen.DEVICE_REWARD_TRANSACTIONS.screenName,
+                    Pair(FirebaseAnalytics.Param.ITEM_ID, it.txHash ?: "")
+                )
+                navigator.showRewardDetails(this, device, it)
+            },
+            onEndOfData = { endOfDataListener() })
         binding.recycler.adapter = adapter
 
-        model.onFirstPageTransactions().observe(this) {
+        model.onFirstPageRewards().observe(this) {
             updateUIFirstPage(it)
         }
 
-        model.onNewTransactionsPage().observe(this) {
+        model.onNewRewardsPage().observe(this) {
             updateUINewPage(it)
         }
 
-        model.fetchFirstPageTransactions(deviceId)
+        model.fetchFirstPageRewards(deviceId)
     }
 
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            Analytics.Screen.REWARD_TRANSACTIONS,
-            TokenActivity::class.simpleName
+            Analytics.Screen.DEVICE_REWARD_TRANSACTIONS,
+            RewardsListActivity::class.simpleName
         )
     }
 
-    private fun updateUIFirstPage(resource: Resource<List<UITransaction>>) {
+    private fun updateUIFirstPage(resource: Resource<List<UIRewardObject>>) {
         when (resource.status) {
             Status.SUCCESS -> {
                 if (!resource.data.isNullOrEmpty()) {
@@ -97,7 +107,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
                 binding.empty.title(getString(R.string.error_transactions_no_data))
                 binding.empty.subtitle(resource.message)
                 binding.empty.action(getString(R.string.action_retry))
-                binding.empty.listener { model.fetchFirstPageTransactions(deviceId) }
+                binding.empty.listener { model.fetchFirstPageRewards(deviceId) }
                 binding.empty.visibility = View.VISIBLE
             }
             Status.LOADING -> {
@@ -109,7 +119,7 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
         }
     }
 
-    private fun updateUINewPage(resource: Resource<List<UITransaction>>) {
+    private fun updateUINewPage(resource: Resource<List<UIRewardObject>>) {
         when (resource.status) {
             Status.SUCCESS -> {
                 if (!resource.data.isNullOrEmpty()) {
@@ -128,21 +138,8 @@ class TokenActivity : AppCompatActivity(), KoinComponent {
         }
     }
 
-    private fun transactionListener(uiTransaction: UITransaction) {
-        uiTransaction.txHash?.let { hash ->
-            navigator.openWebsite(this, "$TransactionExplorer$hash")
-        }
-
-        analytics.trackEventUserAction(
-            actionName = Analytics.ParamValue.TRANSACTION_ON_EXPLORER.paramValue,
-            contentType = Analytics.ParamValue.DEVICE_TRANSACTIONS.paramValue,
-            Pair(FirebaseAnalytics.Param.ITEM_LIST_ID, uiTransaction.txHash ?: ""),
-            Pair(FirebaseAnalytics.Param.ITEM_ID, deviceId)
-        )
-    }
-
     private fun endOfDataListener() {
-        model.fetchNewPageTransactions(deviceId)
+        model.fetchNewPageRewards(deviceId)
     }
 }
 
