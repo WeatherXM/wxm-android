@@ -192,6 +192,7 @@ data class UIForecast(
     var minTemp: Float? = null,
     var maxTemp: Float? = null,
     var precipProbability: Int? = null,
+    var precip: Float? = null,
     var windSpeed: Float? = null,
     var windDirection: Int? = null,
     var humidity: Int? = null,

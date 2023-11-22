@@ -271,7 +271,7 @@ data class HourlyWeather(
 @Parcelize
 data class DailyData(
     var timestamp: String?,
-    @Json(name = "precip_intensity")
+    @Json(name = "precipitation_intensity")
     val precipIntensity: Float?,
     @Json(name = "precipitation_type")
     val precipType: String?,

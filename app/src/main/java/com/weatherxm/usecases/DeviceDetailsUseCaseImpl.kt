@@ -102,6 +102,7 @@ class DeviceDetailsUseCaseImpl(
                     maxTemp = it.daily?.temperatureMax,
                     minTemp = it.daily?.temperatureMin,
                     precipProbability = it.daily?.precipProbability,
+                    precip = it.daily?.precipIntensity,
                     windSpeed = it.daily?.windSpeed,
                     windDirection = it.daily?.windDirection,
                     humidity = it.daily?.humidity,

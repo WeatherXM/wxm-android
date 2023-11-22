@@ -103,8 +103,9 @@ class ForecastAdapter(private val onExpandToggle: (Int, Boolean) -> Unit) :
             binding.minTemperature.text = Weather.getFormattedTemperature(item.minTemp)
             binding.maxTemperature.text = Weather.getFormattedTemperature(item.maxTemp)
 
-            binding.precipitationProbability.text =
+            binding.precipProbability.text =
                 Weather.getFormattedPrecipitationProbability(item.precipProbability)
+            binding.precip.text = Weather.getFormattedPrecipitation(item.precip, isRainRate = false)
 
             binding.wind.text = Weather.getFormattedWind(item.windSpeed, item.windDirection)
             binding.humidity.text = Weather.getFormattedHumidity(item.humidity)
