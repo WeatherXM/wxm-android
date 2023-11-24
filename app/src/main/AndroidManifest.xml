@@ -233,15 +233,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.weatherxm.ui.stationsettings.StationSettingsActivity"
+            android:name="com.weatherxm.ui.devicesettings.DeviceSettingsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.weatherxm.ui.stationsettings.reboot.RebootActivity"
+            android:name="com.weatherxm.ui.devicesettings.reboot.RebootActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.weatherxm.ui.stationsettings.changefrequency.ChangeFrequencyActivity"
+            android:name="com.weatherxm.ui.devicesettings.changefrequency.ChangeFrequencyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity

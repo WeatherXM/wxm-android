@@ -1,4 +1,4 @@
-package com.weatherxm.ui.stationsettings
+package com.weatherxm.ui.devicesettings
 
 import android.os.Bundle
 import android.view.View
@@ -7,12 +7,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.DeviceProfile
-import com.weatherxm.databinding.ActivityStationSettingsBinding
+import com.weatherxm.databinding.ActivityDeviceSettingsBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.hide
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
@@ -23,31 +23,31 @@ import org.koin.core.component.inject
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class StationSettingsActivity : AppCompatActivity(), KoinComponent {
-    private val model: StationSettingsViewModel by viewModel {
+class DeviceSettingsActivity : AppCompatActivity(), KoinComponent {
+    private val model: DeviceSettingsViewModel by viewModel {
         parametersOf(intent.getParcelableExtra<UIDevice>(Contracts.ARG_DEVICE))
     }
-    private lateinit var binding: ActivityStationSettingsBinding
+    private lateinit var binding: ActivityDeviceSettingsBinding
     private val navigator: Navigator by inject()
     private val analytics: Analytics by inject()
     private var snackbar: Snackbar? = null
-    private lateinit var adapter: StationInfoAdapter
+    private lateinit var adapter: DeviceInfoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityStationSettingsBinding.inflate(layoutInflater)
+        binding = ActivityDeviceSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.root.applyInsets()
 
         if (model.device.isEmpty()) {
-            Timber.d("Could not start StationSettingsActivity. Device is null.")
+            Timber.d("Could not start DeviceSettingsActivity. Device is null.")
             toast(R.string.error_generic_message)
             finish()
             return
         }
 
-        adapter = StationInfoAdapter {
+        adapter = DeviceInfoAdapter {
             if (it == ActionType.UPDATE_FIRMWARE) {
                 analytics.trackEventPrompt(
                     Analytics.ParamValue.OTA_AVAILABLE.paramValue,
@@ -58,7 +58,7 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
                 finish()
             }
         }
-        binding.recyclerStationInfo.adapter = adapter
+        binding.recyclerDeviceInfo.adapter = adapter
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -137,7 +137,7 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
         super.onResume()
         analytics.trackScreen(
             Analytics.Screen.STATION_SETTINGS,
-            StationSettingsActivity::class.simpleName
+            DeviceSettingsActivity::class.simpleName
         )
     }
 
@@ -145,18 +145,20 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
         binding.stationName.text = model.device.getDefaultOrFriendlyName()
 
         // TODO: Remove this when we implement this
-        binding.reconfigureWifiContainer.hide(null)
+        binding.reconfigureWifiContainer.setVisible(false)
 
         if (model.device.relation != DeviceRelation.OWNED) {
-            binding.deleteStationCard.hide(null)
-            binding.frequencyTitle.hide(null)
-            binding.frequencyDesc.hide(null)
-            binding.changeFrequencyBtn.hide(null)
-            binding.rebootStationContainer.hide(null)
+            binding.deleteStationCard.setVisible(false)
+            binding.frequencyTitle.setVisible(false)
+            binding.frequencyDesc.setVisible(false)
+            binding.changeFrequencyBtn.setVisible(false)
+            binding.rebootStationContainer.setVisible(false)
+            binding.dividerBelowFrequency.setVisible(false)
+            binding.dividerBelowStationName.setVisible(false)
         }
 
         if (model.device.profile == DeviceProfile.Helium) {
-            // binding.reconfigureWifiContainer.hide(null)
+            // binding.reconfigureWifiContainer.setVisible(false)
             with(binding.frequencyDesc) {
                 movementMethod =
                     me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {
@@ -172,13 +174,13 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
             }
         } else {
             // TODO: Remove the following lines when we implement this feature
-            binding.frequencyTitle.hide(null)
-            binding.frequencyDesc.hide(null)
-            binding.changeFrequencyBtn.hide(null)
-            binding.dividerBelowFrequency.hide(null)
-            binding.dividerBelowStationName.hide(null)
+            binding.frequencyTitle.setVisible(false)
+            binding.frequencyDesc.setVisible(false)
+            binding.changeFrequencyBtn.setVisible(false)
+            binding.dividerBelowFrequency.setVisible(false)
+            binding.dividerBelowStationName.setVisible(false)
             // binding.frequencyDesc.setHtml(R.string.change_station_frequency_m5)
-            binding.rebootStationContainer.hide(null)
+            binding.rebootStationContainer.setVisible(false)
         }
 
         with(binding.removeStationDesc) {
@@ -195,8 +197,8 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
             )
         }
 
-        model.onStationInfo().observe(this) { stationInfo ->
-            if (stationInfo.any { it.warning != null }) {
+        model.onDeviceInfo().observe(this) { deviceInfo ->
+            if (deviceInfo.any { it.warning != null }) {
                 analytics.trackEventPrompt(
                     Analytics.ParamValue.LOW_BATTERY.paramValue,
                     Analytics.ParamValue.WARN.paramValue,
@@ -204,17 +206,17 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
                     Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
                 )
             }
-            if (stationInfo.any { it.action?.actionType == ActionType.UPDATE_FIRMWARE }) {
+            if (deviceInfo.any { it.action?.actionType == ActionType.UPDATE_FIRMWARE }) {
                 analytics.trackEventPrompt(
                     Analytics.ParamValue.OTA_AVAILABLE.paramValue,
                     Analytics.ParamValue.WARN.paramValue,
                     Analytics.ParamValue.VIEW.paramValue
                 )
             }
-            adapter.submitList(stationInfo)
+            adapter.submitList(deviceInfo)
 
             binding.shareBtn.setOnClickListener {
-                navigator.openShare(this, model.parseStationInfoToShare(stationInfo))
+                navigator.openShare(this, model.parseDeviceInfoToShare(deviceInfo))
 
                 analytics.trackEventUserAction(
                     actionName = Analytics.ParamValue.SHARE_STATION_INFO.paramValue,
@@ -224,7 +226,7 @@ class StationSettingsActivity : AppCompatActivity(), KoinComponent {
             }
         }
 
-        model.getStationInformation()
+        model.getDeviceInformation()
     }
 
     private fun showSnackbarMessage(message: String, callback: (() -> Unit)? = null) {

@@ -89,7 +89,7 @@ class RewardsListAdapter(
                 }
             }
 
-            binding.timestamp.text = item.rewardTimestamp
+            binding.timestamp.text = item.rewardFormattedTimestamp
 
             binding.score.text = item.rewardScore?.let {
                 itemView.resources.getString(R.string.score, (it.toFloat() / 100))

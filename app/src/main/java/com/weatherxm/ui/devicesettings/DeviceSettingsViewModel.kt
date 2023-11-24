@@ -1,4 +1,4 @@
-package com.weatherxm.ui.stationsettings
+package com.weatherxm.ui.devicesettings
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,20 +23,20 @@ import timber.log.Timber
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-class StationSettingsViewModel(var device: UIDevice) : ViewModel(), KoinComponent {
+class DeviceSettingsViewModel(var device: UIDevice) : ViewModel(), KoinComponent {
     private val usecase: StationSettingsUseCase by inject()
     private val resHelper: ResourcesHelper by inject()
     private val analytics: Analytics by inject()
 
     private val onEditNameChange = MutableLiveData<String>()
     private val onDeviceRemoved = MutableLiveData<Boolean>()
-    private val onStationInfo = MutableLiveData<List<StationInfo>>()
+    private val onDeviceInfo = MutableLiveData<List<UIDeviceInfo>>()
     private val onError = MutableLiveData<UIError>()
     private val onLoading = MutableLiveData<Boolean>()
 
     fun onEditNameChange(): LiveData<String> = onEditNameChange
     fun onDeviceRemoved(): LiveData<Boolean> = onDeviceRemoved
-    fun onStationInfo(): LiveData<List<StationInfo>> = onStationInfo
+    fun onDeviceInfo(): LiveData<List<UIDeviceInfo>> = onDeviceInfo
     fun onError(): LiveData<UIError> = onError
     fun onLoading(): LiveData<Boolean> = onLoading
 
@@ -133,30 +133,30 @@ class StationSettingsViewModel(var device: UIDevice) : ViewModel(), KoinComponen
         }
     }
 
-    fun getStationInformation() {
-        val stationInfo = getStationInfoFromDevice()
+    fun getDeviceInformation() {
+        val deviceInfo = getDeviceInfoFromDevice()
         onLoading.postValue(true)
         viewModelScope.launch {
             usecase.getDeviceInfo(device.id).onLeft {
                 analytics.trackEventFailure(it.code)
                 Timber.d("$it: Fetching remote device info failed for device: $device")
-                onStationInfo.postValue(stationInfo)
-            }.onRight { deviceInfo ->
+                onDeviceInfo.postValue(deviceInfo)
+            }.onRight { infoFromAPI ->
                 Timber.d("Got device info: $deviceInfo")
-                deviceInfo.weatherStation?.batteryState?.let {
+                infoFromAPI.weatherStation?.batteryState?.let {
                     if (it == BatteryState.low) {
-                        stationInfo.add(
+                        deviceInfo.add(
                             2,
-                            StationInfo(
+                            UIDeviceInfo(
                                 resHelper.getString(R.string.battery_level),
                                 resHelper.getString(R.string.battery_level_low),
                                 warning = resHelper.getString(R.string.battery_level_low_message)
                             )
                         )
                     } else {
-                        stationInfo.add(
+                        deviceInfo.add(
                             2,
-                            StationInfo(
+                            UIDeviceInfo(
                                 resHelper.getString(R.string.battery_level),
                                 resHelper.getString(R.string.battery_level_ok)
                             )
@@ -164,48 +164,48 @@ class StationSettingsViewModel(var device: UIDevice) : ViewModel(), KoinComponen
                     }
                 }
 
-                deviceInfo.weatherStation?.hwVersion?.let {
-                    stationInfo.add(StationInfo(resHelper.getString(R.string.hardware_version), it))
+                infoFromAPI.weatherStation?.hwVersion?.let {
+                    deviceInfo.add(UIDeviceInfo(resHelper.getString(R.string.hardware_version), it))
                 }
-                deviceInfo.weatherStation?.lastHotspot?.let {
-                    stationInfo.add(
-                        StationInfo(
+                infoFromAPI.weatherStation?.lastHotspot?.let {
+                    deviceInfo.add(
+                        UIDeviceInfo(
                             resHelper.getString(R.string.last_hotspot),
                             it.replace("-", " ").capitalizeWords()
                         )
                     )
                 }
-                deviceInfo.weatherStation?.lastTxRssi?.let {
-                    stationInfo.add(
-                        StationInfo(
+                infoFromAPI.weatherStation?.lastTxRssi?.let {
+                    deviceInfo.add(
+                        UIDeviceInfo(
                             resHelper.getString(R.string.last_tx_rssi),
                             resHelper.getString(R.string.rssi, it)
                         )
                     )
                 }
-                deviceInfo.gateway?.gpsSats?.let {
-                    stationInfo.add(StationInfo(resHelper.getString(R.string.gps_number_sats), it))
+                infoFromAPI.gateway?.gpsSats?.let {
+                    deviceInfo.add(UIDeviceInfo(resHelper.getString(R.string.gps_number_sats), it))
                 }
-                deviceInfo.gateway?.wifiRssi?.let {
-                    stationInfo.add(
-                        StationInfo(
+                infoFromAPI.gateway?.wifiRssi?.let {
+                    deviceInfo.add(
+                        UIDeviceInfo(
                             resHelper.getString(R.string.wifi_rssi),
                             resHelper.getString(R.string.rssi, it)
                         )
                     )
                 }
-                onStationInfo.postValue(stationInfo)
+                onDeviceInfo.postValue(deviceInfo)
             }
             onLoading.postValue(false)
         }
     }
 
-    private fun getStationInfoFromDevice(): MutableList<StationInfo> {
-        return mutableListOf<StationInfo>().apply {
-            add(StationInfo(resHelper.getString(R.string.station_default_name), device.name))
+    private fun getDeviceInfoFromDevice(): MutableList<UIDeviceInfo> {
+        return mutableListOf<UIDeviceInfo>().apply {
+            add(UIDeviceInfo(resHelper.getString(R.string.station_default_name), device.name))
             device.claimedAt?.let {
                 add(
-                    StationInfo(
+                    UIDeviceInfo(
                         resHelper.getString(R.string.claimed_at),
                         it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
                     )
@@ -213,11 +213,11 @@ class StationSettingsViewModel(var device: UIDevice) : ViewModel(), KoinComponen
             }
             if (device.profile == DeviceProfile.Helium) {
                 device.label?.unmask()?.let {
-                    add(StationInfo(resHelper.getString(R.string.dev_eui), it))
+                    add(UIDeviceInfo(resHelper.getString(R.string.dev_eui), it))
                 }
             } else {
                 device.label?.unmask()?.let {
-                    add(StationInfo(resHelper.getString(R.string.device_serial_number_title), it))
+                    add(UIDeviceInfo(resHelper.getString(R.string.device_serial_number_title), it))
                 }
             }
             device.currentFirmware?.let { current ->
@@ -225,25 +225,25 @@ class StationSettingsViewModel(var device: UIDevice) : ViewModel(), KoinComponen
                     && usecase.shouldShowOTAPrompt(device)
                 ) {
                     add(
-                        StationInfo(
+                        UIDeviceInfo(
                             resHelper.getString(R.string.firmware_version),
                             "$current ➞ ${device.assignedFirmware}",
-                            StationAction(
+                            UIDeviceAction(
                                 resHelper.getString(R.string.action_update_firmware),
                                 ActionType.UPDATE_FIRMWARE
                             )
                         )
                     )
                 } else {
-                    add(StationInfo(resHelper.getString(R.string.firmware_version), current))
+                    add(UIDeviceInfo(resHelper.getString(R.string.firmware_version), current))
                 }
             }
         }
     }
 
-    fun parseStationInfoToShare(stationInfo: List<StationInfo>): String {
+    fun parseDeviceInfoToShare(deviceInfo: List<UIDeviceInfo>): String {
         var sharingText = ""
-        stationInfo.forEach {
+        deviceInfo.forEach {
             sharingText += "${it}\n"
         }
         return sharingText

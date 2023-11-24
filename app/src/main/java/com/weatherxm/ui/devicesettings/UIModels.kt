@@ -1,16 +1,15 @@
-package com.weatherxm.ui.stationsettings
+package com.weatherxm.ui.devicesettings
 
 import androidx.annotation.Keep
-import androidx.annotation.StringRes
 import com.squareup.moshi.JsonClass
 import com.weatherxm.data.Failure
 
 @Keep
 @JsonClass(generateAdapter = true)
-data class StationInfo(
+data class UIDeviceInfo(
     val title: String,
     val value: String,
-    val action: StationAction? = null,
+    val action: UIDeviceAction? = null,
     val warning: String? = null
 ) {
     override fun toString(): String {
@@ -20,7 +19,7 @@ data class StationInfo(
 
 @Keep
 @JsonClass(generateAdapter = true)
-data class StationAction(
+data class UIDeviceAction(
     val actionText: String,
     val actionType: ActionType
 )

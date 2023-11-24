@@ -1,4 +1,4 @@
-package com.weatherxm.ui.stationsettings.reboot
+package com.weatherxm.ui.devicesettings.reboot
 
 import android.bluetooth.BluetoothDevice
 import androidx.lifecycle.MutableLiveData
@@ -10,8 +10,8 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.stationsettings.RebootState
-import com.weatherxm.ui.stationsettings.RebootStatus
+import com.weatherxm.ui.devicesettings.RebootState
+import com.weatherxm.ui.devicesettings.RebootStatus
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.Analytics

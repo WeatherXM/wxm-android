@@ -1,4 +1,4 @@
-package com.weatherxm.ui.stationsettings.reboot
+package com.weatherxm.ui.devicesettings.reboot
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -20,8 +20,8 @@ import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.toast
-import com.weatherxm.ui.stationsettings.RebootState
-import com.weatherxm.ui.stationsettings.RebootStatus
+import com.weatherxm.ui.devicesettings.RebootState
+import com.weatherxm.ui.devicesettings.RebootStatus
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import org.koin.android.ext.android.inject

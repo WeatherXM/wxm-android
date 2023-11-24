@@ -146,9 +146,9 @@ import com.weatherxm.ui.devicedetails.rewards.RewardsViewModel
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
 import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
 import com.weatherxm.ui.explorer.UICellJsonAdapter
-import com.weatherxm.ui.stationsettings.StationSettingsViewModel
-import com.weatherxm.ui.stationsettings.changefrequency.ChangeFrequencyViewModel
-import com.weatherxm.ui.stationsettings.reboot.RebootViewModel
+import com.weatherxm.ui.devicesettings.DeviceSettingsViewModel
+import com.weatherxm.ui.devicesettings.changefrequency.ChangeFrequencyViewModel
+import com.weatherxm.ui.devicesettings.reboot.RebootViewModel
 import com.weatherxm.usecases.AnalyticsOptInUseCase
 import com.weatherxm.usecases.AnalyticsOptInUseCaseImpl
 import com.weatherxm.usecases.AuthUseCase
@@ -840,7 +840,7 @@ private val viewmodels = module {
         )
     }
     viewModel { params ->
-        StationSettingsViewModel(device = params.get())
+        DeviceSettingsViewModel(device = params.get())
     }
     viewModel { params ->
         RebootViewModel(device = params.get())

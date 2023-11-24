@@ -43,7 +43,8 @@ data class UIRewards(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class UIRewardObject(
-    var rewardTimestamp: String? = null,
+    var rewardTimestamp: ZonedDateTime? = null,
+    var rewardFormattedTimestamp: String? = null,
     var rewardFormattedDate: String? = null,
     var fromDate: String? = null,
     var toDate: String? = null,
@@ -57,10 +58,11 @@ data class UIRewardObject(
     var annotations: MutableList<UIRewardsAnnotation> = mutableListOf()
 ) : Parcelable {
     constructor(context: Context, rewards: RewardsObject, isRange: Boolean = false) : this() {
-        rewardTimestamp = if (isRange) {
+        rewardFormattedTimestamp = if (isRange) {
             "${rewards.fromDate?.getFormattedDate()} - ${rewards.toDate?.getFormattedDate()}"
         } else {
             rewards.timestamp?.let { timestamp ->
+                rewardTimestamp = timestamp
                 val day = timestamp.getFormattedDay(context, true)
                 val time = timestamp.getFormattedTime(context)
                 listOf(day, time).joinToString(separator = ", ")
@@ -82,10 +84,12 @@ data class UIRewardObject(
     constructor(
         context: Context,
         rewardFormattedDate: String?,
+        rewardTimestamp: ZonedDateTime?,
         rewardFormattedTimestamp: String?,
         tx: Transaction
     ) : this() {
-        rewardTimestamp = rewardFormattedTimestamp
+        this.rewardTimestamp = rewardTimestamp
+        this.rewardFormattedTimestamp = rewardFormattedTimestamp
         this.rewardFormattedDate = rewardFormattedDate
 
         actualReward = tx.actualReward

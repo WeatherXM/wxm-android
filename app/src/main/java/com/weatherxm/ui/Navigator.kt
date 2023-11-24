@@ -54,9 +54,9 @@ import com.weatherxm.ui.rewardslist.RewardsListActivity
 import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
-import com.weatherxm.ui.stationsettings.StationSettingsActivity
-import com.weatherxm.ui.stationsettings.changefrequency.ChangeFrequencyActivity
-import com.weatherxm.ui.stationsettings.reboot.RebootActivity
+import com.weatherxm.ui.devicesettings.DeviceSettingsActivity
+import com.weatherxm.ui.devicesettings.changefrequency.ChangeFrequencyActivity
+import com.weatherxm.ui.devicesettings.reboot.RebootActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.util.Analytics
 import timber.log.Timber
@@ -175,7 +175,7 @@ class Navigator(
     fun showStationSettings(context: Context?, device: UIDevice) {
         context?.let {
             it.startActivity(
-                Intent(it, StationSettingsActivity::class.java)
+                Intent(it, DeviceSettingsActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(ARG_DEVICE, device)
             )

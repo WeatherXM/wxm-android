@@ -49,6 +49,7 @@ class RewardsUseCaseImpl(
                         UIRewardObject(
                             context = context,
                             rewardFormattedDate = tx.timestamp.format(dateFormat),
+                            rewardTimestamp = tx.timestamp,
                             rewardFormattedTimestamp = tx.timestamp.format(timestampFormat),
                             tx = tx
                         )

@@ -17,8 +17,9 @@
     <string name="support_email_body_helium_failed">Device Name: %1$s\nError Code: %2$s\n\n</string>
     <string name="support_email_body_device_name">Weather Station Name: %1$s</string>
     <string name="support_email_recipient">support@weatherxm.com</string>
-    <string name="support_email_rewards_subject">Station Rewards v1.5</string>
-    <string name="support_email_rewards_body">Device S/N: %1$s\nError: %2$s</string>
+    <string name="support_email_rewards_subject">Station Reward Issue</string>
+    <string name="support_email_reward_body">Device S/N: %1$s\nError: %2$s</string>
+    <string name="support_email_rewards_issue_body">Station Information\nStation Name: %1$s\nStation Id: %2$s\nExplorer Public URL: %3$s\n\nReward Information\nReward Timestamp: %4$s\nReward Score: %5$s\nRewards Earned: %6$s\nRewards Lost: %7$s\nPeriod Max Reward: %8$s\nAnnotations: %9$s\n</string>
     <string name="website">https://weatherxm.com</string>
     <string name="website_contact">https://weatherxm.com/contact/</string>
     <string name="suggested_wallets_documentation">https://docs.weatherxm.com/wallet/add-edit-wallet-address#how-to-create-wallet-on-metamask</string>

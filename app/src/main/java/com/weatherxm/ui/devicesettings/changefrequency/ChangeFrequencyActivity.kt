@@ -1,4 +1,4 @@
-package com.weatherxm.ui.stationsettings.changefrequency
+package com.weatherxm.ui.devicesettings.changefrequency
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -24,8 +24,8 @@ import com.weatherxm.ui.common.checkPermissionsAndThen
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
-import com.weatherxm.ui.stationsettings.ChangeFrequencyState
-import com.weatherxm.ui.stationsettings.FrequencyStatus
+import com.weatherxm.ui.devicesettings.ChangeFrequencyState
+import com.weatherxm.ui.devicesettings.FrequencyStatus
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setHtml

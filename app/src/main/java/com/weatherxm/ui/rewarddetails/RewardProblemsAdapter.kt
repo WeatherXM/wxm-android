@@ -48,58 +48,61 @@ class RewardProblemsAdapter(
                 val annotationColor = getRewardAnnotationColor(rewardScore)
                 setIconColor(annotationColor)
                 setStrokeColor(annotationColor)
-                val annotationTitle = item.annotation?.getTitleResId()?.let {
+                item.annotation?.getTitleResId()?.let {
                     title(it)
-                    context.getString(it)
-                } ?: ""
-                htmlMessage(item.getMessage(context, device)) {
-                    val docsUrlResId = when (item.annotation) {
-                        AnnotationCode.POL_THRESHOLD_NOT_REACHED -> R.string.docs_url_pol_algorithm
-                        AnnotationCode.QOD_THRESHOLD_NOT_REACHED -> R.string.docs_url_qod_algorithm
-                        else -> R.string.docs_url
-                    }
-                    listener.onDocumentation(context.getString(docsUrlResId))
                 }
-
+                htmlMessage(item.getMessage(context, device))
                 if (device.relation == DeviceRelation.OWNED) {
-                    getAction(item.annotation, annotationTitle)
+                    getAction(item.annotation)
                 }
             }
         }
 
-        private fun getAction(annotation: AnnotationCode?, annotationTitle: String) {
+        private fun getAction(annotation: AnnotationCode?) {
             with(itemView.context) {
                 if (annotation == AnnotationCode.OBC && device.needsUpdate()) {
-                    binding.error.action(getString(R.string.add_wallet_now)) {
-                        listener.onAddWallet()
+                    binding.error.action(getString(R.string.action_update_firmware)) {
+                        listener.onAddWallet(annotation)
                     }
                 } else if (annotation.pointToDocsHome()) {
                     binding.error.action(getString(R.string.read_more)) {
-                        listener.onDocumentation(getString(R.string.docs_url))
+                        listener.onDocumentation(getString(R.string.docs_url), annotation)
                     }
                 } else if (annotation.pointToDocsTroubleshooting()) {
                     binding.error.action(getString(R.string.read_more)) {
-                        listener.onDocumentation(getString(R.string.docs_url_troubleshooting))
+                        listener.onDocumentation(
+                            getString(R.string.docs_url_troubleshooting),
+                            annotation
+                        )
                     }
                 } else if (annotation == AnnotationCode.NO_WALLET) {
-                    binding.error.action(getString(R.string.action_update_firmware)) {
-                        listener.onUpdateFirmware(device)
+                    binding.error.action(getString(R.string.add_wallet_now)) {
+                        listener.onUpdateFirmware(device, annotation)
                     }
                 } else if (annotation == AnnotationCode.CELL_CAPACITY_REACHED) {
                     binding.error.action(getString(R.string.read_more)) {
-                        listener.onDocumentation(getString(R.string.docs_url_cell_capacity))
+                        listener.onDocumentation(
+                            getString(R.string.docs_url_cell_capacity),
+                            annotation
+                        )
                     }
                 } else if (annotation == AnnotationCode.POL_THRESHOLD_NOT_REACHED) {
                     binding.error.action(getString(R.string.read_more)) {
-                        listener.onDocumentation(getString(R.string.docs_url_pol_algorithm))
+                        listener.onDocumentation(
+                            getString(R.string.docs_url_pol_algorithm),
+                            annotation
+                        )
                     }
                 } else if (annotation == AnnotationCode.QOD_THRESHOLD_NOT_REACHED) {
                     binding.error.action(getString(R.string.read_more)) {
-                        listener.onDocumentation(getString(R.string.docs_url_qod_algorithm))
+                        listener.onDocumentation(
+                            getString(R.string.docs_url_qod_algorithm),
+                            annotation
+                        )
                     }
                 } else if (annotation == AnnotationCode.UNKNOWN) {
                     binding.error.action(getString(R.string.title_contact_support)) {
-                        listener.onContactSupport(device, annotationTitle)
+                        listener.onContactSupport(device, annotation)
                     }
                 } else {
                     // Do nothing, no action should be set.
@@ -129,8 +132,8 @@ class RewardProblemsDiffCallback : DiffUtil.ItemCallback<UIRewardsAnnotation>() 
 }
 
 interface RewardProblemsListener {
-    fun onAddWallet()
-    fun onUpdateFirmware(device: UIDevice)
-    fun onContactSupport(device: UIDevice, annotationTitle: String)
-    fun onDocumentation(url: String)
+    fun onAddWallet(annotation: AnnotationCode?)
+    fun onUpdateFirmware(device: UIDevice, annotation: AnnotationCode?)
+    fun onContactSupport(device: UIDevice, annotation: AnnotationCode?)
+    fun onDocumentation(url: String, annotation: AnnotationCode?)
 }

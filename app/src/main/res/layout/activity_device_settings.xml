@@ -287,7 +287,7 @@
                         app:layout_constraintTop_toTopOf="@id/stationInformation" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerStationInfo"
+                        android:id="@+id/recyclerDeviceInfo"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:clipChildren="false"
@@ -297,7 +297,7 @@
                         android:scrollbars="vertical"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_constraintTop_toBottomOf="@id/shareBtn"
-                        tools:listitem="@layout/list_item_station_info" />
+                        tools:listitem="@layout/list_item_device_info" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/contactSupportBtn"
@@ -306,7 +306,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small_to_normal"
                         android:text="@string/title_contact_support"
-                        app:layout_constraintTop_toBottomOf="@id/recyclerStationInfo" />
+                        app:layout_constraintTop_toBottomOf="@id/recyclerDeviceInfo" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

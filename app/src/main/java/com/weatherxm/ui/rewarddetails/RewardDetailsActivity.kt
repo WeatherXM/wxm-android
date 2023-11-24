@@ -3,9 +3,11 @@ package com.weatherxm.ui.rewarddetails
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityRewardDetailsBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.AnnotationCode
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_REWARDS_OBJECT
 import com.weatherxm.ui.common.DeviceRelation
@@ -15,6 +17,7 @@ import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Rewards.formatLostRewards
+import com.weatherxm.util.Rewards.getTitleResId
 import com.weatherxm.util.applyInsets
 import com.weatherxm.util.setHtml
 import org.koin.core.component.KoinComponent
@@ -57,6 +60,7 @@ class RewardDetailsActivity : AppCompatActivity(), KoinComponent, RewardProblems
             navigator.sendSupportEmail(
                 context = this,
                 subject = getString(R.string.support_email_rewards_subject),
+                body = createBodyForSupport(device, rewardsObject),
                 source = Analytics.ParamValue.REWARD_ANNOTATIONS.paramValue
             )
         }
@@ -78,6 +82,23 @@ class RewardDetailsActivity : AppCompatActivity(), KoinComponent, RewardProblems
         super.onResume()
         analytics.trackScreen(
             Analytics.Screen.DEVICE_REWARD_DETAILS, RewardDetailsActivity::class.simpleName
+        )
+    }
+
+    private fun createBodyForSupport(device: UIDevice, rewards: UIRewardObject): String {
+        return getString(
+            R.string.support_email_rewards_issue_body,
+            device.name,
+            device.id,
+            getString(R.string.share_station_url, device.toNormalizedName()),
+            rewards.rewardTimestamp ?: "",
+            rewards.rewardScore?.toString() ?: "",
+            rewards.actualReward?.toString() ?: "",
+            rewards.lostRewards?.toString() ?: "",
+            rewards.periodMaxReward?.toString() ?: "",
+            rewards.annotations.joinToString(", ", "[", "]") {
+                it.annotation?.name ?: ""
+            }
         )
     }
 
@@ -121,24 +142,39 @@ class RewardDetailsActivity : AppCompatActivity(), KoinComponent, RewardProblems
         }
     }
 
-    override fun onAddWallet() {
+    override fun onAddWallet(annotation: AnnotationCode?) {
+        trackUserActionOnErrors(annotation)
         navigator.showConnectWallet(this)
     }
 
-    override fun onUpdateFirmware(device: UIDevice) {
+    override fun onUpdateFirmware(device: UIDevice, annotation: AnnotationCode?) {
+        trackUserActionOnErrors(annotation)
         navigator.showDeviceHeliumOTA(this, device, false)
     }
 
-    override fun onContactSupport(device: UIDevice, annotationTitle: String) {
+    override fun onContactSupport(device: UIDevice, annotation: AnnotationCode?) {
+        trackUserActionOnErrors(annotation)
+        val annotationTitle = annotation?.getTitleResId()?.let {
+            getString(it)
+        } ?: ""
         navigator.sendSupportEmail(
             context = this,
             subject = getString(R.string.support_email_rewards_subject),
-            body = getString(R.string.support_email_rewards_body, device.label, annotationTitle),
+            body = getString(R.string.support_email_reward_body, device.label, annotationTitle),
             source = Analytics.ParamValue.REWARD_ANNOTATIONS.paramValue
         )
     }
 
-    override fun onDocumentation(url: String) {
+    override fun onDocumentation(url: String, annotation: AnnotationCode?) {
+        trackUserActionOnErrors(annotation)
         navigator.openWebsite(this, url)
+    }
+
+    private fun trackUserActionOnErrors(annotation: AnnotationCode?) {
+        analytics.trackEventUserAction(
+            actionName = Analytics.ParamValue.REWARD_DETAILS_ERROR.paramValue,
+            contentType = null,
+            Pair(FirebaseAnalytics.Param.ITEM_ID, annotation?.name ?: "")
+        )
     }
 }

@@ -1,4 +1,4 @@
-package com.weatherxm.ui.stationsettings
+package com.weatherxm.ui.devicesettings
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,36 +8,36 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
-import com.weatherxm.databinding.ListItemStationInfoBinding
+import com.weatherxm.databinding.ListItemDeviceInfoBinding
 import com.weatherxm.util.ResourcesHelper
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class StationInfoAdapter(
+class DeviceInfoAdapter(
     private val actionListener: (ActionType) -> Unit
-) : ListAdapter<StationInfo,
-    StationInfoAdapter.StationInfoViewHolder>(StationInfoDiffCallback()),
+) : ListAdapter<UIDeviceInfo,
+    DeviceInfoAdapter.DeviceInfoViewHolder>(DeviceInfoDiffCallback()),
     KoinComponent {
 
     val resHelper: ResourcesHelper by inject()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StationInfoViewHolder {
-        val binding = ListItemStationInfoBinding.inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceInfoViewHolder {
+        val binding = ListItemDeviceInfoBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return StationInfoViewHolder(binding, actionListener)
+        return DeviceInfoViewHolder(binding, actionListener)
     }
 
-    override fun onBindViewHolder(holder: StationInfoViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: DeviceInfoViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class StationInfoViewHolder(
-        private val binding: ListItemStationInfoBinding,
+    inner class DeviceInfoViewHolder(
+        private val binding: ListItemDeviceInfoBinding,
         private val listener: (ActionType) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: StationInfo) {
+        fun bind(item: UIDeviceInfo) {
             binding.title.text = item.title
             binding.value.text = item.value
 
@@ -61,13 +61,13 @@ class StationInfoAdapter(
         }
     }
 
-    class StationInfoDiffCallback : DiffUtil.ItemCallback<StationInfo>() {
+    class DeviceInfoDiffCallback : DiffUtil.ItemCallback<UIDeviceInfo>() {
 
-        override fun areItemsTheSame(oldItem: StationInfo, newItem: StationInfo): Boolean {
+        override fun areItemsTheSame(oldItem: UIDeviceInfo, newItem: UIDeviceInfo): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: StationInfo, newItem: StationInfo): Boolean {
+        override fun areContentsTheSame(oldItem: UIDeviceInfo, newItem: UIDeviceInfo): Boolean {
             return oldItem.title == newItem.title &&
                 oldItem.value == newItem.value &&
                 oldItem.action?.actionText == newItem.action?.actionText &&

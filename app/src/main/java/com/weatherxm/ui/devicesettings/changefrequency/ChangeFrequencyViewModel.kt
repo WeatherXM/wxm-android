@@ -1,4 +1,4 @@
-package com.weatherxm.ui.stationsettings.changefrequency
+package com.weatherxm.ui.devicesettings.changefrequency
 
 import android.bluetooth.BluetoothDevice
 import androidx.lifecycle.MutableLiveData
@@ -12,8 +12,8 @@ import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.FrequencyState
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.stationsettings.ChangeFrequencyState
-import com.weatherxm.ui.stationsettings.FrequencyStatus
+import com.weatherxm.ui.devicesettings.ChangeFrequencyState
+import com.weatherxm.ui.devicesettings.FrequencyStatus
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.usecases.StationSettingsUseCase

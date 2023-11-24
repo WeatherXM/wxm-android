@@ -78,8 +78,8 @@ open class RewardsCardView : LinearLayout, KoinComponent {
     ) {
         if (data == null) return
 
-        binding.timestamp.text = data.rewardTimestamp
-        binding.timestamp.setVisible(data.rewardTimestamp != null)
+        binding.timestamp.text = data.rewardFormattedTimestamp
+        binding.timestamp.setVisible(data.rewardFormattedTimestamp != null)
 
         val actualReward = data.actualReward ?: 0F
         binding.reward.text = resources.getString(R.string.reward, formatTokens(actualReward))
