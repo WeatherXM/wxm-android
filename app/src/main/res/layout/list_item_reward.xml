@@ -142,71 +142,77 @@
                         tools:valueTo="2000"
                         tools:values="@array/reward_slider_default_values" />
 
-                    <ImageView
-                        android:id="@+id/score_icon"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/secondaryInfoContainer"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_normal_to_large"
-                        android:src="@drawable/ic_reward_scale"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/reward_slider"
-                        tools:ignore="ContentDescription" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/score"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_extra_small"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                        app:layout_constraintBottom_toBottomOf="@id/score_icon"
-                        app:layout_constraintStart_toEndOf="@id/score_icon"
-                        app:layout_constraintTop_toTopOf="@id/score_icon"
-                        tools:text="0.69" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/score_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_extra_small"
-                        android:text="@string/reward_score"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                        android:textColor="@color/colorOnSurfaceVariant"
-                        app:layout_constraintStart_toStartOf="@id/score"
-                        app:layout_constraintTop_toBottomOf="@id/score" />
-
-                    <ImageView
-                        android:id="@+id/max_reward_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_normal"
                         android:layout_marginTop="@dimen/margin_normal_to_large"
-                        android:src="@drawable/ic_reward_scale"
-                        app:layout_constraintStart_toEndOf="@id/score_description"
-                        app:layout_constraintTop_toBottomOf="@id/reward_slider"
-                        app:tint="@color/midGrey"
-                        tools:ignore="ContentDescription" />
+                        app:layout_constraintTop_toBottomOf="@id/reward_slider">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/max_reward"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_extra_small"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                        app:layout_constraintBottom_toBottomOf="@id/max_reward_icon"
-                        app:layout_constraintStart_toEndOf="@id/max_reward_icon"
-                        app:layout_constraintTop_toTopOf="@id/max_reward_icon"
-                        tools:text="2000" />
+                        <ImageView
+                            android:id="@+id/score_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_reward_scale"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="ContentDescription" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_extra_extra_small"
-                        android:text="@string/max_rewards"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                        android:textColor="@color/colorOnSurfaceVariant"
-                        app:layout_constraintStart_toStartOf="@id/max_reward"
-                        app:layout_constraintTop_toBottomOf="@id/max_reward" />
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/score"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            app:layout_constraintBottom_toBottomOf="@id/score_icon"
+                            app:layout_constraintStart_toEndOf="@id/score_icon"
+                            app:layout_constraintTop_toTopOf="@id/score_icon"
+                            tools:text="0.69" />
 
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/score_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_extra_extra_small"
+                            android:text="@string/reward_score"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            android:textColor="@color/colorOnSurfaceVariant"
+                            app:layout_constraintStart_toStartOf="@id/score"
+                            app:layout_constraintTop_toBottomOf="@id/score" />
+
+                        <ImageView
+                            android:id="@+id/max_reward_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_normal"
+                            android:src="@drawable/ic_reward_scale"
+                            app:layout_constraintStart_toEndOf="@id/score_description"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/midGrey"
+                            tools:ignore="ContentDescription" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/max_reward"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            app:layout_constraintBottom_toBottomOf="@id/max_reward_icon"
+                            app:layout_constraintStart_toEndOf="@id/max_reward_icon"
+                            app:layout_constraintTop_toTopOf="@id/max_reward_icon"
+                            tools:text="2000" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_extra_extra_small"
+                            android:text="@string/max_rewards"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            android:textColor="@color/colorOnSurfaceVariant"
+                            app:layout_constraintStart_toStartOf="@id/max_reward"
+                            app:layout_constraintTop_toBottomOf="@id/max_reward" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>

@@ -22,6 +22,7 @@ import com.weatherxm.util.Rewards.getRewardScoreColor
 import com.weatherxm.util.setRewardStatusChip
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import timber.log.Timber
 
 class RewardsListAdapter(
     private val deviceRelation: DeviceRelation?,
@@ -79,15 +80,10 @@ class RewardsListAdapter(
                 binding.rewardStatus.setRewardStatusChip(it)
             } ?: binding.rewardStatus.setVisible(false)
 
-            item.periodMaxReward?.let {
-                binding.maxReward.text = formatTokens(it)
-
-                with(binding.rewardSlider) {
-                    valueFrom = 0.0F
-                    valueTo = it
-                    values = listOf(0.0F, item.actualReward)
-                }
-            }
+            setSlider(item)
+            binding.secondaryInfoContainer.setVisible(
+                item.rewardScore == 0 && item.periodMaxReward == 0F
+            )
 
             binding.timestamp.text = item.rewardFormattedTimestamp
 
@@ -137,6 +133,24 @@ class RewardsListAdapter(
                     binding.datePoint.visibility = View.VISIBLE
                     binding.date.visibility = View.VISIBLE
                     binding.date.text = formattedDate
+                }
+            }
+        }
+
+        private fun setSlider(item: UIRewardObject) {
+            item.periodMaxReward?.let {
+                binding.maxReward.text = formatTokens(it)
+
+                try {
+                    with(binding.rewardSlider) {
+                        valueFrom = 0.0F
+                        valueTo = it
+                        values = listOf(0.0F, item.actualReward)
+                        setVisible(true)
+                    }
+                } catch (e: IllegalStateException) {
+                    Timber.d(e)
+                    binding.rewardSlider.setVisible(false)
                 }
             }
         }
