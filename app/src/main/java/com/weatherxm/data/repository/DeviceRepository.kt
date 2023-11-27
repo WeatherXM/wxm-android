@@ -1,6 +1,7 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
+import arrow.core.recover
 import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceInfo
 import com.weatherxm.data.Failure
@@ -85,13 +86,13 @@ class DeviceRepositoryImpl(
                 .onRight { address ->
                     Timber.d("Got location address from cache [$address].")
                 }
-                .mapLeft {
+                .recover { _ ->
                     networkAddressDataSource.getLocationAddress(hex.index, hex.center)
                         .onRight { address ->
                             Timber.d("Got location address from network [$address].")
                             Timber.d("Saving location address to cache [$address].")
                             cacheAddressDataSource.setLocationAddress(hex.index, address)
-                        }
+                        }.bind()
                 }
         }?.getOrNull()
     }
