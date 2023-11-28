@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 import java.io.ByteArrayOutputStream
 
 plugins {
@@ -148,9 +146,8 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.5.4"
     }
-
 
     // Filter out specific build variants
     androidComponents {
@@ -242,31 +239,31 @@ dependencies {
     androidTestImplementation("androidx.test:rules:1.5.0")
 
     // Desugaring for Java8 feature support
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
     // Android Jetpack libraries
-    implementation("androidx.activity:activity-ktx:1.7.2")
+    implementation("androidx.activity:activity-ktx:1.8.1")
     implementation("androidx.annotation:annotation:1.7.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.browser:browser:1.6.0")
-    implementation("androidx.collection:collection-ktx:1.2.0")
+    implementation("androidx.browser:browser:1.7.0")
+    implementation("androidx.collection:collection-ktx:1.3.0")
     implementation("androidx.compose.foundation:foundation:1.5.4")
     implementation("androidx.compose.material3:material3:1.1.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.fragment:fragment-ktx:1.6.1")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.3")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.3")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
-    implementation("androidx.room:room-runtime:2.5.2")
-    ksp("androidx.room:room-compiler:2.5.2")
+    implementation("androidx.room:room-runtime:2.6.0")
+    ksp("androidx.room:room-compiler:2.6.0")
     implementation("androidx.security:security-crypto:1.0.0")
     implementation("androidx.startup:startup-runtime:1.1.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
@@ -291,7 +288,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
 
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.11.0"))
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
 
@@ -302,7 +299,7 @@ dependencies {
     implementation("com.auth0.android:jwtdecode:2.0.2")
 
     // Animations
-    implementation("com.airbnb.android:lottie:6.1.0")
+    implementation("com.airbnb.android:lottie:6.2.0")
 
     // Charts
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
@@ -319,14 +316,14 @@ dependencies {
     implementation("io.arrow-kt:arrow-fx-coroutines")
 
     // Mapbox
-    implementation("com.mapbox.maps:android:10.16.0")
+    implementation("com.mapbox.maps:android:10.16.2")
     implementation("com.mapbox.search:mapbox-search-android:1.0.0-rc.7")
 
     // Insetter
     implementation("dev.chrisbanes.insetter:insetter:0.6.1")
 
     // Import the Firebase BoM
-    implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
+    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-perf-ktx")
     implementation("com.google.firebase:firebase-config-ktx")
@@ -349,5 +346,5 @@ dependencies {
     // BLE Scanning and Communication
     implementation("com.juul.kable:core:0.27.0")
     implementation("com.github.espressif:esp-idf-provisioning-android:lib-2.1.2")
-    implementation("no.nordicsemi.android:dfu:2.3.2")
+    implementation("no.nordicsemi.android:dfu:2.4.0")
 }
