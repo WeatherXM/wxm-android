@@ -190,6 +190,7 @@ class RewardsListAdapter(
         override fun areContentsTheSame(oldItem: UIRewardObject, newItem: UIRewardObject): Boolean {
             return oldItem.txHash == newItem.txHash &&
                 oldItem.rewardTimestamp == newItem.rewardTimestamp &&
+                oldItem.rewardFormattedTimestamp == newItem.rewardFormattedTimestamp &&
                 oldItem.rewardFormattedDate == newItem.rewardFormattedDate &&
                 oldItem.rewardScore == newItem.rewardScore &&
                 oldItem.periodMaxReward == newItem.periodMaxReward &&

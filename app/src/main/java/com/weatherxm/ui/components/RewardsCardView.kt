@@ -33,6 +33,8 @@ import com.weatherxm.ui.common.UIRewardObject
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.devicedetails.rewards.RewardsViewModel
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.DateTimeHelper.getFormattedOffset
+import com.weatherxm.util.DateTimeHelper.isUTC
 import com.weatherxm.util.Rewards.formatLostRewards
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.getRewardAnnotationBackgroundColor
@@ -73,7 +75,7 @@ open class RewardsCardView : LinearLayout, KoinComponent {
         data: UIRewardObject?,
         deviceRelation: DeviceRelation?,
         tabSelected: RewardsViewModel.TabSelected? = null,
-        onInfoButton: ((String, String) -> Unit),
+        onInfoButton: (String, String) -> Unit,
         onProblems: (() -> Unit)? = null
     ) {
         if (data == null) return
@@ -108,13 +110,19 @@ open class RewardsCardView : LinearLayout, KoinComponent {
 
         binding.timelineExplanation.setOnClickListener {
             trackLearnMore(Analytics.ParamValue.TIMELINE.paramValue)
-            onInfoButton.invoke(
-                context.getString(R.string.timeline),
+            val description = if (data.rewardTimestamp?.offset?.isUTC() == true) {
                 context.getString(
-                    R.string.timeline_desc,
+                    R.string.timeline_desc_utc_only,
                     context.getString(R.string.docs_url_reward_mechanism)
                 )
-            )
+            } else {
+                context.getString(
+                    R.string.timeline_desc,
+                    data.rewardTimestamp?.offset?.getFormattedOffset(),
+                    context.getString(R.string.docs_url_reward_mechanism)
+                )
+            }
+            onInfoButton.invoke(context.getString(R.string.timeline), description)
         }
 
         data.rewardScore?.let {

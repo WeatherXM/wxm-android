@@ -7,6 +7,7 @@
 
     <dimen name="button_corner_radius">10dp</dimen>
 
+    <dimen name="chip_corner_radius_small">10dp</dimen>
     <dimen name="chip_corner_radius_big">40dp</dimen>
 
     <dimen name="margin_extra_extra_large">62dp</dimen>

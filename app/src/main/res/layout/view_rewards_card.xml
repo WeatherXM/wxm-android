@@ -39,7 +39,7 @@
                 app:layout_constraintEnd_toStartOf="@id/rewardStatus"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/timestamp"
-                tools:text="+ 2000 $WXM" />
+                tools:text="+ 2.5643 $WXM" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/rewardStatus"
@@ -150,7 +150,7 @@
                         app:layout_constraintBottom_toBottomOf="@id/maxRewardsIcon"
                         app:layout_constraintStart_toEndOf="@id/maxRewardsIcon"
                         app:layout_constraintTop_toTopOf="@id/maxRewardsIcon"
-                        tools:text="2000" />
+                        tools:text="2.5643" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/maxRewardsTitle"
@@ -197,7 +197,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                     android:textColor="@color/colorOnSurfaceVariant"
-                    tools:text="Timeline for yesterday, Oct 15 2023" />
+                    tools:text="Timeline for yesterday, Oct 15 2023 (UTC)" />
 
                 <ImageButton
                     android:id="@+id/timelineExplanation"

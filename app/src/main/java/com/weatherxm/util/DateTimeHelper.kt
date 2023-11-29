@@ -18,6 +18,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -86,6 +87,15 @@ object DateTimeHelper : KoinComponent {
         } else {
             "${month.getDisplayName(TextStyle.SHORT, Locale.US)} $dayOfMonth"
         }
+    }
+
+    fun ZoneOffset.getFormattedOffset(): String {
+        // In order to show +2:00 instead of +02:00 for example
+        return this.toString().replaceFirst("0", "")
+    }
+
+    fun ZoneOffset.isUTC(): Boolean {
+        return this == UTC
     }
 
     fun ZonedDateTime.getFormattedTime(

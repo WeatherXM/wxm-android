@@ -31,7 +31,7 @@ object Rewards {
     }
 
     fun formatTokens(amount: Float): String {
-        val decimalFormat = DecimalFormat("0.00")
+        val decimalFormat = DecimalFormat("0.00##")
         decimalFormat.roundingMode = RoundingMode.HALF_UP
         return decimalFormat.format(amount.toBigDecimal())
     }

@@ -76,7 +76,7 @@ data class UIRewardObject(
         rewardScore = rewards.rewardScore
         periodMaxReward = rewards.periodMaxReward
         txHash = rewards.txHash
-        setTimelineTitle(context, rewards.timeline?.referenceDate)
+        setTimelineTitle(context, rewards.timeline?.referenceDate, fromDate, toDate)
         timelineScores = rewards.timeline?.rewardScores ?: mutableListOf()
         setAnnotations(rewards.annotations)
     }
@@ -84,14 +84,24 @@ data class UIRewardObject(
     constructor(
         context: Context,
         rewardFormattedDate: String?,
-        rewardTimestamp: ZonedDateTime?,
-        rewardFormattedTimestamp: String?,
+        rewardTimestamp: ZonedDateTime,
         tx: Transaction
     ) : this() {
         this.rewardTimestamp = rewardTimestamp
-        this.rewardFormattedTimestamp = rewardFormattedTimestamp
-        this.rewardFormattedDate = rewardFormattedDate
+        val todayOrYesterday = if (rewardTimestamp.isToday() || rewardTimestamp.isYesterday()) {
+            rewardTimestamp.getFormattedDay(context)
+        } else {
+            null
+        }
+        val time = rewardTimestamp.getFormattedTime(context)
+        val formattedTimestampDate = rewardTimestamp.getFormattedDate(true)
+        rewardFormattedTimestamp = if (todayOrYesterday.isNullOrEmpty()) {
+            "$formattedTimestampDate, $time"
+        } else {
+            "$todayOrYesterday, $formattedTimestampDate, $time"
+        }
 
+        this.rewardFormattedDate = rewardFormattedDate
         actualReward = tx.actualReward
         lostRewards = tx.lostRewards
         rewardScore = tx.rewardScore
@@ -102,8 +112,13 @@ data class UIRewardObject(
         setAnnotations(tx.annotations)
     }
 
-    private fun setTimelineTitle(context: Context, referenceDate: ZonedDateTime?) {
-        timelineTitle = referenceDate?.let {
+    private fun setTimelineTitle(
+        context: Context,
+        referenceDate: ZonedDateTime?,
+        fromDate: String? = null,
+        toDate: String? = null
+    ) {
+        val dateToShow = referenceDate?.let {
             val todayOrYesterday = if (it.isToday() || it.isYesterday()) {
                 it.getFormattedDay(context)
             } else {
@@ -111,10 +126,19 @@ data class UIRewardObject(
             }
             val timelineDate = it.getFormattedDate(true)
             if (todayOrYesterday.isNullOrEmpty()) {
-                "${context.getString(R.string.timeline_for)} $timelineDate"
+                timelineDate
             } else {
-                "${context.getString(R.string.timeline_for)} $todayOrYesterday, $timelineDate"
+                "$todayOrYesterday, $timelineDate"
             }
+        } ?: kotlin.run {
+            if (fromDate != null && toDate != null) {
+                "$fromDate - $toDate"
+            } else {
+                null
+            }
+        }
+        dateToShow?.let {
+            timelineTitle = context.getString(R.string.timeline_for, it)
         }
     }
 

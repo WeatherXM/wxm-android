@@ -61,21 +61,21 @@ class RewardsFragment : Fragment(), KoinComponent {
                     navigator.showMessageDialog(
                         childFragmentManager, title = title, htmlMessage = htmlMessage
                     )
-                },
-                onProblems = {
-                    val tabSelected =
-                        RewardsViewModel.TabSelected.entries[binding.selectorGroup.selectedTabPosition]
-                    analytics.trackEventUserAction(
-                        Analytics.ParamValue.IDENTIFY_PROBLEMS.paramValue,
-                        Analytics.Screen.DEVICE_REWARDS.screenName,
-                        Pair(FirebaseAnalytics.Param.ITEM_ID, tabSelected.analyticsValue)
-                    )
-                    if (tabSelected == RewardsViewModel.TabSelected.LATEST) {
-                        navigator.showRewardDetails(requireContext(), model.device, it)
-                    } else {
-                        navigator.showRewardsList(requireContext(), model.device)
-                    }
-                })
+                }
+            ) {
+                val tabSelected =
+                    RewardsViewModel.TabSelected.entries[binding.selectorGroup.selectedTabPosition]
+                analytics.trackEventUserAction(
+                    Analytics.ParamValue.IDENTIFY_PROBLEMS.paramValue,
+                    Analytics.Screen.DEVICE_REWARDS.screenName,
+                    Pair(FirebaseAnalytics.Param.ITEM_ID, tabSelected.analyticsValue)
+                )
+                if (tabSelected == RewardsViewModel.TabSelected.LATEST) {
+                    navigator.showRewardDetails(requireContext(), model.device, it)
+                } else {
+                    navigator.showRewardsList(requireContext(), model.device)
+                }
+            }
             binding.rewardsMainCard.setVisible(true)
         }
 

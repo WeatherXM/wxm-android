@@ -247,6 +247,7 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="chipBackgroundColor">@color/blueTint</item>
+        <item name="chipCornerRadius">@dimen/chip_corner_radius_small</item>
         <item name="fontFamily">monospace</item>
         <item name="chipStrokeWidth">0dp</item>
         <item name="chipMinTouchTargetSize">0dp</item>

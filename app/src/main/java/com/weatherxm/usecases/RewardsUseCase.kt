@@ -23,7 +23,6 @@ class RewardsUseCaseImpl(
     private val context: Context
 ) : RewardsUseCase {
     private val dateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
-    private val timestampFormat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
 
     override suspend fun getTransactions(
         deviceId: String,
@@ -50,7 +49,6 @@ class RewardsUseCaseImpl(
                             context = context,
                             rewardFormattedDate = tx.timestamp.format(dateFormat),
                             rewardTimestamp = tx.timestamp,
-                            rewardFormattedTimestamp = tx.timestamp.format(timestampFormat),
                             tx = tx
                         )
                     }
