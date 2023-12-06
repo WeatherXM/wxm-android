@@ -12,7 +12,7 @@ interface RewardsRepository {
     suspend fun getTransactions(
         deviceId: String,
         page: Int?,
-        timezone: String? = ZoneId.systemDefault().toString(),
+        timezone: String? = null,
         fromDate: String?,
         toDate: String? = null
     ): Either<Failure, TransactionsResponse>
