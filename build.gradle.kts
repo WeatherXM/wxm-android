@@ -10,24 +10,26 @@ plugins {
 }
 
 /**
- * Load key-values from ".env" properties file into extension properties (ext)
+ * Load key-values from "production.env" properties file into extension properties (ext)
  */
-task("loadEnv") {
-    val envInfo = mutableMapOf<String, String>()
+task("loadProductionEnv") {
+    if(!project.hasProperty("SKIP_PRODUCTION_ENV")) {
+        val env = rootProject.file("production.env")
 
-    val env = rootProject.file(".env")
-
-    if (env.exists()) {
-        env.forEachLine {
-            val keyValuePair = it.split("=")
-            if (keyValuePair.size > 1) {
-                envInfo[keyValuePair[0]] = keyValuePair[1]
+        if (env.exists()) {
+            env.forEachLine {
+                val keyValuePair = it.split("=")
+                if (keyValuePair.size > 1) {
+                    project.ext.set(keyValuePair[0], keyValuePair[1])
+                }
             }
+        } else {
+            throw GradleException(
+                "`production.env` not found. " +
+                    "Please follow the \"building\" section on the README or the CONTRIBUTING guide" +
+                    " and use the respective template to create `production.env`."
+            )
         }
-    }
-
-    envInfo.forEach {
-        project.ext.set(it.key, it.value)
     }
 }
 

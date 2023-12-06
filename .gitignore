@@ -11,7 +11,7 @@ release/
 *.jks
 
 
-.env
+*.env
 local.properties
 google-services.json
 ci-service-account.json

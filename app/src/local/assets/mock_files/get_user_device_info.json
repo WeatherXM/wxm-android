@@ -3,7 +3,7 @@
     "claimed_at": "2023-03-21T16:37:37+02:00",
     "gateway": {
         "model": "WG1000",
-        "serial_number": "01:23:C9:8B:DD:D0:02:40:01",
+        "serial_number": "01:23:45:67:89:AB:CD:DE:EF",
         "firmware": {
             "current": "0.3.34",
             "assigned": "0.3.13"

@@ -4,14 +4,11 @@ on:
         tags:
             - '[0-9]+.[0-9]+.[0-9]+'
 env:
+    # API URL
+    ORG_GRADLE_PROJECT_API_URL: ${{ secrets.API_URL }}
     # Mapbox SDK secrets
     ORG_GRADLE_PROJECT_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
     ORG_GRADLE_PROJECT_MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
-    # Debug key information
-    ORG_GRADLE_PROJECT_DEBUG_KEYSTORE: ${{ secrets.DEBUG_KEYSTORE }}
-    ORG_GRADLE_PROJECT_DEBUG_KEYSTORE_PASSWORD: ${{ secrets.DEBUG_KEYSTORE_PASSWORD }}
-    ORG_GRADLE_PROJECT_DEBUG_KEY_ALIAS: ${{ secrets.DEBUG_KEY_ALIAS }}
-    ORG_GRADLE_PROJECT_DEBUG_KEY_PASSWORD: ${{ secrets.DEBUG_KEY_PASSWORD }}
     # Release key information
     ORG_GRADLE_PROJECT_RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
     ORG_GRADLE_PROJECT_RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
@@ -49,5 +46,5 @@ jobs:
                     java-version: '17'
             -   name: Build production release and distribute on Firebase
                 run: |
-                    ./gradlew :app:assembleRemoteProdRelease :app:appDistributionUploadRemoteProdRelease
+                    ./gradlew :app:assembleRemoteProdRelease :app:appDistributionUploadRemoteProdRelease -PSKIP_PRODUCTION_ENV
                     rm ./ci-service-account.json

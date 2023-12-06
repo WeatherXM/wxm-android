@@ -6,14 +6,11 @@ name: Pull Request Code Build & Analysis
 on:
     pull_request
 env:
+    # API URL
+    ORG_GRADLE_PROJECT_API_URL: ${{ secrets.API_URL }}
     # Mapbox SDK secrets
     ORG_GRADLE_PROJECT_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
     ORG_GRADLE_PROJECT_MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
-    # Debug key information
-    ORG_GRADLE_PROJECT_DEBUG_KEYSTORE: ${{ secrets.DEBUG_KEYSTORE }}
-    ORG_GRADLE_PROJECT_DEBUG_KEYSTORE_PASSWORD: ${{ secrets.DEBUG_KEYSTORE_PASSWORD }}
-    ORG_GRADLE_PROJECT_DEBUG_KEY_ALIAS: ${{ secrets.DEBUG_KEY_ALIAS }}
-    ORG_GRADLE_PROJECT_DEBUG_KEY_PASSWORD: ${{ secrets.DEBUG_KEY_PASSWORD }}
     # Release key information
     ORG_GRADLE_PROJECT_RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
     ORG_GRADLE_PROJECT_RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
@@ -49,7 +46,7 @@ jobs:
                     distribution: 'temurin'
                     java-version: '17'
             -   name: Build
-                run: ./gradlew :app:assembleRemoteProdRelease :app:assemblelocalMockDebug
+                run: ./gradlew :app:assembleRemoteProdRelease :app:assemblelocalMockDebug -PSKIP_PRODUCTION_ENV
     codeanalysis:
         needs: build
         runs-on: ubuntu-latest
@@ -75,4 +72,4 @@ jobs:
                     distribution: 'temurin'
                     java-version: '17'
             -   name: Detekt
-                run: ./gradlew :app:detekt
+                run: ./gradlew :app:detekt -PSKIP_PRODUCTION_ENV

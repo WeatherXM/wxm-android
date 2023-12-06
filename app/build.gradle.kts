@@ -25,6 +25,23 @@ fun getStringProperty(name: String): String {
     return project.property(name) as String
 }
 
+fun getFlavorApiUrl(flavorEnvFile: String): String {
+    // Default API URL
+    var apiURL = getStringProperty("API_URL")
+
+    val env = rootProject.file(flavorEnvFile)
+    if (env.exists()) {
+        env.forEachLine {
+            val keyValuePair = it.split("=")
+            if (keyValuePair.size > 1 && keyValuePair[0] == "API_URL") {
+                apiURL = keyValuePair[1]
+                project.ext.set(keyValuePair[0], keyValuePair[1])
+            }
+        }
+    }
+    return apiURL
+}
+
 android {
     namespace = "com.weatherxm"
     compileSdk = 34
@@ -65,22 +82,24 @@ android {
             dimension = "mode"
         }
         create("mock") {
+            val apiURL = getFlavorApiUrl("remotemock.env")
             dimension = "server"
             applicationIdSuffix = ".mock"
             resValue("string", "app_name", "WXM Remote Mock")
             manifestPlaceholders["auth_host"] = "app-mock.weatherxm.com"
             manifestPlaceholders["explorer_host"] = "explorer-mock.weatherxm.com"
-            buildConfigField("String", "API_URL", "\"https://api-mock.weatherxm.com\"")
-            buildConfigField("String", "AUTH_URL", "\"https://api-mock.weatherxm.com\"")
+            buildConfigField("String", "API_URL", "\"$apiURL\"")
+            buildConfigField("String", "AUTH_URL", "\"$apiURL\"")
         }
         create("staging") {
+            val apiURL = getFlavorApiUrl("staging.env")
             dimension = "server"
             applicationIdSuffix = ".staging"
             resValue("string", "app_name", "WXM Staging")
             manifestPlaceholders["auth_host"] = "app-staging.weatherxm.com"
             manifestPlaceholders["explorer_host"] = "explorer-staging.weatherxm.com"
-            buildConfigField("String", "API_URL", "\"https://api-staging.weatherxm.com\"")
-            buildConfigField("String", "AUTH_URL", "\"https://api-staging.weatherxm.com\"")
+            buildConfigField("String", "API_URL", "\"$apiURL\"")
+            buildConfigField("String", "AUTH_URL", "\"$apiURL\"")
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotes = "Release notes for staging version"
@@ -89,13 +108,14 @@ android {
             }
         }
         create("dev") {
+            val apiURL = getFlavorApiUrl("development.env")
             dimension = "server"
             applicationIdSuffix = ".dev"
             resValue("string", "app_name", "WXM Dev")
             manifestPlaceholders["auth_host"] = "app-dev.weatherxm.com"
             manifestPlaceholders["explorer_host"] = "explorer-dev.weatherxm.com"
-            buildConfigField("String", "API_URL", "\"https://api-dev.weatherxm.com\"")
-            buildConfigField("String", "AUTH_URL", "\"https://api-dev.weatherxm.com\"")
+            buildConfigField("String", "API_URL", "\"$apiURL\"")
+            buildConfigField("String", "AUTH_URL", "\"$apiURL\"")
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotes = "Release notes for development version"
@@ -104,12 +124,13 @@ android {
             }
         }
         create("prod") {
+            val apiURL = getFlavorApiUrl("production.env")
             dimension = "server"
             resValue("string", "app_name", "WeatherXM")
             manifestPlaceholders["auth_host"] = "app.weatherxm.com"
             manifestPlaceholders["explorer_host"] = "explorer.weatherxm.com"
-            buildConfigField("String", "API_URL", "\"https://api.weatherxm.com\"")
-            buildConfigField("String", "AUTH_URL", "\"https://api.weatherxm.com\"")
+            buildConfigField("String", "API_URL", "\"$apiURL\"")
+            buildConfigField("String", "AUTH_URL", "\"$apiURL\"")
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotes = "Release notes for production version"

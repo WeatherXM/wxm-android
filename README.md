@@ -8,9 +8,10 @@ Architecture*.
 # Building
 
 To build the app from source, you need to pass the following environment variables, through `gradle`
-command line arguments, or by creating a `.env` properties file in the root directory, according to
-the [template](https://github.com/WeatherXM/wxm-android/blob/main/.env.template) file, that will be
-automatically read into env variables by the build script.
+command line arguments, or by creating a `production.env` properties file in the root directory,
+according to the
+[template](https://github.com/WeatherXM/wxm-android/blob/main/production.env.template) file,
+that will be automatically read into env variables by the build script.
 
 You would also need the `google-services.json` which can be downloaded from Firebase.
 
@@ -18,19 +19,25 @@ If you want to release on production, you would also need the correct keystore.
 
 # Different Flavors
 
-We have 4 different app flavors (consider flavors as different “build variants”, read
-more [here](https://developer.android.com/build/build-variants)):
+We have 5 different app flavors (consider flavors as different “build variants”, read
+more [here](https://developer.android.com/build/build-variants)). For each flavor a
+different `{flavor}.env`file can be created for different environment variables such as `API_URL`.
+
+The 5 different app flavors are:
 
 1. **Local Mock**: We use this to **mock responses from the API using some local JSON files** that
    can be found in `root/app/src/local/assets/mock_files/*` in order to test some edge cases and/or
    user reported bugs.
-2. **Remote Mock:** This flavor communicates with the `app-mock.weatherxm.com` API which produces *
-   *random mocked responses**.
-3. **Remote Dev**: This flavor communicates with our **dev API**, found on `app-dev.weatherxm.com`
-4. **Remote Staging:** Initially used for communicating with our **staging API** found
-   on `app-staging.weatherxm.com`. **Not currently used.**
+2. **Remote Mock:** This flavor communicates with our **remote mock API**.
+   Powered by `remotemock.env`. **Currently only for internal use.**
+3. **Remote Dev**: This flavor communicates with our **dev API**.
+   Powered by `development.env`. **Currently only for internal use.**
+4. **Remote Staging:** Initially used for communicating with our **staging API**.
+   Powered by `staging.env`. **Not currently used.**
 5. **Remote Prod:** This flavor communicates with our **production API**, found
-   on `app.weatherxm.com`.
+   on `app.weatherxm.com`. Powered by `production.env`.
+   The `API_URL` on that environment file should
+   be [https://api.weatherxm.com](https://api.weatherxm.com)
 
 One thing that needs to be mentioned is that for every flavor a different build type can be used,
 either a `Debug` or a `Release` build type.
