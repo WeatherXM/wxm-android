@@ -29,6 +29,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewRewardsCardBinding
 import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIRewardObject
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.devicedetails.rewards.RewardsViewModel
@@ -73,7 +74,7 @@ open class RewardsCardView : LinearLayout, KoinComponent {
     @Suppress("MagicNumber")
     fun updateUI(
         data: UIRewardObject?,
-        deviceRelation: DeviceRelation?,
+        device: UIDevice?,
         tabSelected: RewardsViewModel.TabSelected? = null,
         onInfoButton: (String, String) -> Unit,
         onProblems: (() -> Unit)? = null
@@ -110,7 +111,7 @@ open class RewardsCardView : LinearLayout, KoinComponent {
 
         binding.timelineExplanation.setOnClickListener {
             trackLearnMore(Analytics.ParamValue.TIMELINE.paramValue)
-            val description = if (data.rewardTimestamp?.offset?.isUTC() == true) {
+            val description = if (device?.lastWeatherStationActivity?.offset?.isUTC() == true) {
                 context.getString(
                     R.string.timeline_desc_utc_only,
                     context.getString(R.string.docs_url_reward_mechanism)
@@ -118,7 +119,7 @@ open class RewardsCardView : LinearLayout, KoinComponent {
             } else {
                 context.getString(
                     R.string.timeline_desc,
-                    data.rewardTimestamp?.offset?.getFormattedOffset(),
+                    device?.lastWeatherStationActivity?.offset?.getFormattedOffset(),
                     context.getString(R.string.docs_url_reward_mechanism)
                 )
             }
@@ -147,7 +148,7 @@ open class RewardsCardView : LinearLayout, KoinComponent {
         if (tabSelected != null &&
             (data.annotations.isNotEmpty() || ((data.rewardScore) ?: 0) < 100)
         ) {
-            setErrorData(data, deviceRelation, onProblems)
+            setErrorData(data, device?.relation, onProblems)
         } else {
             binding.problemsCard.setVisible(false)
         }

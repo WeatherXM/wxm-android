@@ -68,7 +68,7 @@ class RewardDetailsActivity : AppCompatActivity(), KoinComponent, RewardProblems
 
         binding.rewardsContentCard.updateUI(
             rewardsObject,
-            device.relation,
+            device,
             onInfoButton = { title, htmlMessage ->
                 navigator.showMessageDialog(
                     supportFragmentManager, title = title, htmlMessage = htmlMessage

@@ -20,6 +20,8 @@ import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.isToday
 import com.weatherxm.util.isYesterday
 import kotlinx.parcelize.Parcelize
+import java.time.ZoneId
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 @Keep
@@ -58,19 +60,24 @@ data class UIRewardObject(
     var annotations: MutableList<UIRewardsAnnotation> = mutableListOf()
 ) : Parcelable {
     constructor(context: Context, rewards: RewardsObject, isRange: Boolean = false) : this() {
+        val utcFromDate =
+            rewards.fromDate?.withZoneSameInstant(ZoneId.of("UTC"))?.getFormattedDate()
+        val utcToDate =
+            rewards.toDate?.withZoneSameInstant(ZoneId.of("UTC"))?.getFormattedDate()
         rewardFormattedTimestamp = if (isRange) {
-            "${rewards.fromDate?.getFormattedDate()} - ${rewards.toDate?.getFormattedDate()}"
+            "$utcFromDate - $utcToDate (UTC)"
         } else {
             rewards.timestamp?.let { timestamp ->
+                val utcTimestamp = timestamp.withZoneSameInstant(ZoneId.of("UTC"))
                 rewardTimestamp = timestamp
-                val day = timestamp.getFormattedDay(context, true)
-                val time = timestamp.getFormattedTime(context)
-                listOf(day, time).joinToString(separator = ", ")
+                val date = utcTimestamp.getFormattedDate()
+                val time = utcTimestamp.getFormattedTime(context)
+                "$date, $time (UTC)"
             }
         }
 
-        fromDate = rewards.fromDate?.getFormattedDate()
-        toDate = rewards.toDate?.getFormattedDate()
+        fromDate = utcFromDate
+        toDate = utcToDate
         actualReward = rewards.actualReward
         lostRewards = rewards.lostRewards
         rewardScore = rewards.rewardScore
@@ -81,27 +88,12 @@ data class UIRewardObject(
         setAnnotations(rewards.annotations)
     }
 
-    constructor(
-        context: Context,
-        rewardFormattedDate: String?,
-        rewardTimestamp: ZonedDateTime,
-        tx: Transaction
-    ) : this() {
-        this.rewardTimestamp = rewardTimestamp
-        val todayOrYesterday = if (rewardTimestamp.isToday() || rewardTimestamp.isYesterday()) {
-            rewardTimestamp.getFormattedDay(context)
-        } else {
-            null
-        }
-        val time = rewardTimestamp.getFormattedTime(context)
-        val formattedTimestampDate = rewardTimestamp.getFormattedDate(true)
-        rewardFormattedTimestamp = if (todayOrYesterday.isNullOrEmpty()) {
-            "$formattedTimestampDate, $time"
-        } else {
-            "$todayOrYesterday, $formattedTimestampDate, $time"
-        }
-
-        this.rewardFormattedDate = rewardFormattedDate
+    constructor(context: Context, tx: Transaction) : this() {
+        this.rewardTimestamp = tx.timestamp
+        val date = tx.timestamp.getFormattedDate()
+        val time = tx.timestamp.getFormattedTime(context)
+        rewardFormattedTimestamp = "$date, $time (UTC)"
+        this.rewardFormattedDate = tx.timestamp.getFormattedDate(true)
         actualReward = tx.actualReward
         lostRewards = tx.lostRewards
         rewardScore = tx.rewardScore

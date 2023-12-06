@@ -22,8 +22,6 @@ class RewardsUseCaseImpl(
     private val repository: RewardsRepository,
     private val context: Context
 ) : RewardsUseCase {
-    private val dateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
-
     override suspend fun getTransactions(
         deviceId: String,
         page: Int?,
@@ -45,12 +43,7 @@ class RewardsUseCaseImpl(
                         tx.actualReward != null
                     }
                     .map { tx ->
-                        UIRewardObject(
-                            context = context,
-                            rewardFormattedDate = tx.timestamp.format(dateFormat),
-                            rewardTimestamp = tx.timestamp,
-                            tx = tx
-                        )
+                        UIRewardObject(context = context, tx = tx)
                     }
                 UIRewardsList(uiTransactions, it.hasNextPage)
             }

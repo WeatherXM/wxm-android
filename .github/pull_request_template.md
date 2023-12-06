@@ -1,10 +1,3 @@
----
-name: Pull Request
-about: Create a pull request
-assignees: ''
-
----
-
 ## **Why?**
 
 A clear and concise description of what is this PR about.

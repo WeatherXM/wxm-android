@@ -241,8 +241,8 @@
     <string name="rewards_lost">Lost %d%%</string>
     <string name="timeline_for">Timeline for %s (UTC)</string>
     <string name="timeline">Timeline</string>
-    <string name="timeline_desc"><![CDATA[Timeline for the reference day of the actual rewards, as these are calculated taking into account the performance of the weather station for that day.<br><br>Note that <b>all times and dates for the timeline are in UTC</b>, whereas this station is in the <b>UTC%1$s</b> timezone.<br><br>You can read more about our reward mechanism <a href="%2$s">here</a>.]]></string>
-    <string name="timeline_desc_utc_only"><![CDATA[Timeline for the reference day of the actual rewards, as these are calculated taking into account the performance of the weather station for that day.<br><br>Note that <b>all times and dates for the timeline are in UTC.</b><br><br>You can read more about our reward mechanism <a href="%1$s">here</a>.]]></string>
+    <string name="timeline_desc"><![CDATA[Timeline for the reference day of the actual rewards, as these are calculated taking into account the performance of the weather station for that day.<br><br>Note that <b>all times and dates are in UTC</b>, whereas this station is in the <b>UTC%1$s</b> timezone.<br><br>You can read more about our reward mechanism <a href="%2$s">here</a>.]]></string>
+    <string name="timeline_desc_utc_only"><![CDATA[Timeline for the reference day of the actual rewards, as these are calculated taking into account the performance of the weather station for that day.<br><br>Note that <b>all times and dates are in UTC.</b><br><br>You can read more about our reward mechanism <a href="%1$s">here</a>.]]></string>
     <string name="total_station_rewards">Total Station Rewards</string>
     <string name="latest">Latest</string>
     <string name="last_7d">Last 7D</string>

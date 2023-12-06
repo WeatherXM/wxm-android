@@ -55,7 +55,7 @@ class RewardsFragment : Fragment(), KoinComponent {
         model.onRewardsObject().observe(viewLifecycleOwner) {
             binding.rewardsContentCard.updateUI(
                 it,
-                model.device.relation,
+                model.device,
                 RewardsViewModel.TabSelected.entries[binding.selectorGroup.selectedTabPosition],
                 onInfoButton = { title, htmlMessage ->
                     navigator.showMessageDialog(

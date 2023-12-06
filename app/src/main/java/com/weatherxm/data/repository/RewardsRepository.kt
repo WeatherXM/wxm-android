@@ -33,7 +33,7 @@ class RewardsRepositoryImpl(private val dataSource: RewardsDataSource) : Rewards
         return dataSource.getTransactions(
             deviceId,
             page,
-            timezone = timezone,
+            timezone = ZoneId.of("UTC").toString(),
             fromDate = fromDate,
             toDate = toDate,
         )
