@@ -78,9 +78,9 @@ class ExplorerUseCaseImpl(
     }
 
     override suspend fun getCellDevices(cell: UICell): Either<Failure, List<UIDevice>> {
-        return explorerRepository.getCellDevices(cell.index).map {
+        return explorerRepository.getCellDevices(cell.index).map { devices ->
             val address = addressRepository.getAddressFromLocation(cell.index, cell.center)
-            it.map { publicDevice ->
+            devices.map { publicDevice ->
                 publicDevice.toUIDevice().apply {
                     this.cellCenter = cell.center
                     this.address = address

@@ -164,10 +164,11 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.4"
+        kotlinCompilerExtensionVersion = "1.5.6"
     }
 
     // Filter out specific build variants
@@ -283,13 +284,13 @@ dependencies {
     implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
-    implementation("androidx.room:room-runtime:2.6.0")
-    ksp("androidx.room:room-compiler:2.6.0")
+    implementation("androidx.room:room-runtime:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
     implementation("androidx.security:security-crypto:1.0.0")
     implementation("androidx.startup:startup-runtime:1.1.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
-    implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
 
     // Material Components for Android
     implementation("com.google.android.material:material:1.10.0")
@@ -345,11 +346,11 @@ dependencies {
 
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-perf-ktx")
-    implementation("com.google.firebase:firebase-config-ktx")
-    implementation("com.google.firebase:firebase-messaging-ktx")
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-perf")
+    implementation("com.google.firebase:firebase-config")
+    implementation("com.google.firebase:firebase-messaging")
+    implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-installations")
 
     // QR Code Scanner

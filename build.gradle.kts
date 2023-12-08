@@ -1,12 +1,12 @@
 plugins {
-    id("com.android.application") version "8.1.4" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.20" apply false
-    id("com.google.devtools.ksp") version "1.9.20-1.0.14" apply false
+    id("com.android.application") version "8.2.0" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.21" apply false
+    id("com.google.devtools.ksp") version "1.9.21-1.0.15" apply false
     id("com.google.gms.google-services") version "4.4.0" apply false
     id("com.google.firebase.crashlytics") version "2.9.9" apply false
     id("com.google.firebase.appdistribution") version "4.0.1" apply false
     id("com.google.firebase.firebase-perf") version "1.4.2" apply false
-    id("io.gitlab.arturbosch.detekt") version "1.23.3"
+    id("io.gitlab.arturbosch.detekt") version "1.23.4"
 }
 
 /**
@@ -67,6 +67,6 @@ task("clean") {
  * Configures gradle wrapper for this project
  */
 tasks.wrapper {
-    gradleVersion = "8.4"
+    gradleVersion = "8.5"
     distributionType = Wrapper.DistributionType.ALL
 }

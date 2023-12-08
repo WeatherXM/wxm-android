@@ -73,7 +73,7 @@ open class BaseMapFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        map = binding.mapView.getMapboxMap()
+        map = getMap()
 
         viewManager = binding.mapView.viewAnnotationManager
 

@@ -2,8 +2,8 @@ package com.weatherxm.util
 
 import android.content.SharedPreferences
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.ParametersBuilder
-import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.analytics.ParametersBuilder
+import com.google.firebase.analytics.logEvent
 import com.weatherxm.BuildConfig
 import com.weatherxm.R
 import com.weatherxm.data.services.CacheService
