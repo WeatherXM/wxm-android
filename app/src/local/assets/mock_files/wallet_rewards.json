@@ -1,0 +1,11 @@
+{
+    "proof": [
+        "0xb386debe232238f5384e208db3d11d03d14f3f52e741caef0f9b8be0f16b3bf0",
+        "0x678efbdb7eefd288e46a165b1134098fd4e9b97994bd78d1a2dafb8833e26d5d",
+        "0x95b3e6afbe387a8ed084fdd2bb00be21066fafc80dcba639fe7464607eb2efe8"
+    ],
+    "cumulative_amount": "900000000000000000000",
+    "cycle": 4,
+    "available": "827007002010000000000",
+    "total_claimed": "72992997990000001024"
+}

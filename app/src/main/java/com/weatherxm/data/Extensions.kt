@@ -5,7 +5,6 @@ import com.auth0.android.jwt.JWT
 import com.google.android.gms.tasks.Task
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.squareup.moshi.JsonDataException
-import com.weatherxm.R
 import com.weatherxm.data.ApiError.AuthError.InvalidAccessToken
 import com.weatherxm.data.ApiError.AuthError.InvalidActivationToken
 import com.weatherxm.data.ApiError.AuthError.InvalidUsername
@@ -29,6 +28,7 @@ import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidTimezone
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.ApiError.UserError.WalletError.InvalidWalletAddress
+import com.weatherxm.data.ApiError.UserError.WalletError.WalletAddressNotFound
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
 import com.weatherxm.data.NetworkError.ParseJsonError
@@ -55,6 +55,7 @@ import com.weatherxm.data.network.ErrorResponse.Companion.UNAUTHORIZED
 import com.weatherxm.data.network.ErrorResponse.Companion.USER_ALREADY_EXISTS
 import com.weatherxm.data.network.ErrorResponse.Companion.USER_NOT_FOUND
 import com.weatherxm.data.network.ErrorResponse.Companion.VALIDATION
+import com.weatherxm.data.network.ErrorResponse.Companion.WALLET_ADDRESS_NOT_FOUND
 import com.weatherxm.util.Mask
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
@@ -110,6 +111,7 @@ fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
                         FORBIDDEN -> ForbiddenError(code, this.body?.message)
                         VALIDATION -> ValidationError(code, this.body?.message)
                         NOT_FOUND -> NotFoundError(code, this.body?.message)
+                        WALLET_ADDRESS_NOT_FOUND -> WalletAddressNotFound(code, this.body?.message)
                         else -> UnknownError(code, this.body?.message)
                     }
                 )

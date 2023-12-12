@@ -49,4 +49,9 @@
         <attr name="appWidgetInnerRadius" format="dimension" />
         <attr name="appWidgetRadius" format="dimension" />
     </declare-styleable>
+    <declare-styleable name="ProfileItemCardView">
+        <attr name="profile_item_title" format="string" />
+        <attr name="profile_item_subtitle" format="string" />
+        <attr name="profile_item_icon" format="reference" />
+    </declare-styleable>
 </resources>

@@ -12,6 +12,7 @@ interface AppConfigRepository {
     fun getChangelog(): String
     fun setLastRemindedVersion()
     fun getInstallationId(): String?
+    fun isTokenClaimingEnabled(): Boolean
 }
 
 class AppConfigRepositoryImpl(
@@ -51,5 +52,9 @@ class AppConfigRepositoryImpl(
                 }
             }
             .getOrNull()
+    }
+
+    override fun isTokenClaimingEnabled(): Boolean {
+        return appConfigDataSource.isTokenClaimingEnabled()
     }
 }

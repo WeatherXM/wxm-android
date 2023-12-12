@@ -9,11 +9,14 @@ import com.weatherxm.ui.common.AnnotationCode
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIRewardsAnnotation
+import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
 object Rewards {
     const val REWARDS_WARNING_LIMIT = 70
+    const val DIVISOR_WEI_TO_ETH = "1000000000000000000"
+    const val ETH_DECIMALS = 18
 
     @Suppress("MagicNumber")
     @ColorRes
@@ -30,10 +33,21 @@ object Rewards {
         } ?: R.color.reward_score_unknown
     }
 
-    fun formatTokens(amount: Float): String {
+    fun formatTokens(amount: BigDecimal): String {
         val decimalFormat = DecimalFormat("0.00##")
         decimalFormat.roundingMode = RoundingMode.HALF_UP
-        return decimalFormat.format(amount.toBigDecimal())
+        return decimalFormat.format(amount)
+    }
+
+    @Suppress("MagicNumber")
+    fun weiToETH(amount: BigDecimal): BigDecimal {
+        /**
+         * Mandatory otherwise we get a result of 0E-18 instead of 0
+         */
+        if (amount == BigDecimal.ZERO) {
+            return BigDecimal.ZERO
+        }
+        return amount.divide(BigDecimal(DIVISOR_WEI_TO_ETH), ETH_DECIMALS, RoundingMode.HALF_UP)
     }
 
     fun getRewardAnnotationBackgroundColor(rewardScore: Int?): Int {
@@ -50,7 +64,7 @@ object Rewards {
 
     fun formatLostRewards(lostRewards: Float?): String {
         return lostRewards?.let {
-            formatTokens(it)
+            formatTokens(it.toBigDecimal())
         } ?: "?"
     }
 

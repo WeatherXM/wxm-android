@@ -24,7 +24,7 @@ class MessageDialogFragment : BottomSheetDialogFragment() {
         const val TAG = "MessageDialogFragment"
         const val ARG_TITLE = "title"
         const val ARG_MESSAGE = "message"
-        const val ARG_HTML_MESSAGE = "message"
+        const val ARG_HTML_MESSAGE = "html_message"
 
         fun newInstance(title: String?, message: String?, htmlMessage: String?) =
             MessageDialogFragment().apply {
@@ -40,15 +40,9 @@ class MessageDialogFragment : BottomSheetDialogFragment() {
         lifecycleScope.launch {
             withCreated {
                 val args = requireArguments()
-                if (args.containsKey(ARG_TITLE)) {
-                    title = args.getString(ARG_TITLE)
-                }
-                if (args.containsKey(ARG_MESSAGE)) {
-                    message = args.getString(ARG_MESSAGE)
-                }
-                if (args.containsKey(ARG_HTML_MESSAGE)) {
-                    htmlMessage = args.getString(ARG_HTML_MESSAGE)
-                }
+                title = args.getString(ARG_TITLE, null)
+                message = args.getString(ARG_MESSAGE, null)
+                htmlMessage = args.getString(ARG_HTML_MESSAGE, null)
             }
         }
     }

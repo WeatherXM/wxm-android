@@ -32,8 +32,10 @@
     <string name="market_url">market://details?id=%s</string>
     <string name="m5_connect_wifi_instructional_video">https://www.youtube.com/watch?v=sUJEwuFq1CE</string>
     <string name="helium_frequencies_mapping_url">https://docs.helium.com/iot/lorawan-region-plans/</string>
-    <string name="wallet_explorer">https://mumbai.polygonscan.com/address/%s#tokentxns</string>
-    <string name="blockchain_explorer">https://mumbai.polygonscan.com/tx/</string>
+    <string name="wallet_explorer_arbitrum">https://arbiscan.io/address/%s#tokentxns</string>
+    <string name="blockchain_explorer_arbitrum">https://arbiscan.io/tx/</string>
+    <string name="wallet_explorer_polygon">https://mumbai.polygonscan.com/address/%s#tokentxns</string>
+    <string name="blockchain_explorer_polygon">https://mumbai.polygonscan.com/tx/</string>
     <string name="shop_url">https://shop.weatherxm.com/</string>
     <string name="docs_url">https://docs.weatherxm.com</string>
     <string name="docs_url_troubleshooting">https://docs.weatherxm.com/faqs#troubleshooting</string>
@@ -43,4 +45,5 @@
     <string name="docs_url_pol_algorithm">https://docs.weatherxm.com/project/proof-of-location</string>
     <string name="docs_url_qod_algorithm">https://docs.weatherxm.com/project/quality-of-data</string>
     <string name="share_station_url">https://explorer.weatherxm.com/stations/%s</string>
+    <string name="weatherxm_claim_redirect_url">weatherxm://token-claim</string>
 </resources>

@@ -59,6 +59,7 @@ data class ErrorResponse(
         const val VALIDATION = "Validation"
         const val NOT_FOUND = "NotFound"
         const val MAX_FOLLOWED = "MaxFollowed"
+        const val WALLET_ADDRESS_NOT_FOUND = "WalletAddressNotFound"
     }
 
     override fun toString(): String {

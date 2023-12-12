@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.google.android.material.button.MaterialButton.ICON_GRAVITY_END
+import com.google.android.material.button.MaterialButton.ICON_GRAVITY_START
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewMessageCardBinding
 import com.weatherxm.ui.common.hide
@@ -177,6 +178,23 @@ class MessageCardView : LinearLayout {
             if (endIcon != null) {
                 icon = endIcon
                 iconGravity = ICON_GRAVITY_END
+            }
+        }
+        return this
+    }
+
+    fun actionPrimaryBtn(
+        label: String,
+        startIcon: Drawable? = null,
+        listener: OnClickListener
+    ): MessageCardView {
+        with(binding.actionPrimary) {
+            text = label
+            setOnClickListener(listener)
+            visibility = VISIBLE
+            if (startIcon != null) {
+                icon = startIcon
+                iconGravity = ICON_GRAVITY_START
             }
         }
         return this

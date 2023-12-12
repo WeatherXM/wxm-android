@@ -81,7 +81,8 @@ class RewardsFragment : Fragment(), KoinComponent {
 
         model.onTotalRewards().observe(viewLifecycleOwner) { rewards ->
             rewards?.let {
-                binding.totalRewards.text = getString(R.string.wxm_amount, formatTokens(rewards))
+                binding.totalRewards.text =
+                    getString(R.string.wxm_amount, formatTokens(rewards.toBigDecimal()))
             }
         }
 

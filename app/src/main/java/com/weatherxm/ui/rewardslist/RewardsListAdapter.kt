@@ -73,7 +73,8 @@ class RewardsListAdapter(
             }
 
             item.actualReward?.let {
-                binding.reward.text = resHelper.getString(R.string.reward, formatTokens(it))
+                binding.reward.text =
+                    resHelper.getString(R.string.reward, formatTokens(it.toBigDecimal()))
             }
 
             item.rewardScore?.let {
@@ -139,7 +140,7 @@ class RewardsListAdapter(
 
         private fun setSlider(item: UIRewardObject) {
             item.periodMaxReward?.let {
-                binding.maxReward.text = formatTokens(it)
+                binding.maxReward.text = formatTokens(it.toBigDecimal())
 
                 try {
                     with(binding.rewardSlider) {

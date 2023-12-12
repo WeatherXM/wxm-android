@@ -38,6 +38,7 @@ import com.mapbox.search.SearchEngineSettings
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
 import com.weatherxm.R
+import com.weatherxm.data.adapters.BigIntegerJsonAdapter
 import com.weatherxm.data.adapters.LocalDateJsonAdapter
 import com.weatherxm.data.adapters.LocalDateTimeJsonAdapter
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
@@ -145,12 +146,14 @@ import com.weatherxm.ui.devicedetails.forecast.ForecastViewModel
 import com.weatherxm.ui.devicedetails.rewards.RewardsViewModel
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
 import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
-import com.weatherxm.ui.explorer.UICellJsonAdapter
 import com.weatherxm.ui.devicesettings.DeviceSettingsViewModel
 import com.weatherxm.ui.devicesettings.changefrequency.ChangeFrequencyViewModel
 import com.weatherxm.ui.devicesettings.reboot.RebootViewModel
+import com.weatherxm.ui.explorer.UICellJsonAdapter
 import com.weatherxm.usecases.AnalyticsOptInUseCase
 import com.weatherxm.usecases.AnalyticsOptInUseCaseImpl
+import com.weatherxm.usecases.AppConfigUseCase
+import com.weatherxm.usecases.AppConfigUseCaseImpl
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.AuthUseCaseImpl
 import com.weatherxm.usecases.BluetoothConnectionUseCase
@@ -217,6 +220,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
+import java.math.BigInteger
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
@@ -499,7 +503,7 @@ private val usecases = module {
         AuthUseCaseImpl(get(), get(), get())
     }
     single<UserUseCase> {
-        UserUseCaseImpl(get(), get(), get())
+        UserUseCaseImpl(get(), get(), get(), get())
     }
     single<ConnectWalletUseCase> {
         ConnectWalletUseCaseImpl(get())
@@ -551,6 +555,9 @@ private val usecases = module {
     }
     single<RewardDetailsUseCase> {
         RewardDetailsUseCaseImpl(get(), get())
+    }
+    single<AppConfigUseCase> {
+        AppConfigUseCaseImpl(get())
     }
 }
 
@@ -799,7 +806,9 @@ private val utilities = module {
         )
     }
     single<Moshi> {
-        Moshi.Builder().add(ZonedDateTime::class.java, ZonedDateTimeJsonAdapter())
+        Moshi.Builder()
+            .add(BigInteger::class.java, BigIntegerJsonAdapter())
+            .add(ZonedDateTime::class.java, ZonedDateTimeJsonAdapter())
             .add(LocalDateTime::class.java, LocalDateTimeJsonAdapter())
             .add(LocalDate::class.java, LocalDateJsonAdapter()).build()
     }

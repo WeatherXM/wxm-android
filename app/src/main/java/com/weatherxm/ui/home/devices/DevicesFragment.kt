@@ -130,6 +130,7 @@ class DevicesFragment : Fragment(), KoinComponent, DeviceListener {
                     binding.recycler.setVisible(true)
                     parentModel.getWalletMissing(devices.data)
                 } else {
+                    parentModel.setHasDevices(false)
                     with(binding.empty) {
                         clear()
                         animation(R.raw.anim_empty_devices, false)

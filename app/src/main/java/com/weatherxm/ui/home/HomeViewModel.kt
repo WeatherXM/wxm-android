@@ -18,6 +18,8 @@ class HomeViewModel : ViewModel(), KoinComponent {
     private val userUseCase: UserUseCase by inject()
     private val analytics: Analytics by inject()
 
+    private var hasDevices: Boolean? = null
+
     // Needed for passing info to show the wallet missing warning card and badges
     private val onWalletMissingWarning = MutableLiveData(false)
     private val onWalletMissing = MutableLiveData(false)
@@ -31,10 +33,14 @@ class HomeViewModel : ViewModel(), KoinComponent {
         onOpenExplorer.postValue(true)
     }
 
+    fun hasDevices() = hasDevices
+
     fun getWalletMissing(devices: List<UIDevice>?) {
         if (devices?.firstOrNull { it.relation == DeviceRelation.OWNED } == null) {
+            hasDevices = false
             return
         }
+       hasDevices = true
         viewModelScope.launch {
             onWalletMissingWarning.postValue(userUseCase.shouldShowWalletMissingWarning())
             userUseCase.getWalletAddress()
@@ -48,6 +54,10 @@ class HomeViewModel : ViewModel(), KoinComponent {
                     onWalletMissing.postValue(it is DataError.NoWalletAddressError)
                 }
         }
+    }
+
+    fun setHasDevices(hasDevices: Boolean) {
+        this.hasDevices = hasDevices
     }
 
     fun setWalletWarningDismissTimestamp() {

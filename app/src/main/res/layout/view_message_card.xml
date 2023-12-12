@@ -78,6 +78,17 @@
                 tools:text="Do something"
                 tools:visibility="visible" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/actionPrimary"
+                style="@style/Widget.WeatherXM.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small_to_normal"
+                android:visibility="gone"
+                app:cornerRadius="@dimen/button_corner_radius"
+                app:layout_constraintTop_toBottomOf="@id/infoContainer"
+                tools:text="Do something" />
+
             <ImageButton
                 android:id="@+id/closeButton"
                 style="@style/Widget.WeatherXM.ImageButton"

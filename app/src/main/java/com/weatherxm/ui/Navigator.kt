@@ -29,9 +29,11 @@ import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_REWARDS_OBJECT
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
+import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
 import com.weatherxm.ui.common.MessageDialogFragment
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIRewardObject
+import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.DatePickerHelper
 import com.weatherxm.ui.components.LoginPromptDialogFragment
@@ -41,6 +43,9 @@ import com.weatherxm.ui.devicealerts.DeviceAlertsActivity
 import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
+import com.weatherxm.ui.devicesettings.DeviceSettingsActivity
+import com.weatherxm.ui.devicesettings.changefrequency.ChangeFrequencyActivity
+import com.weatherxm.ui.devicesettings.reboot.RebootActivity
 import com.weatherxm.ui.explorer.ExplorerActivity
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.ui.home.HomeActivity
@@ -50,13 +55,11 @@ import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.rewarddetails.RewardDetailsActivity
+import com.weatherxm.ui.rewardsclaim.RewardsClaimActivity
 import com.weatherxm.ui.rewardslist.RewardsListActivity
 import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
-import com.weatherxm.ui.devicesettings.DeviceSettingsActivity
-import com.weatherxm.ui.devicesettings.changefrequency.ChangeFrequencyActivity
-import com.weatherxm.ui.devicesettings.reboot.RebootActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.util.Analytics
 import timber.log.Timber
@@ -357,6 +360,17 @@ class Navigator(
                     .putExtra(ARG_DEVICE, device)
             )
         }
+    }
+
+    fun showRewardsClaiming(
+        activityResultLauncher: ActivityResultLauncher<Intent>,
+        context: Context,
+        rewardsData: UIWalletRewards
+    ) {
+        val intent = Intent(context, RewardsClaimActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .putExtra(ARG_WALLET_REWARDS, rewardsData)
+        activityResultLauncher.launch(intent)
     }
 
     fun showMessageDialog(

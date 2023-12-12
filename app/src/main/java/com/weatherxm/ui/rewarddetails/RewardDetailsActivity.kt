@@ -2,6 +2,7 @@ package com.weatherxm.ui.rewarddetails
 
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
@@ -26,6 +27,7 @@ import timber.log.Timber
 
 class RewardDetailsActivity : AppCompatActivity(), KoinComponent, RewardProblemsListener {
     private lateinit var binding: ActivityRewardDetailsBinding
+    private val model: RewardDetailsViewModel by viewModels()
     private val navigator: Navigator by inject()
     private val analytics: Analytics by inject()
 
@@ -128,7 +130,12 @@ class RewardDetailsActivity : AppCompatActivity(), KoinComponent, RewardProblems
                 analytics.trackEventSelectContent(
                     contentType = Analytics.ParamValue.REWARD_DETAILS_VIEW_TX.paramValue
                 )
-                navigator.openWebsite(this, "${getString(R.string.blockchain_explorer)}$txHash")
+                val blockExplorerUrl = if (model.isTokenClaimingEnabled()) {
+                    getString(R.string.blockchain_explorer_arbitrum)
+                } else {
+                    getString(R.string.blockchain_explorer_polygon)
+                }
+                navigator.openWebsite(this, "$blockExplorerUrl$txHash")
                 true
             }
             R.id.read_more -> {

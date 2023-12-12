@@ -24,6 +24,7 @@ import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.explorer.ExplorerData
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
+import com.weatherxm.ui.home.profile.ProfileViewModel
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

@@ -85,7 +85,8 @@ open class RewardsCardView : LinearLayout, KoinComponent {
         binding.timestamp.setVisible(data.rewardFormattedTimestamp != null)
 
         val actualReward = data.actualReward ?: 0F
-        binding.reward.text = resources.getString(R.string.reward, formatTokens(actualReward))
+        binding.reward.text =
+            resources.getString(R.string.reward, formatTokens(actualReward.toBigDecimal()))
 
         binding.scoreExplanation.setOnClickListener {
             trackLearnMore(Analytics.ParamValue.REWARDS_SCORE.paramValue)
@@ -139,7 +140,7 @@ open class RewardsCardView : LinearLayout, KoinComponent {
         }
 
         data.periodMaxReward?.let {
-            binding.maxRewards.text = formatTokens(it)
+            binding.maxRewards.text = formatTokens(it.toBigDecimal())
         }
 
         binding.secondaryInfoContainer.setVisible(

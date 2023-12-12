@@ -20,8 +20,8 @@ import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.isToday
 import com.weatherxm.util.isYesterday
 import kotlinx.parcelize.Parcelize
+import java.math.BigInteger
 import java.time.ZoneId
-import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 @Keep
@@ -381,6 +381,20 @@ data class DevicesSortFilterOptions(
             }
             DevicesGroupBy.STATUS -> Analytics.ParamValue.FILTERS_GROUP_STATUS.paramValue
         }
+    }
+}
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class UIWalletRewards(
+    var totalEarned: BigInteger,
+    var totalClaimed: BigInteger,
+    var allocated: BigInteger,
+    var walletAddress: String
+) : Parcelable {
+    companion object {
+        fun empty() = UIWalletRewards(BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO, "")
     }
 }
 

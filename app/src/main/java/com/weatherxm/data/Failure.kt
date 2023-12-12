@@ -110,9 +110,16 @@ sealed class ApiError(code: String?, val message: String? = null) : Failure(code
     class InvalidFriendlyName(code: String?, message: String? = null) : ApiError(code, message)
 
     sealed class UserError(code: String?, message: String? = null) : ApiError(code, message) {
-        sealed class WalletError(code: String?, message: String? = null) :
-            UserError(code, message) {
+        sealed class WalletError(
+            code: String?,
+            message: String? = null
+        ) : UserError(code, message) {
             class InvalidWalletAddress(
+                code: String?,
+                message: String? = null
+            ) : WalletError(code, message)
+
+            class WalletAddressNotFound(
                 code: String?,
                 message: String? = null
             ) : WalletError(code, message)

@@ -148,9 +148,12 @@ class ConnectWalletActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.viewTransactionHistoryBtn.setOnClickListener {
-            navigator.openWebsite(
-                this, getString(R.string.wallet_explorer, model.currentAddress().value)
-            )
+            val walletExplorerUrl = if (model.isTokenClaimingEnabled()) {
+                getString(R.string.wallet_explorer_arbitrum, model.currentAddress().value)
+            } else {
+                getString(R.string.wallet_explorer_polygon, model.currentAddress().value)
+            }
+            navigator.openWebsite(this, walletExplorerUrl)
             analytics.trackEventSelectContent(
                 Analytics.ParamValue.WALLET_TRANSACTIONS.paramValue,
                 Pair(FirebaseAnalytics.Param.ITEM_ID, model.currentAddress().value ?: "")

@@ -15,6 +15,7 @@ import com.weatherxm.data.RewardsObject
 import com.weatherxm.data.TransactionsResponse
 import com.weatherxm.data.User
 import com.weatherxm.data.Wallet
+import com.weatherxm.data.WalletRewards
 import com.weatherxm.data.WeatherData
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor.Companion.NO_AUTH_HEADER
 import okhttp3.ResponseBody
@@ -213,6 +214,14 @@ interface ApiService {
     @Headers(NO_AUTH_HEADER)
     suspend fun getNetworkStats(
     ): NetworkResponse<NetworkStatsResponse, ErrorResponse>
+
+    @Mock
+    @MockResponse(body = "mock_files/wallet_rewards.json")
+    @GET("/api/v1/network/rewards/withdraw")
+    @Headers(NO_AUTH_HEADER)
+    suspend fun getWalletRewards(
+        @Query("address") address: String? = null,
+    ): NetworkResponse<WalletRewards, ErrorResponse>
 
     @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)

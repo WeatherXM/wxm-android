@@ -4,11 +4,10 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -17,12 +16,20 @@ import com.weatherxm.data.Status
 import com.weatherxm.data.User
 import com.weatherxm.databinding.FragmentProfileBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.Contracts.ARG_TOKEN_CLAIMED_AMOUNT
+import com.weatherxm.ui.common.UIWalletRewards
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.Mask
+import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.Rewards.weiToETH
 import com.weatherxm.util.applyInsets
+import com.weatherxm.util.setCardStroke
 import org.koin.android.ext.android.inject
 import timber.log.Timber
+import java.math.BigInteger
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
@@ -36,6 +43,17 @@ class ProfileFragment : Fragment() {
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 parentModel.setWalletNotMissing()
+                model.fetchUser()
+            }
+        }
+
+    // Register the launcher for the rewards claim activity and wait for a possible result
+    private val rewardsClaimLauncher =
+        registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                model.onClaimedResult(
+                    result.data?.getSerializableExtra(ARG_TOKEN_CLAIMED_AMOUNT) as BigInteger
+                )
             }
         }
 
@@ -48,11 +66,15 @@ class ProfileFragment : Fragment() {
 
         binding.root.applyInsets()
 
-        binding.connectWallet.setOnClickListener {
+        binding.swiperefresh.setOnRefreshListener {
+            model.fetchUser()
+        }
+
+        binding.walletContainerCard.setOnClickListener {
             navigator.showConnectWallet(connectWalletLauncher, this)
         }
 
-        binding.settings.setOnClickListener {
+        binding.settingsContainerCard.setOnClickListener {
             navigator.showPreferences(this)
         }
 
@@ -62,26 +84,118 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        model.user().observe(viewLifecycleOwner) { resource ->
+        binding.totalEarnedInfoBtn.setOnClickListener {
+            navigator.showMessageDialog(
+                childFragmentManager,
+                title = getString(R.string.total_earned),
+                message = getString(R.string.total_earned_desc)
+            )
+        }
+
+        binding.totalClaimedInfoBtn.setOnClickListener {
+            navigator.showMessageDialog(
+                childFragmentManager,
+                title = getString(R.string.total_claimed),
+                message = getString(R.string.total_claimed_desc)
+            )
+        }
+
+        model.onLoading().observe(viewLifecycleOwner) {
+            if (it && !binding.swiperefresh.isRefreshing) {
+                binding.progress.visibility = View.VISIBLE
+            } else {
+                binding.swiperefresh.isRefreshing = false
+                binding.progress.visibility = View.INVISIBLE
+            }
+        }
+
+        model.onUser().observe(viewLifecycleOwner) { resource ->
             Timber.d("Data updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
-                    updateUI(resource.data, false)
+                    updateUserUI(resource.data)
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
                     resource.message?.let { context.toast(it) }
-                    updateUI(null, false)
                 }
                 Status.LOADING -> {
-                    updateUI(null, true)
+                    // Do nothing
                 }
             }
         }
 
-        // Hide/show badge if user has connected a wallet or not
-        parentModel.onWalletMissing().observe(viewLifecycleOwner) {
-            binding.connectWalletNotification.visibility = if (it) VISIBLE else GONE
+        model.onWalletRewards().observe(viewLifecycleOwner) { resource ->
+            Timber.d("Data updated: ${resource.status}")
+            when (resource.status) {
+                Status.SUCCESS -> {
+                    resource.data?.let {
+                        updateRewardsUI(it)
+                    }
+                }
+                Status.ERROR -> {
+                    Timber.d("Got error: $resource.message")
+                    resource.message?.let { context.toast(it) }
+                }
+                Status.LOADING -> {
+                    // Do nothing
+                }
+            }
+        }
+
+        val tokenClaimingEnabled = model.isTokenClaimingEnabled()
+        binding.totalsRewardsContainer.setVisible(tokenClaimingEnabled)
+        binding.rewardsContainerCard.setVisible(tokenClaimingEnabled)
+
+        model.fetchUser()
+    }
+
+    private fun updateRewardsUI(data: UIWalletRewards) {
+        binding.rewards.clear()
+        binding.totalEarnedValue.text =
+            getString(R.string.wxm_amount, formatTokens(weiToETH(data.totalEarned.toBigDecimal())))
+        binding.totalClaimedValue.text =
+            getString(R.string.wxm_amount, formatTokens(weiToETH(data.totalClaimed.toBigDecimal())))
+        if (data.allocated == BigInteger.ZERO) {
+            binding.rewards.subtitle(getString(R.string.no_allocated_rewards))
+
+            if (parentModel.hasDevices() == false) {
+                binding.rewardsContainerCard.setCardStroke(R.color.colorPrimary, 2)
+                binding.buyStationCard.actionPrimaryBtn(
+                    getString(R.string.action_buy_station),
+                    AppCompatResources.getDrawable(requireContext(), R.drawable.ic_cart),
+                ) {
+                    navigator.openWebsite(requireContext(), getString(R.string.shop_url))
+                }.setVisible(true)
+            }
+        } else {
+            binding.rewardsContainerCard.strokeWidth = 0
+            binding.buyStationCard.setVisible(false)
+            binding.rewards
+                .subtitle(
+                    getString(
+                        R.string.wxm_amount, formatTokens(weiToETH(data.allocated.toBigDecimal()))
+                    )
+                )
+                .action(getString(R.string.action_claim)) {
+                    navigator.showRewardsClaiming(rewardsClaimLauncher, requireContext(), data)
+                }
+        }
+    }
+
+    private fun updateUserUI(user: User?) {
+        binding.wallet.clear()
+        binding.toolbar.subtitle = user?.email
+        user?.wallet?.address?.let {
+            binding.noWalletCard.setVisible(false)
+            binding.walletContainerCard.strokeWidth = 0
+            binding.wallet.chipSubtitle(Mask.maskHash(it))
+        } ?: kotlin.run {
+            binding.wallet.subtitle(getString(R.string.no_wallet_added))
+            if (parentModel.hasDevices() == true) {
+                binding.noWalletCard.setVisible(true)
+                binding.walletContainerCard.setCardStroke(R.color.error, 2)
+            }
         }
     }
 
@@ -91,27 +205,5 @@ class ProfileFragment : Fragment() {
             Analytics.Screen.PROFILE,
             ProfileFragment::class.simpleName
         )
-    }
-
-    private fun updateUI(user: User?, showProgressBar: Boolean) {
-        user?.let {
-            binding.toolbar.title = if (it.name == it.email) {
-                getString(R.string.hello)
-            } else {
-                getString(R.string.hello_user, it.name)
-            }
-            if (it.email.isEmpty()) {
-                binding.email.visibility = GONE
-            } else {
-                binding.email.text = it.email
-                binding.email.visibility = VISIBLE
-            }
-        }
-
-        if (showProgressBar) {
-            binding.progress.visibility = VISIBLE
-        } else {
-            binding.progress.visibility = View.INVISIBLE
-        }
     }
 }

@@ -35,6 +35,7 @@
     <string name="error_support_cannot_send_email">Oops! Could not send email!</string>
     <string name="error_open_website_support_cannot_open_url">Oops! Could not open %s</string>
     <string name="error_cannot_open_play_store">Oops! Could not open Play Store.</string>
+    <string name="error_cannot_open_wallet">Oops! Could not open that wallet.</string>
     <string name="error_search_suggestions">Search suggestions not available. Please try again later.</string>
     <string name="error_invalid_password">Invalid password</string>
     <string name="error_helium_ota_aborted">ABORTED</string>

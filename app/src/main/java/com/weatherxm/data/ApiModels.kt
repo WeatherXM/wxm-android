@@ -9,6 +9,7 @@ import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
+import java.math.BigInteger
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
@@ -519,6 +520,19 @@ data class RewardsAnnotation(
 data class QoDErrorAffects(
     val parameter: String?,
     val ratio: Int?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class WalletRewards(
+    val proof: List<String>?,
+    @Json(name = "cumulative_amount")
+    val cumulativeAmount: BigInteger?,
+    val cycle: Int?,
+    val available: BigInteger?,
+    @Json(name = "total_claimed")
+    val totalClaimed: BigInteger?,
 ) : Parcelable
 
 enum class DeviceProfile {

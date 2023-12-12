@@ -3,8 +3,9 @@ on:
     push:
         branches: [ main ]
 env:
-    # API URL
+    # API & Claim DApp URL
     ORG_GRADLE_PROJECT_API_URL: ${{ secrets.API_URL }}
+    ORG_GRADLE_PROJECT_CLAIM_APP_URL: ${{ secrets.CLAIM_APP_URL }}
     # Mapbox SDK secrets
     ORG_GRADLE_PROJECT_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
     ORG_GRADLE_PROJECT_MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}

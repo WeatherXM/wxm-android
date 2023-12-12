@@ -7,6 +7,7 @@ import com.weatherxm.R
 import com.weatherxm.data.ApiError.UserError.WalletError.InvalidWalletAddress
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
+import com.weatherxm.usecases.AppConfigUseCase
 import com.weatherxm.usecases.ConnectWalletUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.ResourcesHelper
@@ -23,6 +24,8 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
     }
 
     private val connectWalletUseCase: ConnectWalletUseCase by inject()
+    private val appConfigUseCase: AppConfigUseCase by inject()
+
     private val resHelper: ResourcesHelper by inject()
     private val analytics: Analytics by inject()
 
@@ -31,6 +34,8 @@ class ConnectWalletViewModel : ViewModel(), KoinComponent {
 
     private val isAddressSaved = MutableLiveData<Resource<String>>()
     fun isAddressSaved() = isAddressSaved
+
+    fun isTokenClaimingEnabled() = appConfigUseCase.isTokenClaimingEnabled()
 
     fun saveAddress(address: String) {
         isAddressSaved.postValue(Resource.loading())

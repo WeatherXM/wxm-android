@@ -15,6 +15,7 @@ interface AppConfigDataSource {
     fun getLastRemoteVersionCode(): Int
     fun setInstallationId(installationId: String)
     fun getInstallationId(): Either<Failure, String>
+    fun isTokenClaimingEnabled(): Boolean
 }
 
 class AppConfigDataSourceImpl(
@@ -26,6 +27,7 @@ class AppConfigDataSourceImpl(
         const val REMOTE_CONFIG_VERSION_CODE = "android_app_version_code"
         const val REMOTE_CONFIG_MINIMUM_VERSION_CODE = "android_app_minimum_code"
         const val REMOTE_CONFIG_CHANGELOG = "android_app_changelog"
+        const val REMOTE_CONFIG_TOKEN_CLAIMING = "feat_token_claiming"
     }
 
     override fun getLastRemoteVersionCode(): Int {
@@ -66,5 +68,18 @@ class AppConfigDataSourceImpl(
 
     override fun getInstallationId(): Either<Failure, String> {
         return cacheService.getInstallationId()
+    }
+
+    override fun isTokenClaimingEnabled(): Boolean {
+        /**
+         * We use the remote config's value otherwise return true, for future-proof reasons.
+         * So after we roll out the token claiming we can safely remove the key/value pair in
+         * remote config and it older clients will still be working.
+         */
+        return if(firebaseRemoteConfig.all.containsKey(REMOTE_CONFIG_TOKEN_CLAIMING)) {
+            firebaseRemoteConfig.getBoolean(REMOTE_CONFIG_TOKEN_CLAIMING)
+        } else {
+            true
+        }
     }
 }

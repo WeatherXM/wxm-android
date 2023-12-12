@@ -5,6 +5,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Rewards
 import com.weatherxm.data.RewardsObject
 import com.weatherxm.data.TransactionsResponse
+import com.weatherxm.data.WalletRewards
 import com.weatherxm.data.map
 import com.weatherxm.data.network.ApiService
 
@@ -21,6 +22,7 @@ interface RewardsDataSource {
 
     suspend fun getRewards(deviceId: String): Either<Failure, Rewards>
     suspend fun getRewardDetails(deviceId: String, txHash: String): Either<Failure, RewardsObject>
+    suspend fun getWalletRewards(walletAddress: String): Either<Failure, WalletRewards>
 }
 
 class RewardsDataSourceImpl(private val apiService: ApiService) : RewardsDataSource {
@@ -51,5 +53,9 @@ class RewardsDataSourceImpl(private val apiService: ApiService) : RewardsDataSou
         txHash: String
     ): Either<Failure, RewardsObject> {
         return apiService.getRewardDetails(deviceId, txHash).map()
+    }
+
+    override suspend fun getWalletRewards(walletAddress: String): Either<Failure, WalletRewards> {
+        return apiService.getWalletRewards(walletAddress).map()
     }
 }

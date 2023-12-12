@@ -5,6 +5,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Rewards
 import com.weatherxm.data.RewardsObject
 import com.weatherxm.data.TransactionsResponse
+import com.weatherxm.data.WalletRewards
 import com.weatherxm.data.datasource.RewardsDataSource
 import java.time.ZoneId
 
@@ -19,6 +20,7 @@ interface RewardsRepository {
 
     suspend fun getRewards(deviceId: String): Either<Failure, Rewards>
     suspend fun getRewardDetails(deviceId: String, txHash: String): Either<Failure, RewardsObject>
+    suspend fun getWalletRewards(walletAddress: String): Either<Failure, WalletRewards>
 }
 
 class RewardsRepositoryImpl(private val dataSource: RewardsDataSource) : RewardsRepository {
@@ -48,5 +50,9 @@ class RewardsRepositoryImpl(private val dataSource: RewardsDataSource) : Rewards
         txHash: String
     ): Either<Failure, RewardsObject> {
         return dataSource.getRewardDetails(deviceId, txHash)
+    }
+
+    override suspend fun getWalletRewards(walletAddress: String): Either<Failure, WalletRewards> {
+        return dataSource.getWalletRewards(walletAddress)
     }
 }

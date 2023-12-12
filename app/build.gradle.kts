@@ -25,15 +25,15 @@ fun getStringProperty(name: String): String {
     return project.property(name) as String
 }
 
-fun getFlavorApiUrl(flavorEnvFile: String): String {
+fun getFlavorProperty(propertyName: String, flavorEnvFile: String): String {
     // Default API URL
-    var apiURL = getStringProperty("API_URL")
+    var apiURL = getStringProperty(propertyName)
 
     val env = rootProject.file(flavorEnvFile)
     if (env.exists()) {
         env.forEachLine {
             val keyValuePair = it.split("=")
-            if (keyValuePair.size > 1 && keyValuePair[0] == "API_URL") {
+            if (keyValuePair.size > 1 && keyValuePair[0] == propertyName) {
                 apiURL = keyValuePair[1]
                 project.ext.set(keyValuePair[0], keyValuePair[1])
             }
@@ -82,7 +82,8 @@ android {
             dimension = "mode"
         }
         create("mock") {
-            val apiURL = getFlavorApiUrl("remotemock.env")
+            val apiURL = getFlavorProperty("API_URL", "remotemock.env")
+            val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "remotemock.env")
             dimension = "server"
             applicationIdSuffix = ".mock"
             resValue("string", "app_name", "WXM Remote Mock")
@@ -90,9 +91,11 @@ android {
             manifestPlaceholders["explorer_host"] = "explorer-mock.weatherxm.com"
             buildConfigField("String", "API_URL", "\"$apiURL\"")
             buildConfigField("String", "AUTH_URL", "\"$apiURL\"")
+            buildConfigField("String", "CLAIM_APP_URL", "\"$claimDAppUrl\"")
         }
         create("staging") {
-            val apiURL = getFlavorApiUrl("staging.env")
+            val apiURL = getFlavorProperty("API_URL", "staging.env")
+            val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "staging.env")
             dimension = "server"
             applicationIdSuffix = ".staging"
             resValue("string", "app_name", "WXM Staging")
@@ -100,6 +103,7 @@ android {
             manifestPlaceholders["explorer_host"] = "explorer-staging.weatherxm.com"
             buildConfigField("String", "API_URL", "\"$apiURL\"")
             buildConfigField("String", "AUTH_URL", "\"$apiURL\"")
+            buildConfigField("String", "CLAIM_APP_URL", "\"$claimDAppUrl\"")
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotes = "Release notes for staging version"
@@ -108,7 +112,8 @@ android {
             }
         }
         create("dev") {
-            val apiURL = getFlavorApiUrl("development.env")
+            val apiURL = getFlavorProperty("API_URL", "development.env")
+            val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "development.env")
             dimension = "server"
             applicationIdSuffix = ".dev"
             resValue("string", "app_name", "WXM Dev")
@@ -116,6 +121,7 @@ android {
             manifestPlaceholders["explorer_host"] = "explorer-dev.weatherxm.com"
             buildConfigField("String", "API_URL", "\"$apiURL\"")
             buildConfigField("String", "AUTH_URL", "\"$apiURL\"")
+            buildConfigField("String", "CLAIM_APP_URL", "\"$claimDAppUrl\"")
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotes = "Release notes for development version"
@@ -124,13 +130,15 @@ android {
             }
         }
         create("prod") {
-            val apiURL = getFlavorApiUrl("production.env")
+            val apiURL = getFlavorProperty("API_URL", "production.env")
+            val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "production.env")
             dimension = "server"
             resValue("string", "app_name", "WeatherXM")
             manifestPlaceholders["auth_host"] = "app.weatherxm.com"
             manifestPlaceholders["explorer_host"] = "explorer.weatherxm.com"
             buildConfigField("String", "API_URL", "\"$apiURL\"")
             buildConfigField("String", "AUTH_URL", "\"$apiURL\"")
+            buildConfigField("String", "CLAIM_APP_URL", "\"$claimDAppUrl\"")
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotes = "Release notes for production version"
