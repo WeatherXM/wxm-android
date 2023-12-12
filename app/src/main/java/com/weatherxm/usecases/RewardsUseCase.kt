@@ -3,11 +3,10 @@ package com.weatherxm.usecases
 import android.content.Context
 import arrow.core.Either
 import com.weatherxm.data.Failure
+import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.ui.common.UIRewardObject
 import com.weatherxm.ui.common.UIRewardsList
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 interface RewardsUseCase {
     suspend fun getTransactions(
@@ -20,6 +19,7 @@ interface RewardsUseCase {
 
 class RewardsUseCaseImpl(
     private val repository: RewardsRepository,
+    private val appConfigRepo: AppConfigRepository,
     private val context: Context
 ) : RewardsUseCase {
     override suspend fun getTransactions(
@@ -43,7 +43,9 @@ class RewardsUseCaseImpl(
                         tx.actualReward != null
                     }
                     .map { tx ->
-                        UIRewardObject(context = context, tx = tx)
+                        UIRewardObject(
+                            context, tx, appConfigRepo.getRewardsHideAnnotationThreshold()
+                        )
                     }
                 UIRewardsList(uiTransactions, it.hasNextPage)
             }

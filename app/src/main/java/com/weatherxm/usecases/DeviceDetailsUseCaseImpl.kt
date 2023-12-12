@@ -7,6 +7,7 @@ import com.weatherxm.data.DeviceProfile.Helium
 import com.weatherxm.data.Failure
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_TIMEZONE
 import com.weatherxm.data.repository.AddressRepository
+import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
@@ -22,7 +23,6 @@ import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.util.DateTimeHelper.getFormattedRelativeDay
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import java.util.*
 
 @Suppress("LongParameterList")
 class DeviceDetailsUseCaseImpl(
@@ -32,6 +32,7 @@ class DeviceDetailsUseCaseImpl(
     private val addressRepository: AddressRepository,
     private val explorerRepository: ExplorerRepository,
     private val deviceOTARepository: DeviceOTARepository,
+    private val appConfigRepository: AppConfigRepository,
     private val context: Context
 ) : DeviceDetailsUseCase {
 
@@ -107,9 +108,21 @@ class DeviceDetailsUseCaseImpl(
         return rewardsRepository.getRewards(deviceId).map { rewardsInfo ->
             UIRewards(
                 allTimeRewards = rewardsInfo.totalRewards,
-                latest = rewardsInfo.latest?.let { UIRewardObject(context, it) },
-                weekly = rewardsInfo.weekly?.let { UIRewardObject(context, it, true) },
-                monthly = rewardsInfo.monthly?.let { UIRewardObject(context, it, true) }
+                latest = rewardsInfo.latest?.let {
+                    UIRewardObject(
+                        context, it, appConfigRepository.getRewardsHideAnnotationThreshold()
+                    )
+                },
+                weekly = rewardsInfo.weekly?.let {
+                    UIRewardObject(
+                        context, it, appConfigRepository.getRewardsHideAnnotationThreshold(), true
+                    )
+                },
+                monthly = rewardsInfo.monthly?.let {
+                    UIRewardObject(
+                        context, it, appConfigRepository.getRewardsHideAnnotationThreshold(), true
+                    )
+                }
             )
         }
     }

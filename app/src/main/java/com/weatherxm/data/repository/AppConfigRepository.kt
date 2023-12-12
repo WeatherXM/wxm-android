@@ -13,6 +13,7 @@ interface AppConfigRepository {
     fun setLastRemindedVersion()
     fun getInstallationId(): String?
     fun isTokenClaimingEnabled(): Boolean
+    fun getRewardsHideAnnotationThreshold(): Long
 }
 
 class AppConfigRepositoryImpl(
@@ -56,5 +57,9 @@ class AppConfigRepositoryImpl(
 
     override fun isTokenClaimingEnabled(): Boolean {
         return appConfigDataSource.isTokenClaimingEnabled()
+    }
+
+    override fun getRewardsHideAnnotationThreshold(): Long {
+        return appConfigDataSource.getRewardsHideAnnotationThreshold()
     }
 }

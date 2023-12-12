@@ -17,6 +17,7 @@ import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedDay
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
+import com.weatherxm.util.Rewards.shouldHideAnnotations
 import com.weatherxm.util.isToday
 import com.weatherxm.util.isYesterday
 import kotlinx.parcelize.Parcelize
@@ -59,7 +60,12 @@ data class UIRewardObject(
     var timelineScores: List<Int> = emptyList(),
     var annotations: MutableList<UIRewardsAnnotation> = mutableListOf()
 ) : Parcelable {
-    constructor(context: Context, rewards: RewardsObject, isRange: Boolean = false) : this() {
+    constructor(
+        context: Context,
+        rewards: RewardsObject,
+        hideAnnotationsThreshold: Long,
+        isRange: Boolean = false
+    ) : this() {
         val utcFromDate =
             rewards.fromDate?.withZoneSameInstant(ZoneId.of("UTC"))?.getFormattedDate()
         val utcToDate =
@@ -85,10 +91,10 @@ data class UIRewardObject(
         txHash = rewards.txHash
         setTimelineTitle(context, rewards.timeline?.referenceDate, fromDate, toDate)
         timelineScores = rewards.timeline?.rewardScores ?: mutableListOf()
-        setAnnotations(rewards.annotations)
+        setAnnotations(hideAnnotationsThreshold, rewards.annotations)
     }
 
-    constructor(context: Context, tx: Transaction) : this() {
+    constructor(context: Context, tx: Transaction, hideAnnotationsThreshold: Long) : this() {
         this.rewardTimestamp = tx.timestamp
         val date = tx.timestamp.getFormattedDate()
         val time = tx.timestamp.getFormattedTime(context)
@@ -101,7 +107,7 @@ data class UIRewardObject(
         txHash = tx.txHash
         setTimelineTitle(context, tx.timeline?.referenceDate)
         timelineScores = tx.timeline?.rewardScores ?: mutableListOf()
-        setAnnotations(tx.annotations)
+        setAnnotations(hideAnnotationsThreshold, tx.annotations)
     }
 
     private fun setTimelineTitle(
@@ -134,7 +140,10 @@ data class UIRewardObject(
         }
     }
 
-    private fun setAnnotations(annotations: RewardsAnnotations?) {
+    private fun setAnnotations(
+        hideAnnotationsThreshold: Long,
+        annotations: RewardsAnnotations?
+    ) {
         this.annotations = mutableListOf()
         annotations?.pol?.forEach {
             this.annotations.add(UIRewardsAnnotation(it.toAnnotationCode(), it.ratio))
@@ -142,12 +151,14 @@ data class UIRewardObject(
         annotations?.rm?.forEach {
             this.annotations.add(UIRewardsAnnotation(it.toAnnotationCode(), it.ratio))
         }
-        annotations?.qod?.forEach {
-            val qodRewardsAnnotation = UIRewardsAnnotation(it.toAnnotationCode(), it.ratio)
-            it.affects?.let { affectedParameters ->
-                qodRewardsAnnotation.qodParametersAffected = affectedParameters
+        if (!shouldHideAnnotations(rewardScore, hideAnnotationsThreshold)) {
+            annotations?.qod?.forEach {
+                val qodRewardsAnnotation = UIRewardsAnnotation(it.toAnnotationCode(), it.ratio)
+                it.affects?.let { affectedParameters ->
+                    qodRewardsAnnotation.qodParametersAffected = affectedParameters
+                }
+                this.annotations.add(qodRewardsAnnotation)
             }
-            this.annotations.add(qodRewardsAnnotation)
         }
     }
 }

@@ -487,6 +487,7 @@ private val usecases = module {
             get(),
             get(),
             get(),
+            get(),
             androidContext()
         )
     }
@@ -497,7 +498,7 @@ private val usecases = module {
         ClaimDeviceUseCaseImpl(get(), get(), get())
     }
     single<RewardsUseCase> {
-        RewardsUseCaseImpl(get(), androidContext())
+        RewardsUseCaseImpl(get(), get(), androidContext())
     }
     single<AuthUseCase> {
         AuthUseCaseImpl(get(), get(), get())
@@ -554,7 +555,7 @@ private val usecases = module {
         DeviceListUseCaseImpl(get(), get(), get())
     }
     single<RewardDetailsUseCase> {
-        RewardDetailsUseCaseImpl(get(), get())
+        RewardDetailsUseCaseImpl(get(), get(), get())
     }
     single<AppConfigUseCase> {
         AppConfigUseCaseImpl(get())

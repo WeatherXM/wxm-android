@@ -16,6 +16,7 @@ interface AppConfigDataSource {
     fun setInstallationId(installationId: String)
     fun getInstallationId(): Either<Failure, String>
     fun isTokenClaimingEnabled(): Boolean
+    fun getRewardsHideAnnotationThreshold(): Long
 }
 
 class AppConfigDataSourceImpl(
@@ -28,6 +29,9 @@ class AppConfigDataSourceImpl(
         const val REMOTE_CONFIG_MINIMUM_VERSION_CODE = "android_app_minimum_code"
         const val REMOTE_CONFIG_CHANGELOG = "android_app_changelog"
         const val REMOTE_CONFIG_TOKEN_CLAIMING = "feat_token_claiming"
+        const val REMOTE_CONFIG_REWARDS_HIDE_ANNOTATION_THRESHOLD =
+            "rewards_hide_annotation_threshold"
+        const val REMOTE_CONFIG_REWARDS_HIDE_ANNOTATION_THRESHOLD_DEFAULT = 100L
     }
 
     override fun getLastRemoteVersionCode(): Int {
@@ -81,5 +85,11 @@ class AppConfigDataSourceImpl(
         } else {
             true
         }
+    }
+
+    override fun getRewardsHideAnnotationThreshold(): Long {
+        return firebaseRemoteConfig
+            .all[REMOTE_CONFIG_REWARDS_HIDE_ANNOTATION_THRESHOLD]
+            ?.asLong() ?: REMOTE_CONFIG_REWARDS_HIDE_ANNOTATION_THRESHOLD_DEFAULT
     }
 }

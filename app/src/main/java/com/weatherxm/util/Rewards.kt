@@ -68,6 +68,10 @@ object Rewards {
         } ?: "?"
     }
 
+    fun shouldHideAnnotations(rewardScore: Int?, hideAnnotationsThreshold: Long): Boolean {
+        return (rewardScore?.toLong() ?: 0L) >= hideAnnotationsThreshold
+    }
+
     @Suppress("CyclomaticComplexMethod")
     @StringRes
     fun AnnotationCode.getTitleResId(): Int {
