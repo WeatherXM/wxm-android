@@ -17,18 +17,26 @@ class UserRepositoryImpl(
     /**
      * Gets user from cache or network, combining the underlying data sources
      */
-    override suspend fun getUser(): Either<Failure, User> {
-        return cacheUserDataSource.getUser()
-            .onRight {
-                Timber.d("Got user from cache [${it.email}].")
-            }
-            .mapLeft {
-                return networkUserDataSource.getUser().onRight {
-                    Timber.d("Got user from network [${it.email}].")
-                    cacheUserDataSource.setUser(it)
-                    cacheUserDataSource.setUserUsername(it.email)
+    override suspend fun getUser(forceRefresh: Boolean): Either<Failure, User> {
+        return if (forceRefresh) {
+            getUserFromNetwork()
+        } else {
+            cacheUserDataSource.getUser()
+                .onRight {
+                    Timber.d("Got user from cache [${it.email}].")
                 }
-            }
+                .mapLeft {
+                    return getUserFromNetwork()
+                }
+        }
+    }
+
+    private suspend fun getUserFromNetwork(): Either<Failure, User> {
+        return networkUserDataSource.getUser().onRight {
+            Timber.d("Got user from network [${it.email}].")
+            cacheUserDataSource.setUser(it)
+            cacheUserDataSource.setUserUsername(it.email)
+        }
     }
 
     override suspend fun getUserUsername(): Either<Failure, String> {

@@ -16,7 +16,7 @@ import java.math.BigInteger
 import java.util.concurrent.TimeUnit
 
 interface UserUseCase {
-    suspend fun getUser(): Either<Failure, User>
+    suspend fun getUser(forceRefresh: Boolean = false): Either<Failure, User>
     suspend fun getWalletAddress(): Either<Failure, String>
     suspend fun shouldShowWalletMissingWarning(): Boolean
     fun setWalletWarningDismissTimestamp()
@@ -33,8 +33,8 @@ class UserUseCaseImpl(
         val WALLET_WARNING_DISMISS_EXPIRATION = TimeUnit.HOURS.toMillis(24L)
     }
 
-    override suspend fun getUser(): Either<Failure, User> {
-        return userRepository.getUser()
+    override suspend fun getUser(forceRefresh: Boolean): Either<Failure, User> {
+        return userRepository.getUser(forceRefresh)
     }
 
     override suspend fun getWalletAddress(): Either<Failure, String> {

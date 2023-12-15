@@ -2,6 +2,7 @@ package com.weatherxm.data.repository
 
 import arrow.core.Either
 import com.weatherxm.data.Failure
+import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
 import timber.log.Timber

@@ -46,10 +46,10 @@ class ProfileViewModel : ViewModel(), KoinComponent {
         onWalletRewards.postValue(Resource.success(currentWalletRewards))
     }
 
-    fun fetchUser() {
+    fun fetchUser(forceRefresh: Boolean = false) {
         onLoading.postValue(true)
         viewModelScope.launch {
-            useCase.getUser()
+            useCase.getUser(forceRefresh)
                 .onRight {
                     onUser.postValue(Resource.success(it))
                     walletAddress = it.wallet?.address
@@ -65,6 +65,11 @@ class ProfileViewModel : ViewModel(), KoinComponent {
     }
 
     private fun fetchWalletRewards() {
+        // TODO: Remove this when we roll out the token claiming feature
+        if(!isTokenClaimingEnabled()) {
+            onLoading.postValue(false)
+            return
+        }
         viewModelScope.launch {
             onLoading.postValue(true)
             useCase.getWalletRewards(walletAddress).onRight {

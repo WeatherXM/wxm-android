@@ -43,7 +43,7 @@ class ProfileFragment : Fragment() {
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 parentModel.setWalletNotMissing()
-                model.fetchUser()
+                model.fetchUser(true)
             }
         }
 
