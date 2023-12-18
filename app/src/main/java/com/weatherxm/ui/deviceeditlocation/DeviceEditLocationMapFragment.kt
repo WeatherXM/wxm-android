@@ -1,6 +1,5 @@
-package com.weatherxm.ui.claimdevice.location
+package com.weatherxm.ui.deviceeditlocation
 
-import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,44 +13,15 @@ import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.weatherxm.R
 import com.weatherxm.data.Location
 import com.weatherxm.ui.BaseMapFragment
-import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
-import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
-import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class ClaimMapFragment : BaseMapFragment() {
-    private val m5ParentModel: ClaimM5ViewModel by activityViewModels()
-    private val heliumParentModel: ClaimHeliumViewModel by activityViewModels()
-    private val locationModel: ClaimLocationViewModel by activityViewModels()
-
+class DeviceEditLocationMapFragment : BaseMapFragment() {
+    private val model: DeviceEditLocationViewModel by activityViewModels()
     private var marker: View? = null
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        locationModel.onLocationConfirmed().observe(viewLifecycleOwner) { locationConfirmed ->
-            if (!locationConfirmed) return@observe
-            marker?.let {
-                val loc = viewManager.getViewAnnotationOptionsByView(it)?.geometry as Point
-
-                if (!locationModel.validateLocation(loc.latitude(), loc.longitude())) {
-                    activity?.toast(R.string.invalid_location)
-                    return@observe
-                }
-                locationModel.setInstallationLocation(loc.latitude(), loc.longitude())
-
-                if (locationModel.getDeviceType() == DeviceType.M5_WIFI) {
-                    m5ParentModel.next()
-                } else {
-                    heliumParentModel.next()
-                }
-            }
-        }
-    }
 
     override fun onMapReady(map: MapboxMap) {
         // No point executing if in the meanwhile the activity is dead
@@ -62,8 +32,8 @@ class ClaimMapFragment : BaseMapFragment() {
         binding.appBar.setVisible(false)
         binding.searchView.setVisible(false)
 
-        locationModel.onDeviceLocation().observe(this) {
-            Timber.d("Got user location: $it")
+        model.onGoToLocation().observe(this) {
+            Timber.d("Got new location: $it")
             if (it == null) {
                 context.toast(R.string.error_claim_gps_failed)
             } else {
@@ -71,7 +41,7 @@ class ClaimMapFragment : BaseMapFragment() {
             }
         }
 
-        locationModel.onSelectedSearchLocation().observe(this) {
+        model.onSelectedSearchLocation().observe(this) {
             recenter(map, it)
         }
     }
@@ -110,9 +80,11 @@ class ClaimMapFragment : BaseMapFragment() {
                 }
             }
 
-            map.addOnMapIdleListener { locationModel.getAddressFromPoint(map.cameraState.center) }
+            map.addOnMapIdleListener { model.getAddressFromPoint(map.cameraState.center) }
 
-            locationModel.onReverseGeocodedAddress().observe(this@ClaimMapFragment) { address ->
+            model.onReverseGeocodedAddress().observe(
+                this@DeviceEditLocationMapFragment
+            ) { address ->
                 marker?.let {
                     val container = it.findViewById<MaterialCardView>(R.id.addressContainer)
                     if (address != null) {
@@ -123,6 +95,18 @@ class ClaimMapFragment : BaseMapFragment() {
                     }
                 }
             }
+        }
+    }
+
+    fun onConfirmClicked(deviceId: String) {
+        marker?.let {
+            val loc = viewManager.getViewAnnotationOptionsByView(it)?.geometry as Point
+
+            if (!model.validateLocation(loc.latitude(), loc.longitude())) {
+                activity?.toast(R.string.invalid_location)
+                return
+            }
+            model.confirmLocation(deviceId, loc.latitude(), loc.longitude())
         }
     }
 

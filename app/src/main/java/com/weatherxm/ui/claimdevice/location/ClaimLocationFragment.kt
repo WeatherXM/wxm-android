@@ -1,7 +1,5 @@
 package com.weatherxm.ui.claimdevice.location
 
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
@@ -16,7 +14,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimSetLocationBinding
 import com.weatherxm.ui.common.DeviceType
-import com.weatherxm.ui.common.checkPermissionsAndThen
+import com.weatherxm.ui.common.requestLocationPermissions
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.hideKeyboard
@@ -60,6 +58,7 @@ class ClaimLocationFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -78,7 +77,9 @@ class ClaimLocationFragment : Fragment() {
 
         model.onRequestUserLocation().observe(viewLifecycleOwner) {
             if (it) {
-                requestLocationPermissions()
+                requestLocationPermissions {
+                    model.getLocation()
+                }
             }
         }
 
@@ -108,26 +109,13 @@ class ClaimLocationFragment : Fragment() {
         }
 
         binding.addressSearchView.setAdapter(adapter,
-            onTextChanged = {
-                model.geocoding(it)
-            },
+            onTextChanged = { model.geocoding(it) },
             onMyLocationClicked = {
-                requestLocationPermissions()
+                requestLocationPermissions {
+                    model.getLocation()
+                }
             }
         )
         binding.mapView.getFragment<ClaimMapFragment>().initMarkerAndListeners()
-    }
-
-    @SuppressLint("MissingPermission")
-    private fun requestLocationPermissions() {
-        context?.let { context ->
-            checkPermissionsAndThen(
-                permissions = arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION),
-                rationaleTitle = getString(R.string.permission_location_title),
-                rationaleMessage = getString(R.string.permission_location_rationale),
-                onGranted = { model.getLocation() },
-                onDenied = { context.toast(R.string.error_claim_gps_failed) }
-            )
-        }
     }
 }

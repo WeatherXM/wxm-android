@@ -109,6 +109,10 @@ class RewardProblemsAdapter(
                             annotation
                         )
                     }
+                } else if (annotation == AnnotationCode.LOCATION_NOT_VERIFIED) {
+                    binding.error.action(getString(R.string.edit_location)) {
+                        listener.onEditLocation(device, annotation)
+                    }
                 } else if (annotation == AnnotationCode.UNKNOWN) {
                     binding.error.action(getString(R.string.title_contact_support)) {
                         listener.onContactSupport(device, annotation)
@@ -145,4 +149,5 @@ interface RewardProblemsListener {
     fun onUpdateFirmware(device: UIDevice, annotation: AnnotationCode?)
     fun onContactSupport(device: UIDevice, annotation: AnnotationCode?)
     fun onDocumentation(url: String, annotation: AnnotationCode?)
+    fun onEditLocation(device: UIDevice, annotation: AnnotationCode?)
 }

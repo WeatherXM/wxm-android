@@ -233,6 +233,15 @@ interface ApiService {
 
     @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
+    @MockResponse(code = 200, body = "mock_files/get_user_device.json")
+    @POST("/api/v1/me/devices/{deviceId}/location")
+    suspend fun setLocation(
+        @Path("deviceId") deviceId: String,
+        @Body location: LocationBody
+    ): NetworkResponse<Device, ErrorResponse>
+
+    @Mock
+    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @MockResponse(code = 200, body = "mock_files/empty_response.json")
     @DELETE("/api/v1/me/devices/{deviceId}/follow")
     suspend fun unfollowStation(

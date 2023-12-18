@@ -41,6 +41,7 @@ import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
 import com.weatherxm.ui.devicealerts.DeviceAlertsActivity
 import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
+import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationActivity
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.devicesettings.DeviceSettingsActivity
@@ -350,6 +351,21 @@ class Navigator(
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_DEVICE, device)
         )
+    }
+
+    fun showEditLocation(
+        activityResultLauncher: ActivityResultLauncher<Intent>?,
+        context: Context,
+        device: UIDevice?
+    ) {
+        val intent = Intent(context, DeviceEditLocationActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .putExtra(ARG_DEVICE, device)
+        if(activityResultLauncher == null) {
+            context.startActivity(intent)
+        } else {
+            activityResultLauncher.launch(intent)
+        }
     }
 
     fun showDeviceAlerts(fragment: Fragment, device: UIDevice?) {

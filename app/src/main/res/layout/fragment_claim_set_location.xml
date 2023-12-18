@@ -141,7 +141,7 @@
                         android:id="@+id/confirmLocationText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_normal"
+                        android:layout_marginStart="@dimen/margin_small"
                         android:text="@string/confirm_location_description"
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintEnd_toEndOf="parent"

@@ -81,7 +81,8 @@ data class PublicDevice(
             cellCenter = null,
             assignedFirmware = null,
             claimedAt = null,
-            address = null
+            address = null,
+            hex7 = null
         )
     }
 }
@@ -128,6 +129,7 @@ data class Device(
             label = label,
             friendlyName = attributes?.friendlyName,
             location = location,
+            hex7 = attributes?.hex7,
             currentFirmware = attributes?.firmware?.current,
             assignedFirmware = attributes?.firmware?.assigned,
             claimedAt = attributes?.claimedAt,

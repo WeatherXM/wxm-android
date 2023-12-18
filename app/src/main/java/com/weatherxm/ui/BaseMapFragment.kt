@@ -22,6 +22,7 @@ import com.weatherxm.util.DisplayModeHelper
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.android.ext.android.inject
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 open class BaseMapFragment : Fragment() {
     companion object {
@@ -29,6 +30,8 @@ open class BaseMapFragment : Fragment() {
         const val CURRENT_LON = "current_lon"
         const val CURRENT_ZOOM = "current_zoom"
         const val DEFAULT_ZOOM_LEVEL: Double = 1.0
+        const val USER_LOCATION_ZOOM_LEVEL: Double = 15.0
+        val REVERSE_GEOCODING_DELAY = TimeUnit.SECONDS.toMillis(1)
     }
 
     fun interface OnMapDebugInfoListener {

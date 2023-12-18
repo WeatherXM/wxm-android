@@ -9,8 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.data.Location
+import com.weatherxm.ui.BaseMapFragment.Companion.REVERSE_GEOCODING_DELAY
 import com.weatherxm.ui.common.DeviceType
-import com.weatherxm.usecases.ClaimDeviceUseCase
+import com.weatherxm.usecases.EditLocationUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.Validator
@@ -22,17 +23,10 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 @Suppress("TooManyFunctions")
 class ClaimLocationViewModel : ViewModel(), KoinComponent {
-    // Current arbitrary values for the viewpager and the map
-    companion object {
-        const val ZOOM_LEVEL: Double = 15.0
-        val REVERSE_GEOCODING_DELAY = TimeUnit.SECONDS.toMillis(1)
-    }
-
-    private val usecase: ClaimDeviceUseCase by inject()
+    private val editLocationUseCase: EditLocationUseCase by inject()
     private val analytics: Analytics by inject()
     private val validator: Validator by inject()
     private val locationHelper: LocationHelper by inject()
@@ -92,7 +86,7 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
 
     fun geocoding(query: String) {
         viewModelScope.launch {
-            usecase.getSearchSuggestions(query)
+            editLocationUseCase.getSearchSuggestions(query)
                 .onRight { suggestions ->
                     onSearchResults.postValue(suggestions)
                 }.onLeft {
@@ -103,7 +97,7 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
 
     fun getLocationFromSearchSuggestion(suggestion: SearchSuggestion) {
         viewModelScope.launch {
-            usecase.getSuggestionLocation(suggestion)
+            editLocationUseCase.getSuggestionLocation(suggestion)
                 .onRight { location ->
                     onSelectedSearchLocation.postValue(location)
                 }.onLeft {
@@ -121,7 +115,7 @@ class ClaimLocationViewModel : ViewModel(), KoinComponent {
 
         reverseGeocodingJob = viewModelScope.launch {
             delay(REVERSE_GEOCODING_DELAY)
-            usecase.getAddressFromPoint(point)
+            editLocationUseCase.getAddressFromPoint(point)
                 .onRight {
                     onReverseGeocodedAddress.postValue(it)
                 }

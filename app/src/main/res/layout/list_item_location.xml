@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorSurface"
+    android:background="@drawable/background_rounded_surface_smaller_radius"
     android:orientation="vertical">
 
     <com.google.android.material.textview.MaterialTextView

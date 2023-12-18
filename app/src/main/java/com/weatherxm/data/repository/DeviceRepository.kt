@@ -27,6 +27,7 @@ interface DeviceRepository {
     suspend fun removeDevice(serialNumber: String, id: String): Either<Failure, Unit>
     suspend fun getDeviceInfo(deviceId: String): Either<Failure, DeviceInfo>
     suspend fun getUserDevicesIds(): List<String>
+    suspend fun setLocation(deviceId: String, lat: Double, lon: Double): Either<Failure, Device>
 }
 
 class DeviceRepositoryImpl(
@@ -121,5 +122,13 @@ class DeviceRepositoryImpl(
 
     override suspend fun getUserDevicesIds(): List<String> {
         return cacheDeviceDataSource.getUserDevicesIds()
+    }
+
+    override suspend fun setLocation(
+        deviceId: String,
+        lat: Double,
+        lon: Double
+    ): Either<Failure, Device> {
+        return networkDeviceDataSource.setLocation(deviceId, lat, lon)
     }
 }

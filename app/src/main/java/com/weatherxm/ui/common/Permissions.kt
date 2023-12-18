@@ -1,5 +1,6 @@
 package com.weatherxm.ui.common
 
+import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -49,6 +50,32 @@ fun Fragment.checkPermissionsAndThen(
         rationaleMessage = rationaleMessage,
         onGranted = onGranted,
         onDenied = onDenied
+    )
+}
+
+fun FragmentActivity.requestLocationPermissions(onGranted: () -> Unit) {
+    checkPermissionsAndThen(
+        permissions = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ),
+        rationaleTitle = getString(R.string.permission_location_title),
+        rationaleMessage = getString(R.string.permission_location_rationale),
+        onGranted = { onGranted.invoke() },
+        onDenied = { toast(R.string.error_claim_gps_failed) }
+    )
+}
+
+fun Fragment.requestLocationPermissions(onGranted: () -> Unit) {
+    checkPermissionsAndThen(
+        permissions = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ),
+        rationaleTitle = getString(R.string.permission_location_title),
+        rationaleMessage = getString(R.string.permission_location_rationale),
+        onGranted = { onGranted.invoke() },
+        onDenied = { context?.toast(R.string.error_claim_gps_failed) }
     )
 }
 

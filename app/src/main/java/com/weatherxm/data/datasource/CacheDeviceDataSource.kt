@@ -51,4 +51,12 @@ class CacheDeviceDataSource(private val cacheService: CacheService) : DeviceData
     override suspend fun setUserDevicesIds(ids: List<String>) {
         cacheService.setUserDevicesIds(ids)
     }
+
+    override suspend fun setLocation(
+        deviceId: String,
+        lat: Double,
+        lon: Double
+    ): Either<Failure, Device> {
+        throw NotImplementedError("Won't be implemented. Ignore this.")
+    }
 }

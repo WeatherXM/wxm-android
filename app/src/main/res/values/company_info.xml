@@ -46,4 +46,5 @@
     <string name="docs_url_qod_algorithm">https://docs.weatherxm.com/project/quality-of-data</string>
     <string name="share_station_url">https://explorer.weatherxm.com/stations/%s</string>
     <string name="weatherxm_claim_redirect_url">weatherxm://token-claim</string>
+    <string name="mapbox_style">mapbox://styles/exmachina/ckrxjh01a5e7317plznjeicao</string>
 </resources>

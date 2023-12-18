@@ -64,7 +64,8 @@ data class SearchResult(
             claimedAt = null,
             friendlyName = null,
             label = null,
-            location = null
+            location = null,
+            hex7 = null
         )
     }
 }

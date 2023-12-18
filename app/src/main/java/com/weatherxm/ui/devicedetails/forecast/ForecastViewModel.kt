@@ -50,7 +50,7 @@ class ForecastViewModel(var device: UIDevice = UIDevice.empty()) : ViewModel(), 
         viewModelScope.launch {
             deviceDetailsUseCase.getForecast(device, forceRefresh)
                 .map {
-                    Timber.d("Got forecast $it")
+                    Timber.d("Got forecast")
                     if (it.isEmpty()) {
                         onError.postValue(UIError(resHelper.getString(R.string.forecast_empty)))
                     }

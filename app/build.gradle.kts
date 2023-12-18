@@ -348,6 +348,7 @@ dependencies {
     // Mapbox
     implementation("com.mapbox.maps:android:10.16.2")
     implementation("com.mapbox.search:mapbox-search-android:1.0.0-rc.7")
+    implementation("com.mapbox.mapboxsdk:mapbox-sdk-services:6.15.0")
 
     // Insetter
     implementation("dev.chrisbanes.insetter:insetter:0.6.1")
@@ -377,4 +378,7 @@ dependencies {
     implementation("com.juul.kable:core:0.27.0")
     implementation("com.github.espressif:esp-idf-provisioning-android:lib-2.1.2")
     implementation("no.nordicsemi.android:dfu:2.4.0")
+
+    // Image Loader
+    implementation("io.coil-kt:coil-base:2.5.0")
 }

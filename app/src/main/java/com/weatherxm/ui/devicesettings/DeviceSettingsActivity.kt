@@ -1,8 +1,12 @@
 package com.weatherxm.ui.devicesettings
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import coil.ImageLoader
+import coil.request.ImageRequest
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
@@ -10,12 +14,15 @@ import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityDeviceSettingsBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.MapboxUtils.getMinimap
 import com.weatherxm.util.applyInsets
+import com.weatherxm.util.applyOnGlobalLayout
 import com.weatherxm.util.setHtml
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
@@ -30,8 +37,19 @@ class DeviceSettingsActivity : AppCompatActivity(), KoinComponent {
     private lateinit var binding: ActivityDeviceSettingsBinding
     private val navigator: Navigator by inject()
     private val analytics: Analytics by inject()
+    private val imageLoader: ImageLoader by inject()
     private var snackbar: Snackbar? = null
     private lateinit var adapter: DeviceInfoAdapter
+
+    // Register the launcher for the edit location activity and wait for a possible result
+    private val editLocationLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            val device = it.data?.getParcelableExtra<UIDevice>(ARG_DEVICE)
+            if (it.resultCode == Activity.RESULT_OK && device != null) {
+                model.device = device
+                setupStationLocation(true)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,18 +111,7 @@ class DeviceSettingsActivity : AppCompatActivity(), KoinComponent {
         }
 
         binding.removeStationBtn.setOnClickListener {
-            analytics.trackEventSelectContent(
-                Analytics.ParamValue.REMOVE_DEVICE.paramValue,
-                Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
-            )
-            navigator.showPasswordPrompt(this, R.string.remove_station_password_message) {
-                if (it) {
-                    Timber.d("Password confirmation success!")
-                    model.removeDevice()
-                } else {
-                    Timber.d("Password confirmation prompt was cancelled or failed.")
-                }
-            }
+            onRemoveStation()
         }
 
         binding.changeFrequencyBtn.setOnClickListener {
@@ -124,6 +131,63 @@ class DeviceSettingsActivity : AppCompatActivity(), KoinComponent {
 
         if (model.device.relation == DeviceRelation.FOLLOWED) {
             binding.contactSupportBtn.text = getString(R.string.see_something_wrong_contact_support)
+        }
+
+        setupStationLocation()
+    }
+
+    private fun setupStationLocation(forceUpdateMinimap: Boolean = false) {
+        binding.editLocationBtn.setOnClickListener {
+            navigator.showEditLocation(editLocationLauncher, this, model.device)
+        }
+
+        if (model.device.relation == DeviceRelation.FOLLOWED) {
+            binding.locationDesc.setHtml(
+                R.string.station_location_favorite_desc, model.device.address ?: ""
+            )
+        } else {
+            binding.locationDesc.setHtml(R.string.station_location_desc, model.device.address ?: "")
+        }
+
+        if(forceUpdateMinimap) {
+            updateMinimap()
+        } else {
+            binding.locationLayout.applyOnGlobalLayout {
+                updateMinimap()
+            }
+        }
+    }
+
+    private fun updateMinimap() {
+        val deviceMapLocation = if(model.device.relation == DeviceRelation.OWNED) {
+            model.device.location
+        } else {
+            null
+        }
+        getMinimap(binding.locationLayout.width, deviceMapLocation, model.device.hex7)?.let {
+            imageLoader.enqueue(
+                ImageRequest.Builder(this).data(it).target(binding.locationMinimap).build()
+            )
+        } ?: binding.locationMinimap.setVisible(false)
+        getMinimap(binding.locationLayout.width, deviceMapLocation, model.device.hex7)?.let {
+            imageLoader.enqueue(
+                ImageRequest.Builder(this).data(it).target(binding.locationMinimap).build()
+            )
+        } ?: binding.locationMinimap.setVisible(false)
+    }
+
+    private fun onRemoveStation() {
+        analytics.trackEventSelectContent(
+            Analytics.ParamValue.REMOVE_DEVICE.paramValue,
+            Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
+        )
+        navigator.showPasswordPrompt(this, R.string.remove_station_password_message) {
+            if (it) {
+                Timber.d("Password confirmation success!")
+                model.removeDevice()
+            } else {
+                Timber.d("Password confirmation prompt was cancelled or failed.")
+            }
         }
     }
 

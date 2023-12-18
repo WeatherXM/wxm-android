@@ -22,4 +22,9 @@ interface DeviceDataSource {
     suspend fun getDeviceInfo(deviceId: String): Either<Failure, DeviceInfo>
     suspend fun getUserDevicesIds(): List<String>
     suspend fun setUserDevicesIds(ids: List<String>)
+    suspend fun setLocation(
+        deviceId: String,
+        lat: Double,
+        lon: Double
+    ): Either<Failure, Device>
 }

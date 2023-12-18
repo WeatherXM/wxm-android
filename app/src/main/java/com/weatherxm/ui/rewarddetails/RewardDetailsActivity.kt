@@ -177,6 +177,11 @@ class RewardDetailsActivity : AppCompatActivity(), KoinComponent, RewardProblems
         navigator.openWebsite(this, url)
     }
 
+    override fun onEditLocation(device: UIDevice, annotation: AnnotationCode?) {
+        trackUserActionOnErrors(annotation)
+        navigator.showEditLocation(null, this, device)
+    }
+
     private fun trackUserActionOnErrors(annotation: AnnotationCode?) {
         analytics.trackEventUserAction(
             actionName = Analytics.ParamValue.REWARD_DETAILS_ERROR.paramValue,

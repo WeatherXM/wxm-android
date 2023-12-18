@@ -63,3 +63,10 @@ data class FriendlyNameBody(
 data class DeleteDeviceBody(
     val serialNumber: String
 ) : Parcelable
+
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class LocationBody(
+    val lat: Double,
+    val lon: Double
+) : Parcelable

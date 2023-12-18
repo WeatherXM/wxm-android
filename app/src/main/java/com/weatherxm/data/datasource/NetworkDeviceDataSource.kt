@@ -12,6 +12,7 @@ import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.ClaimDeviceBody
 import com.weatherxm.data.network.DeleteDeviceBody
 import com.weatherxm.data.network.FriendlyNameBody
+import com.weatherxm.data.network.LocationBody
 import kotlinx.coroutines.delay
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -75,5 +76,13 @@ class NetworkDeviceDataSource(private val apiService: ApiService) : DeviceDataSo
 
     override suspend fun setUserDevicesIds(ids: List<String>) {
         throw NotImplementedError("Won't be implemented. Ignore this.")
+    }
+
+    override suspend fun setLocation(
+        deviceId: String,
+        lat: Double,
+        lon: Double
+    ): Either<Failure, Device> {
+        return apiService.setLocation(deviceId, LocationBody(lat, lon)).map()
     }
 }

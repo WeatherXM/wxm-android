@@ -14,6 +14,9 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionScheme
 import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme
 import androidx.security.crypto.MasterKeys
+import coil.ImageLoader
+import coil.disk.DiskCache
+import coil.memory.MemoryCache
 import com.espressif.provisioning.ESPConstants
 import com.espressif.provisioning.ESPDevice
 import com.espressif.provisioning.ESPProvisionManager
@@ -172,6 +175,8 @@ import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCaseImpl
 import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.DeviceListUseCaseImpl
+import com.weatherxm.usecases.EditLocationUseCase
+import com.weatherxm.usecases.EditLocationUseCaseImpl
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.ExplorerUseCaseImpl
 import com.weatherxm.usecases.FollowUseCase
@@ -247,6 +252,9 @@ private const val READ_TIMEOUT = 30L
 private const val WRITE_TIMEOUT = 60L
 private const val FIREBASE_CONFIG_FETCH_INTERVAL_DEBUG = 30L
 private const val FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE = 3600L
+
+private const val COIL_MEMORY_CACHE_SIZE_PERCENTAGE = 0.25
+private const val COIL_DISK_CACHE_SIZE_PERCENTAGE = 0.02
 
 private val logging = module {
     single(createdAtStart = true) {
@@ -560,6 +568,9 @@ private val usecases = module {
     single<AppConfigUseCase> {
         AppConfigUseCaseImpl(get())
     }
+    single<EditLocationUseCase> {
+        EditLocationUseCaseImpl(get(), get())
+    }
 }
 
 private val location = module {
@@ -785,6 +796,22 @@ val widgetHelper = module {
 private val utilities = module {
     single<CacheService> {
         CacheService(get(), get<SharedPreferences>(named(PREFERENCES_AUTH_TOKEN)), get(), get())
+    }
+    single<ImageLoader>(createdAtStart = true) {
+        ImageLoader.Builder(androidContext())
+            .memoryCache {
+                MemoryCache.Builder(androidContext())
+                    .maxSizePercent(COIL_MEMORY_CACHE_SIZE_PERCENTAGE)
+                    .build()
+            }
+            .diskCache {
+                DiskCache.Builder()
+                    .directory(androidContext().cacheDir.resolve("image_cache"))
+                    .maxSizePercent(COIL_DISK_CACHE_SIZE_PERCENTAGE)
+                    .build()
+            }
+            .respectCacheHeaders(false)
+            .build()
     }
     single<Geocoder> {
         Geocoder(androidContext(), Locale.getDefault())

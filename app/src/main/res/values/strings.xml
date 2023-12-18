@@ -367,7 +367,7 @@
     <string name="action_quit_claiming">Quit Claiming</string>
     <string name="action_retry_claiming">Retry Claiming</string>
     <string name="location">Location</string>
-    <string name="confirm_location_description">I hereby acknowledge that the location above is the correct one, and can be used to verify the eligibility of this station\’s rewards.</string>
+    <string name="confirm_location_description">I acknowledge that the deployment location above is correct and can be used to verify the eligibility of the station’s rewards.</string>
     <string name="set_and_claim">Set and Claim</string>
     <string name="station_claimed">Station Claimed</string>
     <string name="claiming_station">Claiming Station…</string>
@@ -471,7 +471,7 @@
     <string name="reconfigure_wifi">Reconfigure WiFi</string>
     <string name="reconfigure_wifi_desc">Update M5’s WiFi network connection</string>
     <string name="remove_station">Remove Station</string>
-    <string name="remove_station_desc"><![CDATA[Unclaim and remove this station from your account. You will not lose any rewards, but you will not be able to view its data and earn additional $WXM from it.<br><a href="%1$s">Learn more about it here.</a>]]></string>
+    <string name="remove_station_desc"><![CDATA[Unclaim and remove this station from your account. You will not lose any allocated rewards, but you will not be able to view the station’s data or earn additional rewards in the future.<br><a href="%1$s">Learn more about it here.</a>]]></string>
     <string name="remove_station_warning">This action is not reversible!</string>
     <string name="remove_station_password_message"><![CDATA[In order to remove your station you need to confirm you are the owner of this account.<br><b>Please type in your password to remove your station.</b>]]></string>
     <string name="station_information">Station Information</string>
@@ -500,6 +500,10 @@
     <string name="frequency_changed_subtitle">Your station’s frequency changed and it’s now %s.</string>
     <string name="frequency_changed_failed">Frequency Change Failed</string>
     <string name="changing_frequency_failed_message"><![CDATA[Station frequency change failed, please try again! If the problem persists, please contact our support team at <b><a>support@weatherxm.com</a></b>.<br><br>Please make sure to mention that you’re facing an Error <b>%s</b> for faster resolution.]]></string>
+    <string name="station_location">Station Location</string>
+    <string name="station_location_desc"><![CDATA[The deployment location you set for this station is <b>%s.</b> If the location you see on the map doesn’t match the actual deployment location, press the button below to edit.]]></string>
+    <string name="station_location_favorite_desc"><![CDATA[The deployment location that the station owner has set is <b>%s.</b>]]></string>
+    <string name="edit_location">Edit Location</string>
 
     <!-- Alerts -->
     <string name="alerts">Alerts</string>
@@ -535,4 +539,10 @@
     <string name="hidden_content">Hidden Content</string>
     <string name="hidden_content_prompt"><![CDATA[Add <b>%s</b> to your favorites to see historical & forecast data.]]></string>
     <string name="hidden_content_login_prompt"><![CDATA[Login to add <b>%s</b> to your favorites to see historical & forecast data.]]></string>
+
+    <!-- Edit Station location -->
+    <string name="edit_station_location">Edit Station Location</string>
+    <string name="relocation_fee_notice"><![CDATA[In the near future, station relocation will be subject to a relocation fee.<br><a href="%1$s">Read more here</a>]]></string>
+    <string name="confirm_location">Confirm Location</string>
+    <string name="location_updated">Location Updated</string>
 </resources>

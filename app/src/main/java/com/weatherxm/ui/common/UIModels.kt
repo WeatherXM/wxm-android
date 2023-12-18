@@ -7,6 +7,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.weatherxm.R
 import com.weatherxm.data.DeviceProfile
+import com.weatherxm.data.Hex
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.Location
 import com.weatherxm.data.QoDErrorAffects
@@ -201,6 +202,7 @@ data class UIDevice(
     var profile: DeviceProfile?,
     val location: Location?,
     var cellCenter: Location?,
+    var hex7: Hex?,
     val isActive: Boolean?,
     val currentFirmware: String?,
     val assignedFirmware: String?,
@@ -218,6 +220,7 @@ data class UIDevice(
             "",
             "",
             "",
+            null,
             null,
             null,
             null,

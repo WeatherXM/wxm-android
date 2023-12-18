@@ -264,6 +264,10 @@
             android:name="com.weatherxm.ui.rewardsclaim.RewardsClaimActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.deviceeditlocation.DeviceEditLocationActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
 
         <!-- Services -->
         <service

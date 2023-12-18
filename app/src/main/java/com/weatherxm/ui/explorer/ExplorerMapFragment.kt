@@ -1,6 +1,5 @@
 package com.weatherxm.ui.explorer
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.view.KeyEvent.ACTION_UP
 import android.view.KeyEvent.KEYCODE_ENTER
@@ -31,7 +30,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.ui.BaseMapFragment
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.checkPermissionsAndThen
+import com.weatherxm.ui.common.requestLocationPermissions
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
@@ -130,7 +129,7 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
 
         model.onMyLocationClicked().observe(this) {
             if (it == true) {
-                requestLocationPermissions()
+                getLocationPermissions()
                 analytics.trackEventUserAction(
                     actionName = Analytics.ParamValue.MY_LOCATION.paramValue
                 )
@@ -392,32 +391,21 @@ class ExplorerMapFragment : BaseMapFragment(), KoinComponent {
     }
 
     override fun getMapStyle(): String {
-        return "mapbox://styles/exmachina/ckrxjh01a5e7317plznjeicao"
+        return getString(R.string.mapbox_style)
     }
 
     @SuppressLint("MissingPermission")
-    private fun requestLocationPermissions() {
-        context?.let { context ->
-            checkPermissionsAndThen(
-                permissions = arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                rationaleTitle = getString(R.string.permission_location_title),
-                rationaleMessage = getString(R.string.permission_location_rationale),
-                onGranted = {
-                    // Get last location
-                    model.getLocation {
-                        Timber.d("Got user location: $it")
-                        if (it == null) {
-                            context.toast(R.string.error_claim_gps_failed)
-                        } else {
-                            cameraFly(Point.fromLngLat(it.lon, it.lat))
-                        }
-                    }
-                },
-                onDenied = { context.toast(R.string.error_claim_gps_failed) }
-            )
+    private fun getLocationPermissions() {
+        this.requestLocationPermissions {
+            // Get last location
+            model.getLocation {
+                Timber.d("Got user location: $it")
+                if (it == null) {
+                    context.toast(R.string.error_claim_gps_failed)
+                } else {
+                    cameraFly(Point.fromLngLat(it.lon, it.lat))
+                }
+            }
         }
     }
 }
