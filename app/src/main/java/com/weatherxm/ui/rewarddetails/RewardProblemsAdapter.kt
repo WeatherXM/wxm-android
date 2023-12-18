@@ -17,10 +17,12 @@ import com.weatherxm.util.Rewards.getRewardAnnotationColor
 import com.weatherxm.util.Rewards.getTitleResId
 import com.weatherxm.util.Rewards.pointToDocsHome
 import com.weatherxm.util.Rewards.pointToDocsTroubleshooting
+import com.weatherxm.util.Rewards.pointToPoLPreLaunch
 
 class RewardProblemsAdapter(
     private val device: UIDevice,
     private val rewardScore: Int?,
+    private val isPoLEnabled: Boolean,
     private val listener: RewardProblemsListener
 ) : ListAdapter<UIRewardsAnnotation, RewardProblemsAdapter.RewardProblemsViewHolder>(
     RewardProblemsDiffCallback()
@@ -51,7 +53,14 @@ class RewardProblemsAdapter(
                 item.annotation?.getTitleResId()?.let {
                     title(it)
                 }
-                htmlMessage(item.getMessage(context, device))
+                htmlMessage(item.getMessage(context, isPoLEnabled, device)) {
+                    if(item.annotation.pointToPoLPreLaunch()) {
+                        listener.onDocumentation(
+                            itemView.context.getString(R.string.docs_url_pol_algorithm),
+                            item.annotation
+                        )
+                    }
+                }
                 if (device.relation == DeviceRelation.OWNED) {
                     getAction(item.annotation)
                 }
@@ -127,7 +136,7 @@ class RewardProblemsDiffCallback : DiffUtil.ItemCallback<UIRewardsAnnotation>() 
     ): Boolean {
         return oldItem.annotation == newItem.annotation &&
             oldItem.ratioOfAnnotation == newItem.ratioOfAnnotation &&
-            oldItem.qodParametersAffected == newItem.qodParametersAffected
+            oldItem.qodParametersAffected.size == newItem.qodParametersAffected.size
     }
 }
 

@@ -9,4 +9,6 @@ class RewardDetailsViewModel : ViewModel(), KoinComponent {
     private val appConfigUseCase: AppConfigUseCase by inject()
 
     fun isTokenClaimingEnabled() = appConfigUseCase.isTokenClaimingEnabled()
+
+    fun isPoLEnabled() = appConfigUseCase.isPoLEnabled()
 }

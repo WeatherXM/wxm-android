@@ -16,6 +16,7 @@ interface AppConfigDataSource {
     fun setInstallationId(installationId: String)
     fun getInstallationId(): Either<Failure, String>
     fun isTokenClaimingEnabled(): Boolean
+    fun isPoLEnabled(): Boolean
     fun getRewardsHideAnnotationThreshold(): Long
 }
 
@@ -32,6 +33,7 @@ class AppConfigDataSourceImpl(
         const val REMOTE_CONFIG_REWARDS_HIDE_ANNOTATION_THRESHOLD =
             "rewards_hide_annotation_threshold"
         const val REMOTE_CONFIG_REWARDS_HIDE_ANNOTATION_THRESHOLD_DEFAULT = 100L
+        const val REMOTE_CONFIG_POL_ENABLED = "feat_pol_enabled"
     }
 
     override fun getLastRemoteVersionCode(): Int {
@@ -80,8 +82,21 @@ class AppConfigDataSourceImpl(
          * So after we roll out the token claiming we can safely remove the key/value pair in
          * remote config and it older clients will still be working.
          */
-        return if(firebaseRemoteConfig.all.containsKey(REMOTE_CONFIG_TOKEN_CLAIMING)) {
+        return if (firebaseRemoteConfig.all.containsKey(REMOTE_CONFIG_TOKEN_CLAIMING)) {
             firebaseRemoteConfig.getBoolean(REMOTE_CONFIG_TOKEN_CLAIMING)
+        } else {
+            true
+        }
+    }
+
+    override fun isPoLEnabled(): Boolean {
+        /**
+         * We use the remote config's value otherwise return true, for future-proof reasons.
+         * So after we roll out the token claiming we can safely remove the key/value pair in
+         * remote config and it older clients will still be working.
+         */
+        return if (firebaseRemoteConfig.all.containsKey(REMOTE_CONFIG_POL_ENABLED)) {
+            firebaseRemoteConfig.getBoolean(REMOTE_CONFIG_POL_ENABLED)
         } else {
             true
         }

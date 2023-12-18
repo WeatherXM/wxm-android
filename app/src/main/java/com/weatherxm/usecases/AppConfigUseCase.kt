@@ -5,6 +5,7 @@ import org.koin.core.component.KoinComponent
 
 interface AppConfigUseCase {
     fun isTokenClaimingEnabled(): Boolean
+    fun isPoLEnabled(): Boolean
 }
 
 class AppConfigUseCaseImpl(
@@ -12,5 +13,9 @@ class AppConfigUseCaseImpl(
 ) : AppConfigUseCase, KoinComponent {
     override fun isTokenClaimingEnabled(): Boolean {
         return repository.isTokenClaimingEnabled()
+    }
+
+    override fun isPoLEnabled(): Boolean {
+        return repository.isPoLEnabled()
     }
 }

@@ -118,7 +118,7 @@ class RewardDetailsActivity : AppCompatActivity(), KoinComponent, RewardProblems
             binding.problemsFoundDesc.setHtml(getString(R.string.problems_found_desc, lostRewards))
         }
 
-        val adapter = RewardProblemsAdapter(device, data.rewardScore, this)
+        val adapter = RewardProblemsAdapter(device, data.rewardScore, model.isPoLEnabled(), this)
         binding.problemsList.adapter = adapter
 
         adapter.submitList(data.annotations)

@@ -91,12 +91,18 @@ object Rewards {
             AnnotationCode.RELOCATED -> R.string.annotation_relocated
             AnnotationCode.POL_THRESHOLD_NOT_REACHED -> R.string.annotation_pol_threshold
             AnnotationCode.QOD_THRESHOLD_NOT_REACHED -> R.string.annotation_qod_threshold
+            AnnotationCode.UNIDENTIFIED_SPIKE -> R.string.annotation_unidentified_spike
+            AnnotationCode.UNIDENTIFIED_ANOMALOUS_CHANGE -> R.string.annotation_unidentified_change
             AnnotationCode.UNKNOWN -> R.string.annotation_unknown
         }
     }
 
     @Suppress("CyclomaticComplexMethod", "LongMethod")
-    fun UIRewardsAnnotation.getMessage(context: Context, device: UIDevice): String {
+    fun UIRewardsAnnotation.getMessage(
+        context: Context,
+        isPoLEnabled: Boolean,
+        device: UIDevice
+    ): String {
         return when (this.annotation) {
             AnnotationCode.OBC -> {
                 context.getString(R.string.annotation_obc_desc, getAffectedParameters())
@@ -157,15 +163,36 @@ object Rewards {
                 }
             }
             AnnotationCode.LOCATION_NOT_VERIFIED -> {
-                context.getString(R.string.annotation_location_not_verified_desc)
+                if (device.relation == DeviceRelation.OWNED && !isPoLEnabled) {
+                    context.getString(
+                        R.string.annotation_location_not_verified_desc_pre_launch,
+                        context.getString(R.string.docs_url_pol_algorithm)
+                    )
+                } else {
+                    context.getString(R.string.annotation_location_not_verified_desc)
+                }
             }
             AnnotationCode.NO_LOCATION_DATA -> {
                 if (device.relation != DeviceRelation.OWNED) {
                     context.getString(R.string.annotation_no_location_public_desc)
                 } else if (device.profile == DeviceProfile.M5) {
-                    context.getString(R.string.annotation_no_location_m5_desc)
+                    if (isPoLEnabled) {
+                        context.getString(R.string.annotation_no_location_m5_desc)
+                    } else {
+                        context.getString(
+                            R.string.annotation_no_location_m5_desc_pre_launch,
+                            context.getString(R.string.docs_url_pol_algorithm)
+                        )
+                    }
                 } else {
-                    context.getString(R.string.annotation_no_location_helium_desc)
+                    if (isPoLEnabled) {
+                        context.getString(R.string.annotation_no_location_helium_desc)
+                    } else {
+                        context.getString(
+                            R.string.annotation_no_location_helium_desc_pre_launch,
+                            context.getString(R.string.docs_url_pol_algorithm)
+                        )
+                    }
                 }
             }
             AnnotationCode.NO_WALLET -> {
@@ -197,6 +224,28 @@ object Rewards {
                     context.getString(R.string.annotation_qod_threshold_public_desc)
                 }
             }
+            AnnotationCode.UNIDENTIFIED_ANOMALOUS_CHANGE -> {
+                if (device.relation == DeviceRelation.OWNED) {
+                    context.getString(
+                        R.string.annotation_unidentified_change_desc, getAffectedParameters()
+                    )
+                } else {
+                    context.getString(
+                        R.string.annotation_unidentified_change_desc_public, getAffectedParameters()
+                    )
+                }
+            }
+            AnnotationCode.UNIDENTIFIED_SPIKE -> {
+                if (device.relation == DeviceRelation.OWNED) {
+                    context.getString(
+                        R.string.annotation_unidentified_spike_desc, getAffectedParameters()
+                    )
+                } else {
+                    context.getString(
+                        R.string.annotation_unidentified_spike_desc_public, getAffectedParameters()
+                    )
+                }
+            }
             AnnotationCode.UNKNOWN -> {
                 if (device.relation == DeviceRelation.OWNED) {
                     context.getString(R.string.annotation_unknown_desc)
@@ -212,7 +261,9 @@ object Rewards {
         return listOf(
             AnnotationCode.SPIKE_INST,
             AnnotationCode.ANOMALOUS_INCREASE,
-            AnnotationCode.NO_LOCATION_DATA
+            AnnotationCode.NO_LOCATION_DATA,
+            AnnotationCode.UNIDENTIFIED_SPIKE,
+            AnnotationCode.UNIDENTIFIED_ANOMALOUS_CHANGE
         ).contains(this)
     }
 
@@ -222,6 +273,13 @@ object Rewards {
             AnnotationCode.NO_DATA,
             AnnotationCode.SHORT_CONST,
             AnnotationCode.LONG_CONST
+        ).contains(this)
+    }
+
+    fun AnnotationCode?.pointToPoLPreLaunch(): Boolean {
+        return listOf(
+            AnnotationCode.LOCATION_NOT_VERIFIED,
+            AnnotationCode.NO_LOCATION_DATA
         ).contains(this)
     }
 }
