@@ -140,6 +140,7 @@ class DeviceSettingsActivity : AppCompatActivity(), KoinComponent {
         binding.editLocationBtn.setOnClickListener {
             navigator.showEditLocation(editLocationLauncher, this, model.device)
         }
+        binding.editLocationBtn.setVisible(model.device.relation == DeviceRelation.OWNED)
 
         if (model.device.relation == DeviceRelation.FOLLOWED) {
             binding.locationDesc.setHtml(
@@ -149,7 +150,7 @@ class DeviceSettingsActivity : AppCompatActivity(), KoinComponent {
             binding.locationDesc.setHtml(R.string.station_location_desc, model.device.address ?: "")
         }
 
-        if(forceUpdateMinimap) {
+        if (forceUpdateMinimap) {
             updateMinimap()
         } else {
             binding.locationLayout.applyOnGlobalLayout {
@@ -159,7 +160,7 @@ class DeviceSettingsActivity : AppCompatActivity(), KoinComponent {
     }
 
     private fun updateMinimap() {
-        val deviceMapLocation = if(model.device.relation == DeviceRelation.OWNED) {
+        val deviceMapLocation = if (model.device.relation == DeviceRelation.OWNED) {
             model.device.location
         } else {
             null

@@ -14,6 +14,7 @@ import com.weatherxm.databinding.ActivityDeviceEditLocationBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.location.SearchResultsAdapter
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.requestLocationPermissions
 import com.weatherxm.ui.common.setVisible
@@ -39,8 +40,8 @@ class DeviceEditLocationActivity : AppCompatActivity(), KoinComponent {
         binding.root.applyInsets()
 
         val device = intent?.extras?.getParcelable<UIDevice>(ARG_DEVICE)
-        if (device == null || device.isEmpty()) {
-            Timber.d("Could not start DeviceEditLocationActivity. Device is null.")
+        if (device == null || device.isEmpty() || device.relation != DeviceRelation.OWNED) {
+            Timber.d("Could not start DeviceEditLocationActivity. Device is null or not owned.")
             toast(R.string.error_generic_message)
             finish()
             return
