@@ -39,7 +39,7 @@ a PR, reviewing, and merging the PR.
 ## Code of Conduct
 
 This project and everyone participating in it is governed by the
-[Code of Conduct](blob/main/CODE_OF_CONDUCT.md).
+[Code of Conduct](https://github.com/WeatherXM/wxm-android/blob/main/CODE_OF_CONDUCT.md).
 By participating, you are expected to uphold this code to keep our community approachable and
 respectable.
 
@@ -189,7 +189,7 @@ so we can approve it before you start working on it.
 
 Scan through our existing [issues](https://github.com/WeatherXM/wxm-android/issues) to find one that
 interests you (or create a new one). You can narrow down the search using `labels` as filters.
-See [Issue Labels](#issue-and-pull-request-labels) for more information. Please don't start working
+See [Issue Labels](#issue-labels) for more information. Please don't start working
 on issues that are currently assigned to someone else or have the `in-progress` label. If you find
 an issue to work on, please comment in it to get it assigned to you and you are welcome to open a PR
 with a fix/implementation.
