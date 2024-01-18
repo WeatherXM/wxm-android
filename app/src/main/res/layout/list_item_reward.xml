@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingHorizontal="@dimen/padding_normal">
+
+    <View
+        android:id="@+id/prev_line"
+        android:layout_width="4dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="48dp"
+        android:background="@color/midGrey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/date_point"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="44dp"
+        android:background="@drawable/token_transaction_date_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/prev_line" />
+
+    <View
+        android:id="@+id/current_line"
+        android:layout_width="4dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="48dp"
+        android:background="@color/midGrey"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date_point" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_normal"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+        android:textColor="@color/colorOnSurfaceVariant"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/date_point"
+        app:layout_constraintStart_toEndOf="@id/date_point"
+        app:layout_constraintTop_toTopOf="@id/date_point"
+        tools:text="Tue, 01/02 2022" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mainCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="@dimen/elevation_small"
+        app:contentPadding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.6"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/current_line"
+        tools:strokeColor="@color/error"
+        tools:strokeWidth="@dimen/card_stroke">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/rewardsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="0.001dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/timestamp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small_to_normal"
+                        android:text="@string/reward"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/colorOnSurfaceVariant"
+                        app:layout_constraintBottom_toBottomOf="@id/rewardStatus"
+                        app:layout_constraintEnd_toStartOf="@id/rewardStatus"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/rewardStatus"
+                        tools:text="Feb 5 2023, 07:00" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/rewardStatus"
+                        style="@style/Widget.WeatherXM.Chip.RewardStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipCornerRadius="@dimen/radius_medium"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:chipBackgroundColor="@color/successTint"
+                        tools:chipIcon="@drawable/ic_checkmark_alt"
+                        tools:chipIconTint="@color/darkestBlue"
+                        tools:text="Got 100%" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/reward"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/padding_normal"
+                        android:text="@string/reward"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
+                        android:textSize="22sp"
+                        app:layout_constraintTop_toBottomOf="@id/rewardStatus"
+                        tools:layout_editor_absoluteX="0dp"
+                        tools:text="+ 2.5643 $WXM" />
+
+                    <com.google.android.material.slider.RangeSlider
+                        android:id="@+id/reward_slider"
+                        style="@style/Widget.WeatherXM.Slider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal_to_large"
+                        android:enabled="false"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/reward"
+                        tools:trackColorActive="@color/green"
+                        tools:valueFrom="0"
+                        tools:valueTo="2000"
+                        tools:values="@array/reward_slider_default_values" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/secondaryInfoContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal_to_large"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/reward_slider">
+
+                        <ImageView
+                            android:id="@+id/score_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_reward_scale"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:ignore="ContentDescription" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/score"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            app:layout_constraintBottom_toBottomOf="@id/score_icon"
+                            app:layout_constraintStart_toEndOf="@id/score_icon"
+                            app:layout_constraintTop_toTopOf="@id/score_icon"
+                            tools:text="0.69" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/score_description"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_extra_extra_small"
+                            android:text="@string/reward_score"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            android:textColor="@color/colorOnSurfaceVariant"
+                            app:layout_constraintStart_toStartOf="@id/score"
+                            app:layout_constraintTop_toBottomOf="@id/score" />
+
+                        <ImageView
+                            android:id="@+id/max_reward_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_normal"
+                            android:src="@drawable/ic_reward_scale"
+                            app:layout_constraintStart_toEndOf="@id/score_description"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/midGrey"
+                            tools:ignore="ContentDescription" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/max_reward"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            app:layout_constraintBottom_toBottomOf="@id/max_reward_icon"
+                            app:layout_constraintStart_toEndOf="@id/max_reward_icon"
+                            app:layout_constraintTop_toTopOf="@id/max_reward_icon"
+                            tools:text="2.5643" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_extra_extra_small"
+                            android:text="@string/max_rewards"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            android:textColor="@color/colorOnSurfaceVariant"
+                            app:layout_constraintStart_toStartOf="@id/max_reward"
+                            app:layout_constraintTop_toBottomOf="@id/max_reward" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.weatherxm.ui.components.MessageCardView
+                android:id="@+id/problemsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-20dp"
+                android:elevation="0dp"
+                android:paddingTop="12dp"
+                android:visibility="gone"
+                app:message_background_tint="@color/errorTint"
+                app:message_includes_close_button="false"
+                app:message_title="@string/problems_found"
+                tools:background="@color/errorTint"
+                tools:message_html_message="You lost 152.2 $WXM because of station problems."
+                tools:visibility="visible" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

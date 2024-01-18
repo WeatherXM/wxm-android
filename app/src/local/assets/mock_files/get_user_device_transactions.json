@@ -1,0 +1,194 @@
+{
+    "data": [
+        {
+            "timestamp": "2022-06-03T12:00:03+00:00",
+            "tx_hash": "0x2f3fe2763fdb6fc6fd72a12a2b3dfc061189b41153ef9ad2bca11a6342073801",
+            "daily_reward": 105.61090909090909,
+            "actual_reward": 105.61090909090909,
+            "total_rewards": 6193.4687866115555,
+            "lost_rewards": 0,
+            "timeline": {
+                "reference_date": "2022-06-03T14:45:06+02:00",
+                "reward_scores": [
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    26,
+                    100,
+                    100,
+                    10,
+                    100,
+                    100,
+                    100,
+                    0,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    85,
+                    100,
+                    100,
+                    100
+                ]
+            },
+            "reward_score": 100
+        },
+        {
+            "timestamp": "2022-06-03T11:00:03+00:00",
+            "tx_hash": "0x03bdd2562125a1063807283b8001b3e4ae7caaf5fdce0089dd73b844968ba29d",
+            "daily_reward": 75.86281588447653,
+            "actual_reward": 53.10397111913357,
+            "total_rewards": 3191.7288233139766,
+            "lost_rewards": 22.75884476534296,
+            "reward_score": 70,
+            "timeline": {
+                "reference_date": "2022-06-03T14:45:06+02:00",
+                "reward_scores": [
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    26,
+                    100,
+                    100,
+                    10,
+                    100,
+                    100,
+                    100,
+                    0,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    85,
+                    100,
+                    100,
+                    100
+                ]
+            },
+            "annotations": {
+                "qod": [
+                    {
+                        "annotation": "SPIKES",
+                        "affects": [
+                            {
+                                "parameter": "temperature",
+                                "ratio": 70
+                            },
+                            {
+                                "parameter": "wind_speed",
+                                "ratio": 50
+                            }
+                        ]
+                    },
+                    {
+                        "annotation": "SHORT_CONST",
+                        "affects": [
+                            {
+                                "parameter": "precipitation",
+                                "ratio": 70
+                            }
+                        ]
+                    }
+                ],
+                "pol": [
+                    {
+                        "annotation": "LOCATION_NOT_VERIFIED",
+                        "ratio": 80
+                    }
+                ],
+                "rm": [
+                    {
+                        "annotation": "NO_WALLET"
+                    }
+                ]
+            }
+        },
+        {
+            "timestamp": "2022-06-02T12:00:02+00:00",
+            "tx_hash": "0x19d0175a7d1bd74b583a344cae73a037d85ccf7d3cec01cf0400bef821fe96c1",
+            "daily_reward": 103.61090909090909,
+            "actual_reward": 10.361090909090909,
+            "lost_rewards": 93.24981819,
+            "total_rewards": 6089.857877520646,
+            "reward_score": 10,
+            "timeline": {
+                "timestamp": "2022-06-03T14:45:06+02:00",
+                "reward_scores": [
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    26,
+                    100,
+                    100,
+                    10,
+                    100,
+                    100,
+                    100,
+                    0,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    100,
+                    85,
+                    100,
+                    100,
+                    100
+                ]
+            },
+            "annotations": {
+                "qod": [
+                    {
+                        "annotation": "SPIKES",
+                        "affects": [
+                            {
+                                "parameter": "temperature",
+                                "ratio": 70
+                            },
+                            {
+                                "parameter": "wind_speed",
+                                "ratio": 50
+                            }
+                        ]
+                    },
+                    {
+                        "annotation": "SHORT_CONST",
+                        "affects": [
+                            {
+                                "parameter": "precipitation",
+                                "ratio": 70
+                            }
+                        ]
+                    }
+                ],
+                "pol": [
+                    {
+                        "annotation": "location_not_verified",
+                        "ratio": 80
+                    }
+                ],
+                "rm": [
+                    {
+                        "annotation": "no_wallet"
+                    }
+                ]
+            }
+        }
+    ],
+    "total_pages": 1,
+    "has_next_page": false
+}

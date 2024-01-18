@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EmptyView">
+        <attr name="empty_title" format="string" />
+        <attr name="empty_subtitle" format="string" />
+        <attr name="empty_action" format="string" />
+        <attr name="empty_animation" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="MessageCardView">
+        <attr name="message_title" format="string" />
+        <attr name="message_message" format="string" />
+        <attr name="message_html_message" format="string" />
+        <attr name="message_includes_close_button" format="boolean" />
+        <attr name="message_icon" format="reference" />
+        <attr name="message_icon_color" format="reference" />
+        <attr name="message_stroke_color" format="color" />
+        <attr name="message_background_tint" format="color" />
+        <attr name="message_card_radius" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="StatusView">
+        <attr name="status_title" format="string" />
+        <attr name="status_subtitle" format="string" />
+        <attr name="status_action" format="string" />
+        <attr name="status_animation" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="LineChartView">
+        <attr name="line_chart_title" format="string" />
+        <attr name="line_chart_title_icon" format="reference" />
+        <attr name="line_chart_primary_line_name" format="string" />
+        <attr name="line_chart_secondary_line_name" format="string" />
+        <attr name="line_chart_primary_highlight_name" format="string" />
+        <attr name="line_chart_secondary_highlight_name" format="string" />
+        <attr name="line_chart_secondary_line_color" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="WeatherDataView">
+        <attr name="weather_data_title" format="string" />
+        <attr name="weather_data_icon" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="BleActionFlowView">
+        <attr name="ble_action_flow_first_step" format="string" />
+        <attr name="ble_action_flow_second_step" format="string" />
+        <attr name="ble_action_flow_third_step" format="string" />
+    </declare-styleable>
+    <declare-styleable name="CompactWeatherDataView">
+        <attr name="compact_weather_data_icon" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="AppWidgetAttrs">
+        <attr name="appWidgetPadding" format="dimension" />
+        <attr name="appWidgetInnerRadius" format="dimension" />
+        <attr name="appWidgetRadius" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="ProfileItemCardView">
+        <attr name="profile_item_title" format="string" />
+        <attr name="profile_item_subtitle" format="string" />
+        <attr name="profile_item_icon" format="reference" />
+    </declare-styleable>
+</resources>

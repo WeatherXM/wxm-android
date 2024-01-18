@@ -1,0 +1,6 @@
+{
+    "code": "UnsupportedApplicationVersion",
+    "message": "Your application version is outdated.",
+    "id": "test-id",
+    "path": "/test/path"
+}

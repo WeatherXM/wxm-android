@@ -1,0 +1,48 @@
+{
+    "devices": [
+        {
+            "id": "5be3efc0-4e23-11ed-8c4c-a94cd304a808",
+            "name": "Office #29",
+            "connectivity": "helium",
+            "cell_index": "87754e64dffffff",
+            "cell_center": {
+                "lon": 0,
+                "lat": 0
+            }
+        }
+    ],
+    "addresses": [
+        {
+            "name": "Officer",
+            "place": "Officer, Victoria, Australia",
+            "center": {
+                "lon": 145.411821,
+                "lat": -38.049164
+            }
+        },
+        {
+            "name": "Offiche",
+            "place": "Offiche, Valli del Pasubio, Vicenza, Italy",
+            "center": {
+                "lon": 11.226284,
+                "lat": 45.734234
+            }
+        },
+        {
+            "name": "Offie",
+            "place": "Offie, 98024, Teluk Patipi, Fakfak, West Papua, Indonesia",
+            "center": {
+                "lon": 132.199178,
+                "lat": -2.699183
+            }
+        },
+        {
+            "name": "Officer Colony",
+            "place": "Officer Colony, Kuldiha, Giridih, Giridih, Jharkhand, India",
+            "center": {
+                "lon": 86.301325,
+                "lat": 24.181578
+            }
+        }
+    ]
+}

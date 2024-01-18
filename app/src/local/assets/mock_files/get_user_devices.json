@@ -1,0 +1,516 @@
+[
+    {
+        "id": "76d13810-absd-11ec-812e-6312632e9ec",
+        "name": "Big Blue Cloud",
+        "timezone": "Europe/Berlin",
+        "profile": "Helium",
+        "label": null,
+        "relation": "owned",
+        "location": {
+            "lat": 37.981262,
+            "lon": 23.730503
+        },
+        "attributes": {
+            "isActive": true,
+            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
+            "hex3": {
+                "index": "833f72fffffffff",
+                "polygon": [
+                    {
+                        "lat": 35.62983463943738,
+                        "lon": 23.372801364962505
+                    },
+                    {
+                        "lat": 34.958641140481404,
+                        "lon": 23.339733257269025
+                    },
+                    {
+                        "lat": 34.59685782123658,
+                        "lon": 24.035997744251496
+                    },
+                    {
+                        "lat": 34.903320885355384,
+                        "lon": 24.76919455347358
+                    },
+                    {
+                        "lat": 35.574007582813174,
+                        "lon": 24.81200499077942
+                    },
+                    {
+                        "lat": 35.938786456658356,
+                        "lon": 24.11189955457401
+                    }
+                ],
+                "center": {
+                    "lat": 37.981262,
+                    "lon": 23.730503
+                }
+            },
+            "hex7": {
+                "index": "873f728d0ffffff",
+                "polygon": [
+                    {
+                        "lat": 37.52482636074315,
+                        "lon": 23.014679947948405
+                    },
+                    {
+                        "lat": 37.51114716956354,
+                        "lon": 23.01391178034676
+                    },
+                    {
+                        "lat": 37.50374631403231,
+                        "lon": 23.02820018964633
+                    },
+                    {
+                        "lat": 37.51002341064811,
+                        "lon": 23.043258382501087
+                    },
+                    {
+                        "lat": 37.52370239640629,
+                        "lon": 23.044030629840638
+                    },
+                    {
+                        "lat": 37.53110449138368,
+                        "lon": 23.02974060478422
+                    }
+                ],
+                "center": {
+                    "lat": 37.981262,
+                    "lon": 23.730503
+                }
+            }
+        },
+        "current_weather": {
+            "timestamp": "2022-01-13T22:00:00+02:00",
+            "precipitation": 0,
+            "precipitation_accumulated": 14.10000022,
+            "temperature": -38.8,
+            "feels_like": 16.0,
+            "wind_direction": 321,
+            "humidity": 55,
+            "wind_speed": 3.1,
+            "icon": "partly-cloudy-night",
+            "precipitation_probability": 15,
+            "uv_index": 0,
+            "pressure": 1019.6,
+            "cloud_cover": 89,
+            "wind_gust": 5.4,
+            "precipitation_type": "rain"
+        },
+        "address": "Athens, GR",
+        "rewards": {
+            "total_rewards": 30523.65,
+            "actual_reward": 156.6
+        }
+    },
+    {
+        "id": "76d13810-absd-11ec-812e-6312632e9ec",
+        "name": "Weatherwise Wintergreen Cloud",
+        "timezone": "America/New_York",
+        "relation": "owned",
+        "label": null,
+        "location": {
+            "lat": 37.981262,
+            "lon": 23.730503
+        },
+        "attributes": {
+            "isActive": true,
+            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
+            "hex3": {
+                "index": "833f72fffffffff",
+                "polygon": [
+                    {
+                        "lat": 35.62983463943738,
+                        "lon": 23.372801364962505
+                    },
+                    {
+                        "lat": 34.958641140481404,
+                        "lon": 23.339733257269025
+                    },
+                    {
+                        "lat": 34.59685782123658,
+                        "lon": 24.035997744251496
+                    },
+                    {
+                        "lat": 34.903320885355384,
+                        "lon": 24.76919455347358
+                    },
+                    {
+                        "lat": 35.574007582813174,
+                        "lon": 24.81200499077942
+                    },
+                    {
+                        "lat": 35.938786456658356,
+                        "lon": 24.11189955457401
+                    }
+                ],
+                "center": {
+                    "lat": 37.981262,
+                    "lon": 23.730503
+                }
+            },
+            "hex7": {
+                "index": "873f728d0ffffff",
+                "polygon": [
+                    {
+                        "lat": 37.52482636074315,
+                        "lon": 23.014679947948405
+                    },
+                    {
+                        "lat": 37.51114716956354,
+                        "lon": 23.01391178034676
+                    },
+                    {
+                        "lat": 37.50374631403231,
+                        "lon": 23.02820018964633
+                    },
+                    {
+                        "lat": 37.51002341064811,
+                        "lon": 23.043258382501087
+                    },
+                    {
+                        "lat": 37.52370239640629,
+                        "lon": 23.044030629840638
+                    },
+                    {
+                        "lat": 37.53110449138368,
+                        "lon": 23.02974060478422
+                    }
+                ],
+                "center": {
+                    "lat": 37.981262,
+                    "lon": 23.730503
+                }
+            }
+        },
+        "current_weather": {
+            "timestamp": "2022-01-13T22:00:00+02:00",
+            "precipitation": 0,
+            "temperature": 10.8,
+            "feels_like": 12.0,
+            "wind_direction": 355,
+            "humidity": 74,
+            "wind_speed": 13.7,
+            "icon": "partly-cloudy-night",
+            "precipitation_probability": 0,
+            "uv_index": 0,
+            "pressure": 1021.6,
+            "cloud_cover": 59,
+            "wind_gust": 20.4,
+            "precipitation_type": "rain"
+        },
+        "address": "Athens, GR",
+        "rewards": {
+            "total_rewards": 30523.65,
+            "actual_reward": 156.6
+        }
+    },
+    {
+        "id": "76d13810-10e9-11ec-877e-63751227e9ea",
+        "name": "Enormous Pilot Cloud",
+        "timezone": "America/Chicago",
+        "relation": "owned",
+        "label": null,
+        "profile": "M5",
+        "location": {
+            "lat": 37.981262,
+            "lon": 23.730503
+        },
+        "attributes": {
+            "isActive": true,
+            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
+            "hex3": {
+                "index": "833f72fffffffff",
+                "polygon": [
+                    {
+                        "lat": 35.62983463943738,
+                        "lon": 23.372801364962505
+                    },
+                    {
+                        "lat": 34.958641140481404,
+                        "lon": 23.339733257269025
+                    },
+                    {
+                        "lat": 34.59685782123658,
+                        "lon": 24.035997744251496
+                    },
+                    {
+                        "lat": 34.903320885355384,
+                        "lon": 24.76919455347358
+                    },
+                    {
+                        "lat": 35.574007582813174,
+                        "lon": 24.81200499077942
+                    },
+                    {
+                        "lat": 35.938786456658356,
+                        "lon": 24.11189955457401
+                    }
+                ],
+                "center": {
+                    "lat": 37.981262,
+                    "lon": 23.730503
+                }
+            },
+            "hex7": {
+                "index": "873f728d0ffffff",
+                "polygon": [
+                    {
+                        "lat": 37.52482636074315,
+                        "lon": 23.014679947948405
+                    },
+                    {
+                        "lat": 37.51114716956354,
+                        "lon": 23.01391178034676
+                    },
+                    {
+                        "lat": 37.50374631403231,
+                        "lon": 23.02820018964633
+                    },
+                    {
+                        "lat": 37.51002341064811,
+                        "lon": 23.043258382501087
+                    },
+                    {
+                        "lat": 37.52370239640629,
+                        "lon": 23.044030629840638
+                    },
+                    {
+                        "lat": 37.53110449138368,
+                        "lon": 23.02974060478422
+                    }
+                ],
+                "center": {
+                    "lat": 37.981262,
+                    "lon": 23.730503
+                }
+            }
+        },
+        "current_weather": {
+            "timestamp": "2022-01-13T22:00:00+02:00",
+            "precipitation": 0,
+            "temperature": 10.8,
+            "feels_like": 11.0,
+            "wind_direction": 355,
+            "humidity": 74,
+            "wind_speed": 13.7,
+            "icon": "partly-cloudy-night",
+            "precipitation_probability": 0,
+            "uv_index": 0,
+            "pressure": 1021.6,
+            "cloud_cover": 59,
+            "wind_gust": 20.4,
+            "precipitation_type": "rain"
+        },
+        "address": "Paris, FR",
+        "rewards": {
+            "total_rewards": 0.0,
+            "actual_reward": 0.0
+        }
+    },
+    {
+        "id": "76d13810-00e9-11ec-877e-63751227e9ec",
+        "name": "Acoustic Barrier Cloud",
+        "timezone": "Etc/GMT",
+        "label": null,
+        "relation": "owned",
+        "profile": "Helium",
+        "location": {
+            "lat": 37.981262,
+            "lon": 23.730503
+        },
+        "attributes": {
+            "isActive": true,
+            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
+            "hex3": {
+                "index": "833f72fffffffff",
+                "polygon": [
+                    {
+                        "lat": 35.62983463943738,
+                        "lon": 23.372801364962505
+                    },
+                    {
+                        "lat": 34.958641140481404,
+                        "lon": 23.339733257269025
+                    },
+                    {
+                        "lat": 34.59685782123658,
+                        "lon": 24.035997744251496
+                    },
+                    {
+                        "lat": 34.903320885355384,
+                        "lon": 24.76919455347358
+                    },
+                    {
+                        "lat": 35.574007582813174,
+                        "lon": 24.81200499077942
+                    },
+                    {
+                        "lat": 35.938786456658356,
+                        "lon": 24.11189955457401
+                    }
+                ],
+                "center": {
+                    "lat": 37.981262,
+                    "lon": 23.730503
+                }
+            },
+            "hex7": {
+                "index": "873f728d0ffffff",
+                "polygon": [
+                    {
+                        "lat": 37.52482636074315,
+                        "lon": 23.014679947948405
+                    },
+                    {
+                        "lat": 37.51114716956354,
+                        "lon": 23.01391178034676
+                    },
+                    {
+                        "lat": 37.50374631403231,
+                        "lon": 23.02820018964633
+                    },
+                    {
+                        "lat": 37.51002341064811,
+                        "lon": 23.043258382501087
+                    },
+                    {
+                        "lat": 37.52370239640629,
+                        "lon": 23.044030629840638
+                    },
+                    {
+                        "lat": 37.53110449138368,
+                        "lon": 23.02974060478422
+                    }
+                ],
+                "center": {
+                    "lat": 37.981262,
+                    "lon": 23.730503
+                }
+            }
+        },
+        "current_weather": {
+            "timestamp": "2022-01-13T22:00:00+02:00",
+            "precipitation": 0,
+            "temperature": 10.8,
+            "feels_like": 11.0,
+            "wind_direction": 355,
+            "humidity": 74,
+            "wind_speed": 13.7,
+            "icon": "partly-cloudy-night",
+            "precipitation_probability": 0,
+            "uv_index": 0,
+            "pressure": 1021.6,
+            "cloud_cover": 59,
+            "wind_gust": 20.4,
+            "precipitation_type": "rain"
+        },
+        "address": "Athens, GR",
+        "rewards": {
+            "total_rewards": 30523.65,
+            "actual_reward": 156.6
+        }
+    },
+    {
+        "id": "76113810-10e9-11ec-877e-63751227e9ec",
+        "name": "Brutal Fatality Cloud",
+        "timezone": "America/Toronto",
+        "label": null,
+        "relation": "owned",
+        "location": {
+            "lat": 37.981262,
+            "lon": 23.730503
+        },
+        "attributes": {
+            "isActive": true,
+            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
+            "hex3": {
+                "index": "833f72fffffffff",
+                "polygon": [
+                    {
+                        "lat": 35.62983463943738,
+                        "lon": 23.372801364962505
+                    },
+                    {
+                        "lat": 34.958641140481404,
+                        "lon": 23.339733257269025
+                    },
+                    {
+                        "lat": 34.59685782123658,
+                        "lon": 24.035997744251496
+                    },
+                    {
+                        "lat": 34.903320885355384,
+                        "lon": 24.76919455347358
+                    },
+                    {
+                        "lat": 35.574007582813174,
+                        "lon": 24.81200499077942
+                    },
+                    {
+                        "lat": 35.938786456658356,
+                        "lon": 24.11189955457401
+                    }
+                ],
+                "center": {
+                    "lat": 37.981262,
+                    "lon": 23.730503
+                }
+            },
+            "hex7": {
+                "index": "873f728d0ffffff",
+                "polygon": [
+                    {
+                        "lat": 37.52482636074315,
+                        "lon": 23.014679947948405
+                    },
+                    {
+                        "lat": 37.51114716956354,
+                        "lon": 23.01391178034676
+                    },
+                    {
+                        "lat": 37.50374631403231,
+                        "lon": 23.02820018964633
+                    },
+                    {
+                        "lat": 37.51002341064811,
+                        "lon": 23.043258382501087
+                    },
+                    {
+                        "lat": 37.52370239640629,
+                        "lon": 23.044030629840638
+                    },
+                    {
+                        "lat": 37.53110449138368,
+                        "lon": 23.02974060478422
+                    }
+                ],
+                "center": {
+                    "lat": 37.981262,
+                    "lon": 23.730503
+                }
+            }
+        },
+        "current_weather": {
+            "timestamp": "2022-01-13T22:00:00+02:00",
+            "precipitation": 0,
+            "temperature": 10.8,
+            "feels_like": 11.0,
+            "wind_direction": 355,
+            "humidity": 74,
+            "wind_speed": 13.7,
+            "icon": "partly-cloudy-night",
+            "precipitation_probability": 0,
+            "uv_index": 0,
+            "pressure": 1021.6,
+            "cloud_cover": 59,
+            "wind_gust": 20.4,
+            "precipitation_type": "rain"
+        },
+        "address": "Athens, GR",
+        "rewards": {
+            "total_rewards": 30000.1,
+            "actual_reward": 156.0
+        }
+    }
+]

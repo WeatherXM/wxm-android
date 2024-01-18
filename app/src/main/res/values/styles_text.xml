@@ -1,0 +1,103 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+        Defaults
+    -->
+    <style name="TextAppearance.WeatherXM.Default.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textColor">@color/colorOnSurface</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium" parent="TextAppearance.WeatherXM.Default.HeadlineSmall">
+        <item name="fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Default.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/colorOnSurface</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Default.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">@color/colorOnSurface</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Default.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">@color/colorOnSurface</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Default.PrimaryColor" parent="TextAppearance.WeatherXM.Default.BodyMedium">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.TitleSmall" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textColor">@color/colorPrimaryVariant</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
+        <item name="android:textColor">@color/colorPrimaryVariant</item>
+    </style>
+
+    <!--
+        Toolbar
+    -->
+    <style name="TextAppearance.WeatherXM.Toolbar.Subtitle" parent="TextAppearance.WeatherXM.Default.HeadlineSmall">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.CollapsedToolbar.Title" parent="TextAppearance.WeatherXM.Default.PrimaryColor">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!--
+        Devices List
+    -->
+    <style name="TextAppearance.WeatherXM.Devices.List.WeatherData.Unit" parent="TextAppearance.WeatherXM.Default.BodySmall">
+        <item name="android:textColor">@color/darkGrey</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Devices.List.WeatherData.Subtitle" parent="TextAppearance.WeatherXM.Default.BodySmall">
+        <item name="android:textColor">@color/colorPrimaryVariant</item>
+    </style>
+
+    <!--
+        Weather Card
+    -->
+    <style name="TextAppearance.WeatherXM.WeatherCard.Data" parent="TextAppearance.WeatherXM.Default.BodyLarge">
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.WeatherCard.Data.Subtitle" parent="TextAppearance.WeatherXM.Default.BodySmall">
+        <item name="android:textColor">@color/colorPrimaryVariant</item>
+    </style>
+
+    <!--
+        Tabs
+    -->
+    <style name="TextAppearance.WeatherXM.Tabs" parent="TextAppearance.WeatherXM.Default.BodyLarge">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Navigation.Tabs" parent="TextAppearance.WeatherXM.Default.BodyMedium">
+        <item name="android:textFontWeight" tools:targetApi="p">500</item>
+    </style>
+
+    <!--
+        MaterialTextView above TextInput acting as title
+    -->
+    <style name="TextAppearance.WeatherXM.TextInput.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!--
+        EmptyView
+    -->
+    <style name="TextAppearance.WeatherXM.EmptyView.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+</resources>

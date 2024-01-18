@@ -1,0 +1,83 @@
+{
+    "weather_stations": {
+        "onboarded": {
+            "total": 7975,
+            "details": [
+                {
+                    "model": "WS1000",
+                    "connectivity": "wifi",
+                    "amount": 5024,
+                    "percentage": 0.63
+                },
+                {
+                    "model": "WS2000",
+                    "connectivity": "helium",
+                    "amount": 2951,
+                    "percentage": 0.37
+                }
+            ]
+        },
+        "claimed": {
+            "total": 7950,
+            "details": [
+                {
+                    "model": "WS1000",
+                    "connectivity": "wifi",
+                    "amount": 5008,
+                    "percentage": 0.63
+                },
+                {
+                    "model": "WS2000",
+                    "connectivity": "helium",
+                    "amount": 2942,
+                    "percentage": 0.37
+                }
+            ]
+        },
+        "active": {
+            "total": 10,
+            "details": [
+                {
+                    "model": "WS1000",
+                    "connectivity": "wifi",
+                    "amount": 7,
+                    "percentage": 0.7
+                },
+                {
+                    "model": "WS2000",
+                    "connectivity": "helium",
+                    "amount": 3,
+                    "percentage": 0.3
+                }
+            ]
+        }
+    },
+    "data_days": [
+        {
+            "ts": "2023-05-23T09:31:33.619Z",
+            "value": 12332
+        },
+        {
+            "ts": "2023-06-13T09:31:33.619Z",
+            "value": 15332
+        }
+    ],
+    "tokens": {
+        "total_supply": 100000000,
+        "daily_minted": 35434,
+        "allocated_per_day": [
+            {
+                "ts": "2023-05-13T09:31:33.619Z",
+                "value": 12332
+            },
+            {
+                "ts": "2023-06-13T09:31:33.619Z",
+                "value": 15332
+            }
+        ]
+    },
+    "customers": {
+        "total": 54321,
+        "with_wallet": 54000
+    }
+}

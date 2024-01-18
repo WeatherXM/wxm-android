@@ -1,0 +1,46 @@
+<resources>
+
+    <style name="ThemeOverlay.WeatherXM.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherXM.BottomSheetDialog.Layer1" parent="ThemeOverlay.WeatherXM.BottomSheetDialog">
+        <item name="colorSurface">@color/layer1</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherXM.Toolbar" parent="ThemeOverlay.Material3.Toolbar.Surface">
+        <item name="colorSurface">@color/transparent</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="navigationIconTint">@color/colorPrimary</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherXM.SearchBar" parent="ThemeOverlay.WeatherXM.Toolbar">
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="navigationIconTint">@color/colorOnSurface</item>
+        <item name="android:textColorHint">@color/darkGrey</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherXM.SearchView" parent="ThemeOverlay.WeatherXM.Toolbar">
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="navigationIconTint">@color/colorOnSurface</item>
+        <item name="android:textColorHint">@color/darkGrey</item>
+        <item name="colorOutline">@color/midGrey</item>
+    </style>
+
+    <style name="ThemeOverlay.WeatherXM.AlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="materialAlertDialogTitleTextStyle">@style/Widget.WeatherXM.AlertDialog.Title
+        </item>
+        <item name="materialAlertDialogBodyTextStyle">@style/Widget.WeatherXM.AlertDialog.Body
+        </item>
+        <item name="buttonBarPositiveButtonStyle">
+            @style/Widget.WeatherXM.AlertDialog.Button.Positive
+        </item>
+        <item name="buttonBarNegativeButtonStyle">
+            @style/Widget.WeatherXM.TextButton.Subtle
+        </item>
+        <item name="buttonBarNeutralButtonStyle">
+            @style/Widget.WeatherXM.TextButton.Subtle
+        </item>
+    </style>
+</resources>

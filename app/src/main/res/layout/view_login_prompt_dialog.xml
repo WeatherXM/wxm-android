@@ -1,0 +1,84 @@
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="@id/closePopup"
+            app:layout_constraintEnd_toStartOf="@id/closePopup"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/closePopup"
+            tools:text="Add to favorites?" />
+
+        <ImageButton
+            android:id="@+id/closePopup"
+            style="@style/Widget.WeatherXM.ImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_small"
+            android:src="@drawable/ic_close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/darkGrey" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small_to_normal"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            app:layout_constraintTop_toBottomOf="@id/closePopup"
+            tools:text="Login to add Perky Magenta Clothes to your favorites and see historical &amp; forecast data." />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/loginBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small_to_normal"
+            android:text="@string/action_sign_in"
+            app:layout_constraintTop_toBottomOf="@id/message" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/loginBtn">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/signUpText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/signup_text"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                app:layout_constraintBottom_toBottomOf="@id/signupBtn"
+                app:layout_constraintEnd_toStartOf="@id/signupBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/signupBtn" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/signupBtn"
+                style="@style/Widget.WeatherXM.TextButton.Subtle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_signup"
+                android:textAllCaps="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/signUpText"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

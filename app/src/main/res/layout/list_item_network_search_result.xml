@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/margin_small"
+    android:background="?selectableItemBackground"
+    android:paddingVertical="@dimen/padding_small"
+    android:paddingStart="@dimen/padding_normal"
+    android:paddingEnd="@dimen/padding_large"
+    tools:background="@color/colorSurface">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/typeIconCard"
+        style="@style/Widget.WeatherXM.MaterialCard"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:cardBackgroundColor="@color/layer1"
+        app:contentPadding="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/typeIcon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center"
+            app:tint="@color/colorOnSurface"
+            tools:src="@drawable/ic_helium" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/resultName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_normal"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+        app:layout_constraintBottom_toTopOf="@id/resultDesc"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/typeIconCard"
+        app:layout_constraintTop_toTopOf="@id/typeIconCard"
+        tools:text="List Item" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/resultDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_normal"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+        android:textColor="@color/darkGrey"
+        app:layout_constraintBottom_toBottomOf="@id/typeIconCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/typeIconCard"
+        app:layout_constraintTop_toBottomOf="@id/resultName"
+        tools:text="Supporting line text lorem ipsum" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

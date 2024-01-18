@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swiperefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToOutline="false"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:paddingBottom="@dimen/margin_large"
+        tools:targetApi="s">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToOutline="false"
+            android:clipToPadding="false">
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_scrollFlags="noScroll"
+                tools:visibility="visible" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/rewardsMainCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_normal"
+                app:cardBackgroundColor="@color/layer1"
+                app:cardElevation="@dimen/elevation_small"
+                app:contentPadding="0dp"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal_to_large"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/reward"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+                        android:text="@string/total_station_rewards"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/totalRewards"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+                        android:text="@string/reward"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
+                        android:textSize="22sp"
+                        tools:text="2000 $WXM" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal_to_large"
+                        app:contentPadding="0dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/selectorCard"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+                                android:layout_marginTop="@dimen/margin_normal_to_large"
+                                app:cardBackgroundColor="@color/blueTint"
+                                app:contentPadding="@dimen/padding_extra_small"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:strokeColor="@color/colorPrimary"
+                                app:strokeWidth="1dp">
+
+                                <com.google.android.material.tabs.TabLayout
+                                    android:id="@+id/selectorGroup"
+                                    style="@style/Widget.WeatherXM.TabLayout.Rewards.Navigation"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp">
+
+                                    <com.google.android.material.tabs.TabItem
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/latest" />
+
+                                    <com.google.android.material.tabs.TabItem
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/last_7d" />
+
+                                    <com.google.android.material.tabs.TabItem
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/last_30d" />
+
+                                </com.google.android.material.tabs.TabLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <com.weatherxm.ui.components.RewardsCardView
+                                android:id="@+id/rewardsContentCard"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/margin_small_to_normal"
+                                app:layout_constraintTop_toBottomOf="@id/selectorCard" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/seeDetailedRewards"
+                style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:backgroundTint="@color/colorSurface"
+                android:text="@string/see_wxm_rewards"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rewardsMainCard" />
+
+            <com.weatherxm.ui.components.MessageCardView
+                android:id="@+id/rewardsNotice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_small"
+                app:layout_constraintTop_toBottomOf="@id/seeDetailedRewards"
+                app:message_background_tint="@color/blueTint"
+                app:message_html_message="@string/device_detail_token_notice"
+                app:message_icon="@drawable/ic_info"
+                app:message_icon_color="@color/colorPrimaryVariant"
+                app:message_includes_close_button="false"
+                app:message_stroke_color="@color/colorPrimary" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

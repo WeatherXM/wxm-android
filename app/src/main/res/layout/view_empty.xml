@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:gravity="center"
+    tools:orientation="vertical"
+    tools:padding="24dp"
+    tools:parentTag="LinearLayout">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_gravity="center"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        tools:background="#88424242" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:gravity="center_horizontal"
+        android:textAppearance="@style/TextAppearance.WeatherXM.EmptyView.Title"
+        tools:text="Nothing here!" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin_extra_small"
+        android:autoLink="all"
+        android:gravity="center_horizontal"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+        tools:text="Honestly, something is wrong" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/action"
+        style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin_large"
+        android:backgroundTint="@color/colorSurface"
+        android:minWidth="128dp"
+        tools:text="Retry?" />
+
+</merge>

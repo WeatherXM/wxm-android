@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="180"
+            android:toDegrees="180"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="202.5"
+            android:toDegrees="202.5"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="225"
+            android:toDegrees="225"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="247.5"
+            android:toDegrees="247.5"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="270"
+            android:toDegrees="270"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="292.5"
+            android:toDegrees="292.5"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="315"
+            android:toDegrees="315"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+    <item>
+        <rotate
+            android:fromDegrees="337.5"
+            android:toDegrees="337.5"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            android:drawable="@drawable/ic_wind_direction"/>
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="0"
+            android:toDegrees="0"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="22.5"
+            android:toDegrees="22.5"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="45"
+            android:toDegrees="45"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="67.5"
+            android:toDegrees="67.5"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="90"
+            android:toDegrees="90"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="112.5"
+            android:toDegrees="112.5"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="135"
+            android:toDegrees="135"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+    <item>
+        <rotate
+            android:drawable="@drawable/ic_wind_direction"
+            android:fromDegrees="157.5"
+            android:toDegrees="157.5"
+            android:pivotX="50%"
+            android:pivotY="50%" />
+    </item>
+</layer-list>

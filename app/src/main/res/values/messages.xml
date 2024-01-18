@@ -1,0 +1,61 @@
+<resources>
+    <!-- Error Messages -->
+    <string name="error_generic_message">Oops! Something went wrong.</string>
+    <string name="error_reach_out">It\’s not you, it\’s us! Please try again. If the problem persists, please contact our support team at support.weatherxm.com</string>
+    <string name="error_reach_out_short">It\’s not you, it\’s us! If problem persists, reach out to us.</string>
+    <string name="error_network_generic">Please, check your internet connection and try again.</string>
+    <string name="error_unsupported_error">Unsupported error occurred. Please make sure this app is updated to the latest version.</string>
+    <string name="error_network_timed_out">Server taking too long to respond. Please check your connection and try again.</string>
+    <string name="error_history_no_data_on_day">Oops! Could not load data from network.</string>
+    <string name="error_history_generic_message">Fetching history failed</string>
+    <string name="error_history_no_data_chart_found">No historical weather data could be found for this day.</string>
+    <string name="error_login_invalid_username">Login failed: Invalid email</string>
+    <string name="error_login_invalid_password">Login failed: Invalid password</string>
+    <string name="error_login_invalid_credentials">Login failed: Invalid email or password</string>
+    <string name="error_signup_invalid_username">Signup failed: Invalid email</string>
+    <string name="error_signup_user_already_exists">Signup failed: User with email %1$s already exists</string>
+    <string name="error_password_reset_invalid_username">Password Reset failed: Invalid email</string>
+    <string name="error_user_device_data_failed">Getting data for this device failed.</string>
+    <string name="error_user_device_offline"><![CDATA[Your weather station hasn\'t connected for a while.<br/>Please, visit our <a href="%1$s">troubleshooting guide</a>.]]></string>
+    <string name="error_device_not_found">Could not find the requested device</string>
+    <string name="error_invalid_location">Invalid Location</string>
+    <string name="error_connect_wallet_invalid_address">Invalid wallet address</string>
+    <string name="error_forecast_generic_message">Fetching forecast failed</string>
+    <string name="error_forecast_invalid_timezone">Fetching forecast failed: Invalid Timezone</string>
+    <string name="error_claim_failed_title">Claiming Failed</string>
+    <string name="error_claim_invalid_dev_eui"><![CDATA[Station claiming failed.<br><b>The Dev EUI is invalid</b>.<br>If the problem persists, please contact our support team at <a>support.weatherxm.com</a>]]></string>
+    <string name="error_claim_invalid_serial"><![CDATA[Station claiming failed.<br><b>The serial number is invalid</b>.<br>If the problem persists, please contact our support team at <a>support.weatherxm.com</a>]]></string>
+    <string name="error_claim_invalid_location"><![CDATA[Station claiming failed.<br><b>The location provided is invalid.</b><br>If the problem persists, please contact our support team at <a>support.weatherxm.com</a>]]></string>
+    <string name="error_claim_already_claimed"><![CDATA[Station claiming failed.<br><b>This device is already claimed.</b><br>If the problem persists, please contact our support team at <a>support.weatherxm.com</a>]]></string>
+    <string name="error_claim_not_found"><![CDATA[Station claiming failed.<br><b>Could not find a device with the requested serial number.</b><br>If the problem persists, please contact our support team at <a>support.weatherxm.com</a>]]></string>
+    <string name="error_claim_not_found_helium"><![CDATA[Station claiming failed.<br><b>Could not find such a device.</b><br>If the problem persists, please contact our support team at <a>support.weatherxm.com</a>]]></string>
+    <string name="error_claim_device_claiming_error"><![CDATA[Station claiming failed.<br><b>This device is not in claiming mode or the secret provided is invalid.</b><br>If the problem persists, please contact our support team at <a>support.weatherxm.com</a>]]></string>
+    <string name="error_claim_gps_failed">Could not get current location.</string>
+    <string name="error_cell_devices_no_data">Failed to get the cell devices.</string>
+    <string name="error_transactions_no_data">Oops! $WXM transactions could not be fetched.</string>
+    <string name="error_open_website_support_cannot_open_url">Oops! Could not open %s</string>
+    <string name="error_cannot_open_play_store">Oops! Could not open Play Store.</string>
+    <string name="error_cannot_open_support_center">Oops! Could not open browser.</string>
+    <string name="error_cannot_open_wallet">Oops! Could not open that wallet.</string>
+    <string name="error_search_suggestions">Search suggestions not available. Please try again later.</string>
+    <string name="error_invalid_password">Invalid password</string>
+    <string name="error_helium_ota_aborted">ABORTED</string>
+    <string name="error_helium_ota_download_failed">DOWNLOADING AND PREPARING DFU FILE FAILED</string>
+    <string name="error_helium_ota_failed">FAILED: Error: %1$d - Type: %2$d - Message: %3$s</string>
+    <string name="error_invalid_device_identifier">Invalid Device Identifier</string>
+    <string name="error_server_validation">Validation of the request failed on the server.</string>
+    <string name="error_helium_ota_133_suffix">STATION NOT IN RANGE</string>
+    <string name="error_max_followed">Max followed stations threshold reached.</string>
+
+    <!-- Warn Messages -->
+    <string name="warn_validation_invalid_email">Not a valid email</string>
+    <string name="warn_invalid_password">Invalid Password</string>
+    <string name="warn_validation_invalid_serial_number">Invalid serial number</string>
+    <string name="warn_validation_invalid_password">Password must be >5 characters</string>
+    <string name="warn_validation_invalid_address">Invalid Address</string>
+    <string name="warn_validation_invalid_friendly_name">Invalid Friendly Name</string>
+
+    <!-- Info Messages -->
+    <string name="info_come_back_later">Please come back later!</string>
+    <string name="session_expired">Your session has expired. Please login again.</string>
+</resources>

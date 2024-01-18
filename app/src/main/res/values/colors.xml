@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/light_primary</color>
+    <color name="colorPrimaryVariant">@color/darkestBlue</color>
+    <color name="colorOnPrimary">@color/light_top</color>
+
+    <color name="colorSurface">@color/light_top</color>
+    <color name="colorSurfaceVariant">@color/light_layer2</color>
+    <color name="colorOnSurface">@color/textColor</color>
+    <color name="colorOnSurfaceVariant">@color/darkGrey</color>
+
+    <color name="colorBackground">@color/light_background</color>
+
+    <color name="successTint">@color/light_success_tint</color>
+    <color name="errorTint">@color/light_error_tint</color>
+    <color name="warningTint">@color/light_warning_tint</color>
+    <color name="midGrey">@color/light_mid_grey</color>
+    <color name="midGreyDisabled">@color/light_mid_grey_disabled</color>
+    <color name="darkGrey">@color/light_dark_grey</color>
+    <color name="layer1">@color/light_layer1</color>
+    <color name="layer2">@color/light_layer2</color>
+    <color name="blueTint">@color/light_blue_tint</color>
+    <color name="lightestBlue">@color/light_lightest_blue</color>
+    <color name="darkestBlue">@color/light_darkest_blue</color>
+    <color name="textColor">@color/light_text</color>
+    <color name="translucent">@color/light_translucent</color>
+    <color name="fadeTop">@color/fade_light_top</color>
+
+    <!-- System and Launcher -->
+    <color name="ic_launcher_background">@color/colorPrimary</color>
+    <color name="status_bar_color">#80003b77</color>
+
+    <!-- History Charts -->
+    <color name="chart_secondary_line">@color/light_lightest_blue</color>
+
+    <!-- Status Chip (last seen) -->
+    <color name="status_chip_background_online">@color/light_success_tint</color>
+    <color name="status_chip_background_offline">@color/light_error_tint</color>
+    <color name="status_chip_content_online">@color/textColor</color>
+    <color name="status_chip_content_offline">@color/textColor</color>
+
+    <!-- Network Stats -->
+    <color name="network_stats_slider">@color/network_stats_slider_light</color>
+    <color name="network_stats_button">@color/light_lightest_blue</color>
+</resources>

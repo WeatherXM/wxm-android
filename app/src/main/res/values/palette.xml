@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#00000000</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="purple">#9D1F63</color>
+    <color name="green">#46D163</color>
+
+    <!-- Color Palette/Library Design Team -->
+
+    <color name="light_text">#1B1C22</color>
+    <color name="light_mid_grey_disabled">#27C6C6D0</color>
+    <color name="light_mid_grey">#C6C6D0</color>
+    <color name="light_dark_grey">#45464F</color>
+    <color name="light_top">#FEFBFF</color>
+    <color name="light_layer1">#EAEBF9</color>
+    <color name="light_layer2">#D3D9F2</color>
+    <color name="light_background">#DFE2F6</color>
+    <color name="light_darkest_blue">#00164D</color>
+    <color name="light_primary">#0A3FAD</color>
+    <color name="light_lightest_blue">#B5C4FF</color>
+    <color name="light_blue_tint">#EFF0FF</color>
+    <color name="light_accent">#800162</color>
+    <color name="light_crypto">#3A3F6A</color>
+    <color name="light_translucent">#33FEFBFF</color>
+
+    <color name="dark_text">#FEFBFF</color>
+    <color name="dark_mid_grey_disabled">#275D5E67</color>
+    <color name="dark_mid_grey">#5D5E67</color>
+    <color name="dark_dark_grey">#C6C6D0</color>
+    <color name="dark_top">#31364A</color>
+    <color name="dark_layer1">#272C3A</color>
+    <color name="dark_layer2">#23252F</color>
+    <color name="dark_background">#1B1C22</color>
+    <color name="dark_darkest_blue">#DCE1FF</color>
+    <color name="dark_primary">#B5C4FF</color>
+    <color name="dark_lightest_blue">#00297B</color>
+    <color name="dark_blue_tint">#1E2438</color>
+    <color name="dark_accent">#CD9EFC</color>
+    <color name="dark_crypto">#8C97F5</color>
+    <color name="dark_translucent">#1AFEFBFF</color>
+
+    <color name="success">#00E676</color>
+    <color name="light_success_tint">#D8F8EA</color>
+    <color name="dark_success_tint">#17392C</color>
+    <color name="error">#FF1744</color>
+    <color name="light_error_tint">#FED9E3</color>
+    <color name="dark_error_tint">#3D1A25</color>
+    <color name="warning">#FFAB49</color>
+    <color name="light_warning_tint">#FEEFE4</color>
+    <color name="dark_warning_tint">#3D3125</color>
+
+    <!-- Fade -->
+    <color name="fade_light_top">#00FEFBFF</color>
+    <color name="fade_dark_top">#0031364A</color>
+
+    <!-- Explorer -->
+    <color name="hex_fill_color">#3388ff</color>
+    <color name="follow_heart_color">#FF9AAE</color>
+
+    <!-- Network Stats -->
+    <color name="network_stats_chart_primary">#2780FF</color>
+    <color name="network_stats_slider_light">#BED6FF</color>
+    <color name="network_stats_slider_dark">#2E4C80</color>
+
+    <!-- Reward Scores -->
+    <color name="reward_score_very_high">@color/green</color>
+    <color name="reward_score_high">#E1CA60</color>
+    <color name="reward_score_average">#F3AD4E</color>
+    <color name="reward_score_low">#EF8B4F</color>
+    <color name="reward_score_very_low">#F6736D</color>
+    <color name="reward_score_unknown">#BAC7CB</color>
+    <!-- End -->
+</resources>

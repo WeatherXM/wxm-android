@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/padding_small"
+    android:paddingBottom="@dimen/padding_small">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/stationName"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+        android:textColor="@color/darkGrey"
+        tools:text="WS1000" />
+
+    <ImageButton
+        android:id="@+id/stationShopBtn"
+        style="@style/Widget.WeatherXM.ImageButton"
+        android:layout_width="12dp"
+        android:layout_height="16dp"
+        android:clickable="false"
+        android:src="@drawable/ic_open_new" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="100dp"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/stationPercentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="1dp"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+            android:textFontWeight="600"
+            app:layout_constraintBottom_toBottomOf="@id/stationSlider"
+            app:layout_constraintEnd_toEndOf="@id/stationSlider"
+            app:layout_constraintStart_toStartOf="@id/stationSlider"
+            app:layout_constraintTop_toTopOf="@id/stationSlider"
+            tools:text="70%" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/stationSlider"
+            style="@style/Widget.WeatherXM.Slider.NetworkStats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:valueFrom="0"
+            android:valueTo="100"
+            app:layout_constraintTop_toTopOf="parent"
+            app:values="@array/network_stats_slider_default_values" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/stationAmount"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+        android:textFontWeight="600"
+        tools:text="5,246" />
+</LinearLayout>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:orientation="vertical"
+    tools:parentTag="LinearLayout">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="0dp"
+        app:contentPaddingTop="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.7"
+                android:gravity="center_vertical"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Today, 14:45" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/reward"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/reward"
+                android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toStartOf="@id/rewardStatus"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/timestamp"
+                tools:text="+ 2.5643 $WXM" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/rewardStatus"
+                style="@style/Widget.WeatherXM.Chip.RewardStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/reward"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/reward"
+                tools:chipBackgroundColor="@color/successTint"
+                tools:chipIcon="@drawable/ic_checkmark_alt"
+                tools:chipIconTint="@color/darkestBlue"
+                tools:text="Got 100%" />
+
+            <com.weatherxm.ui.components.MessageCardView
+                android:id="@+id/problemsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small_to_normal"
+                android:elevation="0dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/reward"
+                app:message_card_radius="@dimen/radius_medium"
+                app:message_includes_close_button="false"
+                app:message_title="@string/problems_found"
+                tools:message_background_tint="@color/errorTint"
+                tools:message_html_message="You lost 152.2 $WXM because of station problems."
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/secondaryInfoContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal_to_large"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintTop_toBottomOf="@id/problemsCard">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/scoreIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_reward_scale"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="ContentDescription" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_extra_small"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        app:layout_constraintBottom_toBottomOf="@id/scoreIcon"
+                        app:layout_constraintStart_toEndOf="@id/scoreIcon"
+                        app:layout_constraintTop_toTopOf="@id/scoreIcon"
+                        tools:text="0.69" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/scoreTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_extra_extra_small"
+                        android:text="@string/reward_score"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/colorOnSurfaceVariant"
+                        app:layout_constraintStart_toStartOf="@id/score"
+                        app:layout_constraintTop_toBottomOf="@id/score" />
+
+                    <ImageButton
+                        android:id="@+id/scoreExplanation"
+                        style="@style/Widget.WeatherXM.ImageButton"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_learn_more_info"
+                        app:layout_constraintBottom_toBottomOf="@id/scoreTitle"
+                        app:layout_constraintStart_toEndOf="@id/scoreTitle"
+                        app:layout_constraintTop_toTopOf="@id/scoreTitle" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/maxRewardsIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_reward_scale"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/midGrey"
+                        tools:ignore="ContentDescription" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/maxRewards"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_extra_small"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        app:layout_constraintBottom_toBottomOf="@id/maxRewardsIcon"
+                        app:layout_constraintStart_toEndOf="@id/maxRewardsIcon"
+                        app:layout_constraintTop_toTopOf="@id/maxRewardsIcon"
+                        tools:text="2.5643" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/maxRewardsTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_extra_extra_small"
+                        android:text="@string/max_rewards"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/colorOnSurfaceVariant"
+                        app:layout_constraintStart_toStartOf="@id/maxRewards"
+                        app:layout_constraintTop_toBottomOf="@id/maxRewards" />
+
+                    <ImageButton
+                        android:id="@+id/maxRewardsExplanation"
+                        style="@style/Widget.WeatherXM.ImageButton"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_learn_more_info"
+                        app:layout_constraintBottom_toBottomOf="@id/maxRewardsTitle"
+                        app:layout_constraintStart_toEndOf="@id/maxRewardsTitle"
+                        app:layout_constraintTop_toTopOf="@id/maxRewardsTitle" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+            <androidx.compose.ui.platform.ComposeView
+                android:id="@+id/timelineChart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small_to_normal"
+                app:layout_constraintTop_toBottomOf="@id/secondaryInfoContainer" />
+
+            <LinearLayout
+                android:id="@+id/singleLineTimeline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small_to_normal"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/timelineChart">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/timelineTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                    android:textColor="@color/colorOnSurfaceVariant"
+                    tools:text="Timeline for yesterday, Oct 15 2023 (UTC)" />
+
+                <ImageButton
+                    android:id="@+id/timelineExplanation"
+                    style="@style/Widget.WeatherXM.ImageButton"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_learn_more_info" />
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</merge>

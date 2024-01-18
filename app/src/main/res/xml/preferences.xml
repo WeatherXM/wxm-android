@@ -1,0 +1,135 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:key="@string/account"
+        app:title="@string/account">
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:iconSpaceReserved="false"
+            app:key="@string/key_google_analytics"
+            app:singleLineTitle="false"
+            app:summary="@string/google_analytics_preferences_desc"
+            app:title="@string/google_analytics_preferences_title" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/change_password"
+            app:summary="@string/request_reset_password_desc"
+            app:title="@string/change_password" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/action_logout"
+            app:summary="@string/logout_desc"
+            app:title="@string/action_logout" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/delete_account"
+            app:summary="@string/delete_account_desc"
+            app:title="@string/delete_account" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:key="@string/feedback"
+        app:title="@string/feedback">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/user_panel_title"
+            app:summary="@string/user_panel_desc"
+            app:title="@string/user_panel_title" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/short_app_survey"
+            app:summary="@string/short_app_survey_desc"
+            app:title="@string/short_app_survey" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:key="@string/display"
+        app:title="@string/display">
+        <ListPreference
+            app:defaultValue="@string/system_value"
+            app:entries="@array/theme_entries"
+            app:entryValues="@array/theme_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/key_theme"
+            app:summary="%s"
+            app:title="@string/theme" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/weather_units">
+        <ListPreference
+            app:defaultValue="@string/temperature_celsius"
+            app:entries="@array/temperature_entries"
+            app:entryValues="@array/temperature_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/key_temperature_preference"
+            app:title="@string/temperature"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="@string/precipitation_mm"
+            app:entries="@array/precipitation_entries"
+            app:entryValues="@array/precipitation_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/key_precipitation_preference"
+            app:title="@string/precipitation"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="@string/wind_speed_ms"
+            app:entries="@array/wind_speed_entries"
+            app:entryValues="@array/wind_speed_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/key_wind_speed_preference"
+            app:title="@string/wind_speed"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="@string/wind_direction_cardinal"
+            app:entries="@array/wind_direction_entries"
+            app:entryValues="@array/wind_direction_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/key_wind_direction_preference"
+            app:title="@string/wind_direction"
+            app:useSimpleSummaryProvider="true" />
+
+        <ListPreference
+            app:defaultValue="@string/pressure_hpa"
+            app:entries="@array/pressure_entries"
+            app:entryValues="@array/pressure_values"
+            app:iconSpaceReserved="false"
+            app:key="@string/key_pressure_preference"
+            app:title="@string/pressure"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/help">
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/title_open_documentation"
+            app:summary="@string/desc_open_documentation"
+            app:title="@string/title_open_documentation" />
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/contact_support_title"
+            app:summary="@string/contact_support_desc"
+            app:title="@string/contact_support_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/about">
+        <Preference
+            app:enableCopying="true"
+            app:iconSpaceReserved="false"
+            app:summary="@string/app_version"
+            app:title="@string/title_app_version" />
+    </PreferenceCategory>
+</PreferenceScreen>

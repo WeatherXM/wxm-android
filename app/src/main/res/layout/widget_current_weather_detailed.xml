@@ -1,0 +1,819 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_rounded_surface"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/deviceLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/padding_normal"
+            android:paddingTop="@dimen/padding_small">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="@dimen/margin_extra_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:layout_toStartOf="@id/stationHomeFollowIcon"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="My Weather Station" />
+
+            <ImageView
+                android:id="@+id/stationHomeFollowIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/name"
+                android:layout_alignBottom="@id/name"
+                android:layout_alignParentEnd="true"
+                android:gravity="center"
+                android:src="@drawable/ic_home"
+                tools:ignore="ContentDescription,UseAppTint" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/padding_normal"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:id="@+id/addressContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_rounded_blue_tint"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/padding_small"
+                android:paddingVertical="@dimen/padding_extra_small">
+
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/ic_hex"
+                    android:tint="@color/colorOnSurface"
+                    tools:ignore="ContentDescription,UseAppTint" />
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                    tools:text="Athens, GR" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/statusContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/padding_small"
+                android:paddingVertical="@dimen/padding_extra_small"
+                tools:background="@drawable/background_rounded_success">
+
+                <ImageView
+                    android:id="@+id/statusIcon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_wifi"
+                    android:tint="@color/colorOnSurface"
+                    tools:ignore="ContentDescription,UseAppTint" />
+
+                <TextView
+                    android:id="@+id/lastSeen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                    tools:text="15:45" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/weatherDataLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_rounded_surface"
+                android:baselineAligned="false"
+                android:elevation="1px"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/padding_small"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_normal"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/weatherIcon"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        tools:ignore="ContentDescription"
+                        tools:src="@drawable/ic_weather_clear_day" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/temperature"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                            android:textSize="32sp"
+                            android:textStyle="bold"
+                            tools:text="26" />
+
+                        <TextView
+                            android:id="@+id/temperatureUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
+                            android:textSize="32sp"
+                            tools:text="°C" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/feelsLikeTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/feels_like"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Subtitle" />
+
+                        <TextView
+                            android:id="@+id/feelsLike"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_small"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                            android:textStyle="bold"
+                            tools:text="26" />
+
+                        <TextView
+                            android:id="@+id/feelsLikeUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                            android:textColor="@color/darkGrey"
+                            tools:text="°C" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/humidityIconContainer"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_weather_humidity"
+                                android:tint="@color/colorPrimaryVariant"
+                                tools:ignore="UseAppTint,contentDescription" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/humidityTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:layout_toEndOf="@id/humidityIconContainer"
+                            android:text="@string/humidity"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/humidityValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/humidityTitle"
+                            android:layout_alignStart="@id/humidityTitle"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data"
+                            android:textStyle="bold"
+                            tools:text="78" />
+
+                        <TextView
+                            android:id="@+id/humidityUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@id/humidityValue"
+                            android:layout_toEndOf="@id/humidityValue"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
+                            tools:text="%" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small">
+
+                        <LinearLayout
+                            android:id="@+id/windIconContainer"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_weather_wind"
+                                android:tint="@color/colorPrimaryVariant"
+                                tools:ignore="UseAppTint,contentDescription" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/windTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:layout_toEndOf="@id/windIconContainer"
+                            android:text="@string/wind"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/windValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/windTitle"
+                            android:layout_alignStart="@id/windTitle"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data"
+                            android:textStyle="bold"
+                            tools:text="3.5" />
+
+                        <TextView
+                            android:id="@+id/windUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@id/windValue"
+                            android:layout_toEndOf="@id/windValue"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
+                            tools:text=" km/h SSW" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small">
+
+                        <LinearLayout
+                            android:id="@+id/rainRateIconContainer"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_weather_precipitation"
+                                android:tint="@color/colorPrimaryVariant"
+                                tools:ignore="UseAppTint,contentDescription" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/rainRateTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:layout_toEndOf="@id/rainRateIconContainer"
+                            android:text="@string/precipitation_rate"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/rainRateValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/rainRateTitle"
+                            android:layout_alignStart="@id/rainRateTitle"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data"
+                            android:textStyle="bold"
+                            tools:text="15.6" />
+
+                        <TextView
+                            android:id="@+id/rainRateUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@id/rainRateValue"
+                            android:layout_toEndOf="@id/rainRateValue"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
+                            tools:text=" mm/h" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-32dp"
+                android:background="@drawable/background_rounded"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:paddingTop="32dp"
+                android:paddingBottom="@dimen/padding_small"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_normal"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/padding_small">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/windGustΙconContainer"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_weather_wind"
+                                android:tint="@color/colorPrimaryVariant"
+                                tools:ignore="UseAppTint,contentDescription" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/windGustTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:layout_toEndOf="@id/windGustΙconContainer"
+                            android:text="@string/wind_gust"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/windGustValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/windGustTitle"
+                            android:layout_alignStart="@id/windGustTitle"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data"
+                            android:textStyle="bold"
+                            tools:text="2.3" />
+
+                        <TextView
+                            android:id="@+id/windGustUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@id/windGustValue"
+                            android:layout_toEndOf="@id/windGustValue"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
+                            tools:text=" km/h SSW" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small">
+
+                        <LinearLayout
+                            android:id="@+id/pressureIconContainer"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_weather_pressure"
+                                android:tint="@color/colorPrimaryVariant"
+                                tools:ignore="UseAppTint,contentDescription" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/pressureTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:layout_toEndOf="@id/pressureIconContainer"
+                            android:text="@string/pressure_absolute"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/pressureValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/pressureTitle"
+                            android:layout_alignStart="@id/pressureTitle"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data"
+                            android:textStyle="bold"
+                            tools:text="1010.3" />
+
+                        <TextView
+                            android:id="@+id/pressureUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@id/pressureValue"
+                            android:layout_toEndOf="@id/pressureValue"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
+                            tools:text=" hPa" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small">
+
+                        <LinearLayout
+                            android:id="@+id/radiationIconContainer"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_weather_solar"
+                                android:tint="@color/colorPrimaryVariant"
+                                tools:ignore="UseAppTint,contentDescription" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/radiationTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:layout_toEndOf="@id/radiationIconContainer"
+                            android:text="@string/solar_radiation"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/radiationValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/radiationTitle"
+                            android:layout_alignStart="@id/radiationTitle"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data"
+                            android:textStyle="bold"
+                            tools:text="411.9" />
+
+                        <TextView
+                            android:id="@+id/radiationUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@id/radiationValue"
+                            android:layout_toEndOf="@id/radiationValue"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
+                            tools:text=" W/m2" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_large"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/padding_small">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/dailyPrecipIconContainer"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_weather_precipitation"
+                                android:tint="@color/colorPrimaryVariant"
+                                tools:ignore="UseAppTint,contentDescription" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/dailyPrecipTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:layout_toEndOf="@id/dailyPrecipIconContainer"
+                            android:text="@string/daily_precip"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/dailyPrecipValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/dailyPrecipTitle"
+                            android:layout_alignStart="@id/dailyPrecipTitle"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data"
+                            android:textStyle="bold"
+                            tools:text="2.3" />
+
+                        <TextView
+                            android:id="@+id/dailyPrecipUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@id/dailyPrecipValue"
+                            android:layout_toEndOf="@id/dailyPrecipValue"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
+                            tools:text=" mm" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small">
+
+                        <LinearLayout
+                            android:id="@+id/dewIconContainer"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_weather_dew_point"
+                                android:tint="@color/colorPrimaryVariant"
+                                tools:ignore="UseAppTint,contentDescription" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/dewTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:layout_toEndOf="@id/dewIconContainer"
+                            android:text="@string/dew_point"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/dewValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/dewTitle"
+                            android:layout_alignStart="@id/dewTitle"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data"
+                            android:textStyle="bold"
+                            tools:text="12.4" />
+
+                        <TextView
+                            android:id="@+id/dewUnit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBaseline="@id/dewValue"
+                            android:layout_toEndOf="@id/dewValue"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
+                            tools:text="°C" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small">
+
+                        <LinearLayout
+                            android:id="@+id/uvIconContainer"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/ic_weather_solar"
+                                android:tint="@color/colorPrimaryVariant"
+                                tools:ignore="UseAppTint,contentDescription" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/uvTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_extra_small"
+                            android:layout_toEndOf="@id/uvIconContainer"
+                            android:text="@string/uv_index"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data.Subtitle"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/uvValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/uvTitle"
+                            android:layout_alignStart="@id/uvTitle"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.WeatherCard.Data"
+                            android:textStyle="bold"
+                            tools:text="7" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/noDataLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:background="@drawable/background_rounded_surface"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingVertical="@dimen/padding_normal"
+        android:visibility="gone"
+        android:weightSum="4">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/noDataIcon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_no_data"
+                android:tint="@color/colorOnSurface"
+                tools:ignore="ContentDescription,UseAppTint" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/noDataTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_data"
+                android:textAppearance="@style/TextAppearance.WeatherXM.EmptyView.Title" />
+
+            <TextView
+                android:id="@+id/noDataMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/no_data_message"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/actionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorSurface"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/padding_large"
+        android:paddingVertical="@dimen/padding_extra_large"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/actionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/please_sign_in"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Title" />
+
+        <TextView
+            android:id="@+id/actionDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:gravity="center"
+            android:text="@string/please_sign_in_desc"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge" />
+
+        <Button
+            android:id="@+id/actionBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:backgroundTint="@color/colorPrimary"
+            android:minHeight="54dp"
+            android:text="@string/action_login"
+            android:textAllCaps="false"
+            android:textColor="@color/colorOnPrimary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/errorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/errorTint"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/padding_large"
+        android:paddingVertical="@dimen/padding_large"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/errorIcon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_error"
+            android:tint="@color/error"
+            tools:ignore="ContentDescription,UseAppTint" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/error_user_device_data_failed"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Title" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:gravity="center"
+            android:text="@string/error_reach_out_short"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge" />
+    </LinearLayout>
+
+</LinearLayout>

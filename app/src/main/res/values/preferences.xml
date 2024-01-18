@@ -1,0 +1,123 @@
+<resources>
+    <string name="settings">Settings</string>
+
+    <!-- Account -->
+    <string name="account">Account</string>
+    <string name="change_password">Change Password</string>
+    <string name="request_reset_password_desc">Request a password reset email to change your password.</string>
+    <string name="title_dialog_logout">Logout?</string>
+    <string name="logout_desc">Logout of your account</string>
+    <string name="message_dialog_logout">Are you sure you want to logout?</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_desc">Permanently delete your account, and data. This is not reversible!</string>
+    <string name="google_analytics_preferences_title">Send anonymized data for analytics</string>
+    <string name="google_analytics_preferences_desc">Help us learn and improve WeatherXM experience for you and others!</string>
+    <string name="key_google_analytics" translatable="false">google_analytics</string>
+
+    <!-- Feedback -->
+    <string name="feedback">Feedback</string>
+    <string name="user_panel_title">Join the WeatherXM User Panel</string>
+    <string name="user_panel_desc">You may join the WeatherXM user research panel, share your insights and help shape the future of  WeatherXM apps and services.</string>
+    <string name="short_app_survey">Short App Survey</string>
+    <string name="short_app_survey_prompt_desc">Your feedback matters. Tap to take a very quick survey.</string>
+    <string name="short_app_survey_desc">Share your feedback by taking the WeatherXM app quick survey. It only has 2 mandatory questions!</string>
+
+    <!-- Sorting & Filtering -->
+    <string name="sort_filter">Sort &amp; Filter</string>
+    <string name="sort_by">Sort by</string>
+    <string name="filter">Filter</string>
+    <string name="group_by">Group by</string>
+    <string name="date_added">Date added</string>
+    <string name="name">Name</string>
+    <string name="last_active">Last active</string>
+    <string name="show_all">Show all</string>
+    <string name="owned_only">Owned only</string>
+    <string name="favorites_only">Favorites only</string>
+    <string name="no_grouping">No grouping</string>
+    <string name="relationship_owned_favorites">Relationship (Owned, Favorite)</string>
+    <string name="status_active_inactive">Status (Active, Inactive)</string>
+
+    <!-- Display -->
+    <string name="display">Display</string>
+    <string name="theme">Theme</string>
+    <string name="key_theme" translatable="false">theme</string>
+    <string name="light_value" translatable="false">Light</string>
+    <string name="dark_value" translatable="false">Dark</string>
+    <string name="system_value" translatable="false">System</string>
+    <string-array name="theme_entries">
+        <item>Light Theme</item>
+        <item>Dark Theme</item>
+        <item>System</item>
+    </string-array>
+    <string-array name="theme_values">
+        <item>@string/light_value</item>
+        <item>@string/dark_value</item>
+        <item>@string/system_value</item>
+    </string-array>
+
+    <!-- Help -->
+    <string name="help">Help</string>
+    <string name="contact_support_title">Contact Support</string>
+    <string name="contact_support_desc">Visit our support portal’s knowledge base or open a new ticket and we’ll get back to you as soon as possible.</string>
+    <string name="title_open_documentation">Documentation</string>
+    <string name="desc_open_documentation">Read more about the project, find out how rewards work, tutorials on how to setup your station, troubleshooting guides, and more.</string>
+
+    <!-- About -->
+    <string name="about">About</string>
+    <string name="title_app_version">App Version</string>
+
+    <!-- Weather Units -->
+    <string name="weather_units">Weather Units</string>
+    <string name="key_temperature_preference" translatable="false">temperature_unit</string>
+    <string name="key_precipitation_preference" translatable="false">precipitation_unit</string>
+    <string name="key_wind_speed_preference" translatable="false">wind_speed_unit</string>
+    <string name="key_wind_direction_preference" translatable="false">wind_direction_unit</string>
+    <string name="key_pressure_preference" translatable="false">pressure_unit</string>
+
+    <string-array name="temperature_entries">
+        <item>Celsius (°C)</item>
+        <item>Fahrenheit (°F)</item>
+    </string-array>
+    <string-array name="precipitation_entries">
+        <item>Millimeters (mm)</item>
+        <item>Inches (in)</item>
+    </string-array>
+    <string-array name="wind_speed_entries">
+        <item>Kilometers per hour (km/h)</item>
+        <item>Miles per hour (mph)</item>
+        <item>Meters per second (m/s)</item>
+        <item>Knots (kn)</item>
+        <item>Beaufort (bf)</item>
+    </string-array>
+    <string-array name="wind_direction_entries">
+        <item>Cardinal (e.g. N, SW, NE, etc)</item>
+        <item>Degrees</item>
+    </string-array>
+    <string-array name="pressure_entries">
+        <item>Hectopascal (hPa)</item>
+        <item>Inch of mercury (inHg)</item>
+    </string-array>
+    <string-array name="temperature_values">
+        <item>@string/temperature_celsius</item>
+        <item>@string/temperature_fahrenheit</item>
+    </string-array>
+    <string-array name="precipitation_values">
+        <item>@string/precipitation_mm</item>
+        <item>@string/precipitation_in</item>
+    </string-array>
+    <string-array name="wind_speed_values">
+        <item>@string/wind_speed_kmh</item>
+        <item>@string/wind_speed_mph</item>
+        <item>@string/wind_speed_ms</item>
+        <item>@string/wind_speed_knots</item>
+        <item>@string/wind_speed_beaufort</item>
+    </string-array>
+    <string-array name="wind_direction_values">
+        <item>@string/wind_direction_cardinal</item>
+        <item>@string/wind_direction_degrees</item>
+    </string-array>
+    <string-array name="pressure_values">
+        <item>@string/pressure_hpa</item>
+        <item>@string/pressure_inHg</item>
+    </string-array>
+</resources>

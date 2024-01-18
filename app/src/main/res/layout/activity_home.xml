@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/bottom_navigation"
+        tools:ignore="FragmentTagUsage" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/myLocationBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:contentDescription="@string/go_to_your_location"
+        android:elevation="@dimen/elevation_normal"
+        android:src="@drawable/ic_my_location"
+        android:translationY="-24dp"
+        app:backgroundTint="@color/colorSurface"
+        app:layout_anchor="@id/networkStatsBtn"
+        app:layout_anchorGravity="top|center"
+        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+        app:shapeAppearance="@style/ShapeAppearance.WeatherXM.MyLocation"
+        app:tint="@color/colorOnSurface" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/networkStatsBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginEnd="@dimen/margin_normal"
+        android:contentDescription="@string/network_stats"
+        android:elevation="@dimen/elevation_normal"
+        android:src="@drawable/ic_network_stats"
+        android:translationY="-24dp"
+        app:backgroundTint="@color/network_stats_button"
+        app:layout_anchor="@id/nav_view"
+        app:layout_anchorGravity="top|end"
+        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+        app:tint="@color/light_text" />
+
+    <com.weatherxm.ui.components.HidingBottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginVertical="@dimen/margin_normal"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        app:layout_dodgeInsetEdges="bottom"
+        app:menu="@menu/bottom_nav_menu" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:contentDescription="@string/add_weather_station"
+        android:src="@drawable/ic_add"
+        android:translationY="-24dp"
+        app:elevation="@dimen/elevation_normal"
+        app:layout_anchor="@id/nav_view"
+        app:layout_anchorGravity="top|end"
+        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+        app:tint="@color/colorOnPrimary" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    android:fitsSystemWindows="false"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_normal_to_large"
+    tools:background="@color/colorSurface">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sort_filter"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Title" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_normal_to_large"
+        android:text="@string/sort_by"
+        android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
+        android:textSize="18sp" />
+
+    <RadioGroup
+        android:id="@+id/sortButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/dateAdded"
+            style="@style/Widget.WeatherXM.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_extra_small"
+            android:text="@string/date_added" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/name"
+            style="@style/Widget.WeatherXM.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_extra_small"
+            android:text="@string/name" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/lastActive"
+            style="@style/Widget.WeatherXM.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_extra_small"
+            android:text="@string/last_active" />
+    </RadioGroup>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_normal_to_large"
+        android:text="@string/filter"
+        android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
+        android:textSize="18sp" />
+
+    <RadioGroup
+        android:id="@+id/filterButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/showAll"
+            style="@style/Widget.WeatherXM.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_extra_small"
+            android:text="@string/show_all" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/ownedOnly"
+            style="@style/Widget.WeatherXM.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_extra_small"
+            android:text="@string/owned_only" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/favoritesOnly"
+            style="@style/Widget.WeatherXM.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_extra_small"
+            android:text="@string/favorites_only" />
+    </RadioGroup>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_normal_to_large"
+        android:text="@string/group_by"
+        android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
+        android:textSize="18sp" />
+
+    <RadioGroup
+        android:id="@+id/groupButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/noGrouping"
+            style="@style/Widget.WeatherXM.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_extra_small"
+            android:text="@string/no_grouping" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/relationship"
+            style="@style/Widget.WeatherXM.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_extra_small"
+            android:text="@string/relationship_owned_favorites" />
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/status"
+            style="@style/Widget.WeatherXM.RadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_extra_small"
+            android:text="@string/status_active_inactive" />
+    </RadioGroup>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/padding_normal_to_large">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/resetBtn"
+            style="@style/Widget.WeatherXM.TextButton.Subtle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reset"
+            android:textAllCaps="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancelBtn"
+            style="@style/Widget.WeatherXM.TextButton.Subtle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:text="@string/action_cancel"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toStartOf="@id/saveBtn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/saveBtn"
+            style="@style/Widget.WeatherXM.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_save"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

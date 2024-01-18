@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/margin_small_to_normal"
+    android:orientation="vertical">
+
+    <com.weatherxm.ui.components.MessageCardView
+        android:id="@+id/error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:message_background_tint="@color/errorTint"
+        app:message_icon="@drawable/ic_error"
+        app:message_icon_color="@color/error"
+        app:message_includes_close_button="false"
+        tools:visibility="visible" />
+
+    <com.weatherxm.ui.components.MessageCardView
+        android:id="@+id/warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:message_background_tint="@color/warningTint"
+        app:message_icon="@drawable/ic_warn"
+        app:message_icon_color="@color/warning"
+        app:message_includes_close_button="false" />
+</LinearLayout>

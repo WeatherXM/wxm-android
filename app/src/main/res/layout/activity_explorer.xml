@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false">
+
+    <!-- Content -->
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/mapView"
+        android:name="com.weatherxm.ui.explorer.ExplorerMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_map" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/overlay_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/padding_normal"
+        app:layout_dodgeInsetEdges="bottom">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/map_debug_info_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_normal"
+            app:cardBackgroundColor="@color/transparent"
+            app:cardCornerRadius="@dimen/radius_large"
+            app:cardUseCompatPadding="false"
+            app:contentPadding="@dimen/padding_small"
+            app:layout_constraintBottom_toTopOf="@id/login_signup_view"
+            app:layout_constraintEnd_toStartOf="@id/networkStatsBtn"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/map_debug_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?textAppearanceBodySmall"
+                android:textColor="@color/light_top"
+                tools:text="ZOOM = 12.7" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/myLocationBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:contentDescription="@string/go_to_your_location"
+            android:elevation="@dimen/elevation_normal"
+            android:src="@drawable/ic_my_location"
+            app:backgroundTint="@color/colorSurface"
+            app:layout_anchor="@id/login_signup_view"
+            app:layout_anchorGravity="top"
+            app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearance.WeatherXM.MyLocation"
+            app:tint="@color/colorOnSurface" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/networkStatsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginEnd="@dimen/margin_normal"
+            android:contentDescription="@string/network_stats"
+            android:elevation="@dimen/elevation_normal"
+            android:src="@drawable/ic_network_stats"
+            app:backgroundTint="@color/network_stats_button"
+            app:layout_anchor="@id/login_signup_view"
+            app:layout_anchorGravity="top"
+            app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/myLocationBtn"
+            app:tint="@color/light_text" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/login_signup_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_normal"
+            android:layout_marginTop="@dimen/margin_large"
+            app:cardElevation="@dimen/elevation_small"
+            app:contentPadding="@dimen/padding_normal_to_large"
+            app:contentPaddingBottom="0dp"
+            app:elevation="@dimen/elevation_small"
+            app:layout_constraintTop_toBottomOf="@id/networkStatsBtn">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintVertical_chainStyle="packed">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_login"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/signUpContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/login">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/signUpText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/signup_text"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                        app:layout_constraintBottom_toBottomOf="@id/signupPrompt"
+                        app:layout_constraintEnd_toStartOf="@id/signupPrompt"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/signupPrompt" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/signupPrompt"
+                        style="@style/Widget.WeatherXM.TextButton.Subtle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/action_signup"
+                        android:textAllCaps="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/signUpText"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

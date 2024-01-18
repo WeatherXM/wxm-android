@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/my_wallet" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingHorizontal="@dimen/padding_normal"
+            android:paddingVertical="@dimen/padding_normal"
+            app:layout_constraintBottom_toTopOf="@id/checkBoxesAndButtonContainer"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="vertical">
+
+                <com.weatherxm.ui.components.MessageCardView
+                    android:id="@+id/tokenNoticeCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:message_background_tint="@color/blueTint"
+                    app:message_icon="@drawable/ic_info"
+                    app:message_icon_color="@color/colorPrimaryVariant"
+                    app:message_includes_close_button="false"
+                    app:message_message="@string/wallet_token_notice" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:layout_constraintVertical_chainStyle="packed">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/enterAddress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/enter_your_wallet_address"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                            android:textStyle="bold"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/address_container"
+                            style="@style/Widget.WeatherXM.TextInputEditText.OutlinedBox.Dense"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_normal"
+                            app:counterEnabled="true"
+                            app:counterMaxLength="42"
+                            app:hintEnabled="false"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/enterAddress">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/address"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:digits="xX0123456789ABCDEFabcdef"
+                                android:hint="@string/hint_wxm_address"
+                                android:inputType="text|textNoSuggestions" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/scanQR"
+                            style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="@dimen/margin_normal"
+                            android:text="@string/action_scan_qr"
+                            app:icon="@drawable/ic_scan_qr"
+                            app:iconGravity="textStart"
+                            app:layout_constraintBottom_toTopOf="@id/suggestedWallet"
+                            app:layout_constraintTop_toBottomOf="@id/address_container" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/editWallet"
+                            style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginVertical="@dimen/margin_normal"
+                            android:text="@string/edit_your_wallet_address"
+                            android:visibility="gone"
+                            app:icon="@drawable/ic_edit"
+                            app:iconGravity="textStart"
+                            app:layout_constraintBottom_toTopOf="@id/suggestedWallet"
+                            app:layout_constraintTop_toBottomOf="@id/address_container" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/suggestedWallet"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/suggested_wallets"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                            app:layout_constraintBottom_toTopOf="@id/createMetamask" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/createMetamask"
+                            style="@style/Widget.WeatherXM.TextButton.Subtle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="0dp"
+                            android:text="@string/create_metamask"
+                            app:icon="@drawable/ic_open_new"
+                            app:iconGravity="end"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/viewTransactionHistoryBtn"
+                    style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/margin_normal"
+                    android:text="@string/view_transaction_history"
+                    app:backgroundTint="@color/colorSurface" />
+
+                <com.weatherxm.ui.components.MessageCardView
+                    android:id="@+id/walletCompatibilityCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/margin_normal"
+                    android:visibility="gone"
+                    app:message_background_tint="@color/errorTint"
+                    app:message_html_message="@string/wallet_compatibility_desc"
+                    app:message_icon="@drawable/ic_error"
+                    app:message_icon_color="@color/error"
+                    app:message_includes_close_button="true"
+                    app:message_stroke_color="@color/error"
+                    app:message_title="@string/wallet_compatibility" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <LinearLayout
+            android:id="@+id/checkBoxesAndButtonContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorSurface"
+            android:elevation="@dimen/elevation_small"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/padding_normal"
+            android:paddingVertical="@dimen/padding_normal"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/termsCheckbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/termsCheckboxDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_normal"
+                    android:text="@string/accept_terms" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/ownershipCheckbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_normal"
+                    android:text="@string/ownership_wallet" />
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveBtn"
+                style="@style/Widget.WeatherXM.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:enabled="false"
+                android:text="@string/action_save_wallet_address"
+                app:layout_insetEdge="bottom" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

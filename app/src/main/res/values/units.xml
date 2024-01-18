@@ -1,0 +1,55 @@
+<resources>
+    <!-- Time Units -->
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="mon">Mon</string>
+    <string name="tue">Tue</string>
+    <string name="wed">Wed</string>
+    <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
+    <string name="sat">Sat</string>
+    <string name="sun">Sun</string>
+
+    <!-- Weather Data & Units -->
+    <string name="temperature">Temperature</string>
+    <string name="humidity">Humidity</string>
+    <string name="precipitation_rate">Precipitation Rate</string>
+    <string name="precipitation">Precipitation</string>
+    <string name="daily_precipitation">Daily Precipitation</string>
+    <string name="wind">Wind</string>
+    <string name="wind_speed">Wind Speed</string>
+    <string name="wind_gust">Wind Gust</string>
+    <string name="wind_direction">Wind Direction</string>
+    <string name="pressure">Pressure</string>
+    <string name="feels_like">Feels Like</string>
+    <string name="uv_index">UV Index</string>
+    <string name="temperature_celsius">°C</string>
+    <string name="temperature_fahrenheit">°F</string>
+    <string name="precipitation_mm">&#160;mm</string>
+    <string name="precipitation_in">&#160;in</string>
+    <string name="precipitation_mm_hour">&#160;mm/h</string>
+    <string name="precipitation_in_hour">&#160;in/h</string>
+    <string name="wind_speed_kmh">&#160;km/h</string>
+    <string name="wind_speed_mph">&#160;mph</string>
+    <string name="wind_speed_ms">&#160;m/s</string>
+    <string name="wind_speed_knots">&#160;kn</string>
+    <string name="wind_speed_beaufort">&#160;bf</string>
+    <string name="wind_direction_cardinal">Cardinal</string>
+    <string name="wind_direction_degrees">Degrees</string>
+    <string name="degrees_mark">°</string>
+    <string name="pressure_hpa">&#160;hPa</string>
+    <string name="pressure_inHg">&#160;inHg</string>
+    <string name="solar_radiation_unit" translatable="false">&#160;W/m2</string>
+    <string name="solar_radiation">Solar Radiation</string>
+    <string name="radiation">Radiation</string>
+    <string name="pressure_absolute">Pressure (abs)</string>
+    <string name="dew_point">Dew Point</string>
+</resources>
