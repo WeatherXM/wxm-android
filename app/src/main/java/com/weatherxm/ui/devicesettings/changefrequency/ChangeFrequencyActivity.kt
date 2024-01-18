@@ -40,7 +40,7 @@ class ChangeFrequencyActivity : BaseActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
                 requestBluetoothPermissions(
-                    onGranted = { model.scan() },
+                    onGranted = { model.startConnectionProcess() },
                     onDenied = {
                         binding.bleActionFlow.onError(true, R.string.no_bluetooth_access)
                     }
@@ -117,7 +117,7 @@ class ChangeFrequencyActivity : BaseActivity() {
     }
 
     private fun finishActivity() {
-        model.scanningJob.cancel()
+        model.stopScanning()
         finish()
     }
 
@@ -152,14 +152,14 @@ class ChangeFrequencyActivity : BaseActivity() {
             analytics.trackEventSelectContent(Analytics.ParamValue.BLE_SCAN_AGAIN.paramValue)
             initBluetoothAndStart()
         }, onPairClicked = {
-            model.pairDevice()
+            model.startConnectionProcess()
         }, onSuccessPrimaryButtonClicked = {
             finishActivity()
         }, onCancelButtonClicked = {
             model.disconnectFromPeripheral()
             finishActivity()
         }, onRetryButtonClicked = {
-            model.scan()
+            model.startConnectionProcess()
         })
     }
 
@@ -244,7 +244,7 @@ class ChangeFrequencyActivity : BaseActivity() {
         bluetoothAdapter?.let {
             if (it.isEnabled) {
                 requestBluetoothPermissions(
-                    onGranted = { model.scan() },
+                    onGranted = { model.startConnectionProcess() },
                     onDenied = {
                         binding.bleActionFlow.onError(true, R.string.no_bluetooth_access)
                     }

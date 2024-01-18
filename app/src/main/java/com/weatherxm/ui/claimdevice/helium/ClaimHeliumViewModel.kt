@@ -27,7 +27,6 @@ import timber.log.Timber
 @Suppress("TooManyFunctions")
 class ClaimHeliumViewModel(
     private val claimDeviceUseCase: ClaimDeviceUseCase,
-    private val connectionUseCase: BluetoothConnectionUseCase,
     private val resources: Resources,
     private val analytics: Analytics
 ) : ViewModel() {
@@ -46,13 +45,6 @@ class ClaimHeliumViewModel(
     private var devEUI: String = ""
     private var deviceKey: String = ""
     private var frequency: Frequency = Frequency.US915
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun disconnectFromPeripheral() {
-        GlobalScope.launch {
-            connectionUseCase.disconnectFromPeripheral()
-        }
-    }
 
     fun setFrequency(frequency: Frequency) {
         this.frequency = frequency

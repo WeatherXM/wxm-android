@@ -38,7 +38,7 @@ class DeviceHeliumOTAActivity : BaseActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
                 requestBluetoothPermissions(
-                    onGranted = { model.startScan() },
+                    onGranted = { model.startConnectionProcess() },
                     onDenied = { binding.bleActionFlow.onError(true, R.string.no_bluetooth_access) }
                 )
             } else {
@@ -98,14 +98,14 @@ class DeviceHeliumOTAActivity : BaseActivity() {
             analytics.trackEventSelectContent(Analytics.ParamValue.BLE_SCAN_AGAIN.paramValue)
             initBluetoothAndStart()
         }, onPairClicked = {
-            model.pairDevice()
+            model.startConnectionProcess()
         }, onSuccessPrimaryButtonClicked = {
             navigator.showDeviceDetails(this, device = model.device)
             finish()
         }, onCancelButtonClicked = {
             finish()
         }, onRetryButtonClicked = {
-            model.setPeripheral()
+            model.startConnectionProcess()
         })
     }
 
@@ -216,7 +216,7 @@ class DeviceHeliumOTAActivity : BaseActivity() {
         bluetoothAdapter?.let {
             if (it.isEnabled) {
                 requestBluetoothPermissions(
-                    onGranted = { model.startScan() },
+                    onGranted = { model.startConnectionProcess() },
                     onDenied = { binding.bleActionFlow.onError(true, R.string.no_bluetooth_access) }
                 )
             } else {

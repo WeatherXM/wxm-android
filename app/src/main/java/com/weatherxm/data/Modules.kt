@@ -947,7 +947,7 @@ private val viewmodels = module {
     viewModel { SelectStationViewModel(get()) }
     viewModel { ClaimLocationViewModel(get(), get(), get()) }
     viewModel { ClaimM5ViewModel(get(), get(), get()) }
-    viewModel { ClaimHeliumViewModel(get(), get(), get(), get()) }
+    viewModel { ClaimHeliumViewModel(get(), get(), get()) }
     viewModel { ClaimHeliumPairViewModel(get(), get(), get(), get()) }
     viewModel { ClaimHeliumResultViewModel(get(), get(), get()) }
     viewModel { ClaimHeliumFrequencyViewModel(get(), get()) }

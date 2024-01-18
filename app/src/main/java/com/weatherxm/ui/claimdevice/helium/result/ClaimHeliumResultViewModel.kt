@@ -1,13 +1,14 @@
 package com.weatherxm.ui.claimdevice.helium.result
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
+import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.unmask
+import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Resources
@@ -17,9 +18,9 @@ import java.util.concurrent.TimeUnit
 
 class ClaimHeliumResultViewModel(
     private val resources: Resources,
-    private val connectionUseCase: BluetoothConnectionUseCase,
-    private val analytics: Analytics
-) : ViewModel() {
+    connectionUseCase: BluetoothConnectionUseCase,
+    analytics: Analytics
+) : BluetoothHeliumViewModel("", null, connectionUseCase, analytics) {
     companion object {
         val CONNECT_DELAY_ON_REBOOT = TimeUnit.SECONDS.toMillis(10L)
     }
@@ -35,6 +36,33 @@ class ClaimHeliumResultViewModel(
     fun onRebooting() = onRebooting
     fun onBLEDevEUI() = onBLEDevEUI
     fun onBLEClaimingKey() = onBLEClaimingKey
+
+    override fun onConnected() {
+        fetchDeviceEUI()
+    }
+
+    override fun onConnectionFailure(failure: Failure) {
+        onBLEError.postValue(when (failure) {
+            is BluetoothError.BluetoothDisabledException -> {
+                UIError(resources.getString(R.string.helium_bluetooth_disabled), failure.code) {
+                    connectToPeripheral()
+                }
+            }
+            is BluetoothError.ConnectionLostException -> {
+                UIError(resources.getString(R.string.ble_connection_lost_desc), failure.code) {
+                    connectToPeripheral()
+                }
+            }
+            else -> {
+                UIError(
+                    resources.getString(R.string.helium_connection_rejected),
+                    failure.code
+                ) {
+                    connectToPeripheral()
+                }
+            }
+        })
+    }
 
     fun setFrequency(frequency: Frequency) {
         viewModelScope.launch {
@@ -67,39 +95,11 @@ class ClaimHeliumResultViewModel(
         }
     }
 
-    fun connectToPeripheral() {
+    private fun connectToPeripheral() {
         viewModelScope.launch {
             onBLEConnection.postValue(true)
             delay(CONNECT_DELAY_ON_REBOOT)
-            connectionUseCase.connectToPeripheral().onLeft {
-                analytics.trackEventFailure(it.code)
-                onBLEError.postValue(when (it) {
-                    is BluetoothError.BluetoothDisabledException -> {
-                        UIError(
-                            resources.getString(R.string.helium_bluetooth_disabled), it.code
-                        ) {
-                            connectToPeripheral()
-                        }
-                    }
-                    is BluetoothError.ConnectionLostException -> {
-                        UIError(
-                            resources.getString(R.string.ble_connection_lost_description),
-                            it.code
-                        ) {
-                            connectToPeripheral()
-                        }
-                    }
-                    else -> {
-                        UIError(
-                            resources.getString(R.string.helium_connection_rejected), it.code
-                        ) {
-                            connectToPeripheral()
-                        }
-                    }
-                })
-            }.onRight {
-                fetchDeviceEUI()
-            }
+            super.connect(false)
         }
     }
 

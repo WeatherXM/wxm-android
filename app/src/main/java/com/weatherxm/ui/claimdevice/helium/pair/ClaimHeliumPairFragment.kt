@@ -74,7 +74,7 @@ class ClaimHeliumPairFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = ScannedDevicesListAdapter {
-            model.setupBluetoothClaiming(it.address)
+            model.setupBluetoothClaiming(it)
             setEnabledScannedDevices(false)
             binding.progressBar.visibility = GONE
         }
@@ -90,7 +90,7 @@ class ClaimHeliumPairFragment : BaseFragment() {
                     }
                 }
             setHtml(
-                R.string.ble_connection_lost_description,
+                R.string.ble_connection_lost_desc,
                 getString(R.string.troubleshooting_helium_url)
             )
         }
@@ -105,7 +105,7 @@ class ClaimHeliumPairFragment : BaseFragment() {
         binding.retry.setOnClickListener {
             binding.connectionErrorContainer.hide(null)
             binding.mainContainer.show(null)
-            model.connectToPeripheral()
+            model.setupBluetoothClaiming()
         }
 
         binding.scanAgain.setOnClickListener {

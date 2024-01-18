@@ -88,7 +88,7 @@ class ClaimHeliumActivity : BaseActivity() {
     }
 
     private fun finishClaiming() {
-        model.disconnectFromPeripheral()
+        resultModel.disconnectFromPeripheral()
         finish()
     }
 

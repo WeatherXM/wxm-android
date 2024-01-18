@@ -193,7 +193,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
                 Analytics.ParamValue.VIEW_STATION.paramValue
             )
         )
-        parentModel.disconnectFromPeripheral()
+        model.disconnectFromPeripheral()
         navigator.showDeviceDetails(activity, device = device)
         activity?.finish()
     }
