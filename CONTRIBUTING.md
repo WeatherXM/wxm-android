@@ -39,7 +39,7 @@ a PR, reviewing, and merging the PR.
 ## Code of Conduct
 
 This project and everyone participating in it is governed by the
-[Code of Conduct](blob/main/CODE_OF_CONDUCT.md).
+[Code of Conduct](https://github.com/weatherxm-network/wxm-android/blob/main/CODE_OF_CONDUCT.md).
 By participating, you are expected to uphold this code to keep our community approachable and
 respectable.
 
@@ -47,7 +47,7 @@ respectable.
 
 ### Android Studio Code Style Settings
 All contributors must import our code style settings for Android Studio: 
-[android-studio-settings.zip](https://github.com/WeatherXM/wxm-android/blob/main/android-studio-settings.zip)
+[android-studio-settings.zip](https://github.com/weatherxm-network/wxm-android/blob/main/android-studio-settings.zip)
 
 Steps to import them:
 1. File
@@ -59,7 +59,7 @@ Steps to import them:
 To build the app from source, you need to pass the following environment variables, through `gradle`
 command line arguments, or by creating a `production.env` properties file in the root directory,
 according to
-the [template](https://github.com/WeatherXM/wxm-android/blob/main/production.env.template) file,
+the [template](https://github.com/weatherxm-network/wxm-android/blob/main/production.env.template) file,
 that will be
 automatically read into env variables by the build script. You must use your own environmental
 variables
@@ -146,50 +146,50 @@ you want to use:
 ### **Do you have a question?**
 
 * **Ensure your question was not already asked** by searching on GitHub
-  under [Issues](https://github.com/WeatherXM/wxm-android/issues?q=label%3Aquestion+) under the
+  under [Issues](https://github.com/weatherxm-network/wxm-android/issues?q=label%3Aquestion+) under the
   label _Question_.
 
 * If you're unable to find a response to your
-  question , [open a new issue](https://github.com/WeatherXM/wxm-android/issues/new/choose) by using
-  the [**Ask a question** template](https://github.com/WeatherXM/wxm-android/blob/main/.github/ISSUE_TEMPLATE/ask_a_question.md).
+  question , [open a new issue](https://github.com/weatherxm-network/wxm-android/issues/new/choose) by using
+  the [**Ask a question** template](https://github.com/weatherxm-network/wxm-android/blob/main/.github/ISSUE_TEMPLATE/ask_a_question.md).
   Using this template is mandatory. Make sure to have a **clear title** and include as many details
   as possible as that information helps to answer your question as soon as possible.
 
 ### **Did you find a bug?**
 
 * **Ensure the bug was not already reported** by searching on GitHub
-  under [Issues](https://github.com/WeatherXM/wxm-android/issues?q=label%3Abug) under the label
+  under [Issues](https://github.com/weatherxm-network/wxm-android/issues?q=label%3Abug) under the label
   _Bug_.
 
 * If you're unable to find an open issue addressing the
-  problem, [open a new issue](https://github.com/WeatherXM/wxm-android/issues/new/choose) by using
-  the [**Bug Report** template](https://github.com/WeatherXM/wxm-android/blob/main/.github/ISSUE_TEMPLATE/bug_report.md).
+  problem, [open a new issue](https://github.com/weatherxm-network/wxm-android/issues/new/choose) by using
+  the [**Bug Report** template](https://github.com/weatherxm-network/wxm-android/blob/main/.github/ISSUE_TEMPLATE/bug_report.md).
   Using this template is mandatory. Make sure to have a **clear title** and include as many details
   as possible as that information helps to resolve issues faster.
 
 ### **Do you want to suggest a potential improvement or a new feature?**
 
 * **Ensure this suggestion was not already reported** by searching on GitHub
-  under [Issues](https://github.com/WeatherXM/wxm-android/issues?q=label%3Aenhancement+) under the
+  under [Issues](https://github.com/weatherxm-network/wxm-android/issues?q=label%3Aenhancement+) under the
   label _Enhancement_.
 
 * If you're unable to find that
-  suggestion, [create a new issue](https://github.com/WeatherXM/beta-issue-tracker/issues/new/choose)
-  by using the [**Feature Request** template](https://github.com/WeatherXM/beta-issue-tracker/blob/main/.github/ISSUE_TEMPLATE/feature_request.md).
+  suggestion, [create a new issue](https://github.com/weatherxm-network/beta-issue-tracker/issues/new/choose)
+  by using the [**Feature Request** template](https://github.com/weatherxm-network/beta-issue-tracker/blob/main/.github/ISSUE_TEMPLATE/feature_request.md).
   Using this template is mandatory. Make sure to have a **clear title** and include as many details
   as possible.
 
 ## How to contribute?
 
-We are open to contributions on [current issues](https://github.com/WeatherXM/wxm-android/issues),
+We are open to contributions on [current issues](https://github.com/weatherxm-network/wxm-android/issues),
 if the bug/feature/improvement you would like to work on isn't documented, please open a new issue
 so we can approve it before you start working on it.
 
 ### Fix a bug, implement a new feature or conduct an optimization
 
-Scan through our existing [issues](https://github.com/WeatherXM/wxm-android/issues) to find one that
+Scan through our existing [issues](https://github.com/weatherxm-network/wxm-android/issues) to find one that
 interests you (or create a new one). You can narrow down the search using `labels` as filters.
-See [Issue Labels](#issue-and-pull-request-labels) for more information. Please don't start working
+See [Issue Labels](#issue-labels) for more information. Please don't start working
 on issues that are currently assigned to someone else or have the `in-progress` label. If you find
 an issue to work on, please comment in it to get it assigned to you and you are welcome to open a PR
 with a fix/implementation.
@@ -228,13 +228,13 @@ Architecture*.
 
 ### Android Studio Code Style Settings
 We use these code style settings on Android Studio:
-[android-studio-settings.zip](https://github.com/WeatherXM/wxm-android/blob/main/android-studio-settings.zip)
+[android-studio-settings.zip](https://github.com/weatherxm-network/wxm-android/blob/main/android-studio-settings.zip)
 
 ### Detekt
 
 We use [Detekt](https://github.com/detekt/detekt) as a code analysis tool for finding potential code
 optimizations. Our config file for Detekt can be found
-in [detekt.yml](https://github.com/WeatherXM/wxm-android/blob/main/config/detekt.yml).
+in [detekt.yml](https://github.com/weatherxm-network/wxm-android/blob/main/config/detekt.yml).
 
 ## Additional Notes
 

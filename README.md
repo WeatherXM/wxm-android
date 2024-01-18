@@ -8,7 +8,7 @@ Architecture*.
 # Android Studio Environment
 
 All contributors must import our code style settings for Android Studio:
-[android-studio-settings.zip](https://github.com/WeatherXM/wxm-android/blob/main/android-studio-settings.zip)
+[android-studio-settings.zip](https://github.com/weatherxm-network/wxm-android/blob/main/android-studio-settings.zip)
 
 Steps to import them:
 
@@ -21,7 +21,7 @@ Steps to import them:
 To build the app from source, you need to pass the following environment variables, through `gradle`
 command line arguments, or by creating a `production.env` properties file in the root directory,
 according to the
-[template](https://github.com/WeatherXM/wxm-android/blob/main/production.env.template) file,
+[template](https://github.com/weatherxm-network/wxm-android/blob/main/production.env.template) file,
 that will be automatically read into env variables by the build script.
 
 You would also need the `google-services.json` which can be downloaded from Firebase.
@@ -56,7 +56,7 @@ either a `Debug` or a `Release` build type.
 # Android Studio Code Style Settings
 
 We use these code style settings on Android Studio:
-[android-studio-settings.zip](https://github.com/WeatherXM/wxm-android/blob/main/android-studio-settings.zip)
+[android-studio-settings.zip](https://github.com/weatherxm-network/wxm-android/blob/main/android-studio-settings.zip)
 
 # Detekt
 
@@ -69,10 +69,11 @@ We have 3 different [GitHub Actions](https://github.com/features/actions):
 
 1. **Code Analysis:** An action that runs on **every Pull Request**, building the app and
    running `./gradlew :app:detekt` in order to find potential code optimizations.
-2. **Pre-Release Firebase Distribution:** An action that runs on **every push on** `main`, building
+2. **Build Production & Development and Distribute on Firebase:** An action that runs on **every push on** `main`, building
    the app, and
-   running `./gradlew :app:assembleRemoteProdRelease :app:appDistributionUploadRemoteProdRelease` in
-   order to distribute **Remote Prod** version of the app
+   running `./gradlew :app:assembleRemoteProdRelease :app:appDistributionUploadRemoteProdRelease` &
+   `./gradlew :app:assembleDevDebugRelease :app:appDistributionUploadDevDebugRelease`
+   in order to distribute **Remote Prod** & **Dev Debug** versions of the app
    through [Firebase App Distribution](https://firebase.google.com/docs/app-distribution) in the
    Firebase Channels. Currently used for internal testing.
 3. **Production Firebase Distribution:** An action that runs on **every tag pushed,** building the
@@ -111,14 +112,14 @@ mandatory steps should be followed that we will explain below:
    in `build.gradle`
 2. `git checkout main` and create an **Android App Bundle** via `Generate Signed Bundle / APK` in
    Android Studio.
-3. [Create a new GitHub release](https://github.com/WeatherXM/wxm-android/releases/new) out of main
+3. [Create a new GitHub release](https://github.com/weatherxm-network/wxm-android/releases/new) out of main
    with the title being the version name (`X.X.X`). The same applies for the tag (create a new tag
    if not exist). On the description click `Auto-generate release notes` and format the text
    accordingly to remove authors and commit urls, and have just a human-readable list of release
    notes.
 4. The Android App Bundle that was created before should be attached as a binary in that GitHub
    release. When the uploading is completed `Publish Release`. This will also cause a push of the
-   tag in Git causing the Production Firebase Distribution GitHub Action to run**).**
+   tag in Git causing the Production Firebase Distribution GitHub Action to run).
 5. Follow the procedure to upload that Android App Bundle in Google's Play Store **Open Testing
    channel** and use the auto-generated release notes you got before. Make them even more generic
    and human-friendly. For example, we don't want to mention 5 different UI fixes but just write "
@@ -129,7 +130,7 @@ mandatory steps should be followed that we will explain below:
 7. After the release passes Google’s review and you publish the app to the
    public, [use this template](https://outline.weatherxm.com/doc/templates-for-update-announcements-Uiek4uZYjE),
    and after filling the correct date, app version and release notes, publish it on Discord's
-   #beta-announcements channel or have a community manager publish it.
+   #announcements channel or have a community manager publish it.
 
 **Usually, after some days, we move this beta release from Open Testing → Production on Play
 Console (using console’s “Promote Release” @ Open Testing → Releases → Find your release → Promote
@@ -144,7 +145,7 @@ explain below:
    in `build.gradle`
 2. `git checkout main` and create an **Android App Bundle** via `Generate Signed Bundle / APK` in
    Android Studio.
-3. [Create a new GitHub release](https://github.com/WeatherXM/wxm-android/releases/new) out of main
+3. [Create a new GitHub release](https://github.com/weatherxm-network/wxm-android/releases/new) out of main
    with the title being the version name (`X.X.X`). The same applies for the tag (create a new tag
    if not exist). On the description click `Auto-generate release notes` and format the text
    accordingly to remove authors and commit urls, and have just a human-readable list of release
