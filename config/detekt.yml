@@ -19,3 +19,45 @@ style:
         comments:
             - FIXME
             - STOPSHIP
+    AlsoCouldBeApply:
+        active: true
+    CanBeNonNullable:
+        active: true
+    CascadingCallWrapping:
+        active: true
+    CollapsibleIfStatements:
+        active: true
+    NullableBooleanCheck:
+        active: true
+    OptionalUnit:
+        active: true
+    RedundantExplicitType:
+        active: true
+    SpacingBetweenPackageAndImports:
+        active: true
+    UnnecessaryApply:
+        active: true
+    UnnecessaryBracesAroundTrailingLambda:
+        active: true
+    UnnecessaryLet:
+        active: true
+    UnusedImports:
+        active: true
+    UseDataClass:
+        active: true
+    UseIfEmptyOrIfBlank:
+        active: true
+    UseIfInsteadOfWhen:
+        active: true
+    UseLet:
+        active: true
+
+performance:
+    CouldBeSequence:
+        active: true
+
+naming:
+    VariableMaxLength:
+        active: true
+    VariableMinLength:
+        active: true

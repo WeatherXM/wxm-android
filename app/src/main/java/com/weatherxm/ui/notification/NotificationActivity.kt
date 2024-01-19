@@ -2,7 +2,6 @@ package com.weatherxm.ui.notification
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.home.HomeActivity
 

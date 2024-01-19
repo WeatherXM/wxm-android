@@ -145,7 +145,8 @@ class AddressRepositoryImpl(
                         Timber.d("Got location address from network [$address].")
                         Timber.d("Saving location address to cache [$address].")
                         cacheAddressDataSource.setLocationAddress(hexIndex, address)
-                    }.bind()
+                    }
+                    .bind()
             }
             .getOrNull()
     }

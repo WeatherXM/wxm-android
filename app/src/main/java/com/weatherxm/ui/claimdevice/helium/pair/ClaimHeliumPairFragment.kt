@@ -20,12 +20,10 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.core.view.forEach
-import androidx.fragment.app.Fragment
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentClaimHeliumPairBinding
-import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.hide

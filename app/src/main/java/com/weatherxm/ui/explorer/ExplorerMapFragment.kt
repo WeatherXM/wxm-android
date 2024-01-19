@@ -244,16 +244,14 @@ class ExplorerMapFragment : BaseMapFragment() {
     }
 
     private fun onSearchBarMenuItem(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
-            R.id.settings -> {
-                analytics.trackEventSelectContent(
-                    contentType = Analytics.ParamValue.EXPLORER_SETTINGS.paramValue
-                )
-                navigator.showPreferences(this)
-                true
-            }
-
-            else -> false
+        return if (menuItem.itemId == R.id.settings) {
+            analytics.trackEventSelectContent(
+                contentType = Analytics.ParamValue.EXPLORER_SETTINGS.paramValue
+            )
+            navigator.showPreferences(this)
+            true
+        } else {
+            false
         }
     }
 

@@ -1,7 +1,5 @@
 package com.weatherxm.ui.components
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weatherxm.R
 import com.weatherxm.util.Analytics

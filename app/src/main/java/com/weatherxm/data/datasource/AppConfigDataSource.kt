@@ -75,6 +75,7 @@ class AppConfigDataSourceImpl(
     override fun getRewardsHideAnnotationThreshold(): Long {
         return firebaseRemoteConfig
             .all[REMOTE_CONFIG_REWARDS_HIDE_ANNOTATION_THRESHOLD]
-            ?.asLong() ?: REMOTE_CONFIG_REWARDS_HIDE_ANNOTATION_THRESHOLD_DEFAULT
+            ?.asLong()
+            ?: REMOTE_CONFIG_REWARDS_HIDE_ANNOTATION_THRESHOLD_DEFAULT
     }
 }

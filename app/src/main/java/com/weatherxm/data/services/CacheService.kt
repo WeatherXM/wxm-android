@@ -88,9 +88,10 @@ class CacheService(
 
     fun getInstallationId(): Either<Failure, String> {
         val installationId = preferences.getString(KEY_INSTALLATION_ID, null)
-        return when {
-            installationId.isNullOrEmpty() -> Either.Left(DataError.CacheMissError)
-            else -> Either.Right(installationId)
+        return if (installationId.isNullOrEmpty()) {
+            Either.Left(DataError.CacheMissError)
+        } else {
+            Either.Right(installationId)
         }
     }
 
@@ -108,7 +109,8 @@ class CacheService(
 
     fun setAnalyticsEnabledTimestamp() {
         preferences.edit()
-            .putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, System.currentTimeMillis()).apply()
+            .putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, System.currentTimeMillis())
+            .apply()
     }
 
     fun getAnalyticsOptInTimestamp(): Long {
@@ -133,9 +135,10 @@ class CacheService(
 
     fun getUserUsername(): Either<Failure, String> {
         val username = preferences.getString(KEY_USERNAME, null)
-        return when {
-            username.isNullOrEmpty() -> Either.Left(DataError.CacheMissError)
-            else -> Either.Right(username)
+        return if (username.isNullOrEmpty()) {
+            Either.Left(DataError.CacheMissError)
+        } else {
+            Either.Right(username)
         }
     }
 
@@ -181,7 +184,7 @@ class CacheService(
     }
 
     fun getSearchSuggestions(query: String): Either<Failure, List<SearchSuggestion>> {
-        return (suggestions[query]?.right() ?: DataError.CacheMissError.left())
+        return suggestions[query]?.right() ?: DataError.CacheMissError.left()
     }
 
     fun setSearchSuggestions(query: String, suggestions: List<SearchSuggestion>) {
@@ -206,7 +209,8 @@ class CacheService(
 
     fun setWalletWarningDismissTimestamp() {
         preferences.edit()
-            .putLong(KEY_WALLET_WARNING_DISMISSED_TIMESTAMP, System.currentTimeMillis()).apply()
+            .putLong(KEY_WALLET_WARNING_DISMISSED_TIMESTAMP, System.currentTimeMillis())
+            .apply()
     }
 
     fun getWalletWarningDismissTimestamp(): Long {
@@ -223,9 +227,10 @@ class CacheService(
 
     fun getDeviceLastOtaVersion(key: String): Either<Failure, String> {
         val lastOtaVersion = preferences.getString(key, "")
-        return when {
-            lastOtaVersion.isNullOrEmpty() -> Either.Left(DataError.CacheMissError)
-            else -> Either.Right(lastOtaVersion)
+        return if (lastOtaVersion.isNullOrEmpty()) {
+            Either.Left(DataError.CacheMissError)
+        } else {
+            Either.Right(lastOtaVersion)
         }
     }
 
@@ -262,17 +267,19 @@ class CacheService(
 
     fun getWidgetDevice(key: String): Either<Failure, String> {
         val deviceId = preferences.getString(key, "")
-        return when {
-            deviceId.isNullOrEmpty() -> Either.Left(DataError.CacheMissError)
-            else -> Either.Right(deviceId)
+        return if (deviceId.isNullOrEmpty()) {
+            Either.Left(DataError.CacheMissError)
+        } else {
+            Either.Right(deviceId)
         }
     }
 
     fun getWidgetIds(): Either<Failure, List<String>> {
         val ids = preferences.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, setOf())
-        return when {
-            ids.isNullOrEmpty() -> Either.Left(DataError.CacheMissError)
-            else -> Either.Right(ids.toList())
+        return if (ids.isNullOrEmpty()) {
+            Either.Left(DataError.CacheMissError)
+        } else {
+            Either.Right(ids.toList())
         }
     }
 
@@ -374,7 +381,7 @@ class CacheService(
     ) {
         private val creationTime: Long = now()
 
-        fun isExpired() = (now() - creationTime) > cacheExpirationTime
+        fun isExpired() = now() - creationTime > cacheExpirationTime
 
         private fun now() = System.currentTimeMillis()
     }

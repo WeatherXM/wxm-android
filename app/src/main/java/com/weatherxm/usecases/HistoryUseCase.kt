@@ -112,7 +112,7 @@ class HistoryUseCaseImpl(
                  * wind speed || wind gust are not null and greater than zero
                  */
                 val shouldShowDirection = windDirection != null &&
-                    (((windSpeedValue ?: 0.0F) > 0) || ((windGustValue ?: 0.0F) > 0))
+                    ((windSpeedValue ?: 0.0F) > 0 || (windGustValue ?: 0.0F) > 0)
 
                 windSpeedValue?.let {
                     if (shouldShowDirection) {
