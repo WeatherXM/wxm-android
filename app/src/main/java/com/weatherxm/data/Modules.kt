@@ -28,6 +28,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.crashlytics.crashlytics
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -707,7 +708,7 @@ val firebase = module {
     }
 
     single<FirebaseCrashlytics>(createdAtStart = true) {
-        FirebaseCrashlytics.getInstance()
+        Firebase.crashlytics
     }
 
     single<FirebaseMessaging>(createdAtStart = true) {

@@ -86,7 +86,7 @@
             android:value="false" /> <!-- Enable/Disable crashlytics reporting -->
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
-            android:value="${crashlyticsEnabled}" /> <!-- Icon to show in notification tray for messages sent from Firebase -->
+            android:value="${crashlyticsEnabled}" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_notification_default" /> <!-- Default color for incoming Firebase notification messages -->
