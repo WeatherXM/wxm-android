@@ -67,7 +67,7 @@ data class LineChartData(
                  * different LineDataSet and reset the tempEntries to be able to accept the new
                  * list of continuous (with no gaps) entries
                  */
-                if (tempEntries.isNotEmpty() && tempEntries.last().x != (it.x - 1)) {
+                if (tempEntries.isNotEmpty() && tempEntries.last().x != it.x - 1) {
                     dataSets.add(LineDataSet(tempEntries, label))
                     tempEntries = mutableListOf()
                 }
@@ -105,7 +105,7 @@ data class LineChartData(
                  * different LineDataSet and reset the tempEntries to be able to accept the new
                  * list of continuous gap entries
                  */
-                if (tempEntries.isNotEmpty() && tempEntries.last().x != (it.x - 1)) {
+                if (tempEntries.isNotEmpty() && tempEntries.last().x != it.x - 1) {
                     dataSets.add(LineDataSet(tempEntries, label))
                     tempEntries = mutableListOf()
                 }

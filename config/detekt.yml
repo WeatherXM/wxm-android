@@ -51,6 +51,9 @@ style:
         active: true
     UseLet:
         active: true
+    UnnecessaryParentheses:
+        active: true
+        allowForUnclearPrecedence: true
 
 performance:
     CouldBeSequence:

@@ -50,7 +50,7 @@ class UserUseCaseImpl(
         val dismissTimestamp = userPreferencesRepository.getWalletWarningDismissTimestamp()
         val now = System.currentTimeMillis()
 
-        return !hasWalletAddress && (now - dismissTimestamp) > WALLET_WARNING_DISMISS_EXPIRATION
+        return !hasWalletAddress && now - dismissTimestamp > WALLET_WARNING_DISMISS_EXPIRATION
     }
 
     override fun setWalletWarningDismissTimestamp() {
