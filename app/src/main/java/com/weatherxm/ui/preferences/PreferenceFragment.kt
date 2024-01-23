@@ -1,9 +1,15 @@
 package com.weatherxm.ui.preferences
 
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.NotificationManagerCompat
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -15,6 +21,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.DisplayModeHelper
+import com.weatherxm.util.hasPermission
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import timber.log.Timber
@@ -40,6 +47,11 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             }
         }
 
+    override fun onResume() {
+        handleNotificationsPreference()
+        super.onResume()
+    }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
@@ -57,7 +69,15 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             findPreference(getString(R.string.short_app_survey))
         val analyticsPreference =
             findPreference<SwitchPreferenceCompat>(getString(R.string.key_google_analytics))
+        val notificationsPreference =
+            findPreference<SwitchPreferenceCompat>(getString(R.string.notifications_preference_key))
 
+        /*
+         * Disable switching of notifications toggle as we prompt user to do it via the settings
+         */
+        notificationsPreference?.setOnPreferenceChangeListener { _, _ ->
+            false
+        }
         openDocumentationButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             analytics.trackEventSelectContent(Analytics.ParamValue.DOCUMENTATION.paramValue)
             navigator.openWebsite(context, getString(R.string.docs_url))
@@ -145,5 +165,25 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             }
             .build()
             .show(this)
+    }
+
+    private fun handleNotificationsPreference() {
+        val notificationsPreference =
+            findPreference<SwitchPreferenceCompat>(getString(R.string.notifications_preference_key))
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notificationsPreference?.isChecked = activity?.hasPermission(POST_NOTIFICATIONS) == true
+        } else {
+            notificationsPreference?.isChecked =
+                NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()
+        }
+
+        notificationsPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            Timber.d("Going to application settings")
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            intent.data = Uri.fromParts("package", activity?.packageName, null)
+            startActivity(intent)
+            true
+        }
     }
 }

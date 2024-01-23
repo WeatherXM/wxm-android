@@ -13,6 +13,9 @@
     <string name="google_analytics_preferences_title">Send anonymized data for analytics</string>
     <string name="google_analytics_preferences_desc">Help us learn and improve WeatherXM experience for you and others!</string>
     <string name="key_google_analytics" translatable="false">google_analytics</string>
+    <string name="notifications_preference_key" translatable="false">notifications</string>
+    <string name="notifications_preference_title">Allow Notifications</string>
+    <string name="notifications_preference_desc">Allow WeatherXM to send you notifications about the project or your station.</string>
 
     <!-- Feedback -->
     <string name="feedback">Feedback</string>
