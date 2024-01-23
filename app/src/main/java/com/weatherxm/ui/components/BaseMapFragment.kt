@@ -24,7 +24,7 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-open class BaseMapFragment : Fragment() {
+open class BaseMapFragment : BaseFragment() {
     companion object {
         const val CURRENT_LAT = "current_lat"
         const val CURRENT_LON = "current_lon"
