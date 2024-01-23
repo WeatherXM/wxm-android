@@ -80,7 +80,8 @@ class Analytics(
         DATE("DATE"),
         FILTERS_SORT("SORT_BY"),
         FILTERS_FILTER("FILTER"),
-        FILTERS_GROUP("GROUP_BY")
+        FILTERS_GROUP("GROUP_BY"),
+        STATUS("STATUS")
     }
 
     // Custom Param Names
@@ -217,7 +218,10 @@ class Analytics(
         REWARD_DETAILS_ERROR("Reward Details Error"),
         REWARDS_SCORE("rewards_score"),
         MAX_REWARDS("max_rewards"),
-        TIMELINE("timeline")
+        TIMELINE("timeline"),
+        NOTIFICATIONS("notifications"),
+        ON("on"),
+        OFF("off")
     }
 
     // Custom Param Names

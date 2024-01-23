@@ -179,6 +179,18 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         }
 
         notificationsPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            val notificationsStatus = if (notificationsPreference?.isChecked == true) {
+                Analytics.ParamValue.ON
+            } else {
+                Analytics.ParamValue.OFF
+            }
+            analytics.trackEventUserAction(
+                Analytics.ParamValue.NOTIFICATIONS.paramValue,
+                customParams = arrayOf(
+                    Pair(Analytics.CustomParam.STATUS.paramName, notificationsStatus.paramValue)
+                )
+            )
+
             Timber.d("Going to application settings")
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             intent.data = Uri.fromParts("package", activity?.packageName, null)
