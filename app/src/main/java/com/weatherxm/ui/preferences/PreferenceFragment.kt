@@ -44,7 +44,9 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
         val openDocumentationButton: Preference? =
-            findPreference(getString(R.string.title_open_documentation))
+            findPreference(getString(R.string.documentation_title))
+        val announcementsButton: Preference? =
+            findPreference(getString(R.string.announcements_title))
         val contactSupportButton: Preference? =
             findPreference(getString(R.string.contact_support_title))
         val userResearchButton: Preference? =
@@ -59,6 +61,11 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         openDocumentationButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             analytics.trackEventSelectContent(Analytics.ParamValue.DOCUMENTATION.paramValue)
             navigator.openWebsite(context, getString(R.string.docs_url))
+            true
+        }
+        announcementsButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            analytics.trackEventSelectContent(Analytics.ParamValue.ANNOUNCEMENTS.paramValue)
+            navigator.openWebsite(context, getString(R.string.announcements_url))
             true
         }
         contactSupportButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -92,37 +99,37 @@ class PreferenceFragment : PreferenceFragmentCompat() {
                 }
                 .map {
                     Timber.d("Logged in. Handle button clicks")
-                    val logoutBtn: Preference? = findPreference(getString(R.string.action_logout))
-                    val resetPassBtn: Preference? =
-                        findPreference(getString(R.string.change_password))
-                    val deleteAccountButton: Preference? =
-                        findPreference(getString(R.string.delete_account))
-
-                    logoutBtn?.onPreferenceClickListener =
-                        Preference.OnPreferenceClickListener {
-                            showLogoutDialog()
-                            true
-                        }
-                    resetPassBtn?.onPreferenceClickListener =
-                        Preference.OnPreferenceClickListener {
-                            navigator.showResetPassword(this)
-                            true
-                        }
-                    shortWxmSurvey?.onPreferenceClickListener =
-                        Preference.OnPreferenceClickListener {
-                            navigator.showSendFeedback(sendFeedbackLauncher, this)
-                            true
-                        }
-                    deleteAccountButton?.onPreferenceClickListener =
-                        Preference.OnPreferenceClickListener {
-                            navigator.showDeleteAccount(this)
-                            true
-                        }
+                    onLoggedIn(shortWxmSurvey)
                 }
         }
 
         model.onShowSurveyScreen().observe(this) {
             if (it) navigator.showSendFeedback(sendFeedbackLauncher, this)
+        }
+    }
+
+    private fun onLoggedIn(shortWxmSurvey: Preference?) {
+        val logoutBtn: Preference? = findPreference(getString(R.string.action_logout))
+        val resetPassBtn: Preference? =
+            findPreference(getString(R.string.change_password))
+        val deleteAccountButton: Preference? =
+            findPreference(getString(R.string.delete_account))
+
+        logoutBtn?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            showLogoutDialog()
+            true
+        }
+        resetPassBtn?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            navigator.showResetPassword(this)
+            true
+        }
+        shortWxmSurvey?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            navigator.showSendFeedback(sendFeedbackLauncher, this)
+            true
+        }
+        deleteAccountButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            navigator.showDeleteAccount(this)
+            true
         }
     }
 

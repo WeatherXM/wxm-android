@@ -163,6 +163,7 @@ class Analytics(
         WALLET_SCAN_QR("Scan QR Wallet"),
         LOGOUT("Logout"),
         DOCUMENTATION("Documentation"),
+        ANNOUNCEMENTS("Announcements"),
         BLE_SCAN_AGAIN("BLE Scan Again"),
         DOCUMENTATION_FREQUENCY("Frequency Documentation"),
         OPEN_SHOP("Open Shop"),
