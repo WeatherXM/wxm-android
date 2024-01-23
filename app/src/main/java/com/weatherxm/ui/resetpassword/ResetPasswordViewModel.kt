@@ -39,9 +39,10 @@ class ResetPasswordViewModel(
         isEmailSent.postValue(
             Resource.error(
                 resources.getString(
-                    when (failure) {
-                        is InvalidUsername -> R.string.error_password_reset_invalid_username
-                        else -> failure.getDefaultMessageResId()
+                    if(failure is InvalidUsername) {
+                        R.string.error_password_reset_invalid_username
+                    } else {
+                        failure.getDefaultMessageResId()
                     }
                 )
             )

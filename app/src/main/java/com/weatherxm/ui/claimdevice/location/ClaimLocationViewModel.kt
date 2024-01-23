@@ -78,7 +78,8 @@ class ClaimLocationViewModel(
             editLocationUseCase.getSearchSuggestions(query)
                 .onRight { suggestions ->
                     onSearchResults.postValue(suggestions)
-                }.onLeft {
+                }
+                .onLeft {
                     onSearchResults.postValue(null)
                 }
         }
@@ -89,7 +90,8 @@ class ClaimLocationViewModel(
             editLocationUseCase.getSuggestionLocation(suggestion)
                 .onRight { location ->
                     onMoveToLocation.postValue(location)
-                }.onLeft {
+                }
+                .onLeft {
                     analytics.trackEventFailure(it.code)
                 }
         }

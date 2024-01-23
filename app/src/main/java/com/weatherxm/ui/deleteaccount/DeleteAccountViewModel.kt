@@ -55,22 +55,19 @@ class DeleteAccountViewModel(
                 deleteAccount()
             }.onLeft {
                 analytics.trackEventFailure(it.code)
-                when (it) {
-                    is InvalidCredentials -> {
-                        onStatus.postValue(
-                            Resource.error(
-                                resources.getString(R.string.warn_invalid_password),
-                                State(Status.PASSWORD_VERIFICATION, InvalidPassword(""))
-                            )
+                if (it is InvalidCredentials) {
+                    onStatus.postValue(
+                        Resource.error(
+                            resources.getString(R.string.warn_invalid_password),
+                            State(Status.PASSWORD_VERIFICATION, InvalidPassword(""))
                         )
-                    }
-                    else -> {
-                        onStatus.postValue(
-                            Resource.error(
-                                it.getDefaultMessage(), State(Status.PASSWORD_VERIFICATION)
-                            )
+                    )
+                } else {
+                    onStatus.postValue(
+                        Resource.error(
+                            it.getDefaultMessage(), State(Status.PASSWORD_VERIFICATION)
                         )
-                    }
+                    )
                 }
             }
         }

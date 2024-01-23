@@ -84,18 +84,21 @@ fun Activity.getRichText(
 // https://stackoverflow.com/questions/76614322/boolean-java-lang-class-isinterface-on-a-null-object-reference
 inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? {
     return this.extras?.let {
-        when {
-            Build.VERSION.SDK_INT >= TIRAMISU -> BundleCompat.getParcelable(it, key, T::class.java)
-            else -> @Suppress("DEPRECATION") getParcelableExtra(key) as? T
+        if (Build.VERSION.SDK_INT >= TIRAMISU) {
+            BundleCompat.getParcelable(it, key, T::class.java)
+        } else {
+            @Suppress("DEPRECATION") getParcelableExtra(key) as? T
         }
     }
 }
 
 // https://stackoverflow.com/questions/76614322/boolean-java-lang-class-isinterface-on-a-null-object-reference
-inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? = when {
-    Build.VERSION.SDK_INT >= TIRAMISU -> BundleCompat.getParcelable(this, key, T::class.java)
-    else -> @Suppress("DEPRECATION") getParcelable(key) as? T
-}
+inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? =
+    if (Build.VERSION.SDK_INT >= TIRAMISU) {
+        BundleCompat.getParcelable(this, key, T::class.java)
+    } else {
+        @Suppress("DEPRECATION") getParcelable(key) as? T
+    }
 
 /**
  * Remove colon ":" character from Serial Number text

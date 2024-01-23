@@ -129,7 +129,7 @@ open class RewardsCardView : LinearLayout, KoinComponent {
 
         data.rewardScore?.let {
             binding.rewardStatus.setRewardStatusChip(it)
-            binding.score.text = resources.getString(R.string.score, (it.toFloat() / 100))
+            binding.score.text = resources.getString(R.string.score, it.toFloat() / 100)
             binding.scoreIcon.setColorFilter(
                 resources.getColor(getRewardScoreColor(data.rewardScore), context.theme)
             )
@@ -147,7 +147,7 @@ open class RewardsCardView : LinearLayout, KoinComponent {
             data.rewardScore != 0 && data.periodMaxReward != 0F
         )
         if (tabSelected != null &&
-            (data.annotations.isNotEmpty() || ((data.rewardScore) ?: 0) < 100)
+            (data.annotations.isNotEmpty() || (data.rewardScore ?: 0) < 100)
         ) {
             setErrorData(data, device?.relation, onProblems)
         } else {
@@ -177,7 +177,7 @@ open class RewardsCardView : LinearLayout, KoinComponent {
             }
             if (data.lostRewards == 0F && data.periodMaxReward == 0F) {
                 htmlMessage(context.getString(R.string.problems_found_desc_no_rewards))
-            } else if (((data.lostRewards) ?: 0F) == 0F) {
+            } else if ((data.lostRewards ?: 0F) == 0F) {
                 message(R.string.problems_found_desc_without_lost_rewards)
             } else {
                 val lostRewards = formatLostRewards(data.lostRewards)

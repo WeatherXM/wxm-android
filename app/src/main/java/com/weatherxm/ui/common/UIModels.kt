@@ -245,7 +245,7 @@ data class UIDevice(
 
     fun getLastCharsOfLabel(charCount: Int): String {
         val cleanLabel = label?.replace(":", "")
-        return cleanLabel?.substring((cleanLabel.length - charCount), cleanLabel.length) ?: ""
+        return cleanLabel?.substring(cleanLabel.length - charCount, cleanLabel.length) ?: ""
     }
 
     fun toNormalizedName(): String {

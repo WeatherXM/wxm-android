@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import timber.log.Timber
 
-
 class BluetoothScanner(private val espProvisionManager: ESPProvisionManager) {
     companion object {
         const val DURATION = 5000L
@@ -49,9 +48,7 @@ class BluetoothScanner(private val espProvisionManager: ESPProvisionManager) {
         isScanningRunning = true
         object : CountDownTimer(DURATION, DURATION / COUNTDOWN_INTERVAL) {
             override fun onTick(msUntilDone: Long) {
-                progress.tryEmit(
-                    Either.Right((((DURATION - msUntilDone) * 100L) / DURATION).toInt())
-                )
+                progress.tryEmit(Either.Right(((DURATION - msUntilDone) * 100L / DURATION).toInt()))
             }
 
             override fun onFinish() {

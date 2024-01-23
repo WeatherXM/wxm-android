@@ -10,7 +10,6 @@ import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityConnectWalletBinding
-import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.getRichText
 import com.weatherxm.ui.common.onTextChanged
@@ -22,7 +21,6 @@ import com.weatherxm.util.Analytics
 import com.weatherxm.util.Mask
 import com.weatherxm.util.Validator
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 

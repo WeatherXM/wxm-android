@@ -9,7 +9,6 @@ import com.weatherxm.ui.explorer.ExplorerData
 import com.weatherxm.ui.explorer.SearchResult
 import com.weatherxm.ui.explorer.UICell
 
-
 interface ExplorerUseCase {
     companion object {
         const val DEVICE_COUNT_KEY = "device_count"

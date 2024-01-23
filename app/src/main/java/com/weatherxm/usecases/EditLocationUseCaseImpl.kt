@@ -25,9 +25,10 @@ class EditLocationUseCaseImpl(
     ): Either<Failure, List<SearchSuggestion>> {
         return addressRepository.getSearchSuggestions(query)
             .handleErrorWith {
-                when (it) {
-                    is CancellationError -> Either.Right(emptyList())
-                    else -> Either.Left(it)
+                if(it is CancellationError) {
+                    Either.Right(emptyList())
+                } else {
+                    Either.Left(it)
                 }
             }
     }
