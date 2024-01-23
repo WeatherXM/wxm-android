@@ -2,8 +2,10 @@ package com.weatherxm.util
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import com.fondesa.kpermissions.allDenied
 import com.fondesa.kpermissions.allPermanentlyDenied
@@ -94,7 +96,11 @@ fun FragmentActivity.checkPermissionsAndThen(
     }
 }
 
-private fun FragmentActivity.permissionsBuilder(
+fun FragmentActivity.hasPermission(permission: String): Boolean {
+    return ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+}
+
+fun FragmentActivity.permissionsBuilder(
     vararg permissions: String
 ): PermissionRequestBuilder {
     require(permissions.isNotEmpty()) { "You need to define at least one permission." }
