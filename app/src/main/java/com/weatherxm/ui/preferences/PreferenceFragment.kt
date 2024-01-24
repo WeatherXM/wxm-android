@@ -103,20 +103,27 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             true
         }
 
-        analyticsPreference?.setOnPreferenceChangeListener { _, newValue ->
-            model.setAnalyticsEnabled(newValue as Boolean)
-            true
-        }
-
         model.isLoggedIn().observe(this) { result ->
             result
                 .mapLeft {
                     Timber.d("Not logged in. Hide account preferences.")
-                    onLoggedOut(shortWxmSurvey, logoutBtn, resetPassBtn, deleteAccountButton)
+                    onLoggedOut(
+                        shortWxmSurvey,
+                        logoutBtn,
+                        resetPassBtn,
+                        deleteAccountButton,
+                        analyticsPreference
+                    )
                 }
                 .map {
                     Timber.d("Logged in. Handle button clicks")
-                    onLoggedIn(shortWxmSurvey, logoutBtn, resetPassBtn, deleteAccountButton)
+                    onLoggedIn(
+                        shortWxmSurvey,
+                        logoutBtn,
+                        resetPassBtn,
+                        deleteAccountButton,
+                        analyticsPreference
+                    )
                 }
         }
 
@@ -129,20 +136,27 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         shortWxmSurvey: Preference?,
         logoutBtn: Preference?,
         resetPassBtn: Preference?,
-        deleteAccountButton: Preference?
+        deleteAccountButton: Preference?,
+        analyticsPreference: SwitchPreferenceCompat?
     ) {
         logoutBtn?.isVisible = false
         resetPassBtn?.isVisible = false
         deleteAccountButton?.isVisible = false
         shortWxmSurvey?.isVisible = false
+        analyticsPreference?.isVisible = false
     }
 
     private fun onLoggedIn(
         shortWxmSurvey: Preference?,
         logoutBtn: Preference?,
         resetPassBtn: Preference?,
-        deleteAccountButton: Preference?
+        deleteAccountButton: Preference?,
+        analyticsPreference: SwitchPreferenceCompat?
     ) {
+        analyticsPreference?.setOnPreferenceChangeListener { _, newValue ->
+            model.setAnalyticsEnabled(newValue as Boolean)
+            true
+        }
         logoutBtn?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             showLogoutDialog()
             true
