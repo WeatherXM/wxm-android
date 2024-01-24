@@ -1,9 +1,10 @@
 package com.weatherxm.util
 
-import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import com.fondesa.kpermissions.allDenied
 import com.fondesa.kpermissions.allPermanentlyDenied
@@ -16,19 +17,6 @@ import com.weatherxm.R
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
 import timber.log.Timber
-
-fun FragmentActivity.requestLocationPermissions(onGranted: () -> Unit) {
-    checkPermissionsAndThen(
-        permissions = arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ),
-        rationaleTitle = getString(R.string.permission_location_title),
-        rationaleMessage = getString(R.string.permission_location_rationale),
-        onGranted = { onGranted.invoke() },
-        onDenied = { toast(R.string.error_claim_gps_failed) }
-    )
-}
 
 fun FragmentActivity.checkPermissionsAndThen(
     vararg permissions: String,
@@ -94,7 +82,11 @@ fun FragmentActivity.checkPermissionsAndThen(
     }
 }
 
-private fun FragmentActivity.permissionsBuilder(
+fun FragmentActivity.hasPermission(permission: String): Boolean {
+    return ActivityCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+}
+
+fun FragmentActivity.permissionsBuilder(
     vararg permissions: String
 ): PermissionRequestBuilder {
     require(permissions.isNotEmpty()) { "You need to define at least one permission." }

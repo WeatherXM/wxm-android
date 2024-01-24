@@ -13,6 +13,9 @@
     <string name="google_analytics_preferences_title">Send anonymized data for analytics</string>
     <string name="google_analytics_preferences_desc">Help us learn and improve WeatherXM experience for you and others!</string>
     <string name="key_google_analytics" translatable="false">google_analytics</string>
+    <string name="notifications_preference_key" translatable="false">notifications</string>
+    <string name="notifications_preference_title">Allow Notifications</string>
+    <string name="notifications_preference_desc">Allow WeatherXM to send you push notifications about the project or your station.</string>
 
     <!-- Feedback -->
     <string name="feedback">Feedback</string>
@@ -59,8 +62,10 @@
     <string name="help">Help</string>
     <string name="contact_support_title">Contact Support</string>
     <string name="contact_support_desc">Visit our support portal’s knowledge base or open a new ticket and we’ll get back to you as soon as possible.</string>
-    <string name="title_open_documentation">Documentation</string>
-    <string name="desc_open_documentation">Read more about the project, find out how rewards work, tutorials on how to setup your station, troubleshooting guides, and more.</string>
+    <string name="documentation_title">Documentation</string>
+    <string name="documentation_desc">Read more about the project, find out how rewards work, tutorials on how to setup your station, troubleshooting guides, and more.</string>
+    <string name="announcements_title">Announcements</string>
+    <string name="announcements_desc">Visit our announcements portal to get up to date with WeatherXM.</string>
 
     <!-- About -->
     <string name="about">About</string>
