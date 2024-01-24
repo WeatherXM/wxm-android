@@ -67,7 +67,8 @@ class DeviceDetailsViewModel(
                     }
                     this.device = it
                     onDevicePolling.postValue(it)
-                }.onLeft {
+                }
+                .onLeft {
                     analytics.trackEventFailure(it.code)
                 }
         }

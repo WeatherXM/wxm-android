@@ -54,7 +54,8 @@ class LocationDataSourceImpl(
                 Types.newParameterizedType(List::class.java, CountryInfo::class.java)
             )
             adapter.fromJson(context.assets.open("countries_information.json")
-                .bufferedReader().use {
+                .bufferedReader()
+                .use {
                     it.readText()
                 }).apply {
                 cacheService.setCountriesInfo(this)

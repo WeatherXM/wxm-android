@@ -77,7 +77,7 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
         binding.problemsList.setVisible(hasAnnotations)
         if (data.lostRewards == 0F && data.periodMaxReward == 0F) {
             binding.problemsFoundDesc.setHtml(getString(R.string.problems_found_desc_no_rewards))
-        } else if (((data.lostRewards) ?: 0F) == 0F) {
+        } else if ((data.lostRewards ?: 0F) == 0F) {
             binding.problemsFoundDesc.setText(R.string.problems_found_desc_without_lost_rewards)
         } else {
             val lostRewards = formatLostRewards(data.lostRewards)
@@ -91,15 +91,14 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
     }
 
     private fun onMenuItem(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
-            R.id.read_more -> {
-                analytics.trackEventSelectContent(
-                    contentType = Analytics.ParamValue.REWARD_DETAILS_READ_MORE.paramValue
-                )
-                navigator.openWebsite(this, getString(R.string.docs_url_reward_mechanism))
-                true
-            }
-            else -> false
+        return if(menuItem.itemId == R.id.read_more) {
+            analytics.trackEventSelectContent(
+                contentType = Analytics.ParamValue.REWARD_DETAILS_READ_MORE.paramValue
+            )
+            navigator.openWebsite(this, getString(R.string.docs_url_reward_mechanism))
+            true
+        } else {
+            false
         }
     }
 

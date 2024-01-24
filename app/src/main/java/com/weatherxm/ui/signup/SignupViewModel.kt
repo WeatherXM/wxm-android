@@ -34,7 +34,8 @@ class SignupViewModel(
                     analytics.trackEventFailure(it.code)
                     Timber.d("Signup Error: $it")
                     handleFailure(it, username)
-                }.map {
+                }
+                .map {
                     isSignedUp.postValue(
                         Resource.success(resources.getString(R.string.success_signup_text, it))
                     )

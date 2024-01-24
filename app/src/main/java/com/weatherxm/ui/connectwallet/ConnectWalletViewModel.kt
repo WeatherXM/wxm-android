@@ -37,7 +37,8 @@ class ConnectWalletViewModel(
                 .mapLeft {
                     analytics.trackEventFailure(it.code)
                     handleFailure(it)
-                }.map {
+                }
+                .map {
                     isAddressSaved.postValue(
                         Resource.success(resources.getString(R.string.address_saved))
                     )
@@ -54,9 +55,10 @@ class ConnectWalletViewModel(
         isAddressSaved.postValue(
             Resource.error(
                 resources.getString(
-                    when (failure) {
-                        is InvalidWalletAddress -> R.string.error_connect_wallet_invalid_address
-                        else -> failure.getDefaultMessageResId(R.string.error_reach_out_short)
+                    if (failure is InvalidWalletAddress) {
+                        R.string.error_connect_wallet_invalid_address
+                    } else {
+                        failure.getDefaultMessageResId(R.string.error_reach_out_short)
                     }
                 )
             )

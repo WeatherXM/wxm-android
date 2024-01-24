@@ -48,7 +48,8 @@ class ProfileViewModel(
                     onUser.postValue(Resource.success(it))
                     walletAddress = it.wallet?.address
                     fetchWalletRewards()
-                }.onLeft {
+                }
+                .onLeft {
                     analytics.trackEventFailure(it.code)
                     onUser.postValue(
                         Resource.error(it.getDefaultMessage(R.string.error_reach_out_short))

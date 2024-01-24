@@ -37,10 +37,12 @@ class ForecastAdapter(private val onExpandToggle: (Int, Boolean) -> Unit) :
         */
         minTemperature = list
             ?.minOfOrNull { it.minTemp ?: Float.MAX_VALUE }
-            ?.let { roundToDecimals(it, 0) } ?: 0F
+            ?.let { roundToDecimals(it, 0) }
+            ?: 0F
         maxTemperature = list
             ?.maxOfOrNull { it.maxTemp ?: Float.MIN_VALUE }
-            ?.let { roundToDecimals(it, 0) } ?: 0F
+            ?.let { roundToDecimals(it, 0) }
+            ?: 0F
 
         // Update data
         super.submitList(list?.map {
