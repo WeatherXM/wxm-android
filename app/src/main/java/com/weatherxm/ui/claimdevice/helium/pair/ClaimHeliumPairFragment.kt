@@ -7,11 +7,8 @@ import android.Manifest.permission.BLUETOOTH_SCAN
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -20,12 +17,10 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.core.view.forEach
-import androidx.fragment.app.Fragment
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentClaimHeliumPairBinding
-import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.hide
@@ -41,7 +36,6 @@ import com.weatherxm.util.checkPermissionsAndThen
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class ClaimHeliumPairFragment : BaseFragment() {
     private val model: ClaimHeliumPairViewModel by viewModel()
@@ -115,10 +109,7 @@ class ClaimHeliumPairFragment : BaseFragment() {
         }
 
         binding.accessBluetoothPrompt.setOnClickListener {
-            Timber.d("Going to application settings")
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            intent.data = Uri.fromParts("package", context?.packageName, null)
-            startActivity(intent)
+            navigator.openAppSettings(context)
         }
 
         model.onNewScannedDevice().observe(viewLifecycleOwner) {

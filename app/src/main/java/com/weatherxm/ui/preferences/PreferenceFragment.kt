@@ -2,17 +2,13 @@ package com.weatherxm.ui.preferences
 
 import android.Manifest.permission.POST_NOTIFICATIONS
 import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.NotificationManagerCompat
 import androidx.preference.ListPreference
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.weatherxm.R
@@ -71,6 +67,11 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             findPreference<SwitchPreferenceCompat>(getString(R.string.key_google_analytics))
         val notificationsPreference =
             findPreference<SwitchPreferenceCompat>(getString(R.string.notifications_preference_key))
+        val logoutBtn: Preference? = findPreference(getString(R.string.action_logout))
+        val resetPassBtn: Preference? =
+            findPreference(getString(R.string.change_password))
+        val deleteAccountButton: Preference? =
+            findPreference(getString(R.string.delete_account))
 
         /*
          * Disable switching of notifications toggle as we prompt user to do it via the settings
@@ -111,15 +112,11 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             result
                 .mapLeft {
                     Timber.d("Not logged in. Hide account preferences.")
-                    val accountCategory: PreferenceCategory? =
-                        findPreference(getString(R.string.account))
-
-                    accountCategory?.isVisible = false
-                    shortWxmSurvey?.isVisible = false
+                    onLoggedOut(shortWxmSurvey, logoutBtn, resetPassBtn, deleteAccountButton)
                 }
                 .map {
                     Timber.d("Logged in. Handle button clicks")
-                    onLoggedIn(shortWxmSurvey)
+                    onLoggedIn(shortWxmSurvey, logoutBtn, resetPassBtn, deleteAccountButton)
                 }
         }
 
@@ -128,13 +125,24 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         }
     }
 
-    private fun onLoggedIn(shortWxmSurvey: Preference?) {
-        val logoutBtn: Preference? = findPreference(getString(R.string.action_logout))
-        val resetPassBtn: Preference? =
-            findPreference(getString(R.string.change_password))
-        val deleteAccountButton: Preference? =
-            findPreference(getString(R.string.delete_account))
+    private fun onLoggedOut(
+        shortWxmSurvey: Preference?,
+        logoutBtn: Preference?,
+        resetPassBtn: Preference?,
+        deleteAccountButton: Preference?
+    ) {
+        logoutBtn?.isVisible = false
+        resetPassBtn?.isVisible = false
+        deleteAccountButton?.isVisible = false
+        shortWxmSurvey?.isVisible = false
+    }
 
+    private fun onLoggedIn(
+        shortWxmSurvey: Preference?,
+        logoutBtn: Preference?,
+        resetPassBtn: Preference?,
+        deleteAccountButton: Preference?
+    ) {
         logoutBtn?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             showLogoutDialog()
             true
@@ -171,12 +179,12 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         val notificationsPreference =
             findPreference<SwitchPreferenceCompat>(getString(R.string.notifications_preference_key))
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            notificationsPreference?.isChecked = activity?.hasPermission(POST_NOTIFICATIONS) == true
-        } else {
-            notificationsPreference?.isChecked =
+        notificationsPreference?.isChecked =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                activity?.hasPermission(POST_NOTIFICATIONS) == true
+            } else {
                 NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()
-        }
+            }
 
         notificationsPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val notificationsStatus = if (notificationsPreference?.isChecked == true) {
@@ -191,10 +199,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
                 )
             )
 
-            Timber.d("Going to application settings")
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            intent.data = Uri.fromParts("package", activity?.packageName, null)
-            startActivity(intent)
+            navigator.openAppSettings(context)
             true
         }
     }
