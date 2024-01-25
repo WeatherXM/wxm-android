@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
@@ -496,6 +497,21 @@ class Navigator(private val analytics: Analytics) {
             } catch (e: ActivityNotFoundException) {
                 Timber.d(e, "Could not open play store.")
                 it.toast(R.string.error_cannot_open_play_store)
+            }
+        }
+    }
+
+    fun openAppSettings(context: Context?) {
+        context?.let {
+            try {
+                Timber.d("Going to application settings")
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", it.packageName, null)
+                    it.startActivity(this)
+                }
+            } catch (e: ActivityNotFoundException) {
+                Timber.d(e, "Could not open app settings.")
+                it.toast(R.string.error_cannot_open_app_settings)
             }
         }
     }

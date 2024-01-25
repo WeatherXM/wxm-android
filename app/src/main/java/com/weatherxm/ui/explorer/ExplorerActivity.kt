@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withCreated
 import com.mapbox.geojson.Point
 import com.weatherxm.BuildConfig
 import com.weatherxm.data.Location
@@ -18,6 +20,7 @@ import com.weatherxm.ui.common.show
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.BaseMapFragment
 import dev.chrisbanes.insetter.applyInsetter
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 import java.util.*
@@ -25,6 +28,14 @@ import java.util.*
 class ExplorerActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     private val model: ExplorerViewModel by viewModel()
     private lateinit var binding: ActivityExplorerBinding
+
+    init {
+        lifecycleScope.launch {
+            withCreated {
+                requestNotificationsPermissions()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

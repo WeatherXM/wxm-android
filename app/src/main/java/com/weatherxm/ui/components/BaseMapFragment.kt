@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
@@ -24,7 +23,7 @@ import org.koin.android.ext.android.inject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-open class BaseMapFragment : Fragment() {
+open class BaseMapFragment : BaseFragment() {
     companion object {
         const val CURRENT_LAT = "current_lat"
         const val CURRENT_LON = "current_lon"

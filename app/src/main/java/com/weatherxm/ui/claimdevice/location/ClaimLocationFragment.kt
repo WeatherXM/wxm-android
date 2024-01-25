@@ -21,7 +21,6 @@ import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.EditLocationListener
 import com.weatherxm.ui.components.EditLocationMapFragment
 import com.weatherxm.util.Analytics
-import com.weatherxm.util.requestLocationPermissions
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -107,7 +106,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
         binding.addressSearchView.setAdapter(adapter,
             onTextChanged = { model.geocoding(it) },
             onMyLocationClicked = {
-                activity?.requestLocationPermissions {
+                requestLocationPermissions(activity) {
                     model.getLocation()
                 }
             }
@@ -126,7 +125,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
 
         model.onRequestUserLocation().observe(viewLifecycleOwner) {
             if (it) {
-                activity?.requestLocationPermissions {
+                requestLocationPermissions(activity) {
                     model.getLocation()
                 }
             }

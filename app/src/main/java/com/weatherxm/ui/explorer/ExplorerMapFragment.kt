@@ -26,7 +26,6 @@ import com.mapbox.maps.plugin.locationcomponent.location
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
-import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setVisible
@@ -39,9 +38,7 @@ import com.weatherxm.ui.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Validator
-import com.weatherxm.util.requestLocationPermissions
 import dev.chrisbanes.insetter.applyInsetter
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -57,8 +54,6 @@ class ExplorerMapFragment : BaseMapFragment() {
     */
     private val model: ExplorerViewModel by activityViewModel()
     private val searchModel: NetworkSearchViewModel by viewModel()
-    private val analytics: Analytics by inject()
-    private val navigator: Navigator by inject()
 
     private lateinit var adapter: NetworkSearchResultsListAdapter
     private var useSearchOnTextChangedListener = true
@@ -392,7 +387,7 @@ class ExplorerMapFragment : BaseMapFragment() {
 
     @SuppressLint("MissingPermission")
     private fun getLocationPermissions() {
-        activity?.requestLocationPermissions {
+        requestLocationPermissions(activity) {
             // Get last location
             model.getLocation {
                 Timber.d("Got user location: $it")
