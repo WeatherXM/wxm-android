@@ -11,24 +11,25 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.google.firebase.messaging.RemoteMessage.Notification
 import com.weatherxm.R
+import com.weatherxm.data.RemoteMessageType
+import com.weatherxm.data.WXMRemoteMessage
+import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
+import com.weatherxm.ui.common.Contracts.ARG_TYPE
+import com.weatherxm.ui.common.Contracts.ARG_URL
 import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
 import com.weatherxm.util.hasPermission
 import timber.log.Timber
 import kotlin.random.Random
 
 class MessagingService : FirebaseMessagingService() {
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Timber.d("From: ${remoteMessage.from}")
 
-        // Check if message contains a data payload.
-        if (remoteMessage.data.isNotEmpty()) {
-            Timber.d("Message data payload: ${remoteMessage.data}")
-        }
-
         // Check if message contains a notification payload.
         remoteMessage.notification?.let {
+            Timber.d("Message Data payload: ${remoteMessage.data}")
             Timber.d("Message Notification Body: ${it.body}")
 
             val showNotification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -38,7 +39,7 @@ class MessagingService : FirebaseMessagingService() {
             }
 
             if (showNotification) {
-                handleNotification(it, this)
+                handleNotification(remoteMessage, this)
             }
         }
     }
@@ -52,7 +53,18 @@ class MessagingService : FirebaseMessagingService() {
         Timber.d("Refreshed Firebase token: $token")
     }
 
-    private fun handleNotification(remoteNotification: Notification, context: Context) {
+    private fun handleNotification(remoteMessage: RemoteMessage, context: Context) {
+        val type = RemoteMessageType.parse(remoteMessage.data.getOrDefault(ARG_TYPE, ""))
+
+        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                type.id, type.publicName, NotificationManager.IMPORTANCE_DEFAULT
+            )
+            channel.description = type.desc
+            manager.createNotificationChannel(channel)
+        }
+
         /**
          * In order to have multiple distinct intents we need to use unique requestCodes:
          * https://developer.android.com/reference/android/app/PendingIntent.html
@@ -63,23 +75,20 @@ class MessagingService : FirebaseMessagingService() {
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
             context,
             requestCode,
-            Intent(context, UrlRouterActivity::class.java),
+            Intent(context, UrlRouterActivity::class.java).apply {
+                putExtra(
+                    ARG_REMOTE_MESSAGE,
+                    WXMRemoteMessage(type, remoteMessage.data.getOrDefault(ARG_URL, ""))
+                )
+            },
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val notification = NotificationCompat.Builder(context, "Announcements").apply {
+        val notification = NotificationCompat.Builder(context, type.id).apply {
             setContentIntent(pendingIntent)
             setSmallIcon(R.drawable.ic_logo)
-            setContentTitle(remoteNotification.title)
-            setContentInfo(remoteNotification.body)
+            setContentTitle(remoteMessage.notification?.title)
+            setContentInfo(remoteMessage.notification?.body)
         }.build()
-
-        val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                "WeatherXM", "Announcements", NotificationManager.IMPORTANCE_DEFAULT
-            )
-            manager.createNotificationChannel(channel)
-        }
         /**
          * As long as the title of the notification and the ID are different,
          * different notifications will show up:
@@ -89,6 +98,6 @@ class MessagingService : FirebaseMessagingService() {
          * By sending a notification from Firebase will the same title as the previous one,
          * that will replace the shown notification's info with the updated one.
          */
-        manager.notify(remoteNotification.title, 0, notification)
+        manager.notify(remoteMessage.notification?.title, 0, notification)
     }
 }
