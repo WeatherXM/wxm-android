@@ -16,6 +16,7 @@ import com.weatherxm.R
 import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
 import com.weatherxm.util.hasPermission
 import timber.log.Timber
+import kotlin.random.Random
 
 class MessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -52,11 +53,16 @@ class MessagingService : FirebaseMessagingService() {
     }
 
     private fun handleNotification(remoteNotification: Notification, context: Context) {
-        // Create an Intent for the activity you want to start.
-        // TODO: REQUEST CODE here
+        /**
+         * In order to have multiple distinct intents we need to use unique requestCodes:
+         * https://developer.android.com/reference/android/app/PendingIntent.html
+         * So we generate a random number from 0-100 which is simple enough to sufficiently
+         * achieve it
+         */
+        val requestCode = Random.nextInt()
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
             context,
-            5,
+            requestCode,
             Intent(context, UrlRouterActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -74,7 +80,15 @@ class MessagingService : FirebaseMessagingService() {
             )
             manager.createNotificationChannel(channel)
         }
-        // TODO: ID here
-        manager.notify(12, notification)
+        /**
+         * As long as the title of the notification and the ID are different,
+         * different notifications will show up:
+         * https://developer.android.com/reference/android/app/NotificationManager#notify(java.lang.String,%20int,%20android.app.Notification)
+         *
+         * We use this functionality in order to replace any notifications that might be bugged.
+         * By sending a notification from Firebase will the same title as the previous one,
+         * that will replace the shown notification's info with the updated one.
+         */
+        manager.notify(remoteNotification.title, 0, notification)
     }
 }
