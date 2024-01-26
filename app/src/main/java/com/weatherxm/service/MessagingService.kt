@@ -88,6 +88,7 @@ class MessagingService : FirebaseMessagingService() {
             setSmallIcon(R.drawable.ic_logo)
             setContentTitle(remoteMessage.notification?.title)
             setContentInfo(remoteMessage.notification?.body)
+            setAutoCancel(true)
         }.build()
         /**
          * As long as the title of the notification and the ID are different,
