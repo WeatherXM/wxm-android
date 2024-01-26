@@ -2,11 +2,8 @@ package com.weatherxm.ui.urlrouteractivity
 
 import android.os.Bundle
 import com.weatherxm.R
-import com.weatherxm.data.WXMRemoteMessage
 import com.weatherxm.databinding.ActivityUrlRouterBinding
-import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.applyInsets
-import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -21,9 +18,6 @@ class UrlRouterActivity : BaseActivity() {
         setContentView(binding.root)
 
         binding.root.applyInsets()
-
-        // TODO: Handle remote message
-        val remoteMessage = intent.parcelable<WXMRemoteMessage>(ARG_REMOTE_MESSAGE)
 
         model.onError().observe(this) {
             binding.logo.setVisible(false)
@@ -44,7 +38,18 @@ class UrlRouterActivity : BaseActivity() {
             finish()
         }
 
-        model.parseUrl(intent.data)
+        model.onRemoteMessage().observe(this) {
+            binding.logo.setVisible(false)
+            it.url?.let { url ->
+                if (isTaskRoot) {
+                    navigator.showStartup(this)
+                }
+                navigator.openWebsite(this, url)
+            }
+            finish()
+        }
+
+        model.parseUrl(intent)
     }
 }
 
