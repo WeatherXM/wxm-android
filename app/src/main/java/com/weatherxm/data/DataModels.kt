@@ -7,6 +7,7 @@ import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -82,6 +83,7 @@ enum class RemoteMessageType(val id: String, val publicName: String, val desc: S
                     it.id.equals(id, true)
                 } ?: DEFAULT
             } catch (e: IllegalArgumentException) {
+                Timber.e(e)
                 DEFAULT
             }
         }
