@@ -87,7 +87,7 @@ class MessagingService : FirebaseMessagingService() {
             setContentIntent(pendingIntent)
             setSmallIcon(R.drawable.ic_logo)
             setContentTitle(remoteMessage.notification?.title)
-            setContentInfo(remoteMessage.notification?.body)
+            setContentText(remoteMessage.notification?.body)
             setAutoCancel(true)
         }.build()
         /**
