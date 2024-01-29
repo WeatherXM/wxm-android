@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withCreated
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentMessageDialogBinding
 import com.weatherxm.ui.common.setHtml

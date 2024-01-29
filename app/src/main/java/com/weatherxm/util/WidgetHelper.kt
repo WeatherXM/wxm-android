@@ -17,9 +17,7 @@ class WidgetHelper(private val cacheService: CacheService, private val context: 
 
     fun getWidgetTypeById(appWidgetManager: AppWidgetManager, appWidgetId: Int): WidgetType? {
         val widgetInfo = appWidgetManager.getAppWidgetInfo(appWidgetId)
-        return if (widgetInfo == null) {
-            null
-        } else {
+        return widgetInfo?.let {
             when (widgetInfo.initialLayout) {
                 R.layout.widget_current_weather -> WidgetType.CURRENT_WEATHER
                 R.layout.widget_current_weather_tile -> WidgetType.CURRENT_WEATHER_TILE

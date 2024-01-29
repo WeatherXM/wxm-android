@@ -118,11 +118,10 @@ class BluetoothUpdater(
 
     @Suppress("MagicNumber")
     private fun createErrorMessage(errorCode: Int, defaultMessage: String?): String? {
-        return when (errorCode) {
-            133 -> {
-                "$defaultMessage - ${context.getString(R.string.error_helium_ota_133_suffix)}"
-            }
-            else -> defaultMessage
+        return if(errorCode == 133) {
+            "$defaultMessage - ${context.getString(R.string.error_helium_ota_133_suffix)}"
+        } else {
+            defaultMessage
         }
     }
 

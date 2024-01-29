@@ -34,7 +34,7 @@ class DeviceOTARepositoryImpl(
             deviceOTADataSource.getDeviceLastOtaVersion(deviceId).fold({ true }, {
                 val lastOtaTimestamp = deviceOTADataSource.getDeviceLastOtaTimestamp(deviceId)
                 val now = System.currentTimeMillis()
-                it != assignedOtaVersion || (now - lastOtaTimestamp) > OTA_UPDATE_HIDE_EXPIRATION
+                it != assignedOtaVersion || now - lastOtaTimestamp > OTA_UPDATE_HIDE_EXPIRATION
             })
         }
     }

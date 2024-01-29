@@ -22,7 +22,6 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.EditLocationListener
 import com.weatherxm.ui.components.EditLocationMapFragment
-import com.weatherxm.util.requestLocationPermissions
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -94,7 +93,7 @@ class DeviceEditLocationActivity : BaseActivity(), EditLocationListener {
             adapter,
             onTextChanged = { model.geocoding(it) },
             onMyLocationClicked = {
-                requestLocationPermissions {
+                requestLocationPermissions(this) {
                     model.getLocation()
                 }
             }

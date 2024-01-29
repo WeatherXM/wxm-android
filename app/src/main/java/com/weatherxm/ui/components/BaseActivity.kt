@@ -4,14 +4,18 @@ import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.BLUETOOTH_CONNECT
 import android.Manifest.permission.BLUETOOTH_SCAN
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.os.Build
-import android.view.ViewGroup
+import android.os.Build.VERSION_CODES.S
+import android.os.Build.VERSION_CODES.TIRAMISU
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.ui.Navigator
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.checkPermissionsAndThen
+import com.weatherxm.util.hasPermission
+import com.weatherxm.util.permissionsBuilder
 import org.koin.android.ext.android.inject
 
 open class BaseActivity : AppCompatActivity(), BaseInterface {
@@ -20,7 +24,7 @@ open class BaseActivity : AppCompatActivity(), BaseInterface {
     override var snackbar: Snackbar? = null
 
     protected fun requestToEnableBluetooth(onGranted: () -> Unit, onDenied: () -> Unit) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= S) {
             checkPermissionsAndThen(
                 permissions = arrayOf(BLUETOOTH_CONNECT),
                 rationaleTitle = getString(R.string.permission_bluetooth_title),
@@ -34,7 +38,7 @@ open class BaseActivity : AppCompatActivity(), BaseInterface {
     }
 
     protected fun requestBluetoothPermissions(onGranted: () -> Unit, onDenied: () -> Unit) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (Build.VERSION.SDK_INT >= S) {
             checkPermissionsAndThen(
                 permissions = arrayOf(BLUETOOTH_SCAN, BLUETOOTH_CONNECT),
                 rationaleTitle = getString(R.string.permission_bluetooth_title),
@@ -50,6 +54,12 @@ open class BaseActivity : AppCompatActivity(), BaseInterface {
                 onGranted = onGranted,
                 onDenied = onDenied
             )
+        }
+    }
+
+    protected fun requestNotificationsPermissions() {
+        if (!hasPermission(POST_NOTIFICATIONS) && Build.VERSION.SDK_INT >= TIRAMISU) {
+            permissionsBuilder(permissions = arrayOf(POST_NOTIFICATIONS)).build().send()
         }
     }
 }

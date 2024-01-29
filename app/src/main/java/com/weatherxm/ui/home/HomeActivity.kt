@@ -1,6 +1,8 @@
 package com.weatherxm.ui.home
 
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.withCreated
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
@@ -23,6 +25,7 @@ import com.weatherxm.ui.explorer.ExplorerData
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import dev.chrisbanes.insetter.applyInsetter
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -33,6 +36,14 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var navController: NavController
+
+    init {
+        lifecycleScope.launch {
+            withCreated {
+                requestNotificationsPermissions()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

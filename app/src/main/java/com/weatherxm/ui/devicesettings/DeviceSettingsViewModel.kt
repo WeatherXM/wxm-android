@@ -117,13 +117,10 @@ class DeviceSettingsViewModel(
                     .mapLeft {
                         analytics.trackEventFailure(it.code)
                         Timber.e("Error when trying to remove device: $it")
-                        val error = when (it) {
-                            is ApiError.UserError.ClaimError.InvalidClaimId -> {
-                                resources.getString(R.string.error_invalid_device_identifier)
-                            }
-                            else -> {
-                                resources.getString(R.string.error_reach_out_short)
-                            }
+                        val error = if (it is ApiError.UserError.ClaimError.InvalidClaimId) {
+                            resources.getString(R.string.error_invalid_device_identifier)
+                        } else {
+                            resources.getString(R.string.error_reach_out_short)
                         }
                         onError.postValue(UIError(error))
                     }

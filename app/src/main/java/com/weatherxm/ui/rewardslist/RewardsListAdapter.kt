@@ -84,7 +84,7 @@ class RewardsListAdapter(
             binding.timestamp.text = item.rewardFormattedTimestamp
 
             binding.score.text = item.rewardScore?.let {
-                itemView.resources.getString(R.string.score, (it.toFloat() / 100))
+                itemView.resources.getString(R.string.score, it.toFloat() / 100)
             } ?: itemView.resources.getString(R.string.score_unknown)
 
             with(binding.scoreIcon) {
@@ -93,7 +93,7 @@ class RewardsListAdapter(
                 binding.rewardSlider.trackActiveTintList = ColorStateList.valueOf(color)
             }
 
-            if (item.annotations.isNotEmpty() || ((item.rewardScore) ?: 0) < 100) {
+            if (item.annotations.isNotEmpty() || (item.rewardScore ?: 0) < 100) {
                 binding.mainCard.strokeColor =
                     itemView.context.getColor(getRewardAnnotationColor(item.rewardScore))
                 binding.mainCard.strokeWidth = 2
@@ -166,7 +166,7 @@ class RewardsListAdapter(
                 action(actionMessage) {
                     onProblems.invoke(data)
                 }
-                if (((data.lostRewards) ?: 0F) == 0F && (data.periodMaxReward ?: 0F) != 0F) {
+                if ((data.lostRewards ?: 0F) == 0F && (data.periodMaxReward ?: 0F) != 0F) {
                     message(R.string.problems_found_desc_without_lost_rewards)
                 } else {
                     val lostRewards = formatLostRewards(data.lostRewards)

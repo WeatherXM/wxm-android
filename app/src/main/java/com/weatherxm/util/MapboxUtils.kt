@@ -50,7 +50,7 @@ object MapboxUtils : KoinComponent {
 
     @Suppress("MagicNumber")
     fun getMinimap(width: Int, userLocation: Location?, hex: Hex?): HttpUrl? {
-        return if (hex != null) {
+        return hex?.let {
             val hexPoints = hex.polygon.map {
                 Point.fromLngLat(it.lon, it.lat)
             }
@@ -81,8 +81,6 @@ object MapboxUtils : KoinComponent {
                 }
                 build()
             }.url()
-        } else {
-            null
         }
     }
 }

@@ -69,10 +69,11 @@ We have 3 different [GitHub Actions](https://github.com/features/actions):
 
 1. **Code Analysis:** An action that runs on **every Pull Request**, building the app and
    running `./gradlew :app:detekt` in order to find potential code optimizations.
-2. **Pre-Release Firebase Distribution:** An action that runs on **every push on** `main`, building
+2. **Build Production & Development and Distribute on Firebase:** An action that runs on **every push on** `main`, building
    the app, and
-   running `./gradlew :app:assembleRemoteProdRelease :app:appDistributionUploadRemoteProdRelease` in
-   order to distribute **Remote Prod** version of the app
+   running `./gradlew :app:assembleRemoteProdRelease :app:appDistributionUploadRemoteProdRelease` &
+   `./gradlew :app:assembleDevDebugRelease :app:appDistributionUploadDevDebugRelease`
+   in order to distribute **Remote Prod** & **Dev Debug** versions of the app
    through [Firebase App Distribution](https://firebase.google.com/docs/app-distribution) in the
    Firebase Channels. Currently used for internal testing.
 3. **Production Firebase Distribution:** An action that runs on **every tag pushed,** building the
@@ -118,7 +119,7 @@ mandatory steps should be followed that we will explain below:
    notes.
 4. The Android App Bundle that was created before should be attached as a binary in that GitHub
    release. When the uploading is completed `Publish Release`. This will also cause a push of the
-   tag in Git causing the Production Firebase Distribution GitHub Action to run**).**
+   tag in Git causing the Production Firebase Distribution GitHub Action to run).
 5. Follow the procedure to upload that Android App Bundle in Google's Play Store **Open Testing
    channel** and use the auto-generated release notes you got before. Make them even more generic
    and human-friendly. For example, we don't want to mention 5 different UI fixes but just write "
@@ -129,7 +130,7 @@ mandatory steps should be followed that we will explain below:
 7. After the release passes Google’s review and you publish the app to the
    public, [use this template](https://outline.weatherxm.com/doc/templates-for-update-announcements-Uiek4uZYjE),
    and after filling the correct date, app version and release notes, publish it on Discord's
-   #beta-announcements channel or have a community manager publish it.
+   #announcements channel or have a community manager publish it.
 
 **Usually, after some days, we move this beta release from Open Testing → Production on Play
 Console (using console’s “Promote Release” @ Open Testing → Releases → Find your release → Promote

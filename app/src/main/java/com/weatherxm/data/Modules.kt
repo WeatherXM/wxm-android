@@ -28,6 +28,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.crashlytics.crashlytics
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -645,13 +646,16 @@ private val network = module {
             .addInterceptor(get() as AuthRequestInterceptor)
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-            .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS).build()
+            .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
+            .build()
 
         // Create retrofit instance
         Retrofit.Builder()
             .baseUrl(BuildConfig.AUTH_URL)
             .addConverterFactory(get() as MoshiConverterFactory)
-            .addCallAdapterFactory(NetworkResponseAdapterFactory()).client(client).build()
+            .addCallAdapterFactory(NetworkResponseAdapterFactory())
+            .client(client)
+            .build()
     }
 
     single<Retrofit>(named(RETROFIT_API)) {
@@ -664,13 +668,17 @@ private val network = module {
             .authenticator(get() as AuthTokenAuthenticator)
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-            .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS).cache(get() as Cache).build()
+            .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
+            .cache(get() as Cache)
+            .build()
 
         // Create retrofit instance
         Retrofit.Builder()
             .baseUrl(BuildConfig.API_URL)
             .addConverterFactory(get() as MoshiConverterFactory)
-            .addCallAdapterFactory(NetworkResponseAdapterFactory()).client(client).build()
+            .addCallAdapterFactory(NetworkResponseAdapterFactory())
+            .client(client)
+            .build()
     }
 }
 
@@ -707,7 +715,7 @@ val firebase = module {
     }
 
     single<FirebaseCrashlytics>(createdAtStart = true) {
-        FirebaseCrashlytics.getInstance()
+        Firebase.crashlytics
     }
 
     single<FirebaseMessaging>(createdAtStart = true) {
@@ -775,9 +783,9 @@ val database = module {
 
 val displayModeHelper = module {
     single(createdAtStart = true) {
-        DisplayModeHelper(androidContext().resources, get()).also {
+        DisplayModeHelper(androidContext().resources, get()).apply {
             // Set light/dark theme at startup
-            it.setDisplayMode()
+            setDisplayMode()
         }
     }
 }
@@ -857,11 +865,13 @@ private val utilities = module {
             .add(BigInteger::class.java, BigIntegerJsonAdapter())
             .add(ZonedDateTime::class.java, ZonedDateTimeJsonAdapter())
             .add(LocalDateTime::class.java, LocalDateTimeJsonAdapter())
-            .add(LocalDate::class.java, LocalDateJsonAdapter()).build()
+            .add(LocalDate::class.java, LocalDateJsonAdapter())
+            .build()
     }
     single<Gson> {
         GsonBuilder().setPrettyPrinting()
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create()
     }
     single<UICellJsonAdapter> {
         UICellJsonAdapter(get())
