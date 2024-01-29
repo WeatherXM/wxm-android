@@ -53,12 +53,8 @@ object DatePicker {
             listener.onDateSelected(timestampToLocalDate(it))
         }
 
-        when (context) {
-            is AppCompatActivity -> picker.show(context.supportFragmentManager, TAG)
-            else -> {
-                throw IllegalArgumentException("Can only display DatePicker from AppCompatActivity")
-            }
-        }
+        require(context is AppCompatActivity)
+        picker.show(context.supportFragmentManager, TAG)
 
         return picker
     }

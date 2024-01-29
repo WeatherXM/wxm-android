@@ -13,13 +13,10 @@ import com.weatherxm.data.Frequency
 import com.weatherxm.data.Location
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
