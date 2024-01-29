@@ -119,7 +119,7 @@ class ClaimHeliumPairViewModel(
         }
     }
 
-    init {
+    private fun collectOnBLEScanning() {
         viewModelScope.launch {
             scanDevicesUseCase.registerOnScanning().collect {
                 if (!scannedDevices.contains(it)) {
@@ -129,5 +129,9 @@ class ClaimHeliumPairViewModel(
                 }
             }
         }
+    }
+
+    init {
+        collectOnBLEScanning()
     }
 }

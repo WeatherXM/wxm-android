@@ -40,7 +40,6 @@ open class BluetoothHeliumViewModel(
 
     private val scanningJob: Job = viewModelScope.launch {
         scanUseCase?.registerOnScanning()?.collect {
-            @Suppress("MagicNumber")
             if (it.name?.contains(deviceBleAddress) == true) {
                 scannedDevice = it
                 scanUseCase.stopScanning()
