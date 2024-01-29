@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID
 import android.content.Context
 import android.content.Intent
+import android.os.Parcelable
 import androidx.preference.PreferenceManager
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
@@ -99,7 +100,7 @@ class CurrentWeatherWidgetWorkerUpdate(
         val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
         intent.putExtra(ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
-        intent.extras?.putParcelable(ARG_WIDGET_TYPE, widgetType)
+        intent.putExtra(ARG_WIDGET_TYPE, widgetType as Parcelable)
 
         return authUseCase.isLoggedIn()
             .flatMap { isLoggedIn ->
