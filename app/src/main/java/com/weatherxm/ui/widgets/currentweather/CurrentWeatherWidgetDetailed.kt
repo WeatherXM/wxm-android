@@ -55,7 +55,7 @@ class CurrentWeatherWidgetDetailed : AppWidgetProvider(), KoinComponent {
         val widgetIdsFromIntent = extras?.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS)
 
         val validWidgetTypeForUpdate =
-            extras?.getSerializable(ARG_WIDGET_TYPE) == WidgetType.CURRENT_WEATHER_DETAILED
+            extras?.parcelable<WidgetType>(ARG_WIDGET_TYPE) == WidgetType.CURRENT_WEATHER_DETAILED
 
         /*
         * Only update widget on actions we have triggered:

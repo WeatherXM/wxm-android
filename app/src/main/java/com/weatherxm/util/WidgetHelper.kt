@@ -37,7 +37,7 @@ class WidgetHelper(private val cacheService: CacheService, private val context: 
             widgetsOfDevice.forEach { widgetId ->
                 with(Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
                     putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId.toInt())
-                    putExtra(
+                    extras?.putParcelable(
                         Contracts.ARG_WIDGET_TYPE,
                         getWidgetTypeById(AppWidgetManager.getInstance(context), widgetId.toInt())
                     )

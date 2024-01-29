@@ -99,7 +99,7 @@ class CurrentWeatherWidgetWorkerUpdate(
         val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
         intent.putExtra(ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
-        intent.putExtra(ARG_WIDGET_TYPE, widgetType)
+        intent.extras?.putParcelable(ARG_WIDGET_TYPE, widgetType)
 
         return authUseCase.isLoggedIn()
             .flatMap { isLoggedIn ->

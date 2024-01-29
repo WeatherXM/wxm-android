@@ -14,7 +14,6 @@ import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.math.BigInteger
 
 class ProfileViewModel(
     private val useCase: UserUseCase,
@@ -32,7 +31,7 @@ class ProfileViewModel(
     private var walletAddress: String? = null
     private var currentWalletRewards: UIWalletRewards? = null
 
-    fun onClaimedResult(amountClaimed: BigInteger) {
+    fun onClaimedResult(amountClaimed: Double) {
         currentWalletRewards?.apply {
             allocated -= amountClaimed
             totalClaimed += amountClaimed

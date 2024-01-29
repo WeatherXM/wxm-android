@@ -43,7 +43,6 @@ import com.mapbox.search.SearchEngineSettings
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
 import com.weatherxm.R
-import com.weatherxm.data.adapters.BigIntegerJsonAdapter
 import com.weatherxm.data.adapters.LocalDateJsonAdapter
 import com.weatherxm.data.adapters.LocalDateTimeJsonAdapter
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
@@ -252,7 +251,6 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
-import java.math.BigInteger
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
@@ -862,7 +860,6 @@ private val utilities = module {
     }
     single<Moshi> {
         Moshi.Builder()
-            .add(BigInteger::class.java, BigIntegerJsonAdapter())
             .add(ZonedDateTime::class.java, ZonedDateTimeJsonAdapter())
             .add(LocalDateTime::class.java, LocalDateTimeJsonAdapter())
             .add(LocalDate::class.java, LocalDateJsonAdapter())
