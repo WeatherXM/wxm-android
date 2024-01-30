@@ -13,6 +13,7 @@ import com.weatherxm.databinding.ListItemDeviceBinding
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
@@ -169,7 +170,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             )
             val windDirectionUnit = item.currentWeather?.windDirection?.let {
                 Weather.getFormattedWindDirection(it)
-            } ?: ""
+            } ?: String.empty()
             binding.wind.setData(windValue, "$windUnit $windDirectionUnit")
 
             binding.rain.setData(

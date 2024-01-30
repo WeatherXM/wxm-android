@@ -8,6 +8,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
+import com.weatherxm.ui.common.empty
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -93,7 +94,7 @@ object Weather : KoinComponent {
         } else if (includeUnit) {
             resources.getString(R.string.degrees_mark)
         } else {
-            ""
+            String.empty()
         }
 
         if (value == null) {
@@ -120,7 +121,7 @@ object Weather : KoinComponent {
         val unit = if (includeUnit) {
             getPrecipitationPreferredUnit(isRainRate)
         } else {
-            ""
+            String.empty()
         }
 
         if (value == null) {
@@ -138,7 +139,7 @@ object Weather : KoinComponent {
         val unit = if (includeUnit) {
             "%"
         } else {
-            ""
+            String.empty()
         }
         if (value == null) {
             return "$EMPTY_VALUE$unit"
@@ -151,7 +152,7 @@ object Weather : KoinComponent {
         val unit = if (includeUnit) {
             "%"
         } else {
-            ""
+            String.empty()
         }
         if (value == null) {
             return "$EMPTY_VALUE$unit"
@@ -179,7 +180,7 @@ object Weather : KoinComponent {
                 resources.getString(R.string.pressure_hpa)
             )
         } else {
-            ""
+            String.empty()
         }
 
         if (value == null) {
@@ -197,7 +198,7 @@ object Weather : KoinComponent {
         val unit = if (includeUnit) {
             resources.getString(R.string.solar_radiation_unit)
         } else {
-            ""
+            String.empty()
         }
 
         if (value == null) {
@@ -218,7 +219,7 @@ object Weather : KoinComponent {
                 resources.getString(R.string.wind_speed_ms)
             )
         } else {
-            ""
+            String.empty()
         }
         if (value == null) {
             return "$EMPTY_VALUE$unit"
@@ -259,7 +260,7 @@ object Weather : KoinComponent {
                 resources.getString(KEY_WIND), resources.getString(R.string.wind_speed_ms)
             )
         } else {
-            ""
+            String.empty()
         }
 
         return if (windSpeed != null && windDirection != null) {
@@ -373,7 +374,7 @@ object Weather : KoinComponent {
     }
 
     fun getPreferredUnit(keyOnSharedPref: String, defaultUnit: String): String {
-        val savedUnit = sharedPref.getString(keyOnSharedPref, "")
+        val savedUnit = sharedPref.getString(keyOnSharedPref, String.empty())
         if (!savedUnit.isNullOrEmpty()) {
             return savedUnit
         }

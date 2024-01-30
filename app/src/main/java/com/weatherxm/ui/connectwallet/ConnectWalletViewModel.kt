@@ -7,6 +7,7 @@ import com.weatherxm.R
 import com.weatherxm.data.ApiError.UserError.WalletError.InvalidWalletAddress
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.ConnectWalletUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getDefaultMessageResId
@@ -24,7 +25,7 @@ class ConnectWalletViewModel(
         const val LAST_CHARS_TO_SHOW_AS_CONFIRM = 5
     }
 
-    private var currentAddress = MutableLiveData("")
+    private var currentAddress = MutableLiveData(String.empty())
     fun currentAddress() = currentAddress
 
     private val isAddressSaved = MutableLiveData<Resource<String>>()

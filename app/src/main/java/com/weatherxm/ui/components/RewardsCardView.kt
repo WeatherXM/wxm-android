@@ -31,6 +31,7 @@ import com.weatherxm.databinding.ViewRewardsCardBinding
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIRewardObject
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setRewardStatusChip
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.devicedetails.rewards.RewardsViewModel
@@ -275,12 +276,12 @@ open class RewardsCardView : LinearLayout, KoinComponent {
             )
         } else {
             Text(
-                text = data.fromDate ?: "",
+                text = data.fromDate ?: String.empty(),
                 fontSize = 12.sp,
                 color = Color(context.getColor(R.color.colorOnSurface)),
             )
             Text(
-                text = data.toDate ?: "",
+                text = data.toDate ?: String.empty(),
                 fontSize = 12.sp,
                 color = Color(context.getColor(R.color.colorOnSurface)),
             )

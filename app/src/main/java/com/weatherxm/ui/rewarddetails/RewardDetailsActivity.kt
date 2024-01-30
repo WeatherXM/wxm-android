@@ -12,6 +12,7 @@ import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIRewardObject
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
@@ -131,7 +132,7 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
         analytics.trackEventUserAction(
             actionName = Analytics.ParamValue.REWARD_DETAILS_ERROR.paramValue,
             contentType = null,
-            Pair(FirebaseAnalytics.Param.ITEM_ID, annotation?.name ?: "")
+            Pair(FirebaseAnalytics.Param.ITEM_ID, annotation?.name ?: String.empty())
         )
     }
 }

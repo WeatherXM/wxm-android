@@ -9,6 +9,7 @@ import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
 import com.weatherxm.data.HOUR_FORMAT_12H_FULL
 import com.weatherxm.data.HOUR_FORMAT_12H_HOUR_ONLY
 import com.weatherxm.data.HOUR_FORMAT_24H
+import com.weatherxm.ui.common.empty
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
@@ -74,7 +75,7 @@ object DateTimeHelper : KoinComponent {
 
     fun ZoneOffset.getFormattedOffset(): String {
         // In order to show +2:00 instead of +02:00 for example
-        return this.toString().replaceFirst("0", "")
+        return this.toString().replaceFirst("0", String.empty())
     }
 
     fun ZoneOffset.isUTC(): Boolean {

@@ -7,6 +7,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkStatsStationDetails
 import com.weatherxm.data.NetworkStatsTimeseries
 import com.weatherxm.data.repository.StatsRepository
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.networkstats.NetworkStationStats
 import com.weatherxm.ui.networkstats.NetworkStats
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
@@ -36,8 +37,9 @@ class StatsUseCaseImpl(
                 ),
                 lastDataDays = getValidLastOfEntries(dataDaysEntries),
                 dataDaysEntries = dataDaysEntries,
-                dataDaysStartDate = stats.dataDays?.first()?.ts?.getFormattedDate() ?: "",
-                dataDaysEndDate = stats.dataDays?.last()?.ts?.getFormattedDate() ?: "",
+                dataDaysStartDate = stats.dataDays?.first()?.ts?.getFormattedDate()
+                    ?: String.empty(),
+                dataDaysEndDate = stats.dataDays?.last()?.ts?.getFormattedDate() ?: String.empty(),
                 totalRewards = compactNumber(stats.tokens?.allocatedPerDay?.last()?.value),
                 totalRewards30D = compactNumber(
                     (stats.tokens?.allocatedPerDay?.last()?.value ?: 0.0)
@@ -46,7 +48,7 @@ class StatsUseCaseImpl(
                 lastRewards = getValidLastOfEntries(rewardEntries),
                 rewardsEntries = rewardEntries,
                 rewardsStartDate = stats.tokens?.allocatedPerDay?.first()?.ts?.getFormattedDate()
-                    ?: "",
+                    ?: String.empty(),
                 rewardsEndDate = run {
                     stats.tokens?.allocatedPerDay?.size?.let {
                         if (it >= 2 && !isLastDayValid(stats.tokens.allocatedPerDay)) {
@@ -54,7 +56,7 @@ class StatsUseCaseImpl(
                         } else {
                             stats.tokens.allocatedPerDay.last().ts?.getFormattedDate()
                         }
-                    } ?: ""
+                    } ?: String.empty()
                 },
                 rewardsAvgMonthly = formatNumber(stats.tokens?.avgMonthly),
                 totalSupply = compactNumber(stats.tokens?.totalSupply),
@@ -114,7 +116,7 @@ class StatsUseCaseImpl(
                     it * 100
                 } ?: 0.0
                 val amount = formatNumber(stationStatsDetails.amount)
-                val url = stationStatsDetails.url ?: ""
+                val url = stationStatsDetails.url ?: String.empty()
                 NetworkStationStats(name, url, percentage, amount)
             }
             ?: mutableListOf()

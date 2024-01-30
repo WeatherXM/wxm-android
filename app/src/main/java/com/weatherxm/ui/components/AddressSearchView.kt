@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.databinding.ViewAddressSearchBinding
 import com.weatherxm.ui.common.SearchResultsAdapter
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.onTextChanged
 
 class AddressSearchView : LinearLayout {
@@ -64,7 +65,7 @@ class AddressSearchView : LinearLayout {
     }
 
     fun clear() {
-        adapter.updateData("", mutableListOf())
+        adapter.updateData(String.empty(), mutableListOf())
         binding.recycler.visibility = GONE
     }
 }

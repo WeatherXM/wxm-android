@@ -12,6 +12,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.usecases.BluetoothUpdaterUseCase
@@ -65,7 +66,11 @@ class DeviceHeliumOTAViewModel(
                     }
                 }.onLeft { failure ->
                     analytics.trackEventFailure(failure.code)
-                    onStatus.postValue(Resource.error("", State(OTAStatus.SCAN_FOR_STATION)))
+                    onStatus.postValue(
+                        Resource.error(
+                            String.empty(), State(OTAStatus.SCAN_FOR_STATION)
+                        )
+                    )
                 }
             }
         }
@@ -86,7 +91,7 @@ class DeviceHeliumOTAViewModel(
             setPeripheral()
         } else {
             analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
-            onStatus.postValue(Resource.error("", State(OTAStatus.PAIR_STATION)))
+            onStatus.postValue(Resource.error(String.empty(), State(OTAStatus.PAIR_STATION)))
         }
     }
 
@@ -97,7 +102,11 @@ class DeviceHeliumOTAViewModel(
                     if (deviceIsPaired()) {
                         downloadFirmwareAndGetFileURI()
                     } else {
-                        onStatus.postValue(Resource.error("", State(OTAStatus.PAIR_STATION)))
+                        onStatus.postValue(
+                            Resource.error(
+                                String.empty(), State(OTAStatus.PAIR_STATION)
+                            )
+                        )
                     }
                 }.onLeft {
                     analytics.trackEventFailure(it.code)
@@ -181,7 +190,7 @@ class DeviceHeliumOTAViewModel(
                         analytics.trackEventFailure(Failure.CODE_BL_OTA_FAILED)
                         onStatus.postValue(
                             Resource.error(
-                                "",
+                                String.empty(),
                                 State(
                                     OTAStatus.INSTALLING,
                                     otaError = it.error,
@@ -215,7 +224,11 @@ class DeviceHeliumOTAViewModel(
                     }
                     BluetoothDevice.BOND_NONE -> {
                         analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
-                        onStatus.postValue(Resource.error("", State(OTAStatus.PAIR_STATION)))
+                        onStatus.postValue(
+                            Resource.error(
+                                String.empty(), State(OTAStatus.PAIR_STATION)
+                            )
+                        )
                     }
                 }
             }
