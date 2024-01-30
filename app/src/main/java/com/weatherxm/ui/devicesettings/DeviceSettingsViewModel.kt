@@ -58,6 +58,7 @@ class DeviceSettingsViewModel(
                             Analytics.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
                             success = 1L
                         )
+                        device.friendlyName = friendlyName
                         onEditNameChange.postValue(friendlyName)
                     }
                     .mapLeft {
@@ -87,6 +88,7 @@ class DeviceSettingsViewModel(
                             Analytics.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
                             success = 1L
                         )
+                        device.friendlyName = null
                         onEditNameChange.postValue(device.name)
                     }
                     .mapLeft {
