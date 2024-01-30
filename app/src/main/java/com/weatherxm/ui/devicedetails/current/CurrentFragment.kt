@@ -48,6 +48,7 @@ class CurrentFragment : BaseFragment() {
         }
 
         parentModel.onDevicePolling().observe(viewLifecycleOwner) {
+            model.device = it
             onDeviceUpdated(it)
         }
 
