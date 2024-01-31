@@ -16,6 +16,7 @@ import com.weatherxm.ui.common.Contracts.ARG_WIDGET_ON_LOGGED_IN
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_SHOULD_LOGIN
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.widgets.WidgetType
 import com.weatherxm.ui.widgets.onDevice
@@ -149,7 +150,7 @@ class CurrentWeatherWidgetDetailed : AppWidgetProvider(), KoinComponent {
                 CurrentWeatherWidgetWorkerUpdate.initAndStart(
                     context,
                     it,
-                    usecase.getWidgetDevice(it) ?: ""
+                    usecase.getWidgetDevice(it) ?: String.empty()
                 )
             }
         }

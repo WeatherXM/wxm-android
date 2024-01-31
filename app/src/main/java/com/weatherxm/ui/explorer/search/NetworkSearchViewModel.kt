@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.explorer.SearchResult
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Analytics
@@ -31,8 +32,8 @@ class NetworkSearchViewModel(
     private val onRecentSearches = MutableLiveData<List<SearchResult>>()
     fun onRecentSearches(): LiveData<List<SearchResult>> = onRecentSearches
 
-    private var lastSearchedQuery = ""
-    private var query = ""
+    private var lastSearchedQuery = String.empty()
+    private var query = String.empty()
     private var networkSearchJob: Job? = null
 
     fun getQuery() = query
@@ -95,7 +96,7 @@ class NetworkSearchViewModel(
     fun onSearchClicked(searchResult: SearchResult) {
         viewModelScope.launch(Dispatchers.IO) {
             explorerUseCase.setRecentSearch(searchResult)
-            query = ""
+            query = String.empty()
         }
     }
 }

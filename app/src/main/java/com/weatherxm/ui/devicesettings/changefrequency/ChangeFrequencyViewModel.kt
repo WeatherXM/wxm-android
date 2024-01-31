@@ -12,6 +12,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.FrequencyState
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.devicesettings.ChangeFrequencyState
 import com.weatherxm.ui.devicesettings.FrequencyStatus
 import com.weatherxm.usecases.BluetoothConnectionUseCase
@@ -105,8 +106,7 @@ class ChangeFrequencyViewModel(
             analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
             onStatus.postValue(
                 Resource.error(
-                    "",
-                    ChangeFrequencyState(FrequencyStatus.PAIR_STATION)
+                    String.empty(), ChangeFrequencyState(FrequencyStatus.PAIR_STATION)
                 )
             )
         }
@@ -126,7 +126,9 @@ class ChangeFrequencyViewModel(
                 }.onLeft { failure ->
                     analytics.trackEventFailure(failure.code)
                     onStatus.postValue(
-                        Resource.error("", ChangeFrequencyState(FrequencyStatus.SCAN_FOR_STATION))
+                        Resource.error(
+                            String.empty(), ChangeFrequencyState(FrequencyStatus.SCAN_FOR_STATION)
+                        )
                     )
                 }
             }
@@ -145,7 +147,9 @@ class ChangeFrequencyViewModel(
                     } else {
                         analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
                         onStatus.postValue(
-                            Resource.error("", ChangeFrequencyState(FrequencyStatus.PAIR_STATION))
+                            Resource.error(
+                                String.empty(), ChangeFrequencyState(FrequencyStatus.PAIR_STATION)
+                            )
                         )
                     }
                 }
@@ -214,7 +218,9 @@ class ChangeFrequencyViewModel(
                     BluetoothDevice.BOND_NONE -> {
                         analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
                         onStatus.postValue(
-                            Resource.error("", ChangeFrequencyState(FrequencyStatus.PAIR_STATION))
+                            Resource.error(
+                                String.empty(), ChangeFrequencyState(FrequencyStatus.PAIR_STATION)
+                            )
                         )
                     }
                 }

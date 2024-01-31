@@ -214,9 +214,9 @@ data class UIDevice(
 ) : Parcelable {
     companion object {
         fun empty() = UIDevice(
-            "",
-            "",
-            "",
+            String.empty(),
+            String.empty(),
+            String.empty(),
             null,
             null,
             null,
@@ -244,8 +244,9 @@ data class UIDevice(
     }
 
     fun getLastCharsOfLabel(charCount: Int): String {
-        val cleanLabel = label?.replace(":", "")
-        return cleanLabel?.substring(cleanLabel.length - charCount, cleanLabel.length) ?: ""
+        val cleanLabel = label?.replace(":", String.empty())
+        return cleanLabel?.substring(cleanLabel.length - charCount, cleanLabel.length)
+            ?: String.empty()
     }
 
     fun toNormalizedName(): String {
@@ -266,9 +267,7 @@ data class ScannedDevice(
     val type: DeviceType = DeviceType.HELIUM
 ) : Parcelable {
     companion object {
-        fun empty() = ScannedDevice(
-            "", ""
-        )
+        fun empty() = ScannedDevice(String.empty(), String.empty())
     }
 }
 
@@ -300,7 +299,7 @@ enum class DeviceAlert : Parcelable {
 @Keep
 @JsonClass(generateAdapter = true)
 data class UIForecast(
-    var nameOfDayAndDate: String = "",
+    var nameOfDayAndDate: String = String.empty(),
     var icon: String? = null,
     var minTemp: Float? = null,
     var maxTemp: Float? = null,
@@ -405,7 +404,8 @@ data class UIWalletRewards(
     var walletAddress: String
 ) : Parcelable {
     companion object {
-        fun empty() = UIWalletRewards(BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO, "")
+        fun empty() =
+            UIWalletRewards(BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO, String.empty())
     }
 }
 

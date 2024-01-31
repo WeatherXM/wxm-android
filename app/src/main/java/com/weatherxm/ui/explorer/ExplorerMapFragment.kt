@@ -26,6 +26,7 @@ import com.mapbox.maps.plugin.locationcomponent.location
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setVisible
@@ -170,7 +171,7 @@ class ExplorerMapFragment : BaseMapFragment() {
         } else {
             binding.resultsRecycler.setVisible(true)
             binding.searchEmptyResultsContainer.setVisible(false)
-            adapter.updateData("", searchResults)
+            adapter.updateData(String.empty(), searchResults)
         }
     }
 

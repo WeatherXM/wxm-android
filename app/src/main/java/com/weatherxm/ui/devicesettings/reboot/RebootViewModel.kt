@@ -10,6 +10,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.devicesettings.RebootState
 import com.weatherxm.ui.devicesettings.RebootStatus
 import com.weatherxm.usecases.BluetoothConnectionUseCase
@@ -64,7 +65,11 @@ class RebootViewModel(
             connectAndReboot()
         } else {
             analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
-            onStatus.postValue(Resource.error("", RebootState(RebootStatus.PAIR_STATION)))
+            onStatus.postValue(
+                Resource.error(
+                    String.empty(), RebootState(RebootStatus.PAIR_STATION)
+                )
+            )
         }
     }
 
@@ -80,7 +85,7 @@ class RebootViewModel(
                 }.onLeft { failure ->
                     analytics.trackEventFailure(failure.code)
                     onStatus.postValue(
-                        Resource.error("", RebootState(RebootStatus.SCAN_FOR_STATION))
+                        Resource.error(String.empty(), RebootState(RebootStatus.SCAN_FOR_STATION))
                     )
                 }
             }
@@ -97,7 +102,7 @@ class RebootViewModel(
                     } else {
                         analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
                         onStatus.postValue(
-                            Resource.error("", RebootState(RebootStatus.PAIR_STATION))
+                            Resource.error(String.empty(), RebootState(RebootStatus.PAIR_STATION))
                         )
                     }
                 }
@@ -154,7 +159,7 @@ class RebootViewModel(
                     BluetoothDevice.BOND_NONE -> {
                         analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
                         onStatus.postValue(
-                            Resource.error("", RebootState(RebootStatus.PAIR_STATION))
+                            Resource.error(String.empty(), RebootState(RebootStatus.PAIR_STATION))
                         )
                     }
                 }
