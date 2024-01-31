@@ -17,6 +17,7 @@ import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setIcon
 import com.weatherxm.ui.common.setSuccessChip
@@ -76,8 +77,8 @@ class ClaimHeliumActivity : BaseActivity() {
 
         savedInstanceState?.let {
             binding.pager.currentItem = it.getInt(CURRENT_PAGE, 0)
-            model.setDeviceEUI(it.getString(DEV_EUI, ""))
-            model.setDeviceKey(it.getString(DEV_KEY, ""))
+            model.setDeviceEUI(it.getString(DEV_EUI, String.empty()))
+            model.setDeviceKey(it.getString(DEV_KEY, String.empty()))
             model.setClaimedDevice(it.parcelable(CLAIMED_DEVICE))
         }
     }

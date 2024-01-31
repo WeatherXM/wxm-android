@@ -7,6 +7,7 @@ import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -38,6 +39,14 @@ data class CountryInfo(
     var mapCenter: Location?,
 ) : Parcelable
 
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class WXMRemoteMessage(
+    val type: RemoteMessageType,
+    val url: String? = null
+) : Parcelable
+
 enum class Frequency {
     EU868,
     US915,
@@ -57,4 +66,26 @@ enum class BluetoothOTAState {
     FAILED,
     ABORTED,
     COMPLETED
+}
+
+enum class RemoteMessageType(val id: String, val publicName: String, val desc: String) {
+    ANNOUNCEMENT(
+        "announcement",
+        "Announcements",
+        "These notifications are used for WeatherXM-related announcements."
+    ),
+    DEFAULT("DEFAULT", "Default", "These are general purpose notifications.");
+
+    companion object {
+        fun parse(id: String): RemoteMessageType {
+            return try {
+                RemoteMessageType.entries.firstOrNull {
+                    it.id.equals(id, true)
+                } ?: DEFAULT
+            } catch (e: IllegalArgumentException) {
+                Timber.e(e)
+                DEFAULT
+            }
+        }
+    }
 }

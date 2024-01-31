@@ -195,7 +195,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
 
         notificationsPreference?.isChecked =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                activity?.hasPermission(POST_NOTIFICATIONS) == true
+                context?.hasPermission(POST_NOTIFICATIONS) == true
             } else {
                 NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()
             }

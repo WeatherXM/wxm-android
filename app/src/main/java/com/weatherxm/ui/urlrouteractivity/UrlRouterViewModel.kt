@@ -1,6 +1,6 @@
 package com.weatherxm.ui.urlrouteractivity
 
-import android.net.Uri
+import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,8 +9,12 @@ import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Failure
+import com.weatherxm.data.WXMRemoteMessage
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_PLACES
+import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.explorer.SearchResult
 import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.ExplorerUseCase
@@ -29,18 +33,28 @@ class UrlRouterViewModel(
 
     private val onError = MutableLiveData<String>()
     private val onDevice = MutableLiveData<UIDevice>()
+    private val onRemoteMessage = MutableLiveData<WXMRemoteMessage>()
 
     fun onError(): LiveData<String> = onError
     fun onDevice(): LiveData<UIDevice> = onDevice
+    fun onRemoteMessage(): LiveData<WXMRemoteMessage> = onRemoteMessage
 
-    fun parseUrl(uri: Uri?) {
-        val pathSegments = uri?.pathSegments ?: mutableListOf()
+    fun parseUrl(intent: Intent) {
+        intent.parcelable<WXMRemoteMessage>(ARG_REMOTE_MESSAGE)?.let {
+            if (it.url.isNullOrEmpty()) {
+                onError.postValue(resources.getString(R.string.could_not_parse_url))
+            } else {
+                onRemoteMessage.postValue(it)
+            }
+        } ?: run {
+            val pathSegments = intent.data?.pathSegments ?: mutableListOf()
 
-        // e.g. https://exporer.weatherxm.com/stations/my-weather-station
-        if (pathSegments.size == 2 && pathSegments[0].equals(STATIONS_PATH_SEGMENT)) {
-            searchForDevice(pathSegments[1])
-        } else {
-            onError.postValue(resources.getString(R.string.could_not_parse_url))
+            // e.g. https://exporer.weatherxm.com/stations/my-weather-station
+            if (pathSegments.size == 2 && pathSegments[0].equals(STATIONS_PATH_SEGMENT)) {
+                searchForDevice(pathSegments[1])
+            } else {
+                onError.postValue(resources.getString(R.string.could_not_parse_url))
+            }
         }
     }
 
@@ -69,7 +83,10 @@ class UrlRouterViewModel(
         }?.let {
             onDevice.postValue(it)
         } ?: kotlin.run {
-            usecase.getCellDevice(searchResult.stationCellIndex ?: "", searchResult.stationId ?: "")
+            usecase.getCellDevice(
+                searchResult.stationCellIndex ?: String.empty(),
+                searchResult.stationId ?: String.empty()
+            )
                 .onRight {
                     it.cellCenter = searchResult.center
                     onDevice.postValue(it)

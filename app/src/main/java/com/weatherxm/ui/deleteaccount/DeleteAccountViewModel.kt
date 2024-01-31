@@ -7,6 +7,7 @@ import com.weatherxm.R
 import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidCredentials
 import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidPassword
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.DeleteAccountUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getCode
@@ -41,7 +42,7 @@ class DeleteAccountViewModel(
             onStatus.postValue(
                 Resource.error(
                     resources.getString(R.string.warn_invalid_password),
-                    State(Status.PASSWORD_VERIFICATION, InvalidPassword(""))
+                    State(Status.PASSWORD_VERIFICATION, InvalidPassword(String.empty()))
                 )
             )
             return
@@ -59,7 +60,7 @@ class DeleteAccountViewModel(
                     onStatus.postValue(
                         Resource.error(
                             resources.getString(R.string.warn_invalid_password),
-                            State(Status.PASSWORD_VERIFICATION, InvalidPassword(""))
+                            State(Status.PASSWORD_VERIFICATION, InvalidPassword(String.empty()))
                         )
                     )
                 } else {

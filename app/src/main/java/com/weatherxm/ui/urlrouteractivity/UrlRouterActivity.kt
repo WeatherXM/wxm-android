@@ -38,7 +38,18 @@ class UrlRouterActivity : BaseActivity() {
             finish()
         }
 
-        model.parseUrl(intent.data)
+        model.onRemoteMessage().observe(this) {
+            binding.logo.setVisible(false)
+            it.url?.let { url ->
+                if (isTaskRoot) {
+                    navigator.showStartup(this)
+                }
+                navigator.openWebsite(this, url)
+            }
+            finish()
+        }
+
+        model.parseUrl(intent)
     }
 }
 

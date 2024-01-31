@@ -27,7 +27,6 @@ import com.weatherxm.util.Rewards.weiToETH
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import java.math.BigInteger
 
 class ProfileFragment : BaseFragment() {
     private lateinit var binding: FragmentProfileBinding
@@ -48,7 +47,7 @@ class ProfileFragment : BaseFragment() {
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
                 model.onClaimedResult(
-                    result.data?.getSerializableExtra(ARG_TOKEN_CLAIMED_AMOUNT) as BigInteger
+                    result.data?.getDoubleExtra(ARG_TOKEN_CLAIMED_AMOUNT, 0.0) ?: 0.0
                 )
             }
         }
@@ -148,7 +147,7 @@ class ProfileFragment : BaseFragment() {
             getString(R.string.wxm_amount, formatTokens(weiToETH(data.totalEarned.toBigDecimal())))
         binding.totalClaimedValue.text =
             getString(R.string.wxm_amount, formatTokens(weiToETH(data.totalClaimed.toBigDecimal())))
-        if (data.allocated == BigInteger.ZERO) {
+        if (data.allocated == 0.0) {
             binding.rewards.subtitle(getString(R.string.no_allocated_rewards))
 
             if (parentModel.hasDevices() == false) {

@@ -10,6 +10,7 @@ import com.weatherxm.data.Connectivity
 import com.weatherxm.data.Location
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import kotlinx.parcelize.Parcelize
 
 @Keep
@@ -47,9 +48,9 @@ data class SearchResult(
 ) {
     fun toUIDevice(): UIDevice {
         return UIDevice(
-            id = stationId ?: "",
-            name = name ?: "",
-            cellIndex = stationCellIndex ?: "",
+            id = stationId ?: String.empty(),
+            name = name ?: String.empty(),
+            cellIndex = stationCellIndex ?: String.empty(),
             cellCenter = center,
             relation = relation,
             profile = null,

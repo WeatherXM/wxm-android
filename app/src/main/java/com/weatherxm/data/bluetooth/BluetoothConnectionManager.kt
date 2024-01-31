@@ -23,6 +23,7 @@ import com.juul.kable.Peripheral
 import com.juul.kable.peripheral
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Failure
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -59,7 +60,7 @@ class BluetoothConnectionManager(
     }
 
     private lateinit var peripheral: Peripheral
-    private var macAddress: String = ""
+    private var macAddress: String = String.empty()
     private var readCharacteristic: Characteristic? = null
     private var writeCharacteristic: Characteristic? = null
 
@@ -271,9 +272,10 @@ class BluetoothConnectionManager(
 
         readCharacteristic?.let { characteristic ->
             var failed = false
-            var fullResponse = ""
+            var fullResponse = String.empty()
             peripheral.observe(characteristic).takeWhile {
-                val currentResponse = String(it).replace("\r", "").replace("\n", "")
+                val currentResponse =
+                    String(it).replace("\r", String.empty()).replace("\n", String.empty())
                 Timber.d("[BLE Communication] Response: $currentResponse")
                 if (currentResponse.contains("ERROR")) {
                     Timber.e("[BLE Communication] ERROR: $currentResponse")
@@ -289,7 +291,7 @@ class BluetoothConnectionManager(
                     listener.invoke(Either.Right(fullResponse))
                 }
             }.collect {
-                fullResponse += String(it).replace("'", "")
+                fullResponse += String(it).replace("'", String.empty())
             }
         }
     }
@@ -303,7 +305,8 @@ class BluetoothConnectionManager(
         readCharacteristic?.let { characteristic ->
             var isSuccess = false
             peripheral.observe(characteristic).cancellable().takeWhile {
-                val currentResponse = String(it).replace("\r", "").replace("\n", "")
+                val currentResponse =
+                    String(it).replace("\r", String.empty()).replace("\n", String.empty())
                 if (currentResponse.contains("ERROR")) {
                     Timber.e("[BLE Communication] ERROR: $currentResponse")
                     isSuccess = false

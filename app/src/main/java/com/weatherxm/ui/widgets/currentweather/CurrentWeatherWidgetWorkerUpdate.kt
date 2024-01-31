@@ -4,6 +4,7 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID
 import android.content.Context
 import android.content.Intent
+import android.os.Parcelable
 import androidx.preference.PreferenceManager
 import androidx.work.Constraints
 import androidx.work.CoroutineWorker
@@ -27,6 +28,7 @@ import com.weatherxm.ui.common.Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_ID
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_SHOULD_SELECT_STATION
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
+import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.util.WidgetHelper
@@ -47,7 +49,8 @@ class CurrentWeatherWidgetWorkerUpdate(
             val ids = prefs.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, setOf())
 
             ids?.forEach {
-                val deviceId = prefs.getString(CacheService.getWidgetFormattedKey(it.toInt()), "")
+                val deviceId =
+                    prefs.getString(CacheService.getWidgetFormattedKey(it.toInt()), String.empty())
                 if (!deviceId.isNullOrEmpty()) {
                     initAndStart(context, it.toInt(), deviceId)
                 }
@@ -99,7 +102,7 @@ class CurrentWeatherWidgetWorkerUpdate(
         val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
         intent.putExtra(ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
-        intent.putExtra(ARG_WIDGET_TYPE, widgetType)
+        intent.putExtra(ARG_WIDGET_TYPE, widgetType as Parcelable)
 
         return authUseCase.isLoggedIn()
             .flatMap { isLoggedIn ->

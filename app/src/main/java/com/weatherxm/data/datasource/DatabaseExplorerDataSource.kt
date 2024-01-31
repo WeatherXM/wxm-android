@@ -14,6 +14,7 @@ import com.weatherxm.data.database.dao.BaseDao
 import com.weatherxm.data.database.dao.NetworkSearchRecentDao
 import com.weatherxm.data.database.entities.NetworkSearchRecent
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.RECENTS_MAX_ENTRIES
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.explorer.SearchResult
 
 class DatabaseExplorerDataSource(
@@ -77,7 +78,7 @@ class DatabaseExplorerDataSource(
 
         BaseDao.Companion.DAOWrapper(dao).insertWithTimestamp(
             NetworkSearchRecent(
-                name = search.name ?: "",
+                name = search.name ?: String.empty(),
                 lat = search.center?.lat ?: 0.0,
                 lon = search.center?.lon ?: 0.0,
                 addressPlace = search.addressPlace,

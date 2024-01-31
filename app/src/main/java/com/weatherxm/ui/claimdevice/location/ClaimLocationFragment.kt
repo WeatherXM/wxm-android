@@ -1,7 +1,6 @@
 package com.weatherxm.ui.claimdevice.location
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +15,7 @@ import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.SearchResultsAdapter
 import com.weatherxm.ui.common.hideKeyboard
+import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.EditLocationListener
@@ -35,21 +35,15 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
         const val ARG_DEVICE_TYPE = "device_type"
 
         fun newInstance(deviceType: DeviceType) = ClaimLocationFragment().apply {
-            arguments = Bundle().apply { putSerializable(ARG_DEVICE_TYPE, deviceType) }
+            arguments = Bundle().apply { putParcelable(ARG_DEVICE_TYPE, deviceType) }
         }
     }
 
     init {
         lifecycleScope.launch {
             whenCreated {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    arguments?.getSerializable(ARG_DEVICE_TYPE, DeviceType::class.java)?.let {
-                        model.setDeviceType(it)
-                    }
-                } else {
-                    arguments?.getSerializable(ARG_DEVICE_TYPE)?.let {
-                        model.setDeviceType(it as DeviceType)
-                    }
+                arguments?.parcelable<DeviceType>(ARG_DEVICE_TYPE)?.let {
+                    model.setDeviceType(it)
                 }
             }
         }

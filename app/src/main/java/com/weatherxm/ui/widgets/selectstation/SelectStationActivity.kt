@@ -4,6 +4,7 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -123,14 +124,17 @@ class SelectStationActivity : BaseActivity() {
         /**
          * Broadcast a custom intent in order to update the widget that was just added.
          */
-        val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-        intent.putExtra(
-            ARG_WIDGET_TYPE,
-            widgetHelper.getWidgetTypeById(AppWidgetManager.getInstance(this), appWidgetId)
-        )
-        intent.putExtra(Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
-        intent.putExtra(Contracts.ARG_DEVICE, model.getStationSelected())
+        val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE).apply {
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+            putExtra(
+                ARG_WIDGET_TYPE,
+                widgetHelper.getWidgetTypeById(
+                    AppWidgetManager.getInstance(this@SelectStationActivity), appWidgetId
+                ) as Parcelable
+            )
+            putExtra(Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
+            putExtra(Contracts.ARG_DEVICE, model.getStationSelected())
+        }
 
         this.sendBroadcast(intent)
 

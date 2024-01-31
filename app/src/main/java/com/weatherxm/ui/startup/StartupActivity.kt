@@ -20,10 +20,13 @@ class StartupActivity : BaseActivity() {
                 StartupState.ShowHome -> navigator.showHome(this)
                 StartupState.ShowAnalyticsOptIn -> navigator.showAnalyticsOptIn(this)
                 StartupState.ShowUpdate -> navigator.showUpdatePrompt(this)
+                is StartupState.ShowUrlRouter -> navigator.showUrlRouter(this, state.remoteMessage)
             }
             finish()
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
+
+        model.handleStartup(intent)
     }
 
     override fun onResume() {

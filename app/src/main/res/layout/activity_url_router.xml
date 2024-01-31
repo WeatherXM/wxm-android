@@ -24,7 +24,7 @@
         android:layout_gravity="center"
         android:padding="@dimen/padding_extra_large"
         android:visibility="gone"
-        app:empty_animation="@raw/anim_empty_devices"
+        tools:empty_animation="@raw/anim_empty_devices"
         tools:empty_subtitle="How are you?"
         tools:empty_title="Nothing here"
         tools:visibility="visible" />

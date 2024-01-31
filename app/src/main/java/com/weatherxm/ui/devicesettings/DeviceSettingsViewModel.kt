@@ -12,6 +12,7 @@ import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.capitalizeWords
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.util.Analytics
@@ -240,7 +241,7 @@ class DeviceSettingsViewModel(
     }
 
     fun parseDeviceInfoToShare(deviceInfo: List<UIDeviceInfo>): String {
-        var sharingText = ""
+        var sharingText = String.empty()
         deviceInfo.forEach {
             sharingText += "${it}\n"
         }
