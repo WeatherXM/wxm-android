@@ -16,6 +16,7 @@ import com.weatherxm.data.Location
 import com.weatherxm.data.User
 import com.weatherxm.data.WeatherData
 import com.weatherxm.data.network.AuthToken
+import com.weatherxm.ui.common.empty
 import com.weatherxm.util.Resources
 import okhttp3.Cache
 import java.util.concurrent.TimeUnit
@@ -166,7 +167,7 @@ class CacheService(
     }
 
     fun getUserId(): String {
-        return preferences.getString(KEY_USER_ID, "") ?: ""
+        return preferences.getString(KEY_USER_ID, String.empty()) ?: String.empty()
     }
 
     fun getForecast(deviceId: String): Either<Failure, List<WeatherData>> {
@@ -226,7 +227,7 @@ class CacheService(
     }
 
     fun getDeviceLastOtaVersion(key: String): Either<Failure, String> {
-        val lastOtaVersion = preferences.getString(key, "")
+        val lastOtaVersion = preferences.getString(key, String.empty())
         return if (lastOtaVersion.isNullOrEmpty()) {
             Either.Left(DataError.CacheMissError)
         } else {
@@ -266,7 +267,7 @@ class CacheService(
     }
 
     fun getWidgetDevice(key: String): Either<Failure, String> {
-        val deviceId = preferences.getString(key, "")
+        val deviceId = preferences.getString(key, String.empty())
         return if (deviceId.isNullOrEmpty()) {
             Either.Left(DataError.CacheMissError)
         } else {

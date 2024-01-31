@@ -108,7 +108,7 @@ fun Editable?.unmask(): String = this.toString().unmask()
 /**
  * Remove colon ":" character from Serial Number text
  */
-fun String.unmask(): String = this.replace(":", "")
+fun String.unmask(): String = this.replace(":", String.empty())
 
 /**
  * hello world ---> Hello World
@@ -126,6 +126,9 @@ fun String.capitalized(): String {
         }
     }
 }
+
+@Suppress("FunctionOnlyReturningConstant")
+fun String.Companion.empty() = ""
 
 fun View.show(
     animation: Animation.ShowAnimation? = Animation.ShowAnimation.FadeIn,
@@ -177,9 +180,7 @@ fun EditText.onTextChanged(callback: (String) -> Unit) {
     })
 }
 
-fun EditText.clear() {
-    this.setText("")
-}
+fun EditText.clear() = this.setText(String.empty())
 
 fun ImageView.setWarningDrawable(context: Context) {
     val drawable = ResourcesCompat.getDrawable(resources, R.drawable.ic_warn, context.theme)

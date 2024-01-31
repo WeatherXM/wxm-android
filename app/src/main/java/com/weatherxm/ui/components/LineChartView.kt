@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import com.github.mikephil.charting.charts.LineChart
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewLineChartBinding
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setVisible
 
 class LineChartView : LinearLayout {
@@ -93,16 +94,20 @@ class LineChartView : LinearLayout {
         binding.chart.highlightValue(x, dataSetIndex)
     }
 
-    fun onHighlightedData(time: String, primaryData: String, secondaryData: String = "") {
+    fun onHighlightedData(
+        time: String,
+        primaryData: String,
+        secondaryData: String = String.empty()
+    ) {
         binding.time.text = time
         binding.primaryDataValue.text = primaryData
         binding.secondaryDataValue.text = secondaryData
     }
 
     fun onClearHighlight() {
-        binding.time.text = ""
-        binding.primaryDataValue.text = ""
-        binding.secondaryDataValue.text = ""
+        binding.time.text = String.empty()
+        binding.primaryDataValue.text = String.empty()
+        binding.secondaryDataValue.text = String.empty()
     }
 
     fun clearChart() {

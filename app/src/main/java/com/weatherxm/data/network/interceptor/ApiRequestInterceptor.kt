@@ -4,6 +4,7 @@ import arrow.core.getOrElse
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor.Companion.AUTH_HEADER
 import com.weatherxm.data.path
+import com.weatherxm.ui.common.empty
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
@@ -63,7 +64,7 @@ private fun Request.signedRequest(cacheAuthDataSource: CacheAuthDataSource): Req
 
         // Return a new request, adding empty auth header
         this.newBuilder()
-            .header(AUTH_HEADER, "")
+            .header(AUTH_HEADER, String.empty())
             .build()
     }
 }

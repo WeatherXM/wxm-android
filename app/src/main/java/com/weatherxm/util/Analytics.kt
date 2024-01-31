@@ -11,6 +11,7 @@ import com.weatherxm.ui.common.DevicesFilterType
 import com.weatherxm.ui.common.DevicesGroupBy
 import com.weatherxm.ui.common.DevicesSortFilterOptions
 import com.weatherxm.ui.common.DevicesSortOrder
+import com.weatherxm.ui.common.empty
 import timber.log.Timber
 
 class Analytics(
@@ -393,7 +394,7 @@ class Analytics(
         if (cacheService.getAnalyticsEnabled()) {
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                 param(FirebaseAnalytics.Param.SCREEN_NAME, screen.screenName)
-                param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass ?: "")
+                param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass ?: String.empty())
                 itemId?.let { param(FirebaseAnalytics.Param.ITEM_ID, itemId) }
             }
         }
@@ -446,7 +447,7 @@ class Analytics(
         trackEventViewContent(
             ParamValue.FAILURE.paramValue,
             ParamValue.FAILURE_ID.paramValue,
-            Pair(FirebaseAnalytics.Param.ITEM_ID, failureId ?: "")
+            Pair(FirebaseAnalytics.Param.ITEM_ID, failureId ?: String.empty())
         )
     }
 

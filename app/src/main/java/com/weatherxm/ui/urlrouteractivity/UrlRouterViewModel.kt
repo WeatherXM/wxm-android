@@ -11,6 +11,7 @@ import com.weatherxm.data.ApiError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_PLACES
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.explorer.SearchResult
 import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.ExplorerUseCase
@@ -69,7 +70,10 @@ class UrlRouterViewModel(
         }?.let {
             onDevice.postValue(it)
         } ?: kotlin.run {
-            usecase.getCellDevice(searchResult.stationCellIndex ?: "", searchResult.stationId ?: "")
+            usecase.getCellDevice(
+                searchResult.stationCellIndex ?: String.empty(),
+                searchResult.stationId ?: String.empty()
+            )
                 .onRight {
                     it.cellCenter = searchResult.center
                     onDevice.postValue(it)

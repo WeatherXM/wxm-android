@@ -19,7 +19,7 @@ class SearchResultsAdapter(
 ) : ListAdapter<SearchSuggestion, LocationSearchResultViewHolder>(
     LocationSearchResultDiffCallback()
 ) {
-    private var query: String = ""
+    private var query: String = String.empty()
 
     fun updateData(newQuery: String, newData: List<SearchSuggestion> = mutableListOf()) {
         query = newQuery
