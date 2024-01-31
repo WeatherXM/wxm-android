@@ -22,7 +22,6 @@ import com.weatherxm.util.Rewards.shouldHideAnnotations
 import com.weatherxm.util.isToday
 import com.weatherxm.util.isYesterday
 import kotlinx.parcelize.Parcelize
-import java.math.BigInteger
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -398,14 +397,13 @@ data class DevicesSortFilterOptions(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class UIWalletRewards(
-    var totalEarned: BigInteger,
-    var totalClaimed: BigInteger,
-    var allocated: BigInteger,
+    var totalEarned: Double,
+    var totalClaimed: Double,
+    var allocated: Double,
     var walletAddress: String
 ) : Parcelable {
     companion object {
-        fun empty() =
-            UIWalletRewards(BigInteger.ZERO, BigInteger.ZERO, BigInteger.ZERO, String.empty())
+        fun empty() = UIWalletRewards(0.0, 0.0, 0.0, String.empty())
     }
 }
 

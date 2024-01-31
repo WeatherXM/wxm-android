@@ -7,7 +7,6 @@ import com.weatherxm.ui.common.Contracts.ARG_TOKEN_CLAIMED_AMOUNT
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.Resources
-import java.math.BigInteger
 
 class RewardsClaimViewModel(
     private val displayModeHelper: DisplayModeHelper,
@@ -37,12 +36,7 @@ class RewardsClaimViewModel(
         return queryParams
     }
 
-    fun getAmountFromRedirectUrl(uri: Uri?): BigInteger {
-        val amountQueryParam = uri?.getQueryParameter(ARG_TOKEN_CLAIMED_AMOUNT)
-        return if (amountQueryParam != null) {
-            BigInteger(amountQueryParam)
-        } else {
-            BigInteger.ZERO
-        }
+    fun getAmountFromRedirectUrl(uri: Uri?): Double {
+        return uri?.getQueryParameter(ARG_TOKEN_CLAIMED_AMOUNT)?.toDoubleOrNull() ?: 0.0
     }
 }
