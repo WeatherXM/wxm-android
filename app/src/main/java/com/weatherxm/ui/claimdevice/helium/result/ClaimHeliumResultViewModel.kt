@@ -7,6 +7,7 @@ import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
 import com.weatherxm.ui.common.UIError
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.usecases.BluetoothConnectionUseCase
@@ -20,7 +21,7 @@ class ClaimHeliumResultViewModel(
     private val resources: Resources,
     connectionUseCase: BluetoothConnectionUseCase,
     analytics: Analytics
-) : BluetoothHeliumViewModel("", null, connectionUseCase, analytics) {
+) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics) {
     companion object {
         val CONNECT_DELAY_ON_REBOOT = TimeUnit.SECONDS.toMillis(10L)
     }

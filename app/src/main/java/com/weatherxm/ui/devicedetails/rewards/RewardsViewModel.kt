@@ -13,6 +13,7 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.UIRewardObject
 import com.weatherxm.ui.common.UIRewards
+import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getDefaultMessage
@@ -88,7 +89,7 @@ class RewardsViewModel(
     }
 
     private fun handleRewardsFailure(failure: Failure, tabSelected: TabSelected) {
-        val uiError = UIError("", null)
+        val uiError = UIError(String.empty(), null)
         when (failure) {
             is ApiError.GenericError -> {
                 uiError.errorMessage =

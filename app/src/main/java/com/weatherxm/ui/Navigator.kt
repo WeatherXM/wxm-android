@@ -16,6 +16,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.Location
+import com.weatherxm.data.WXMRemoteMessage
 import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.cellinfo.CellInfoActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
@@ -26,6 +27,7 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
+import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_REWARDS_OBJECT
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
@@ -62,6 +64,7 @@ import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
+import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
 import com.weatherxm.util.Analytics
 import timber.log.Timber
 import java.time.LocalDate
@@ -347,6 +350,14 @@ class Navigator(private val analytics: Analytics) {
             Intent(context, ChangeFrequencyActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_DEVICE, device)
+        )
+    }
+
+    fun showUrlRouter(context: Context, wxmRemoteMessage: WXMRemoteMessage? = null) {
+        context.startActivity(
+            Intent(context, UrlRouterActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                .putExtra(ARG_REMOTE_MESSAGE, wxmRemoteMessage)
         )
     }
 

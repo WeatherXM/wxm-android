@@ -16,6 +16,7 @@ import com.weatherxm.ui.common.Contracts.ARG_WIDGET_SHOULD_LOGIN
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_SHOULD_SELECT_STATION
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.widgets.WidgetType
 import com.weatherxm.ui.widgets.onDevice
@@ -54,7 +55,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
         val widgetIdsFromIntent = extras?.getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS)
 
         val validWidgetTypeForUpdate =
-            extras?.getSerializable(ARG_WIDGET_TYPE) == WidgetType.CURRENT_WEATHER
+            extras?.parcelable<WidgetType>(ARG_WIDGET_TYPE) == WidgetType.CURRENT_WEATHER
 
         /*
         * Only update widget on actions we have triggered:
@@ -148,7 +149,7 @@ class CurrentWeatherWidget : AppWidgetProvider(), KoinComponent {
                 CurrentWeatherWidgetWorkerUpdate.initAndStart(
                     context,
                     it,
-                    usecase.getWidgetDevice(it) ?: ""
+                    usecase.getWidgetDevice(it) ?: String.empty()
                 )
             }
         }

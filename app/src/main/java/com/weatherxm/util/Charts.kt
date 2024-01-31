@@ -18,6 +18,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.weatherxm.R
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.show
 import com.weatherxm.ui.devicehistory.LineChartData
 import com.weatherxm.util.Weather.getDecimalsPressure
@@ -544,7 +545,7 @@ fun LineChart.initSolarChart(
 
 @Suppress("MagicNumber")
 fun LineChart.initializeNetworkStatsChart(entries: List<Entry>) {
-    val dataSet = LineDataSet(entries, "")
+    val dataSet = LineDataSet(entries, String.empty())
     val lineData = LineData(dataSet)
     data = lineData
 

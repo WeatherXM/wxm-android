@@ -3,6 +3,7 @@ package com.weatherxm.util
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.os.Parcelable
 import arrow.core.Either
 import com.weatherxm.R
 import com.weatherxm.data.Failure
@@ -39,7 +40,9 @@ class WidgetHelper(private val cacheService: CacheService, private val context: 
                     putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId.toInt())
                     putExtra(
                         Contracts.ARG_WIDGET_TYPE,
-                        getWidgetTypeById(AppWidgetManager.getInstance(context), widgetId.toInt())
+                        getWidgetTypeById(
+                            AppWidgetManager.getInstance(context), widgetId.toInt()
+                        ) as Parcelable
                     )
                     putExtra(Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
                     putExtra(Contracts.ARG_WIDGET_SHOULD_SELECT_STATION, true)

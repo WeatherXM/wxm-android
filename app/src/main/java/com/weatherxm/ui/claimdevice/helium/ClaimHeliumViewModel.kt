@@ -13,6 +13,7 @@ import com.weatherxm.data.Frequency
 import com.weatherxm.data.Location
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getDefaultMessageResId
@@ -39,8 +40,8 @@ class ClaimHeliumViewModel(
     fun onBackToLocation() = onBackToLocation
     fun onClaimResult() = onClaimResult
 
-    private var devEUI: String = ""
-    private var deviceKey: String = ""
+    private var devEUI: String = String.empty()
+    private var deviceKey: String = String.empty()
     private var frequency: Frequency = Frequency.US915
 
     fun setFrequency(frequency: Frequency) {

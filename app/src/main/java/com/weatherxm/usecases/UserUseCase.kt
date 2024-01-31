@@ -12,7 +12,7 @@ import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.data.repository.WalletRepository
 import com.weatherxm.ui.common.UIWalletRewards
-import java.math.BigInteger
+import com.weatherxm.ui.common.empty
 import java.util.concurrent.TimeUnit
 
 interface UserUseCase {
@@ -61,20 +61,13 @@ class UserUseCaseImpl(
         walletAddress: String?
     ): Either<Failure, UIWalletRewards> {
         return if (walletAddress.isNullOrEmpty()) {
-            Either.Right(
-                UIWalletRewards(
-                    BigInteger.ZERO,
-                    BigInteger.ZERO,
-                    BigInteger.ZERO,
-                    ""
-                )
-            )
+            Either.Right(UIWalletRewards(0.0, 0.0, 0.0, String.empty()))
         } else {
             rewardsRepository.getWalletRewards(walletAddress).map { rewards ->
                 UIWalletRewards(
-                    rewards.cumulativeAmount ?: BigInteger.ZERO,
-                    rewards.totalClaimed ?: BigInteger.ZERO,
-                    rewards.available ?: BigInteger.ZERO,
+                    rewards.cumulativeAmount ?: 0.0,
+                    rewards.totalClaimed ?: 0.0,
+                    rewards.available ?: 0.0,
                     walletAddress
                 )
             }

@@ -1,5 +1,7 @@
 package com.weatherxm.util
 
+import com.weatherxm.ui.common.empty
+
 object Mask {
 
     private const val DEFAULT_OFFSET_START = 5
@@ -14,7 +16,7 @@ object Mask {
         maxMaskedChars: Int = DEFAULT_MASKED_CHARACTERS_TO_SHOW,
         maskCharacter: Char = DEFAULT_MASK_CHARACTER
     ): String {
-        var addressToShow = ""
+        var addressToShow = String.empty()
         var counter = 0
         var maskedCharacters = 0
         hash.forEach {

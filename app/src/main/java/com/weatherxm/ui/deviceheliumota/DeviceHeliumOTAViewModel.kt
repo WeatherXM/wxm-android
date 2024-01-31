@@ -9,6 +9,7 @@ import com.weatherxm.data.BluetoothOTAState
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
@@ -49,7 +50,7 @@ class DeviceHeliumOTAViewModel(
                     State(OTAStatus.SCAN_FOR_STATION, BluetoothError.DeviceNotFound)
                 )
             } else {
-                Resource.error("", State(OTAStatus.SCAN_FOR_STATION))
+                Resource.error(String.empty(), State(OTAStatus.SCAN_FOR_STATION))
             }
         )
     }
@@ -59,7 +60,7 @@ class DeviceHeliumOTAViewModel(
     }
 
     override fun onNotPaired() {
-        onStatus.postValue(Resource.error("", State(OTAStatus.PAIR_STATION)))
+        onStatus.postValue(Resource.error(String.empty(), State(OTAStatus.PAIR_STATION)))
     }
 
     override fun onConnected() {
@@ -129,7 +130,7 @@ class DeviceHeliumOTAViewModel(
                         analytics.trackEventFailure(Failure.CODE_BL_OTA_FAILED)
                         onStatus.postValue(
                             Resource.error(
-                                "",
+                                String.empty(),
                                 State(
                                     OTAStatus.INSTALLING,
                                     otaError = it.error,

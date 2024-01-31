@@ -7,6 +7,7 @@ import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.ui.devicesettings.RebootState
 import com.weatherxm.ui.devicesettings.RebootStatus
@@ -42,7 +43,7 @@ class RebootViewModel(
                     RebootState(RebootStatus.SCAN_FOR_STATION, BluetoothError.DeviceNotFound)
                 )
             } else {
-                Resource.error("", RebootState(RebootStatus.SCAN_FOR_STATION))
+                Resource.error(String.empty(), RebootState(RebootStatus.SCAN_FOR_STATION))
             }
         )
     }
@@ -52,7 +53,7 @@ class RebootViewModel(
     }
 
     override fun onNotPaired() {
-        onStatus.postValue(Resource.error("", RebootState(RebootStatus.PAIR_STATION)))
+        onStatus.postValue(Resource.error(String.empty(), RebootState(RebootStatus.PAIR_STATION)))
     }
 
     override fun onConnected() {

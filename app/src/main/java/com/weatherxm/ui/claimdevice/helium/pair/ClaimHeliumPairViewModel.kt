@@ -9,6 +9,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIError
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
@@ -22,7 +23,7 @@ class ClaimHeliumPairViewModel(
     analytics: Analytics,
     private val scanDevicesUseCase: BluetoothScannerUseCase,
     connectionUseCase: BluetoothConnectionUseCase
-) : BluetoothHeliumViewModel("", null, connectionUseCase, analytics) {
+) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics) {
     private var scannedDevices: MutableList<ScannedDevice> = mutableListOf()
 
     private val onBLEError = MutableLiveData<UIError>()
@@ -56,7 +57,7 @@ class ClaimHeliumPairViewModel(
                     }
                 }.onLeft { failure ->
                     analytics.trackEventFailure(failure.code)
-                    onScanStatus.postValue(Resource.error(""))
+                    onScanStatus.postValue(Resource.error(String.empty()))
                 }
             }
         }

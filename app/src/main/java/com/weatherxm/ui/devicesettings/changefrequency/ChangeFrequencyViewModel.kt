@@ -9,6 +9,7 @@ import com.weatherxm.data.Frequency
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.FrequencyState
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.ui.devicesettings.ChangeFrequencyState
 import com.weatherxm.ui.devicesettings.FrequencyStatus
@@ -79,7 +80,9 @@ class ChangeFrequencyViewModel(
                     )
                 )
             } else {
-                Resource.error("", ChangeFrequencyState(FrequencyStatus.SCAN_FOR_STATION))
+                Resource.error(
+                    String.empty(), ChangeFrequencyState(FrequencyStatus.SCAN_FOR_STATION)
+                )
             }
         )
     }
@@ -90,7 +93,7 @@ class ChangeFrequencyViewModel(
 
     override fun onNotPaired() {
         onStatus.postValue(
-            Resource.error("", ChangeFrequencyState(FrequencyStatus.PAIR_STATION))
+            Resource.error(String.empty(), ChangeFrequencyState(FrequencyStatus.PAIR_STATION))
         )
     }
 

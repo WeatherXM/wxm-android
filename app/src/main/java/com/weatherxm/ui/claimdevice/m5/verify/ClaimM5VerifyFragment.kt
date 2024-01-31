@@ -10,6 +10,7 @@ import com.redmadrobot.inputmask.MaskedTextChangedListener
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimM5VerifyBinding
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -58,7 +59,7 @@ class ClaimM5VerifyFragment : BaseFragment() {
                      * in the serial number & location screen and edits the SN after he has already
                      * set it successfully once
                      */
-                    model.setSerialNumber("")
+                    model.setSerialNumber(String.empty())
                 }
             })
 
