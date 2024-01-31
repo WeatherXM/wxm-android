@@ -11,6 +11,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIError
+import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.Analytics
@@ -33,7 +34,7 @@ class ClaimHeliumPairViewModel(
     private val onScanStatus = MutableLiveData<Resource<Unit>>()
     private val onScanProgress = MutableLiveData<Int>()
 
-    private var selectedDeviceMacAddress: String = ""
+    private var selectedDeviceMacAddress: String = String.empty()
     private var bleConnectionStarted = false
 
     fun onNewScannedDevice(): LiveData<List<ScannedDevice>> = onNewScannedDevice
@@ -58,7 +59,7 @@ class ClaimHeliumPairViewModel(
                     }
                 }.onLeft { failure ->
                     analytics.trackEventFailure(failure.code)
-                    onScanStatus.postValue(Resource.error(""))
+                    onScanStatus.postValue(Resource.error(String.empty()))
                 }
             }
         }

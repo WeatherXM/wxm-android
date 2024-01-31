@@ -27,6 +27,7 @@ import com.weatherxm.ui.common.Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_ID
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_SHOULD_SELECT_STATION
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
+import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.util.WidgetHelper
@@ -47,7 +48,8 @@ class CurrentWeatherWidgetWorkerUpdate(
             val ids = prefs.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, setOf())
 
             ids?.forEach {
-                val deviceId = prefs.getString(CacheService.getWidgetFormattedKey(it.toInt()), "")
+                val deviceId =
+                    prefs.getString(CacheService.getWidgetFormattedKey(it.toInt()), String.empty())
                 if (!deviceId.isNullOrEmpty()) {
                     initAndStart(context, it.toInt(), deviceId)
                 }

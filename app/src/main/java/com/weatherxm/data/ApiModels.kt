@@ -7,6 +7,7 @@ import com.squareup.moshi.JsonClass
 import com.weatherxm.ui.common.AnnotationCode
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.math.BigInteger
@@ -104,7 +105,7 @@ data class Device(
 ) : Parcelable {
     companion object {
         fun empty() = Device(
-            "", "", null, null, null, null, null, null, null, null, null
+            String.empty(), String.empty(), null, null, null, null, null, null, null, null, null
         )
     }
 
@@ -117,7 +118,7 @@ data class Device(
         return UIDevice(
             id = id,
             name = name,
-            cellIndex = attributes?.hex7?.index ?: "",
+            cellIndex = attributes?.hex7?.index ?: String.empty(),
             cellCenter = attributes?.hex7?.center,
             profile = profile,
             isActive = attributes?.isActive,
@@ -136,7 +137,7 @@ data class Device(
         )
     }
 
-    fun isEmpty() = id == "" && name == ""
+    fun isEmpty() = id == String.empty() && name == String.empty()
 }
 
 @Keep
@@ -502,7 +503,7 @@ data class RewardsAnnotation(
 ) : Parcelable {
     fun toAnnotationCode(): AnnotationCode {
         return try {
-            AnnotationCode.valueOf(annotation ?: "")
+            AnnotationCode.valueOf(annotation ?: String.empty())
         } catch (e: IllegalArgumentException) {
             Timber.w(e)
             AnnotationCode.UNKNOWN

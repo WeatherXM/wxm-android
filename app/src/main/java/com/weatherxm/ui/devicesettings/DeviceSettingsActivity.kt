@@ -15,6 +15,7 @@ import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.applyOnGlobalLayout
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
@@ -135,10 +136,13 @@ class DeviceSettingsActivity : BaseActivity() {
 
         if (model.device.relation == DeviceRelation.FOLLOWED) {
             binding.locationDesc.setHtml(
-                R.string.station_location_favorite_desc, model.device.address ?: ""
+                R.string.station_location_favorite_desc, model.device.address ?: String.empty()
             )
         } else {
-            binding.locationDesc.setHtml(R.string.station_location_desc, model.device.address ?: "")
+            binding.locationDesc.setHtml(
+                R.string.station_location_desc,
+                model.device.address ?: String.empty()
+            )
         }
 
         if (forceUpdateMinimap) {

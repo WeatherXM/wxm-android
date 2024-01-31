@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.Connectivity
 import com.weatherxm.databinding.ListItemNetworkSearchResultBinding
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.highlightText
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.explorer.SearchResult
@@ -17,7 +18,7 @@ class NetworkSearchResultsListAdapter(
 ) : ListAdapter<SearchResult, NetworkSearchResultsListAdapter.NetworkSearchResultViewHolder>(
     NetworkSearchResultDiffCallback()
 ) {
-    private var query: String = ""
+    private var query: String = String.empty()
 
     fun updateData(newQuery: String, newData: List<SearchResult> = mutableListOf()) {
         /*
@@ -61,7 +62,7 @@ class NetworkSearchResultsListAdapter(
                 else -> {}
             }
 
-            val resultName = item.name ?: ""
+            val resultName = item.name ?: String.empty()
             if (query.isEmpty()) {
                 binding.resultName.text = resultName
                 binding.resultName.setTextColor(itemView.context.getColor(R.color.colorOnSurface))

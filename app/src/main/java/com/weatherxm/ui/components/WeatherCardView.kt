@@ -11,6 +11,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.databinding.ViewWeatherCardBinding
+import com.weatherxm.ui.common.empty
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Weather
@@ -76,7 +77,7 @@ class WeatherCardView : LinearLayout {
             )
             val windDirectionUnit = weatherData?.windDirection?.let {
                 Weather.getFormattedWindDirection(it)
-            } ?: ""
+            } ?: String.empty()
             val windGustValue = Weather.getFormattedWind(
                 weatherData?.windGust, weatherData?.windDirection, includeUnits = false
             )

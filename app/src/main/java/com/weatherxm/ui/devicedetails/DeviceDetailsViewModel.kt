@@ -11,6 +11,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCase
@@ -96,7 +97,7 @@ class DeviceDetailsViewModel(
         return if (!device.isEmpty()) {
             device.toNormalizedName()
         } else {
-            ""
+            String.empty()
         }
     }
 

@@ -12,6 +12,7 @@ import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.data.repository.UserRepository
 import com.weatherxm.data.repository.WalletRepository
 import com.weatherxm.ui.common.UIWalletRewards
+import com.weatherxm.ui.common.empty
 import java.math.BigInteger
 import java.util.concurrent.TimeUnit
 
@@ -66,7 +67,7 @@ class UserUseCaseImpl(
                     BigInteger.ZERO,
                     BigInteger.ZERO,
                     BigInteger.ZERO,
-                    ""
+                    String.empty()
                 )
             )
         } else {

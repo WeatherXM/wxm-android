@@ -11,6 +11,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityConnectWalletBinding
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.getRichText
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
@@ -108,7 +109,10 @@ class ConnectWalletActivity : BaseActivity() {
         binding.editWallet.setOnClickListener {
             analytics.trackEventSelectContent(
                 Analytics.ParamValue.EDIT_WALLET.paramValue,
-                Pair(FirebaseAnalytics.Param.ITEM_ID, model.currentAddress().value ?: "")
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID,
+                    model.currentAddress().value ?: String.empty()
+                )
             )
             navigator.showPasswordPrompt(
                 this,
@@ -134,7 +138,10 @@ class ConnectWalletActivity : BaseActivity() {
         binding.createMetamask.setOnClickListener {
             analytics.trackEventSelectContent(
                 Analytics.ParamValue.CREATE_METAMASK.paramValue,
-                Pair(FirebaseAnalytics.Param.ITEM_ID, model.currentAddress().value ?: "")
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID,
+                    model.currentAddress().value ?: String.empty()
+                )
             )
             navigator.openWebsite(this, getString(R.string.suggested_wallets_documentation))
         }
@@ -145,7 +152,9 @@ class ConnectWalletActivity : BaseActivity() {
             )
             analytics.trackEventSelectContent(
                 Analytics.ParamValue.WALLET_TRANSACTIONS.paramValue,
-                Pair(FirebaseAnalytics.Param.ITEM_ID, model.currentAddress().value ?: "")
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID, model.currentAddress().value ?: String.empty()
+                )
             )
         }
 

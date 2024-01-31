@@ -18,6 +18,7 @@ import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyFragment
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setIcon
 import com.weatherxm.ui.common.setSuccessChip
 import com.weatherxm.ui.components.BaseActivity
@@ -61,7 +62,7 @@ class ClaimM5Activity : BaseActivity() {
 
         savedInstanceState?.let {
             binding.pager.currentItem = it.getInt(CURRENT_PAGE, 0)
-            val savedSn = it.getString(SERIAL_NUMBER, "")
+            val savedSn = it.getString(SERIAL_NUMBER, String.empty())
             if (verifyModel.validateSerial(savedSn)) {
                 verifyModel.setSerialNumber(savedSn)
             }

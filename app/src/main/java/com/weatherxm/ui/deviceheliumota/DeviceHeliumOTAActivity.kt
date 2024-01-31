@@ -14,6 +14,7 @@ import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
@@ -190,7 +191,7 @@ class DeviceHeliumOTAActivity : BaseActivity() {
                     OTAStatus.CONNECT_TO_STATION -> Analytics.ParamValue.CONNECT.paramValue
                     OTAStatus.DOWNLOADING -> Analytics.ParamValue.DOWNLOAD.paramValue
                     OTAStatus.INSTALLING -> Analytics.ParamValue.INSTALL.paramValue
-                    null -> ""
+                    null -> String.empty()
                 }
             )
         )
