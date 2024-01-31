@@ -45,7 +45,11 @@ class EmptyView : LinearLayout {
                 title(getString(R.styleable.EmptyView_empty_title))
                 subtitle(getString(R.styleable.EmptyView_empty_subtitle))
                 action(getString(EmptyView_empty_action))
-                animation(getResourceId(R.styleable.EmptyView_empty_animation, 0))
+
+                val prefilledAnimation = getResourceId(R.styleable.EmptyView_empty_animation, 0)
+                if (prefilledAnimation != 0) {
+                    animation(prefilledAnimation)
+                }
             } finally {
                 recycle()
             }
