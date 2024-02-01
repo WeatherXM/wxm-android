@@ -2,11 +2,19 @@ name: Build QA Release and Distribute on Firebase
 on:
     workflow_dispatch:
         inputs:
-            buildType:
+            environment:
                 type: environment
-                description: 'Select between "production" and "development" as build types.'
+                description: 'Select between "production" and "development" as the environment.'
                 required: true
                 default: 'production'
+            buildType:
+                type: choice
+                description: 'Select between "release" and "debug" as build types.'
+                required: true
+                options:
+                    - "release"
+                    - "debug"
+                default: 'release'
 env:
     # Claim DApp URL
     ORG_GRADLE_PROJECT_CLAIM_APP_URL: ${{ secrets.CLAIM_APP_URL }}
@@ -53,12 +61,22 @@ jobs:
                     distribution: 'temurin'
                     java-version: '17'
             -   name: Build production release for the QA Team and distribute on Firebase
-                if: ${{ github.event.inputs.buildType == 'production' }}
+                if: ${{ github.event.inputs.environment == 'production' && github.event.inputs.buildType == 'release' }}
+                run: |
+                    ./gradlew :app:assembleRemoteProdRelease :app:appDistributionUploadRemoteProdRelease -PSKIP_PRODUCTION_ENV
+                    rm ./ci-service-account.json
+            -   name: Build production debug for the QA Team and distribute on Firebase
+                if: ${{ github.event.inputs.environment == 'production' && github.event.inputs.buildType == 'debug' }}
                 run: |
                     ./gradlew :app:assembleRemoteProdRelease :app:appDistributionUploadRemoteProdRelease -PSKIP_PRODUCTION_ENV
                     rm ./ci-service-account.json
             -   name: Build development release for the QA Team and distribute on Firebase
-                if: ${{ github.event.inputs.buildType == 'development' }}
+                if: ${{ github.event.inputs.environment == 'development' && github.event.inputs.buildType == 'release' }}
+                run: |
+                    ./gradlew :app:assembleRemoteDevRelease :app:appDistributionUploadRemoteDevRelease -PSKIP_PRODUCTION_ENV
+                    rm ./ci-service-account.json
+            -   name: Build development debug for the QA Team and distribute on Firebase
+                if: ${{ github.event.inputs.environment == 'development' && github.event.inputs.buildType == 'debug' }}
                 run: |
                     ./gradlew :app:assembleRemoteDevDebug :app:appDistributionUploadRemoteDevDebug -PSKIP_PRODUCTION_ENV
                     rm ./ci-service-account.json
