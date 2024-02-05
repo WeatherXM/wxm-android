@@ -57,7 +57,7 @@ timber = "5.0.1"
 zxing-android-embedded = "4.3.0"
 
 # Plugins
-android-gradle-plugin = "8.2.1"
+android-gradle-plugin = "8.2.2"
 kotlin-android-plugin = "1.9.22"
 kotlin-parcelize-plugin = "1.9.22"
 ksp-plugin = "1.9.22-1.0.17"
