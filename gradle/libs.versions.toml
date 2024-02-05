@@ -65,7 +65,7 @@ google-services-plugin = "4.4.0"
 firebase-crashlytics-plugin = "2.9.9"
 firebase-appdistribution-plugin = "4.0.1"
 firebase-perf-plugin = "1.4.2"
-detekt-plugin = "1.23.4"
+detekt-plugin = "1.23.5"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity-ktx" }
