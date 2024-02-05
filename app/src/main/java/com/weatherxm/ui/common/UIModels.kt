@@ -194,7 +194,7 @@ data class UIDevice(
     val cellIndex: String,
     var relation: DeviceRelation?,
     val label: String?,
-    val friendlyName: String?,
+    var friendlyName: String?,
     var profile: DeviceProfile?,
     val location: Location?,
     var cellCenter: Location?,

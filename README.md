@@ -84,7 +84,7 @@ We have 4 different [GitHub Actions](https://github.com/features/actions):
    Firebase Channels. Currently used for internal testing.
 4. **Build QA Release and Distribute on Firebase:** An action that gets 
    [manually triggered](https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/)
-   and takes as input the environment, creates a release and distributes it through 
+   and takes as input the `environment`, the `build type` and creates a release and distributes it through 
    [Firebase App Distribution](https://firebase.google.com/docs/app-distribution) in the QA 
    Firebase Channels. Currently used for internal testing.
 
