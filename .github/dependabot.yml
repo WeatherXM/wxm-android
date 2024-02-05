@@ -7,5 +7,8 @@ version: 2
 updates:
   - package-ecosystem: "gradle"
     directory: "/" # Location of package manifests
+    open-pull-requests-limit: 10
     schedule:
       interval: "weekly"
+    reviewers:
+        - "PavlosTze"
