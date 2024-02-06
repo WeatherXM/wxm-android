@@ -63,10 +63,6 @@ class ClaimHeliumPairViewModel(
         }
     }
 
-    override fun onPaired() {
-        onBLEConnection.postValue(true)
-    }
-
     override fun onNotPaired() {
         analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
         onBLEError.postValue(
@@ -77,12 +73,7 @@ class ClaimHeliumPairViewModel(
     }
 
     override fun onConnected() {
-        if (connectionUseCase.getPairedDevices().any {
-                it.address == super.scannedDevice.address
-            }
-        ) {
-            onBLEConnection.postValue(true)
-        }
+        onBLEConnection.postValue(true)
     }
 
     override fun onConnectionFailure(failure: Failure) {

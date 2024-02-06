@@ -48,10 +48,6 @@ class RebootViewModel(
         )
     }
 
-    override fun onPaired() {
-        reboot()
-    }
-
     override fun onNotPaired() {
         onStatus.postValue(Resource.error(String.empty(), RebootState(RebootStatus.PAIR_STATION)))
     }

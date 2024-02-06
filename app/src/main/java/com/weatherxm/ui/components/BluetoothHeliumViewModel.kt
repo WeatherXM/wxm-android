@@ -27,7 +27,7 @@ open class BluetoothHeliumViewModel(
             connectionUseCase.registerOnBondStatus().collect {
                 when (it) {
                     BluetoothDevice.BOND_BONDED -> {
-                        onPaired()
+                        onConnected()
                     }
                     BluetoothDevice.BOND_NONE -> {
                         analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
@@ -45,10 +45,6 @@ open class BluetoothHeliumViewModel(
                 scanUseCase.stopScanning()
             }
         }
-    }
-
-    open fun onPaired() {
-        // To be overridden
     }
 
     open fun onNotPaired() {
@@ -96,16 +92,26 @@ open class BluetoothHeliumViewModel(
         }
     }
 
-    protected suspend fun connect(ignorePairing: Boolean = false) {
+    suspend fun connect(ignorePairing: Boolean = false) {
         if (scannedDevice == ScannedDevice.empty()) {
             onScanFailure(BluetoothError.DeviceNotFound)
             return
         }
 
-        if (deviceIsPaired() && ignorePairing) {
+        if (deviceIsPaired()) {
             connectionUseCase.connectToPeripheral().onRight {
                 onConnected()
             }.onLeft {
+                analytics.trackEventFailure(it.code)
+                onConnectionFailure(it)
+            }
+        } else if (ignorePairing) {
+            /**
+             * If we get here that means that device is not paired, so there will be a prompt
+             * for pairing when trying to connect to the device, if the user accepts it then
+             * BluetoothDevice.BOND_BONDED will get fired so we continue there
+             */
+            connectionUseCase.connectToPeripheral().onLeft {
                 analytics.trackEventFailure(it.code)
                 onConnectionFailure(it)
             }

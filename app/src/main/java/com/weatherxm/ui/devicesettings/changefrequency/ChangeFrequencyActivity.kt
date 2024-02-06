@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Resource
@@ -23,6 +24,7 @@ import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicesettings.ChangeFrequencyState
 import com.weatherxm.ui.devicesettings.FrequencyStatus
 import com.weatherxm.util.Analytics
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -152,7 +154,9 @@ class ChangeFrequencyActivity : BaseActivity() {
             analytics.trackEventSelectContent(Analytics.ParamValue.BLE_SCAN_AGAIN.paramValue)
             initBluetoothAndStart()
         }, onPairClicked = {
-            model.startConnectionProcess()
+            lifecycleScope.launch {
+                model.connect(true)
+            }
         }, onSuccessPrimaryButtonClicked = {
             finishActivity()
         }, onCancelButtonClicked = {

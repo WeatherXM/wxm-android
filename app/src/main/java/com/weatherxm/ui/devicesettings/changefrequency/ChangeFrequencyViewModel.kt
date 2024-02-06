@@ -87,10 +87,6 @@ class ChangeFrequencyViewModel(
         )
     }
 
-    override fun onPaired() {
-        changeFrequency()
-    }
-
     override fun onNotPaired() {
         onStatus.postValue(
             Resource.error(String.empty(), ChangeFrequencyState(FrequencyStatus.PAIR_STATION))

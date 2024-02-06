@@ -55,10 +55,6 @@ class DeviceHeliumOTAViewModel(
         )
     }
 
-    override fun onPaired() {
-        downloadFirmwareAndGetFileURI()
-    }
-
     override fun onNotPaired() {
         onStatus.postValue(Resource.error(String.empty(), State(OTAStatus.PAIR_STATION)))
     }
