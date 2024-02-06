@@ -42,6 +42,8 @@ class ClaimHeliumPairViewModel(
     fun onBLEConnectionLost() = onBLEConnectionLost
     fun onBLEConnection() = onBLEConnection
 
+    fun getSelectedDevice(): ScannedDevice = super.scannedDevice
+
     @Suppress("MagicNumber")
     fun scanBleDevices() {
         viewModelScope.launch {

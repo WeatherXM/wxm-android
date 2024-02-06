@@ -6,6 +6,7 @@ import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
+import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
@@ -63,6 +64,10 @@ class ClaimHeliumResultViewModel(
                 }
             }
         })
+    }
+
+    fun setSelectedDevice(scannedDevice: ScannedDevice) {
+        super.scannedDevice = scannedDevice
     }
 
     fun setFrequency(frequency: Frequency) {

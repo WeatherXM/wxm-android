@@ -10,6 +10,7 @@ import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyFragment
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyViewModel
 import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairFragment
+import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairViewModel
 import com.weatherxm.ui.claimdevice.helium.reset.ClaimHeliumResetFragment
 import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultFragment
 import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultViewModel
@@ -37,6 +38,7 @@ class ClaimHeliumActivity : BaseActivity() {
     private val locationModel: ClaimLocationViewModel by viewModel()
     private val frequencyModel: ClaimHeliumFrequencyViewModel by viewModel()
     private val resultModel: ClaimHeliumResultViewModel by viewModel()
+    private val pairModel: ClaimHeliumPairViewModel by viewModel()
     private lateinit var binding: ActivityClaimHeliumDeviceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,6 +115,7 @@ class ClaimHeliumActivity : BaseActivity() {
                     frequencyModel.getCountryAndFrequencies(locationModel.getInstallationLocation())
                 }
                 ClaimHeliumDevicePagerAdapter.PAGE_RESULT -> {
+                    resultModel.setSelectedDevice(pairModel.getSelectedDevice())
                     resultModel.setFrequency(model.getFrequency())
                     fourthStep.setSuccessChip()
                 }

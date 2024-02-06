@@ -35,10 +35,9 @@ import com.weatherxm.util.Analytics
 import com.weatherxm.util.checkPermissionsAndThen
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ClaimHeliumPairFragment : BaseFragment() {
-    private val model: ClaimHeliumPairViewModel by viewModel()
+    private val model: ClaimHeliumPairViewModel by activityViewModel()
     private val parentModel: ClaimHeliumViewModel by activityViewModel()
     private val bluetoothAdapter: BluetoothAdapter? by inject()
     private lateinit var binding: FragmentClaimHeliumPairBinding
