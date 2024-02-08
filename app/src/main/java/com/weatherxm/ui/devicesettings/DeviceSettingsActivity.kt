@@ -132,7 +132,7 @@ class DeviceSettingsActivity : BaseActivity() {
         binding.editLocationBtn.setOnClickListener {
             navigator.showEditLocation(editLocationLauncher, this, model.device)
         }
-        binding.editLocationBtn.setVisible(model.device.relation == DeviceRelation.OWNED)
+        binding.editLocationBtn.setVisible(model.device.isOwned())
 
         if (model.device.relation == DeviceRelation.FOLLOWED) {
             binding.locationDesc.setHtml(
@@ -155,7 +155,7 @@ class DeviceSettingsActivity : BaseActivity() {
     }
 
     private fun updateMinimap() {
-        val deviceMapLocation = if (model.device.relation == DeviceRelation.OWNED) {
+        val deviceMapLocation = if (model.device.isOwned()) {
             model.device.location
         } else {
             null

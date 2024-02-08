@@ -108,11 +108,11 @@
             "pol": [
                 {
                     "annotation": "LOCATION_NOT_VERIFIED",
-                    "ratio": 0.8
+                    "ratio": 8
                 },
                 {
                     "annotation": "NO_LOCATION_DATA",
-                    "ratio": 0.8
+                    "ratio": 8
                 }
             ],
             "rm": [
@@ -129,7 +129,30 @@
                     "annotation": "QOD_THRESHOLD_NOT_REACHED"
                 }
             ]
-        }
+        },
+        "annotation_summary": [
+            {
+                "severity": "WARNING",
+                "group": "NO_WALLET",
+                "title": "No Wallet",
+                "message": "Station excluded from rewards because no connected wallet was found.",
+                "doc_url": "https://docs.weatherxm.com/"
+            },
+            {
+                "severity": "INFO",
+                "group": "SENSOR_PROBLEMS",
+                "title": "Sensor Problems",
+                "message": "Station is doing great! Minor sensor issues detected during our checks.",
+                "doc_url": "https://docs.weatherxm.com/"
+            },
+            {
+                "severity": "ERROR",
+                "group": "LOCATION_NOT_VERIFIED",
+                "title": "Invalid Location",
+                "message": "Station rewards were temporarily suspended, because the station’s location could not be verified. The station’s location needs to be revalidated by the owner and it will be again eligible for rewards in 2 days.",
+                "doc_url": "https://docs.weatherxm.com/"
+            }
+        ]
     },
     "weekly": {
         "total_rewards": 1252.0,
@@ -166,10 +189,10 @@
                 100,
                 50,
                 100,
-                0.26,
-                0.26,
-                0.26,
-                0.26,
+                26,
+                26,
+                26,
+                26,
                 100,
                 100,
                 10,

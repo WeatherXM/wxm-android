@@ -11,6 +11,7 @@ import com.weatherxm.data.Hex
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.Location
 import com.weatherxm.data.QoDErrorAffects
+import com.weatherxm.data.RewardsAnnotationGroup
 import com.weatherxm.data.RewardsAnnotations
 import com.weatherxm.data.RewardsObject
 import com.weatherxm.data.Transaction
@@ -57,7 +58,8 @@ data class UIRewardObject(
     var periodMaxReward: Float? = null,
     var timelineTitle: String? = null,
     var timelineScores: List<Int> = emptyList(),
-    var annotations: MutableList<UIRewardsAnnotation> = mutableListOf()
+    var annotations: MutableList<UIRewardsAnnotation> = mutableListOf(),
+    var annotationSummary: List<RewardsAnnotationGroup> = mutableListOf(),
 ) : Parcelable {
     constructor(
         context: Context,
@@ -89,6 +91,9 @@ data class UIRewardObject(
         periodMaxReward = rewards.periodMaxReward
         setTimelineTitle(context, rewards.timeline?.referenceDate, fromDate, toDate)
         timelineScores = rewards.timeline?.rewardScores ?: mutableListOf()
+        annotationSummary = rewards.annotationSummary?.sortedByDescending {
+            it.severity?.ordinal
+        } ?: mutableListOf()
         setAnnotations(hideAnnotationsThreshold, rewards.annotations)
     }
 
@@ -104,6 +109,9 @@ data class UIRewardObject(
         periodMaxReward = tx.dailyReward
         setTimelineTitle(context, tx.timeline?.referenceDate)
         timelineScores = tx.timeline?.rewardScores ?: mutableListOf()
+        annotationSummary = tx.annotationSummary?.sortedByDescending {
+            it.severity?.ordinal
+        } ?: mutableListOf()
         setAnnotations(hideAnnotationsThreshold, tx.annotations)
     }
 
@@ -234,6 +242,12 @@ data class UIDevice(
         )
     }
 
+    fun isOwned(): Boolean = relation == DeviceRelation.OWNED
+
+    fun isUnfollowed(): Boolean = relation == DeviceRelation.UNFOLLOWED
+
+    fun isFollowed(): Boolean = relation == DeviceRelation.FOLLOWED
+
     fun needsUpdate(): Boolean {
         return !currentFirmware.equals(assignedFirmware) && !assignedFirmware.isNullOrEmpty()
     }
@@ -334,7 +348,7 @@ data class DevicesSortFilterOptions(
         return when (filterType) {
             DevicesFilterType.ALL -> devices
             DevicesFilterType.OWNED -> devices.filter {
-                it.relation == DeviceRelation.OWNED
+                it.isOwned()
             }
             DevicesFilterType.FAVORITES -> devices.filter {
                 it.relation == DeviceRelation.FOLLOWED
@@ -447,5 +461,18 @@ enum class AnnotationCode : Parcelable {
     QOD_THRESHOLD_NOT_REACHED,
     UNIDENTIFIED_SPIKE,
     UNIDENTIFIED_ANOMALOUS_CHANGE,
+    UNKNOWN
+}
+
+@Parcelize
+enum class AnnotationGroupCode : Parcelable {
+    NO_WALLET,
+    NO_STATION_DATA,
+    SENSOR_PROBLEMS,
+    WEATHER_DATA_GAPS,
+    BAD_STATION_DEPLOYMENT,
+    NO_LOCATION_DATA,
+    LOCATION_NOT_VERIFIED,
+    USER_RELOCATION_PENALTY,
     UNKNOWN
 }

@@ -5,6 +5,7 @@ import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.weatherxm.ui.common.AnnotationCode
+import com.weatherxm.ui.common.AnnotationGroupCode
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
@@ -196,7 +197,9 @@ data class Transaction(
     @Json(name = "lost_rewards")
     val lostRewards: Float?,
     val timeline: RewardsTimeline?,
-    val annotations: RewardsAnnotations?
+    val annotations: RewardsAnnotations?,
+    @Json(name = "annotation_summary")
+    val annotationSummary: List<RewardsAnnotationGroup>?,
 ) : Parcelable
 
 @Keep
@@ -470,7 +473,9 @@ data class RewardsObject(
     @Json(name = "lost_rewards")
     val lostRewards: Float?,
     val timeline: RewardsTimeline?,
-    val annotations: RewardsAnnotations?
+    val annotations: RewardsAnnotations?,
+    @Json(name = "annotation_summary")
+    val annotationSummary: List<RewardsAnnotationGroup>?,
 ) : Parcelable
 
 @Keep
@@ -506,6 +511,27 @@ data class RewardsAnnotation(
         } catch (e: IllegalArgumentException) {
             Timber.w(e)
             AnnotationCode.UNKNOWN
+        }
+    }
+}
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class RewardsAnnotationGroup(
+    val severity: Severity?,
+    val group: String?,
+    val title: String?,
+    val message: String?,
+    @Json(name = "doc_url")
+    val docUrl: String?,
+) : Parcelable {
+    fun toAnnotationGroupCode(): AnnotationGroupCode {
+        return try {
+            AnnotationGroupCode.valueOf(group ?: String.empty())
+        } catch (e: IllegalArgumentException) {
+            Timber.w(e)
+            AnnotationGroupCode.UNKNOWN
         }
     }
 }
@@ -553,5 +579,11 @@ enum class BatteryState {
 enum class Relation {
     owned,
     followed
+}
+
+enum class Severity {
+    INFO,
+    WARNING,
+    ERROR
 }
 
