@@ -161,6 +161,9 @@ class ClaimHeliumResultFragment : BaseFragment() {
                             Analytics.ParamValue.RETRY.paramValue
                         )
                     )
+                    binding.bleActionFlow.onStep(
+                        2, R.string.claiming_station, R.string.claiming_station_helium_desc
+                    )
                     parentModel.claimDevice(locationModel.getInstallationLocation())
                 }
                 binding.bleActionFlow.onError(
@@ -193,7 +196,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
                 Analytics.ParamValue.VIEW_STATION.paramValue
             )
         )
-        parentModel.disconnectFromPeripheral()
+        model.disconnectFromPeripheral()
         navigator.showDeviceDetails(activity, device = device)
         activity?.finish()
     }

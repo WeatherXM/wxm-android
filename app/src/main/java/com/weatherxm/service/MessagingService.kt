@@ -17,6 +17,7 @@ import com.weatherxm.data.WXMRemoteMessage
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_URL
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
 import com.weatherxm.util.hasPermission
 import timber.log.Timber
@@ -54,7 +55,8 @@ class MessagingService : FirebaseMessagingService() {
     }
 
     private fun handleNotification(remoteMessage: RemoteMessage, context: Context) {
-        val type = RemoteMessageType.parse(remoteMessage.data.getOrDefault(ARG_TYPE, ""))
+        val type =
+            RemoteMessageType.parse(remoteMessage.data.getOrDefault(ARG_TYPE, String.empty()))
 
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -78,7 +80,7 @@ class MessagingService : FirebaseMessagingService() {
             Intent(context, UrlRouterActivity::class.java).apply {
                 putExtra(
                     ARG_REMOTE_MESSAGE,
-                    WXMRemoteMessage(type, remoteMessage.data.getOrDefault(ARG_URL, ""))
+                    WXMRemoteMessage(type, remoteMessage.data.getOrDefault(ARG_URL, String.empty()))
                 )
             },
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE

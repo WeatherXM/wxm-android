@@ -36,7 +36,7 @@ import com.weatherxm.ui.common.UIRewardObject
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
-import com.weatherxm.ui.components.DatePickerHelper
+import com.weatherxm.ui.components.DatePicker
 import com.weatherxm.ui.components.LoginPromptDialogFragment
 import com.weatherxm.ui.components.MessageDialogFragment
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
@@ -459,9 +459,9 @@ class Navigator(private val analytics: Analytics) {
         selectedDate: LocalDate? = null,
         dateStart: LocalDate? = null,
         dateEnd: LocalDate? = null,
-        listener: DatePickerHelper.OnDateSelectedListener
+        listener: DatePicker.OnDateSelectedListener
     ) {
-        DatePickerHelper.show(context, selectedDate, dateStart, dateEnd, listener)
+        DatePicker.show(context, selectedDate, dateStart, dateEnd, listener)
     }
 
     fun openSupportCenter(

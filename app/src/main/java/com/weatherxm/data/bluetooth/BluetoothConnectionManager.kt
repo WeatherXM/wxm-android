@@ -63,6 +63,7 @@ class BluetoothConnectionManager(
     private var macAddress: String = String.empty()
     private var readCharacteristic: Characteristic? = null
     private var writeCharacteristic: Characteristic? = null
+    private var isSettingCharacteristics: Boolean = false
 
     private val bondStateChangedFilter = IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
 
@@ -92,6 +93,8 @@ class BluetoothConnectionManager(
                     BluetoothDevice.BOND_BONDED -> {
                         Timber.d("[BLE Communication]: Bonded.")
                         GlobalScope.launch {
+                            isSettingCharacteristics = true
+                            delay(DELAY_BEFORE_CHARACTERISTICS_SETUP)
                             setReadWriteCharacteristic()
                         }
                         bondStatus.tryEmit(BluetoothDevice.BOND_BONDED)
@@ -169,6 +172,7 @@ class BluetoothConnectionManager(
 
             if (getPairedDevices().any { it.address == macAddress }) {
                 withContext(coroutineContext) {
+                    isSettingCharacteristics = true
                     delay(DELAY_BEFORE_CHARACTERISTICS_SETUP)
                     setReadWriteCharacteristic()
                 }
@@ -197,6 +201,7 @@ class BluetoothConnectionManager(
 
     private suspend fun setReadWriteCharacteristic() {
         if (readCharacteristic != null && writeCharacteristic != null) {
+            isSettingCharacteristics = false
             return
         }
         Timber.d("[BLE Communication]: Setting read & write characteristics...")
@@ -210,6 +215,7 @@ class BluetoothConnectionManager(
                 }
             }
         }
+        isSettingCharacteristics = false
 
         /**
          * When we get here it means that we are at the equivalent of BLE `onConnected`
@@ -243,6 +249,13 @@ class BluetoothConnectionManager(
     }
 
     suspend fun write(command: String): Boolean {
+        if(isSettingCharacteristics) {
+            /**
+             * If we are still in the process of setting characteristics, delay a bit
+             * to ensure they are correctly set
+             */
+            delay(DELAY_BEFORE_CHARACTERISTICS_SETUP * 2)
+        }
         Timber.d("[BLE Communication]: $command")
         return writeCharacteristic?.let {
             try {

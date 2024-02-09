@@ -4,6 +4,7 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Resource
@@ -18,6 +19,7 @@ import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicesettings.RebootState
 import com.weatherxm.ui.devicesettings.RebootStatus
 import com.weatherxm.util.Analytics
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -35,7 +37,7 @@ class RebootActivity : BaseActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) {
                 requestBluetoothPermissions(
-                    onGranted = { model.scanConnectAndReboot() },
+                    onGranted = { model.startConnectionProcess() },
                     onDenied = {
                         binding.bleActionFlow.onError(true, R.string.no_bluetooth_access)
                     }
@@ -145,7 +147,7 @@ class RebootActivity : BaseActivity() {
     }
 
     private fun finishActivity() {
-        model.scanningJob.cancel()
+        model.stopScanning()
         finish()
     }
 
@@ -154,13 +156,15 @@ class RebootActivity : BaseActivity() {
             analytics.trackEventSelectContent(Analytics.ParamValue.BLE_SCAN_AGAIN.paramValue)
             initBluetoothAndStart()
         }, onPairClicked = {
-            model.pairDevice()
+            lifecycleScope.launch {
+                model.connect(true)
+            }
         }, onSuccessPrimaryButtonClicked = {
             finishActivity()
         }, onCancelButtonClicked = {
             finishActivity()
         }, onRetryButtonClicked = {
-            model.scanConnectAndReboot()
+            model.startConnectionProcess()
         })
     }
 
@@ -168,7 +172,7 @@ class RebootActivity : BaseActivity() {
         bluetoothAdapter?.let {
             if (it.isEnabled) {
                 requestBluetoothPermissions(
-                    onGranted = { model.scanConnectAndReboot() },
+                    onGranted = { model.startConnectionProcess() },
                     onDenied = {
                         binding.bleActionFlow.onError(true, R.string.no_bluetooth_access)
                     }

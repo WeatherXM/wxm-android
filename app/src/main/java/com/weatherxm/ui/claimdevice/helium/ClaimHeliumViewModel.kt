@@ -14,13 +14,10 @@ import com.weatherxm.data.Location
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
-import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -28,7 +25,6 @@ import timber.log.Timber
 @Suppress("TooManyFunctions")
 class ClaimHeliumViewModel(
     private val claimDeviceUseCase: ClaimDeviceUseCase,
-    private val connectionUseCase: BluetoothConnectionUseCase,
     private val resources: Resources,
     private val analytics: Analytics
 ) : ViewModel() {
@@ -47,13 +43,6 @@ class ClaimHeliumViewModel(
     private var devEUI: String = String.empty()
     private var deviceKey: String = String.empty()
     private var frequency: Frequency = Frequency.US915
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun disconnectFromPeripheral() {
-        GlobalScope.launch {
-            connectionUseCase.disconnectFromPeripheral()
-        }
-    }
 
     fun setFrequency(frequency: Frequency) {
         this.frequency = frequency

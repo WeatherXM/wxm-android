@@ -1,9 +1,7 @@
 package com.weatherxm.ui.claimdevice.helium.pair
 
-import android.bluetooth.BluetoothDevice
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
@@ -12,6 +10,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.Analytics
@@ -21,10 +20,10 @@ import timber.log.Timber
 
 class ClaimHeliumPairViewModel(
     private val resources: Resources,
-    private val analytics: Analytics,
+    analytics: Analytics,
     private val scanDevicesUseCase: BluetoothScannerUseCase,
-    private val connectionUseCase: BluetoothConnectionUseCase
-) : ViewModel() {
+    connectionUseCase: BluetoothConnectionUseCase
+) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics) {
     private var scannedDevices: MutableList<ScannedDevice> = mutableListOf()
 
     private val onBLEError = MutableLiveData<UIError>()
@@ -34,7 +33,6 @@ class ClaimHeliumPairViewModel(
     private val onScanStatus = MutableLiveData<Resource<Unit>>()
     private val onScanProgress = MutableLiveData<Int>()
 
-    private var selectedDeviceMacAddress: String = String.empty()
     private var bleConnectionStarted = false
 
     fun onNewScannedDevice(): LiveData<List<ScannedDevice>> = onNewScannedDevice
@@ -43,6 +41,8 @@ class ClaimHeliumPairViewModel(
     fun onBLEError() = onBLEError
     fun onBLEConnectionLost() = onBLEConnectionLost
     fun onBLEConnection() = onBLEConnection
+
+    fun getSelectedDevice(): ScannedDevice = super.scannedDevice
 
     @Suppress("MagicNumber")
     fun scanBleDevices() {
@@ -65,58 +65,55 @@ class ClaimHeliumPairViewModel(
         }
     }
 
-    fun setupBluetoothClaiming(macAddress: String) {
-        if (bleConnectionStarted) return
-        bleConnectionStarted = true
-
-        scanDevicesUseCase.stopScanning()
-        selectedDeviceMacAddress = macAddress
-        connectionUseCase.setPeripheral(macAddress).onRight {
-            connectToPeripheral()
-        }.onLeft {
-            analytics.trackEventFailure(it.code)
-            bleConnectionStarted = false
-            onBLEError.postValue(UIError(resources.getString(R.string.helium_pairing_failed_desc)) {
-                setupBluetoothClaiming(macAddress)
-            })
-        }
+    override fun onNotPaired() {
+        analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
+        onBLEError.postValue(
+            UIError(resources.getString(R.string.helium_pairing_failed_desc)) {
+                setupBluetoothClaiming(super.scannedDevice)
+            }
+        )
     }
 
-    fun connectToPeripheral() {
-        viewModelScope.launch {
-            connectionUseCase.connectToPeripheral().onLeft {
-                analytics.trackEventFailure(it.code)
-                when (it) {
-                    is BluetoothError.BluetoothDisabledException -> {
-                        onBLEError.postValue(
-                            UIError(resources.getString(R.string.helium_bluetooth_disabled)) {
-                                connectToPeripheral()
-                            }
-                        )
+    override fun onConnected() {
+        onBLEConnection.postValue(true)
+    }
+
+    override fun onConnectionFailure(failure: Failure) {
+        bleConnectionStarted = false
+        when (failure) {
+            is BluetoothError.BluetoothDisabledException -> {
+                onBLEError.postValue(
+                    UIError(resources.getString(R.string.helium_bluetooth_disabled)) {
+                        setupBluetoothClaiming(super.scannedDevice)
                     }
-                    is BluetoothError.ConnectionLostException -> {
-                        onBLEConnectionLost.postValue(true)
+                )
+            }
+            is BluetoothError.ConnectionLostException -> {
+                onBLEConnectionLost.postValue(true)
+            }
+            else -> {
+                onBLEError.postValue(
+                    UIError(resources.getString(R.string.helium_pairing_failed_desc)) {
+                        setupBluetoothClaiming(super.scannedDevice)
                     }
-                    else -> {
-                        onBLEError.postValue(
-                            UIError(resources.getString(R.string.helium_pairing_failed_desc)) {
-                                connectToPeripheral()
-                            }
-                        )
-                    }
-                }
-            }.onRight {
-                if (connectionUseCase.getPairedDevices().any {
-                        it.address == selectedDeviceMacAddress
-                    }
-                ) {
-                    onBLEConnection.postValue(true)
-                }
+                )
             }
         }
     }
 
-    init {
+    fun setupBluetoothClaiming(scannedDevice: ScannedDevice = super.scannedDevice) {
+        if (bleConnectionStarted) return
+        bleConnectionStarted = true
+
+        super.stopScanning()
+        super.scannedDevice = scannedDevice
+
+        viewModelScope.launch {
+            super.setPeripheralAndConnect(true)
+        }
+    }
+
+    private fun collectOnBLEScanning() {
         viewModelScope.launch {
             scanDevicesUseCase.registerOnScanning().collect {
                 if (!scannedDevices.contains(it)) {
@@ -126,23 +123,9 @@ class ClaimHeliumPairViewModel(
                 }
             }
         }
+    }
 
-        viewModelScope.launch {
-            connectionUseCase.registerOnBondStatus().collect {
-                when (it) {
-                    BluetoothDevice.BOND_BONDED -> {
-                        onBLEConnection.postValue(true)
-                    }
-                    BluetoothDevice.BOND_NONE -> {
-                        analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
-                        onBLEError.postValue(
-                            UIError(resources.getString(R.string.helium_pairing_failed_desc)) {
-                                connectToPeripheral()
-                            }
-                        )
-                    }
-                }
-            }
-        }
+    init {
+        collectOnBLEScanning()
     }
 }
