@@ -132,21 +132,21 @@
         },
         "annotation_summary": [
             {
-                "severity": "WARNING",
+                "severity_level": "WARNING",
                 "group": "NO_WALLET",
                 "title": "No Wallet",
                 "message": "Station excluded from rewards because no connected wallet was found.",
                 "doc_url": "https://docs.weatherxm.com/"
             },
             {
-                "severity": "INFO",
+                "severity_level": "INFO",
                 "group": "SENSOR_PROBLEMS",
                 "title": "Sensor Problems",
                 "message": "Station is doing great! Minor sensor issues detected during our checks.",
                 "doc_url": "https://docs.weatherxm.com/"
             },
             {
-                "severity": "ERROR",
+                "severity_level": "ERROR",
                 "group": "LOCATION_NOT_VERIFIED",
                 "title": "Invalid Location",
                 "message": "Station rewards were temporarily suspended, because the station’s location could not be verified. The station’s location needs to be revalidated by the owner and it will be again eligible for rewards in 2 days.",

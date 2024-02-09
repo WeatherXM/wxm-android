@@ -519,7 +519,8 @@ data class RewardsAnnotation(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class RewardsAnnotationGroup(
-    val severity: Severity?,
+    @Json(name = "severity_level")
+    val severityLevel: SeverityLevel?,
     val group: String?,
     val title: String?,
     val message: String?,
@@ -581,7 +582,7 @@ enum class Relation {
     followed
 }
 
-enum class Severity {
+enum class SeverityLevel {
     INFO,
     WARNING,
     ERROR

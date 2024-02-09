@@ -92,7 +92,7 @@ data class UIRewardObject(
         setTimelineTitle(context, rewards.timeline?.referenceDate, fromDate, toDate)
         timelineScores = rewards.timeline?.rewardScores ?: mutableListOf()
         annotationSummary = rewards.annotationSummary?.sortedByDescending {
-            it.severity?.ordinal
+            it.severityLevel?.ordinal
         } ?: mutableListOf()
         setAnnotations(hideAnnotationsThreshold, rewards.annotations)
     }
@@ -110,7 +110,7 @@ data class UIRewardObject(
         setTimelineTitle(context, tx.timeline?.referenceDate)
         timelineScores = tx.timeline?.rewardScores ?: mutableListOf()
         annotationSummary = tx.annotationSummary?.sortedByDescending {
-            it.severity?.ordinal
+            it.severityLevel?.ordinal
         } ?: mutableListOf()
         setAnnotations(hideAnnotationsThreshold, tx.annotations)
     }

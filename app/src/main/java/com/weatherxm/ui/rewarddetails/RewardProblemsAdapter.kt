@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.RewardsAnnotationGroup
-import com.weatherxm.data.Severity
+import com.weatherxm.data.SeverityLevel
 import com.weatherxm.databinding.ListItemRewardProblemBinding
 import com.weatherxm.ui.common.AnnotationGroupCode
 import com.weatherxm.ui.common.UIDevice
@@ -37,20 +37,20 @@ class RewardProblemsAdapter(
 
         fun bind(item: RewardsAnnotationGroup) {
             with(binding.annotationContainer) {
-                when (item.severity) {
-                    Severity.INFO -> {
+                when (item.severityLevel) {
+                    SeverityLevel.INFO -> {
                         setBackground(R.color.blueTint)
                         setStrokeColor(R.color.colorPrimaryVariant)
                         setIcon(R.drawable.ic_info)
                         setIconColor(R.color.colorPrimaryVariant)
                     }
-                    Severity.WARNING -> {
+                    SeverityLevel.WARNING -> {
                         setBackground(R.color.warningTint)
                         setStrokeColor(R.color.warning)
                         setIcon(R.drawable.ic_warn)
                         setIconColor(R.color.warning)
                     }
-                    Severity.ERROR -> {
+                    SeverityLevel.ERROR -> {
                         setBackground(R.color.errorTint)
                         setStrokeColor(R.color.error)
                         setIcon(R.drawable.ic_warn)
@@ -105,7 +105,7 @@ class RewardProblemsDiffCallback : DiffUtil.ItemCallback<RewardsAnnotationGroup>
         newItem: RewardsAnnotationGroup
     ): Boolean {
         return oldItem.title == newItem.title && oldItem.message == newItem.message &&
-            oldItem.severity == newItem.severity && oldItem.group == newItem.group &&
+            oldItem.severityLevel == newItem.severityLevel && oldItem.group == newItem.group &&
             oldItem.docUrl == newItem.docUrl
     }
 }
