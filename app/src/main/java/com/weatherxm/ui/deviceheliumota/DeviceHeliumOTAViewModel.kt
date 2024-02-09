@@ -1,18 +1,16 @@
 package com.weatherxm.ui.deviceheliumota
 
-import android.bluetooth.BluetoothDevice
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.BluetoothOTAState
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
-import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.usecases.BluetoothUpdaterUseCase
@@ -26,27 +24,50 @@ import kotlinx.coroutines.launch
 @Suppress("LongParameterList")
 class DeviceHeliumOTAViewModel(
     val device: UIDevice,
-    val deviceIsBleConnected: Boolean,
+    private val deviceIsBleConnected: Boolean,
     private val resources: Resources,
-    private val connectionUseCase: BluetoothConnectionUseCase,
     private val updaterUseCase: BluetoothUpdaterUseCase,
-    private val scanUseCase: BluetoothScannerUseCase,
-    private val analytics: Analytics
-) : ViewModel() {
+    connectionUseCase: BluetoothConnectionUseCase,
+    scanUseCase: BluetoothScannerUseCase,
+    analytics: Analytics
+) : BluetoothHeliumViewModel(
+    device.getLastCharsOfLabel(),
+    scanUseCase,
+    connectionUseCase,
+    analytics
+) {
     private val onStatus = MutableLiveData<Resource<State>>()
     fun onStatus() = onStatus
 
     private val onInstallingProgress = MutableLiveData<Int>()
     fun onInstallingProgress() = onInstallingProgress
 
-    private var scannedDevice = ScannedDevice.empty()
-
-    private fun deviceIsPaired(): Boolean {
-        return connectionUseCase.getPairedDevices().any { it.address == scannedDevice.address }
+    override fun onScanFailure(failure: Failure) {
+        onStatus.postValue(
+            if (failure == BluetoothError.DeviceNotFound) {
+                Resource.error(
+                    resources.getString(R.string.station_not_in_range_subtitle),
+                    State(OTAStatus.SCAN_FOR_STATION, BluetoothError.DeviceNotFound)
+                )
+            } else {
+                Resource.error(String.empty(), State(OTAStatus.SCAN_FOR_STATION))
+            }
+        )
     }
 
-    @Suppress("MagicNumber")
-    fun startScan() {
+    override fun onNotPaired() {
+        onStatus.postValue(Resource.error(String.empty(), State(OTAStatus.PAIR_STATION)))
+    }
+
+    override fun onConnected() {
+        downloadFirmwareAndGetFileURI()
+    }
+
+    override fun onConnectionFailure(failure: Failure) {
+        onStatus.postValue(Resource.error(failure.getCode(), State(OTAStatus.CONNECT_TO_STATION)))
+    }
+
+    fun startConnectionProcess() {
         /**
          * If device is already connected we have no reason to BLE Scan again so we go directly
          * to downloading and installing.
@@ -58,92 +79,7 @@ class DeviceHeliumOTAViewModel(
             return
         }
         onStatus.postValue(Resource.loading(State(OTAStatus.CONNECT_TO_STATION)))
-        viewModelScope.launch {
-            scanUseCase.startScanning().collect {
-                it.onRight { progress ->
-                    if (progress == 100) {
-                        checkIfDevicePaired()
-                    }
-                }.onLeft { failure ->
-                    analytics.trackEventFailure(failure.code)
-                    onStatus.postValue(
-                        Resource.error(
-                            String.empty(), State(OTAStatus.SCAN_FOR_STATION)
-                        )
-                    )
-                }
-            }
-        }
-    }
-
-    private fun checkIfDevicePaired() {
-        if (scannedDevice == ScannedDevice.empty()) {
-            onStatus.postValue(
-                Resource.error(
-                    resources.getString(R.string.station_not_in_range_subtitle),
-                    State(OTAStatus.SCAN_FOR_STATION, BluetoothError.DeviceNotFound)
-                )
-            )
-            return
-        }
-
-        if (deviceIsPaired()) {
-            setPeripheral()
-        } else {
-            analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
-            onStatus.postValue(Resource.error(String.empty(), State(OTAStatus.PAIR_STATION)))
-        }
-    }
-
-    fun pairDevice() {
-        viewModelScope.launch {
-            connectionUseCase.setPeripheral(scannedDevice.address).onRight {
-                connectionUseCase.connectToPeripheral().onRight {
-                    if (deviceIsPaired()) {
-                        downloadFirmwareAndGetFileURI()
-                    } else {
-                        onStatus.postValue(
-                            Resource.error(
-                                String.empty(), State(OTAStatus.PAIR_STATION)
-                            )
-                        )
-                    }
-                }.onLeft {
-                    analytics.trackEventFailure(it.code)
-                }
-            }.onLeft {
-                analytics.trackEventFailure(it.code)
-            }
-        }
-    }
-
-    fun setPeripheral() {
-        connectionUseCase.setPeripheral(scannedDevice.address).onRight {
-            connectToPeripheral()
-        }.onLeft {
-            analytics.trackEventFailure(it.code)
-            onStatus.postValue(Resource.error(it.getCode(), State(OTAStatus.CONNECT_TO_STATION)))
-        }
-    }
-
-    private fun connectToPeripheral() {
-        viewModelScope.launch {
-            connectionUseCase.connectToPeripheral().onRight {
-                downloadFirmwareAndGetFileURI()
-            }.onLeft {
-                analytics.trackEventFailure(it.code)
-                onStatus.postValue(
-                    Resource.error(it.getCode(), State(OTAStatus.CONNECT_TO_STATION))
-                )
-            }
-        }
-    }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun disconnectFromPeripheral() {
-        GlobalScope.launch {
-            connectionUseCase.disconnectFromPeripheral()
-        }
+        super.scanAndConnect()
     }
 
     private fun downloadFirmwareAndGetFileURI() {
@@ -197,36 +133,6 @@ class DeviceHeliumOTAViewModel(
                                     otaErrorType = it.errorType,
                                     otaErrorMessage = it.message
                                 )
-                            )
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    init {
-        viewModelScope.launch {
-            scanUseCase.registerOnScanning().collect {
-                @Suppress("MagicNumber")
-                if (it.name?.contains(device.getLastCharsOfLabel(6)) == true) {
-                    scannedDevice = it
-                    scanUseCase.stopScanning()
-                }
-            }
-        }
-
-        viewModelScope.launch {
-            connectionUseCase.registerOnBondStatus().collect {
-                when (it) {
-                    BluetoothDevice.BOND_BONDED -> {
-                        downloadFirmwareAndGetFileURI()
-                    }
-                    BluetoothDevice.BOND_NONE -> {
-                        analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
-                        onStatus.postValue(
-                            Resource.error(
-                                String.empty(), State(OTAStatus.PAIR_STATION)
                             )
                         )
                     }

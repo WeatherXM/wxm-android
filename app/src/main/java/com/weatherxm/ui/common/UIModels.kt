@@ -256,7 +256,11 @@ data class UIDevice(
         return friendlyName ?: name
     }
 
-    fun getLastCharsOfLabel(charCount: Int): String {
+    /**
+     * We use "6" as default because that's what is needed to match a UIDevice to a BLE scanned one
+     */
+    @Suppress("MagicNumber")
+    fun getLastCharsOfLabel(charCount: Int = 6): String {
         val cleanLabel = label?.replace(":", String.empty())
         return cleanLabel?.substring(cleanLabel.length - charCount, cleanLabel.length)
             ?: String.empty()

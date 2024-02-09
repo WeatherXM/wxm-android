@@ -368,7 +368,7 @@
     <string name="claiming_station_helium_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to the Helium\'s network bandwidth limitations!<b>]]></string>
     <string name="success_claim_device"><![CDATA[Your station is claimed under your account:<br><b>%s</b>]]></string>
     <string name="ble_connection_lost">Connection Failed</string>
-    <string name="ble_connection_lost_description"><![CDATA[Something went wrong with the connection. Make sure you are <b>near your weather station</b> and retry claiming. If connection still fails, please <b>unpair the station and restart the claiming process</b>. For more details check our <a href="%1$s">troubleshooting guide</a>.<br><br>Alternatively, you can contact our support.]]></string>
+    <string name="ble_connection_lost_desc"><![CDATA[Something went wrong with the connection. Make sure you are <b>near your weather station</b> and retry claiming. If connection still fails, please <b>unpair the station and restart the claiming process</b>. For more details check our <a href="%1$s">troubleshooting guide</a>.<br><br>Alternatively, you can contact our support.]]></string>
     <string name="setting_station_frequency">Setting Station Frequency</string>
     <string name="rebooting_station">Rebooting Station</string>
     <string name="claiming_station_step">Claiming Station</string>

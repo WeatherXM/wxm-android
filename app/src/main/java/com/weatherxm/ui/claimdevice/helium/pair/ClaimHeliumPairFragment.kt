@@ -35,10 +35,9 @@ import com.weatherxm.util.Analytics
 import com.weatherxm.util.checkPermissionsAndThen
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ClaimHeliumPairFragment : BaseFragment() {
-    private val model: ClaimHeliumPairViewModel by viewModel()
+    private val model: ClaimHeliumPairViewModel by activityViewModel()
     private val parentModel: ClaimHeliumViewModel by activityViewModel()
     private val bluetoothAdapter: BluetoothAdapter? by inject()
     private lateinit var binding: FragmentClaimHeliumPairBinding
@@ -68,7 +67,7 @@ class ClaimHeliumPairFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adapter = ScannedDevicesListAdapter {
-            model.setupBluetoothClaiming(it.address)
+            model.setupBluetoothClaiming(it)
             setEnabledScannedDevices(false)
             binding.progressBar.visibility = GONE
         }
@@ -84,7 +83,7 @@ class ClaimHeliumPairFragment : BaseFragment() {
                     }
                 }
             setHtml(
-                R.string.ble_connection_lost_description,
+                R.string.ble_connection_lost_desc,
                 getString(R.string.troubleshooting_helium_url)
             )
         }
@@ -99,7 +98,7 @@ class ClaimHeliumPairFragment : BaseFragment() {
         binding.retry.setOnClickListener {
             binding.connectionErrorContainer.hide(null)
             binding.mainContainer.show(null)
-            model.connectToPeripheral()
+            model.setupBluetoothClaiming()
         }
 
         binding.scanAgain.setOnClickListener {

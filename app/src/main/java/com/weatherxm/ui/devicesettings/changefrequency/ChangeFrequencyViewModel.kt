@@ -1,8 +1,6 @@
 package com.weatherxm.ui.devicesettings.changefrequency
 
-import android.bluetooth.BluetoothDevice
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothError
@@ -10,9 +8,9 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.FrequencyState
-import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.ui.devicesettings.ChangeFrequencyState
 import com.weatherxm.ui.devicesettings.FrequencyStatus
 import com.weatherxm.usecases.BluetoothConnectionUseCase
@@ -21,20 +19,22 @@ import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getCode
 import com.weatherxm.util.Resources
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Suppress("TooManyFunctions")
 class ChangeFrequencyViewModel(
-    var device: UIDevice,
+    val device: UIDevice,
     private val resources: Resources,
     private val usecase: StationSettingsUseCase,
-    private val connectionUseCase: BluetoothConnectionUseCase,
-    private val scanUseCase: BluetoothScannerUseCase,
-    private val analytics: Analytics
-) : ViewModel() {
+    connectionUseCase: BluetoothConnectionUseCase,
+    scanUseCase: BluetoothScannerUseCase,
+    analytics: Analytics
+) : BluetoothHeliumViewModel(
+    device.getLastCharsOfLabel(),
+    scanUseCase,
+    connectionUseCase,
+    analytics
+) {
     private val frequenciesInOrder = mutableListOf<Frequency>()
     private var selectedFrequency = Frequency.US915
 
@@ -49,8 +49,6 @@ class ChangeFrequencyViewModel(
 
     private val onStatus = MutableLiveData<Resource<ChangeFrequencyState>>()
     fun onStatus() = onStatus
-
-    private var scannedDevice = ScannedDevice.empty()
 
     fun getCountryAndFrequencies() {
         viewModelScope.launch {
@@ -72,121 +70,46 @@ class ChangeFrequencyViewModel(
         }
     }
 
-    private fun deviceIsPaired(): Boolean {
-        return connectionUseCase.getPairedDevices().any { it.address == scannedDevice.address }
-    }
-
-    val scanningJob: Job = viewModelScope.launch {
-        scanUseCase.registerOnScanning().collect {
-            @Suppress("MagicNumber")
-            if (it.name?.contains(device.getLastCharsOfLabel(6)) == true) {
-                scannedDevice = it
-                scanUseCase.stopScanning()
-            }
-        }
-    }
-
-    private fun checkIfDevicePaired() {
-        if (scannedDevice == ScannedDevice.empty()) {
-            onStatus.postValue(
+    override fun onScanFailure(failure: Failure) {
+        onStatus.postValue(
+            if (failure == BluetoothError.DeviceNotFound) {
                 Resource.error(
                     resources.getString(R.string.station_not_in_range_subtitle),
                     ChangeFrequencyState(
-                        FrequencyStatus.SCAN_FOR_STATION,
-                        BluetoothError.DeviceNotFound
+                        FrequencyStatus.SCAN_FOR_STATION, BluetoothError.DeviceNotFound
                     )
                 )
-            )
-            return
-        }
-
-        if (deviceIsPaired()) {
-            connect()
-        } else {
-            analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
-            onStatus.postValue(
+            } else {
                 Resource.error(
-                    String.empty(), ChangeFrequencyState(FrequencyStatus.PAIR_STATION)
+                    String.empty(), ChangeFrequencyState(FrequencyStatus.SCAN_FOR_STATION)
                 )
-            )
-        }
+            }
+        )
     }
 
-    @Suppress("MagicNumber")
-    fun scan() {
+    override fun onNotPaired() {
+        onStatus.postValue(
+            Resource.error(String.empty(), ChangeFrequencyState(FrequencyStatus.PAIR_STATION))
+        )
+    }
+
+    override fun onConnected() {
+        changeFrequency()
+    }
+
+    override fun onConnectionFailure(failure: Failure) {
+        onStatus.postValue(
+            Resource.error(
+                failure.getCode(), ChangeFrequencyState(FrequencyStatus.CONNECT_TO_STATION)
+            )
+        )
+    }
+
+    fun startConnectionProcess() {
         onStatus.postValue(
             Resource.loading(ChangeFrequencyState(FrequencyStatus.CONNECT_TO_STATION))
         )
-        viewModelScope.launch {
-            scanUseCase.startScanning().collect {
-                it.onRight { progress ->
-                    if (progress == 100) {
-                        checkIfDevicePaired()
-                    }
-                }.onLeft { failure ->
-                    analytics.trackEventFailure(failure.code)
-                    onStatus.postValue(
-                        Resource.error(
-                            String.empty(), ChangeFrequencyState(FrequencyStatus.SCAN_FOR_STATION)
-                        )
-                    )
-                }
-            }
-        }
-    }
-
-    fun pairDevice() {
-        viewModelScope.launch {
-            onStatus.postValue(
-                Resource.loading(ChangeFrequencyState(FrequencyStatus.CONNECT_TO_STATION))
-            )
-            connectionUseCase.setPeripheral(scannedDevice.address).onRight {
-                connectionUseCase.connectToPeripheral().onRight {
-                    if (deviceIsPaired()) {
-                        changeFrequency()
-                    } else {
-                        analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
-                        onStatus.postValue(
-                            Resource.error(
-                                String.empty(), ChangeFrequencyState(FrequencyStatus.PAIR_STATION)
-                            )
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun disconnectFromPeripheral() {
-        GlobalScope.launch {
-            connectionUseCase.disconnectFromPeripheral()
-        }
-    }
-
-    private fun connect() {
-        connectionUseCase.setPeripheral(scannedDevice.address).onRight {
-            viewModelScope.launch {
-                connectionUseCase.connectToPeripheral().onRight {
-                    changeFrequency()
-                }.onLeft {
-                    analytics.trackEventFailure(it.code)
-                    onStatus.postValue(
-                        Resource.error(
-                            it.getCode(), ChangeFrequencyState(FrequencyStatus.CONNECT_TO_STATION)
-                        )
-                    )
-                }
-            }
-        }.onLeft {
-            analytics.trackEventFailure(it.code)
-            onStatus.postValue(
-                Resource.error(
-                    it.getCode(),
-                    ChangeFrequencyState(FrequencyStatus.CONNECT_TO_STATION)
-                )
-            )
-        }
+        super.scanAndConnect()
     }
 
     private fun changeFrequency() {
@@ -202,28 +125,9 @@ class ChangeFrequencyViewModel(
             }.onLeft {
                 analytics.trackEventFailure(it.code)
                 Resource.error(
-                    it.getCode(), ChangeFrequencyState(FrequencyStatus.CHANGING_FREQUENCY)
+                    it.getCode(),
+                    ChangeFrequencyState(FrequencyStatus.CHANGING_FREQUENCY)
                 )
-            }
-        }
-    }
-
-    init {
-        viewModelScope.launch {
-            connectionUseCase.registerOnBondStatus().collect {
-                when (it) {
-                    BluetoothDevice.BOND_BONDED -> {
-                        changeFrequency()
-                    }
-                    BluetoothDevice.BOND_NONE -> {
-                        analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
-                        onStatus.postValue(
-                            Resource.error(
-                                String.empty(), ChangeFrequencyState(FrequencyStatus.PAIR_STATION)
-                            )
-                        )
-                    }
-                }
             }
         }
     }
