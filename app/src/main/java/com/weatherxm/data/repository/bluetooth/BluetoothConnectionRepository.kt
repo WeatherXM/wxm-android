@@ -4,10 +4,11 @@ import android.bluetooth.BluetoothDevice
 import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
 interface BluetoothConnectionRepository {
-    fun setPeripheral(address: String): Either<Failure, Unit>
+    fun setPeripheral(address: String, scope: CoroutineScope): Either<Failure, Unit>
     suspend fun connectToPeripheral(): Either<Failure, Unit>
     suspend fun disconnectFromPeripheral()
     fun registerOnBondStatus(): Flow<Int>

@@ -5,6 +5,7 @@ import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
 import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSource
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
 class BluetoothConnectionRepositoryImpl(
@@ -15,8 +16,8 @@ class BluetoothConnectionRepositoryImpl(
         return dataSource.getPairedDevices()
     }
 
-    override fun setPeripheral(address: String): Either<Failure, Unit> {
-        return dataSource.setPeripheral(address)
+    override fun setPeripheral(address: String, scope: CoroutineScope): Either<Failure, Unit> {
+        return dataSource.setPeripheral(address, scope)
     }
 
     override suspend fun connectToPeripheral(): Either<Failure, Unit> {

@@ -26,6 +26,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -122,11 +123,10 @@ class BluetoothConnectionManager(
         } ?: mutableListOf()
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
-    fun setPeripheral(address: String): Either<Failure, Unit> {
+    fun setPeripheral(address: String, scope: CoroutineScope): Either<Failure, Unit> {
         return try {
             macAddress = address
-            peripheral = GlobalScope.peripheral(address)
+            peripheral = scope.peripheral(address)
             Either.Right(Unit)
         } catch (e: IllegalArgumentException) {
             Timber.w(e, "Creation of peripheral failed: $address")
@@ -249,7 +249,7 @@ class BluetoothConnectionManager(
     }
 
     suspend fun write(command: String): Boolean {
-        if(isSettingCharacteristics) {
+        if (isSettingCharacteristics) {
             /**
              * If we are still in the process of setting characteristics, delay a bit
              * to ensure they are correctly set

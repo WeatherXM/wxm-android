@@ -12,6 +12,7 @@ import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_DEV_
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_REBOOT_COMMAND
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_SET_FREQUENCY_COMMAND
 import com.weatherxm.data.frequencyToHeliumBleBandValue
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -32,8 +33,8 @@ class BluetoothConnectionDataSourceImpl(
         return connectionManager.getPairedDevices()
     }
 
-    override fun setPeripheral(address: String): Either<Failure, Unit> {
-        return connectionManager.setPeripheral(address)
+    override fun setPeripheral(address: String, scope: CoroutineScope): Either<Failure, Unit> {
+        return connectionManager.setPeripheral(address, scope)
     }
 
     override suspend fun connectToPeripheral(numOfRetries: Int): Either<Failure, Unit> {
