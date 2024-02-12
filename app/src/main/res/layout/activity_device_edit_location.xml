@@ -33,6 +33,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_normal"
@@ -118,10 +119,10 @@
                         android:id="@+id/confirmLocationToggle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="top"
                         android:layout_marginTop="@dimen/margin_normal_to_large"
+                        android:gravity="top"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/relocationFeeCard"/>
+                        app:layout_constraintTop_toBottomOf="@id/relocationFeeCard" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/confirmLocationText"
@@ -150,4 +151,31 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/successContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorSurface"
+        android:visibility="gone">
+
+        <com.weatherxm.ui.components.EmptyView
+            android:id="@+id/successView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/margin_large"
+            app:empty_animation="@raw/anim_success"
+            app:empty_title="@string/location_confirmed"
+            app:layout_constraintBottom_toTopOf="@id/dismissBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:empty_subtitle="@string/location_confirmed_desc" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dismissBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_large"
+            android:text="@string/action_dismiss"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

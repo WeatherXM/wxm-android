@@ -109,10 +109,15 @@ class DeviceEditLocationActivity : BaseActivity(), EditLocationListener {
         binding.confirmBtn.isEnabled = resource.status == Status.ERROR
 
         if (resource.status == Status.SUCCESS) {
-            toast(R.string.location_updated)
-            val resultValue = Intent().putExtra(ARG_DEVICE, resource.data)
-            setResult(Activity.RESULT_OK, resultValue)
-            finish()
+            binding.appBar.setVisible(false)
+            binding.mainContainer.setVisible(false)
+            binding.successView.htmlSubtitle(R.string.location_confirmed_desc)
+            binding.dismissBtn.setOnClickListener {
+                val resultValue = Intent().putExtra(ARG_DEVICE, resource.data)
+                setResult(Activity.RESULT_OK, resultValue)
+                finish()
+            }
+            binding.successContainer.setVisible(true)
         } else if (resource.status == Status.ERROR) {
             resource.message?.let { toast(it, Toast.LENGTH_LONG) }
         }
