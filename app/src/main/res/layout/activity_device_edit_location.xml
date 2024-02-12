@@ -79,35 +79,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/confirmLocationToggle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="top"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/confirmLocationText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_small"
-                        android:text="@string/confirm_location_description"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toEndOf="@id/confirmLocationToggle"
-                        app:layout_constraintTop_toTopOf="@id/confirmLocationToggle" />
-
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/relocationFeeCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_normal_to_large"
                         app:cardBackgroundColor="@color/warningTint"
                         app:cardCornerRadius="@dimen/radius_medium"
                         app:contentPadding="@dimen/padding_small"
-                        app:layout_constraintTop_toBottomOf="@id/confirmLocationText">
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -135,6 +114,27 @@
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/confirmLocationToggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="top"
+                        android:layout_marginTop="@dimen/margin_normal_to_large"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/relocationFeeCard"/>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/confirmLocationText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small"
+                        android:text="@string/confirm_location_description"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@id/confirmLocationToggle"
+                        app:layout_constraintTop_toTopOf="@id/confirmLocationToggle" />
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/confirmBtn"
                         style="@style/Widget.WeatherXM.Button"
@@ -143,7 +143,7 @@
                         android:layout_marginTop="@dimen/margin_normal_to_large"
                         android:enabled="false"
                         android:text="@string/confirm_location"
-                        app:layout_constraintTop_toBottomOf="@id/relocationFeeCard" />
+                        app:layout_constraintTop_toBottomOf="@id/confirmLocationText" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>

@@ -526,7 +526,7 @@
 
     <!-- Edit Station location -->
     <string name="edit_station_location">Edit Station Location</string>
-    <string name="relocation_fee_notice"><![CDATA[Station relocation is subject to a relocation fee.<br><a href="%1$s">Read more here</a>]]></string>
+    <string name="relocation_fee_notice"><![CDATA[Editing the station’s location is subject to a <b>relocation fee</b> and the station will be excluded from rewards for the next <b>2 days</b>.<br><a href="%1$s">Read more here</a>]]></string>
     <string name="confirm_location">Confirm Location</string>
     <string name="location_updated">Location Updated</string>
 </resources>
