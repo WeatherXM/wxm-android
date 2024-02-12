@@ -527,8 +527,8 @@
 
     <!-- Edit Station location -->
     <string name="edit_station_location">Edit Station Location</string>
-    <string name="relocation_fee_notice"><![CDATA[Editing the station’s location is subject to a <b>relocation fee</b> and the station will be excluded from rewards for the next <b>2 days</b>.<br><a href="%1$s">Read more here</a>]]></string>
+    <string name="relocation_fee_notice"><![CDATA[Editing the station’s location is subject to a <b>relocation penalty</b> and the station will be excluded from rewards for the next <b>2 days</b>.<br><a href="%1$s">Read more here</a>]]></string>
     <string name="confirm_location">Confirm Location</string>
     <string name="location_confirmed">Location Confirmed!</string>
-    <string name="location_confirmed_desc"><![CDATA[Your station’s location has been updated. The station should start earning rewards again in <b>2 days</b>.]]></string>
+    <string name="location_confirmed_desc"><![CDATA[Your station’s location has been updated. The station should start earning rewards again when your location is verified by our systems in <b>~2–3 days</b>.]]></string>
 </resources>
