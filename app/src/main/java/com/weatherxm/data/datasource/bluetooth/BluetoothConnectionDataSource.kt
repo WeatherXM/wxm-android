@@ -8,7 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
 interface BluetoothConnectionDataSource {
-    fun setPeripheral(address: String, scope: CoroutineScope): Either<Failure, Unit>
+    suspend fun setPeripheral(address: String): Either<Failure, Unit>
     suspend fun connectToPeripheral(numOfRetries: Int = 0): Either<Failure, Unit>
     suspend fun disconnectFromPeripheral()
     fun registerOnBondStatus(): Flow<Int>

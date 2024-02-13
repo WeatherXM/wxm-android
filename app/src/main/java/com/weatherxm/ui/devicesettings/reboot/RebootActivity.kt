@@ -3,6 +3,7 @@ package com.weatherxm.ui.devicesettings.reboot
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.os.Bundle
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.weatherxm.R
@@ -61,8 +62,14 @@ class RebootActivity : BaseActivity() {
             return
         }
 
+        onBackPressedDispatcher.addCallback {
+            finishActivity()
+        }
+
         with(binding.toolbar) {
-            setNavigationOnClickListener { finishActivity() }
+            setNavigationOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
             subtitle = model.device.name
         }
 

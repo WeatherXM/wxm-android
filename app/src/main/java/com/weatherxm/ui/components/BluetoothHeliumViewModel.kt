@@ -9,9 +9,6 @@ import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.Analytics
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -85,7 +82,7 @@ open class BluetoothHeliumViewModel(
             onScanFailure(BluetoothError.DeviceNotFound)
             return
         }
-        connectionUseCase.setPeripheral(scannedDevice.address, viewModelScope).onRight {
+        connectionUseCase.setPeripheral(scannedDevice.address).onRight {
             connect(ignorePairing)
         }.onLeft {
             analytics.trackEventFailure(it.code)
@@ -122,9 +119,8 @@ open class BluetoothHeliumViewModel(
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     fun disconnectFromPeripheral() {
-        GlobalScope.launch {
+        viewModelScope.launch {
             connectionUseCase.disconnectFromPeripheral()
         }
     }

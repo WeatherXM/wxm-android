@@ -17,8 +17,6 @@ import com.weatherxm.usecases.BluetoothUpdaterUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getCode
 import com.weatherxm.util.Resources
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList")
@@ -99,9 +97,8 @@ class DeviceHeliumOTAViewModel(
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     fun update(uri: Uri) {
-        GlobalScope.launch {
+        viewModelScope.launch {
             onStatus.postValue(Resource.loading(State(OTAStatus.INSTALLING)))
             updaterUseCase.update(uri).collect {
                 when (it.state) {
