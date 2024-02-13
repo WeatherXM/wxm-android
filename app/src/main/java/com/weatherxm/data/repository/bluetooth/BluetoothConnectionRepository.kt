@@ -4,7 +4,6 @@ import android.bluetooth.BluetoothDevice
 import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
 interface BluetoothConnectionRepository {

@@ -44,6 +44,7 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.coroutineContext
 
+@Suppress("TooManyFunctions")
 class BluetoothConnectionManager(
     private val context: Context, private val bluetoothAdapter: BluetoothAdapter?
 ) {
