@@ -471,12 +471,6 @@ enum class AnnotationCode : Parcelable {
 @Parcelize
 enum class AnnotationGroupCode : Parcelable {
     NO_WALLET,
-    NO_STATION_DATA,
-    SENSOR_PROBLEMS,
-    WEATHER_DATA_GAPS,
-    BAD_STATION_DEPLOYMENT,
-    NO_LOCATION_DATA,
     LOCATION_NOT_VERIFIED,
-    USER_RELOCATION_PENALTY,
     UNKNOWN
 }
