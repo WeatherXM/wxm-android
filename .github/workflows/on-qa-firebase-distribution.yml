@@ -34,9 +34,9 @@ env:
     GLOBAL_GRADLE_CACHE: gradle-cache-${GITHUB_REPOSITORY}
 jobs:
     qa_dist:
-        environment: ${{ github.event.inputs.buildType }}
+        environment: ${{ github.event.inputs.environment }}
         env:
-            # API URL for Prod Flavor
+            # API URL for the environment selected
             ORG_GRADLE_PROJECT_API_URL: ${{ secrets.API_URL }}
         runs-on: ubuntu-latest
         steps:
