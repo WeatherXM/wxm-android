@@ -145,7 +145,7 @@ class RewardsFragment : BaseFragment() {
                             val value = item.second
 
                             // Fit the value (0-100) in the 20-100 range
-                            val normalizedValue = ((value.toFloat() / 100F) * 80F + 20F).toInt()
+                            val normalizedValue = ((value.toFloat() / 100F) * 60F + 20F).toInt()
 
                             Bar(colorId = R.color.blueTint)
                             Bar(height = normalizedValue, colorId = getRewardScoreColor(value))
@@ -184,7 +184,7 @@ class RewardsFragment : BaseFragment() {
 
     @Suppress("FunctionNaming")
     @Composable
-    private fun BoxScope.Bar(height: Int = 100, @ColorRes colorId: Int) {
+    private fun BoxScope.Bar(height: Int = 80, @ColorRes colorId: Int) {
         val radius = dimensionResource(id = R.dimen.radius_medium)
         Spacer(
             modifier = Modifier
