@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:navigationIcon="@drawable/ic_back"
-            app:title="@string/title_device_rewards"
+            app:title="@string/title_rewards_timeline"
             tools:subtitle="Weatherwise Wintergreen Stratocumulus" />
     </com.google.android.material.appbar.AppBarLayout>
 

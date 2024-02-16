@@ -116,11 +116,6 @@ class DeviceDetailsUseCaseImpl(
                     UIRewardObject(
                         context, it, appConfigRepository.getRewardsHideAnnotationThreshold(), true
                     )
-                },
-                monthly = rewardsInfo.monthly?.let {
-                    UIRewardObject(
-                        context, it, appConfigRepository.getRewardsHideAnnotationThreshold(), true
-                    )
                 }
             )
         }

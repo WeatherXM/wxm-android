@@ -46,11 +46,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.weatherxm.ui.components.RewardsCardView
+                    <com.weatherxm.ui.components.DailyRewardsCardView
                         android:id="@+id/rewardsContentCard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small_to_normal"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textview.MaterialTextView
@@ -99,7 +98,7 @@
                 android:layout_marginTop="@dimen/margin_normal_to_large"
                 android:text="@string/need_help_contact_support"
                 app:backgroundTint="@color/colorSurface"
-                app:layout_constraintTop_toBottomOf="@id/mainCard"/>
+                app:layout_constraintTop_toBottomOf="@id/mainCard" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

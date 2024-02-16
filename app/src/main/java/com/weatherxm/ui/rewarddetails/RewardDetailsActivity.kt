@@ -52,15 +52,7 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
         }
         binding.contactSupportBtn.setVisible(device.isOwned())
 
-        binding.rewardsContentCard.updateUI(
-            rewardsObject,
-            device,
-            onInfoButton = { title, htmlMessage ->
-                navigator.showMessageDialog(
-                    supportFragmentManager, title = title, htmlMessage = htmlMessage
-                )
-            }
-        )
+        binding.rewardsContentCard.updateUI(rewardsObject)
         updateErrors(device, rewardsObject)
     }
 

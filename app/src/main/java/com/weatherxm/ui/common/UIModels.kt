@@ -5,7 +5,6 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.weatherxm.R
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Hex
 import com.weatherxm.data.HourlyWeather
@@ -17,11 +16,8 @@ import com.weatherxm.data.RewardsObject
 import com.weatherxm.data.Transaction
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
-import com.weatherxm.util.DateTimeHelper.getFormattedDay
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Rewards.shouldHideAnnotations
-import com.weatherxm.util.isToday
-import com.weatherxm.util.isYesterday
 import kotlinx.parcelize.Parcelize
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -39,8 +35,7 @@ data class UIError(
 data class UIRewards(
     val allTimeRewards: Float? = null,
     var latest: UIRewardObject? = null,
-    var weekly: UIRewardObject? = null,
-    var monthly: UIRewardObject? = null,
+    var weekly: UIRewardObject? = null
 ) : Parcelable
 
 @Keep
@@ -52,12 +47,13 @@ data class UIRewardObject(
     var rewardFormattedDate: String? = null,
     var fromDate: String? = null,
     var toDate: String? = null,
-    var actualReward: Float? = null,
+    var actualReward: Float = 0F,
+    var referenceDate: String? = null,
+    var baseReward: Float = 0F,
+    var boosts: Float? = null,
     var lostRewards: Float? = null,
     var rewardScore: Int? = null,
     var periodMaxReward: Float? = null,
-    var timelineTitle: String? = null,
-    var timelineScores: List<Int> = emptyList(),
     var annotations: MutableList<UIRewardsAnnotation> = mutableListOf(),
     var annotationSummary: List<RewardsAnnotationGroup> = mutableListOf(),
 ) : Parcelable {
@@ -85,12 +81,16 @@ data class UIRewardObject(
 
         fromDate = utcFromDate
         toDate = utcToDate
-        actualReward = rewards.actualReward
+        actualReward = rewards.actualReward ?: 0F
+
+        // FIXME: Replace this when API is ready. Remove any unused variables.
+        baseReward = rewards.actualReward ?: 0F
+        boosts = null
+        referenceDate = rewards.timeline?.referenceDate?.getFormattedDate(true)
+
         lostRewards = rewards.lostRewards
         rewardScore = rewards.rewardScore
         periodMaxReward = rewards.periodMaxReward
-        setTimelineTitle(context, rewards.timeline?.referenceDate, fromDate, toDate)
-        timelineScores = rewards.timeline?.rewardScores ?: mutableListOf()
         annotationSummary = rewards.annotationSummary?.sortedByDescending {
             it.severityLevel?.ordinal
         } ?: mutableListOf()
@@ -103,46 +103,20 @@ data class UIRewardObject(
         val time = tx.timestamp.getFormattedTime(context)
         rewardFormattedTimestamp = "$date, $time (UTC)"
         this.rewardFormattedDate = tx.timestamp.getFormattedDate(true)
-        actualReward = tx.actualReward
+        actualReward = tx.actualReward ?: 0F
+
+        // FIXME: Replace this when API is ready
+        baseReward = tx.actualReward ?: 0F
+        boosts = 0F
+        referenceDate = tx.timeline?.referenceDate?.getFormattedDate(true)
+
         lostRewards = tx.lostRewards
         rewardScore = tx.rewardScore
         periodMaxReward = tx.dailyReward
-        setTimelineTitle(context, tx.timeline?.referenceDate)
-        timelineScores = tx.timeline?.rewardScores ?: mutableListOf()
         annotationSummary = tx.annotationSummary?.sortedByDescending {
             it.severityLevel?.ordinal
         } ?: mutableListOf()
         setAnnotations(hideAnnotationsThreshold, tx.annotations)
-    }
-
-    private fun setTimelineTitle(
-        context: Context,
-        referenceDate: ZonedDateTime?,
-        fromDate: String? = null,
-        toDate: String? = null
-    ) {
-        val dateToShow = referenceDate?.let {
-            val todayOrYesterday = if (it.isToday() || it.isYesterday()) {
-                it.getFormattedDay(context)
-            } else {
-                null
-            }
-            val timelineDate = it.getFormattedDate(true)
-            if (todayOrYesterday.isNullOrEmpty()) {
-                timelineDate
-            } else {
-                "$todayOrYesterday, $timelineDate"
-            }
-        } ?: kotlin.run {
-            if (fromDate != null && toDate != null) {
-                "$fromDate - $toDate"
-            } else {
-                null
-            }
-        }
-        dateToShow?.let {
-            timelineTitle = context.getString(R.string.timeline_for, it)
-        }
     }
 
     private fun setAnnotations(

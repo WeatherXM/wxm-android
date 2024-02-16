@@ -35,10 +35,7 @@
     <string name="action_scan_qr">Scan QR Code</string>
     <string name="important_message">Important Message</string>
     <string name="contact_us">Contact us</string>
-    <string name="select_date">Select Date</string>
-    <string name="start_of_day_hour">12 am</string>
-    <string name="mid_of_day_hour">12 pm</string>
-    <string name="end_of_day_hour">11 pm</string>
+    <string name="select_date">Select Date</string>>
     <string name="read_more">Read More</string>
     <string name="need_help_contact_support">Need more help? Contact Support</string>
 
@@ -88,6 +85,7 @@
     <string name="manufacturer_title">Are you a station manufacturer?</string>
     <string name="manufacturer_prompt">Join the ecosystem</string>
     <string name="last_updated">Last Updated on %s</string>
+    <string name="total">Total</string>
 
     <!-- Network Stats & Search -->
     <string name="search_station_name_address">Search station name or address</string>
@@ -229,14 +227,19 @@
     <string name="info_registration_contact_support">Not receiving an activation email? Contact our support team.</string>
 
     <!-- Rewards -->
-    <string name="title_device_rewards">Detailed $WXM Rewards</string>
-    <string name="see_wxm_rewards">See Detailed $WXM Rewards</string>
+    <string name="title_rewards_timeline">Rewards Timeline</string>
+    <string name="view_wxm_timeline">View Timeline</string>
     <string name="no_transactions_title">Oh, no! No transactions yet?</string>
     <string name="rewards">Rewards</string>
-    <string name="total">Total</string>
     <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, $WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after $WXM mainnet token launch. Actual rewards may differ from the ones you see above.]]></string>
     <string name="wxm_amount">%s $WXM</string>
     <string name="reward">+ %s $WXM</string>
+    <string name="daily_reward">Daily Reward</string>
+    <string name="earnings_for">Earnings for %s</string>
+    <string name="base_reward">Base Reward</string>
+    <string name="boosts">Boosts</string>
+    <string name="no_active">No Active</string>
+    <string name="view_reward_details">View Reward Details</string>
     <string name="score">%.2f</string>
     <string name="score_unknown">N/A</string>
     <string name="reward_score">Reward Score</string>
