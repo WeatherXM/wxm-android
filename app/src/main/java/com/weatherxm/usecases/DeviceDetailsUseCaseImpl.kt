@@ -13,11 +13,12 @@ import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.data.repository.WeatherForecastRepository
+import com.weatherxm.ui.common.DailyReward
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.RewardsWeeklyStreak
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
-import com.weatherxm.ui.common.UIRewardObject
 import com.weatherxm.ui.common.UIRewards
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.util.DateTimeHelper.getFormattedRelativeDay
@@ -108,14 +109,12 @@ class DeviceDetailsUseCaseImpl(
             UIRewards(
                 allTimeRewards = rewardsInfo.totalRewards,
                 latest = rewardsInfo.latest?.let {
-                    UIRewardObject(
+                    DailyReward(
                         context, it, appConfigRepository.getRewardsHideAnnotationThreshold()
                     )
                 },
                 weekly = rewardsInfo.weekly?.let {
-                    UIRewardObject(
-                        context, it, appConfigRepository.getRewardsHideAnnotationThreshold(), true
-                    )
+                    RewardsWeeklyStreak(it)
                 }
             )
         }

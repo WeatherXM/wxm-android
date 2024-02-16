@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewDailyRewardsCardBinding
-import com.weatherxm.ui.common.UIRewardObject
+import com.weatherxm.ui.common.DailyReward
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.getRewardScoreColor
@@ -41,7 +41,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
     }
 
     @Suppress("MagicNumber")
-    fun updateUI(data: UIRewardObject?, onViewDetails: (() -> Unit)? = null) {
+    fun updateUI(data: DailyReward?, onViewDetails: (() -> Unit)? = null) {
         if (data == null) return
 
         if (onViewDetails != null) {

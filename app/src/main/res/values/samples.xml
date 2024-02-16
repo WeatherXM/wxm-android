@@ -6,7 +6,7 @@
     </array>
     <array name="reward_slider_default_values">
         <item>0</item>
-        <item>1500</item>
+        <item>60</item>
     </array>
     <array name="network_stats_slider_default_values">
         <item>0</item>

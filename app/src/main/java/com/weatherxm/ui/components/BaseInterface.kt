@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.RewardsWeeklyStreak
 import com.weatherxm.ui.common.toast
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.checkPermissionsAndThen

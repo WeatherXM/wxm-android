@@ -8,7 +8,7 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityRewardsListBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.UIRewardObject
+import com.weatherxm.ui.common.DailyReward
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
@@ -75,7 +75,7 @@ class RewardsListActivity : BaseActivity() {
         analytics.trackScreen(Analytics.Screen.DEVICE_REWARD_TRANSACTIONS, this::class.simpleName)
     }
 
-    private fun updateUIFirstPage(resource: Resource<List<UIRewardObject>>) {
+    private fun updateUIFirstPage(resource: Resource<List<DailyReward>>) {
         when (resource.status) {
             Status.SUCCESS -> {
                 if (!resource.data.isNullOrEmpty()) {
@@ -110,7 +110,7 @@ class RewardsListActivity : BaseActivity() {
         }
     }
 
-    private fun updateUINewPage(resource: Resource<List<UIRewardObject>>) {
+    private fun updateUINewPage(resource: Resource<List<DailyReward>>) {
         when (resource.status) {
             Status.SUCCESS -> {
                 if (!resource.data.isNullOrEmpty()) {

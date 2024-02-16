@@ -227,8 +227,8 @@
     <string name="info_registration_contact_support">Not receiving an activation email? Contact our support team.</string>
 
     <!-- Rewards -->
-    <string name="title_rewards_timeline">Rewards Timeline</string>
-    <string name="view_wxm_timeline">View Timeline</string>
+    <string name="title_reward_timeline">Reward Timeline</string>
+    <string name="view_timeline">View Timeline</string>
     <string name="no_transactions_title">Oh, no! No transactions yet?</string>
     <string name="rewards">Rewards</string>
     <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, $WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after $WXM mainnet token launch. Actual rewards may differ from the ones you see above.]]></string>
@@ -240,6 +240,8 @@
     <string name="boosts">Boosts</string>
     <string name="no_active">No Active</string>
     <string name="view_reward_details">View Reward Details</string>
+    <string name="weekly_streak">Weekly Streak</string>
+    <string name="weekly_streak_desc">Base reward scores from %1$s to %2$s</string>
     <string name="score">%.2f</string>
     <string name="score_unknown">N/A</string>
     <string name="reward_score">Reward Score</string>

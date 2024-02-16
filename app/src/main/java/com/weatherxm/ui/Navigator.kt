@@ -32,7 +32,7 @@ import com.weatherxm.ui.common.Contracts.ARG_REWARDS_OBJECT
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.UIRewardObject
+import com.weatherxm.ui.common.DailyReward
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
@@ -261,7 +261,7 @@ class Navigator(private val analytics: Analytics) {
         )
     }
 
-    fun showRewardDetails(context: Context, device: UIDevice?, rewardsObject: UIRewardObject?) {
+    fun showRewardDetails(context: Context, device: UIDevice?, rewardsObject: DailyReward?) {
         context.startActivity(
             Intent(context, RewardDetailsActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)

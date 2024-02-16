@@ -8,7 +8,7 @@ import com.weatherxm.databinding.ActivityRewardDetailsBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_REWARDS_OBJECT
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.UIRewardObject
+import com.weatherxm.ui.common.DailyReward
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
@@ -31,7 +31,7 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
         binding.root.applyInsets()
 
         val device = intent?.extras?.parcelable<UIDevice>(ARG_DEVICE)
-        val rewardsObject = intent?.extras?.parcelable<UIRewardObject>(ARG_REWARDS_OBJECT)
+        val rewardsObject = intent?.extras?.parcelable<DailyReward>(ARG_REWARDS_OBJECT)
         if (device == null || rewardsObject == null) {
             Timber.d("Could not start RewardDetailsActivity. Device or Rewards Object is null.")
             toast(R.string.error_generic_message)
@@ -61,7 +61,7 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
         analytics.trackScreen(Analytics.Screen.DEVICE_REWARD_DETAILS, this::class.simpleName)
     }
 
-    private fun updateErrors(device: UIDevice, data: UIRewardObject) {
+    private fun updateErrors(device: UIDevice, data: DailyReward) {
         val hasAnnotations = data.annotations.isNotEmpty()
         binding.problemsFoundTitle.setVisible(hasAnnotations)
         binding.problemsFoundDesc.setVisible(hasAnnotations)

@@ -34,14 +34,14 @@ data class UIError(
 @Parcelize
 data class UIRewards(
     val allTimeRewards: Float? = null,
-    var latest: UIRewardObject? = null,
-    var weekly: UIRewardObject? = null
+    var latest: DailyReward? = null,
+    var weekly: RewardsWeeklyStreak? = null
 ) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class UIRewardObject(
+data class DailyReward(
     var rewardTimestamp: ZonedDateTime? = null,
     var rewardFormattedTimestamp: String? = null,
     var rewardFormattedDate: String? = null,
@@ -144,8 +144,31 @@ data class UIRewardObject(
 
 @Keep
 @JsonClass(generateAdapter = true)
+@Parcelize
+data class RewardsWeeklyStreak(
+    var fromDate: String? = null,
+    var toDate: String? = null,
+    var timelineData: MutableList<Pair<String, Int>> = mutableListOf()
+) : Parcelable {
+    constructor(rewards: RewardsObject) : this() {
+        fromDate = rewards.fromDate?.withZoneSameInstant(ZoneId.of("UTC"))?.getFormattedDate()
+        toDate = rewards.toDate?.withZoneSameInstant(ZoneId.of("UTC"))?.getFormattedDate()
+
+        // FIXME: Replace this when API is ready
+        timelineData.add(Pair("W", 0))
+        timelineData.add(Pair("T", 10))
+        timelineData.add(Pair("F", 30))
+        timelineData.add(Pair("S", 50))
+        timelineData.add(Pair("S", 70))
+        timelineData.add(Pair("M", 90))
+        timelineData.add(Pair("T", 100))
+    }
+}
+
+@Keep
+@JsonClass(generateAdapter = true)
 data class UIRewardsList(
-    var rewards: List<UIRewardObject>,
+    var rewards: List<DailyReward>,
     var hasNextPage: Boolean = false,
     var reachedTotal: Boolean = false
 )

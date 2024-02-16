@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.databinding.ListItemRewardBinding
 import com.weatherxm.ui.common.DeviceRelation
-import com.weatherxm.ui.common.UIRewardObject
+import com.weatherxm.ui.common.DailyReward
 import com.weatherxm.ui.common.setRewardStatusChip
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Resources
@@ -25,9 +25,9 @@ import timber.log.Timber
 
 class RewardsListAdapter(
     private val deviceRelation: DeviceRelation?,
-    private val onRewardDetails: (UIRewardObject) -> Unit,
+    private val onRewardDetails: (DailyReward) -> Unit,
     private val onEndOfData: () -> Unit
-) : ListAdapter<UIRewardObject,
+) : ListAdapter<DailyReward,
     RewardsListAdapter.RewardsViewHolder>(UITransactionDiffCallback()),
     KoinComponent {
 
@@ -48,7 +48,7 @@ class RewardsListAdapter(
 
     inner class RewardsViewHolder(
         private val binding: ListItemRewardBinding,
-        private val onRewardDetails: (UIRewardObject) -> Unit,
+        private val onRewardDetails: (DailyReward) -> Unit,
         private val onEndOfData: () -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -60,7 +60,7 @@ class RewardsListAdapter(
         }
 
         @Suppress("MagicNumber")
-        fun bind(item: UIRewardObject, position: Int) {
+        fun bind(item: DailyReward, position: Int) {
             if (position == currentList.size - 1) {
                 onEndOfData()
             }
@@ -133,7 +133,7 @@ class RewardsListAdapter(
             }
         }
 
-        private fun setSlider(item: UIRewardObject) {
+        private fun setSlider(item: DailyReward) {
             item.periodMaxReward?.let {
                 binding.maxReward.text = formatTokens(it.toBigDecimal())
 
@@ -151,7 +151,7 @@ class RewardsListAdapter(
             }
         }
 
-        private fun setErrorData(data: UIRewardObject, onProblems: (UIRewardObject) -> Unit) {
+        private fun setErrorData(data: DailyReward, onProblems: (DailyReward) -> Unit) {
             with(binding.problemsCard) {
                 val actionMessage = context.getString(
                     if (deviceRelation == DeviceRelation.OWNED) {
@@ -177,13 +177,13 @@ class RewardsListAdapter(
         }
     }
 
-    class UITransactionDiffCallback : DiffUtil.ItemCallback<UIRewardObject>() {
+    class UITransactionDiffCallback : DiffUtil.ItemCallback<DailyReward>() {
 
-        override fun areItemsTheSame(oldItem: UIRewardObject, newItem: UIRewardObject): Boolean {
+        override fun areItemsTheSame(oldItem: DailyReward, newItem: DailyReward): Boolean {
             return oldItem.rewardTimestamp == newItem.rewardTimestamp
         }
 
-        override fun areContentsTheSame(oldItem: UIRewardObject, newItem: UIRewardObject): Boolean {
+        override fun areContentsTheSame(oldItem: DailyReward, newItem: DailyReward): Boolean {
             return oldItem.rewardTimestamp == newItem.rewardTimestamp &&
                 oldItem.rewardFormattedTimestamp == newItem.rewardFormattedTimestamp &&
                 oldItem.rewardFormattedDate == newItem.rewardFormattedDate &&
