@@ -8,7 +8,6 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityCellInfoBinding
 import com.weatherxm.ui.common.Contracts
-import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.parcelable
@@ -127,15 +126,15 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
             return
         }
 
-        if (device.relation == DeviceRelation.FOLLOWED) {
+        if (device.isFollowed()) {
             navigator.showHandleFollowDialog(this, false, device.name) {
                 model.unFollowStation(device.id)
             }
-        } else if (device.relation == DeviceRelation.UNFOLLOWED && !device.isOnline()) {
+        } else if (device.isUnfollowed() && !device.isOnline()) {
             navigator.showHandleFollowDialog(this, true, device.name) {
                 model.followStation(device.id)
             }
-        } else if (device.relation == DeviceRelation.UNFOLLOWED) {
+        } else if (device.isUnfollowed()) {
             model.followStation(device.id)
         }
     }

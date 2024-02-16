@@ -8,15 +8,15 @@
     android:orientation="vertical">
 
     <com.weatherxm.ui.components.MessageCardView
-        android:id="@+id/error"
+        android:id="@+id/annotationContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:message_background_tint="@color/errorTint"
         app:message_card_radius="@dimen/radius_medium"
-        app:message_icon="@drawable/ic_warn"
-        app:message_icon_color="@color/error"
         app:message_includes_close_button="false"
-        app:message_stroke_color="@color/error"
+        tools:message_background_tint="@color/errorTint"
+        tools:message_icon="@drawable/ic_warn"
+        tools:message_icon_color="@color/error"
         tools:message_message="Your station didn’t send any data for the 50% of the previous day. Please check that it is properly connected to the internet and the batteries are OK."
+        tools:message_stroke_color="@color/error"
         tools:message_title="Connectivity" />
 </LinearLayout>

@@ -8,7 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.button.MaterialButton.ICON_GRAVITY_END
 import com.google.android.material.button.MaterialButton.ICON_GRAVITY_START
 import com.weatherxm.R
@@ -111,10 +113,10 @@ class MessageCardView : LinearLayout {
         return this
     }
 
-    fun title(subtitle: String?): MessageCardView {
+    fun title(title: String?): MessageCardView {
         binding.title.apply {
-            text = subtitle
-            visibility = if (subtitle != null) View.VISIBLE else View.GONE
+            text = title
+            visibility = if (title != null) View.VISIBLE else View.GONE
         }
         return this
     }
@@ -137,12 +139,21 @@ class MessageCardView : LinearLayout {
         return this
     }
 
+    fun setIcon(@DrawableRes drawableResId: Int): MessageCardView {
+        binding.icon.setImageDrawable(
+            ResourcesCompat.getDrawable(resources, drawableResId, context.theme)
+        )
+        binding.icon.setVisible(true)
+        return this
+    }
+
     fun setIconColor(@ColorRes colorResId: Int): MessageCardView {
         binding.icon.setColor(colorResId)
         return this
     }
 
     fun setStrokeColor(@ColorRes colorResId: Int): MessageCardView {
+        binding.card.strokeWidth = 2
         binding.card.strokeColor = context.getColor(colorResId)
         return this
     }

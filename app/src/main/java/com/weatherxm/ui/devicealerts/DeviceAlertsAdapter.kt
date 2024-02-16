@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.databinding.ListItemAlertBinding
 import com.weatherxm.ui.common.DeviceAlert
-import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setVisible
 
@@ -46,7 +45,7 @@ class DeviceAlertsAdapter(
                     }
                 showWarningCard()
             } else if (item == DeviceAlert.OFFLINE) {
-                val messageResId = if (device?.relation == DeviceRelation.OWNED) {
+                val messageResId = if (device?.isOwned() == true) {
                     R.string.station_offline_alert_message
                 } else {
                     R.string.no_data_message_public_device

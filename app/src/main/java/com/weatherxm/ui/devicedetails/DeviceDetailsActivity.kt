@@ -234,11 +234,11 @@ class DeviceDetailsActivity : BaseActivity() {
         }
 
         with(binding.toolbar) {
-            if (device.relation == DeviceRelation.FOLLOWED) {
+            if (device.isFollowed()) {
                 if (menu.findItem(R.id.settings) == null) {
                     menu.add(Menu.NONE, R.id.settings, 1, R.string.station_settings)
                 }
-            } else if (device.relation == DeviceRelation.UNFOLLOWED) {
+            } else if (device.isUnfollowed()) {
                 menu.removeItem(R.id.settings)
             }
         }
@@ -268,15 +268,15 @@ class DeviceDetailsActivity : BaseActivity() {
             return
         }
 
-        if (model.device.relation == DeviceRelation.FOLLOWED) {
+        if (model.device.isFollowed()) {
             navigator.showHandleFollowDialog(this, false, model.device.name) {
                 model.unFollowStation()
             }
-        } else if (model.device.relation == DeviceRelation.UNFOLLOWED && !model.device.isOnline()) {
+        } else if (model.device.isUnfollowed() && !model.device.isOnline()) {
             navigator.showHandleFollowDialog(this, true, model.device.name) {
                 model.followStation()
             }
-        } else if (model.device.relation == DeviceRelation.UNFOLLOWED) {
+        } else if (model.device.isUnfollowed()) {
             model.followStation()
         }
     }

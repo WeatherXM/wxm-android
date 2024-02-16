@@ -6,24 +6,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
+import com.weatherxm.data.RewardsAnnotationGroup
+import com.weatherxm.data.SeverityLevel
 import com.weatherxm.databinding.ListItemRewardProblemBinding
-import com.weatherxm.ui.common.AnnotationCode
-import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.AnnotationGroupCode
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.UIRewardsAnnotation
-import com.weatherxm.util.Rewards.getMessage
-import com.weatherxm.util.Rewards.getRewardAnnotationBackgroundColor
-import com.weatherxm.util.Rewards.getRewardAnnotationColor
-import com.weatherxm.util.Rewards.getTitleResId
-import com.weatherxm.util.Rewards.pointToDocsHome
-import com.weatherxm.util.Rewards.pointToDocsTroubleshooting
-import com.weatherxm.util.Rewards.pointToPoLPreLaunch
 
 class RewardProblemsAdapter(
     private val device: UIDevice,
-    private val rewardScore: Int?,
     private val listener: RewardProblemsListener
-) : ListAdapter<UIRewardsAnnotation, RewardProblemsAdapter.RewardProblemsViewHolder>(
+) : ListAdapter<RewardsAnnotationGroup, RewardProblemsAdapter.RewardProblemsViewHolder>(
     RewardProblemsDiffCallback()
 ) {
 
@@ -43,110 +35,83 @@ class RewardProblemsAdapter(
     inner class RewardProblemsViewHolder(private val binding: ListItemRewardProblemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: UIRewardsAnnotation) {
-            with(binding.error) {
-                setBackground(getRewardAnnotationBackgroundColor(rewardScore))
-                val annotationColor = getRewardAnnotationColor(rewardScore)
-                setIconColor(annotationColor)
-                setStrokeColor(annotationColor)
-                item.annotation?.getTitleResId()?.let {
-                    title(it)
-                }
-                htmlMessage(item.getMessage(context, device)) {
-                    if (item.annotation.pointToPoLPreLaunch()) {
-                        listener.onDocumentation(
-                            itemView.context.getString(R.string.docs_url_pol_algorithm),
-                            item.annotation
-                        )
+        fun bind(item: RewardsAnnotationGroup) {
+            with(binding.annotationContainer) {
+                when (item.severityLevel) {
+                    SeverityLevel.INFO -> {
+                        setBackground(R.color.blueTint)
+                        setStrokeColor(R.color.colorPrimaryVariant)
+                        setIcon(R.drawable.ic_info)
+                        setIconColor(R.color.colorPrimaryVariant)
+                    }
+                    SeverityLevel.WARNING -> {
+                        setBackground(R.color.warningTint)
+                        setStrokeColor(R.color.warning)
+                        setIcon(R.drawable.ic_warn)
+                        setIconColor(R.color.warning)
+                    }
+                    SeverityLevel.ERROR -> {
+                        setBackground(R.color.errorTint)
+                        setStrokeColor(R.color.error)
+                        setIcon(R.drawable.ic_warn)
+                        setIconColor(R.color.error)
+                    }
+                    else -> {
+                        setBackground(R.color.blueTint)
+                        setStrokeColor(R.color.colorPrimaryVariant)
+                        setIcon(R.drawable.ic_info)
+                        setIconColor(R.color.colorPrimaryVariant)
                     }
                 }
-                if (device.relation == DeviceRelation.OWNED) {
-                    getAction(item.annotation)
-                }
+                title(item.title)
+                message(item.message)
+                setAction(item.toAnnotationGroupCode(), item.docUrl)
             }
         }
 
-        private fun getAction(annotation: AnnotationCode?) {
+        private fun setAction(code: AnnotationGroupCode?, docUrl: String?) {
             with(itemView.context) {
-                if (annotation == AnnotationCode.OBC && device.needsUpdate()) {
-                    binding.error.action(getString(R.string.action_update_firmware)) {
-                        listener.onUpdateFirmware(device, annotation)
+                if (code == AnnotationGroupCode.NO_WALLET && device.isOwned()) {
+                    binding.annotationContainer.action(getString(R.string.add_wallet_now)) {
+                        listener.onAddWallet(code.toString())
                     }
-                } else if (annotation.pointToDocsHome()) {
-                    binding.error.action(getString(R.string.read_more)) {
-                        listener.onDocumentation(getString(R.string.docs_url), annotation)
+                } else if (code == AnnotationGroupCode.LOCATION_NOT_VERIFIED && device.isOwned()) {
+                    binding.annotationContainer.action(getString(R.string.edit_location)) {
+                        listener.onEditLocation(device, code.toString())
                     }
-                } else if (annotation.pointToDocsTroubleshooting()) {
-                    binding.error.action(getString(R.string.read_more)) {
-                        listener.onDocumentation(
-                            getString(R.string.docs_url_troubleshooting),
-                            annotation
-                        )
-                    }
-                } else if (annotation == AnnotationCode.NO_WALLET) {
-                    binding.error.action(getString(R.string.add_wallet_now)) {
-                        listener.onAddWallet(annotation)
-                    }
-                } else if (annotation == AnnotationCode.CELL_CAPACITY_REACHED) {
-                    binding.error.action(getString(R.string.read_more)) {
-                        listener.onDocumentation(
-                            getString(R.string.docs_url_cell_capacity),
-                            annotation
-                        )
-                    }
-                } else if (annotation == AnnotationCode.POL_THRESHOLD_NOT_REACHED) {
-                    binding.error.action(getString(R.string.read_more)) {
-                        listener.onDocumentation(
-                            getString(R.string.docs_url_pol_algorithm),
-                            annotation
-                        )
-                    }
-                } else if (annotation == AnnotationCode.QOD_THRESHOLD_NOT_REACHED) {
-                    binding.error.action(getString(R.string.read_more)) {
-                        listener.onDocumentation(
-                            getString(R.string.docs_url_qod_algorithm),
-                            annotation
-                        )
-                    }
-                } else if (annotation == AnnotationCode.LOCATION_NOT_VERIFIED) {
-                    binding.error.action(getString(R.string.edit_location)) {
-                        listener.onEditLocation(device, annotation)
-                    }
-                } else if (annotation == AnnotationCode.UNKNOWN) {
-                    binding.error.action(getString(R.string.contact_support_title)) {
-                        listener.onContactSupport(device, annotation)
+                } else if (!docUrl.isNullOrEmpty()) {
+                    binding.annotationContainer.action(getString(R.string.read_more)) {
+                        listener.onDocumentation(docUrl, code.toString())
                     }
                 } else {
-                    // Do nothing, no action should be set.
+                    // Do nothing
                 }
             }
         }
     }
 }
 
-class RewardProblemsDiffCallback : DiffUtil.ItemCallback<UIRewardsAnnotation>() {
+class RewardProblemsDiffCallback : DiffUtil.ItemCallback<RewardsAnnotationGroup>() {
 
     override fun areItemsTheSame(
-        oldItem: UIRewardsAnnotation,
-        newItem: UIRewardsAnnotation
+        oldItem: RewardsAnnotationGroup,
+        newItem: RewardsAnnotationGroup
     ): Boolean {
         return oldItem == newItem
     }
 
     override fun areContentsTheSame(
-        oldItem: UIRewardsAnnotation,
-        newItem: UIRewardsAnnotation
+        oldItem: RewardsAnnotationGroup,
+        newItem: RewardsAnnotationGroup
     ): Boolean {
-        return oldItem.annotation == newItem.annotation &&
-            oldItem.ratioOfAnnotation == newItem.ratioOfAnnotation &&
-            oldItem.qodParametersAffected.size == newItem.qodParametersAffected.size
+        return oldItem.title == newItem.title && oldItem.message == newItem.message &&
+            oldItem.severityLevel == newItem.severityLevel && oldItem.group == newItem.group &&
+            oldItem.docUrl == newItem.docUrl
     }
 }
 
 interface RewardProblemsListener {
-    fun onAddWallet(annotation: AnnotationCode?)
-    fun onUpdateFirmware(device: UIDevice, annotation: AnnotationCode?)
-    fun onContactSupport(device: UIDevice, annotation: AnnotationCode?)
-    fun onDocumentation(url: String, annotation: AnnotationCode?)
-    fun onEditLocation(device: UIDevice, annotation: AnnotationCode?)
+    fun onAddWallet(group: String?)
+    fun onDocumentation(url: String, group: String?)
+    fun onEditLocation(device: UIDevice, group: String?)
 }

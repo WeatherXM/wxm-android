@@ -80,12 +80,8 @@ class CurrentFragment : BaseFragment() {
             navigator.showHistoryActivity(requireContext(), model.device)
         }
 
-        binding.followCard.setVisible(
-            model.device.relation == DeviceRelation.UNFOLLOWED
-        )
-        binding.historicalCharts.isEnabled =
-            model.device.relation != DeviceRelation.UNFOLLOWED
-
+        binding.followCard.setVisible(model.device.isUnfollowed())
+        binding.historicalCharts.isEnabled = !model.device.isUnfollowed()
         binding.followPromptBtn.setOnClickListener {
             handleFollowClick()
         }
@@ -109,11 +105,11 @@ class CurrentFragment : BaseFragment() {
             return
         }
 
-        if (model.device.relation == DeviceRelation.UNFOLLOWED && !model.device.isOnline()) {
+        if (model.device.isUnfollowed() && !model.device.isOnline()) {
             navigator.showHandleFollowDialog(activity, true, model.device.name) {
                 parentModel.followStation()
             }
-        } else if (model.device.relation == DeviceRelation.UNFOLLOWED) {
+        } else if (model.device.isUnfollowed()) {
             parentModel.followStation()
         }
     }
@@ -122,12 +118,8 @@ class CurrentFragment : BaseFragment() {
         binding.progress.visibility = View.INVISIBLE
         setAlerts(device)
         binding.currentWeatherCard.setData(device.currentWeather)
-
-        binding.followCard.setVisible(
-            device.relation == DeviceRelation.UNFOLLOWED
-        )
-        binding.historicalCharts.isEnabled =
-            device.relation != DeviceRelation.UNFOLLOWED
+        binding.followCard.setVisible(device.isUnfollowed())
+        binding.historicalCharts.isEnabled = !device.isUnfollowed()
     }
 
     private fun setAlerts(device: UIDevice) {
