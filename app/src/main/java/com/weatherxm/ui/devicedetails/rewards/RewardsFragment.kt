@@ -4,30 +4,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Slider
-import androidx.compose.material3.SliderColors
-import androidx.compose.material3.SliderDefaults
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.weatherxm.R
@@ -140,15 +136,24 @@ class RewardsFragment : BaseFragment() {
                 verticalAlignment = Alignment.Bottom
             ) {
                 weekly?.timelineData?.forEach { item ->
-                    val score = remember { mutableIntStateOf(item.second) }
                     Column(
                         modifier = Modifier.then(Modifier.width(20.dp)),
                         verticalArrangement = Arrangement.SpaceAround,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        VerticalSlider(value = score)
+                        Box {
+                            val height = if (item.second == 0) {
+                                20
+                            } else {
+                                (((item.second - 20) * 80) / 100) + 20
+                            }.coerceIn(20..80)
+
+                            Bar(colorId = R.color.blueTint)
+                            Bar(height = height, colorId = getRewardScoreColor(item.second))
+                        }
                         Text(
                             text = item.first,
+                            Modifier.padding(0.dp, 4.dp, 0.dp, 0.dp),
                             fontSize = 12.sp,
                             color = Color(requireContext().getColor(R.color.colorOnSurface)),
                         )
@@ -178,58 +183,20 @@ class RewardsFragment : BaseFragment() {
         }
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @Suppress("FunctionNaming")
     @Composable
-    fun VerticalSlider(value: MutableState<Int>) {
-        Slider(modifier = Modifier
-            .graphicsLayer {
-                rotationZ = 270f
-                transformOrigin = TransformOrigin(0f, 0f)
-            }
-            .layout { measurable, constraints ->
-                val placeable = measurable.measure(
-                    Constraints(
-                        minWidth = constraints.minHeight,
-                        maxWidth = constraints.maxHeight,
-                        minHeight = constraints.minWidth,
-                        maxHeight = constraints.maxWidth,
-                    )
+    private fun BoxScope.Bar(height: Int = 80, @ColorRes colorId: Int) {
+        val radius = dimensionResource(id = R.dimen.radius_medium)
+        Spacer(
+            modifier = Modifier
+                .height(height.dp)
+                .width(20.dp)
+                .align(Alignment.BottomCenter)
+                .background(
+                    colorResource(id = colorId),
+                    RoundedCornerShape(radius, radius, radius, radius)
                 )
-                layout(placeable.height, placeable.width) {
-                    placeable.place(-placeable.width, 0)
-                }
-            }
-            .width(80.dp),
-            value = value.value.toFloat(),
-            valueRange = 0F..100F,
-            enabled = false,
-            colors = SliderDefaults.colors(
-                disabledThumbColor = colorResource(R.color.transparent),
-                disabledActiveTrackColor = colorResource(getRewardScoreColor(value.value)),
-                disabledInactiveTrackColor = colorResource(R.color.blueTint),
-            ),
-            track = { sliderState ->
-                SliderDefaults.Track(
-                    sliderState = sliderState,
-                    modifier = Modifier.scale(scaleX = 1f, scaleY = 5f),
-                    colors = SliderColors(
-                        disabledThumbColor = colorResource(R.color.transparent),
-                        disabledActiveTrackColor = colorResource(getRewardScoreColor(value.value)),
-                        disabledInactiveTrackColor = colorResource(R.color.blueTint),
-                        activeTrackColor = colorResource(R.color.transparent),
-                        activeTickColor = colorResource(R.color.transparent),
-                        inactiveTickColor = colorResource(R.color.transparent),
-                        inactiveTrackColor = colorResource(R.color.transparent),
-                        disabledActiveTickColor = colorResource(R.color.transparent),
-                        disabledInactiveTickColor = colorResource(R.color.transparent),
-                        thumbColor = colorResource(R.color.transparent),
-                    ),
-                    enabled = false
-                )
-            },
-            onValueChange = {
-                value.value = it.toInt()
-            })
+        )
     }
 
     override fun onResume() {
