@@ -142,14 +142,13 @@ class RewardsFragment : BaseFragment() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Box {
-                            val height = if (item.second == 0) {
-                                20
-                            } else {
-                                (((item.second - 20) * 80) / 100) + 20
-                            }.coerceIn(20..80)
+                            val value = item.second
+
+                            // Fit the value (0-100) in the 20-100 range
+                            val normalizedValue = ((value.toFloat() / 100F) * 80F + 20F).toInt()
 
                             Bar(colorId = R.color.blueTint)
-                            Bar(height = height, colorId = getRewardScoreColor(item.second))
+                            Bar(height = normalizedValue, colorId = getRewardScoreColor(value))
                         }
                         Text(
                             text = item.first,
@@ -185,7 +184,7 @@ class RewardsFragment : BaseFragment() {
 
     @Suppress("FunctionNaming")
     @Composable
-    private fun BoxScope.Bar(height: Int = 80, @ColorRes colorId: Int) {
+    private fun BoxScope.Bar(height: Int = 100, @ColorRes colorId: Int) {
         val radius = dimensionResource(id = R.dimen.radius_medium)
         Spacer(
             modifier = Modifier
