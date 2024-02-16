@@ -104,7 +104,7 @@ object Rewards {
                 context.getString(R.string.annotation_obc_desc, getAffectedParameters())
             }
             AnnotationCode.SPIKE_INST -> {
-                if (device.relation == DeviceRelation.OWNED) {
+                if (device.isOwned()) {
                     context.getString(R.string.annotation_spikes_desc, getAffectedParameters())
                 } else {
                     context.getString(
@@ -113,21 +113,21 @@ object Rewards {
                 }
             }
             AnnotationCode.NO_DATA -> {
-                if (device.relation == DeviceRelation.OWNED) {
+                if (device.isOwned()) {
                     context.getString(R.string.annotation_no_data_desc)
                 } else {
                     context.getString(R.string.annotation_no_data_public_desc)
                 }
             }
             AnnotationCode.NO_MEDIAN -> {
-                if (device.relation == DeviceRelation.OWNED) {
+                if (device.isOwned()) {
                     context.getString(R.string.annotation_no_median_desc)
                 } else {
                     context.getString(R.string.annotation_no_median_public_desc)
                 }
             }
             AnnotationCode.SHORT_CONST -> {
-                if (device.relation == DeviceRelation.OWNED) {
+                if (device.isOwned()) {
                     context.getString(R.string.annotation_short_const_desc, getAffectedParameters())
                 } else {
                     context.getString(
@@ -136,7 +136,7 @@ object Rewards {
                 }
             }
             AnnotationCode.LONG_CONST -> {
-                if (device.relation == DeviceRelation.OWNED) {
+                if (device.isOwned()) {
                     context.getString(R.string.annotation_long_const_desc, getAffectedParameters())
                 } else {
                     context.getString(
@@ -148,7 +148,7 @@ object Rewards {
                 context.getString(R.string.annotation_frozen_sensor_desc)
             }
             AnnotationCode.ANOMALOUS_INCREASE -> {
-                if (device.relation == DeviceRelation.OWNED) {
+                if (device.isOwned()) {
                     context.getString(
                         R.string.annotation_anom_increase_desc, getAffectedParameters()
                     )
@@ -171,14 +171,14 @@ object Rewards {
                 }
             }
             AnnotationCode.NO_WALLET -> {
-                if (device.relation == DeviceRelation.OWNED) {
+                if (device.isOwned()) {
                     context.getString(R.string.annotation_no_wallet_desc)
                 } else {
                     context.getString(R.string.annotation_no_wallet_public_desc)
                 }
             }
             AnnotationCode.CELL_CAPACITY_REACHED -> {
-                if (device.relation == DeviceRelation.OWNED) {
+                if (device.isOwned()) {
                     context.getString(R.string.annotation_cell_capacity_reached_desc)
                 } else {
                     context.getString(R.string.annotation_cell_capacity_reached_public_desc)
@@ -186,21 +186,21 @@ object Rewards {
             }
             AnnotationCode.RELOCATED -> context.getString(R.string.annotation_relocated_desc)
             AnnotationCode.POL_THRESHOLD_NOT_REACHED -> {
-                if (device.relation == DeviceRelation.OWNED) {
+                if (device.isOwned()) {
                     context.getString(R.string.annotation_pol_threshold_desc)
                 } else {
                     context.getString(R.string.annotation_pol_threshold_public_desc)
                 }
             }
             AnnotationCode.QOD_THRESHOLD_NOT_REACHED -> {
-                if (device.relation == DeviceRelation.OWNED) {
+                if (device.isOwned()) {
                     context.getString(R.string.annotation_qod_threshold_desc)
                 } else {
                     context.getString(R.string.annotation_qod_threshold_public_desc)
                 }
             }
             AnnotationCode.UNIDENTIFIED_ANOMALOUS_CHANGE -> {
-                if (device.relation == DeviceRelation.OWNED) {
+                if (device.isOwned()) {
                     context.getString(
                         R.string.annotation_unidentified_change_desc, getAffectedParameters()
                     )
@@ -211,7 +211,7 @@ object Rewards {
                 }
             }
             AnnotationCode.UNIDENTIFIED_SPIKE -> {
-                if (device.relation == DeviceRelation.OWNED) {
+                if (device.isOwned()) {
                     context.getString(
                         R.string.annotation_unidentified_spike_desc, getAffectedParameters()
                     )
@@ -222,7 +222,7 @@ object Rewards {
                 }
             }
             AnnotationCode.UNKNOWN -> {
-                if (device.relation == DeviceRelation.OWNED) {
+                if (device.isOwned()) {
                     context.getString(R.string.annotation_unknown_desc)
                 } else {
                     context.getString(R.string.annotation_unknown_public_desc)

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.DataError
 import com.weatherxm.data.SingleLiveEvent
-import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Analytics
@@ -34,7 +33,7 @@ class HomeViewModel(
     fun hasDevices() = hasDevices
 
     fun getWalletMissing(devices: List<UIDevice>?) {
-        if (devices?.firstOrNull { it.relation == DeviceRelation.OWNED } == null) {
+        if (devices?.firstOrNull { it.isOwned() } == null) {
             hasDevices = false
             return
         }

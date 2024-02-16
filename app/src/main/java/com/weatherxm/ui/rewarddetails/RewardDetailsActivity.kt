@@ -5,10 +5,8 @@ import android.view.MenuItem
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityRewardDetailsBinding
-import com.weatherxm.ui.common.AnnotationCode
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_REWARDS_OBJECT
-import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIRewardObject
 import com.weatherxm.ui.common.applyInsets
@@ -52,7 +50,7 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
         binding.contactSupportBtn.setOnClickListener {
             navigator.openSupportCenter(this, Analytics.ParamValue.REWARD_ANNOTATIONS.paramValue)
         }
-        binding.contactSupportBtn.setVisible(device.relation == DeviceRelation.OWNED)
+        binding.contactSupportBtn.setVisible(device.isOwned())
 
         binding.rewardsContentCard.updateUI(
             rewardsObject,
@@ -85,14 +83,14 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
             binding.problemsFoundDesc.setHtml(getString(R.string.problems_found_desc, lostRewards))
         }
 
-        val adapter = RewardProblemsAdapter(device, data.rewardScore, this)
+        val adapter = RewardProblemsAdapter(device, this)
         binding.problemsList.adapter = adapter
 
-        adapter.submitList(data.annotations)
+        adapter.submitList(data.annotationSummary)
     }
 
     private fun onMenuItem(menuItem: MenuItem): Boolean {
-        return if(menuItem.itemId == R.id.read_more) {
+        return if (menuItem.itemId == R.id.read_more) {
             analytics.trackEventSelectContent(
                 contentType = Analytics.ParamValue.REWARD_DETAILS_READ_MORE.paramValue
             )
@@ -103,36 +101,26 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
         }
     }
 
-    override fun onAddWallet(annotation: AnnotationCode?) {
-        trackUserActionOnErrors(annotation)
+    override fun onAddWallet(group: String?) {
+        trackUserActionOnErrors(group)
         navigator.showConnectWallet(this)
     }
 
-    override fun onUpdateFirmware(device: UIDevice, annotation: AnnotationCode?) {
-        trackUserActionOnErrors(annotation)
-        navigator.showDeviceHeliumOTA(this, device, false)
-    }
-
-    override fun onContactSupport(device: UIDevice, annotation: AnnotationCode?) {
-        trackUserActionOnErrors(annotation)
-        navigator.openSupportCenter(this, Analytics.ParamValue.REWARD_ANNOTATIONS.paramValue)
-    }
-
-    override fun onDocumentation(url: String, annotation: AnnotationCode?) {
-        trackUserActionOnErrors(annotation)
+    override fun onDocumentation(url: String, group: String?) {
+        trackUserActionOnErrors(group)
         navigator.openWebsite(this, url)
     }
 
-    override fun onEditLocation(device: UIDevice, annotation: AnnotationCode?) {
-        trackUserActionOnErrors(annotation)
+    override fun onEditLocation(device: UIDevice, group: String?) {
+        trackUserActionOnErrors(group)
         navigator.showEditLocation(null, this, device)
     }
 
-    private fun trackUserActionOnErrors(annotation: AnnotationCode?) {
+    private fun trackUserActionOnErrors(group: String?) {
         analytics.trackEventUserAction(
             actionName = Analytics.ParamValue.REWARD_DETAILS_ERROR.paramValue,
             contentType = null,
-            Pair(FirebaseAnalytics.Param.ITEM_ID, annotation?.name ?: String.empty())
+            Pair(FirebaseAnalytics.Param.ITEM_ID, group ?: String.empty())
         )
     }
 }

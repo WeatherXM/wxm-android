@@ -37,7 +37,7 @@ class DeviceDetailsUseCaseImpl(
 ) : DeviceDetailsUseCase {
 
     override suspend fun getUserDevice(device: UIDevice): Either<Failure, UIDevice> {
-        return if (device.relation == DeviceRelation.UNFOLLOWED) {
+        return if (device.isUnfollowed()) {
             explorerRepository.getCellDevice(device.cellIndex, device.id).map {
                 it.toUIDevice().apply {
                     this.relation = DeviceRelation.UNFOLLOWED
@@ -50,9 +50,8 @@ class DeviceDetailsUseCaseImpl(
             deviceRepository.getUserDevice(device.id).map {
                 it.toUIDevice().apply {
                     val shouldShowOTAPrompt = deviceOTARepository.shouldShowOTAPrompt(
-                        id,
-                        assignedFirmware
-                    ) && relation == DeviceRelation.OWNED
+                        id, assignedFirmware
+                    ) && isOwned()
                     val alerts = mutableListOf<DeviceAlert>()
                     if (shouldShowOTAPrompt && profile == Helium && needsUpdate()) {
                         alerts.add(DeviceAlert.NEEDS_UPDATE)

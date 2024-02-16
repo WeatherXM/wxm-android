@@ -8,7 +8,6 @@ import com.weatherxm.R
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.BatteryState
 import com.weatherxm.data.DeviceProfile
-import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.capitalizeWords
@@ -220,7 +219,7 @@ class DeviceSettingsViewModel(
                 }
             }
             device.currentFirmware?.let { current ->
-                if (device.needsUpdate() && device.relation == DeviceRelation.OWNED
+                if (device.needsUpdate() && device.isOwned()
                     && usecase.shouldShowOTAPrompt(device)
                 ) {
                     add(

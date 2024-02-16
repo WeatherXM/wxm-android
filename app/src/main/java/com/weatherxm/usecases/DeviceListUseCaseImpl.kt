@@ -7,7 +7,6 @@ import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.ui.common.DeviceAlert
-import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.DevicesFilterType
 import com.weatherxm.ui.common.DevicesGroupBy
 import com.weatherxm.ui.common.DevicesSortFilterOptions
@@ -24,9 +23,8 @@ class DeviceListUseCaseImpl(
             val devices = response.map {
                 val device = it.toUIDevice()
                 val shouldShowOTAPrompt = deviceOTARepository.shouldShowOTAPrompt(
-                    device.id,
-                    device.assignedFirmware
-                ) && device.relation == DeviceRelation.OWNED
+                    device.id, device.assignedFirmware
+                ) && device.isOwned()
                 val alerts = mutableListOf<DeviceAlert>()
                 if (device.isActive == false) {
                     alerts.add(DeviceAlert.OFFLINE)

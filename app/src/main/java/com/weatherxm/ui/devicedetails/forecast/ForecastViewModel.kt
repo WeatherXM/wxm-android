@@ -9,7 +9,6 @@ import com.weatherxm.data.ApiError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
-import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.UIForecast
@@ -45,7 +44,7 @@ class ForecastViewModel(
          *
          * Or do not fetch forecast if we this device is UNFOLLOWED
          */
-        if (device.isDeviceFromSearchResult || device.relation == DeviceRelation.UNFOLLOWED) {
+        if (device.isDeviceFromSearchResult || device.isUnfollowed()) {
             return
         }
         onLoading.postValue(true)
