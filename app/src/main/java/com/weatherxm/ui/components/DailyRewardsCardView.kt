@@ -5,9 +5,13 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.annotation.ColorRes
+import androidx.annotation.StringRes
 import com.weatherxm.R
+import com.weatherxm.data.SeverityLevel
 import com.weatherxm.databinding.ViewDailyRewardsCardBinding
 import com.weatherxm.ui.common.DailyReward
+import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.getRewardScoreColor
@@ -72,5 +76,43 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             binding.boosts.text =
                 context.getString(R.string.wxm_amount, formatTokens(it.toBigDecimal()))
         }
+
+        val severityLevels = data.annotationSummary.map {
+            it.severityLevel
+        }
+        if (severityLevels.contains(SeverityLevel.ERROR)) {
+            onAnnotation(
+                R.color.errorTint, R.color.error, R.string.annotation_error_text, onViewDetails
+            )
+        } else if (severityLevels.contains(SeverityLevel.WARNING)) {
+            onAnnotation(
+                R.color.warningTint, R.color.warning, R.string.annotation_warn_text, onViewDetails
+            )
+        } else if (severityLevels.contains(SeverityLevel.INFO)) {
+            onAnnotation(
+                R.color.blueTint, R.color.colorPrimary, R.string.annotation_info_text, onViewDetails
+            )
+        } else {
+            binding.annotationCard.setVisible(false)
+            binding.viewRewardDetails.setVisible(true)
+        }
+    }
+
+    private fun onAnnotation(
+        @ColorRes backgroundColor: Int,
+        @ColorRes strokeColor: Int,
+        @StringRes text: Int,
+        onViewDetails: (() -> Unit)? = null
+    ) {
+        binding.parentCard.setCardStroke(strokeColor, 2)
+        binding.annotationCard.setBackgroundColor(context.getColor(backgroundColor))
+        binding.annotationCard
+            .setBackground(backgroundColor)
+            .htmlMessage(context.getString(text))
+            .action(context.getString(R.string.view_reward_details)) {
+                onViewDetails?.invoke()
+            }
+            .setVisible(true)
+        binding.viewRewardDetails.setVisible(false)
     }
 }
