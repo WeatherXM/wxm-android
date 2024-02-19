@@ -231,7 +231,6 @@
     <string name="view_timeline">View Timeline</string>
     <string name="no_transactions_title">Oh, no! No transactions yet?</string>
     <string name="rewards">Rewards</string>
-    <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, $WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after $WXM mainnet token launch. Actual rewards may differ from the ones you see above.]]></string>
     <string name="wxm_amount">%s $WXM</string>
     <string name="reward">+ %s $WXM</string>
     <string name="daily_reward">Daily Reward</string>
@@ -322,6 +321,9 @@
     <string name="annotation_info_text"><![CDATA[<b>Minor issues slightly affected your rewards.</b> This may happen occasionally, but we thought you should know. View reward details to identify and fix problems.]]></string>
     <string name="annotation_warn_text"><![CDATA[<b>Some issues prevent your station from getting the full rewards.</b> View reward details to identify and fix problems.]]></string>
     <string name="annotation_error_text"><![CDATA[<b>Serious problems were detected, that prevent the station from getting the full rewards.</b> View reward details to identify and fix problems.]]></string>
+    <string name="rewards_empty_title">Rewards Coming Soon!</string>
+    <string name="rewards_empty_message">Your station hasn’t received any rewards yet. Sit back and relax, while our systems are validating the station’s location and data. You should start seeing rewards in the next couple of days.</string>
+
 
     <!-- Claim Rewards -->
     <string name="claim_rewards">Claim Rewards</string>

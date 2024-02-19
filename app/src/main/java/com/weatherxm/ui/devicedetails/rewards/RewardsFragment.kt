@@ -67,16 +67,19 @@ class RewardsFragment : BaseFragment() {
         }
 
         model.onRewards().observe(viewLifecycleOwner) {
-            binding.dailyRewardsCard.updateUI(it.latest) {
-                navigator.showRewardDetails(requireContext(), model.device, it.latest)
-            }
             val totalRewards = it.allTimeRewards ?: 0F
-            binding.totalRewards.text =
-                getString(R.string.wxm_amount, formatTokens(totalRewards.toBigDecimal()))
-            updateWeeklyStreak(it.weekly)
-            binding.dailyRewardsCard.setVisible(true)
-            binding.totalCard.setVisible(true)
-            binding.weeklyCard.setVisible(true)
+            binding.emptyCard.setVisible(totalRewards == 0F)
+            if (totalRewards != 0F) {
+                binding.dailyRewardsCard.updateUI(it.latest) {
+                    navigator.showRewardDetails(requireContext(), model.device, it.latest)
+                }
+                binding.totalRewards.text =
+                    getString(R.string.wxm_amount, formatTokens(totalRewards.toBigDecimal()))
+                updateWeeklyStreak(it.weekly)
+                binding.dailyRewardsCard.setVisible(true)
+                binding.totalCard.setVisible(true)
+                binding.weeklyCard.setVisible(true)
+            }
         }
 
         model.onLoading().observe(viewLifecycleOwner) {
