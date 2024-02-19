@@ -32,10 +32,20 @@ class RewardsViewModel(
     private val onLoading = MutableLiveData<Boolean>()
     private val onError = MutableLiveData<UIError>()
     private val onRewards = MutableLiveData<UIRewards>()
+    private val onMainnet = MutableLiveData<String>()
 
     fun onLoading(): LiveData<Boolean> = onLoading
     fun onError(): LiveData<UIError> = onError
     fun onRewards(): LiveData<UIRewards> = onRewards
+    fun onMainnet(): LiveData<String> = onMainnet
+
+    fun fetchMainnetStatus() {
+        viewModelScope.launch {
+            if (deviceDetailsUseCase.isMainnetEnabled()) {
+                onMainnet.postValue(deviceDetailsUseCase.getMainnetMessage())
+            }
+        }
+    }
 
     fun fetchRewardsFromNetwork() {
         fetchRewardsJob?.let {

@@ -16,4 +16,6 @@ interface DeviceDetailsUseCase {
 
     suspend fun getAddressOfCell(cell: UICell): String?
     suspend fun getRewards(deviceId: String): Either<Failure, UIRewards>
+    fun isMainnetEnabled(): Boolean
+    fun getMainnetMessage(): String
 }

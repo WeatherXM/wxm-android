@@ -119,4 +119,12 @@ class DeviceDetailsUseCaseImpl(
             )
         }
     }
+
+    override fun isMainnetEnabled(): Boolean {
+        return appConfigRepository.isMainnetEnabled()
+    }
+
+    override fun getMainnetMessage(): String {
+        return appConfigRepository.getMainnetMessage()
+    }
 }

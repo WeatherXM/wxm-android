@@ -66,6 +66,13 @@ class RewardsFragment : BaseFragment() {
             }
         }
 
+        model.onMainnet().observe(viewLifecycleOwner) {
+            if (!it.isNullOrEmpty()) {
+                binding.mainnetMessage.text = it
+                binding.mainnetCard.setVisible(true)
+            }
+        }
+
         model.onRewards().observe(viewLifecycleOwner) {
             val totalRewards = it.allTimeRewards ?: 0F
             binding.emptyCard.setVisible(totalRewards == 0F)
@@ -111,6 +118,7 @@ class RewardsFragment : BaseFragment() {
             navigator.showRewardsList(requireContext(), model.device)
         }
 
+        model.fetchMainnetStatus()
         model.fetchRewardsFromNetwork()
     }
 

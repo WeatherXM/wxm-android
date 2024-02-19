@@ -324,6 +324,8 @@
     <string name="rewards_empty_title">Rewards Coming Soon!</string>
     <string name="rewards_empty_message">Your station hasn’t received any rewards yet. Sit back and relax, while our systems are validating the station’s location and data. You should start seeing rewards in the next couple of days.</string>
 
+    <!-- Mainnet -->
+    <string name="mainnet_welcome">Welcome to Mainnet!</string>
 
     <!-- Claim Rewards -->
     <string name="claim_rewards">Claim Rewards</string>
