@@ -23,7 +23,7 @@
     <color name="light_blue_tint">#EFF0FF</color>
     <color name="light_accent">#800162</color>
     <color name="light_crypto">#3A3F6A</color>
-    <color name="light_translucent">#33FEFBFF</color>
+    <color name="light_translucent">#80FEFBFF</color>
 
     <color name="dark_text">#FEFBFF</color>
     <color name="dark_mid_grey_disabled">#275D5E67</color>
