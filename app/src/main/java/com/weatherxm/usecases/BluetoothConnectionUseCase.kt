@@ -7,7 +7,7 @@ import com.weatherxm.data.Frequency
 import kotlinx.coroutines.flow.Flow
 
 interface BluetoothConnectionUseCase {
-    fun setPeripheral(address: String): Either<Failure, Unit>
+    suspend fun setPeripheral(address: String): Either<Failure, Unit>
     suspend fun connectToPeripheral(): Either<Failure, Unit>
     suspend fun disconnectFromPeripheral()
     fun registerOnBondStatus(): Flow<Int>

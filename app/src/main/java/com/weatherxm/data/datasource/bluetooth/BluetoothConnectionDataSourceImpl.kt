@@ -12,12 +12,12 @@ import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_DEV_
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_REBOOT_COMMAND
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_SET_FREQUENCY_COMMAND
 import com.weatherxm.data.frequencyToHeliumBleBandValue
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.suspendCoroutine
 
 class BluetoothConnectionDataSourceImpl(
@@ -32,7 +32,7 @@ class BluetoothConnectionDataSourceImpl(
         return connectionManager.getPairedDevices()
     }
 
-    override fun setPeripheral(address: String): Either<Failure, Unit> {
+    override suspend fun setPeripheral(address: String): Either<Failure, Unit> {
         return connectionManager.setPeripheral(address)
     }
 
@@ -56,10 +56,10 @@ class BluetoothConnectionDataSourceImpl(
         return connectionManager.onBondStatus()
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     override suspend fun fetchClaimingKey(): Either<Failure, String> {
+        val coroutineContext = coroutineContext
         return suspendCoroutine { continuation ->
-            GlobalScope.launch {
+            CoroutineScope(coroutineContext).launch {
                 connectionManager.fetchATCommand(AT_CLAIMING_KEY_COMMAND) {
                     continuation.resumeWith(Result.success(it))
                 }
@@ -67,10 +67,10 @@ class BluetoothConnectionDataSourceImpl(
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     override suspend fun fetchDeviceEUI(): Either<Failure, String> {
+        val coroutineContext = coroutineContext
         return suspendCoroutine { continuation ->
-            GlobalScope.launch {
+            CoroutineScope(coroutineContext).launch {
                 connectionManager.fetchATCommand(AT_DEV_EUI_COMMAND) {
                     continuation.resumeWith(Result.success(it))
                 }
@@ -78,10 +78,10 @@ class BluetoothConnectionDataSourceImpl(
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     override suspend fun setFrequency(frequency: Frequency): Either<Failure, Unit> {
+        val coroutineContext = coroutineContext
         return suspendCoroutine { continuation ->
-            GlobalScope.launch {
+            CoroutineScope(coroutineContext).launch {
                 /**
                  * /r/n is needed so we need to add them at the end of the command here
                  */
@@ -94,10 +94,10 @@ class BluetoothConnectionDataSourceImpl(
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     override suspend fun reboot(): Either<Failure, Unit> {
+        val coroutineContext = coroutineContext
         return suspendCoroutine { continuation ->
-            GlobalScope.launch {
+            CoroutineScope(coroutineContext).launch {
                 connectionManager.reboot(AT_REBOOT_COMMAND) {
                     continuation.resumeWith(Result.success(it))
                 }

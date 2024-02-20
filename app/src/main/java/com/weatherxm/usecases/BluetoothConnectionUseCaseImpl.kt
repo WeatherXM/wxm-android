@@ -15,7 +15,7 @@ class BluetoothConnectionUseCaseImpl(
         return bluetoothConnectionRepository.getPairedDevices()
     }
 
-    override fun setPeripheral(address: String): Either<Failure, Unit> {
+    override suspend fun setPeripheral(address: String): Either<Failure, Unit> {
         return bluetoothConnectionRepository.setPeripheral(address)
     }
 
