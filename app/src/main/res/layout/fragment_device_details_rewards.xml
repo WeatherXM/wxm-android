@@ -64,7 +64,7 @@
                         android:id="@+id/mainnetTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableStart="@drawable/ic_badge_check"
+                        android:drawableStart="@drawable/ic_checkmark_hex"
                         android:drawablePadding="@dimen/padding_small"
                         android:text="@string/mainnet_welcome"
                         android:textAppearance="@style/TextAppearance.WeatherXM.Title"
