@@ -447,6 +447,42 @@ data class NetworkSearchAddressResult(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
+data class RewardsResponse(
+    @Json(name = "total_rewards")
+    val totalRewards: Float?,
+    val latest: Reward?,
+    val timeline: List<RewardsTimelineEntry>?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class Reward(
+    val timestamp: ZonedDateTime?,
+    @Json(name = "base_reward")
+    val baseReward: Float?,
+    @Json(name = "total_business_boost_reward")
+    val totalBoostReward: Float?,
+    @Json(name = "total_reward")
+    val totalReward: Float?,
+    @Json(name = "base_reward_score")
+    val baseRewardScore: Int?,
+    @Json(name = "annotation_summary")
+    val annotationSummary: List<RewardsAnnotationGroup>?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class RewardsTimelineEntry(
+    val timestamp: ZonedDateTime?,
+    @Json(name = "base_reward_score")
+    val baseRewardScore: Int?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
 data class Rewards(
     @Json(name = "total_rewards")
     val totalRewards: Float?,
