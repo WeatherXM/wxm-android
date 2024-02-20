@@ -95,6 +95,13 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
         val severityLevels = data.annotationSummary?.map {
             it.severityLevel
         } ?: mutableListOf()
+        setupAnnotations(severityLevels)
+    }
+
+    private fun setupAnnotations(
+        severityLevels: List<SeverityLevel?>,
+        onViewDetails: (() -> Unit)? = null
+    ) {
         if (severityLevels.contains(SeverityLevel.ERROR)) {
             onAnnotation(
                 R.color.errorTint, R.color.error, R.string.annotation_error_text, onViewDetails

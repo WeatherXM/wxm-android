@@ -134,7 +134,7 @@ class RewardsFragment : BaseFragment() {
         }
     }
 
-    @Suppress("FunctionNaming", "MagicNumber")
+    @Suppress("FunctionNaming")
     @Composable
     internal fun WeeklyStreak(
         fromDate: String,
@@ -180,6 +180,7 @@ class RewardsFragment : BaseFragment() {
         }
     }
 
+    @Suppress("FunctionNaming", "MagicNumber")
     @Composable
     private fun BarAndText(entry: RewardsTimelineEntry) {
         Column(
