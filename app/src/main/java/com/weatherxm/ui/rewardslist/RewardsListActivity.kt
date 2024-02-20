@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.View
 import com.weatherxm.R
 import com.weatherxm.data.Resource
+import com.weatherxm.data.Reward
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityRewardsListBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
-import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.DailyReward
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
@@ -54,7 +55,18 @@ class RewardsListActivity : BaseActivity() {
                     Analytics.ParamValue.IDENTIFY_PROBLEMS.paramValue,
                     Analytics.Screen.DEVICE_REWARD_TRANSACTIONS.screenName
                 )
-                navigator.showRewardDetails(this, device, it)
+                navigator.showRewardDetails(
+                    this,
+                    device,
+                    Reward(
+                        it.rewardTimestamp,
+                        it.actualReward,
+                        0F,
+                        it.actualReward,
+                        it.rewardScore,
+                        it.annotationSummary
+                    )
+                )
             },
             onEndOfData = { endOfDataListener() })
         binding.recycler.adapter = adapter

@@ -16,6 +16,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.Location
+import com.weatherxm.data.Reward
 import com.weatherxm.data.WXMRemoteMessage
 import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.cellinfo.CellInfoActivity
@@ -28,11 +29,10 @@ import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
-import com.weatherxm.ui.common.Contracts.ARG_REWARDS_OBJECT
+import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.DailyReward
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
@@ -261,12 +261,12 @@ class Navigator(private val analytics: Analytics) {
         )
     }
 
-    fun showRewardDetails(context: Context, device: UIDevice?, rewardsObject: DailyReward?) {
+    fun showRewardDetails(context: Context, device: UIDevice?, reward: Reward?) {
         context.startActivity(
             Intent(context, RewardDetailsActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_DEVICE, device)
-                .putExtra(ARG_REWARDS_OBJECT, rewardsObject)
+                .putExtra(ARG_REWARD, reward)
         )
     }
 

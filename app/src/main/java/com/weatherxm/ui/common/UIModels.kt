@@ -12,14 +12,12 @@ import com.weatherxm.data.Location
 import com.weatherxm.data.QoDErrorAffects
 import com.weatherxm.data.RewardsAnnotationGroup
 import com.weatherxm.data.RewardsAnnotations
-import com.weatherxm.data.RewardsObject
 import com.weatherxm.data.Transaction
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Rewards.shouldHideAnnotations
 import kotlinx.parcelize.Parcelize
-import java.time.ZoneId
 import java.time.ZonedDateTime
 
 @Keep
@@ -32,15 +30,6 @@ data class UIError(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class UIRewards(
-    val allTimeRewards: Float? = null,
-    var latest: DailyReward? = null,
-    var weekly: RewardsWeeklyStreak? = null
-) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
 data class DailyReward(
     var rewardTimestamp: ZonedDateTime? = null,
     var rewardFormattedTimestamp: String? = null,
@@ -48,55 +37,12 @@ data class DailyReward(
     var fromDate: String? = null,
     var toDate: String? = null,
     var actualReward: Float = 0F,
-    var referenceDate: String? = null,
-    var baseReward: Float = 0F,
-    var boosts: Float? = null,
     var lostRewards: Float? = null,
     var rewardScore: Int? = null,
     var periodMaxReward: Float? = null,
     var annotations: MutableList<UIRewardsAnnotation> = mutableListOf(),
     var annotationSummary: List<RewardsAnnotationGroup> = mutableListOf(),
 ) : Parcelable {
-    constructor(
-        context: Context,
-        rewards: RewardsObject,
-        hideAnnotationsThreshold: Long,
-        isRange: Boolean = false
-    ) : this() {
-        val utcFromDate =
-            rewards.fromDate?.withZoneSameInstant(ZoneId.of("UTC"))?.getFormattedDate()
-        val utcToDate =
-            rewards.toDate?.withZoneSameInstant(ZoneId.of("UTC"))?.getFormattedDate()
-        rewardFormattedTimestamp = if (isRange) {
-            "$utcFromDate - $utcToDate (UTC)"
-        } else {
-            rewards.timestamp?.let { timestamp ->
-                val utcTimestamp = timestamp.withZoneSameInstant(ZoneId.of("UTC"))
-                rewardTimestamp = timestamp
-                val date = utcTimestamp.getFormattedDate()
-                val time = utcTimestamp.getFormattedTime(context)
-                "$date, $time (UTC)"
-            }
-        }
-
-        fromDate = utcFromDate
-        toDate = utcToDate
-        actualReward = rewards.actualReward ?: 0F
-
-        // FIXME: Replace this when API is ready. Remove any unused variables.
-        baseReward = rewards.actualReward ?: 0F
-        boosts = null
-        referenceDate = rewards.timeline?.referenceDate?.getFormattedDate(true)
-
-        lostRewards = rewards.lostRewards
-        rewardScore = rewards.rewardScore
-        periodMaxReward = rewards.periodMaxReward
-        annotationSummary = rewards.annotationSummary?.sortedByDescending {
-            it.severityLevel?.ordinal
-        } ?: mutableListOf()
-        setAnnotations(hideAnnotationsThreshold, rewards.annotations)
-    }
-
     constructor(context: Context, tx: Transaction, hideAnnotationsThreshold: Long) : this() {
         this.rewardTimestamp = tx.timestamp
         val date = tx.timestamp.getFormattedDate()
@@ -104,11 +50,6 @@ data class DailyReward(
         rewardFormattedTimestamp = "$date, $time (UTC)"
         this.rewardFormattedDate = tx.timestamp.getFormattedDate(true)
         actualReward = tx.actualReward ?: 0F
-
-        // FIXME: Replace this when API is ready
-        baseReward = tx.actualReward ?: 0F
-        boosts = 0F
-        referenceDate = tx.timeline?.referenceDate?.getFormattedDate(true)
 
         lostRewards = tx.lostRewards
         rewardScore = tx.rewardScore
@@ -139,29 +80,6 @@ data class DailyReward(
                 this.annotations.add(qodRewardsAnnotation)
             }
         }
-    }
-}
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class RewardsWeeklyStreak(
-    var fromDate: String? = null,
-    var toDate: String? = null,
-    var timelineData: MutableList<Pair<String, Int>> = mutableListOf()
-) : Parcelable {
-    constructor(rewards: RewardsObject) : this() {
-        fromDate = rewards.fromDate?.withZoneSameInstant(ZoneId.of("UTC"))?.getFormattedDate()
-        toDate = rewards.toDate?.withZoneSameInstant(ZoneId.of("UTC"))?.getFormattedDate()
-
-        // FIXME: Replace this when API is ready
-        timelineData.add(Pair("W", 0))
-        timelineData.add(Pair("T", 10))
-        timelineData.add(Pair("F", 30))
-        timelineData.add(Pair("S", 50))
-        timelineData.add(Pair("S", 70))
-        timelineData.add(Pair("M", 90))
-        timelineData.add(Pair("T", 100))
     }
 }
 

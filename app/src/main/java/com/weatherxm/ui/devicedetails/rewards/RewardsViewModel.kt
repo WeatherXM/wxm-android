@@ -9,9 +9,9 @@ import com.weatherxm.data.ApiError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
+import com.weatherxm.data.Rewards
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
-import com.weatherxm.ui.common.UIRewards
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.util.Analytics
@@ -31,12 +31,12 @@ class RewardsViewModel(
 
     private val onLoading = MutableLiveData<Boolean>()
     private val onError = MutableLiveData<UIError>()
-    private val onRewards = MutableLiveData<UIRewards>()
+    private val onRewards = MutableLiveData<Rewards>()
     private val onMainnet = MutableLiveData<String>()
 
     fun onLoading(): LiveData<Boolean> = onLoading
     fun onError(): LiveData<UIError> = onError
-    fun onRewards(): LiveData<UIRewards> = onRewards
+    fun onRewards(): LiveData<Rewards> = onRewards
     fun onMainnet(): LiveData<String> = onMainnet
 
     fun fetchMainnetStatus() {

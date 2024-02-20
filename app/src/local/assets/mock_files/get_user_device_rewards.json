@@ -1,220 +1,48 @@
 {
-    "total_rewards": 1252.0,
+    "total_rewards": 54.32,
     "latest": {
-        "timestamp": "2022-08-03T14:45:06+02:00",
-        "tx_hash": "0xa01f5fab82632244d7a554ccbc9617a13ca64c201e1f34d9920a35cb3a450ce1",
-        "reward_score": 100,
-        "period_max_reward": 70.89,
-        "actual_reward": 70.89,
-        "lost_rewards": 0,
-        "timeline": {
-            "reference_date": "2022-06-03T14:45:06+02:00",
-            "reward_scores": [
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100,
-                100
-            ]
-        },
-        "annotations": {
-            "qod": [
-                {
-                    "annotation": "SPIKE_INST",
-                    "affects": [
-                        {
-                            "parameter": "temperature",
-                            "ratio": 70
-                        },
-                        {
-                            "parameter": "wind_speed",
-                            "ratio": 50
-                        }
-                    ]
-                },
-                {
-                    "annotation": "ANOMALOUS_INCREASE",
-                    "affects": [
-                        {
-                            "parameter": "temperature",
-                            "ratio": 70
-                        },
-                        {
-                            "parameter": "wind_speed",
-                            "ratio": 50
-                        }
-                    ]
-                },
-                {
-                    "annotation": "OBC",
-                    "affects": [
-                        {
-                            "parameter": "temperature",
-                            "ratio": 70
-                        },
-                        {
-                            "parameter": "humidity",
-                            "ratio": 50
-                        }
-                    ]
-                },
-                {
-                    "annotation": "SHORT_CONST",
-                    "affects": [
-                        {
-                            "parameter": "precipitation",
-                            "ratio": 70
-                        }
-                    ]
-                },
-                {
-                    "annotation": "LONG_CONST",
-                    "affects": [
-                        {
-                            "parameter": "pressure",
-                            "ratio": 70
-                        }
-                    ]
-                },
-                {
-                    "annotation": "NO_DATA"
-                },
-                {
-                    "annotation": "NO_MEDIAN"
-                },
-                {
-                    "annotation": "FROZEN_SENSOR"
-                }
-            ],
-            "pol": [
-                {
-                    "annotation": "LOCATION_NOT_VERIFIED",
-                    "ratio": 8
-                },
-                {
-                    "annotation": "NO_LOCATION_DATA",
-                    "ratio": 8
-                }
-            ],
-            "rm": [
-                {
-                    "annotation": "NO_WALLET"
-                },
-                {
-                    "annotation": "CELL_CAPACITY_REACHED"
-                },
-                {
-                    "annotation": "POL_THRESHOLD_NOT_REACHED"
-                },
-                {
-                    "annotation": "QOD_THRESHOLD_NOT_REACHED"
-                }
-            ]
-        },
+        "timestamp": "2024-02-20T12:49:12.723Z",
+        "base_reward": 2.34,
+        "total_business_boost_reward": 1.23,
+        "total_reward": 3.57,
+        "base_reward_score": 95,
         "annotation_summary": [
-            {
-                "severity_level": "WARNING",
-                "group": "NO_WALLET",
-                "title": "No Wallet",
-                "message": "Station excluded from rewards because no connected wallet was found.",
-                "doc_url": "https://docs.weatherxm.com/"
-            },
             {
                 "severity_level": "INFO",
                 "group": "SENSOR_PROBLEMS",
-                "title": "Sensor Problems",
-                "message": "Station is doing great! Minor sensor issues detected during our checks.",
-                "doc_url": "https://docs.weatherxm.com/"
-            },
-            {
-                "severity_level": "ERROR",
-                "group": "LOCATION_NOT_VERIFIED",
-                "title": "Invalid Location",
-                "message": "Station rewards were temporarily suspended, because the station’s location could not be verified. The station’s location needs to be revalidated by the owner and it will be again eligible for rewards in 2 days.",
-                "doc_url": "https://docs.weatherxm.com/"
+                "title": "Minor Sensor Issues",
+                "message": "Station is doing great! Minor issues detected during our data quality checks, that may be related to occasional sensor inaccuracies. That can happen once in a while.",
+                "doc_url": "https://docs.weatherxm.com/project/rewards-troubleshooting#sensor-problems"
             }
         ]
     },
-    "weekly": {
-        "total_rewards": 1252.0,
-        "from_date": "2022-07-03T14:45:06+02:00",
-        "to_date": "2022-08-10T14:45:06+02:00",
-        "reward_score": 50,
-        "period_max_reward": 71.4,
-        "actual_reward": 250.00,
-        "lost_rewards": 250.00,
-        "timeline": {
-            "reward_scores": [
-                100,
-                26,
-                100,
-                10,
-                100,
-                85,
-                100
-            ]
+    "timeline": [
+        {
+            "timestamp": "2024-02-14T12:49:12.724Z"
+        },
+        {
+            "timestamp": "2024-02-15T12:49:12.724Z",
+            "base_reward_score": 0
+        },
+        {
+            "timestamp": "2024-02-16T12:49:12.724Z",
+            "base_reward_score": 15
+        },
+        {
+            "timestamp": "2024-02-17T12:49:12.724Z",
+            "base_reward_score": 35
+        },
+        {
+            "timestamp": "2024-02-18T12:49:12.724Z",
+            "base_reward_score": 55
+        },
+        {
+            "timestamp": "2024-02-19T12:49:12.724Z",
+            "base_reward_score": 75
+        },
+        {
+            "timestamp": "2024-02-20T12:49:12.724Z",
+            "base_reward_score": 95
         }
-    },
-    "monthly": {
-        "total_rewards": 1252.0,
-        "from_date": "2022-07-03T14:45:06+02:00",
-        "to_date": "2022-08-03T14:45:06+02:00",
-        "reward_score": 20,
-        "period_max_reward": 71.4,
-        "actual_reward": 428.4,
-        "lost_rewards": 1713.6,
-        "timeline": {
-            "reward_scores": [
-                70,
-                0,
-                100,
-                50,
-                100,
-                26,
-                26,
-                26,
-                26,
-                100,
-                100,
-                10,
-                100,
-                100,
-                0,
-                0,
-                100,
-                100,
-                0,
-                100,
-                0,
-                0,
-                100,
-                85,
-                85,
-                85,
-                100,
-                100,
-                100,
-                85
-            ]
-        }
-    }
+    ]
 }

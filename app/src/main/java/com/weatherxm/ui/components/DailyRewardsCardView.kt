@@ -8,11 +8,12 @@ import android.widget.LinearLayout
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.weatherxm.R
+import com.weatherxm.data.Reward
 import com.weatherxm.data.SeverityLevel
 import com.weatherxm.databinding.ViewDailyRewardsCardBinding
-import com.weatherxm.ui.common.DailyReward
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setVisible
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.getRewardScoreColor
 import com.weatherxm.util.Weather.EMPTY_VALUE
@@ -45,10 +46,14 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
     }
 
     @Suppress("MagicNumber")
-    fun updateUI(data: DailyReward?, onViewDetails: (() -> Unit)? = null) {
+    fun updateUI(
+        data: Reward?,
+        isInRewardDetails: Boolean,
+        onViewDetails: (() -> Unit)? = null
+    ) {
         if (data == null) return
 
-        if (onViewDetails != null) {
+        if (onViewDetails != null && !isInRewardDetails) {
             binding.viewRewardDetails.setOnClickListener {
                 onViewDetails.invoke()
             }
@@ -56,30 +61,40 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             binding.viewRewardDetails.setVisible(false)
         }
 
+        val formattedTimestamp = data.timestamp?.getFormattedDate(true)
         binding.dailyRewardTimestamp.text =
-            context.getString(R.string.earnings_for, data.referenceDate ?: EMPTY_VALUE)
-        binding.dailyRewardTimestamp.setVisible(data.rewardFormattedTimestamp != null)
+            context.getString(R.string.earnings_for, formattedTimestamp ?: EMPTY_VALUE)
+        binding.dailyRewardTimestamp.setVisible(formattedTimestamp != null)
 
-        binding.reward.text =
-            context.getString(R.string.reward, formatTokens(data.actualReward.toBigDecimal()))
+        binding.reward.text = data.totalReward?.let {
+            context.getString(R.string.reward, formatTokens(it.toBigDecimal()))
+        } ?: EMPTY_VALUE
 
         binding.baseRewardIcon.setColorFilter(
-            context.getColor(getRewardScoreColor(data.rewardScore))
+            context.getColor(getRewardScoreColor(data.baseRewardScore))
         )
 
-        binding.baseRewardScore.text =
-            context.getString(R.string.wxm_amount, formatTokens(data.baseReward.toBigDecimal()))
+        binding.baseRewardScore.text = data.baseReward?.let {
+            context.getString(R.string.wxm_amount, formatTokens(it.toBigDecimal()))
+        } ?: EMPTY_VALUE
 
-        binding.boosts.setVisible(data.boosts != null)
-        binding.noActiveBoosts.setVisible(data.boosts == null)
-        data.boosts?.let {
+        binding.boosts.setVisible(data.totalBoostReward != null)
+        binding.noActiveBoosts.setVisible(data.totalBoostReward == null)
+        data.totalBoostReward?.let {
             binding.boosts.text =
                 context.getString(R.string.wxm_amount, formatTokens(it.toBigDecimal()))
         }
 
-        val severityLevels = data.annotationSummary.map {
-            it.severityLevel
+        // TODO: Temporary code until we use something else for the reward details screen
+        if (isInRewardDetails) {
+            binding.parentCard.elevation = 0F
+            binding.annotationCard.setVisible(false)
+            return
         }
+
+        val severityLevels = data.annotationSummary?.map {
+            it.severityLevel
+        } ?: mutableListOf()
         if (severityLevels.contains(SeverityLevel.ERROR)) {
             onAnnotation(
                 R.color.errorTint, R.color.error, R.string.annotation_error_text, onViewDetails

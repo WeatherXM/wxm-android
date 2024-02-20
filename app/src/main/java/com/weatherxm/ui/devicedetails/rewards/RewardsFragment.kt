@@ -27,16 +27,18 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.weatherxm.R
+import com.weatherxm.data.RewardsTimelineEntry
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsRewardsBinding
-import com.weatherxm.ui.common.RewardsWeeklyStreak
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.getRewardScoreColor
+import com.weatherxm.util.getFirstLetter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -74,15 +76,15 @@ class RewardsFragment : BaseFragment() {
         }
 
         model.onRewards().observe(viewLifecycleOwner) {
-            val totalRewards = it.allTimeRewards ?: 0F
+            val totalRewards = it.totalRewards ?: 0F
             binding.emptyCard.setVisible(totalRewards == 0F)
             if (totalRewards != 0F) {
-                binding.dailyRewardsCard.updateUI(it.latest) {
+                binding.dailyRewardsCard.updateUI(it.latest, isInRewardDetails = false) {
                     navigator.showRewardDetails(requireContext(), model.device, it.latest)
                 }
                 binding.totalRewards.text =
                     getString(R.string.wxm_amount, formatTokens(totalRewards.toBigDecimal()))
-                updateWeeklyStreak(it.weekly)
+                updateWeeklyStreak(it.timeline)
                 binding.dailyRewardsCard.setVisible(true)
                 binding.totalCard.setVisible(true)
                 binding.weeklyCard.setVisible(true)
@@ -122,18 +124,23 @@ class RewardsFragment : BaseFragment() {
         model.fetchRewardsFromNetwork()
     }
 
-    private fun updateWeeklyStreak(weekly: RewardsWeeklyStreak?) {
-        binding.weeklyStreak.text =
-            getString(R.string.weekly_streak_desc, weekly?.fromDate, weekly?.toDate)
+    private fun updateWeeklyStreak(timeline: List<RewardsTimelineEntry>?) {
+        val fromDate = timeline?.firstOrNull()?.timestamp?.getFormattedDate() ?: String.empty()
+        val toDate = timeline?.lastOrNull()?.timestamp?.getFormattedDate() ?: String.empty()
+        binding.weeklyStreak.text = getString(R.string.weekly_streak_desc, fromDate, toDate)
 
         binding.weeklyTimeline.setContent {
-            WeeklyStreak(weekly)
+            WeeklyStreak(fromDate, toDate, timeline)
         }
     }
 
     @Suppress("FunctionNaming", "MagicNumber")
     @Composable
-    internal fun WeeklyStreak(weekly: RewardsWeeklyStreak?) {
+    internal fun WeeklyStreak(
+        fromDate: String,
+        toDate: String,
+        timeline: List<RewardsTimelineEntry>?
+    ) {
         Column(
             modifier = Modifier.then(Modifier.fillMaxWidth())
         ) {
@@ -146,28 +153,8 @@ class RewardsFragment : BaseFragment() {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
-                weekly?.timelineData?.forEach { item ->
-                    Column(
-                        modifier = Modifier.then(Modifier.width(20.dp)),
-                        verticalArrangement = Arrangement.SpaceAround,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Box {
-                            val value = item.second
-
-                            // Fit the value (0-100) in the 20-100 range
-                            val normalizedValue = (value.toFloat() / 100F * 60F + 20F).toInt()
-
-                            Bar(colorId = R.color.blueTint)
-                            Bar(height = normalizedValue, colorId = getRewardScoreColor(value))
-                        }
-                        Text(
-                            text = item.first,
-                            Modifier.padding(0.dp, 4.dp, 0.dp, 0.dp),
-                            fontSize = 12.sp,
-                            color = Color(requireContext().getColor(R.color.colorOnSurface)),
-                        )
-                    }
+                timeline?.forEach { item ->
+                    BarAndText(item)
                 }
             }
             Row(
@@ -180,12 +167,38 @@ class RewardsFragment : BaseFragment() {
                 verticalAlignment = Alignment.Bottom
             ) {
                 Text(
-                    text = weekly?.fromDate ?: String.empty(),
+                    text = fromDate,
                     fontSize = 12.sp,
                     color = Color(requireContext().getColor(R.color.colorOnSurface)),
                 )
                 Text(
-                    text = weekly?.toDate ?: String.empty(),
+                    text = toDate,
+                    fontSize = 12.sp,
+                    color = Color(requireContext().getColor(R.color.colorOnSurface)),
+                )
+            }
+        }
+    }
+
+    @Composable
+    private fun BarAndText(entry: RewardsTimelineEntry) {
+        Column(
+            modifier = Modifier.then(Modifier.width(20.dp)),
+            verticalArrangement = Arrangement.SpaceAround,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box {
+                Bar(colorId = R.color.blueTint)
+                entry.baseRewardScore?.let {
+                    // Fit the value (0-100) in the 20-100 range
+                    val normalizedValue = (it.toFloat() / 100F * 60F + 20F).toInt()
+                    Bar(height = normalizedValue, colorId = getRewardScoreColor(it))
+                }
+            }
+            context?.let {
+                Text(
+                    text = entry.timestamp?.dayOfWeek?.getFirstLetter(it) ?: String.empty(),
+                    Modifier.padding(0.dp, 4.dp, 0.dp, 0.dp),
                     fontSize = 12.sp,
                     color = Color(requireContext().getColor(R.color.colorOnSurface)),
                 )

@@ -249,7 +249,6 @@
     <string name="max_rewards_desc"><![CDATA[The maximum rewards you could earn in that reward distribution if you had a perfect 100&percnt; reward score. You can read more about our reward mechanism <a href="%1$s">here</a>.]]></string>
     <string name="problems_found">Problems Found</string>
     <string name="problems_found_desc"><![CDATA[<b>Lost %s $WXM</b> because of station problems.]]></string>
-    <string name="problems_found_desc_no_rewards"><![CDATA[<b>Did not earn any $WXM</b> because of station problems.]]></string>
     <string name="problems_found_desc_without_lost_rewards">Some station problems found but did not lose any rewards.</string>
     <string name="identify_fix_problems">Identify &amp; Fix Problems</string>
     <string name="see_detailed_problems">See Detailed Problems</string>

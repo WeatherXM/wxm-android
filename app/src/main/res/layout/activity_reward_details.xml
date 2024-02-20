@@ -61,18 +61,7 @@
                         android:text="@string/problems_found"
                         android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
                         android:textSize="20sp"
-                        app:layout_constraintTop_toBottomOf="@id/rewardsContentCard"
-                        tools:text="2000 $WXM" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/problemsFoundDesc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_normal_to_large"
-                        android:layout_marginTop="@dimen/margin_normal"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                        app:layout_constraintTop_toBottomOf="@id/problemsFoundTitle"
-                        tools:text="You lost 152.2 $WXM because of station problems." />
+                        app:layout_constraintTop_toBottomOf="@id/rewardsContentCard" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/problemsList"
@@ -83,7 +72,7 @@
                         android:overScrollMode="never"
                         android:scrollbars="vertical"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintTop_toBottomOf="@id/problemsFoundDesc"
+                        app:layout_constraintTop_toBottomOf="@id/problemsFoundTitle"
                         tools:listitem="@layout/list_item_reward_problem" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

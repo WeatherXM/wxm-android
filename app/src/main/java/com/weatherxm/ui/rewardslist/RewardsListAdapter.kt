@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.databinding.ListItemRewardBinding
-import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.DailyReward
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.setRewardStatusChip
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Resources
