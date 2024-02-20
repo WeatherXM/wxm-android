@@ -64,7 +64,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
 
         model.onBLEError().observe(viewLifecycleOwner) { uiError ->
             binding.bleActionFlow.setRetryButtonListener {
-                uiError.retryFunction
+                uiError.retryFunction?.invoke()
             }
             binding.bleActionFlow.onError(
                 false,

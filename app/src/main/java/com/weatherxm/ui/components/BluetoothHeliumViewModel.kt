@@ -9,8 +9,6 @@ import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.Analytics
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -121,9 +119,8 @@ open class BluetoothHeliumViewModel(
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     fun disconnectFromPeripheral() {
-        GlobalScope.launch {
+        viewModelScope.launch {
             connectionUseCase.disconnectFromPeripheral()
         }
     }

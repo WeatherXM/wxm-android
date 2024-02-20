@@ -26,9 +26,8 @@ import com.weatherxm.data.Failure
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -45,6 +44,7 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.coroutineContext
 
+@Suppress("TooManyFunctions")
 class BluetoothConnectionManager(
     private val context: Context, private val bluetoothAdapter: BluetoothAdapter?
 ) {
@@ -59,6 +59,7 @@ class BluetoothConnectionManager(
         val DELAY_BEFORE_CHARACTERISTICS_SETUP = TimeUnit.SECONDS.toMillis(1L)
     }
 
+    private lateinit var bondStateChangedReceiver: BroadcastReceiver
     private lateinit var peripheral: Peripheral
     private var macAddress: String = String.empty()
     private var readCharacteristic: Characteristic? = null
@@ -77,41 +78,6 @@ class BluetoothConnectionManager(
         return bondStatus
     }
 
-    /*
-    * This broadcast receiver is a necessity in order to know when our device is BONDED and we can
-    * start communicating with it and working on its data
-     */
-    @OptIn(DelicateCoroutinesApi::class)
-    private val bondStateChangedReceiver = object : BroadcastReceiver() {
-        @SuppressLint("MissingPermission")
-        override fun onReceive(context: Context?, intent: Intent) {
-            if (intent.action == BluetoothDevice.ACTION_BOND_STATE_CHANGED) {
-                val bluetoothDevice =
-                    intent.parcelable<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-
-                when (bluetoothDevice?.bondState) {
-                    BluetoothDevice.BOND_BONDED -> {
-                        Timber.d("[BLE Communication]: Bonded.")
-                        GlobalScope.launch {
-                            isSettingCharacteristics = true
-                            delay(DELAY_BEFORE_CHARACTERISTICS_SETUP)
-                            setReadWriteCharacteristic()
-                        }
-                        bondStatus.tryEmit(BluetoothDevice.BOND_BONDED)
-                    }
-                    BluetoothDevice.BOND_BONDING -> {
-                        Timber.d("[BLE Communication]: Bonding...")
-                        bondStatus.tryEmit(BluetoothDevice.BOND_BONDING)
-                    }
-                    BluetoothDevice.BOND_NONE -> {
-                        Timber.d("[BLE Communication]: Bonding NONE...")
-                        bondStatus.tryEmit(BluetoothDevice.BOND_NONE)
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * Suppress MissingPermission as we will call this function only after we have it granted
      */
@@ -122,15 +88,55 @@ class BluetoothConnectionManager(
         } ?: mutableListOf()
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
-    fun setPeripheral(address: String): Either<Failure, Unit> {
+    /*
+    * This broadcast receiver is a necessity in order to know when our device is BONDED and we can
+    * start communicating with it and working on its data
+     */
+    private fun initBondStateChangeReceiver(scope: CoroutineScope) {
+        bondStateChangedReceiver = object : BroadcastReceiver() {
+            @SuppressLint("MissingPermission")
+            override fun onReceive(context: Context?, intent: Intent) {
+                if (intent.action == BluetoothDevice.ACTION_BOND_STATE_CHANGED) {
+                    val bluetoothDevice =
+                        intent.parcelable<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+
+                    when (bluetoothDevice?.bondState) {
+                        BluetoothDevice.BOND_BONDED -> {
+                            Timber.d("[BLE Communication]: Bonded.")
+                            tryToSetCharacteristics(scope)
+                            bondStatus.tryEmit(BluetoothDevice.BOND_BONDED)
+                        }
+                        BluetoothDevice.BOND_BONDING -> {
+                            Timber.d("[BLE Communication]: Bonding...")
+                            bondStatus.tryEmit(BluetoothDevice.BOND_BONDING)
+                        }
+                        BluetoothDevice.BOND_NONE -> {
+                            Timber.d("[BLE Communication]: Bonding NONE...")
+                            bondStatus.tryEmit(BluetoothDevice.BOND_NONE)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    suspend fun setPeripheral(address: String): Either<Failure, Unit> {
         return try {
             macAddress = address
-            peripheral = GlobalScope.peripheral(address)
+            initBondStateChangeReceiver(CoroutineScope(coroutineContext))
+            peripheral = CoroutineScope(coroutineContext).peripheral(address)
             Either.Right(Unit)
         } catch (e: IllegalArgumentException) {
             Timber.w(e, "Creation of peripheral failed: $address")
             Either.Left(BluetoothError.PeripheralCreationError())
+        }
+    }
+
+    private fun tryToSetCharacteristics(scope: CoroutineScope) {
+        scope.launch {
+            isSettingCharacteristics = true
+            delay(DELAY_BEFORE_CHARACTERISTICS_SETUP)
+            setReadWriteCharacteristic()
         }
     }
 
@@ -162,8 +168,7 @@ class BluetoothConnectionManager(
             bondStateChangedFilter.priority = SYSTEM_HIGH_PRIORITY
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 context.registerReceiver(
-                    bondStateChangedReceiver, bondStateChangedFilter,
-                    Context.RECEIVER_EXPORTED
+                    bondStateChangedReceiver, bondStateChangedFilter, Context.RECEIVER_EXPORTED
                 )
             } else {
                 context.registerReceiver(bondStateChangedReceiver, bondStateChangedFilter)
@@ -171,11 +176,7 @@ class BluetoothConnectionManager(
             peripheral.connect()
 
             if (getPairedDevices().any { it.address == macAddress }) {
-                withContext(coroutineContext) {
-                    isSettingCharacteristics = true
-                    delay(DELAY_BEFORE_CHARACTERISTICS_SETUP)
-                    setReadWriteCharacteristic()
-                }
+                tryToSetCharacteristics(CoroutineScope(coroutineContext))
             }
             Either.Right(Unit)
         } catch (e: ConnectionRejectedException) {
@@ -249,7 +250,7 @@ class BluetoothConnectionManager(
     }
 
     suspend fun write(command: String): Boolean {
-        if(isSettingCharacteristics) {
+        if (isSettingCharacteristics) {
             /**
              * If we are still in the process of setting characteristics, delay a bit
              * to ensure they are correctly set

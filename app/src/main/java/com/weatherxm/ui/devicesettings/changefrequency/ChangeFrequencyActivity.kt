@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.weatherxm.R
@@ -66,10 +67,14 @@ class ChangeFrequencyActivity : BaseActivity() {
             return
         }
 
+        onBackPressedDispatcher.addCallback {
+            model.disconnectFromPeripheral()
+            finishActivity()
+        }
+
         with(binding.toolbar) {
             setNavigationOnClickListener {
-                model.disconnectFromPeripheral()
-                finishActivity()
+                onBackPressedDispatcher.onBackPressed()
             }
             subtitle = model.device.name
         }
