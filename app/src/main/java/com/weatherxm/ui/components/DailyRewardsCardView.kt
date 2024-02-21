@@ -95,7 +95,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
         val severityLevels = data.annotationSummary?.map {
             it.severityLevel
         } ?: mutableListOf()
-        setupAnnotations(severityLevels)
+        setupAnnotations(severityLevels, onViewDetails)
     }
 
     private fun setupAnnotations(
