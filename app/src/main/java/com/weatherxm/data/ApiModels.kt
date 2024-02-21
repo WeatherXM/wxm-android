@@ -173,6 +173,17 @@ data class Hex(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
+data class RewardsTimelineResponse(
+    val data: List<Reward>,
+    @Json(name = "total_pages")
+    val totalPages: Int,
+    @Json(name = "has_next_page")
+    val hasNextPage: Boolean
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
 data class TransactionsResponse(
     val data: List<Transaction>,
     @Json(name = "total_pages")
