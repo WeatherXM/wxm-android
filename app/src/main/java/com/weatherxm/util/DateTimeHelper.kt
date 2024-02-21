@@ -65,12 +65,15 @@ object DateTimeHelper : KoinComponent {
         }
     }
 
-    fun ZonedDateTime.getFormattedDate(includeYear: Boolean = false): String {
-        return if (includeYear) {
-            "${month.getDisplayName(TextStyle.SHORT, Locale.US)} $dayOfMonth, $year"
-        } else {
-            "${month.getDisplayName(TextStyle.SHORT, Locale.US)} $dayOfMonth"
-        }
+    fun ZonedDateTime?.getFormattedDate(includeYear: Boolean = false): String {
+        return this?.let {
+            if (includeYear) {
+                "${month.getDisplayName(TextStyle.SHORT, Locale.US)} $dayOfMonth, $year"
+            } else {
+                "${month.getDisplayName(TextStyle.SHORT, Locale.US)} $dayOfMonth"
+            }
+        } ?: String.empty()
+
     }
 
     fun ZoneOffset.getFormattedOffset(): String {

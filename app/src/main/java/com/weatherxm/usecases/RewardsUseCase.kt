@@ -1,54 +1,53 @@
 package com.weatherxm.usecases
 
-import android.content.Context
 import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.RewardsRepository
-import com.weatherxm.ui.common.DailyReward
-import com.weatherxm.ui.common.UIRewardsList
+import com.weatherxm.ui.common.UIRewardsTimeline
 
 interface RewardsUseCase {
-    suspend fun getTransactions(
+    suspend fun getRewardsTimeline(
         deviceId: String,
         page: Int?,
         fromDate: String?,
         toDate: String? = null
-    ): Either<Failure, UIRewardsList>
+    ): Either<Failure, UIRewardsTimeline>
+
+    fun getRewardsHideAnnotationThreshold(): Long
 }
 
 class RewardsUseCaseImpl(
     private val repository: RewardsRepository,
-    private val appConfigRepo: AppConfigRepository,
-    private val context: Context
+    private val appConfigRepository: AppConfigRepository
 ) : RewardsUseCase {
-    override suspend fun getTransactions(
+    override suspend fun getRewardsTimeline(
         deviceId: String,
         page: Int?,
         fromDate: String?,
         toDate: String?
-    ): Either<Failure, UIRewardsList> {
-        return repository.getTransactions(
+    ): Either<Failure, UIRewardsTimeline> {
+        return repository.getRewardsTimeline(
             deviceId = deviceId,
             page = page,
             fromDate = fromDate,
             toDate = toDate
         ).map {
             if (it.data.isEmpty()) {
-                UIRewardsList(listOf(), reachedTotal = true)
+                UIRewardsTimeline(listOf(), reachedTotal = true)
             } else {
-                val uiTransactions = it.data
-                    .filter { tx ->
+                UIRewardsTimeline(
+                    it.data.filter { tx ->
                         // Keep only transactions that have a reward for this device
-                        tx.actualReward != null
-                    }
-                    .map { tx ->
-                        DailyReward(
-                            context, tx, appConfigRepo.getRewardsHideAnnotationThreshold()
-                        )
-                    }
-                UIRewardsList(uiTransactions, it.hasNextPage)
+                        tx.baseReward != null
+                    },
+                    it.hasNextPage
+                )
             }
         }
+    }
+
+    override fun getRewardsHideAnnotationThreshold(): Long {
+        return appConfigRepository.getRewardsHideAnnotationThreshold()
     }
 }

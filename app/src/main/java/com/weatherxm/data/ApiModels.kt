@@ -173,44 +173,12 @@ data class Hex(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class RewardsTimelineResponse(
+data class RewardsTimeline(
     val data: List<Reward>,
     @Json(name = "total_pages")
     val totalPages: Int,
     @Json(name = "has_next_page")
     val hasNextPage: Boolean
-) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class TransactionsResponse(
-    val data: List<Transaction>,
-    @Json(name = "total_pages")
-    val totalPages: Int,
-    @Json(name = "has_next_page")
-    val hasNextPage: Boolean
-) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class Transaction(
-    val timestamp: ZonedDateTime,
-    @Json(name = "reward_score")
-    val rewardScore: Int?,
-    @Json(name = "daily_reward")
-    val dailyReward: Float?,
-    @Json(name = "actual_reward")
-    val actualReward: Float?,
-    @Json(name = "total_rewards")
-    val totalRewards: Float?,
-    @Json(name = "lost_rewards")
-    val lostRewards: Float?,
-    val timeline: RewardsTimeline?,
-    val annotations: RewardsAnnotations?,
-    @Json(name = "annotation_summary")
-    val annotationSummary: List<RewardsAnnotationGroup>?,
 ) : Parcelable
 
 @Keep
@@ -462,7 +430,7 @@ data class Rewards(
     @Json(name = "total_rewards")
     val totalRewards: Float?,
     val latest: Reward?,
-    val timeline: List<RewardsTimelineEntry>?
+    val timeline: List<RewardsTimestampScore>?
 ) : Parcelable
 
 @Keep
@@ -485,20 +453,10 @@ data class Reward(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class RewardsTimelineEntry(
+data class RewardsTimestampScore(
     val timestamp: ZonedDateTime?,
     @Json(name = "base_reward_score")
     val baseRewardScore: Int?
-) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class RewardsTimeline(
-    @Json(name = "reference_date")
-    val referenceDate: ZonedDateTime?,
-    @Json(name = "reward_scores")
-    val rewardScores: List<Int>?
 ) : Parcelable
 
 @Keep

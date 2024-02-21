@@ -15,11 +15,14 @@ import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.rewardslist.RewardsListViewModel
 import com.weatherxm.util.Analytics
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
     private lateinit var binding: ActivityRewardDetailsBinding
+    private val model: RewardsListViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +53,12 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
         }
         binding.contactSupportBtn.setVisible(device.isOwned())
 
-        binding.rewardsContentCard.updateUI(reward, isInRewardDetails = true)
+        binding.rewardsContentCard.updateUI(
+            reward,
+            model.getRewardsHideAnnotationThreshold(),
+            showRewardDetailsBtnInCard = false,
+            isInRewardDetails = true
+        )
         updateErrors(device, reward)
     }
 

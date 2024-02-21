@@ -16,6 +16,7 @@ import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.getRewardScoreColor
+import com.weatherxm.util.Rewards.shouldHideAnnotations
 import com.weatherxm.util.Weather.EMPTY_VALUE
 import org.koin.core.component.KoinComponent
 
@@ -48,12 +49,14 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
     @Suppress("MagicNumber")
     fun updateUI(
         data: Reward?,
+        rewardsHideAnnotationThreshold: Long,
+        showRewardDetailsBtnInCard: Boolean,
         isInRewardDetails: Boolean,
         onViewDetails: (() -> Unit)? = null
     ) {
         if (data == null) return
 
-        if (onViewDetails != null && !isInRewardDetails) {
+        if (onViewDetails != null && showRewardDetailsBtnInCard) {
             binding.viewRewardDetails.setOnClickListener {
                 onViewDetails.invoke()
             }
@@ -92,10 +95,12 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             return
         }
 
-        val severityLevels = data.annotationSummary?.map {
-            it.severityLevel
-        } ?: mutableListOf()
-        setupAnnotations(severityLevels, onViewDetails)
+        if (!shouldHideAnnotations(data.baseRewardScore, rewardsHideAnnotationThreshold)) {
+            val severityLevels = data.annotationSummary?.map {
+                it.severityLevel
+            } ?: mutableListOf()
+            setupAnnotations(severityLevels, onViewDetails)
+        }
     }
 
     private fun setupAnnotations(

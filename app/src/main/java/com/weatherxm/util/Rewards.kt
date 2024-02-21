@@ -50,24 +50,6 @@ object Rewards {
         return amount.divide(BigDecimal(DIVISOR_WEI_TO_ETH), ETH_DECIMALS, RoundingMode.HALF_UP)
     }
 
-    fun getRewardAnnotationBackgroundColor(rewardScore: Int?): Int {
-        return rewardScore?.let {
-            if (it >= REWARDS_WARNING_LIMIT) R.color.warningTint else R.color.errorTint
-        } ?: R.color.errorTint
-    }
-
-    fun getRewardAnnotationColor(rewardScore: Int?): Int {
-        return rewardScore?.let {
-            if (it >= REWARDS_WARNING_LIMIT) R.color.warning else R.color.error
-        } ?: R.color.error
-    }
-
-    fun formatLostRewards(lostRewards: Float?): String {
-        return lostRewards?.let {
-            formatTokens(it.toBigDecimal())
-        } ?: "?"
-    }
-
     fun shouldHideAnnotations(rewardScore: Int?, hideAnnotationsThreshold: Long): Boolean {
         return (rewardScore?.toLong() ?: 0L) >= hideAnnotationsThreshold
     }

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
-import com.weatherxm.ui.common.DailyReward
+import com.weatherxm.data.Reward
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getDefaultMessage
@@ -29,22 +29,24 @@ class RewardsListViewModel(
     private var reachedTotal = false
     private var currFromDate = ZonedDateTime.now().minusMonths(FETCH_INTERVAL_MONTHS)
     private var currToDate = ZonedDateTime.now()
-    private val currentShownRewards = mutableListOf<DailyReward>()
+    private val currentShownRewards = mutableListOf<Reward>()
 
-    private val onFirstPageRewards = MutableLiveData<Resource<List<DailyReward>>>().apply {
+    private val onFirstPageRewards = MutableLiveData<Resource<List<Reward>>>().apply {
         value = Resource.loading()
     }
 
-    private val onNewRewardsPage = MutableLiveData<Resource<List<DailyReward>>>()
+    private val onNewRewardsPage = MutableLiveData<Resource<List<Reward>>>()
 
-    fun onFirstPageRewards(): LiveData<Resource<List<DailyReward>>> = onFirstPageRewards
+    fun onFirstPageRewards(): LiveData<Resource<List<Reward>>> = onFirstPageRewards
 
-    fun onNewRewardsPage(): LiveData<Resource<List<DailyReward>>> = onNewRewardsPage
+    fun onNewRewardsPage(): LiveData<Resource<List<Reward>>> = onNewRewardsPage
+
+    fun getRewardsHideAnnotationThreshold() = usecase.getRewardsHideAnnotationThreshold()
 
     fun fetchFirstPageRewards(deviceId: String) {
         onFirstPageRewards.postValue(Resource.loading())
         viewModelScope.launch {
-            usecase.getTransactions(deviceId, currentPage, currFromDate.toISODate())
+            usecase.getRewardsTimeline(deviceId, currentPage, currFromDate.toISODate())
                 .map {
                     Timber.d("Got Rewards: ${it.rewards}")
                     hasNextPage = it.hasNextPage
@@ -66,7 +68,7 @@ class RewardsListViewModel(
                 currentPage++
                 blockNewPageRequest = true
 
-                usecase.getTransactions(
+                usecase.getRewardsTimeline(
                     deviceId,
                     currentPage,
                     currFromDate.toISODate(),
@@ -100,7 +102,7 @@ class RewardsListViewModel(
                 currToDate = currFromDate
                 currFromDate = currFromDate.minusMonths(FETCH_INTERVAL_MONTHS)
 
-                usecase.getTransactions(
+                usecase.getRewardsTimeline(
                     deviceId,
                     currentPage,
                     currFromDate.toISODate(),

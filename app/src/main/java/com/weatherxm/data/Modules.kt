@@ -176,6 +176,7 @@ import com.weatherxm.ui.networkstats.NetworkStatsViewModel
 import com.weatherxm.ui.passwordprompt.PasswordPromptViewModel
 import com.weatherxm.ui.preferences.PreferenceViewModel
 import com.weatherxm.ui.resetpassword.ResetPasswordViewModel
+import com.weatherxm.ui.rewarddetails.RewardDetailsViewModel
 import com.weatherxm.ui.rewardsclaim.RewardsClaimViewModel
 import com.weatherxm.ui.rewardslist.RewardsListViewModel
 import com.weatherxm.ui.sendfeedback.SendFeedbackViewModel
@@ -531,7 +532,7 @@ private val usecases = module {
         ClaimDeviceUseCaseImpl(get(), get())
     }
     single<RewardsUseCase> {
-        RewardsUseCaseImpl(get(), get(), androidContext())
+        RewardsUseCaseImpl(get(), get())
     }
     single<AuthUseCase> {
         AuthUseCaseImpl(get(), get(), get())
@@ -947,6 +948,7 @@ private val viewmodels = module {
     viewModel { ResetPasswordViewModel(get(), get(), get()) }
     viewModel { RewardsClaimViewModel(get(), get()) }
     viewModel { RewardsListViewModel(get(), get()) }
+    viewModel { RewardDetailsViewModel(get()) }
     viewModel { SendFeedbackViewModel(get(), get(), get()) }
     viewModel { SignupViewModel(get(), get(), get()) }
     viewModel { UpdatePromptViewModel(get()) }
