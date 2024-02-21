@@ -217,9 +217,6 @@ class Analytics(
         REWARD_ANNOTATIONS("Reward Annotations"),
         REWARD_DETAILS_READ_MORE("Reward Details Read More"),
         REWARD_DETAILS_ERROR("Reward Details Error"),
-        REWARDS_SCORE("rewards_score"),
-        MAX_REWARDS("max_rewards"),
-        TIMELINE("timeline"),
         NOTIFICATIONS("notifications"),
         ON("on"),
         OFF("off")

@@ -14,7 +14,6 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 
 object Rewards {
-    const val REWARDS_WARNING_LIMIT = 70
     const val DIVISOR_WEI_TO_ETH = "1000000000000000000"
     const val ETH_DECIMALS = 18
 

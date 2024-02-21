@@ -56,7 +56,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_large"
-                        android:text="@string/reward"
                         android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
                         android:textSize="32sp"
                         app:layout_constraintStart_toStartOf="parent"
