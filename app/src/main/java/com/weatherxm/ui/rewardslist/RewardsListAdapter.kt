@@ -62,11 +62,8 @@ class RewardsListAdapter(
             binding.mainCard.updateUI(
                 item,
                 rewardsHideAnnotationThreshold,
-                showRewardDetailsBtnInCard = false,
                 isInRewardDetails = false
-            ) {
-                onRewardDetails.invoke(item)
-            }
+            )
         }
 
         /**

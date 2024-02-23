@@ -82,7 +82,6 @@ class RewardsFragment : BaseFragment() {
                 binding.dailyRewardsCard.updateUI(
                     it.latest,
                     model.getRewardsHideAnnotationThreshold(),
-                    showRewardDetailsBtnInCard = true,
                     isInRewardDetails = false
                 ) {
                     navigator.showRewardDetails(requireContext(), model.device, it.latest)

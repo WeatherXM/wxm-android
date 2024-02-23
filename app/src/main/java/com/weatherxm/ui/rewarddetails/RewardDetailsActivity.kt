@@ -56,7 +56,6 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
         binding.rewardsContentCard.updateUI(
             reward,
             model.getRewardsHideAnnotationThreshold(),
-            showRewardDetailsBtnInCard = false,
             isInRewardDetails = true
         )
         updateErrors(device, reward)

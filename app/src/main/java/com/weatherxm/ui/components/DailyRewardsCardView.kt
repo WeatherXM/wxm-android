@@ -46,17 +46,15 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
         gravity = Gravity.CENTER
     }
 
-    @Suppress("MagicNumber")
     fun updateUI(
         data: Reward?,
         rewardsHideAnnotationThreshold: Long,
-        showRewardDetailsBtnInCard: Boolean,
         isInRewardDetails: Boolean,
         onViewDetails: (() -> Unit)? = null
     ) {
         if (data == null) return
 
-        if (onViewDetails != null && showRewardDetailsBtnInCard) {
+        if (onViewDetails != null) {
             binding.viewRewardDetails.setOnClickListener {
                 onViewDetails.invoke()
             }
@@ -132,14 +130,17 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
         onViewDetails: (() -> Unit)? = null
     ) {
         binding.parentCard.setCardStroke(strokeColor, 2)
-        binding.annotationCard.setBackgroundColor(context.getColor(backgroundColor))
-        binding.annotationCard
-            .setBackground(backgroundColor)
-            .htmlMessage(context.getString(text))
-            .action(context.getString(R.string.view_reward_details)) {
-                onViewDetails?.invoke()
+        with(binding.annotationCard) {
+            setBackgroundColor(context.getColor(backgroundColor))
+            setBackground(backgroundColor)
+            htmlMessage(context.getString(text))
+            if (onViewDetails != null) {
+                action(context.getString(R.string.view_reward_details)) {
+                    onViewDetails.invoke()
+                }
             }
-            .setVisible(true)
+            setVisible(true)
+        }
         binding.viewRewardDetails.setVisible(false)
     }
 }
