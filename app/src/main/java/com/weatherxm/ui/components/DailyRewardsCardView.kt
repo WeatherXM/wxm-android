@@ -6,7 +6,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.annotation.ColorRes
-import androidx.annotation.StringRes
 import com.weatherxm.R
 import com.weatherxm.data.Reward
 import com.weatherxm.data.RewardsAnnotationGroup
@@ -104,11 +103,11 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
         } ?: mutableListOf()
         val annotationsSize = annotations?.size ?: 0
 
-        val message = if(severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
+        val message = if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
             context.getString(R.string.annotations_info_text, annotationsSize)
-        } else if(severityLevels.contains(SeverityLevel.INFO) && annotationsSize <= 1) {
+        } else if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize <= 1) {
             context.getString(R.string.annotation_info_text)
-        } else if(!severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
+        } else if (!severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
             context.getString(R.string.annotations_warn_error_text, annotationsSize)
         } else {
             context.getString(R.string.annotation_warn_error_text)
