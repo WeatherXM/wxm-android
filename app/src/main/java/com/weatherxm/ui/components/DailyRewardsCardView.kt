@@ -45,9 +45,9 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
         gravity = Gravity.CENTER
     }
 
-    @Suppress("MagicNumber")
     fun updateUI(
         data: Reward?,
+        useShortAnnotationText: Boolean,
         isInRewardDetails: Boolean,
         onViewDetails: (() -> Unit)? = null
     ) {
@@ -91,11 +91,16 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             binding.annotationCard.setVisible(false)
             return
         }
-        setupAnnotations(data.annotationSummary, onViewDetails)
+        setupAnnotations(
+            data.annotationSummary,
+            useShortAnnotationText,
+            onViewDetails
+        )
     }
 
     private fun setupAnnotations(
         annotations: List<RewardsAnnotationGroup>?,
+        useShortAnnotationText: Boolean,
         onViewDetails: (() -> Unit)? = null
     ) {
         val severityLevels = annotations?.map {
@@ -103,14 +108,24 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
         } ?: mutableListOf()
         val annotationsSize = annotations?.size ?: 0
 
-        val message = if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
-            context.getString(R.string.annotations_info_text, annotationsSize)
-        } else if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize <= 1) {
-            context.getString(R.string.annotation_info_text)
-        } else if (!severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
-            context.getString(R.string.annotations_warn_error_text, annotationsSize)
+        val message = if (useShortAnnotationText) {
+            if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
+                context.getString(R.string.annotations_timeline_info_text, annotationsSize)
+            } else if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize <= 1) {
+                context.getString(R.string.annotation_timeline_info_text)
+            } else if (!severityLevels.contains(SeverityLevel.WARNING) && annotationsSize > 1) {
+                context.getString(R.string.annotations_timeline_warn_error_text, annotationsSize)
+            } else {
+                context.getString(R.string.annotation_timeline_warn_error_text)
+            }
         } else {
-            context.getString(R.string.annotation_warn_error_text)
+            if (severityLevels.contains(SeverityLevel.INFO)) {
+                context.getString(R.string.annotation_info_text)
+            } else if (severityLevels.contains(SeverityLevel.WARNING)) {
+                context.getString(R.string.annotation_warn_text)
+            } else {
+                context.getString(R.string.annotation_error_text)
+            }
         }
 
         if (severityLevels.contains(SeverityLevel.ERROR)) {

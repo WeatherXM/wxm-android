@@ -30,6 +30,7 @@ import com.weatherxm.R
 import com.weatherxm.data.RewardsTimelineEntry
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsRewardsBinding
+import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
@@ -79,7 +80,11 @@ class RewardsFragment : BaseFragment() {
             val totalRewards = it.totalRewards ?: 0F
             binding.emptyCard.setVisible(totalRewards == 0F)
             if (totalRewards != 0F) {
-                binding.dailyRewardsCard.updateUI(it.latest, isInRewardDetails = false) {
+                binding.dailyRewardsCard.updateUI(
+                    it.latest,
+                    useShortAnnotationText = model.device.relation != DeviceRelation.OWNED,
+                    isInRewardDetails = false
+                ) {
                     navigator.showRewardDetails(requireContext(), model.device, it.latest)
                 }
                 binding.totalRewards.text =

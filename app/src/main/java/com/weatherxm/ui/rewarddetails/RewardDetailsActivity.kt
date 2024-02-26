@@ -50,7 +50,11 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
         }
         binding.contactSupportBtn.setVisible(device.isOwned())
 
-        binding.rewardsContentCard.updateUI(reward, isInRewardDetails = true)
+        binding.rewardsContentCard.updateUI(
+            reward,
+            useShortAnnotationText = false,
+            isInRewardDetails = true
+        )
         updateErrors(device, reward)
     }
 
