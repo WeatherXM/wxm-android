@@ -9,6 +9,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.weatherxm.R
 import com.weatherxm.data.Reward
+import com.weatherxm.data.RewardsAnnotationGroup
 import com.weatherxm.data.SeverityLevel
 import com.weatherxm.databinding.ViewDailyRewardsCardBinding
 import com.weatherxm.ui.common.setCardStroke
@@ -91,29 +92,34 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             binding.annotationCard.setVisible(false)
             return
         }
-
-        val severityLevels = data.annotationSummary?.map {
-            it.severityLevel
-        } ?: mutableListOf()
-        setupAnnotations(severityLevels, onViewDetails)
+        setupAnnotations(data.annotationSummary, onViewDetails)
     }
 
     private fun setupAnnotations(
-        severityLevels: List<SeverityLevel?>,
+        annotations: List<RewardsAnnotationGroup>?,
         onViewDetails: (() -> Unit)? = null
     ) {
+        val severityLevels = annotations?.map {
+            it.severityLevel
+        } ?: mutableListOf()
+        val annotationsSize = annotations?.size ?: 0
+
+        val message = if(severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
+            context.getString(R.string.annotations_info_text, annotationsSize)
+        } else if(severityLevels.contains(SeverityLevel.INFO) && annotationsSize <= 1) {
+            context.getString(R.string.annotation_info_text)
+        } else if(!severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
+            context.getString(R.string.annotations_warn_error_text, annotationsSize)
+        } else {
+            context.getString(R.string.annotation_warn_error_text)
+        }
+
         if (severityLevels.contains(SeverityLevel.ERROR)) {
-            onAnnotation(
-                R.color.errorTint, R.color.error, R.string.annotation_error_text, onViewDetails
-            )
+            onAnnotation(R.color.errorTint, R.color.error, message, onViewDetails)
         } else if (severityLevels.contains(SeverityLevel.WARNING)) {
-            onAnnotation(
-                R.color.warningTint, R.color.warning, R.string.annotation_warn_text, onViewDetails
-            )
+            onAnnotation(R.color.warningTint, R.color.warning, message, onViewDetails)
         } else if (severityLevels.contains(SeverityLevel.INFO)) {
-            onAnnotation(
-                R.color.blueTint, R.color.colorPrimary, R.string.annotation_info_text, onViewDetails
-            )
+            onAnnotation(R.color.blueTint, R.color.colorPrimary, message, onViewDetails)
         } else {
             binding.annotationCard.setVisible(false)
             binding.viewRewardDetails.setVisible(true)
@@ -123,18 +129,22 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
     private fun onAnnotation(
         @ColorRes backgroundColor: Int,
         @ColorRes strokeColor: Int,
-        @StringRes text: Int,
+        text: String,
         onViewDetails: (() -> Unit)? = null
     ) {
         binding.parentCard.setCardStroke(strokeColor, 2)
-        binding.annotationCard.setBackgroundColor(context.getColor(backgroundColor))
-        binding.annotationCard
-            .setBackground(backgroundColor)
-            .htmlMessage(context.getString(text))
-            .action(context.getString(R.string.view_reward_details)) {
-                onViewDetails?.invoke()
+
+        with(binding.annotationCard) {
+            setBackgroundColor(context.getColor(backgroundColor))
+            setBackground(backgroundColor)
+            htmlMessage(text)
+            if (onViewDetails != null) {
+                action(context.getString(R.string.view_reward_details)) {
+                    onViewDetails.invoke()
+                }
             }
-            .setVisible(true)
+            setVisible(true)
+        }
         binding.viewRewardDetails.setVisible(false)
     }
 }

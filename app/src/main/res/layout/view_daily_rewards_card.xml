@@ -178,9 +178,9 @@
                 android:paddingTop="8dp"
                 android:visibility="gone"
                 app:message_includes_close_button="false"
-                app:message_message="@string/annotation_error_text"
                 tools:message_background_tint="@color/errorTint"
                 tools:message_icon_color="@color/error"
+                tools:message_message="@string/annotation_warn_error_text"
                 tools:visibility="visible" />
 
         </LinearLayout>

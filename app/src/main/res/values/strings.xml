@@ -317,9 +317,10 @@
     <string name="annotation_unknown">Unknown error</string>
     <string name="annotation_unknown_desc"><![CDATA[There seems to be an unknown issue with your station. Please make sure you are running the latest version of our mobile app and your station is upgraded to the latest firmware.]]></string>
     <string name="annotation_unknown_public_desc"><![CDATA[There seems to be an unknown issue with this station. Please make sure you are running the latest version of our mobile app.]]></string>
-    <string name="annotation_info_text"><![CDATA[<b>Minor issues slightly affected your rewards.</b> This may happen occasionally, but we thought you should know. View reward details to identify and fix problems.]]></string>
-    <string name="annotation_warn_text"><![CDATA[<b>Some issues prevent your station from getting the full rewards.</b> View reward details to identify and fix problems.]]></string>
-    <string name="annotation_error_text"><![CDATA[<b>Serious problems were detected, that prevent the station from getting the full rewards.</b> View reward details to identify and fix problems.]]></string>
+    <string name="annotation_info_text"><![CDATA[<b>1 minor issue</b> affecting station rewards.]]></string>
+    <string name="annotations_info_text"><![CDATA[<b>%d minor issues</b> affecting station rewards.]]></string>
+    <string name="annotation_warn_error_text"><![CDATA[<b>1 issue</b> affecting station rewards.]]></string>
+    <string name="annotations_warn_error_text"><![CDATA[<b>%d issues</b> affecting station rewards.]]></string>
     <string name="rewards_empty_title">Rewards Coming Soon!</string>
     <string name="rewards_empty_message">Your station hasn’t received any rewards yet. Sit back and relax, while our systems are validating the station’s location and data. You should start seeing rewards in the next couple of days.</string>
 
