@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import androidx.annotation.ColorRes
 import com.weatherxm.R
 import com.weatherxm.data.Reward
 import com.weatherxm.data.RewardsAnnotationGroup
@@ -49,6 +48,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
     fun updateUI(
         data: Reward?,
         rewardsHideAnnotationThreshold: Long,
+        useShortAnnotationText: Boolean,
         isInRewardDetails: Boolean,
         onViewDetails: (() -> Unit)? = null
     ) {
@@ -93,47 +93,95 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             return
         }
         if (!shouldHideAnnotations(data.baseRewardScore, rewardsHideAnnotationThreshold)) {
-            setupAnnotations(data.annotationSummary, onViewDetails)
+            setupAnnotations(data.annotationSummary, useShortAnnotationText, onViewDetails)
         }
     }
 
     private fun setupAnnotations(
         annotations: List<RewardsAnnotationGroup>?,
+        useShortAnnotationText: Boolean,
         onViewDetails: (() -> Unit)? = null
     ) {
         val severityLevels = annotations?.map {
             it.severityLevel
-        } ?: mutableListOf()
+        }
         val annotationsSize = annotations?.size ?: 0
 
-        val message = if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
-            context.getString(R.string.annotations_info_text, annotationsSize)
-        } else if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize <= 1) {
-            context.getString(R.string.annotation_info_text)
-        } else if (!severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
-            context.getString(R.string.annotations_warn_error_text, annotationsSize)
-        } else {
-            context.getString(R.string.annotation_warn_error_text)
+        if (severityLevels.isNullOrEmpty()) {
+            binding.annotationCard.setVisible(false)
+            binding.viewRewardDetails.setVisible(true)
+            return
         }
 
         if (severityLevels.contains(SeverityLevel.ERROR)) {
-            onAnnotation(R.color.errorTint, R.color.error, message, onViewDetails)
+            onAnnotation(
+                SeverityLevel.ERROR,
+                getAnnotationMessage(useShortAnnotationText, severityLevels, annotationsSize),
+                onViewDetails
+            )
         } else if (severityLevels.contains(SeverityLevel.WARNING)) {
-            onAnnotation(R.color.warningTint, R.color.warning, message, onViewDetails)
+            onAnnotation(
+                SeverityLevel.WARNING,
+                getAnnotationMessage(useShortAnnotationText, severityLevels, annotationsSize),
+                onViewDetails
+            )
         } else if (severityLevels.contains(SeverityLevel.INFO)) {
-            onAnnotation(R.color.blueTint, R.color.colorPrimary, message, onViewDetails)
+            onAnnotation(
+                SeverityLevel.INFO,
+                getAnnotationMessage(useShortAnnotationText, severityLevels, annotationsSize),
+                onViewDetails
+            )
+        }
+    }
+
+    private fun getAnnotationMessage(
+        useShortAnnotationText: Boolean,
+        severityLevels: List<SeverityLevel?>,
+        annotationsSize: Int
+    ): String {
+        return if (!useShortAnnotationText) {
+            if (severityLevels.contains(SeverityLevel.ERROR)) {
+                context.getString(R.string.annotation_error_text)
+            } else if (severityLevels.contains(SeverityLevel.WARNING)) {
+                context.getString(R.string.annotation_warn_text)
+            } else {
+                context.getString(R.string.annotation_info_text)
+            }
         } else {
-            binding.annotationCard.setVisible(false)
-            binding.viewRewardDetails.setVisible(true)
+            if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
+                context.getString(R.string.annotations_timeline_info_text, annotationsSize)
+            } else if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize <= 1) {
+                context.getString(R.string.annotation_timeline_info_text)
+            } else if (!severityLevels.contains(SeverityLevel.WARNING) && annotationsSize > 1) {
+                context.getString(R.string.annotations_timeline_warn_error_text, annotationsSize)
+            } else {
+                context.getString(R.string.annotation_timeline_warn_error_text)
+            }
         }
     }
 
     private fun onAnnotation(
-        @ColorRes backgroundColor: Int,
-        @ColorRes strokeColor: Int,
+        severityLevel: SeverityLevel,
         text: String,
         onViewDetails: (() -> Unit)? = null
     ) {
+        val strokeColor: Int
+        val backgroundColor: Int
+        when (severityLevel) {
+            SeverityLevel.ERROR -> {
+                strokeColor = R.color.error
+                backgroundColor = R.color.errorTint
+            }
+            SeverityLevel.WARNING -> {
+                strokeColor = R.color.warning
+                backgroundColor = R.color.warningTint
+            }
+            SeverityLevel.INFO -> {
+                strokeColor = R.color.lightestBlue
+                backgroundColor = R.color.blueTint
+            }
+        }
+
         binding.parentCard.setCardStroke(strokeColor, 2)
         with(binding.annotationCard) {
             setBackgroundColor(context.getColor(backgroundColor))

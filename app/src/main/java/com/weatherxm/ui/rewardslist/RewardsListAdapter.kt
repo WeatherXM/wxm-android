@@ -62,6 +62,7 @@ class RewardsListAdapter(
             binding.mainCard.updateUI(
                 item,
                 rewardsHideAnnotationThreshold,
+                useShortAnnotationText = true,
                 isInRewardDetails = false
             )
         }

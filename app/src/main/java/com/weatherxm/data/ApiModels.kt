@@ -431,7 +431,9 @@ data class Rewards(
     val totalRewards: Float?,
     val latest: Reward?,
     val timeline: List<RewardsTimestampScore>?
-) : Parcelable
+) : Parcelable {
+    fun isEmpty() = latest == null && timeline == null
+}
 
 @Keep
 @JsonClass(generateAdapter = true)
