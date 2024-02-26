@@ -78,8 +78,8 @@ class RewardsFragment : BaseFragment() {
 
         model.onRewards().observe(viewLifecycleOwner) {
             val totalRewards = it.totalRewards ?: 0F
-            binding.emptyCard.setVisible(totalRewards == 0F)
-            if (totalRewards != 0F) {
+            binding.emptyCard.setVisible(it.isEmpty())
+            if (!it.isEmpty()) {
                 binding.dailyRewardsCard.updateUI(
                     it.latest,
                     useShortAnnotationText = model.device.relation != DeviceRelation.OWNED,
