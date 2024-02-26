@@ -464,7 +464,7 @@ data class Rewards(
     val latest: Reward?,
     val timeline: List<RewardsTimelineEntry>?
 ) : Parcelable {
-    fun isEmpty() = totalRewards != null && totalRewards == 0F && latest == null && timeline == null
+    fun isEmpty() = latest == null && timeline == null
 }
 
 @Keep
