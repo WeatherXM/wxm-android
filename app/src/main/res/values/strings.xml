@@ -309,6 +309,9 @@
     <string name="rewards_empty_message">Your station hasn’t received any rewards yet. Sit back and relax, while our systems are validating the station’s location and data. You should start seeing rewards in the next couple of days.</string>
     <string name="rewards_empty_pro_tip">Pro Tip</string>
     <string name="rewards_empty_pro_tip_message">Don’t worry if you see any errors and reward losses for the first 2–3 days after claiming your station. This is expected. Keep calm and wait for the full rewards!</string>
+    <string name="reward_issues">Reward Issues</string>
+    <string name="report_for">Report for %s</string>
+
 
     <!-- Mainnet -->
     <string name="mainnet_welcome">Welcome to Mainnet!</string>

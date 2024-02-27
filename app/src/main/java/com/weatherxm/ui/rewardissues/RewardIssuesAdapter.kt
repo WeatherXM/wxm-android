@@ -1,4 +1,4 @@
-package com.weatherxm.ui.rewarddetails
+package com.weatherxm.ui.rewardissues
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,60 +8,51 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.RewardsAnnotationGroup
 import com.weatherxm.data.SeverityLevel
-import com.weatherxm.databinding.ListItemRewardProblemBinding
+import com.weatherxm.databinding.ListItemRewardIssueBinding
 import com.weatherxm.ui.common.AnnotationGroupCode
 import com.weatherxm.ui.common.UIDevice
 
-@Deprecated("Remove this and UIs on redesign of reward details")
-class RewardProblemsAdapter(
+class RewardIssuesAdapter(
     private val device: UIDevice,
-    private val listener: RewardProblemsListener
-) : ListAdapter<RewardsAnnotationGroup, RewardProblemsAdapter.RewardProblemsViewHolder>(
-    RewardProblemsDiffCallback()
+    private val listener: RewardIssuesListener
+) : ListAdapter<RewardsAnnotationGroup, RewardIssuesAdapter.RewardIssuesViewHolder>(
+    RewardIssuesDiffCallback()
 ) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RewardProblemsViewHolder {
-        val binding = ListItemRewardProblemBinding.inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RewardIssuesViewHolder {
+        val binding = ListItemRewardIssueBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return RewardProblemsViewHolder(binding)
+        return RewardIssuesViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: RewardProblemsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RewardIssuesViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class RewardProblemsViewHolder(private val binding: ListItemRewardProblemBinding) :
+    inner class RewardIssuesViewHolder(private val binding: ListItemRewardIssueBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: RewardsAnnotationGroup) {
-            with(binding.annotationContainer) {
+            with(binding.annotationCard) {
                 when (item.severityLevel) {
                     SeverityLevel.INFO -> {
                         setBackground(R.color.blueTint)
                         setStrokeColor(R.color.colorPrimaryVariant)
-                        setIcon(R.drawable.ic_info)
-                        setIconColor(R.color.colorPrimaryVariant)
                     }
                     SeverityLevel.WARNING -> {
                         setBackground(R.color.warningTint)
                         setStrokeColor(R.color.warning)
-                        setIcon(R.drawable.ic_warn)
-                        setIconColor(R.color.warning)
                     }
                     SeverityLevel.ERROR -> {
                         setBackground(R.color.errorTint)
                         setStrokeColor(R.color.error)
-                        setIcon(R.drawable.ic_warn)
-                        setIconColor(R.color.error)
                     }
                     else -> {
                         setBackground(R.color.blueTint)
                         setStrokeColor(R.color.colorPrimaryVariant)
-                        setIcon(R.drawable.ic_info)
-                        setIconColor(R.color.colorPrimaryVariant)
                     }
                 }
                 title(item.title)
@@ -73,15 +64,15 @@ class RewardProblemsAdapter(
         private fun setAction(code: AnnotationGroupCode?, docUrl: String?) {
             with(itemView.context) {
                 if (code == AnnotationGroupCode.NO_WALLET && device.isOwned()) {
-                    binding.annotationContainer.action(getString(R.string.add_wallet_now)) {
+                    binding.annotationCard.action(getString(R.string.add_wallet_now)) {
                         listener.onAddWallet(code.toString())
                     }
                 } else if (code == AnnotationGroupCode.LOCATION_NOT_VERIFIED && device.isOwned()) {
-                    binding.annotationContainer.action(getString(R.string.edit_location)) {
+                    binding.annotationCard.action(getString(R.string.edit_location)) {
                         listener.onEditLocation(device, code.toString())
                     }
                 } else if (!docUrl.isNullOrEmpty()) {
-                    binding.annotationContainer.action(getString(R.string.read_more)) {
+                    binding.annotationCard.action(getString(R.string.read_more)) {
                         listener.onDocumentation(docUrl, code.toString())
                     }
                 } else {
@@ -92,7 +83,7 @@ class RewardProblemsAdapter(
     }
 }
 
-class RewardProblemsDiffCallback : DiffUtil.ItemCallback<RewardsAnnotationGroup>() {
+class RewardIssuesDiffCallback : DiffUtil.ItemCallback<RewardsAnnotationGroup>() {
 
     override fun areItemsTheSame(
         oldItem: RewardsAnnotationGroup,
@@ -111,7 +102,7 @@ class RewardProblemsDiffCallback : DiffUtil.ItemCallback<RewardsAnnotationGroup>
     }
 }
 
-interface RewardProblemsListener {
+interface RewardIssuesListener {
     fun onAddWallet(group: String?)
     fun onDocumentation(url: String, group: String?)
     fun onEditLocation(device: UIDevice, group: String?)

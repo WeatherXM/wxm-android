@@ -58,7 +58,8 @@ class Analytics(
         NETWORK_STATS("Network Stats"),
         NETWORK_SEARCH("Network Search"),
         SORT_FILTER("Sort Filter"),
-        DEVICE_REWARD_DETAILS("Device Rewards Details")
+        DEVICE_REWARD_DETAILS("Device Rewards Details"),
+        DEVICE_REWARD_ISSUES("Device Rewards Issues")
     }
 
     // Custom Event Names
@@ -217,6 +218,7 @@ class Analytics(
         REWARD_ANNOTATIONS("Reward Annotations"),
         REWARD_DETAILS_READ_MORE("Reward Details Read More"),
         REWARD_DETAILS_ERROR("Reward Details Error"),
+        REWARD_ISSUES_ERROR("Reward Issues Error"),
         NOTIFICATIONS("notifications"),
         ON("on"),
         OFF("off")
