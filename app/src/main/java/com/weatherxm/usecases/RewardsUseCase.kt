@@ -5,7 +5,7 @@ import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.RewardsRepository
-import com.weatherxm.ui.common.UIRewardObject
+import com.weatherxm.ui.common.DailyReward
 import com.weatherxm.ui.common.UIRewardsList
 
 interface RewardsUseCase {
@@ -43,7 +43,7 @@ class RewardsUseCaseImpl(
                         tx.actualReward != null
                     }
                     .map { tx ->
-                        UIRewardObject(
+                        DailyReward(
                             context, tx, appConfigRepo.getRewardsHideAnnotationThreshold()
                         )
                     }

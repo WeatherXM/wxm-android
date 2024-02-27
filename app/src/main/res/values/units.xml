@@ -17,6 +17,13 @@
     <string name="fri">Fri</string>
     <string name="sat">Sat</string>
     <string name="sun">Sun</string>
+    <string name="mon_first_letter">M</string>
+    <string name="tue_first_letter">T</string>
+    <string name="wed_first_letter">W</string>
+    <string name="thu_first_letter">T</string>
+    <string name="fri_first_letter">F</string>
+    <string name="sat_first_letter">S</string>
+    <string name="sun_first_letter">S</string>
 
     <!-- Weather Data & Units -->
     <string name="temperature">Temperature</string>

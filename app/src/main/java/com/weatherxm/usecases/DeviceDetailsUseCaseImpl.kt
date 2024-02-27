@@ -5,6 +5,7 @@ import arrow.core.Either
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.DeviceProfile.Helium
 import com.weatherxm.data.Failure
+import com.weatherxm.data.Rewards
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_TIMEZONE
 import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.AppConfigRepository
@@ -17,8 +18,6 @@ import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
-import com.weatherxm.ui.common.UIRewardObject
-import com.weatherxm.ui.common.UIRewards
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.util.DateTimeHelper.getFormattedRelativeDay
 import java.time.ZoneId
@@ -103,26 +102,15 @@ class DeviceDetailsUseCaseImpl(
         return addressRepository.getAddressFromLocation(cell.index, cell.center)
     }
 
-    override suspend fun getRewards(deviceId: String): Either<Failure, UIRewards> {
-        return rewardsRepository.getRewards(deviceId).map { rewardsInfo ->
-            UIRewards(
-                allTimeRewards = rewardsInfo.totalRewards,
-                latest = rewardsInfo.latest?.let {
-                    UIRewardObject(
-                        context, it, appConfigRepository.getRewardsHideAnnotationThreshold()
-                    )
-                },
-                weekly = rewardsInfo.weekly?.let {
-                    UIRewardObject(
-                        context, it, appConfigRepository.getRewardsHideAnnotationThreshold(), true
-                    )
-                },
-                monthly = rewardsInfo.monthly?.let {
-                    UIRewardObject(
-                        context, it, appConfigRepository.getRewardsHideAnnotationThreshold(), true
-                    )
-                }
-            )
-        }
+    override suspend fun getRewards(deviceId: String): Either<Failure, Rewards> {
+        return rewardsRepository.getRewards(deviceId)
+    }
+
+    override fun isMainnetEnabled(): Boolean {
+        return appConfigRepository.isMainnetEnabled()
+    }
+
+    override fun getMainnetMessage(): String {
+        return appConfigRepository.getMainnetMessage()
     }
 }

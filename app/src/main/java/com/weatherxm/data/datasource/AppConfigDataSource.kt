@@ -16,6 +16,8 @@ interface AppConfigDataSource {
     fun setInstallationId(installationId: String)
     fun getInstallationId(): Either<Failure, String>
     fun getRewardsHideAnnotationThreshold(): Long
+    fun isMainnetEnabled(): Boolean
+    fun getMainnetMessage(): String
 }
 
 class AppConfigDataSourceImpl(
@@ -27,6 +29,8 @@ class AppConfigDataSourceImpl(
         const val REMOTE_CONFIG_VERSION_CODE = "android_app_version_code"
         const val REMOTE_CONFIG_MINIMUM_VERSION_CODE = "android_app_minimum_code"
         const val REMOTE_CONFIG_CHANGELOG = "android_app_changelog"
+        const val REMOTE_CONFIG_MAINNET = "feat_mainnet"
+        const val REMOTE_CONFIG_MAINNET_MESSAGE = "feat_mainnet_message"
         const val REMOTE_CONFIG_REWARDS_HIDE_ANNOTATION_THRESHOLD =
             "rewards_hide_annotation_threshold"
         const val REMOTE_CONFIG_REWARDS_HIDE_ANNOTATION_THRESHOLD_DEFAULT = 100L
@@ -70,6 +74,14 @@ class AppConfigDataSourceImpl(
 
     override fun getInstallationId(): Either<Failure, String> {
         return cacheService.getInstallationId()
+    }
+
+    override fun isMainnetEnabled(): Boolean {
+        return firebaseRemoteConfig.getBoolean(REMOTE_CONFIG_MAINNET)
+    }
+
+    override fun getMainnetMessage(): String {
+        return firebaseRemoteConfig.getString(REMOTE_CONFIG_MAINNET_MESSAGE)
     }
 
     override fun getRewardsHideAnnotationThreshold(): Long {

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
-import com.weatherxm.ui.common.UIRewardObject
+import com.weatherxm.ui.common.DailyReward
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getDefaultMessage
@@ -29,17 +29,17 @@ class RewardsListViewModel(
     private var reachedTotal = false
     private var currFromDate = ZonedDateTime.now().minusMonths(FETCH_INTERVAL_MONTHS)
     private var currToDate = ZonedDateTime.now()
-    private val currentShownRewards = mutableListOf<UIRewardObject>()
+    private val currentShownRewards = mutableListOf<DailyReward>()
 
-    private val onFirstPageRewards = MutableLiveData<Resource<List<UIRewardObject>>>().apply {
+    private val onFirstPageRewards = MutableLiveData<Resource<List<DailyReward>>>().apply {
         value = Resource.loading()
     }
 
-    private val onNewRewardsPage = MutableLiveData<Resource<List<UIRewardObject>>>()
+    private val onNewRewardsPage = MutableLiveData<Resource<List<DailyReward>>>()
 
-    fun onFirstPageRewards(): LiveData<Resource<List<UIRewardObject>>> = onFirstPageRewards
+    fun onFirstPageRewards(): LiveData<Resource<List<DailyReward>>> = onFirstPageRewards
 
-    fun onNewRewardsPage(): LiveData<Resource<List<UIRewardObject>>> = onNewRewardsPage
+    fun onNewRewardsPage(): LiveData<Resource<List<DailyReward>>> = onNewRewardsPage
 
     fun fetchFirstPageRewards(deviceId: String) {
         onFirstPageRewards.postValue(Resource.loading())

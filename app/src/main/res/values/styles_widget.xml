@@ -256,7 +256,6 @@
     </style>
 
     <style name="Widget.WeatherXM.Slider.NetworkStats" parent="Widget.WeatherXM.Slider">
-        <item name="android:stepSize">0</item>
         <item name="trackHeight">18dp</item>
         <item name="trackColorInactive">@color/colorSurface</item>
         <item name="trackColorActive">@color/network_stats_slider</item>

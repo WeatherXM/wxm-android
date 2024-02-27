@@ -458,12 +458,14 @@ data class NetworkSearchAddressResult(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class RewardsResponse(
+data class Rewards(
     @Json(name = "total_rewards")
     val totalRewards: Float?,
     val latest: Reward?,
     val timeline: List<RewardsTimelineEntry>?
-) : Parcelable
+) : Parcelable {
+    fun isEmpty() = latest == null && timeline == null
+}
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -489,40 +491,6 @@ data class RewardsTimelineEntry(
     val timestamp: ZonedDateTime?,
     @Json(name = "base_reward_score")
     val baseRewardScore: Int?
-) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class Rewards(
-    @Json(name = "total_rewards")
-    val totalRewards: Float?,
-    val latest: RewardsObject?,
-    val weekly: RewardsObject?,
-    val monthly: RewardsObject?
-) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class RewardsObject(
-    val timestamp: ZonedDateTime?,
-    @Json(name = "from_date")
-    val fromDate: ZonedDateTime?,
-    @Json(name = "to_date")
-    val toDate: ZonedDateTime?,
-    @Json(name = "reward_score")
-    val rewardScore: Int?,
-    @Json(name = "period_max_reward")
-    val periodMaxReward: Float?,
-    @Json(name = "actual_reward")
-    val actualReward: Float?,
-    @Json(name = "lost_rewards")
-    val lostRewards: Float?,
-    val timeline: RewardsTimeline?,
-    val annotations: RewardsAnnotations?,
-    @Json(name = "annotation_summary")
-    val annotationSummary: List<RewardsAnnotationGroup>?,
 ) : Parcelable
 
 @Keep

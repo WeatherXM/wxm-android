@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:orientation="vertical"
+    tools:parentTag="LinearLayout">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/parentCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="@dimen/elevation_small"
+        app:contentPadding="0dp"
+        tools:strokeColor="@color/error"
+        tools:strokeWidth="@dimen/card_stroke">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardElevation="0.001dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/dailyRewardTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/daily_reward"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/dailyRewardTimestamp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                        android:textColor="@color/colorOnSurfaceVariant"
+                        app:layout_constraintTop_toBottomOf="@id/dailyRewardTitle"
+                        tools:text="Earnings for Yesterday" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/reward"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_large"
+                        android:text="@string/reward"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
+                        android:textSize="32sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/dailyRewardTimestamp"
+                        tools:text="+ 2.5643 $WXM" />
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="@dimen/margin_small"
+                        app:dividerColor="@color/layer2"
+                        app:layout_constraintTop_toBottomOf="@id/reward" />
+
+                    <ImageView
+                        android:id="@+id/baseRewardIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:src="@drawable/ic_reward_scale"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/divider"
+                        tools:ignore="ContentDescription" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/baseRewardScore"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_extra_small"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/colorOnSurfaceVariant"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@id/baseRewardIcon"
+                        app:layout_constraintTop_toTopOf="@id/baseRewardIcon"
+                        tools:text="2.789 $WXM" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/baseRewardTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/base_reward"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/colorOnSurfaceVariant"
+                        app:layout_constraintStart_toStartOf="@id/baseRewardScore"
+                        app:layout_constraintTop_toBottomOf="@id/baseRewardScore" />
+
+                    <ImageView
+                        android:id="@+id/boostsIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_normal"
+                        android:src="@drawable/ic_reward_scale"
+                        app:layout_constraintStart_toEndOf="@id/baseRewardScore"
+                        app:layout_constraintTop_toTopOf="@id/baseRewardIcon"
+                        app:tint="@color/network_stats_chart_primary"
+                        tools:ignore="ContentDescription" />
+
+                    <FrameLayout
+                        android:id="@+id/boostsContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_extra_small"
+                        app:layout_constraintStart_toEndOf="@id/boostsIcon"
+                        app:layout_constraintTop_toTopOf="@id/boostsIcon">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/boosts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            android:textColor="@color/colorOnSurfaceVariant"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toEndOf="@id/boostsIcon"
+                            app:layout_constraintTop_toTopOf="@id/boostsIcon"
+                            tools:text="1.234 $WXM" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/noActiveBoosts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/no_active"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            android:textColor="@color/colorOnSurfaceVariant"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toEndOf="@id/boostsIcon"
+                            app:layout_constraintTop_toTopOf="@id/boostsIcon" />
+                    </FrameLayout>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/boostsTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/boosts"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/colorOnSurfaceVariant"
+                        app:layout_constraintStart_toStartOf="@id/boostsContainer"
+                        app:layout_constraintTop_toBottomOf="@id/boostsContainer" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/viewRewardDetails"
+                        style="@style/Widget.WeatherXM.Button.Ghost"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_large"
+                        android:text="@string/view_reward_details"
+                        app:layout_constraintTop_toBottomOf="@id/baseRewardTitle" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.weatherxm.ui.components.MessageCardView
+                android:id="@+id/annotationCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-16dp"
+                android:background="@color/errorTint"
+                android:elevation="0dp"
+                android:paddingTop="8dp"
+                android:visibility="gone"
+                app:message_includes_close_button="false"
+                tools:message_background_tint="@color/errorTint"
+                tools:message_icon_color="@color/error"
+                tools:message_message="@string/annotation_warn_error_text"
+                tools:visibility="visible" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</merge>

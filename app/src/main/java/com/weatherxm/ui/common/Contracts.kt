@@ -15,7 +15,7 @@ object Contracts {
     const val ARG_EXPLORER_CELL = "explorer_cell"
     const val ARG_CELL_CENTER = "cell_center"
     const val ARG_OPEN_EXPLORER_ON_BACK = "open_explorer_on_back"
-    const val ARG_REWARDS_OBJECT = "rewards_object"
+    const val ARG_REWARD = "reward"
     const val ARG_WALLET_REWARDS = "wallet_rewards"
     const val ARG_TOKEN_CLAIMED_AMOUNT = "claimed_amount"
     const val ARG_REMOTE_MESSAGE= "remote_message"

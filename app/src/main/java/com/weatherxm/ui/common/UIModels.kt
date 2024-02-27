@@ -5,7 +5,6 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.weatherxm.R
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Hex
 import com.weatherxm.data.HourlyWeather
@@ -13,17 +12,12 @@ import com.weatherxm.data.Location
 import com.weatherxm.data.QoDErrorAffects
 import com.weatherxm.data.RewardsAnnotationGroup
 import com.weatherxm.data.RewardsAnnotations
-import com.weatherxm.data.RewardsObject
 import com.weatherxm.data.Transaction
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
-import com.weatherxm.util.DateTimeHelper.getFormattedDay
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Rewards.shouldHideAnnotations
-import com.weatherxm.util.isToday
-import com.weatherxm.util.isYesterday
 import kotlinx.parcelize.Parcelize
-import java.time.ZoneId
 import java.time.ZonedDateTime
 
 @Keep
@@ -36,113 +30,34 @@ data class UIError(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class UIRewards(
-    val allTimeRewards: Float? = null,
-    var latest: UIRewardObject? = null,
-    var weekly: UIRewardObject? = null,
-    var monthly: UIRewardObject? = null,
-) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class UIRewardObject(
+data class DailyReward(
     var rewardTimestamp: ZonedDateTime? = null,
     var rewardFormattedTimestamp: String? = null,
     var rewardFormattedDate: String? = null,
     var fromDate: String? = null,
     var toDate: String? = null,
-    var actualReward: Float? = null,
+    var actualReward: Float = 0F,
     var lostRewards: Float? = null,
     var rewardScore: Int? = null,
     var periodMaxReward: Float? = null,
-    var timelineTitle: String? = null,
-    var timelineScores: List<Int> = emptyList(),
     var annotations: MutableList<UIRewardsAnnotation> = mutableListOf(),
     var annotationSummary: List<RewardsAnnotationGroup> = mutableListOf(),
 ) : Parcelable {
-    constructor(
-        context: Context,
-        rewards: RewardsObject,
-        hideAnnotationsThreshold: Long,
-        isRange: Boolean = false
-    ) : this() {
-        val utcFromDate =
-            rewards.fromDate?.withZoneSameInstant(ZoneId.of("UTC"))?.getFormattedDate()
-        val utcToDate =
-            rewards.toDate?.withZoneSameInstant(ZoneId.of("UTC"))?.getFormattedDate()
-        rewardFormattedTimestamp = if (isRange) {
-            "$utcFromDate - $utcToDate (UTC)"
-        } else {
-            rewards.timestamp?.let { timestamp ->
-                val utcTimestamp = timestamp.withZoneSameInstant(ZoneId.of("UTC"))
-                rewardTimestamp = timestamp
-                val date = utcTimestamp.getFormattedDate()
-                val time = utcTimestamp.getFormattedTime(context)
-                "$date, $time (UTC)"
-            }
-        }
-
-        fromDate = utcFromDate
-        toDate = utcToDate
-        actualReward = rewards.actualReward
-        lostRewards = rewards.lostRewards
-        rewardScore = rewards.rewardScore
-        periodMaxReward = rewards.periodMaxReward
-        setTimelineTitle(context, rewards.timeline?.referenceDate, fromDate, toDate)
-        timelineScores = rewards.timeline?.rewardScores ?: mutableListOf()
-        annotationSummary = rewards.annotationSummary?.sortedByDescending {
-            it.severityLevel?.ordinal
-        } ?: mutableListOf()
-        setAnnotations(hideAnnotationsThreshold, rewards.annotations)
-    }
-
     constructor(context: Context, tx: Transaction, hideAnnotationsThreshold: Long) : this() {
         this.rewardTimestamp = tx.timestamp
         val date = tx.timestamp.getFormattedDate()
         val time = tx.timestamp.getFormattedTime(context)
         rewardFormattedTimestamp = "$date, $time (UTC)"
         this.rewardFormattedDate = tx.timestamp.getFormattedDate(true)
-        actualReward = tx.actualReward
+        actualReward = tx.actualReward ?: 0F
+
         lostRewards = tx.lostRewards
         rewardScore = tx.rewardScore
         periodMaxReward = tx.dailyReward
-        setTimelineTitle(context, tx.timeline?.referenceDate)
-        timelineScores = tx.timeline?.rewardScores ?: mutableListOf()
         annotationSummary = tx.annotationSummary?.sortedByDescending {
             it.severityLevel?.ordinal
         } ?: mutableListOf()
         setAnnotations(hideAnnotationsThreshold, tx.annotations)
-    }
-
-    private fun setTimelineTitle(
-        context: Context,
-        referenceDate: ZonedDateTime?,
-        fromDate: String? = null,
-        toDate: String? = null
-    ) {
-        val dateToShow = referenceDate?.let {
-            val todayOrYesterday = if (it.isToday() || it.isYesterday()) {
-                it.getFormattedDay(context)
-            } else {
-                null
-            }
-            val timelineDate = it.getFormattedDate(true)
-            if (todayOrYesterday.isNullOrEmpty()) {
-                timelineDate
-            } else {
-                "$todayOrYesterday, $timelineDate"
-            }
-        } ?: kotlin.run {
-            if (fromDate != null && toDate != null) {
-                "$fromDate - $toDate"
-            } else {
-                null
-            }
-        }
-        dateToShow?.let {
-            timelineTitle = context.getString(R.string.timeline_for, it)
-        }
     }
 
     private fun setAnnotations(
@@ -171,7 +86,7 @@ data class UIRewardObject(
 @Keep
 @JsonClass(generateAdapter = true)
 data class UIRewardsList(
-    var rewards: List<UIRewardObject>,
+    var rewards: List<DailyReward>,
     var hasNextPage: Boolean = false,
     var reachedTotal: Boolean = false
 )

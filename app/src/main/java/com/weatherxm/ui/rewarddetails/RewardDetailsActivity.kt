@@ -4,20 +4,18 @@ import android.os.Bundle
 import android.view.MenuItem
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.data.Reward
 import com.weatherxm.databinding.ActivityRewardDetailsBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
-import com.weatherxm.ui.common.Contracts.ARG_REWARDS_OBJECT
+import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.UIRewardObject
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Analytics
-import com.weatherxm.util.Rewards.formatLostRewards
 import timber.log.Timber
 
 class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
@@ -31,8 +29,8 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
         binding.root.applyInsets()
 
         val device = intent?.extras?.parcelable<UIDevice>(ARG_DEVICE)
-        val rewardsObject = intent?.extras?.parcelable<UIRewardObject>(ARG_REWARDS_OBJECT)
-        if (device == null || rewardsObject == null) {
+        val reward = intent?.extras?.parcelable<Reward>(ARG_REWARD)
+        if (device == null || reward == null) {
             Timber.d("Could not start RewardDetailsActivity. Device or Rewards Object is null.")
             toast(R.string.error_generic_message)
             finish()
@@ -53,15 +51,11 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
         binding.contactSupportBtn.setVisible(device.isOwned())
 
         binding.rewardsContentCard.updateUI(
-            rewardsObject,
-            device,
-            onInfoButton = { title, htmlMessage ->
-                navigator.showMessageDialog(
-                    supportFragmentManager, title = title, htmlMessage = htmlMessage
-                )
-            }
+            reward,
+            useShortAnnotationText = false,
+            isInRewardDetails = true
         )
-        updateErrors(device, rewardsObject)
+        updateErrors(device, reward)
     }
 
     override fun onResume() {
@@ -69,19 +63,9 @@ class RewardDetailsActivity : BaseActivity(), RewardProblemsListener {
         analytics.trackScreen(Analytics.Screen.DEVICE_REWARD_DETAILS, this::class.simpleName)
     }
 
-    private fun updateErrors(device: UIDevice, data: UIRewardObject) {
-        val hasAnnotations = data.annotations.isNotEmpty()
-        binding.problemsFoundTitle.setVisible(hasAnnotations)
-        binding.problemsFoundDesc.setVisible(hasAnnotations)
-        binding.problemsList.setVisible(hasAnnotations)
-        if (data.lostRewards == 0F && data.periodMaxReward == 0F) {
-            binding.problemsFoundDesc.setHtml(getString(R.string.problems_found_desc_no_rewards))
-        } else if ((data.lostRewards ?: 0F) == 0F) {
-            binding.problemsFoundDesc.setText(R.string.problems_found_desc_without_lost_rewards)
-        } else {
-            val lostRewards = formatLostRewards(data.lostRewards)
-            binding.problemsFoundDesc.setHtml(getString(R.string.problems_found_desc, lostRewards))
-        }
+    private fun updateErrors(device: UIDevice, data: Reward) {
+        binding.problemsFoundTitle.setVisible(data.annotationSummary?.isNotEmpty() == true)
+        binding.problemsList.setVisible(data.annotationSummary?.isNotEmpty() == true)
 
         val adapter = RewardProblemsAdapter(device, this)
         binding.problemsList.adapter = adapter

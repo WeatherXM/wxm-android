@@ -4,16 +4,42 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.firebase.analytics.FirebaseAnalytics
+import androidx.annotation.ColorRes
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.weatherxm.R
+import com.weatherxm.data.RewardsTimelineEntry
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsRewardsBinding
-import com.weatherxm.ui.common.onTabSelected
+import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.Rewards.getRewardScoreColor
+import com.weatherxm.util.getFirstLetter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -39,43 +65,34 @@ class RewardsFragment : BaseFragment() {
         parentModel.onFollowStatus().observe(viewLifecycleOwner) {
             if (it.status == Status.SUCCESS) {
                 model.device = parentModel.device
-                model.fetchRewardsFromNetwork(
-                    RewardsViewModel.TabSelected.entries[binding.selectorGroup.selectedTabPosition]
-                )
+                model.fetchRewardsFromNetwork()
             }
         }
 
-        model.onRewardsObject().observe(viewLifecycleOwner) {
-            binding.rewardsContentCard.updateUI(
-                it,
-                model.device,
-                RewardsViewModel.TabSelected.entries[binding.selectorGroup.selectedTabPosition],
-                onInfoButton = { title, htmlMessage ->
-                    navigator.showMessageDialog(
-                        childFragmentManager, title = title, htmlMessage = htmlMessage
-                    )
-                }
-            ) {
-                val tabSelected =
-                    RewardsViewModel.TabSelected.entries[binding.selectorGroup.selectedTabPosition]
-                analytics.trackEventUserAction(
-                    Analytics.ParamValue.IDENTIFY_PROBLEMS.paramValue,
-                    Analytics.Screen.DEVICE_REWARDS.screenName,
-                    Pair(FirebaseAnalytics.Param.ITEM_ID, tabSelected.analyticsValue)
-                )
-                if (tabSelected == RewardsViewModel.TabSelected.LATEST) {
-                    navigator.showRewardDetails(requireContext(), model.device, it)
-                } else {
-                    navigator.showRewardsList(requireContext(), model.device)
-                }
+        model.onMainnet().observe(viewLifecycleOwner) {
+            if (!it.isNullOrEmpty()) {
+                binding.mainnetMessage.text = it
+                binding.mainnetCard.setVisible(true)
             }
-            binding.rewardsMainCard.setVisible(true)
         }
 
-        model.onTotalRewards().observe(viewLifecycleOwner) { rewards ->
-            rewards?.let {
+        model.onRewards().observe(viewLifecycleOwner) {
+            val totalRewards = it.totalRewards ?: 0F
+            binding.emptyCard.setVisible(it.isEmpty())
+            if (!it.isEmpty()) {
+                binding.dailyRewardsCard.updateUI(
+                    it.latest,
+                    useShortAnnotationText = model.device.relation != DeviceRelation.OWNED,
+                    isInRewardDetails = false
+                ) {
+                    navigator.showRewardDetails(requireContext(), model.device, it.latest)
+                }
                 binding.totalRewards.text =
-                    getString(R.string.wxm_amount, formatTokens(rewards.toBigDecimal()))
+                    getString(R.string.wxm_amount, formatTokens(totalRewards.toBigDecimal()))
+                updateWeeklyStreak(it.timeline)
+                binding.dailyRewardsCard.setVisible(true)
+                binding.totalCard.setVisible(true)
+                binding.weeklyCard.setVisible(true)
             }
         }
 
@@ -83,7 +100,9 @@ class RewardsFragment : BaseFragment() {
             if (it && binding.swiperefresh.isRefreshing) {
                 binding.progress.visibility = View.INVISIBLE
             } else if (it) {
-                binding.rewardsMainCard.setVisible(false)
+                binding.totalCard.setVisible(false)
+                binding.dailyRewardsCard.setVisible(false)
+                binding.weeklyCard.setVisible(false)
                 binding.progress.visibility = View.VISIBLE
             } else {
                 binding.swiperefresh.isRefreshing = false
@@ -92,40 +111,125 @@ class RewardsFragment : BaseFragment() {
         }
 
         model.onError().observe(viewLifecycleOwner) {
-            binding.rewardsMainCard.setVisible(false)
+            binding.totalCard.setVisible(false)
+            binding.dailyRewardsCard.setVisible(false)
+            binding.weeklyCard.setVisible(false)
             showSnackbarMessage(binding.root, it.errorMessage, it.retryFunction)
         }
 
         binding.swiperefresh.setOnRefreshListener {
-            model.fetchRewardsFromNetwork(
-                RewardsViewModel.TabSelected.entries[binding.selectorGroup.selectedTabPosition]
-            )
+            model.fetchRewardsFromNetwork()
         }
 
-        binding.selectorGroup.onTabSelected {
-            trackRangeToggle(RewardsViewModel.TabSelected.entries[it.position].analyticsValue)
-            model.fetchRewards(RewardsViewModel.TabSelected.entries[it.position])
-        }
-
-        binding.seeDetailedRewards.setOnClickListener {
+        binding.viewTimeline.setOnClickListener {
             navigator.showRewardsList(requireContext(), model.device)
         }
 
+        model.fetchMainnetStatus()
         model.fetchRewardsFromNetwork()
+    }
+
+    private fun updateWeeklyStreak(timeline: List<RewardsTimelineEntry>?) {
+        val fromDate = timeline?.firstOrNull()?.timestamp?.getFormattedDate() ?: String.empty()
+        val toDate = timeline?.lastOrNull()?.timestamp?.getFormattedDate() ?: String.empty()
+        binding.weeklyStreak.text = getString(R.string.weekly_streak_desc, fromDate, toDate)
+
+        binding.weeklyTimeline.setContent {
+            WeeklyStreak(fromDate, toDate, timeline)
+        }
+    }
+
+    @Suppress("FunctionNaming")
+    @Composable
+    internal fun WeeklyStreak(
+        fromDate: String,
+        toDate: String,
+        timeline: List<RewardsTimelineEntry>?
+    ) {
+        Column(
+            modifier = Modifier.then(Modifier.fillMaxWidth())
+        ) {
+            Row(
+                modifier = Modifier.then(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(12.dp, 0.dp, 12.dp, 0.dp)
+                ),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom
+            ) {
+                timeline?.forEach { item ->
+                    BarAndText(item)
+                }
+            }
+            Row(
+                modifier = Modifier.then(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(0.dp, 8.dp, 0.dp, 0.dp)
+                ),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Text(
+                    text = fromDate,
+                    fontSize = 12.sp,
+                    color = Color(requireContext().getColor(R.color.colorOnSurface)),
+                )
+                Text(
+                    text = toDate,
+                    fontSize = 12.sp,
+                    color = Color(requireContext().getColor(R.color.colorOnSurface)),
+                )
+            }
+        }
+    }
+
+    @Suppress("FunctionNaming", "MagicNumber")
+    @Composable
+    private fun BarAndText(entry: RewardsTimelineEntry) {
+        Column(
+            modifier = Modifier.then(Modifier.width(20.dp)),
+            verticalArrangement = Arrangement.SpaceAround,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box {
+                Bar(colorId = R.color.blueTint)
+                entry.baseRewardScore?.let {
+                    // Fit the value (0-100) in the 20-100 range
+                    val normalizedValue = (it.toFloat() / 100F * 60F + 20F).toInt()
+                    Bar(height = normalizedValue, colorId = getRewardScoreColor(it))
+                }
+            }
+            context?.let {
+                Text(
+                    text = entry.timestamp?.dayOfWeek?.getFirstLetter(it) ?: String.empty(),
+                    Modifier.padding(0.dp, 4.dp, 0.dp, 0.dp),
+                    fontSize = 12.sp,
+                    color = Color(requireContext().getColor(R.color.colorOnSurface)),
+                )
+            }
+        }
+    }
+
+    @Suppress("FunctionNaming")
+    @Composable
+    private fun BoxScope.Bar(height: Int = 80, @ColorRes colorId: Int) {
+        val radius = dimensionResource(id = R.dimen.radius_medium)
+        Spacer(
+            modifier = Modifier
+                .height(height.dp)
+                .width(20.dp)
+                .align(Alignment.BottomCenter)
+                .background(
+                    colorResource(id = colorId),
+                    RoundedCornerShape(radius, radius, radius, radius)
+                )
+        )
     }
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(
-            Analytics.Screen.DEVICE_REWARDS, RewardsFragment::class.simpleName
-        )
-    }
-
-    private fun trackRangeToggle(newRange: String) {
-        analytics.trackEventSelectContent(
-            Analytics.ParamValue.REWARDS_CARD.paramValue,
-            Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
-            Pair(Analytics.CustomParam.STATE.paramName, newRange)
-        )
+        analytics.trackScreen(Analytics.Screen.DEVICE_REWARDS, RewardsFragment::class.simpleName)
     }
 }

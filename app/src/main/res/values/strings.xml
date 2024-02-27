@@ -35,10 +35,7 @@
     <string name="action_scan_qr">Scan QR Code</string>
     <string name="important_message">Important Message</string>
     <string name="contact_us">Contact us</string>
-    <string name="select_date">Select Date</string>
-    <string name="start_of_day_hour">12 am</string>
-    <string name="mid_of_day_hour">12 pm</string>
-    <string name="end_of_day_hour">11 pm</string>
+    <string name="select_date">Select Date</string>>
     <string name="read_more">Read More</string>
     <string name="need_help_contact_support">Need more help? Contact Support</string>
 
@@ -88,6 +85,7 @@
     <string name="manufacturer_title">Are you a station manufacturer?</string>
     <string name="manufacturer_prompt">Join the ecosystem</string>
     <string name="last_updated">Last Updated on %s</string>
+    <string name="total">Total</string>
 
     <!-- Network Stats & Search -->
     <string name="search_station_name_address">Search station name or address</string>
@@ -229,14 +227,20 @@
     <string name="info_registration_contact_support">Not receiving an activation email? Contact our support team.</string>
 
     <!-- Rewards -->
-    <string name="title_device_rewards">Detailed $WXM Rewards</string>
-    <string name="see_wxm_rewards">See Detailed $WXM Rewards</string>
+    <string name="title_reward_timeline">Reward Timeline</string>
+    <string name="view_timeline">View Timeline</string>
     <string name="no_transactions_title">Oh, no! No transactions yet?</string>
     <string name="rewards">Rewards</string>
-    <string name="total">Total</string>
-    <string name="device_detail_token_notice"><![CDATA[<strong>IMPORTANT:</strong> During beta phase, $WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after $WXM mainnet token launch. Actual rewards may differ from the ones you see above.]]></string>
     <string name="wxm_amount">%s $WXM</string>
     <string name="reward">+ %s $WXM</string>
+    <string name="daily_reward">Daily Reward</string>
+    <string name="earnings_for">Earnings for %s</string>
+    <string name="base_reward">Base Reward</string>
+    <string name="boosts">Boosts</string>
+    <string name="no_active">No Active</string>
+    <string name="view_reward_details">View Reward Details</string>
+    <string name="weekly_streak">Weekly Streak</string>
+    <string name="weekly_streak_desc">Base reward scores from %1$s to %2$s</string>
     <string name="score">%.2f</string>
     <string name="score_unknown">N/A</string>
     <string name="reward_score">Reward Score</string>
@@ -245,7 +249,6 @@
     <string name="max_rewards_desc"><![CDATA[The maximum rewards you could earn in that reward distribution if you had a perfect 100&percnt; reward score. You can read more about our reward mechanism <a href="%1$s">here</a>.]]></string>
     <string name="problems_found">Problems Found</string>
     <string name="problems_found_desc"><![CDATA[<b>Lost %s $WXM</b> because of station problems.]]></string>
-    <string name="problems_found_desc_no_rewards"><![CDATA[<b>Did not earn any $WXM</b> because of station problems.]]></string>
     <string name="problems_found_desc_without_lost_rewards">Some station problems found but did not lose any rewards.</string>
     <string name="identify_fix_problems">Identify &amp; Fix Problems</string>
     <string name="see_detailed_problems">See Detailed Problems</string>
@@ -314,6 +317,18 @@
     <string name="annotation_unknown">Unknown error</string>
     <string name="annotation_unknown_desc"><![CDATA[There seems to be an unknown issue with your station. Please make sure you are running the latest version of our mobile app and your station is upgraded to the latest firmware.]]></string>
     <string name="annotation_unknown_public_desc"><![CDATA[There seems to be an unknown issue with this station. Please make sure you are running the latest version of our mobile app.]]></string>
+    <string name="annotation_info_text"><![CDATA[Minor issues slightly affected your rewards. This may happen occasionally, but we thought you should know. View reward details to identify and fix problems.]]></string>
+    <string name="annotation_warn_text"><![CDATA[Some issues prevent your station from getting the full rewards. View reward details to identify and fix problems.]]></string>
+    <string name="annotation_error_text"><![CDATA[Serious problems were detected, that prevent the station from getting the full rewards. View reward details to identify and fix problems.]]></string>
+    <string name="annotation_timeline_info_text"><![CDATA[<b>1 minor issue</b> affecting station rewards.]]></string>
+    <string name="annotations_timeline_info_text"><![CDATA[<b>%d minor issues</b> affecting station rewards.]]></string>
+    <string name="annotation_timeline_warn_error_text"><![CDATA[<b>1 issue</b> affecting station rewards.]]></string>
+    <string name="annotations_timeline_warn_error_text"><![CDATA[<b>%d issues</b> affecting station rewards.]]></string>
+    <string name="rewards_empty_title">Rewards Coming Soon!</string>
+    <string name="rewards_empty_message">Your station hasn’t received any rewards yet. Sit back and relax, while our systems are validating the station’s location and data. You should start seeing rewards in the next couple of days.</string>
+
+    <!-- Mainnet -->
+    <string name="mainnet_welcome">Welcome to Mainnet!</string>
 
     <!-- Claim Rewards -->
     <string name="claim_rewards">Claim Rewards</string>
