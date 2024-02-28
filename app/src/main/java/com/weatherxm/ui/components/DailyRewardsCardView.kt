@@ -15,6 +15,7 @@ import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.getRewardScoreColor
+import com.weatherxm.util.Rewards.shouldHideAnnotations
 import com.weatherxm.util.Weather.EMPTY_VALUE
 import org.koin.core.component.KoinComponent
 
@@ -46,13 +47,14 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
 
     fun updateUI(
         data: Reward?,
+        rewardsHideAnnotationThreshold: Long,
         useShortAnnotationText: Boolean,
         isInRewardDetails: Boolean,
         onViewDetails: (() -> Unit)? = null
     ) {
         if (data == null) return
 
-        if (onViewDetails != null && !isInRewardDetails) {
+        if (onViewDetails != null) {
             binding.viewRewardDetails.setOnClickListener {
                 onViewDetails.invoke()
             }
@@ -90,11 +92,9 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             binding.annotationCard.setVisible(false)
             return
         }
-        setupAnnotations(
-            data.annotationSummary,
-            useShortAnnotationText,
-            onViewDetails
-        )
+        if (!shouldHideAnnotations(data.baseRewardScore, rewardsHideAnnotationThreshold)) {
+            setupAnnotations(data.annotationSummary, useShortAnnotationText, onViewDetails)
+        }
     }
 
     private fun setupAnnotations(
@@ -177,13 +177,12 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
                 backgroundColor = R.color.warningTint
             }
             SeverityLevel.INFO -> {
-                strokeColor = R.color.lightestBlue
+                strokeColor = R.color.light_lightest_blue
                 backgroundColor = R.color.blueTint
             }
         }
 
         binding.parentCard.setCardStroke(strokeColor, 2)
-
         with(binding.annotationCard) {
             setBackgroundColor(context.getColor(backgroundColor))
             setBackground(backgroundColor)

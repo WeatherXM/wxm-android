@@ -37,9 +37,8 @@ class StatsUseCaseImpl(
                 ),
                 lastDataDays = getValidLastOfEntries(dataDaysEntries),
                 dataDaysEntries = dataDaysEntries,
-                dataDaysStartDate = stats.dataDays?.first()?.ts?.getFormattedDate()
-                    ?: String.empty(),
-                dataDaysEndDate = stats.dataDays?.last()?.ts?.getFormattedDate() ?: String.empty(),
+                dataDaysStartDate = stats.dataDays?.first()?.ts.getFormattedDate(),
+                dataDaysEndDate = stats.dataDays?.last()?.ts.getFormattedDate(),
                 totalRewards = compactNumber(stats.tokens?.allocatedPerDay?.last()?.value),
                 totalRewards30D = compactNumber(
                     (stats.tokens?.allocatedPerDay?.last()?.value ?: 0.0)
@@ -47,14 +46,13 @@ class StatsUseCaseImpl(
                 ),
                 lastRewards = getValidLastOfEntries(rewardEntries),
                 rewardsEntries = rewardEntries,
-                rewardsStartDate = stats.tokens?.allocatedPerDay?.first()?.ts?.getFormattedDate()
-                    ?: String.empty(),
+                rewardsStartDate = stats.tokens?.allocatedPerDay?.first()?.ts.getFormattedDate(),
                 rewardsEndDate = run {
                     stats.tokens?.allocatedPerDay?.size?.let {
                         if (it >= 2 && !isLastDayValid(stats.tokens.allocatedPerDay)) {
-                            stats.tokens.allocatedPerDay[it - 2].ts?.getFormattedDate()
+                            stats.tokens.allocatedPerDay[it - 2].ts.getFormattedDate()
                         } else {
-                            stats.tokens.allocatedPerDay.last().ts?.getFormattedDate()
+                            stats.tokens.allocatedPerDay.last().ts.getFormattedDate()
                         }
                     } ?: String.empty()
                 },

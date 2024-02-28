@@ -11,7 +11,7 @@ import com.weatherxm.data.NetworkStatsResponse
 import com.weatherxm.data.PublicDevice
 import com.weatherxm.data.PublicHex
 import com.weatherxm.data.Rewards
-import com.weatherxm.data.TransactionsResponse
+import com.weatherxm.data.RewardsTimeline
 import com.weatherxm.data.User
 import com.weatherxm.data.Wallet
 import com.weatherxm.data.WalletRewards
@@ -170,21 +170,21 @@ interface ApiService {
 
     @Suppress("LongParameterList")
     @Mock
-    @MockResponse(body = "mock_files/get_user_device_transactions.json")
-    @GET("/api/v1/devices/{deviceId}/tokens/transactions")
+    @MockResponse(body = "mock_files/get_device_rewards_timeline.json")
+    @GET("/api/v1/devices/{deviceId}/tokens/timeline")
     @Headers(NO_AUTH_HEADER)
-    suspend fun getTransactions(
+    suspend fun getRewardsTimeline(
         @Path("deviceId") deviceId: String,
         @Query("page") page: Int? = null,
         @Query("pageSize") pageSize: Int? = null,
         @Query("timezone") timezone: String? = null,
         @Query("fromDate") fromDate: String? = null,
         @Query("toDate") toDate: String? = null,
-    ): NetworkResponse<TransactionsResponse, ErrorResponse>
+    ): NetworkResponse<RewardsTimeline, ErrorResponse>
 
     @Suppress("LongParameterList")
     @Mock
-    @MockResponse(body = "mock_files/get_user_device_rewards.json")
+    @MockResponse(body = "mock_files/get_device_rewards.json")
     @GET("/api/v1/devices/{deviceId}/tokens")
     @Headers(NO_AUTH_HEADER)
     suspend fun getRewards(

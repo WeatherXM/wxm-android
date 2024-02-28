@@ -1,6 +1,5 @@
 package com.weatherxm.ui.common
 
-import android.content.Context
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
@@ -10,13 +9,8 @@ import com.weatherxm.data.Hex
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.Location
 import com.weatherxm.data.QoDErrorAffects
-import com.weatherxm.data.RewardsAnnotationGroup
-import com.weatherxm.data.RewardsAnnotations
-import com.weatherxm.data.Transaction
+import com.weatherxm.data.Reward
 import com.weatherxm.util.Analytics
-import com.weatherxm.util.DateTimeHelper.getFormattedDate
-import com.weatherxm.util.DateTimeHelper.getFormattedTime
-import com.weatherxm.util.Rewards.shouldHideAnnotations
 import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
 
@@ -29,64 +23,8 @@ data class UIError(
 
 @Keep
 @JsonClass(generateAdapter = true)
-@Parcelize
-data class DailyReward(
-    var rewardTimestamp: ZonedDateTime? = null,
-    var rewardFormattedTimestamp: String? = null,
-    var rewardFormattedDate: String? = null,
-    var fromDate: String? = null,
-    var toDate: String? = null,
-    var actualReward: Float = 0F,
-    var lostRewards: Float? = null,
-    var rewardScore: Int? = null,
-    var periodMaxReward: Float? = null,
-    var annotations: MutableList<UIRewardsAnnotation> = mutableListOf(),
-    var annotationSummary: List<RewardsAnnotationGroup> = mutableListOf(),
-) : Parcelable {
-    constructor(context: Context, tx: Transaction, hideAnnotationsThreshold: Long) : this() {
-        this.rewardTimestamp = tx.timestamp
-        val date = tx.timestamp.getFormattedDate()
-        val time = tx.timestamp.getFormattedTime(context)
-        rewardFormattedTimestamp = "$date, $time (UTC)"
-        this.rewardFormattedDate = tx.timestamp.getFormattedDate(true)
-        actualReward = tx.actualReward ?: 0F
-
-        lostRewards = tx.lostRewards
-        rewardScore = tx.rewardScore
-        periodMaxReward = tx.dailyReward
-        annotationSummary = tx.annotationSummary?.sortedByDescending {
-            it.severityLevel?.ordinal
-        } ?: mutableListOf()
-        setAnnotations(hideAnnotationsThreshold, tx.annotations)
-    }
-
-    private fun setAnnotations(
-        hideAnnotationsThreshold: Long,
-        annotations: RewardsAnnotations?
-    ) {
-        this.annotations = mutableListOf()
-        annotations?.pol?.forEach {
-            this.annotations.add(UIRewardsAnnotation(it.toAnnotationCode(), it.ratio))
-        }
-        annotations?.rm?.forEach {
-            this.annotations.add(UIRewardsAnnotation(it.toAnnotationCode(), it.ratio))
-        }
-        if (!shouldHideAnnotations(rewardScore, hideAnnotationsThreshold)) {
-            annotations?.qod?.forEach {
-                val qodRewardsAnnotation = UIRewardsAnnotation(it.toAnnotationCode(), it.ratio)
-                it.affects?.let { affectedParameters ->
-                    qodRewardsAnnotation.qodParametersAffected = affectedParameters
-                }
-                this.annotations.add(qodRewardsAnnotation)
-            }
-        }
-    }
-}
-
-@Keep
-@JsonClass(generateAdapter = true)
-data class UIRewardsList(
-    var rewards: List<DailyReward>,
+data class UIRewardsTimeline(
+    var rewards: List<Reward>,
     var hasNextPage: Boolean = false,
     var reachedTotal: Boolean = false
 )

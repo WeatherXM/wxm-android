@@ -27,7 +27,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.weatherxm.R
-import com.weatherxm.data.RewardsTimelineEntry
+import com.weatherxm.data.RewardsTimestampScore
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsRewardsBinding
 import com.weatherxm.ui.common.DeviceRelation
@@ -82,6 +82,7 @@ class RewardsFragment : BaseFragment() {
             if (!it.isEmpty()) {
                 binding.dailyRewardsCard.updateUI(
                     it.latest,
+                    model.getRewardsHideAnnotationThreshold(),
                     useShortAnnotationText = model.device.relation != DeviceRelation.OWNED,
                     isInRewardDetails = false
                 ) {
@@ -129,9 +130,9 @@ class RewardsFragment : BaseFragment() {
         model.fetchRewardsFromNetwork()
     }
 
-    private fun updateWeeklyStreak(timeline: List<RewardsTimelineEntry>?) {
-        val fromDate = timeline?.firstOrNull()?.timestamp?.getFormattedDate() ?: String.empty()
-        val toDate = timeline?.lastOrNull()?.timestamp?.getFormattedDate() ?: String.empty()
+    private fun updateWeeklyStreak(timeline: List<RewardsTimestampScore>?) {
+        val fromDate = timeline?.firstOrNull()?.timestamp.getFormattedDate()
+        val toDate = timeline?.lastOrNull()?.timestamp.getFormattedDate()
         binding.weeklyStreak.text = getString(R.string.weekly_streak_desc, fromDate, toDate)
 
         binding.weeklyTimeline.setContent {
@@ -144,7 +145,7 @@ class RewardsFragment : BaseFragment() {
     internal fun WeeklyStreak(
         fromDate: String,
         toDate: String,
-        timeline: List<RewardsTimelineEntry>?
+        timeline: List<RewardsTimestampScore>?
     ) {
         Column(
             modifier = Modifier.then(Modifier.fillMaxWidth())
@@ -187,7 +188,7 @@ class RewardsFragment : BaseFragment() {
 
     @Suppress("FunctionNaming", "MagicNumber")
     @Composable
-    private fun BarAndText(entry: RewardsTimelineEntry) {
+    private fun BarAndText(entry: RewardsTimestampScore) {
         Column(
             modifier = Modifier.then(Modifier.width(20.dp)),
             verticalArrangement = Arrangement.SpaceAround,

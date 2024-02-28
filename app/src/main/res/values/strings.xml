@@ -241,27 +241,8 @@
     <string name="view_reward_details">View Reward Details</string>
     <string name="weekly_streak">Weekly Streak</string>
     <string name="weekly_streak_desc">Base reward scores from %1$s to %2$s</string>
-    <string name="score">%.2f</string>
-    <string name="score_unknown">N/A</string>
-    <string name="reward_score">Reward Score</string>
-    <string name="reward_score_desc"><![CDATA[A score from 0–1 (0–100&percnt;) which takes into account multiple factors in order to calculate the rewards you will earn on any given date. You can read more about these factors and our reward mechanism <a href="%1$s">here</a>.]]></string>
-    <string name="max_rewards">Max Rewards</string>
-    <string name="max_rewards_desc"><![CDATA[The maximum rewards you could earn in that reward distribution if you had a perfect 100&percnt; reward score. You can read more about our reward mechanism <a href="%1$s">here</a>.]]></string>
     <string name="problems_found">Problems Found</string>
-    <string name="problems_found_desc"><![CDATA[<b>Lost %s $WXM</b> because of station problems.]]></string>
-    <string name="problems_found_desc_without_lost_rewards">Some station problems found but did not lose any rewards.</string>
-    <string name="identify_fix_problems">Identify &amp; Fix Problems</string>
-    <string name="see_detailed_problems">See Detailed Problems</string>
-    <string name="rewards_got_all">Got 100%</string>
-    <string name="rewards_lost">Lost %d%%</string>
-    <string name="timeline_for">Timeline for %s (UTC)</string>
-    <string name="timeline">Timeline</string>
-    <string name="timeline_desc"><![CDATA[Timeline for the reference day of the actual rewards, as these are calculated taking into account the performance of the weather station for that day.<br><br>Note that <b>all times and dates are in UTC</b>, whereas this station is in the <b>UTC%1$s</b> timezone.<br><br>You can read more about our reward mechanism <a href="%2$s">here</a>.]]></string>
-    <string name="timeline_desc_utc_only"><![CDATA[Timeline for the reference day of the actual rewards, as these are calculated taking into account the performance of the weather station for that day.<br><br>Note that <b>all times and dates are in UTC.</b><br><br>You can read more about our reward mechanism <a href="%1$s">here</a>.]]></string>
     <string name="total_station_rewards">Total Station Rewards</string>
-    <string name="latest">Latest</string>
-    <string name="last_7d">Last 7D</string>
-    <string name="last_30d">Last 30D</string>
     <string name="reward_details">Reward Details</string>
     <string name="annotation_obc">Values out of bounds</string>
     <string name="annotation_obc_desc"><![CDATA[Some measurements (%s) were found to have out of bound values, compared to sensor specifications. <b>This could be due to a faulty sensor or outdated firmware.</b>]]></string>

@@ -8,7 +8,6 @@ import com.weatherxm.data.Reward
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityRewardsListBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
-import com.weatherxm.ui.common.DailyReward
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.parcelable
@@ -45,30 +44,19 @@ class RewardsListActivity : BaseActivity() {
         }
 
         deviceId = device.id
-        binding.toolbar.subtitle = device.getDefaultOrFriendlyName()
 
         // Initialize the adapter with empty data
         adapter = RewardsListAdapter(
-            device.relation,
+            model.getRewardsHideAnnotationThreshold(),
             onRewardDetails = {
                 analytics.trackEventUserAction(
                     Analytics.ParamValue.IDENTIFY_PROBLEMS.paramValue,
                     Analytics.Screen.DEVICE_REWARD_TRANSACTIONS.screenName
                 )
-                navigator.showRewardDetails(
-                    this,
-                    device,
-                    Reward(
-                        it.rewardTimestamp,
-                        it.actualReward,
-                        0F,
-                        it.actualReward,
-                        it.rewardScore,
-                        it.annotationSummary
-                    )
-                )
+                navigator.showRewardDetails(this, device, it)
             },
-            onEndOfData = { endOfDataListener() })
+            onEndOfData = { endOfDataListener() }
+        )
         binding.recycler.adapter = adapter
 
         model.onFirstPageRewards().observe(this) {
@@ -87,7 +75,7 @@ class RewardsListActivity : BaseActivity() {
         analytics.trackScreen(Analytics.Screen.DEVICE_REWARD_TRANSACTIONS, this::class.simpleName)
     }
 
-    private fun updateUIFirstPage(resource: Resource<List<DailyReward>>) {
+    private fun updateUIFirstPage(resource: Resource<List<Reward>>) {
         when (resource.status) {
             Status.SUCCESS -> {
                 if (!resource.data.isNullOrEmpty()) {
@@ -122,7 +110,7 @@ class RewardsListActivity : BaseActivity() {
         }
     }
 
-    private fun updateUINewPage(resource: Resource<List<DailyReward>>) {
+    private fun updateUINewPage(resource: Resource<List<Reward>>) {
         when (resource.status) {
             Status.SUCCESS -> {
                 if (!resource.data.isNullOrEmpty()) {
