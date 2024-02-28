@@ -20,10 +20,15 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/ic_back"
-            app:title="@string/reward_issues"
-            tools:subtitle="Report for Dec 6, 2023 (UTC)" />
+            app:navigationIcon="@drawable/ic_back" />
 
+        <com.weatherxm.ui.components.HeaderView
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_normal_to_large"
+            android:layout_marginTop="@dimen/margin_small"
+            app:header_title="@string/reward_issues" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

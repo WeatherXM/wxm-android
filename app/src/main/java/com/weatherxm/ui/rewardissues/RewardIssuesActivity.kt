@@ -38,8 +38,10 @@ class RewardIssuesActivity : BaseActivity(), RewardIssuesListener {
 
         with(binding.toolbar) {
             setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
-            subtitle = getString(R.string.report_for, reward.timestamp?.getFormattedDate(true))
         }
+        binding.header.subtitle(
+            getString(R.string.report_for, reward.timestamp?.getFormattedDate(true))
+        )
 
         val adapter = RewardIssuesAdapter(device, this)
         binding.recycler.adapter = adapter
