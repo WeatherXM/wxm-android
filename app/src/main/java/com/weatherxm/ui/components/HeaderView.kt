@@ -17,7 +17,7 @@ open class HeaderView : LinearLayout, KoinComponent {
     }
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        init(context)
+        init(context, attrs)
     }
 
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
@@ -25,7 +25,7 @@ open class HeaderView : LinearLayout, KoinComponent {
         attrs,
         defStyleAttr
     ) {
-        init(context)
+        init(context, attrs)
     }
 
     private fun init(context: Context?, attrs: AttributeSet? = null) {
@@ -38,6 +38,7 @@ open class HeaderView : LinearLayout, KoinComponent {
         attributes.getString(R.styleable.HeaderView_header_title)?.let {
             title(it)
         }
+        attributes.recycle()
     }
 
     fun title(title: String): HeaderView {
