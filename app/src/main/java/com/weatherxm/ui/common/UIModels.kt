@@ -325,5 +325,8 @@ enum class AnnotationCode : Parcelable {
 enum class AnnotationGroupCode : Parcelable {
     NO_WALLET,
     LOCATION_NOT_VERIFIED,
+    NO_LOCATION_DATA,
+    USER_RELOCATION_PENALTY,
+    CELL_CAPACITY_REACHED,
     UNKNOWN
 }
