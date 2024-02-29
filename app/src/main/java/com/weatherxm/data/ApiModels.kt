@@ -513,6 +513,65 @@ data class RewardsAnnotationGroup(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
+data class RewardDetails(
+    val timestamp: ZonedDateTime?,
+    @Json(name = "total_daily_reward")
+    val totalDailyReward: Float?,
+    val base: BaseReward?,
+    val boost: BoostRewards,
+    @Json(name = "annotation_summary")
+    val annotationSummary: List<RewardsAnnotationGroup>?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class BaseReward(
+    @Json(name = "actual_reward")
+    val actualReward: Float?,
+    @Json(name = "reward_score")
+    val rewardScore: Int?,
+    @Json(name = "max_reward")
+    val maxReward: Float?,
+    @Json(name = "qod_score")
+    val qodScore: Int?,
+    @Json(name = "cell_capacity")
+    val cellCapacity: Int?,
+    @Json(name = "cell_position")
+    val cellPosition: Int?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class BoostRewards(
+    @Json(name = "total_daily_reward")
+    val totalDailyReward: Float?,
+    val data: List<BoostReward>
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class BoostReward(
+    val code: String?,
+    val title: String?,
+    val description: String?,
+    @Json(name = "img_url")
+    val imgUrl: String?,
+    @Json(name = "doc_url")
+    val docUrl: String?,
+    @Json(name = "actual_reward")
+    val actualReward: Float?,
+    @Json(name = "reward_score")
+    val rewardScore: Int?,
+    @Json(name = "max_reward")
+    val maxReward: Float?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
 data class QoDErrorAffects(
     val parameter: String?,
     val ratio: Int?,

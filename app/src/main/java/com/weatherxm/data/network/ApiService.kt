@@ -10,6 +10,7 @@ import com.weatherxm.data.NetworkSearchResults
 import com.weatherxm.data.NetworkStatsResponse
 import com.weatherxm.data.PublicDevice
 import com.weatherxm.data.PublicHex
+import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.Rewards
 import com.weatherxm.data.RewardsTimeline
 import com.weatherxm.data.User
@@ -190,6 +191,15 @@ interface ApiService {
     suspend fun getRewards(
         @Path("deviceId") deviceId: String
     ): NetworkResponse<Rewards, ErrorResponse>
+
+    @Mock
+    @MockResponse(body = "mock_files/get_device_reward_details.json")
+    @GET("/api/v1/devices/{deviceId}/rewards/details")
+    @Headers(NO_AUTH_HEADER)
+    suspend fun getRewardDetails(
+        @Path("deviceId") deviceId: String,
+        @Query("date") date: String,
+    ): NetworkResponse<RewardDetails, ErrorResponse>
 
     @GET("/api/v1/me/devices/{deviceId}/firmware")
     @Streaming
