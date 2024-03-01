@@ -27,6 +27,20 @@
                 "title": "Minor Sensor Issues",
                 "message": "Station is doing great! Minor issues detected during our data quality checks, that may be related to occasional sensor inaccuracies. That can happen once in a while.",
                 "doc_url": "https://docs.weatherxm.com/project/rewards-troubleshooting#sensor-problems"
+            },
+            {
+                "severity_level": "WARNING",
+                "group": "SENSOR_PROBLEMS",
+                "title": "Minor Sensor Issues",
+                "message": "Station is doing great! Minor issues detected during our data quality checks, that may be related to occasional sensor inaccuracies. That can happen once in a while.",
+                "doc_url": "https://docs.weatherxm.com/project/rewards-troubleshooting#sensor-problems"
+            },
+            {
+                "severity_level": "WARNING",
+                "group": "SENSOR_PROBLEMS",
+                "title": "Minor Sensor Issues",
+                "message": "Station is doing great! Minor issues detected during our data quality checks, that may be related to occasional sensor inaccuracies. That can happen once in a while.",
+                "doc_url": "https://docs.weatherxm.com/project/rewards-troubleshooting#sensor-problems"
             }
         ]
     },

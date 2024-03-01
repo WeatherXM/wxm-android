@@ -117,12 +117,4 @@ class DeviceDetailsUseCaseImpl(
     override fun getRewardsHideAnnotationThreshold(): Long {
         return appConfigRepository.getRewardsHideAnnotationThreshold()
     }
-
-    override fun isMainnetEnabled(): Boolean {
-        return appConfigRepository.isMainnetEnabled()
-    }
-
-    override fun getMainnetMessage(): String {
-        return appConfigRepository.getMainnetMessage()
-    }
 }
