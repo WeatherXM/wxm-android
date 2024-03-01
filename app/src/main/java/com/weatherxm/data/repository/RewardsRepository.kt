@@ -2,11 +2,14 @@ package com.weatherxm.data.repository
 
 import arrow.core.Either
 import com.weatherxm.data.Failure
+import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.Rewards
 import com.weatherxm.data.RewardsTimeline
 import com.weatherxm.data.WalletRewards
 import com.weatherxm.data.datasource.RewardsDataSource
+import com.weatherxm.util.toISODate
 import java.time.ZoneId
+import java.time.ZonedDateTime
 
 interface RewardsRepository {
     suspend fun getRewardsTimeline(
@@ -18,6 +21,11 @@ interface RewardsRepository {
     ): Either<Failure, RewardsTimeline>
 
     suspend fun getRewards(deviceId: String): Either<Failure, Rewards>
+    suspend fun getRewardDetails(
+        deviceId: String,
+        date: ZonedDateTime
+    ): Either<Failure, RewardDetails>
+
     suspend fun getWalletRewards(walletAddress: String): Either<Failure, WalletRewards>
 }
 
@@ -41,6 +49,13 @@ class RewardsRepositoryImpl(private val dataSource: RewardsDataSource) : Rewards
 
     override suspend fun getRewards(deviceId: String): Either<Failure, Rewards> {
         return dataSource.getRewards(deviceId)
+    }
+
+    override suspend fun getRewardDetails(
+        deviceId: String,
+        date: ZonedDateTime
+    ): Either<Failure, RewardDetails> {
+        return dataSource.getRewardDetails(deviceId, date.toISODate())
     }
 
     override suspend fun getWalletRewards(walletAddress: String): Either<Failure, WalletRewards> {
