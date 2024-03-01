@@ -30,6 +30,7 @@
     <string name="action_buy_station">Buy Station</string>
     <string name="action_claim">Claim</string>
     <string name="action_dismiss">Dismiss</string>
+    <string name="action_view_all_issues">View All Issues</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="action_scan_qr">Scan QR Code</string>
@@ -37,7 +38,6 @@
     <string name="contact_us">Contact us</string>
     <string name="select_date">Select Date</string>>
     <string name="read_more">Read More</string>
-    <string name="need_help_contact_support">Need more help? Contact Support</string>
 
     <!-- Permissions -->
     <string name="permission_location_title">Access to your location</string>
@@ -236,14 +236,13 @@
     <string name="daily_reward">Daily Reward</string>
     <string name="earnings_for">Earnings for %s</string>
     <string name="base_reward">Base Reward</string>
+    <string name="base_reward_desc"><![CDATA[Earned <b>+%1$s $WXM</b> of the %2$s $WXM Daily Max.]]></string>
     <string name="boosts">Boosts</string>
     <string name="no_active">No Active</string>
     <string name="view_reward_details">View Reward Details</string>
     <string name="weekly_streak">Weekly Streak</string>
     <string name="weekly_streak_desc">Base reward scores from %1$s to %2$s</string>
-    <string name="problems_found">Problems Found</string>
     <string name="total_station_rewards">Total Station Rewards</string>
-    <string name="reward_details">Reward Details</string>
     <string name="annotation_obc">Values out of bounds</string>
     <string name="annotation_obc_desc"><![CDATA[Some measurements (%s) were found to have out of bound values, compared to sensor specifications. <b>This could be due to a faulty sensor or outdated firmware.</b>]]></string>
     <string name="annotation_spikes">Extreme spikes</string>
@@ -301,17 +300,43 @@
     <string name="annotation_info_text"><![CDATA[Minor issues slightly affected your rewards. This may happen occasionally, but we thought you should know. View reward details to identify and fix problems.]]></string>
     <string name="annotation_warn_text"><![CDATA[Some issues prevent your station from getting the full rewards. View reward details to identify and fix problems.]]></string>
     <string name="annotation_error_text"><![CDATA[Serious problems were detected, that prevent the station from getting the full rewards. View reward details to identify and fix problems.]]></string>
-    <string name="annotation_timeline_info_text"><![CDATA[<b>1 minor issue</b> affecting station rewards.]]></string>
-    <string name="annotations_timeline_info_text"><![CDATA[<b>%d minor issues</b> affecting station rewards.]]></string>
-    <string name="annotation_timeline_warn_error_text"><![CDATA[<b>1 issue</b> affecting station rewards.]]></string>
-    <string name="annotations_timeline_warn_error_text"><![CDATA[<b>%d issues</b> affecting station rewards.]]></string>
+    <string name="annotation_issue_info_text"><![CDATA[<b>1 minor issue</b> affecting station rewards.]]></string>
+    <string name="annotation_issues_info_text"><![CDATA[<b>%d minor issues</b> affecting station rewards.]]></string>
+    <string name="annotation_issue_warn_error_text"><![CDATA[<b>1 issue</b> affecting station rewards.]]></string>
+    <string name="annotation_issues_warn_error_text"><![CDATA[<b>%d issues</b> affecting station rewards.]]></string>
     <string name="rewards_empty_title">Rewards Coming Soon!</string>
     <string name="rewards_empty_message">Your station hasn’t received any rewards yet. Sit back and relax, while our systems are validating the station’s location and data. You should start seeing rewards in the next couple of days.</string>
     <string name="rewards_empty_pro_tip">Pro Tip</string>
     <string name="rewards_empty_pro_tip_message">Don’t worry if you see any errors and reward losses for the first 2–3 days after claiming your station. This is expected. Keep calm and wait for the full rewards!</string>
     <string name="reward_issues">Reward Issues</string>
     <string name="report_for">Report for %s</string>
-
+    <string name="issues_title">Issues</string>
+    <string name="data_quality">Data Quality</string>
+    <string name="data_quality_perfect">Good job! A solid 100%.</string>
+    <string name="data_quality_almost_perfect">Almost perfect! Got %d%%.</string>
+    <string name="data_quality_great">Data quality is great! Got %d%%. Fix any pending issues to earn more rewards.</string>
+    <string name="data_quality_great_public">Data quality is great! Got %d%%.</string>
+    <string name="data_quality_ok">Data quality is ok! Got %d%%. Fix any pending issues to earn more rewards.</string>
+    <string name="data_quality_ok_public">Data quality is ok! Got %d%%.</string>
+    <string name="data_quality_average">Data quality is average! Got %d%%. Fix any pending issues to earn more rewards.</string>
+    <string name="data_quality_average_public">Data quality is average! Got %d%%.</string>
+    <string name="data_quality_low">Data quality is low! Got %d%%. Fix any pending issues to earn more rewards.</string>
+    <string name="data_quality_low_public">Data quality is low! Got %d%%.</string>
+    <string name="data_quality_very_low">Data quality is very low! Got %d%%. Fix any pending issues to earn more rewards.</string>
+    <string name="data_quality_very_low_public">Data quality is very low! Got %d%%.</string>
+    <string name="data_quality_no_rewards">Station lost all rewards because of data quality issues.</string>
+    <string name="data_quality_not_available">No information about data quality is available at the moment.</string>
+    <string name="location_quality">Location Quality</string>
+    <string name="location_quality_no_location">No location data.</string>
+    <string name="location_quality_not_verified">Location could not be verified.</string>
+    <string name="location_quality_relocated">Station was recently relocated.</string>
+    <string name="location_quality_verified">Station location is verified!</string>
+    <string name="cell_position">Cell Position</string>
+    <string name="cell_position_great">Cell position is great!</string>
+    <string name="active_boosts">Active Boosts</string>
+    <string name="active_boosts_desc"><![CDATA[Earned <b>+%s $WXM</b> additional rewards from boosts.]]></string>
+    <string name="no_active_boosts_title">No active boosts for this station at the moment</string>
+    <string name="no_active_boosts_desc">More reward boosts coming soon.</string>
 
     <!-- Mainnet -->
     <string name="mainnet_welcome">Welcome to Mainnet!</string>

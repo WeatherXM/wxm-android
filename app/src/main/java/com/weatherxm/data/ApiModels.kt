@@ -514,6 +514,8 @@ data class RewardsAnnotationGroup(
             AnnotationGroupCode.UNKNOWN
         }
     }
+
+    fun isInfo() = severityLevel == SeverityLevel.INFO
 }
 
 @Keep
@@ -524,10 +526,16 @@ data class RewardDetails(
     @Json(name = "total_daily_reward")
     val totalDailyReward: Float?,
     val base: BaseReward?,
-    val boost: BoostRewards,
+    val boost: BoostRewards?,
     @Json(name = "annotation_summary")
     val annotationSummary: List<RewardsAnnotationGroup>?,
-) : Parcelable
+) : Parcelable {
+    fun toSortedAnnotations(): List<RewardsAnnotationGroup>? {
+        return annotationSummary?.sortedByDescending {
+            it.severityLevel
+        }
+    }
+}
 
 @Keep
 @JsonClass(generateAdapter = true)

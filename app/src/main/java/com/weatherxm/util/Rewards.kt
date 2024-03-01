@@ -6,9 +6,11 @@ import androidx.annotation.StringRes
 import com.weatherxm.R
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.ui.common.AnnotationCode
+import com.weatherxm.ui.common.AnnotationGroupCode
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIRewardsAnnotation
+import com.weatherxm.ui.common.empty
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -32,6 +34,12 @@ object Rewards {
         } ?: R.color.reward_score_unknown
     }
 
+    fun formatTokens(amount: Float?): String {
+        return amount?.let {
+            formatTokens(it.toBigDecimal())
+        } ?: String.empty()
+    }
+
     fun formatTokens(amount: BigDecimal): String {
         val decimalFormat = DecimalFormat("0.00##")
         decimalFormat.roundingMode = RoundingMode.HALF_UP
@@ -51,6 +59,14 @@ object Rewards {
 
     fun shouldHideAnnotations(rewardScore: Int?, hideAnnotationsThreshold: Long): Boolean {
         return (rewardScore?.toLong() ?: 0L) >= hideAnnotationsThreshold
+    }
+
+    fun AnnotationGroupCode?.isPoL(): Boolean {
+        return listOf(
+            AnnotationGroupCode.LOCATION_NOT_VERIFIED,
+            AnnotationGroupCode.NO_LOCATION_DATA,
+            AnnotationGroupCode.USER_RELOCATION_PENALTY
+        ).contains(this)
     }
 
     @Suppress("CyclomaticComplexMethod")

@@ -57,4 +57,7 @@
     <declare-styleable name="HeaderView">
         <attr name="header_title" format="string" />
     </declare-styleable>
+    <declare-styleable name="RewardsQualityCardView">
+        <attr name="reward_quality_title" format="string" />
+    </declare-styleable>
 </resources>

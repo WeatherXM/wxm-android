@@ -12,12 +12,27 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.WeatherXM.Title"
             android:textColor="@color/colorOnSurface"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/reward_issues" />
+
+        <ImageButton
+            android:id="@+id/infoButton"
+            style="@style/Widget.WeatherXM.ImageButton"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="@dimen/margin_small"
+            android:contentDescription="@string/read_more"
+            android:src="@drawable/ic_learn_more_info"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/title"
+            app:layout_constraintStart_toEndOf="@id/title"
+            app:layout_constraintTop_toTopOf="@id/title"
+            tools:visibility="visible" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/subtitle"

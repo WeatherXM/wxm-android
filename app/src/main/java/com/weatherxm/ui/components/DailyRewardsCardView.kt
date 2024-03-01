@@ -149,13 +149,13 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             }
         } else {
             if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
-                context.getString(R.string.annotations_timeline_info_text, annotationsSize)
+                context.getString(R.string.annotation_issues_info_text, annotationsSize)
             } else if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize <= 1) {
-                context.getString(R.string.annotation_timeline_info_text)
-            } else if (!severityLevels.contains(SeverityLevel.WARNING) && annotationsSize > 1) {
-                context.getString(R.string.annotations_timeline_warn_error_text, annotationsSize)
+                context.getString(R.string.annotation_issue_info_text)
+            } else if (annotationsSize > 1) {
+                context.getString(R.string.annotation_issues_warn_error_text, annotationsSize)
             } else {
-                context.getString(R.string.annotation_timeline_warn_error_text)
+                context.getString(R.string.annotation_issue_warn_error_text)
             }
         }
     }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewHeaderBinding
+import com.weatherxm.ui.common.setVisible
 import org.koin.core.component.KoinComponent
 
 open class HeaderView : LinearLayout, KoinComponent {
@@ -48,6 +49,14 @@ open class HeaderView : LinearLayout, KoinComponent {
 
     fun subtitle(subtitle: String): HeaderView {
         binding.subtitle.text = subtitle
+        return this
+    }
+
+    fun infoButton(listener: () -> Unit): HeaderView {
+        binding.infoButton.setOnClickListener {
+            listener.invoke()
+        }
+        binding.infoButton.setVisible(true)
         return this
     }
 }

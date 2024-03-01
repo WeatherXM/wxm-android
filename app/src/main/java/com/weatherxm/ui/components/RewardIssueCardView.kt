@@ -1,7 +1,6 @@
 package com.weatherxm.ui.components
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -9,7 +8,6 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
-import com.google.android.material.button.MaterialButton.ICON_GRAVITY_END
 import com.weatherxm.databinding.ViewRewardIssueBinding
 import com.weatherxm.ui.common.setCardStroke
 
@@ -77,17 +75,12 @@ class RewardIssueCardView : LinearLayout {
 
     fun action(
         label: String,
-        endIcon: Drawable? = null,
         listener: OnClickListener
     ): RewardIssueCardView {
         with(binding.action) {
             text = label
             setOnClickListener(listener)
             visibility = VISIBLE
-            if (endIcon != null) {
-                icon = endIcon
-                iconGravity = ICON_GRAVITY_END
-            }
         }
         return this
     }

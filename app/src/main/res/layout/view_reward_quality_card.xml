@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:orientation="vertical"
+    tools:parentTag="LinearLayout">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/parentCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardElevation="@dimen/elevation_normal"
+        app:contentPadding="@dimen/padding_large"
+        app:contentPaddingLeft="0dp"
+        app:contentPaddingRight="0dp"
+        tools:strokeColor="@color/warning"
+        tools:strokeWidth="@dimen/card_stroke">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_large"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.LabelLarge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/data_quality" />
+
+            <ImageButton
+                android:id="@+id/infoButton"
+                style="@style/Widget.WeatherXM.ImageButton"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:contentDescription="@string/read_more"
+                android:src="@drawable/ic_learn_more_info"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/title"
+                tools:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/statusIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="@dimen/margin_large"
+                android:importantForAccessibility="no"
+                app:layout_constraintBottom_toBottomOf="@id/statusDesc"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/statusDesc"
+                tools:src="@drawable/ic_warning_hex_filled"
+                tools:tint="@color/warning" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/statusDesc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_large"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                android:textColor="@color/darkGrey"
+                app:layout_constraintBottom_toTopOf="@id/sliderContainer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/statusIcon"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="Data quality is ok! Got 65%. Fix any pending issues to earn more rewards." />
+
+            <FrameLayout
+                android:id="@+id/sliderContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                android:paddingTop="@dimen/padding_normal"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:visibility="visible">
+
+                <com.google.android.material.slider.RangeSlider
+                    android:id="@+id/slider"
+                    style="@style/Widget.WeatherXM.Slider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:valueFrom="0"
+                    android:valueTo="100"
+                    app:trackHeight="20dp"
+                    tools:trackColorActive="@color/reward_score_high"
+                    tools:values="@array/reward_slider_default_values" />
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</merge>

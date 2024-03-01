@@ -3,10 +3,10 @@ package com.weatherxm.ui.rewardissues
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
-import com.weatherxm.data.Reward
+import com.weatherxm.data.RewardDetails
 import com.weatherxm.databinding.ActivityRewardIssuesBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
-import com.weatherxm.ui.common.Contracts.ARG_REWARD
+import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.empty
@@ -27,7 +27,7 @@ class RewardIssuesActivity : BaseActivity(), RewardIssuesListener {
 
         binding.root.applyInsets()
 
-        val reward = intent?.extras?.parcelable<Reward>(ARG_REWARD)
+        val reward = intent?.extras?.parcelable<RewardDetails>(ARG_REWARD_DETAILS)
         val device = intent?.extras?.parcelable<UIDevice>(ARG_DEVICE)
         if (reward == null || device == null) {
             Timber.d("Could not start RewardIssuesActivity. Reward or Device is null.")

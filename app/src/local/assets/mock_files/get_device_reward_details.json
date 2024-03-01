@@ -5,7 +5,7 @@
         "actual_reward": 54.32,
         "reward_score": 50,
         "max_reward": 108.64,
-        "qod_score": 42,
+        "qod_score": 62,
         "cell_capacity": 10,
         "cell_position": 1
     },
@@ -16,8 +16,6 @@
                 "code": "beta_rewards",
                 "title": "Beta Reward",
                 "description": "Rewarded for participating in our beta reward program.",
-                "img_url": "string",
-                "doc_url": "string",
                 "actual_reward": 1.23,
                 "reward_score": 50,
                 "max_reward": 2.46
@@ -27,7 +25,7 @@
     "annotation_summary": [
         {
             "severity_level": "INFO",
-            "group": "NO_WALLET",
+            "group": "WEATHER_DATA_GAPS",
             "title": "Minor Sensor Issues",
             "message": "Station is doing great! Minor issues detected during our data quality checks, that may be related to occasional sensor inaccuracies. That can happen once in a while.",
             "doc_url": "https://docs.weatherxm.com/project/rewards-troubleshooting#sensor-problems"

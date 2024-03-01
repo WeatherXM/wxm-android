@@ -40,7 +40,7 @@ class RewardIssuesAdapter(
                 when (item.severityLevel) {
                     SeverityLevel.INFO -> {
                         setBackground(R.color.blueTint)
-                        setStrokeColor(R.color.colorPrimaryVariant)
+                        setStrokeColor(R.color.light_lightest_blue)
                     }
                     SeverityLevel.WARNING -> {
                         setBackground(R.color.warningTint)
@@ -52,7 +52,7 @@ class RewardIssuesAdapter(
                     }
                     else -> {
                         setBackground(R.color.blueTint)
-                        setStrokeColor(R.color.colorPrimaryVariant)
+                        setStrokeColor(R.color.light_lightest_blue)
                     }
                 }
                 title(item.title)
