@@ -172,7 +172,7 @@ interface ApiService {
     @Suppress("LongParameterList")
     @Mock
     @MockResponse(body = "mock_files/get_device_rewards_timeline.json")
-    @GET("/api/v1/devices/{deviceId}/tokens/timeline")
+    @GET("/api/v1/devices/{deviceId}/rewards/timeline")
     @Headers(NO_AUTH_HEADER)
     suspend fun getRewardsTimeline(
         @Path("deviceId") deviceId: String,
@@ -186,7 +186,7 @@ interface ApiService {
     @Suppress("LongParameterList")
     @Mock
     @MockResponse(body = "mock_files/get_device_rewards.json")
-    @GET("/api/v1/devices/{deviceId}/tokens")
+    @GET("/api/v1/devices/{deviceId}/rewards")
     @Headers(NO_AUTH_HEADER)
     suspend fun getRewards(
         @Path("deviceId") deviceId: String
