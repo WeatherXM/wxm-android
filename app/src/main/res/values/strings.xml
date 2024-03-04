@@ -316,8 +316,8 @@
     <string name="data_quality_almost_perfect">Almost perfect! Got %d%%.</string>
     <string name="data_quality_great">Data quality is great! Got %d%%. Fix any pending issues to earn more rewards.</string>
     <string name="data_quality_great_public">Data quality is great! Got %d%%.</string>
-    <string name="data_quality_ok">Data quality is ok! Got %d%%. Fix any pending issues to earn more rewards.</string>
-    <string name="data_quality_ok_public">Data quality is ok! Got %d%%.</string>
+    <string name="data_quality_ok">Data quality is OK! Got %d%%. Fix any pending issues to earn more rewards.</string>
+    <string name="data_quality_ok_public">Data quality is OK! Got %d%%.</string>
     <string name="data_quality_average">Data quality is average! Got %d%%. Fix any pending issues to earn more rewards.</string>
     <string name="data_quality_average_public">Data quality is average! Got %d%%.</string>
     <string name="data_quality_low">Data quality is low! Got %d%%. Fix any pending issues to earn more rewards.</string>
@@ -337,6 +337,10 @@
     <string name="active_boosts_desc"><![CDATA[Earned <b>+%s $WXM</b> additional rewards from boosts.]]></string>
     <string name="no_active_boosts_title">No active boosts for this station at the moment</string>
     <string name="no_active_boosts_desc">More reward boosts coming soon.</string>
+    <string name="daily_reward_explanation">WeatherXM’s goal is to become an open, decentralized ecosystem structured in such a way that network growth, and thereby balanced global weather coverage, is incentivised and every participant (weather station owners and service providers) is fairly and organically rewarded in accordance to the value they contribute to the network.\n\nStation owners are responsible for deploying and maintaining their stations and ensuring the best possible quality of weather data following the Network’s guidelines of deployment. In return they are rewarded, in the Network’s token, called $WXM.\n\nEvery day, our reward algorithm assesses the performance of all weather stations, calculates the Base Reward and any additional rewards originating from various active “Boosts”, and allocates the total reward amount to each user’s connected wallet.\n\nRead more about how our Reward Mechanism works.</string>
+    <string name="data_quality_explanation">The Network is as good as its data and we need our data to be meaningful and usable. The Quality-of-Data (QoD) score is an attempt to quantify this metric. The end goal is to encourage weather station owners to do their best to comply with the Network’s guidelines in order to consistently achieve the best data quality possible.\n\nA weather station’s daily reward is affected by its QoD score. To calculate the QoD score, we have created an open source algorithm that evaluates the quality of the weather data using various methods. The calculated score indicates the confidence level in the quality of the weather data received from the station.\n\nRead more about how our Quality-of-Data algorithm works.</string>
+    <string name="location_quality_explanation">It is important for the Network that a station remains at the same location throughout its lifetime.\n\nThe Proof-of-Location algorithm evaluates location data associated with the station, their accuracy, and consistency. It generates a score which is a confidence indicator about the station’s location.\n\nRead more about how our Proof-of-Location algorithm works.</string>
+    <string name="cell_position_explanation">Cell capacity is a parameter that is used to define the maximum number of stations that may receive rewards in a specific cell - a hexagonal area on the planet covering a surface area of ~5 square kilometers. Each cell has a predefined cell capacity that depends on its geospatial characteristics. The cell’s capacity indicates the maximum number of stations that may receive rewards.\n\nAs long as a station’s position is above the maximum capacity it will be rewarded, whereas getting below this threshold will lead to zero rewards. A station’s position in a cell is calculated using its reward score and its seniority as criteria.\n\nRead more about how our Cell Capacity algorithm works.</string>
 
     <!-- Mainnet -->
     <string name="mainnet_welcome">Welcome to Mainnet!</string>

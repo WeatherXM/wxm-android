@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="@dimen/padding_normal_to_large"
-        android:paddingBottom="@dimen/padding_normal_to_large">
+        android:paddingHorizontal="@dimen/padding_large"
+        android:paddingBottom="@dimen/padding_large">
 
         <com.google.android.material.bottomsheet.BottomSheetDragHandleView
             android:id="@+id/dragHandler"
@@ -27,9 +27,9 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_normal"
-            android:layout_marginBottom="@dimen/margin_normal"
-            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.LabelLarge"
             android:textStyle="bold"
             tools:text="Message Title" />
 
@@ -37,9 +37,18 @@
             android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_normal"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
             tools:text="Message" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/readMoreAction"
+            style="@style/Widget.WeatherXM.Button.Ghost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:text="@string/read_more"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     </LinearLayout>
 

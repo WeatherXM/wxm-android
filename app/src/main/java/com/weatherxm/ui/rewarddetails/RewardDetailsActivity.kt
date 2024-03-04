@@ -62,7 +62,12 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         binding.header
             .subtitle(subtitle)
             .infoButton {
-                // TODO: Open Message Dialog
+                navigator.showMessageDialog(
+                    supportFragmentManager,
+                    getString(R.string.daily_reward),
+                    getString(R.string.daily_reward_explanation),
+                    readMoreUrl = getString(R.string.docs_url_reward_mechanism)
+                )
             }
 
         model.onRewardDetails().observe(this) {
@@ -154,7 +159,12 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
     @Suppress("MagicNumber", "CyclomaticComplexMethod")
     private fun updateDataQualityCard(qodScore: Int) {
         binding.dataQualityCard.infoButton {
-            // TODO: Open Message Dialog
+            navigator.showMessageDialog(
+                supportFragmentManager,
+                getString(R.string.data_quality),
+                getString(R.string.data_quality_explanation),
+                readMoreUrl = getString(R.string.docs_url_qod_algorithm)
+            )
         }
         if (qodScore >= 95) {
             binding.dataQualityCard.checkmark()
@@ -202,7 +212,12 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
 
     private fun updateLocationCard(annotations: List<RewardsAnnotationGroup>?) {
         binding.locationQualityCard.infoButton {
-            // TODO: Open Message Dialog
+            navigator.showMessageDialog(
+                supportFragmentManager,
+                getString(R.string.location_quality),
+                getString(R.string.location_quality_explanation),
+                readMoreUrl = getString(R.string.docs_url_pol_algorithm)
+            )
         }
         annotations?.firstOrNull {
             it.toAnnotationGroupCode().isPoL()
@@ -233,7 +248,12 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
 
     private fun updateCellCard(annotations: List<RewardsAnnotationGroup>?) {
         binding.cellQualityCard.infoButton {
-            // TODO: Open Message Dialog
+            navigator.showMessageDialog(
+                supportFragmentManager,
+                getString(R.string.cell_position),
+                getString(R.string.cell_position_explanation),
+                readMoreUrl = getString(R.string.docs_url_cell_capacity)
+            )
         }
         annotations?.firstOrNull {
             it.toAnnotationGroupCode() == AnnotationGroupCode.CELL_CAPACITY_REACHED

@@ -413,9 +413,10 @@ class Navigator(private val analytics: Analytics) {
         fragmentManager: FragmentManager,
         title: String?,
         message: String? = null,
-        htmlMessage: String? = null
+        htmlMessage: String? = null,
+        readMoreUrl: String? = null
     ) {
-        MessageDialogFragment.newInstance(title, message, htmlMessage)
+        MessageDialogFragment.newInstance(title, message, htmlMessage, readMoreUrl)
             .show(fragmentManager, MessageDialogFragment.TAG)
     }
 

@@ -58,13 +58,7 @@ class RewardsListAdapter(
             }
 
             updateDateAndLines(item.timestamp, position)
-
-            binding.mainCard.updateUI(
-                item,
-                rewardsHideAnnotationThreshold,
-                useShortAnnotationText = true,
-                isInRewardDetails = false
-            )
+            binding.mainCard.updateUI(item, rewardsHideAnnotationThreshold, true)
         }
 
         /**

@@ -49,7 +49,6 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
         data: Reward?,
         rewardsHideAnnotationThreshold: Long,
         useShortAnnotationText: Boolean,
-        isInRewardDetails: Boolean,
         onViewDetails: (() -> Unit)? = null
     ) {
         if (data == null) return
@@ -86,12 +85,6 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
                 context.getString(R.string.wxm_amount, formatTokens(it.toBigDecimal()))
         }
 
-        // TODO: Temporary code until we use something else for the reward details screen
-        if (isInRewardDetails) {
-            binding.parentCard.elevation = 0F
-            binding.annotationCard.setVisible(false)
-            return
-        }
         if (!shouldHideAnnotations(data.baseRewardScore, rewardsHideAnnotationThreshold)) {
             setupAnnotations(data.annotationSummary, useShortAnnotationText, onViewDetails)
         }
