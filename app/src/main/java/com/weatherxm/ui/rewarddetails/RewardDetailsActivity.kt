@@ -100,7 +100,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
 
     private fun updateUI(data: RewardDetails) {
         val actualBaseReward = formatTokens(data.base?.actualReward)
-        val maxBaseReward = formatTokens(data.base?.actualReward)
+        val maxBaseReward = formatTokens(data.base?.maxReward)
         val sortedIssues = data.toSortedAnnotations()
         val boostAdapter = RewardBoostAdapter(this)
 
