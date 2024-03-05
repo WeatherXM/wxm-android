@@ -6,44 +6,63 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/margin_normal"
     app:cardElevation="@dimen/elevation_normal"
-    app:contentPadding="@dimen/padding_large"
-    tools:cardBackgroundColor="@color/dark_blue_tint">
+    app:contentPadding="0dp"
+    tools:cardBackgroundColor="@color/dark_background">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAllCaps="true"
-            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-            android:textColor="@color/dark_text"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Beta Reward" />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/desc"
+        <ImageView
+            android:id="@+id/backgroundImage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
-            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/light_background"
-            app:layout_constraintTop_toBottomOf="@id/title"
-            tools:text="Rewarded for participating in our beta reward program." />
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/dataContainer"
+            app:layout_constraintTop_toTopOf="@id/dataContainer"
+            tools:ignore="contentDescription"
+            tools:src="@drawable/weatherxm_gradient_background"
+            tools:visibility="visible" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.WeatherXM.Default.LabelMedium"
-            android:textColor="@color/dark_text"
-            app:layout_constraintBottom_toBottomOf="@id/title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/title"
-            tools:text="+ 0.2142 $WXM" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dataContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/padding_large">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:textColor="@color/dark_text"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Beta Reward" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                android:textColor="@color/light_background"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="Rewarded for participating in our beta reward program." />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.LabelMedium"
+                android:textColor="@color/dark_text"
+                app:layout_constraintBottom_toBottomOf="@id/title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/title"
+                tools:text="+ 0.2142 $WXM" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

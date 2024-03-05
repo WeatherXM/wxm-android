@@ -5,12 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.ImageLoader
+import coil.request.ImageRequest
 import com.weatherxm.R
 import com.weatherxm.data.BoostReward
 import com.weatherxm.databinding.ListItemRewardBoostBinding
+import com.weatherxm.ui.common.setBoostFallbackBackground
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Rewards.formatTokens
 
 class RewardBoostAdapter(
+    private val imageLoader: ImageLoader,
     private val listener: RewardBoostListener
 ) : ListAdapter<BoostReward, RewardBoostAdapter.RewardBoostViewHolder>(
     RewardBoostDiffCallback()
@@ -41,15 +46,16 @@ class RewardBoostAdapter(
             binding.amount.text =
                 itemView.context.getString(R.string.reward, formatTokens(item.actualReward))
 
-            /**
-             * Fallback in case img url is missing so the texts can be visible
-             */
             if (item.imgUrl.isNullOrEmpty()) {
-                binding.root.setCardBackgroundColor(
-                    itemView.context.getColor(R.color.dark_background)
-                )
+                binding.root.setBoostFallbackBackground()
             } else {
-                // TODO: Load image from URL
+                imageLoader.enqueue(
+                    ImageRequest.Builder(itemView.context)
+                        .data(item.imgUrl)
+                        .target(binding.backgroundImage)
+                        .build()
+                )
+                binding.backgroundImage.setVisible(true)
             }
         }
     }

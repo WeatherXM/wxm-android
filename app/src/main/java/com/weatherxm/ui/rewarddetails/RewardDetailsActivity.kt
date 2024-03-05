@@ -2,6 +2,7 @@ package com.weatherxm.ui.rewarddetails
 
 import android.os.Bundle
 import android.view.View
+import coil.ImageLoader
 import com.weatherxm.R
 import com.weatherxm.data.BoostReward
 import com.weatherxm.data.Reward
@@ -28,6 +29,7 @@ import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.isPoL
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -38,6 +40,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
     private val model: RewardDetailsViewModel by viewModel {
         parametersOf(intent.parcelable<UIDevice>(ARG_DEVICE))
     }
+    private val imageLoader: ImageLoader by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,7 +105,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         val actualBaseReward = formatTokens(data.base?.actualReward)
         val maxBaseReward = formatTokens(data.base?.maxReward)
         val sortedIssues = data.toSortedAnnotations()
-        val boostAdapter = RewardBoostAdapter(this)
+        val boostAdapter = RewardBoostAdapter(imageLoader, this)
 
         binding.totalDailyReward.text =
             getString(R.string.reward, formatTokens(data.totalDailyReward))
