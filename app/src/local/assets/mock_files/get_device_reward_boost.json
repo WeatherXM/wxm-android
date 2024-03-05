@@ -1,0 +1,19 @@
+{
+    "code": "beta_rewards",
+    "metadata": {
+        "title": "Beta Reward",
+        "description": "Rewarded for participating in our beta reward program.",
+        "img_url": "string",
+        "doc_url": "string",
+        "about": "According to the Token Allocation table 3,000,000 $WXM are reserved to reward stations that participated to the network before the Token Launch Day (\"Beta period\")."
+    },
+    "details": {
+        "station_hours": 17500,
+        "max_daily_reward": 1.24,
+        "max_total_reward": 10.24,
+        "boost_start_date": "2024-03-05T09:29:54.450Z",
+        "boost_stop_date": "2024-03-05T09:29:54.450Z",
+        "participation_start_date": "2024-03-05T09:29:54.450Z",
+        "participation_stop_date": "2024-03-05T09:29:54.450Z"
+    }
+}

@@ -4,6 +4,7 @@ import co.infinum.retromock.meta.Mock
 import co.infinum.retromock.meta.MockBehavior
 import co.infinum.retromock.meta.MockResponse
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.weatherxm.data.BoostRewardResponse
 import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceInfo
 import com.weatherxm.data.NetworkSearchResults
@@ -200,6 +201,15 @@ interface ApiService {
         @Path("deviceId") deviceId: String,
         @Query("date") date: String,
     ): NetworkResponse<RewardDetails, ErrorResponse>
+
+    @Mock
+    @MockResponse(body = "mock_files/get_device_reward_boost.json")
+    @GET("/api/v1/devices/{deviceId}/rewards/boosts/{boostCode}")
+    @Headers(NO_AUTH_HEADER)
+    suspend fun getRewardBoost(
+        @Path("deviceId") deviceId: String,
+        @Path("boostCode") boostCode: String
+    ): NetworkResponse<BoostRewardResponse, ErrorResponse>
 
     @GET("/api/v1/me/devices/{deviceId}/firmware")
     @Streaming
