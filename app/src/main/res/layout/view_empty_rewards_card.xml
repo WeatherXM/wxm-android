@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:orientation="vertical"
+    tools:parentTag="LinearLayout">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/emptyCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="@dimen/elevation_small"
+        app:contentPadding="@dimen/padding_large"
+        app:layout_constraintTop_toBottomOf="@id/weeklyCard">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/emptyAnimation"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/anim_rocket" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/emptyTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:gravity="center"
+                android:text="@string/rewards_empty_title"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Title"
+                android:textColor="@color/colorOnSurface"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/emptyAnimation" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/emptyMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:gravity="center"
+                android:text="@string/rewards_empty_message"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:textColor="@color/colorOnSurfaceVariant"
+                app:layout_constraintTop_toBottomOf="@id/emptyTitle" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                app:cardBackgroundColor="@color/blueTint"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="0dp"
+                app:contentPadding="0dp"
+                app:layout_constraintTop_toBottomOf="@id/emptyMessage">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:id="@+id/proTipDivider"
+                        android:layout_width="1dp"
+                        android:layout_height="0dp"
+                        android:background="@color/colorPrimary"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/proTipTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:text="@string/rewards_empty_pro_tip"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/proTipDivider"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/proTipDesc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        android:paddingBottom="@dimen/padding_small"
+                        android:text="@string/rewards_empty_pro_tip_message"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        app:layout_constraintTop_toBottomOf="@id/proTipTitle" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</merge>

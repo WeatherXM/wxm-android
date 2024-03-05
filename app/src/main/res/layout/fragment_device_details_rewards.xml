@@ -198,60 +198,15 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
+            <com.weatherxm.ui.components.EmptyRewardsCardView
                 android:id="@+id/emptyCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:visibility="gone"
-                app:cardElevation="@dimen/elevation_small"
-                app:contentPadding="@dimen/padding_large"
                 app:layout_constraintTop_toBottomOf="@id/weeklyCard"
-                tools:visibility="visible">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/emptyAnimation"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:lottie_autoPlay="true"
-                        app:lottie_loop="true"
-                        app:lottie_rawRes="@raw/anim_rocket" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/emptyTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_normal"
-                        android:gravity="center"
-                        android:text="@string/rewards_empty_title"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Title"
-                        android:textColor="@color/colorOnSurface"
-                        android:textSize="26sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@id/emptyAnimation" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/emptyMessage"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:gravity="center"
-                        android:text="@string/rewards_empty_message"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                        android:textColor="@color/colorOnSurfaceVariant"
-                        app:layout_constraintTop_toBottomOf="@id/emptyTitle" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.card.MaterialCardView>
+                tools:visibility="visible" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
