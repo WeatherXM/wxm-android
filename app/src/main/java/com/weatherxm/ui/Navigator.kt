@@ -58,6 +58,7 @@ import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
 import com.weatherxm.ui.rewarddetails.RewardDetailsActivity
+import com.weatherxm.ui.rewardissues.RewardIssuesActivity
 import com.weatherxm.ui.rewardsclaim.RewardsClaimActivity
 import com.weatherxm.ui.rewardslist.RewardsListActivity
 import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
@@ -395,6 +396,15 @@ class Navigator(private val analytics: Analytics) {
             .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             .putExtra(ARG_WALLET_REWARDS, rewardsData)
         activityResultLauncher.launch(intent)
+    }
+
+    fun showRewardIssues(context: Context, device: UIDevice?, reward: Reward?) {
+        context.startActivity(
+            Intent(context, RewardIssuesActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_DEVICE, device)
+                .putExtra(ARG_REWARD, reward)
+        )
     }
 
     fun showMessageDialog(

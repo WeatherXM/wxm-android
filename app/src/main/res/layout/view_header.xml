@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="androidx.appcompat.widget.LinearLayoutCompat">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Title"
+            android:textColor="@color/colorOnSurface"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/reward_issues" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            android:textColor="@color/darkGrey"
+            app:layout_constraintTop_toBottomOf="@id/title"
+            tools:text="Report for Dec 6, 2023 (UTC)" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</merge>

@@ -83,10 +83,10 @@ class RewardsFragment : BaseFragment() {
                 binding.dailyRewardsCard.updateUI(
                     it.latest,
                     model.getRewardsHideAnnotationThreshold(),
-                    useShortAnnotationText = model.device.relation != DeviceRelation.OWNED,
+                    useShortAnnotationText = parentModel.device.relation != DeviceRelation.OWNED,
                     isInRewardDetails = false
                 ) {
-                    navigator.showRewardDetails(requireContext(), model.device, it.latest)
+                    navigator.showRewardDetails(requireContext(), parentModel.device, it.latest)
                 }
                 binding.totalRewards.text =
                     getString(R.string.wxm_amount, formatTokens(totalRewards.toBigDecimal()))

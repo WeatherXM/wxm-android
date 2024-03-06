@@ -54,4 +54,7 @@
         <attr name="profile_item_subtitle" format="string" />
         <attr name="profile_item_icon" format="reference" />
     </declare-styleable>
+    <declare-styleable name="HeaderView">
+        <attr name="header_title" format="string" />
+    </declare-styleable>
 </resources>
