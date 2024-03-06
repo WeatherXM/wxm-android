@@ -86,9 +86,7 @@ class RewardsFragment : BaseFragment() {
                     useShortAnnotationText = parentModel.device.relation != DeviceRelation.OWNED,
                     isInRewardDetails = false
                 ) {
-                    // FIXME: Fix the below before merging
-                    navigator.showRewardIssues(requireContext(), parentModel.device, it.latest)
-                   // navigator.showRewardDetails(requireContext(), parentModel.device, it.latest)
+                    navigator.showRewardDetails(requireContext(), parentModel.device, it.latest)
                 }
                 binding.totalRewards.text =
                     getString(R.string.wxm_amount, formatTokens(totalRewards.toBigDecimal()))
