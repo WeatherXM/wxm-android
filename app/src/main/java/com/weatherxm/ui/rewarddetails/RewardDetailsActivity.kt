@@ -253,8 +253,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         binding.cellQualityCard.infoButton {
             navigator.showMessageDialog(
                 supportFragmentManager,
-                getString(R.string.cell_position),
-                getString(R.string.cell_position_explanation),
+                getString(R.string.cell_ranking),
+                getString(R.string.cell_ranking_explanation),
                 readMoreUrl = getString(R.string.docs_url_cell_capacity)
             )
         }
@@ -268,7 +268,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
             }
             binding.cellQualityCard.desc(it.message ?: String.empty())
         } ?: run {
-            binding.cellQualityCard.desc(getString(R.string.cell_position_great))
+            binding.cellQualityCard.desc(getString(R.string.cell_ranking_great))
             binding.cellQualityCard.checkmark()
         }
     }

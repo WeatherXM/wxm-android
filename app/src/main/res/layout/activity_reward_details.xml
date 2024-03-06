@@ -142,7 +142,7 @@
                     android:layout_marginStart="@dimen/margin_small"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:layout_weight="1"
-                    app:reward_quality_title="@string/cell_position" />
+                    app:reward_quality_title="@string/cell_ranking" />
 
             </LinearLayout>
 
