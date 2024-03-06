@@ -2,8 +2,10 @@ package com.weatherxm.ui.rewarddetails
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import coil.ImageLoader
 import com.weatherxm.R
+import com.weatherxm.data.BoostCode
 import com.weatherxm.data.BoostReward
 import com.weatherxm.data.Reward
 import com.weatherxm.data.RewardDetails
@@ -42,6 +44,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
     }
     private val imageLoader: ImageLoader by inject()
 
+    private var rewardDate: String = String.empty()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRewardDetailsBinding.inflate(layoutInflater)
@@ -60,8 +64,9 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         with(binding.toolbar) {
             setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
         }
-        val formattedDate = reward.timestamp.getFormattedDate(true)
-        val subtitle = "${getString(R.string.earnings_for, formattedDate)} (UTC)"
+
+        rewardDate = reward.timestamp.getFormattedDate(true)
+        val subtitle = "${getString(R.string.earnings_for, rewardDate)} (UTC)"
         binding.header
             .subtitle(subtitle)
             .infoButton {
@@ -79,11 +84,11 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                     it.data?.let { rewardDetails ->
                         updateUI(rewardDetails)
                     } ?: onFetchError(
-                        reward.timestamp, formattedDate, getString(R.string.error_reach_out)
+                        reward.timestamp, rewardDate, getString(R.string.error_reach_out)
                     )
                 }
                 Status.ERROR -> {
-                    onFetchError(reward.timestamp, formattedDate, it.message)
+                    onFetchError(reward.timestamp, rewardDate, it.message)
                 }
                 Status.LOADING -> {
                     binding.statusView.clear().animation(R.raw.anim_loading)
@@ -341,6 +346,17 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
     }
 
     override fun onBoostReward(boost: BoostReward) {
-        // TODO: Open Boost Reward Details screen
+        val isCodeSupported = try {
+            BoostCode.valueOf(boost.code ?: String.empty())
+            true
+        } catch (e: IllegalArgumentException) {
+            Timber.e("Unsupported Boost Code: ${boost.code}")
+            false
+        }
+        if (isCodeSupported) {
+            navigator.showRewardBoost(this, boost, model.device.id, rewardDate)
+        } else {
+            toast(R.string.error_boost_not_supported, duration = Toast.LENGTH_LONG)
+        }
     }
 }

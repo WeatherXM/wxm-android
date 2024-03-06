@@ -530,11 +530,18 @@ data class RewardDetails(
     @Json(name = "annotation_summary")
     val annotationSummary: List<RewardsAnnotationGroup>?,
 ) : Parcelable {
+    companion object {
+        fun empty() = RewardDetails(null, null, null, null, null)
+    }
+
     fun toSortedAnnotations(): List<RewardsAnnotationGroup>? {
         return annotationSummary?.sortedByDescending {
             it.severityLevel
         }
     }
+
+    fun isEmpty() = timestamp == null && totalDailyReward == null && base == null
+        && boost == null && annotationSummary == null
 }
 
 @Keep
@@ -674,5 +681,10 @@ enum class SeverityLevel {
     INFO,
     WARNING,
     ERROR
+}
+
+@Suppress("EnumNaming")
+enum class BoostCode {
+    beta_rewards
 }
 

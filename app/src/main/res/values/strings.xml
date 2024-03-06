@@ -343,6 +343,17 @@
     <string name="cell_ranking_explanation">Cell ranking is a measure of a station’s performance relative to others within the same cell - a hexagonal area, covering approximately 5 square kilometers (2 square miles) on the planet.\n\nCell capacity is a parameter that is used to define the maximum number of stations that are eligible for rewards in a specific cell. Every cell has a predefined capacity that depends on its geospatial characteristics*.\n\nEvery station is ranked in its cell daily, based on its reward score and its seniority. As long as the station’s ranking is above the capacity threshold, it will be rewarded, whereas getting below it will lead to zero rewards. For example, in a cell with a max capacity of 5 stations, if a station is ranked 3rd it will get rewarded, but if it is ranked 7th, it won’t receive any rewards.\n\nRead more about how our Cell Capacity algorithm works.\n\n* The cell capacity is currently set to the fixed value of 10 rewardable stations, for every cell.
 </string>
 
+    <!-- Boosts -->
+    <string name="daily_boost_score">Daily Boost Score</string>
+    <string name="boost_tokens_earned">Boost tokens earned for %s (UTC)</string>
+    <string name="boost_tokens_lost">Lost %s $WXM because of data quality score.</string>
+    <string name="boost_details">Boost Details</string>
+    <string name="boost_details_beta_desc">This boost is rewarded for participating in our beta reward program from %1$s to %2$s.</string>
+    <string name="rewardable_station_hours">Rewardable station-hours</string>
+    <string name="daily_tokens_to_be_rewarded">Daily tokens to be rewarded (max)</string>
+    <string name="total_tokens_to_be_rewarded">Total tokens to be rewarded (max)</string>
+    <string name="boost_period">Boost period</string>
+
     <!-- Mainnet -->
     <string name="mainnet_welcome">Welcome to Mainnet!</string>
 

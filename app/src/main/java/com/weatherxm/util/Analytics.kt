@@ -59,7 +59,8 @@ class Analytics(
         NETWORK_SEARCH("Network Search"),
         SORT_FILTER("Sort Filter"),
         DEVICE_REWARD_DETAILS("Device Rewards Details"),
-        DEVICE_REWARD_ISSUES("Device Rewards Issues")
+        DEVICE_REWARD_ISSUES("Device Rewards Issues"),
+        REWARD_BOOST_DETAIL("Boost Detail")
     }
 
     // Custom Event Names
