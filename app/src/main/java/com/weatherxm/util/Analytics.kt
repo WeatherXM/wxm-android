@@ -59,7 +59,7 @@ class Analytics(
         NETWORK_SEARCH("Network Search"),
         SORT_FILTER("Sort Filter"),
         DEVICE_REWARD_DETAILS("Device Rewards Details"),
-        DEVICE_REWARD_ISSUES("Device Rewards Issues"),
+        REWARD_ISSUES("Rewards Issues"),
         REWARD_BOOST_DETAIL("Boost Detail")
     }
 
@@ -149,10 +149,6 @@ class Analytics(
         FORECAST_DAY("Forecast Day"),
         OPEN("open"),
         CLOSE("close"),
-        REWARDS_CARD("Rewards Card"),
-        LATEST("Latest"),
-        DAYS_7("7D"),
-        DAYS_30("30D"),
         REMOVE_DEVICE("Remove Device"),
         CONTACT_SUPPORT("Contact Support"),
         DEVICE_ALERTS("device_alerts"),
@@ -216,13 +212,15 @@ class Analytics(
         FILTERS_GROUP_RELATIONSHIP("relationship"),
         FILTERS_GROUP_STATUS("status"),
         IDENTIFY_PROBLEMS("Identify Problems"),
-        REWARD_ANNOTATIONS("Reward Annotations"),
-        REWARD_DETAILS_READ_MORE("Reward Details Read More"),
-        REWARD_DETAILS_ERROR("Reward Details Error"),
         REWARD_ISSUES_ERROR("Reward Issues Error"),
         NOTIFICATIONS("notifications"),
         ON("on"),
-        OFF("off")
+        OFF("off"),
+        WEB_DOCUMENTATION("WEB_DOCUMENTATION"),
+        INFO_DAILY_REWARDS("info_daily_rewards"),
+        INFO_QOD("info_qod"),
+        INFO_POL("info_pol"),
+        INFO_CELL_POSITION("info_cell_position")
     }
 
     // Custom Param Names

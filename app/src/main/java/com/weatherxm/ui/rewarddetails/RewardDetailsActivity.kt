@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import coil.ImageLoader
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.BoostCode
 import com.weatherxm.data.BoostReward
@@ -70,8 +71,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         binding.header
             .subtitle(subtitle)
             .infoButton {
-                navigator.showMessageDialog(
-                    supportFragmentManager,
+                onMessageDialog(
+                    Analytics.ParamValue.INFO_DAILY_REWARDS.paramValue,
                     getString(R.string.daily_reward),
                     getString(R.string.daily_reward_explanation),
                     readMoreUrl = getString(R.string.docs_url_reward_mechanism)
@@ -167,8 +168,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
     @Suppress("MagicNumber", "CyclomaticComplexMethod")
     private fun updateDataQualityCard(qodScore: Int) {
         binding.dataQualityCard.infoButton {
-            navigator.showMessageDialog(
-                supportFragmentManager,
+            onMessageDialog(
+                Analytics.ParamValue.INFO_QOD.paramValue,
                 getString(R.string.data_quality),
                 getString(R.string.data_quality_explanation),
                 readMoreUrl = getString(R.string.docs_url_qod_algorithm)
@@ -220,8 +221,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
 
     private fun updateLocationCard(annotations: List<RewardsAnnotationGroup>?) {
         binding.locationQualityCard.infoButton {
-            navigator.showMessageDialog(
-                supportFragmentManager,
+            onMessageDialog(
+                Analytics.ParamValue.INFO_POL.paramValue,
                 getString(R.string.location_quality),
                 getString(R.string.location_quality_explanation),
                 readMoreUrl = getString(R.string.docs_url_pol_algorithm)
@@ -256,8 +257,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
 
     private fun updateCellCard(annotations: List<RewardsAnnotationGroup>?) {
         binding.cellQualityCard.infoButton {
-            navigator.showMessageDialog(
-                supportFragmentManager,
+            onMessageDialog(
+                Analytics.ParamValue.INFO_CELL_POSITION.paramValue,
                 getString(R.string.cell_ranking),
                 getString(R.string.cell_ranking_explanation),
                 readMoreUrl = getString(R.string.docs_url_cell_capacity)
@@ -338,11 +339,30 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 }
             } else if (!issue.docUrl.isNullOrEmpty()) {
                 binding.issueCard.action(getString(R.string.read_more)) {
+                    analytics.trackEventSelectContent(
+                        Analytics.ParamValue.WEB_DOCUMENTATION.paramValue,
+                        Pair(FirebaseAnalytics.Param.ITEM_ID, issue.docUrl)
+                    )
                     navigator.openWebsite(this, issue.docUrl)
                 }
             }
         }
         binding.issueCard.setVisible(true)
+    }
+
+    private fun onMessageDialog(
+        itemId: String,
+        title: String,
+        message: String,
+        readMoreUrl: String
+    ) {
+        analytics.trackEventSelectContent(
+            Analytics.ParamValue.LEARN_MORE.paramValue,
+            Pair(FirebaseAnalytics.Param.ITEM_ID, itemId)
+        )
+        navigator.showMessageDialog(
+            supportFragmentManager, title, message, readMoreUrl = readMoreUrl
+        )
     }
 
     override fun onBoostReward(boost: BoostReward) {
