@@ -572,6 +572,48 @@ data class BoostReward(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
+data class BoostRewardResponse(
+    val code: String?,
+    val metadata: BoostRewardMetadata?,
+    val details: BoostRewardDetails?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class BoostRewardMetadata(
+    val title: String?,
+    val description: String?,
+    @Json(name = "img_url")
+    val imgUrl: String?,
+    @Json(name = "doc_url")
+    val docUrl: String?,
+    val about: String?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class BoostRewardDetails(
+    @Json(name = "station_hours")
+    val stationHours: Int?,
+    @Json(name = "max_daily_reward")
+    val maxDailyReward: Float?,
+    @Json(name = "max_total_reward")
+    val maxTotalReward: Float?,
+    @Json(name = "boost_start_date")
+    val boostStartDate: ZonedDateTime?,
+    @Json(name = "boost_stop_date")
+    val boostStopDate: ZonedDateTime?,
+    @Json(name = "participation_start_date")
+    val participationStartDate: ZonedDateTime?,
+    @Json(name = "participation_stop_date")
+    val participationStopDate: ZonedDateTime?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
 data class QoDErrorAffects(
     val parameter: String?,
     val ratio: Int?,

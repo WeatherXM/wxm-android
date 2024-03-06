@@ -1,6 +1,7 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
+import com.weatherxm.data.BoostRewardResponse
 import com.weatherxm.data.Failure
 import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.Rewards
@@ -25,6 +26,11 @@ interface RewardsRepository {
         deviceId: String,
         date: ZonedDateTime
     ): Either<Failure, RewardDetails>
+
+    suspend fun getBoostReward(
+        deviceId: String,
+        boostCode: String
+    ): Either<Failure, BoostRewardResponse>
 
     suspend fun getWalletRewards(walletAddress: String): Either<Failure, WalletRewards>
 }
@@ -56,6 +62,13 @@ class RewardsRepositoryImpl(private val dataSource: RewardsDataSource) : Rewards
         date: ZonedDateTime
     ): Either<Failure, RewardDetails> {
         return dataSource.getRewardDetails(deviceId, date.toISODate())
+    }
+
+    override suspend fun getBoostReward(
+        deviceId: String,
+        boostCode: String
+    ): Either<Failure, BoostRewardResponse> {
+        return dataSource.getBoostReward(deviceId, boostCode)
     }
 
     override suspend fun getWalletRewards(walletAddress: String): Either<Failure, WalletRewards> {
