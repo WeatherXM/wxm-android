@@ -29,7 +29,6 @@ import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.isPoL
-import com.weatherxm.util.Rewards.shouldHideAnnotations
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -114,10 +113,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
             getString(R.string.base_reward_desc, actualBaseReward, maxBaseReward)
         )
 
-        updateIssues(
-            sortedIssues,
-            shouldHideAnnotations(data.base?.rewardScore, model.getRewardsHideAnnotationThreshold())
-        )
+        updateIssues(sortedIssues)
 
         data.base?.qodScore?.let {
             updateDataQualityCard(it)
@@ -139,8 +135,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         binding.mainContainer.setVisible(true)
     }
 
-    private fun updateIssues(sortedIssues: List<RewardsAnnotationGroup>?, hideIssues: Boolean) {
-        if (sortedIssues.isNullOrEmpty() || hideIssues) {
+    private fun updateIssues(sortedIssues: List<RewardsAnnotationGroup>?) {
+        if (sortedIssues.isNullOrEmpty()) {
             binding.issuesTitle.setVisible(false)
             binding.issuesDesc.setVisible(false)
             binding.issueCard.setVisible(false)

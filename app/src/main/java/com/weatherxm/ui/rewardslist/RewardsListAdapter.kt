@@ -16,7 +16,6 @@ import org.koin.core.component.inject
 import java.time.ZonedDateTime
 
 class RewardsListAdapter(
-    private val rewardsHideAnnotationThreshold: Long,
     private val onRewardDetails: (Reward) -> Unit,
     private val onEndOfData: () -> Unit
 ) : ListAdapter<Reward,
@@ -58,7 +57,7 @@ class RewardsListAdapter(
             }
 
             updateDateAndLines(item.timestamp, position)
-            binding.mainCard.updateUI(item, rewardsHideAnnotationThreshold, true)
+            binding.mainCard.updateUI(item, true)
         }
 
         /**

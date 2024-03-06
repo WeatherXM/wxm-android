@@ -15,7 +15,6 @@ import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.getRewardScoreColor
-import com.weatherxm.util.Rewards.shouldHideAnnotations
 import com.weatherxm.util.Weather.EMPTY_VALUE
 import org.koin.core.component.KoinComponent
 
@@ -47,7 +46,6 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
 
     fun updateUI(
         data: Reward?,
-        rewardsHideAnnotationThreshold: Long,
         useShortAnnotationText: Boolean,
         onViewDetails: (() -> Unit)? = null
     ) {
@@ -85,9 +83,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
                 context.getString(R.string.wxm_amount, formatTokens(it.toBigDecimal()))
         }
 
-        if (!shouldHideAnnotations(data.baseRewardScore, rewardsHideAnnotationThreshold)) {
-            setupAnnotations(data.annotationSummary, useShortAnnotationText, onViewDetails)
-        }
+        setupAnnotations(data.annotationSummary, useShortAnnotationText, onViewDetails)
     }
 
     private fun setupAnnotations(

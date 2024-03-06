@@ -12,7 +12,6 @@ interface AppConfigRepository {
     fun getChangelog(): String
     fun setLastRemindedVersion()
     fun getInstallationId(): String?
-    fun getRewardsHideAnnotationThreshold(): Long
     fun isMainnetEnabled(): Boolean
     fun getMainnetMessage(): String
 }
@@ -54,10 +53,6 @@ class AppConfigRepositoryImpl(
                 }
             }
             .getOrNull()
-    }
-
-    override fun getRewardsHideAnnotationThreshold(): Long {
-        return appConfigDataSource.getRewardsHideAnnotationThreshold()
     }
 
     override fun isMainnetEnabled(): Boolean {

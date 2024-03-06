@@ -28,7 +28,6 @@ class RewardDetailsViewModel(
     private val onRewardDetails = MutableLiveData<Resource<RewardDetails>>()
 
     fun onRewardDetails(): LiveData<Resource<RewardDetails>> = onRewardDetails
-    fun getRewardsHideAnnotationThreshold() = usecase.getRewardsHideAnnotationThreshold()
 
     fun fetchRewardDetails(timestamp: ZonedDateTime) {
         viewModelScope.launch {

@@ -57,10 +57,6 @@ object Rewards {
         return amount.divide(BigDecimal(DIVISOR_WEI_TO_ETH), ETH_DECIMALS, RoundingMode.HALF_UP)
     }
 
-    fun shouldHideAnnotations(rewardScore: Int?, hideAnnotationsThreshold: Long): Boolean {
-        return (rewardScore?.toLong() ?: 0L) >= hideAnnotationsThreshold
-    }
-
     fun AnnotationGroupCode?.isPoL(): Boolean {
         return listOf(
             AnnotationGroupCode.LOCATION_NOT_VERIFIED,

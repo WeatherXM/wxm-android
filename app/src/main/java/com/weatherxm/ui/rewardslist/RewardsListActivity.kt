@@ -47,7 +47,6 @@ class RewardsListActivity : BaseActivity() {
 
         // Initialize the adapter with empty data
         adapter = RewardsListAdapter(
-            model.getRewardsHideAnnotationThreshold(),
             onRewardDetails = {
                 analytics.trackEventUserAction(
                     Analytics.ParamValue.IDENTIFY_PROBLEMS.paramValue,

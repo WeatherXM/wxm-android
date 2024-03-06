@@ -532,7 +532,7 @@ private val usecases = module {
         ClaimDeviceUseCaseImpl(get(), get())
     }
     single<RewardsUseCase> {
-        RewardsUseCaseImpl(get(), get())
+        RewardsUseCaseImpl(get())
     }
     single<AuthUseCase> {
         AuthUseCaseImpl(get(), get(), get())
