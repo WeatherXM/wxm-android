@@ -81,7 +81,12 @@ open class RewardsQualityCardView : LinearLayout, KoinComponent {
     }
 
     fun setSlider(score: Int): RewardsQualityCardView {
-        binding.slider.values = listOf(score.toFloat())
+        // In case of zero score, show a very small number instead of an empty slider
+        binding.slider.values = if (score == 0) {
+            listOf(0.1F)
+        } else {
+            listOf(score.toFloat())
+        }
         binding.slider.trackActiveTintList =
             ColorStateList.valueOf(context.getColor(getRewardScoreColor(score)))
         binding.sliderContainer.setVisible(true)
