@@ -75,7 +75,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                     Analytics.ParamValue.INFO_DAILY_REWARDS.paramValue,
                     getString(R.string.daily_reward),
                     getString(R.string.daily_reward_explanation),
-                    readMoreUrl = getString(R.string.docs_url_reward_mechanism)
+                    readMoreUrl = getString(R.string.docs_url_reward_mechanism),
+                    analyticsScreenName = Analytics.Screen.DAILY_REWARD_INFO.screenName
                 )
             }
 
@@ -172,7 +173,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 Analytics.ParamValue.INFO_QOD.paramValue,
                 getString(R.string.data_quality),
                 getString(R.string.data_quality_explanation),
-                readMoreUrl = getString(R.string.docs_url_qod_algorithm)
+                readMoreUrl = getString(R.string.docs_url_qod_algorithm),
+                analyticsScreenName = Analytics.Screen.DATA_QUALITY_INFO.screenName
             )
         }
         if (qodScore >= 95) {
@@ -225,7 +227,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 Analytics.ParamValue.INFO_POL.paramValue,
                 getString(R.string.location_quality),
                 getString(R.string.location_quality_explanation),
-                readMoreUrl = getString(R.string.docs_url_pol_algorithm)
+                readMoreUrl = getString(R.string.docs_url_pol_algorithm),
+                analyticsScreenName = Analytics.Screen.LOCATION_QUALITY_INFO.screenName
             )
         }
         annotations?.firstOrNull {
@@ -261,7 +264,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 Analytics.ParamValue.INFO_CELL_POSITION.paramValue,
                 getString(R.string.cell_ranking),
                 getString(R.string.cell_ranking_explanation),
-                readMoreUrl = getString(R.string.docs_url_cell_capacity)
+                readMoreUrl = getString(R.string.docs_url_cell_capacity),
+                analyticsScreenName = Analytics.Screen.CELL_RANKING_INFO.screenName
             )
         }
         annotations?.firstOrNull {
@@ -354,14 +358,19 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         itemId: String,
         title: String,
         message: String,
-        readMoreUrl: String
+        readMoreUrl: String,
+        analyticsScreenName: String
     ) {
         analytics.trackEventSelectContent(
             Analytics.ParamValue.LEARN_MORE.paramValue,
             Pair(FirebaseAnalytics.Param.ITEM_ID, itemId)
         )
         navigator.showMessageDialog(
-            supportFragmentManager, title, message, readMoreUrl = readMoreUrl
+            supportFragmentManager,
+            title,
+            message,
+            readMoreUrl = readMoreUrl,
+            analyticsScreenName = analyticsScreenName
         )
     }
 

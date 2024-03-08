@@ -427,12 +427,16 @@ class Navigator(private val analytics: Analytics) {
     fun showMessageDialog(
         fragmentManager: FragmentManager,
         title: String?,
-        message: String? = null,
-        htmlMessage: String? = null,
-        readMoreUrl: String? = null
+        message: String?,
+        readMoreUrl: String? = null,
+        analyticsScreenName: String? = null
     ) {
-        MessageDialogFragment.newInstance(title, message, htmlMessage, readMoreUrl)
-            .show(fragmentManager, MessageDialogFragment.TAG)
+        MessageDialogFragment.newInstance(
+            title,
+            message,
+            readMoreUrl,
+            analyticsScreenName
+        ).show(fragmentManager, MessageDialogFragment.TAG)
     }
 
     fun showHandleFollowDialog(

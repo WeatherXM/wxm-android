@@ -59,8 +59,12 @@ class Analytics(
         NETWORK_SEARCH("Network Search"),
         SORT_FILTER("Sort Filter"),
         DEVICE_REWARD_DETAILS("Device Rewards Details"),
-        REWARD_ISSUES("Rewards Issues"),
-        REWARD_BOOST_DETAIL("Boost Detail")
+        REWARD_ISSUES("Reward Issues"),
+        REWARD_BOOST_DETAIL("Boost Detail"),
+        DAILY_REWARD_INFO("Daily Reward info"),
+        DATA_QUALITY_INFO("Data Quality info"),
+        LOCATION_QUALITY_INFO("Location Quality info"),
+        CELL_RANKING_INFO("Cell Ranking info")
     }
 
     // Custom Event Names
@@ -394,6 +398,15 @@ class Analytics(
                 param(FirebaseAnalytics.Param.SCREEN_NAME, screen.screenName)
                 param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass ?: String.empty())
                 itemId?.let { param(FirebaseAnalytics.Param.ITEM_ID, itemId) }
+            }
+        }
+    }
+
+    fun trackScreen(screenName: String, screenClass: String?) {
+        if (cacheService.getAnalyticsEnabled()) {
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+                param(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
+                param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass ?: String.empty())
             }
         }
     }

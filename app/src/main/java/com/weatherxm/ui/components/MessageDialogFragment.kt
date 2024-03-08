@@ -12,10 +12,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentMessageDialogBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import kotlinx.coroutines.launch
-import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.koin.android.ext.android.inject
 
 class MessageDialogFragment : BaseBottomSheetDialogFragment() {
@@ -24,28 +22,28 @@ class MessageDialogFragment : BaseBottomSheetDialogFragment() {
 
     private var title: String? = null
     private var message: String? = null
-    private var htmlMessage: String? = null
     private var readMoreUrl: String? = null
+    private var analyticsScreenName: String? = null
 
     companion object {
         const val TAG = "MessageDialogFragment"
         const val ARG_TITLE = "title"
         const val ARG_MESSAGE = "message"
-        const val ARG_HTML_MESSAGE = "html_message"
         const val ARG_READ_MORE_URL = "read_more_url"
+        const val ARG_ANALYTICS_SCREEN_NAME = "analytics_screen_name"
 
         fun newInstance(
             title: String?,
             message: String?,
-            htmlMessage: String?,
-            readMoreUrl: String?
+            readMoreUrl: String?,
+            analyticsScreenName: String?
         ) =
             MessageDialogFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_TITLE, title)
                     putString(ARG_MESSAGE, message)
-                    putString(ARG_HTML_MESSAGE, htmlMessage)
                     putString(ARG_READ_MORE_URL, readMoreUrl)
+                    putString(ARG_ANALYTICS_SCREEN_NAME, analyticsScreenName)
                 }
             }
     }
@@ -56,8 +54,8 @@ class MessageDialogFragment : BaseBottomSheetDialogFragment() {
                 val args = requireArguments()
                 title = args.getString(ARG_TITLE, null)
                 message = args.getString(ARG_MESSAGE, null)
-                htmlMessage = args.getString(ARG_HTML_MESSAGE, null)
                 readMoreUrl = args.getString(ARG_READ_MORE_URL, null)
+                analyticsScreenName = args.getString(ARG_ANALYTICS_SCREEN_NAME, null)
             }
         }
     }
@@ -90,16 +88,18 @@ class MessageDialogFragment : BaseBottomSheetDialogFragment() {
             binding.message.text = it
         }
 
-        htmlMessage?.let {
-            binding.message.setHtml(it)
-            binding.message.movementMethod = BetterLinkMovementMethod.getInstance()
-        }
-
         readMoreUrl?.let { url ->
             binding.readMoreAction.setOnClickListener {
                 navigator.openWebsite(context, url)
             }
             binding.readMoreAction.setVisible(true)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analyticsScreenName?.let {
+            analytics.trackScreen(it, MessageDialogFragment::class.simpleName)
         }
     }
 }
