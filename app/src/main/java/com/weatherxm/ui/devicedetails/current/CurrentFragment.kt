@@ -117,6 +117,9 @@ class CurrentFragment : BaseFragment() {
     private fun onDeviceUpdated(device: UIDevice) {
         binding.progress.visibility = View.INVISIBLE
         setAlerts(device)
+        if (device.currentWeather == null || device.currentWeather.isEmpty()) {
+            binding.historicalCharts.setVisible(false)
+        }
         binding.currentWeatherCard.setData(device.currentWeather)
         binding.followCard.setVisible(device.isUnfollowed())
         binding.historicalCharts.isEnabled = !device.isUnfollowed()

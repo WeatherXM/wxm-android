@@ -128,7 +128,7 @@
                         android:id="@+id/noDataMessage"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_normal"
+                        android:layout_marginTop="@dimen/margin_small"
                         android:text="@string/no_data_message"
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         app:layout_constraintEnd_toEndOf="parent"
