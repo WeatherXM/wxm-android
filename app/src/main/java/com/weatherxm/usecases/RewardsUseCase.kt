@@ -125,7 +125,7 @@ class RewardsUseCaseImpl(
             UIBoost(
                 it.metadata?.title ?: String.empty(),
                 formatTokens(actualReward),
-                boostReward.rewardScore ?: 0,
+                boostReward.rewardScore,
                 formatTokens(maxReward - actualReward),
                 getBoostDesc(boostCode, it.details),
                 it.metadata?.about ?: String.empty(),
