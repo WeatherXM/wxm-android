@@ -72,6 +72,7 @@ class RewardBoostActivity : BaseActivity() {
         model.fetchRewardBoost(boostReward)
     }
 
+    @Suppress("MagicNumber")
     @SuppressLint("SetTextI18n")
     private fun updateUI(boostCode: String?, data: UIBoost) {
         if (data.imgUrl.isEmpty()) {
@@ -88,7 +89,7 @@ class RewardBoostActivity : BaseActivity() {
 
         binding.title.text = data.title
         binding.amount.text = getString(R.string.reward, data.actualReward)
-        if (BoostCode.beta_rewards.name == boostCode) {
+        if (BoostCode.beta_rewards.name == boostCode && data.boostScore != null) {
             binding.dailyBoostScore.text = if (data.boostScore == 100) {
                 getString(R.string.got_all_beta_rewards)
             } else {

@@ -284,7 +284,7 @@ data class UIWalletRewards(
 data class UIBoost(
     val title: String,
     val actualReward: String,
-    val boostScore: Int,
+    val boostScore: Int?,
     val lostRewards: String,
     val boostDesc: String,
     val about: String,
