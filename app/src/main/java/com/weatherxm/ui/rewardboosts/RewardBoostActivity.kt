@@ -6,6 +6,7 @@ import android.view.View
 import coil.ImageLoader
 import coil.request.ImageRequest
 import com.weatherxm.R
+import com.weatherxm.data.BoostCode
 import com.weatherxm.data.BoostReward
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityRewardBoostBinding
@@ -54,7 +55,7 @@ class RewardBoostActivity : BaseActivity() {
                 Status.SUCCESS -> {
                     it.data?.let { data ->
                         binding.amountDesc.text = getString(R.string.boost_tokens_earned, date)
-                        updateUI(data)
+                        updateUI(boostReward.code, data)
                     } ?: onFetchError(boostReward, getString(R.string.error_reach_out))
                 }
                 Status.ERROR -> {
@@ -72,7 +73,7 @@ class RewardBoostActivity : BaseActivity() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun updateUI(data: UIBoost) {
+    private fun updateUI(boostCode: String?, data: UIBoost) {
         if (data.imgUrl.isEmpty()) {
             binding.boostCard.setBoostFallbackBackground()
         } else {
@@ -86,9 +87,20 @@ class RewardBoostActivity : BaseActivity() {
         }
 
         binding.title.text = data.title
-        binding.amount.text = getString(R.string.wxm_amount, data.actualReward)
-        binding.dailyBoostScore.text = "${data.boostScore}%"
-        binding.lostRewards.text = getString(R.string.boost_tokens_lost, data.lostRewards)
+        binding.amount.text = getString(R.string.reward, data.actualReward)
+        if (BoostCode.beta_rewards.name == boostCode) {
+            binding.dailyBoostScore.text = if (data.boostScore == 100) {
+                getString(R.string.got_all_beta_rewards)
+            } else {
+                "${data.boostScore}%"
+            }
+            binding.lostRewards.text = getString(R.string.boost_tokens_lost, data.lostRewards)
+        } else {
+            binding.lostRewards.setVisible(false)
+            binding.divider.setVisible(false)
+            binding.dailyBoostScoreTitle.setVisible(false)
+            binding.dailyBoostScore.setVisible(false)
+        }
         binding.boostDetailsDesc.text = data.boostDesc
         binding.boostDetailsDesc.setVisible(data.boostDesc.isNotEmpty())
         binding.boostAboutDesc.text = data.about
