@@ -61,8 +61,7 @@
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingBottom="@dimen/padding_normal">
+                            android:layout_height="wrap_content">
 
                             <com.weatherxm.ui.components.WeatherCardView
                                 android:id="@+id/currentWeatherCard"
@@ -76,8 +75,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/margin_normal"
+                                android:layout_marginBottom="@dimen/margin_normal"
                                 android:backgroundTint="@color/subtle_button_background_color"
                                 android:text="@string/view_historical_data"
+                                app:layout_constraintBottom_toBottomOf="parent"
                                 android:textColor="@color/subtle_button_text_stroke_color"
                                 app:layout_constraintTop_toBottomOf="@id/currentWeatherCard"
                                 app:strokeColor="@color/subtle_button_text_stroke_color" />
