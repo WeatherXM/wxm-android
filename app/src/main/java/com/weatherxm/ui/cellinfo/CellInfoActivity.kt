@@ -2,6 +2,7 @@ package com.weatherxm.ui.cellinfo
 
 import android.os.Bundle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -50,11 +51,19 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
             }
         }
         binding.capacityChip.setOnCloseIconClickListener {
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.LEARN_MORE.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID,
+                    Analytics.ParamValue.INFO_CELL_CAPACITY.paramValue
+                )
+            )
             navigator.showMessageDialog(
                 supportFragmentManager,
                 getString(R.string.cell_capacity),
                 getString(R.string.cell_capacity_explanation),
-                readMoreUrl = getString(R.string.docs_url_cell_capacity)
+                readMoreUrl = getString(R.string.docs_url_cell_capacity),
+                analyticsScreenName = Analytics.Screen.CELL_CAPACITY_INFO.screenName
             )
         }
 

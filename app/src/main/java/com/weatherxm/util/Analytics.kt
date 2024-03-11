@@ -64,7 +64,8 @@ class Analytics(
         DAILY_REWARD_INFO("Daily Reward info"),
         DATA_QUALITY_INFO("Data Quality info"),
         LOCATION_QUALITY_INFO("Location Quality info"),
-        CELL_RANKING_INFO("Cell Ranking info")
+        CELL_RANKING_INFO("Cell Ranking info"),
+        CELL_CAPACITY_INFO("Cell Capacity info")
     }
 
     // Custom Event Names
@@ -226,7 +227,8 @@ class Analytics(
         INFO_DAILY_REWARDS("info_daily_rewards"),
         INFO_QOD("info_qod"),
         INFO_POL("info_pol"),
-        INFO_CELL_POSITION("info_cell_position")
+        INFO_CELL_POSITION("info_cell_position"),
+        INFO_CELL_CAPACITY("info_cell_capacity")
     }
 
     // Custom Param Names
