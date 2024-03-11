@@ -17,6 +17,7 @@ import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.Location
 import com.weatherxm.data.Reward
+import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.WXMRemoteMessage
 import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.cellinfo.CellInfoActivity
@@ -30,6 +31,7 @@ import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_REWARD
+import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
 import com.weatherxm.ui.common.UIDevice
@@ -398,12 +400,12 @@ class Navigator(private val analytics: Analytics) {
         activityResultLauncher.launch(intent)
     }
 
-    fun showRewardIssues(context: Context, device: UIDevice?, reward: Reward?) {
+    fun showRewardIssues(context: Context, device: UIDevice?, reward: RewardDetails?) {
         context.startActivity(
             Intent(context, RewardIssuesActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_DEVICE, device)
-                .putExtra(ARG_REWARD, reward)
+                .putExtra(ARG_REWARD_DETAILS, reward)
         )
     }
 
@@ -411,9 +413,10 @@ class Navigator(private val analytics: Analytics) {
         fragmentManager: FragmentManager,
         title: String?,
         message: String? = null,
-        htmlMessage: String? = null
+        htmlMessage: String? = null,
+        readMoreUrl: String? = null
     ) {
-        MessageDialogFragment.newInstance(title, message, htmlMessage)
+        MessageDialogFragment.newInstance(title, message, htmlMessage, readMoreUrl)
             .show(fragmentManager, MessageDialogFragment.TAG)
     }
 

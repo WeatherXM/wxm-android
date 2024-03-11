@@ -47,9 +47,6 @@ class RewardsViewModel(
         }
     }
 
-    fun getRewardsHideAnnotationThreshold() =
-        deviceDetailsUseCase.getRewardsHideAnnotationThreshold()
-
     fun fetchRewardsFromNetwork() {
         fetchRewardsJob?.let {
             if (it.isActive) {

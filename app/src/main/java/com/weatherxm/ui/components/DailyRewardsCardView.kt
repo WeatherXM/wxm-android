@@ -15,7 +15,6 @@ import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.getRewardScoreColor
-import com.weatherxm.util.Rewards.shouldHideAnnotations
 import com.weatherxm.util.Weather.EMPTY_VALUE
 import org.koin.core.component.KoinComponent
 
@@ -47,9 +46,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
 
     fun updateUI(
         data: Reward?,
-        rewardsHideAnnotationThreshold: Long,
         useShortAnnotationText: Boolean,
-        isInRewardDetails: Boolean,
         onViewDetails: (() -> Unit)? = null
     ) {
         if (data == null) return
@@ -86,15 +83,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
                 context.getString(R.string.wxm_amount, formatTokens(it.toBigDecimal()))
         }
 
-        // TODO: Temporary code until we use something else for the reward details screen
-        if (isInRewardDetails) {
-            binding.parentCard.elevation = 0F
-            binding.annotationCard.setVisible(false)
-            return
-        }
-        if (!shouldHideAnnotations(data.baseRewardScore, rewardsHideAnnotationThreshold)) {
-            setupAnnotations(data.annotationSummary, useShortAnnotationText, onViewDetails)
-        }
+        setupAnnotations(data.annotationSummary, useShortAnnotationText, onViewDetails)
     }
 
     private fun setupAnnotations(
@@ -149,13 +138,13 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             }
         } else {
             if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
-                context.getString(R.string.annotations_timeline_info_text, annotationsSize)
+                context.getString(R.string.annotation_issues_info_text, annotationsSize)
             } else if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize <= 1) {
-                context.getString(R.string.annotation_timeline_info_text)
-            } else if (!severityLevels.contains(SeverityLevel.WARNING) && annotationsSize > 1) {
-                context.getString(R.string.annotations_timeline_warn_error_text, annotationsSize)
+                context.getString(R.string.annotation_issue_info_text)
+            } else if (annotationsSize > 1) {
+                context.getString(R.string.annotation_issues_warn_error_text, annotationsSize)
             } else {
-                context.getString(R.string.annotation_timeline_warn_error_text)
+                context.getString(R.string.annotation_issue_warn_error_text)
             }
         }
     }

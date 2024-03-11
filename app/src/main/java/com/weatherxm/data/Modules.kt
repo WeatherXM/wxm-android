@@ -532,7 +532,7 @@ private val usecases = module {
         ClaimDeviceUseCaseImpl(get(), get())
     }
     single<RewardsUseCase> {
-        RewardsUseCaseImpl(get(), get())
+        RewardsUseCaseImpl(get())
     }
     single<AuthUseCase> {
         AuthUseCaseImpl(get(), get(), get())
@@ -948,7 +948,7 @@ private val viewmodels = module {
     viewModel { ResetPasswordViewModel(get(), get(), get()) }
     viewModel { RewardsClaimViewModel(get(), get()) }
     viewModel { RewardsListViewModel(get(), get()) }
-    viewModel { RewardDetailsViewModel(get()) }
+    viewModel { params -> RewardDetailsViewModel(device = params.get(), get(), get(), get()) }
     viewModel { SendFeedbackViewModel(get(), get(), get()) }
     viewModel { SignupViewModel(get(), get(), get()) }
     viewModel { UpdatePromptViewModel(get()) }

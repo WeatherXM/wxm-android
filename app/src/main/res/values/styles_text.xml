@@ -39,6 +39,14 @@
         <item name="android:textColor">@color/colorPrimaryVariant</item>
     </style>
 
+    <style name="TextAppearance.WeatherXM.Default.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textColor">@color/colorOnSurface</item>
+    </style>
+
+    <style name="TextAppearance.WeatherXM.Default.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:textColor">@color/colorOnSurface</item>
+    </style>
+
     <!--
         Toolbar
     -->

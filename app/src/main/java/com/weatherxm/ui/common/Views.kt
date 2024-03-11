@@ -351,6 +351,13 @@ fun MaterialCardView.setCardStroke(@ColorRes colorResId: Int, width: Int) {
     strokeWidth = width
 }
 
+/**
+ * Fallback in case img url or drawable is missing so the texts can be visible
+ */
+fun MaterialCardView.setBoostFallbackBackground() {
+    setCardBackgroundColor(context.getColor(R.color.dark_background))
+}
+
 private fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)

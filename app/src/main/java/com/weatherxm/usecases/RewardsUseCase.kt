@@ -2,9 +2,10 @@ package com.weatherxm.usecases
 
 import arrow.core.Either
 import com.weatherxm.data.Failure
-import com.weatherxm.data.repository.AppConfigRepository
+import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.ui.common.UIRewardsTimeline
+import java.time.ZonedDateTime
 
 interface RewardsUseCase {
     suspend fun getRewardsTimeline(
@@ -14,13 +15,13 @@ interface RewardsUseCase {
         toDate: String? = null
     ): Either<Failure, UIRewardsTimeline>
 
-    fun getRewardsHideAnnotationThreshold(): Long
+    suspend fun getRewardDetails(
+        deviceId: String,
+        date: ZonedDateTime
+    ): Either<Failure, RewardDetails>
 }
 
-class RewardsUseCaseImpl(
-    private val repository: RewardsRepository,
-    private val appConfigRepository: AppConfigRepository
-) : RewardsUseCase {
+class RewardsUseCaseImpl(private val repository: RewardsRepository) : RewardsUseCase {
     override suspend fun getRewardsTimeline(
         deviceId: String,
         page: Int?,
@@ -47,7 +48,10 @@ class RewardsUseCaseImpl(
         }
     }
 
-    override fun getRewardsHideAnnotationThreshold(): Long {
-        return appConfigRepository.getRewardsHideAnnotationThreshold()
+    override suspend fun getRewardDetails(
+        deviceId: String,
+        date: ZonedDateTime
+    ): Either<Failure, RewardDetails> {
+        return repository.getRewardDetails(deviceId, date)
     }
 }

@@ -18,5 +18,4 @@ interface DeviceDetailsUseCase {
     suspend fun getRewards(deviceId: String): Either<Failure, Rewards>
     fun isMainnetEnabled(): Boolean
     fun getMainnetMessage(): String
-    fun getRewardsHideAnnotationThreshold(): Long
 }

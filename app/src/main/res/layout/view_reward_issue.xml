@@ -26,8 +26,7 @@
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.LabelLarge"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Message title here." />
 

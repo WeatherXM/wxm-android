@@ -41,8 +41,6 @@ class RewardsListViewModel(
 
     fun onNewRewardsPage(): LiveData<Resource<List<Reward>>> = onNewRewardsPage
 
-    fun getRewardsHideAnnotationThreshold() = usecase.getRewardsHideAnnotationThreshold()
-
     fun fetchFirstPageRewards(deviceId: String) {
         onFirstPageRewards.postValue(Resource.loading())
         viewModelScope.launch {

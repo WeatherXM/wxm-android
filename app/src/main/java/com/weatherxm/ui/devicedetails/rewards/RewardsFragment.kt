@@ -82,9 +82,7 @@ class RewardsFragment : BaseFragment() {
             if (!it.isEmpty()) {
                 binding.dailyRewardsCard.updateUI(
                     it.latest,
-                    model.getRewardsHideAnnotationThreshold(),
-                    useShortAnnotationText = parentModel.device.relation != DeviceRelation.OWNED,
-                    isInRewardDetails = false
+                    parentModel.device.relation != DeviceRelation.OWNED
                 ) {
                     navigator.showRewardDetails(requireContext(), parentModel.device, it.latest)
                 }
