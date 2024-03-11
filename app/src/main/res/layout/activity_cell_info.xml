@@ -12,15 +12,72 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_bottom_rounded_corners">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:navigationIcon="@drawable/ic_back"
-            app:title="@string/weather_stations"
-            tools:subtitle="Athens, GR" />
+            app:menu="@menu/cell_details_menu"
+            app:navigationIcon="@drawable/ic_back" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_normal_to_large">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Title"
+                android:textColor="@color/colorOnSurface"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Athens, Greece"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/cellStatsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/padding_normal"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:visibility="visible">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/activeChip"
+                    style="@style/Widget.WeatherXM.Chip.Status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.LabelLarge"
+                    app:chipBackgroundColor="@color/successTint"
+                    tools:text="3 active stations" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/capacityChip"
+                    style="@style/Widget.WeatherXM.Chip.Status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.LabelLarge"
+                    app:chipBackgroundColor="@color/blueTint"
+                    app:closeIcon="@drawable/ic_learn_more_info"
+                    app:closeIconEnabled="true"
+                    app:closeIconSize="16dp"
+                    app:closeIconTint="@color/colorOnSurface"
+                    tools:text="4/10 stations present" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
