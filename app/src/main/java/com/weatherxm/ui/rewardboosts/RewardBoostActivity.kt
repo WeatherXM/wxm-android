@@ -50,6 +50,10 @@ class RewardBoostActivity : BaseActivity() {
             return
         }
 
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         model.onBoostReward().observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
