@@ -97,7 +97,7 @@ class RewardsUseCaseImpl(
                 boostDetails.add(
                     BoostDetailInfo(
                         resources.getString(R.string.daily_tokens_to_be_rewarded),
-                        formatTokens(amount)
+                        resources.getString(R.string.wxm_amount, formatTokens(amount))
                     )
                 )
             }
@@ -106,7 +106,7 @@ class RewardsUseCaseImpl(
                 boostDetails.add(
                     BoostDetailInfo(
                         resources.getString(R.string.total_tokens_to_be_rewarded),
-                        formatTokens(amount)
+                        resources.getString(R.string.wxm_amount, formatTokens(amount))
                     )
                 )
             }
