@@ -42,7 +42,7 @@
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/margin_small"
         app:dividerColor="@color/layer2"
-        app:layout_constraintTop_toBottomOf="@id/value" />
+        app:layout_constraintTop_toBottomOf="@id/key" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
