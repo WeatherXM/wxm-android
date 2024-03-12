@@ -30,6 +30,14 @@ data class UICell(
 
 @Keep
 @JsonClass(generateAdapter = true)
+@Parcelize
+data class NavigationLocation(
+    var zoomLevel: Double,
+    var location: Location
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
 data class ExplorerCamera(
     var zoom: Double,
     var center: Point

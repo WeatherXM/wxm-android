@@ -97,7 +97,7 @@ class EditLocationMapFragment : BaseMapFragment() {
     private fun recenter(map: MapboxMap?, location: Location) {
         map?.setCamera(
             CameraOptions.Builder()
-                .zoom(USER_LOCATION_ZOOM_LEVEL)
+                .zoom(USER_SET_LOCATION_ZOOM_LEVEL)
                 .center(Point.fromLngLat(location.lon, location.lat))
                 .build()
         )

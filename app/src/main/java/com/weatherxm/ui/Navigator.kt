@@ -150,12 +150,13 @@ class Navigator(private val analytics: Analytics) {
         }
     }
 
-    fun showCellInfo(context: Context?, cell: UICell) {
+    fun showCellInfo(context: Context?, cell: UICell, openExplorerOnBack: Boolean = false) {
         context?.let {
             it.startActivity(
                 Intent(it, CellInfoActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(ARG_EXPLORER_CELL, cell)
+                    .putExtra(ARG_OPEN_EXPLORER_ON_BACK, openExplorerOnBack)
             )
         }
     }

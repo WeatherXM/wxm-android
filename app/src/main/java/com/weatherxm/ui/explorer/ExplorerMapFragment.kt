@@ -33,7 +33,6 @@ import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseMapFragment
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.USER_LOCATION_DEFAULT_ZOOM_LEVEL
 import com.weatherxm.ui.explorer.search.NetworkSearchResultsListAdapter
 import com.weatherxm.ui.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
@@ -146,14 +145,7 @@ class ExplorerMapFragment : BaseMapFragment() {
         // Fly the camera to the center of the hex selected
         model.onNavigateToLocation().observe(this) { location ->
             location?.let {
-                cameraFly(Point.fromLngLat(it.lon, it.lat))
-            }
-        }
-
-        // Fly the camera to the starting location on a low zoom level
-        model.onStartingLocation().observe(this) { location ->
-            location?.let {
-                cameraFly(Point.fromLngLat(it.lon, it.lat), DEFAULT_ZOOM_LEVEL)
+                cameraFly(Point.fromLngLat(it.location.lon, it.location.lat), it.zoomLevel)
             }
         }
 
@@ -175,7 +167,7 @@ class ExplorerMapFragment : BaseMapFragment() {
         }
     }
 
-    private fun cameraFly(center: Point, zoomLevel: Double = USER_LOCATION_DEFAULT_ZOOM_LEVEL) {
+    private fun cameraFly(center: Point, zoomLevel: Double = USER_LOCATION_ZOOM_LEVEL) {
         binding.mapView.getMapboxMap().flyTo(
             CameraOptions.Builder().zoom(zoomLevel).center(center).build(),
             MapAnimationOptions.Builder().duration(CAMERA_ANIMATION_DURATION).build()

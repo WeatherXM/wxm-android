@@ -27,4 +27,5 @@ interface ExplorerUseCase {
     suspend fun getRecentSearches(): List<SearchResult>
     suspend fun setRecentSearch(search: SearchResult)
     suspend fun getUserCountryLocation(): Location?
+    suspend fun getCellInfo(index: String): Either<Failure, UICell>
 }

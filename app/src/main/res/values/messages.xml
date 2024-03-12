@@ -20,6 +20,7 @@
     <string name="error_user_device_data_failed">Getting data for this device failed.</string>
     <string name="error_user_device_offline"><![CDATA[Your weather station hasn\'t connected for a while.<br/>Please, visit our <a href="%1$s">troubleshooting guide</a>.]]></string>
     <string name="error_device_not_found">Could not find the requested device</string>
+    <string name="error_cell_not_found">Could not find the requested explorer cell</string>
     <string name="error_invalid_location">Invalid Location</string>
     <string name="error_connect_wallet_invalid_address">Invalid wallet address</string>
     <string name="error_forecast_generic_message">Fetching forecast failed</string>
