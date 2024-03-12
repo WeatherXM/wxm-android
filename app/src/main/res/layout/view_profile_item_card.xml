@@ -9,9 +9,8 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:contentPadding="@dimen/padding_normal_to_large"
-        app:contentPaddingEnd="@dimen/padding_small_to_normal"
-        app:contentPaddingLeft="@dimen/padding_small_to_normal">
+        app:contentPaddingLeft="@dimen/padding_small_to_normal"
+        app:contentPaddingRight="@dimen/padding_small_to_normal">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
