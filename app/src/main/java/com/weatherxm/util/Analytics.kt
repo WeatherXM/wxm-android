@@ -221,7 +221,9 @@ class Analytics(
         REWARD_ISSUES_ERROR("Reward Issues Error"),
         NOTIFICATIONS("notifications"),
         ON("on"),
-        OFF("off")
+        OFF("off"),
+        APP_SURVEY("App Survey"),
+        USER_RESEARCH_PANEL("User Research Panel")
     }
 
     // Custom Param Names
