@@ -94,6 +94,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             true
         }
         userResearchButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            analytics.trackEventSelectContent(Analytics.ParamValue.USER_RESEARCH_PANEL.paramValue)
             navigator.openWebsite(this.context, getString(R.string.user_panel_url))
             true
         }
@@ -166,6 +167,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             true
         }
         shortWxmSurvey?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            analytics.trackEventSelectContent(Analytics.ParamValue.APP_SURVEY.paramValue)
             navigator.showSendFeedback(sendFeedbackLauncher, this)
             true
         }
