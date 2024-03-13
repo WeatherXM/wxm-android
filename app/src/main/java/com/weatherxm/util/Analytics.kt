@@ -59,7 +59,12 @@ class Analytics(
         NETWORK_SEARCH("Network Search"),
         SORT_FILTER("Sort Filter"),
         DEVICE_REWARD_DETAILS("Device Rewards Details"),
-        DEVICE_REWARD_ISSUES("Device Rewards Issues")
+        REWARD_ISSUES("Reward Issues"),
+        REWARD_BOOST_DETAIL("Boost Detail"),
+        DAILY_REWARD_INFO("Daily Reward info"),
+        DATA_QUALITY_INFO("Data Quality info"),
+        LOCATION_QUALITY_INFO("Location Quality info"),
+        CELL_RANKING_INFO("Cell Ranking info")
     }
 
     // Custom Event Names
@@ -148,10 +153,6 @@ class Analytics(
         FORECAST_DAY("Forecast Day"),
         OPEN("open"),
         CLOSE("close"),
-        REWARDS_CARD("Rewards Card"),
-        LATEST("Latest"),
-        DAYS_7("7D"),
-        DAYS_30("30D"),
         REMOVE_DEVICE("Remove Device"),
         CONTACT_SUPPORT("Contact Support"),
         DEVICE_ALERTS("device_alerts"),
@@ -215,15 +216,17 @@ class Analytics(
         FILTERS_GROUP_RELATIONSHIP("relationship"),
         FILTERS_GROUP_STATUS("status"),
         IDENTIFY_PROBLEMS("Identify Problems"),
-        REWARD_ANNOTATIONS("Reward Annotations"),
-        REWARD_DETAILS_READ_MORE("Reward Details Read More"),
-        REWARD_DETAILS_ERROR("Reward Details Error"),
         REWARD_ISSUES_ERROR("Reward Issues Error"),
         NOTIFICATIONS("notifications"),
         ON("on"),
         OFF("off"),
         APP_SURVEY("App Survey"),
-        USER_RESEARCH_PANEL("User Research Panel")
+        USER_RESEARCH_PANEL("User Research Panel"),
+        WEB_DOCUMENTATION("WEB_DOCUMENTATION"),
+        INFO_DAILY_REWARDS("info_daily_rewards"),
+        INFO_QOD("info_qod"),
+        INFO_POL("info_pol"),
+        INFO_CELL_POSITION("info_cell_position")
     }
 
     // Custom Param Names
@@ -397,6 +400,15 @@ class Analytics(
                 param(FirebaseAnalytics.Param.SCREEN_NAME, screen.screenName)
                 param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass ?: String.empty())
                 itemId?.let { param(FirebaseAnalytics.Param.ITEM_ID, itemId) }
+            }
+        }
+    }
+
+    fun trackScreen(screenName: String, screenClass: String?) {
+        if (cacheService.getAnalyticsEnabled()) {
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+                param(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
+                param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass ?: String.empty())
             }
         }
     }

@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
+import com.weatherxm.data.BoostReward
 import com.weatherxm.data.Location
 import com.weatherxm.data.Reward
 import com.weatherxm.data.RewardDetails
@@ -24,8 +25,11 @@ import com.weatherxm.ui.cellinfo.CellInfoActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
 import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
+import com.weatherxm.ui.common.Contracts.ARG_BOOST_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_CELL_CENTER
+import com.weatherxm.ui.common.Contracts.ARG_DATE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
@@ -59,6 +63,7 @@ import com.weatherxm.ui.networkstats.NetworkStatsActivity
 import com.weatherxm.ui.passwordprompt.PasswordPromptFragment
 import com.weatherxm.ui.preferences.PreferenceActivity
 import com.weatherxm.ui.resetpassword.ResetPasswordActivity
+import com.weatherxm.ui.rewardboosts.RewardBoostActivity
 import com.weatherxm.ui.rewarddetails.RewardDetailsActivity
 import com.weatherxm.ui.rewardissues.RewardIssuesActivity
 import com.weatherxm.ui.rewardsclaim.RewardsClaimActivity
@@ -409,15 +414,29 @@ class Navigator(private val analytics: Analytics) {
         )
     }
 
+    fun showRewardBoost(context: Context, reward: BoostReward?, deviceId: String?, date: String?) {
+        context.startActivity(
+            Intent(context, RewardBoostActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_BOOST_REWARD, reward)
+                .putExtra(ARG_DEVICE_ID, deviceId)
+                .putExtra(ARG_DATE, date)
+        )
+    }
+
     fun showMessageDialog(
         fragmentManager: FragmentManager,
         title: String?,
-        message: String? = null,
-        htmlMessage: String? = null,
-        readMoreUrl: String? = null
+        message: String?,
+        readMoreUrl: String? = null,
+        analyticsScreenName: String? = null
     ) {
-        MessageDialogFragment.newInstance(title, message, htmlMessage, readMoreUrl)
-            .show(fragmentManager, MessageDialogFragment.TAG)
+        MessageDialogFragment.newInstance(
+            title,
+            message,
+            readMoreUrl,
+            analyticsScreenName
+        ).show(fragmentManager, MessageDialogFragment.TAG)
     }
 
     fun showHandleFollowDialog(

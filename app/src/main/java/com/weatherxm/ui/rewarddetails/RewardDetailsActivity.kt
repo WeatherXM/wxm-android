@@ -2,8 +2,11 @@ package com.weatherxm.ui.rewarddetails
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import coil.ImageLoader
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.data.BoostCode
 import com.weatherxm.data.BoostReward
 import com.weatherxm.data.Reward
 import com.weatherxm.data.RewardDetails
@@ -42,6 +45,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
     }
     private val imageLoader: ImageLoader by inject()
 
+    private var rewardDate: String = String.empty()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRewardDetailsBinding.inflate(layoutInflater)
@@ -60,16 +65,18 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         with(binding.toolbar) {
             setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
         }
-        val formattedDate = reward.timestamp.getFormattedDate(true)
-        val subtitle = "${getString(R.string.earnings_for, formattedDate)} (UTC)"
+
+        rewardDate = reward.timestamp.getFormattedDate(true)
+        val subtitle = "${getString(R.string.earnings_for, rewardDate)} (UTC)"
         binding.header
             .subtitle(subtitle)
             .infoButton {
-                navigator.showMessageDialog(
-                    supportFragmentManager,
+                onMessageDialog(
+                    Analytics.ParamValue.INFO_DAILY_REWARDS.paramValue,
                     getString(R.string.daily_reward),
                     getString(R.string.daily_reward_explanation),
-                    readMoreUrl = getString(R.string.docs_url_reward_mechanism)
+                    readMoreUrl = getString(R.string.docs_url_reward_mechanism),
+                    analyticsScreenName = Analytics.Screen.DAILY_REWARD_INFO.screenName
                 )
             }
 
@@ -79,11 +86,11 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                     it.data?.let { rewardDetails ->
                         updateUI(rewardDetails)
                     } ?: onFetchError(
-                        reward.timestamp, formattedDate, getString(R.string.error_reach_out)
+                        reward.timestamp, rewardDate, getString(R.string.error_reach_out)
                     )
                 }
                 Status.ERROR -> {
-                    onFetchError(reward.timestamp, formattedDate, it.message)
+                    onFetchError(reward.timestamp, rewardDate, it.message)
                 }
                 Status.LOADING -> {
                     binding.statusView.clear().animation(R.raw.anim_loading)
@@ -162,11 +169,12 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
     @Suppress("MagicNumber", "CyclomaticComplexMethod")
     private fun updateDataQualityCard(qodScore: Int) {
         binding.dataQualityCard.infoButton {
-            navigator.showMessageDialog(
-                supportFragmentManager,
+            onMessageDialog(
+                Analytics.ParamValue.INFO_QOD.paramValue,
                 getString(R.string.data_quality),
                 getString(R.string.data_quality_explanation),
-                readMoreUrl = getString(R.string.docs_url_qod_algorithm)
+                readMoreUrl = getString(R.string.docs_url_qod_algorithm),
+                analyticsScreenName = Analytics.Screen.DATA_QUALITY_INFO.screenName
             )
         }
         if (qodScore >= 95) {
@@ -215,11 +223,12 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
 
     private fun updateLocationCard(annotations: List<RewardsAnnotationGroup>?) {
         binding.locationQualityCard.infoButton {
-            navigator.showMessageDialog(
-                supportFragmentManager,
+            onMessageDialog(
+                Analytics.ParamValue.INFO_POL.paramValue,
                 getString(R.string.location_quality),
                 getString(R.string.location_quality_explanation),
-                readMoreUrl = getString(R.string.docs_url_pol_algorithm)
+                readMoreUrl = getString(R.string.docs_url_pol_algorithm),
+                analyticsScreenName = Analytics.Screen.LOCATION_QUALITY_INFO.screenName
             )
         }
         annotations?.firstOrNull {
@@ -251,11 +260,12 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
 
     private fun updateCellCard(annotations: List<RewardsAnnotationGroup>?) {
         binding.cellQualityCard.infoButton {
-            navigator.showMessageDialog(
-                supportFragmentManager,
+            onMessageDialog(
+                Analytics.ParamValue.INFO_CELL_POSITION.paramValue,
                 getString(R.string.cell_ranking),
                 getString(R.string.cell_ranking_explanation),
-                readMoreUrl = getString(R.string.docs_url_cell_capacity)
+                readMoreUrl = getString(R.string.docs_url_cell_capacity),
+                analyticsScreenName = Analytics.Screen.CELL_RANKING_INFO.screenName
             )
         }
         annotations?.firstOrNull {
@@ -333,6 +343,10 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 }
             } else if (!issue.docUrl.isNullOrEmpty()) {
                 binding.issueCard.action(getString(R.string.read_more)) {
+                    analytics.trackEventSelectContent(
+                        Analytics.ParamValue.WEB_DOCUMENTATION.paramValue,
+                        Pair(FirebaseAnalytics.Param.ITEM_ID, issue.docUrl)
+                    )
                     navigator.openWebsite(this, issue.docUrl)
                 }
             }
@@ -340,7 +354,38 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         binding.issueCard.setVisible(true)
     }
 
+    private fun onMessageDialog(
+        itemId: String,
+        title: String,
+        message: String,
+        readMoreUrl: String,
+        analyticsScreenName: String
+    ) {
+        analytics.trackEventSelectContent(
+            Analytics.ParamValue.LEARN_MORE.paramValue,
+            Pair(FirebaseAnalytics.Param.ITEM_ID, itemId)
+        )
+        navigator.showMessageDialog(
+            supportFragmentManager,
+            title,
+            message,
+            readMoreUrl = readMoreUrl,
+            analyticsScreenName = analyticsScreenName
+        )
+    }
+
     override fun onBoostReward(boost: BoostReward) {
-        // TODO: Open Boost Reward Details screen
+        val isCodeSupported = try {
+            BoostCode.valueOf(boost.code ?: String.empty())
+            true
+        } catch (e: IllegalArgumentException) {
+            Timber.e("Unsupported Boost Code: ${boost.code}")
+            false
+        }
+        if (isCodeSupported) {
+            navigator.showRewardBoost(this, boost, model.device.id, rewardDate)
+        } else {
+            toast(R.string.error_boost_not_supported, duration = Toast.LENGTH_LONG)
+        }
     }
 }

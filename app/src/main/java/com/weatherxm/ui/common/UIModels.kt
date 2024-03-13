@@ -278,6 +278,29 @@ data class UIWalletRewards(
     }
 }
 
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class UIBoost(
+    val title: String,
+    val actualReward: String,
+    val boostScore: Int?,
+    val lostRewards: String,
+    val boostDesc: String,
+    val about: String,
+    val docUrl: String,
+    val imgUrl: String,
+    val details: List<BoostDetailInfo>
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class BoostDetailInfo(
+    val title: String,
+    val value: String
+) : Parcelable
+
 @Parcelize
 enum class DevicesSortOrder : Parcelable {
     DATE_ADDED,
