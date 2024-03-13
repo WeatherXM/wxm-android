@@ -51,7 +51,7 @@ class RewardIssuesActivity : BaseActivity(), RewardIssuesListener {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DEVICE_REWARD_ISSUES, this::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.REWARD_ISSUES, this::class.simpleName)
     }
 
     override fun onAddWallet(group: String?) {

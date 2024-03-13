@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import coil.ImageLoader
 import coil.request.ImageRequest
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.BoostCode
 import com.weatherxm.data.BoostReward
@@ -15,6 +16,7 @@ import com.weatherxm.ui.common.Contracts.ARG_DATE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.UIBoost
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setBoostFallbackBackground
 import com.weatherxm.ui.common.setVisible
@@ -34,6 +36,8 @@ class RewardBoostActivity : BaseActivity() {
 
     private val imageLoader: ImageLoader by inject()
 
+    private var boostCode: String? = String.empty()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRewardBoostBinding.inflate(layoutInflater)
@@ -49,6 +53,7 @@ class RewardBoostActivity : BaseActivity() {
             finish()
             return
         }
+        boostCode = boostReward.code
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -110,6 +115,10 @@ class RewardBoostActivity : BaseActivity() {
         binding.boostDetailsDesc.setVisible(data.boostDesc.isNotEmpty())
         binding.boostAboutDesc.text = data.about
         binding.aboutReadMore.setOnClickListener {
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.WEB_DOCUMENTATION.paramValue,
+                Pair(FirebaseAnalytics.Param.ITEM_ID, data.docUrl)
+            )
             navigator.openWebsite(this, data.docUrl)
         }
         binding.aboutReadMore.setVisible(data.docUrl.isNotEmpty())
@@ -137,6 +146,8 @@ class RewardBoostActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.REWARD_BOOST_DETAIL, this::class.simpleName)
+        analytics.trackScreen(
+            Analytics.Screen.REWARD_BOOST_DETAIL, this::class.simpleName, boostCode
+        )
     }
 }
