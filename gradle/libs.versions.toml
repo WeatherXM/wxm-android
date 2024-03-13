@@ -120,6 +120,7 @@ insetter = { module = "dev.chrisbanes.insetter:insetter", version.ref = "insette
 jwtdecode = { module = "com.auth0.android:jwtdecode", version.ref = "jwtdecode" }
 kable = { module = "com.juul.kable:core", version.ref = "kable" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin-android" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-android" }
 kpermissions = { module = "com.github.fondesa:kpermissions", version.ref = "kpermissions" }
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 mapbox = { module = "com.mapbox.maps:android", version.ref = "mapbox" }
