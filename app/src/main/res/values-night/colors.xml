@@ -42,4 +42,7 @@
     <!-- Network Stats -->
     <color name="network_stats_slider">@color/network_stats_slider_dark</color>
     <color name="network_stats_button">@color/dark_primary</color>
+
+    <!-- Rewards -->
+    <color name="rewards_background">@color/dark_background</color>
 </resources>

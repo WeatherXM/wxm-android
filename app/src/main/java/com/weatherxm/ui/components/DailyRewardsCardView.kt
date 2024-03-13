@@ -55,8 +55,6 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             binding.viewRewardDetails.setOnClickListener {
                 onViewDetails.invoke()
             }
-        } else {
-            binding.viewRewardDetails.setVisible(false)
         }
 
         val formattedTimestamp = data.timestamp?.getFormattedDate(true)
@@ -83,6 +81,9 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
                 context.getString(R.string.wxm_amount, formatTokens(it.toBigDecimal()))
         }
 
+        binding.viewRewardDetails.setVisible(
+            onViewDetails != null && data.annotationSummary.isNullOrEmpty()
+        )
         setupAnnotations(data.annotationSummary, useShortAnnotationText, onViewDetails)
     }
 
@@ -98,7 +99,6 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
 
         if (severityLevels.isNullOrEmpty()) {
             binding.annotationCard.setVisible(false)
-            binding.viewRewardDetails.setVisible(true)
             return
         }
 
@@ -183,6 +183,5 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             }
             setVisible(true)
         }
-        binding.viewRewardDetails.setVisible(false)
     }
 }
