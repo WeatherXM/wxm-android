@@ -25,6 +25,8 @@
     <color name="textColor">@color/light_text</color>
     <color name="translucent">@color/light_translucent</color>
     <color name="fadeTop">@color/fade_light_top</color>
+    <color name="messageDialogBackground">@color/layer1</color>
+    <color name="messageDialogButton">@color/light_translucent</color>
 
     <!-- System and Launcher -->
     <color name="ic_launcher_background">@color/colorPrimary</color>

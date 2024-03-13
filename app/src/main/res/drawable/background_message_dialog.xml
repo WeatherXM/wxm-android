@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="@color/messageDialogBackground" />
+    <corners
+        android:topLeftRadius="@dimen/radius_extra_large"
+        android:topRightRadius="@dimen/radius_extra_large" />
+
+</shape>
