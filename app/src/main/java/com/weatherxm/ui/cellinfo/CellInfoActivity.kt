@@ -1,8 +1,8 @@
 package com.weatherxm.ui.cellinfo
 
 import android.os.Bundle
-import android.view.View
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -34,8 +34,37 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
 
         binding.root.applyInsets()
 
-        binding.toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+        with(binding.toolbar) {
+            setNavigationOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
+            setOnMenuItemClickListener {
+                return@setOnMenuItemClickListener if (it.itemId == R.id.share_cell) {
+                    navigator.openShare(
+                        this@CellInfoActivity,
+                        getString(R.string.share_cell_url, model.cell.index)
+                    )
+                    true
+                } else {
+                    false
+                }
+            }
+        }
+        binding.capacityChip.setOnCloseIconClickListener {
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.LEARN_MORE.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID,
+                    Analytics.ParamValue.INFO_CELL_CAPACITY.paramValue
+                )
+            )
+            navigator.showMessageDialog(
+                supportFragmentManager,
+                getString(R.string.cell_capacity),
+                getString(R.string.cell_capacity_explanation),
+                readMoreUrl = getString(R.string.docs_url_cell_capacity),
+                analyticsScreenName = Analytics.Screen.CELL_CAPACITY_INFO.screenName
+            )
         }
 
         val dialogOverlay = MaterialAlertDialogBuilder(this).create()
@@ -49,7 +78,8 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
         }
 
         model.address().observe(this) {
-            binding.toolbar.subtitle = it
+            binding.title.text = it
+            binding.title.setVisible(true)
         }
 
         model.onFollowStatus().observe(this) {
@@ -83,33 +113,45 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
         when (response.status) {
             Status.SUCCESS -> {
                 if (!response.data.isNullOrEmpty()) {
+                    updateCellStats(response.data)
                     adapter.submitList(response.data)
-                    binding.empty.visibility = View.GONE
-                    binding.recycler.visibility = View.VISIBLE
+                    binding.empty.setVisible(false)
+                    binding.recycler.setVisible(true)
                 } else {
                     binding.empty.clear()
-                    binding.empty.animation(R.raw.anim_error)
-                    binding.empty.title(getString(R.string.error_generic_message))
-                    binding.recycler.visibility = View.GONE
-                    binding.empty.visibility = View.VISIBLE
+                        .animation(R.raw.anim_error)
+                        .title(getString(R.string.error_generic_message))
+                    binding.recycler.setVisible(false)
+                    binding.empty.setVisible(true)
                 }
             }
             Status.ERROR -> {
                 Timber.d(response.message, response.message)
                 binding.empty.clear()
-                binding.empty.animation(R.raw.anim_error)
-                binding.empty.title(getString(R.string.error_generic_message))
-                binding.empty.subtitle(response.message)
-                binding.recycler.visibility = View.GONE
-                binding.empty.visibility = View.VISIBLE
+                    .animation(R.raw.anim_error)
+                    .title(getString(R.string.error_generic_message))
+                    .subtitle(response.message)
+                binding.recycler.setVisible(false)
+                binding.empty.setVisible(true)
             }
             Status.LOADING -> {
-                binding.empty.clear()
-                binding.empty.animation(R.raw.anim_loading)
-                binding.recycler.visibility = View.GONE
-                binding.empty.visibility = View.VISIBLE
+                binding.empty.clear().animation(R.raw.anim_loading)
+                binding.recycler.setVisible(false)
+                binding.empty.setVisible(true)
             }
         }
+    }
+
+    private fun updateCellStats(data: List<UIDevice>) {
+        data.count { it.isOnline() }.apply {
+            if (this > 0) {
+                binding.activeChip.text = getString(R.string.cell_active_stations, this)
+            } else {
+                binding.activeChip.setVisible(false)
+            }
+        }
+        binding.capacityChip.text = getString(R.string.cell_stations_present, data.size)
+        binding.cellStatsContainer.setVisible(true)
     }
 
     override fun onDeviceClicked(device: UIDevice) {

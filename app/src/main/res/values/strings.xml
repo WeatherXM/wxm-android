@@ -573,4 +573,11 @@
     <string name="confirm_location">Confirm Location</string>
     <string name="location_confirmed">Location Confirmed!</string>
     <string name="location_confirmed_desc"><![CDATA[Your station’s location has been updated. The station should start earning rewards again when your location is verified by our systems in <b>~2–3 days</b>.]]></string>
+
+
+    <!-- Cell Info -->
+    <string name="cell_active_stations">%d active stations</string>
+    <string name="cell_stations_present">%d/10 stations present</string>
+    <string name="cell_capacity">Cell Capacity</string>
+    <string name="cell_capacity_explanation">Cell capacity is a parameter that is used to define the maximum number of stations that are eligible for rewards in a specific cell. Every cell has a predefined capacity that depends on its geospatial characteristics*\n\nEvery station is ranked in its cell daily, based on its reward score and its seniority. As long as the station’s ranking is above the capacity threshold, it will be rewarded, whereas getting below it will lead to zero rewards. For example, in a cell with a max capacity of 5 stations, if a station is ranked 3rd it will get rewarded, but if it is ranked 7th, it won’t receive any rewards.\n\nRead more about how our Cell Capacity algorithm works.\n\n* The cell capacity is currently set to the fixed value of 10 rewardable stations, for every cell.</string>
 </resources>

@@ -57,11 +57,12 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/primaryLineColor"
-                    style="@style/Widget.WeatherXM.Chip.ChartLines"
+                    style="@style/Widget.WeatherXM.Chip.Status"
                     android:layout_width="40dp"
                     android:layout_height="10dp"
                     android:layout_marginTop="@dimen/margin_extra_small"
                     app:chipBackgroundColor="@color/colorPrimary"
+                    app:chipCornerRadius="@dimen/radius_large"
                     app:layout_constraintStart_toStartOf="@id/primaryLineName"
                     app:layout_constraintTop_toBottomOf="@id/primaryLineName" />
 
@@ -77,11 +78,12 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/secondaryLineColor"
-                    style="@style/Widget.WeatherXM.Chip.ChartLines"
+                    style="@style/Widget.WeatherXM.Chip.Status"
                     android:layout_width="40dp"
                     android:layout_height="10dp"
                     android:layout_marginTop="@dimen/margin_extra_small"
                     app:chipBackgroundColor="@color/chart_secondary_line"
+                    app:chipCornerRadius="@dimen/radius_large"
                     app:layout_constraintStart_toStartOf="@id/secondaryLineName"
                     app:layout_constraintTop_toBottomOf="@id/secondaryLineName" />
 
@@ -181,8 +183,8 @@
                                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 android:textColor="@color/colorPrimaryVariant"
                                 android:textStyle="bold"
-                                app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintBottom_toBottomOf="@id/secondaryDataName"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/secondaryDataName"
                                 app:layout_constraintTop_toTopOf="@id/secondaryDataName"
                                 tools:text="40 km/h SSW" />

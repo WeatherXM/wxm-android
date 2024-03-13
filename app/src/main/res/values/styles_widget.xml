@@ -160,47 +160,12 @@
     </style>
 
     <style name="Widget.WeatherXM.Chip.Status" parent="Widget.Material3.Chip.Assist">
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="android:textSize">12sp</item>
         <item name="android:textAppearance">@style/TextAppearance.WeatherXM.Default.BodySmall</item>
         <item name="chipMinTouchTargetSize">0dp</item>
         <item name="android:clickable">false</item>
         <item name="chipStrokeWidth">0dp</item>
         <item name="chipMinHeight">30dp</item>
         <item name="chipCornerRadius">@dimen/radius_medium</item>
-        <item name="chipIconSize">15dp</item>
-    </style>
-
-    <style name="Widget.WeatherXM.Chip.ChartLines" parent="Widget.Material3.Chip.Assist">
-        <item name="android:textColor">@color/dark_background</item>
-        <item name="android:textSize">12sp</item>
-        <item name="chipMinTouchTargetSize">0dp</item>
-        <item name="android:clickable">false</item>
-        <item name="chipStrokeWidth">0dp</item>
-        <item name="chipCornerRadius">20dp</item>
-        <item name="chipIconSize">20dp</item>
-    </style>
-
-    <style name="Widget.WeatherXM.Chip.TransactionHash" parent="Widget.Material3.Chip.Filter">
-        <item name="android:textSize">14sp</item>
-        <item name="android:textColor">@color/colorPrimary</item>
-        <item name="chipBackgroundColor">@color/blueTint</item>
-        <item name="chipCornerRadius">@dimen/radius_medium</item>
-        <item name="fontFamily">monospace</item>
-        <item name="chipStrokeWidth">0dp</item>
-        <item name="chipMinTouchTargetSize">0dp</item>
-        <item name="android:clickable">false</item>
-    </style>
-
-    <style name="Widget.WeatherXM.Chip.RewardStatus" parent="Widget.Material3.Chip.Assist">
-        <item name="android:textColor">@color/colorOnSurface</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">12sp</item>
-        <item name="chipMinTouchTargetSize">0dp</item>
-        <item name="android:clickable">false</item>
-        <item name="chipStrokeWidth">0dp</item>
-        <item name="chipMinHeight">30dp</item>
-        <item name="chipCornerRadius">@dimen/radius_extra_extra_large</item>
         <item name="chipIconSize">15dp</item>
     </style>
 
