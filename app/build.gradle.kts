@@ -338,6 +338,7 @@ dependencies {
 
     // Dependency Injection
     implementation(libs.koin.android)
+    androidTestImplementation(libs.koin.test)
 
     // Data types and more
     implementation(platform(libs.arrow.stack.bom))
