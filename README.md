@@ -168,8 +168,6 @@ explain below:
    public, [use this template](https://outline.weatherxm.com/doc/templates-for-update-announcements-Uiek4uZYjE),
    and after filling the correct date, app version and release notes, publish it on Discord's
    #announcements channel or have a community manager publish it.
-8. At Firebase's Console, go
-   to [remote config](https://console.firebase.google.com/u/0/project/weatherxm-321811/config) and
-   edit the `android_app_changelog`, `android_app_minimum_code` , `android_app_version_code` as
+8. At Firebase's Console, go to [remote config](https://console.firebase.google.com/u/0/project/weatherxm-321811/config) and edit the `android_app_changelog`, `android_app_minimum_code` , `android_app_version_code` as
    needed.
 
