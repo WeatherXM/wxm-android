@@ -75,11 +75,6 @@ open class RewardsQualityCardView : LinearLayout, KoinComponent {
         return this
     }
 
-    fun setIconColor(score: Int): RewardsQualityCardView {
-        binding.statusIcon.setColor(getRewardScoreColor(score))
-        return this
-    }
-
     @Suppress("MagicNumber")
     fun setSlider(score: Int): RewardsQualityCardView {
         // In case of zero score, show a very small number instead of an empty slider
