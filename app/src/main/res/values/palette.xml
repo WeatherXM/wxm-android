@@ -39,7 +39,7 @@
     <color name="dark_blue_tint">#1E2438</color>
     <color name="dark_accent">#CD9EFC</color>
     <color name="dark_crypto">#8C97F5</color>
-    <color name="dark_translucent">#1AFEFBFF</color>
+    <color name="dark_translucent">#26FEFBFF</color>
 
     <color name="success">#00E676</color>
     <color name="light_success_tint">#D8F8EA</color>
