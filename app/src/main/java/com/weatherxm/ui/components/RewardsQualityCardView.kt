@@ -8,7 +8,6 @@ import android.widget.LinearLayout
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewRewardQualityCardBinding
 import com.weatherxm.ui.common.setCardStroke
-import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Rewards.getRewardScoreColor
 import org.koin.core.component.KoinComponent
