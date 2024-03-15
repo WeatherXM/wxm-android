@@ -1,6 +1,7 @@
 package com.weatherxm.usecases
 
 import arrow.core.Either
+import arrow.core.flatMap
 import arrow.core.getOrElse
 import com.google.gson.Gson
 import com.mapbox.geojson.Feature
@@ -10,6 +11,7 @@ import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.weatherxm.R
+import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 import com.weatherxm.data.repository.AddressRepository
@@ -49,6 +51,16 @@ class ExplorerUseCaseImpl(
             coordinates.add(coordinates[0])
         }
         return latLongs
+    }
+
+    override suspend fun getCellInfo(index: String): Either<Failure, UICell> {
+        return explorerRepository.getCells().flatMap {
+            it.firstOrNull { cell ->
+                cell.index == index
+            }?.let { cell ->
+                Either.Right(UICell(cell.index, cell.center))
+            } ?: Either.Left(DataError.CellNotFound)
+        }
     }
 
     override suspend fun getCells(): Either<Failure, ExplorerData> {

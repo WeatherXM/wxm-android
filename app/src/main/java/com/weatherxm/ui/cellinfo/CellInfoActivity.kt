@@ -1,6 +1,7 @@
 package com.weatherxm.ui.cellinfo
 
 import android.os.Bundle
+import androidx.activity.addCallback
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
@@ -8,6 +9,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityCellInfoBinding
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.parcelable
@@ -50,6 +52,20 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
                 }
             }
         }
+        val openExplorerOnBack = intent.getBooleanExtra(ARG_OPEN_EXPLORER_ON_BACK, false)
+        onBackPressedDispatcher.addCallback {
+            if (!openExplorerOnBack || model.isLoggedIn() == null) {
+                finish()
+                return@addCallback
+            }
+            if (model.isLoggedIn() == true) {
+                navigator.showHome(this@CellInfoActivity, model.cell.center)
+            } else {
+                navigator.showExplorer(this@CellInfoActivity, model.cell.center)
+            }
+            finish()
+        }
+
         binding.capacityChip.setOnCloseIconClickListener {
             analytics.trackEventSelectContent(
                 Analytics.ParamValue.LEARN_MORE.paramValue,

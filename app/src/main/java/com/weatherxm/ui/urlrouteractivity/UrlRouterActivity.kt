@@ -38,6 +38,12 @@ class UrlRouterActivity : BaseActivity() {
             finish()
         }
 
+        model.onCell().observe(this) {
+            binding.logo.setVisible(false)
+            navigator.showCellInfo(this, it, openExplorerOnBack = true)
+            finish()
+        }
+
         model.onRemoteMessage().observe(this) {
             binding.logo.setVisible(false)
             it.url?.let { url ->

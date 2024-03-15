@@ -195,6 +195,7 @@ sealed class DataError : Failure() {
     object CacheMissError : DataError()
     object CacheExpiredError : DataError()
     object NoWalletAddressError : DataError()
+    object CellNotFound : DataError()
 }
 
 @Keep

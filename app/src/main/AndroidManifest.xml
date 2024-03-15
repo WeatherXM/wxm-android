@@ -132,10 +132,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="${explorer_host}"
-                    android:pathPattern="/stations/.*"
-                    android:scheme="https" />
+                <data android:scheme="https"/>
+                <data android:host="${explorer_host}"/>
+                <data android:pathPattern="/stations/.*"/>
+                <data android:pathPattern="/cells/.*"/>
             </intent-filter>
         </activity>
         <activity

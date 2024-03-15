@@ -14,6 +14,8 @@ import com.weatherxm.R
 import com.weatherxm.data.Location
 import com.weatherxm.data.Resource
 import com.weatherxm.data.SingleLiveEvent
+import com.weatherxm.ui.components.BaseMapFragment.Companion.DEFAULT_ZOOM_LEVEL
+import com.weatherxm.ui.components.BaseMapFragment.Companion.USER_LOCATION_ZOOM_LEVEL
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getDefaultMessage
@@ -35,7 +37,6 @@ class ExplorerViewModel(
         const val HEATMAP_LAYER_ID = "heatmap-layer"
         const val HEATMAP_LAYER_SOURCE = "heatmap"
         const val HEATMAP_WEIGHT_KEY = ExplorerUseCase.DEVICE_COUNT_KEY
-        const val USER_LOCATION_DEFAULT_ZOOM_LEVEL: Double = 11.0
     }
 
     // All public devices shown on map
@@ -55,14 +56,11 @@ class ExplorerViewModel(
     /**
      * Needed for passing info to the fragment to handle when a prefilled location is used
      * so we want the camera to move directly to that point
-     */
-    private val onNavigateToLocation = SingleLiveEvent<Location>()
-
-    /**
-     * Needed for passing info to the fragment to handle when a starting location is used
+     * or
+     * when a starting location is used
      * so we want the camera to move directly to that point (usually country level but on low zoom)
      */
-    private val onStartingLocation = SingleLiveEvent<Location>()
+    private val onNavigateToLocation = SingleLiveEvent<NavigationLocation>()
 
     // Needed for passing info to the fragment to handle when my location button is clicked
     private val onMyLocationClicked = SingleLiveEvent<Boolean>()
@@ -181,16 +179,23 @@ class ExplorerViewModel(
         }
     }
 
+    private var useUserLocation: Boolean = true
+
     fun onMyLocationClicked() = onMyLocationClicked
     fun onNavigateToLocation() = onNavigateToLocation
-    fun onStartingLocation() = onStartingLocation
     fun showMapOverlayViews() = showMapOverlayViews
     fun onSearchOpenStatus() = onSearchOpenStatus
     fun explorerState(): LiveData<Resource<ExplorerData>> = state
     fun onCellSelected(): LiveData<UICell> = onCellSelected
 
-    fun navigateToLocation(location: Location) {
-        onNavigateToLocation.postValue(location)
+    fun navigateToLocation(location: Location, isUserLocation: Boolean = false) {
+        Timber.d("Got starting location [${location.lat}, ${location.lon}")
+        if (isUserLocation && useUserLocation) {
+            onNavigateToLocation.postValue(NavigationLocation(DEFAULT_ZOOM_LEVEL, location))
+        } else if (!isUserLocation) {
+            useUserLocation = false
+            onNavigateToLocation.postValue(NavigationLocation(USER_LOCATION_ZOOM_LEVEL, location))
+        }
     }
 
     fun setExplorerAfterLoggedIn(isAfterLoggedIn: Boolean) {
@@ -258,16 +263,15 @@ class ExplorerViewModel(
 
     init {
         if (locationHelper.hasLocationPermissions()) {
-            getLocation {
-                it?.let {
-                    onStartingLocation.postValue(it)
+            getLocation { location ->
+                location?.let {
+                    navigateToLocation(it, true)
                 }
             }
         } else {
             viewModelScope.launch(Dispatchers.IO) {
                 explorerUseCase.getUserCountryLocation()?.let {
-                    Timber.d("Got starting location [${it.lat}, ${it.lon}")
-                    onStartingLocation.postValue(it)
+                    navigateToLocation(it, true)
                 }
             }
         }
