@@ -27,7 +27,6 @@ class FriendlyNameDialogFragment(
         val builder = MaterialAlertDialogBuilder(requireContext())
 
         binding = ViewEditNameBinding.inflate(layoutInflater)
-        builder.setTitle(getString(R.string.edit_name))
         builder.setView(binding.root)
 
         binding.newName.setText(currentFriendlyName)
