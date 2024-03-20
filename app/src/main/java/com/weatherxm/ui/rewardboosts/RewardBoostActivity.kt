@@ -99,14 +99,14 @@ class RewardBoostActivity : BaseActivity() {
         binding.title.text = data.title
         binding.amount.text = getString(R.string.reward, data.actualReward)
         if (BoostCode.beta_rewards.name == boostCode && data.boostScore != null) {
-            binding.dailyBoostScore.text = if (data.boostScore == 100) {
+            binding.dailyBoostScore.text = "${data.boostScore}%"
+            binding.rewardsDesc.text = if (data.boostScore == 100) {
                 getString(R.string.got_all_beta_rewards)
             } else {
-                "${data.boostScore}%"
+                getString(R.string.boost_tokens_lost, data.lostRewards)
             }
-            binding.lostRewards.text = getString(R.string.boost_tokens_lost, data.lostRewards)
         } else {
-            binding.lostRewards.setVisible(false)
+            binding.rewardsDesc.setVisible(false)
             binding.divider.setVisible(false)
             binding.dailyBoostScoreTitle.setVisible(false)
             binding.dailyBoostScore.setVisible(false)
