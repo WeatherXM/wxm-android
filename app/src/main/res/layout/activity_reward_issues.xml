@@ -7,14 +7,13 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:background="@color/colorSurface"
-    android:clipChildren="false"
-    android:clipToPadding="false"
     android:fitsSystemWindows="false">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:liftOnScroll="false">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
@@ -26,9 +25,10 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_normal"
         android:layout_marginTop="@dimen/margin_small"
         android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingHorizontal="@dimen/padding_normal"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
