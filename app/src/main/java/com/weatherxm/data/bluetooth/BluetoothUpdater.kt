@@ -2,7 +2,6 @@ package com.weatherxm.data.bluetooth
 
 import android.content.Context
 import android.net.Uri
-import android.os.Build
 import com.weatherxm.R
 import com.weatherxm.data.BluetoothOTAState
 import com.weatherxm.data.OTAState
@@ -118,7 +117,7 @@ class BluetoothUpdater(
 
     @Suppress("MagicNumber")
     private fun createErrorMessage(errorCode: Int, defaultMessage: String?): String? {
-        return if(errorCode == 133) {
+        return if (errorCode == 133) {
             "$defaultMessage - ${context.getString(R.string.error_helium_ota_133_suffix)}"
         } else {
             defaultMessage
@@ -130,17 +129,15 @@ class BluetoothUpdater(
         onOTAState.resetReplayCache()
         setUpdater()
 
-        /*
-        * This is needed because of crashing. More:
-        * https://github.com/NordicSemiconductor/Android-DFU-Library/issues/266
-        * https://github.com/NordicSemiconductor/Android-DFU-Library/issues/106
+        /**
+         * This is needed because of some crashes. We do not need notifications here.
+         * More:
+         * https://github.com/NordicSemiconductor/Android-DFU-Library/issues/438
+         * https://github.com/NordicSemiconductor/Android-DFU-Library/issues/266
+         * https://github.com/NordicSemiconductor/Android-DFU-Library/issues/106
          */
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            DfuServiceInitiator.createDfuNotificationChannel(context)
-        } else {
-            dfuServiceInitiator.setForeground(false)
-            dfuServiceInitiator.setDisableNotification(true)
-        }
+        dfuServiceInitiator.setForeground(false)
+        dfuServiceInitiator.setDisableNotification(true)
 
         dfuServiceInitiator.setZip(updatePackage)
         dfuServiceInitiator.start(context, DfuService::class.java)
