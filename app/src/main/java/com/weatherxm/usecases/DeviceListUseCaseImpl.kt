@@ -30,8 +30,7 @@ class DeviceListUseCaseImpl(
                     alerts.add(DeviceAlert.OFFLINE)
                 }
 
-                // FIXME: Revert this before merging. For testing purposes. 
-                if (true) {
+                if (shouldShowOTAPrompt && device.profile == Helium && device.needsUpdate()) {
                     alerts.add(DeviceAlert.NEEDS_UPDATE)
                 }
                 device.apply {
