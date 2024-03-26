@@ -18,6 +18,7 @@ import com.juul.kable.ConnectionRejectedException
 import com.juul.kable.Descriptor
 import com.juul.kable.GattRequestRejectedException
 import com.juul.kable.GattStatusException
+import com.juul.kable.GattWriteException
 import com.juul.kable.NotReadyException
 import com.juul.kable.Peripheral
 import com.juul.kable.peripheral
@@ -228,14 +229,19 @@ class BluetoothConnectionManager(
     private suspend fun enableDescriptorNotification(descriptor: Descriptor) {
         try {
             peripheral.write(descriptor, ENABLE_NOTIFICATION_VALUE)
+        } catch (e: GattWriteException) {
+            Timber.w(
+                e,
+                "[enable descriptor notification]: GattWriteException - Result: ${e.result}, Name: ${e.result.name}"
+            )
         } catch (e: GattRequestRejectedException) {
-            Timber.w(e, "[enable descriptor notification] failed: GattRequestRejectedException")
+            Timber.w(e, "[enable descriptor notification]: GattRequestRejectedException")
         } catch (e: ConnectionLostException) {
-            Timber.w(e, "[enable descriptor notification] failed: ConnectionLostException")
+            Timber.w(e, "[enable descriptor notification]: ConnectionLostException")
         } catch (e: NotReadyException) {
-            Timber.w(e, "[enable descriptor notification] failed: NotReadyException")
+            Timber.w(e, "[enable descriptor notification]: NotReadyException")
         } catch (e: GattStatusException) {
-            Timber.w(e, "[enable descriptor notification] failed: GattStatusException")
+            Timber.w(e, "[enable descriptor notification]: GattStatusException")
         }
     }
 
@@ -262,6 +268,12 @@ class BluetoothConnectionManager(
             try {
                 peripheral.write(it, command.toByteArray())
                 true
+            } catch (e: GattWriteException) {
+                Timber.w(
+                    e,
+                    "[$command]: GattWriteException - Result: ${e.result}, Name: ${e.result.name}"
+                )
+                false
             } catch (e: GattRequestRejectedException) {
                 Timber.w(e, "[$command] failed: GattRequestRejectedException")
                 false
