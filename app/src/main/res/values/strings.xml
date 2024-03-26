@@ -576,6 +576,7 @@
 
 
     <!-- Cell Info -->
+    <string name="cell_active_station">1 active station</string>
     <string name="cell_active_stations">%d active stations</string>
     <string name="cell_stations_present">%d/10 stations present</string>
     <string name="cell_capacity">Cell Capacity</string>

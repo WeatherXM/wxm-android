@@ -8,7 +8,6 @@ import android.widget.LinearLayout
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewRewardQualityCardBinding
 import com.weatherxm.ui.common.setCardStroke
-import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Rewards.getRewardScoreColor
 import org.koin.core.component.KoinComponent
@@ -72,11 +71,6 @@ open class RewardsQualityCardView : LinearLayout, KoinComponent {
 
     fun checkmark(): RewardsQualityCardView {
         binding.statusIcon.setImageResource(R.drawable.ic_checkmark_hex_filled)
-        return this
-    }
-
-    fun setIconColor(score: Int): RewardsQualityCardView {
-        binding.statusIcon.setColor(getRewardScoreColor(score))
         return this
     }
 

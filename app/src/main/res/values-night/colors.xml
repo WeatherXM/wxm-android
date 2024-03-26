@@ -25,6 +25,8 @@
     <color name="textColor">@color/dark_text</color>
     <color name="translucent">@color/dark_translucent</color>
     <color name="fadeTop">@color/fade_dark_top</color>
+    <color name="messageDialogBackground">@color/dark_top</color>
+    <color name="messageDialogButton">@color/dark_layer1</color>
 
     <!-- System and Launcher -->
     <color name="ic_launcher_background">#1B75BA</color>
@@ -42,4 +44,7 @@
     <!-- Network Stats -->
     <color name="network_stats_slider">@color/network_stats_slider_dark</color>
     <color name="network_stats_button">@color/dark_primary</color>
+
+    <!-- Rewards -->
+    <color name="rewards_background">@color/dark_background</color>
 </resources>

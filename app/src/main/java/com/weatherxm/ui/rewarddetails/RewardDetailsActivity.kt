@@ -124,7 +124,10 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
 
         data.base?.qodScore?.let {
             updateDataQualityCard(it)
-        } ?: binding.dataQualityCard.desc(getString(R.string.data_quality_not_available))
+        } ?: run {
+            binding.dataQualityCard.error()
+            binding.dataQualityCard.desc(getString(R.string.data_quality_not_available))
+        }
         updateLocationCard(sortedIssues)
         updateCellCard(sortedIssues)
 
@@ -184,7 +187,6 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         } else {
             binding.dataQualityCard.error()
         }
-        binding.dataQualityCard.setIconColor(qodScore)
 
         val qodMessageResId = when {
             qodScore == 100 -> R.string.data_quality_perfect
