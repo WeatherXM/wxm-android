@@ -12,6 +12,7 @@ import com.weatherxm.data.RewardsAnnotationGroup
 import com.weatherxm.data.SeverityLevel
 import com.weatherxm.databinding.ViewDailyRewardsCardBinding
 import com.weatherxm.ui.common.setCardStroke
+import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
@@ -87,13 +88,23 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             context.getString(R.string.wxm_amount, formatTokens(it.toBigDecimal()))
         } ?: EMPTY_VALUE
 
-        binding.boosts.setVisible(data.totalBoostReward != null)
-        binding.noActiveBoosts.setVisible(data.totalBoostReward == null)
+        if(data.totalBoostReward == null) {
+            binding.boostsIcon.setImageDrawable(
+                AppCompatResources.getDrawable(context, R.drawable.ic_error_hex_filled)
+            )
+            binding.boostsIcon.setColor(R.color.midGrey)
+            binding.boosts.setVisible(false)
+            binding.noActiveBoosts.setVisible(true)
+        } else {
+            binding.boostsIcon.setImageDrawable(
+                AppCompatResources.getDrawable(context, R.drawable.ic_checkmark_hex_filled)
+            )
+            binding.boostsIcon.setColor(R.color.network_stats_chart_primary)
+        }
         data.totalBoostReward?.let {
             binding.boosts.text =
                 context.getString(R.string.wxm_amount, formatTokens(it.toBigDecimal()))
         }
-
         binding.viewRewardDetails.setVisible(
             onViewDetails != null && data.annotationSummary.isNullOrEmpty()
         )
