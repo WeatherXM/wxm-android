@@ -45,10 +45,9 @@ class RewardBoostAdapter(
             binding.desc.text = item.description
             binding.amount.text =
                 itemView.context.getString(R.string.reward, formatTokens(item.actualReward))
+            binding.root.setBoostFallbackBackground()
 
-            if (item.imgUrl.isNullOrEmpty()) {
-                binding.root.setBoostFallbackBackground()
-            } else {
+            if (!item.imgUrl.isNullOrEmpty()) {
                 imageLoader.enqueue(
                     ImageRequest.Builder(itemView.context)
                         .data(item.imgUrl)

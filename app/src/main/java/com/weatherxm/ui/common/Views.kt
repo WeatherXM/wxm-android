@@ -355,7 +355,7 @@ fun MaterialCardView.setCardStroke(@ColorRes colorResId: Int, width: Int) {
  * Fallback in case img url or drawable is missing so the texts can be visible
  */
 fun MaterialCardView.setBoostFallbackBackground() {
-    setCardBackgroundColor(context.getColor(R.color.dark_background))
+    setCardBackgroundColor(context.getColor(R.color.blue))
 }
 
 private fun Context.hideKeyboard(view: View) {

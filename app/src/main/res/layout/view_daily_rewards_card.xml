@@ -110,7 +110,7 @@
                         android:src="@drawable/ic_reward_scale"
                         app:layout_constraintStart_toEndOf="@id/baseRewardScore"
                         app:layout_constraintTop_toTopOf="@id/baseRewardIcon"
-                        app:tint="@color/network_stats_chart_primary"
+                        app:tint="@color/blue"
                         tools:ignore="ContentDescription" />
 
                     <FrameLayout

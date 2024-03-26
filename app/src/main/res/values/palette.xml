@@ -6,6 +6,7 @@
     <color name="white">#FFFFFF</color>
     <color name="purple">#9D1F63</color>
     <color name="green">#46D163</color>
+    <color name="blue">#2780FF</color>
 
     <!-- Color Palette/Library Design Team -->
 
@@ -60,7 +61,6 @@
     <color name="follow_heart_color">#FF9AAE</color>
 
     <!-- Network Stats -->
-    <color name="network_stats_chart_primary">#2780FF</color>
     <color name="network_stats_slider_light">#BED6FF</color>
     <color name="network_stats_slider_dark">#2E4C80</color>
 
