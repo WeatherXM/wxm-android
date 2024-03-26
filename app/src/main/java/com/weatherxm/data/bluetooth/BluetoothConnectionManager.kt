@@ -232,7 +232,8 @@ class BluetoothConnectionManager(
         } catch (e: GattWriteException) {
             Timber.w(
                 e,
-                "[enable descriptor notification]: GattWriteException - Result: ${e.result}, Name: ${e.result.name}"
+                "[enable descriptor notification]: " +
+                    "GattWriteException - Result: ${e.result}, Name: ${e.result.name}"
             )
         } catch (e: GattRequestRejectedException) {
             Timber.w(e, "[enable descriptor notification]: GattRequestRejectedException")
