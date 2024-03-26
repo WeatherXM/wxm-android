@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.appcompat.content.res.AppCompatResources
 import com.weatherxm.R
 import com.weatherxm.data.Reward
 import com.weatherxm.data.RewardsAnnotationGroup
@@ -65,6 +66,18 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
         binding.reward.text = data.totalReward?.let {
             context.getString(R.string.reward, formatTokens(it.toBigDecimal()))
         } ?: EMPTY_VALUE
+
+        data.baseRewardScore?.let {
+            val baseRewardIcon = when {
+                it >= 95 -> R.drawable.ic_checkmark_hex_filled
+                it >= 10 -> R.drawable.ic_warning_hex_filled
+                it >= 0 -> R.drawable.ic_error_hex_filled
+                else -> R.drawable.ic_error_hex_filled
+            }
+            binding.baseRewardIcon.setImageDrawable(
+                AppCompatResources.getDrawable(context, baseRewardIcon)
+            )
+        }
 
         binding.baseRewardIcon.setColorFilter(
             context.getColor(getRewardScoreColor(data.baseRewardScore))
