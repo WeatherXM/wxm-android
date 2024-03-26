@@ -190,7 +190,7 @@
         app:message_icon="@drawable/ic_info"
         app:message_icon_color="@color/colorPrimaryVariant"
         app:message_includes_close_button="false"
-        app:message_stroke_color="@color/colorPrimaryVariant"
+        app:message_stroke_color="@color/infoStrokeColor"
         tools:visibility="visible" />
 
     <!-- Buttons -->

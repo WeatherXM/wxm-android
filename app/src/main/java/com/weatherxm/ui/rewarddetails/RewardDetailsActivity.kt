@@ -306,7 +306,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         val backgroundColor: Int
         when (issue.severityLevel) {
             SeverityLevel.INFO -> {
-                strokeColor = R.color.light_lightest_blue
+                strokeColor = R.color.infoStrokeColor
                 backgroundColor = R.color.blueTint
             }
             SeverityLevel.WARNING -> {
@@ -318,7 +318,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 backgroundColor = R.color.errorTint
             }
             else -> {
-                strokeColor = R.color.light_lightest_blue
+                strokeColor = R.color.infoStrokeColor
                 backgroundColor = R.color.blueTint
             }
         }

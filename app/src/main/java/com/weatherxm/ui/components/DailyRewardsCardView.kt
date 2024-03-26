@@ -166,7 +166,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
                 backgroundColor = R.color.warningTint
             }
             SeverityLevel.INFO -> {
-                strokeColor = R.color.light_lightest_blue
+                strokeColor = R.color.infoStrokeColor
                 backgroundColor = R.color.blueTint
             }
         }

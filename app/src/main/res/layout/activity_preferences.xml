@@ -43,7 +43,7 @@
                 app:message_icon="@drawable/ic_survey"
                 app:message_icon_color="@color/colorPrimaryVariant"
                 app:message_includes_close_button="true"
-                app:message_stroke_color="@color/colorPrimaryVariant"
+                app:message_stroke_color="@color/infoStrokeColor"
                 app:message_title="@string/short_app_survey"
                 tools:visibility="visible" />
 
