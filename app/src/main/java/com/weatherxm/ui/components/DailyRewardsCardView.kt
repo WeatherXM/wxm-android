@@ -16,6 +16,7 @@ import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.Rewards.getRewardIcon
 import com.weatherxm.util.Rewards.getRewardScoreColor
 import com.weatherxm.util.Weather.EMPTY_VALUE
 import org.koin.core.component.KoinComponent
@@ -68,17 +69,9 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             context.getString(R.string.reward, formatTokens(it.toBigDecimal()))
         } ?: EMPTY_VALUE
 
-        data.baseRewardScore?.let {
-            val baseRewardIcon = when {
-                it >= 95 -> R.drawable.ic_checkmark_hex_filled
-                it >= 10 -> R.drawable.ic_warning_hex_filled
-                it >= 0 -> R.drawable.ic_error_hex_filled
-                else -> R.drawable.ic_error_hex_filled
-            }
-            binding.baseRewardIcon.setImageDrawable(
-                AppCompatResources.getDrawable(context, baseRewardIcon)
-            )
-        }
+        binding.baseRewardIcon.setImageDrawable(
+            AppCompatResources.getDrawable(context, getRewardIcon(data.baseRewardScore))
+        )
 
         binding.baseRewardIcon.setColorFilter(
             context.getColor(getRewardScoreColor(data.baseRewardScore))

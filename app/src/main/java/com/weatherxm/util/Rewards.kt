@@ -32,6 +32,19 @@ object Rewards {
         } ?: R.color.reward_score_unknown
     }
 
+    @Suppress("MagicNumber")
+    @ColorRes
+    fun getRewardIcon(score: Int?): Int {
+        return score?.let {
+            when {
+                it >= 95 -> R.drawable.ic_checkmark_hex_filled
+                it >= 10 -> R.drawable.ic_warning_hex_filled
+                it >= 0 -> R.drawable.ic_error_hex_filled
+                else -> R.drawable.ic_error_hex_filled
+            }
+        } ?: R.drawable.ic_error_hex_filled
+    }
+
     fun formatTokens(amount: Float?): String {
         return amount?.let {
             formatTokens(it.toBigDecimal())
