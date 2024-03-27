@@ -65,11 +65,6 @@
     <color name="network_stats_slider_dark">#2E4C80</color>
 
     <!-- Reward Scores -->
-    <color name="reward_score_very_high">@color/green</color>
-    <color name="reward_score_high">#E1CA60</color>
-    <color name="reward_score_average">#F3AD4E</color>
-    <color name="reward_score_low">#EF8B4F</color>
-    <color name="reward_score_very_low">#F6736D</color>
     <color name="reward_score_unknown">#BAC7CB</color>
     <!-- End -->
 </resources>

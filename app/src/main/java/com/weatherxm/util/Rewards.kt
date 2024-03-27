@@ -24,7 +24,7 @@ object Rewards {
     fun getRewardScoreColor(score: Int?): Int {
         return score?.let {
             when {
-                it >= 95 -> R.color.reward_score_very_high
+                it >= 95 -> R.color.green
                 it >= 10 -> R.color.warning
                 it >= 0 -> R.color.error
                 else -> R.color.reward_score_unknown

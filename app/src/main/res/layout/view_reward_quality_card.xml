@@ -95,7 +95,7 @@
                     android:valueFrom="0"
                     android:valueTo="100"
                     app:trackHeight="20dp"
-                    tools:trackColorActive="@color/reward_score_high"
+                    tools:trackColorActive="@color/warning"
                     tools:values="@array/reward_slider_default_values" />
             </FrameLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
