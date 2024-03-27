@@ -81,7 +81,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             context.getString(R.string.wxm_amount, formatTokens(it.toBigDecimal()))
         } ?: EMPTY_VALUE
 
-        if(data.totalBoostReward == null) {
+        if (data.totalBoostReward == null) {
             binding.boostsIcon.setImageDrawable(
                 AppCompatResources.getDrawable(context, R.drawable.ic_error_hex_filled)
             )
@@ -93,10 +93,11 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
                 AppCompatResources.getDrawable(context, R.drawable.ic_checkmark_hex_filled)
             )
             binding.boostsIcon.setColor(R.color.blue)
-        }
-        data.totalBoostReward?.let {
-            binding.boosts.text =
-                context.getString(R.string.wxm_amount, formatTokens(it.toBigDecimal()))
+            binding.boosts.text = context.getString(
+                R.string.wxm_amount, formatTokens(data.totalBoostReward.toBigDecimal())
+            )
+            binding.noActiveBoosts.setVisible(false)
+            binding.boosts.setVisible(true)
         }
         binding.viewRewardDetails.setVisible(
             onViewDetails != null && data.annotationSummary.isNullOrEmpty()
@@ -116,6 +117,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
 
         if (severityLevels.isNullOrEmpty()) {
             binding.annotationCard.setVisible(false)
+            binding.parentCard.strokeWidth = 0
             return
         }
 
