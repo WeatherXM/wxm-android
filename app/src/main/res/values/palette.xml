@@ -34,7 +34,7 @@
     <color name="dark_layer2">#23252F</color>
     <color name="dark_background">#1B1C22</color>
     <color name="dark_darkest_blue">#DCE1FF</color>
-    <color name="dark_primary">#B5C4FF</color>
+    <color name="dark_primary">#B8C6FF</color>
     <color name="dark_lightest_blue">#00297B</color>
     <color name="dark_blue_tint">#1E2438</color>
     <color name="dark_accent">#CD9EFC</color>
@@ -45,11 +45,11 @@
     <color name="light_success_tint">#D8F8EA</color>
     <color name="dark_success_tint">#17392C</color>
     <color name="error">#FF1744</color>
-    <color name="light_error_tint">#FED9E3</color>
-    <color name="dark_error_tint">#3D1A25</color>
+    <color name="light_error_tint">#FADCE3</color>
+    <color name="dark_error_tint">#4B2F36</color>
     <color name="warning">#FFAB49</color>
-    <color name="light_warning_tint">#FEEFE4</color>
-    <color name="dark_warning_tint">#3D3125</color>
+    <color name="light_warning_tint">#FBDEBC</color>
+    <color name="dark_warning_tint">#46381B</color>
 
     <!-- Fade -->
     <color name="fade_light_top">#00FEFBFF</color>
