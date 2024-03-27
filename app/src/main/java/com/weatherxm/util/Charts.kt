@@ -557,8 +557,8 @@ fun LineChart.initializeNetworkStatsChart(entries: List<Entry>) {
 
     // Line and highlight Settings
     lineData.setDrawValues(false)
-    dataSet.color = context.getColor(R.color.network_stats_chart_primary)
-    dataSet.setCircleColor(context.getColor(R.color.network_stats_chart_primary))
+    dataSet.color = context.getColor(R.color.blue)
+    dataSet.setCircleColor(context.getColor(R.color.blue))
     dataSet.setDrawCircleHole(false)
     dataSet.circleRadius = 1F
     dataSet.lineWidth = LINE_WIDTH

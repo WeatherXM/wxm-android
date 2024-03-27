@@ -84,9 +84,8 @@ class RewardBoostActivity : BaseActivity() {
     @Suppress("MagicNumber")
     @SuppressLint("SetTextI18n")
     private fun updateUI(boostCode: String?, data: UIBoost) {
-        if (data.imgUrl.isEmpty()) {
-            binding.boostCard.setBoostFallbackBackground()
-        } else {
+        binding.boostCard.setBoostFallbackBackground()
+        if (data.imgUrl.isNotEmpty()) {
             imageLoader.enqueue(
                 ImageRequest.Builder(this)
                     .data(data.imgUrl)
