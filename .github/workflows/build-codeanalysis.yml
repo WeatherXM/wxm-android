@@ -6,8 +6,6 @@ name: Pull Request Code Build & Analysis
 on:
     pull_request
 env:
-    # Claim DApp URL
-    ORG_GRADLE_PROJECT_CLAIM_APP_URL: ${{ secrets.CLAIM_APP_URL }}
     # Mapbox SDK secrets
     ORG_GRADLE_PROJECT_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
     ORG_GRADLE_PROJECT_MAPBOX_DOWNLOADS_TOKEN: ${{ secrets.MAPBOX_DOWNLOADS_TOKEN }}
@@ -28,6 +26,8 @@ jobs:
         env:
             # API URL for Prod Flavor
             ORG_GRADLE_PROJECT_API_URL: ${{ secrets.API_URL }}
+            # Claim DApp URL
+            ORG_GRADLE_PROJECT_CLAIM_APP_URL: ${{ secrets.CLAIM_APP_URL }}
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
@@ -57,6 +57,8 @@ jobs:
         env:
             # API URL for Prod Flavor
             ORG_GRADLE_PROJECT_API_URL: ${{ secrets.API_URL }}
+            # Claim DApp URL
+            ORG_GRADLE_PROJECT_CLAIM_APP_URL: ${{ secrets.CLAIM_APP_URL }}
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
