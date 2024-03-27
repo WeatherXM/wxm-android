@@ -92,7 +92,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             binding.boostsIcon.setImageDrawable(
                 AppCompatResources.getDrawable(context, R.drawable.ic_checkmark_hex_filled)
             )
-            binding.boostsIcon.setColor(R.color.network_stats_chart_primary)
+            binding.boostsIcon.setColor(R.color.blue)
         }
         data.totalBoostReward?.let {
             binding.boosts.text =
