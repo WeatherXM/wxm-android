@@ -24,14 +24,25 @@ object Rewards {
     fun getRewardScoreColor(score: Int?): Int {
         return score?.let {
             when {
-                it >= 80 -> R.color.reward_score_very_high
-                it >= 60 -> R.color.reward_score_high
-                it >= 40 -> R.color.reward_score_average
-                it >= 20 -> R.color.reward_score_low
-                it >= 0 -> R.color.reward_score_very_low
+                it >= 95 -> R.color.green
+                it >= 10 -> R.color.warning
+                it >= 0 -> R.color.error
                 else -> R.color.reward_score_unknown
             }
         } ?: R.color.reward_score_unknown
+    }
+
+    @Suppress("MagicNumber")
+    @ColorRes
+    fun getRewardIcon(score: Int?): Int {
+        return score?.let {
+            when {
+                it >= 95 -> R.drawable.ic_checkmark_hex_filled
+                it >= 10 -> R.drawable.ic_warning_hex_filled
+                it >= 0 -> R.drawable.ic_error_hex_filled
+                else -> R.drawable.ic_warning_hex_filled
+            }
+        } ?: R.drawable.ic_warning_hex_filled
     }
 
     fun formatTokens(amount: Float?): String {

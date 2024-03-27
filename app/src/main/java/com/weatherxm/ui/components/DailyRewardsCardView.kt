@@ -5,15 +5,18 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.appcompat.content.res.AppCompatResources
 import com.weatherxm.R
 import com.weatherxm.data.Reward
 import com.weatherxm.data.RewardsAnnotationGroup
 import com.weatherxm.data.SeverityLevel
 import com.weatherxm.databinding.ViewDailyRewardsCardBinding
 import com.weatherxm.ui.common.setCardStroke
+import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.Rewards.getRewardIcon
 import com.weatherxm.util.Rewards.getRewardScoreColor
 import com.weatherxm.util.Weather.EMPTY_VALUE
 import org.koin.core.component.KoinComponent
@@ -66,6 +69,10 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             context.getString(R.string.reward, formatTokens(it.toBigDecimal()))
         } ?: EMPTY_VALUE
 
+        binding.baseRewardIcon.setImageDrawable(
+            AppCompatResources.getDrawable(context, getRewardIcon(data.baseRewardScore))
+        )
+
         binding.baseRewardIcon.setColorFilter(
             context.getColor(getRewardScoreColor(data.baseRewardScore))
         )
@@ -74,13 +81,24 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             context.getString(R.string.wxm_amount, formatTokens(it.toBigDecimal()))
         } ?: EMPTY_VALUE
 
-        binding.boosts.setVisible(data.totalBoostReward != null)
-        binding.noActiveBoosts.setVisible(data.totalBoostReward == null)
-        data.totalBoostReward?.let {
-            binding.boosts.text =
-                context.getString(R.string.wxm_amount, formatTokens(it.toBigDecimal()))
+        if (data.totalBoostReward == null) {
+            binding.boostsIcon.setImageDrawable(
+                AppCompatResources.getDrawable(context, R.drawable.ic_error_hex_filled)
+            )
+            binding.boostsIcon.setColor(R.color.midGrey)
+            binding.boosts.setVisible(false)
+            binding.noActiveBoosts.setVisible(true)
+        } else {
+            binding.boostsIcon.setImageDrawable(
+                AppCompatResources.getDrawable(context, R.drawable.ic_checkmark_hex_filled)
+            )
+            binding.boostsIcon.setColor(R.color.blue)
+            binding.boosts.text = context.getString(
+                R.string.wxm_amount, formatTokens(data.totalBoostReward.toBigDecimal())
+            )
+            binding.noActiveBoosts.setVisible(false)
+            binding.boosts.setVisible(true)
         }
-
         binding.viewRewardDetails.setVisible(
             onViewDetails != null && data.annotationSummary.isNullOrEmpty()
         )
@@ -99,6 +117,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
 
         if (severityLevels.isNullOrEmpty()) {
             binding.annotationCard.setVisible(false)
+            binding.parentCard.strokeWidth = 0
             return
         }
 

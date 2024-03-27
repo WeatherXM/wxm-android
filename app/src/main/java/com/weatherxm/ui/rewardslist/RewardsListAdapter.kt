@@ -18,9 +18,7 @@ import java.time.ZonedDateTime
 class RewardsListAdapter(
     private val onRewardDetails: (Reward) -> Unit,
     private val onEndOfData: () -> Unit
-) : ListAdapter<Reward,
-    RewardsListAdapter.RewardsViewHolder>(UITransactionDiffCallback()),
-    KoinComponent {
+) : ListAdapter<Reward, RewardsListAdapter.RewardsViewHolder>(RewardDiffCallback()), KoinComponent {
 
     val resources: Resources by inject()
 
@@ -93,7 +91,7 @@ class RewardsListAdapter(
         }
     }
 
-    class UITransactionDiffCallback : DiffUtil.ItemCallback<Reward>() {
+    class RewardDiffCallback : DiffUtil.ItemCallback<Reward>() {
 
         override fun areItemsTheSame(oldItem: Reward, newItem: Reward): Boolean {
             return oldItem.timestamp == newItem.timestamp
