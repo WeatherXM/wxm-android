@@ -69,6 +69,15 @@ open class RewardsQualityCardView : LinearLayout, KoinComponent {
         return this
     }
 
+    fun hideIcon(): RewardsQualityCardView {
+        binding.statusIcon.setVisible(false)
+        // Make the status description start from the same position as the title
+        binding.statusDesc.setPadding(
+            resources.getDimension(R.dimen.padding_normal).toInt(), 0, 0, 0
+        )
+        return this
+    }
+
     fun checkmark(): RewardsQualityCardView {
         binding.statusIcon.setImageResource(R.drawable.ic_checkmark_hex_filled)
         return this
