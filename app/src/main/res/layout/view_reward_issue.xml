@@ -12,7 +12,7 @@
         style="@style/Widget.WeatherXM.MaterialCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="@dimen/elevation_small"
+        app:cardElevation="@dimen/elevation_normal"
         app:contentPadding="@dimen/padding_large"
         app:strokeWidth="@dimen/card_stroke"
         tools:cardBackgroundColor="@color/errorTint"
