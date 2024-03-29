@@ -229,7 +229,7 @@
     <!-- Rewards -->
     <string name="title_reward_timeline">Reward Timeline</string>
     <string name="view_timeline">View Timeline</string>
-    <string name="no_transactions_title">Oh, no! No transactions yet?</string>
+    <string name="timeline_end_message">You can’t view more than 90 days.</string>
     <string name="rewards">Rewards</string>
     <string name="wxm_amount">%s $WXM</string>
     <string name="reward">+ %s $WXM</string>

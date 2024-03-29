@@ -1,7 +1,6 @@
 package com.weatherxm.ui.rewardslist
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -9,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.data.Reward
 import com.weatherxm.databinding.ListItemRewardBinding
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Resources
 import org.koin.core.component.KoinComponent
@@ -53,9 +53,14 @@ class RewardsListAdapter(
             if (position == currentList.size - 1) {
                 onEndOfData()
             }
-
-            updateDateAndLines(item.timestamp, position)
-            binding.mainCard.updateUI(item, true)
+            if (!item.isEmpty()) {
+                updateDateAndLines(item.timestamp, position)
+                binding.mainCard.updateUI(item, true)
+            } else {
+                binding.date.setVisible(false)
+                binding.mainCard.setVisible(false)
+                binding.endOfDataCard.setVisible(true)
+            }
         }
 
         /**
@@ -66,25 +71,23 @@ class RewardsListAdapter(
          * date as this one, then we hide the date and the respective line views.
          */
         private fun updateDateAndLines(timestamp: ZonedDateTime?, position: Int) {
-            binding.prevLine.visibility = if (position == 0) View.GONE else View.VISIBLE
-
             val formattedDate = timestamp.getFormattedDate(true)
 
             if (position == 0) {
-                binding.prevLine.visibility = View.GONE
+                binding.prevLine.setVisible(false)
                 binding.date.text = formattedDate
             } else {
                 val prevFormattedDate =
                     getItem(position - 1).timestamp?.getFormattedDate(true) ?: String.empty()
 
                 if (formattedDate == prevFormattedDate) {
-                    binding.prevLine.visibility = View.GONE
-                    binding.datePoint.visibility = View.GONE
-                    binding.date.visibility = View.GONE
+                    binding.prevLine.setVisible(false)
+                    binding.datePoint.setVisible(false)
+                    binding.date.setVisible(false)
                 } else {
-                    binding.prevLine.visibility = View.VISIBLE
-                    binding.datePoint.visibility = View.VISIBLE
-                    binding.date.visibility = View.VISIBLE
+                    binding.prevLine.setVisible(true)
+                    binding.datePoint.setVisible(true)
+                    binding.date.setVisible(true)
                     binding.date.text = formattedDate
                 }
             }

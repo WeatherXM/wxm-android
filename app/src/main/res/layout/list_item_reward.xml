@@ -5,9 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clipChildren="false"
-    android:clipToPadding="false"
-    android:paddingHorizontal="@dimen/padding_normal">
+    android:clipChildren="false">
 
     <View
         android:id="@+id/prev_line"
@@ -53,8 +51,48 @@
         android:id="@+id/mainCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent="0.6"
         app:layout_constraintTop_toBottomOf="@id/current_line" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/endOfDataCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_normal"
+        android:visibility="gone"
+        app:cardElevation="@dimen/elevation_small"
+        app:contentPadding="@dimen/padding_large"
+        app:layout_constraintTop_toBottomOf="@id/current_line">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/timelineEndIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_checkmark_hex_filled"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/darkGrey"
+                tools:ignore="contentDescription" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/endOfDataText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:text="@string/timeline_end_message"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:textColor="@color/darkGrey"
+                app:layout_constraintBottom_toBottomOf="@id/timelineEndIcon"
+                app:layout_constraintStart_toEndOf="@id/timelineEndIcon"
+                app:layout_constraintTop_toTopOf="@id/timelineEndIcon" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

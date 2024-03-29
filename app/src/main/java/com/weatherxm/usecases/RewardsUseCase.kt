@@ -22,9 +22,7 @@ import java.time.ZonedDateTime
 interface RewardsUseCase {
     suspend fun getRewardsTimeline(
         deviceId: String,
-        page: Int?,
-        fromDate: String?,
-        toDate: String? = null
+        page: Int?
     ): Either<Failure, UIRewardsTimeline>
 
     suspend fun getRewardDetails(
@@ -44,15 +42,11 @@ class RewardsUseCaseImpl(
 ) : RewardsUseCase {
     override suspend fun getRewardsTimeline(
         deviceId: String,
-        page: Int?,
-        fromDate: String?,
-        toDate: String?
+        page: Int?
     ): Either<Failure, UIRewardsTimeline> {
         return repository.getRewardsTimeline(
             deviceId = deviceId,
-            page = page,
-            fromDate = fromDate,
-            toDate = toDate
+            page = page
         ).map {
             if (it.data.isEmpty()) {
                 UIRewardsTimeline(listOf(), reachedTotal = true)

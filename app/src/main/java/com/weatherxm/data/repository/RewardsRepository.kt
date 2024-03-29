@@ -15,10 +15,7 @@ import java.time.ZonedDateTime
 interface RewardsRepository {
     suspend fun getRewardsTimeline(
         deviceId: String,
-        page: Int?,
-        timezone: String? = null,
-        fromDate: String?,
-        toDate: String? = null
+        page: Int?
     ): Either<Failure, RewardsTimeline>
 
     suspend fun getRewards(deviceId: String): Either<Failure, Rewards>
@@ -36,20 +33,19 @@ interface RewardsRepository {
 }
 
 class RewardsRepositoryImpl(private val dataSource: RewardsDataSource) : RewardsRepository {
+    companion object {
+        const val TIMELINE_MINUS_MONTHS_TO_FETCH = 3L
+    }
 
     override suspend fun getRewardsTimeline(
         deviceId: String,
-        page: Int?,
-        timezone: String?,
-        fromDate: String?,
-        toDate: String?
+        page: Int?
     ): Either<Failure, RewardsTimeline> {
         return dataSource.getRewardsTimeline(
             deviceId,
             page,
             timezone = ZoneId.of("UTC").toString(),
-            fromDate = fromDate,
-            toDate = toDate,
+            fromDate = ZonedDateTime.now().minusMonths(TIMELINE_MINUS_MONTHS_TO_FETCH).toISODate()
         )
     }
 

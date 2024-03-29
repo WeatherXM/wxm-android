@@ -35,7 +35,7 @@
     <string name="error_claim_device_claiming_error"><![CDATA[Station claiming failed.<br><b>This device is not in claiming mode or the secret provided is invalid.</b><br>If the problem persists, please contact our support team at <a>support.weatherxm.com</a>]]></string>
     <string name="error_claim_gps_failed">Could not get current location.</string>
     <string name="error_cell_devices_no_data">Failed to get the cell devices.</string>
-    <string name="error_transactions_no_data">Oops! $WXM transactions could not be fetched.</string>
+    <string name="error_rewards_no_data">Oops! $WXM rewards could not be fetched.</string>
     <string name="error_open_website_support_cannot_open_url">Oops! Could not open %s</string>
     <string name="error_cannot_open_play_store">Oops! Could not open Play Store.</string>
     <string name="error_cannot_open_app_settings">Oops! Could not open App Settings.</string>
@@ -61,6 +61,5 @@
     <string name="warn_validation_invalid_friendly_name">Invalid Friendly Name</string>
 
     <!-- Info Messages -->
-    <string name="info_come_back_later">Please come back later!</string>
     <string name="session_expired">Your session has expired. Please login again.</string>
 </resources>
