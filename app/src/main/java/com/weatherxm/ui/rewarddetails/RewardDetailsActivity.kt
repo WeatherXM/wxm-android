@@ -125,8 +125,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         data.base?.qodScore?.let {
             updateDataQualityCard(it)
         } ?: run {
-            binding.dataQualityCard.error()
-            binding.dataQualityCard.desc(getString(R.string.data_quality_not_available))
+            binding.dataQualityCard.hideIcon().desc(getString(R.string.data_quality_not_available))
         }
         updateLocationCard(sortedIssues)
         updateCellCard(sortedIssues)
