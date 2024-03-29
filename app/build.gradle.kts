@@ -50,8 +50,8 @@ android {
         applicationId = "com.weatherxm.app"
         minSdk = 24
         targetSdk = 34
-        versionCode = 61
-        versionName = "3.8.1"
+        versionCode = 62
+        versionName = "3.9.0"
 
         // Resource value fields
         resValue("string", "mapbox_access_token", getStringProperty("MAPBOX_ACCESS_TOKEN"))
