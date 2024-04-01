@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Reward
+import com.weatherxm.ui.common.RewardTimelineType
+import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getDefaultMessage
@@ -20,17 +22,17 @@ class RewardsListViewModel(
     private var currentPage = 0
     private var hasNextPage = false
     private var blockNewPageRequest = false
-    private val currentShownRewards = mutableListOf<Reward>()
+    private val currentShownRewards = mutableListOf<TimelineReward>()
 
-    private val onFirstPageRewards = MutableLiveData<Resource<List<Reward>>>().apply {
+    private val onFirstPageRewards = MutableLiveData<Resource<List<TimelineReward>>>().apply {
         value = Resource.loading()
     }
-    private val onNewRewardsPage = MutableLiveData<Resource<List<Reward>>>()
-    private val onEndOfData = MutableLiveData<List<Reward>>()
+    private val onNewRewardsPage = MutableLiveData<Resource<List<TimelineReward>>>()
+    private val onEndOfData = MutableLiveData<List<TimelineReward>>()
 
-    fun onFirstPageRewards(): LiveData<Resource<List<Reward>>> = onFirstPageRewards
-    fun onNewRewardsPage(): LiveData<Resource<List<Reward>>> = onNewRewardsPage
-    fun onEndOfData(): LiveData<List<Reward>> = onEndOfData
+    fun onFirstPageRewards(): LiveData<Resource<List<TimelineReward>>> = onFirstPageRewards
+    fun onNewRewardsPage(): LiveData<Resource<List<TimelineReward>>> = onNewRewardsPage
+    fun onEndOfData(): LiveData<List<TimelineReward>> = onEndOfData
 
     fun fetchFirstPageRewards(deviceId: String) {
         onFirstPageRewards.postValue(Resource.loading())
@@ -68,8 +70,7 @@ class RewardsListViewModel(
                 blockNewPageRequest = false
             }
         } else if (!hasNextPage) {
-            // Add an empty reward to indicate the end of data and send all rewards to the activity
-            currentShownRewards.add(Reward.empty())
+            currentShownRewards.add(TimelineReward(RewardTimelineType.END_OF_LIST, null))
             onEndOfData.postValue(currentShownRewards)
         }
     }

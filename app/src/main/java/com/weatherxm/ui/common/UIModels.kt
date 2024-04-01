@@ -24,10 +24,18 @@ data class UIError(
 @Keep
 @JsonClass(generateAdapter = true)
 data class UIRewardsTimeline(
-    var rewards: List<Reward>,
+    var rewards: List<TimelineReward>,
     var hasNextPage: Boolean = false,
     var reachedTotal: Boolean = false
 )
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class TimelineReward(
+    val type: RewardTimelineType,
+    val data: Reward?
+) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -300,6 +308,12 @@ data class BoostDetailInfo(
     val title: String,
     val value: String
 ) : Parcelable
+
+@Suppress("EnumNaming")
+enum class RewardTimelineType {
+    DATA,
+    END_OF_LIST
+}
 
 @Parcelize
 enum class DevicesSortOrder : Parcelable {

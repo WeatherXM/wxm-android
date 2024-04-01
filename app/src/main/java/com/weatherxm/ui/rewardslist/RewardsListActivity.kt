@@ -7,6 +7,7 @@ import com.weatherxm.data.Reward
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityRewardsListBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.parcelable
@@ -78,7 +79,7 @@ class RewardsListActivity : BaseActivity() {
         analytics.trackScreen(Analytics.Screen.DEVICE_REWARD_TRANSACTIONS, this::class.simpleName)
     }
 
-    private fun updateUIFirstPage(resource: Resource<List<Reward>>) {
+    private fun updateUIFirstPage(resource: Resource<List<TimelineReward>>) {
         when (resource.status) {
             Status.SUCCESS -> {
                 if (!resource.data.isNullOrEmpty()) {
@@ -110,7 +111,7 @@ class RewardsListActivity : BaseActivity() {
         }
     }
 
-    private fun updateUINewPage(resource: Resource<List<Reward>>) {
+    private fun updateUINewPage(resource: Resource<List<TimelineReward>>) {
         when (resource.status) {
             Status.SUCCESS -> {
                 if (!resource.data.isNullOrEmpty()) {

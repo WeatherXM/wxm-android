@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.data.Reward
 import com.weatherxm.databinding.ListItemRewardBinding
 import com.weatherxm.databinding.ListItemRewardEndOfDataBinding
+import com.weatherxm.ui.common.RewardTimelineType
+import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
@@ -19,11 +21,11 @@ class RewardsListAdapter(
     private val onEndOfData: () -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), KoinComponent {
 
-    private val adapterData = mutableListOf<Reward>()
+    private val adapterData = mutableListOf<TimelineReward>()
 
     val resources: Resources by inject()
 
-    fun setData(data: List<Reward>) {
+    fun setData(data: List<TimelineReward>) {
         adapterData.apply {
             clear()
             addAll(data)
@@ -51,18 +53,18 @@ class RewardsListAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = adapterData[position]
-        if (!item.isEmpty()) {
-            (holder as RewardsViewHolder).bind(item, position)
+        if (item.type == RewardTimelineType.DATA && item.data != null) {
+            (holder as RewardsViewHolder).bind(item.data, position)
         }
     }
 
     override fun getItemCount(): Int = adapterData.size
 
     override fun getItemViewType(position: Int): Int {
-        return if (!adapterData[position].isEmpty()) {
+        return if (adapterData[position].type == RewardTimelineType.DATA) {
             TYPE_REWARD
         } else {
-            END_OF_DATA
+            TYPE_END_OF_DATA
         }
     }
 
@@ -72,18 +74,14 @@ class RewardsListAdapter(
         private val onEndOfData: () -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        init {
-            binding.mainCard.setOnClickListener {
-                val transaction = adapterData[absoluteAdapterPosition]
-                onRewardDetails(transaction)
-            }
-        }
-
         fun bind(item: Reward, position: Int) {
             if (position == adapterData.size - 1) {
                 onEndOfData()
             }
             updateDateAndLines(item.timestamp, position)
+            binding.mainCard.setOnClickListener {
+                onRewardDetails(item)
+            }
             binding.mainCard.updateUI(item, true)
         }
 
@@ -102,7 +100,8 @@ class RewardsListAdapter(
                 binding.date.text = formattedDate
             } else {
                 val prevFormattedDate =
-                    adapterData[position - 1].timestamp?.getFormattedDate(true) ?: String.empty()
+                    adapterData[position - 1].data?.timestamp?.getFormattedDate(true)
+                        ?: String.empty()
 
                 if (formattedDate == prevFormattedDate) {
                     binding.prevLine.setVisible(false)
@@ -124,6 +123,6 @@ class RewardsListAdapter(
 
     companion object {
         private const val TYPE_REWARD = 0
-        private const val END_OF_DATA = 1
+        private const val TYPE_END_OF_DATA = 1
     }
 }

@@ -10,6 +10,8 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.ui.common.BoostDetailInfo
+import com.weatherxm.ui.common.RewardTimelineType
+import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.UIBoost
 import com.weatherxm.ui.common.UIRewardsTimeline
 import com.weatherxm.ui.common.empty
@@ -55,6 +57,8 @@ class RewardsUseCaseImpl(
                     it.data.filter { tx ->
                         // Keep only transactions that have a reward for this device
                         tx.baseReward != null
+                    }.map {
+                        TimelineReward(RewardTimelineType.DATA, it)
                     },
                     it.hasNextPage
                 )

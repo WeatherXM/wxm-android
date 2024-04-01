@@ -450,14 +450,7 @@ data class Reward(
     val baseRewardScore: Int?,
     @Json(name = "annotation_summary")
     val annotationSummary: List<RewardsAnnotationGroup>?,
-) : Parcelable {
-    companion object {
-        fun empty() = Reward(null, null, null, null, null, null)
-    }
-
-    fun isEmpty() = timestamp == null && baseReward == null && totalBoostReward == null
-        && totalReward == null && baseRewardScore == null && annotationSummary == null
-}
+) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)
