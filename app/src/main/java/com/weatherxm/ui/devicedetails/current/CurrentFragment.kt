@@ -131,19 +131,21 @@ class CurrentFragment : BaseFragment() {
         binding.errorView.setVisible(false)
         binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.transparent, 0)
         if (device.alerts.size > 1) {
-            binding.multipleAlertsView.title(
-                getString(R.string.issues, device.alerts.size.toString())
-            ).action {
+            binding.multipleAlertsView.action {
                 navigator.showDeviceAlerts(this, device)
             }
             if (device.hasErrors()) {
-                binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
-                binding.multipleAlertsView.setBackground(R.color.errorTint)
+                binding.multipleAlertsView
+                    .title(getString(R.string.issues_detected, device.alerts.size))
+                    .setBackground(R.color.errorTint)
                     .setIcon(R.drawable.ic_error_hex_filled)
-            } else {
                 binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
-                binding.multipleAlertsView.setBackground(R.color.warningTint)
+            } else {
+                binding.multipleAlertsView
+                    .title(getString(R.string.alerts_detected, device.alerts.size))
+                    .setBackground(R.color.warningTint)
                     .setIcon(R.drawable.ic_warning_hex_filled)
+                binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
             }
             binding.multipleAlertsView.setVisible(true)
         } else if (device.alerts.size == 1) {

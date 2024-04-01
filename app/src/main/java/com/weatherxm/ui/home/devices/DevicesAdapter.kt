@@ -115,15 +115,23 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
 
         private fun setAlerts(item: UIDevice) {
             if (item.alerts.size > 1) {
-                binding.multipleAlerts
-                    .title(itemView.context.getString(R.string.issues, item.alerts.size.toString()))
-                    .action { deviceListener.onAlertsClicked(item) }
+                binding.multipleAlerts.action {
+                    deviceListener.onAlertsClicked(item)
+                }
                 if (item.hasErrors()) {
-                    binding.multipleAlerts.setBackground(R.color.errorTint)
+                    binding.multipleAlerts
+                        .title(
+                            itemView.context.getString(R.string.alerts_detected, item.alerts.size)
+                        )
+                        .setBackground(R.color.errorTint)
                         .setIcon(R.drawable.ic_error_hex_filled)
                     binding.root.setCardStroke(R.color.error, 2)
                 } else {
-                    binding.multipleAlerts.setBackground(R.color.warningTint)
+                    binding.multipleAlerts
+                        .title(
+                            itemView.context.getString(R.string.issues_detected, item.alerts.size)
+                        )
+                        .setBackground(R.color.warningTint)
                         .setIcon(R.drawable.ic_warning_hex_filled)
                     binding.root.setCardStroke(R.color.warning, 2)
                 }
