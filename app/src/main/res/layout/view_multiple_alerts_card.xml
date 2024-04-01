@@ -49,7 +49,7 @@
                 style="@style/Widget.WeatherXM.TonalButton"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:text="@string/action_view_more"
+                android:text="@string/action_view_all"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>

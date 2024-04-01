@@ -24,7 +24,7 @@
     <string name="action_deny">Deny</string>
     <string name="action_sounds_good">Sounds good!</string>
     <string name="action_update_firmware">Update Firmware</string>
-    <string name="action_view_more">View More</string>
+    <string name="action_view_all">View All</string>
     <string name="action_finish">Finish</string>
     <string name="action_sign_in">Sign In</string>
     <string name="action_buy_station">Buy Station</string>
