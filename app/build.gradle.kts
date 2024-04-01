@@ -315,7 +315,7 @@ dependencies {
 
     // HTTP client
     implementation(libs.retrofit)
-    implementation(libs.converter.moshi)
+    implementation(libs.retrofit.converter.moshi)
 
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
