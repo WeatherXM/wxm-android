@@ -66,6 +66,10 @@ class RewardsListActivity : BaseActivity() {
             updateUINewPage(it)
         }
 
+        model.onEndOfData().observe(this) {
+            adapter.setData(it)
+        }
+
         model.fetchFirstPageRewards(deviceId)
     }
 
@@ -78,7 +82,7 @@ class RewardsListActivity : BaseActivity() {
         when (resource.status) {
             Status.SUCCESS -> {
                 if (!resource.data.isNullOrEmpty()) {
-                    adapter.submitList(resource.data)
+                    adapter.setData(resource.data)
                     binding.recycler.setVisible(true)
                     binding.status.setVisible(false)
                     binding.emptyRewardsCard.setVisible(false)
@@ -110,8 +114,7 @@ class RewardsListActivity : BaseActivity() {
         when (resource.status) {
             Status.SUCCESS -> {
                 if (!resource.data.isNullOrEmpty()) {
-                    adapter.submitList(resource.data)
-                    adapter.notifyDataSetChanged()
+                    adapter.setData(resource.data)
                 }
                 binding.loadingNewPage.setVisible(false)
             }

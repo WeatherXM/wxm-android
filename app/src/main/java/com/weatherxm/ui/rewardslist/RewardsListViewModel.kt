@@ -26,11 +26,11 @@ class RewardsListViewModel(
         value = Resource.loading()
     }
     private val onNewRewardsPage = MutableLiveData<Resource<List<Reward>>>()
-    private val onEndOfData = MutableLiveData<Unit>()
+    private val onEndOfData = MutableLiveData<List<Reward>>()
 
     fun onFirstPageRewards(): LiveData<Resource<List<Reward>>> = onFirstPageRewards
     fun onNewRewardsPage(): LiveData<Resource<List<Reward>>> = onNewRewardsPage
-    fun onEndOfData(): LiveData<Unit> = onEndOfData
+    fun onEndOfData(): LiveData<List<Reward>> = onEndOfData
 
     fun fetchFirstPageRewards(deviceId: String) {
         onFirstPageRewards.postValue(Resource.loading())
@@ -60,13 +60,6 @@ class RewardsListViewModel(
                     Timber.d("Got Rewards: ${it.rewards}")
                     hasNextPage = it.hasNextPage
                     currentShownRewards.addAll(it.rewards)
-                    /**
-                     * Add an empty reward at the end in order to let the adapter know that we
-                     * reached the end of the data and show the respective card
-                     */
-                    if (!hasNextPage) {
-                        currentShownRewards.add(Reward.empty())
-                    }
                     onNewRewardsPage.postValue(Resource.success(currentShownRewards))
                 }.onLeft {
                     analytics.trackEventFailure(it.code)
@@ -75,8 +68,9 @@ class RewardsListViewModel(
                 blockNewPageRequest = false
             }
         } else if (!hasNextPage) {
-            // TODO: Empty reward on last page
-            onEndOfData.postValue(Unit)
+            // Add an empty reward to indicate the end of data and send all rewards to the activity
+            currentShownRewards.add(Reward.empty())
+            onEndOfData.postValue(currentShownRewards)
         }
     }
 
