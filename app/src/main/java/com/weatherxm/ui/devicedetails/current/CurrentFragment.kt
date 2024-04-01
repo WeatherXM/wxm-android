@@ -8,7 +8,7 @@ import com.weatherxm.R
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
-import com.weatherxm.ui.common.DeviceAlert
+import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setCardStroke
@@ -131,24 +131,40 @@ class CurrentFragment : BaseFragment() {
         binding.errorView.setVisible(false)
         binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.transparent, 0)
         if (device.alerts.size > 1) {
-            binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
             binding.multipleAlertsView.title(
                 getString(R.string.issues, device.alerts.size.toString())
             ).action {
                 navigator.showDeviceAlerts(this, device)
-            }.setVisible(true)
-        } else if (device.alerts.contains(DeviceAlert.OFFLINE)) {
-            onDeviceOffline(device.relation, device.profile)
-        } else if (device.alerts.contains(DeviceAlert.NEEDS_UPDATE)) {
-            binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.warning, 2)
-            binding.warningView.action(getString(R.string.update_station_now)) {
-                analytics.trackEventPrompt(
-                    Analytics.ParamValue.OTA_AVAILABLE.paramValue,
-                    Analytics.ParamValue.WARN.paramValue,
-                    Analytics.ParamValue.ACTION.paramValue
-                )
-                navigator.showDeviceHeliumOTA(this, device, false)
-            }.setVisible(true)
+            }
+            if (device.hasErrors()) {
+                binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
+                binding.multipleAlertsView.setBackground(R.color.errorTint)
+                    .setIcon(R.drawable.ic_error_hex_filled)
+            } else {
+                binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
+                binding.multipleAlertsView.setBackground(R.color.warningTint)
+                    .setIcon(R.drawable.ic_warning_hex_filled)
+            }
+            binding.multipleAlertsView.setVisible(true)
+        } else if (device.alerts.size == 1) {
+            binding.multipleAlertsView.setVisible(false)
+            when (device.alerts[0].alert) {
+                DeviceAlertType.OFFLINE -> onDeviceOffline(device.relation, device.profile)
+                DeviceAlertType.LOW_BATTERY -> {
+                    // TODO: Implement this.
+                }
+                DeviceAlertType.NEEDS_UPDATE -> {
+                    binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.warning, 2)
+                    binding.warningView.action(getString(R.string.update_station_now)) {
+                        analytics.trackEventPrompt(
+                            Analytics.ParamValue.OTA_AVAILABLE.paramValue,
+                            Analytics.ParamValue.WARN.paramValue,
+                            Analytics.ParamValue.ACTION.paramValue
+                        )
+                        navigator.showDeviceHeliumOTA(this, device, false)
+                    }.setVisible(true)
+                }
+            }
         }
     }
 

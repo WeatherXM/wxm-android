@@ -8,9 +8,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
+import com.weatherxm.data.SeverityLevel
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
 import com.weatherxm.ui.common.DeviceAlert
+import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
@@ -112,31 +114,65 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
         }
 
         private fun setAlerts(item: UIDevice) {
-            binding.alertsError.setVisible(false)
-            binding.error.setVisible(false)
-            binding.warning.setVisible(false)
-            binding.root.setCardStroke(R.color.transparent, 0)
             if (item.alerts.size > 1) {
-                binding.root.setCardStroke(R.color.error, 2)
-                binding.alertsError.title(
-                    itemView.context.getString(R.string.issues, item.alerts.size.toString())
-                ).action {
-                    deviceListener.onAlertsClicked(item)
-                }.setVisible(true)
-            } else if (item.alerts.contains(DeviceAlert.OFFLINE)) {
-                binding.root.setCardStroke(R.color.error, 2)
-                binding.error.setVisible(true)
-            } else if (item.alerts.contains(DeviceAlert.NEEDS_UPDATE)) {
-                binding.root.setCardStroke(R.color.warning, 2)
-                binding.warning.action(resources.getString(R.string.update_station_now)) {
-                    deviceListener.onUpdateStationClicked(item)
-                }.setVisible(true)
-                analytics.trackEventPrompt(
-                    Analytics.ParamValue.OTA_AVAILABLE.paramValue,
-                    Analytics.ParamValue.WARN.paramValue,
-                    Analytics.ParamValue.VIEW.paramValue
-                )
+                binding.multipleAlerts
+                    .title(itemView.context.getString(R.string.issues, item.alerts.size.toString()))
+                    .action { deviceListener.onAlertsClicked(item) }
+                if (item.hasErrors()) {
+                    binding.multipleAlerts.setBackground(R.color.errorTint)
+                        .setIcon(R.drawable.ic_error_hex_filled)
+                    binding.root.setCardStroke(R.color.error, 2)
+                } else {
+                    binding.multipleAlerts.setBackground(R.color.warningTint)
+                        .setIcon(R.drawable.ic_warning_hex_filled)
+                    binding.root.setCardStroke(R.color.warning, 2)
+                }
+                binding.alert.setVisible(false)
+                binding.multipleAlerts.setVisible(true)
+            } else if (item.alerts.size == 1) {
+                binding.multipleAlerts.setVisible(false)
+                handleSingleAlert(item.alerts[0], item)
+            } else {
+                binding.multipleAlerts.setVisible(false)
+                binding.alert.setVisible(false)
             }
+        }
+
+        private fun handleSingleAlert(deviceAlert: DeviceAlert, item: UIDevice) {
+            if (deviceAlert.severity == SeverityLevel.ERROR) {
+                binding.root.setCardStroke(R.color.error, 2)
+                binding.alert.error()
+            } else {
+                binding.root.setCardStroke(R.color.warning, 2)
+                binding.alert.warning()
+            }
+            when (deviceAlert.alert) {
+                DeviceAlertType.OFFLINE -> {
+                    binding.alert.title(R.string.station_offline)
+                }
+                DeviceAlertType.LOW_BATTERY -> {
+                    binding.alert
+                        .title(R.string.low_battery)
+                        .message(R.string.low_battery_desc)
+                        .action(resources.getString(R.string.read_more)) {
+                            deviceListener.onLowBatteryReadMoreClicked(item)
+                        }
+                }
+                DeviceAlertType.NEEDS_UPDATE -> {
+                    binding.alert
+                        .title(R.string.updated_needed_title)
+                        .message(R.string.updated_needed_desc)
+                        .action(resources.getString(R.string.update_station_now)) {
+                            deviceListener.onUpdateStationClicked(item)
+                        }
+                    analytics.trackEventPrompt(
+                        Analytics.ParamValue.OTA_AVAILABLE.paramValue,
+                        Analytics.ParamValue.WARN.paramValue,
+                        Analytics.ParamValue.VIEW.paramValue
+                    )
+                }
+            }
+            binding.alert.setVisible(true)
         }
 
         private fun setWeatherData(item: UIDevice) {
@@ -213,6 +249,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
 interface DeviceListener {
     fun onDeviceClicked(device: UIDevice)
     fun onUpdateStationClicked(device: UIDevice)
+    fun onLowBatteryReadMoreClicked(device: UIDevice)
     fun onAlertsClicked(device: UIDevice)
     fun onFollowBtnClicked(device: UIDevice)
 }

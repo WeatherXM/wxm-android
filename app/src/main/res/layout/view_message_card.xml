@@ -31,13 +31,12 @@
 
                 <ImageView
                     android:id="@+id/icon"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="center_vertical"
-                    app:tint="@color/warning"
                     android:layout_marginEnd="@dimen/margin_small"
                     tools:ignore="ContentDescription"
-                    tools:src="@drawable/ic_warn" />
+                    tools:src="@drawable/ic_warning_hex_filled" />
 
                 <LinearLayout
                     android:id="@+id/textContainers"

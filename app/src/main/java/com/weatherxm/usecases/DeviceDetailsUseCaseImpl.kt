@@ -15,6 +15,7 @@ import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.common.DeviceAlert
+import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
@@ -41,7 +42,7 @@ class DeviceDetailsUseCaseImpl(
                 it.toUIDevice().apply {
                     this.relation = DeviceRelation.UNFOLLOWED
                     if (isActive == false) {
-                        this.alerts = listOf(DeviceAlert.OFFLINE)
+                        this.alerts = listOf(DeviceAlert.createError(DeviceAlertType.OFFLINE))
                     }
                 }
             }
@@ -53,13 +54,15 @@ class DeviceDetailsUseCaseImpl(
                     ) && isOwned()
                     val alerts = mutableListOf<DeviceAlert>()
                     if (shouldShowOTAPrompt && profile == Helium && needsUpdate()) {
-                        alerts.add(DeviceAlert.NEEDS_UPDATE)
+                        alerts.add(DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE))
                     }
 
                     if (isActive == false) {
-                        alerts.add(DeviceAlert.OFFLINE)
+                        alerts.add(DeviceAlert.createError(DeviceAlertType.OFFLINE))
                     }
-                    this.alerts = alerts
+                    this.alerts = alerts.sortedByDescending { alert ->
+                        alert.severity
+                    }
                 }
             }
         }

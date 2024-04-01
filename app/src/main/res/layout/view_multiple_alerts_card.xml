@@ -11,9 +11,9 @@
         style="@style/Widget.WeatherXM.MaterialCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/errorTint"
         app:contentPadding="@dimen/padding_normal"
-        app:strokeWidth="0dp">
+        app:strokeWidth="0dp"
+        tools:cardBackgroundColor="@color/errorTint">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -21,21 +21,21 @@
 
             <ImageView
                 android:id="@+id/icon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_error"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/error"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/ic_error_hex_filled"
+                tools:tint="@color/error" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_normal"
+                android:layout_marginHorizontal="@dimen/margin_small"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -46,7 +46,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/action"
-                style="@style/Widget.WeatherXM.TextButton.Subtle"
+                style="@style/Widget.WeatherXM.TonalButton"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:text="@string/action_view_more"
