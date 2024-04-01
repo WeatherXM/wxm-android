@@ -81,41 +81,58 @@
                     tools:src="@drawable/ic_favorite"
                     tools:tint="@color/follow_heart_color" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/address"
-                    style="@style/Widget.WeatherXM.Chip.Status"
-                    android:layout_width="wrap_content"
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:ellipsize="end"
-                    app:chipBackgroundColor="@color/blueTint"
-                    app:chipIcon="@drawable/ic_hex"
-                    app:chipIconSize="12dp"
-                    app:chipIconTint="@color/colorOnSurface"
-                    app:layout_constrainedWidth="true"
-                    app:layout_constraintEnd_toStartOf="@id/status"
-                    app:layout_constraintHorizontal_bias="0"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/public_name"
-                    tools:ignore="KeyboardInaccessibleWidget"
-                    tools:text="Athens, GR" />
+                    android:scrollbars="none"
+                    app:layout_constraintTop_toBottomOf="@id/public_name">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/status"
-                    style="@style/Widget.WeatherXM.Chip.Status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:layout_marginTop="@dimen/margin_small"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/address"
-                    app:layout_constraintTop_toBottomOf="@id/public_name"
-                    tools:chipBackgroundColor="@color/status_chip_background_online"
-                    tools:chipIcon="@drawable/ic_wifi"
-                    tools:chipIconTint="@color/status_chip_content_online"
-                    tools:text="5 mins ago"
-                    tools:textColor="@color/status_chip_content_online" />
+                    <com.google.android.material.chip.ChipGroup
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/alertChip"
+                            style="@style/Widget.WeatherXM.Chip.Status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:chipBackgroundColor="@color/warningTint"
+                            app:chipCornerRadius="@dimen/radius_small"
+                            app:chipIcon="@drawable/ic_warning_hex_filled"
+                            app:chipIconTint="@color/warning"
+                            tools:text="@string/update_required" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/status"
+                            style="@style/Widget.WeatherXM.Chip.Status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:chipCornerRadius="@dimen/radius_small"
+                            tools:chipBackgroundColor="@color/status_chip_background_online"
+                            tools:chipIcon="@drawable/ic_wifi"
+                            tools:chipIconTint="@color/status_chip_content_online"
+                            tools:text="5 mins ago"
+                            tools:textColor="@color/status_chip_content_online" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/address"
+                            style="@style/Widget.WeatherXM.Chip.Status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:ellipsize="end"
+                            app:chipBackgroundColor="@color/blueTint"
+                            app:chipCornerRadius="@dimen/radius_small"
+                            app:chipIcon="@drawable/ic_hex"
+                            app:chipIconSize="12dp"
+                            app:chipIconTint="@color/colorOnSurface"
+                            tools:ignore="KeyboardInaccessibleWidget"
+                            tools:text="Athens, GR" />
+
+                    </com.google.android.material.chip.ChipGroup>
+                </HorizontalScrollView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

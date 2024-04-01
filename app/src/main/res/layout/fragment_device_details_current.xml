@@ -86,7 +86,7 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.weatherxm.ui.components.MessageCardView
-                        android:id="@+id/errorView"
+                        android:id="@+id/alert"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="-16dp"
@@ -99,31 +99,6 @@
                         app:message_includes_close_button="false"
                         app:message_title="@string/station_offline"
                         tools:visibility="visible" />
-
-                    <com.weatherxm.ui.components.MessageCardView
-                        android:id="@+id/warningView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="-16dp"
-                        android:background="@color/warningTint"
-                        android:elevation="0dp"
-                        android:paddingTop="16dp"
-                        android:visibility="gone"
-                        app:message_background_tint="@color/warningTint"
-                        app:message_icon="@drawable/ic_warning_hex_filled"
-                        app:message_includes_close_button="false"
-                        app:message_message="@string/updated_needed_desc"
-                        app:message_title="@string/updated_needed_title" />
-
-                    <com.weatherxm.ui.components.MultipleAlertsCardView
-                        android:id="@+id/multipleAlertsView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="-16dp"
-                        android:background="@color/errorTint"
-                        android:elevation="0dp"
-                        android:paddingTop="16dp"
-                        android:visibility="gone" />
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>

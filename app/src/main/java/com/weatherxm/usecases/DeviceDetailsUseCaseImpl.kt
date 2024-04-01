@@ -53,12 +53,17 @@ class DeviceDetailsUseCaseImpl(
                         id, assignedFirmware
                     ) && isOwned()
                     val alerts = mutableListOf<DeviceAlert>()
-                    if (shouldShowOTAPrompt && profile == Helium && needsUpdate()) {
-                        alerts.add(DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE))
-                    }
-
                     if (isActive == false) {
                         alerts.add(DeviceAlert.createError(DeviceAlertType.OFFLINE))
+                    }
+
+                    // FIXME: Revert this testing code before going to production
+                    if (device.isOwned()) {
+                        alerts.add(DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY))
+                    }
+
+                    if (shouldShowOTAPrompt && profile == Helium && needsUpdate()) {
+                        alerts.add(DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE))
                     }
                     this.alerts = alerts.sortedByDescending { alert ->
                         alert.severity

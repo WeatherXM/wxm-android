@@ -20,6 +20,8 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityDeviceDetailsBinding
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.DeviceAlert
+import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
@@ -115,6 +117,10 @@ class DeviceDetailsActivity : BaseActivity() {
             }
         }
 
+        binding.alertChip.setOnClickListener {
+            navigator.showDeviceAlerts(this, model.device)
+        }
+
         model.onFollowStatus().observe(this) {
             onFollowStatus(it, dialogOverlay)
         }
@@ -182,12 +188,10 @@ class DeviceDetailsActivity : BaseActivity() {
                 )
                 true
             }
-
             R.id.settings -> {
                 navigator.showStationSettings(this, model.device)
                 true
             }
-
             else -> false
         }
     }
@@ -250,11 +254,40 @@ class DeviceDetailsActivity : BaseActivity() {
             device.profile,
             device.isActive,
         )
+        if (!model.device.isOnline()) {
+            binding.status.setOnClickListener {
+                navigator.showDeviceAlerts(this, model.device)
+            }
+        } else {
+            binding.status.setOnClickListener(null)
+            binding.status.isClickable = false
+        }
 
         if (device.address.isNullOrEmpty()) {
             model.fetchAddressFromCell()
         } else {
             binding.address.text = device.address
+        }
+
+        setAlerts(device.alerts)
+    }
+
+    private fun setAlerts(alerts: List<DeviceAlert>) {
+        val alertsWithoutOffline = alerts.dropWhile {
+            it.alert == DeviceAlertType.OFFLINE
+        }
+        if (alertsWithoutOffline.size > 1) {
+            binding.alertChip.text = getString(R.string.issues, alertsWithoutOffline.size)
+            binding.alertChip.setVisible(true)
+        } else if (alertsWithoutOffline.size == 1) {
+            if (alertsWithoutOffline[0].alert == DeviceAlertType.NEEDS_UPDATE) {
+                binding.alertChip.text = getString(R.string.update_required)
+            } else if (alertsWithoutOffline[0].alert == DeviceAlertType.LOW_BATTERY) {
+                binding.alertChip.text = getString(R.string.low_battery)
+            }
+            binding.alertChip.setVisible(true)
+        } else {
+            binding.alertChip.setVisible(false)
         }
     }
 

@@ -216,7 +216,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     }
 
     override fun onLowBatteryReadMoreClicked(device: UIDevice) {
-        if(device.profile == DeviceProfile.M5) {
+        if (device.profile == DeviceProfile.M5) {
             navigator.openWebsite(context, getString(R.string.docs_url_low_battery_m5))
         } else {
             navigator.openWebsite(context, getString(R.string.docs_url_low_battery_helium))
@@ -224,7 +224,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     }
 
     override fun onAlertsClicked(device: UIDevice) {
-        navigator.showDeviceAlerts(this, device)
+        navigator.showDeviceAlerts(context, device)
     }
 
     override fun onFollowBtnClicked(device: UIDevice) {
