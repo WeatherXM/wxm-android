@@ -79,11 +79,10 @@ Remote Staging -> `staging.env`
 
 #### Firebase Variables
 
-We have two different variables for Firebase:
+We have one variable for Firebase:
 
-- `FIREBASE_PUBLIC_TEST_GROUP`
-- `FIREBASE_INTERNAL_TEST_GROUP`
-  These are used for using builds through Firebase App Distribution to testers, won't be needed for
+- `FIREBASE_TEST_GROUP`
+  This is used for sending builds through Firebase App Distribution to testers, won't be needed for
   contributors so feel free to emit that.
 
 #### Mapbox Variables

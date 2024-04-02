@@ -107,7 +107,7 @@ android {
                 artifactType = "APK"
                 releaseNotes = "Release notes for staging version"
                 serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
-                groups = getStringProperty("FIREBASE_INTERNAL_TEST_GROUP")
+                groups = getStringProperty("FIREBASE_TEST_GROUP")
             }
         }
         create("dev") {
@@ -125,7 +125,7 @@ android {
                 artifactType = "APK"
                 releaseNotes = "Release notes for development version"
                 serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
-                groups = getStringProperty("FIREBASE_INTERNAL_TEST_GROUP")
+                groups = getStringProperty("FIREBASE_TEST_GROUP")
             }
         }
         create("prod") {
@@ -142,7 +142,7 @@ android {
                 artifactType = "APK"
                 releaseNotes = "Release notes for production version"
                 serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
-                groups = getStringProperty("FIREBASE_PUBLIC_TEST_GROUP")
+                groups = getStringProperty("FIREBASE_TEST_GROUP")
             }
         }
     }
