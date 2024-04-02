@@ -14,6 +14,11 @@ env:
     ORG_GRADLE_PROJECT_RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
     ORG_GRADLE_PROJECT_RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
     ORG_GRADLE_PROJECT_RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+    # Debug key information
+    ORG_GRADLE_PROJECT_DEBUG_KEYSTORE: ${{ secrets.DEBUG_KEYSTORE }}
+    ORG_GRADLE_PROJECT_DEBUG_KEYSTORE_PASSWORD: ${{ secrets.DEBUG_KEYSTORE_PASSWORD }}
+    ORG_GRADLE_PROJECT_DEBUG_KEY_ALIAS: ${{ secrets.DEBUG_KEY_ALIAS }}
+    ORG_GRADLE_PROJECT_DEBUG_KEY_PASSWORD: ${{ secrets.DEBUG_KEY_PASSWORD }}
     # Firebase distribution on tech team group
     ORG_GRADLE_PROJECT_FIREBASE_TEST_GROUP: ${{ secrets.FIREBASE_TECH_TEAM_TEST_GROUP }}
     # Gradle config
@@ -42,7 +47,9 @@ jobs:
                 run: |
                     echo "${{ secrets.ENCODED_GOOGLE_SERVICES }}" | base64 -d > ./app/google-services.json
                     echo "${{ secrets.ENCODED_RELEASE_KEYSTORE }}" > release-keystore.asc
+                    echo "${{ secrets.ENCODED_DEBUG_KEYSTORE }}" > debug-keystore.asc
                     gpg -d --passphrase "${{ secrets.ENCODED_RELEASE_KEYSTORE_PASSPHRASE }}" --batch release-keystore.asc > ./${{ secrets.RELEASE_KEYSTORE }}
+                    gpg -d --passphrase "${{ secrets.DEBUG_KEYSTORE_PASSWORD }}" --batch debug-keystore.asc > ./${{ secrets.DEBUG_KEYSTORE }}
             -   name: Setup JDK 17
                 uses: actions/setup-java@v3
                 with:
@@ -74,7 +81,9 @@ jobs:
                     echo "${{ secrets.ENCODED_GOOGLE_SERVICES }}" | base64 -d > ./app/google-services.json
                     echo "${{ secrets.ENCODED_SERVICE_ACCOUNT }}" | base64 -d > ./ci-service-account.json
                     echo "${{ secrets.ENCODED_RELEASE_KEYSTORE }}" > release-keystore.asc
+                    echo "${{ secrets.ENCODED_DEBUG_KEYSTORE }}" > debug-keystore.asc
                     gpg -d --passphrase "${{ secrets.ENCODED_RELEASE_KEYSTORE_PASSPHRASE }}" --batch release-keystore.asc > ./${{ secrets.RELEASE_KEYSTORE }}
+                    gpg -d --passphrase "${{ secrets.DEBUG_KEYSTORE_PASSWORD }}" --batch debug-keystore.asc > ./${{ secrets.DEBUG_KEYSTORE }}
             -   name: Setup JDK 17
                 uses: actions/setup-java@v3
                 with:

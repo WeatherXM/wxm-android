@@ -67,6 +67,12 @@ android {
             keyAlias = getStringProperty("RELEASE_KEY_ALIAS")
             keyPassword = getStringProperty("RELEASE_KEY_PASSWORD")
         }
+        create("debug-config") {
+            storeFile = file("${rootDir.path}/${getStringProperty("DEBUG_KEYSTORE")}")
+            storePassword = getStringProperty("DEBUG_KEYSTORE_PASSWORD")
+            keyAlias = getStringProperty("DEBUG_KEY_ALIAS")
+            keyPassword = getStringProperty("DEBUG_KEY_PASSWORD")
+        }
     }
 
     flavorDimensions.add("mode")
@@ -158,6 +164,7 @@ android {
             manifestPlaceholders["crashlyticsEnabled"] = true
         }
         getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug-config")
             // Change minifyEnabled to true if you want to test code obfuscation in debug mode
             isMinifyEnabled = false
             proguardFiles(
