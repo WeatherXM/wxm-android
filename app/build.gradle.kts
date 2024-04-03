@@ -20,6 +20,10 @@ fun getGitCommitHash(): String {
     return stdout.toString().trim()
 }
 
+fun hasProperty(name: String): Boolean {
+    return project.hasProperty(name)
+}
+
 fun getStringProperty(name: String): String {
     return project.property(name) as String
 }
@@ -66,6 +70,14 @@ android {
             storePassword = getStringProperty("RELEASE_KEYSTORE_PASSWORD")
             keyAlias = getStringProperty("RELEASE_KEY_ALIAS")
             keyPassword = getStringProperty("RELEASE_KEY_PASSWORD")
+        }
+        if (hasProperty("DEBUG_KEYSTORE")) {
+            create("debug-config") {
+                storeFile = file("${rootDir.path}/${getStringProperty("DEBUG_KEYSTORE")}")
+                storePassword = getStringProperty("DEBUG_KEYSTORE_PASSWORD")
+                keyAlias = getStringProperty("DEBUG_KEY_ALIAS")
+                keyPassword = getStringProperty("DEBUG_KEY_PASSWORD")
+            }
         }
     }
 
@@ -158,6 +170,9 @@ android {
             manifestPlaceholders["crashlyticsEnabled"] = true
         }
         getByName("debug") {
+            signingConfigs.firstOrNull { it.name == "debug-config" }?.let {
+                signingConfig = it
+            }
             // Change minifyEnabled to true if you want to test code obfuscation in debug mode
             isMinifyEnabled = false
             proguardFiles(
