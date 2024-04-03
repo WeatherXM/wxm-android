@@ -2,7 +2,7 @@ name: Build Production & Google Play Internal Channel Distribution
 on:
     push:
         tags:
-            - '[0-9]+.[0-9]+.[0-9]+'
+            - 'RC-[0-9]+_[0-9]+.[0-9]+.[0-9]+'
 env:
     # Mapbox SDK secrets
     ORG_GRADLE_PROJECT_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
