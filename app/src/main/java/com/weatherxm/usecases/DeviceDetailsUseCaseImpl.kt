@@ -57,8 +57,7 @@ class DeviceDetailsUseCaseImpl(
                         alerts.add(DeviceAlert.createError(DeviceAlertType.OFFLINE))
                     }
 
-                    // FIXME: Revert this testing code before going to production
-                    if (device.isOwned()) {
+                    if (device.hasLowBattery() && device.isOwned()) {
                         alerts.add(DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY))
                     }
 
