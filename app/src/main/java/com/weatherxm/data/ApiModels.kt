@@ -450,13 +450,7 @@ data class Reward(
     val baseRewardScore: Int?,
     @Json(name = "annotation_summary")
     val annotationSummary: List<RewardsAnnotationGroup>?,
-) : Parcelable {
-    fun toSortedAnnotations(): List<RewardsAnnotationGroup>? {
-        return annotationSummary?.sortedByDescending {
-            it.severityLevel
-        }
-    }
-}
+) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)

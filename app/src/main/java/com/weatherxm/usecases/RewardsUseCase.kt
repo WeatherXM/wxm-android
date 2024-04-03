@@ -10,6 +10,8 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.ui.common.BoostDetailInfo
+import com.weatherxm.ui.common.RewardTimelineType
+import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.UIBoost
 import com.weatherxm.ui.common.UIRewardsTimeline
 import com.weatherxm.ui.common.empty
@@ -22,9 +24,7 @@ import java.time.ZonedDateTime
 interface RewardsUseCase {
     suspend fun getRewardsTimeline(
         deviceId: String,
-        page: Int?,
-        fromDate: String?,
-        toDate: String? = null
+        page: Int?
     ): Either<Failure, UIRewardsTimeline>
 
     suspend fun getRewardDetails(
@@ -44,15 +44,11 @@ class RewardsUseCaseImpl(
 ) : RewardsUseCase {
     override suspend fun getRewardsTimeline(
         deviceId: String,
-        page: Int?,
-        fromDate: String?,
-        toDate: String?
+        page: Int?
     ): Either<Failure, UIRewardsTimeline> {
         return repository.getRewardsTimeline(
             deviceId = deviceId,
-            page = page,
-            fromDate = fromDate,
-            toDate = toDate
+            page = page
         ).map {
             if (it.data.isEmpty()) {
                 UIRewardsTimeline(listOf(), reachedTotal = true)
@@ -61,6 +57,8 @@ class RewardsUseCaseImpl(
                     it.data.filter { tx ->
                         // Keep only transactions that have a reward for this device
                         tx.baseReward != null
+                    }.map {
+                        TimelineReward(RewardTimelineType.DATA, it)
                     },
                     it.hasNextPage
                 )
