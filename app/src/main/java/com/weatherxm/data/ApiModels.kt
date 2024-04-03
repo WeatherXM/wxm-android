@@ -81,7 +81,8 @@ data class PublicDevice(
             assignedFirmware = null,
             claimedAt = null,
             address = null,
-            hex7 = null
+            hex7 = null,
+            hasLowBattery = null
         )
     }
 }
@@ -101,11 +102,24 @@ data class Device(
     val currentWeather: HourlyWeather?,
     var address: String?,
     val rewards: Rewards?,
-    val relation: Relation?
+    val relation: Relation?,
+    @Json(name = "bat_state")
+    val batteryState: BatteryState?
 ) : Parcelable {
     companion object {
         fun empty() = Device(
-            String.empty(), String.empty(), null, null, null, null, null, null, null, null, null
+            String.empty(),
+            String.empty(),
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
         )
     }
 
@@ -133,7 +147,8 @@ data class Device(
             assignedFirmware = attributes?.firmware?.assigned,
             claimedAt = attributes?.claimedAt,
             address = address,
-            currentWeather = currentWeather
+            currentWeather = currentWeather,
+            hasLowBattery = batteryState == BatteryState.low
         )
     }
 

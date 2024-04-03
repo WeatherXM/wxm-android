@@ -78,6 +78,7 @@ data class UIDevice(
     var address: String?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
+    val hasLowBattery: Boolean?,
     var alerts: List<DeviceAlert> = listOf(),
     val isDeviceFromSearchResult: Boolean = false
 ) : Parcelable {
@@ -86,6 +87,7 @@ data class UIDevice(
             String.empty(),
             String.empty(),
             String.empty(),
+            null,
             null,
             null,
             null,
@@ -133,8 +135,8 @@ data class UIDevice(
     }
 
     fun isEmpty() = id.isEmpty() && name.isEmpty() && cellIndex.isEmpty()
-
     fun isOnline() = isActive != null && isActive == true
+    fun hasLowBattery() = hasLowBattery != null && hasLowBattery == true
 
     fun hasErrors(): Boolean {
         return alerts.firstOrNull {

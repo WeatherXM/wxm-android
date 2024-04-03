@@ -5,6 +5,7 @@
     "timezone": "Europe/Athens",
     "profile": "Helium",
     "relation": "owned",
+    "bat_state": "low",
     "location": {
         "lat": 37.981262,
         "lon": 23.730503

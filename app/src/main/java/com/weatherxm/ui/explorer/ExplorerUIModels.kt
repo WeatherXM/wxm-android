@@ -74,7 +74,8 @@ data class SearchResult(
             friendlyName = null,
             label = null,
             location = null,
-            hex7 = null
+            hex7 = null,
+            hasLowBattery = null
         )
     }
 }
