@@ -1,5 +1,3 @@
-import java.io.ByteArrayOutputStream
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -9,15 +7,32 @@ plugins {
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.firebase.appdistribution)
     alias(libs.plugins.firebase.perf)
+    alias(libs.plugins.grgit)
+}
+
+fun getVersionGitTags(): List<String> {
+    val versionTagsWithOptionalRCRegex = Regex("[RC-]*[0-9]*_*[0-9]+[.][0-9]+[.][0-9]+")
+    return grgit.tag.list().filter {
+        it.name.matches(versionTagsWithOptionalRCRegex)
+    }.map {
+        it.name
+    }
+}
+
+fun getLastVersionGitTag(): String {
+    var lastVersionTag = getVersionGitTags().last()
+    if (lastVersionTag.startsWith("RC")) {
+        lastVersionTag = lastVersionTag.substringAfterLast("_")
+    }
+    return lastVersionTag
 }
 
 fun getGitCommitHash(): String {
-    val stdout = ByteArrayOutputStream()
-    exec {
-        commandLine("git", "rev-parse", "--short", "HEAD")
-        standardOutput = stdout
-    }
-    return stdout.toString().trim()
+    return grgit.head().abbreviatedId
+}
+
+fun hasProperty(name: String): Boolean {
+    return project.hasProperty(name)
 }
 
 fun getStringProperty(name: String): String {
@@ -50,8 +65,8 @@ android {
         applicationId = "com.weatherxm.app"
         minSdk = 24
         targetSdk = 34
-        versionCode = 62
-        versionName = "3.9.0"
+        versionCode = 10 + getVersionGitTags().size
+        versionName = "${getLastVersionGitTag()}-${getGitCommitHash()}"
 
         // Resource value fields
         resValue("string", "mapbox_access_token", getStringProperty("MAPBOX_ACCESS_TOKEN"))
@@ -66,6 +81,14 @@ android {
             storePassword = getStringProperty("RELEASE_KEYSTORE_PASSWORD")
             keyAlias = getStringProperty("RELEASE_KEY_ALIAS")
             keyPassword = getStringProperty("RELEASE_KEY_PASSWORD")
+        }
+        if (hasProperty("DEBUG_KEYSTORE")) {
+            create("debug-config") {
+                storeFile = file("${rootDir.path}/${getStringProperty("DEBUG_KEYSTORE")}")
+                storePassword = getStringProperty("DEBUG_KEYSTORE_PASSWORD")
+                keyAlias = getStringProperty("DEBUG_KEY_ALIAS")
+                keyPassword = getStringProperty("DEBUG_KEY_PASSWORD")
+            }
         }
     }
 
@@ -107,7 +130,7 @@ android {
                 artifactType = "APK"
                 releaseNotes = "Release notes for staging version"
                 serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
-                groups = getStringProperty("FIREBASE_INTERNAL_TEST_GROUP")
+                groups = getStringProperty("FIREBASE_TEST_GROUP")
             }
         }
         create("dev") {
@@ -125,7 +148,7 @@ android {
                 artifactType = "APK"
                 releaseNotes = "Release notes for development version"
                 serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
-                groups = getStringProperty("FIREBASE_INTERNAL_TEST_GROUP")
+                groups = getStringProperty("FIREBASE_TEST_GROUP")
             }
         }
         create("prod") {
@@ -142,7 +165,7 @@ android {
                 artifactType = "APK"
                 releaseNotes = "Release notes for production version"
                 serviceCredentialsFile = "${rootDir.path}/ci-service-account.json"
-                groups = getStringProperty("FIREBASE_PUBLIC_TEST_GROUP")
+                groups = getStringProperty("FIREBASE_TEST_GROUP")
             }
         }
     }
@@ -158,6 +181,9 @@ android {
             manifestPlaceholders["crashlyticsEnabled"] = true
         }
         getByName("debug") {
+            signingConfigs.firstOrNull { it.name == "debug-config" }?.let {
+                signingConfig = it
+            }
             // Change minifyEnabled to true if you want to test code obfuscation in debug mode
             isMinifyEnabled = false
             proguardFiles(
@@ -195,7 +221,7 @@ android {
     applicationVariants.all {
         val variant = this
         // Base version
-        var version = "${variant.versionName}-${getGitCommitHash()}"
+        var version = versionName
 
         // Add flavor in version, if mock or dev
         val flavor = variant.flavorName.lowercase()

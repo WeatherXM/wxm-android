@@ -1,8 +1,8 @@
-name: Build Production & Firebase Distribution
+name: Build Production & Google Play Internal Channel Distribution
 on:
     push:
         tags:
-            - '[0-9]+.[0-9]+.[0-9]+'
+            - 'RC-[0-9]+_[0-9]+.[0-9]+.[0-9]+'
 env:
     # Mapbox SDK secrets
     ORG_GRADLE_PROJECT_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
@@ -12,9 +12,8 @@ env:
     ORG_GRADLE_PROJECT_RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
     ORG_GRADLE_PROJECT_RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
     ORG_GRADLE_PROJECT_RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
-    # Firebase distribution test groups
-    ORG_GRADLE_PROJECT_FIREBASE_PUBLIC_TEST_GROUP: ${{ secrets.FIREBASE_PUBLIC_TEST_GROUP }}
-    ORG_GRADLE_PROJECT_FIREBASE_INTERNAL_TEST_GROUP: ${{ secrets.FIREBASE_INTERNAL_TEST_GROUP }}
+    # Firebase distribution on tech team group
+    ORG_GRADLE_PROJECT_FIREBASE_TEST_GROUP: ${{ secrets.FIREBASE_TECH_TEAM_TEST_GROUP }}
     # Gradle config
     GRADLE_USER_HOME: ${GITHUB_WORKSPACE}/.gradle
     GLOBAL_GRADLE_CACHE: gradle-cache-${GITHUB_REPOSITORY}
@@ -41,6 +40,7 @@ jobs:
                 run: |
                     echo "${{ secrets.ENCODED_GOOGLE_SERVICES }}" | base64 -d > ./app/google-services.json
                     echo "${{ secrets.ENCODED_SERVICE_ACCOUNT }}" | base64 -d > ./ci-service-account.json
+                    echo "${{ secrets.ENCODED_GPLAY_SERVICE_ACCOUNT }}" | base64 -d > ./gplay-ci-service-account.json
                     echo "${{ secrets.ENCODED_RELEASE_KEYSTORE }}" > release-keystore.asc
                     gpg -d --passphrase "${{ secrets.ENCODED_RELEASE_KEYSTORE_PASSPHRASE }}" --batch release-keystore.asc > ./${{ secrets.RELEASE_KEYSTORE }}
             -   name: Setup JDK 17
@@ -48,7 +48,18 @@ jobs:
                 with:
                     distribution: 'temurin'
                     java-version: '17'
-            -   name: Build production release and distribute on Firebase
+            -   name: Build AAB production release and distribute on Firebase
                 run: |
-                    ./gradlew :app:assembleRemoteProdRelease :app:appDistributionUploadRemoteProdRelease -PSKIP_PRODUCTION_ENV
+                    ./gradlew bundleRemoteProdRelease -PSKIP_PRODUCTION_ENV
+            -   name: Upload Android Release to Play Store
+                uses: r0adkll/upload-google-play@v1.1.3
+                with:
+                    serviceAccountJson: ./gplay-ci-service-account.json
+                    packageName: com.weatherxm.com
+                    releaseFiles: app/remoteProd/release/*.aab
+                    track: qa
+                    changesNotSentForReview: true
+            -   name: Remove service account files
+                run: |
                     rm ./ci-service-account.json
+                    rm ./gplay-ci-service-account.json
