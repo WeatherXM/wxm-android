@@ -69,19 +69,15 @@ We have 4 different [GitHub Actions](https://github.com/features/actions):
 
 1. **Code Analysis:** An action that runs on **every Pull Request**, building the app and
    running `./gradlew :app:detekt` in order to find potential code optimizations.
-2. **Build Production & Development and Distribute on Firebase:** An action that runs on **every push on** `main`, building
-   the app, and
-   running `./gradlew :app:assembleRemoteProdRelease :app:appDistributionUploadRemoteProdRelease` &
-   `./gradlew :app:assembleDevDebugRelease :app:appDistributionUploadDevDebugRelease`
-   in order to distribute **Remote Prod** & **Dev Debug** versions of the app
+2. **Build Development and Distribute on Firebase:** An action that runs on **every push on** `main`, building
+   the app, and running `./gradlew :app:assembleDevDebugRelease :app:appDistributionUploadDevDebugRelease`
+   in order to distribute **Dev Debug** versions of the app
    through [Firebase App Distribution](https://firebase.google.com/docs/app-distribution) in the
    Firebase Channels. Currently used for internal testing.
-3. **Production Firebase Distribution:** An action that runs on **every tag pushed,** building the
-   app, and
-   running `./gradlew :app:assembleRemoteProdRelease :app:appDistributionUploadRemoteProdRelease` in
-   order to distribute a **Remote Prod** version of the app
-   through [Firebase App Distribution](https://firebase.google.com/docs/app-distribution) in the
-   Firebase Channels. Currently used for internal testing.
+3. **Build Production & Google Play Internal Channel Distribution:** An action that runs on **every tag pushed,** building the
+   app, and running `./gradlew bundleRemoteProdRelease -PSKIP_PRODUCTION_ENV` and 
+   `uses: r0adkll/upload-google-play@v1.1.3` in order to distribute a **Remote Prod** version of the app
+   bundled as AAB through in the Google Play Internal Testing Channel.
 4. **Build QA Release and Distribute on Firebase:** An action that gets 
    [manually triggered](https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/)
    and takes as input the `environment`, the `build type` and creates a release and distributes it through 
@@ -93,10 +89,9 @@ We have 4 different [GitHub Actions](https://github.com/features/actions):
 When merging a `feature/` PR on Git, we do `squash merge` with an explanatory and human-friendly
 commit message.
 
-# Firebase & Internal Testing Releases
+# Firebase Releases
 
-Our only (for now) internal channel to distribute our app to the team in order to test it is by
-utilizing Firebase and more
+For releases to the tech team or to the QA team we are utilizing Firebase and more
 specifically [Firebase App Distribution](https://firebase.google.com/docs/app-distribution) (can be
 found under the *Release & Monitor* tab in Firebase Console). All different `Remote` flavors are
 supported.
@@ -108,66 +103,57 @@ In order to upload a version up for testing, two different ways can be used:
    testers you prefer.
 2. Using a GitHub Action to automatically build, upload and distribute an AAB/APK through Firebase.
 
-# Public Beta Releases (How To)
+# Internal Testing Releases (How To)
 
 In order to create a new public beta release (**called Open Testing release on Play Console**) some
 mandatory steps should be followed that we will explain below:
 
-1. Create and push a new commit in `main` bumping the `versionCode` and `versionName`
-   in `build.gradle`
-2. `git checkout main` and create an **Android App Bundle** via `Generate Signed Bundle / APK` in
-   Android Studio.
-3. [Create a new GitHub release](https://github.com/WeatherXM/wxm-android/releases/new) out of main
-   with the title being the version name (`X.X.X`). The same applies for the tag (create a new tag
-   if not exist). On the description click `Auto-generate release notes` and format the text
+1. Create and push a new **tag** in `main` which will be the version we want to release.
+2. [Create a new GitHub release](https://github.com/WeatherXM/wxm-android/releases/new) out of main
+   with the title being the version name (`X.X.X`). The same applies for the tag (use the tag
+   you created in the previous step). On the description click `Auto-generate release notes` and format the text
    accordingly to remove authors and commit urls, and have just a human-readable list of release
    notes.
-4. The Android App Bundle that was created before should be attached as a binary in that GitHub
-   release. When the uploading is completed `Publish Release`. This will also cause a push of the
-   tag in Git causing the Production Firebase Distribution GitHub Action to run).
-5. Follow the procedure to upload that Android App Bundle in Google's Play Store **Open Testing
-   channel** and use the auto-generated release notes you got before. Make them even more generic
+3. The Android App Bundle has been created automatically and deployed to "Internal Testing" in Google Play. 
+   When the deployment is completed, download the `AAB` file from App Bundle Explorer in Google Play Console"
+   and attach it to that GitHub Release and then click `Publish Release`.
+4. In Google Play Internal Testing release, edit the release notes and make them even more generic
    and human-friendly. For example, we don't want to mention 5 different UI fixes but just write "
-   Numerous UI Fixes and Improvements". Also, the title of the release should contain the `-beta`
-   suffix.
-6. Send the new release for review by Google (we
+   Numerous UI Fixes and Improvements". Also, the title of the release should contain the `-internal` suffix.
+5. Send the new release for review by Google (we
    use [Google Play Managed Publishing](https://play.google.com/console/about/publishingoverview/)).
-7. After the release passes Google’s review and you publish the app to the
+
+**Usually, after some days if everything is OK, we move this internal release from Internal Testing → Open Testing on Play
+Console (using console’s “Promote Release” @ Internal Testing → Releases → Find your release → Promote
+Release) and we execute the steps 1-2 at the below guide “Public Beta Releases (How To)”.**
+
+# Public Beta Releases (How To)
+
+In order to create a new public beta release (**called Open Testing release on Play Console**) some
+mandatory steps should be followed after we have promoted our release from internal testing:
+
+1. Send the new release for review by Google (we
+   use [Google Play Managed Publishing](https://play.google.com/console/about/publishingoverview/)).
+2. After the release passes Google’s review and you publish the app to the
    public, [use this template](https://outline.weatherxm.com/doc/templates-for-update-announcements-Uiek4uZYjE),
    and after filling the correct date, app version and release notes, publish it on Discord's
    #announcements channel or have a community manager publish it.
 
 **Usually, after some days, we move this beta release from Open Testing → Production on Play
 Console (using console’s “Promote Release” @ Open Testing → Releases → Find your release → Promote
-Release) and we execute the steps 6-8 at the below guide “Production Releases (How To)”.**
+Release) and we execute the steps 1-3 at the below guide “Production Releases (How To)”.**
 
 # Production Releases (How To)
 
-In order to create a new production release some mandatory steps should be followed that we will
-explain below:
+In order to create a new production release some mandatory steps 
+should be followed after we have promoted our release from open testing:
 
-1. Create and push a new commit in `main` bumping the `versionCode` and `versionName`
-   in `build.gradle`
-2. `git checkout main` and create an **Android App Bundle** via `Generate Signed Bundle / APK` in
-   Android Studio.
-3. [Create a new GitHub release](https://github.com/WeatherXM/wxm-android/releases/new) out of main
-   with the title being the version name (`X.X.X`). The same applies for the tag (create a new tag
-   if not exist). On the description click `Auto-generate release notes` and format the text
-   accordingly to remove authors and commit urls, and have just a human-readable list of release
-   notes.
-4. The Android App Bundle that was created before should be attached as a binary in that GitHub
-   release. When the uploading is completed `Publish Release`. This will also cause a push of the
-   tag in Git causing the **Production Firebase Distribution** GitHub Action to run**).**
-5. Follow the procedure to upload that Android App Bundle in Google's Play Store and use the
-   auto-generated release notes you got before. Make them even more generic and human-friendly. For
-   example, we don't want to mention 5 different UI fixes but just write "Numerous UI Fixes and
-   Improvements".
-6. Send the new release for review by Google (we
+1. Send the new release for review by Google (we
    use [Google Play Managed Publishing](https://play.google.com/console/about/publishingoverview/)).
-7. After the release passes Google’s review and you publish the app to the
+2. After the release passes Google’s review and you publish the app to the
    public, [use this template](https://outline.weatherxm.com/doc/templates-for-update-announcements-Uiek4uZYjE),
    and after filling the correct date, app version and release notes, publish it on Discord's
    #announcements channel or have a community manager publish it.
-8. At Firebase's Console, go to [remote config](https://console.firebase.google.com/u/0/project/weatherxm-321811/config) and edit the `android_app_changelog`, `android_app_minimum_code` , `android_app_version_code` as
+3. At Firebase's Console, go to [remote config](https://console.firebase.google.com/u/0/project/weatherxm-321811/config) and edit the `android_app_changelog`, `android_app_minimum_code` , `android_app_version_code` as
    needed.
 
