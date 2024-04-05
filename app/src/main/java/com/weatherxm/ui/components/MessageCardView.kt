@@ -8,14 +8,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.core.content.res.ResourcesCompat
+import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.button.MaterialButton.ICON_GRAVITY_END
 import com.google.android.material.button.MaterialButton.ICON_GRAVITY_START
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewMessageCardBinding
 import com.weatherxm.ui.common.hide
+import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
@@ -139,22 +139,27 @@ class MessageCardView : LinearLayout {
         return this
     }
 
-    fun setIcon(@DrawableRes drawableResId: Int): MessageCardView {
+    fun warning(includeStroke: Boolean = false): MessageCardView {
         binding.icon.setImageDrawable(
-            ResourcesCompat.getDrawable(resources, drawableResId, context.theme)
+            AppCompatResources.getDrawable(context, R.drawable.ic_warning_hex_filled)
         )
         binding.icon.setVisible(true)
+        binding.card.setCardBackgroundColor(context.getColor(R.color.warningTint))
+        if (includeStroke) {
+            binding.card.setCardStroke(R.color.warning, 2)
+        }
         return this
     }
 
-    fun setIconColor(@ColorRes colorResId: Int): MessageCardView {
-        binding.icon.setColor(colorResId)
-        return this
-    }
-
-    fun setStrokeColor(@ColorRes colorResId: Int): MessageCardView {
-        binding.card.strokeWidth = 2
-        binding.card.strokeColor = context.getColor(colorResId)
+    fun error(includeStroke: Boolean = false): MessageCardView {
+        binding.icon.setImageDrawable(
+            AppCompatResources.getDrawable(context, R.drawable.ic_error_hex_filled)
+        )
+        binding.icon.setVisible(true)
+        binding.card.setCardBackgroundColor(context.getColor(R.color.errorTint))
+        if (includeStroke) {
+            binding.card.setCardStroke(R.color.error, 2)
+        }
         return this
     }
 

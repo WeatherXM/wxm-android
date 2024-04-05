@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
@@ -212,6 +213,14 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             Analytics.ParamValue.ACTION.paramValue
         )
         navigator.showDeviceHeliumOTA(this, device, false)
+    }
+
+    override fun onLowBatteryReadMoreClicked(device: UIDevice) {
+        if(device.profile == DeviceProfile.M5) {
+            navigator.openWebsite(context, getString(R.string.docs_url_low_battery_m5))
+        } else {
+            navigator.openWebsite(context, getString(R.string.docs_url_low_battery_helium))
+        }
     }
 
     override fun onAlertsClicked(device: UIDevice) {

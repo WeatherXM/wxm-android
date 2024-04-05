@@ -59,10 +59,28 @@
                         tools:tint="@color/follow_heart_color" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/status"
+                        style="@style/Widget.WeatherXM.Chip.Status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginTop="@dimen/margin_small"
+                        app:layout_constraintEnd_toStartOf="@id/address"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/name"
+                        tools:chipBackgroundColor="@color/status_chip_background_online"
+                        tools:chipIcon="@drawable/ic_wifi"
+                        tools:chipIconTint="@color/status_chip_content_online"
+                        tools:text="5 mins ago"
+                        tools:textColor="@color/status_chip_content_online" />
+
+                    <com.google.android.material.chip.Chip
                         android:id="@+id/address"
                         style="@style/Widget.WeatherXM.Chip.Status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_small"
                         android:layout_marginTop="@dimen/margin_small"
                         android:ellipsize="end"
                         app:chipBackgroundColor="@color/blueTint"
@@ -70,29 +88,11 @@
                         app:chipIconSize="12dp"
                         app:chipIconTint="@color/colorOnSurface"
                         app:layout_constrainedWidth="true"
-                        app:layout_constraintEnd_toStartOf="@id/status"
-                        app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/status"
                         app:layout_constraintTop_toBottomOf="@id/name"
                         tools:ignore="KeyboardInaccessibleWidget"
                         tools:text="Athens, GR" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/status"
-                        style="@style/Widget.WeatherXM.Chip.Status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_marginStart="@dimen/margin_small"
-                        android:layout_marginTop="@dimen/margin_small"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/address"
-                        app:layout_constraintTop_toBottomOf="@id/name"
-                        tools:chipBackgroundColor="@color/status_chip_background_online"
-                        tools:chipIcon="@drawable/ic_wifi"
-                        tools:chipIconTint="@color/status_chip_content_online"
-                        tools:text="5 mins ago"
-                        tools:textColor="@color/status_chip_content_online" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -257,8 +257,18 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.weatherxm.ui.components.AlertsErrorCardView
-            android:id="@+id/alertsError"
+        <com.weatherxm.ui.components.MultipleAlertsCardView
+            android:id="@+id/multipleAlerts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-16dp"
+            android:background="@color/errorTint"
+            android:elevation="0dp"
+            android:paddingTop="16dp"
+            android:visibility="gone" />
+
+        <com.weatherxm.ui.components.MessageCardView
+            android:id="@+id/alert"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-16dp"
@@ -266,38 +276,11 @@
             android:elevation="0dp"
             android:paddingTop="16dp"
             android:visibility="gone"
+            app:message_includes_close_button="false"
+            tools:message_background_tint="@color/errorTint"
+            tools:message_icon="@drawable/ic_error_hex_filled"
+            tools:message_title="@string/station_offline"
             tools:visibility="visible" />
-
-        <com.weatherxm.ui.components.MessageCardView
-            android:id="@+id/error"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-16dp"
-            android:background="@color/errorTint"
-            android:elevation="0dp"
-            android:paddingTop="16dp"
-            android:visibility="gone"
-            app:message_background_tint="@color/errorTint"
-            app:message_icon="@drawable/ic_error"
-            app:message_icon_color="@color/error"
-            app:message_includes_close_button="false"
-            app:message_title="@string/station_offline" />
-
-        <com.weatherxm.ui.components.MessageCardView
-            android:id="@+id/warning"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-16dp"
-            android:background="@color/warningTint"
-            android:elevation="0dp"
-            android:paddingTop="16dp"
-            android:visibility="gone"
-            app:message_background_tint="@color/warningTint"
-            app:message_icon="@drawable/ic_warn"
-            app:message_icon_color="@color/warning"
-            app:message_includes_close_button="false"
-            app:message_message="@string/updated_needed_desc"
-            app:message_title="@string/updated_needed_title" />
 
     </LinearLayout>
 

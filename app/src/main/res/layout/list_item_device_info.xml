@@ -49,8 +49,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/actionBtn"
         app:message_background_tint="@color/warningTint"
-        app:message_icon="@drawable/ic_warn"
-        app:message_icon_color="@color/warning"
+        app:message_icon="@drawable/ic_warning_hex_filled"
         app:message_includes_close_button="false"
         app:message_message="@string/updated_needed_desc"
         tools:visibility="visible" />

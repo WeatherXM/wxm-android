@@ -95,8 +95,7 @@
                         android:paddingTop="16dp"
                         android:visibility="gone"
                         app:message_background_tint="@color/errorTint"
-                        app:message_icon="@drawable/ic_error"
-                        app:message_icon_color="@color/error"
+                        app:message_icon="@drawable/ic_error_hex_filled"
                         app:message_includes_close_button="false"
                         app:message_title="@string/station_offline"
                         tools:visibility="visible" />
@@ -111,13 +110,12 @@
                         android:paddingTop="16dp"
                         android:visibility="gone"
                         app:message_background_tint="@color/warningTint"
-                        app:message_icon="@drawable/ic_warn"
-                        app:message_icon_color="@color/warning"
+                        app:message_icon="@drawable/ic_warning_hex_filled"
                         app:message_includes_close_button="false"
                         app:message_message="@string/updated_needed_desc"
                         app:message_title="@string/updated_needed_title" />
 
-                    <com.weatherxm.ui.components.AlertsErrorCardView
+                    <com.weatherxm.ui.components.MultipleAlertsCardView
                         android:id="@+id/multipleAlertsView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -105,6 +105,11 @@
         <item name="buttonTint">@color/colorPrimary</item>
     </style>
 
+    <style name="Widget.WeatherXM.TonalButton" parent="@style/Widget.Material3.Button.TonalButton">
+        <item name="buttonTint">@color/translucent</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
     <!--
         Material Cards
     -->

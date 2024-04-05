@@ -2,9 +2,10 @@ package com.weatherxm.ui.devicealerts
 
 import android.os.Bundle
 import com.weatherxm.R
+import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityDeviceAlertsBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
-import com.weatherxm.ui.common.DeviceAlert
+import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.parcelable
@@ -35,13 +36,15 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
 
         with(binding.toolbar) {
             setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
-            subtitle = device?.getDefaultOrFriendlyName()
+        }
+        device?.getDefaultOrFriendlyName()?.let {
+            binding.header.subtitle(it)
         }
 
         val adapter = DeviceAlertsAdapter(this, device)
         binding.recycler.adapter = adapter
 
-        if (device?.alerts?.contains(DeviceAlert.NEEDS_UPDATE) == true) {
+        if (device?.alerts?.firstOrNull { it.alert == DeviceAlertType.NEEDS_UPDATE } != null) {
             analytics.trackEventPrompt(
                 Analytics.ParamValue.OTA_AVAILABLE.paramValue,
                 Analytics.ParamValue.WARN.paramValue,
@@ -69,5 +72,13 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
     override fun onContactSupportClicked() {
         navigator.openSupportCenter(this, Analytics.ParamValue.DEVICE_ALERTS.paramValue)
         finish()
+    }
+
+    override fun onLowBatteryReadMoreClicked() {
+        if (device?.profile == DeviceProfile.M5) {
+            navigator.openWebsite(this, getString(R.string.docs_url_low_battery_m5))
+        } else if (device?.profile == DeviceProfile.Helium) {
+            navigator.openWebsite(this, getString(R.string.docs_url_low_battery_helium))
+        }
     }
 }

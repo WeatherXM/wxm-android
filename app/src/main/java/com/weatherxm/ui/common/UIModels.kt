@@ -10,6 +10,7 @@ import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.Location
 import com.weatherxm.data.QoDErrorAffects
 import com.weatherxm.data.Reward
+import com.weatherxm.data.SeverityLevel
 import com.weatherxm.util.Analytics
 import kotlinx.parcelize.Parcelize
 import java.time.ZonedDateTime
@@ -77,6 +78,7 @@ data class UIDevice(
     var address: String?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
+    val hasLowBattery: Boolean?,
     var alerts: List<DeviceAlert> = listOf(),
     val isDeviceFromSearchResult: Boolean = false
 ) : Parcelable {
@@ -85,6 +87,7 @@ data class UIDevice(
             String.empty(),
             String.empty(),
             String.empty(),
+            null,
             null,
             null,
             null,
@@ -132,8 +135,32 @@ data class UIDevice(
     }
 
     fun isEmpty() = id.isEmpty() && name.isEmpty() && cellIndex.isEmpty()
-
     fun isOnline() = isActive != null && isActive == true
+    fun hasLowBattery() = hasLowBattery != null && hasLowBattery == true
+
+    fun hasErrors(): Boolean {
+        return alerts.firstOrNull {
+            it.severity == SeverityLevel.ERROR
+        } != null
+    }
+}
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceAlert(
+    val alert: DeviceAlertType,
+    val severity: SeverityLevel,
+) : Parcelable {
+    companion object {
+        fun createWarning(alert: DeviceAlertType): DeviceAlert {
+            return DeviceAlert(alert, SeverityLevel.WARNING)
+        }
+
+        fun createError(alert: DeviceAlertType): DeviceAlert {
+            return DeviceAlert(alert, SeverityLevel.ERROR)
+        }
+    }
 }
 
 @Keep
@@ -169,8 +196,9 @@ enum class DeviceRelation : Parcelable {
 }
 
 @Parcelize
-enum class DeviceAlert : Parcelable {
+enum class DeviceAlertType : Parcelable {
     OFFLINE,
+    LOW_BATTERY,
     NEEDS_UPDATE
 }
 

@@ -24,7 +24,7 @@
     <string name="action_deny">Deny</string>
     <string name="action_sounds_good">Sounds good!</string>
     <string name="action_update_firmware">Update Firmware</string>
-    <string name="action_view_more">View More</string>
+    <string name="action_view_all">View All</string>
     <string name="action_finish">Finish</string>
     <string name="action_sign_in">Sign In</string>
     <string name="action_buy_station">Buy Station</string>
@@ -536,8 +536,11 @@
 
     <!-- Alerts -->
     <string name="alerts">Alerts</string>
-    <string name="issues">%s Issues</string>
-    <string name="station_offline_alert_message">The station is offline. Check that it has batteries and internet connection. If the problem persists, contact our support team at support.weatherxm.com</string>
+    <string name="issues_detected">%d issues detected</string>
+    <string name="alerts_detected">%d alerts detected</string>
+    <string name="station_offline_alert_message">The station is offline. Check that it has batteries and internet connection. If the problem persists, contact our support team.</string>
+    <string name="low_battery">Low Battery</string>
+    <string name="low_battery_desc">Your station is reporting low battery. This may lead to data gaps at night, or in low-sunlight conditions and, eventually, lose rewards. Read more on how to replace your station batteries.</string>
 
     <!-- Widgets -->
     <string name="select_station">Select Station for Widget</string>

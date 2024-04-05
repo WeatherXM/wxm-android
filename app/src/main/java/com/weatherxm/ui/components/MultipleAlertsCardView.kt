@@ -6,12 +6,15 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
-import androidx.annotation.StringRes
-import com.weatherxm.databinding.ViewAlertsErrorCardBinding
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.core.content.res.ResourcesCompat
+import com.weatherxm.databinding.ViewMultipleAlertsCardBinding
+import com.weatherxm.ui.common.setVisible
 
-class AlertsErrorCardView : LinearLayout {
+class MultipleAlertsCardView : LinearLayout {
 
-    private lateinit var binding: ViewAlertsErrorCardBinding
+    private lateinit var binding: ViewMultipleAlertsCardBinding
 
     constructor(context: Context?) : super(context) {
         init(context)
@@ -30,17 +33,12 @@ class AlertsErrorCardView : LinearLayout {
     }
 
     private fun init(context: Context?) {
-        binding = ViewAlertsErrorCardBinding.inflate(LayoutInflater.from(context), this)
+        binding = ViewMultipleAlertsCardBinding.inflate(LayoutInflater.from(context), this)
         orientation = VERTICAL
         gravity = Gravity.CENTER
     }
 
-    fun title(@StringRes resId: Int): AlertsErrorCardView {
-        title(resources.getString(resId))
-        return this
-    }
-
-    fun title(subtitle: String?): AlertsErrorCardView {
+    fun title(subtitle: String?): MultipleAlertsCardView {
         binding.title.apply {
             text = subtitle
             visibility = if (subtitle != null) View.VISIBLE else View.GONE
@@ -48,11 +46,24 @@ class AlertsErrorCardView : LinearLayout {
         return this
     }
 
-    fun action(listener: OnClickListener): AlertsErrorCardView {
+    fun action(listener: OnClickListener): MultipleAlertsCardView {
         with(binding.action) {
             setOnClickListener(listener)
             visibility = VISIBLE
         }
+        return this
+    }
+
+    fun setIcon(@DrawableRes drawableResId: Int): MultipleAlertsCardView {
+        binding.icon.setImageDrawable(
+            ResourcesCompat.getDrawable(resources, drawableResId, context.theme)
+        )
+        binding.icon.setVisible(true)
+        return this
+    }
+
+    fun setBackground(@ColorRes colorResId: Int): MultipleAlertsCardView {
+        binding.card.setCardBackgroundColor(context.getColor(colorResId))
         return this
     }
 }

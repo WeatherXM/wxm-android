@@ -21,6 +21,8 @@
     <string name="docs_url_reward_mechanism">https://docs.weatherxm.com/reward-mechanism</string>
     <string name="docs_url_pol_algorithm">https://docs.weatherxm.com/project/proof-of-location</string>
     <string name="docs_url_qod_algorithm">https://docs.weatherxm.com/project/quality-of-data</string>
+    <string name="docs_url_low_battery_m5">https://docs.weatherxm.com/wxm-devices/wifi-m5-bundle/assemble-m5#installing-batteries</string>
+    <string name="docs_url_low_battery_helium">https://docs.weatherxm.com/wxm-devices/helium-bundle/helium-assemble#battery-installation-diagram-external-box</string>
     <string name="share_cell_url">https://explorer.weatherxm.com/cells/%s</string>
     <string name="share_station_url">https://explorer.weatherxm.com/stations/%s</string>
     <string name="weatherxm_claim_redirect_url">weatherxm://token-claim</string>

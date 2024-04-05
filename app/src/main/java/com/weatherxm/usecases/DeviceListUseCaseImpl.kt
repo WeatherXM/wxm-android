@@ -7,6 +7,7 @@ import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.ui.common.DeviceAlert
+import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DevicesFilterType
 import com.weatherxm.ui.common.DevicesGroupBy
 import com.weatherxm.ui.common.DevicesSortFilterOptions
@@ -26,15 +27,21 @@ class DeviceListUseCaseImpl(
                     device.id, device.assignedFirmware
                 ) && device.isOwned()
                 val alerts = mutableListOf<DeviceAlert>()
-                if (device.isActive == false) {
-                    alerts.add(DeviceAlert.OFFLINE)
+                if (!device.isOnline()) {
+                    alerts.add(DeviceAlert.createError(DeviceAlertType.OFFLINE))
+                }
+
+                if (device.hasLowBattery() && device.isOwned()) {
+                    alerts.add(DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY))
                 }
 
                 if (shouldShowOTAPrompt && device.profile == Helium && device.needsUpdate()) {
-                    alerts.add(DeviceAlert.NEEDS_UPDATE)
+                    alerts.add(DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE))
                 }
                 device.apply {
-                    this.alerts = alerts
+                    this.alerts = alerts.sortedByDescending { alert ->
+                        alert.severity
+                    }
                 }
             }
 
