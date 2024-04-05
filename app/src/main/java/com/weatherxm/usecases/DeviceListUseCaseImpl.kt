@@ -27,7 +27,8 @@ class DeviceListUseCaseImpl(
                     device.id, device.assignedFirmware
                 ) && device.isOwned()
                 val alerts = mutableListOf<DeviceAlert>()
-                if (!device.isOnline()) {
+                // FIXME: Testing code
+                if (true) {
                     alerts.add(DeviceAlert.createError(DeviceAlertType.OFFLINE))
                 }
 
@@ -35,7 +36,8 @@ class DeviceListUseCaseImpl(
                     alerts.add(DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY))
                 }
 
-                if (shouldShowOTAPrompt && device.profile == Helium && device.needsUpdate()) {
+                // FIXME: Testing code 
+                if (true) {
                     alerts.add(DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE))
                 }
                 device.apply {
