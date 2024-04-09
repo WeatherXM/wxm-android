@@ -195,7 +195,6 @@ class Analytics(
         NETWORK_STATS("network_stats"),
         DEVICE_DETAILS_FOLLOW("Device Details Follow"),
         DEVICE_DETAILS_SHARE("Device Details Share"),
-        DEVICE_DETAILS_ADDRESS("Device Details Address"),
         DEVICE_LIST_FOLLOW("Device List Follow"),
         EXPLORER_DEVICE_LIST_FOLLOW("Explorer Device List Follow"),
         FOLLOW("follow"),
@@ -223,12 +222,21 @@ class Analytics(
         OFF("off"),
         APP_SURVEY("App Survey"),
         USER_RESEARCH_PANEL("User Research Panel"),
-        WEB_DOCUMENTATION("WEB_DOCUMENTATION"),
+        WEB_DOCUMENTATION("Web Documentation"),
         INFO_DAILY_REWARDS("info_daily_rewards"),
         INFO_QOD("info_qod"),
         INFO_POL("info_pol"),
         INFO_CELL_POSITION("info_cell_position"),
-        INFO_CELL_CAPACITY("info_cell_capacity")
+        INFO_CELL_CAPACITY("info_cell_capacity"),
+        STATION_OFFLINE("station_offline"),
+        VIEW_ALL("View all"),
+        MULTIPLE_ISSUES("multiple_issue"),
+        STATION_DETAILS_CHIP("Station Details Chip"),
+        OTA_UPDATE_ID("ota_update"),
+        LOW_BATTERY_ID("low_battery"),
+        STATION_REGION_ID("station_region"),
+        REGION("Region"),
+        WARNINGS("Warnings")
     }
 
     // Custom Param Names

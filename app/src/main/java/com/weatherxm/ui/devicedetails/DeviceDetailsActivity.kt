@@ -15,6 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -111,14 +112,22 @@ class DeviceDetailsActivity : BaseActivity() {
         }
 
         binding.address.setOnClickListener {
-            analytics.trackEventUserAction(Analytics.ParamValue.DEVICE_DETAILS_ADDRESS.paramValue)
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.REGION.paramValue,
+                customParams = arrayOf(
+                    Pair(
+                        Analytics.CustomParam.CONTENT_NAME.paramName,
+                        Analytics.ParamValue.STATION_DETAILS_CHIP.paramValue
+                    ),
+                    Pair(
+                        FirebaseAnalytics.Param.ITEM_ID,
+                        Analytics.ParamValue.STATION_REGION_ID.paramValue
+                    )
+                )
+            )
             model.device.cellCenter?.let { location ->
                 navigator.showCellInfo(this, UICell(model.device.cellIndex, location))
             }
-        }
-
-        binding.alertChip.setOnClickListener {
-            navigator.showDeviceAlerts(this, model.device)
         }
 
         model.onFollowStatus().observe(this) {
@@ -279,15 +288,41 @@ class DeviceDetailsActivity : BaseActivity() {
         if (alertsWithoutOffline.size > 1) {
             binding.alertChip.text = getString(R.string.issues, alertsWithoutOffline.size)
             binding.alertChip.setVisible(true)
+            setupAlertChipClickListener(null)
         } else if (alertsWithoutOffline.size == 1) {
             if (alertsWithoutOffline[0].alert == DeviceAlertType.NEEDS_UPDATE) {
                 binding.alertChip.text = getString(R.string.update_required)
+                analytics.trackEventPrompt(
+                    Analytics.ParamValue.OTA_AVAILABLE.paramValue,
+                    Analytics.ParamValue.WARN.paramValue,
+                    Analytics.ParamValue.VIEW.paramValue
+                )
+                setupAlertChipClickListener(Analytics.ParamValue.OTA_UPDATE_ID.paramValue)
             } else if (alertsWithoutOffline[0].alert == DeviceAlertType.LOW_BATTERY) {
                 binding.alertChip.text = getString(R.string.low_battery)
+                setupAlertChipClickListener(Analytics.ParamValue.LOW_BATTERY_ID.paramValue)
             }
             binding.alertChip.setVisible(true)
         } else {
             binding.alertChip.setVisible(false)
+        }
+    }
+
+    private fun setupAlertChipClickListener(analyticsItemId: String?) {
+        analyticsItemId?.let {
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.WARNINGS.paramValue,
+                customParams = arrayOf(
+                    Pair(
+                        Analytics.CustomParam.CONTENT_NAME.paramName,
+                        Analytics.ParamValue.STATION_DETAILS_CHIP.paramValue
+                    ),
+                    Pair(FirebaseAnalytics.Param.ITEM_ID, it)
+                )
+            )
+        }
+        binding.alertChip.setOnClickListener {
+            navigator.showDeviceAlerts(this, model.device)
         }
     }
 

@@ -216,14 +216,23 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     }
 
     override fun onLowBatteryReadMoreClicked(device: UIDevice) {
-        if (device.profile == DeviceProfile.M5) {
-            navigator.openWebsite(context, getString(R.string.docs_url_low_battery_m5))
+        val url = if (device.profile == DeviceProfile.M5) {
+            getString(R.string.docs_url_low_battery_m5)
         } else {
-            navigator.openWebsite(context, getString(R.string.docs_url_low_battery_helium))
+            getString(R.string.docs_url_low_battery_helium)
         }
+        navigator.openWebsite(context, url)
+        analytics.trackEventSelectContent(
+            Analytics.ParamValue.WEB_DOCUMENTATION.paramValue,
+            Pair(FirebaseAnalytics.Param.ITEM_ID, url)
+        )
     }
 
     override fun onAlertsClicked(device: UIDevice) {
+        analytics.trackEventSelectContent(
+            Analytics.ParamValue.VIEW_ALL.paramValue,
+            Pair(FirebaseAnalytics.Param.ITEM_ID, Analytics.ParamValue.MULTIPLE_ISSUES.paramValue)
+        )
         navigator.showDeviceAlerts(context, device)
     }
 
