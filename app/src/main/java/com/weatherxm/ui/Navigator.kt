@@ -385,8 +385,8 @@ class Navigator(private val analytics: Analytics) {
         }
     }
 
-    fun showDeviceAlerts(fragment: Fragment, device: UIDevice?) {
-        fragment.context?.let {
+    fun showDeviceAlerts(context: Context?, device: UIDevice?) {
+        context?.let {
             it.startActivity(
                 Intent(it, DeviceAlertsActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)

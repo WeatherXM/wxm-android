@@ -126,69 +126,32 @@ class CurrentFragment : BaseFragment() {
     }
 
     private fun setAlerts(device: UIDevice) {
-        binding.multipleAlertsView.setVisible(false)
-        binding.warningView.setVisible(false)
-        binding.errorView.setVisible(false)
-        binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.transparent, 0)
-        if (device.alerts.size > 1) {
-            binding.multipleAlertsView.action {
-                navigator.showDeviceAlerts(this, device)
-            }
-            if (device.hasErrors()) {
-                binding.multipleAlertsView
-                    .title(getString(R.string.issues_detected, device.alerts.size))
-                    .setBackground(R.color.errorTint)
-                    .setIcon(R.drawable.ic_error_hex_filled)
-                binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
-            } else {
-                binding.multipleAlertsView
-                    .title(getString(R.string.alerts_detected, device.alerts.size))
-                    .setBackground(R.color.warningTint)
-                    .setIcon(R.drawable.ic_warning_hex_filled)
-                binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
-            }
-            binding.multipleAlertsView.setVisible(true)
-        } else if (device.alerts.size == 1) {
-            binding.multipleAlertsView.setVisible(false)
-            when (device.alerts[0].alert) {
-                DeviceAlertType.OFFLINE -> onDeviceOffline(device.relation, device.profile)
-                DeviceAlertType.LOW_BATTERY -> {
-                    // TODO: Implement this.
-                }
-                DeviceAlertType.NEEDS_UPDATE -> {
-                    binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.warning, 2)
-                    binding.warningView.action(getString(R.string.update_station_now)) {
-                        analytics.trackEventPrompt(
-                            Analytics.ParamValue.OTA_AVAILABLE.paramValue,
-                            Analytics.ParamValue.WARN.paramValue,
-                            Analytics.ParamValue.ACTION.paramValue
-                        )
-                        navigator.showDeviceHeliumOTA(this, device, false)
-                    }.setVisible(true)
-                }
-            }
+        if (device.alerts.firstOrNull { it.alert == DeviceAlertType.OFFLINE } != null) {
+            onDeviceOfflineAlert(device.relation, device.profile)
+        } else {
+            binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.transparent, 0)
         }
     }
 
-    private fun onDeviceOffline(relation: DeviceRelation?, profile: DeviceProfile?) {
+    private fun onDeviceOfflineAlert(relation: DeviceRelation?, profile: DeviceProfile?) {
         if (relation == DeviceRelation.OWNED && profile == DeviceProfile.M5) {
             val m5TroubleshootingUrl = getString(R.string.troubleshooting_m5_url)
-            binding.errorView.htmlMessage(
+            binding.alert.htmlMessage(
                 getString(R.string.error_user_device_offline, m5TroubleshootingUrl)
             ) {
                 navigator.openWebsite(context, getString(R.string.troubleshooting_m5_url))
             }
         } else if (relation == DeviceRelation.OWNED && profile == DeviceProfile.Helium) {
             val heliumTroubleshootingUrl = getString(R.string.troubleshooting_helium_url)
-            binding.errorView.htmlMessage(
+            binding.alert.htmlMessage(
                 getString(R.string.error_user_device_offline, heliumTroubleshootingUrl)
             ) {
                 navigator.openWebsite(context, heliumTroubleshootingUrl)
             }
         } else {
-            binding.errorView.message(getString(R.string.no_data_message_public_device))
+            binding.alert.message(getString(R.string.no_data_message_public_device))
         }
         binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
-        binding.errorView.setVisible(true)
+        binding.alert.setVisible(true)
     }
 }

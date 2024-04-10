@@ -15,11 +15,14 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityDeviceDetailsBinding
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.DeviceAlert
+import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
@@ -109,7 +112,19 @@ class DeviceDetailsActivity : BaseActivity() {
         }
 
         binding.address.setOnClickListener {
-            analytics.trackEventUserAction(Analytics.ParamValue.DEVICE_DETAILS_ADDRESS.paramValue)
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.REGION.paramValue,
+                customParams = arrayOf(
+                    Pair(
+                        Analytics.CustomParam.CONTENT_NAME.paramName,
+                        Analytics.ParamValue.STATION_DETAILS_CHIP.paramValue
+                    ),
+                    Pair(
+                        FirebaseAnalytics.Param.ITEM_ID,
+                        Analytics.ParamValue.STATION_REGION_ID.paramValue
+                    )
+                )
+            )
             model.device.cellCenter?.let { location ->
                 navigator.showCellInfo(this, UICell(model.device.cellIndex, location))
             }
@@ -182,12 +197,10 @@ class DeviceDetailsActivity : BaseActivity() {
                 )
                 true
             }
-
             R.id.settings -> {
                 navigator.showStationSettings(this, model.device)
                 true
             }
-
             else -> false
         }
     }
@@ -250,11 +263,63 @@ class DeviceDetailsActivity : BaseActivity() {
             device.profile,
             device.isActive,
         )
+        if (!model.device.isOnline()) {
+            binding.status.setOnClickListener {
+                navigator.showDeviceAlerts(this, model.device)
+            }
+        } else {
+            binding.status.setOnClickListener(null)
+            binding.status.isClickable = false
+        }
 
         if (device.address.isNullOrEmpty()) {
             model.fetchAddressFromCell()
         } else {
             binding.address.text = device.address
+        }
+
+        setAlerts(device.alerts)
+    }
+
+    private fun setAlerts(alerts: List<DeviceAlert>) {
+        val alertsWithoutOffline = alerts.dropWhile {
+            it.alert == DeviceAlertType.OFFLINE
+        }
+        if (alertsWithoutOffline.size > 1) {
+            binding.alertChip.text = getString(R.string.issues, alertsWithoutOffline.size)
+            setupAlertChipClickListener(null)
+        } else if (alertsWithoutOffline.size == 1) {
+            if (alertsWithoutOffline[0].alert == DeviceAlertType.NEEDS_UPDATE) {
+                binding.alertChip.text = getString(R.string.update_required)
+                analytics.trackEventPrompt(
+                    Analytics.ParamValue.OTA_AVAILABLE.paramValue,
+                    Analytics.ParamValue.WARN.paramValue,
+                    Analytics.ParamValue.VIEW.paramValue
+                )
+                setupAlertChipClickListener(Analytics.ParamValue.OTA_UPDATE_ID.paramValue)
+            } else if (alertsWithoutOffline[0].alert == DeviceAlertType.LOW_BATTERY) {
+                binding.alertChip.text = getString(R.string.low_battery)
+                setupAlertChipClickListener(Analytics.ParamValue.LOW_BATTERY_ID.paramValue)
+            }
+        }
+        binding.alertChip.setVisible(alertsWithoutOffline.isNotEmpty())
+    }
+
+    private fun setupAlertChipClickListener(analyticsItemId: String?) {
+        analyticsItemId?.let {
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.WARNINGS.paramValue,
+                customParams = arrayOf(
+                    Pair(
+                        Analytics.CustomParam.CONTENT_NAME.paramName,
+                        Analytics.ParamValue.STATION_DETAILS_CHIP.paramValue
+                    ),
+                    Pair(FirebaseAnalytics.Param.ITEM_ID, it)
+                )
+            )
+        }
+        binding.alertChip.setOnClickListener {
+            navigator.showDeviceAlerts(this, model.device)
         }
     }
 
