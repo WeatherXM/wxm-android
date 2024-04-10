@@ -1,6 +1,7 @@
 package com.weatherxm.ui.devicealerts
 
 import android.os.Bundle
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityDeviceAlertsBinding
@@ -70,15 +71,20 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
     }
 
     override fun onContactSupportClicked() {
-        navigator.openSupportCenter(this, Analytics.ParamValue.DEVICE_ALERTS.paramValue)
+        navigator.openSupportCenter(this, Analytics.ParamValue.STATION_OFFLINE.paramValue)
         finish()
     }
 
     override fun onLowBatteryReadMoreClicked() {
-        if (device?.profile == DeviceProfile.M5) {
-            navigator.openWebsite(this, getString(R.string.docs_url_low_battery_m5))
-        } else if (device?.profile == DeviceProfile.Helium) {
-            navigator.openWebsite(this, getString(R.string.docs_url_low_battery_helium))
+        val url = if (device?.profile == DeviceProfile.M5) {
+            getString(R.string.docs_url_low_battery_m5)
+        } else {
+            getString(R.string.docs_url_low_battery_helium)
         }
+        navigator.openWebsite(this, url)
+        analytics.trackEventSelectContent(
+            Analytics.ParamValue.WEB_DOCUMENTATION.paramValue,
+            Pair(FirebaseAnalytics.Param.ITEM_ID, url)
+        )
     }
 }
