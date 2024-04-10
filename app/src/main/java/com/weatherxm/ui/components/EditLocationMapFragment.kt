@@ -7,6 +7,8 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapboxMap
 import com.mapbox.maps.ViewAnnotationAnchor
+import com.mapbox.maps.viewannotation.annotationAnchor
+import com.mapbox.maps.viewannotation.geometry
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.weatherxm.R
 import com.weatherxm.data.Location
@@ -50,18 +52,20 @@ class EditLocationMapFragment : BaseMapFragment() {
         marker = viewManager.addViewAnnotation(
             R.layout.view_marker,
             viewAnnotationOptions {
-                anchor(ViewAnnotationAnchor.BOTTOM)
+                annotationAnchor {
+                    anchor(ViewAnnotationAnchor.BOTTOM)
+                }
                 geometry(map.cameraState.center)
                 view?.measuredWidth?.let {
                     val padding = resources.getDimensionPixelSize(R.dimen.padding_normal)
-                    width(it - 2 * padding)
+                    width(it - 2.0 * padding)
                 }
             }
         )
 
         marker?.let {
             // Add map camera change listener
-            map.addOnCameraChangeListener { _ ->
+            map.subscribeCameraChanged { _ ->
                 viewManager.updateViewAnnotation(it, viewAnnotationOptions {
                     geometry(map.cameraState.center)
                 })
@@ -71,7 +75,7 @@ class EditLocationMapFragment : BaseMapFragment() {
     }
 
     fun addOnMapIdleListener(onAddressFromPoint: (Point?) -> Unit) {
-        map?.addOnMapIdleListener { onAddressFromPoint(map?.cameraState?.center) }
+        map?.subscribeMapIdle { onAddressFromPoint(map?.cameraState?.center) }
     }
 
     fun showMarkerAddress(address: String?) {
@@ -88,7 +92,8 @@ class EditLocationMapFragment : BaseMapFragment() {
 
     fun getMarkerLocation(): Location {
         return marker?.let {
-            val point = viewManager.getViewAnnotationOptionsByView(it)?.geometry as Point
+            val point =
+                viewManager.getViewAnnotationOptions(it)?.annotatedFeature?.geometry as Point
             Location(point.latitude(), point.longitude())
         } ?: Location.empty()
     }
