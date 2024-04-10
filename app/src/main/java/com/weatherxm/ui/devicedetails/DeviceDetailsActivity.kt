@@ -287,7 +287,6 @@ class DeviceDetailsActivity : BaseActivity() {
         }
         if (alertsWithoutOffline.size > 1) {
             binding.alertChip.text = getString(R.string.issues, alertsWithoutOffline.size)
-            binding.alertChip.setVisible(true)
             setupAlertChipClickListener(null)
         } else if (alertsWithoutOffline.size == 1) {
             if (alertsWithoutOffline[0].alert == DeviceAlertType.NEEDS_UPDATE) {
@@ -302,10 +301,8 @@ class DeviceDetailsActivity : BaseActivity() {
                 binding.alertChip.text = getString(R.string.low_battery)
                 setupAlertChipClickListener(Analytics.ParamValue.LOW_BATTERY_ID.paramValue)
             }
-            binding.alertChip.setVisible(true)
-        } else {
-            binding.alertChip.setVisible(false)
         }
+        binding.alertChip.setVisible(alertsWithoutOffline.isNotEmpty())
     }
 
     private fun setupAlertChipClickListener(analyticsItemId: String?) {
