@@ -24,8 +24,6 @@ class ForecastFragment : BaseFragment() {
         parametersOf(parentModel.device)
     }
 
-    private lateinit var dailyForecastAdapter: DailyForecastAdapter
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -45,11 +43,15 @@ class ForecastFragment : BaseFragment() {
 
         initHiddenContent()
 
-        // Initialize the adapter with empty data
-        dailyForecastAdapter = DailyForecastAdapter {
-            // TODO: Do something 
+        // Initialize the adapters with empty data
+        val dailyForecastAdapter = DailyForecastAdapter {
+            // TODO: Open forecast details
         }
-        binding.forecastRecycler.adapter = dailyForecastAdapter
+        val hourlyForecastAdapter = HourlyForecastAdapter {
+            // TODO: Open forecast details
+        }
+        binding.dailyForecastRecycler.adapter = dailyForecastAdapter
+        binding.hourlyForecastRecycler.adapter = hourlyForecastAdapter
 
         parentModel.onFollowStatus().observe(viewLifecycleOwner) {
             if (it.status == Status.SUCCESS) {
@@ -64,15 +66,21 @@ class ForecastFragment : BaseFragment() {
         }
 
         model.onForecast().observe(viewLifecycleOwner) {
-            dailyForecastAdapter.submitList(it)
-            binding.forecastRecycler.setVisible(true)
+            hourlyForecastAdapter.submitList(it.next24Hours)
+            dailyForecastAdapter.submitList(it.forecastDays)
+            binding.dailyForecastRecycler.setVisible(true)
+            binding.dailyForecastTitle.setVisible(true)
+            binding.hourlyForecastRecycler.setVisible(true)
+            binding.hourlyForecastTitle.setVisible(true)
         }
 
         model.onLoading().observe(viewLifecycleOwner) {
             if (it && binding.swiperefresh.isRefreshing) {
                 binding.progress.visibility = View.INVISIBLE
             } else if (it) {
-                binding.progress.visibility = View.VISIBLE
+                binding.dailyForecastTitle.setVisible(false)
+                binding.hourlyForecastTitle.setVisible(false)
+                binding.progress.setVisible(true)
             } else {
                 binding.swiperefresh.isRefreshing = false
                 binding.progress.visibility = View.INVISIBLE
@@ -99,7 +107,10 @@ class ForecastFragment : BaseFragment() {
             binding.hiddenContentContainer.setVisible(false)
             model.fetchForecast()
         } else if (model.device.relation == UNFOLLOWED) {
-            binding.forecastRecycler.setVisible(false)
+            binding.dailyForecastRecycler.setVisible(false)
+            binding.dailyForecastTitle.setVisible(false)
+            binding.hourlyForecastTitle.setVisible(false)
+            binding.hourlyForecastRecycler.setVisible(false)
             binding.hiddenContentContainer.setVisible(true)
         }
     }

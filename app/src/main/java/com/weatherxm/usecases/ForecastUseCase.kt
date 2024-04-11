@@ -9,5 +9,5 @@ interface ForecastUseCase {
     suspend fun getForecast(
         device: UIDevice,
         forceRefresh: Boolean = false
-    ): Either<Failure, List<UIForecast>>
+    ): Either<Failure, UIForecast>
 }
