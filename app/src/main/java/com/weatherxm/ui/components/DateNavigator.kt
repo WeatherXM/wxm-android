@@ -11,7 +11,7 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.weatherxm.R
 import com.weatherxm.databinding.ListItemDateBinding
 import com.weatherxm.databinding.ViewDateNavigatorBinding
-import com.weatherxm.util.DateTimeHelper.getFormattedRelativeDay
+import com.weatherxm.util.DateTimeHelper.getRelativeDayOrFull
 import com.weatherxm.util.LocalDateRange
 import java.time.LocalDate
 
@@ -118,8 +118,7 @@ class DateNavigator : ConstraintLayout {
             private val binding: ListItemDateBinding
         ) : RecyclerView.ViewHolder(binding.root) {
             fun bind(date: LocalDate) {
-                binding.date.text =
-                    date.getFormattedRelativeDay(context, useCustomFormatter = false)
+                binding.date.text = date.getRelativeDayOrFull(context)
                 itemView.setOnClickListener {
                     listener.onDateClick(absoluteAdapterPosition)
                 }

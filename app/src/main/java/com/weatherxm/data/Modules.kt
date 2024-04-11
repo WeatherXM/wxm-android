@@ -231,6 +231,8 @@ import com.weatherxm.usecases.StatsUseCase
 import com.weatherxm.usecases.StatsUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.usecases.UserUseCaseImpl
+import com.weatherxm.usecases.ForecastUseCase
+import com.weatherxm.usecases.ForecastUseCaseImpl
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCaseImpl
 import com.weatherxm.usecases.WidgetSelectStationUseCase
@@ -514,16 +516,10 @@ private val usecases = module {
         ExplorerUseCaseImpl(get(), get(), get(), get(), get(), get(), get())
     }
     single<DeviceDetailsUseCase> {
-        DeviceDetailsUseCaseImpl(
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            get(),
-            androidContext()
-        )
+        DeviceDetailsUseCaseImpl(get(), get(), get(), get(), get(), get())
+    }
+    single<ForecastUseCase> {
+        ForecastUseCaseImpl(get())
     }
     single<HistoryUseCase> {
         HistoryUseCaseImpl(androidContext(), get(), get())

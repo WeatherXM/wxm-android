@@ -11,7 +11,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.datepicker.MaterialDatePicker.todayInUtcMilliseconds
 import com.weatherxm.R
 import com.weatherxm.util.DateTimeHelper.timestampToLocalDate
-import com.weatherxm.util.DateTimeHelper.toUTCEpochMillis
+import com.weatherxm.util.toUTCEpochMillis
 import java.time.LocalDate
 
 object DatePickerHelper {

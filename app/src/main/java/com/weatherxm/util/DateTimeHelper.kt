@@ -13,7 +13,6 @@ import com.weatherxm.ui.common.empty
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
-import timber.log.Timber
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
@@ -120,36 +119,27 @@ object DateTimeHelper : KoinComponent {
         return Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault()).toLocalDate()
     }
 
-    fun LocalDate.toUTCEpochMillis(): Long? {
-        return try {
-            this.atStartOfDay(UTC).toInstant().toEpochMilli()
-        } catch (e: ArithmeticException) {
-            Timber.e(e, this.toString())
-            null
-        }
-    }
-
-    fun LocalDate.getFormattedRelativeDay(
-        context: Context,
-        fullName: Boolean = false,
-        useCustomFormatter: Boolean = true,
-    ): String {
+    fun LocalDate.getRelativeDayOrFull(context: Context): String {
         return when {
             isToday() -> context.getString(R.string.today)
             isTomorrow() -> context.getString(R.string.tomorrow)
             isYesterday() -> context.getString(R.string.yesterday)
-            else -> {
-                val nameOfDay = if (fullName) {
-                    dayOfWeek.getName(context)
-                } else {
-                    dayOfWeek.getShortName(context)
-                }
-                if (useCustomFormatter) {
-                    "$nameOfDay ${format(formatterMonthDay)}"
-                } else {
-                    format(formatterFull)
-                }
-            }
+            else -> format(formatterFull)
+        }
+    }
+
+    fun LocalDate.getRelativeDayAndMonthDay(context: Context): String {
+        val relativeDay = when {
+            isToday() -> context.getString(R.string.today)
+            isTomorrow() -> context.getString(R.string.tomorrow)
+            isYesterday() -> context.getString(R.string.yesterday)
+            else -> null
+        }
+        val nameOfDay = dayOfWeek.getName(context)
+        return if (relativeDay != null) {
+            "$relativeDay, $nameOfDay ${format(formatterMonthDay)}"
+        } else {
+            "$nameOfDay ${format(formatterMonthDay)}"
         }
     }
 }
