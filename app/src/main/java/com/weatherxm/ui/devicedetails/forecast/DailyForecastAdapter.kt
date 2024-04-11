@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.databinding.ListItemForecastBinding
-import com.weatherxm.ui.common.UIForecast
+import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndMonthDay
 import com.weatherxm.util.Resources
 import com.weatherxm.util.UnitConverter
@@ -18,8 +18,8 @@ import com.weatherxm.util.Weather.roundToDecimals
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class DailyForecastAdapter(private val onClickListener: (UIForecast) -> Unit) :
-    ListAdapter<UIForecast, DailyForecastAdapter.DailyForecastViewHolder>(
+class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit) :
+    ListAdapter<UIForecastDay, DailyForecastAdapter.DailyForecastViewHolder>(
         UIForecastDiffCallback()
     ), KoinComponent {
 
@@ -28,7 +28,7 @@ class DailyForecastAdapter(private val onClickListener: (UIForecast) -> Unit) :
 
     val resources: Resources by inject()
 
-    override fun submitList(list: List<UIForecast>?) {
+    override fun submitList(list: List<UIForecastDay>?) {
         /*
         Consider the following case:
         Day X: minimum value: 10.01, max value 15.99
@@ -71,8 +71,8 @@ class DailyForecastAdapter(private val onClickListener: (UIForecast) -> Unit) :
     inner class DailyForecastViewHolder(private val binding: ListItemForecastBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: UIForecast) {
-            binding.summaryCard.setOnClickListener {
+        fun bind(item: UIForecastDay) {
+            binding.root.setOnClickListener {
                 onClickListener(item)
             }
 
@@ -109,13 +109,13 @@ class DailyForecastAdapter(private val onClickListener: (UIForecast) -> Unit) :
         }
     }
 
-    class UIForecastDiffCallback : DiffUtil.ItemCallback<UIForecast>() {
+    class UIForecastDiffCallback : DiffUtil.ItemCallback<UIForecastDay>() {
 
-        override fun areItemsTheSame(oldItem: UIForecast, newItem: UIForecast): Boolean {
+        override fun areItemsTheSame(oldItem: UIForecastDay, newItem: UIForecastDay): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: UIForecast, newItem: UIForecast): Boolean {
+        override fun areContentsTheSame(oldItem: UIForecastDay, newItem: UIForecastDay): Boolean {
             return oldItem.date == newItem.date &&
                 oldItem.icon == newItem.icon &&
                 oldItem.maxTemp == newItem.maxTemp &&

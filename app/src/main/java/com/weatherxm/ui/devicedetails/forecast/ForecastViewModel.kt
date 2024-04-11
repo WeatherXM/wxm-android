@@ -29,13 +29,13 @@ class ForecastViewModel(
 
     private val onError = MutableLiveData<UIError>()
 
-    private val onForecast = MutableLiveData<List<UIForecast>>()
+    private val onForecast = MutableLiveData<UIForecast>()
 
     fun onLoading(): LiveData<Boolean> = onLoading
 
     fun onError(): LiveData<UIError> = onError
 
-    fun onForecast(): LiveData<List<UIForecast>> = onForecast
+    fun onForecast(): LiveData<UIForecast> = onForecast
 
     fun fetchForecast(forceRefresh: Boolean = false) {
         /**
@@ -52,7 +52,7 @@ class ForecastViewModel(
             forecastUseCase.getForecast(device, forceRefresh)
                 .map {
                     Timber.d("Got forecast")
-                    if (it.isEmpty()) {
+                    if (it.next24Hours.isNullOrEmpty() && it.forecastDays.isEmpty()) {
                         onError.postValue(UIError(resources.getString(R.string.forecast_empty)))
                     }
                     onForecast.postValue(it)
