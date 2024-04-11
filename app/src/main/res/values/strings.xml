@@ -451,6 +451,8 @@
 
     <!-- Forecast -->
     <string name="forecast_empty">Oops! No forecast weather data could not be found.</string>
+    <string name="next_24_hours">Next 24 hours</string>
+    <string name="next_7_days">Next 7 days</string>
 
     <!-- Device History -->
     <string name="history">History</string>

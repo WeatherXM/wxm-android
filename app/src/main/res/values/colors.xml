@@ -25,6 +25,7 @@
     <color name="textColor">@color/light_text</color>
     <color name="translucent">@color/light_translucent</color>
     <color name="fadeTop">@color/fade_light_top</color>
+    <color name="crypto">@color/light_crypto</color>
     <color name="messageDialogBackground">@color/layer1</color>
     <color name="messageDialogButton">@color/light_translucent</color>
     <color name="infoStrokeColor">@color/light_lightest_blue</color>

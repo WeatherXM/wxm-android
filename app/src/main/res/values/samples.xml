@@ -2,7 +2,7 @@
 <resources>
     <array name="temperature_slider_sample_values">
         <item>13</item>
-        <item>19</item>
+        <item>21</item>
     </array>
     <array name="reward_slider_default_values">
         <item>0</item>

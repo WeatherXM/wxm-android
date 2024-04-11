@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
@@ -25,7 +24,7 @@ class ForecastFragment : BaseFragment() {
         parametersOf(parentModel.device)
     }
 
-    private lateinit var forecastAdapter: ForecastAdapter
+    private lateinit var dailyForecastAdapter: DailyForecastAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,20 +46,10 @@ class ForecastFragment : BaseFragment() {
         initHiddenContent()
 
         // Initialize the adapter with empty data
-        forecastAdapter = ForecastAdapter { index, state ->
-            val stateParam = if (state) {
-                Pair(Analytics.CustomParam.STATE.paramName, Analytics.ParamValue.OPEN.paramValue)
-            } else {
-                Pair(Analytics.CustomParam.STATE.paramName, Analytics.ParamValue.CLOSE.paramValue)
-            }
-            analytics.trackEventSelectContent(
-                Analytics.ParamValue.FORECAST_DAY.paramValue,
-                Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
-                stateParam,
-                index = index.toLong()
-            )
+        dailyForecastAdapter = DailyForecastAdapter {
+            // TODO: Do something 
         }
-        binding.forecastRecycler.adapter = forecastAdapter
+        binding.forecastRecycler.adapter = dailyForecastAdapter
 
         parentModel.onFollowStatus().observe(viewLifecycleOwner) {
             if (it.status == Status.SUCCESS) {
@@ -75,7 +64,7 @@ class ForecastFragment : BaseFragment() {
         }
 
         model.onForecast().observe(viewLifecycleOwner) {
-            forecastAdapter.submitList(it)
+            dailyForecastAdapter.submitList(it)
             binding.forecastRecycler.setVisible(true)
         }
 
