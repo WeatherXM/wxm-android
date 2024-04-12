@@ -43,7 +43,7 @@ class HourlyForecastAdapter(
                 setAnimation(Weather.getWeatherAnimation(item.icon))
                 playAnimation()
             }
-            binding.temperaturePrimary.text = Weather.getFormattedTemperature(item.temperature)
+            binding.temperaturePrimary.text = Weather.getFormattedTemperature(item.temperature, 1)
         }
     }
 
