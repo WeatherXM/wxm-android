@@ -12,7 +12,7 @@ import com.weatherxm.util.Weather
 import org.koin.core.component.KoinComponent
 
 class HourlyForecastAdapter(
-    private val onClickListener: (HourlyWeather) -> Unit
+    private val onClickListener: ((HourlyWeather) -> Unit)?
 ) : ListAdapter<HourlyWeather, HourlyForecastAdapter.HourlyForecastViewHolder>(
     HourlyWeatherDiffCallback()
 ), KoinComponent {
@@ -34,8 +34,10 @@ class HourlyForecastAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: HourlyWeather) {
-            binding.root.setOnClickListener {
-                onClickListener.invoke(item)
+            onClickListener?.let { listener ->
+                binding.root.setOnClickListener {
+                    listener.invoke(item)
+                }
             }
 
             binding.timestamp.text = item.timestamp.getFormattedTime(itemView.context, false)
