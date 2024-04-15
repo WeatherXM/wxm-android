@@ -22,6 +22,10 @@ class DailyTileForecastAdapter(
     UIForecastDayDiffCallback()
 ), KoinComponent {
 
+    private var selectedPosition = 0
+
+    fun getSelectedPosition(): Int = selectedPosition
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DailyTileViewHolder {
         val binding = ListItemDailyTileForecastBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -32,30 +36,20 @@ class DailyTileForecastAdapter(
     }
 
     override fun onBindViewHolder(holder: DailyTileViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), position)
     }
 
     inner class DailyTileViewHolder(private val binding: ListItemDailyTileForecastBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: UIForecastDay) {
+        fun bind(item: UIForecastDay, position: Int) {
             binding.root.setOnClickListener {
-                selectedDate = item.date
-                binding.root.setCardStroke(R.color.colorPrimary, 2)
                 onClickListener.invoke(item)
+                selectedDate = item.date
+                checkSelectionStatus(item, position)
             }
-            // TODO: Clear previous selected daily card 
 
-            if (selectedDate == item.date) {
-//                binding.root.setCardBackgroundColor(
-//                    itemView.context.getColor(R.color.daily_tile_selected_background)
-//                )
-                binding.root.setCardStroke(R.color.colorPrimary, 2)
-            } else {
-//                binding.root.setCardBackgroundColor(
-//                    itemView.context.getColor(R.color.daily_tile_unselected_background)
-//                )
-            }
+            checkSelectionStatus(item, position)
 
             binding.timestamp.text = item.date.dayOfWeek.getShortName(itemView.context)
             binding.icon.apply {
@@ -65,6 +59,21 @@ class DailyTileForecastAdapter(
             binding.temperaturePrimary.text = Weather.getFormattedTemperature(item.maxTemp)
             binding.temperatureSecondary.text = Weather.getFormattedTemperature(item.minTemp)
             binding.temperatureSecondary.setVisible(true)
+        }
+
+        private fun checkSelectionStatus(item: UIForecastDay, position: Int) {
+            if (selectedDate == item.date) {
+                selectedPosition = position
+//                binding.root.setCardBackgroundColor(
+//                    itemView.context.getColor(R.color.daily_tile_selected_background)
+//                )
+                binding.root.setCardStroke(R.color.colorPrimary, 2)
+            } else {
+//                binding.root.setCardBackgroundColor(
+//                    itemView.context.getColor(R.color.daily_tile_unselected_background)
+//                )
+                binding.root.strokeWidth = 0
+            }
         }
     }
 

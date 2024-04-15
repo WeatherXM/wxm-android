@@ -35,6 +35,8 @@ class ForecastDetailsActivity : BaseActivity() {
         )
     }
 
+    private lateinit var dailyAdapter: DailyTileForecastAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityForecastDetailsBinding.inflate(layoutInflater)
@@ -72,7 +74,9 @@ class ForecastDetailsActivity : BaseActivity() {
     }
 
     private fun setupDailyAdapter(forecastDay: UIForecastDay, selectedDayPosition: Int) {
-        val dailyAdapter = DailyTileForecastAdapter(forecastDay.date) {
+        dailyAdapter = DailyTileForecastAdapter(forecastDay.date) {
+            // Get selected position before we change it to the new one in order to reset the stroke
+            dailyAdapter.notifyItemChanged(dailyAdapter.getSelectedPosition())
             setupHourlyAdapter(it, null)
             updateDailyWeather(it)
         }
@@ -82,9 +86,7 @@ class ForecastDetailsActivity : BaseActivity() {
     }
 
     private fun setupHourlyAdapter(forecastDay: UIForecastDay, selectedHour: HourlyWeather?) {
-        val hourlyAdapter = HourlyForecastAdapter {
-            // Do nothing
-        }
+        val hourlyAdapter = HourlyForecastAdapter(null)
         binding.hourlyForecastRecycler.adapter = hourlyAdapter
         hourlyAdapter.submitList(forecastDay.hourlyWeather)
         if (!forecastDay.hourlyWeather.isNullOrEmpty()) {
