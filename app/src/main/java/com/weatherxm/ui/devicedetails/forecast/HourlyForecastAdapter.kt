@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.data.HourlyWeather
-import com.weatherxm.databinding.ListItemForecastCompactBinding
+import com.weatherxm.databinding.ListItemHourlyForecastBinding
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Weather
 import org.koin.core.component.KoinComponent
@@ -18,7 +18,7 @@ class HourlyForecastAdapter(
 ), KoinComponent {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourlyForecastViewHolder {
-        val binding = ListItemForecastCompactBinding.inflate(
+        val binding = ListItemHourlyForecastBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -30,7 +30,7 @@ class HourlyForecastAdapter(
         holder.bind(getItem(position))
     }
 
-    inner class HourlyForecastViewHolder(private val binding: ListItemForecastCompactBinding) :
+    inner class HourlyForecastViewHolder(private val binding: ListItemHourlyForecastBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: HourlyWeather) {
