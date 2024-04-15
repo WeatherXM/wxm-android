@@ -19,6 +19,8 @@ import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.DateTimeHelper.getRelativeDayAndShort
+import com.weatherxm.util.Weather
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -66,11 +68,13 @@ class ForecastDetailsActivity : BaseActivity() {
         val forecastDay = model.forecast.forecastDays[selectedDayPosition]
         setupDailyAdapter(forecastDay, selectedDayPosition)
         setupHourlyAdapter(forecastDay, selectedHour)
+        updateDailyWeather(forecastDay)
     }
 
     private fun setupDailyAdapter(forecastDay: UIForecastDay, selectedDayPosition: Int) {
         val dailyAdapter = DailyTileForecastAdapter(forecastDay.date) {
-            // TODO: Update UI
+            setupHourlyAdapter(it, null)
+            updateDailyWeather(it)
         }
         binding.dailyTilesRecycler.adapter = dailyAdapter
         dailyAdapter.submitList(model.forecast.forecastDays)
@@ -87,8 +91,17 @@ class ForecastDetailsActivity : BaseActivity() {
             binding.hourlyForecastRecycler.scrollToPosition(
                 model.getSelectedHourPosition(forecastDay.hourlyWeather, selectedHour)
             )
-
         }
+    }
+
+    private fun updateDailyWeather(forecast: UIForecastDay) {
+        binding.dailyDate.text = forecast.date.getRelativeDayAndShort(this)
+        binding.dailyIcon.apply {
+            setAnimation(Weather.getWeatherAnimation(forecast.icon))
+            playAnimation()
+        }
+        binding.dailyMaxTemp.text = Weather.getFormattedTemperature(forecast.maxTemp, 1)
+        binding.dailyMinTemp.text = Weather.getFormattedTemperature(forecast.minTemp, 1)
     }
 
     private fun handleOwnershipIcon() {

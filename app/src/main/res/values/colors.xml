@@ -49,4 +49,7 @@
 
     <!-- Rewards -->
     <color name="rewards_background">@color/light_top</color>
+
+    <!-- Forecast -->
+    <color name="daily_temps_divider">@color/dark_background</color>
 </resources>
