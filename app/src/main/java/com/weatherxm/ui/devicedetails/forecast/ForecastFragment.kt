@@ -8,6 +8,7 @@ import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
 import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
+import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
@@ -45,10 +46,20 @@ class ForecastFragment : BaseFragment() {
 
         // Initialize the adapters with empty data
         val dailyForecastAdapter = DailyForecastAdapter {
-            // TODO: Open forecast details
+            navigator.showForecastDetails(
+                context,
+                model.device,
+                model.onForecast().value,
+                forecastSelectedDate = it
+            )
         }
         val hourlyForecastAdapter = HourlyForecastAdapter {
-            // TODO: Open forecast details
+            navigator.showForecastDetails(
+                context,
+                model.device,
+                model.onForecast().value,
+                forecastSelectedHour = it
+            )
         }
         binding.dailyForecastRecycler.adapter = dailyForecastAdapter
         binding.hourlyForecastRecycler.adapter = hourlyForecastAdapter

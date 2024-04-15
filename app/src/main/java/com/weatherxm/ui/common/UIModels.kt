@@ -205,13 +205,15 @@ enum class DeviceAlertType : Parcelable {
 
 @Keep
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class UIForecast(
     val next24Hours: List<HourlyWeather>?,
     val forecastDays: List<UIForecastDay>
-)
+) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class UIForecastDay(
     val date: LocalDate,
     val icon: String?,
@@ -223,7 +225,7 @@ data class UIForecastDay(
     val windDirection: Int?,
     val humidity: Int?,
     val hourlyWeather: List<HourlyWeather>?
-)
+) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)

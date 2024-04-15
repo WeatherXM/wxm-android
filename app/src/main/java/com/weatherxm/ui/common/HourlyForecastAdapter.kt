@@ -1,4 +1,4 @@
-package com.weatherxm.ui.devicedetails.forecast
+package com.weatherxm.ui.common
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -65,7 +65,8 @@ class Analytics(
         DATA_QUALITY_INFO("Data Quality info"),
         LOCATION_QUALITY_INFO("Location Quality info"),
         CELL_RANKING_INFO("Cell Ranking info"),
-        CELL_CAPACITY_INFO("Cell Capacity info")
+        CELL_CAPACITY_INFO("Cell Capacity info"),
+        DEVICE_FORECAST_DETAILS("Forecast Details Screen")
     }
 
     // Custom Event Names

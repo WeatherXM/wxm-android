@@ -24,4 +24,7 @@ object Contracts {
     const val ARG_URL = "url"
     const val ARG_TYPE = "type"
     const val ARG_DATE = "date"
+    const val ARG_FORECAST = "forecast"
+    const val ARG_FORECAST_SELECTED_DAY = "forecast_selected_day"
+    const val ARG_FORECAST_SELECTED_HOUR = "forecast_selected_hour"
 }
