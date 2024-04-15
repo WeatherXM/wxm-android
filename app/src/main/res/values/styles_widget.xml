@@ -106,7 +106,7 @@
     </style>
 
     <style name="Widget.WeatherXM.TonalButton" parent="@style/Widget.Material3.Button.TonalButton">
-        <item name="buttonTint">@color/translucent</item>
+        <item name="backgroundTint">@color/translucent</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
 
