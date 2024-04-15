@@ -224,6 +224,8 @@ data class UIForecastDay(
     val windSpeed: Float?,
     val windDirection: Int?,
     val humidity: Int?,
+    val pressure: Float?,
+    val uv: Int?,
     val hourlyWeather: List<HourlyWeather>?
 ) : Parcelable
 
