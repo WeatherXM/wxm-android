@@ -64,14 +64,14 @@ class DailyTileForecastAdapter(
         private fun checkSelectionStatus(item: UIForecastDay, position: Int) {
             if (selectedDate == item.date) {
                 selectedPosition = position
-//                binding.root.setCardBackgroundColor(
-//                    itemView.context.getColor(R.color.daily_tile_selected_background)
-//                )
+                binding.root.setCardBackgroundColor(
+                    itemView.context.getColor(R.color.daily_selected_tile)
+                )
                 binding.root.setCardStroke(R.color.colorPrimary, 2)
             } else {
-//                binding.root.setCardBackgroundColor(
-//                    itemView.context.getColor(R.color.daily_tile_unselected_background)
-//                )
+                binding.root.setCardBackgroundColor(
+                    itemView.context.getColor(R.color.daily_unselected_tile)
+                )
                 binding.root.strokeWidth = 0
             }
         }

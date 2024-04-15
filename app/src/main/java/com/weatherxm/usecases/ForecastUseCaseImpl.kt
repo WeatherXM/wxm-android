@@ -54,6 +54,8 @@ class ForecastUseCaseImpl(
                     windSpeed = weatherData.daily?.windSpeed,
                     windDirection = weatherData.daily?.windDirection,
                     humidity = weatherData.daily?.humidity,
+                    pressure = weatherData.daily?.pressure,
+                    uv = weatherData.daily?.uvIndex,
                     hourlyWeather = weatherData.hourly
                 )
             }
