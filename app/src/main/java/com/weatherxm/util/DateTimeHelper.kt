@@ -6,6 +6,7 @@ import android.text.format.DateUtils
 import com.weatherxm.R
 import com.weatherxm.data.DATE_FORMAT_FULL
 import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
+import com.weatherxm.data.DATE_FORMAT_MONTH_SHORT
 import com.weatherxm.data.HOUR_FORMAT_12H_FULL
 import com.weatherxm.data.HOUR_FORMAT_12H_HOUR_ONLY
 import com.weatherxm.data.HOUR_FORMAT_24H
@@ -31,6 +32,7 @@ object DateTimeHelper : KoinComponent {
     private val formatter12hFull: DateTimeFormatter by inject(named(HOUR_FORMAT_12H_FULL))
     private val formatter12hHourOnly: DateTimeFormatter by inject(named(HOUR_FORMAT_12H_HOUR_ONLY))
     private val formatterMonthDay: DateTimeFormatter by inject(named(DATE_FORMAT_MONTH_DAY))
+    private val formatterShort: DateTimeFormatter by inject(named(DATE_FORMAT_MONTH_SHORT))
     private val formatterFull: DateTimeFormatter by inject(named(DATE_FORMAT_FULL))
 
     fun LocalDateTime.getFormattedTime(
@@ -140,6 +142,21 @@ object DateTimeHelper : KoinComponent {
             "$relativeDay, $nameOfDay ${format(formatterMonthDay)}"
         } else {
             "$nameOfDay ${format(formatterMonthDay)}"
+        }
+    }
+
+    fun LocalDate.getRelativeDayAndShort(context: Context): String {
+        val relativeDay = when {
+            isToday() -> context.getString(R.string.today)
+            isTomorrow() -> context.getString(R.string.tomorrow)
+            isYesterday() -> context.getString(R.string.yesterday)
+            else -> null
+        }
+        val nameOfDay = dayOfWeek.getName(context)
+        return if (relativeDay != null) {
+            "$relativeDay, $nameOfDay, ${format(formatterShort)}"
+        } else {
+            "$nameOfDay, ${format(formatterShort)}"
         }
     }
 }

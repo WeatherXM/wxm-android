@@ -16,7 +16,7 @@ import org.koin.core.component.KoinComponent
 import java.time.LocalDate
 
 class DailyTileForecastAdapter(
-    private val selectedDate: LocalDate,
+    private var selectedDate: LocalDate,
     private val onClickListener: (UIForecastDay) -> Unit
 ) : ListAdapter<UIForecastDay, DailyTileForecastAdapter.DailyTileViewHolder>(
     UIForecastDayDiffCallback()
@@ -40,8 +40,11 @@ class DailyTileForecastAdapter(
 
         fun bind(item: UIForecastDay) {
             binding.root.setOnClickListener {
+                selectedDate = item.date
+                binding.root.setCardStroke(R.color.colorPrimary, 2)
                 onClickListener.invoke(item)
             }
+            // TODO: Clear previous selected daily card 
 
             if (selectedDate == item.date) {
 //                binding.root.setCardBackgroundColor(

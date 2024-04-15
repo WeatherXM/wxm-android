@@ -270,6 +270,7 @@ const val HOUR_FORMAT_24H = "HH:mm"
 const val HOUR_FORMAT_12H_FULL = "h:mm a"
 const val HOUR_FORMAT_12H_HOUR_ONLY = "h a"
 const val DATE_FORMAT_MONTH_DAY = "d/M"
+const val DATE_FORMAT_MONTH_SHORT = "MMM d"
 const val DATE_FORMAT_FULL = "EEE d, MMM yy"
 private const val ENCRYPTED_PREFERENCES_KEY = "ENCRYPTED_PREFERENCES_KEY"
 private const val PREFERENCES_AUTH_TOKEN = "PREFERENCES_AUTH_TOKEN"
@@ -888,6 +889,9 @@ private val utilities = module {
     }
     single<DateTimeFormatter>(named(DATE_FORMAT_FULL)) {
         DateTimeFormatter.ofPattern(DATE_FORMAT_FULL, Locale.US)
+    }
+    single<DateTimeFormatter>(named(DATE_FORMAT_MONTH_SHORT)) {
+        DateTimeFormatter.ofPattern(DATE_FORMAT_MONTH_SHORT, Locale.US)
     }
 }
 
