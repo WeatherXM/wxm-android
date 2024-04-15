@@ -101,7 +101,7 @@
                 android:scrollbars="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/hourlyForecastTitle"
-                tools:listitem="@layout/list_item_forecast_compact" />
+                tools:listitem="@layout/list_item_hourly_forecast" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/dailyForecastTitle"

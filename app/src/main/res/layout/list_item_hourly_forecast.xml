@@ -44,19 +44,6 @@
             android:textStyle="bold"
             tools:text="15.4°C" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/temperatureSecondary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/darkestBlue"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="15.4°C"
-            tools:visibility="visible" />
-
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
