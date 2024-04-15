@@ -1,0 +1,63 @@
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="@dimen/margin_normal"
+    app:cardElevation="@dimen/elevation_normal"
+    app:contentPadding="@dimen/padding_normal"
+    app:contentPaddingBottom="@dimen/padding_small"
+    app:contentPaddingTop="@dimen/padding_small"
+    tools:strokeColor="@color/colorPrimary"
+    tools:strokeWidth="1">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+            android:textColor="@color/darkestBlue"
+            tools:text="Wed" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_small"
+            android:scaleType="centerInside"
+            app:lottie_autoPlay="false"
+            app:lottie_loop="true"
+            tools:lottie_rawRes="@raw/anim_weather_clear_day" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/temperaturePrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_small"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            android:textColor="@color/darkestBlue"
+            android:textStyle="bold"
+            tools:text="15.4°C" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/temperatureSecondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+            android:textColor="@color/darkestBlue"
+            tools:text="15.4°C" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

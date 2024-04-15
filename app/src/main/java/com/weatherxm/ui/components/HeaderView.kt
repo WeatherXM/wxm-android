@@ -49,6 +49,12 @@ open class HeaderView : LinearLayout, KoinComponent {
 
     fun subtitle(subtitle: String): HeaderView {
         binding.subtitle.text = subtitle
+        binding.subtitle.setVisible(true)
+        return this
+    }
+
+    fun hideSubtitle(): HeaderView {
+        binding.subtitle.setVisible(false)
         return this
     }
 

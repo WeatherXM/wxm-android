@@ -16,6 +16,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.BoostReward
+import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.Location
 import com.weatherxm.data.Reward
 import com.weatherxm.data.RewardDetails
@@ -31,6 +32,9 @@ import com.weatherxm.ui.common.Contracts.ARG_DATE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
+import com.weatherxm.ui.common.Contracts.ARG_FORECAST
+import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
+import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_HOUR
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
@@ -39,6 +43,8 @@ import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UIForecast
+import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
@@ -50,6 +56,7 @@ import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
 import com.weatherxm.ui.devicealerts.DeviceAlertsActivity
 import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationActivity
+import com.weatherxm.ui.deviceforecast.ForecastDetailsActivity
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.devicesettings.DeviceSettingsActivity
@@ -422,6 +429,23 @@ class Navigator(private val analytics: Analytics) {
                 .putExtra(ARG_BOOST_REWARD, reward)
                 .putExtra(ARG_DEVICE_ID, deviceId)
                 .putExtra(ARG_DATE, date)
+        )
+    }
+
+    fun showForecastDetails(
+        context: Context?,
+        device: UIDevice,
+        forecast: UIForecast?,
+        forecastSelectedDate: UIForecastDay? = null,
+        forecastSelectedHour: HourlyWeather? = null
+    ) {
+        context?.startActivity(
+            Intent(context, ForecastDetailsActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_DEVICE, device)
+                .putExtra(ARG_FORECAST, forecast)
+                .putExtra(ARG_FORECAST_SELECTED_DAY, forecastSelectedDate)
+                .putExtra(ARG_FORECAST_SELECTED_HOUR, forecastSelectedHour)
         )
     }
 

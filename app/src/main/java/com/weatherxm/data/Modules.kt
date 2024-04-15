@@ -159,6 +159,7 @@ import com.weatherxm.ui.devicedetails.current.CurrentViewModel
 import com.weatherxm.ui.devicedetails.forecast.ForecastViewModel
 import com.weatherxm.ui.devicedetails.rewards.RewardsViewModel
 import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationViewModel
+import com.weatherxm.ui.deviceforecast.ForecastDetailsViewModel
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
 import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
 import com.weatherxm.ui.devicesettings.DeviceSettingsViewModel
@@ -211,6 +212,8 @@ import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.ExplorerUseCaseImpl
 import com.weatherxm.usecases.FollowUseCase
 import com.weatherxm.usecases.FollowUseCaseImpl
+import com.weatherxm.usecases.ForecastUseCase
+import com.weatherxm.usecases.ForecastUseCaseImpl
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
 import com.weatherxm.usecases.PasswordPromptUseCase
@@ -231,8 +234,6 @@ import com.weatherxm.usecases.StatsUseCase
 import com.weatherxm.usecases.StatsUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.usecases.UserUseCaseImpl
-import com.weatherxm.usecases.ForecastUseCase
-import com.weatherxm.usecases.ForecastUseCaseImpl
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCaseImpl
 import com.weatherxm.usecases.WidgetSelectStationUseCase
@@ -957,6 +958,7 @@ private val viewmodels = module {
     viewModel { ClaimHeliumFrequencyViewModel(get(), get()) }
     viewModel { ClaimM5VerifyViewModel() }
     viewModel { NetworkSearchViewModel(get(), get()) }
+    viewModel { params -> ForecastDetailsViewModel(params.get(), get()) }
 }
 
 val modules = listOf(
