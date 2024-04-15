@@ -32,6 +32,7 @@ class RewardsClaimActivity : BaseActivity() {
         setContentView(binding.root)
 
         binding.root.applyInsets()
+        binding.root.setFitsSystemWindows(true)
         binding.toolbar.title = getString(R.string.claim_rewards)
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
