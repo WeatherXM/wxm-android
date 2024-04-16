@@ -371,6 +371,8 @@ fun LineChart.initPrecipitation24hChart(
             )
             valueFormatter = CustomYAxisFormatter(getDecimalsPrecipitation(), false)
         }
+    } else {
+        axisRight.axisMinimum = 0F
     }
 
     // X axis settings
