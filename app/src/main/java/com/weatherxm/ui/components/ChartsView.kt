@@ -55,6 +55,8 @@ class ChartsView : LinearLayout {
     fun chartPrecipitation() = binding.chartPrecipitation
     fun chartWind() = binding.chartWind
     fun chartSolar() = binding.chartSolar
+    fun chartHumidity() = binding.chartHumidity
+    fun chartPressure() = binding.chartPressure
 
     fun clearCharts() {
         binding.chartTemperature.clearChart()
