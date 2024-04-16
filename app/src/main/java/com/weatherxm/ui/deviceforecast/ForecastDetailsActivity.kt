@@ -29,6 +29,7 @@ import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.components.LineChartView
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndShort
 import com.weatherxm.util.UnitConverter
@@ -110,12 +111,27 @@ class ForecastDetailsActivity : BaseActivity() {
 
         updateCharts(model.getCharts(forecastDay))
 
+        binding.precipProbabilityCard.setOnClickListener {
+            scrollToChart(binding.charts.chartPrecipitation())
+        }
+        binding.dailyPrecipCard.setOnClickListener {
+            scrollToChart(binding.charts.chartPrecipitation())
+        }
+        binding.windCard.setOnClickListener { scrollToChart(binding.charts.chartWind()) }
+        binding.humidityCard.setOnClickListener { scrollToChart(binding.charts.chartHumidity()) }
+        binding.uvCard.setOnClickListener { scrollToChart(binding.charts.chartSolar()) }
+        binding.pressureCard.setOnClickListener { scrollToChart(binding.charts.chartPressure()) }
+
         with(binding.displayTimeNotice) {
             model.device.timezone?.let {
                 text = getString(R.string.displayed_times, it)
                 setVisible(true)
             } ?: setVisible(false)
         }
+    }
+
+    private fun scrollToChart(chart: LineChartView) {
+        chart.parent.requestChildFocus(chart, chart)
     }
 
     private fun setupDailyAdapter(forecastDay: UIForecastDay, selectedDayPosition: Int) {
