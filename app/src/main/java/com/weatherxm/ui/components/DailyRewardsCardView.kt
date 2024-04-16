@@ -110,33 +110,30 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
         useShortAnnotationText: Boolean,
         onViewDetails: (() -> Unit)? = null
     ) {
-        val severityLevels = annotations?.map {
-            it.severityLevel
-        }
-        val annotationsSize = annotations?.size ?: 0
+        val sortedSeverities = annotations?.map { it.severityLevel }?.sortedByDescending { it }
 
-        if (severityLevels.isNullOrEmpty()) {
+        if (sortedSeverities.isNullOrEmpty()) {
             binding.annotationCard.setVisible(false)
             binding.parentCard.strokeWidth = 0
             return
         }
 
-        if (severityLevels.contains(SeverityLevel.ERROR)) {
+        if (sortedSeverities.contains(SeverityLevel.ERROR)) {
             onAnnotation(
                 SeverityLevel.ERROR,
-                getAnnotationMessage(useShortAnnotationText, severityLevels, annotationsSize),
+                getAnnotationMessage(useShortAnnotationText, sortedSeverities, annotations.size),
                 onViewDetails
             )
-        } else if (severityLevels.contains(SeverityLevel.WARNING)) {
+        } else if (sortedSeverities.contains(SeverityLevel.WARNING)) {
             onAnnotation(
                 SeverityLevel.WARNING,
-                getAnnotationMessage(useShortAnnotationText, severityLevels, annotationsSize),
+                getAnnotationMessage(useShortAnnotationText, sortedSeverities, annotations.size),
                 onViewDetails
             )
-        } else if (severityLevels.contains(SeverityLevel.INFO)) {
+        } else if (sortedSeverities.contains(SeverityLevel.INFO)) {
             onAnnotation(
                 SeverityLevel.INFO,
-                getAnnotationMessage(useShortAnnotationText, severityLevels, annotationsSize),
+                getAnnotationMessage(useShortAnnotationText, sortedSeverities, annotations.size),
                 onViewDetails
             )
         }
@@ -144,21 +141,21 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
 
     private fun getAnnotationMessage(
         useShortAnnotationText: Boolean,
-        severityLevels: List<SeverityLevel?>,
+        sortedSeverities: List<SeverityLevel?>,
         annotationsSize: Int
     ): String {
         return if (!useShortAnnotationText) {
-            if (severityLevels.contains(SeverityLevel.ERROR)) {
+            if (sortedSeverities.contains(SeverityLevel.ERROR)) {
                 context.getString(R.string.annotation_error_text)
-            } else if (severityLevels.contains(SeverityLevel.WARNING)) {
+            } else if (sortedSeverities.contains(SeverityLevel.WARNING)) {
                 context.getString(R.string.annotation_warn_text)
             } else {
                 context.getString(R.string.annotation_info_text)
             }
         } else {
-            if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize > 1) {
+            if (sortedSeverities[0] == SeverityLevel.INFO && annotationsSize > 1) {
                 context.getString(R.string.annotation_issues_info_text, annotationsSize)
-            } else if (severityLevels.contains(SeverityLevel.INFO) && annotationsSize <= 1) {
+            } else if (sortedSeverities[0] == SeverityLevel.INFO && annotationsSize <= 1) {
                 context.getString(R.string.annotation_issue_info_text)
             } else if (annotationsSize > 1) {
                 context.getString(R.string.annotation_issues_warn_error_text, annotationsSize)
