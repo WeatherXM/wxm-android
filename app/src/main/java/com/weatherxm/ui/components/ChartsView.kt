@@ -10,6 +10,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.weatherxm.databinding.ViewChartsBinding
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.util.Weather
+import com.weatherxm.util.Weather.getFormattedSolarRadiation
 import com.weatherxm.util.initHumidity24hChart
 import com.weatherxm.util.initPrecipitation24hChart
 import com.weatherxm.util.initPressure24hChart
@@ -17,6 +18,7 @@ import com.weatherxm.util.initSolarChart
 import com.weatherxm.util.initTemperature24hChart
 import com.weatherxm.util.initWind24hChart
 
+@Suppress("TooManyFunctions")
 class ChartsView : LinearLayout {
 
     private lateinit var binding: ViewChartsBinding
@@ -49,6 +51,10 @@ class ChartsView : LinearLayout {
     private fun init(context: Context?) {
         binding = ViewChartsBinding.inflate(LayoutInflater.from(context), this)
     }
+
+    fun chartPrecipitation() = binding.chartPrecipitation
+    fun chartWind() = binding.chartWind
+    fun chartSolar() = binding.chartSolar
 
     fun clearCharts() {
         binding.chartTemperature.clearChart()
@@ -154,23 +160,12 @@ class ChartsView : LinearLayout {
     }
 
     fun initSolarChart(uvData: LineChartData, radiationData: LineChartData) {
-        if (uvData.isDataValid() && radiationData.isDataValid()) {
+        if (uvData.isDataValid() || radiationData.isDataValid()) {
             solarDataSets = binding.chartSolar.getChart().initSolarChart(uvData, radiationData)
             binding.chartSolar.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
-                        if (e != null && !e.y.isNaN()) {
-                            val time = uvData.timestamps[e.x.toInt()]
-                            val uv = Weather.getFormattedUV(e.y.toInt())
-                            val radiation = Weather.getFormattedSolarRadiation(
-                                radiationData.entries[e.x.toInt()].y
-                            )
-                            binding.chartSolar.onHighlightedData(time, uv, radiation)
-
-                            autoHighlightCharts(e.x)
-                        } else {
-                            binding.chartSolar.onClearHighlight()
-                        }
+                        onSolarValueSelected(uvData, radiationData, e)
                     }
 
                     override fun onNothingSelected() {
@@ -182,31 +177,22 @@ class ChartsView : LinearLayout {
         }
     }
 
-    fun initPrecipitationChart(rateData: LineChartData, accumulatedData: LineChartData) {
-        if (rateData.isDataValid() && accumulatedData.isDataValid()) {
+    fun initPrecipitationChart(
+        primaryData: LineChartData,
+        secondaryData: LineChartData,
+        isHistoricalData: Boolean
+    ) {
+        if (primaryData.isDataValid() && secondaryData.isDataValid()) {
             precipDataSets = binding.chartPrecipitation
                 .getChart()
-                .initPrecipitation24hChart(rateData, accumulatedData)
+                .initPrecipitation24hChart(primaryData, secondaryData, isHistoricalData)
             binding.chartPrecipitation.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
-                        if (e != null && !e.y.isNaN()) {
-                            val time = accumulatedData.timestamps[e.x.toInt()]
-                            val accumulated = Weather.getFormattedPrecipitation(
-                                accumulatedData.entries[e.x.toInt()].y,
-                                isRainRate = false,
-                                ignoreConversion = true
-                            )
-                            val rate = Weather.getFormattedPrecipitation(
-                                rateData.entries[e.x.toInt()].y,
-                                isRainRate = true,
-                                ignoreConversion = true
-                            )
-                            binding.chartPrecipitation.onHighlightedData(time, rate, accumulated)
-
-                            autoHighlightCharts(e.x)
+                        if (isHistoricalData) {
+                            onHistoricalPrecipitationValueSelected(primaryData, secondaryData, e)
                         } else {
-                            binding.chartPrecipitation.onClearHighlight()
+                            onForecastPrecipitationValueSelected(primaryData, secondaryData, e)
                         }
                     }
 
@@ -222,34 +208,14 @@ class ChartsView : LinearLayout {
     fun initWindChart(
         windSpeedData: LineChartData, windGustData: LineChartData, windDirectionData: LineChartData
     ) {
-        if (windSpeedData.isDataValid()
-            && windGustData.isDataValid()
-            && windDirectionData.isDataValid()
-        ) {
+        if (windSpeedData.isDataValid() && windDirectionData.isDataValid()) {
             windDataSets = binding.chartWind
                 .getChart()
                 .initWind24hChart(windSpeedData, windGustData)
             binding.chartWind.getChart().setOnChartValueSelectedListener(
                 object : OnChartValueSelectedListener {
                     override fun onValueSelected(e: Entry?, h: Highlight?) {
-                        if (e != null && !e.y.isNaN()) {
-                            val time = windSpeedData.timestamps[e.x.toInt()]
-                            val windSpeed = Weather.getFormattedWind(
-                                e.y,
-                                windDirectionData.entries[e.x.toInt()].y.toInt(),
-                                ignoreConversion = true
-                            )
-                            val windGust = Weather.getFormattedWind(
-                                windGustData.entries[e.x.toInt()].y,
-                                windDirectionData.entries[e.x.toInt()].y.toInt(),
-                                ignoreConversion = true
-                            )
-                            binding.chartWind.onHighlightedData(time, windSpeed, windGust)
-
-                            autoHighlightCharts(e.x)
-                        } else {
-                            binding.chartWind.onClearHighlight()
-                        }
+                        onWindValueSelected(windSpeedData, windGustData, windDirectionData, e)
                     }
 
                     override fun onNothingSelected() {
@@ -258,6 +224,107 @@ class ChartsView : LinearLayout {
                 })
         } else {
             binding.chartWind.showNoDataText()
+        }
+    }
+
+    private fun onSolarValueSelected(
+        uvData: LineChartData,
+        radiationData: LineChartData,
+        e: Entry?
+    ) {
+        if (e != null && !e.y.isNaN()) {
+            val time = uvData.timestamps[e.x.toInt()]
+            val uv = Weather.getFormattedUV(e.y.toInt())
+
+            if (radiationData.isDataValid()) {
+                val radiation = getFormattedSolarRadiation(radiationData.entries[e.x.toInt()].y)
+                binding.chartSolar.onHighlightedData(time, uv, radiation)
+            } else {
+                binding.chartSolar.onHighlightedData(time, uv)
+            }
+
+            autoHighlightCharts(e.x)
+        } else {
+            binding.chartSolar.onClearHighlight()
+        }
+    }
+
+    private fun onHistoricalPrecipitationValueSelected(
+        primaryData: LineChartData,
+        secondaryData: LineChartData,
+        e: Entry?
+    ) {
+        if (e != null && !e.y.isNaN()) {
+            val time = secondaryData.timestamps[e.x.toInt()]
+            val accumulated = Weather.getFormattedPrecipitation(
+                secondaryData.entries[e.x.toInt()].y,
+                isRainRate = false,
+                ignoreConversion = true
+            )
+            val rate = Weather.getFormattedPrecipitation(
+                primaryData.entries[e.x.toInt()].y,
+                isRainRate = true,
+                ignoreConversion = true
+            )
+            binding.chartPrecipitation.onHighlightedData(time, rate, accumulated)
+
+            autoHighlightCharts(e.x)
+        } else {
+            binding.chartPrecipitation.onClearHighlight()
+        }
+    }
+
+    private fun onForecastPrecipitationValueSelected(
+        primaryData: LineChartData,
+        secondaryData: LineChartData,
+        e: Entry?
+    ) {
+        if (e != null && !e.y.isNaN()) {
+            val time = secondaryData.timestamps[e.x.toInt()]
+            val precipitation = Weather.getFormattedPrecipitation(
+                primaryData.entries[e.x.toInt()].y,
+                isRainRate = false,
+                ignoreConversion = true
+            )
+            val percentage = Weather.getFormattedPrecipitationProbability(
+                secondaryData.entries[e.x.toInt()].y.toInt()
+            )
+            binding.chartPrecipitation.onHighlightedData(time, precipitation, percentage)
+
+            autoHighlightCharts(e.x)
+        } else {
+            binding.chartPrecipitation.onClearHighlight()
+        }
+    }
+
+    private fun onWindValueSelected(
+        windSpeedData: LineChartData,
+        windGustData: LineChartData,
+        windDirectionData: LineChartData,
+        e: Entry?
+    ) {
+        if (e != null && !e.y.isNaN()) {
+            val time = windSpeedData.timestamps[e.x.toInt()]
+            val windSpeed = Weather.getFormattedWind(
+                e.y,
+                windDirectionData.entries[e.x.toInt()].y.toInt(),
+                ignoreConversion = true
+            )
+
+            if (windGustData.isDataValid()) {
+                val windGust = Weather.getFormattedWind(
+                    windGustData.entries[e.x.toInt()].y,
+                    windDirectionData.entries[e.x.toInt()].y.toInt(),
+                    ignoreConversion = true
+                )
+                binding.chartWind.onHighlightedData(time, windSpeed, windGust)
+            } else {
+                binding.chartWind.onHighlightedData(time, windSpeed)
+            }
+
+            autoHighlightCharts(e.x)
+        } else {
+            binding.chartWind.onClearHighlight()
         }
     }
 

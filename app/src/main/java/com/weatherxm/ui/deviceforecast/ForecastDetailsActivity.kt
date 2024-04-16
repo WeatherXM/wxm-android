@@ -13,6 +13,7 @@ import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.databinding.ActivityForecastDetailsBinding
+import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_HOUR
@@ -93,6 +94,21 @@ class ForecastDetailsActivity : BaseActivity() {
         setupDailyAdapter(forecastDay, selectedDayPosition)
         setupHourlyAdapter(forecastDay, selectedHour)
         updateDailyWeather(forecastDay)
+        binding.charts.chartPrecipitation().primaryLine(
+            getString(R.string.precipitation),
+            getString(R.string.precipitation)
+        )
+        binding.charts.chartPrecipitation().secondaryLine(
+            getString(R.string.precipitation_probability),
+            getString(R.string.precipitation_probability)
+        )
+        binding.charts.chartWind().primaryLine(null, getString(R.string.speed))
+        binding.charts.chartWind().secondaryLine(null, null)
+        binding.charts.chartSolar().updateTitle(getString(R.string.uv_index))
+        binding.charts.chartSolar().primaryLine(null, getString(R.string.uv_index))
+        binding.charts.chartSolar().secondaryLine(null, null)
+
+        updateCharts(model.getCharts(forecastDay))
 
         with(binding.displayTimeNotice) {
             model.device.timezone?.let {
@@ -108,6 +124,7 @@ class ForecastDetailsActivity : BaseActivity() {
             dailyAdapter.notifyItemChanged(dailyAdapter.getSelectedPosition())
             setupHourlyAdapter(it, null)
             updateDailyWeather(it)
+            updateCharts(model.getCharts(it))
         }
         binding.dailyTilesRecycler.adapter = dailyAdapter
         dailyAdapter.submitList(model.forecast.forecastDays)
@@ -191,6 +208,18 @@ class ForecastDetailsActivity : BaseActivity() {
                 else -> setVisible(false)
             }
         }
+    }
+
+    private fun updateCharts(charts: Charts) {
+        binding.charts.clearCharts()
+        binding.charts.initTemperatureChart(charts.temperature, charts.feelsLike)
+        binding.charts.initWindChart(charts.windSpeed, charts.windGust, charts.windDirection)
+        binding.charts.initPrecipitationChart(charts.precipitation, charts.precipProbability, false)
+        binding.charts.initHumidityChart(charts.humidity)
+        binding.charts.initPressureChart(charts.pressure)
+        binding.charts.initSolarChart(charts.uv, charts.solarRadiation)
+        binding.charts.autoHighlightCharts(0F)
+        binding.charts.setVisible(!charts.isEmpty())
     }
 
     override fun onResume() {

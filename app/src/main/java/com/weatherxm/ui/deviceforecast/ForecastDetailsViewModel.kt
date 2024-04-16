@@ -2,13 +2,17 @@ package com.weatherxm.ui.deviceforecast
 
 import androidx.lifecycle.ViewModel
 import com.weatherxm.data.HourlyWeather
+import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UIForecastDay
+import com.weatherxm.usecases.ChartsUseCase
+import timber.log.Timber
 
 class ForecastDetailsViewModel(
     val device: UIDevice,
     val forecast: UIForecast,
+    private val chartsUseCase: ChartsUseCase,
 ) : ViewModel() {
     fun getSelectedDayPosition(selectedDate: UIForecastDay?, selectedHour: HourlyWeather?): Int {
         return if (selectedDate != null) {
@@ -38,5 +42,12 @@ class ForecastDetailsViewModel(
                 } ?: hourlies[0]
             )
         }
+    }
+
+    fun getCharts(forecastDay: UIForecastDay): Charts {
+        Timber.d("Returning forecast charts for [${forecastDay.date}]")
+        return chartsUseCase.createHourlyCharts(
+            forecastDay.date, forecastDay.hourlyWeather ?: mutableListOf()
+        )
     }
 }

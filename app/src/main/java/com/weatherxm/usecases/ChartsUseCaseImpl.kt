@@ -121,13 +121,14 @@ class ChartsUseCaseImpl(
 
                 hourlyWeather.solarIrradiance?.let {
                     solarRadiationEntries.add(Entry(counter, Weather.roundToDecimals(it)))
-                } ?: solarRadiationEntries.add(Entry(counter, Float.NaN))
+                } ?: solarRadiationEntries.add(emptyEntry)
 
             } ?: kotlin.run {
                 temperatureEntries.add(emptyEntry)
                 feelsLikeEntries.add(emptyEntry)
                 precipEntries.add(emptyEntry)
                 precipAccumulatedEntries.add(emptyEntry)
+                precipProbabilityEntries.add(emptyEntry)
                 windSpeedEntries.add(emptyEntry)
                 windGustEntries.add(emptyEntry)
                 windDirectionEntries.add(emptyEntry)
