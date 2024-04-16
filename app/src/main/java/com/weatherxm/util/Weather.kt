@@ -161,12 +161,30 @@ object Weather : KoinComponent {
         return "$value$unit"
     }
 
-    fun getFormattedUV(value: Int?): String {
+    fun getFormattedUV(value: Int?, includeUnit: Boolean = true): String {
         if (value == null) {
             return EMPTY_VALUE
         }
 
-        return "$value"
+        return if (includeUnit) {
+            "$value${getUVClassification(value)}"
+        } else {
+            "$value"
+        }
+    }
+
+    @Suppress("MagicNumber")
+    fun getUVClassification(value: Int?): String {
+        if (value == null) {
+            return String.empty()
+        }
+        return when {
+            value <= 2 -> resources.getString(R.string.uv_low)
+            value <= 5 -> resources.getString(R.string.uv_moderate)
+            value <= 7 -> resources.getString(R.string.uv_high)
+            value <= 10 -> resources.getString(R.string.uv_very_high)
+            else -> resources.getString(R.string.uv_extreme)
+        }
     }
 
     fun getFormattedPressure(

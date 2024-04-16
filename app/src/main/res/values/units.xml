@@ -60,4 +60,10 @@
     <string name="radiation">Radiation</string>
     <string name="pressure_absolute">Pressure (abs)</string>
     <string name="dew_point">Dew Point</string>
+    <string name="uv_low">&#160;Low</string>
+    <string name="uv_moderate">&#160;Moderate</string>
+    <string name="uv_high">&#160;High</string>
+    <string name="uv_very_high">&#160;Very High</string>
+    <string name="uv_extreme">&#160;Extreme</string>
+
 </resources>

@@ -41,6 +41,7 @@ import com.weatherxm.util.Weather.getFormattedWind
 import com.weatherxm.util.Weather.getFormattedWindDirection
 import com.weatherxm.util.Weather.getPrecipitationPreferredUnit
 import com.weatherxm.util.Weather.getPreferredUnit
+import com.weatherxm.util.Weather.getUVClassification
 import com.weatherxm.util.Weather.getWeatherAnimation
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -157,8 +158,7 @@ class ForecastDetailsActivity : BaseActivity() {
             getFormattedPrecipitation(forecast.precip, isRainRate = false, includeUnit = false),
             getPrecipitationPreferredUnit(false)
         )
-        // TODO: Mapping of UV here
-        binding.uvCard.setData(getFormattedUV(forecast.uv), " High")
+        binding.uvCard.setData(getFormattedUV(forecast.uv, false), getUVClassification(forecast.uv))
 
         binding.humidityCard.setData(
             getFormattedHumidity(forecast.humidity, includeUnit = false), "%"

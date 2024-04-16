@@ -237,6 +237,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/padding_normal"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:weightSum="2"

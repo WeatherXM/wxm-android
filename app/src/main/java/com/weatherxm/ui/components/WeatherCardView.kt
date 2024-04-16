@@ -17,6 +17,7 @@ import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getPrecipitationPreferredUnit
+import com.weatherxm.util.Weather.getUVClassification
 
 class WeatherCardView : LinearLayout {
 
@@ -105,7 +106,10 @@ class WeatherCardView : LinearLayout {
                 Weather.getFormattedPressure(weatherData?.pressure, includeUnit = false),
                 pressureUnit
             )
-            binding.uv.setData(Weather.getFormattedUV(weatherData?.uvIndex))
+            binding.uv.setData(
+                Weather.getFormattedUV(weatherData?.uvIndex, includeUnit = false),
+                getUVClassification(weatherData?.uvIndex)
+            )
             binding.solarRadiation.setData(
                 Weather.getFormattedSolarRadiation(weatherData?.solarIrradiance, false),
                 context.getString(R.string.solar_radiation_unit)
@@ -121,8 +125,8 @@ class WeatherCardView : LinearLayout {
         } else {
             weatherData = data
             updateCurrentWeatherUI()
-            val lastUpdatedDate = data?.timestamp?.getFormattedDate(includeYear = true)
-            val lastUpdatedTime = data?.timestamp?.getFormattedTime(context)
+            val lastUpdatedDate = data.timestamp.getFormattedDate(includeYear = true)
+            val lastUpdatedTime = data.timestamp.getFormattedTime(context)
             binding.lastUpdatedOn.text =
                 context.getString(R.string.last_updated, "$lastUpdatedDate, $lastUpdatedTime")
         }
