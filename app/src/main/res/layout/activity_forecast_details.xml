@@ -286,6 +286,18 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/hourlyTitle"
                 tools:listitem="@layout/list_item_hourly_forecast" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/displayTimeNotice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                android:textSize="10sp"
+                android:textStyle="italic"
+                app:layout_constraintTop_toBottomOf="@id/hourlyForecastRecycler"
+                tools:ignore="SmallSp"
+                tools:text="All displayed times are in the Station’s timezone (Europe/Athens)." />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

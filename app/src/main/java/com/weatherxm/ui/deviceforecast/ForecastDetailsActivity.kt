@@ -93,6 +93,13 @@ class ForecastDetailsActivity : BaseActivity() {
         setupDailyAdapter(forecastDay, selectedDayPosition)
         setupHourlyAdapter(forecastDay, selectedHour)
         updateDailyWeather(forecastDay)
+
+        with(binding.displayTimeNotice) {
+            model.device.timezone?.let {
+                text = getString(R.string.displayed_times, it)
+                setVisible(true)
+            } ?: setVisible(false)
+        }
     }
 
     private fun setupDailyAdapter(forecastDay: UIForecastDay, selectedDayPosition: Int) {
