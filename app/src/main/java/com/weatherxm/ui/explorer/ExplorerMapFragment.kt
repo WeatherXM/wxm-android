@@ -96,8 +96,8 @@ class ExplorerMapFragment : BaseMapFragment() {
             true
         }
 
-        map.addOnCameraChangeListener {
-            model.setCurrentCamera(map.cameraState.zoom, map.cameraState.center)
+        map.subscribeCameraChanged {
+            model.setCurrentCamera(it.cameraState.zoom, it.cameraState.center)
         }
 
         getMapView().location.updateSettings {
@@ -168,7 +168,7 @@ class ExplorerMapFragment : BaseMapFragment() {
     }
 
     private fun cameraFly(center: Point, zoomLevel: Double = USER_LOCATION_ZOOM_LEVEL) {
-        binding.mapView.getMapboxMap().flyTo(
+        getMap().flyTo(
             CameraOptions.Builder().zoom(zoomLevel).center(center).build(),
             MapAnimationOptions.Builder().duration(CAMERA_ANIMATION_DURATION).build()
         )
@@ -306,7 +306,7 @@ class ExplorerMapFragment : BaseMapFragment() {
                     return
                 }
 
-                val mapStyle = map.getStyle()
+                val mapStyle = map.style
                 if (mapStyle?.styleSourceExists(HEATMAP_SOURCE_ID) == true) {
                     resource.data.geoJsonSource.data?.let {
                         (mapStyle.getSource(HEATMAP_SOURCE_ID) as GeoJsonSource).data(it)

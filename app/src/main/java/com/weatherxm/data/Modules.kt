@@ -42,7 +42,6 @@ import com.mapbox.search.SearchEngine
 import com.mapbox.search.SearchEngineSettings
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
-import com.weatherxm.R
 import com.weatherxm.data.adapters.LocalDateJsonAdapter
 import com.weatherxm.data.adapters.LocalDateTimeJsonAdapter
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
@@ -856,9 +855,7 @@ private val utilities = module {
         NumberFormat.getInstance()
     }
     single<SearchEngine> {
-        SearchEngine.createSearchEngine(
-            SearchEngineSettings(androidContext().resources.getString(R.string.mapbox_access_token))
-        )
+        SearchEngine.createSearchEngine(SearchEngineSettings())
     }
     single<Moshi> {
         Moshi.Builder()

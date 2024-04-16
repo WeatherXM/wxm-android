@@ -80,14 +80,14 @@ open class BaseMapFragment : BaseFragment() {
 
         viewManager = binding.mapView.viewAnnotationManager
 
-        map.addOnCameraChangeListener {
+        map.subscribeCameraChanged {
             debugInfoListener.onMapDebugInfoUpdated(
                 zoom = map.cameraState.zoom,
                 center = map.cameraState.center
             )
         }
 
-        map.loadStyleUri(getMapStyle()) {
+        map.loadStyle(getMapStyle()) {
             Timber.d("MapBox is ready and style loaded")
 
             binding.mapView.gestures.rotateEnabled = false
@@ -131,7 +131,7 @@ open class BaseMapFragment : BaseFragment() {
         super.onSaveInstanceState(outState)
     }
 
-    fun getMap(): MapboxMap = binding.mapView.getMapboxMap()
+    fun getMap(): MapboxMap = binding.mapView.mapboxMap
 
     fun getMapView(): MapView = binding.mapView
 
