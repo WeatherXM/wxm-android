@@ -143,6 +143,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             } else {
                 binding.multipleAlerts.setVisible(false)
                 binding.alert.setVisible(false)
+                binding.root.strokeWidth = 0
             }
         }
 
