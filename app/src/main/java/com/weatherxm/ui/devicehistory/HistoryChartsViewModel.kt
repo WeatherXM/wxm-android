@@ -9,7 +9,9 @@ import com.weatherxm.R
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.usecases.ChartsUseCase
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getDefaultMessageResId
@@ -26,6 +28,7 @@ import java.time.LocalDate
 class HistoryChartsViewModel(
     val device: UIDevice,
     private val historyUseCase: HistoryUseCase,
+    private val chartsUseCase: ChartsUseCase,
     private val resources: Resources,
     private val analytics: Analytics
 ) : ViewModel() {
@@ -37,18 +40,11 @@ class HistoryChartsViewModel(
     private var updateWeatherHistoryJob: Job? = null
     private var currentDateShown: LocalDate = LocalDate.now()
 
-    private val charts = MutableLiveData<Resource<HistoryCharts>>(Resource.loading())
-    fun charts(): LiveData<Resource<HistoryCharts>> = charts
+    private val charts = MutableLiveData<Resource<Charts>>(Resource.loading())
+    fun charts(): LiveData<Resource<Charts>> = charts
 
     private val onNewDate = MutableLiveData(currentDateShown)
     fun onNewDate(): LiveData<LocalDate> = onNewDate
-
-    var temperatureDataSets: MutableMap<Int, List<Float>> = mutableMapOf()
-    var precipDataSets: MutableMap<Int, List<Float>> = mutableMapOf()
-    var windDataSets: MutableMap<Int, List<Float>> = mutableMapOf()
-    var humidityDataSets: MutableMap<Int, List<Float>> = mutableMapOf()
-    var pressureDataSets: MutableMap<Int, List<Float>> = mutableMapOf()
-    var solarDataSets: MutableMap<Int, List<Float>> = mutableMapOf()
 
     fun isTodayShown(): Boolean {
         return currentDateShown.isToday()
@@ -60,15 +56,6 @@ class HistoryChartsViewModel(
         currentDateShown = newDate
         onNewDate.postValue(newDate)
         fetchWeatherHistory()
-    }
-
-    fun getLatestChartEntry(lineChartData: LineChartData): Float {
-        val firstNaN = lineChartData.entries.firstOrNull { it.y.isNaN() }?.x
-        return if (firstNaN != null && firstNaN > 0F) {
-            firstNaN - 1
-        } else {
-            0F
-        }
     }
 
     fun fetchWeatherHistory(forceUpdate: Boolean = false) {
@@ -96,8 +83,9 @@ class HistoryChartsViewModel(
             // Fetch fresh data
             historyUseCase.getWeatherHistory(device, currentDateShown, shouldForceUpdate)
                 .onRight {
-                    Timber.d("Returning history charts for [${it.date}]")
-                    charts.postValue(Resource.success(it))
+                    val historyCharts = chartsUseCase.createHourlyCharts(currentDateShown, it)
+                    Timber.d("Returning history charts for [${historyCharts.date}]")
+                    charts.postValue(Resource.success(historyCharts))
                 }
                 .onLeft {
                     analytics.trackEventFailure(it.code)

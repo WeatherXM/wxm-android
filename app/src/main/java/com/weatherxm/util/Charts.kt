@@ -18,9 +18,9 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
 import com.weatherxm.R
+import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.show
-import com.weatherxm.ui.devicehistory.LineChartData
 import com.weatherxm.util.Weather.getDecimalsPressure
 import com.weatherxm.util.Weather.roundToDecimals
 import com.weatherxm.util.Weather.roundToInt

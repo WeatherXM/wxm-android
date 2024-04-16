@@ -196,6 +196,8 @@ import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCaseImpl
 import com.weatherxm.usecases.BluetoothUpdaterUseCase
 import com.weatherxm.usecases.BluetoothUpdaterUseCaseImpl
+import com.weatherxm.usecases.ChartsUseCase
+import com.weatherxm.usecases.ChartsUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCaseImpl
 import com.weatherxm.usecases.ConnectWalletUseCase
@@ -524,7 +526,10 @@ private val usecases = module {
         ForecastUseCaseImpl(get())
     }
     single<HistoryUseCase> {
-        HistoryUseCaseImpl(androidContext(), get(), get())
+        HistoryUseCaseImpl(get())
+    }
+    single<ChartsUseCase> {
+        ChartsUseCaseImpl(androidContext(), get())
     }
     single<ClaimDeviceUseCase> {
         ClaimDeviceUseCaseImpl(get(), get())
@@ -915,7 +920,15 @@ private val viewmodels = module {
     viewModel { params -> CurrentViewModel(device = params.get(), get(), get(), get()) }
     viewModel { params -> ForecastViewModel(device = params.get(), get(), get(), get()) }
     viewModel { params -> RewardsViewModel(device = params.get(), get(), get(), get()) }
-    viewModel { params -> HistoryChartsViewModel(device = params.get(), get(), get(), get()) }
+    viewModel { params ->
+        HistoryChartsViewModel(
+            device = params.get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
     viewModel { params ->
         DeviceHeliumOTAViewModel(
             device = params.get(),
@@ -962,7 +975,7 @@ private val viewmodels = module {
     viewModel { ClaimHeliumFrequencyViewModel(get(), get()) }
     viewModel { ClaimM5VerifyViewModel() }
     viewModel { NetworkSearchViewModel(get(), get()) }
-    viewModel { params -> ForecastDetailsViewModel(params.get(), get()) }
+    viewModel { params -> ForecastDetailsViewModel(params.get(), params.get(), get()) }
 }
 
 val modules = listOf(
