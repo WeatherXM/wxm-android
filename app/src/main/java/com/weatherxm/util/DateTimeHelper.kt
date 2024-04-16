@@ -154,7 +154,7 @@ object DateTimeHelper : KoinComponent {
         }
         val nameOfDay = dayOfWeek.getName(context)
         return if (relativeDay != null) {
-            "$relativeDay, $nameOfDay, ${format(formatterShort)}"
+            "$relativeDay, ${format(formatterShort)}"
         } else {
             "$nameOfDay, ${format(formatterShort)}"
         }

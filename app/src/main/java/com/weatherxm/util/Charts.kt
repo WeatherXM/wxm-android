@@ -21,6 +21,7 @@ import com.weatherxm.R
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.show
+import com.weatherxm.util.Weather.getDecimalsPrecipitation
 import com.weatherxm.util.Weather.getDecimalsPressure
 import com.weatherxm.util.Weather.roundToDecimals
 import com.weatherxm.util.Weather.roundToInt
@@ -309,22 +310,24 @@ fun LineChart.initPressure24hChart(chartData: LineChartData): MutableMap<Int, Li
     return createDataSetToXPointsMap(0, lineDataSetsWithValues)
 }
 
-@Suppress("MagicNumber", "LongMethod")
+@Suppress("MagicNumber")
 fun LineChart.initPrecipitation24hChart(
-    rateData: LineChartData, accumulatedData: LineChartData
+    primaryData: LineChartData,
+    secondaryData: LineChartData,
+    hasDecimalsAxisRight: Boolean
 ): MutableMap<Int, List<Float>> {
     val rateLabel = resources.getString(R.string.precipitation_rate)
     val accumulationLabel = resources.getString(R.string.daily_precipitation)
 
-    val rateLineDataSetsWithValues = rateData.getLineDataSetsWithValues(rateLabel)
-    val rateEmptyLineDataSets = rateData.getEmptyLineDataSets(rateLabel)
-    val accumulatedDataLineDataSetsWithValues =
-        accumulatedData.getLineDataSetsWithValues(accumulationLabel)
-    val accumulatedDataEmptyLineDataSets = accumulatedData.getEmptyLineDataSets(accumulationLabel)
+    val primaryDataSetsWithValues = primaryData.getLineDataSetsWithValues(rateLabel)
+    val primaryEmptyLineDataSets = primaryData.getEmptyLineDataSets(rateLabel)
+    val secondaryDataLineDataSetsWithValues =
+        secondaryData.getLineDataSetsWithValues(accumulationLabel)
+    val secondaryDataEmptyLineDataSets = secondaryData.getEmptyLineDataSets(accumulationLabel)
     val dataSets = mutableListOf<ILineDataSet>()
 
-    dataSets.addAll(accumulatedDataLineDataSetsWithValues.secondaryLineInit(context, resources))
-    accumulatedDataLineDataSetsWithValues.forEach {
+    dataSets.addAll(secondaryDataLineDataSetsWithValues.secondaryLineInit(context, resources))
+    secondaryDataLineDataSetsWithValues.forEach {
         // Precipitation Accumulated Settings
         it.axisDependency = YAxis.AxisDependency.RIGHT
         if (it.values.size > 1) it.setDrawCircles(false)
@@ -334,15 +337,15 @@ fun LineChart.initPrecipitation24hChart(
         it.color = resources.getColor(R.color.chart_secondary_line, context.theme)
         it.fillColor = context.getColor(R.color.chart_secondary_line)
     }
-    dataSets.addAll(accumulatedDataEmptyLineDataSets)
-    dataSets.addAll(rateLineDataSetsWithValues.primaryLineInit(context, resources))
-    rateLineDataSetsWithValues.forEach {
+    dataSets.addAll(secondaryDataEmptyLineDataSets)
+    dataSets.addAll(primaryDataSetsWithValues.primaryLineInit(context, resources))
+    primaryDataSetsWithValues.forEach {
         // Precipitation Intensity Settings
         if (it.values.size > 1) it.setDrawCircles(false)
         it.axisDependency = YAxis.AxisDependency.LEFT
         it.mode = LineDataSet.Mode.STEPPED
     }
-    dataSets.addAll(rateEmptyLineDataSets)
+    dataSets.addAll(primaryEmptyLineDataSets)
 
     val lineData = LineData(dataSets)
     data = lineData
@@ -350,75 +353,66 @@ fun LineChart.initPrecipitation24hChart(
     // Set the default settings we want to all LineCharts
     setDefaultSettings(context)
 
-    // General Chart Settings
-    val decimals = getDecimalsPressure()
-
     // Y Axis settings
-    val customNumberForMinMax = if (decimals == 2) 0.01F else 0.1F
     with(axisLeft) {
-        granularity = if (decimals == 2) {
-            Y_AXIS_PRECIP_INCHES_GRANULARITY
-        } else {
-            Y_AXIS_1_DECIMAL_GRANULARITY
-        }
-
-        /**
-         * If max - min < 0.1 that means that the values are probably too close together.
-         * Which causes a bug not showing labels on Y axis or hiding the precip line behind the
-         * X axis line.
-         * That's why we set custom minimum and maximum values.
-         */
-        val yMin = rateLineDataSetsWithValues.minOf { it.yMin }
-        val yMax = rateLineDataSetsWithValues.maxOf { it.yMax }
-        if (yMax - yMin < customNumberForMinMax) {
-            if (yMin < customNumberForMinMax) {
-                axisMinimum = 0F
-                axisMaximum = yMax + customNumberForMinMax
-            } else {
-                axisMinimum = yMin - customNumberForMinMax
-                axisMaximum = yMax + customNumberForMinMax
-            }
-        } else {
-            axisMinimum = yMin
-        }
-
-        valueFormatter = CustomYAxisFormatter(Weather.getDecimalsPrecipitation())
+        setupPrecipitation(
+            primaryDataSetsWithValues.minOf { it.yMin },
+            primaryDataSetsWithValues.maxOf { it.yMax }
+        )
+        valueFormatter = CustomYAxisFormatter(getDecimalsPrecipitation())
     }
 
-    with(axisRight) {
-        isEnabled = true
-        valueFormatter = CustomYAxisFormatter(Weather.getDecimalsPrecipitation(), false)
-
-        granularity = if (decimals == 2) {
-            Y_AXIS_PRECIP_INCHES_GRANULARITY
-        } else {
-            Y_AXIS_1_DECIMAL_GRANULARITY
-        }
-
-        val yMin = accumulatedDataLineDataSetsWithValues.minOf { it.yMin }
-        val yMax = accumulatedDataLineDataSetsWithValues.maxOf { it.yMax }
-        if (yMax - yMin < customNumberForMinMax) {
-            if (yMin < customNumberForMinMax) {
-                axisMinimum = 0F
-                axisMaximum = yMax + customNumberForMinMax
-            } else {
-                axisMinimum = yMin - customNumberForMinMax
-                axisMaximum = yMax + customNumberForMinMax
-            }
-        } else {
-            axisMinimum = yMin
+    axisRight.isEnabled = true
+    if (hasDecimalsAxisRight) {
+        with(axisRight) {
+            setupPrecipitation(
+                secondaryDataLineDataSetsWithValues.minOf { it.yMin },
+                secondaryDataLineDataSetsWithValues.maxOf { it.yMax }
+            )
+            valueFormatter = CustomYAxisFormatter(getDecimalsPrecipitation(), false)
         }
     }
 
     // X axis settings
-    xAxis.valueFormatter = CustomXAxisFormatter(rateData.timestamps)
+    xAxis.valueFormatter = CustomXAxisFormatter(primaryData.timestamps)
     show()
     notifyDataSetChanged()
 
     return createDataSetToXPointsMap(
-        rateLineDataSetsWithValues.size + rateEmptyLineDataSets.size,
-        accumulatedDataLineDataSetsWithValues
+        primaryDataSetsWithValues.size + primaryEmptyLineDataSets.size,
+        secondaryDataLineDataSetsWithValues
     )
+}
+
+@Suppress("MagicNumber")
+private fun YAxis.setupPrecipitation(yMin: Float, yMax: Float) {
+    val decimals = getDecimalsPrecipitation()
+    val customNumberForMinMax = if (decimals == 2) 0.01F else 0.1F
+
+    granularity = if (decimals == 2) {
+        Y_AXIS_PRECIP_INCHES_GRANULARITY
+    } else {
+        Y_AXIS_1_DECIMAL_GRANULARITY
+    }
+
+
+    /**
+     * If max - min < 0.1 that means that the values are probably too close together.
+     * Which causes a bug not showing labels on Y axis or hiding the precip line behind the
+     * X axis line.
+     * That's why we set custom minimum and maximum values.
+     */
+    if (yMax - yMin < customNumberForMinMax) {
+        if (yMin < customNumberForMinMax) {
+            axisMinimum = 0F
+            axisMaximum = yMax + customNumberForMinMax
+        } else {
+            axisMinimum = yMin - customNumberForMinMax
+            axisMaximum = yMax + customNumberForMinMax
+        }
+    } else {
+        axisMinimum = yMin
+    }
 }
 
 @Suppress("MagicNumber")
@@ -428,15 +422,23 @@ fun LineChart.initWind24hChart(
 ): MutableMap<Int, List<Float>> {
     val speedLabel = resources.getString(R.string.wind_speed)
     val gustLabel = resources.getString(R.string.wind_gust)
+    val dataSets = mutableListOf<ILineDataSet>()
+    val yMax: Float
 
     val windSpeedLineDataSetsWithValues = windSpeedData.getLineDataSetsWithValues(speedLabel)
     val windSpeedEmptyLineDataSets = windSpeedData.getEmptyLineDataSets(speedLabel)
-    val windGustLineDataSetsWithValues = windGustData.getLineDataSetsWithValues(gustLabel)
-    val windGustEmptyLineDataSets = windGustData.getEmptyLineDataSets(gustLabel)
-    val dataSets = mutableListOf<ILineDataSet>()
 
-    dataSets.addAll(windGustLineDataSetsWithValues.secondaryLineInit(context, resources))
-    dataSets.addAll(windGustEmptyLineDataSets)
+    val initialSize = if (windGustData.isDataValid()) {
+        val windGustLineDataSetsWithValues = windGustData.getLineDataSetsWithValues(gustLabel)
+        val windGustEmptyLineDataSets = windGustData.getEmptyLineDataSets(gustLabel)
+        dataSets.addAll(windGustLineDataSetsWithValues.secondaryLineInit(context, resources))
+        dataSets.addAll(windGustEmptyLineDataSets)
+        yMax = windGustLineDataSetsWithValues.maxOf { it.yMax }
+        windGustLineDataSetsWithValues.size + windGustEmptyLineDataSets.size
+    } else {
+        yMax = windSpeedLineDataSetsWithValues.maxOf { it.yMax }
+        0
+    }
     dataSets.addAll(windSpeedLineDataSetsWithValues.primaryLineInit(context, resources))
     dataSets.addAll(windSpeedEmptyLineDataSets)
 
@@ -455,7 +457,6 @@ fun LineChart.initWind24hChart(
      * NOTE: Wind Gust is always equal or higher than wind speed that's why we use its max
      */
     val yMin = windSpeedLineDataSetsWithValues.minOf { it.yMin }
-    val yMax = windGustLineDataSetsWithValues.maxOf { it.yMax }
     if (yMax - yMin < 2) {
         if (yMin < 1) {
             axisLeft.axisMinimum = 0F
@@ -472,7 +473,7 @@ fun LineChart.initWind24hChart(
     notifyDataSetChanged()
 
     return createDataSetToXPointsMap(
-        windGustLineDataSetsWithValues.size + windGustEmptyLineDataSets.size,
+        initialSize,
         windSpeedLineDataSetsWithValues
     )
 }
@@ -484,24 +485,38 @@ fun LineChart.initSolarChart(
     val uvLabel = resources.getString(R.string.uv_index)
     val solarLabel = resources.getString(R.string.solar_radiation)
 
-    val uvLineDataSetsWithValues = uvData.getLineDataSetsWithValues(uvLabel)
-    val uvEmptyLineDataSets = uvData.getEmptyLineDataSets(uvLabel)
-    val radiationDataLineDataSetsWithValues = radiationData.getLineDataSetsWithValues(solarLabel)
-    val radiationDataEmptyLineDataSets = radiationData.getEmptyLineDataSets(solarLabel)
     val dataSets = mutableListOf<ILineDataSet>()
 
-    dataSets.addAll(radiationDataLineDataSetsWithValues.secondaryLineInit(context, resources))
-    radiationDataLineDataSetsWithValues.forEach {
-        // Radiation Settings
-        if (it.values.size > 1) it.setDrawCircles(false)
-        it.setDrawFilled(true)
-        it.lineWidth = 0.2F
-        it.axisDependency = YAxis.AxisDependency.RIGHT
-        it.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
-        it.color = resources.getColor(R.color.chart_secondary_line, context.theme)
-        it.fillColor = context.getColor(R.color.chart_secondary_line)
+    val uvLineDataSetsWithValues = uvData.getLineDataSetsWithValues(uvLabel)
+    val uvEmptyLineDataSets = uvData.getEmptyLineDataSets(uvLabel)
+    val initialSize = if (radiationData.isDataValid()) {
+        val radiationDataLineDataSetsWithValues =
+            radiationData.getLineDataSetsWithValues(solarLabel)
+        val radiationDataEmptyLineDataSets = radiationData.getEmptyLineDataSets(solarLabel)
+
+        dataSets.addAll(radiationDataLineDataSetsWithValues.secondaryLineInit(context, resources))
+        radiationDataLineDataSetsWithValues.forEach {
+            // Radiation Settings
+            if (it.values.size > 1) it.setDrawCircles(false)
+            it.setDrawFilled(true)
+            it.lineWidth = 0.2F
+            it.axisDependency = YAxis.AxisDependency.RIGHT
+            it.mode = LineDataSet.Mode.HORIZONTAL_BEZIER
+            it.color = resources.getColor(R.color.chart_secondary_line, context.theme)
+            it.fillColor = context.getColor(R.color.chart_secondary_line)
+        }
+        dataSets.addAll(radiationDataEmptyLineDataSets)
+
+        with(axisRight) {
+            isEnabled = true
+            isGranularityEnabled = true
+            granularity = 1F
+            axisMinimum = 0F
+        }
+        radiationDataLineDataSetsWithValues.size + radiationDataEmptyLineDataSets.size
+    } else {
+        0
     }
-    dataSets.addAll(radiationDataEmptyLineDataSets)
 
     dataSets.addAll(uvLineDataSetsWithValues.primaryLineInit(context, resources))
     uvLineDataSetsWithValues.forEach {
@@ -525,22 +540,12 @@ fun LineChart.initSolarChart(
         granularity = 1F
     }
 
-    with(axisRight) {
-        isEnabled = true
-        isGranularityEnabled = true
-        granularity = 1F
-        axisMinimum = 0F
-    }
-
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(uvData.timestamps)
     show()
     notifyDataSetChanged()
 
-    return createDataSetToXPointsMap(
-        radiationDataLineDataSetsWithValues.size + radiationDataEmptyLineDataSets.size,
-        uvLineDataSetsWithValues
-    )
+    return createDataSetToXPointsMap(initialSize, uvLineDataSetsWithValues)
 }
 
 @Suppress("MagicNumber")

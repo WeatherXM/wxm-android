@@ -95,7 +95,7 @@ class HistoryChartsFragment : BaseFragment() {
                         data.windSpeed, data.windGust, data.windDirection
                     )
                     binding.charts.initPrecipitationChart(
-                        data.precipitation, data.precipitationAccumulated
+                        data.precipitation, data.precipitationAccumulated, true
                     )
                     binding.charts.initHumidityChart(data.humidity)
                     binding.charts.initPressureChart(data.pressure)

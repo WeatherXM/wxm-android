@@ -238,9 +238,9 @@
                 android:layout_marginTop="@dimen/margin_normal"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:paddingBottom="@dimen/padding_normal"
                 android:gravity="center"
                 android:orientation="horizontal"
+                android:paddingBottom="@dimen/padding_normal"
                 android:weightSum="2"
                 app:layout_constraintTop_toBottomOf="@id/dailySecondRow">
 
@@ -279,13 +279,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
+                android:clipToPadding="false"
                 android:nestedScrollingEnabled="false"
                 android:orientation="horizontal"
                 android:overScrollMode="never"
+                android:paddingBottom="@dimen/padding_normal"
                 android:scrollbars="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/hourlyTitle"
                 tools:listitem="@layout/list_item_hourly_forecast" />
+
+            <com.weatherxm.ui.components.ChartsView
+                android:id="@+id/charts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/padding_normal"
+                app:layout_constraintTop_toBottomOf="@id/hourlyForecastRecycler" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/displayTimeNotice"
@@ -295,7 +307,7 @@
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                 android:textSize="10sp"
                 android:textStyle="italic"
-                app:layout_constraintTop_toBottomOf="@id/hourlyForecastRecycler"
+                app:layout_constraintTop_toBottomOf="@id/charts"
                 tools:ignore="SmallSp"
                 tools:text="All displayed times are in the Station’s timezone (Europe/Athens)." />
         </androidx.constraintlayout.widget.ConstraintLayout>
