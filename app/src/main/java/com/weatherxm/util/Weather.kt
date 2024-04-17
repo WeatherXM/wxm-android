@@ -266,12 +266,11 @@ object Weather : KoinComponent {
         val defaultUnit = resources.getString(R.string.wind_direction_cardinal)
         val savedUnit = sharedPref.getString(resources.getString(KEY_WIND_DIR), defaultUnit)
 
-        if (savedUnit != defaultUnit) {
-            val windDegreesMark = resources.getString(R.string.degrees_mark)
-            return "$value$windDegreesMark"
+        return if (savedUnit != defaultUnit) {
+            "$value${resources.getString(R.string.degrees_mark)}"
+        } else {
+            UnitConverter.degreesToCardinal(value)
         }
-
-        return UnitConverter.degreesToCardinal(value)
     }
 
     fun getFormattedWind(
