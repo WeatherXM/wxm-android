@@ -353,7 +353,6 @@ data class BoostDetailInfo(
 
 @Keep
 @JsonClass(generateAdapter = true)
-@Parcelize
 data class Charts(
     var date: LocalDate,
     var temperature: LineChartData,
@@ -368,7 +367,7 @@ data class Charts(
     var pressure: LineChartData,
     var uv: LineChartData,
     var solarRadiation: LineChartData
-) : Parcelable {
+) {
     fun isEmpty(): Boolean {
         return !temperature.isDataValid() && !feelsLike.isDataValid()
             && !precipitation.isDataValid() && !precipitationAccumulated.isDataValid()
@@ -381,11 +380,10 @@ data class Charts(
 
 @Keep
 @JsonClass(generateAdapter = true)
-@Parcelize
 data class LineChartData(
     var timestamps: MutableList<String>,
     var entries: MutableList<Entry>
-) : Parcelable {
+) {
     fun isDataValid(): Boolean {
         return timestamps.isNotEmpty() && entries.filterNot { it.y.isNaN() }.isNotEmpty()
     }
