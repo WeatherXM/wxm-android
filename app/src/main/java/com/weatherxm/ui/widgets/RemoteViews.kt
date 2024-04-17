@@ -16,7 +16,6 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.widgets.selectstation.SelectStationActivity
@@ -255,9 +254,7 @@ fun RemoteViews.setWeatherData(
     val windUnit = Weather.getPreferredUnit(
         context.getString(KEY_WIND), context.getString(R.string.wind_speed_ms)
     )
-    val windDirectionUnit = device.currentWeather?.windDirection?.let {
-        Weather.getFormattedWindDirection(it)
-    } ?: String.empty()
+    val windDirectionUnit = Weather.getFormattedWindDirection(device.currentWeather?.windDirection)
     if (widgetType != WidgetType.CURRENT_WEATHER_TILE) {
         val humidity = Weather.getFormattedHumidity(device.currentWeather?.humidity, false)
         setTextViewText(R.id.humidityValue, humidity)

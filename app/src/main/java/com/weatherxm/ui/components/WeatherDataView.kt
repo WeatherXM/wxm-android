@@ -1,6 +1,7 @@
 package com.weatherxm.ui.components
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
@@ -42,7 +43,10 @@ class WeatherDataView : LinearLayout {
         }
     }
 
-    fun setData(value: String, unit: String? = null) {
+    fun setData(value: String, unit: String? = null, drawable: Drawable? = null) {
+        drawable?.let {
+            binding.icon.setImageDrawable(it)
+        }
         binding.value.text = value
         binding.unit.text = unit
     }

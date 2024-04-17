@@ -15,7 +15,6 @@ import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
@@ -24,6 +23,8 @@ import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
+import com.weatherxm.util.Weather.getFormattedWindDirection
+import com.weatherxm.util.Weather.getWindDirectionDrawable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -213,10 +214,11 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 resources.getString(CacheService.KEY_WIND),
                 resources.getString(R.string.wind_speed_ms)
             )
-            val windDirectionUnit = item.currentWeather?.windDirection?.let {
-                Weather.getFormattedWindDirection(it)
-            } ?: String.empty()
-            binding.wind.setData(windValue, "$windUnit $windDirectionUnit")
+            binding.wind.setData(
+                windValue,
+                "$windUnit ${getFormattedWindDirection(item.currentWeather?.windDirection)}",
+                getWindDirectionDrawable(itemView.context, item.currentWeather?.windDirection)
+            )
 
             binding.rain.setData(
                 Weather.getFormattedPrecipitation(
