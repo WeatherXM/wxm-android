@@ -9,8 +9,8 @@ import com.weatherxm.R
 import com.weatherxm.databinding.ListItemDailyTileForecastBinding
 import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.setCardStroke
-import com.weatherxm.ui.common.setVisible
-import com.weatherxm.util.Weather
+import com.weatherxm.ui.common.setWeatherAnimation
+import com.weatherxm.util.Weather.getFormattedTemperature
 import com.weatherxm.util.getShortName
 import org.koin.core.component.KoinComponent
 import java.time.LocalDate
@@ -52,13 +52,9 @@ class DailyTileForecastAdapter(
             checkSelectionStatus(item, position)
 
             binding.timestamp.text = item.date.dayOfWeek.getShortName(itemView.context)
-            binding.icon.apply {
-                setAnimation(Weather.getWeatherAnimation(item.icon))
-                playAnimation()
-            }
-            binding.temperaturePrimary.text = Weather.getFormattedTemperature(item.maxTemp)
-            binding.temperatureSecondary.text = Weather.getFormattedTemperature(item.minTemp)
-            binding.temperatureSecondary.setVisible(true)
+            binding.icon.setWeatherAnimation(item.icon)
+            binding.temperaturePrimary.text = getFormattedTemperature(item.maxTemp)
+            binding.temperatureSecondary.text = getFormattedTemperature(item.minTemp)
         }
 
         private fun checkSelectionStatus(item: UIForecastDay, position: Int) {

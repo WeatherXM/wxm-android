@@ -8,15 +8,11 @@ import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.LocalDateTimeRange
-import com.weatherxm.util.Resources
-import com.weatherxm.util.UnitConverter
 import com.weatherxm.util.Weather
+import com.weatherxm.util.Weather.convertPrecipitation
 import java.time.LocalDate
 
-class ChartsUseCaseImpl(
-    private val context: Context,
-    private val resources: Resources
-) : ChartsUseCase {
+class ChartsUseCaseImpl(private val context: Context) : ChartsUseCase {
 
     /**
      * Suppress long and Complex method warning by detekt because it is just a bunch of `.let`
@@ -64,13 +60,11 @@ class ChartsUseCaseImpl(
                 } ?: feelsLikeEntries.add(emptyEntry)
 
                 hourlyWeather.precipitation?.let {
-                    precipEntries.add(Entry(counter, Weather.convertPrecipitation(it) as Float))
+                    precipEntries.add(Entry(counter, convertPrecipitation(it) as Float))
                 } ?: precipEntries.add(emptyEntry)
 
                 hourlyWeather.precipAccumulated?.let {
-                    precipAccumulatedEntries.add(
-                        Entry(counter, Weather.convertPrecipitation(it) as Float)
-                    )
+                    precipAccumulatedEntries.add(Entry(counter, convertPrecipitation(it) as Float))
                 } ?: precipAccumulatedEntries.add(emptyEntry)
 
                 hourlyWeather.precipProbability?.let {
@@ -80,10 +74,9 @@ class ChartsUseCaseImpl(
                 // Get the wind speed and direction formatted
                 val windSpeedValue = Weather.convertWindSpeed(hourlyWeather.windSpeed)?.toFloat()
                 val windGustValue = Weather.convertWindSpeed(hourlyWeather.windGust)?.toFloat()
-                var windDirection: Drawable? = null
+                val windDirection: Drawable? =
+                    Weather.getWindDirectionDrawable(context, hourlyWeather.windDirection)
                 hourlyWeather.windDirection?.let {
-                    val index = UnitConverter.getIndexOfCardinal(it)
-                    windDirection = resources.getWindDirectionDrawable(index)
                     windDirectionEntries.add(Entry(counter, it.toFloat()))
                 } ?: windDirectionEntries.add(emptyEntry)
 

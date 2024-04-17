@@ -14,6 +14,7 @@ import android.os.Build.VERSION_CODES.TIRAMISU
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
+import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -45,11 +46,13 @@ import androidx.core.text.toSpanned
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
 import com.weatherxm.data.DeviceProfile
+import com.weatherxm.util.Weather.getWeatherAnimation
 import dev.chrisbanes.insetter.applyInsetter
 import java.util.Locale
 import kotlin.math.abs
@@ -124,6 +127,18 @@ fun String.capitalized(): String {
             it.toString()
         }
     }
+}
+
+fun String.boldText(boldText: String): SpannableStringBuilder {
+    val formattedText = SpannableStringBuilder(this)
+    val boldToStart = this.indexOf(boldText, ignoreCase = true)
+    formattedText.setSpan(
+        StyleSpan(Typeface.BOLD),
+        boldToStart,
+        boldToStart.plus(boldText.length),
+        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+    )
+    return formattedText
 }
 
 @Suppress("FunctionOnlyReturningConstant")
@@ -321,6 +336,18 @@ fun TextView.removeLinksUnderline() {
         }, spannable.getSpanStart(it), spannable.getSpanEnd(it), 0)
     }
     text = spannable
+}
+
+fun TextView.setDisplayTimezone(timezone: String?) {
+    timezone?.let {
+        text = context.getString(R.string.displayed_times, it)
+        setVisible(true)
+    } ?: setVisible(false)
+}
+
+fun LottieAnimationView.setWeatherAnimation(animation: String?) {
+    setAnimation(getWeatherAnimation(animation))
+    playAnimation()
 }
 
 fun View.applyOnGlobalLayout(listener: () -> Unit) {

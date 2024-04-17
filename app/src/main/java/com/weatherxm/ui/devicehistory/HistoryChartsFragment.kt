@@ -9,6 +9,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentHistoryChartsBinding
 import com.weatherxm.ui.common.Charts
+import com.weatherxm.ui.common.setDisplayTimezone
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -47,12 +48,7 @@ class HistoryChartsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        with(binding.displayTimeNotice) {
-            model.device.timezone?.let {
-                text = getString(R.string.displayed_times, it)
-                setVisible(true)
-            } ?: setVisible(false)
-        }
+        binding.displayTimeNotice.setDisplayTimezone(model.device.timezone)
 
         binding.swiperefresh.setOnRefreshListener {
             callback?.onSwipeRefresh()

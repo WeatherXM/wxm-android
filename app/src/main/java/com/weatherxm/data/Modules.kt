@@ -529,7 +529,7 @@ private val usecases = module {
         HistoryUseCaseImpl(get())
     }
     single<ChartsUseCase> {
-        ChartsUseCaseImpl(androidContext(), get())
+        ChartsUseCaseImpl(androidContext())
     }
     single<ClaimDeviceUseCase> {
         ClaimDeviceUseCaseImpl(get(), get())

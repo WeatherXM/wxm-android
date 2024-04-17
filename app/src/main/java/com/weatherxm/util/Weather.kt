@@ -1,7 +1,11 @@
 package com.weatherxm.util
 
+import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.LayerDrawable
 import androidx.annotation.RawRes
+import androidx.appcompat.content.res.AppCompatResources
 import com.weatherxm.R
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRECIP
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
@@ -255,7 +259,10 @@ object Weather : KoinComponent {
         }
     }
 
-    fun getFormattedWindDirection(value: Int): String {
+    fun getFormattedWindDirection(value: Int?): String {
+        if (value == null) {
+            return EMPTY_VALUE
+        }
         val defaultUnit = resources.getString(R.string.wind_direction_cardinal)
         val savedUnit = sharedPref.getString(resources.getString(KEY_WIND_DIR), defaultUnit)
 
@@ -290,6 +297,16 @@ object Weather : KoinComponent {
                 getFormattedWindSpeed(windSpeed, false, ignoreConversion = ignoreConversion)
             }
         } else "$EMPTY_VALUE$windUnit"
+    }
+
+    fun getWindDirectionDrawable(context: Context, index: Int?): Drawable? {
+        return index?.let {
+            val windDirectionDrawable = AppCompatResources.getDrawable(
+                context, R.drawable.layers_wind_direction
+            ) as LayerDrawable
+
+            windDirectionDrawable.getDrawable(UnitConverter.getIndexOfCardinal(it))
+        } ?: AppCompatResources.getDrawable(context, R.drawable.ic_weather_wind)
     }
 
     fun convertTemp(value: Number?, decimals: Int = 0): Number? {
