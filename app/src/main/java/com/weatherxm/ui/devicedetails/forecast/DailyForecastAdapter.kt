@@ -3,17 +3,16 @@ package com.weatherxm.ui.devicedetails.forecast
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.weatherxm.R
 import com.weatherxm.databinding.ListItemForecastBinding
 import com.weatherxm.ui.common.UIForecastDay
+import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndMonthDay
 import com.weatherxm.util.Resources
-import com.weatherxm.util.UnitConverter
 import com.weatherxm.util.Weather
+import com.weatherxm.util.Weather.getWindDirectionDrawable
 import com.weatherxm.util.Weather.roundToDecimals
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -77,10 +76,7 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
             }
 
             binding.date.text = item.date.getRelativeDayAndMonthDay(itemView.context)
-            binding.icon.apply {
-                setAnimation(Weather.getWeatherAnimation(item.icon))
-                playAnimation()
-            }
+            binding.icon.setWeatherAnimation(item.icon)
             if (minTemperature == Float.MAX_VALUE || maxTemperature == Float.MIN_VALUE) {
                 binding.temperature.visibility = View.INVISIBLE
             } else {
@@ -99,12 +95,8 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
 
             binding.wind.text = Weather.getFormattedWind(item.windSpeed, item.windDirection)
             binding.windIcon.setImageDrawable(
-                item.windDirection?.let {
-                    val index = UnitConverter.getIndexOfCardinal(it)
-                    resources.getWindDirectionDrawable(index)
-                } ?: AppCompatResources.getDrawable(itemView.context, R.drawable.ic_weather_wind)
+                getWindDirectionDrawable(itemView.context, item.windDirection)
             )
-
             binding.humidity.text = Weather.getFormattedHumidity(item.humidity)
         }
     }

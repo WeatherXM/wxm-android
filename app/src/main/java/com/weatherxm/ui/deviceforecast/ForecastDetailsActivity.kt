@@ -1,13 +1,6 @@
 package com.weatherxm.ui.deviceforecast
 
-import android.graphics.Typeface
-import android.graphics.drawable.LayerDrawable
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.style.StyleSpan
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.res.ResourcesCompat
 import com.weatherxm.R
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
@@ -23,16 +16,17 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.applyInsets
-import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.boldText
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setColor
+import com.weatherxm.ui.common.setDisplayTimezone
 import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.LineChartView
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndShort
-import com.weatherxm.util.UnitConverter
 import com.weatherxm.util.Weather.getFormattedHumidity
 import com.weatherxm.util.Weather.getFormattedPrecipitation
 import com.weatherxm.util.Weather.getFormattedPrecipitationProbability
@@ -44,7 +38,7 @@ import com.weatherxm.util.Weather.getFormattedWindDirection
 import com.weatherxm.util.Weather.getPrecipitationPreferredUnit
 import com.weatherxm.util.Weather.getPreferredUnit
 import com.weatherxm.util.Weather.getUVClassification
-import com.weatherxm.util.Weather.getWeatherAnimation
+import com.weatherxm.util.Weather.getWindDirectionDrawable
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -60,6 +54,7 @@ class ForecastDetailsActivity : BaseActivity() {
     }
 
     private lateinit var dailyAdapter: DailyTileForecastAdapter
+    private lateinit var hourlyAdapter: HourlyForecastAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,6 +88,8 @@ class ForecastDetailsActivity : BaseActivity() {
         )
         val forecastDay = model.forecast.forecastDays[selectedDayPosition]
         setupDailyAdapter(forecastDay, selectedDayPosition)
+        hourlyAdapter = HourlyForecastAdapter(null)
+        binding.hourlyForecastRecycler.adapter = hourlyAdapter
         setupHourlyAdapter(forecastDay, selectedHour)
         updateDailyWeather(forecastDay)
         binding.charts.chartPrecipitation().primaryLine(
@@ -122,12 +119,7 @@ class ForecastDetailsActivity : BaseActivity() {
         binding.uvCard.setOnClickListener { scrollToChart(binding.charts.chartSolar()) }
         binding.pressureCard.setOnClickListener { scrollToChart(binding.charts.chartPressure()) }
 
-        with(binding.displayTimeNotice) {
-            model.device.timezone?.let {
-                text = getString(R.string.displayed_times, it)
-                setVisible(true)
-            } ?: setVisible(false)
-        }
+        binding.displayTimeNotice.setDisplayTimezone(model.device.timezone)
     }
 
     private fun scrollToChart(chart: LineChartView) {
@@ -138,8 +130,8 @@ class ForecastDetailsActivity : BaseActivity() {
         dailyAdapter = DailyTileForecastAdapter(forecastDay.date) {
             // Get selected position before we change it to the new one in order to reset the stroke
             dailyAdapter.notifyItemChanged(dailyAdapter.getSelectedPosition())
-            setupHourlyAdapter(it, null)
             updateDailyWeather(it)
+            setupHourlyAdapter(it, null)
             updateCharts(model.getCharts(it))
         }
         binding.dailyTilesRecycler.adapter = dailyAdapter
@@ -148,8 +140,6 @@ class ForecastDetailsActivity : BaseActivity() {
     }
 
     private fun setupHourlyAdapter(forecastDay: UIForecastDay, selectedHour: HourlyWeather?) {
-        val hourlyAdapter = HourlyForecastAdapter(null)
-        binding.hourlyForecastRecycler.adapter = hourlyAdapter
         hourlyAdapter.submitList(forecastDay.hourlyWeather)
         if (!forecastDay.hourlyWeather.isNullOrEmpty()) {
             binding.hourlyForecastRecycler.scrollToPosition(
@@ -160,10 +150,7 @@ class ForecastDetailsActivity : BaseActivity() {
 
     private fun updateDailyWeather(forecast: UIForecastDay) {
         binding.dailyDate.text = forecast.date.getRelativeDayAndShort(this)
-        binding.dailyIcon.apply {
-            setAnimation(getWeatherAnimation(forecast.icon))
-            playAnimation()
-        }
+        binding.dailyIcon.setWeatherAnimation(forecast.icon)
         binding.dailyMaxTemp.text = getFormattedTemperature(forecast.maxTemp, 1)
         binding.dailyMinTemp.text = getFormattedTemperature(forecast.minTemp, 1)
 
@@ -173,25 +160,9 @@ class ForecastDetailsActivity : BaseActivity() {
         val windValue =
             getFormattedWind(forecast.windSpeed, forecast.windDirection, includeUnits = false)
         val windUnit = getPreferredUnit(getString(KEY_WIND), getString(R.string.wind_speed_ms))
-        val windDirectionUnit = forecast.windDirection?.let {
-            getFormattedWindDirection(it)
-        } ?: String.empty()
-        val windUnitWithDirection = "$windUnit $windDirectionUnit"
-        val formattedWindUnit = SpannableStringBuilder(windUnitWithDirection)
-        val boldToStart = windUnitWithDirection.indexOf(windDirectionUnit, ignoreCase = true)
-        formattedWindUnit.setSpan(
-            StyleSpan(Typeface.BOLD),
-            boldToStart,
-            boldToStart.plus(windDirectionUnit.length),
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        val windDrawable = forecast.windDirection?.let {
-            val windDirectionDrawable = ResourcesCompat.getDrawable(
-                resources, R.drawable.layers_wind_direction, null
-            ) as LayerDrawable
-            windDirectionDrawable.getDrawable(UnitConverter.getIndexOfCardinal(it))
-        } ?: AppCompatResources.getDrawable(this, R.drawable.ic_weather_wind)
-        binding.windCard.setIcon(windDrawable)
+        val windDirectionUnit = getFormattedWindDirection(forecast.windDirection)
+        val formattedWindUnit = "$windUnit $windDirectionUnit".boldText(windDirectionUnit)
+        binding.windCard.setIcon(getWindDirectionDrawable(this, forecast.windDirection))
         binding.windCard.setData(windValue, spannableStringBuilder = formattedWindUnit)
 
         binding.dailyPrecipCard.setData(

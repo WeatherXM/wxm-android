@@ -13,6 +13,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.databinding.ViewWeatherCardBinding
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Weather
@@ -48,9 +49,7 @@ class WeatherCardView : LinearLayout {
 
     private fun updateCurrentWeatherUI() {
         with(binding) {
-            icon.setAnimation(Weather.getWeatherAnimation(weatherData?.icon))
-            icon.playAnimation()
-
+            icon.setWeatherAnimation(weatherData?.icon)
             val temperatureUnit = Weather.getPreferredUnit(
                 context.getString(KEY_TEMPERATURE), context.getString(R.string.temperature_celsius)
             )
