@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
@@ -46,6 +47,12 @@ class ForecastFragment : BaseFragment() {
 
         // Initialize the adapters with empty data
         val dailyForecastAdapter = DailyForecastAdapter {
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.DAILY_CARD.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID, Analytics.ParamValue.DAILY_FORECAST.paramValue
+                )
+            )
             navigator.showForecastDetails(
                 context,
                 model.device,
@@ -54,6 +61,12 @@ class ForecastFragment : BaseFragment() {
             )
         }
         val hourlyForecastAdapter = HourlyForecastAdapter {
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.HOURLY_DETAILS_CARD.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID, Analytics.ParamValue.HOURLY_FORECAST.paramValue
+                )
+            )
             navigator.showForecastDetails(
                 context,
                 model.device,
@@ -108,7 +121,7 @@ class ForecastFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            Analytics.Screen.FORECAST,
+            Analytics.Screen.DEVICE_FORECAST,
             ForecastFragment::class.simpleName
         )
     }
