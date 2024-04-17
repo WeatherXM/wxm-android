@@ -11,7 +11,6 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.databinding.ViewWeatherCardBinding
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
@@ -19,6 +18,7 @@ import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getPrecipitationPreferredUnit
 import com.weatherxm.util.Weather.getUVClassification
+import com.weatherxm.util.Weather.getWindDirectionDrawable
 
 class WeatherCardView : LinearLayout {
 
@@ -76,14 +76,13 @@ class WeatherCardView : LinearLayout {
             val windUnit = Weather.getPreferredUnit(
                 context.getString(KEY_WIND), context.getString(R.string.wind_speed_ms)
             )
-            val windDirectionUnit = weatherData?.windDirection?.let {
-                Weather.getFormattedWindDirection(it)
-            } ?: String.empty()
+            val windDirectionUnit = Weather.getFormattedWindDirection(weatherData?.windDirection)
             val windGustValue = Weather.getFormattedWind(
                 weatherData?.windGust, weatherData?.windDirection, includeUnits = false
             )
-            binding.wind.setData(windValue, "$windUnit $windDirectionUnit")
-            binding.windGust.setData(windGustValue, "$windUnit $windDirectionUnit")
+            val windDirDrawable = getWindDirectionDrawable(context, weatherData?.windDirection)
+            binding.wind.setData(windValue, "$windUnit $windDirectionUnit", windDirDrawable)
+            binding.windGust.setData(windGustValue, "$windUnit $windDirectionUnit", windDirDrawable)
 
             binding.rainRate.setData(
                 Weather.getFormattedPrecipitation(weatherData?.precipitation, includeUnit = false),
