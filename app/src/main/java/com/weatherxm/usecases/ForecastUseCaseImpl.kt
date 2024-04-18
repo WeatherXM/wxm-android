@@ -36,7 +36,10 @@ class ForecastUseCaseImpl(
             val nextHourlyWeatherForecast = mutableListOf<HourlyWeather>()
             val forecastDays = result.map { weatherData ->
                 weatherData.hourly?.filter {
-                    it.timestamp >= nowDeviceTz && it.timestamp < nowDeviceTz.plusHours(24)
+                    val isCurrentHour = it.timestamp.dayOfYear == nowDeviceTz.dayOfYear
+                        && it.timestamp.hour == nowDeviceTz.hour
+                    val isFutureHour = it.timestamp.isAfter(nowDeviceTz)
+                    isCurrentHour || (isFutureHour && it.timestamp < nowDeviceTz.plusHours(24))
                 }?.apply {
                     nextHourlyWeatherForecast.addAll(this)
                 }
