@@ -56,7 +56,7 @@ jobs:
                 with:
                     serviceAccountJson: ./gplay-ci-service-account.json
                     packageName: com.weatherxm.com
-                    releaseFiles: app/remoteProd/release/app-remote-prod-release.aab
+                    releaseFiles: ${{ github.workspace }}/app/build/outputs/bundle/release/app-remote-prod-release.aab
                     track: qa
                     changesNotSentForReview: true
             -   name: Remove service account files
