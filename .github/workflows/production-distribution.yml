@@ -48,7 +48,7 @@ jobs:
                 with:
                     distribution: 'temurin'
                     java-version: '17'
-            -   name: Build AAB production release and distribute on Firebase
+            -   name: Build AAB production release and distribute on Google Play Internal Channel
                 run: |
                     ./gradlew bundleRemoteProdRelease -PSKIP_PRODUCTION_ENV
             -   name: Upload Android Release to Play Store
@@ -56,7 +56,7 @@ jobs:
                 with:
                     serviceAccountJson: ./gplay-ci-service-account.json
                     packageName: com.weatherxm.com
-                    releaseFiles: app/remoteProd/release/*.aab
+                    releaseFiles: app/remoteProd/release/app-remote-prod-release.aab
                     track: qa
                     changesNotSentForReview: true
             -   name: Remove service account files
