@@ -55,7 +55,7 @@ jobs:
                 uses: r0adkll/upload-google-play@v1.1.3
                 with:
                     serviceAccountJson: ./gplay-ci-service-account.json
-                    packageName: com.weatherxm.com
+                    packageName: com.weatherxm.app
                     releaseFiles: ${{ github.workspace }}/app/build/outputs/bundle/remoteProdRelease/app-remote-prod-release.aab
                     track: qa
                     changesNotSentForReview: true
