@@ -58,7 +58,7 @@ jobs:
                     packageName: com.weatherxm.app
                     releaseFiles: ${{ github.workspace }}/app/build/outputs/bundle/remoteProdRelease/app-remote-prod-release.aab
                     track: internal
-                    changesNotSentForReview: true
+                    status: completed
             -   name: Remove service account files
                 run: |
                     rm ./ci-service-account.json
