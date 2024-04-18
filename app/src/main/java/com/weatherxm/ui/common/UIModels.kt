@@ -13,6 +13,7 @@ import com.weatherxm.data.Reward
 import com.weatherxm.data.SeverityLevel
 import com.weatherxm.util.Analytics
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
 import java.time.ZonedDateTime
 
 @Keep
@@ -205,16 +206,23 @@ enum class DeviceAlertType : Parcelable {
 @Keep
 @JsonClass(generateAdapter = true)
 data class UIForecast(
-    var nameOfDayAndDate: String = String.empty(),
-    var icon: String? = null,
-    var minTemp: Float? = null,
-    var maxTemp: Float? = null,
-    var precipProbability: Int? = null,
-    var precip: Float? = null,
-    var windSpeed: Float? = null,
-    var windDirection: Int? = null,
-    var humidity: Int? = null,
-    var hourlyWeather: List<HourlyWeather>?
+    val next24Hours: List<HourlyWeather>?,
+    val forecastDays: List<UIForecastDay>
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class UIForecastDay(
+    val date: LocalDate,
+    val icon: String?,
+    var minTemp: Float?,
+    var maxTemp: Float?,
+    val precipProbability: Int?,
+    val precip: Float?,
+    val windSpeed: Float?,
+    val windDirection: Int?,
+    val humidity: Int?,
+    val hourlyWeather: List<HourlyWeather>?
 )
 
 @Keep

@@ -12,7 +12,7 @@ import com.weatherxm.data.NetworkError.NoConnectionError
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.UIForecast
-import com.weatherxm.usecases.DeviceDetailsUseCase
+import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.util.Analytics
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
@@ -22,20 +22,20 @@ import timber.log.Timber
 class ForecastViewModel(
     var device: UIDevice = UIDevice.empty(),
     private val resources: Resources,
-    private val deviceDetailsUseCase: DeviceDetailsUseCase,
+    private val forecastUseCase: ForecastUseCase,
     private val analytics: Analytics
 ) : ViewModel() {
     private val onLoading = MutableLiveData<Boolean>()
 
     private val onError = MutableLiveData<UIError>()
 
-    private val onForecast = MutableLiveData<List<UIForecast>>()
+    private val onForecast = MutableLiveData<UIForecast>()
 
     fun onLoading(): LiveData<Boolean> = onLoading
 
     fun onError(): LiveData<UIError> = onError
 
-    fun onForecast(): LiveData<List<UIForecast>> = onForecast
+    fun onForecast(): LiveData<UIForecast> = onForecast
 
     fun fetchForecast(forceRefresh: Boolean = false) {
         /**
@@ -49,10 +49,10 @@ class ForecastViewModel(
         }
         onLoading.postValue(true)
         viewModelScope.launch {
-            deviceDetailsUseCase.getForecast(device, forceRefresh)
+            forecastUseCase.getForecast(device, forceRefresh)
                 .map {
                     Timber.d("Got forecast")
-                    if (it.isEmpty()) {
+                    if (it.next24Hours.isNullOrEmpty() && it.forecastDays.isEmpty()) {
                         onError.postValue(UIError(resources.getString(R.string.forecast_empty)))
                     }
                     onForecast.postValue(it)

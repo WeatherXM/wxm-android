@@ -1,6 +1,8 @@
 package com.weatherxm.util
 
+import timber.log.Timber
 import java.time.LocalDate
+import java.time.ZoneOffset
 
 class LocalDateRange(
     override val start: LocalDate,
@@ -65,4 +67,13 @@ fun LocalDate.isTomorrow(): Boolean {
 fun LocalDate.isSameYear(): Boolean {
     val now = LocalDate.now()
     return now.year == this.year
+}
+
+fun LocalDate.toUTCEpochMillis(): Long? {
+    return try {
+        this.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+    } catch (e: ArithmeticException) {
+        Timber.e(e, this.toString())
+        null
+    }
 }

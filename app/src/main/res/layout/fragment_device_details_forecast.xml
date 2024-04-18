@@ -21,6 +21,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_normal"
             android:clipChildren="false"
             android:clipToOutline="false"
             android:clipToPadding="false">
@@ -38,7 +39,6 @@
                 android:id="@+id/hiddenContentContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="@dimen/margin_normal"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:visibility="gone"
@@ -79,21 +79,52 @@
                     app:icon="@drawable/ic_favorite_outline" />
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/forecastRecycler"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/hourlyForecastTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_large"
+                android:text="@string/next_24_hours"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                android:textColor="@color/darkestBlue"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/hourlyForecastRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
-                android:clipChildren="false"
-                android:clipToOutline="false"
-                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:orientation="horizontal"
+                android:overScrollMode="never"
+                android:scrollbars="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/hourlyForecastTitle"
+                tools:listitem="@layout/list_item_hourly_forecast" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/dailyForecastTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:text="@string/next_7_days"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                android:textColor="@color/darkestBlue"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/hourlyForecastRecycler" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/dailyForecastRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:nestedScrollingEnabled="false"
                 android:orientation="vertical"
                 android:overScrollMode="never"
                 android:scrollbars="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dailyForecastTitle"
                 tools:listitem="@layout/list_item_forecast" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

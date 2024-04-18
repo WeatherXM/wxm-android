@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
@@ -25,8 +24,6 @@ class ForecastFragment : BaseFragment() {
         parametersOf(parentModel.device)
     }
 
-    private lateinit var forecastAdapter: ForecastAdapter
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,21 +43,15 @@ class ForecastFragment : BaseFragment() {
 
         initHiddenContent()
 
-        // Initialize the adapter with empty data
-        forecastAdapter = ForecastAdapter { index, state ->
-            val stateParam = if (state) {
-                Pair(Analytics.CustomParam.STATE.paramName, Analytics.ParamValue.OPEN.paramValue)
-            } else {
-                Pair(Analytics.CustomParam.STATE.paramName, Analytics.ParamValue.CLOSE.paramValue)
-            }
-            analytics.trackEventSelectContent(
-                Analytics.ParamValue.FORECAST_DAY.paramValue,
-                Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
-                stateParam,
-                index = index.toLong()
-            )
+        // Initialize the adapters with empty data
+        val dailyForecastAdapter = DailyForecastAdapter {
+            // TODO: Open forecast details
         }
-        binding.forecastRecycler.adapter = forecastAdapter
+        val hourlyForecastAdapter = HourlyForecastAdapter {
+            // TODO: Open forecast details
+        }
+        binding.dailyForecastRecycler.adapter = dailyForecastAdapter
+        binding.hourlyForecastRecycler.adapter = hourlyForecastAdapter
 
         parentModel.onFollowStatus().observe(viewLifecycleOwner) {
             if (it.status == Status.SUCCESS) {
@@ -75,15 +66,21 @@ class ForecastFragment : BaseFragment() {
         }
 
         model.onForecast().observe(viewLifecycleOwner) {
-            forecastAdapter.submitList(it)
-            binding.forecastRecycler.setVisible(true)
+            hourlyForecastAdapter.submitList(it.next24Hours)
+            dailyForecastAdapter.submitList(it.forecastDays)
+            binding.dailyForecastRecycler.setVisible(true)
+            binding.dailyForecastTitle.setVisible(true)
+            binding.hourlyForecastRecycler.setVisible(true)
+            binding.hourlyForecastTitle.setVisible(true)
         }
 
         model.onLoading().observe(viewLifecycleOwner) {
             if (it && binding.swiperefresh.isRefreshing) {
                 binding.progress.visibility = View.INVISIBLE
             } else if (it) {
-                binding.progress.visibility = View.VISIBLE
+                binding.dailyForecastTitle.setVisible(false)
+                binding.hourlyForecastTitle.setVisible(false)
+                binding.progress.setVisible(true)
             } else {
                 binding.swiperefresh.isRefreshing = false
                 binding.progress.visibility = View.INVISIBLE
@@ -110,7 +107,10 @@ class ForecastFragment : BaseFragment() {
             binding.hiddenContentContainer.setVisible(false)
             model.fetchForecast()
         } else if (model.device.relation == UNFOLLOWED) {
-            binding.forecastRecycler.setVisible(false)
+            binding.dailyForecastRecycler.setVisible(false)
+            binding.dailyForecastTitle.setVisible(false)
+            binding.hourlyForecastTitle.setVisible(false)
+            binding.hourlyForecastRecycler.setVisible(false)
             binding.hiddenContentContainer.setVisible(true)
         }
     }

@@ -1,32 +1,34 @@
 package com.weatherxm.ui.devicedetails.forecast
 
-import android.view.GestureDetector
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.databinding.ListItemForecastBinding
-import com.weatherxm.ui.common.HorizontalScrollGestureListener
-import com.weatherxm.ui.common.UIForecast
-import com.weatherxm.ui.common.toggleVisibility
+import com.weatherxm.ui.common.UIForecastDay
+import com.weatherxm.util.DateTimeHelper.getRelativeDayAndMonthDay
+import com.weatherxm.util.Resources
+import com.weatherxm.util.UnitConverter
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.roundToDecimals
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class ForecastAdapter(private val onExpandToggle: (Int, Boolean) -> Unit) :
-    ListAdapter<UIForecast, ForecastAdapter.DailyForecastViewHolder>(
+class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit) :
+    ListAdapter<UIForecastDay, DailyForecastAdapter.DailyForecastViewHolder>(
         UIForecastDiffCallback()
-    ) {
+    ), KoinComponent {
 
     private var minTemperature: Float = Float.MAX_VALUE
     private var maxTemperature: Float = Float.MIN_VALUE
 
-    override fun submitList(list: List<UIForecast>?) {
+    val resources: Resources by inject()
+
+    override fun submitList(list: List<UIForecastDay>?) {
         /*
         Consider the following case:
         Day X: minimum value: 10.01, max value 15.99
@@ -69,26 +71,12 @@ class ForecastAdapter(private val onExpandToggle: (Int, Boolean) -> Unit) :
     inner class DailyForecastViewHolder(private val binding: ListItemForecastBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: UIForecast) {
-            // Initialize the hourly adapter
-            val hourlyAdapter = HourlyAdapter()
-            binding.hourlyRecycler.adapter = hourlyAdapter
-            hourlyAdapter.submitList(item.hourlyWeather)
-
-            if (!item.hourlyWeather.isNullOrEmpty()) {
-                binding.rootCard.setOnClickListener {
-                    onExpandClick()
-                }
-
-                binding.toggleExpand.setOnClickListener {
-                    onExpandClick()
-                }
-                binding.toggleExpand.visibility = View.VISIBLE
-            } else {
-                binding.toggleExpand.visibility = View.INVISIBLE
+        fun bind(item: UIForecastDay) {
+            binding.root.setOnClickListener {
+                onClickListener(item)
             }
 
-            binding.date.text = item.nameOfDayAndDate
+            binding.date.text = item.date.getRelativeDayAndMonthDay(itemView.context)
             binding.icon.apply {
                 setAnimation(Weather.getWeatherAnimation(item.icon))
                 playAnimation()
@@ -110,70 +98,25 @@ class ForecastAdapter(private val onExpandToggle: (Int, Boolean) -> Unit) :
             binding.precip.text = Weather.getFormattedPrecipitation(item.precip, isRainRate = false)
 
             binding.wind.text = Weather.getFormattedWind(item.windSpeed, item.windDirection)
-            binding.humidity.text = Weather.getFormattedHumidity(item.humidity)
-
-            if (absoluteAdapterPosition == 0 && !item.hourlyWeather.isNullOrEmpty()) {
-                onExpandClick(ignoreEvent = true)
-            }
-
-            handleHourlyForecastSwiping()
-        }
-
-        private fun handleHourlyForecastSwiping() {
-            val gestureDetector = GestureDetector(
-                itemView.context,
-                HorizontalScrollGestureListener(binding.hourlyRecycler)
+            binding.windIcon.setImageDrawable(
+                item.windDirection?.let {
+                    val index = UnitConverter.getIndexOfCardinal(it)
+                    resources.getWindDirectionDrawable(index)
+                } ?: AppCompatResources.getDrawable(itemView.context, R.drawable.ic_weather_wind)
             )
 
-            binding.hourlyRecycler.addOnItemTouchListener(object :
-                RecyclerView.OnItemTouchListener {
-                override fun onTouchEvent(view: RecyclerView, event: MotionEvent) {
-                    // Do nothing
-                }
-
-                override fun onInterceptTouchEvent(
-                    view: RecyclerView,
-                    event: MotionEvent
-                ): Boolean {
-                    gestureDetector.onTouchEvent(event)
-                    return false
-                }
-
-                override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
-                    // Do nothing
-                }
-            })
-        }
-
-        private fun onExpandClick(ignoreEvent: Boolean = false) {
-            /*
-             * We define a new variable here because toggleVisibility uses an animation and has a
-             * delay so we cannot use `binding.hourlyRecycler.isVisible` directly`.
-             */
-            val willBeExpanded = !binding.hourlyRecycler.isVisible
-            if (binding.hourlyRecycler.isVisible) {
-                binding.toggleExpand.icon =
-                    AppCompatResources.getDrawable(itemView.context, R.drawable.ic_expand_more)
-            } else {
-                binding.toggleExpand.icon =
-                    AppCompatResources.getDrawable(itemView.context, R.drawable.ic_expand_less)
-            }
-            binding.hourlyRecycler.toggleVisibility()
-
-            if (!ignoreEvent) {
-                onExpandToggle.invoke(absoluteAdapterPosition, willBeExpanded)
-            }
+            binding.humidity.text = Weather.getFormattedHumidity(item.humidity)
         }
     }
 
-    class UIForecastDiffCallback : DiffUtil.ItemCallback<UIForecast>() {
+    class UIForecastDiffCallback : DiffUtil.ItemCallback<UIForecastDay>() {
 
-        override fun areItemsTheSame(oldItem: UIForecast, newItem: UIForecast): Boolean {
+        override fun areItemsTheSame(oldItem: UIForecastDay, newItem: UIForecastDay): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: UIForecast, newItem: UIForecast): Boolean {
-            return oldItem.nameOfDayAndDate == newItem.nameOfDayAndDate &&
+        override fun areContentsTheSame(oldItem: UIForecastDay, newItem: UIForecastDay): Boolean {
+            return oldItem.date == newItem.date &&
                 oldItem.icon == newItem.icon &&
                 oldItem.maxTemp == newItem.maxTemp &&
                 oldItem.minTemp == newItem.minTemp &&
