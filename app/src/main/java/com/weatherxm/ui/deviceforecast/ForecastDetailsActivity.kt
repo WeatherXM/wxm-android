@@ -91,7 +91,7 @@ class ForecastDetailsActivity : BaseActivity() {
         setupDailyAdapter(forecastDay, selectedDayPosition)
         hourlyAdapter = HourlyForecastAdapter(null)
         binding.hourlyForecastRecycler.adapter = hourlyAdapter
-        setupHourlyAdapter(forecastDay, selectedHour)
+        setupHourlyAdapter(forecastDay)
         updateDailyWeather(forecastDay)
         binding.charts.chartPrecipitation().primaryLine(
             getString(R.string.precipitation),
@@ -136,7 +136,7 @@ class ForecastDetailsActivity : BaseActivity() {
             // Get selected position before we change it to the new one in order to reset the stroke
             dailyAdapter.notifyItemChanged(dailyAdapter.getSelectedPosition())
             updateDailyWeather(it)
-            setupHourlyAdapter(it, null)
+            setupHourlyAdapter(it)
             updateCharts(model.getCharts(it))
         }
         binding.dailyTilesRecycler.adapter = dailyAdapter
@@ -144,11 +144,11 @@ class ForecastDetailsActivity : BaseActivity() {
         binding.dailyTilesRecycler.scrollToPosition(selectedDayPosition)
     }
 
-    private fun setupHourlyAdapter(forecastDay: UIForecastDay, selectedHour: HourlyWeather?) {
+    private fun setupHourlyAdapter(forecastDay: UIForecastDay) {
         hourlyAdapter.submitList(forecastDay.hourlyWeather)
         if (!forecastDay.hourlyWeather.isNullOrEmpty()) {
             binding.hourlyForecastRecycler.scrollToPosition(
-                model.getSelectedHourPosition(forecastDay.hourlyWeather, selectedHour)
+                model.getDefaultHourPosition(forecastDay.hourlyWeather)
             )
         }
     }

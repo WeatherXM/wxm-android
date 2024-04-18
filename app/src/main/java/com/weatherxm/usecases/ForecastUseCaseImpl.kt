@@ -44,10 +44,6 @@ class ForecastUseCaseImpl(
                     nextHourlyWeatherForecast.addAll(this)
                 }
 
-                val remainingHourlyWeather = weatherData.hourly?.filter {
-                    it.timestamp.isSameDayAndHour(nowDeviceTz) || it.timestamp.isAfter(nowDeviceTz)
-                }
-
                 UIForecastDay(
                     weatherData.date,
                     icon = weatherData.daily?.icon,
@@ -60,7 +56,7 @@ class ForecastUseCaseImpl(
                     humidity = weatherData.daily?.humidity,
                     pressure = weatherData.daily?.pressure,
                     uv = weatherData.daily?.uvIndex,
-                    hourlyWeather = remainingHourlyWeather
+                    hourlyWeather = weatherData.hourly
                 )
             }
 

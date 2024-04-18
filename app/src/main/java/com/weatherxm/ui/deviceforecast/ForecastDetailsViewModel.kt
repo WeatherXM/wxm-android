@@ -27,21 +27,16 @@ class ForecastDetailsViewModel(
     }
 
     /**
-     * 1. Show first the selected hour or
      * 2. Show first the 07:00am hour or
      * 3. Show first the first available hour
      */
     @Suppress("MagicNumber")
-    fun getSelectedHourPosition(hourlies: List<HourlyWeather>, selectedHour: HourlyWeather?): Int {
-        return if (selectedHour != null) {
-            hourlies.indexOf(selectedHour)
-        } else {
-            hourlies.indexOf(
-                hourlies.firstOrNull {
-                    it.timestamp.hour == 7
-                } ?: hourlies[0]
-            )
-        }
+    fun getDefaultHourPosition(hourlies: List<HourlyWeather>): Int {
+        return hourlies.indexOf(
+            hourlies.firstOrNull {
+                it.timestamp.hour == 7
+            } ?: hourlies[0]
+        )
     }
 
     fun getCharts(forecastDay: UIForecastDay): Charts {
