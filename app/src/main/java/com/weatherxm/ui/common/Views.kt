@@ -390,6 +390,24 @@ private fun Context.hideKeyboard(view: View) {
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
 
+@Suppress("EmptyFunctionBlock")
+fun RecyclerView.blockParentViewPagerOnScroll() {
+    addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
+        override fun onTouchEvent(view: RecyclerView, event: MotionEvent) {}
+
+        override fun onInterceptTouchEvent(view: RecyclerView, event: MotionEvent): Boolean {
+            when (event.action) {
+                MotionEvent.ACTION_MOVE -> {
+                    parent?.requestDisallowInterceptTouchEvent(true)
+                }
+            }
+            return false
+        }
+
+        override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
+    })
+}
+
 // https://stackoverflow.com/a/46165723/5403137
 class HorizontalScrollGestureListener(
     private val recyclerView: RecyclerView

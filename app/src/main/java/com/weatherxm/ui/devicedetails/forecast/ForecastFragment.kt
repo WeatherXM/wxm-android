@@ -10,6 +10,7 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
 import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
 import com.weatherxm.ui.common.HourlyForecastAdapter
+import com.weatherxm.ui.common.blockParentViewPagerOnScroll
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
@@ -76,6 +77,7 @@ class ForecastFragment : BaseFragment() {
         }
         binding.dailyForecastRecycler.adapter = dailyForecastAdapter
         binding.hourlyForecastRecycler.adapter = hourlyForecastAdapter
+        binding.hourlyForecastRecycler.blockParentViewPagerOnScroll()
 
         parentModel.onFollowStatus().observe(viewLifecycleOwner) {
             if (it.status == Status.SUCCESS) {
