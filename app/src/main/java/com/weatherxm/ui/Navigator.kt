@@ -16,7 +16,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.data.BoostReward
-import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.Location
 import com.weatherxm.data.Reward
 import com.weatherxm.data.RewardDetails
@@ -34,7 +33,6 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
-import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_HOUR
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
@@ -83,6 +81,7 @@ import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
 import com.weatherxm.util.Analytics
 import timber.log.Timber
 import java.time.LocalDate
+import java.time.ZonedDateTime
 
 @Suppress("TooManyFunctions")
 class Navigator(private val analytics: Analytics) {
@@ -435,17 +434,13 @@ class Navigator(private val analytics: Analytics) {
     fun showForecastDetails(
         context: Context?,
         device: UIDevice,
-        forecast: UIForecast?,
-        forecastSelectedDate: UIForecastDay? = null,
-        forecastSelectedHour: HourlyWeather? = null
+        forecastSelectedISODate: String? = null
     ) {
         context?.startActivity(
             Intent(context, ForecastDetailsActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .putExtra(ARG_DEVICE, device)
-                .putExtra(ARG_FORECAST, forecast)
-                .putExtra(ARG_FORECAST_SELECTED_DAY, forecastSelectedDate)
-                .putExtra(ARG_FORECAST_SELECTED_HOUR, forecastSelectedHour)
+                .putExtra(ARG_FORECAST_SELECTED_DAY, forecastSelectedISODate)
         )
     }
 

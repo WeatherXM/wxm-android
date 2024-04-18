@@ -10,6 +10,7 @@ import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.LocalDateTimeRange
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.convertPrecipitation
+import com.weatherxm.util.Weather.convertWindSpeed
 import java.time.LocalDate
 
 class ChartsUseCaseImpl(private val context: Context) : ChartsUseCase {
@@ -73,7 +74,6 @@ class ChartsUseCaseImpl(private val context: Context) : ChartsUseCase {
 
                 // Get the wind speed and direction formatted
                 val windSpeedValue = Weather.convertWindSpeed(hourlyWeather.windSpeed)?.toFloat()
-                val windGustValue = Weather.convertWindSpeed(hourlyWeather.windGust)?.toFloat()
                 val windDirection: Drawable? =
                     Weather.getWindDirectionDrawable(context, hourlyWeather.windDirection)
                 hourlyWeather.windDirection?.let {
@@ -86,7 +86,7 @@ class ChartsUseCaseImpl(private val context: Context) : ChartsUseCase {
                  * wind speed || wind gust are not null and greater than zero
                  */
                 val shouldShowDirection = windDirection != null &&
-                    ((windSpeedValue ?: 0.0F) > 0 || (windGustValue ?: 0.0F) > 0)
+                    ((windSpeedValue ?: 0.0F) > 0 || (hourlyWeather.windGust ?: 0.0F) > 0)
 
                 windSpeedValue?.let {
                     if (shouldShowDirection) {
@@ -96,8 +96,8 @@ class ChartsUseCaseImpl(private val context: Context) : ChartsUseCase {
                     }
                 } ?: windSpeedEntries.add(emptyEntry)
 
-                windGustValue?.let {
-                    windGustEntries.add(Entry(counter, it))
+                hourlyWeather.windGust?.let {
+                    windGustEntries.add(Entry(counter, convertWindSpeed(it) as Float))
                 } ?: windGustEntries.add(emptyEntry)
 
                 hourlyWeather.pressure?.let {

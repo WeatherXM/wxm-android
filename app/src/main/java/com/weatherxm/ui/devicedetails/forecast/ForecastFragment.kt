@@ -16,6 +16,7 @@ import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.toISODate
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -57,8 +58,7 @@ class ForecastFragment : BaseFragment() {
             navigator.showForecastDetails(
                 context,
                 model.device,
-                model.onForecast().value,
-                forecastSelectedDate = it
+                forecastSelectedISODate = it.date.toString()
             )
         }
         val hourlyForecastAdapter = HourlyForecastAdapter {
@@ -71,8 +71,7 @@ class ForecastFragment : BaseFragment() {
             navigator.showForecastDetails(
                 context,
                 model.device,
-                model.onForecast().value,
-                forecastSelectedHour = it
+                forecastSelectedISODate = it.timestamp.toISODate()
             )
         }
         binding.dailyForecastRecycler.adapter = dailyForecastAdapter

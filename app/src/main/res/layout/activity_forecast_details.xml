@@ -30,7 +30,9 @@
         android:clipChildren="false"
         android:clipToPadding="false"
         android:paddingHorizontal="@dimen/padding_normal"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        android:visibility="gone"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -297,7 +299,9 @@
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:paddingBottom="@dimen/padding_normal"
-                app:layout_constraintTop_toBottomOf="@id/hourlyForecastRecycler" />
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/hourlyForecastRecycler"
+                tools:visibility="visible" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/displayTimeNotice"
@@ -313,5 +317,16 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <com.weatherxm.ui.components.EmptyView
+        android:id="@+id/statusView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:padding="@dimen/padding_extra_large"
+        android:visibility="gone"
+        tools:empty_animation="@raw/anim_empty_devices"
+        tools:empty_subtitle="How are you?"
+        tools:empty_title="Nothing here" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

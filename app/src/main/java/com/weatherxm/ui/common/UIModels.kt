@@ -211,7 +211,11 @@ enum class DeviceAlertType : Parcelable {
 data class UIForecast(
     val next24Hours: List<HourlyWeather>?,
     val forecastDays: List<UIForecastDay>
-) : Parcelable
+) : Parcelable {
+    companion object {
+        fun empty() = UIForecast(mutableListOf(), mutableListOf())
+    }
+}
 
 @Keep
 @JsonClass(generateAdapter = true)

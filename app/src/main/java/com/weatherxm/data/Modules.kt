@@ -975,7 +975,15 @@ private val viewmodels = module {
     viewModel { ClaimHeliumFrequencyViewModel(get(), get()) }
     viewModel { ClaimM5VerifyViewModel() }
     viewModel { NetworkSearchViewModel(get(), get()) }
-    viewModel { params -> ForecastDetailsViewModel(params.get(), params.get(), get()) }
+    viewModel { params ->
+        ForecastDetailsViewModel(
+            params.get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
 }
 
 val modules = listOf(

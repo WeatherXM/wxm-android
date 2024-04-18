@@ -3,18 +3,15 @@ package com.weatherxm.ui.deviceforecast
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
-import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.Status
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.databinding.ActivityForecastDetailsBinding
-import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
-import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_HOUR
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.boldText
@@ -40,6 +37,8 @@ import com.weatherxm.util.Weather.getPrecipitationPreferredUnit
 import com.weatherxm.util.Weather.getPreferredUnit
 import com.weatherxm.util.Weather.getUVClassification
 import com.weatherxm.util.Weather.getWindDirectionDrawable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -48,10 +47,7 @@ class ForecastDetailsActivity : BaseActivity() {
     private lateinit var binding: ActivityForecastDetailsBinding
 
     private val model: ForecastDetailsViewModel by viewModel {
-        parametersOf(
-            intent.parcelable<UIDevice>(Contracts.ARG_DEVICE),
-            intent.parcelable<UIForecast>(Contracts.ARG_FORECAST)
-        )
+        parametersOf(intent.parcelable<UIDevice>(Contracts.ARG_DEVICE))
     }
 
     private lateinit var dailyAdapter: DailyTileForecastAdapter
@@ -82,45 +78,116 @@ class ForecastDetailsActivity : BaseActivity() {
         }
         handleOwnershipIcon()
 
-        val selectedHour = intent.parcelable<HourlyWeather>(ARG_FORECAST_SELECTED_HOUR)
-        val selectedDayPosition = model.getSelectedDayPosition(
-            intent.parcelable<UIForecastDay>(ARG_FORECAST_SELECTED_DAY),
-            selectedHour
-        )
-        val forecastDay = model.forecast.forecastDays[selectedDayPosition]
-        setupDailyAdapter(forecastDay, selectedDayPosition)
         hourlyAdapter = HourlyForecastAdapter(null)
         binding.hourlyForecastRecycler.adapter = hourlyAdapter
-        setupHourlyAdapter(forecastDay)
-        updateDailyWeather(forecastDay)
-        binding.charts.chartPrecipitation().primaryLine(
-            getString(R.string.precipitation),
-            getString(R.string.precipitation)
-        )
-        binding.charts.chartPrecipitation().secondaryLine(
-            getString(R.string.precipitation_probability),
-            getString(R.string.precipitation_probability)
-        )
-        binding.charts.chartWind().primaryLine(null, getString(R.string.speed))
-        binding.charts.chartWind().secondaryLine(null, null)
-        binding.charts.chartSolar().updateTitle(getString(R.string.uv_index))
-        binding.charts.chartSolar().primaryLine(null, getString(R.string.uv_index))
-        binding.charts.chartSolar().secondaryLine(null, null)
-
-        updateCharts(model.getCharts(forecastDay))
-
-        binding.precipProbabilityCard.setOnClickListener {
-            scrollToChart(binding.charts.chartPrecipitation())
-        }
-        binding.dailyPrecipCard.setOnClickListener {
-            scrollToChart(binding.charts.chartPrecipitation())
-        }
-        binding.windCard.setOnClickListener { scrollToChart(binding.charts.chartWind()) }
-        binding.humidityCard.setOnClickListener { scrollToChart(binding.charts.chartHumidity()) }
-        binding.uvCard.setOnClickListener { scrollToChart(binding.charts.chartSolar()) }
-        binding.pressureCard.setOnClickListener { scrollToChart(binding.charts.chartPressure()) }
 
         binding.displayTimeNotice.setDisplayTimezone(model.device.timezone)
+        setupChartsAndListeners()
+
+        model.onForecastLoaded().observe(this) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    val selectedDayPosition = model.getSelectedDayPosition(
+                        intent.getStringExtra(ARG_FORECAST_SELECTED_DAY)
+                    )
+                    val forecastDay = model.forecast().forecastDays[selectedDayPosition]
+                    setupDailyAdapter(forecastDay, selectedDayPosition)
+                    updateUI(forecastDay)
+                    binding.statusView.setVisible(false)
+                    binding.mainContainer.setVisible(true)
+                }
+                Status.ERROR -> {
+                    binding.statusView.clear()
+                        .animation(R.raw.anim_error)
+                        .title(getString(R.string.error_generic_message))
+                        .subtitle(it.message)
+                    binding.mainContainer.setVisible(false)
+                }
+                Status.LOADING -> {
+                    binding.statusView.clear().animation(R.raw.anim_loading)
+                    binding.mainContainer.setVisible(false)
+                    binding.statusView.setVisible(true)
+                }
+            }
+        }
+
+        model.fetchForecast()
+    }
+
+    private fun updateUI(forecast: UIForecastDay) {
+        // Update Daily Weather
+        binding.dailyDate.text = forecast.date.getRelativeDayAndShort(this)
+        binding.dailyIcon.setWeatherAnimation(forecast.icon)
+        binding.dailyMaxTemp.text = getFormattedTemperature(forecast.maxTemp, 1)
+        binding.dailyMinTemp.text = getFormattedTemperature(forecast.minTemp, 1)
+        binding.precipProbabilityCard.setData(
+            getFormattedPrecipitationProbability(forecast.precipProbability, false), "%"
+        )
+        val windValue =
+            getFormattedWind(forecast.windSpeed, forecast.windDirection, includeUnits = false)
+        val windUnit = getPreferredUnit(getString(KEY_WIND), getString(R.string.wind_speed_ms))
+        val windDirectionUnit = getFormattedWindDirection(forecast.windDirection)
+        val formattedWindUnit = "$windUnit $windDirectionUnit".boldText(windDirectionUnit)
+        binding.windCard.setIcon(getWindDirectionDrawable(this, forecast.windDirection))
+        binding.windCard.setData(windValue, spannableStringBuilder = formattedWindUnit)
+        binding.dailyPrecipCard.setData(
+            getFormattedPrecipitation(forecast.precip, isRainRate = false, includeUnit = false),
+            getPrecipitationPreferredUnit(false)
+        )
+        binding.uvCard.setData(getFormattedUV(forecast.uv, false), getUVClassification(forecast.uv))
+        binding.humidityCard.setData(
+            getFormattedHumidity(forecast.humidity, includeUnit = false), "%"
+        )
+        val pressureUnit =
+            getPreferredUnit(getString(KEY_PRESSURE), getString(R.string.pressure_hpa))
+        binding.pressureCard.setData(
+            getFormattedPressure(forecast.pressure, includeUnit = false), pressureUnit
+        )
+
+        // Update Hourly Tiles
+        hourlyAdapter.submitList(forecast.hourlyWeather)
+        if (!forecast.hourlyWeather.isNullOrEmpty()) {
+            binding.hourlyForecastRecycler.scrollToPosition(
+                model.getDefaultHourPosition(forecast.hourlyWeather)
+            )
+        }
+
+        // Update Charts
+        with(binding.charts) {
+            val charts = model.getCharts(forecast)
+            clearCharts()
+            initTemperatureChart(charts.temperature, charts.feelsLike)
+            initWindChart(charts.windSpeed, charts.windGust, charts.windDirection)
+            initPrecipitationChart(charts.precipitation, charts.precipProbability, false)
+            initHumidityChart(charts.humidity)
+            initPressureChart(charts.pressure)
+            initSolarChart(charts.uv, charts.solarRadiation)
+            autoHighlightCharts(0F)
+            setVisible(!charts.isEmpty())
+        }
+    }
+
+    private fun setupChartsAndListeners() {
+        with(binding.charts) {
+            chartPrecipitation().primaryLine(
+                getString(R.string.precipitation), getString(R.string.precipitation)
+            )
+            chartPrecipitation().secondaryLine(
+                getString(R.string.precipitation_probability),
+                getString(R.string.precipitation_probability)
+            )
+            chartWind().primaryLine(null, getString(R.string.speed))
+            chartWind().secondaryLine(null, null)
+            chartSolar().updateTitle(getString(R.string.uv_index))
+            chartSolar().primaryLine(null, getString(R.string.uv_index))
+            chartSolar().secondaryLine(null, null)
+            binding.precipProbabilityCard.setOnClickListener { scrollToChart(chartPrecipitation()) }
+            binding.dailyPrecipCard.setOnClickListener { scrollToChart(chartPrecipitation()) }
+            binding.windCard.setOnClickListener { scrollToChart(chartWind()) }
+            binding.humidityCard.setOnClickListener { scrollToChart(chartHumidity()) }
+            binding.uvCard.setOnClickListener { scrollToChart(chartSolar()) }
+            binding.pressureCard.setOnClickListener { scrollToChart(chartPressure()) }
+        }
     }
 
     private fun scrollToChart(chart: LineChartView) {
@@ -135,55 +202,11 @@ class ForecastDetailsActivity : BaseActivity() {
             )
             // Get selected position before we change it to the new one in order to reset the stroke
             dailyAdapter.notifyItemChanged(dailyAdapter.getSelectedPosition())
-            updateDailyWeather(it)
-            setupHourlyAdapter(it)
-            updateCharts(model.getCharts(it))
+            updateUI(it)
         }
         binding.dailyTilesRecycler.adapter = dailyAdapter
-        dailyAdapter.submitList(model.forecast.forecastDays)
+        dailyAdapter.submitList(model.forecast().forecastDays)
         binding.dailyTilesRecycler.scrollToPosition(selectedDayPosition)
-    }
-
-    private fun setupHourlyAdapter(forecastDay: UIForecastDay) {
-        hourlyAdapter.submitList(forecastDay.hourlyWeather)
-        if (!forecastDay.hourlyWeather.isNullOrEmpty()) {
-            binding.hourlyForecastRecycler.scrollToPosition(
-                model.getDefaultHourPosition(forecastDay.hourlyWeather)
-            )
-        }
-    }
-
-    private fun updateDailyWeather(forecast: UIForecastDay) {
-        binding.dailyDate.text = forecast.date.getRelativeDayAndShort(this)
-        binding.dailyIcon.setWeatherAnimation(forecast.icon)
-        binding.dailyMaxTemp.text = getFormattedTemperature(forecast.maxTemp, 1)
-        binding.dailyMinTemp.text = getFormattedTemperature(forecast.minTemp, 1)
-
-        binding.precipProbabilityCard.setData(
-            getFormattedPrecipitationProbability(forecast.precipProbability, false), "%"
-        )
-        val windValue =
-            getFormattedWind(forecast.windSpeed, forecast.windDirection, includeUnits = false)
-        val windUnit = getPreferredUnit(getString(KEY_WIND), getString(R.string.wind_speed_ms))
-        val windDirectionUnit = getFormattedWindDirection(forecast.windDirection)
-        val formattedWindUnit = "$windUnit $windDirectionUnit".boldText(windDirectionUnit)
-        binding.windCard.setIcon(getWindDirectionDrawable(this, forecast.windDirection))
-        binding.windCard.setData(windValue, spannableStringBuilder = formattedWindUnit)
-
-        binding.dailyPrecipCard.setData(
-            getFormattedPrecipitation(forecast.precip, isRainRate = false, includeUnit = false),
-            getPrecipitationPreferredUnit(false)
-        )
-        binding.uvCard.setData(getFormattedUV(forecast.uv, false), getUVClassification(forecast.uv))
-
-        binding.humidityCard.setData(
-            getFormattedHumidity(forecast.humidity, includeUnit = false), "%"
-        )
-        val pressureUnit =
-            getPreferredUnit(getString(KEY_PRESSURE), getString(R.string.pressure_hpa))
-        binding.pressureCard.setData(
-            getFormattedPressure(forecast.pressure, includeUnit = false), pressureUnit
-        )
     }
 
     private fun handleOwnershipIcon() {
@@ -200,18 +223,6 @@ class ForecastDetailsActivity : BaseActivity() {
                 else -> setVisible(false)
             }
         }
-    }
-
-    private fun updateCharts(charts: Charts) {
-        binding.charts.clearCharts()
-        binding.charts.initTemperatureChart(charts.temperature, charts.feelsLike)
-        binding.charts.initWindChart(charts.windSpeed, charts.windGust, charts.windDirection)
-        binding.charts.initPrecipitationChart(charts.precipitation, charts.precipProbability, false)
-        binding.charts.initHumidityChart(charts.humidity)
-        binding.charts.initPressureChart(charts.pressure)
-        binding.charts.initSolarChart(charts.uv, charts.solarRadiation)
-        binding.charts.autoHighlightCharts(0F)
-        binding.charts.setVisible(!charts.isEmpty())
     }
 
     override fun onResume() {
