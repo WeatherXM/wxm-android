@@ -1,6 +1,7 @@
 package com.weatherxm.ui.deviceforecast
 
 import android.os.Bundle
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
@@ -128,6 +129,10 @@ class ForecastDetailsActivity : BaseActivity() {
 
     private fun setupDailyAdapter(forecastDay: UIForecastDay, selectedDayPosition: Int) {
         dailyAdapter = DailyTileForecastAdapter(forecastDay.date) {
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.DAILY_CARD.paramValue,
+                Pair(FirebaseAnalytics.Param.ITEM_ID, Analytics.ParamValue.DAILY_DETAILS.paramValue)
+            )
             // Get selected position before we change it to the new one in order to reset the stroke
             dailyAdapter.notifyItemChanged(dailyAdapter.getSelectedPosition())
             updateDailyWeather(it)
