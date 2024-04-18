@@ -37,8 +37,6 @@ import com.weatherxm.util.Weather.getPrecipitationPreferredUnit
 import com.weatherxm.util.Weather.getPreferredUnit
 import com.weatherxm.util.Weather.getUVClassification
 import com.weatherxm.util.Weather.getWindDirectionDrawable
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber

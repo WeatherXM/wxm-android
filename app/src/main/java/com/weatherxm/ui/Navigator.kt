@@ -31,7 +31,6 @@ import com.weatherxm.ui.common.Contracts.ARG_DATE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
-import com.weatherxm.ui.common.Contracts.ARG_FORECAST
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
@@ -41,8 +40,6 @@ import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.UIForecast
-import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
@@ -81,7 +78,6 @@ import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
 import com.weatherxm.util.Analytics
 import timber.log.Timber
 import java.time.LocalDate
-import java.time.ZonedDateTime
 
 @Suppress("TooManyFunctions")
 class Navigator(private val analytics: Analytics) {
