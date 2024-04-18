@@ -18,3 +18,7 @@ fun ZonedDateTime.isTomorrow(): Boolean {
 }
 
 fun ZonedDateTime.toISODate(): String = this.toLocalDate().toString()
+
+fun ZonedDateTime.isSameDayAndHour(targetTimestamp: ZonedDateTime): Boolean {
+    return dayOfYear == targetTimestamp.dayOfYear && hour == targetTimestamp.hour
+}

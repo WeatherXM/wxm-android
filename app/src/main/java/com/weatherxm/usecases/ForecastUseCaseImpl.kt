@@ -9,6 +9,7 @@ import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UIForecastDay
+import com.weatherxm.util.isSameDayAndHour
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -36,12 +37,15 @@ class ForecastUseCaseImpl(
             val nextHourlyWeatherForecast = mutableListOf<HourlyWeather>()
             val forecastDays = result.map { weatherData ->
                 weatherData.hourly?.filter {
-                    val isCurrentHour = it.timestamp.dayOfYear == nowDeviceTz.dayOfYear
-                        && it.timestamp.hour == nowDeviceTz.hour
+                    val isCurrentHour = it.timestamp.isSameDayAndHour(nowDeviceTz)
                     val isFutureHour = it.timestamp.isAfter(nowDeviceTz)
                     isCurrentHour || (isFutureHour && it.timestamp < nowDeviceTz.plusHours(24))
                 }?.apply {
                     nextHourlyWeatherForecast.addAll(this)
+                }
+
+                val remainingHourlyWeather = weatherData.hourly?.filter {
+                    it.timestamp.isSameDayAndHour(nowDeviceTz) || it.timestamp.isAfter(nowDeviceTz)
                 }
 
                 UIForecastDay(
@@ -56,7 +60,7 @@ class ForecastUseCaseImpl(
                     humidity = weatherData.daily?.humidity,
                     pressure = weatherData.daily?.pressure,
                     uv = weatherData.daily?.uvIndex,
-                    hourlyWeather = weatherData.hourly
+                    hourlyWeather = remainingHourlyWeather
                 )
             }
 
