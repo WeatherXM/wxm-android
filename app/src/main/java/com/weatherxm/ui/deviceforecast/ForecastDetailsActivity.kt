@@ -76,9 +76,6 @@ class ForecastDetailsActivity : BaseActivity() {
         }
         handleOwnershipIcon()
 
-        hourlyAdapter = HourlyForecastAdapter(null)
-        binding.hourlyForecastRecycler.adapter = hourlyAdapter
-
         binding.displayTimeNotice.setDisplayTimezone(model.device.timezone)
         setupChartsAndListeners()
 
@@ -143,6 +140,8 @@ class ForecastDetailsActivity : BaseActivity() {
         )
 
         // Update Hourly Tiles
+        hourlyAdapter = HourlyForecastAdapter(null)
+        binding.hourlyForecastRecycler.adapter = hourlyAdapter
         hourlyAdapter.submitList(forecast.hourlyWeather)
         if (!forecast.hourlyWeather.isNullOrEmpty()) {
             binding.hourlyForecastRecycler.scrollToPosition(
