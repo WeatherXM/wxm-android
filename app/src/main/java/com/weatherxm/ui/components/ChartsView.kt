@@ -52,6 +52,7 @@ class ChartsView : LinearLayout {
         binding = ViewChartsBinding.inflate(LayoutInflater.from(context), this)
     }
 
+    fun chartTemperature() = binding.chartTemperature
     fun chartPrecipitation() = binding.chartPrecipitation
     fun chartWind() = binding.chartWind
     fun chartSolar() = binding.chartSolar

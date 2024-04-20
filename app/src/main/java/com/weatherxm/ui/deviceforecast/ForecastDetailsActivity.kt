@@ -179,6 +179,7 @@ class ForecastDetailsActivity : BaseActivity() {
             chartSolar().updateTitle(getString(R.string.uv_index))
             chartSolar().primaryLine(null, getString(R.string.uv_index))
             chartSolar().secondaryLine(null, null)
+            binding.dailyMainCard.setOnClickListener { scrollToChart(chartTemperature()) }
             binding.precipProbabilityCard.setOnClickListener { scrollToChart(chartPrecipitation()) }
             binding.dailyPrecipCard.setOnClickListener { scrollToChart(chartPrecipitation()) }
             binding.windCard.setOnClickListener { scrollToChart(chartWind()) }
