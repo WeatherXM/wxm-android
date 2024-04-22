@@ -297,7 +297,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     // Android Jetpack libraries
-    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.activity)
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.browser)
