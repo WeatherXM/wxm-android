@@ -49,4 +49,9 @@
 
     <!-- Rewards -->
     <color name="rewards_background">@color/dark_background</color>
+
+    <!-- Forecast -->
+    <color name="daily_temps_divider">@color/light_background</color>
+    <color name="daily_selected_tile">@color/dark_top</color>
+    <color name="daily_unselected_tile">@color/layer1</color>
 </resources>

@@ -11,12 +11,14 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.databinding.ViewWeatherCardBinding
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getPrecipitationPreferredUnit
+import com.weatherxm.util.Weather.getUVClassification
+import com.weatherxm.util.Weather.getWindDirectionDrawable
 
 class WeatherCardView : LinearLayout {
 
@@ -47,9 +49,7 @@ class WeatherCardView : LinearLayout {
 
     private fun updateCurrentWeatherUI() {
         with(binding) {
-            icon.setAnimation(Weather.getWeatherAnimation(weatherData?.icon))
-            icon.playAnimation()
-
+            icon.setWeatherAnimation(weatherData?.icon)
             val temperatureUnit = Weather.getPreferredUnit(
                 context.getString(KEY_TEMPERATURE), context.getString(R.string.temperature_celsius)
             )
@@ -76,14 +76,13 @@ class WeatherCardView : LinearLayout {
             val windUnit = Weather.getPreferredUnit(
                 context.getString(KEY_WIND), context.getString(R.string.wind_speed_ms)
             )
-            val windDirectionUnit = weatherData?.windDirection?.let {
-                Weather.getFormattedWindDirection(it)
-            } ?: String.empty()
+            val windDirectionUnit = Weather.getFormattedWindDirection(weatherData?.windDirection)
             val windGustValue = Weather.getFormattedWind(
                 weatherData?.windGust, weatherData?.windDirection, includeUnits = false
             )
-            binding.wind.setData(windValue, "$windUnit $windDirectionUnit")
-            binding.windGust.setData(windGustValue, "$windUnit $windDirectionUnit")
+            val windDirDrawable = getWindDirectionDrawable(context, weatherData?.windDirection)
+            binding.wind.setData(windValue, "$windUnit $windDirectionUnit", windDirDrawable)
+            binding.windGust.setData(windGustValue, "$windUnit $windDirectionUnit", windDirDrawable)
 
             binding.rainRate.setData(
                 Weather.getFormattedPrecipitation(weatherData?.precipitation, includeUnit = false),
@@ -105,7 +104,10 @@ class WeatherCardView : LinearLayout {
                 Weather.getFormattedPressure(weatherData?.pressure, includeUnit = false),
                 pressureUnit
             )
-            binding.uv.setData(Weather.getFormattedUV(weatherData?.uvIndex))
+            binding.uv.setData(
+                Weather.getFormattedUV(weatherData?.uvIndex, includeUnit = false),
+                getUVClassification(weatherData?.uvIndex)
+            )
             binding.solarRadiation.setData(
                 Weather.getFormattedSolarRadiation(weatherData?.solarIrradiance, false),
                 context.getString(R.string.solar_radiation_unit)
@@ -121,8 +123,8 @@ class WeatherCardView : LinearLayout {
         } else {
             weatherData = data
             updateCurrentWeatherUI()
-            val lastUpdatedDate = data?.timestamp?.getFormattedDate(includeYear = true)
-            val lastUpdatedTime = data?.timestamp?.getFormattedTime(context)
+            val lastUpdatedDate = data.timestamp.getFormattedDate(includeYear = true)
+            val lastUpdatedTime = data.timestamp.getFormattedTime(context)
             binding.lastUpdatedOn.text =
                 context.getString(R.string.last_updated, "$lastUpdatedDate, $lastUpdatedTime")
         }

@@ -2,15 +2,16 @@ package com.weatherxm.ui.components
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.text.SpannableStringBuilder
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import com.weatherxm.R
-import com.weatherxm.databinding.ViewWeatherDataBinding
+import com.weatherxm.databinding.ViewWeatherMeasurementCardBinding
 
-class WeatherDataView : LinearLayout {
+class WeatherMeasurementCardView : LinearLayout {
 
-    private lateinit var binding: ViewWeatherDataBinding
+    private lateinit var binding: ViewWeatherMeasurementCardBinding
 
     constructor(context: Context?) : super(context) {
         init(context)
@@ -29,7 +30,7 @@ class WeatherDataView : LinearLayout {
     }
 
     private fun init(context: Context?, attrs: AttributeSet? = null) {
-        binding = ViewWeatherDataBinding.inflate(LayoutInflater.from(context), this)
+        binding = ViewWeatherMeasurementCardBinding.inflate(LayoutInflater.from(context), this)
 
         this.context.theme.obtainStyledAttributes(attrs, R.styleable.WeatherDataView, 0, 0).apply {
             try {
@@ -43,11 +44,23 @@ class WeatherDataView : LinearLayout {
         }
     }
 
-    fun setData(value: String, unit: String? = null, drawable: Drawable? = null) {
+    fun setIcon(drawable: Drawable?) {
         drawable?.let {
             binding.icon.setImageDrawable(it)
         }
+    }
+
+    fun setData(
+        value: String,
+        unit: String? = null,
+        spannableStringBuilder: SpannableStringBuilder? = null
+    ) {
         binding.value.text = value
-        binding.unit.text = unit
+        unit?.let {
+            binding.unit.text = it
+        }
+        spannableStringBuilder?.let {
+            binding.unit.text = it
+        }
     }
 }

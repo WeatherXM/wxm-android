@@ -41,7 +41,7 @@ class Analytics(
         PASSWORD_RESET("Password Reset"),
         PROFILE("Account"),
         CURRENT_WEATHER("Device Current Weather"),
-        FORECAST("Device Forecast"),
+        DEVICE_FORECAST("Device Forecast Tab"),
         DEVICE_REWARDS("Device Rewards"),
         STATION_SETTINGS("Device Settings"),
         DEVICE_REWARD_TRANSACTIONS("Device Reward Transactions"),
@@ -65,7 +65,8 @@ class Analytics(
         DATA_QUALITY_INFO("Data Quality info"),
         LOCATION_QUALITY_INFO("Location Quality info"),
         CELL_RANKING_INFO("Cell Ranking info"),
-        CELL_CAPACITY_INFO("Cell Capacity info")
+        CELL_CAPACITY_INFO("Cell Capacity info"),
+        DEVICE_FORECAST_DETAILS("Forecast Details Screen")
     }
 
     // Custom Event Names
@@ -84,7 +85,6 @@ class Analytics(
         STEP("STEP"),
         PROMPT_NAME("PROMPT_NAME"),
         PROMPT_TYPE("PROMPT_TYPE"),
-        STATE("STATE"),
         DATE("DATE"),
         FILTERS_SORT("SORT_BY"),
         FILTERS_FILTER("FILTER"),
@@ -151,12 +151,8 @@ class Analytics(
         VIEW("view"),
         DISMISS("dismiss"),
         ACTION("action"),
-        FORECAST_DAY("Forecast Day"),
-        OPEN("open"),
-        CLOSE("close"),
         REMOVE_DEVICE("Remove Device"),
         CONTACT_SUPPORT("Contact Support"),
-        DEVICE_ALERTS("device_alerts"),
         DEVICE_INFO("device_info"),
         SETTINGS("settings"),
         ERROR("error"),
@@ -236,7 +232,12 @@ class Analytics(
         LOW_BATTERY_ID("low_battery"),
         STATION_REGION_ID("station_region"),
         REGION("Region"),
-        WARNINGS("Warnings")
+        WARNINGS("Warnings"),
+        HOURLY_DETAILS_CARD("Hourly Details Card"),
+        HOURLY_FORECAST("hourly_forecast"),
+        DAILY_CARD("Daily Card"),
+        DAILY_FORECAST("daily_forecast"),
+        DAILY_DETAILS("daily_details")
     }
 
     // Custom Param Names

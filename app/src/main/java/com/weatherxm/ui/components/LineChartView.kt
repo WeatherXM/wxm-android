@@ -121,4 +121,24 @@ class LineChartView : LinearLayout {
         binding.chart.setNoDataTextColor(context.getColor(R.color.colorOnSurface))
         binding.chart.setNoDataTextTypeface(Typeface.DEFAULT_BOLD)
     }
+
+    fun updateTitle(text: String) {
+        binding.chartTitle.text = text
+    }
+
+    fun primaryLine(lineName: String?, dataName: String) {
+        binding.primaryLineName.setVisible(!lineName.isNullOrEmpty())
+        binding.primaryLineColor.setVisible(!lineName.isNullOrEmpty())
+        binding.primaryDataName.text = dataName
+        binding.primaryLineName.text = lineName
+    }
+
+    fun secondaryLine(lineName: String?, dataName: String?) {
+        binding.secondaryLineName.setVisible(!lineName.isNullOrEmpty())
+        binding.secondaryLineColor.setVisible(!lineName.isNullOrEmpty())
+        binding.secondaryDataName.setVisible(!dataName.isNullOrEmpty())
+        binding.divider.setVisible(!dataName.isNullOrEmpty())
+        binding.secondaryDataName.text = dataName
+        binding.secondaryLineName.text = lineName
+    }
 }

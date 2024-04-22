@@ -159,6 +159,7 @@ import com.weatherxm.ui.devicedetails.current.CurrentViewModel
 import com.weatherxm.ui.devicedetails.forecast.ForecastViewModel
 import com.weatherxm.ui.devicedetails.rewards.RewardsViewModel
 import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationViewModel
+import com.weatherxm.ui.deviceforecast.ForecastDetailsViewModel
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
 import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
 import com.weatherxm.ui.devicesettings.DeviceSettingsViewModel
@@ -195,6 +196,8 @@ import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCaseImpl
 import com.weatherxm.usecases.BluetoothUpdaterUseCase
 import com.weatherxm.usecases.BluetoothUpdaterUseCaseImpl
+import com.weatherxm.usecases.ChartsUseCase
+import com.weatherxm.usecases.ChartsUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCaseImpl
 import com.weatherxm.usecases.ConnectWalletUseCase
@@ -211,6 +214,8 @@ import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.ExplorerUseCaseImpl
 import com.weatherxm.usecases.FollowUseCase
 import com.weatherxm.usecases.FollowUseCaseImpl
+import com.weatherxm.usecases.ForecastUseCase
+import com.weatherxm.usecases.ForecastUseCaseImpl
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
 import com.weatherxm.usecases.PasswordPromptUseCase
@@ -231,8 +236,6 @@ import com.weatherxm.usecases.StatsUseCase
 import com.weatherxm.usecases.StatsUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.usecases.UserUseCaseImpl
-import com.weatherxm.usecases.ForecastUseCase
-import com.weatherxm.usecases.ForecastUseCaseImpl
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCaseImpl
 import com.weatherxm.usecases.WidgetSelectStationUseCase
@@ -269,6 +272,7 @@ const val HOUR_FORMAT_24H = "HH:mm"
 const val HOUR_FORMAT_12H_FULL = "h:mm a"
 const val HOUR_FORMAT_12H_HOUR_ONLY = "h a"
 const val DATE_FORMAT_MONTH_DAY = "d/M"
+const val DATE_FORMAT_MONTH_SHORT = "MMM d"
 const val DATE_FORMAT_FULL = "EEE d, MMM yy"
 private const val ENCRYPTED_PREFERENCES_KEY = "ENCRYPTED_PREFERENCES_KEY"
 private const val PREFERENCES_AUTH_TOKEN = "PREFERENCES_AUTH_TOKEN"
@@ -522,7 +526,10 @@ private val usecases = module {
         ForecastUseCaseImpl(get())
     }
     single<HistoryUseCase> {
-        HistoryUseCaseImpl(androidContext(), get(), get())
+        HistoryUseCaseImpl(get())
+    }
+    single<ChartsUseCase> {
+        ChartsUseCaseImpl(androidContext())
     }
     single<ClaimDeviceUseCase> {
         ClaimDeviceUseCaseImpl(get(), get())
@@ -888,6 +895,9 @@ private val utilities = module {
     single<DateTimeFormatter>(named(DATE_FORMAT_FULL)) {
         DateTimeFormatter.ofPattern(DATE_FORMAT_FULL, Locale.US)
     }
+    single<DateTimeFormatter>(named(DATE_FORMAT_MONTH_SHORT)) {
+        DateTimeFormatter.ofPattern(DATE_FORMAT_MONTH_SHORT, Locale.US)
+    }
 }
 
 private val viewmodels = module {
@@ -910,7 +920,15 @@ private val viewmodels = module {
     viewModel { params -> CurrentViewModel(device = params.get(), get(), get(), get()) }
     viewModel { params -> ForecastViewModel(device = params.get(), get(), get(), get()) }
     viewModel { params -> RewardsViewModel(device = params.get(), get(), get(), get()) }
-    viewModel { params -> HistoryChartsViewModel(device = params.get(), get(), get(), get()) }
+    viewModel { params ->
+        HistoryChartsViewModel(
+            device = params.get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
     viewModel { params ->
         DeviceHeliumOTAViewModel(
             device = params.get(),
@@ -957,6 +975,15 @@ private val viewmodels = module {
     viewModel { ClaimHeliumFrequencyViewModel(get(), get()) }
     viewModel { ClaimM5VerifyViewModel() }
     viewModel { NetworkSearchViewModel(get(), get()) }
+    viewModel { params ->
+        ForecastDetailsViewModel(
+            params.get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
 }
 
 val modules = listOf(

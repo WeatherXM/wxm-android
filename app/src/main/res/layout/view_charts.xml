@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false">
+
+        <com.weatherxm.ui.components.LineChartView
+            android:id="@+id/chart_temperature"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:line_chart_primary_highlight_name="@string/temperature"
+            app:line_chart_primary_line_name="@string/temperature"
+            app:line_chart_secondary_highlight_name="@string/feels_like"
+            app:line_chart_secondary_line_name="@string/feels_like"
+            app:line_chart_title="@string/temperature"
+            app:line_chart_title_icon="@drawable/ic_weather_temperature" />
+
+        <com.weatherxm.ui.components.LineChartView
+            android:id="@+id/chart_precipitation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chart_temperature"
+            app:line_chart_primary_highlight_name="@string/rate"
+            app:line_chart_primary_line_name="@string/precip_rate"
+            app:line_chart_secondary_highlight_name="@string/daily"
+            app:line_chart_secondary_line_color="@color/chart_secondary_line"
+            app:line_chart_secondary_line_name="@string/daily_precip"
+            app:line_chart_title="@string/precipitation"
+            app:line_chart_title_icon="@drawable/ic_weather_precipitation" />
+
+        <com.weatherxm.ui.components.LineChartView
+            android:id="@+id/chart_wind"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chart_precipitation"
+            app:line_chart_primary_highlight_name="@string/speed"
+            app:line_chart_primary_line_name="@string/wind_speed"
+            app:line_chart_secondary_highlight_name="@string/gust"
+            app:line_chart_secondary_line_name="@string/wind_gust"
+            app:line_chart_title="@string/wind"
+            app:line_chart_title_icon="@drawable/ic_weather_wind" />
+
+        <com.weatherxm.ui.components.LineChartView
+            android:id="@+id/chart_humidity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chart_wind"
+            app:line_chart_primary_highlight_name="@string/humidity"
+            app:line_chart_title="@string/humidity"
+            app:line_chart_title_icon="@drawable/ic_weather_humidity" />
+
+        <com.weatherxm.ui.components.LineChartView
+            android:id="@+id/chart_pressure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chart_humidity"
+            app:line_chart_primary_highlight_name="@string/pressure"
+            app:line_chart_title="@string/pressure"
+            app:line_chart_title_icon="@drawable/ic_weather_pressure" />
+
+        <com.weatherxm.ui.components.LineChartView
+            android:id="@+id/chart_solar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chart_pressure"
+            app:line_chart_primary_highlight_name="@string/uv_index"
+            app:line_chart_primary_line_name="@string/uv_index"
+            app:line_chart_secondary_highlight_name="@string/radiation"
+            app:line_chart_secondary_line_color="@color/chart_secondary_line"
+            app:line_chart_secondary_line_name="@string/solar_radiation"
+            app:line_chart_title="@string/solar"
+            app:line_chart_title_icon="@drawable/ic_weather_solar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</merge>

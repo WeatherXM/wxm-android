@@ -1,4 +1,4 @@
-package com.weatherxm.ui.devicedetails.forecast
+package com.weatherxm.ui.common
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,7 +12,7 @@ import com.weatherxm.util.Weather
 import org.koin.core.component.KoinComponent
 
 class HourlyForecastAdapter(
-    private val onClickListener: (HourlyWeather) -> Unit
+    private val onClickListener: ((HourlyWeather) -> Unit)?
 ) : ListAdapter<HourlyWeather, HourlyForecastAdapter.HourlyForecastViewHolder>(
     HourlyWeatherDiffCallback()
 ), KoinComponent {
@@ -34,15 +34,14 @@ class HourlyForecastAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: HourlyWeather) {
-            binding.root.setOnClickListener {
-                onClickListener.invoke(item)
+            onClickListener?.let { listener ->
+                binding.root.setOnClickListener {
+                    listener.invoke(item)
+                }
             }
 
             binding.timestamp.text = item.timestamp.getFormattedTime(itemView.context, false)
-            binding.icon.apply {
-                setAnimation(Weather.getWeatherAnimation(item.icon))
-                playAnimation()
-            }
+            binding.icon.setWeatherAnimation(item.icon)
             binding.temperaturePrimary.text = Weather.getFormattedTemperature(item.temperature, 1)
         }
     }

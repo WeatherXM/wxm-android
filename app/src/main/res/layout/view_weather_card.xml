@@ -176,7 +176,7 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintBottom_toTopOf="@id/rainRate"
                             app:layout_constraintTop_toBottomOf="@id/humidity"
-                            app:weather_data_icon="@drawable/ic_weather_wind"
+                            app:weather_data_icon="@drawable/ic_wind_direction"
                             app:weather_data_title="@string/wind" />
 
                         <com.weatherxm.ui.components.WeatherDataView
@@ -225,7 +225,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/margin_normal"
-                                app:weather_data_icon="@drawable/ic_weather_wind"
+                                app:weather_data_icon="@drawable/ic_wind_direction"
                                 app:weather_data_title="@string/wind_gust" />
 
                             <com.weatherxm.ui.components.WeatherDataView

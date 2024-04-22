@@ -4,15 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
 import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
+import com.weatherxm.ui.common.HourlyForecastAdapter
+import com.weatherxm.ui.common.blockParentViewPagerOnScroll
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.toISODate
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -45,13 +49,34 @@ class ForecastFragment : BaseFragment() {
 
         // Initialize the adapters with empty data
         val dailyForecastAdapter = DailyForecastAdapter {
-            // TODO: Open forecast details
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.DAILY_CARD.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID, Analytics.ParamValue.DAILY_FORECAST.paramValue
+                )
+            )
+            navigator.showForecastDetails(
+                context,
+                model.device,
+                forecastSelectedISODate = it.date.toString()
+            )
         }
         val hourlyForecastAdapter = HourlyForecastAdapter {
-            // TODO: Open forecast details
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.HOURLY_DETAILS_CARD.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID, Analytics.ParamValue.HOURLY_FORECAST.paramValue
+                )
+            )
+            navigator.showForecastDetails(
+                context,
+                model.device,
+                forecastSelectedISODate = it.timestamp.toISODate()
+            )
         }
         binding.dailyForecastRecycler.adapter = dailyForecastAdapter
         binding.hourlyForecastRecycler.adapter = hourlyForecastAdapter
+        binding.hourlyForecastRecycler.blockParentViewPagerOnScroll()
 
         parentModel.onFollowStatus().observe(viewLifecycleOwner) {
             if (it.status == Status.SUCCESS) {
@@ -97,7 +122,7 @@ class ForecastFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            Analytics.Screen.FORECAST,
+            Analytics.Screen.DEVICE_FORECAST,
             ForecastFragment::class.simpleName
         )
     }

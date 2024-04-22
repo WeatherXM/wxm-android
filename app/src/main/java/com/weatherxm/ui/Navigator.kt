@@ -31,6 +31,7 @@ import com.weatherxm.ui.common.Contracts.ARG_DATE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
+import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
@@ -50,6 +51,7 @@ import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
 import com.weatherxm.ui.devicealerts.DeviceAlertsActivity
 import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationActivity
+import com.weatherxm.ui.deviceforecast.ForecastDetailsActivity
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
 import com.weatherxm.ui.devicesettings.DeviceSettingsActivity
@@ -422,6 +424,19 @@ class Navigator(private val analytics: Analytics) {
                 .putExtra(ARG_BOOST_REWARD, reward)
                 .putExtra(ARG_DEVICE_ID, deviceId)
                 .putExtra(ARG_DATE, date)
+        )
+    }
+
+    fun showForecastDetails(
+        context: Context?,
+        device: UIDevice,
+        forecastSelectedISODate: String? = null
+    ) {
+        context?.startActivity(
+            Intent(context, ForecastDetailsActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_DEVICE, device)
+                .putExtra(ARG_FORECAST_SELECTED_DAY, forecastSelectedISODate)
         )
     }
 
