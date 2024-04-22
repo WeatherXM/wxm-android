@@ -1,5 +1,5 @@
 [versions]
-androidx-activity-ktx = "1.9.0"
+androidx-activity = "1.9.0"
 androidx-core-splashscreen = "1.0.1"
 androidx-core-ktx = "1.13.0"
 androidx-coordinatorlayout = "1.2.0"
@@ -68,7 +68,7 @@ detekt-plugin = "1.23.6"
 grgit = "5.2.2"
 
 [libraries]
-androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidx-activity-ktx" }
+androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activity" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle-livedata-ktx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-runtime-ktx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle-viewmodel-ktx" }
