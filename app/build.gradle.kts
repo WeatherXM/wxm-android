@@ -334,6 +334,7 @@ dependencies {
 
     // Google Play Services for Location & Maps
     implementation(libs.play.services.location)
+    implementation(libs.play.services.scanner)
 
     // Logging
     implementation(libs.timber)
