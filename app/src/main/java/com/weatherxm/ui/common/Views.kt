@@ -365,6 +365,12 @@ fun View?.hideKeyboard() {
     this?.let { this.context?.hideKeyboard(it) }
 }
 
+fun View.screenLocation(): IntArray {
+    val point = IntArray(2)
+    getLocationOnScreen(point)
+    return point
+}
+
 fun Fragment.hideKeyboard() {
     view?.let { this.activity?.hideKeyboard(it) }
 }

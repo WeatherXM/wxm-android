@@ -16,6 +16,7 @@ import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.boldText
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.screenLocation
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setDisplayTimezone
 import com.weatherxm.ui.common.setVisible
@@ -189,7 +190,8 @@ class ForecastDetailsActivity : BaseActivity() {
     }
 
     private fun scrollToChart(chart: LineChartView) {
-        chart.parent.requestChildFocus(chart, chart)
+        val (x, y) = chart.screenLocation()
+        binding.mainContainer.smoothScrollTo(x, y - binding.appBar.height - binding.root.paddingTop)
     }
 
     private fun setupDailyAdapter(forecastDay: UIForecastDay, selectedDayPosition: Int) {
