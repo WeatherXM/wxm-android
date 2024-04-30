@@ -142,13 +142,13 @@
                             android:textColor="@color/textColor"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/dailyDate"
-                            tools:text="17.4°C" />
+                            tools:text="17°C" />
 
                         <com.google.android.material.divider.MaterialDivider
                             android:id="@+id/dailyTempsDivider"
                             android:layout_width="2dp"
                             android:layout_height="0dp"
-                            android:layout_marginStart="@dimen/margin_small"
+                            android:layout_marginStart="@dimen/margin_small_to_normal"
                             android:layout_marginTop="12dp"
                             android:layout_marginBottom="6dp"
                             app:dividerColor="@color/daily_temps_divider"
@@ -160,13 +160,13 @@
                             android:id="@+id/dailyMinTemp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_small"
+                            android:layout_marginStart="@dimen/margin_small_to_normal"
                             android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
                             android:textColor="@color/textColor"
                             android:textSize="24sp"
                             app:layout_constraintBaseline_toBaselineOf="@id/dailyMaxTemp"
                             app:layout_constraintStart_toEndOf="@id/dailyTempsDivider"
-                            tools:text="12.0°C" />
+                            tools:text="12°C" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

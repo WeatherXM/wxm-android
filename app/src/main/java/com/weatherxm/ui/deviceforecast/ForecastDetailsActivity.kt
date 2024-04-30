@@ -113,8 +113,8 @@ class ForecastDetailsActivity : BaseActivity() {
         // Update Daily Weather
         binding.dailyDate.text = forecast.date.getRelativeDayAndShort(this)
         binding.dailyIcon.setWeatherAnimation(forecast.icon)
-        binding.dailyMaxTemp.text = getFormattedTemperature(forecast.maxTemp, 1)
-        binding.dailyMinTemp.text = getFormattedTemperature(forecast.minTemp, 1)
+        binding.dailyMaxTemp.text = getFormattedTemperature(forecast.maxTemp)
+        binding.dailyMinTemp.text = getFormattedTemperature(forecast.minTemp)
         binding.precipProbabilityCard.setData(
             getFormattedPrecipitationProbability(forecast.precipProbability, false), "%"
         )
