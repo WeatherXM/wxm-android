@@ -285,8 +285,8 @@ class DeviceDetailsActivity : BaseActivity() {
         val alertsWithoutOffline = alerts.dropWhile {
             it.alert == DeviceAlertType.OFFLINE
         }
-        if (alertsWithoutOffline.size > 1) {
-            binding.alertChip.text = getString(R.string.issues, alertsWithoutOffline.size)
+        if (alerts.size > 1) {
+            binding.alertChip.text = getString(R.string.issues, alerts.size)
             setupAlertChipClickListener(null)
         } else if (alertsWithoutOffline.size == 1) {
             if (alertsWithoutOffline[0].alert == DeviceAlertType.NEEDS_UPDATE) {
