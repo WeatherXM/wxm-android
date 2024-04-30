@@ -133,7 +133,7 @@
                 style="@style/Widget.WeatherXM.MaterialCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_extra_large"
+                android:layout_marginTop="@dimen/margin_extra_extra_large"
                 app:cardBackgroundColor="@color/colorSurfaceVariant"
                 app:cardCornerRadius="@dimen/radius_extra_extra_large"
                 app:contentPadding="@dimen/padding_small"
