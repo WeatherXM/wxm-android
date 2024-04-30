@@ -170,7 +170,7 @@ class ForecastDetailsActivity : BaseActivity() {
                 getString(R.string.precipitation), getString(R.string.precipitation)
             )
             chartPrecipitation().secondaryLine(
-                getString(R.string.precipitation_probability),
+                getString(R.string.probability),
                 getString(R.string.precipitation_probability)
             )
             chartWind().primaryLine(null, getString(R.string.speed))
