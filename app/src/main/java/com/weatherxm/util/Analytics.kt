@@ -1,9 +1,12 @@
 package com.weatherxm.util
 
+import android.content.Context
 import android.content.SharedPreferences
+import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ParametersBuilder
 import com.google.firebase.analytics.logEvent
+import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.weatherxm.BuildConfig
 import com.weatherxm.R
 import com.weatherxm.data.services.CacheService
@@ -12,14 +15,16 @@ import com.weatherxm.ui.common.DevicesGroupBy
 import com.weatherxm.ui.common.DevicesSortFilterOptions
 import com.weatherxm.ui.common.DevicesSortOrder
 import com.weatherxm.ui.common.empty
+import org.json.JSONObject
 import timber.log.Timber
 
 class Analytics(
     private val firebaseAnalytics: FirebaseAnalytics,
+    private val mixpanelAPI: MixpanelAPI,
     private val cacheService: CacheService,
     private val displayModeHelper: DisplayModeHelper,
     preferences: SharedPreferences,
-    private val resources: Resources
+    private val context: Context
 ) {
     // Screen Names
     enum class Screen(val screenName: String) {
@@ -282,92 +287,89 @@ class Analytics(
     @Suppress("CyclomaticComplexMethod", "LongMethod")
     private fun setUserProperties() {
         firebaseAnalytics.setUserId(cacheService.getUserId())
+        mixpanelAPI.identify(cacheService.getUserId())
+
+        val userParams = mutableListOf<Pair<String, String>>()
 
         // Selected Theme
-        firebaseAnalytics.setUserProperty(
-            UserProperty.THEME.propertyName,
-            when (displayModeHelper.getDisplayMode()) {
-                resources.getString(R.string.dark_value) -> UserProperty.DARK.propertyName
-                resources.getString(R.string.light_value) -> UserProperty.LIGHT.propertyName
-                else -> UserProperty.SYSTEM.propertyName
-            }
-        )
+        when (displayModeHelper.getDisplayMode()) {
+            context.getString(R.string.dark_value) -> UserProperty.DARK.propertyName
+            context.getString(R.string.light_value) -> UserProperty.LIGHT.propertyName
+            else -> UserProperty.SYSTEM.propertyName
+        }.apply {
+            userParams.add(Pair(UserProperty.THEME.propertyName, this))
+        }
 
         // Selected Temperature Unit
         Weather.getPreferredUnit(
-            resources.getString(CacheService.KEY_TEMPERATURE),
-            resources.getString(R.string.temperature_celsius)
+            context.getString(CacheService.KEY_TEMPERATURE),
+            context.getString(R.string.temperature_celsius)
         ).let {
-            firebaseAnalytics.setUserProperty(
-                UserProperty.UNIT_TEMPERATURE.propertyName,
-                if (it == resources.getString(R.string.temperature_celsius)) {
-                    UserProperty.CELSIUS.propertyName
-                } else {
-                    UserProperty.FAHRENHEIT.propertyName
-                }
-            )
+            if (it == context.getString(R.string.temperature_celsius)) {
+                UserProperty.CELSIUS.propertyName
+            } else {
+                UserProperty.FAHRENHEIT.propertyName
+            }.apply {
+                userParams.add(Pair(UserProperty.UNIT_TEMPERATURE.propertyName, this))
+            }
         }
 
         // Selected Wind Unit
         Weather.getPreferredUnit(
-            resources.getString(CacheService.KEY_WIND),
-            resources.getString(R.string.wind_speed_ms)
+            context.getString(CacheService.KEY_WIND),
+            context.getString(R.string.wind_speed_ms)
         ).let {
-            firebaseAnalytics.setUserProperty(
-                UserProperty.UNIT_WIND.propertyName,
-                when (it) {
-                    resources.getString(R.string.wind_speed_ms) -> UserProperty.MPS.propertyName
-                    resources.getString(R.string.wind_speed_mph) -> UserProperty.MPH.propertyName
-                    resources.getString(R.string.wind_speed_kmh) -> UserProperty.KMPH.propertyName
-                    resources.getString(R.string.wind_speed_knots) -> UserProperty.KN.propertyName
-                    else -> UserProperty.BF.propertyName
-                }
-            )
+            when (it) {
+                context.getString(R.string.wind_speed_ms) -> UserProperty.MPS.propertyName
+                context.getString(R.string.wind_speed_mph) -> UserProperty.MPH.propertyName
+                context.getString(R.string.wind_speed_kmh) -> UserProperty.KMPH.propertyName
+                context.getString(R.string.wind_speed_knots) -> UserProperty.KN.propertyName
+                else -> UserProperty.BF.propertyName
+            }.apply {
+                userParams.add(Pair(UserProperty.UNIT_WIND.propertyName, this))
+            }
         }
 
         // Selected Wind Direction Unit
         Weather.getPreferredUnit(
-            resources.getString(CacheService.KEY_WIND_DIR),
-            resources.getString(R.string.wind_direction_cardinal)
+            context.getString(CacheService.KEY_WIND_DIR),
+            context.getString(R.string.wind_direction_cardinal)
         ).let {
-            firebaseAnalytics.setUserProperty(
-                UserProperty.UNIT_WIND_DIRECTION.propertyName,
-                if (it == resources.getString(R.string.wind_direction_cardinal)) {
-                    UserProperty.CARDINAL.propertyName
-                } else {
-                    UserProperty.DEGREES.propertyName
-                }
-            )
+            if (it == context.getString(R.string.wind_direction_cardinal)) {
+                UserProperty.CARDINAL.propertyName
+            } else {
+                UserProperty.DEGREES.propertyName
+            }.apply {
+                userParams.add(Pair(UserProperty.UNIT_WIND_DIRECTION.propertyName, this))
+            }
         }
 
         // Selected Precipitation Unit
         Weather.getPreferredUnit(
-            resources.getString(CacheService.KEY_PRECIP),
-            resources.getString(R.string.precipitation_mm)
+            context.getString(CacheService.KEY_PRECIP),
+            context.getString(R.string.precipitation_mm)
         ).let {
-            firebaseAnalytics.setUserProperty(
-                UserProperty.UNIT_PRECIPITATION.propertyName,
-                if (it == resources.getString(R.string.precipitation_mm)) {
-                    UserProperty.MILLIMETERS.propertyName
-                } else {
-                    UserProperty.INCHES.propertyName
-                }
-            )
+            if (it == context.getString(R.string.precipitation_mm)) {
+                UserProperty.MILLIMETERS.propertyName
+            } else {
+                UserProperty.INCHES.propertyName
+            }.apply {
+                userParams.add(Pair(UserProperty.UNIT_PRECIPITATION.propertyName, this))
+            }
         }
 
         // Selected Pressure Unit
         Weather.getPreferredUnit(
-            resources.getString(CacheService.KEY_PRESSURE),
-            resources.getString(R.string.pressure_hpa)
+            context.getString(CacheService.KEY_PRESSURE),
+            context.getString(R.string.pressure_hpa)
         ).let {
-            firebaseAnalytics.setUserProperty(
-                UserProperty.UNIT_PRESSURE.propertyName,
-                if (it == resources.getString(R.string.pressure_hpa)) {
-                    UserProperty.HPA.propertyName
-                } else {
-                    UserProperty.INHG.propertyName
-                }
-            )
+            if (it == context.getString(R.string.pressure_hpa)) {
+                UserProperty.HPA.propertyName
+            } else {
+                UserProperty.INHG.propertyName
+            }.apply {
+                userParams.add(Pair(UserProperty.UNIT_PRESSURE.propertyName, this))
+            }
         }
 
         val sortFilterOptions = cacheService.getDevicesSortFilterOptions().let {
@@ -381,18 +383,16 @@ class Analytics(
                 )
             }
         }
-        firebaseAnalytics.setUserProperty(
-            CustomParam.FILTERS_SORT.paramName,
-            sortFilterOptions.getSortAnalyticsValue()
-        )
-        firebaseAnalytics.setUserProperty(
-            CustomParam.FILTERS_FILTER.paramName,
-            sortFilterOptions.getFilterAnalyticsValue()
-        )
-        firebaseAnalytics.setUserProperty(
-            CustomParam.FILTERS_GROUP.paramName,
-            sortFilterOptions.getGroupByAnalyticsValue()
-        )
+        with(sortFilterOptions) {
+            userParams.add(Pair(CustomParam.FILTERS_SORT.paramName, getSortAnalyticsValue()))
+            userParams.add(Pair(CustomParam.FILTERS_FILTER.paramName, getFilterAnalyticsValue()))
+            userParams.add(Pair(CustomParam.FILTERS_GROUP.paramName, getGroupByAnalyticsValue()))
+        }
+
+        userParams.forEach {
+            firebaseAnalytics.setUserProperty(it.first, it.second)
+        }
+        mixpanelAPI.people.set(paramsToJSON(userParams))
     }
 
     fun setAnalyticsEnabled(enabled: Boolean = cacheService.getAnalyticsEnabled()) {
@@ -402,25 +402,42 @@ class Analytics(
         } else {
             Timber.d("Resetting analytics tracking [enabled=$enabled]")
             firebaseAnalytics.setAnalyticsCollectionEnabled(enabled)
+            if (enabled) {
+                mixpanelAPI.optInTracking()
+            } else {
+                mixpanelAPI.optOutTracking()
+            }
         }
     }
 
     fun trackScreen(screen: Screen, screenClass: String?, itemId: String? = null) {
         if (cacheService.getAnalyticsEnabled()) {
+            val mixpanelParams = mutableListOf<Pair<String, Any?>>()
+
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                 param(FirebaseAnalytics.Param.SCREEN_NAME, screen.screenName)
                 param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass ?: String.empty())
-                itemId?.let { param(FirebaseAnalytics.Param.ITEM_ID, itemId) }
+                mixpanelParams.add(Pair(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass))
+                itemId?.let {
+                    param(FirebaseAnalytics.Param.ITEM_ID, itemId)
+                    mixpanelParams.add(Pair(FirebaseAnalytics.Param.ITEM_ID, itemId))
+                }
             }
+
+            mixpanelAPI.track(FirebaseAnalytics.Param.SCREEN_NAME, paramsToJSON(mixpanelParams))
         }
     }
 
     fun trackScreen(screenName: String, screenClass: String?) {
         if (cacheService.getAnalyticsEnabled()) {
+            val mixpanelParams = mutableListOf<Pair<String, Any?>>()
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
                 param(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
                 param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass ?: String.empty())
+                mixpanelParams.add(Pair(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass))
             }
+
+            mixpanelAPI.track(FirebaseAnalytics.Param.SCREEN_NAME, paramsToJSON(mixpanelParams))
         }
     }
 
@@ -431,18 +448,22 @@ class Analytics(
     ) {
         if (!cacheService.getAnalyticsEnabled()) return
 
+        val mixpanelParams = mutableListOf<Pair<String, Any?>>()
         val params = ParametersBuilder().apply {
             param(CustomParam.ACTION_NAME.paramName, actionName)
+            mixpanelParams.add(Pair(CustomParam.ACTION_NAME.paramName, actionName))
 
             contentType?.let {
                 param(FirebaseAnalytics.Param.CONTENT_TYPE, contentType)
+                mixpanelParams.add(Pair(FirebaseAnalytics.Param.CONTENT_TYPE, contentType))
             }
 
             customParams.forEach {
                 param(it.first, it.second)
+                mixpanelParams.add(Pair(it.first, it.second))
             }
         }
-        firebaseAnalytics.logEvent(CustomEvent.USER_ACTION.eventName, params.bundle)
+        logEvent(CustomEvent.USER_ACTION.eventName, params.bundle, paramsToJSON(mixpanelParams))
     }
 
     fun trackEventViewContent(
@@ -453,18 +474,23 @@ class Analytics(
     ) {
         if (!cacheService.getAnalyticsEnabled()) return
 
+        val mixpanelParams = mutableListOf<Pair<String, Any?>>()
         val params = ParametersBuilder().apply {
             param(CustomParam.CONTENT_NAME.paramName, contentName)
             param(CustomParam.CONTENT_ID.paramName, contentId)
+            mixpanelParams.add(Pair(CustomParam.CONTENT_NAME.paramName, contentName))
+            mixpanelParams.add(Pair(CustomParam.CONTENT_ID.paramName, contentId))
 
             customParams.forEach {
                 param(it.first, it.second)
+                mixpanelParams.add(Pair(it.first, it.second))
             }
             success?.let {
                 param(FirebaseAnalytics.Param.SUCCESS, it)
+                mixpanelParams.add(Pair(FirebaseAnalytics.Param.SUCCESS, it))
             }
         }
-        firebaseAnalytics.logEvent(CustomEvent.VIEW_CONTENT.eventName, params.bundle)
+        logEvent(CustomEvent.VIEW_CONTENT.eventName, params.bundle, paramsToJSON(mixpanelParams))
     }
 
     fun trackEventFailure(failureId: String?) {
@@ -483,16 +509,22 @@ class Analytics(
     ) {
         if (!cacheService.getAnalyticsEnabled()) return
 
+        val mixpanelParams = mutableListOf<Pair<String, Any?>>()
         val params = ParametersBuilder().apply {
             param(CustomParam.PROMPT_NAME.paramName, promptName)
             param(CustomParam.PROMPT_TYPE.paramName, promptType)
             param(CustomParam.ACTION.paramName, action)
+            mixpanelParams.add(Pair(CustomParam.PROMPT_NAME.paramName, promptName))
+            mixpanelParams.add(Pair(CustomParam.PROMPT_TYPE.paramName, promptType))
+            mixpanelParams.add(Pair(CustomParam.ACTION.paramName, action))
 
             customParams.forEach {
                 param(it.first, it.second)
+                mixpanelParams.add(Pair(it.first, it.second))
             }
         }
-        firebaseAnalytics.logEvent(CustomEvent.PROMPT.eventName, params.bundle)
+
+        logEvent(CustomEvent.PROMPT.eventName, params.bundle, paramsToJSON(mixpanelParams))
     }
 
     fun trackEventSelectContent(
@@ -502,17 +534,41 @@ class Analytics(
     ) {
         if (!cacheService.getAnalyticsEnabled()) return
 
+        val mixpanelParams = mutableListOf<Pair<String, Any?>>()
         val params = ParametersBuilder().apply {
             param(FirebaseAnalytics.Param.CONTENT_TYPE, contentType)
+            mixpanelParams.add(Pair(FirebaseAnalytics.Param.CONTENT_TYPE, contentType))
 
             customParams.forEach {
                 param(it.first, it.second)
+                mixpanelParams.add(Pair(it.first, it.second))
             }
 
             index?.let {
                 param(FirebaseAnalytics.Param.INDEX, it)
+                mixpanelParams.add(Pair(FirebaseAnalytics.Param.INDEX, it))
             }
         }
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params.bundle)
+
+        logEvent(
+            FirebaseAnalytics.Event.SELECT_CONTENT, params.bundle, paramsToJSON(mixpanelParams)
+        )
+    }
+
+    private fun logEvent(key: String, firebaseParams: Bundle, mixpanelParams: JSONObject) {
+        firebaseAnalytics.logEvent(key, firebaseParams)
+        mixpanelAPI.track(key, mixpanelParams)
+    }
+
+
+    private fun paramsToJSON(params: List<Pair<String, Any?>>): JSONObject {
+        val entries = JSONObject()
+
+        params.filter {
+            it.second != null
+        }.forEach {
+            entries.put(it.first, it.second)
+        }
+        return entries
     }
 }

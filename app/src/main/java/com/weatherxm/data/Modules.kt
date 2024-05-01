@@ -40,6 +40,7 @@ import com.google.gson.GsonBuilder
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.mapbox.search.SearchEngine
 import com.mapbox.search.SearchEngineSettings
+import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
 import com.weatherxm.data.adapters.LocalDateJsonAdapter
@@ -805,8 +806,14 @@ val clientIdentificationHelper = module {
 }
 
 val analytics = module {
+    single<MixpanelAPI>(createdAtStart = true) {
+        MixpanelAPI.getInstance(androidContext(), BuildConfig.MIXPANEL_TOKEN, false).apply {
+            setEnableLogging(true)
+        }
+    }
+
     single(createdAtStart = true) {
-        Analytics(get(), get(), get(), get(), get())
+        Analytics(get(), get(), get(), get(), get(), androidContext())
     }
 }
 
