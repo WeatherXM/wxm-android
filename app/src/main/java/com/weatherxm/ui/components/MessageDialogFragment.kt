@@ -12,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentMessageDialogBinding
 import com.weatherxm.ui.Navigator
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.ui.common.setVisible
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -99,7 +100,7 @@ class MessageDialogFragment : BaseBottomSheetDialogFragment() {
     override fun onResume() {
         super.onResume()
         analyticsScreenName?.let {
-            analytics.trackScreen(it, MessageDialogFragment::class.simpleName)
+            analytics.trackScreen(it, getClassSimpleName())
         }
     }
 }

@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.BoostReward
 import com.weatherxm.data.Location
 import com.weatherxm.data.Reward
@@ -75,12 +76,12 @@ import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import timber.log.Timber
 import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
-class Navigator(private val analytics: Analytics) {
+class Navigator(private val analytics: AnalyticsImpl) {
 
     fun showExplorer(context: Context, cellCenter: Location? = null) {
         context.startActivity(

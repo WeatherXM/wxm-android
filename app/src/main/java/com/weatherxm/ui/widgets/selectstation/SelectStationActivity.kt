@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityWidgetSelectStationBinding
@@ -16,7 +17,7 @@ import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.widgets.currentweather.CurrentWeatherWidgetWorkerUpdate
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.util.WidgetHelper
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -81,7 +82,7 @@ class SelectStationActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.WIDGET_SELECT_STATION, this::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.WIDGET_SELECT_STATION, getClassSimpleName())
     }
 
     private fun onDevices(devices: Resource<List<UIDevice>>) {

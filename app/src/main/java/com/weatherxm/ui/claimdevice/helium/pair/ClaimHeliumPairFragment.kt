@@ -18,11 +18,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.core.view.forEach
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentClaimHeliumPairBinding
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.common.UIError
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.setBluetoothDrawable
 import com.weatherxm.ui.common.setHtml
@@ -31,7 +33,6 @@ import com.weatherxm.ui.common.setWarningDrawable
 import com.weatherxm.ui.common.show
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseFragment
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.checkPermissionsAndThen
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -185,10 +186,7 @@ class ClaimHeliumPairFragment : BaseFragment() {
             .build()
             .show(this)
 
-        analytics.trackScreen(
-            Analytics.Screen.BLE_CONNECTION_POPUP_ERROR,
-            ClaimHeliumPairFragment::class.simpleName
-        )
+        analytics.trackScreen(Analytics.Screen.BLE_CONNECTION_POPUP_ERROR, getClassSimpleName())
     }
 
     private fun updateUI(result: Resource<Unit>) {

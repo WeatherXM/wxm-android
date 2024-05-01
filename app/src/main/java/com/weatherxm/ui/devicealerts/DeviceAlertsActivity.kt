@@ -3,6 +3,7 @@ package com.weatherxm.ui.devicealerts
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityDeviceAlertsBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
@@ -12,7 +13,7 @@ import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.getClassSimpleName
 import timber.log.Timber
 
 class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
@@ -57,7 +58,7 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DEVICE_ALERTS, this::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.DEVICE_ALERTS, getClassSimpleName())
     }
 
     override fun onUpdateStationClicked() {

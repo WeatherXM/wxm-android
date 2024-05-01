@@ -10,13 +10,14 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.databinding.FragmentDevicesSortFilterBinding
 import com.weatherxm.ui.common.DevicesFilterType
 import com.weatherxm.ui.common.DevicesGroupBy
 import com.weatherxm.ui.common.DevicesSortOrder
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseBottomSheetDialogFragment
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class SortFilterDialogFragment : BaseBottomSheetDialogFragment() {
@@ -196,10 +197,7 @@ class SortFilterDialogFragment : BaseBottomSheetDialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(
-            Analytics.Screen.SORT_FILTER,
-            SortFilterDialogFragment::class.simpleName
-        )
+        analytics.trackScreen(Analytics.Screen.SORT_FILTER, getClassSimpleName())
     }
 
     fun show(fragment: Fragment) {

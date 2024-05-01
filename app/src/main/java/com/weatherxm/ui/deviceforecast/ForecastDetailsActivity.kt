@@ -3,6 +3,7 @@ package com.weatherxm.ui.deviceforecast
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.Status
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
@@ -16,6 +17,7 @@ import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.boldText
 import com.weatherxm.ui.common.moveItemToCenter
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.screenLocation
 import com.weatherxm.ui.common.setColor
@@ -25,7 +27,6 @@ import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.LineChartView
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndShort
 import com.weatherxm.util.Weather.getFormattedHumidity
 import com.weatherxm.util.Weather.getFormattedPrecipitation
@@ -243,6 +244,6 @@ class ForecastDetailsActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DEVICE_FORECAST_DETAILS, this::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.DEVICE_FORECAST_DETAILS, getClassSimpleName())
     }
 }

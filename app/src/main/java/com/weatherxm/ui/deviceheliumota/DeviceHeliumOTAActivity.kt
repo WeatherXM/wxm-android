@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -19,7 +20,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.getClassSimpleName
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -88,7 +89,7 @@ class DeviceHeliumOTAActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.HELIUM_OTA, this::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.HELIUM_OTA, getClassSimpleName())
     }
 
     override fun onDestroy() {

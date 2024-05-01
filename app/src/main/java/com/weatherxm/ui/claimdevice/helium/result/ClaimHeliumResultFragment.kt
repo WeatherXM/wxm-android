@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.DeviceProfile.Helium
 import com.weatherxm.data.DeviceProfile.M5
 import com.weatherxm.data.Resource
@@ -15,7 +16,6 @@ import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseFragment
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class ClaimHeliumResultFragment : BaseFragment() {

@@ -2,6 +2,7 @@ package com.weatherxm.ui.rewardslist
 
 import android.os.Bundle
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityRewardsListBinding
@@ -13,7 +14,7 @@ import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.getClassSimpleName
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -75,7 +76,7 @@ class RewardsListActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DEVICE_REWARD_TRANSACTIONS, this::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.DEVICE_REWARD_TRANSACTIONS, getClassSimpleName())
     }
 
     private fun updateUIFirstPage(resource: Resource<List<TimelineReward>>) {

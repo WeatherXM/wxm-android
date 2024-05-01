@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyFragment
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyViewModel
@@ -19,11 +20,11 @@ import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setIcon
 import com.weatherxm.ui.common.setSuccessChip
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ClaimHeliumActivity : BaseActivity() {
@@ -87,7 +88,7 @@ class ClaimHeliumActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.CLAIM_HELIUM, this::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.CLAIM_HELIUM, getClassSimpleName())
     }
 
     private fun finishClaiming() {

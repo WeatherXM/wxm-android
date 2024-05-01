@@ -6,6 +6,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Hex
 import com.weatherxm.data.HourlyWeather
@@ -13,7 +14,6 @@ import com.weatherxm.data.Location
 import com.weatherxm.data.QoDErrorAffects
 import com.weatherxm.data.Reward
 import com.weatherxm.data.SeverityLevel
-import com.weatherxm.util.Analytics
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 import java.time.ZonedDateTime

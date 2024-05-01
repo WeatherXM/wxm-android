@@ -5,17 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -89,10 +90,7 @@ class CurrentFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(
-            Analytics.Screen.CURRENT_WEATHER,
-            CurrentFragment::class.simpleName
-        )
+        analytics.trackScreen(Analytics.Screen.CURRENT_WEATHER, getClassSimpleName())
     }
 
     private fun handleFollowClick() {

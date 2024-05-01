@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.getOrElse
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
@@ -16,7 +17,7 @@ import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.FollowUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.RefreshHandler
 import com.weatherxm.util.Resources
@@ -33,7 +34,7 @@ class DeviceDetailsViewModel(
     private val authUseCase: AuthUseCase,
     private val resources: Resources,
     private val followUseCase: FollowUseCase,
-    private val analytics: Analytics
+    private val analytics: AnalyticsImpl
 ) : ViewModel() {
     companion object {
         private const val REFRESH_INTERVAL_SECONDS = 30L

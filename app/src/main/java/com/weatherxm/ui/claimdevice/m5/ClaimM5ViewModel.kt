@@ -14,7 +14,7 @@ import com.weatherxm.data.Location
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.ClaimDeviceUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ import timber.log.Timber
 class ClaimM5ViewModel(
     private val claimDeviceUseCase: ClaimDeviceUseCase,
     private val resources: Resources,
-    private val analytics: Analytics
+    private val analytics: AnalyticsImpl
 ) : ViewModel() {
 
     private val onNext = MutableLiveData(false)

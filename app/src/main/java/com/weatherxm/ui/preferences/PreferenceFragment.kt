@@ -12,10 +12,11 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.hasPermission
 import org.koin.android.ext.android.inject
@@ -26,7 +27,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
     private val model: PreferenceViewModel by activityViewModel()
     private val navigator: Navigator by inject()
     private val displayModeHelper: DisplayModeHelper by inject()
-    private val analytics: Analytics by inject()
+    private val analytics: AnalyticsImpl by inject()
 
     companion object {
         const val TAG = "PreferenceFragment"

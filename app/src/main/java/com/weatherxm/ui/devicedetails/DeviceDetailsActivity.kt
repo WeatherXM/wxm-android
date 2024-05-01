@@ -17,6 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.Resource
 import com.weatherxm.data.SeverityLevel
 import com.weatherxm.data.Status
@@ -38,7 +39,7 @@ import com.weatherxm.ui.devicedetails.current.CurrentFragment
 import com.weatherxm.ui.devicedetails.forecast.ForecastFragment
 import com.weatherxm.ui.devicedetails.rewards.RewardsFragment
 import com.weatherxm.ui.explorer.UICell
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -169,7 +170,7 @@ class DeviceDetailsActivity : BaseActivity() {
         super.onResume()
         if (model.device.relation != DeviceRelation.OWNED) {
             analytics.trackScreen(
-                Analytics.Screen.EXPLORER_DEVICE, this::class.simpleName, model.device.id
+                Analytics.Screen.EXPLORER_DEVICE, getClassSimpleName(), model.device.id
             )
         }
     }

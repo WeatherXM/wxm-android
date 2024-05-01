@@ -8,7 +8,7 @@ import com.weatherxm.data.ApiError.AuthError.InvalidUsername
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.AuthUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 class ResetPasswordViewModel(
     private val authUseCase: AuthUseCase,
     private val resources: Resources,
-    private val analytics: Analytics
+    private val analytics: AnalyticsImpl
 ) : ViewModel() {
     private val isEmailSent = MutableLiveData<Resource<Unit>>()
     fun isEmailSent() = isEmailSent

@@ -6,6 +6,7 @@ import android.widget.Toast
 import coil.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.BoostCode
 import com.weatherxm.data.BoostReward
 import com.weatherxm.data.Reward
@@ -28,7 +29,7 @@ import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.isPoL
@@ -105,7 +106,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DEVICE_REWARD_DETAILS, this::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.DEVICE_REWARD_DETAILS, getClassSimpleName())
     }
 
     private fun updateUI(data: RewardDetails) {

@@ -6,8 +6,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import com.weatherxm.databinding.ViewEditNameBinding
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.util.Validator
 import org.koin.android.ext.android.inject
 
@@ -16,7 +18,7 @@ class FriendlyNameDialogFragment(
     private val deviceId: String,
     private val resultCallback: (String?) -> Unit
 ) : DialogFragment() {
-    private val analytics: Analytics by inject()
+    private val analytics: AnalyticsImpl by inject()
     private lateinit var binding: ViewEditNameBinding
 
     companion object {
@@ -35,7 +37,10 @@ class FriendlyNameDialogFragment(
             analytics.trackEventUserAction(
                 actionName = Analytics.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
                 contentType = Analytics.ParamValue.CHANGE_STATION_NAME.paramValue,
-                Pair(Analytics.CustomParam.ACTION.paramName, Analytics.ParamValue.CANCEL.paramValue)
+                Pair(
+                    Analytics.CustomParam.ACTION.paramName,
+                    Analytics.ParamValue.CANCEL.paramValue
+                )
             )
             dismiss()
         }
@@ -44,7 +49,10 @@ class FriendlyNameDialogFragment(
             analytics.trackEventUserAction(
                 actionName = Analytics.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
                 contentType = Analytics.ParamValue.CHANGE_STATION_NAME.paramValue,
-                Pair(Analytics.CustomParam.ACTION.paramName, Analytics.ParamValue.CLEAR.paramValue)
+                Pair(
+                    Analytics.CustomParam.ACTION.paramName,
+                    Analytics.ParamValue.CLEAR.paramValue
+                )
             )
             resultCallback(null)
             dismiss()
@@ -75,9 +83,7 @@ class FriendlyNameDialogFragment(
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            Analytics.Screen.CHANGE_STATION_NAME,
-            FriendlyNameDialogFragment::class.simpleName,
-            deviceId
+            Analytics.Screen.CHANGE_STATION_NAME, getClassSimpleName(), deviceId
         )
     }
 

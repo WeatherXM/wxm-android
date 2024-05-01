@@ -43,6 +43,9 @@ import com.mapbox.search.SearchEngineSettings
 import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
+import com.weatherxm.analytics.AnalyticsImpl
+import com.weatherxm.analytics.FirebaseAnalyticsLib
+import com.weatherxm.analytics.MixpanelLib
 import com.weatherxm.data.adapters.LocalDateJsonAdapter
 import com.weatherxm.data.adapters.LocalDateTimeJsonAdapter
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
@@ -241,7 +244,6 @@ import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCaseImpl
 import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.usecases.WidgetSelectStationUseCaseImpl
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.Crashlytics
 import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.LocationHelper
@@ -812,8 +814,16 @@ val analytics = module {
         }
     }
 
+    single<MixpanelLib>() {
+        MixpanelLib(get())
+    }
+
+    single<FirebaseAnalyticsLib>() {
+        FirebaseAnalyticsLib(get())
+    }
+
     single(createdAtStart = true) {
-        Analytics(get(), get(), get(), get(), get(), androidContext())
+        AnalyticsImpl(get(), get(), get(), get(), get(), androidContext())
     }
 }
 

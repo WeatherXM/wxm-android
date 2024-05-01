@@ -8,7 +8,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.explorer.SearchResult
 import com.weatherxm.usecases.ExplorerUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +20,7 @@ import timber.log.Timber
 
 class NetworkSearchViewModel(
     private val explorerUseCase: ExplorerUseCase,
-    private val analytics: Analytics
+    private val analytics: AnalyticsImpl
 ) : ViewModel() {
     companion object {
         const val NETWORK_SEARCH_REQUEST_THRESHOLD = 1000L

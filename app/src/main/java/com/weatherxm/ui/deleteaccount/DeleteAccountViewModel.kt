@@ -9,7 +9,7 @@ import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidPassword
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.DeleteAccountUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import com.weatherxm.util.Failure.getCode
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class DeleteAccountViewModel(
     private val resources: Resources,
     private val deleteAccountUseCase: DeleteAccountUseCase,
-    private val analytics: Analytics
+    private val analytics: AnalyticsImpl
 ) : ViewModel() {
 
     private val onStatus = MutableLiveData<Resource<State>>()

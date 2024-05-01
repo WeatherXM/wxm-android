@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.BatteryState
 import com.weatherxm.data.DeviceProfile
@@ -14,7 +15,7 @@ import com.weatherxm.ui.common.capitalizeWords
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.StationSettingsUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -25,7 +26,7 @@ class DeviceSettingsViewModel(
     var device: UIDevice,
     private val usecase: StationSettingsUseCase,
     private val resources: Resources,
-    private val analytics: Analytics
+    private val analytics: AnalyticsImpl
 ) : ViewModel() {
     private val onEditNameChange = MutableLiveData<String>()
     private val onDeviceRemoved = MutableLiveData<Boolean>()

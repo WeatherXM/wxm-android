@@ -13,14 +13,14 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ClaimHeliumPairViewModel(
     private val resources: Resources,
-    analytics: Analytics,
+    analytics: AnalyticsImpl,
     private val scanDevicesUseCase: BluetoothScannerUseCase,
     connectionUseCase: BluetoothConnectionUseCase
 ) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics) {

@@ -12,14 +12,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.ui.Navigator
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import com.weatherxm.util.checkPermissionsAndThen
 import com.weatherxm.util.hasPermission
 import com.weatherxm.util.permissionsBuilder
 import org.koin.android.ext.android.inject
 
 open class BaseActivity : AppCompatActivity(), BaseInterface {
-    override val analytics: Analytics by inject()
+    override val analytics: AnalyticsImpl by inject()
     override val navigator: Navigator by inject()
     override var snackbar: Snackbar? = null
 

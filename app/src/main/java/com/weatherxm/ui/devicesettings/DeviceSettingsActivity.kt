@@ -8,6 +8,7 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityDeviceSettingsBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
@@ -16,12 +17,12 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.applyOnGlobalLayout
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.MapboxUtils.getMinimap
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -195,7 +196,7 @@ class DeviceSettingsActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.STATION_SETTINGS, this::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.STATION_SETTINGS, getClassSimpleName())
     }
 
     private fun setupInfo() {

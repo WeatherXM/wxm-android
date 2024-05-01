@@ -9,14 +9,14 @@ import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.RewardTimelineType
 import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.usecases.RewardsUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class RewardsListViewModel(
     private val usecase: RewardsUseCase,
-    private val analytics: Analytics
+    private val analytics: AnalyticsImpl
 ) : ViewModel() {
     private var currentPage = 0
     private var hasNextPage = false

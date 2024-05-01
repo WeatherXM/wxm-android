@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo
 import arrow.core.getOrElse
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.data.User
@@ -19,7 +20,7 @@ import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.util.Validator
 import com.weatherxm.util.WidgetHelper
 import org.koin.android.ext.android.inject
@@ -126,7 +127,7 @@ class LoginActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.LOGIN, this::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.LOGIN, getClassSimpleName())
     }
 
     private fun onLoginResult(result: Resource<Unit>) {

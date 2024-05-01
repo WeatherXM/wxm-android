@@ -3,13 +3,14 @@ package com.weatherxm.ui.resetpassword
 import android.os.Bundle
 import android.view.View
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityResetPasswordBinding
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.util.Validator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -50,7 +51,7 @@ class ResetPasswordActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.PASSWORD_RESET, this::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.PASSWORD_RESET, getClassSimpleName())
     }
 
     private fun onEmailSentResult(result: Resource<Unit>) {

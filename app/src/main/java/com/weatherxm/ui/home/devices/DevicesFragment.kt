@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -18,11 +19,11 @@ import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.home.HomeViewModel
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class DevicesFragment : BaseFragment(), DeviceListener {
@@ -193,7 +194,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DEVICES_LIST, DevicesFragment::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.DEVICES_LIST, getClassSimpleName())
     }
 
     override fun onDeviceClicked(device: UIDevice) {

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.Resource
@@ -13,7 +14,7 @@ import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.ChartsUseCase
 import com.weatherxm.usecases.HistoryUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
 import com.weatherxm.util.isToday
@@ -30,7 +31,7 @@ class HistoryChartsViewModel(
     private val historyUseCase: HistoryUseCase,
     private val chartsUseCase: ChartsUseCase,
     private val resources: Resources,
-    private val analytics: Analytics
+    private val analytics: AnalyticsImpl
 ) : ViewModel() {
 
     companion object {

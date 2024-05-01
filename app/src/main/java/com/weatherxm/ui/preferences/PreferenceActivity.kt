@@ -6,12 +6,13 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.databinding.ActivityPreferencesBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.WidgetHelper
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -76,7 +77,7 @@ class PreferenceActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.SETTINGS, this::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.SETTINGS, getClassSimpleName())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

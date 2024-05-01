@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentClaimM5ResultBinding
@@ -13,7 +14,6 @@ import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.components.BaseFragment
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class ClaimM5ResultFragment : BaseFragment() {

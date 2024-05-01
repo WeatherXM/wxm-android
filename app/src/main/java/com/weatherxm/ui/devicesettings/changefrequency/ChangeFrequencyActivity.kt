@@ -9,6 +9,7 @@ import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -24,7 +25,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicesettings.ChangeFrequencyState
 import com.weatherxm.ui.devicesettings.FrequencyStatus
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.getClassSimpleName
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -119,7 +120,7 @@ class ChangeFrequencyActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            Analytics.Screen.CHANGE_STATION_FREQUENCY, this::class.simpleName, model.device.id
+            Analytics.Screen.CHANGE_STATION_FREQUENCY, getClassSimpleName(), model.device.id
         )
     }
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.annotation.StringRes
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityNetworkStatsBinding
 import com.weatherxm.ui.common.applyInsets
@@ -12,7 +13,7 @@ import com.weatherxm.ui.common.removeLinksUnderline
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.util.initializeNetworkStatsChart
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -195,7 +196,7 @@ class NetworkStatsActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.NETWORK_STATS, this::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.NETWORK_STATS, getClassSimpleName())
     }
 
     @SuppressLint("SetTextI18n")

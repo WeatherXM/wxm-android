@@ -24,9 +24,11 @@ import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setVisible
@@ -36,7 +38,6 @@ import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
 import com.weatherxm.ui.explorer.search.NetworkSearchResultsListAdapter
 import com.weatherxm.ui.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.Validator
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -182,7 +183,7 @@ class ExplorerMapFragment : BaseMapFragment() {
                 )
                 analytics.trackScreen(
                     Analytics.Screen.NETWORK_SEARCH,
-                    NetworkStatsActivity::class.simpleName
+                    NetworkStatsActivity::class.simpleName ?: String.empty()
                 )
                 model.onSearchOpenStatus(true)
             } else if (newState == TransitionState.HIDING) {
@@ -331,15 +332,9 @@ class ExplorerMapFragment : BaseMapFragment() {
         super.onResume()
         binding.searchBar.menu.getItem(0).isVisible = !model.isExplorerAfterLoggedIn()
         if (model.isExplorerAfterLoggedIn()) {
-            analytics.trackScreen(
-                Analytics.Screen.EXPLORER,
-                ExplorerMapFragment::class.simpleName
-            )
+            analytics.trackScreen(Analytics.Screen.EXPLORER, getClassSimpleName())
         } else {
-            analytics.trackScreen(
-                Analytics.Screen.EXPLORER_LANDING,
-                ExplorerMapFragment::class.simpleName
-            )
+            analytics.trackScreen(Analytics.Screen.EXPLORER_LANDING, getClassSimpleName())
         }
     }
 

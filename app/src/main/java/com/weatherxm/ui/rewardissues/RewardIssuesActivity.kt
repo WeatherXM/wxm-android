@@ -3,6 +3,7 @@ package com.weatherxm.ui.rewardissues
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.Analytics
 import com.weatherxm.data.RewardDetails
 import com.weatherxm.databinding.ActivityRewardIssuesBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
@@ -13,7 +14,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import timber.log.Timber
 
@@ -51,7 +52,7 @@ class RewardIssuesActivity : BaseActivity(), RewardIssuesListener {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.REWARD_ISSUES, this::class.simpleName)
+        analytics.trackScreen(Analytics.Screen.REWARD_ISSUES, getClassSimpleName())
     }
 
     override fun onAddWallet(group: String?) {

@@ -16,7 +16,7 @@ import com.weatherxm.ui.devicesettings.FrequencyStatus
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.usecases.StationSettingsUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import com.weatherxm.util.Failure.getCode
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
@@ -28,7 +28,7 @@ class ChangeFrequencyViewModel(
     private val usecase: StationSettingsUseCase,
     connectionUseCase: BluetoothConnectionUseCase,
     scanUseCase: BluetoothScannerUseCase,
-    analytics: Analytics
+    analytics: AnalyticsImpl
 ) : BluetoothHeliumViewModel(
     device.getLastCharsOfLabel(),
     scanUseCase,

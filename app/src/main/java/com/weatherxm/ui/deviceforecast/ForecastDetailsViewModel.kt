@@ -16,7 +16,7 @@ import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.usecases.ChartsUseCase
 import com.weatherxm.usecases.ForecastUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsImpl
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ import java.time.LocalDate
 class ForecastDetailsViewModel(
     val device: UIDevice,
     private val resources: Resources,
-    private val analytics: Analytics,
+    private val analytics: AnalyticsImpl,
     private val chartsUseCase: ChartsUseCase,
     private val forecastUseCase: ForecastUseCase
 ) : ViewModel() {
