@@ -29,6 +29,7 @@
     <string name="temperature">Temperature</string>
     <string name="humidity">Humidity</string>
     <string name="precipitation_probability">Precip. Probability</string>
+    <string name="probability">Probability</string>
     <string name="precipitation_rate">Precipitation Rate</string>
     <string name="precipitation">Precipitation</string>
     <string name="daily_precipitation">Daily Precipitation</string>

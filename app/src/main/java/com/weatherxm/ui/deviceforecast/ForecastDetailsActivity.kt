@@ -16,6 +16,7 @@ import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.boldText
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.screenLocation
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setDisplayTimezone
 import com.weatherxm.ui.common.setVisible
@@ -42,6 +43,10 @@ import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 class ForecastDetailsActivity : BaseActivity() {
+    companion object {
+        const val SCROLL_DURATION_MS = 500
+    }
+
     private lateinit var binding: ActivityForecastDetailsBinding
 
     private val model: ForecastDetailsViewModel by viewModel {
@@ -113,8 +118,8 @@ class ForecastDetailsActivity : BaseActivity() {
         // Update Daily Weather
         binding.dailyDate.text = forecast.date.getRelativeDayAndShort(this)
         binding.dailyIcon.setWeatherAnimation(forecast.icon)
-        binding.dailyMaxTemp.text = getFormattedTemperature(forecast.maxTemp, 1)
-        binding.dailyMinTemp.text = getFormattedTemperature(forecast.minTemp, 1)
+        binding.dailyMaxTemp.text = getFormattedTemperature(forecast.maxTemp)
+        binding.dailyMinTemp.text = getFormattedTemperature(forecast.minTemp)
         binding.precipProbabilityCard.setData(
             getFormattedPrecipitationProbability(forecast.precipProbability, false), "%"
         )
@@ -170,7 +175,7 @@ class ForecastDetailsActivity : BaseActivity() {
                 getString(R.string.precipitation), getString(R.string.precipitation)
             )
             chartPrecipitation().secondaryLine(
-                getString(R.string.precipitation_probability),
+                getString(R.string.probability),
                 getString(R.string.precipitation_probability)
             )
             chartWind().primaryLine(null, getString(R.string.speed))
@@ -189,7 +194,10 @@ class ForecastDetailsActivity : BaseActivity() {
     }
 
     private fun scrollToChart(chart: LineChartView) {
-        chart.parent.requestChildFocus(chart, chart)
+        val (chartX, chartY) = chart.screenLocation()
+        val currentY = binding.mainContainer.scrollY
+        val finalY = chartY - binding.appBar.height - binding.root.paddingTop + currentY
+        binding.mainContainer.smoothScrollTo(chartX, finalY, SCROLL_DURATION_MS)
     }
 
     private fun setupDailyAdapter(forecastDay: UIForecastDay, selectedDayPosition: Int) {

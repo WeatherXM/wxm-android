@@ -230,7 +230,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/margin_extra_large"
+                android:layout_marginBottom="@dimen/margin_extra_extra_large"
                 android:text="@string/contact_support_title"
                 app:layout_constraintBottom_toTopOf="@id/buttonsContainer" />
 

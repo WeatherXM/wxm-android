@@ -8,7 +8,8 @@
 
     <dimen name="card_stroke">2dp</dimen>
 
-    <dimen name="margin_extra_large">48dp</dimen>
+    <dimen name="margin_extra_extra_large">48dp</dimen>
+    <dimen name="margin_extra_large">32dp</dimen>
     <dimen name="margin_large">24dp</dimen>
     <dimen name="margin_normal_to_large">20dp</dimen>
     <dimen name="margin_normal">16dp</dimen>

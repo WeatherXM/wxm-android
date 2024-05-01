@@ -37,7 +37,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
-                android:textSize="26sp"
                 android:textStyle="bold"
                 tools:text="25°C" />
 
