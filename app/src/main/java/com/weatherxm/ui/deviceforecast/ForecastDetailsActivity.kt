@@ -43,6 +43,10 @@ import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
 class ForecastDetailsActivity : BaseActivity() {
+    companion object {
+        const val SCROLL_DURATION_MS = 500
+    }
+
     private lateinit var binding: ActivityForecastDetailsBinding
 
     private val model: ForecastDetailsViewModel by viewModel {
@@ -190,9 +194,10 @@ class ForecastDetailsActivity : BaseActivity() {
     }
 
     private fun scrollToChart(chart: LineChartView) {
-        val (x, y) = chart.screenLocation()
+        val (chartX, chartY) = chart.screenLocation()
         val currentY = binding.mainContainer.scrollY
-        binding.mainContainer.smoothScrollTo(x, y - binding.appBar.height - binding.root.paddingTop + currentY)
+        val finalY = chartY - binding.appBar.height - binding.root.paddingTop + currentY
+        binding.mainContainer.smoothScrollTo(chartX, finalY, SCROLL_DURATION_MS)
     }
 
     private fun setupDailyAdapter(forecastDay: UIForecastDay, selectedDayPosition: Int) {
