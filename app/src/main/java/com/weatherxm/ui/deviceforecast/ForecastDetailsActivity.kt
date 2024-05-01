@@ -191,7 +191,8 @@ class ForecastDetailsActivity : BaseActivity() {
 
     private fun scrollToChart(chart: LineChartView) {
         val (x, y) = chart.screenLocation()
-        binding.mainContainer.smoothScrollTo(x, y - binding.appBar.height - binding.root.paddingTop)
+        val currentY = binding.mainContainer.scrollY
+        binding.mainContainer.smoothScrollTo(x, y - binding.appBar.height - binding.root.paddingTop + currentY)
     }
 
     private fun setupDailyAdapter(forecastDay: UIForecastDay, selectedDayPosition: Int) {
