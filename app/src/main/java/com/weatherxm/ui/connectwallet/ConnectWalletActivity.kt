@@ -7,7 +7,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityConnectWalletBinding
@@ -56,25 +56,25 @@ class ConnectWalletActivity : BaseActivity() {
             ) {
                 navigator.openWebsite(this, getString(R.string.suggested_wallets_documentation))
                 analytics.trackEventPrompt(
-                    Analytics.ParamValue.WALLET_COMPATIBILITY.paramValue,
-                    Analytics.ParamValue.INFO.paramValue,
-                    Analytics.ParamValue.ACTION.paramValue
+                    AnalyticsService.ParamValue.WALLET_COMPATIBILITY.paramValue,
+                    AnalyticsService.ParamValue.INFO.paramValue,
+                    AnalyticsService.ParamValue.ACTION.paramValue
                 )
             }
 
         binding.walletCompatibilityCard.closeButton {
             binding.walletCompatibilityCard.setVisible(false)
             analytics.trackEventPrompt(
-                Analytics.ParamValue.WALLET_COMPATIBILITY.paramValue,
-                Analytics.ParamValue.INFO.paramValue,
-                Analytics.ParamValue.DISMISS.paramValue
+                AnalyticsService.ParamValue.WALLET_COMPATIBILITY.paramValue,
+                AnalyticsService.ParamValue.INFO.paramValue,
+                AnalyticsService.ParamValue.DISMISS.paramValue
             )
         }
 
         with(binding.termsCheckboxDesc) {
             movementMethod = BetterLinkMovementMethod.newInstance().apply {
                 setOnLinkClickListener { _, url ->
-                    analytics.trackEventSelectContent(Analytics.ParamValue.WALLET_TERMS.paramValue)
+                    analytics.trackEventSelectContent(AnalyticsService.ParamValue.WALLET_TERMS.paramValue)
                     navigator.openWebsite(this@ConnectWalletActivity, url)
                     return@setOnLinkClickListener true
                 }
@@ -103,13 +103,13 @@ class ConnectWalletActivity : BaseActivity() {
         }
 
         binding.scanQR.setOnClickListener {
-            analytics.trackEventSelectContent(Analytics.ParamValue.WALLET_SCAN_QR.paramValue)
+            analytics.trackEventSelectContent(AnalyticsService.ParamValue.WALLET_SCAN_QR.paramValue)
             navigator.showQRScanner(barcodeLauncher)
         }
 
         binding.editWallet.setOnClickListener {
             analytics.trackEventSelectContent(
-                Analytics.ParamValue.EDIT_WALLET.paramValue,
+                AnalyticsService.ParamValue.EDIT_WALLET.paramValue,
                 Pair(
                     FirebaseAnalytics.Param.ITEM_ID,
                     model.currentAddress().value ?: String.empty()
@@ -138,7 +138,7 @@ class ConnectWalletActivity : BaseActivity() {
 
         binding.createMetamask.setOnClickListener {
             analytics.trackEventSelectContent(
-                Analytics.ParamValue.CREATE_METAMASK.paramValue,
+                AnalyticsService.ParamValue.CREATE_METAMASK.paramValue,
                 Pair(
                     FirebaseAnalytics.Param.ITEM_ID,
                     model.currentAddress().value ?: String.empty()
@@ -152,7 +152,7 @@ class ConnectWalletActivity : BaseActivity() {
                 this, getString(R.string.wallet_explorer_arbitrum, model.currentAddress().value)
             )
             analytics.trackEventSelectContent(
-                Analytics.ParamValue.WALLET_TRANSACTIONS.paramValue,
+                AnalyticsService.ParamValue.WALLET_TRANSACTIONS.paramValue,
                 Pair(
                     FirebaseAnalytics.Param.ITEM_ID, model.currentAddress().value ?: String.empty()
                 )
@@ -173,7 +173,7 @@ class ConnectWalletActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.WALLET, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.WALLET, getClassSimpleName())
     }
 
     private fun showConfirmWalletDialog(address: String) {
@@ -210,9 +210,9 @@ class ConnectWalletActivity : BaseActivity() {
         binding.walletCompatibilityCard.setVisible(true)
 
         analytics.trackEventPrompt(
-            Analytics.ParamValue.WALLET_COMPATIBILITY.paramValue,
-            Analytics.ParamValue.INFO.paramValue,
-            Analytics.ParamValue.VIEW.paramValue
+            AnalyticsService.ParamValue.WALLET_COMPATIBILITY.paramValue,
+            AnalyticsService.ParamValue.INFO.paramValue,
+            AnalyticsService.ParamValue.VIEW.paramValue
         )
     }
 
@@ -225,9 +225,9 @@ class ConnectWalletActivity : BaseActivity() {
             binding.checkBoxesAndButtonContainer.setVisible(true)
 
             analytics.trackEventPrompt(
-                Analytics.ParamValue.WALLET_COMPATIBILITY.paramValue,
-                Analytics.ParamValue.INFO.paramValue,
-                Analytics.ParamValue.VIEW.paramValue
+                AnalyticsService.ParamValue.WALLET_COMPATIBILITY.paramValue,
+                AnalyticsService.ParamValue.INFO.paramValue,
+                AnalyticsService.ParamValue.VIEW.paramValue
             )
         } else {
             binding.editWallet.setVisible(true)

@@ -9,7 +9,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.ConnectWalletUseCase
-import com.weatherxm.analytics.AnalyticsImpl
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class ConnectWalletViewModel(
     private val connectWalletUseCase: ConnectWalletUseCase,
     private val resources: Resources,
-    private val analytics: AnalyticsImpl
+    private val analytics: AnalyticsWrapper
 ) : ViewModel() {
 
     companion object {

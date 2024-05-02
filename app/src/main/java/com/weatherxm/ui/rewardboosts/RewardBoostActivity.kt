@@ -7,7 +7,7 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.BoostCode
 import com.weatherxm.data.BoostReward
 import com.weatherxm.data.Status
@@ -116,7 +116,7 @@ class RewardBoostActivity : BaseActivity() {
         binding.boostAboutDesc.text = data.about
         binding.aboutReadMore.setOnClickListener {
             analytics.trackEventSelectContent(
-                Analytics.ParamValue.WEB_DOCUMENTATION.paramValue,
+                AnalyticsService.ParamValue.WEB_DOCUMENTATION.paramValue,
                 Pair(FirebaseAnalytics.Param.ITEM_ID, data.docUrl)
             )
             navigator.openWebsite(this, data.docUrl)
@@ -147,7 +147,7 @@ class RewardBoostActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            Analytics.Screen.REWARD_BOOST_DETAIL, getClassSimpleName(), boostCode
+            AnalyticsService.Screen.REWARD_BOOST_DETAIL, getClassSimpleName(), boostCode
         )
     }
 }

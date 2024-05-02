@@ -7,7 +7,7 @@ import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -86,7 +86,7 @@ class RebootActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            Analytics.Screen.REBOOT_STATION, getClassSimpleName(), model.device.id
+            AnalyticsService.Screen.REBOOT_STATION, getClassSimpleName(), model.device.id
         )
     }
 
@@ -161,7 +161,7 @@ class RebootActivity : BaseActivity() {
 
     private fun setListeners() {
         binding.bleActionFlow.setListeners(onScanClicked = {
-            analytics.trackEventSelectContent(Analytics.ParamValue.BLE_SCAN_AGAIN.paramValue)
+            analytics.trackEventSelectContent(AnalyticsService.ParamValue.BLE_SCAN_AGAIN.paramValue)
             initBluetoothAndStart()
         }, onPairClicked = {
             lifecycleScope.launch {

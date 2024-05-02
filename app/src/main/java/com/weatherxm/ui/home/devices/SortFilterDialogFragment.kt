@@ -10,7 +10,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentDevicesSortFilterBinding
 import com.weatherxm.ui.common.DevicesFilterType
 import com.weatherxm.ui.common.DevicesGroupBy
@@ -45,12 +45,12 @@ class SortFilterDialogFragment : BaseBottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.cancelBtn.setOnClickListener {
-            analytics.trackEventUserAction(Analytics.ParamValue.FILTERS_CANCEL.paramValue)
+            analytics.trackEventUserAction(AnalyticsService.ParamValue.FILTERS_CANCEL.paramValue)
             dismiss()
         }
 
         binding.resetBtn.setOnClickListener {
-            analytics.trackEventUserAction(Analytics.ParamValue.FILTERS_RESET.paramValue)
+            analytics.trackEventUserAction(AnalyticsService.ParamValue.FILTERS_RESET.paramValue)
             binding.sortButtons.check(R.id.dateAdded)
             binding.filterButtons.check(R.id.showAll)
             binding.groupButtons.check(R.id.noGrouping)
@@ -64,18 +64,18 @@ class SortFilterDialogFragment : BaseBottomSheetDialogFragment() {
             )
             model.fetch()
             analytics.trackEventUserAction(
-                Analytics.ParamValue.FILTERS_SAVE.paramValue,
+                AnalyticsService.ParamValue.FILTERS_SAVE.paramValue,
                 customParams = arrayOf(
                     Pair(
-                        Analytics.CustomParam.FILTERS_SORT.paramName,
+                        AnalyticsService.CustomParam.FILTERS_SORT.paramName,
                         model.getDevicesSortFilterOptions().getSortAnalyticsValue()
                     ),
                     Pair(
-                        Analytics.CustomParam.FILTERS_FILTER.paramName,
+                        AnalyticsService.CustomParam.FILTERS_FILTER.paramName,
                         model.getDevicesSortFilterOptions().getFilterAnalyticsValue()
                     ),
                     Pair(
-                        Analytics.CustomParam.FILTERS_GROUP.paramName,
+                        AnalyticsService.CustomParam.FILTERS_GROUP.paramName,
                         model.getDevicesSortFilterOptions().getGroupByAnalyticsValue()
                     )
                 )
@@ -115,20 +115,20 @@ class SortFilterDialogFragment : BaseBottomSheetDialogFragment() {
             when (checkedId) {
                 R.id.dateAdded -> {
                     trackUserOptionChange(
-                        Analytics.ParamValue.FILTERS_SORT.paramValue,
-                        Analytics.ParamValue.FILTERS_SORT_DATE_ADDED.paramValue
+                        AnalyticsService.ParamValue.FILTERS_SORT.paramValue,
+                        AnalyticsService.ParamValue.FILTERS_SORT_DATE_ADDED.paramValue
                     )
                 }
                 R.id.name -> {
                     trackUserOptionChange(
-                        Analytics.ParamValue.FILTERS_SORT.paramValue,
-                        Analytics.ParamValue.FILTERS_SORT_NAME.paramValue
+                        AnalyticsService.ParamValue.FILTERS_SORT.paramValue,
+                        AnalyticsService.ParamValue.FILTERS_SORT_NAME.paramValue
                     )
                 }
                 else -> {
                     trackUserOptionChange(
-                        Analytics.ParamValue.FILTERS_SORT.paramValue,
-                        Analytics.ParamValue.FILTERS_SORT_LAST_ACTIVE.paramValue
+                        AnalyticsService.ParamValue.FILTERS_SORT.paramValue,
+                        AnalyticsService.ParamValue.FILTERS_SORT_LAST_ACTIVE.paramValue
                     )
                 }
             }
@@ -137,20 +137,20 @@ class SortFilterDialogFragment : BaseBottomSheetDialogFragment() {
             when (checkedId) {
                 R.id.showAll -> {
                     trackUserOptionChange(
-                        Analytics.ParamValue.FILTERS_FILTER.paramValue,
-                        Analytics.ParamValue.FILTERS_FILTER_ALL.paramValue
+                        AnalyticsService.ParamValue.FILTERS_FILTER.paramValue,
+                        AnalyticsService.ParamValue.FILTERS_FILTER_ALL.paramValue
                     )
                 }
                 R.id.ownedOnly -> {
                     trackUserOptionChange(
-                        Analytics.ParamValue.FILTERS_FILTER.paramValue,
-                        Analytics.ParamValue.FILTERS_FILTER_OWNED.paramValue
+                        AnalyticsService.ParamValue.FILTERS_FILTER.paramValue,
+                        AnalyticsService.ParamValue.FILTERS_FILTER_OWNED.paramValue
                     )
                 }
                 else -> {
                     trackUserOptionChange(
-                        Analytics.ParamValue.FILTERS_FILTER.paramValue,
-                        Analytics.ParamValue.FILTERS_FILTER_FAVORITES.paramValue
+                        AnalyticsService.ParamValue.FILTERS_FILTER.paramValue,
+                        AnalyticsService.ParamValue.FILTERS_FILTER_FAVORITES.paramValue
                     )
                 }
             }
@@ -159,20 +159,20 @@ class SortFilterDialogFragment : BaseBottomSheetDialogFragment() {
             when (checkedId) {
                 R.id.noGrouping -> {
                     trackUserOptionChange(
-                        Analytics.ParamValue.FILTERS_GROUP.paramValue,
-                        Analytics.ParamValue.FILTERS_GROUP_NO_GROUPING.paramValue
+                        AnalyticsService.ParamValue.FILTERS_GROUP.paramValue,
+                        AnalyticsService.ParamValue.FILTERS_GROUP_NO_GROUPING.paramValue
                     )
                 }
                 R.id.relationship -> {
                     trackUserOptionChange(
-                        Analytics.ParamValue.FILTERS_GROUP.paramValue,
-                        Analytics.ParamValue.FILTERS_GROUP_RELATIONSHIP.paramValue
+                        AnalyticsService.ParamValue.FILTERS_GROUP.paramValue,
+                        AnalyticsService.ParamValue.FILTERS_GROUP_RELATIONSHIP.paramValue
                     )
                 }
                 else -> {
                     trackUserOptionChange(
-                        Analytics.ParamValue.FILTERS_GROUP.paramValue,
-                        Analytics.ParamValue.FILTERS_GROUP_STATUS.paramValue
+                        AnalyticsService.ParamValue.FILTERS_GROUP.paramValue,
+                        AnalyticsService.ParamValue.FILTERS_GROUP_STATUS.paramValue
                     )
                 }
             }
@@ -181,7 +181,7 @@ class SortFilterDialogFragment : BaseBottomSheetDialogFragment() {
 
     private fun trackUserOptionChange(itemId: String, itemListId: String) {
         analytics.trackEventSelectContent(
-            Analytics.ParamValue.FILTERS.paramValue,
+            AnalyticsService.ParamValue.FILTERS.paramValue,
             customParams = arrayOf(
                 Pair(FirebaseAnalytics.Param.ITEM_ID, itemId),
                 Pair(FirebaseAnalytics.Param.ITEM_LIST_ID, itemListId)
@@ -197,7 +197,7 @@ class SortFilterDialogFragment : BaseBottomSheetDialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.SORT_FILTER, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.SORT_FILTER, getClassSimpleName())
     }
 
     fun show(fragment: Fragment) {

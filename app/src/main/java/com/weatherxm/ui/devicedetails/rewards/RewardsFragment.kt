@@ -27,7 +27,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.RewardsTimestampScore
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsRewardsBinding
@@ -230,6 +230,6 @@ class RewardsFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DEVICE_REWARDS, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.DEVICE_REWARDS, getClassSimpleName())
     }
 }

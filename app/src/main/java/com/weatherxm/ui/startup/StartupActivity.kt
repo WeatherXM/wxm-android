@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mapbox.common.MapboxOptions
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.common.getClassSimpleName
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -37,6 +37,6 @@ class StartupActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.SPLASH, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.SPLASH, getClassSimpleName())
     }
 }

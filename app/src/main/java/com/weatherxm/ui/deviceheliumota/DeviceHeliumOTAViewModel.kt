@@ -14,7 +14,7 @@ import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.usecases.BluetoothUpdaterUseCase
-import com.weatherxm.analytics.AnalyticsImpl
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getCode
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
@@ -27,7 +27,7 @@ class DeviceHeliumOTAViewModel(
     private val updaterUseCase: BluetoothUpdaterUseCase,
     connectionUseCase: BluetoothConnectionUseCase,
     scanUseCase: BluetoothScannerUseCase,
-    analytics: AnalyticsImpl
+    analytics: AnalyticsWrapper
 ) : BluetoothHeliumViewModel(
     device.getLastCharsOfLabel(),
     scanUseCase,

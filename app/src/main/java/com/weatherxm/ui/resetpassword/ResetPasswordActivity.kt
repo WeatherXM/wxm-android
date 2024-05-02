@@ -3,7 +3,7 @@ package com.weatherxm.ui.resetpassword
 import android.os.Bundle
 import android.view.View
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityResetPasswordBinding
@@ -51,7 +51,7 @@ class ResetPasswordActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.PASSWORD_RESET, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.PASSWORD_RESET, getClassSimpleName())
     }
 
     private fun onEmailSentResult(result: Resource<Unit>) {
@@ -66,8 +66,8 @@ class ResetPasswordActivity : BaseActivity() {
                 binding.status.visibility = View.VISIBLE
 
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.SEND_EMAIL_FORGOT_PASSWORD.paramValue,
-                    contentId = Analytics.ParamValue.SEND_EMAIL_FORGOT_PASSWORD_ID.paramValue,
+                    contentName = AnalyticsService.ParamValue.SEND_EMAIL_FORGOT_PASSWORD.paramValue,
+                    contentId = AnalyticsService.ParamValue.SEND_EMAIL_FORGOT_PASSWORD_ID.paramValue,
                     success = 1L
                 )
             }
@@ -84,8 +84,8 @@ class ResetPasswordActivity : BaseActivity() {
                     }
 
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.SEND_EMAIL_FORGOT_PASSWORD.paramValue,
-                    contentId = Analytics.ParamValue.SEND_EMAIL_FORGOT_PASSWORD_ID.paramValue,
+                    contentName = AnalyticsService.ParamValue.SEND_EMAIL_FORGOT_PASSWORD.paramValue,
+                    contentId = AnalyticsService.ParamValue.SEND_EMAIL_FORGOT_PASSWORD_ID.paramValue,
                     success = 0L
                 )
             }

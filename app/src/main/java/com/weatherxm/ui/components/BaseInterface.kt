@@ -7,11 +7,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
-import com.weatherxm.analytics.AnalyticsImpl
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.checkPermissionsAndThen
 
 interface BaseInterface {
-    val analytics: AnalyticsImpl
+    val analytics: AnalyticsWrapper
     val navigator: Navigator
     var snackbar: Snackbar?
 

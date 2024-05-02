@@ -8,7 +8,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
-import com.weatherxm.analytics.AnalyticsImpl
+import com.weatherxm.analytics.AnalyticsWrapper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -16,7 +16,7 @@ open class BluetoothHeliumViewModel(
     private val deviceBleAddress: String,
     private val scanUseCase: BluetoothScannerUseCase?,
     protected val connectionUseCase: BluetoothConnectionUseCase,
-    protected val analytics: AnalyticsImpl
+    protected val analytics: AnalyticsWrapper
 ) : ViewModel() {
     protected var scannedDevice = ScannedDevice.empty()
 

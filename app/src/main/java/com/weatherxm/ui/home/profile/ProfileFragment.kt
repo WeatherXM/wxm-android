@@ -9,7 +9,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.content.res.AppCompatResources
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Status
 import com.weatherxm.data.User
 import com.weatherxm.databinding.FragmentProfileBinding
@@ -193,6 +193,6 @@ class ProfileFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.PROFILE, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.PROFILE, getClassSimpleName())
     }
 }

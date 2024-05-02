@@ -5,7 +5,7 @@ import androidx.activity.addCallback
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityCellInfoBinding
@@ -69,10 +69,10 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
 
         binding.capacityChip.setOnCloseIconClickListener {
             analytics.trackEventSelectContent(
-                Analytics.ParamValue.LEARN_MORE.paramValue,
+                AnalyticsService.ParamValue.LEARN_MORE.paramValue,
                 Pair(
                     FirebaseAnalytics.Param.ITEM_ID,
-                    Analytics.ParamValue.INFO_CELL_CAPACITY.paramValue
+                    AnalyticsService.ParamValue.INFO_CELL_CAPACITY.paramValue
                 )
             )
             navigator.showMessageDialog(
@@ -80,7 +80,7 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
                 getString(R.string.cell_capacity),
                 getString(R.string.cell_capacity_explanation),
                 readMoreUrl = getString(R.string.docs_url_cell_capacity),
-                analyticsScreenName = Analytics.Screen.CELL_CAPACITY_INFO.screenName
+                analyticsScreenName = AnalyticsService.Screen.CELL_CAPACITY_INFO.screenName
             )
         }
 
@@ -121,7 +121,7 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            Analytics.Screen.EXPLORER_CELL, getClassSimpleName(), model.cell.index
+            AnalyticsService.Screen.EXPLORER_CELL, getClassSimpleName(), model.cell.index
         )
         model.fetchDevices()
     }

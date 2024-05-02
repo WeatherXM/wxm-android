@@ -43,9 +43,10 @@ import com.mapbox.search.SearchEngineSettings
 import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
-import com.weatherxm.analytics.AnalyticsImpl
-import com.weatherxm.analytics.FirebaseAnalyticsLib
-import com.weatherxm.analytics.MixpanelLib
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.analytics.FirebaseAnalyticsService
+import com.weatherxm.analytics.MixpanelAnalyticsService
 import com.weatherxm.data.adapters.LocalDateJsonAdapter
 import com.weatherxm.data.adapters.LocalDateTimeJsonAdapter
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
@@ -808,23 +809,18 @@ val clientIdentificationHelper = module {
 }
 
 val analytics = module {
+    single { FirebaseAnalytics.getInstance(androidContext()) }
     single<MixpanelAPI>(createdAtStart = true) {
         MixpanelAPI.getInstance(androidContext(), BuildConfig.MIXPANEL_TOKEN, false).apply {
             setEnableLogging(true)
         }
     }
 
-    single<MixpanelLib>() {
-        MixpanelLib(get())
-    }
+    factory { FirebaseAnalyticsService(get()) as AnalyticsService }
+    factory { MixpanelAnalyticsService(get()) as AnalyticsService }
 
-    single<FirebaseAnalyticsLib>() {
-        FirebaseAnalyticsLib(get())
-    }
+    factory { AnalyticsWrapper(getAll<AnalyticsService>(), get(), get(), get(), androidContext()) }
 
-    single(createdAtStart = true) {
-        AnalyticsImpl(get(), get(), get(), get(), get(), androidContext())
-    }
 }
 
 val crashlytics = module {

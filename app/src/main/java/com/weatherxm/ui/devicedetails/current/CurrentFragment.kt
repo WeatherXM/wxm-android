@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
@@ -90,7 +90,7 @@ class CurrentFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.CURRENT_WEATHER, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.CURRENT_WEATHER, getClassSimpleName())
     }
 
     private fun handleFollowClick() {

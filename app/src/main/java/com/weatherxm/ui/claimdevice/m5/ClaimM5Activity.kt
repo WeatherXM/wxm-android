@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimM5DeviceBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
@@ -72,7 +72,7 @@ class ClaimM5Activity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.CLAIM_M5, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.CLAIM_M5, getClassSimpleName())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

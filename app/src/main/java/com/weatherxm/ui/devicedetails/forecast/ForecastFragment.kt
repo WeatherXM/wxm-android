@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
 import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
@@ -51,10 +51,10 @@ class ForecastFragment : BaseFragment() {
         // Initialize the adapters with empty data
         val dailyForecastAdapter = DailyForecastAdapter {
             analytics.trackEventSelectContent(
-                Analytics.ParamValue.DAILY_CARD.paramValue,
+                AnalyticsService.ParamValue.DAILY_CARD.paramValue,
                 Pair(
                     FirebaseAnalytics.Param.ITEM_ID,
-                    Analytics.ParamValue.DAILY_FORECAST.paramValue
+                    AnalyticsService.ParamValue.DAILY_FORECAST.paramValue
                 )
             )
             navigator.showForecastDetails(
@@ -65,10 +65,10 @@ class ForecastFragment : BaseFragment() {
         }
         val hourlyForecastAdapter = HourlyForecastAdapter {
             analytics.trackEventSelectContent(
-                Analytics.ParamValue.HOURLY_DETAILS_CARD.paramValue,
+                AnalyticsService.ParamValue.HOURLY_DETAILS_CARD.paramValue,
                 Pair(
                     FirebaseAnalytics.Param.ITEM_ID,
-                    Analytics.ParamValue.HOURLY_FORECAST.paramValue
+                    AnalyticsService.ParamValue.HOURLY_FORECAST.paramValue
                 )
             )
             navigator.showForecastDetails(
@@ -124,7 +124,7 @@ class ForecastFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DEVICE_FORECAST, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, getClassSimpleName())
     }
 
     private fun fetchOrHideContent() {

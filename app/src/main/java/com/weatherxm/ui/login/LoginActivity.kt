@@ -8,7 +8,7 @@ import android.view.inputmethod.EditorInfo
 import arrow.core.getOrElse
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.data.User
@@ -127,7 +127,7 @@ class LoginActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.LOGIN, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.LOGIN, getClassSimpleName())
     }
 
     private fun onLoginResult(result: Resource<Unit>) {
@@ -139,9 +139,9 @@ class LoginActivity : BaseActivity() {
             }
             Status.ERROR -> {
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.LOGIN.paramValue,
-                    contentId = Analytics.ParamValue.LOGIN_ID.paramValue,
-                    Pair(FirebaseAnalytics.Param.METHOD, Analytics.ParamValue.EMAIL.paramValue),
+                    contentName = AnalyticsService.ParamValue.LOGIN.paramValue,
+                    contentId = AnalyticsService.ParamValue.LOGIN_ID.paramValue,
+                    Pair(FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue),
                     success = 0L
                 )
                 setInputEnabled(true)
@@ -174,9 +174,9 @@ class LoginActivity : BaseActivity() {
                 * should track the successful login event.
                  */
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.LOGIN.paramValue,
-                    contentId = Analytics.ParamValue.LOGIN_ID.paramValue,
-                    Pair(FirebaseAnalytics.Param.METHOD, Analytics.ParamValue.EMAIL.paramValue),
+                    contentName = AnalyticsService.ParamValue.LOGIN.paramValue,
+                    contentId = AnalyticsService.ParamValue.LOGIN_ID.paramValue,
+                    Pair(FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue),
                     success = 1L
                 )
 
@@ -195,9 +195,9 @@ class LoginActivity : BaseActivity() {
             }
             Status.ERROR -> {
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.LOGIN.paramValue,
-                    contentId = Analytics.ParamValue.LOGIN_ID.paramValue,
-                    Pair(FirebaseAnalytics.Param.METHOD, Analytics.ParamValue.EMAIL.paramValue),
+                    contentName = AnalyticsService.ParamValue.LOGIN.paramValue,
+                    contentId = AnalyticsService.ParamValue.LOGIN_ID.paramValue,
+                    Pair(FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue),
                     success = 0L
                 )
                 binding.loading.visibility = View.INVISIBLE

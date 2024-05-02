@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.getOrElse
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
@@ -17,7 +17,7 @@ import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.FollowUseCase
-import com.weatherxm.analytics.AnalyticsImpl
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.RefreshHandler
 import com.weatherxm.util.Resources
@@ -34,7 +34,7 @@ class DeviceDetailsViewModel(
     private val authUseCase: AuthUseCase,
     private val resources: Resources,
     private val followUseCase: FollowUseCase,
-    private val analytics: AnalyticsImpl
+    private val analytics: AnalyticsWrapper
 ) : ViewModel() {
     companion object {
         private const val REFRESH_INTERVAL_SECONDS = 30L
@@ -104,8 +104,8 @@ class DeviceDetailsViewModel(
 
     fun followStation() {
         analytics.trackEventUserAction(
-            Analytics.ParamValue.DEVICE_DETAILS_FOLLOW.paramValue,
-            Analytics.ParamValue.FOLLOW.paramValue
+            AnalyticsService.ParamValue.DEVICE_DETAILS_FOLLOW.paramValue,
+            AnalyticsService.ParamValue.FOLLOW.paramValue
         )
         onFollowStatus.postValue(Resource.loading())
         viewModelScope.launch {
@@ -122,8 +122,8 @@ class DeviceDetailsViewModel(
 
     fun unFollowStation() {
         analytics.trackEventUserAction(
-            Analytics.ParamValue.DEVICE_DETAILS_FOLLOW.paramValue,
-            Analytics.ParamValue.UNFOLLOW.paramValue
+            AnalyticsService.ParamValue.DEVICE_DETAILS_FOLLOW.paramValue,
+            AnalyticsService.ParamValue.UNFOLLOW.paramValue
         )
         onFollowStatus.postValue(Resource.loading())
         viewModelScope.launch {

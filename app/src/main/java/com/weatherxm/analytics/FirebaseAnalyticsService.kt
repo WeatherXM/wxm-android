@@ -7,16 +7,39 @@ import com.weatherxm.BuildConfig
 import com.weatherxm.ui.common.empty
 import timber.log.Timber
 
-class FirebaseAnalyticsLib(private val firebaseAnalytics: FirebaseAnalytics) {
+class FirebaseAnalyticsService(private val firebaseAnalytics: FirebaseAnalytics) : AnalyticsService {
 
-    fun setUserProperties(userId: String, params: List<Pair<String, String>>) {
+
+    override fun setUserProperties() {
+        TODO("Not yet implemented")
+    }
+
+    override fun trackScreen(screen: AnalyticsService.Screen, screenClass: String, itemId: String?) {
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, screen.screenName)
+            param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass ?: String.empty())
+            itemId?.let {
+                param(FirebaseAnalytics.Param.ITEM_ID, itemId)
+            }
+        }
+    }
+
+    override fun trackScreen(screenName: String, screenClass: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun trackEventFailure(failureId: String?) {
+        TODO("Not yet implemented")
+    }
+
+    override fun setUserProperties(userId: String, params: List<Pair<String, String>>) {
         firebaseAnalytics.setUserId(userId)
         params.forEach {
             firebaseAnalytics.setUserProperty(it.first, it.second)
         }
     }
 
-    fun setAnalyticsEnabled(enabled: Boolean) {
+    override fun setAnalyticsEnabled(enabled: Boolean) {
         if (BuildConfig.DEBUG) {
             Timber.d("Skipping analytics tracking in DEBUG mode [enabled=$enabled].")
             firebaseAnalytics.setAnalyticsCollectionEnabled(false)
@@ -26,23 +49,13 @@ class FirebaseAnalyticsLib(private val firebaseAnalytics: FirebaseAnalytics) {
         }
     }
 
-    fun trackScreen(screenName: String, screenClass: String?, itemId: String? = null) {
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-            param(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
-            param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass ?: String.empty())
-            itemId?.let {
-                param(FirebaseAnalytics.Param.ITEM_ID, itemId)
-            }
-        }
-    }
-
-    fun trackEventUserAction(
+    override fun trackEventUserAction(
         actionName: String,
-        contentType: String? = null,
+        contentType: String?,
         vararg customParams: Pair<String, String>
     ) {
         val params = ParametersBuilder().apply {
-            param(Analytics.CustomParam.ACTION_NAME.paramName, actionName)
+            param(AnalyticsService.CustomParam.ACTION_NAME.paramName, actionName)
 
             contentType?.let {
                 param(FirebaseAnalytics.Param.CONTENT_TYPE, contentType)
@@ -52,18 +65,18 @@ class FirebaseAnalyticsLib(private val firebaseAnalytics: FirebaseAnalytics) {
                 param(it.first, it.second)
             }
         }
-        firebaseAnalytics.logEvent(Analytics.CustomEvent.USER_ACTION.eventName, params.bundle)
+        firebaseAnalytics.logEvent(AnalyticsService.CustomEvent.USER_ACTION.eventName, params.bundle)
     }
 
-    fun trackEventViewContent(
+    override fun trackEventViewContent(
         contentName: String,
         contentId: String,
         vararg customParams: Pair<String, String>,
-        success: Long? = null
+        success: Long?
     ) {
         val params = ParametersBuilder().apply {
-            param(Analytics.CustomParam.CONTENT_NAME.paramName, contentName)
-            param(Analytics.CustomParam.CONTENT_ID.paramName, contentId)
+            param(AnalyticsService.CustomParam.CONTENT_NAME.paramName, contentName)
+            param(AnalyticsService.CustomParam.CONTENT_ID.paramName, contentId)
 
             customParams.forEach {
                 param(it.first, it.second)
@@ -72,31 +85,31 @@ class FirebaseAnalyticsLib(private val firebaseAnalytics: FirebaseAnalytics) {
                 param(FirebaseAnalytics.Param.SUCCESS, it)
             }
         }
-        firebaseAnalytics.logEvent(Analytics.CustomEvent.VIEW_CONTENT.eventName, params.bundle)
+        firebaseAnalytics.logEvent(AnalyticsService.CustomEvent.VIEW_CONTENT.eventName, params.bundle)
     }
 
-    fun trackEventPrompt(
+    override fun trackEventPrompt(
         promptName: String,
         promptType: String,
         action: String,
         vararg customParams: Pair<String, String>
     ) {
         val params = ParametersBuilder().apply {
-            param(Analytics.CustomParam.PROMPT_NAME.paramName, promptName)
-            param(Analytics.CustomParam.PROMPT_TYPE.paramName, promptType)
-            param(Analytics.CustomParam.ACTION.paramName, action)
+            param(AnalyticsService.CustomParam.PROMPT_NAME.paramName, promptName)
+            param(AnalyticsService.CustomParam.PROMPT_TYPE.paramName, promptType)
+            param(AnalyticsService.CustomParam.ACTION.paramName, action)
 
             customParams.forEach {
                 param(it.first, it.second)
             }
         }
-        firebaseAnalytics.logEvent(Analytics.CustomEvent.PROMPT.eventName, params.bundle)
+        firebaseAnalytics.logEvent(AnalyticsService.CustomEvent.PROMPT.eventName, params.bundle)
     }
 
-    fun trackEventSelectContent(
+    override fun trackEventSelectContent(
         contentType: String,
         vararg customParams: Pair<String, String>,
-        index: Long? = null
+        index: Long?
     ) {
         val params = ParametersBuilder().apply {
             param(FirebaseAnalytics.Param.CONTENT_TYPE, contentType)

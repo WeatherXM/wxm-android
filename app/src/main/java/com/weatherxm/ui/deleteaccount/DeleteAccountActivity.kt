@@ -7,7 +7,7 @@ import androidx.activity.addCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidPassword
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -56,7 +56,7 @@ class DeleteAccountActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DELETE_ACCOUNT, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.DELETE_ACCOUNT, getClassSimpleName())
     }
 
     private fun initHtmlText() {

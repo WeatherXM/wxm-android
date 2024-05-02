@@ -11,7 +11,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.RewardDetails
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.RewardsUseCase
-import com.weatherxm.analytics.AnalyticsImpl
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
@@ -20,7 +20,7 @@ import java.time.ZonedDateTime
 
 class RewardDetailsViewModel(
     var device: UIDevice = UIDevice.empty(),
-    private val analytics: AnalyticsImpl,
+    private val analytics: AnalyticsWrapper,
     private val resources: Resources,
     private val usecase: RewardsUseCase
 ) : ViewModel() {

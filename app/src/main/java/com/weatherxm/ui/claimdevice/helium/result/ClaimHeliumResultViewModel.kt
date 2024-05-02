@@ -12,7 +12,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.usecases.BluetoothConnectionUseCase
-import com.weatherxm.analytics.AnalyticsImpl
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
 class ClaimHeliumResultViewModel(
     private val resources: Resources,
     connectionUseCase: BluetoothConnectionUseCase,
-    analytics: AnalyticsImpl
+    analytics: AnalyticsWrapper
 ) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics) {
     companion object {
         val CONNECT_DELAY_ON_REBOOT = TimeUnit.SECONDS.toMillis(10L)

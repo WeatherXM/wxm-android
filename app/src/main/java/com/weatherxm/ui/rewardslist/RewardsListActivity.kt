@@ -2,7 +2,7 @@ package com.weatherxm.ui.rewardslist
 
 import android.os.Bundle
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityRewardsListBinding
@@ -50,8 +50,8 @@ class RewardsListActivity : BaseActivity() {
         adapter = RewardsListAdapter(
             onRewardDetails = {
                 analytics.trackEventUserAction(
-                    Analytics.ParamValue.IDENTIFY_PROBLEMS.paramValue,
-                    Analytics.Screen.DEVICE_REWARD_TRANSACTIONS.screenName
+                    AnalyticsService.ParamValue.IDENTIFY_PROBLEMS.paramValue,
+                    AnalyticsService.Screen.DEVICE_REWARD_TRANSACTIONS.screenName
                 )
                 navigator.showRewardDetails(this, device, it)
             },
@@ -76,7 +76,7 @@ class RewardsListActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DEVICE_REWARD_TRANSACTIONS, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.DEVICE_REWARD_TRANSACTIONS, getClassSimpleName())
     }
 
     private fun updateUIFirstPage(resource: Resource<List<TimelineReward>>) {

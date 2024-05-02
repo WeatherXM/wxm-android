@@ -13,7 +13,7 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.usecases.ForecastUseCase
-import com.weatherxm.analytics.AnalyticsImpl
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ class ForecastViewModel(
     var device: UIDevice = UIDevice.empty(),
     private val resources: Resources,
     private val forecastUseCase: ForecastUseCase,
-    private val analytics: AnalyticsImpl
+    private val analytics: AnalyticsWrapper
 ) : ViewModel() {
     private val onLoading = MutableLiveData<Boolean>()
 

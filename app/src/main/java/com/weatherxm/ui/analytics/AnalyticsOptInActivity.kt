@@ -2,7 +2,7 @@ package com.weatherxm.ui.analytics
 
 import android.os.Bundle
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityAnalyticsOptInBinding
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.setHtml
@@ -38,6 +38,6 @@ class AnalyticsOptInActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.ANALYTICS, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.ANALYTICS, getClassSimpleName())
     }
 }

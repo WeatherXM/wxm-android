@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.BatteryState
 import com.weatherxm.data.DeviceProfile
@@ -15,7 +15,7 @@ import com.weatherxm.ui.common.capitalizeWords
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.StationSettingsUseCase
-import com.weatherxm.analytics.AnalyticsImpl
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -26,7 +26,7 @@ class DeviceSettingsViewModel(
     var device: UIDevice,
     private val usecase: StationSettingsUseCase,
     private val resources: Resources,
-    private val analytics: AnalyticsImpl
+    private val analytics: AnalyticsWrapper
 ) : ViewModel() {
     private val onEditNameChange = MutableLiveData<String>()
     private val onDeviceRemoved = MutableLiveData<Boolean>()
@@ -55,8 +55,8 @@ class DeviceSettingsViewModel(
                 usecase.setFriendlyName(device.id, friendlyName)
                     .map {
                         analytics.trackEventViewContent(
-                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
+                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
                             success = 1L
                         )
                         device.friendlyName = friendlyName
@@ -65,8 +65,8 @@ class DeviceSettingsViewModel(
                     .mapLeft {
                         analytics.trackEventFailure(it.code)
                         analytics.trackEventViewContent(
-                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
+                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
                             success = 0L
                         )
                         onError.postValue(
@@ -85,8 +85,8 @@ class DeviceSettingsViewModel(
                 usecase.clearFriendlyName(device.id)
                     .map {
                         analytics.trackEventViewContent(
-                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
+                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
                             success = 1L
                         )
                         device.friendlyName = null
@@ -95,8 +95,8 @@ class DeviceSettingsViewModel(
                     .mapLeft {
                         analytics.trackEventFailure(it.code)
                         analytics.trackEventViewContent(
-                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                            Analytics.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
+                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
                             success = 0L
                         )
                         onError.postValue(

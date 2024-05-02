@@ -9,7 +9,7 @@ import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -85,7 +85,7 @@ class ChangeFrequencyActivity : BaseActivity() {
                 me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {
                     setOnLinkClickListener { _, url ->
                         analytics.trackEventSelectContent(
-                            Analytics.ParamValue.DOCUMENTATION_FREQUENCY.paramValue
+                            AnalyticsService.ParamValue.DOCUMENTATION_FREQUENCY.paramValue
                         )
                         navigator.openWebsite(context, url)
                         return@setOnLinkClickListener true
@@ -120,7 +120,7 @@ class ChangeFrequencyActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            Analytics.Screen.CHANGE_STATION_FREQUENCY, getClassSimpleName(), model.device.id
+            AnalyticsService.Screen.CHANGE_STATION_FREQUENCY, getClassSimpleName(), model.device.id
         )
     }
 
@@ -136,9 +136,9 @@ class ChangeFrequencyActivity : BaseActivity() {
 
         binding.backButton.setOnClickListener {
             analytics.trackEventUserAction(
-                actionName = Analytics.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
-                contentType = Analytics.ParamValue.CHANGE_FREQUENCY.paramValue,
-                Pair(Analytics.CustomParam.ACTION.paramName, Analytics.ParamValue.CANCEL.paramValue)
+                actionName = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
+                contentType = AnalyticsService.ParamValue.CHANGE_FREQUENCY.paramValue,
+                Pair(AnalyticsService.CustomParam.ACTION.paramName, AnalyticsService.ParamValue.CANCEL.paramValue)
             )
             model.disconnectFromPeripheral()
             finishActivity()
@@ -146,9 +146,9 @@ class ChangeFrequencyActivity : BaseActivity() {
 
         binding.changeFrequencyBtn.setOnClickListener {
             analytics.trackEventUserAction(
-                actionName = Analytics.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
-                contentType = Analytics.ParamValue.CHANGE_FREQUENCY.paramValue,
-                Pair(Analytics.CustomParam.ACTION.paramName, Analytics.ParamValue.CHANGE.paramValue)
+                actionName = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
+                contentType = AnalyticsService.ParamValue.CHANGE_FREQUENCY.paramValue,
+                Pair(AnalyticsService.CustomParam.ACTION.paramName, AnalyticsService.ParamValue.CHANGE.paramValue)
             )
             model.setSelectedFrequency(binding.frequenciesSelector.selectedItemPosition)
             initBluetoothAndStart()
@@ -157,7 +157,7 @@ class ChangeFrequencyActivity : BaseActivity() {
         }
 
         binding.bleActionFlow.setListeners(onScanClicked = {
-            analytics.trackEventSelectContent(Analytics.ParamValue.BLE_SCAN_AGAIN.paramValue)
+            analytics.trackEventSelectContent(AnalyticsService.ParamValue.BLE_SCAN_AGAIN.paramValue)
             initBluetoothAndStart()
         }, onPairClicked = {
             lifecycleScope.launch {
@@ -185,8 +185,8 @@ class ChangeFrequencyActivity : BaseActivity() {
                     primaryActionText = getString(R.string.back_to_settings)
                 )
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
-                    contentId = Analytics.ParamValue.CHANGE_FREQUENCY_RESULT_ID.paramValue,
+                    contentName = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
+                    contentId = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT_ID.paramValue,
                     success = 1L
                 )
             }
@@ -196,8 +196,8 @@ class ChangeFrequencyActivity : BaseActivity() {
             Status.ERROR -> {
                 onErrorStatusUpdate(it)
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
-                    contentId = Analytics.ParamValue.CHANGE_FREQUENCY_RESULT_ID.paramValue,
+                    contentName = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
+                    contentId = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT_ID.paramValue,
                     success = 0L
                 )
             }

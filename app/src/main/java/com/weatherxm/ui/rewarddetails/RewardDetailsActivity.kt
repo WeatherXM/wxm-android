@@ -6,7 +6,7 @@ import android.widget.Toast
 import coil.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.BoostCode
 import com.weatherxm.data.BoostReward
 import com.weatherxm.data.Reward
@@ -73,11 +73,11 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
             .subtitle(subtitle)
             .infoButton {
                 onMessageDialog(
-                    Analytics.ParamValue.INFO_DAILY_REWARDS.paramValue,
+                    AnalyticsService.ParamValue.INFO_DAILY_REWARDS.paramValue,
                     getString(R.string.daily_reward),
                     getString(R.string.daily_reward_explanation),
                     readMoreUrl = getString(R.string.docs_url_reward_mechanism),
-                    analyticsScreenName = Analytics.Screen.DAILY_REWARD_INFO.screenName
+                    analyticsScreenName = AnalyticsService.Screen.DAILY_REWARD_INFO.screenName
                 )
             }
 
@@ -106,7 +106,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DEVICE_REWARD_DETAILS, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.DEVICE_REWARD_DETAILS, getClassSimpleName())
     }
 
     private fun updateUI(data: RewardDetails) {
@@ -173,11 +173,11 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
     private fun updateDataQualityCard(qodScore: Int) {
         binding.dataQualityCard.infoButton {
             onMessageDialog(
-                Analytics.ParamValue.INFO_QOD.paramValue,
+                AnalyticsService.ParamValue.INFO_QOD.paramValue,
                 getString(R.string.data_quality),
                 getString(R.string.data_quality_explanation),
                 readMoreUrl = getString(R.string.docs_url_qod_algorithm),
-                analyticsScreenName = Analytics.Screen.DATA_QUALITY_INFO.screenName
+                analyticsScreenName = AnalyticsService.Screen.DATA_QUALITY_INFO.screenName
             )
         }
         if (qodScore >= 95) {
@@ -226,11 +226,11 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
     private fun updateLocationCard(annotations: List<RewardsAnnotationGroup>?) {
         binding.locationQualityCard.infoButton {
             onMessageDialog(
-                Analytics.ParamValue.INFO_POL.paramValue,
+                AnalyticsService.ParamValue.INFO_POL.paramValue,
                 getString(R.string.location_quality),
                 getString(R.string.location_quality_explanation),
                 readMoreUrl = getString(R.string.docs_url_pol_algorithm),
-                analyticsScreenName = Analytics.Screen.LOCATION_QUALITY_INFO.screenName
+                analyticsScreenName = AnalyticsService.Screen.LOCATION_QUALITY_INFO.screenName
             )
         }
         annotations?.firstOrNull {
@@ -263,11 +263,11 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
     private fun updateCellCard(annotations: List<RewardsAnnotationGroup>?) {
         binding.cellQualityCard.infoButton {
             onMessageDialog(
-                Analytics.ParamValue.INFO_CELL_POSITION.paramValue,
+                AnalyticsService.ParamValue.INFO_CELL_POSITION.paramValue,
                 getString(R.string.cell_ranking),
                 getString(R.string.cell_ranking_explanation),
                 readMoreUrl = getString(R.string.docs_url_cell_capacity),
-                analyticsScreenName = Analytics.Screen.CELL_RANKING_INFO.screenName
+                analyticsScreenName = AnalyticsService.Screen.CELL_RANKING_INFO.screenName
             )
         }
         annotations?.firstOrNull {
@@ -346,7 +346,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
             } else if (!issue.docUrl.isNullOrEmpty()) {
                 binding.issueCard.action(getString(R.string.read_more)) {
                     analytics.trackEventSelectContent(
-                        Analytics.ParamValue.WEB_DOCUMENTATION.paramValue,
+                        AnalyticsService.ParamValue.WEB_DOCUMENTATION.paramValue,
                         Pair(FirebaseAnalytics.Param.ITEM_ID, issue.docUrl)
                     )
                     navigator.openWebsite(this, issue.docUrl)
@@ -364,7 +364,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         analyticsScreenName: String
     ) {
         analytics.trackEventSelectContent(
-            Analytics.ParamValue.LEARN_MORE.paramValue,
+            AnalyticsService.ParamValue.LEARN_MORE.paramValue,
             Pair(FirebaseAnalytics.Param.ITEM_ID, itemId)
         )
         navigator.showMessageDialog(

@@ -1,37 +1,6 @@
 package com.weatherxm.analytics
 
-interface Analytics {
-    fun setUserProperties()
-    fun setAnalyticsEnabled(enabled: Boolean)
-    fun trackScreen(screen: Screen, screenClass: String, itemId: String? = null)
-    fun trackScreen(screenName: String, screenClass: String)
-    fun trackEventUserAction(
-        actionName: String,
-        contentType: String? = null,
-        vararg customParams: Pair<String, String>
-    )
-
-    fun trackEventViewContent(
-        contentName: String,
-        contentId: String,
-        vararg customParams: Pair<String, String>,
-        success: Long? = null
-    )
-
-    fun trackEventFailure(failureId: String?)
-    fun trackEventPrompt(
-        promptName: String,
-        promptType: String,
-        action: String,
-        vararg customParams: Pair<String, String>
-    )
-
-    fun trackEventSelectContent(
-        contentType: String,
-        vararg customParams: Pair<String, String>,
-        index: Long? = null
-    )
-
+interface AnalyticsService {
     // Screen Names
     enum class Screen(val screenName: String) {
         SPLASH("Splash Screen"),
@@ -276,4 +245,35 @@ interface Analytics {
         HPA("hpa"),
         INHG("inhg"),
     }
+
+    fun setUserProperties(userId: String, params: List<Pair<String, String>>)
+    fun setAnalyticsEnabled(enabled: Boolean)
+    fun trackScreen(screen: Screen, screenClass: String, itemId: String? = null)
+    fun trackScreen(screenName: String, screenClass: String)
+    fun trackEventUserAction(
+        actionName: String,
+        contentType: String? = null,
+        vararg customParams: Pair<String, String>
+    )
+
+    fun trackEventViewContent(
+        contentName: String,
+        contentId: String,
+        vararg customParams: Pair<String, String>,
+        success: Long? = null
+    )
+
+    fun trackEventFailure(failureId: String?)
+    fun trackEventPrompt(
+        promptName: String,
+        promptType: String,
+        action: String,
+        vararg customParams: Pair<String, String>
+    )
+
+    fun trackEventSelectContent(
+        contentType: String,
+        vararg customParams: Pair<String, String>,
+        index: Long? = null
+    )
 }

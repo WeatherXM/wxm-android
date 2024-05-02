@@ -13,7 +13,7 @@ import com.weatherxm.ui.devicesettings.RebootState
 import com.weatherxm.ui.devicesettings.RebootStatus
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
-import com.weatherxm.analytics.AnalyticsImpl
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getCode
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
@@ -24,7 +24,7 @@ class RebootViewModel(
     private val resources: Resources,
     connectionUseCase: BluetoothConnectionUseCase,
     scanUseCase: BluetoothScannerUseCase,
-    analytics: AnalyticsImpl
+    analytics: AnalyticsWrapper
 ) : BluetoothHeliumViewModel(
     device.getLastCharsOfLabel(),
     scanUseCase,

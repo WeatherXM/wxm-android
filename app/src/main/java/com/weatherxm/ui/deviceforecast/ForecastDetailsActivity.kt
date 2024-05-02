@@ -4,6 +4,7 @@ import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Status
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND

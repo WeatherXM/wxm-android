@@ -3,7 +3,7 @@ package com.weatherxm.ui.rewardissues
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.RewardDetails
 import com.weatherxm.databinding.ActivityRewardIssuesBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
@@ -52,7 +52,7 @@ class RewardIssuesActivity : BaseActivity(), RewardIssuesListener {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.REWARD_ISSUES, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.REWARD_ISSUES, getClassSimpleName())
     }
 
     override fun onAddWallet(group: String?) {
@@ -72,7 +72,7 @@ class RewardIssuesActivity : BaseActivity(), RewardIssuesListener {
 
     private fun trackUserActionOnErrors(group: String?) {
         analytics.trackEventUserAction(
-            actionName = Analytics.ParamValue.REWARD_ISSUES_ERROR.paramValue,
+            actionName = AnalyticsService.ParamValue.REWARD_ISSUES_ERROR.paramValue,
             contentType = null,
             Pair(FirebaseAnalytics.Param.ITEM_ID, group ?: String.empty())
         )

@@ -16,7 +16,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.components.BaseMapFragment.Companion.REVERSE_GEOCODING_DELAY
 import com.weatherxm.usecases.EditLocationUseCase
-import com.weatherxm.analytics.AnalyticsImpl
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.Resources
@@ -31,7 +31,7 @@ import timber.log.Timber
 @Suppress("TooManyFunctions")
 class DeviceEditLocationViewModel(
     private val usecase: EditLocationUseCase,
-    private val analytics: AnalyticsImpl,
+    private val analytics: AnalyticsWrapper,
     private val locationHelper: LocationHelper,
     private val resources: Resources
 ) : ViewModel() {

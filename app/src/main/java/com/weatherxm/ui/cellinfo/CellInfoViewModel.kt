@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.getOrElse
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
@@ -15,7 +15,7 @@ import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.FollowUseCase
-import com.weatherxm.analytics.AnalyticsImpl
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +28,7 @@ class CellInfoViewModel(
     private val explorerUseCase: ExplorerUseCase,
     private val followUseCase: FollowUseCase,
     private val authUseCase: AuthUseCase,
-    private val analytics: AnalyticsImpl
+    private val analytics: AnalyticsWrapper
 ) : ViewModel() {
     private val onCellDevices = MutableLiveData<Resource<List<UIDevice>>>(Resource.loading())
     private val address = MutableLiveData<String>()
@@ -72,8 +72,8 @@ class CellInfoViewModel(
 
     fun followStation(deviceId: String) {
         analytics.trackEventUserAction(
-            Analytics.ParamValue.EXPLORER_DEVICE_LIST_FOLLOW.paramValue,
-            Analytics.ParamValue.FOLLOW.paramValue
+            AnalyticsService.ParamValue.EXPLORER_DEVICE_LIST_FOLLOW.paramValue,
+            AnalyticsService.ParamValue.FOLLOW.paramValue
         )
         onFollowStatus.postValue(Resource.loading())
         viewModelScope.launch {
@@ -90,8 +90,8 @@ class CellInfoViewModel(
 
     fun unFollowStation(deviceId: String) {
         analytics.trackEventUserAction(
-            Analytics.ParamValue.EXPLORER_DEVICE_LIST_FOLLOW.paramValue,
-            Analytics.ParamValue.UNFOLLOW.paramValue
+            AnalyticsService.ParamValue.EXPLORER_DEVICE_LIST_FOLLOW.paramValue,
+            AnalyticsService.ParamValue.UNFOLLOW.paramValue
         )
         onFollowStatus.postValue(Resource.loading())
         viewModelScope.launch {

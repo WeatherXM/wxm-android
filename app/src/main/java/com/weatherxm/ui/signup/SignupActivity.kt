@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivitySignupBinding
@@ -72,7 +72,7 @@ class SignupActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.SIGNUP, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.SIGNUP, getClassSimpleName())
     }
 
     private fun onSignupResult(result: Resource<String>) {
@@ -90,9 +90,9 @@ class SignupActivity : BaseActivity() {
                 binding.done.visibility = View.VISIBLE
 
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.SIGNUP.paramValue,
-                    contentId = Analytics.ParamValue.SIGNUP_ID.paramValue,
-                    Pair(FirebaseAnalytics.Param.METHOD, Analytics.ParamValue.EMAIL.paramValue),
+                    contentName = AnalyticsService.ParamValue.SIGNUP.paramValue,
+                    contentId = AnalyticsService.ParamValue.SIGNUP_ID.paramValue,
+                    Pair(FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue),
                     success = 1L
                 )
             }
@@ -114,9 +114,9 @@ class SignupActivity : BaseActivity() {
                 binding.done.visibility = View.INVISIBLE
 
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.SIGNUP.paramValue,
-                    contentId = Analytics.ParamValue.SIGNUP_ID.paramValue,
-                    Pair(FirebaseAnalytics.Param.METHOD, Analytics.ParamValue.EMAIL.paramValue),
+                    contentName = AnalyticsService.ParamValue.SIGNUP.paramValue,
+                    contentId = AnalyticsService.ParamValue.SIGNUP_ID.paramValue,
+                    Pair(FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue),
                     success = 0L
                 )
             }

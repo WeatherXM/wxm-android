@@ -14,14 +14,13 @@ import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.Weather
 import timber.log.Timber
 
-class AnalyticsImpl(
-    private val firebaseLib: FirebaseAnalyticsLib,
-    private val mixpanelLib: MixpanelLib,
+class AnalyticsWrapper(
+    private var analytics: List<AnalyticsService>,
     private val cacheService: CacheService,
     private val displayModeHelper: DisplayModeHelper,
     preferences: SharedPreferences,
     private val context: Context
-) : Analytics {
+) {
 
     private val onPreferencesChanged = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
         setUserProperties()
@@ -37,16 +36,16 @@ class AnalyticsImpl(
 
     // Suppress CyclomaticComplexMethod because it is just a bunch of if/when statements.
     @Suppress("CyclomaticComplexMethod", "LongMethod")
-    override fun setUserProperties() {
+    fun setUserProperties() {
         val userParams = mutableListOf<Pair<String, String>>()
 
         // Selected Theme
         when (displayModeHelper.getDisplayMode()) {
-            context.getString(R.string.dark_value) -> Analytics.UserProperty.DARK.propertyName
-            context.getString(R.string.light_value) -> Analytics.UserProperty.LIGHT.propertyName
-            else -> Analytics.UserProperty.SYSTEM.propertyName
+            context.getString(R.string.dark_value) -> AnalyticsService.UserProperty.DARK.propertyName
+            context.getString(R.string.light_value) -> AnalyticsService.UserProperty.LIGHT.propertyName
+            else -> AnalyticsService.UserProperty.SYSTEM.propertyName
         }.apply {
-            userParams.add(Pair(Analytics.UserProperty.THEME.propertyName, this))
+            userParams.add(Pair(AnalyticsService.UserProperty.THEME.propertyName, this))
         }
 
         // Selected Temperature Unit
@@ -55,11 +54,11 @@ class AnalyticsImpl(
             context.getString(R.string.temperature_celsius)
         ).let {
             if (it == context.getString(R.string.temperature_celsius)) {
-                Analytics.UserProperty.CELSIUS.propertyName
+                AnalyticsService.UserProperty.CELSIUS.propertyName
             } else {
-                Analytics.UserProperty.FAHRENHEIT.propertyName
+                AnalyticsService.UserProperty.FAHRENHEIT.propertyName
             }.apply {
-                userParams.add(Pair(Analytics.UserProperty.UNIT_TEMPERATURE.propertyName, this))
+                userParams.add(Pair(AnalyticsService.UserProperty.UNIT_TEMPERATURE.propertyName, this))
             }
         }
 
@@ -69,19 +68,19 @@ class AnalyticsImpl(
             context.getString(R.string.wind_speed_ms)
         ).let {
             when (it) {
-                context.getString(R.string.wind_speed_ms) -> Analytics.UserProperty.MPS.propertyName
+                context.getString(R.string.wind_speed_ms) -> AnalyticsService.UserProperty.MPS.propertyName
                 context.getString(R.string.wind_speed_mph) -> {
-                    Analytics.UserProperty.MPH.propertyName
+                    AnalyticsService.UserProperty.MPH.propertyName
                 }
                 context.getString(R.string.wind_speed_kmh) -> {
-                    Analytics.UserProperty.KMPH.propertyName
+                    AnalyticsService.UserProperty.KMPH.propertyName
                 }
                 context.getString(R.string.wind_speed_knots) -> {
-                    Analytics.UserProperty.KN.propertyName
+                    AnalyticsService.UserProperty.KN.propertyName
                 }
-                else -> Analytics.UserProperty.BF.propertyName
+                else -> AnalyticsService.UserProperty.BF.propertyName
             }.apply {
-                userParams.add(Pair(Analytics.UserProperty.UNIT_WIND.propertyName, this))
+                userParams.add(Pair(AnalyticsService.UserProperty.UNIT_WIND.propertyName, this))
             }
         }
 
@@ -91,11 +90,11 @@ class AnalyticsImpl(
             context.getString(R.string.wind_direction_cardinal)
         ).let {
             if (it == context.getString(R.string.wind_direction_cardinal)) {
-                Analytics.UserProperty.CARDINAL.propertyName
+                AnalyticsService.UserProperty.CARDINAL.propertyName
             } else {
-                Analytics.UserProperty.DEGREES.propertyName
+                AnalyticsService.UserProperty.DEGREES.propertyName
             }.apply {
-                userParams.add(Pair(Analytics.UserProperty.UNIT_WIND_DIRECTION.propertyName, this))
+                userParams.add(Pair(AnalyticsService.UserProperty.UNIT_WIND_DIRECTION.propertyName, this))
             }
         }
 
@@ -105,11 +104,11 @@ class AnalyticsImpl(
             context.getString(R.string.precipitation_mm)
         ).let {
             if (it == context.getString(R.string.precipitation_mm)) {
-                Analytics.UserProperty.MILLIMETERS.propertyName
+                AnalyticsService.UserProperty.MILLIMETERS.propertyName
             } else {
-                Analytics.UserProperty.INCHES.propertyName
+                AnalyticsService.UserProperty.INCHES.propertyName
             }.apply {
-                userParams.add(Pair(Analytics.UserProperty.UNIT_PRECIPITATION.propertyName, this))
+                userParams.add(Pair(AnalyticsService.UserProperty.UNIT_PRECIPITATION.propertyName, this))
             }
         }
 
@@ -119,11 +118,11 @@ class AnalyticsImpl(
             context.getString(R.string.pressure_hpa)
         ).let {
             if (it == context.getString(R.string.pressure_hpa)) {
-                Analytics.UserProperty.HPA.propertyName
+                AnalyticsService.UserProperty.HPA.propertyName
             } else {
-                Analytics.UserProperty.INHG.propertyName
+                AnalyticsService.UserProperty.INHG.propertyName
             }.apply {
-                userParams.add(Pair(Analytics.UserProperty.UNIT_PRESSURE.propertyName, this))
+                userParams.add(Pair(AnalyticsService.UserProperty.UNIT_PRESSURE.propertyName, this))
             }
         }
 
@@ -140,95 +139,98 @@ class AnalyticsImpl(
         }
         with(sortFilterOptions) {
             userParams.add(
-                Pair(Analytics.CustomParam.FILTERS_SORT.paramName, getSortAnalyticsValue())
+                Pair(AnalyticsService.CustomParam.FILTERS_SORT.paramName, getSortAnalyticsValue())
             )
             userParams.add(
-                Pair(Analytics.CustomParam.FILTERS_FILTER.paramName, getFilterAnalyticsValue())
+                Pair(AnalyticsService.CustomParam.FILTERS_FILTER.paramName, getFilterAnalyticsValue())
             )
             userParams.add(
-                Pair(Analytics.CustomParam.FILTERS_GROUP.paramName, getGroupByAnalyticsValue())
+                Pair(AnalyticsService.CustomParam.FILTERS_GROUP.paramName, getGroupByAnalyticsValue())
             )
         }
 
         val userId = cacheService.getUserId()
-        firebaseLib.setUserProperties(userId, userParams)
-        mixpanelLib.setUserProperties(userId, userParams)
+        analytics.forEach { it.setUserProperties(userId, userParams) }
     }
 
-    override fun setAnalyticsEnabled(enabled: Boolean) {
-        firebaseLib.setAnalyticsEnabled(enabled)
-        mixpanelLib.setAnalyticsEnabled(enabled)
+    fun setAnalyticsEnabled(enabled: Boolean) {
+        analytics.forEach { it.setAnalyticsEnabled(enabled) }
     }
 
-    override fun trackScreen(screen: Analytics.Screen, screenClass: String, itemId: String?) {
+    fun trackScreen(screen: AnalyticsService.Screen, screenClass: String, itemId: String?) {
         if (cacheService.getAnalyticsEnabled()) {
-            firebaseLib.trackScreen(screen.screenName, screenClass, itemId)
-            mixpanelLib.trackScreen(screenClass, itemId)
+            analytics.forEach { it.trackScreen(screen, screenClass, itemId) }
         }
     }
 
-    override fun trackScreen(screenName: String, screenClass: String) {
+    fun trackScreen(screenName: String, screenClass: String) {
         if (cacheService.getAnalyticsEnabled()) {
-            firebaseLib.trackScreen(screenName, screenClass)
-            mixpanelLib.trackScreen(screenClass)
+            analytics.forEach { it.trackScreen(screenName, screenClass) }
         }
     }
 
-    override fun trackEventUserAction(
+    fun trackEventUserAction(
         actionName: String,
         contentType: String?,
         vararg customParams: Pair<String, String>
     ) {
         if (cacheService.getAnalyticsEnabled()) {
-            firebaseLib.trackEventUserAction(actionName, contentType, *customParams)
-            mixpanelLib.trackEventUserAction(actionName, contentType, *customParams)
+            analytics.forEach { it.trackEventUserAction(actionName, contentType, *customParams) }
         }
     }
 
-    override fun trackEventViewContent(
+    fun trackEventViewContent(
         contentName: String,
         contentId: String,
         vararg customParams: Pair<String, String>,
         success: Long?
     ) {
         if (cacheService.getAnalyticsEnabled()) {
-            firebaseLib.trackEventViewContent(
-                contentName, contentId, *customParams, success = success
-            )
-            mixpanelLib.trackEventViewContent(
-                contentName, contentId, *customParams, success = success
+            analytics.forEach {
+                it.trackEventViewContent(
+                    contentName,
+                    contentId,
+                    *customParams,
+                    success = success
+                )
+            }
+        }
+    }
+
+    fun trackEventFailure(failureId: String?) {
+        analytics.forEach {
+            it.trackEventViewContent(
+                AnalyticsService.ParamValue.FAILURE.paramValue,
+                AnalyticsService.ParamValue.FAILURE_ID.paramValue,
+                Pair(FirebaseAnalytics.Param.ITEM_ID, failureId ?: String.empty())
             )
         }
     }
 
-    override fun trackEventFailure(failureId: String?) {
-        trackEventViewContent(
-            Analytics.ParamValue.FAILURE.paramValue,
-            Analytics.ParamValue.FAILURE_ID.paramValue,
-            Pair(FirebaseAnalytics.Param.ITEM_ID, failureId ?: String.empty())
-        )
-    }
-
-    override fun trackEventPrompt(
+    fun trackEventPrompt(
         promptName: String,
         promptType: String,
         action: String,
         vararg customParams: Pair<String, String>
     ) {
         if (cacheService.getAnalyticsEnabled()) {
-            firebaseLib.trackEventPrompt(promptName, promptType, action, *customParams)
-            mixpanelLib.trackEventPrompt(promptName, promptType, action, *customParams)
+            analytics.forEach { it.trackEventPrompt(promptName, promptType, action, *customParams) }
         }
     }
 
-    override fun trackEventSelectContent(
+    fun trackEventSelectContent(
         contentType: String,
         vararg customParams: Pair<String, String>,
         index: Long?
     ) {
         if (cacheService.getAnalyticsEnabled()) {
-            firebaseLib.trackEventSelectContent(contentType, *customParams, index = index)
-            mixpanelLib.trackEventSelectContent(contentType, *customParams, index = index)
+            analytics.forEach {
+                it.trackEventSelectContent(
+                    contentType,
+                    *customParams,
+                    index = index
+                )
+            }
         }
     }
 }

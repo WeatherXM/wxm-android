@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.SeverityLevel
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
@@ -20,7 +20,7 @@ import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
 import com.weatherxm.ui.common.setVisible
-import com.weatherxm.analytics.AnalyticsImpl
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
@@ -33,7 +33,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
     ListAdapter<UIDevice, DeviceAdapter.DeviceViewHolder>(DeviceDiffCallback()), KoinComponent {
 
     val resources: Resources by inject()
-    val analytics: AnalyticsImpl by inject()
+    val analytics: AnalyticsWrapper by inject()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
         val binding =
@@ -177,9 +177,9 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                             deviceListener.onUpdateStationClicked(item)
                         }
                     analytics.trackEventPrompt(
-                        Analytics.ParamValue.OTA_AVAILABLE.paramValue,
-                        Analytics.ParamValue.WARN.paramValue,
-                        Analytics.ParamValue.VIEW.paramValue
+                        AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+                        AnalyticsService.ParamValue.WARN.paramValue,
+                        AnalyticsService.ParamValue.VIEW.paramValue
                     )
                 }
             }
