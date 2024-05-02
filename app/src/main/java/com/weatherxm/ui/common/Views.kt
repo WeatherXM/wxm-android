@@ -37,6 +37,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.IntDef
 import androidx.annotation.StringRes
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.BundleCompat
 import androidx.core.text.HtmlCompat
@@ -228,7 +229,13 @@ fun TabLayout.onTabSelected(callback: (TabLayout.Tab) -> Unit) {
 }
 
 fun Chip.setIcon(@DrawableRes drawable: Int) {
-    this.chipIcon = ResourcesCompat.getDrawable(resources, drawable, context.theme)
+    this.chipIcon = AppCompatResources.getDrawable(context, drawable)
+}
+
+fun Chip.setErrorChip() {
+    setChipBackgroundColorResource(R.color.errorTint)
+    setIcon(R.drawable.ic_error_hex_filled)
+    setChipIconTintResource(R.color.error)
 }
 
 fun Chip.setSuccessChip() {

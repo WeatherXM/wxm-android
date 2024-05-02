@@ -18,6 +18,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.Resource
+import com.weatherxm.data.SeverityLevel
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityDeviceDetailsBinding
 import com.weatherxm.ui.common.Contracts
@@ -28,6 +29,7 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setColor
+import com.weatherxm.ui.common.setErrorChip
 import com.weatherxm.ui.common.setStatusChip
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
@@ -285,8 +287,15 @@ class DeviceDetailsActivity : BaseActivity() {
         val alertsWithoutOffline = alerts.dropWhile {
             it.alert == DeviceAlertType.OFFLINE
         }
-        if (alertsWithoutOffline.size > 1) {
-            binding.alertChip.text = getString(R.string.issues, alertsWithoutOffline.size)
+        val hasErrorSeverity = alerts.firstOrNull {
+            it.severity == SeverityLevel.ERROR
+        } != null
+
+        if (alerts.size > 1) {
+            if(hasErrorSeverity) {
+                binding.alertChip.setErrorChip()
+            }
+            binding.alertChip.text = getString(R.string.issues, alerts.size)
             setupAlertChipClickListener(null)
         } else if (alertsWithoutOffline.size == 1) {
             if (alertsWithoutOffline[0].alert == DeviceAlertType.NEEDS_UPDATE) {
