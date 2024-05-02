@@ -1,8 +1,23 @@
 package com.weatherxm.analytics
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 interface AnalyticsService {
+    // Some event key names
+    enum class EventKey(val key: String) {
+        SCREEN_CLASS("screen_class"),
+        SCREEN_NAME("screen_name"),
+        ITEM_ID("item_id"),
+        CONTENT_TYPE("content_type"),
+        SUCCESS("success"),
+        INDEX("index"),
+        SELECT_CONTENT("select_content")
+    }
+
     // Screen Names
-    enum class Screen(val screenName: String) {
+    @Parcelize
+    enum class Screen(val screenName: String) : Parcelable {
         SPLASH("Splash Screen"),
         ANALYTICS("Analytics Opt-In Prompt"),
         EXPLORER_LANDING("Explorer (Landing)"),
@@ -249,7 +264,6 @@ interface AnalyticsService {
     fun setUserProperties(userId: String, params: List<Pair<String, String>>)
     fun setAnalyticsEnabled(enabled: Boolean)
     fun trackScreen(screen: Screen, screenClass: String, itemId: String? = null)
-    fun trackScreen(screenName: String, screenClass: String)
     fun trackEventUserAction(
         actionName: String,
         contentType: String? = null,
@@ -263,7 +277,6 @@ interface AnalyticsService {
         success: Long? = null
     )
 
-    fun trackEventFailure(failureId: String?)
     fun trackEventPrompt(
         promptName: String,
         promptType: String,

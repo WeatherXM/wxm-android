@@ -16,6 +16,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.BoostReward
 import com.weatherxm.data.Location
 import com.weatherxm.data.Reward
@@ -76,7 +77,6 @@ import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
-import com.weatherxm.analytics.AnalyticsWrapper
 import timber.log.Timber
 import java.time.LocalDate
 
@@ -446,14 +446,10 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         title: String?,
         message: String?,
         readMoreUrl: String? = null,
-        analyticsScreenName: String? = null
+        analyticsScreen: AnalyticsService.Screen? = null
     ) {
-        MessageDialogFragment.newInstance(
-            title,
-            message,
-            readMoreUrl,
-            analyticsScreenName
-        ).show(fragmentManager, MessageDialogFragment.TAG)
+        MessageDialogFragment.newInstance(title, message, readMoreUrl, analyticsScreen)
+            .show(fragmentManager, MessageDialogFragment.TAG)
     }
 
     fun showHandleFollowDialog(

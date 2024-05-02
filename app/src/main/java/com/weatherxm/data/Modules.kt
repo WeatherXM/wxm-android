@@ -716,10 +716,6 @@ private val bluetooth = module {
 }
 
 val firebase = module {
-    single<FirebaseAnalytics>(createdAtStart = true) {
-        Firebase.analytics
-    }
-
     single<FirebaseCrashlytics>(createdAtStart = true) {
         Firebase.crashlytics
     }
@@ -809,8 +805,11 @@ val clientIdentificationHelper = module {
 }
 
 val analytics = module {
-    single { FirebaseAnalytics.getInstance(androidContext()) }
-    single<MixpanelAPI>(createdAtStart = true) {
+    single<FirebaseAnalytics> {
+        Firebase.analytics
+    }
+
+    single<MixpanelAPI> {
         MixpanelAPI.getInstance(androidContext(), BuildConfig.MIXPANEL_TOKEN, false).apply {
             setEnableLogging(true)
         }
@@ -819,7 +818,9 @@ val analytics = module {
     factory { FirebaseAnalyticsService(get()) as AnalyticsService }
     factory { MixpanelAnalyticsService(get()) as AnalyticsService }
 
-    factory { AnalyticsWrapper(getAll<AnalyticsService>(), get(), get(), get(), androidContext()) }
+    single<AnalyticsWrapper> {
+        AnalyticsWrapper(getAll<AnalyticsService>(), get(), get(), get(), androidContext())
+    }
 
 }
 

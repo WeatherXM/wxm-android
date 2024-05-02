@@ -4,33 +4,10 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ParametersBuilder
 import com.google.firebase.analytics.logEvent
 import com.weatherxm.BuildConfig
-import com.weatherxm.ui.common.empty
 import timber.log.Timber
 
-class FirebaseAnalyticsService(private val firebaseAnalytics: FirebaseAnalytics) : AnalyticsService {
-
-
-    override fun setUserProperties() {
-        TODO("Not yet implemented")
-    }
-
-    override fun trackScreen(screen: AnalyticsService.Screen, screenClass: String, itemId: String?) {
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-            param(FirebaseAnalytics.Param.SCREEN_NAME, screen.screenName)
-            param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass ?: String.empty())
-            itemId?.let {
-                param(FirebaseAnalytics.Param.ITEM_ID, itemId)
-            }
-        }
-    }
-
-    override fun trackScreen(screenName: String, screenClass: String) {
-        TODO("Not yet implemented")
-    }
-
-    override fun trackEventFailure(failureId: String?) {
-        TODO("Not yet implemented")
-    }
+class FirebaseAnalyticsService(private val firebaseAnalytics: FirebaseAnalytics) :
+    AnalyticsService {
 
     override fun setUserProperties(userId: String, params: List<Pair<String, String>>) {
         firebaseAnalytics.setUserId(userId)
@@ -39,10 +16,24 @@ class FirebaseAnalyticsService(private val firebaseAnalytics: FirebaseAnalytics)
         }
     }
 
+    override fun trackScreen(
+        screen: AnalyticsService.Screen,
+        screenClass: String,
+        itemId: String?
+    ) {
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, screen.screenName)
+            param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass)
+            itemId?.let {
+                param(FirebaseAnalytics.Param.ITEM_ID, itemId)
+            }
+        }
+    }
+
     override fun setAnalyticsEnabled(enabled: Boolean) {
         if (BuildConfig.DEBUG) {
             Timber.d("Skipping analytics tracking in DEBUG mode [enabled=$enabled].")
-            firebaseAnalytics.setAnalyticsCollectionEnabled(false)
+            firebaseAnalytics.setAnalyticsCollectionEnabled(enabled)
         } else {
             Timber.d("Resetting analytics tracking [enabled=$enabled]")
             firebaseAnalytics.setAnalyticsCollectionEnabled(enabled)
@@ -65,7 +56,10 @@ class FirebaseAnalyticsService(private val firebaseAnalytics: FirebaseAnalytics)
                 param(it.first, it.second)
             }
         }
-        firebaseAnalytics.logEvent(AnalyticsService.CustomEvent.USER_ACTION.eventName, params.bundle)
+        firebaseAnalytics.logEvent(
+            AnalyticsService.CustomEvent.USER_ACTION.eventName,
+            params.bundle
+        )
     }
 
     override fun trackEventViewContent(
@@ -85,7 +79,10 @@ class FirebaseAnalyticsService(private val firebaseAnalytics: FirebaseAnalytics)
                 param(FirebaseAnalytics.Param.SUCCESS, it)
             }
         }
-        firebaseAnalytics.logEvent(AnalyticsService.CustomEvent.VIEW_CONTENT.eventName, params.bundle)
+        firebaseAnalytics.logEvent(
+            AnalyticsService.CustomEvent.VIEW_CONTENT.eventName,
+            params.bundle
+        )
     }
 
     override fun trackEventPrompt(

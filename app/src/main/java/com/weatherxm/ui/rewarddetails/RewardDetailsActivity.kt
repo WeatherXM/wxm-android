@@ -24,12 +24,12 @@ import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.isPoL
@@ -77,7 +77,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                     getString(R.string.daily_reward),
                     getString(R.string.daily_reward_explanation),
                     readMoreUrl = getString(R.string.docs_url_reward_mechanism),
-                    analyticsScreenName = AnalyticsService.Screen.DAILY_REWARD_INFO.screenName
+                    analyticsScreen = AnalyticsService.Screen.DAILY_REWARD_INFO
                 )
             }
 
@@ -177,7 +177,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 getString(R.string.data_quality),
                 getString(R.string.data_quality_explanation),
                 readMoreUrl = getString(R.string.docs_url_qod_algorithm),
-                analyticsScreenName = AnalyticsService.Screen.DATA_QUALITY_INFO.screenName
+                analyticsScreen = AnalyticsService.Screen.DATA_QUALITY_INFO
             )
         }
         if (qodScore >= 95) {
@@ -230,7 +230,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 getString(R.string.location_quality),
                 getString(R.string.location_quality_explanation),
                 readMoreUrl = getString(R.string.docs_url_pol_algorithm),
-                analyticsScreenName = AnalyticsService.Screen.LOCATION_QUALITY_INFO.screenName
+                analyticsScreen = AnalyticsService.Screen.LOCATION_QUALITY_INFO
             )
         }
         annotations?.firstOrNull {
@@ -267,7 +267,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 getString(R.string.cell_ranking),
                 getString(R.string.cell_ranking_explanation),
                 readMoreUrl = getString(R.string.docs_url_cell_capacity),
-                analyticsScreenName = AnalyticsService.Screen.CELL_RANKING_INFO.screenName
+                analyticsScreen = AnalyticsService.Screen.CELL_RANKING_INFO
             )
         }
         annotations?.firstOrNull {
@@ -361,7 +361,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         title: String,
         message: String,
         readMoreUrl: String,
-        analyticsScreenName: String
+        analyticsScreen: AnalyticsService.Screen
     ) {
         analytics.trackEventSelectContent(
             AnalyticsService.ParamValue.LEARN_MORE.paramValue,
@@ -372,7 +372,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
             title,
             message,
             readMoreUrl = readMoreUrl,
-            analyticsScreenName = analyticsScreenName
+            analyticsScreen = analyticsScreen
         )
     }
 

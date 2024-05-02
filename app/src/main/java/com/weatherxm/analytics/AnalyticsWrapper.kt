@@ -36,7 +36,7 @@ class AnalyticsWrapper(
 
     // Suppress CyclomaticComplexMethod because it is just a bunch of if/when statements.
     @Suppress("CyclomaticComplexMethod", "LongMethod")
-    fun setUserProperties() {
+    private fun setUserProperties() {
         val userParams = mutableListOf<Pair<String, String>>()
 
         // Selected Theme
@@ -58,7 +58,9 @@ class AnalyticsWrapper(
             } else {
                 AnalyticsService.UserProperty.FAHRENHEIT.propertyName
             }.apply {
-                userParams.add(Pair(AnalyticsService.UserProperty.UNIT_TEMPERATURE.propertyName, this))
+                userParams.add(
+                    Pair(AnalyticsService.UserProperty.UNIT_TEMPERATURE.propertyName, this)
+                )
             }
         }
 
@@ -94,7 +96,9 @@ class AnalyticsWrapper(
             } else {
                 AnalyticsService.UserProperty.DEGREES.propertyName
             }.apply {
-                userParams.add(Pair(AnalyticsService.UserProperty.UNIT_WIND_DIRECTION.propertyName, this))
+                userParams.add(
+                    Pair(AnalyticsService.UserProperty.UNIT_WIND_DIRECTION.propertyName, this)
+                )
             }
         }
 
@@ -108,7 +112,9 @@ class AnalyticsWrapper(
             } else {
                 AnalyticsService.UserProperty.INCHES.propertyName
             }.apply {
-                userParams.add(Pair(AnalyticsService.UserProperty.UNIT_PRECIPITATION.propertyName, this))
+                userParams.add(
+                    Pair(AnalyticsService.UserProperty.UNIT_PRECIPITATION.propertyName, this)
+                )
             }
         }
 
@@ -142,10 +148,14 @@ class AnalyticsWrapper(
                 Pair(AnalyticsService.CustomParam.FILTERS_SORT.paramName, getSortAnalyticsValue())
             )
             userParams.add(
-                Pair(AnalyticsService.CustomParam.FILTERS_FILTER.paramName, getFilterAnalyticsValue())
+                Pair(
+                    AnalyticsService.CustomParam.FILTERS_FILTER.paramName, getFilterAnalyticsValue()
+                )
             )
             userParams.add(
-                Pair(AnalyticsService.CustomParam.FILTERS_GROUP.paramName, getGroupByAnalyticsValue())
+                Pair(
+                    AnalyticsService.CustomParam.FILTERS_GROUP.paramName, getGroupByAnalyticsValue()
+                )
             )
         }
 
@@ -157,21 +167,15 @@ class AnalyticsWrapper(
         analytics.forEach { it.setAnalyticsEnabled(enabled) }
     }
 
-    fun trackScreen(screen: AnalyticsService.Screen, screenClass: String, itemId: String?) {
+    fun trackScreen(screen: AnalyticsService.Screen, screenClass: String, itemId: String? = null) {
         if (cacheService.getAnalyticsEnabled()) {
             analytics.forEach { it.trackScreen(screen, screenClass, itemId) }
         }
     }
 
-    fun trackScreen(screenName: String, screenClass: String) {
-        if (cacheService.getAnalyticsEnabled()) {
-            analytics.forEach { it.trackScreen(screenName, screenClass) }
-        }
-    }
-
     fun trackEventUserAction(
         actionName: String,
-        contentType: String?,
+        contentType: String? = null,
         vararg customParams: Pair<String, String>
     ) {
         if (cacheService.getAnalyticsEnabled()) {
@@ -183,7 +187,7 @@ class AnalyticsWrapper(
         contentName: String,
         contentId: String,
         vararg customParams: Pair<String, String>,
-        success: Long?
+        success: Long? = null
     ) {
         if (cacheService.getAnalyticsEnabled()) {
             analytics.forEach {
@@ -198,13 +202,11 @@ class AnalyticsWrapper(
     }
 
     fun trackEventFailure(failureId: String?) {
-        analytics.forEach {
-            it.trackEventViewContent(
-                AnalyticsService.ParamValue.FAILURE.paramValue,
-                AnalyticsService.ParamValue.FAILURE_ID.paramValue,
-                Pair(FirebaseAnalytics.Param.ITEM_ID, failureId ?: String.empty())
-            )
-        }
+        trackEventViewContent(
+            AnalyticsService.ParamValue.FAILURE.paramValue,
+            AnalyticsService.ParamValue.FAILURE_ID.paramValue,
+            Pair(FirebaseAnalytics.Param.ITEM_ID, failureId ?: String.empty())
+        )
     }
 
     fun trackEventPrompt(
@@ -221,7 +223,7 @@ class AnalyticsWrapper(
     fun trackEventSelectContent(
         contentType: String,
         vararg customParams: Pair<String, String>,
-        index: Long?
+        index: Long? = null
     ) {
         if (cacheService.getAnalyticsEnabled()) {
             analytics.forEach {

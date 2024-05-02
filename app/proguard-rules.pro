@@ -41,3 +41,7 @@
 # Retain generic signatures of TypeToken and its subclasses with R8 version 3.0 and higher.
  -keep,allowobfuscation,allowshrinking class com.google.gson.reflect.TypeToken
  -keep,allowobfuscation,allowshrinking class * extends com.google.gson.reflect.TypeToken
+
+ # Retain Fragment Class Names for Analytics purposes
+ -keepnames class * extends androidx.fragment.app.Fragment
+ -keepnames class * extends com.google.android.material.bottomsheet.BottomSheetDialogFragment

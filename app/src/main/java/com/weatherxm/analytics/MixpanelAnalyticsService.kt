@@ -1,12 +1,11 @@
 package com.weatherxm.analytics
 
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.weatherxm.BuildConfig
 import org.json.JSONObject
 import timber.log.Timber
 
-class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI): AnalyticsService {
+class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI) : AnalyticsService {
 
     override fun setUserProperties(userId: String, params: List<Pair<String, String>>) {
         mixpanelAPI.identify(userId)
@@ -14,46 +13,30 @@ class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI): AnalyticsS
     }
 
     override fun setAnalyticsEnabled(enabled: Boolean) {
-        if (BuildConfig.DEBUG) {
-            Timber.d("Skipping analytics tracking in DEBUG mode [enabled=$enabled].")
-            mixpanelAPI.optOutTracking()
+
+        if (enabled) {
+            mixpanelAPI.optInTracking()
         } else {
-            if (enabled) {
-                mixpanelAPI.optInTracking()
-            } else {
-                mixpanelAPI.optOutTracking()
-            }
+            mixpanelAPI.optOutTracking()
         }
     }
 
-    override fun trackScreen(screen: AnalyticsService.Screen, screenClass: String, itemId: String?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun trackScreen(screenName: String, screenClass: String) {
-        TODO("Not yet implemented")
-    }
-
-    override fun trackEventUserAction(
-        actionName: String,
-        contentType: String?,
-        vararg customParams: Pair<String, String>
+    override fun trackScreen(
+        screen: AnalyticsService.Screen,
+        screenClass: String,
+        itemId: String?
     ) {
-        TODO("Not yet implemented")
-    }
-
-    fun trackScreen(screenClass: String, itemId: String? = null) {
-        val params = mutableListOf(Pair(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass))
+        val params = mutableListOf(Pair(AnalyticsService.EventKey.SCREEN_CLASS.key, screenClass))
         itemId?.let {
-            params.add(Pair(FirebaseAnalytics.Param.ITEM_ID, it))
+            params.add(Pair(AnalyticsService.EventKey.ITEM_ID.key, it))
         }
-        mixpanelAPI.track(FirebaseAnalytics.Param.SCREEN_NAME, paramsToJSON(params))
+        mixpanelAPI.track(AnalyticsService.EventKey.SCREEN_NAME.key, paramsToJSON(params))
     }
 
     @Suppress("SpreadOperator")
     override fun trackEventUserAction(
         actionName: String,
-        contentType: String,
+        contentType: String?,
         vararg customParams: Pair<String, String>
     ) {
         val mixpanelParams: MutableList<Pair<String, Any>> = mutableListOf(
@@ -64,7 +47,7 @@ class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI): AnalyticsS
         )
 
         contentType?.let {
-            mixpanelParams.add(Pair(FirebaseAnalytics.Param.CONTENT_TYPE, contentType))
+            mixpanelParams.add(Pair(AnalyticsService.EventKey.CONTENT_TYPE.key, contentType))
         }
         mixpanelAPI.track(
             AnalyticsService.CustomEvent.USER_ACTION.eventName, paramsToJSON(mixpanelParams)
@@ -86,15 +69,11 @@ class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI): AnalyticsS
             }.toTypedArray()
         )
         success?.let {
-            mixpanelParams.add(Pair(FirebaseAnalytics.Param.SUCCESS, it))
+            mixpanelParams.add(Pair(AnalyticsService.EventKey.SUCCESS.key, it))
         }
         mixpanelAPI.track(
             AnalyticsService.CustomEvent.VIEW_CONTENT.eventName, paramsToJSON(mixpanelParams)
         )
-    }
-
-    override fun trackEventFailure(failureId: String?) {
-        TODO("Not yet implemented")
     }
 
     @Suppress("SpreadOperator")
@@ -112,7 +91,10 @@ class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI): AnalyticsS
                 it
             }.toTypedArray()
         )
-        mixpanelAPI.track(AnalyticsService.CustomEvent.PROMPT.eventName, paramsToJSON(mixpanelParams))
+        mixpanelAPI.track(
+            AnalyticsService.CustomEvent.PROMPT.eventName,
+            paramsToJSON(mixpanelParams)
+        )
     }
 
     @Suppress("SpreadOperator")
@@ -122,16 +104,18 @@ class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI): AnalyticsS
         index: Long?
     ) {
         val mixpanelParams: MutableList<Pair<String, Any>> = mutableListOf(
-            Pair(FirebaseAnalytics.Param.CONTENT_TYPE, contentType),
+            Pair(AnalyticsService.EventKey.CONTENT_TYPE.key, contentType),
             *customParams.map {
                 it
             }.toTypedArray()
         )
 
         index?.let {
-            mixpanelParams.add(Pair(FirebaseAnalytics.Param.INDEX, it))
+            mixpanelParams.add(Pair(AnalyticsService.EventKey.INDEX.key, it))
         }
-        mixpanelAPI.track(FirebaseAnalytics.Event.SELECT_CONTENT, paramsToJSON(mixpanelParams))
+        mixpanelAPI.track(
+            AnalyticsService.EventKey.SELECT_CONTENT.key, paramsToJSON(mixpanelParams)
+        )
     }
 
     private fun paramsToJSON(params: List<Pair<String, Any>>): JSONObject {
