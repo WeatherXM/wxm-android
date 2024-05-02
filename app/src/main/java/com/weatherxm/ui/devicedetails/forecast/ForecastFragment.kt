@@ -12,7 +12,7 @@ import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
 import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
 import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.blockParentViewPagerOnScroll
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
@@ -124,7 +124,7 @@ class ForecastFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, classSimpleName())
     }
 
     private fun fetchOrHideContent() {

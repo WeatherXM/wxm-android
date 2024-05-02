@@ -17,6 +17,7 @@ import com.weatherxm.databinding.ActivityChangeFrequencyStationBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
@@ -25,7 +26,6 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicesettings.ChangeFrequencyState
 import com.weatherxm.ui.devicesettings.FrequencyStatus
-import com.weatherxm.ui.common.getClassSimpleName
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -120,7 +120,7 @@ class ChangeFrequencyActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            AnalyticsService.Screen.CHANGE_STATION_FREQUENCY, getClassSimpleName(), model.device.id
+            AnalyticsService.Screen.CHANGE_STATION_FREQUENCY, classSimpleName(), model.device.id
         )
     }
 
@@ -138,7 +138,10 @@ class ChangeFrequencyActivity : BaseActivity() {
             analytics.trackEventUserAction(
                 actionName = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
                 contentType = AnalyticsService.ParamValue.CHANGE_FREQUENCY.paramValue,
-                Pair(AnalyticsService.CustomParam.ACTION.paramName, AnalyticsService.ParamValue.CANCEL.paramValue)
+                Pair(
+                    AnalyticsService.CustomParam.ACTION.paramName,
+                    AnalyticsService.ParamValue.CANCEL.paramValue
+                )
             )
             model.disconnectFromPeripheral()
             finishActivity()
@@ -148,7 +151,10 @@ class ChangeFrequencyActivity : BaseActivity() {
             analytics.trackEventUserAction(
                 actionName = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
                 contentType = AnalyticsService.ParamValue.CHANGE_FREQUENCY.paramValue,
-                Pair(AnalyticsService.CustomParam.ACTION.paramName, AnalyticsService.ParamValue.CHANGE.paramValue)
+                Pair(
+                    AnalyticsService.CustomParam.ACTION.paramName,
+                    AnalyticsService.ParamValue.CHANGE.paramValue
+                )
             )
             model.setSelectedFrequency(binding.frequenciesSelector.selectedItemPosition)
             initBluetoothAndStart()

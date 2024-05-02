@@ -13,7 +13,7 @@ import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import timber.log.Timber
 
 class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
@@ -58,7 +58,7 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.DEVICE_ALERTS, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.DEVICE_ALERTS, classSimpleName())
     }
 
     override fun onUpdateStationClicked() {

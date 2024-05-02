@@ -7,9 +7,9 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityUpdatePromptBinding
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.getClassSimpleName
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UpdatePromptActivity : BaseActivity() {
@@ -53,7 +53,10 @@ class UpdatePromptActivity : BaseActivity() {
             analytics.trackEventUserAction(
                 actionName = AnalyticsService.ParamValue.APP_UPDATE_PROMPT_RESULT.paramValue,
                 contentType = AnalyticsService.ParamValue.APP_UPDATE_PROMPT.paramValue,
-                Pair(AnalyticsService.CustomParam.ACTION.paramName, AnalyticsService.ParamValue.UPDATE.paramValue)
+                Pair(
+                    AnalyticsService.CustomParam.ACTION.paramName,
+                    AnalyticsService.ParamValue.UPDATE.paramValue
+                )
             )
             navigator.openPlayStore(this, getString(R.string.market_url, packageName))
         }
@@ -76,6 +79,6 @@ class UpdatePromptActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.APP_UPDATE_PROMPT, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.APP_UPDATE_PROMPT, classSimpleName())
     }
 }

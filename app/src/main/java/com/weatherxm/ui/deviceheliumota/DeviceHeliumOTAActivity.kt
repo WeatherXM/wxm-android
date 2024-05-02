@@ -20,7 +20,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -89,7 +89,7 @@ class DeviceHeliumOTAActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.HELIUM_OTA, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.HELIUM_OTA, classSimpleName())
     }
 
     override fun onDestroy() {

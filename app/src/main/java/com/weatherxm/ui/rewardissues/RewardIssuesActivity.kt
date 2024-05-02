@@ -14,7 +14,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import timber.log.Timber
 
@@ -52,7 +52,7 @@ class RewardIssuesActivity : BaseActivity(), RewardIssuesListener {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.REWARD_ISSUES, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.REWARD_ISSUES, classSimpleName())
     }
 
     override fun onAddWallet(group: String?) {

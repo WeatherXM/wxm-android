@@ -7,7 +7,7 @@ import com.weatherxm.databinding.ActivityHistoryBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
@@ -75,7 +75,7 @@ class HistoryActivity : BaseActivity(), SwipeRefreshCallback {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.HISTORY, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.HISTORY, classSimpleName())
     }
 
     override fun onSwipeRefresh() {

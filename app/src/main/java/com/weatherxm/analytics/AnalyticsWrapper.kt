@@ -41,8 +41,12 @@ class AnalyticsWrapper(
 
         // Selected Theme
         when (displayModeHelper.getDisplayMode()) {
-            context.getString(R.string.dark_value) -> AnalyticsService.UserProperty.DARK.propertyName
-            context.getString(R.string.light_value) -> AnalyticsService.UserProperty.LIGHT.propertyName
+            context.getString(R.string.dark_value) -> {
+                AnalyticsService.UserProperty.DARK.propertyName
+            }
+            context.getString(R.string.light_value) -> {
+                AnalyticsService.UserProperty.LIGHT.propertyName
+            }
             else -> AnalyticsService.UserProperty.SYSTEM.propertyName
         }.apply {
             userParams.add(Pair(AnalyticsService.UserProperty.THEME.propertyName, this))
@@ -70,7 +74,9 @@ class AnalyticsWrapper(
             context.getString(R.string.wind_speed_ms)
         ).let {
             when (it) {
-                context.getString(R.string.wind_speed_ms) -> AnalyticsService.UserProperty.MPS.propertyName
+                context.getString(R.string.wind_speed_ms) -> {
+                    AnalyticsService.UserProperty.MPS.propertyName
+                }
                 context.getString(R.string.wind_speed_mph) -> {
                     AnalyticsService.UserProperty.MPH.propertyName
                 }

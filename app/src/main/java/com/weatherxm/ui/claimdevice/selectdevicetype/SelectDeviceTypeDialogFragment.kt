@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimSelectDeviceTypeBinding
 import com.weatherxm.ui.common.DeviceType
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseBottomSheetDialogFragment
@@ -78,7 +78,7 @@ class SelectDeviceTypeDialogFragment : BaseBottomSheetDialogFragment() {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            AnalyticsService.Screen.CLAIM_DEVICE_TYPE_SELECTION, getClassSimpleName()
+            AnalyticsService.Screen.CLAIM_DEVICE_TYPE_SELECTION, classSimpleName()
         )
     }
 

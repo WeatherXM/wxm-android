@@ -10,11 +10,11 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.getClassSimpleName
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -76,7 +76,7 @@ class RewardsListActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.DEVICE_REWARD_TRANSACTIONS, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.DEVICE_REWARD_TRANSACTIONS, classSimpleName())
     }
 
     private fun updateUIFirstPage(resource: Resource<List<TimelineReward>>) {

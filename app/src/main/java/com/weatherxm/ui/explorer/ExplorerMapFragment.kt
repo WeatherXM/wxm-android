@@ -28,7 +28,7 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setVisible
@@ -332,9 +332,9 @@ class ExplorerMapFragment : BaseMapFragment() {
         super.onResume()
         binding.searchBar.menu.getItem(0).isVisible = !model.isExplorerAfterLoggedIn()
         if (model.isExplorerAfterLoggedIn()) {
-            analytics.trackScreen(AnalyticsService.Screen.EXPLORER, getClassSimpleName())
+            analytics.trackScreen(AnalyticsService.Screen.EXPLORER, classSimpleName())
         } else {
-            analytics.trackScreen(AnalyticsService.Screen.EXPLORER_LANDING, getClassSimpleName())
+            analytics.trackScreen(AnalyticsService.Screen.EXPLORER_LANDING, classSimpleName())
         }
     }
 

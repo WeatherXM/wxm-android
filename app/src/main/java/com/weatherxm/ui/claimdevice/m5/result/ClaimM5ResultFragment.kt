@@ -39,7 +39,8 @@ class ClaimM5ResultFragment : BaseFragment() {
                 actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
                 contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
                 Pair(
-                    AnalyticsService.CustomParam.ACTION.paramName, AnalyticsService.ParamValue.QUIT.paramValue
+                    AnalyticsService.CustomParam.ACTION.paramName,
+                    AnalyticsService.ParamValue.QUIT.paramValue
                 )
             )
             m5ParentModel.cancel()

@@ -12,7 +12,7 @@ import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
@@ -90,7 +90,7 @@ class CurrentFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.CURRENT_WEATHER, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.CURRENT_WEATHER, classSimpleName())
     }
 
     private fun handleFollowClick() {

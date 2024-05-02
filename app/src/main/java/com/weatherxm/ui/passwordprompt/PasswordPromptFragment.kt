@@ -15,7 +15,7 @@ import androidx.lifecycle.whenCreated
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentPasswordPromptBinding
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.components.BaseBottomSheetDialogFragment
@@ -102,7 +102,7 @@ class PasswordPromptFragment : BaseBottomSheetDialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.PASSWORD_CONFIRM, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.PASSWORD_CONFIRM, classSimpleName())
     }
 
     private fun setResult(result: Boolean) {

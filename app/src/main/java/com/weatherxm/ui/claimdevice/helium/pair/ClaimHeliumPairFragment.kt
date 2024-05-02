@@ -24,7 +24,7 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentClaimHeliumPairBinding
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.common.UIError
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.setBluetoothDrawable
 import com.weatherxm.ui.common.setHtml
@@ -186,7 +186,7 @@ class ClaimHeliumPairFragment : BaseFragment() {
             .build()
             .show(this)
 
-        analytics.trackScreen(AnalyticsService.Screen.BLE_CONNECTION_POPUP_ERROR, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.BLE_CONNECTION_POPUP_ERROR, classSimpleName())
     }
 
     private fun updateUI(result: Resource<Unit>) {

@@ -24,7 +24,7 @@ import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
@@ -106,7 +106,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.DEVICE_REWARD_DETAILS, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.DEVICE_REWARD_DETAILS, classSimpleName())
     }
 
     private fun updateUI(data: RewardDetails) {

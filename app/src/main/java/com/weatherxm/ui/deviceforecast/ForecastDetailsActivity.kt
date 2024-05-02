@@ -2,6 +2,7 @@ package com.weatherxm.ui.deviceforecast
 
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.mapbox.search.analytics.AnalyticsService
 import com.weatherxm.R
 import com.weatherxm.analytics.Analytics
 import com.weatherxm.analytics.AnalyticsService
@@ -19,6 +20,7 @@ import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.boldText
 import com.weatherxm.ui.common.moveItemToCenter
 import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.screenLocation
 import com.weatherxm.ui.common.setColor
@@ -245,6 +247,6 @@ class ForecastDetailsActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DEVICE_FORECAST_DETAILS, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST_DETAILS, classSimpleName())
     }
 }

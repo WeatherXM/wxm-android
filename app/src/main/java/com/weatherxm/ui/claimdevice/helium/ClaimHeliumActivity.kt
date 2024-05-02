@@ -20,7 +20,7 @@ import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setIcon
 import com.weatherxm.ui.common.setSuccessChip
@@ -88,7 +88,7 @@ class ClaimHeliumActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.CLAIM_HELIUM, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.CLAIM_HELIUM, classSimpleName())
     }
 
     private fun finishClaiming() {

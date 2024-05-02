@@ -16,7 +16,7 @@ import com.weatherxm.databinding.FragmentProfileBinding
 import com.weatherxm.ui.common.Contracts.ARG_TOKEN_CLAIMED_AMOUNT
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.applyInsets
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
@@ -193,6 +193,6 @@ class ProfileFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.PROFILE, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.PROFILE, classSimpleName())
     }
 }

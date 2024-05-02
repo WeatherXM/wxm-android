@@ -15,7 +15,7 @@ import com.weatherxm.databinding.FragmentDevicesSortFilterBinding
 import com.weatherxm.ui.common.DevicesFilterType
 import com.weatherxm.ui.common.DevicesGroupBy
 import com.weatherxm.ui.common.DevicesSortOrder
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseBottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -197,7 +197,7 @@ class SortFilterDialogFragment : BaseBottomSheetDialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.SORT_FILTER, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.SORT_FILTER, classSimpleName())
     }
 
     fun show(fragment: Fragment) {

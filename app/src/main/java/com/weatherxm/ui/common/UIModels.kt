@@ -293,9 +293,15 @@ data class DevicesSortFilterOptions(
 
     fun getSortAnalyticsValue(): String {
         return when (sortOrder) {
-            DevicesSortOrder.DATE_ADDED -> AnalyticsService.ParamValue.FILTERS_SORT_DATE_ADDED.paramValue
-            DevicesSortOrder.NAME -> AnalyticsService.ParamValue.FILTERS_SORT_NAME.paramValue
-            DevicesSortOrder.LAST_ACTIVE -> AnalyticsService.ParamValue.FILTERS_SORT_LAST_ACTIVE.paramValue
+            DevicesSortOrder.DATE_ADDED -> {
+                AnalyticsService.ParamValue.FILTERS_SORT_DATE_ADDED.paramValue
+            }
+            DevicesSortOrder.NAME -> {
+                AnalyticsService.ParamValue.FILTERS_SORT_NAME.paramValue
+            }
+            DevicesSortOrder.LAST_ACTIVE -> {
+                AnalyticsService.ParamValue.FILTERS_SORT_LAST_ACTIVE.paramValue
+            }
         }
     }
 
@@ -303,13 +309,17 @@ data class DevicesSortFilterOptions(
         return when (filterType) {
             DevicesFilterType.ALL -> AnalyticsService.ParamValue.FILTERS_FILTER_ALL.paramValue
             DevicesFilterType.OWNED -> AnalyticsService.ParamValue.FILTERS_FILTER_OWNED.paramValue
-            DevicesFilterType.FAVORITES -> AnalyticsService.ParamValue.FILTERS_FILTER_FAVORITES.paramValue
+            DevicesFilterType.FAVORITES -> {
+                AnalyticsService.ParamValue.FILTERS_FILTER_FAVORITES.paramValue
+            }
         }
     }
 
     fun getGroupByAnalyticsValue(): String {
         return when (groupBy) {
-            DevicesGroupBy.NO_GROUPING -> AnalyticsService.ParamValue.FILTERS_GROUP_NO_GROUPING.paramValue
+            DevicesGroupBy.NO_GROUPING -> {
+                AnalyticsService.ParamValue.FILTERS_GROUP_NO_GROUPING.paramValue
+            }
             DevicesGroupBy.RELATIONSHIP -> {
                 AnalyticsService.ParamValue.FILTERS_GROUP_RELATIONSHIP.paramValue
             }

@@ -85,11 +85,11 @@ fun Activity.getRichText(
     vararg args: Any = emptyArray()
 ) = getText(resId).toSpanned().toHtml().format(*args).parseAsHtml().trim().toString()
 
-fun Activity.getClassSimpleName(): String {
+fun Activity.classSimpleName(): String {
     return this::class.simpleName ?: String.empty()
 }
 
-fun Fragment.getClassSimpleName(): String {
+fun Fragment.classSimpleName(): String {
     return this::class.simpleName ?: String.empty()
 }
 

@@ -19,7 +19,7 @@ import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
@@ -194,7 +194,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.DEVICES_LIST, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.DEVICES_LIST, classSimpleName())
     }
 
     override fun onDeviceClicked(device: UIDevice) {
@@ -232,7 +232,10 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     override fun onAlertsClicked(device: UIDevice) {
         analytics.trackEventSelectContent(
             AnalyticsService.ParamValue.VIEW_ALL.paramValue,
-            Pair(FirebaseAnalytics.Param.ITEM_ID, AnalyticsService.ParamValue.MULTIPLE_ISSUES.paramValue)
+            Pair(
+                FirebaseAnalytics.Param.ITEM_ID,
+                AnalyticsService.ParamValue.MULTIPLE_ISSUES.paramValue
+            )
         )
         navigator.showDeviceAlerts(context, device)
     }

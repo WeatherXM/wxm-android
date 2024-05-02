@@ -20,7 +20,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicesettings.RebootState
 import com.weatherxm.ui.devicesettings.RebootStatus
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -86,7 +86,7 @@ class RebootActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            AnalyticsService.Screen.REBOOT_STATION, getClassSimpleName(), model.device.id
+            AnalyticsService.Screen.REBOOT_STATION, classSimpleName(), model.device.id
         )
     }
 

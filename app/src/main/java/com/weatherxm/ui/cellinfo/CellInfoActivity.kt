@@ -13,7 +13,7 @@ import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
@@ -121,7 +121,7 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            AnalyticsService.Screen.EXPLORER_CELL, getClassSimpleName(), model.cell.index
+            AnalyticsService.Screen.EXPLORER_CELL, classSimpleName(), model.cell.index
         )
         model.fetchDevices()
     }

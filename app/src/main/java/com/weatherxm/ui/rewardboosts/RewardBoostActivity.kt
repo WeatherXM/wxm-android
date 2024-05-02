@@ -23,7 +23,7 @@ import com.weatherxm.ui.common.setBoostFallbackBackground
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -147,7 +147,7 @@ class RewardBoostActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            AnalyticsService.Screen.REWARD_BOOST_DETAIL, getClassSimpleName(), boostCode
+            AnalyticsService.Screen.REWARD_BOOST_DETAIL, classSimpleName(), boostCode
         )
     }
 }

@@ -16,11 +16,11 @@ import com.weatherxm.databinding.ActivityLoginBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.util.Validator
 import com.weatherxm.util.WidgetHelper
 import org.koin.android.ext.android.inject
@@ -127,7 +127,7 @@ class LoginActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.LOGIN, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.LOGIN, classSimpleName())
     }
 
     private fun onLoginResult(result: Resource<Unit>) {
@@ -141,7 +141,9 @@ class LoginActivity : BaseActivity() {
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.LOGIN.paramValue,
                     contentId = AnalyticsService.ParamValue.LOGIN_ID.paramValue,
-                    Pair(FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue),
+                    Pair(
+                        FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue
+                    ),
                     success = 0L
                 )
                 setInputEnabled(true)
@@ -176,7 +178,10 @@ class LoginActivity : BaseActivity() {
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.LOGIN.paramValue,
                     contentId = AnalyticsService.ParamValue.LOGIN_ID.paramValue,
-                    Pair(FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue),
+                    Pair(
+                        FirebaseAnalytics.Param.METHOD,
+                        AnalyticsService.ParamValue.EMAIL.paramValue
+                    ),
                     success = 1L
                 )
 
@@ -197,7 +202,10 @@ class LoginActivity : BaseActivity() {
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.LOGIN.paramValue,
                     contentId = AnalyticsService.ParamValue.LOGIN_ID.paramValue,
-                    Pair(FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue),
+                    Pair(
+                        FirebaseAnalytics.Param.METHOD,
+                        AnalyticsService.ParamValue.EMAIL.paramValue
+                    ),
                     success = 0L
                 )
                 binding.loading.visibility = View.INVISIBLE

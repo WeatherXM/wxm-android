@@ -13,13 +13,13 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityConnectWalletBinding
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.getRichText
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.util.Mask
 import com.weatherxm.util.Validator
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
@@ -74,7 +74,9 @@ class ConnectWalletActivity : BaseActivity() {
         with(binding.termsCheckboxDesc) {
             movementMethod = BetterLinkMovementMethod.newInstance().apply {
                 setOnLinkClickListener { _, url ->
-                    analytics.trackEventSelectContent(AnalyticsService.ParamValue.WALLET_TERMS.paramValue)
+                    analytics.trackEventSelectContent(
+                        AnalyticsService.ParamValue.WALLET_TERMS.paramValue
+                    )
                     navigator.openWebsite(this@ConnectWalletActivity, url)
                     return@setOnLinkClickListener true
                 }
@@ -173,7 +175,7 @@ class ConnectWalletActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.WALLET, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.WALLET, classSimpleName())
     }
 
     private fun showConfirmWalletDialog(address: String) {

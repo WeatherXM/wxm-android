@@ -1,9 +1,7 @@
 package com.weatherxm.analytics
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI
-import com.weatherxm.BuildConfig
 import org.json.JSONObject
-import timber.log.Timber
 
 class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI) : AnalyticsService {
 

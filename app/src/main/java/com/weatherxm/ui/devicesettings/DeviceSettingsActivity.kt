@@ -17,7 +17,7 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.applyOnGlobalLayout
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
@@ -196,7 +196,7 @@ class DeviceSettingsActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.STATION_SETTINGS, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.STATION_SETTINGS, classSimpleName())
     }
 
     private fun setupInfo() {

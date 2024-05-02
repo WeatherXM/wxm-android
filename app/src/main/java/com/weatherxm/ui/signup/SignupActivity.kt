@@ -9,10 +9,10 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivitySignupBinding
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.util.Validator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -72,7 +72,7 @@ class SignupActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.SIGNUP, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.SIGNUP, classSimpleName())
     }
 
     private fun onSignupResult(result: Resource<String>) {
@@ -92,7 +92,9 @@ class SignupActivity : BaseActivity() {
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.SIGNUP.paramValue,
                     contentId = AnalyticsService.ParamValue.SIGNUP_ID.paramValue,
-                    Pair(FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue),
+                    Pair(
+                        FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue
+                    ),
                     success = 1L
                 )
             }
@@ -116,7 +118,10 @@ class SignupActivity : BaseActivity() {
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.SIGNUP.paramValue,
                     contentId = AnalyticsService.ParamValue.SIGNUP_ID.paramValue,
-                    Pair(FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue),
+                    Pair(
+                        FirebaseAnalytics.Param.METHOD,
+                        AnalyticsService.ParamValue.EMAIL.paramValue
+                    ),
                     success = 0L
                 )
             }

@@ -28,6 +28,7 @@ import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setErrorChip
@@ -39,7 +40,6 @@ import com.weatherxm.ui.devicedetails.current.CurrentFragment
 import com.weatherxm.ui.devicedetails.forecast.ForecastFragment
 import com.weatherxm.ui.devicedetails.rewards.RewardsFragment
 import com.weatherxm.ui.explorer.UICell
-import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -170,7 +170,7 @@ class DeviceDetailsActivity : BaseActivity() {
         super.onResume()
         if (model.device.relation != DeviceRelation.OWNED) {
             analytics.trackScreen(
-                AnalyticsService.Screen.EXPLORER_DEVICE, getClassSimpleName(), model.device.id
+                AnalyticsService.Screen.EXPLORER_DEVICE, classSimpleName(), model.device.id
             )
         }
     }
@@ -193,7 +193,9 @@ class DeviceDetailsActivity : BaseActivity() {
     private fun onMenuItem(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.share_station -> {
-                analytics.trackEventUserAction(AnalyticsService.ParamValue.DEVICE_DETAILS_SHARE.paramValue)
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.DEVICE_DETAILS_SHARE.paramValue
+                )
                 navigator.openShare(
                     this,
                     getString(R.string.share_station_url, model.createNormalizedName())
@@ -293,7 +295,7 @@ class DeviceDetailsActivity : BaseActivity() {
         } != null
 
         if (alerts.size > 1) {
-            if(hasErrorSeverity) {
+            if (hasErrorSeverity) {
                 binding.alertChip.setErrorChip()
             }
             binding.alertChip.text = getString(R.string.issues, alerts.size)

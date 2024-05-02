@@ -9,7 +9,7 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.databinding.ViewEditNameBinding
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.util.Validator
 import org.koin.android.ext.android.inject
 
@@ -83,7 +83,7 @@ class FriendlyNameDialogFragment(
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            AnalyticsService.Screen.CHANGE_STATION_NAME, getClassSimpleName(), deviceId
+            AnalyticsService.Screen.CHANGE_STATION_NAME, classSimpleName(), deviceId
         )
     }
 

@@ -13,7 +13,7 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentMessageDialogBinding
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setVisible
 import kotlinx.coroutines.launch
@@ -102,7 +102,7 @@ class MessageDialogFragment : BaseBottomSheetDialogFragment() {
     override fun onResume() {
         super.onResume()
         analyticsScreen?.let {
-            analytics.trackScreen(it, getClassSimpleName())
+            analytics.trackScreen(it, classSimpleName())
         }
     }
 }

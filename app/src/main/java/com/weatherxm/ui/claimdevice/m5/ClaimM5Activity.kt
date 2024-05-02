@@ -23,7 +23,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setIcon
 import com.weatherxm.ui.common.setSuccessChip
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ClaimM5Activity : BaseActivity() {
@@ -72,7 +72,7 @@ class ClaimM5Activity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.CLAIM_M5, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.CLAIM_M5, classSimpleName())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

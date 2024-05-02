@@ -13,10 +13,10 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.hasPermission
 import org.koin.android.ext.android.inject
@@ -91,11 +91,13 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             true
         }
         contactSupportButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            navigator.openSupportCenter(context, source = AnalyticsService.ParamValue.SETTINGS.paramValue)
+            navigator.openSupportCenter(context, AnalyticsService.ParamValue.SETTINGS.paramValue)
             true
         }
         userResearchButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            analytics.trackEventSelectContent(AnalyticsService.ParamValue.USER_RESEARCH_PANEL.paramValue)
+            analytics.trackEventSelectContent(
+                AnalyticsService.ParamValue.USER_RESEARCH_PANEL.paramValue
+            )
             navigator.openWebsite(this.context, getString(R.string.user_panel_url))
             true
         }
@@ -212,7 +214,10 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             analytics.trackEventUserAction(
                 AnalyticsService.ParamValue.NOTIFICATIONS.paramValue,
                 customParams = arrayOf(
-                    Pair(AnalyticsService.CustomParam.STATUS.paramName, notificationsStatus.paramValue)
+                    Pair(
+                        AnalyticsService.CustomParam.STATUS.paramName,
+                        notificationsStatus.paramValue
+                    )
                 )
             )
 

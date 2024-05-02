@@ -17,7 +17,7 @@ import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.getClassSimpleName
+import com.weatherxm.ui.common.classSimpleName
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -56,7 +56,7 @@ class DeleteAccountActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(AnalyticsService.Screen.DELETE_ACCOUNT, getClassSimpleName())
+        analytics.trackScreen(AnalyticsService.Screen.DELETE_ACCOUNT, classSimpleName())
     }
 
     private fun initHtmlText() {
