@@ -14,6 +14,8 @@ fun getVersionGitTags(): List<String> {
     val versionTagsWithOptionalRCRegex = Regex("[RC-]*[0-9]*_*[0-9]+[.][0-9]+[.][0-9]+")
     return grgit.tag.list().filter {
         it.name.matches(versionTagsWithOptionalRCRegex)
+    }.sortedBy {
+        it.dateTime
     }.map {
         it.name
     }
