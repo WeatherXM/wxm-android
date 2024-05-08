@@ -2,9 +2,7 @@ package com.weatherxm.ui.deviceforecast
 
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.mapbox.search.analytics.AnalyticsService
 import com.weatherxm.R
-import com.weatherxm.analytics.Analytics
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Status
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
@@ -18,9 +16,8 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.boldText
-import com.weatherxm.ui.common.moveItemToCenter
-import com.weatherxm.ui.common.getClassSimpleName
 import com.weatherxm.ui.common.classSimpleName
+import com.weatherxm.ui.common.moveItemToCenter
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.screenLocation
 import com.weatherxm.ui.common.setColor
@@ -213,10 +210,10 @@ class ForecastDetailsActivity : BaseActivity() {
             },
             onClickListener = {
                 analytics.trackEventSelectContent(
-                    Analytics.ParamValue.DAILY_CARD.paramValue,
+                    AnalyticsService.ParamValue.DAILY_CARD.paramValue,
                     Pair(
                         FirebaseAnalytics.Param.ITEM_ID,
-                        Analytics.ParamValue.DAILY_DETAILS.paramValue
+                        AnalyticsService.ParamValue.DAILY_DETAILS.paramValue
                     )
                 )
                 // Get selected position before we update it in order to reset the stroke
