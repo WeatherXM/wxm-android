@@ -384,11 +384,10 @@
     <string name="scan_failed_desc"><![CDATA[Something went wrong! Please <b>Scan Again</b>.]]></string>
 
     <!-- Select Device Type -->
-    <string name="select_your_device_type">Select your device type</string>
-    <string name="m5_ws1000_title">WS1000 | M5</string>
-    <string name="m5_ws1000_desc">Claim Device Manually</string>
-    <string name="helium_type_title">WS2000 | Helium</string>
-    <string name="helium_type_desc">Claim Device via Bluetooth</string>
+    <string name="claim_a_weather_station">Claim a Weather Station</string>
+    <string name="select_your_station_type">Select your station type</string>
+    <string name="m5_wifi">M5 | WiFi</string>
+    <string name="d1_wifi">D1 | WiFi</string>
 
     <!-- Claim device -->
     <string name="device_serial_number_title">Device Serial Number</string>

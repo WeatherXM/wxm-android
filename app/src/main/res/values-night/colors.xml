@@ -48,7 +48,7 @@
     <color name="network_stats_button">@color/dark_primary</color>
 
     <!-- Rewards -->
-    <color name="rewards_background">@color/dark_background</color>
+    <color name="alternative_background">@color/dark_background</color>
 
     <!-- Forecast -->
     <color name="daily_temps_divider">@color/light_background</color>

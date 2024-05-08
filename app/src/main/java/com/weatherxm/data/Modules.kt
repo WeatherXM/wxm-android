@@ -160,7 +160,6 @@ import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
-import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeViewModel
 import com.weatherxm.ui.connectwallet.ConnectWalletViewModel
 import com.weatherxm.ui.deleteaccount.DeleteAccountViewModel
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -233,8 +232,6 @@ import com.weatherxm.usecases.PreferencesUseCase
 import com.weatherxm.usecases.PreferencesUseCaseImpl
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.usecases.RewardsUseCaseImpl
-import com.weatherxm.usecases.SelectDeviceTypeUseCase
-import com.weatherxm.usecases.SelectDeviceTypeUseCaseImpl
 import com.weatherxm.usecases.SendFeedbackUseCase
 import com.weatherxm.usecases.SendFeedbackUseCaseImpl
 import com.weatherxm.usecases.StartupUseCase
@@ -568,9 +565,6 @@ private val usecases = module {
     }
     single<BluetoothScannerUseCase> {
         BluetoothScannerUseCaseImpl(get())
-    }
-    single<SelectDeviceTypeUseCase> {
-        SelectDeviceTypeUseCaseImpl(get())
     }
     single<BluetoothConnectionUseCase> {
         BluetoothConnectionUseCaseImpl(get())
@@ -971,7 +965,6 @@ private val viewmodels = module {
     }
     viewModel { StartupViewModel(get()) }
     viewModel { AnalyticsOptInViewModel(get(), get()) }
-    viewModel { SelectDeviceTypeViewModel(get()) }
     viewModel { ConnectWalletViewModel(get(), get(), get()) }
     viewModel { DeleteAccountViewModel(get(), get(), get()) }
     viewModel { DeviceEditLocationViewModel(get(), get(), get(), get()) }

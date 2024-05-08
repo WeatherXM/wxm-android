@@ -285,6 +285,10 @@
             android:name="com.weatherxm.ui.deviceforecast.ForecastDetailsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.claimdevice.selectstation.SelectStationTypeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
 
         <!-- Services -->
         <service

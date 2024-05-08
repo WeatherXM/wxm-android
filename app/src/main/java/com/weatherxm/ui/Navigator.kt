@@ -25,6 +25,7 @@ import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.cellinfo.CellInfoActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
+import com.weatherxm.ui.claimdevice.selectstation.SelectStationTypeActivity
 import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
 import com.weatherxm.ui.common.Contracts.ARG_BOOST_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_CELL_CENTER
@@ -306,6 +307,13 @@ class Navigator(private val analytics: AnalyticsWrapper) {
                     .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             )
         }
+    }
+
+    fun showClaimSelectStationType(context: Context) {
+        context.startActivity(
+            Intent(context, SelectStationTypeActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        )
     }
 
     fun showClaimHeliumFlow(context: Context) {
