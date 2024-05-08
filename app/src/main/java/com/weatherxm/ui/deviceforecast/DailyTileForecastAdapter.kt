@@ -17,6 +17,7 @@ import java.time.LocalDate
 
 class DailyTileForecastAdapter(
     private var selectedDate: LocalDate,
+    private val onNewSelectedPosition: (Int, Int) -> Unit,
     private val onClickListener: (UIForecastDay) -> Unit
 ) : ListAdapter<UIForecastDay, DailyTileForecastAdapter.DailyTileViewHolder>(
     UIForecastDayDiffCallback()
@@ -64,6 +65,7 @@ class DailyTileForecastAdapter(
                     itemView.context.getColor(R.color.daily_selected_tile)
                 )
                 binding.root.setCardStroke(R.color.colorPrimary, 2)
+                onNewSelectedPosition.invoke(position, binding.root.width)
             } else {
                 binding.root.setCardBackgroundColor(
                     itemView.context.getColor(R.color.daily_unselected_tile)
