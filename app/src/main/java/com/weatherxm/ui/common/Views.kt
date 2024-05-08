@@ -46,6 +46,7 @@ import androidx.core.text.toHtml
 import androidx.core.text.toSpanned
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.card.MaterialCardView
@@ -401,6 +402,11 @@ fun MaterialCardView.setBoostFallbackBackground() {
 private fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+fun RecyclerView.moveItemToCenter(position: Int, parentWidth: Int, itemWidth: Int) {
+    val centerOfScreen: Int = parentWidth / 2 - (itemWidth / 2)
+    (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(position, centerOfScreen)
 }
 
 @Suppress("EmptyFunctionBlock")

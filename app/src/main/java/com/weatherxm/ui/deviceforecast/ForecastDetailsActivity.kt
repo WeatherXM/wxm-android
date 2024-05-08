@@ -15,6 +15,7 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.boldText
+import com.weatherxm.ui.common.moveItemToCenter
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.screenLocation
 import com.weatherxm.ui.common.setColor
@@ -201,15 +202,24 @@ class ForecastDetailsActivity : BaseActivity() {
     }
 
     private fun setupDailyAdapter(forecastDay: UIForecastDay, selectedDayPosition: Int) {
-        dailyAdapter = DailyTileForecastAdapter(forecastDay.date) {
-            analytics.trackEventSelectContent(
-                Analytics.ParamValue.DAILY_CARD.paramValue,
-                Pair(FirebaseAnalytics.Param.ITEM_ID, Analytics.ParamValue.DAILY_DETAILS.paramValue)
-            )
-            // Get selected position before we change it to the new one in order to reset the stroke
-            dailyAdapter.notifyItemChanged(dailyAdapter.getSelectedPosition())
-            updateUI(it)
-        }
+        dailyAdapter = DailyTileForecastAdapter(
+            forecastDay.date,
+            onNewSelectedPosition = { position, width ->
+                binding.dailyTilesRecycler.moveItemToCenter(position, binding.root.width, width)
+            },
+            onClickListener = {
+                analytics.trackEventSelectContent(
+                    Analytics.ParamValue.DAILY_CARD.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.ITEM_ID,
+                        Analytics.ParamValue.DAILY_DETAILS.paramValue
+                    )
+                )
+                // Get selected position before we update it in order to reset the stroke
+                dailyAdapter.notifyItemChanged(dailyAdapter.getSelectedPosition())
+                updateUI(it)
+            }
+        )
         binding.dailyTilesRecycler.adapter = dailyAdapter
         dailyAdapter.submitList(model.forecast().forecastDays)
         binding.dailyTilesRecycler.scrollToPosition(selectedDayPosition)
