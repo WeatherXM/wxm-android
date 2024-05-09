@@ -158,8 +158,8 @@ import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyViewMod
 import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairViewModel
 import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
-import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
-import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
+import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
+import com.weatherxm.ui.claimdevice.wifi.verify.ClaimWifiVerifyViewModel
 import com.weatherxm.ui.connectwallet.ConnectWalletViewModel
 import com.weatherxm.ui.deleteaccount.DeleteAccountViewModel
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -987,12 +987,11 @@ private val viewmodels = module {
     viewModel { UrlRouterViewModel(get(), get(), get()) }
     viewModel { SelectStationViewModel(get()) }
     viewModel { ClaimLocationViewModel(get(), get(), get()) }
-    viewModel { ClaimM5ViewModel(get(), get(), get()) }
     viewModel { ClaimHeliumViewModel(get(), get(), get()) }
     viewModel { ClaimHeliumPairViewModel(get(), get(), get(), get()) }
     viewModel { ClaimHeliumResultViewModel(get(), get(), get()) }
     viewModel { ClaimHeliumFrequencyViewModel(get(), get()) }
-    viewModel { ClaimM5VerifyViewModel() }
+    viewModel { ClaimWifiVerifyViewModel() }
     viewModel { NetworkSearchViewModel(get(), get()) }
     viewModel { params ->
         ForecastDetailsViewModel(
@@ -1002,6 +1001,9 @@ private val viewmodels = module {
             get(),
             get()
         )
+    }
+    viewModel { params ->
+        ClaimWifiViewModel(deviceType = params.get(), get(), get(), get())
     }
 }
 

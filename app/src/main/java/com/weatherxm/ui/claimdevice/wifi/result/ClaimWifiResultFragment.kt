@@ -1,4 +1,4 @@
-package com.weatherxm.ui.claimdevice.m5.result
+package com.weatherxm.ui.claimdevice.wifi.result
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,26 +8,26 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
-import com.weatherxm.databinding.FragmentClaimM5ResultBinding
+import com.weatherxm.databinding.FragmentClaimWifiResultBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
-import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
-import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
+import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
+import com.weatherxm.ui.claimdevice.wifi.verify.ClaimWifiVerifyViewModel
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
-class ClaimM5ResultFragment : BaseFragment() {
-    private val m5ParentModel: ClaimM5ViewModel by activityViewModel()
-    private val verifyM5Model: ClaimM5VerifyViewModel by activityViewModel()
+class ClaimWifiResultFragment : BaseFragment() {
+    private val parentModel: ClaimWifiViewModel by activityViewModel()
+    private val verifyModel: ClaimWifiVerifyViewModel by activityViewModel()
     private val locationModel: ClaimLocationViewModel by activityViewModel()
-    private lateinit var binding: FragmentClaimM5ResultBinding
+    private lateinit var binding: FragmentClaimWifiResultBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentClaimM5ResultBinding.inflate(inflater, container, false)
+        binding = FragmentClaimWifiResultBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -43,17 +43,17 @@ class ClaimM5ResultFragment : BaseFragment() {
                     AnalyticsService.ParamValue.QUIT.paramValue
                 )
             )
-            m5ParentModel.cancel()
+            parentModel.cancel()
         }
 
         binding.retry.setOnClickListener {
-            m5ParentModel.claimDevice(
-                verifyM5Model.getSerialNumber(),
+            parentModel.claimDevice(
+                verifyModel.getSerialNumber(),
                 locationModel.getInstallationLocation()
             )
         }
 
-        m5ParentModel.onClaimResult().observe(viewLifecycleOwner) {
+        parentModel.onClaimResult().observe(viewLifecycleOwner) {
             updateUI(it)
         }
     }

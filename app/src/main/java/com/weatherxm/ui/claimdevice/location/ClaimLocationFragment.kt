@@ -12,7 +12,8 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimSetLocationBinding
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
-import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
+import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.SearchResultsAdapter
 import com.weatherxm.ui.common.hideKeyboard
@@ -27,12 +28,11 @@ import org.koin.androidx.viewmodel.ext.android.activityViewModel
 class ClaimLocationFragment : BaseFragment(), EditLocationListener {
     private val model: ClaimLocationViewModel by activityViewModel()
     private val heliumParentModel: ClaimHeliumViewModel by activityViewModel()
-    private val m5ParentModel: ClaimM5ViewModel by activityViewModel()
+    private val wifiParentModel: ClaimWifiViewModel by activityViewModel()
     private lateinit var binding: FragmentClaimSetLocationBinding
 
     companion object {
         const val TAG = "ClaimLocationFragment"
-        const val ARG_DEVICE_TYPE = "device_type"
 
         fun newInstance(deviceType: DeviceType) = ClaimLocationFragment().apply {
             arguments = Bundle().apply { putParcelable(ARG_DEVICE_TYPE, deviceType) }
@@ -80,7 +80,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             model.setInstallationLocation(markerLocation.lat, markerLocation.lon)
 
             if (model.getDeviceType() == DeviceType.M5_WIFI) {
-                m5ParentModel.next()
+                wifiParentModel.next()
             } else {
                 heliumParentModel.next()
             }

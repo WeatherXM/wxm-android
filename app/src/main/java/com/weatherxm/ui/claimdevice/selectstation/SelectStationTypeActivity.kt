@@ -3,6 +3,7 @@ package com.weatherxm.ui.claimdevice.selectstation
 import android.os.Bundle
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimSelectStationBinding
+import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.components.BaseActivity
@@ -22,12 +23,13 @@ class SelectStationTypeActivity : BaseActivity() {
         }
 
         binding.m5WifiCard.listener {
-            navigator.showClaimM5Flow(this)
+            navigator.showClaimWifiFlow(this, DeviceType.M5_WIFI)
             finish()
         }
 
         binding.d1WifiCard.listener {
-            // Coming Soon...
+            navigator.showClaimWifiFlow(this, DeviceType.D1_WIFI)
+            finish()
         }
 
         binding.heliumCard.listener {

@@ -1,4 +1,4 @@
-package com.weatherxm.ui.claimdevice.m5
+package com.weatherxm.ui.claimdevice.wifi
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,43 +6,48 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.databinding.ActivityClaimM5DeviceBinding
+import com.weatherxm.databinding.ActivityClaimWifiDeviceBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
-import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
-import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
-import com.weatherxm.ui.claimdevice.m5.connectwifi.ClaimM5ConnectWifiFragment
-import com.weatherxm.ui.claimdevice.m5.result.ClaimM5ResultFragment
-import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyFragment
-import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
+import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
+import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
+import com.weatherxm.ui.claimdevice.wifi.connectwifi.ClaimWifiConnectWifiFragment
+import com.weatherxm.ui.claimdevice.wifi.result.ClaimWifiResultFragment
+import com.weatherxm.ui.claimdevice.wifi.verify.ClaimWifiVerifyFragment
+import com.weatherxm.ui.claimdevice.wifi.verify.ClaimWifiVerifyViewModel
+import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.common.classSimpleName
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-class ClaimM5Activity : BaseActivity() {
+class ClaimWifiActivity : BaseActivity() {
     companion object {
         const val CURRENT_PAGE = "current_page"
         const val SERIAL_NUMBER = "serial_number"
     }
 
-    private lateinit var binding: ActivityClaimM5DeviceBinding
-    private val model: ClaimM5ViewModel by viewModel()
+    private lateinit var binding: ActivityClaimWifiDeviceBinding
+    private val model: ClaimWifiViewModel by viewModel {
+        parametersOf(intent.parcelable<DeviceType>(Contracts.ARG_DEVICE_TYPE))
+    }
     private val locationModel: ClaimLocationViewModel by viewModel()
-    private val verifyModel: ClaimM5VerifyViewModel by viewModel()
+    private val verifyModel: ClaimWifiVerifyViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityClaimM5DeviceBinding.inflate(layoutInflater)
+        binding = ActivityClaimWifiDeviceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.root.applyInsets()
 
         // The pager adapter, which provides the pages to the view pager widget.
-        val pagerAdapter = ClaimDevicePagerAdapter(this)
+        val pagerAdapter = ClaimDevicePagerAdapter(this, model.deviceType)
         binding.pager.adapter = pagerAdapter
         binding.pager.isUserInputEnabled = false
 
@@ -54,7 +59,11 @@ class ClaimM5Activity : BaseActivity() {
             if (it) onNextPressed()
         }
 
-        binding.toolbar.title = getString(R.string.title_claim_m5_wifi)
+        binding.toolbar.title = if (model.deviceType == DeviceType.M5_WIFI) {
+            getString(R.string.title_claim_m5_wifi)
+        } else {
+            getString(R.string.title_claim_d1_wifi)
+        }
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
@@ -66,11 +75,12 @@ class ClaimM5Activity : BaseActivity() {
                 verifyModel.setSerialNumber(savedSn)
             }
         }
-        setClaimingProgress(binding.pager.currentItem)
+        updateClaimingProgress()
     }
 
-    private fun setClaimingProgress(currentPage: Int) {
-        binding.progress.progress = when (currentPage) {
+    @Suppress("MagicNumber")
+    private fun updateClaimingProgress() {
+        binding.progress.progress = when (binding.pager.currentItem) {
             0 -> 10
             1 -> 30
             2 -> 100
@@ -92,7 +102,7 @@ class ClaimM5Activity : BaseActivity() {
     private fun onNextPressed() {
         with(binding) {
             pager.currentItem += 1
-            setClaimingProgress(pager.currentItem)
+            updateClaimingProgress()
             when (pager.currentItem) {
                 PAGE_LOCATION -> {
                     locationModel.requestUserLocation()
@@ -110,7 +120,8 @@ class ClaimM5Activity : BaseActivity() {
     }
 
     private class ClaimDevicePagerAdapter(
-        activity: AppCompatActivity
+        activity: AppCompatActivity,
+        private val deviceType: DeviceType
     ) : FragmentStateAdapter(activity) {
         companion object {
             const val PAGE_CONNECT_WIFI = 0
@@ -125,10 +136,10 @@ class ClaimM5Activity : BaseActivity() {
         @Suppress("UseCheckOrError")
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                PAGE_CONNECT_WIFI -> ClaimM5ConnectWifiFragment()
-                PAGE_SERIAL_NUMBER -> ClaimM5VerifyFragment()
-                PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.M5_WIFI)
-                PAGE_RESULT -> ClaimM5ResultFragment()
+                PAGE_CONNECT_WIFI -> ClaimWifiConnectWifiFragment()
+                PAGE_SERIAL_NUMBER -> ClaimWifiVerifyFragment()
+                PAGE_LOCATION -> ClaimLocationFragment.newInstance(deviceType)
+                PAGE_RESULT -> ClaimWifiResultFragment()
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }
         }

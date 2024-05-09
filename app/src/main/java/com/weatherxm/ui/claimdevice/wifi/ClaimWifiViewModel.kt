@@ -1,4 +1,4 @@
-package com.weatherxm.ui.claimdevice.m5
+package com.weatherxm.ui.claimdevice.wifi
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +12,7 @@ import com.weatherxm.data.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.analytics.AnalyticsWrapper
@@ -20,7 +21,8 @@ import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class ClaimM5ViewModel(
+class ClaimWifiViewModel(
+    val deviceType: DeviceType,
     private val claimDeviceUseCase: ClaimDeviceUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper

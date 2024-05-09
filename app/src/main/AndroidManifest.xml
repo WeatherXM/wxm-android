@@ -201,7 +201,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.weatherxm.ui.claimdevice.m5.ClaimM5Activity"
+            android:name="com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
