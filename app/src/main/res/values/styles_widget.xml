@@ -46,7 +46,7 @@
     -->
     <style name="Widget.WeatherXM.ProgressBar.Horizontal" parent="Widget.Material3.LinearProgressIndicator">
         <item name="progressBarStyle">?android:progressBarStyleHorizontal</item>
-        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="trackColor">@color/transparent</item>
         <item name="android:indeterminateOnly">true</item>
         <item name="android:indeterminate">true</item>
         <item name="minHeight">8dp</item>
@@ -216,11 +216,12 @@
     -->
     <style name="Widget.WeatherXM.Slider" parent="Widget.Material3.Slider">
         <item name="android:stepSize">0</item>
-        <item name="haloRadius">0dp</item>
         <item name="labelBehavior">gone</item>
         <item name="thumbElevation">0dp</item>
-        <item name="thumbRadius">0dp</item>
-        <item name="tickVisible">false</item>
+        <item name="thumbWidth">0dp</item>
+        <item name="thumbHeight">0dp</item>
+        <item name="thumbTrackGapSize">0dp</item>
+        <item name="trackStopIndicatorSize">0dp</item>
         <item name="trackHeight">@dimen/slider_default_track_height</item>
         <item name="trackColorInactive">@color/blueTint</item>
     </style>
