@@ -13,7 +13,7 @@ import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity.ClaimDevicePagerAdapter.Companion.PAGE_SERIAL_NUMBER
-import com.weatherxm.ui.claimdevice.m5.information.ClaimM5InformationFragment
+import com.weatherxm.ui.claimdevice.m5.connectwifi.ClaimM5ConnectWifiFragment
 import com.weatherxm.ui.claimdevice.m5.result.ClaimM5ResultFragment
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyFragment
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
@@ -44,6 +44,7 @@ class ClaimM5Activity : BaseActivity() {
 
         binding.root.applyInsets()
 
+
         // The pager adapter, which provides the pages to the view pager widget.
         val pagerAdapter = ClaimDevicePagerAdapter(this)
         binding.pager.adapter = pagerAdapter
@@ -57,6 +58,7 @@ class ClaimM5Activity : BaseActivity() {
             if (it) onNextPressed()
         }
 
+        binding.toolbar.title = getString(R.string.title_claim_m5_wifi)
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
@@ -123,7 +125,7 @@ class ClaimM5Activity : BaseActivity() {
         @Suppress("UseCheckOrError")
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                PAGE_INFORMATION -> ClaimM5InformationFragment()
+                PAGE_INFORMATION -> ClaimM5ConnectWifiFragment()
                 PAGE_SERIAL_NUMBER -> ClaimM5VerifyFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.M5_WIFI)
                 PAGE_RESULT -> ClaimM5ResultFragment()
