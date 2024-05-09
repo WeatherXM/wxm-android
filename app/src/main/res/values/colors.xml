@@ -32,6 +32,7 @@
 
     <!-- Generic -->
     <color name="alternative_background">@color/light_top</color>
+    <color name="progress_bar_background">@color/light_lightest_blue</color>
 
     <!-- System and Launcher -->
     <color name="ic_launcher_background">@color/colorPrimary</color>

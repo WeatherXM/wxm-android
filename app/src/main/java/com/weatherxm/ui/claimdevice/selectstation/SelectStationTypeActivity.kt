@@ -23,6 +23,7 @@ class SelectStationTypeActivity : BaseActivity() {
 
         binding.m5WifiCard.listener {
             navigator.showClaimM5Flow(this)
+            finish()
         }
 
         binding.d1WifiCard.listener {
@@ -31,6 +32,7 @@ class SelectStationTypeActivity : BaseActivity() {
 
         binding.heliumCard.listener {
             navigator.showClaimHeliumFlow(this)
+            finish()
         }
     }
 
