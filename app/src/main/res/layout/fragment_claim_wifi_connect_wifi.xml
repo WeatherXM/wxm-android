@@ -5,7 +5,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/alternative_background">
+    android:background="@color/alternativeBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -40,14 +40,14 @@
 
                 <ImageView
                     android:id="@+id/firstStepIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:layout_marginEnd="@dimen/margin_normal"
                     android:src="@drawable/ic_one_filled"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/title"
-                    app:tint="@color/colorOnSurface"
+                    app:tint="@color/alternativeTextColor"
                     tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -56,6 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
                     android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    android:textColor="@color/alternativeTextColor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/firstStepIcon"
                     app:layout_constraintTop_toTopOf="@id/firstStepIcon"
@@ -63,14 +64,14 @@
 
                 <ImageView
                     android:id="@+id/secondStepIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:layout_marginEnd="@dimen/margin_normal"
                     android:src="@drawable/ic_two_filled"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/firstStep"
-                    app:tint="@color/colorOnSurface"
+                    app:tint="@color/alternativeTextColor"
                     tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -79,6 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
                     android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    android:textColor="@color/alternativeTextColor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/secondStepIcon"
                     app:layout_constraintTop_toTopOf="@id/secondStepIcon"
@@ -86,14 +88,14 @@
 
                 <ImageView
                     android:id="@+id/thirdStepIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:layout_marginEnd="@dimen/margin_normal"
                     android:src="@drawable/ic_three_filled"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/secondStep"
-                    app:tint="@color/colorOnSurface"
+                    app:tint="@color/alternativeTextColor"
                     tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -102,6 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"
                     android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    android:textColor="@color/alternativeTextColor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/thirdStepIcon"
                     app:layout_constraintTop_toTopOf="@id/thirdStepIcon"
@@ -109,14 +112,14 @@
 
                 <ImageView
                     android:id="@+id/fourthStepIcon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:layout_marginEnd="@dimen/margin_normal"
                     android:src="@drawable/ic_four_filled"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/thirdStep"
-                    app:tint="@color/colorOnSurface"
+                    app:tint="@color/alternativeTextColor"
                     tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textview.MaterialTextView
@@ -126,6 +129,7 @@
                     android:layout_marginStart="@dimen/margin_small"
                     android:text="@string/connect_wifi_fourth_step"
                     android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    android:textColor="@color/alternativeTextColor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/fourthStepIcon"
                     app:layout_constraintTop_toTopOf="@id/fourthStepIcon" />
@@ -137,6 +141,7 @@
                     android:layout_marginTop="@dimen/margin_extra_large"
                     android:text="@string/connect_m5_wifi_watch_video"
                     android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    android:textColor="@color/alternativeTextColor"
                     android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/fourthStep"
                     tools:visibility="visible" />

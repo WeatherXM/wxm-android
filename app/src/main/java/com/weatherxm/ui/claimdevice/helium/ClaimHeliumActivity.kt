@@ -5,7 +5,6 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyFragment
@@ -19,8 +18,8 @@ import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.applyInsets
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.classSimpleName
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.components.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel

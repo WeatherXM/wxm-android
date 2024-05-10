@@ -29,7 +29,7 @@
         android:indeterminate="false"
         android:indeterminateOnly="false"
         app:layout_constraintTop_toBottomOf="@id/app_bar"
-        app:trackColor="@color/progress_bar_background"
+        app:trackColor="@color/progressBarTrackColor"
         app:trackCornerRadius="@dimen/radius_large"
         tools:progress="30" />
 

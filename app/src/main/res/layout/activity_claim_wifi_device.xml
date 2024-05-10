@@ -4,7 +4,7 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/alternative_background">
+    android:background="@color/alternativeBackground">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -30,7 +30,7 @@
         android:indeterminate="false"
         android:indeterminateOnly="false"
         app:layout_constraintTop_toBottomOf="@id/app_bar"
-        app:trackColor="@color/progress_bar_background"
+        app:trackColor="@color/progressBarTrackColor"
         app:trackCornerRadius="@dimen/radius_large"
         tools:progress="30" />
 
