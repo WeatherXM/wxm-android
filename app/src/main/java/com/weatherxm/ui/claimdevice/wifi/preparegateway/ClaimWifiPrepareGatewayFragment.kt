@@ -1,11 +1,11 @@
 package com.weatherxm.ui.claimdevice.wifi.preparegateway
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import coil.ImageLoader
-import coil.request.ImageRequest
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimWifiPrepareClaimingBinding
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
@@ -13,6 +13,7 @@ import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.util.checkPermissionsAndThen
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -56,9 +57,24 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
         }
 
         binding.scanBtn.setOnClickListener {
-            // To be implemented
+            getCameraPermissionsAndScan()
         }
 
         return binding.root
+    }
+
+    private fun getCameraPermissionsAndScan() {
+        // FIXME: Ensure that the flow is OK as-is
+        activity?.checkPermissionsAndThen(
+            permissions = arrayOf(Manifest.permission.CAMERA),
+            rationaleTitle = getString(R.string.permission_camera),
+            rationaleMessage = getString(R.string.permission_camera_desc),
+            onGranted = {
+                // Start QR code scanner
+            },
+            onDenied = {
+                // Do nothing now. We handle it differently.
+            }
+        )
     }
 }
