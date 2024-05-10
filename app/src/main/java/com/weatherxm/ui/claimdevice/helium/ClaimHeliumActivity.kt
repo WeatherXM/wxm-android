@@ -22,8 +22,6 @@ import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.setIcon
-import com.weatherxm.ui.common.setSuccessChip
 import com.weatherxm.ui.components.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -73,8 +71,7 @@ class ClaimHeliumActivity : BaseActivity() {
         model.onBackToLocation().observe(this) {
             if (it) {
                 binding.pager.currentItem -= 1
-                binding.thirdStep.setIcon(R.drawable.ic_three_filled)
-                binding.fourthStep.setIcon(R.drawable.ic_four_outlined)
+                updateClaimingProgress()
             }
         }
 
@@ -84,6 +81,7 @@ class ClaimHeliumActivity : BaseActivity() {
             model.setDeviceKey(it.getString(DEV_KEY, String.empty()))
             model.setClaimedDevice(it.parcelable(CLAIMED_DEVICE))
         }
+        updateClaimingProgress()
     }
 
     override fun onResume() {
@@ -99,28 +97,30 @@ class ClaimHeliumActivity : BaseActivity() {
     private fun onNextPressed() {
         with(binding) {
             pager.currentItem += 1
+            updateClaimingProgress()
 
             when (pager.currentItem) {
-                ClaimHeliumDevicePagerAdapter.PAGE_VERIFY_OR_PAIR -> {
-                    firstStep.setSuccessChip()
-                    secondStep.setIcon(R.drawable.ic_two_filled)
-                }
                 ClaimHeliumDevicePagerAdapter.PAGE_LOCATION -> {
-                    secondStep.setSuccessChip()
-                    thirdStep.setIcon(R.drawable.ic_three_filled)
                     locationModel.requestUserLocation()
                 }
                 ClaimHeliumDevicePagerAdapter.PAGE_FREQUENCY -> {
-                    thirdStep.setSuccessChip()
-                    fourthStep.setIcon(R.drawable.ic_four_filled)
                     frequencyModel.getCountryAndFrequencies(locationModel.getInstallationLocation())
                 }
                 ClaimHeliumDevicePagerAdapter.PAGE_RESULT -> {
                     resultModel.setSelectedDevice(pairModel.getSelectedDevice())
                     resultModel.setFrequency(model.getFrequency())
-                    fourthStep.setSuccessChip()
                 }
             }
+        }
+    }
+
+    @Suppress("MagicNumber")
+    private fun updateClaimingProgress() {
+        binding.progress.progress = when (binding.pager.currentItem) {
+            0 -> 10
+            1 -> 30
+            2 -> 70
+            else -> 100
         }
     }
 

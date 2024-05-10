@@ -15,8 +15,6 @@
     <string name="action_clear">Clear</string>
     <string name="action_try_again">Try Again</string>
     <string name="action_verify">Verify</string>
-    <string name="action_pair">Pair</string>
-    <string name="action_reset">Reset</string>
     <string name="action_have_reset_device">I\’ve Reset My Device</string>
     <string name="action_favorite">Favorite</string>
     <string name="action_pair_device">Pair Device</string>
@@ -402,7 +400,6 @@
     <string name="action_view_station">View Station</string>
     <string name="action_quit_claiming">Quit Claiming</string>
     <string name="action_retry_claiming">Retry Claiming</string>
-    <string name="location">Location</string>
     <string name="confirm_location_description">I acknowledge that the deployment location above is correct and can be used to verify the eligibility of the station’s rewards.</string>
     <string name="set_and_claim">Set and Claim</string>
     <string name="station_claimed">Station Claimed</string>
