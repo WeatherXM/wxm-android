@@ -332,7 +332,7 @@ dependencies {
     // Material Components for Android
     implementation(libs.material)
 
-    // Google Play Services for Location & Maps
+    // Google Play Services for Location & Maps & QR Scanner
     implementation(libs.play.services.location)
     implementation(libs.play.services.scanner)
 
@@ -395,9 +395,6 @@ dependencies {
 
     // Mixpanel Analytics
     implementation(libs.mixpanel)
-
-    // QR Code Scanner
-    implementation(libs.zxing.android.embedded)
 
     // Retromock for mocking responses
     implementation(libs.retromock)

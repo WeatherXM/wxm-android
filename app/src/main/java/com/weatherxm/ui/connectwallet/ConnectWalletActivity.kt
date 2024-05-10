@@ -2,6 +2,7 @@ package com.weatherxm.ui.connectwallet
 
 import android.app.Activity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
@@ -17,6 +18,7 @@ import com.weatherxm.ui.common.getRichText
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Mask
@@ -104,11 +106,13 @@ class ConnectWalletActivity : BaseActivity() {
                         binding.address.setText(address)
                     }
                 }
-                .addOnCanceledListener {
-                    // TODO Do something if user cancelled
-                }
                 .addOnFailureListener { e ->
-                    // TODO Do something if scanning failed with an exception
+                    Timber.e(e, "Failure when scanning QR of wallet")
+                    toast(
+                        R.string.error_connect_wallet_scan_exception,
+                        e.message ?: String.empty(),
+                        Toast.LENGTH_LONG
+                    )
                 }
         }
 

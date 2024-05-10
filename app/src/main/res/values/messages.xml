@@ -23,6 +23,7 @@
     <string name="error_cell_not_found">Could not find the requested explorer cell</string>
     <string name="error_invalid_location">Invalid Location</string>
     <string name="error_connect_wallet_invalid_address">Invalid wallet address</string>
+    <string name="error_connect_wallet_scan_exception">Scanning error: %s</string>
     <string name="error_forecast_generic_message">Fetching forecast failed</string>
     <string name="error_forecast_invalid_timezone">Fetching forecast failed: Invalid Timezone</string>
     <string name="error_claim_failed_title">Claiming Failed</string>
