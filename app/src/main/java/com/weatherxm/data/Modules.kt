@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.icu.text.CompactDecimalFormat
 import android.icu.text.NumberFormat
 import android.location.Geocoder
+import android.os.Build.VERSION.SDK_INT
 import android.text.format.DateFormat
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
@@ -15,6 +16,8 @@ import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionSche
 import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme
 import androidx.security.crypto.MasterKeys
 import coil.ImageLoader
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import com.chuckerteam.chucker.api.ChuckerInterceptor
@@ -858,6 +861,13 @@ private val utilities = module {
                     .directory(androidContext().cacheDir.resolve("image_cache"))
                     .maxSizePercent(COIL_DISK_CACHE_SIZE_PERCENTAGE)
                     .build()
+            }
+            .components {
+                if (SDK_INT >= 28) {
+                    add(ImageDecoderDecoder.Factory())
+                } else {
+                    add(GifDecoder.Factory())
+                }
             }
             .respectCacheHeaders(false)
             .build()

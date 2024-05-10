@@ -13,6 +13,7 @@ import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapt
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.claimdevice.wifi.connectwifi.ClaimWifiConnectWifiFragment
+import com.weatherxm.ui.claimdevice.wifi.preparegateway.ClaimWifiPrepareGatewayFragment
 import com.weatherxm.ui.claimdevice.wifi.result.ClaimWifiResultFragment
 import com.weatherxm.ui.claimdevice.wifi.verify.ClaimWifiVerifyFragment
 import com.weatherxm.ui.claimdevice.wifi.verify.ClaimWifiVerifyViewModel
@@ -118,10 +119,11 @@ class ClaimWifiActivity : BaseActivity() {
     ) : FragmentStateAdapter(activity) {
         companion object {
             const val PAGE_CONNECT_WIFI = 0
-            const val PAGE_SERIAL_NUMBER = 1
-            const val PAGE_LOCATION = 2
-            const val PAGE_RESULT = 3
-            const val PAGE_COUNT = 4
+            const val PAGE_PREPARE_GATEWAY = 1
+            const val PAGE_SERIAL_NUMBER = 2
+            const val PAGE_LOCATION = 3
+            const val PAGE_RESULT = 4
+            const val PAGE_COUNT = 5
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -130,6 +132,7 @@ class ClaimWifiActivity : BaseActivity() {
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 PAGE_CONNECT_WIFI -> ClaimWifiConnectWifiFragment()
+                PAGE_PREPARE_GATEWAY -> ClaimWifiPrepareGatewayFragment()
                 PAGE_SERIAL_NUMBER -> ClaimWifiVerifyFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(deviceType)
                 PAGE_RESULT -> ClaimWifiResultFragment()
