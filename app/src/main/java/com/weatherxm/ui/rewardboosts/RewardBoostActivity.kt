@@ -7,6 +7,7 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.BoostCode
 import com.weatherxm.data.BoostReward
 import com.weatherxm.data.Status
@@ -22,7 +23,7 @@ import com.weatherxm.ui.common.setBoostFallbackBackground
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.classSimpleName
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -115,7 +116,7 @@ class RewardBoostActivity : BaseActivity() {
         binding.boostAboutDesc.text = data.about
         binding.aboutReadMore.setOnClickListener {
             analytics.trackEventSelectContent(
-                Analytics.ParamValue.WEB_DOCUMENTATION.paramValue,
+                AnalyticsService.ParamValue.WEB_DOCUMENTATION.paramValue,
                 Pair(FirebaseAnalytics.Param.ITEM_ID, data.docUrl)
             )
             navigator.openWebsite(this, data.docUrl)
@@ -146,7 +147,7 @@ class RewardBoostActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            Analytics.Screen.REWARD_BOOST_DETAIL, this::class.simpleName, boostCode
+            AnalyticsService.Screen.REWARD_BOOST_DETAIL, classSimpleName(), boostCode
         )
     }
 }

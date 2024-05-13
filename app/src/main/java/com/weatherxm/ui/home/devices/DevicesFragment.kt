@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -18,11 +19,11 @@ import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.home.HomeViewModel
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class DevicesFragment : BaseFragment(), DeviceListener {
@@ -168,24 +169,24 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         if (walletMissing) {
             binding.walletWarning.action(getString(R.string.add_wallet_now)) {
                 analytics.trackEventPrompt(
-                    Analytics.ParamValue.WALLET_MISSING.paramValue,
-                    Analytics.ParamValue.WARN.paramValue,
-                    Analytics.ParamValue.ACTION.paramValue
+                    AnalyticsService.ParamValue.WALLET_MISSING.paramValue,
+                    AnalyticsService.ParamValue.WARN.paramValue,
+                    AnalyticsService.ParamValue.ACTION.paramValue
                 )
                 navigator.showConnectWallet(connectWalletLauncher, this)
             }.closeButton {
                 analytics.trackEventPrompt(
-                    Analytics.ParamValue.WALLET_MISSING.paramValue,
-                    Analytics.ParamValue.WARN.paramValue,
-                    Analytics.ParamValue.DISMISS.paramValue
+                    AnalyticsService.ParamValue.WALLET_MISSING.paramValue,
+                    AnalyticsService.ParamValue.WARN.paramValue,
+                    AnalyticsService.ParamValue.DISMISS.paramValue
                 )
                 binding.walletWarning.setVisible(false)
                 parentModel.setWalletWarningDismissTimestamp()
             }
             analytics.trackEventPrompt(
-                Analytics.ParamValue.WALLET_MISSING.paramValue,
-                Analytics.ParamValue.WARN.paramValue,
-                Analytics.ParamValue.VIEW.paramValue
+                AnalyticsService.ParamValue.WALLET_MISSING.paramValue,
+                AnalyticsService.ParamValue.WARN.paramValue,
+                AnalyticsService.ParamValue.VIEW.paramValue
             )
         }
         binding.walletWarning.setVisible(walletMissing)
@@ -193,24 +194,24 @@ class DevicesFragment : BaseFragment(), DeviceListener {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DEVICES_LIST, DevicesFragment::class.simpleName)
+        analytics.trackScreen(AnalyticsService.Screen.DEVICES_LIST, classSimpleName())
     }
 
     override fun onDeviceClicked(device: UIDevice) {
         navigator.showDeviceDetails(context, device = device)
 
         analytics.trackEventUserAction(
-            actionName = Analytics.ParamValue.SELECT_DEVICE.paramValue,
-            contentType = Analytics.ParamValue.USER_DEVICE_LIST.paramValue,
+            actionName = AnalyticsService.ParamValue.SELECT_DEVICE.paramValue,
+            contentType = AnalyticsService.ParamValue.USER_DEVICE_LIST.paramValue,
             Pair(FirebaseAnalytics.Param.ITEM_LIST_ID, device.id)
         )
     }
 
     override fun onUpdateStationClicked(device: UIDevice) {
         analytics.trackEventPrompt(
-            Analytics.ParamValue.OTA_AVAILABLE.paramValue,
-            Analytics.ParamValue.WARN.paramValue,
-            Analytics.ParamValue.ACTION.paramValue
+            AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+            AnalyticsService.ParamValue.WARN.paramValue,
+            AnalyticsService.ParamValue.ACTION.paramValue
         )
         navigator.showDeviceHeliumOTA(this, device, false)
     }
@@ -223,15 +224,18 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         }
         navigator.openWebsite(context, url)
         analytics.trackEventSelectContent(
-            Analytics.ParamValue.WEB_DOCUMENTATION.paramValue,
+            AnalyticsService.ParamValue.WEB_DOCUMENTATION.paramValue,
             Pair(FirebaseAnalytics.Param.ITEM_ID, url)
         )
     }
 
     override fun onAlertsClicked(device: UIDevice) {
         analytics.trackEventSelectContent(
-            Analytics.ParamValue.VIEW_ALL.paramValue,
-            Pair(FirebaseAnalytics.Param.ITEM_ID, Analytics.ParamValue.MULTIPLE_ISSUES.paramValue)
+            AnalyticsService.ParamValue.VIEW_ALL.paramValue,
+            Pair(
+                FirebaseAnalytics.Param.ITEM_ID,
+                AnalyticsService.ParamValue.MULTIPLE_ISSUES.paramValue
+            )
         )
         navigator.showDeviceAlerts(context, device)
     }
@@ -239,8 +243,8 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     override fun onFollowBtnClicked(device: UIDevice) {
         if (device.relation == DeviceRelation.FOLLOWED) {
             analytics.trackEventUserAction(
-                Analytics.ParamValue.DEVICE_LIST_FOLLOW.paramValue,
-                Analytics.ParamValue.UNFOLLOW.paramValue
+                AnalyticsService.ParamValue.DEVICE_LIST_FOLLOW.paramValue,
+                AnalyticsService.ParamValue.UNFOLLOW.paramValue
             )
             navigator.showHandleFollowDialog(activity, false, device.name) {
                 model.unFollowStation(device.id)

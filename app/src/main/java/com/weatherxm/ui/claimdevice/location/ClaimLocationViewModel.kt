@@ -12,7 +12,7 @@ import com.weatherxm.data.Location
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.components.BaseMapFragment.Companion.REVERSE_GEOCODING_DELAY
 import com.weatherxm.usecases.EditLocationUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.Validator
 import kotlinx.coroutines.CancellationException
@@ -24,7 +24,7 @@ import timber.log.Timber
 
 class ClaimLocationViewModel(
     private val editLocationUseCase: EditLocationUseCase,
-    private val analytics: Analytics,
+    private val analytics: AnalyticsWrapper,
     private val locationHelper: LocationHelper
 ) : ViewModel() {
     private var reverseGeocodingJob: Job? = null

@@ -17,6 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.SeverityLevel
 import com.weatherxm.data.Status
@@ -27,6 +28,7 @@ import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setErrorChip
@@ -38,7 +40,6 @@ import com.weatherxm.ui.devicedetails.current.CurrentFragment
 import com.weatherxm.ui.devicedetails.forecast.ForecastFragment
 import com.weatherxm.ui.devicedetails.rewards.RewardsFragment
 import com.weatherxm.ui.explorer.UICell
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -115,15 +116,15 @@ class DeviceDetailsActivity : BaseActivity() {
 
         binding.address.setOnClickListener {
             analytics.trackEventSelectContent(
-                Analytics.ParamValue.REGION.paramValue,
+                AnalyticsService.ParamValue.REGION.paramValue,
                 customParams = arrayOf(
                     Pair(
-                        Analytics.CustomParam.CONTENT_NAME.paramName,
-                        Analytics.ParamValue.STATION_DETAILS_CHIP.paramValue
+                        AnalyticsService.CustomParam.CONTENT_NAME.paramName,
+                        AnalyticsService.ParamValue.STATION_DETAILS_CHIP.paramValue
                     ),
                     Pair(
                         FirebaseAnalytics.Param.ITEM_ID,
-                        Analytics.ParamValue.STATION_REGION_ID.paramValue
+                        AnalyticsService.ParamValue.STATION_REGION_ID.paramValue
                     )
                 )
             )
@@ -169,7 +170,7 @@ class DeviceDetailsActivity : BaseActivity() {
         super.onResume()
         if (model.device.relation != DeviceRelation.OWNED) {
             analytics.trackScreen(
-                Analytics.Screen.EXPLORER_DEVICE, this::class.simpleName, model.device.id
+                AnalyticsService.Screen.EXPLORER_DEVICE, classSimpleName(), model.device.id
             )
         }
     }
@@ -192,7 +193,9 @@ class DeviceDetailsActivity : BaseActivity() {
     private fun onMenuItem(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.share_station -> {
-                analytics.trackEventUserAction(Analytics.ParamValue.DEVICE_DETAILS_SHARE.paramValue)
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.DEVICE_DETAILS_SHARE.paramValue
+                )
                 navigator.openShare(
                     this,
                     getString(R.string.share_station_url, model.createNormalizedName())
@@ -292,7 +295,7 @@ class DeviceDetailsActivity : BaseActivity() {
         } != null
 
         if (alerts.size > 1) {
-            if(hasErrorSeverity) {
+            if (hasErrorSeverity) {
                 binding.alertChip.setErrorChip()
             }
             binding.alertChip.text = getString(R.string.issues, alerts.size)
@@ -301,14 +304,14 @@ class DeviceDetailsActivity : BaseActivity() {
             if (alertsWithoutOffline[0].alert == DeviceAlertType.NEEDS_UPDATE) {
                 binding.alertChip.text = getString(R.string.update_required)
                 analytics.trackEventPrompt(
-                    Analytics.ParamValue.OTA_AVAILABLE.paramValue,
-                    Analytics.ParamValue.WARN.paramValue,
-                    Analytics.ParamValue.VIEW.paramValue
+                    AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+                    AnalyticsService.ParamValue.WARN.paramValue,
+                    AnalyticsService.ParamValue.VIEW.paramValue
                 )
-                setupAlertChipClickListener(Analytics.ParamValue.OTA_UPDATE_ID.paramValue)
+                setupAlertChipClickListener(AnalyticsService.ParamValue.OTA_UPDATE_ID.paramValue)
             } else if (alertsWithoutOffline[0].alert == DeviceAlertType.LOW_BATTERY) {
                 binding.alertChip.text = getString(R.string.low_battery)
-                setupAlertChipClickListener(Analytics.ParamValue.LOW_BATTERY_ID.paramValue)
+                setupAlertChipClickListener(AnalyticsService.ParamValue.LOW_BATTERY_ID.paramValue)
             }
         }
         binding.alertChip.setVisible(alertsWithoutOffline.isNotEmpty())
@@ -317,11 +320,11 @@ class DeviceDetailsActivity : BaseActivity() {
     private fun setupAlertChipClickListener(analyticsItemId: String?) {
         analyticsItemId?.let {
             analytics.trackEventSelectContent(
-                Analytics.ParamValue.WARNINGS.paramValue,
+                AnalyticsService.ParamValue.WARNINGS.paramValue,
                 customParams = arrayOf(
                     Pair(
-                        Analytics.CustomParam.CONTENT_NAME.paramName,
-                        Analytics.ParamValue.STATION_DETAILS_CHIP.paramValue
+                        AnalyticsService.CustomParam.CONTENT_NAME.paramName,
+                        AnalyticsService.ParamValue.STATION_DETAILS_CHIP.paramValue
                     ),
                     Pair(FirebaseAnalytics.Param.ITEM_ID, it)
                 )

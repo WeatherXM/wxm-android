@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
@@ -19,7 +20,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.classSimpleName
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -88,7 +89,7 @@ class DeviceHeliumOTAActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.HELIUM_OTA, this::class.simpleName)
+        analytics.trackScreen(AnalyticsService.Screen.HELIUM_OTA, classSimpleName())
     }
 
     override fun onDestroy() {
@@ -98,7 +99,7 @@ class DeviceHeliumOTAActivity : BaseActivity() {
 
     private fun setListeners() {
         binding.bleActionFlow.setListeners(onScanClicked = {
-            analytics.trackEventSelectContent(Analytics.ParamValue.BLE_SCAN_AGAIN.paramValue)
+            analytics.trackEventSelectContent(AnalyticsService.ParamValue.BLE_SCAN_AGAIN.paramValue)
             initBluetoothAndStart()
         }, onPairClicked = {
             lifecycleScope.launch {
@@ -123,8 +124,8 @@ class DeviceHeliumOTAActivity : BaseActivity() {
                     primaryActionText = getString(R.string.action_view_station)
                 )
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.OTA_RESULT.paramValue,
-                    contentId = Analytics.ParamValue.OTA_RESULT_ID.paramValue,
+                    contentName = AnalyticsService.ParamValue.OTA_RESULT.paramValue,
+                    contentId = AnalyticsService.ParamValue.OTA_RESULT_ID.paramValue,
                     Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
                     success = 1L
                 )
@@ -135,8 +136,8 @@ class DeviceHeliumOTAActivity : BaseActivity() {
             Status.ERROR -> {
                 onErrorStatusUpdate(it)
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.OTA_RESULT.paramValue,
-                    contentId = Analytics.ParamValue.OTA_RESULT_ID.paramValue,
+                    contentName = AnalyticsService.ParamValue.OTA_RESULT.paramValue,
+                    contentId = AnalyticsService.ParamValue.OTA_RESULT_ID.paramValue,
                     Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
                     success = 0L
                 )
@@ -184,17 +185,17 @@ class DeviceHeliumOTAActivity : BaseActivity() {
         }
 
         analytics.trackEventViewContent(
-            contentName = Analytics.ParamValue.OTA_ERROR.paramValue,
-            contentId = Analytics.ParamValue.OTA_ERROR_ID.paramValue,
+            contentName = AnalyticsService.ParamValue.OTA_ERROR.paramValue,
+            contentId = AnalyticsService.ParamValue.OTA_ERROR_ID.paramValue,
             Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id),
             Pair(
-                Analytics.CustomParam.STEP.paramName,
+                AnalyticsService.CustomParam.STEP.paramName,
                 when (resource.data?.status) {
-                    OTAStatus.SCAN_FOR_STATION -> Analytics.ParamValue.SCAN.paramValue
-                    OTAStatus.PAIR_STATION -> Analytics.ParamValue.PAIR.paramValue
-                    OTAStatus.CONNECT_TO_STATION -> Analytics.ParamValue.CONNECT.paramValue
-                    OTAStatus.DOWNLOADING -> Analytics.ParamValue.DOWNLOAD.paramValue
-                    OTAStatus.INSTALLING -> Analytics.ParamValue.INSTALL.paramValue
+                    OTAStatus.SCAN_FOR_STATION -> AnalyticsService.ParamValue.SCAN.paramValue
+                    OTAStatus.PAIR_STATION -> AnalyticsService.ParamValue.PAIR.paramValue
+                    OTAStatus.CONNECT_TO_STATION -> AnalyticsService.ParamValue.CONNECT.paramValue
+                    OTAStatus.DOWNLOADING -> AnalyticsService.ParamValue.DOWNLOAD.paramValue
+                    OTAStatus.INSTALLING -> AnalyticsService.ParamValue.INSTALL.paramValue
                     null -> String.empty()
                 }
             )

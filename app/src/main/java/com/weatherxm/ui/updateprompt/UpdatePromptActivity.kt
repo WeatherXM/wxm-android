@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityUpdatePromptBinding
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class UpdatePromptActivity : BaseActivity() {
@@ -28,11 +29,11 @@ class UpdatePromptActivity : BaseActivity() {
 
         onBackPressedDispatcher.addCallback {
             analytics.trackEventUserAction(
-                actionName = Analytics.ParamValue.APP_UPDATE_PROMPT_RESULT.paramValue,
-                contentType = Analytics.ParamValue.APP_UPDATE_PROMPT.paramValue,
+                actionName = AnalyticsService.ParamValue.APP_UPDATE_PROMPT_RESULT.paramValue,
+                contentType = AnalyticsService.ParamValue.APP_UPDATE_PROMPT.paramValue,
                 Pair(
-                    Analytics.CustomParam.ACTION.paramName,
-                    Analytics.ParamValue.DISCARD.paramValue
+                    AnalyticsService.CustomParam.ACTION.paramName,
+                    AnalyticsService.ParamValue.DISCARD.paramValue
                 )
             )
             if (!model.isUpdateMandatory()) {
@@ -50,20 +51,23 @@ class UpdatePromptActivity : BaseActivity() {
 
         binding.updateBtn.setOnClickListener {
             analytics.trackEventUserAction(
-                actionName = Analytics.ParamValue.APP_UPDATE_PROMPT_RESULT.paramValue,
-                contentType = Analytics.ParamValue.APP_UPDATE_PROMPT.paramValue,
-                Pair(Analytics.CustomParam.ACTION.paramName, Analytics.ParamValue.UPDATE.paramValue)
+                actionName = AnalyticsService.ParamValue.APP_UPDATE_PROMPT_RESULT.paramValue,
+                contentType = AnalyticsService.ParamValue.APP_UPDATE_PROMPT.paramValue,
+                Pair(
+                    AnalyticsService.CustomParam.ACTION.paramName,
+                    AnalyticsService.ParamValue.UPDATE.paramValue
+                )
             )
             navigator.openPlayStore(this, getString(R.string.market_url, packageName))
         }
 
         binding.continueWithoutUpdatingBtn.setOnClickListener {
             analytics.trackEventUserAction(
-                actionName = Analytics.ParamValue.APP_UPDATE_PROMPT_RESULT.paramValue,
-                contentType = Analytics.ParamValue.APP_UPDATE_PROMPT.paramValue,
+                actionName = AnalyticsService.ParamValue.APP_UPDATE_PROMPT_RESULT.paramValue,
+                contentType = AnalyticsService.ParamValue.APP_UPDATE_PROMPT.paramValue,
                 Pair(
-                    Analytics.CustomParam.ACTION.paramName,
-                    Analytics.ParamValue.DISCARD.paramValue
+                    AnalyticsService.CustomParam.ACTION.paramName,
+                    AnalyticsService.ParamValue.DISCARD.paramValue
                 )
             )
             navigator.showStartup(this)
@@ -75,6 +79,6 @@ class UpdatePromptActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.APP_UPDATE_PROMPT, this::class.simpleName)
+        analytics.trackScreen(AnalyticsService.Screen.APP_UPDATE_PROMPT, classSimpleName())
     }
 }

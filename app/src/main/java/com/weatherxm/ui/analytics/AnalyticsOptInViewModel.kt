@@ -2,11 +2,11 @@ package com.weatherxm.ui.analytics
 
 import androidx.lifecycle.ViewModel
 import com.weatherxm.usecases.AnalyticsOptInUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsWrapper
 
 class AnalyticsOptInViewModel(
     private val useCase: AnalyticsOptInUseCase,
-    private val analytics: Analytics
+    private val analytics: AnalyticsWrapper
 ) : ViewModel() {
     fun setAnalyticsEnabled(enabled: Boolean) {
         useCase.setAnalyticsEnabled(enabled)

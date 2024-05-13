@@ -85,6 +85,14 @@ fun Activity.getRichText(
     vararg args: Any = emptyArray()
 ) = getText(resId).toSpanned().toHtml().format(*args).parseAsHtml().trim().toString()
 
+fun Activity.classSimpleName(): String {
+    return this::class.simpleName ?: String.empty()
+}
+
+fun Fragment.classSimpleName(): String {
+    return this::class.simpleName ?: String.empty()
+}
+
 // https://stackoverflow.com/questions/76614322/boolean-java-lang-class-isinterface-on-a-null-object-reference
 inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? {
     return this.extras?.let {

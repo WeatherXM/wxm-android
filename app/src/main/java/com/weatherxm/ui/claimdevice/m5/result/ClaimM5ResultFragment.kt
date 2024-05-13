@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentClaimM5ResultBinding
@@ -13,7 +14,6 @@ import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
 import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.components.BaseFragment
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class ClaimM5ResultFragment : BaseFragment() {
@@ -36,10 +36,11 @@ class ClaimM5ResultFragment : BaseFragment() {
 
         binding.quit.setOnClickListener {
             analytics.trackEventUserAction(
-                actionName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
-                contentType = Analytics.ParamValue.CLAIMING.paramValue,
+                actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+                contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
                 Pair(
-                    Analytics.CustomParam.ACTION.paramName, Analytics.ParamValue.QUIT.paramValue
+                    AnalyticsService.CustomParam.ACTION.paramName,
+                    AnalyticsService.ParamValue.QUIT.paramValue
                 )
             )
             m5ParentModel.cancel()
@@ -70,11 +71,11 @@ class ClaimM5ResultFragment : BaseFragment() {
                 if (device != null) {
                     binding.viewStationOnlyBtn.setOnClickListener {
                         analytics.trackEventUserAction(
-                            actionName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
-                            contentType = Analytics.ParamValue.CLAIMING.paramValue,
+                            actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+                            contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
                             Pair(
-                                Analytics.CustomParam.ACTION.paramName,
-                                Analytics.ParamValue.VIEW_STATION.paramValue
+                                AnalyticsService.CustomParam.ACTION.paramName,
+                                AnalyticsService.ParamValue.VIEW_STATION.paramValue
                             )
                         )
                         navigator.showDeviceDetails(activity, device = device)
@@ -84,8 +85,8 @@ class ClaimM5ResultFragment : BaseFragment() {
                 }
                 binding.failureButtons.visibility = View.GONE
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
-                    contentId = Analytics.ParamValue.CLAIMING_RESULT_ID.paramValue,
+                    contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+                    contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
                     success = 1L
                 )
             }
@@ -103,8 +104,8 @@ class ClaimM5ResultFragment : BaseFragment() {
                 }
                 binding.failureButtons.visibility = View.VISIBLE
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
-                    contentId = Analytics.ParamValue.CLAIMING_RESULT_ID.paramValue,
+                    contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+                    contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
                     success = 0L
                 )
             }

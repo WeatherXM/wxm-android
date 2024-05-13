@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.DeviceProfile.Helium
 import com.weatherxm.data.DeviceProfile.M5
 import com.weatherxm.data.Resource
@@ -15,7 +16,6 @@ import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseFragment
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class ClaimHeliumResultFragment : BaseFragment() {
@@ -95,11 +95,11 @@ class ClaimHeliumResultFragment : BaseFragment() {
             // We will define this later when we show it
         }, onCancelButtonClicked = {
             analytics.trackEventUserAction(
-                actionName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
-                contentType = Analytics.ParamValue.CLAIMING.paramValue,
+                actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+                contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
                 Pair(
-                    Analytics.CustomParam.ACTION.paramName,
-                    Analytics.ParamValue.CANCEL.paramValue
+                    AnalyticsService.CustomParam.ACTION.paramName,
+                    AnalyticsService.ParamValue.CANCEL.paramValue
                 )
             )
             parentModel.cancel()
@@ -114,9 +114,9 @@ class ClaimHeliumResultFragment : BaseFragment() {
                 val device = resource.data
                 if (device != null && device.profile == Helium && device.needsUpdate()) {
                     analytics.trackEventPrompt(
-                        Analytics.ParamValue.OTA_AVAILABLE.paramValue,
-                        Analytics.ParamValue.WARN.paramValue,
-                        Analytics.ParamValue.VIEW.paramValue
+                        AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+                        AnalyticsService.ParamValue.WARN.paramValue,
+                        AnalyticsService.ParamValue.VIEW.paramValue
                     )
                     binding.bleActionFlow.setSuccessPrimaryButtonListener {
                         onUpdate(device)
@@ -146,19 +146,19 @@ class ClaimHeliumResultFragment : BaseFragment() {
                     )
                 }
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
-                    contentId = Analytics.ParamValue.CLAIMING_RESULT_ID.paramValue,
+                    contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+                    contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
                     success = 1L
                 )
             }
             Status.ERROR -> {
                 binding.bleActionFlow.setRetryButtonListener {
                     analytics.trackEventUserAction(
-                        actionName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
-                        contentType = Analytics.ParamValue.CLAIMING.paramValue,
+                        actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+                        contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
                         Pair(
-                            Analytics.CustomParam.ACTION.paramName,
-                            Analytics.ParamValue.RETRY.paramValue
+                            AnalyticsService.CustomParam.ACTION.paramName,
+                            AnalyticsService.ParamValue.RETRY.paramValue
                         )
                     )
                     binding.bleActionFlow.onStep(
@@ -176,8 +176,8 @@ class ClaimHeliumResultFragment : BaseFragment() {
                     navigator.openSupportCenter(context = context)
                 }
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
-                    contentId = Analytics.ParamValue.CLAIMING_RESULT_ID.paramValue,
+                    contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+                    contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
                     success = 0L
                 )
             }
@@ -189,11 +189,11 @@ class ClaimHeliumResultFragment : BaseFragment() {
 
     private fun onViewDevice(device: UIDevice) {
         analytics.trackEventUserAction(
-            actionName = Analytics.ParamValue.CLAIMING_RESULT.paramValue,
-            contentType = Analytics.ParamValue.CLAIMING.paramValue,
+            actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
+            contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
             Pair(
-                Analytics.CustomParam.ACTION.paramName,
-                Analytics.ParamValue.VIEW_STATION.paramValue
+                AnalyticsService.CustomParam.ACTION.paramName,
+                AnalyticsService.ParamValue.VIEW_STATION.paramValue
             )
         )
         model.disconnectFromPeripheral()
@@ -203,9 +203,9 @@ class ClaimHeliumResultFragment : BaseFragment() {
 
     private fun onUpdate(device: UIDevice) {
         analytics.trackEventPrompt(
-            Analytics.ParamValue.OTA_AVAILABLE.paramValue,
-            Analytics.ParamValue.WARN.paramValue,
-            Analytics.ParamValue.ACTION.paramValue
+            AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+            AnalyticsService.ParamValue.WARN.paramValue,
+            AnalyticsService.ParamValue.ACTION.paramValue
         )
         navigator.showDeviceHeliumOTA(this, device, true)
         activity?.finish()

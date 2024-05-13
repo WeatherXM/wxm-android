@@ -14,7 +14,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.data.User
 import com.weatherxm.usecases.AuthUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
@@ -25,7 +25,7 @@ import timber.log.Timber
 class LoginViewModel(
     private val authUseCase: AuthUseCase,
     private val resources: Resources,
-    private val analytics: Analytics
+    private val analytics: AnalyticsWrapper
 ) : ViewModel() {
 
     private val onLogin = MutableLiveData<Resource<Unit>>()

@@ -6,12 +6,13 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityPreferencesBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.WidgetHelper
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -58,7 +59,7 @@ class PreferenceActivity : BaseActivity() {
 
         model.onLogout().observe(this) { hasLoggedOut ->
             if (hasLoggedOut) {
-                analytics.trackEventSelectContent(Analytics.ParamValue.LOGOUT.paramValue)
+                analytics.trackEventSelectContent(AnalyticsService.ParamValue.LOGOUT.paramValue)
                 widgetHelper.getWidgetIds().onRight {
                     val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
                     val ids = it.map { id ->
@@ -76,7 +77,7 @@ class PreferenceActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.SETTINGS, this::class.simpleName)
+        analytics.trackScreen(AnalyticsService.Screen.SETTINGS, classSimpleName())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

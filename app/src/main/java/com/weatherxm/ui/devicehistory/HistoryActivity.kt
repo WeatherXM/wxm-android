@@ -2,16 +2,17 @@ package com.weatherxm.ui.devicehistory
 
 import android.os.Bundle
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityHistoryBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicehistory.HistoryChartsFragment.SwipeRefreshCallback
 import com.weatherxm.ui.devicehistory.HistoryChartsViewModel.Companion.DATES_BACKOFF
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -74,7 +75,7 @@ class HistoryActivity : BaseActivity(), SwipeRefreshCallback {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.HISTORY, this::class.simpleName)
+        analytics.trackScreen(AnalyticsService.Screen.HISTORY, classSimpleName())
     }
 
     override fun onSwipeRefresh() {

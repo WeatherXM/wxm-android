@@ -17,7 +17,7 @@ import com.weatherxm.data.SingleLiveEvent
 import com.weatherxm.ui.components.BaseMapFragment.Companion.DEFAULT_ZOOM_LEVEL
 import com.weatherxm.ui.components.BaseMapFragment.Companion.USER_LOCATION_ZOOM_LEVEL
 import com.weatherxm.usecases.ExplorerUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.MapboxUtils
@@ -28,7 +28,7 @@ import timber.log.Timber
 @Suppress("TooManyFunctions")
 class ExplorerViewModel(
     private val explorerUseCase: ExplorerUseCase,
-    private val analytics: Analytics,
+    private val analytics: AnalyticsWrapper,
     private val locationHelper: LocationHelper
 ) : ViewModel() {
     companion object {

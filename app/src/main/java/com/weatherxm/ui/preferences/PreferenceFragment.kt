@@ -12,10 +12,11 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.hasPermission
 import org.koin.android.ext.android.inject
@@ -26,7 +27,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
     private val model: PreferenceViewModel by activityViewModel()
     private val navigator: Navigator by inject()
     private val displayModeHelper: DisplayModeHelper by inject()
-    private val analytics: Analytics by inject()
+    private val analytics: AnalyticsWrapper by inject()
 
     companion object {
         const val TAG = "PreferenceFragment"
@@ -80,21 +81,23 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             false
         }
         openDocumentationButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            analytics.trackEventSelectContent(Analytics.ParamValue.DOCUMENTATION.paramValue)
+            analytics.trackEventSelectContent(AnalyticsService.ParamValue.DOCUMENTATION.paramValue)
             navigator.openWebsite(context, getString(R.string.docs_url))
             true
         }
         announcementsButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            analytics.trackEventSelectContent(Analytics.ParamValue.ANNOUNCEMENTS.paramValue)
+            analytics.trackEventSelectContent(AnalyticsService.ParamValue.ANNOUNCEMENTS.paramValue)
             navigator.openWebsite(context, getString(R.string.announcements_url))
             true
         }
         contactSupportButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            navigator.openSupportCenter(context, source = Analytics.ParamValue.SETTINGS.paramValue)
+            navigator.openSupportCenter(context, AnalyticsService.ParamValue.SETTINGS.paramValue)
             true
         }
         userResearchButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            analytics.trackEventSelectContent(Analytics.ParamValue.USER_RESEARCH_PANEL.paramValue)
+            analytics.trackEventSelectContent(
+                AnalyticsService.ParamValue.USER_RESEARCH_PANEL.paramValue
+            )
             navigator.openWebsite(this.context, getString(R.string.user_panel_url))
             true
         }
@@ -167,7 +170,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             true
         }
         shortWxmSurvey?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            analytics.trackEventSelectContent(Analytics.ParamValue.APP_SURVEY.paramValue)
+            analytics.trackEventSelectContent(AnalyticsService.ParamValue.APP_SURVEY.paramValue)
             navigator.showSendFeedback(sendFeedbackLauncher, this)
             true
         }
@@ -204,14 +207,17 @@ class PreferenceFragment : PreferenceFragmentCompat() {
 
         notificationsPreference?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val notificationsStatus = if (notificationsPreference?.isChecked == true) {
-                Analytics.ParamValue.ON
+                AnalyticsService.ParamValue.ON
             } else {
-                Analytics.ParamValue.OFF
+                AnalyticsService.ParamValue.OFF
             }
             analytics.trackEventUserAction(
-                Analytics.ParamValue.NOTIFICATIONS.paramValue,
+                AnalyticsService.ParamValue.NOTIFICATIONS.paramValue,
                 customParams = arrayOf(
-                    Pair(Analytics.CustomParam.STATUS.paramName, notificationsStatus.paramValue)
+                    Pair(
+                        AnalyticsService.CustomParam.STATUS.paramName,
+                        notificationsStatus.paramValue
+                    )
                 )
             )
 

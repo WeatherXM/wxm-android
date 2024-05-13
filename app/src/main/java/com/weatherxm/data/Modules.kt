@@ -40,8 +40,13 @@ import com.google.gson.GsonBuilder
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.mapbox.search.SearchEngine
 import com.mapbox.search.SearchEngineSettings
+import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.analytics.FirebaseAnalyticsService
+import com.weatherxm.analytics.MixpanelAnalyticsService
 import com.weatherxm.data.adapters.LocalDateJsonAdapter
 import com.weatherxm.data.adapters.LocalDateTimeJsonAdapter
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
@@ -240,7 +245,6 @@ import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCaseImpl
 import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.usecases.WidgetSelectStationUseCaseImpl
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.Crashlytics
 import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.LocationHelper
@@ -712,10 +716,6 @@ private val bluetooth = module {
 }
 
 val firebase = module {
-    single<FirebaseAnalytics>(createdAtStart = true) {
-        Firebase.analytics
-    }
-
     single<FirebaseCrashlytics>(createdAtStart = true) {
         Firebase.crashlytics
     }
@@ -805,9 +805,23 @@ val clientIdentificationHelper = module {
 }
 
 val analytics = module {
-    single(createdAtStart = true) {
-        Analytics(get(), get(), get(), get(), get())
+    single<FirebaseAnalytics> {
+        Firebase.analytics
     }
+
+    single<MixpanelAPI> {
+        MixpanelAPI.getInstance(androidContext(), BuildConfig.MIXPANEL_TOKEN, false).apply {
+            setEnableLogging(true)
+        }
+    }
+
+    factory { FirebaseAnalyticsService(get()) as AnalyticsService }
+    factory { MixpanelAnalyticsService(get()) as AnalyticsService }
+
+    single<AnalyticsWrapper> {
+        AnalyticsWrapper(getAll<AnalyticsService>(), get(), get(), get(), androidContext())
+    }
+
 }
 
 val crashlytics = module {

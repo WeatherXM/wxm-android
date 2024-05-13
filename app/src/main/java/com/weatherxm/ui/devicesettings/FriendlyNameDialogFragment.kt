@@ -6,8 +6,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.databinding.ViewEditNameBinding
-import com.weatherxm.util.Analytics
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.util.Validator
 import org.koin.android.ext.android.inject
 
@@ -16,7 +18,7 @@ class FriendlyNameDialogFragment(
     private val deviceId: String,
     private val resultCallback: (String?) -> Unit
 ) : DialogFragment() {
-    private val analytics: Analytics by inject()
+    private val analytics: AnalyticsWrapper by inject()
     private lateinit var binding: ViewEditNameBinding
 
     companion object {
@@ -33,18 +35,24 @@ class FriendlyNameDialogFragment(
 
         binding.cancel.setOnClickListener {
             analytics.trackEventUserAction(
-                actionName = Analytics.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                contentType = Analytics.ParamValue.CHANGE_STATION_NAME.paramValue,
-                Pair(Analytics.CustomParam.ACTION.paramName, Analytics.ParamValue.CANCEL.paramValue)
+                actionName = AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                contentType = AnalyticsService.ParamValue.CHANGE_STATION_NAME.paramValue,
+                Pair(
+                    AnalyticsService.CustomParam.ACTION.paramName,
+                    AnalyticsService.ParamValue.CANCEL.paramValue
+                )
             )
             dismiss()
         }
 
         binding.clear.setOnClickListener {
             analytics.trackEventUserAction(
-                actionName = Analytics.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                contentType = Analytics.ParamValue.CHANGE_STATION_NAME.paramValue,
-                Pair(Analytics.CustomParam.ACTION.paramName, Analytics.ParamValue.CLEAR.paramValue)
+                actionName = AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                contentType = AnalyticsService.ParamValue.CHANGE_STATION_NAME.paramValue,
+                Pair(
+                    AnalyticsService.CustomParam.ACTION.paramName,
+                    AnalyticsService.ParamValue.CLEAR.paramValue
+                )
             )
             resultCallback(null)
             dismiss()
@@ -57,11 +65,11 @@ class FriendlyNameDialogFragment(
                     getString(R.string.warn_validation_invalid_friendly_name)
             } else {
                 analytics.trackEventUserAction(
-                    actionName = Analytics.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                    contentType = Analytics.ParamValue.CHANGE_STATION_NAME.paramValue,
+                    actionName = AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                    contentType = AnalyticsService.ParamValue.CHANGE_STATION_NAME.paramValue,
                     Pair(
-                        Analytics.CustomParam.ACTION.paramName,
-                        Analytics.ParamValue.EDIT.paramValue
+                        AnalyticsService.CustomParam.ACTION.paramName,
+                        AnalyticsService.ParamValue.EDIT.paramValue
                     )
                 )
                 resultCallback(newName)
@@ -75,9 +83,7 @@ class FriendlyNameDialogFragment(
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            Analytics.Screen.CHANGE_STATION_NAME,
-            FriendlyNameDialogFragment::class.simpleName,
-            deviceId
+            AnalyticsService.Screen.CHANGE_STATION_NAME, classSimpleName(), deviceId
         )
     }
 

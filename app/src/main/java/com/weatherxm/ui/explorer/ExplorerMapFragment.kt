@@ -24,9 +24,11 @@ import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
 import com.mapbox.maps.plugin.locationcomponent.location
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setVisible
@@ -36,7 +38,6 @@ import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
 import com.weatherxm.ui.explorer.search.NetworkSearchResultsListAdapter
 import com.weatherxm.ui.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.Validator
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -124,7 +125,7 @@ class ExplorerMapFragment : BaseMapFragment() {
             if (it == true) {
                 getLocationPermissions()
                 analytics.trackEventUserAction(
-                    actionName = Analytics.ParamValue.MY_LOCATION.paramValue
+                    actionName = AnalyticsService.ParamValue.MY_LOCATION.paramValue
                 )
             }
         }
@@ -178,11 +179,11 @@ class ExplorerMapFragment : BaseMapFragment() {
         binding.searchView.addTransitionListener { _, _, newState ->
             if (newState == TransitionState.SHOWING) {
                 analytics.trackEventUserAction(
-                    actionName = Analytics.ParamValue.EXPLORER_SEARCH.paramValue
+                    actionName = AnalyticsService.ParamValue.EXPLORER_SEARCH.paramValue
                 )
                 analytics.trackScreen(
-                    Analytics.Screen.NETWORK_SEARCH,
-                    NetworkStatsActivity::class.simpleName
+                    AnalyticsService.Screen.NETWORK_SEARCH,
+                    NetworkStatsActivity::class.simpleName ?: String.empty()
                 )
                 model.onSearchOpenStatus(true)
             } else if (newState == TransitionState.HIDING) {
@@ -234,7 +235,7 @@ class ExplorerMapFragment : BaseMapFragment() {
     private fun onSearchBarMenuItem(menuItem: MenuItem): Boolean {
         return if (menuItem.itemId == R.id.settings) {
             analytics.trackEventSelectContent(
-                contentType = Analytics.ParamValue.EXPLORER_SETTINGS.paramValue
+                contentType = AnalyticsService.ParamValue.EXPLORER_SETTINGS.paramValue
             )
             navigator.showPreferences(this)
             true
@@ -331,33 +332,27 @@ class ExplorerMapFragment : BaseMapFragment() {
         super.onResume()
         binding.searchBar.menu.getItem(0).isVisible = !model.isExplorerAfterLoggedIn()
         if (model.isExplorerAfterLoggedIn()) {
-            analytics.trackScreen(
-                Analytics.Screen.EXPLORER,
-                ExplorerMapFragment::class.simpleName
-            )
+            analytics.trackScreen(AnalyticsService.Screen.EXPLORER, classSimpleName())
         } else {
-            analytics.trackScreen(
-                Analytics.Screen.EXPLORER_LANDING,
-                ExplorerMapFragment::class.simpleName
-            )
+            analytics.trackScreen(AnalyticsService.Screen.EXPLORER_LANDING, classSimpleName())
         }
     }
 
     private fun trackOnSearchResult(isStationResult: Boolean) {
         val itemId = if (binding.recent.isVisible) {
-            Analytics.ParamValue.RECENT.paramValue
+            AnalyticsService.ParamValue.RECENT.paramValue
         } else {
-            Analytics.ParamValue.SEARCH.paramValue
+            AnalyticsService.ParamValue.SEARCH.paramValue
         }
 
         val resultType = if (isStationResult) {
-            Analytics.ParamValue.STATION.paramValue
+            AnalyticsService.ParamValue.STATION.paramValue
         } else {
-            Analytics.ParamValue.LOCATION.paramValue
+            AnalyticsService.ParamValue.LOCATION.paramValue
         }
 
         analytics.trackEventSelectContent(
-            Analytics.ParamValue.NETWORK_SEARCH.paramValue,
+            AnalyticsService.ParamValue.NETWORK_SEARCH.paramValue,
             Pair(FirebaseAnalytics.Param.ITEM_ID, itemId),
             Pair(FirebaseAnalytics.Param.ITEM_LIST_ID, resultType)
         )

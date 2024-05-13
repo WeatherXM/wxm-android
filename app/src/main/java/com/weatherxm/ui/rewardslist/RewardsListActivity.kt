@@ -2,6 +2,7 @@ package com.weatherxm.ui.rewardslist
 
 import android.os.Bundle
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityRewardsListBinding
@@ -9,11 +10,11 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -49,8 +50,8 @@ class RewardsListActivity : BaseActivity() {
         adapter = RewardsListAdapter(
             onRewardDetails = {
                 analytics.trackEventUserAction(
-                    Analytics.ParamValue.IDENTIFY_PROBLEMS.paramValue,
-                    Analytics.Screen.DEVICE_REWARD_TRANSACTIONS.screenName
+                    AnalyticsService.ParamValue.IDENTIFY_PROBLEMS.paramValue,
+                    AnalyticsService.Screen.DEVICE_REWARD_TRANSACTIONS.screenName
                 )
                 navigator.showRewardDetails(this, device, it)
             },
@@ -75,7 +76,7 @@ class RewardsListActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DEVICE_REWARD_TRANSACTIONS, this::class.simpleName)
+        analytics.trackScreen(AnalyticsService.Screen.DEVICE_REWARD_TRANSACTIONS, classSimpleName())
     }
 
     private fun updateUIFirstPage(resource: Resource<List<TimelineReward>>) {

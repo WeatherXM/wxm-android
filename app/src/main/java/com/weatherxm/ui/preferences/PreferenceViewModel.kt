@@ -7,14 +7,14 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.usecases.PreferencesUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsWrapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class PreferenceViewModel(
     private val preferencesUseCase: PreferencesUseCase,
-    private val analytics: Analytics
+    private val analytics: AnalyticsWrapper
 ) : ViewModel() {
     // Needed for passing info to the activity to when logging out
     private val onLogout = MutableLiveData(false)

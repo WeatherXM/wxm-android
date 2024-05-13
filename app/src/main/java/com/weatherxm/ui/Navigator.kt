@@ -15,6 +15,8 @@ import androidx.fragment.app.FragmentManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.BoostReward
 import com.weatherxm.data.Location
 import com.weatherxm.data.Reward
@@ -75,12 +77,11 @@ import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
-import com.weatherxm.util.Analytics
 import timber.log.Timber
 import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
-class Navigator(private val analytics: Analytics) {
+class Navigator(private val analytics: AnalyticsWrapper) {
 
     fun showExplorer(context: Context, cellCenter: Location? = null) {
         context.startActivity(
@@ -445,14 +446,10 @@ class Navigator(private val analytics: Analytics) {
         title: String?,
         message: String?,
         readMoreUrl: String? = null,
-        analyticsScreenName: String? = null
+        analyticsScreen: AnalyticsService.Screen? = null
     ) {
-        MessageDialogFragment.newInstance(
-            title,
-            message,
-            readMoreUrl,
-            analyticsScreenName
-        ).show(fragmentManager, MessageDialogFragment.TAG)
+        MessageDialogFragment.newInstance(title, message, readMoreUrl, analyticsScreen)
+            .show(fragmentManager, MessageDialogFragment.TAG)
     }
 
     fun showHandleFollowDialog(
@@ -514,10 +511,10 @@ class Navigator(private val analytics: Analytics) {
 
     fun openSupportCenter(
         context: Context?,
-        source: String = Analytics.ParamValue.ERROR.paramValue
+        source: String = AnalyticsService.ParamValue.ERROR.paramValue
     ) {
         analytics.trackEventSelectContent(
-            Analytics.ParamValue.CONTACT_SUPPORT.paramValue,
+            AnalyticsService.ParamValue.CONTACT_SUPPORT.paramValue,
             Pair(FirebaseAnalytics.Param.SOURCE, source)
         )
 

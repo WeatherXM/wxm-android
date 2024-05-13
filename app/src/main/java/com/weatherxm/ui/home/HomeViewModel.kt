@@ -7,12 +7,12 @@ import com.weatherxm.data.DataError
 import com.weatherxm.data.SingleLiveEvent
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.UserUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsWrapper
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val userUseCase: UserUseCase,
-    private val analytics: Analytics
+    private val analytics: AnalyticsWrapper
 ) : ViewModel() {
 
     private var hasDevices: Boolean? = null

@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimSetLocationBinding
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
@@ -20,7 +21,6 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.EditLocationListener
 import com.weatherxm.ui.components.EditLocationMapFragment
-import com.weatherxm.util.Analytics
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -91,8 +91,8 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             hideKeyboard()
 
             analytics.trackEventUserAction(
-                actionName = Analytics.ParamValue.SEARCH_LOCATION.paramValue,
-                contentType = Analytics.ParamValue.CLAIMING_ADDRESS_SEARCH.paramValue,
+                actionName = AnalyticsService.ParamValue.SEARCH_LOCATION.paramValue,
+                contentType = AnalyticsService.ParamValue.CLAIMING_ADDRESS_SEARCH.paramValue,
                 Pair(FirebaseAnalytics.Param.LOCATION, it.name)
             )
         }

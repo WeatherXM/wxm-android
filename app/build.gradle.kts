@@ -73,6 +73,8 @@ android {
         // Resource value fields
         resValue("string", "mapbox_access_token", getStringProperty("MAPBOX_ACCESS_TOKEN"))
 
+        buildConfigField("String", "MIXPANEL_TOKEN", "\"${getStringProperty("MIXPANEL_TOKEN")}\"")
+
         // Instrumented Tests
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -389,6 +391,9 @@ dependencies {
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.installations)
+
+    // Mixpanel Analytics
+    implementation(libs.mixpanel)
 
     // QR Code Scanner
     implementation(libs.zxing.android.embedded)
