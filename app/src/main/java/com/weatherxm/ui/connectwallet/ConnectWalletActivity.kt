@@ -2,10 +2,10 @@ package com.weatherxm.ui.connectwallet
 
 import android.app.Activity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.journeyapps.barcodescanner.ScanContract
-import com.journeyapps.barcodescanner.ScanIntentResult
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
@@ -18,27 +18,20 @@ import com.weatherxm.ui.common.getRichText
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Mask
 import com.weatherxm.util.Validator
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class ConnectWalletActivity : BaseActivity() {
     private lateinit var binding: ActivityConnectWalletBinding
     private val model: ConnectWalletViewModel by viewModel()
-
-    // Register the launcher and result handler for QR code scanner
-    private val barcodeLauncher =
-        registerForActivityResult(ScanContract()) { result: ScanIntentResult ->
-            result.contents.let {
-                model.onScanAddress(it)?.let { address ->
-                    binding.address.setText(address)
-                }
-            }
-        }
+    private val scanner: GmsBarcodeScanner by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,7 +99,21 @@ class ConnectWalletActivity : BaseActivity() {
 
         binding.scanQR.setOnClickListener {
             analytics.trackEventSelectContent(AnalyticsService.ParamValue.WALLET_SCAN_QR.paramValue)
-            navigator.showQRScanner(barcodeLauncher)
+
+            scanner.startScan()
+                .addOnSuccessListener { barcode ->
+                    model.onScanAddress(barcode.rawValue)?.let { address ->
+                        binding.address.setText(address)
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Timber.e(e, "Failure when scanning QR of wallet")
+                    toast(
+                        R.string.error_connect_wallet_scan_exception,
+                        e.message ?: String.empty(),
+                        Toast.LENGTH_LONG
+                    )
+                }
         }
 
         binding.editWallet.setOnClickListener {

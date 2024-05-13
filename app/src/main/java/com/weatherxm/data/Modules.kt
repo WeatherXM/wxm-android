@@ -37,6 +37,10 @@ import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.mapbox.search.SearchEngine
 import com.mapbox.search.SearchEngineSettings
@@ -751,6 +755,14 @@ val firebase = module {
 
     single<FirebaseInstallations> {
         FirebaseInstallations.getInstance()
+    }
+
+    single<GmsBarcodeScanner> {
+        val options = GmsBarcodeScannerOptions.Builder()
+            .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
+            .enableAutoZoom()
+            .build()
+        GmsBarcodeScanning.getClient(get(), options)
     }
 }
 

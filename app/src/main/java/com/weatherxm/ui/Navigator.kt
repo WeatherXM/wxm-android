@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
@@ -215,10 +214,6 @@ class Navigator(private val analytics: AnalyticsWrapper) {
             .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
             .putExtra(ARG_IS_DELETE_ACCOUNT_FORM, isDeleteAccountForm)
         activityResultLauncher.launch(intent)
-    }
-
-    fun showQRScanner(activityResultLauncher: ActivityResultLauncher<ScanOptions>) {
-        activityResultLauncher.launch(ScanOptions().setBeepEnabled(false))
     }
 
     fun showBluetoothEnablePrompt(bluetoothLauncher: ActivityResultLauncher<Intent>) {

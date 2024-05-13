@@ -33,6 +33,10 @@
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute,LockedOrientationActivity">
 
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="barcode_ui"/>
+
         <receiver
             android:name=".service.receivers.AppUpdateReceiver"
             android:exported="true">
