@@ -58,7 +58,7 @@ zxing-android-embedded = "4.3.0"
 # Plugins
 android-gradle-plugin = "8.4.0"
 kotlin-android-plugin = "1.9.23"
-kotlin-parcelize-plugin = "1.9.23"
+kotlin-parcelize-plugin = "1.9.24"
 ksp-plugin = "1.9.23-1.0.20"
 google-services-plugin = "4.4.1"
 firebase-crashlytics-plugin = "2.9.9"
