@@ -1,10 +1,11 @@
 package com.weatherxm.ui.claimdevice.selectstation
 
 import android.os.Bundle
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimSelectStationBinding
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
 
 class SelectStationTypeActivity : BaseActivity() {
     private lateinit var binding: ActivityClaimSelectStationBinding
@@ -35,6 +36,8 @@ class SelectStationTypeActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.CLAIM_DEVICE_TYPE_SELECTION, this::class.simpleName)
+        analytics.trackScreen(
+            AnalyticsService.Screen.CLAIM_DEVICE_TYPE_SELECTION, classSimpleName()
+        )
     }
 }
