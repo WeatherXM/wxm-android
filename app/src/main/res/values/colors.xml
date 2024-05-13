@@ -30,6 +30,9 @@
     <color name="messageDialogButton">@color/light_translucent</color>
     <color name="infoStrokeColor">@color/light_lightest_blue</color>
 
+    <!-- Generic -->
+    <color name="alternative_background">@color/light_top</color>
+
     <!-- System and Launcher -->
     <color name="ic_launcher_background">@color/colorPrimary</color>
     <color name="status_bar_color">#80003b77</color>
@@ -46,9 +49,6 @@
     <!-- Network Stats -->
     <color name="network_stats_slider">@color/network_stats_slider_light</color>
     <color name="network_stats_button">@color/light_lightest_blue</color>
-
-    <!-- Rewards -->
-    <color name="rewards_background">@color/light_top</color>
 
     <!-- Forecast -->
     <color name="daily_temps_divider">@color/dark_background</color>
