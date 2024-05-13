@@ -94,13 +94,6 @@
     </style>
 
     <!--
-        MaterialTextView above TextInput acting as title
-    -->
-    <style name="TextAppearance.WeatherXM.TextInput.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <!--
         EmptyView
     -->
     <style name="TextAppearance.WeatherXM.EmptyView.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.BatteryState
 import com.weatherxm.data.DeviceProfile
@@ -15,7 +16,6 @@ import com.weatherxm.ui.common.capitalizeWords
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.StationSettingsUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -216,7 +216,7 @@ class DeviceSettingsViewModel(
                 }
             } else {
                 device.label?.unmask()?.let {
-                    add(UIDeviceInfo(resources.getString(R.string.device_serial_number_title), it))
+                    add(UIDeviceInfo(resources.getString(R.string.device_serial_number), it))
                 }
             }
             device.currentFirmware?.let { current ->

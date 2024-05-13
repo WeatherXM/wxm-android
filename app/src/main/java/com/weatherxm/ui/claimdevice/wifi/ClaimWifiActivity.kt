@@ -13,9 +13,9 @@ import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapt
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.claimdevice.wifi.connectwifi.ClaimWifiConnectWifiFragment
+import com.weatherxm.ui.claimdevice.wifi.manualdetails.ClaimWifiManualDetailsFragment
 import com.weatherxm.ui.claimdevice.wifi.preparegateway.ClaimWifiPrepareGatewayFragment
 import com.weatherxm.ui.claimdevice.wifi.result.ClaimWifiResultFragment
-import com.weatherxm.ui.claimdevice.wifi.verify.ClaimWifiVerifyFragment
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.applyInsets
@@ -121,7 +121,7 @@ class ClaimWifiActivity : BaseActivity() {
         companion object {
             const val PAGE_CONNECT_WIFI = 0
             const val PAGE_PREPARE_GATEWAY = 1
-            const val PAGE_SERIAL_NUMBER = 2
+            const val PAGE_MANUAL_DETAILS = 2
             const val PAGE_LOCATION = 3
             const val PAGE_RESULT = 4
             const val PAGE_COUNT = 5
@@ -134,7 +134,7 @@ class ClaimWifiActivity : BaseActivity() {
             return when (position) {
                 PAGE_CONNECT_WIFI -> ClaimWifiConnectWifiFragment()
                 PAGE_PREPARE_GATEWAY -> ClaimWifiPrepareGatewayFragment()
-                PAGE_SERIAL_NUMBER -> ClaimWifiVerifyFragment()
+                PAGE_MANUAL_DETAILS -> ClaimWifiManualDetailsFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(deviceType)
                 PAGE_RESULT -> ClaimWifiResultFragment()
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
