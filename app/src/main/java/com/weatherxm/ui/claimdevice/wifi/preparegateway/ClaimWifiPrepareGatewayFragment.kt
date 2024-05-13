@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import coil.ImageLoader
+import coil.request.ImageRequest
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimWifiPrepareClaimingBinding
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
@@ -33,21 +34,21 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
             binding.firstStep.setHtml(R.string.prepare_gateway_m1_first_step)
             binding.m5Notice.setHtml(R.string.prepare_gateway_m5_notice)
 
-//            imageLoader.enqueue(
-//                ImageRequest.Builder(requireContext())
-//                    .data()
-//                    .target(binding.guideGif)
-//                    .build()
-//            )
+            imageLoader.enqueue(
+                ImageRequest.Builder(requireContext())
+                    .data(R.raw.m5_claim)
+                    .target(binding.guideGif)
+                    .build()
+            )
         } else {
             binding.firstStep.setHtml(R.string.prepare_gateway_d1_first_step)
 
-//            imageLoader.enqueue(
-//                ImageRequest.Builder(requireContext())
-//                    .data()
-//                    .target(binding.guideGif)
-//                    .build()
-//            )
+            imageLoader.enqueue(
+                ImageRequest.Builder(requireContext())
+                    .data(R.raw.wg1200_claim)
+                    .target(binding.guideGif)
+                    .build()
+            )
         }
         binding.secondStep.setHtml(R.string.prepare_gateway_wifi_second_step)
         binding.m5Notice.setVisible(parentModel.deviceType == DeviceType.M5_WIFI)
