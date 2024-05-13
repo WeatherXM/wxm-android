@@ -162,7 +162,6 @@ import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairViewModel
 import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
-import com.weatherxm.ui.claimdevice.wifi.verify.ClaimWifiVerifyViewModel
 import com.weatherxm.ui.connectwallet.ConnectWalletViewModel
 import com.weatherxm.ui.deleteaccount.DeleteAccountViewModel
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -849,6 +848,7 @@ private val utilities = module {
     single<CacheService> {
         CacheService(get(), get<SharedPreferences>(named(PREFERENCES_AUTH_TOKEN)), get(), get())
     }
+    @Suppress("MagicNumber")
     single<ImageLoader>(createdAtStart = true) {
         ImageLoader.Builder(androidContext())
             .memoryCache {
@@ -1001,7 +1001,6 @@ private val viewmodels = module {
     viewModel { ClaimHeliumPairViewModel(get(), get(), get(), get()) }
     viewModel { ClaimHeliumResultViewModel(get(), get(), get()) }
     viewModel { ClaimHeliumFrequencyViewModel(get(), get()) }
-    viewModel { ClaimWifiVerifyViewModel() }
     viewModel { NetworkSearchViewModel(get(), get()) }
     viewModel { params ->
         ForecastDetailsViewModel(

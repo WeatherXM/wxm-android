@@ -11,14 +11,12 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentClaimWifiResultBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
-import com.weatherxm.ui.claimdevice.wifi.verify.ClaimWifiVerifyViewModel
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class ClaimWifiResultFragment : BaseFragment() {
     private val parentModel: ClaimWifiViewModel by activityViewModel()
-    private val verifyModel: ClaimWifiVerifyViewModel by activityViewModel()
     private val locationModel: ClaimLocationViewModel by activityViewModel()
     private lateinit var binding: FragmentClaimWifiResultBinding
 
@@ -47,10 +45,7 @@ class ClaimWifiResultFragment : BaseFragment() {
         }
 
         binding.retry.setOnClickListener {
-            parentModel.claimDevice(
-                verifyModel.getSerialNumber(),
-                locationModel.getInstallationLocation()
-            )
+            parentModel.claimDevice(locationModel.getInstallationLocation())
         }
 
         parentModel.onClaimResult().observe(viewLifecycleOwner) {

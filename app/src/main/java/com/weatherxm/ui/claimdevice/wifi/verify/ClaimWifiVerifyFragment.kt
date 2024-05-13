@@ -11,13 +11,11 @@ import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimM5VerifyBinding
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.common.unmask
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class ClaimWifiVerifyFragment : BaseFragment() {
     private val parentModel: ClaimWifiViewModel by activityViewModel()
-    private val model: ClaimWifiVerifyViewModel by activityViewModel()
     private lateinit var binding: FragmentClaimM5VerifyBinding
 
     override fun onCreateView(
@@ -59,7 +57,7 @@ class ClaimWifiVerifyFragment : BaseFragment() {
                      * in the serial number & location screen and edits the SN after he has already
                      * set it successfully once
                      */
-                    model.setSerialNumber(String.empty())
+                    parentModel.setSerialNumber(String.empty())
                 }
             })
 
@@ -76,11 +74,11 @@ class ClaimWifiVerifyFragment : BaseFragment() {
     }
 
     private fun validateAndSetSerial() {
-        if (!model.validateSerial(binding.serialNumber.text.unmask())) {
+        if (!parentModel.validateSerial(binding.serialNumber.text.toString())) {
             binding.serialNumberContainer.error =
                 getString(R.string.warn_validation_invalid_serial_number)
         } else {
-            model.setSerialNumber(binding.serialNumber.text.unmask())
+            parentModel.setSerialNumber(binding.serialNumber.text.toString())
             parentModel.next()
         }
     }
