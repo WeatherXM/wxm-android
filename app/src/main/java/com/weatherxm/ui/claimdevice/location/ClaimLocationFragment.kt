@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
@@ -18,7 +20,9 @@ import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.SearchResultsAdapter
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.components.AddressSearchView
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.EditLocationListener
 import com.weatherxm.ui.components.EditLocationMapFragment
@@ -67,11 +71,29 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
 
         getMapFragment().setListener(this)
 
-        binding.confirmLocationToggle.setOnCheckedChangeListener { _, checked ->
-            binding.confirm.isEnabled = checked
+        /**
+         * Temp work-around until the design for Helium gets updated.
+         */
+        val confirmButton: MaterialButton
+        val confirmLocationToggle: MaterialSwitch
+        val addressSearchView: AddressSearchView
+        if (model.getDeviceType() == DeviceType.HELIUM) {
+            confirmButton = binding.confirm
+            confirmLocationToggle = binding.confirmLocationToggle
+            addressSearchView = binding.addressSearchView
+        } else {
+            binding.heliumRoot.setVisible(false)
+            binding.wifiRoot.setVisible(true)
+            confirmButton = binding.wifiConfirm
+            confirmLocationToggle = binding.wifiConfirmLocationToggle
+            addressSearchView = binding.wifiAddressSearchView
         }
 
-        binding.confirm.setOnClickListener {
+        confirmLocationToggle.setOnCheckedChangeListener { _, checked ->
+            confirmButton.isEnabled = checked
+        }
+
+        confirmButton.setOnClickListener {
             val markerLocation = getMapFragment().getMarkerLocation()
             if (!model.validateLocation(markerLocation.lat, markerLocation.lon)) {
                 activity?.toast(R.string.invalid_location)
@@ -97,7 +119,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             )
         }
 
-        binding.addressSearchView.setAdapter(adapter,
+        addressSearchView.setAdapter(adapter,
             onTextChanged = { model.geocoding(it) },
             onMyLocationClicked = {
                 requestLocationPermissions(activity) {
@@ -108,7 +130,11 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
     }
 
     private fun getMapFragment(): EditLocationMapFragment {
-        return binding.mapView.getFragment()
+        return if (model.getDeviceType() == DeviceType.HELIUM) {
+            binding.mapView.getFragment()
+        } else {
+            binding.wifiMapView.getFragment()
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -125,13 +151,18 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             }
         }
 
+        val addressSearchView = if (model.getDeviceType() == DeviceType.HELIUM) {
+            binding.addressSearchView
+        } else {
+            binding.wifiAddressSearchView
+        }
         model.onSearchResults().observe(viewLifecycleOwner) {
             if (it == null) {
                 context?.toast(getString(R.string.error_search_suggestions))
-            } else if (it.isEmpty() || binding.addressSearchView.getQueryLength() <= 2) {
-                binding.addressSearchView.clear()
+            } else if (it.isEmpty() || addressSearchView.getQueryLength() <= 2) {
+                addressSearchView.clear()
             } else {
-                binding.addressSearchView.setData(it)
+                addressSearchView.setData(it)
             }
         }
 
@@ -141,7 +172,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
 
         model.onMoveToLocation().observe(viewLifecycleOwner) {
             getMapFragment().moveToLocation(it)
-            binding.addressSearchView.clear()
+            addressSearchView.clear()
         }
 
         getMapFragment().initMarkerAndListeners()
