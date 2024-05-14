@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/heliumRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:contentPadding="0dp">
@@ -24,72 +25,16 @@
                 app:contentPadding="0dp"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <LinearLayout
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/title"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/margin_normal"
-                            android:text="@string/location_of_installation"
-                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.google.android.material.materialswitch.MaterialSwitch
-                            android:id="@+id/installationToggle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_normal"
-                            android:visibility="gone"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/title" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/toggleDescription"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/margin_normal"
-                            android:text="@string/installation_toggle_unchecked"
-                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                            android:visibility="gone"
-                            app:layout_constraintBottom_toBottomOf="@id/installationToggle"
-                            app:layout_constraintStart_toEndOf="@id/installationToggle"
-                            app:layout_constraintTop_toTopOf="@id/installationToggle" />
-
-                        <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/needHelpInstallation"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/margin_normal"
-                            android:text="@string/need_help_installation"
-                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                            android:visibility="gone"
-                            app:layout_constraintTop_toBottomOf="@id/installationToggle" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <com.weatherxm.ui.components.MessageCardView
-                        android:id="@+id/warningBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@id/needHelpInstallation"
-                        app:message_background_tint="@color/warningTint"
-                        app:message_icon="@drawable/ic_warn"
-                        app:message_icon_color="@color/warning"
-                        app:message_includes_close_button="true"
-                        app:message_message="@string/installation_location_warning_text"
-                        app:message_title="@string/important_message" />
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/margin_normal"
+                    android:text="@string/confirm_station_location"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -166,5 +111,98 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/wifiRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/alternativeBackground"
+        android:visibility="gone">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/wifiTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm_station_location"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+            android:textColor="@color/darkestBlue"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/wifiDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/padding_normal"
+            android:text="@string/confirm_station_location_desc"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            android:textColor="@color/alternativeTextColor"
+            app:layout_constraintTop_toBottomOf="@id/wifiTitle" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/wifiMapContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small_to_normal"
+            app:layout_constraintBottom_toTopOf="@id/wifiConfirmLocationToggle"
+            app:layout_constraintTop_toBottomOf="@id/wifiDesc">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/wifiMapViewContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:contentPadding="0dp">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/wifiMapView"
+                    android:name="com.weatherxm.ui.components.EditLocationMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:layout="@layout/fragment_map" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.weatherxm.ui.components.AddressSearchView
+                android:id="@+id/wifiAddressSearchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_normal"
+                app:layout_constraintTop_toTopOf="@id/wifiMapViewContainer" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/wifiConfirmLocationToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/wifiConfirmLocationText" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/wifiConfirmLocationText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small_to_normal"
+            android:text="@string/confirm_location_description"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            app:layout_constraintBottom_toTopOf="@id/wifiConfirm"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/wifiConfirmLocationToggle" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/wifiConfirm"
+            style="@style/Widget.WeatherXM.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:enabled="false"
+            android:text="@string/confirm_and_proceed"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
