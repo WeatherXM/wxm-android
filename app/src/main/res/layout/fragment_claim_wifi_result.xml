@@ -22,18 +22,18 @@
                 app:empty_animation="@raw/anim_loading"
                 app:empty_subtitle="@string/success_claim_device"
                 app:empty_title="@string/station_claimed"
-                app:layout_constraintBottom_toTopOf="@id/viewStationOnlyBtn"
+                app:layout_constraintBottom_toTopOf="@id/goToStationBtn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/viewStationOnlyBtn"
+                android:id="@+id/goToStationBtn"
                 style="@style/Widget.WeatherXM.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="@string/action_view_station"
+                android:text="@string/action_go_to"
                 android:textAllCaps="false"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -49,13 +49,13 @@
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/quit"
+                    android:id="@+id/cancel"
                     style="@style/Widget.WeatherXM.Button.Subtle.Borders"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_normal"
                     android:layout_weight="1"
-                    android:text="@string/action_quit_claiming"
+                    android:text="@string/action_cancel_claiming"
                     android:textAllCaps="false" />
 
                 <com.google.android.material.button.MaterialButton

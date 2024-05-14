@@ -12,6 +12,7 @@ import com.weatherxm.databinding.FragmentClaimWifiResultBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -32,7 +33,7 @@ class ClaimWifiResultFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.quit.setOnClickListener {
+        binding.cancel.setOnClickListener {
             analytics.trackEventUserAction(
                 actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
                 contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
@@ -57,14 +58,14 @@ class ClaimWifiResultFragment : BaseFragment() {
         when (resource.status) {
             Status.SUCCESS -> {
                 binding.statusView.animation(R.raw.anim_success, false)
-                binding.statusView.title(R.string.station_claimed)
-                binding.statusView.htmlSubtitle(
-                    R.string.success_claim_device,
-                    resource.data?.name
-                )
+                    .title(R.string.station_claimed)
+                    .htmlSubtitle(
+                        R.string.success_claim_device,
+                        resource.data?.name
+                    )
                 val device = resource.data
                 if (device != null) {
-                    binding.viewStationOnlyBtn.setOnClickListener {
+                    binding.goToStationBtn.setOnClickListener {
                         analytics.trackEventUserAction(
                             actionName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
                             contentType = AnalyticsService.ParamValue.CLAIMING.paramValue,
@@ -76,9 +77,9 @@ class ClaimWifiResultFragment : BaseFragment() {
                         navigator.showDeviceDetails(activity, device = device)
                         activity?.finish()
                     }
-                    binding.viewStationOnlyBtn.visibility = View.VISIBLE
+                    binding.goToStationBtn.setVisible(true)
                 }
-                binding.failureButtons.visibility = View.GONE
+                binding.failureButtons.setVisible(false)
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
                     contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
@@ -87,17 +88,17 @@ class ClaimWifiResultFragment : BaseFragment() {
             }
             Status.ERROR -> {
                 binding.statusView.animation(R.raw.anim_error, false)
-                binding.statusView.title(R.string.error_claim_failed_title)
+                    .title(R.string.error_claim_failed_title)
+                    .action(getString(R.string.contact_support_title))
+                    .listener {
+                        navigator.openSupportCenter(context)
+                    }
                 resource.message?.let {
                     binding.statusView.htmlSubtitle(it) {
                         navigator.openSupportCenter(context)
                     }
                 }
-                binding.statusView.action(getString(R.string.contact_support_title))
-                binding.statusView.listener {
-                    navigator.openSupportCenter(context)
-                }
-                binding.failureButtons.visibility = View.VISIBLE
+                binding.failureButtons.setVisible(true)
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
                     contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
@@ -106,9 +107,10 @@ class ClaimWifiResultFragment : BaseFragment() {
             }
             Status.LOADING -> {
                 binding.statusView.clear()
-                binding.statusView.animation(R.raw.anim_loading)
-                binding.statusView.title(R.string.claiming_station)
-                binding.failureButtons.visibility = View.GONE
+                    .animation(R.raw.anim_loading)
+                    .title(R.string.claiming_station)
+                    .subtitle(R.string.claiming_station_m5_desc)
+                binding.failureButtons.setVisible(false)
             }
         }
     }
