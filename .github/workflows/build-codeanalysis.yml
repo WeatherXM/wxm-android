@@ -48,8 +48,10 @@ jobs:
                 with:
                     distribution: 'temurin'
                     java-version: '17'
-            -   name: Build
-                run: ./gradlew :app:assembleRemoteProdRelease :app:assemblelocalMockDebug -PSKIP_PRODUCTION_ENV
+            -   name: Build Production
+                run: ./gradlew :app:assembleRemoteProdRelease -PSKIP_PRODUCTION_ENV
+            -   name: Build Local Mock
+                run: ./gradlew :app:assemblelocalMockDebug -PSKIP_PRODUCTION_ENV
     codeanalysis:
         needs: build
         environment: production
