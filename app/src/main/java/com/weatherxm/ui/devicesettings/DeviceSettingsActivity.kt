@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import coil.ImageLoader
-import coil.request.ImageRequest
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
@@ -16,8 +15,9 @@ import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.applyOnGlobalLayout
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.classSimpleName
+import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
@@ -162,14 +162,7 @@ class DeviceSettingsActivity : BaseActivity() {
             null
         }
         getMinimap(binding.locationLayout.width, deviceMapLocation, model.device.hex7)?.let {
-            imageLoader.enqueue(
-                ImageRequest.Builder(this).data(it).target(binding.locationMinimap).build()
-            )
-        } ?: binding.locationMinimap.setVisible(false)
-        getMinimap(binding.locationLayout.width, deviceMapLocation, model.device.hex7)?.let {
-            imageLoader.enqueue(
-                ImageRequest.Builder(this).data(it).target(binding.locationMinimap).build()
-            )
+            binding.locationMinimap.loadImage(imageLoader, it)
         } ?: binding.locationMinimap.setVisible(false)
     }
 

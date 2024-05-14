@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import coil.ImageLoader
-import coil.request.ImageRequest
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimWifiPrepareClaimingBinding
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
@@ -37,22 +37,10 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
         if (model.deviceType == DeviceType.M5_WIFI) {
             binding.firstStep.setHtml(R.string.prepare_gateway_m1_first_step)
             binding.m5Notice.setHtml(R.string.prepare_gateway_m5_notice)
-
-            imageLoader.enqueue(
-                ImageRequest.Builder(requireContext())
-                    .data(R.raw.m5_claim)
-                    .target(binding.guideGif)
-                    .build()
-            )
+            binding.guideGif.loadImage(imageLoader, R.raw.m5_claim)
         } else {
             binding.firstStep.setHtml(R.string.prepare_gateway_d1_first_step)
-
-            imageLoader.enqueue(
-                ImageRequest.Builder(requireContext())
-                    .data(R.raw.wg1200_claim)
-                    .target(binding.guideGif)
-                    .build()
-            )
+            binding.guideGif.loadImage(imageLoader, R.raw.wg1200_claim)
         }
         binding.secondStep.setHtml(R.string.prepare_gateway_wifi_second_step)
         binding.m5Notice.setVisible(model.deviceType == DeviceType.M5_WIFI)

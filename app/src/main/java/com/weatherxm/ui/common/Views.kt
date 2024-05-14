@@ -48,6 +48,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.ImageLoader
+import coil.request.ImageRequest
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
@@ -223,6 +225,15 @@ fun ImageView.setNoDevicesFoundDrawable(context: Context) {
         ResourcesCompat.getDrawable(resources, R.drawable.ic_no_devices_found, context.theme)
     drawable?.setTint(ResourcesCompat.getColor(resources, R.color.darkGrey, context.theme))
     this.setImageDrawable(drawable)
+}
+
+fun ImageView.loadImage(imageLoader: ImageLoader, data: Any?) {
+    imageLoader.enqueue(
+        ImageRequest.Builder(this.context)
+            .data(data)
+            .target(this)
+            .build()
+    )
 }
 
 @Suppress("EmptyFunctionBlock")
