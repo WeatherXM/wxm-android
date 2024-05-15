@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_COUNT
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyFragment
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyViewModel
 import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairFragment
@@ -50,6 +51,7 @@ class ClaimHeliumActivity : BaseActivity() {
         val pagerAdapter = ClaimHeliumDevicePagerAdapter(this)
         binding.pager.adapter = pagerAdapter
         binding.pager.isUserInputEnabled = false
+        binding.progress.max = PAGE_COUNT - 1
 
         onBackPressedDispatcher.addCallback {
             finishClaiming()
@@ -70,17 +72,18 @@ class ClaimHeliumActivity : BaseActivity() {
         model.onBackToLocation().observe(this) {
             if (it) {
                 binding.pager.currentItem -= 1
-                updateClaimingProgress()
+                binding.progress.progress = binding.pager.currentItem + 1
             }
         }
 
         savedInstanceState?.let {
             binding.pager.currentItem = it.getInt(CURRENT_PAGE, 0)
+            binding.progress.progress = binding.pager.currentItem + 1
             model.setDeviceEUI(it.getString(DEV_EUI, String.empty()))
             model.setDeviceKey(it.getString(DEV_KEY, String.empty()))
             model.setClaimedDevice(it.parcelable(CLAIMED_DEVICE))
         }
-        updateClaimingProgress()
+        binding.progress.progress = binding.pager.currentItem + 1
     }
 
     override fun onResume() {
@@ -96,7 +99,7 @@ class ClaimHeliumActivity : BaseActivity() {
     private fun onNextPressed() {
         with(binding) {
             pager.currentItem += 1
-            updateClaimingProgress()
+            binding.progress.progress = binding.pager.currentItem + 1
 
             when (pager.currentItem) {
                 ClaimHeliumDevicePagerAdapter.PAGE_LOCATION -> {
@@ -110,16 +113,6 @@ class ClaimHeliumActivity : BaseActivity() {
                     resultModel.setFrequency(model.getFrequency())
                 }
             }
-        }
-    }
-
-    @Suppress("MagicNumber")
-    private fun updateClaimingProgress() {
-        binding.progress.progress = when (binding.pager.currentItem) {
-            0 -> 10
-            1 -> 30
-            2 -> 70
-            else -> 100
         }
     }
 

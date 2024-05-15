@@ -9,6 +9,7 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimWifiDeviceBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_COUNT
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.claimdevice.wifi.connectwifi.ClaimWifiConnectWifiFragment
@@ -18,11 +19,11 @@ import com.weatherxm.ui.claimdevice.wifi.verify.ClaimWifiVerifyViewModel
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.classSimpleName
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -50,6 +51,7 @@ class ClaimWifiActivity : BaseActivity() {
         val pagerAdapter = ClaimDevicePagerAdapter(this, model.deviceType)
         binding.pager.adapter = pagerAdapter
         binding.pager.isUserInputEnabled = false
+        binding.progress.max = PAGE_COUNT - 1
 
         model.onCancel().observe(this) {
             if (it) finish()
@@ -70,22 +72,13 @@ class ClaimWifiActivity : BaseActivity() {
 
         savedInstanceState?.let {
             binding.pager.currentItem = it.getInt(CURRENT_PAGE, 0)
+            binding.progress.progress = binding.pager.currentItem + 1
             val savedSn = it.getString(SERIAL_NUMBER, String.empty())
             if (verifyModel.validateSerial(savedSn)) {
                 verifyModel.setSerialNumber(savedSn)
             }
         }
-        updateClaimingProgress()
-    }
-
-    @Suppress("MagicNumber")
-    private fun updateClaimingProgress() {
-        binding.progress.progress = when (binding.pager.currentItem) {
-            0 -> 10
-            1 -> 30
-            2 -> 100
-            else -> 100
-        }
+        binding.progress.progress = binding.pager.currentItem + 1
     }
 
     override fun onResume() {
@@ -102,7 +95,7 @@ class ClaimWifiActivity : BaseActivity() {
     private fun onNextPressed() {
         with(binding) {
             pager.currentItem += 1
-            updateClaimingProgress()
+            binding.progress.progress = pager.currentItem + 1
             when (pager.currentItem) {
                 PAGE_LOCATION -> {
                     locationModel.requestUserLocation()
