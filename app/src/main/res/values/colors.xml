@@ -29,9 +29,9 @@
     <color name="messageDialogBackground">@color/layer1</color>
     <color name="messageDialogButton">@color/light_translucent</color>
     <color name="infoStrokeColor">@color/light_lightest_blue</color>
-
-    <!-- Generic -->
-    <color name="alternative_background">@color/light_top</color>
+    <color name="alternativeBackground">@color/light_top</color>
+    <color name="progressBarTrackColor">@color/light_lightest_blue</color>
+    <color name="alternativeTextColor">@color/darkGrey</color>
 
     <!-- System and Launcher -->
     <color name="ic_launcher_background">@color/colorPrimary</color>

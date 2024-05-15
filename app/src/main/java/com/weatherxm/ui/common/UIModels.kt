@@ -188,7 +188,7 @@ data class FrequencyState(
 @Parcelize
 enum class DeviceType : Parcelable {
     M5_WIFI,
-    D1,
+    D1_WIFI,
     HELIUM
 }
 

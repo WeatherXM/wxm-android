@@ -1,4 +1,4 @@
-package com.weatherxm.ui.claimdevice.m5.verify
+package com.weatherxm.ui.claimdevice.wifi.verify
 
 import android.os.Bundle
 import android.text.InputFilter
@@ -9,15 +9,15 @@ import android.view.inputmethod.EditorInfo
 import com.redmadrobot.inputmask.MaskedTextChangedListener
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimM5VerifyBinding
-import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
+import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
-class ClaimM5VerifyFragment : BaseFragment() {
-    private val parentModel: ClaimM5ViewModel by activityViewModel()
-    private val model: ClaimM5VerifyViewModel by activityViewModel()
+class ClaimWifiVerifyFragment : BaseFragment() {
+    private val parentModel: ClaimWifiViewModel by activityViewModel()
+    private val model: ClaimWifiVerifyViewModel by activityViewModel()
     private lateinit var binding: FragmentClaimM5VerifyBinding
 
     override fun onCreateView(

@@ -15,8 +15,6 @@
     <string name="action_clear">Clear</string>
     <string name="action_try_again">Try Again</string>
     <string name="action_verify">Verify</string>
-    <string name="action_pair">Pair</string>
-    <string name="action_reset">Reset</string>
     <string name="action_have_reset_device">I\’ve Reset My Device</string>
     <string name="action_favorite">Favorite</string>
     <string name="action_pair_device">Pair Device</string>
@@ -402,7 +400,6 @@
     <string name="action_view_station">View Station</string>
     <string name="action_quit_claiming">Quit Claiming</string>
     <string name="action_retry_claiming">Retry Claiming</string>
-    <string name="location">Location</string>
     <string name="confirm_location_description">I acknowledge that the deployment location above is correct and can be used to verify the eligibility of the station’s rewards.</string>
     <string name="set_and_claim">Set and Claim</string>
     <string name="station_claimed">Station Claimed</string>
@@ -416,16 +413,23 @@
     <string name="claiming_station_step">Claiming Station</string>
     <string name="invalid_location">Invalid Location</string>
 
-    <!-- Claim M5 -->
-    <string name="title_claim_ws1000_device">Claim WS1000 Device</string>
+    <!-- Claim - Connect to WiFi -->
+    <string name="title_claim_d1_wifi">Claim D1 | WiFi</string>
+    <string name="title_claim_m5_wifi">Claim M5 | WiFi</string>
     <string name="connection">Connection</string>
-    <string name="verify_your_device">Verify Your Device</string>
-    <string name="action_connect_m5_wifi">I\'ve Connected My M5</string>
-    <string name="connect_m5_wifi">Connect M5 via WiFi</string>
-    <string name="connect_m5_wifi_first_step"><![CDATA[Open your phone\'s WiFi manager, and connect to the “<b>WXM M5 XXX</b>” network (this is your M5 device).]]></string>
-    <string name="connect_m5_wifi_second_step"><![CDATA[After connecting to the M5, open your browser, and type <b>10.10.1.1</b> to view the available networks page.]]></string>
-    <string name="connect_m5_wifi_third_step"><![CDATA[Choose the WiFi network you’d like to connect your M5 to and transmit data.]]></string>
+    <string name="begin_station_claiming">Begin Station Claiming</string>
+    <string name="connect_gateway_wifi">Connect the gateway to your WiFi</string>
+    <string name="connect_m5_wifi_first_step"><![CDATA[Turn on the M5 gateway and swipe right to the settings screen. Select <b>“Configure WiFi”</b> and then press <b>“Continue”</b> on the screen.]]></string>
+    <string name="connect_m5_wifi_second_step"><![CDATA[Connect your phone to the <b>“WXM M5 XXX”</b> WiFi network.]]></string>
+    <string name="connect_wifi_third_step"><![CDATA[Open your phone’s browser, and navigate to <b>10.10.0.1</b>.]]></string>
+    <string name="connect_wifi_fourth_step">Choose your WiFi network from the list and enter the WiFi password to connect your gateway.</string>
+    <string name="connect_d1_wifi_first_step"><![CDATA[Turn on the WG1200 gateway and swipe right to the settings screen. Select <b>“Configure WiFi”</b> and then press <b>“Continue”</b> on the screen.]]></string>
+    <string name="connect_d1_wifi_second_step"><![CDATA[Connect your phone to the <b>“WXM_WG1200”</b> WiFi network.]]></string>
     <string name="connect_m5_wifi_watch_video">If you\’re having difficulty completing this step, make sure you watch the instructional video below!</string>
+
+    <!-- Claim - Manually Enter S/N -->
+    <string name="verify_your_device">Verify Your Device</string>
+
 
     <!-- Claim Helium -->
     <string name="title_claim_ws2000_device">Claim WS2000 Device</string>

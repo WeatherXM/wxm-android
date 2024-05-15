@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/alternativeBackground">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -16,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:navigationIcon="@drawable/ic_back"
-            app:title="@string/title_claim_ws2000_device" />
+            tools:title="@string/title_claim_m5_wifi" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -39,7 +40,6 @@
         android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/margin_normal"
         android:layout_marginTop="@dimen/margin_normal"
-        android:layout_marginBottom="@dimen/margin_small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progress"
         app:layout_constraintVertical_bias="1.0"

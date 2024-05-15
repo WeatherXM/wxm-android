@@ -29,6 +29,9 @@
     <color name="messageDialogBackground">@color/dark_top</color>
     <color name="messageDialogButton">@color/dark_layer1</color>
     <color name="infoStrokeColor">@color/dark_primary</color>
+    <color name="alternativeBackground">@color/dark_background</color>
+    <color name="progressBarTrackColor">@color/dark_top</color>
+    <color name="alternativeTextColor">@color/dark_text</color>
 
     <!-- System and Launcher -->
     <color name="ic_launcher_background">#1B75BA</color>
@@ -46,9 +49,6 @@
     <!-- Network Stats -->
     <color name="network_stats_slider">@color/network_stats_slider_dark</color>
     <color name="network_stats_button">@color/dark_primary</color>
-
-    <!-- Rewards -->
-    <color name="alternative_background">@color/dark_background</color>
 
     <!-- Forecast -->
     <color name="daily_temps_divider">@color/light_background</color>

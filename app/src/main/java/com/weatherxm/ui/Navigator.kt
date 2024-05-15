@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Parcelable
 import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.StringRes
@@ -24,14 +25,15 @@ import com.weatherxm.data.WXMRemoteMessage
 import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.cellinfo.CellInfoActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
-import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
 import com.weatherxm.ui.claimdevice.selectstation.SelectStationTypeActivity
+import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity
 import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
 import com.weatherxm.ui.common.Contracts.ARG_BOOST_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_CELL_CENTER
 import com.weatherxm.ui.common.Contracts.ARG_DATE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
@@ -41,6 +43,7 @@ import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
+import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.toast
@@ -324,11 +327,12 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         )
     }
 
-    fun showClaimM5Flow(context: Context) {
+    fun showClaimWifiFlow(context: Context, deviceType: DeviceType) {
         // Launch claim activity
         context.startActivity(
-            Intent(context, ClaimM5Activity::class.java)
+            Intent(context, ClaimWifiActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_DEVICE_TYPE, deviceType as Parcelable)
         )
     }
 
