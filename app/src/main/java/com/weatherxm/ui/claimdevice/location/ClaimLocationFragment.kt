@@ -101,10 +101,10 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             }
             model.setInstallationLocation(markerLocation.lat, markerLocation.lon)
 
-            if (model.getDeviceType() == DeviceType.M5_WIFI) {
-                wifiParentModel.next()
-            } else {
+            if (model.getDeviceType() == DeviceType.HELIUM) {
                 heliumParentModel.next()
+            } else {
+                wifiParentModel.next()
             }
         }
 
