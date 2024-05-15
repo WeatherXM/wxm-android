@@ -109,7 +109,7 @@ class ClaimWifiResultFragment : BaseFragment() {
                 binding.statusView.clear()
                     .animation(R.raw.anim_loading)
                     .title(R.string.claiming_station)
-                    .subtitle(R.string.claiming_station_m5_desc)
+                    .htmlSubtitle(R.string.claiming_station_m5_desc)
                 binding.failureButtons.setVisible(false)
             }
         }
