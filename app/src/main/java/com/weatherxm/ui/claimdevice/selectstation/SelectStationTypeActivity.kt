@@ -24,17 +24,14 @@ class SelectStationTypeActivity : BaseActivity() {
 
         binding.m5WifiCard.listener {
             navigator.showClaimWifiFlow(this, DeviceType.M5_WIFI)
-            finish()
         }
 
         binding.d1WifiCard.listener {
             navigator.showClaimWifiFlow(this, DeviceType.D1_WIFI)
-            finish()
         }
 
         binding.heliumCard.listener {
             navigator.showClaimHeliumFlow(this)
-            finish()
         }
     }
 
