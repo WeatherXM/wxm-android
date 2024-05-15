@@ -31,8 +31,6 @@ class NetworkStatsActivity : BaseActivity() {
         binding = ActivityNetworkStatsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.root.applyInsets()
-
         binding.toolbar.setNavigationOnClickListener {
             finish()
         }
