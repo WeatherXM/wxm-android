@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.Either
 import arrow.core.flatMap
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError.AuthError.InvalidUsername
 import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidCredentials
 import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidPassword
@@ -14,7 +15,6 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.data.User
 import com.weatherxm.usecases.AuthUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
@@ -66,6 +66,7 @@ class LoginViewModel(
                     handleUserFailure(it)
                 }
                 .map {
+                    analytics.setUserId(it.id)
                     user.postValue(Resource.success(it))
                 }
         }

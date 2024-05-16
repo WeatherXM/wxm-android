@@ -2,6 +2,7 @@ package com.weatherxm.ui.preferences
 
 import android.appwidget.AppWidgetManager
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -21,6 +22,7 @@ class PreferenceActivity : BaseActivity() {
     private lateinit var binding: ActivityPreferencesBinding
     private val model: PreferenceViewModel by viewModel()
     private val widgetHelper: WidgetHelper by inject()
+    private val sharedPreferences: SharedPreferences by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +73,13 @@ class PreferenceActivity : BaseActivity() {
                 navigator.showStartup(this)
             }
         }
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(model.onPreferencesChanged)
+    }
+
+    override fun onDestroy() {
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(model.onPreferencesChanged)
+        super.onDestroy()
     }
 
     override fun onResume() {

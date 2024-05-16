@@ -30,8 +30,6 @@ import com.google.android.gms.location.SettingsClient
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.crashlytics.crashlytics
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -248,7 +246,6 @@ import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCaseImpl
 import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.usecases.WidgetSelectStationUseCaseImpl
-import com.weatherxm.util.Crashlytics
 import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.Resources
@@ -716,10 +713,6 @@ private val bluetooth = module {
 }
 
 val firebase = module {
-    single<FirebaseCrashlytics>(createdAtStart = true) {
-        Firebase.crashlytics
-    }
-
     single<FirebaseMessaging>(createdAtStart = true) {
         FirebaseMessaging.getInstance().also {
             if (BuildConfig.DEBUG) {
@@ -793,7 +786,7 @@ val database = module {
 
 val displayModeHelper = module {
     single(createdAtStart = true) {
-        DisplayModeHelper(androidContext().resources, get()).apply {
+        DisplayModeHelper(androidContext().resources, get(), get()).apply {
             // Set light/dark theme at startup
             setDisplayMode()
         }
@@ -827,14 +820,7 @@ val analytics = module {
     factory { MixpanelAnalyticsService(get()) as AnalyticsService }
 
     single<AnalyticsWrapper> {
-        AnalyticsWrapper(getAll<AnalyticsService>(), get(), get(), get(), androidContext())
-    }
-
-}
-
-val crashlytics = module {
-    single(createdAtStart = true) {
-        Crashlytics(get(), get(), get())
+        AnalyticsWrapper(getAll<AnalyticsService>(), androidContext())
     }
 }
 
@@ -1036,6 +1022,5 @@ val modules = listOf(
     clientIdentificationHelper,
     utilities,
     widgetHelper,
-    crashlytics,
     viewmodels
 )
