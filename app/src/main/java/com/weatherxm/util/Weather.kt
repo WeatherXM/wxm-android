@@ -7,6 +7,7 @@ import android.graphics.drawable.LayerDrawable
 import androidx.annotation.RawRes
 import androidx.appcompat.content.res.AppCompatResources
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRECIP
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
@@ -467,5 +468,95 @@ object Weather : KoinComponent {
 
     fun roundToInt(value: Number): Int {
         return value.toFloat().toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()
+    }
+
+    // Suppress CyclomaticComplexMethod because it is just a bunch of if/when statements.
+    @Suppress("CyclomaticComplexMethod")
+    fun getWeatherUserUnitsForAnalytics(context: Context): List<Pair<String, String>> {
+        val userParams = mutableListOf<Pair<String, String>>()
+
+        // Selected Temperature Unit
+        getPreferredUnit(
+            context.getString(KEY_TEMPERATURE),
+            context.getString(R.string.temperature_celsius)
+        ).also {
+            if (it == context.getString(R.string.temperature_celsius)) {
+                AnalyticsService.UserProperty.CELSIUS.propertyName
+            } else {
+                AnalyticsService.UserProperty.FAHRENHEIT.propertyName
+            }.apply {
+                userParams.add(
+                    Pair(AnalyticsService.UserProperty.UNIT_TEMPERATURE.propertyName, this)
+                )
+            }
+        }
+
+        // Selected Wind Unit
+        getPreferredUnit(
+            context.getString(KEY_WIND),
+            context.getString(R.string.wind_speed_ms)
+        ).also {
+            when (it) {
+                context.getString(R.string.wind_speed_ms) -> {
+                    AnalyticsService.UserProperty.MPS.propertyName
+                }
+                context.getString(R.string.wind_speed_mph) -> {
+                    AnalyticsService.UserProperty.MPH.propertyName
+                }
+                context.getString(R.string.wind_speed_kmh) -> {
+                    AnalyticsService.UserProperty.KMPH.propertyName
+                }
+                context.getString(R.string.wind_speed_knots) -> {
+                    AnalyticsService.UserProperty.KN.propertyName
+                }
+                else -> AnalyticsService.UserProperty.BF.propertyName
+            }.apply {
+                userParams.add(Pair(AnalyticsService.UserProperty.UNIT_WIND.propertyName, this))
+            }
+        }
+
+        // Selected Wind Direction Unit
+        getPreferredUnit(
+            context.getString(KEY_WIND_DIR),
+            context.getString(R.string.wind_direction_cardinal)
+        ).also {
+            if (it == context.getString(R.string.wind_direction_cardinal)) {
+                AnalyticsService.UserProperty.CARDINAL.propertyName
+            } else {
+                AnalyticsService.UserProperty.DEGREES.propertyName
+            }.apply {
+                userParams.add(
+                    Pair(AnalyticsService.UserProperty.UNIT_WIND_DIRECTION.propertyName, this)
+                )
+            }
+        }
+
+        // Selected Precipitation Unit
+        getPrecipitationPreferredUnit().also {
+            if (it == context.getString(R.string.precipitation_mm)) {
+                AnalyticsService.UserProperty.MILLIMETERS.propertyName
+            } else {
+                AnalyticsService.UserProperty.INCHES.propertyName
+            }.apply {
+                userParams.add(
+                    Pair(AnalyticsService.UserProperty.UNIT_PRECIPITATION.propertyName, this)
+                )
+            }
+        }
+
+        // Selected Pressure Unit
+        getPreferredUnit(
+            context.getString(KEY_PRESSURE),
+            context.getString(R.string.pressure_hpa)
+        ).also {
+            if (it == context.getString(R.string.pressure_hpa)) {
+                AnalyticsService.UserProperty.HPA.propertyName
+            } else {
+                AnalyticsService.UserProperty.INHG.propertyName
+            }.apply {
+                userParams.add(Pair(AnalyticsService.UserProperty.UNIT_PRESSURE.propertyName, this))
+            }
+        }
+        return userParams
     }
 }

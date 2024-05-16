@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.startup.Initializer
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.services.CacheService
-import com.weatherxm.util.DisplayModeHelper
+import com.weatherxm.util.Weather
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -12,7 +12,6 @@ import timber.log.Timber
 class AnalyticsInitializer : Initializer<Unit>, KoinComponent {
     private val cacheService: CacheService by inject()
     private val analyticsWrapper: AnalyticsWrapper by inject()
-    private val displayModeHelper: DisplayModeHelper by inject()
 
     override fun create(context: Context) {
         Timber.d("Basic configuration for Analytics Wrapper")
@@ -21,7 +20,7 @@ class AnalyticsInitializer : Initializer<Unit>, KoinComponent {
         analyticsWrapper.setAnalyticsEnabled(enabled)
         analyticsWrapper.setUserId(cacheService.getUserId())
         analyticsWrapper.setDevicesSortFilterOptions(cacheService.getDevicesSortFilterOptions())
-        analyticsWrapper.setUserProperties()
+        analyticsWrapper.setUserProperties(Weather.getWeatherUserUnitsForAnalytics(context))
         return
     }
 

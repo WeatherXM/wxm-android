@@ -13,6 +13,7 @@ import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.util.Weather
 import com.weatherxm.util.WidgetHelper
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,6 +24,10 @@ class PreferenceActivity : BaseActivity() {
     private val model: PreferenceViewModel by viewModel()
     private val widgetHelper: WidgetHelper by inject()
     private val sharedPreferences: SharedPreferences by inject()
+
+    private val onPreferencesChanged = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+        analytics.setUserProperties(Weather.getWeatherUserUnitsForAnalytics(this))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,11 +79,11 @@ class PreferenceActivity : BaseActivity() {
             }
         }
 
-        sharedPreferences.registerOnSharedPreferenceChangeListener(model.onPreferencesChanged)
+        sharedPreferences.registerOnSharedPreferenceChangeListener(onPreferencesChanged)
     }
 
     override fun onDestroy() {
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(model.onPreferencesChanged)
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(onPreferencesChanged)
         super.onDestroy()
     }
 

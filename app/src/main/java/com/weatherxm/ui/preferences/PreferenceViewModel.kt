@@ -1,6 +1,5 @@
 package com.weatherxm.ui.preferences
 
-import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,12 +15,8 @@ import timber.log.Timber
 
 class PreferenceViewModel(
     private val preferencesUseCase: PreferencesUseCase,
-    private val analytics: AnalyticsWrapper
+    val analytics: AnalyticsWrapper
 ) : ViewModel() {
-    val onPreferencesChanged = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-        analytics.setUserProperties()
-    }
-
     // Needed for passing info to the activity to when logging out
     private val onLogout = MutableLiveData(false)
 
