@@ -13,9 +13,9 @@ import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapt
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.claimdevice.wifi.connectwifi.ClaimWifiConnectWifiFragment
+import com.weatherxm.ui.claimdevice.wifi.preparegateway.ClaimWifiPrepareGatewayFragment
 import com.weatherxm.ui.claimdevice.wifi.result.ClaimWifiResultFragment
 import com.weatherxm.ui.claimdevice.wifi.verify.ClaimWifiVerifyFragment
-import com.weatherxm.ui.claimdevice.wifi.verify.ClaimWifiVerifyViewModel
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.applyInsets
@@ -31,6 +31,7 @@ class ClaimWifiActivity : BaseActivity() {
     companion object {
         const val CURRENT_PAGE = "current_page"
         const val SERIAL_NUMBER = "serial_number"
+        const val CLAIMING_KEY = "claiming_key"
     }
 
     private lateinit var binding: ActivityClaimWifiDeviceBinding
@@ -38,7 +39,6 @@ class ClaimWifiActivity : BaseActivity() {
         parametersOf(intent.parcelable<DeviceType>(Contracts.ARG_DEVICE_TYPE))
     }
     private val locationModel: ClaimLocationViewModel by viewModel()
-    private val verifyModel: ClaimWifiVerifyViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +58,7 @@ class ClaimWifiActivity : BaseActivity() {
         }
 
         model.onNext().observe(this) {
-            if (it) onNextPressed()
+            if (it > 0) onNextPressed(it)
         }
 
         binding.toolbar.title = if (model.deviceType == DeviceType.M5_WIFI) {
@@ -74,8 +74,12 @@ class ClaimWifiActivity : BaseActivity() {
             binding.pager.currentItem = it.getInt(CURRENT_PAGE, 0)
             binding.progress.progress = binding.pager.currentItem + 1
             val savedSn = it.getString(SERIAL_NUMBER, String.empty())
-            if (verifyModel.validateSerial(savedSn)) {
-                verifyModel.setSerialNumber(savedSn)
+            if (model.validateSerial(savedSn)) {
+                model.setSerialNumber(savedSn)
+            }
+            val savedKey = it.getString(CLAIMING_KEY, null)
+            if (model.validateClaimingKey(savedKey)) {
+                model.setClaimingKey(savedKey)
             }
         }
         binding.progress.progress = binding.pager.currentItem + 1
@@ -88,13 +92,14 @@ class ClaimWifiActivity : BaseActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putInt(CURRENT_PAGE, binding.pager.currentItem)
-        outState.putString(SERIAL_NUMBER, verifyModel.getSerialNumber())
+        outState.putString(SERIAL_NUMBER, model.getSerialNumber())
+        outState.putString(CLAIMING_KEY, model.getClaimingKey())
         super.onSaveInstanceState(outState)
     }
 
-    private fun onNextPressed() {
+    private fun onNextPressed(incrementPage: Int) {
         with(binding) {
-            pager.currentItem += 1
+            pager.currentItem += incrementPage
             binding.progress.progress = pager.currentItem + 1
             when (pager.currentItem) {
                 PAGE_LOCATION -> {
@@ -103,10 +108,7 @@ class ClaimWifiActivity : BaseActivity() {
                 PAGE_RESULT -> {
                     binding.appBar.setVisible(false)
                     binding.progress.setVisible(false)
-                    model.claimDevice(
-                        verifyModel.getSerialNumber(),
-                        locationModel.getInstallationLocation()
-                    )
+                    model.claimDevice(locationModel.getInstallationLocation())
                 }
             }
         }
@@ -118,10 +120,11 @@ class ClaimWifiActivity : BaseActivity() {
     ) : FragmentStateAdapter(activity) {
         companion object {
             const val PAGE_CONNECT_WIFI = 0
-            const val PAGE_SERIAL_NUMBER = 1
-            const val PAGE_LOCATION = 2
-            const val PAGE_RESULT = 3
-            const val PAGE_COUNT = 4
+            const val PAGE_PREPARE_GATEWAY = 1
+            const val PAGE_SERIAL_NUMBER = 2
+            const val PAGE_LOCATION = 3
+            const val PAGE_RESULT = 4
+            const val PAGE_COUNT = 5
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -130,6 +133,7 @@ class ClaimWifiActivity : BaseActivity() {
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 PAGE_CONNECT_WIFI -> ClaimWifiConnectWifiFragment()
+                PAGE_PREPARE_GATEWAY -> ClaimWifiPrepareGatewayFragment()
                 PAGE_SERIAL_NUMBER -> ClaimWifiVerifyFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(deviceType)
                 PAGE_RESULT -> ClaimWifiResultFragment()

@@ -412,6 +412,7 @@ dependencies {
 
     // Image Loader
     implementation(libs.coil.base)
+    implementation(libs.coil.gif)
 
     // Chucker - HTTP Inspector
     debugImplementation(libs.chucker)

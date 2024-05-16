@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
-import coil.request.ImageRequest
 import com.weatherxm.R
 import com.weatherxm.data.BoostReward
 import com.weatherxm.databinding.ListItemRewardBoostBinding
+import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.setBoostFallbackBackground
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Rewards.formatTokens
@@ -48,12 +48,7 @@ class RewardBoostAdapter(
             binding.root.setBoostFallbackBackground()
 
             if (!item.imgUrl.isNullOrEmpty()) {
-                imageLoader.enqueue(
-                    ImageRequest.Builder(itemView.context)
-                        .data(item.imgUrl)
-                        .target(binding.backgroundImage)
-                        .build()
-                )
+                binding.backgroundImage.loadImage(imageLoader, item.imgUrl)
                 binding.backgroundImage.setVisible(true)
             }
         }

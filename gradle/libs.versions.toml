@@ -105,6 +105,7 @@ better-link-movement-method = { module = "me.saket:better-link-movement-method",
 chucker-no-op = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
 chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
 coil-base = { module = "io.coil-kt:coil-base", version.ref = "coil-base" }
+coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil-base" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 dfu = { module = "no.nordicsemi.android:dfu", version.ref = "dfu" }
 esp-idf-provisioning-android = { module = "com.github.espressif:esp-idf-provisioning-android", version.ref = "esp-idf-provisioning-android" }

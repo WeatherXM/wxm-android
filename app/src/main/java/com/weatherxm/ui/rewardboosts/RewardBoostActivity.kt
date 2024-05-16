@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import coil.ImageLoader
-import coil.request.ImageRequest
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
@@ -17,13 +16,14 @@ import com.weatherxm.ui.common.Contracts.ARG_DATE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.UIBoost
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setBoostFallbackBackground
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.classSimpleName
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -87,12 +87,7 @@ class RewardBoostActivity : BaseActivity() {
     private fun updateUI(boostCode: String?, data: UIBoost) {
         binding.boostCard.setBoostFallbackBackground()
         if (data.imgUrl.isNotEmpty()) {
-            imageLoader.enqueue(
-                ImageRequest.Builder(this)
-                    .data(data.imgUrl)
-                    .target(binding.backgroundImage)
-                    .build()
-            )
+            binding.backgroundImage.loadImage(imageLoader, data.imgUrl)
             binding.backgroundImage.setVisible(true)
         }
 

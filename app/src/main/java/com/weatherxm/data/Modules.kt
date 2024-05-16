@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.icu.text.CompactDecimalFormat
 import android.icu.text.NumberFormat
 import android.location.Geocoder
+import android.os.Build.VERSION.SDK_INT
 import android.text.format.DateFormat
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
@@ -15,6 +16,8 @@ import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionSche
 import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme
 import androidx.security.crypto.MasterKeys
 import coil.ImageLoader
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import com.chuckerteam.chucker.api.ChuckerInterceptor
@@ -159,7 +162,6 @@ import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairViewModel
 import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
-import com.weatherxm.ui.claimdevice.wifi.verify.ClaimWifiVerifyViewModel
 import com.weatherxm.ui.connectwallet.ConnectWalletViewModel
 import com.weatherxm.ui.deleteaccount.DeleteAccountViewModel
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -846,6 +848,7 @@ private val utilities = module {
     single<CacheService> {
         CacheService(get(), get<SharedPreferences>(named(PREFERENCES_AUTH_TOKEN)), get(), get())
     }
+    @Suppress("MagicNumber")
     single<ImageLoader>(createdAtStart = true) {
         ImageLoader.Builder(androidContext())
             .memoryCache {
@@ -858,6 +861,13 @@ private val utilities = module {
                     .directory(androidContext().cacheDir.resolve("image_cache"))
                     .maxSizePercent(COIL_DISK_CACHE_SIZE_PERCENTAGE)
                     .build()
+            }
+            .components {
+                if (SDK_INT >= 28) {
+                    add(ImageDecoderDecoder.Factory())
+                } else {
+                    add(GifDecoder.Factory())
+                }
             }
             .respectCacheHeaders(false)
             .build()
@@ -991,7 +1001,6 @@ private val viewmodels = module {
     viewModel { ClaimHeliumPairViewModel(get(), get(), get(), get()) }
     viewModel { ClaimHeliumResultViewModel(get(), get(), get()) }
     viewModel { ClaimHeliumFrequencyViewModel(get(), get()) }
-    viewModel { ClaimWifiVerifyViewModel() }
     viewModel { NetworkSearchViewModel(get(), get()) }
     viewModel { params ->
         ForecastDetailsViewModel(

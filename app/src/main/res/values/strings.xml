@@ -44,6 +44,9 @@
     <string name="permission_permanently_denied_rationale">Go to the app settings to give the required permissions.</string>
     <string name="warn_cancelled">Cancelled!</string>
     <string name="permission_bluetooth_title">WeatherXM Requests Access to Bluetooth</string>
+    <string name="permission_camera">WeatherXM Requests Access to Camera</string>
+    <string name="permission_camera_desc">We will need to access your camera in order to utilise it in connecting and communicating to your WeatherXM Device.</string>
+    <string name="permission_camera_required">Camera permission is required. Please enable it in your device settings.</string>
 
     <!-- Login -->
     <string name="title_login">Login</string>
@@ -427,9 +430,17 @@
     <string name="connect_d1_wifi_second_step"><![CDATA[Connect your phone to the <b>“WXM_WG1200”</b> WiFi network.]]></string>
     <string name="connect_m5_wifi_watch_video">If you\’re having difficulty completing this step, make sure you watch the instructional video below!</string>
 
+    <!-- Claim - Prepare for claiming -->
+    <string name="prepare_gateway_claiming">Prepare gateway for claiming</string>
+    <string name="prepare_gateway_m1_first_step"><![CDATA[The M5 gateway should reboot automatically. After it has rebooted, navigate to the bottom of the settings screen to reveal the <b>QR Code</b> and <b>Serial Number</b>.]]></string>
+    <string name="prepare_gateway_d1_first_step"><![CDATA[The WG1200 gateway reboots automatically. After it has rebooted, navigate to the <b>“Claim Device”</b> menu, in the settings.]]></string>
+    <string name="prepare_gateway_wifi_second_step"><![CDATA[Scan the gateway’s <b>QR Code</b> that appears in the screen, as seen below.]]></string>
+    <string name="prepare_gateway_m5_notice"><![CDATA[If your gateway is running on an older firmware version, you may have to enter the <b>Serial Number Manually</b>.]]></string>
+    <string name="action_enter_serial_number_manually">Enter S/N Manually</string>
+    <string name="prepare_gateway_invalid_qr_code">The QR Code you scanned is invalid. Please try again with a valid QR Code or enter manually.</string>
+
     <!-- Claim - Manually Enter S/N -->
     <string name="verify_your_device">Verify Your Device</string>
-
 
     <!-- Claim Helium -->
     <string name="title_claim_ws2000_device">Claim WS2000 Device</string>
