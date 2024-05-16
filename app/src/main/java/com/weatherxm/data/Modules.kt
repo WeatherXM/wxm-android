@@ -820,7 +820,7 @@ val analytics = module {
     factory { MixpanelAnalyticsService(get()) as AnalyticsService }
 
     single<AnalyticsWrapper> {
-        AnalyticsWrapper(getAll<AnalyticsService>())
+        AnalyticsWrapper(getAll<AnalyticsService>(), androidContext())
     }
 }
 
