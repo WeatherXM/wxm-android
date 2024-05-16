@@ -11,9 +11,8 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityConnectWalletBinding
-import com.weatherxm.ui.common.applyInsets
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.classSimpleName
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.getRichText
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
@@ -37,8 +36,6 @@ class ConnectWalletActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityConnectWalletBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         setListeners()
 

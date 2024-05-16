@@ -14,7 +14,6 @@ import com.weatherxm.databinding.ActivityWebviewBinding
 import com.weatherxm.ui.common.Contracts.ARG_TOKEN_CLAIMED_AMOUNT
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
 import com.weatherxm.ui.common.UIWalletRewards
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
@@ -31,8 +30,6 @@ class RewardsClaimActivity : BaseActivity() {
         binding = ActivityWebviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.root.applyInsets()
-        binding.root.setFitsSystemWindows(true)
         binding.toolbar.title = getString(R.string.claim_rewards)
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()

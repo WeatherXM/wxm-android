@@ -7,7 +7,6 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.weatherxm.databinding.ActivityWebviewBinding
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.components.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -20,8 +19,6 @@ class SendFeedbackActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityWebviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         val isDeleteAccountForm = intent?.extras?.getBoolean(ARG_IS_DELETE_ACCOUNT_FORM) ?: false
 

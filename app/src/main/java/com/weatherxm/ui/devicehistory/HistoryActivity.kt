@@ -6,7 +6,6 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityHistoryBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
@@ -29,8 +28,6 @@ class HistoryActivity : BaseActivity(), SwipeRefreshCallback {
         super.onCreate(savedInstanceState)
         binding = ActivityHistoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         if (model.device.isEmpty()) {
             Timber.d("Could not start HistoryActivity. Device is null.")

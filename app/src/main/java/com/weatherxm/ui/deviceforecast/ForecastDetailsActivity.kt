@@ -14,7 +14,6 @@ import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecastDay
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.boldText
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.moveItemToCenter
@@ -62,8 +61,6 @@ class ForecastDetailsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityForecastDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         if (model.device.isEmpty()) {
             Timber.d("Could not start ForecastDetailsActivity. Device is null.")

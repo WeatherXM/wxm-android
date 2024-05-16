@@ -18,7 +18,6 @@ import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.common.DeviceType
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
@@ -44,8 +43,6 @@ class ClaimHeliumActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityClaimHeliumDeviceBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         // The pager adapter, which provides the pages to the view pager widget.
         val pagerAdapter = ClaimHeliumDevicePagerAdapter(this)

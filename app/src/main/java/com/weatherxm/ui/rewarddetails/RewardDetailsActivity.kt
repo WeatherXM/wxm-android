@@ -22,9 +22,8 @@ import com.weatherxm.ui.common.AnnotationGroupCode.USER_RELOCATION_PENALTY
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.classSimpleName
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
@@ -52,8 +51,6 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         super.onCreate(savedInstanceState)
         binding = ActivityRewardDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         val reward = intent?.extras?.parcelable<Reward>(ARG_REWARD)
         if (model.device.isEmpty() || reward == null || reward.timestamp == null) {

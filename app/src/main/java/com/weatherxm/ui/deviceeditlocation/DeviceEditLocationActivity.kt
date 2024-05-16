@@ -13,7 +13,6 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.SearchResultsAdapter
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
@@ -35,8 +34,6 @@ class DeviceEditLocationActivity : BaseActivity(), EditLocationListener {
         super.onCreate(savedInstanceState)
         binding = ActivityDeviceEditLocationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         val device = intent?.extras?.parcelable<UIDevice>(ARG_DEVICE)
         if (device == null || device.isEmpty() || device.relation != DeviceRelation.OWNED) {
