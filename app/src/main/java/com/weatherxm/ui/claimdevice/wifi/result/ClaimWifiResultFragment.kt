@@ -55,6 +55,8 @@ class ClaimWifiResultFragment : BaseFragment() {
     }
 
     private fun updateUI(resource: Resource<UIDevice>) {
+        binding.cancel.setVisible(resource.status == Status.ERROR)
+        binding.retry.setVisible(resource.status == Status.ERROR)
         when (resource.status) {
             Status.SUCCESS -> {
                 binding.statusView.animation(R.raw.anim_success, false)
@@ -79,7 +81,6 @@ class ClaimWifiResultFragment : BaseFragment() {
                     }
                     binding.goToStationBtn.setVisible(true)
                 }
-                binding.failureButtons.setVisible(false)
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
                     contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
@@ -98,7 +99,6 @@ class ClaimWifiResultFragment : BaseFragment() {
                         navigator.openSupportCenter(context)
                     }
                 }
-                binding.failureButtons.setVisible(true)
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,
                     contentId = AnalyticsService.ParamValue.CLAIMING_RESULT_ID.paramValue,
@@ -110,7 +110,6 @@ class ClaimWifiResultFragment : BaseFragment() {
                     .animation(R.raw.anim_loading)
                     .title(R.string.claiming_station)
                     .htmlSubtitle(R.string.claiming_station_m5_desc)
-                binding.failureButtons.setVisible(false)
             }
         }
     }
