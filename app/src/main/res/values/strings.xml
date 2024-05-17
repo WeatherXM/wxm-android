@@ -391,9 +391,6 @@
     <string name="d1_wifi">D1 | WiFi</string>
 
     <!-- Claim device -->
-    <string name="device_serial_number_title">Device Serial Number</string>
-    <string name="device_serial_number_hint">Enter the device\'s serial number</string>
-    <string name="device_serial_number_instructions"><![CDATA[Device\'s serial number can be found in the M5 (shown after automatic reboot, or in the settings screen - swipe right to view). You can also find this information on the box of your station.<br><br>It is 18 characters long and looks like this: <strong>12:34:56:78:9A:BC:DE:F0:12</strong>. Please type only the letters and numbers.]]></string>
     <string name="location_of_installation">Location of Installation</string>
     <string name="search_location">Search for location</string>
     <string name="installation_toggle_unchecked">Not yet, will install at a later time!</string>
@@ -440,7 +437,16 @@
     <string name="prepare_gateway_invalid_qr_code">The QR Code you scanned is invalid. Please try again with a valid QR Code or enter manually.</string>
 
     <!-- Claim - Manually Enter S/N -->
-    <string name="verify_your_device">Verify Your Device</string>
+    <string name="proceed_next_step">Proceed to Next Step</string>
+    <string name="enter_gateway_serial_number">Enter gateway Serial Number</string>
+    <string name="enter_gateway_details">Enter gateway details</string>
+    <string name="enter_gateway_serial_number_desc"><![CDATA[Enter the gateway’s <b>Serial Number</b> that appears in the screen, as seen below.]]></string>
+    <string name="enter_gateway_details_desc"><![CDATA[Enter the gateway’s <b>Claiming Key</b> and <b>Serial Number</b>. They are located under the QR code.]]></string>
+    <string name="enter_gateway_m5_notice">If your gateway is running on an older firmware version, screens may differ.</string>
+    <string name="enter_your_gateway_sn">Enter your gateway’s Serial Number</string>
+    <string name="enter_your_gateway_sn_hint">12:34:56:67:78:90:12:34:56:78</string>
+    <string name="enter_your_gateway_claiming_key">Enter your gateway’s Claiming Key</string>
+    <string name="enter_your_gateway_claiming_key_hint">123456</string>
 
     <!-- Claim Helium -->
     <string name="title_claim_ws2000_device">Claim WS2000 Device</string>
@@ -551,6 +557,7 @@
     <string name="station_location_desc"><![CDATA[The deployment location you set for this station is <b>%s.</b> If the location you see on the map doesn’t match the actual deployment location, press the button below to edit.]]></string>
     <string name="station_location_favorite_desc"><![CDATA[The deployment location that the station owner has set is <b>%s.</b>]]></string>
     <string name="edit_location">Edit Location</string>
+    <string name="device_serial_number">Device Serial Number</string>
 
     <!-- Alerts -->
     <string name="alerts">Alerts</string>

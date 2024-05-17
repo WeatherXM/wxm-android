@@ -46,7 +46,7 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
         binding.m5Notice.setVisible(model.deviceType == DeviceType.M5_WIFI)
 
         binding.enterManuallyBtn.setOnClickListener {
-            // To be implemented
+            model.next()
         }
 
         binding.scanBtn.setOnClickListener {
