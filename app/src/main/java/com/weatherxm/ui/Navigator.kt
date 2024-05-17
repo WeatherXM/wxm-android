@@ -319,21 +319,32 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         )
     }
 
-    fun showClaimHeliumFlow(context: Context) {
-        // Launch claim activity
-        context.startActivity(
-            Intent(context, ClaimHeliumActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        )
+    fun showClaimWifiFlow(
+        activityResultLauncher: ActivityResultLauncher<Intent>?,
+        context: Context,
+        deviceType: DeviceType
+    ) {
+        val intent = Intent(context, ClaimWifiActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .putExtra(ARG_DEVICE_TYPE, deviceType as Parcelable)
+        if (activityResultLauncher == null) {
+            context.startActivity(intent)
+        } else {
+            activityResultLauncher.launch(intent)
+        }
     }
 
-    fun showClaimWifiFlow(context: Context, deviceType: DeviceType) {
-        // Launch claim activity
-        context.startActivity(
-            Intent(context, ClaimWifiActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                .putExtra(ARG_DEVICE_TYPE, deviceType as Parcelable)
-        )
+    fun showClaimHeliumFlow(
+        activityResultLauncher: ActivityResultLauncher<Intent>?,
+        context: Context
+    ) {
+        val intent = Intent(context, ClaimHeliumActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        if (activityResultLauncher == null) {
+            context.startActivity(intent)
+        } else {
+            activityResultLauncher.launch(intent)
+        }
     }
 
     fun showDeviceHeliumOTA(fragment: Fragment, device: UIDevice?, deviceIsBleConnected: Boolean) {

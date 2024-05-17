@@ -1,5 +1,6 @@
 package com.weatherxm.ui.claimdevice.wifi.result
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -77,6 +78,7 @@ class ClaimWifiResultFragment : BaseFragment() {
                             )
                         )
                         navigator.showDeviceDetails(activity, device = device)
+                        activity?.setResult(Activity.RESULT_OK)
                         activity?.finish()
                     }
                     binding.goToStationBtn.setVisible(true)
