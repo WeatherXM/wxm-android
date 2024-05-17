@@ -12,7 +12,6 @@ import com.weatherxm.databinding.ActivityCellInfoBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setVisible
@@ -34,8 +33,6 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
         super.onCreate(savedInstanceState)
         binding = ActivityCellInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         with(binding.toolbar) {
             setNavigationOnClickListener {

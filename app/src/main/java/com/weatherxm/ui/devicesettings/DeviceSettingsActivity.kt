@@ -13,7 +13,6 @@ import com.weatherxm.databinding.ActivityDeviceSettingsBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.applyOnGlobalLayout
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
@@ -51,8 +50,6 @@ class DeviceSettingsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDeviceSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         if (model.device.isEmpty()) {
             Timber.d("Could not start DeviceSettingsActivity. Device is null.")

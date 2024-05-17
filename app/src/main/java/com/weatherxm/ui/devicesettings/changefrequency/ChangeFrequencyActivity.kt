@@ -16,7 +16,6 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityChangeFrequencyStationBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.parcelable
@@ -58,8 +57,6 @@ class ChangeFrequencyActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityChangeFrequencyStationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         if (model.device.isEmpty()) {
             Timber.d("Could not start ChangeFrequencyActivity. Device is null.")

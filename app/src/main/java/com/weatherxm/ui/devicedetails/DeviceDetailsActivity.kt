@@ -27,7 +27,6 @@ import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setColor
@@ -81,8 +80,6 @@ class DeviceDetailsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDeviceDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         val dialogOverlay = MaterialAlertDialogBuilder(this).create()
 

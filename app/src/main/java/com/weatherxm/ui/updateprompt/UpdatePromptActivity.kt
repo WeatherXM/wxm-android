@@ -1,14 +1,13 @@
 package com.weatherxm.ui.updateprompt
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.addCallback
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityUpdatePromptBinding
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setHtml
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -20,8 +19,6 @@ class UpdatePromptActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUpdatePromptBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -46,7 +43,7 @@ class UpdatePromptActivity : BaseActivity() {
 
         if (model.isUpdateMandatory()) {
             binding.toolbar.navigationIcon = null
-            binding.continueWithoutUpdatingBtn.visibility = View.GONE
+            binding.continueWithoutUpdatingBtn.setVisible(false)
         }
 
         binding.updateBtn.setOnClickListener {

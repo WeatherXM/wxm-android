@@ -15,7 +15,6 @@ import com.weatherxm.ui.common.Contracts.ARG_BOOST_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_DATE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.UIBoost
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.loadImage
@@ -43,8 +42,6 @@ class RewardBoostActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRewardBoostBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         val boostReward = intent?.extras?.parcelable<BoostReward>(ARG_BOOST_REWARD)
         val date = intent?.extras?.getString(ARG_DATE)

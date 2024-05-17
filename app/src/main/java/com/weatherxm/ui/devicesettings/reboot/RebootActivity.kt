@@ -14,13 +14,12 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityRebootStationBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicesettings.RebootState
 import com.weatherxm.ui.devicesettings.RebootStatus
-import com.weatherxm.ui.common.classSimpleName
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -53,8 +52,6 @@ class RebootActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRebootStationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         if (model.device.isEmpty()) {
             Timber.d("Could not start RebootActivity. Device is null.")

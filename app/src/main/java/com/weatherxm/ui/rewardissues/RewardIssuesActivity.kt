@@ -9,12 +9,11 @@ import com.weatherxm.databinding.ActivityRewardIssuesBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import timber.log.Timber
 
@@ -25,8 +24,6 @@ class RewardIssuesActivity : BaseActivity(), RewardIssuesListener {
         super.onCreate(savedInstanceState)
         binding = ActivityRewardIssuesBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         val reward = intent?.extras?.parcelable<RewardDetails>(ARG_REWARD_DETAILS)
         val device = intent?.extras?.parcelable<UIDevice>(ARG_DEVICE)

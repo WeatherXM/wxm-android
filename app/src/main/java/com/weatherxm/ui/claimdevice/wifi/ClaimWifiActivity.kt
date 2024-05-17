@@ -18,7 +18,6 @@ import com.weatherxm.ui.claimdevice.wifi.preparegateway.ClaimWifiPrepareGatewayF
 import com.weatherxm.ui.claimdevice.wifi.result.ClaimWifiResultFragment
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DeviceType
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
@@ -44,8 +43,6 @@ class ClaimWifiActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityClaimWifiDeviceBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         // The pager adapter, which provides the pages to the view pager widget.
         val pagerAdapter = ClaimDevicePagerAdapter(this, model.deviceType)

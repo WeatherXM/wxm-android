@@ -9,11 +9,10 @@ import com.weatherxm.databinding.ActivityDeviceAlertsBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.common.classSimpleName
 import timber.log.Timber
 
 class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
@@ -25,8 +24,6 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
         super.onCreate(savedInstanceState)
         binding = ActivityDeviceAlertsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         device = intent?.extras?.parcelable(ARG_DEVICE)
         if (device == null) {
