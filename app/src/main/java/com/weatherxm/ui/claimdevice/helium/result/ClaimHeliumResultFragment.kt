@@ -1,5 +1,6 @@
 package com.weatherxm.ui.claimdevice.helium.result
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -198,6 +199,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
         )
         model.disconnectFromPeripheral()
         navigator.showDeviceDetails(activity, device = device)
+        activity?.setResult(Activity.RESULT_OK)
         activity?.finish()
     }
 
