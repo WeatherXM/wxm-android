@@ -51,7 +51,11 @@ class NetworkStatsActivity : BaseActivity() {
         }
         binding.activeRecycler.adapter = activeAdapter
 
-        formatTokenInfo()
+        formatContractsLinks()
+
+        binding.lastRunCard.setOnClickListener {
+            // TODO: To be implemented
+        }
 
         binding.buyCard.setOnClickListener {
             navigator.openWebsite(this, getString(R.string.shop_url))
@@ -68,6 +72,18 @@ class NetworkStatsActivity : BaseActivity() {
         }
 
         setInfoButtonListeners()
+
+        model.onMainnet().observe(this) {
+            if (it.message.isNotEmpty()) {
+                binding.mainnetCard.message(it.message)
+            }
+            if (it.url.isNotEmpty()) {
+                binding.mainnetCard.listener {
+                    navigator.openWebsite(this, it.url)
+                }
+            }
+            binding.mainnetCard.setVisible(true)
+        }
 
         model.onNetworkStats().observe(this) {
             when (it.status) {
@@ -95,25 +111,30 @@ class NetworkStatsActivity : BaseActivity() {
             }
         }
 
+        model.fetchMainnetStatus()
         model.getNetworkStats()
     }
 
-    private fun formatTokenInfo() {
-        with(binding.tokenQuickInfo) {
+    private fun formatContractsLinks() {
+        with(binding.viewRewardsContractBtn) {
             movementMethod = BetterLinkMovementMethod.newInstance().apply {
                 setOnLinkClickListener { _, url ->
-                    analytics.trackEventSelectContent(
-                        Analytics.ParamValue.TOKENOMICS.paramValue,
-                        Pair(
-                            FirebaseAnalytics.Param.SOURCE,
-                            Analytics.ParamValue.NETWORK_STATS.paramValue
-                        )
-                    )
                     navigator.openWebsite(this@NetworkStatsActivity, url)
                     return@setOnLinkClickListener true
                 }
             }
-            setHtml(R.string.token_quick_info, getString(R.string.docs_url_tokenomics))
+            setHtml(R.string.view_token_contract, getString(R.string.rewards_contract_arbiscan))
+            removeLinksUnderline()
+        }
+
+        with(binding.viewTokenContractBtn) {
+            movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                setOnLinkClickListener { _, url ->
+                    navigator.openWebsite(this@NetworkStatsActivity, url)
+                    return@setOnLinkClickListener true
+                }
+            }
+            setHtml(R.string.view_rewards_contract, getString(R.string.token_contract_etherscan))
             removeLinksUnderline()
         }
     }
@@ -150,6 +171,14 @@ class NetworkStatsActivity : BaseActivity() {
                 R.string.average_monthly_rewards_explanation,
                 Analytics.ParamValue.BUY_STATION.paramValue
             )
+        }
+
+        binding.totalSupplyBtn.setOnClickListener {
+            // TODO: To be implemented
+        }
+
+        binding.circSupplyBtn.setOnClickListener {
+            // TODO: To be implemented
         }
 
         binding.totalInfoBtn.setOnClickListener {
@@ -218,10 +247,13 @@ class NetworkStatsActivity : BaseActivity() {
             earnWxmPerMonth.text = getString(R.string.earn_wxm, data.rewardsAvgMonthly)
 
             totalSupply.text = data.totalSupply
-            dailyMinted.text = "+${data.dailyMinted}"
             totals.text = data.totalStations
             claimed.text = data.claimedStations
             active.text = data.activeStations
+
+            // TODO: Implement these
+//            binding.circSupply.text = ""
+//            binding.circSupplyBar.values = listOf(0F, 50F)
 
             totalsAdapter.submitList(data.totalStationStats)
             claimedAdapter.submitList(data.claimedStationStats)

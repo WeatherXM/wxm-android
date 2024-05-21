@@ -14,6 +14,7 @@ interface AppConfigRepository {
     fun getInstallationId(): String?
     fun isMainnetEnabled(): Boolean
     fun getMainnetMessage(): String
+    fun getMainnetUrl(): String
 }
 
 class AppConfigRepositoryImpl(
@@ -61,5 +62,9 @@ class AppConfigRepositoryImpl(
 
     override fun getMainnetMessage(): String {
         return appConfigDataSource.getMainnetMessage()
+    }
+
+    override fun getMainnetUrl(): String {
+        return appConfigDataSource.getMainnetUrl()
     }
 }

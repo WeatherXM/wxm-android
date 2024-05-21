@@ -27,4 +27,6 @@
     <string name="share_station_url">https://explorer.weatherxm.com/stations/%s</string>
     <string name="weatherxm_claim_redirect_url">weatherxm://token-claim</string>
     <string name="mapbox_style">mapbox://styles/exmachina/ckrxjh01a5e7317plznjeicao</string>
+    <string name="token_contract_etherscan">https://etherscan.io/token/0xde654f497a563dd7a121c176a125dd2f11f13a83</string>
+    <string name="rewards_contract_arbiscan">https://arbiscan.io/address/0x3d5aA83d830398ad93fBAF98ee7079278b9DCD49</string>
 </resources>

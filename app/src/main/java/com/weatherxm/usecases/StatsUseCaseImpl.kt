@@ -6,7 +6,9 @@ import com.github.mikephil.charting.data.Entry
 import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkStatsStationDetails
 import com.weatherxm.data.NetworkStatsTimeseries
+import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.StatsRepository
+import com.weatherxm.ui.common.MainnetInfo
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.networkstats.NetworkStationStats
 import com.weatherxm.ui.networkstats.NetworkStats
@@ -19,6 +21,7 @@ import java.time.ZoneId
 
 class StatsUseCaseImpl(
     private val repository: StatsRepository,
+    private val appConfigRepository: AppConfigRepository,
     private val context: Context
 ) : StatsUseCase {
 
@@ -68,6 +71,17 @@ class StatsUseCaseImpl(
                 lastUpdated = "$lastUpdatedDate, $lastUpdatedTime"
             )
         }
+    }
+
+    override fun isMainnetEnabled(): Boolean {
+        return appConfigRepository.isMainnetEnabled()
+    }
+
+    override fun getMainnetInfo(): MainnetInfo {
+        return MainnetInfo(
+            appConfigRepository.getMainnetMessage(),
+            appConfigRepository.getMainnetUrl()
+        )
     }
 
     private fun getEntriesOfTimeseries(data: List<NetworkStatsTimeseries>?): List<Entry> {

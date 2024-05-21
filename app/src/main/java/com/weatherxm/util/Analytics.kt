@@ -187,7 +187,6 @@ class Analytics(
         SEARCH("search"),
         LOCATION("location"),
         STATION("station"),
-        TOKENOMICS("Tokenomics"),
         NETWORK_STATS("network_stats"),
         DEVICE_DETAILS_FOLLOW("Device Details Follow"),
         DEVICE_DETAILS_SHARE("Device Details Share"),

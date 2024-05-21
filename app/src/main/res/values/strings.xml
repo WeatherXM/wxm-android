@@ -79,9 +79,10 @@
     <string name="earn_prompt">Join the weather revolution</string>
     <string name="earn_wxm">Earn %s $WXM/mo</string>
     <string name="wxm_token">$WXM Token</string>
-    <string name="token_quick_info"><![CDATA[Deployed on Arbitrum - <a href="%1$s">Read more here</a>]]></string>
+    <string name="view_token_contract"><![CDATA[<a href="%1$s">View token contract on Etherscan</a>]]></string>
+    <string name="view_rewards_contract"><![CDATA[<a href="%1$s">View rewards contract on Arbiscan</a>]]></string>
     <string name="total_supply">Total Supply</string>
-    <string name="daily_minted">Daily Minted</string>
+    <string name="circulating_supply">Circulating Supply</string>
     <string name="manufacturer_title">Are you a station manufacturer?</string>
     <string name="manufacturer_prompt">Join the ecosystem</string>
     <string name="last_updated">Last Updated on %s</string>
