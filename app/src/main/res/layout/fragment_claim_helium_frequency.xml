@@ -1,143 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/alternativeBackground">
 
-    <com.google.android.material.card.MaterialCardView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/margin_normal"
-        app:contentPadding="0dp">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/toggleButtonsContainer"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipChildren="false"
-            android:clipToPadding="false">
+            android:layout_height="wrap_content"
+            app:layout_constraintVertical_chainStyle="packed">
 
-            <androidx.core.widget.NestedScrollView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:paddingHorizontal="@dimen/padding_large"
-                android:paddingTop="@dimen/padding_large"
-                app:layout_constraintBottom_toTopOf="@id/toggleButtonsContainer"
-                app:layout_constraintTop_toTopOf="parent">
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/set_frequency"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintVertical_chainStyle="packed">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/set_frequency"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:text="@string/set_frequency_desc"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                        app:layout_constraintTop_toBottomOf="@id/title" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/frequencyTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_normal"
-                        android:text="@string/frequency"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@id/description" />
-
-                    <Spinner
-                        android:id="@+id/frequenciesSelector"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="@dimen/padding_large"
-                        app:layout_constraintTop_toBottomOf="@id/frequencyTitle" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/frequencySelectedText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:text="@string/frequency_selected_text"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                        app:layout_constraintTop_toBottomOf="@id/frequenciesSelector" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.core.widget.NestedScrollView>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/toggleButtonsContainer"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/colorSurface"
-                android:elevation="@dimen/elevation_normal"
-                android:padding="@dimen/padding_large"
-                app:layout_constraintBottom_toBottomOf="parent">
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/set_frequency_desc"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                app:layout_constraintTop_toBottomOf="@id/title" />
 
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/confirmFrequencyToggle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="top"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/frequencyTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:text="@string/frequency"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/description" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/confirmFrequencyText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_normal"
-                    android:text="@string/set_frequency_toggle_desc"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/confirmFrequencyToggle"
-                    app:layout_constraintTop_toTopOf="@id/confirmFrequencyToggle" />
+            <Spinner
+                android:id="@+id/frequenciesSelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="@dimen/padding_large"
+                app:layout_constraintTop_toBottomOf="@id/frequencyTitle" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_normal"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:weightSum="2"
-                    app:layout_constraintTop_toBottomOf="@id/confirmFrequencyText">
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/frequencySelectedText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@string/frequency_selected_text"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                app:layout_constraintTop_toBottomOf="@id/frequenciesSelector" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/backButton"
-                        style="@style/Widget.WeatherXM.Button.Subtle.Borders"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/margin_normal"
-                        android:layout_weight="1"
-                        android:text="@string/action_back"
-                        android:textAllCaps="false"
-                        app:layout_constraintBottom_toBottomOf="parent" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/setAndClaimButton"
-                        style="@style/Widget.WeatherXM.Button"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:enabled="false"
-                        android:text="@string/set_and_claim"
-                        android:textAllCaps="false"
-                        app:layout_constraintBottom_toBottomOf="parent" />
-                </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toggleButtonsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/elevation_normal"
+        android:paddingTop="@dimen/padding_large"
+        android:paddingBottom="@dimen/padding_large"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/confirmFrequencyToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/confirmFrequencyText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:text="@string/set_frequency_toggle_desc"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/confirmFrequencyToggle"
+            app:layout_constraintTop_toTopOf="@id/confirmFrequencyToggle" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintTop_toBottomOf="@id/confirmFrequencyText">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/backButton"
+                style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_normal"
+                android:layout_weight="1"
+                android:text="@string/action_back"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/setAndClaimButton"
+                style="@style/Widget.WeatherXM.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:enabled="false"
+                android:text="@string/set_and_claim"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
