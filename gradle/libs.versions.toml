@@ -14,9 +14,7 @@ androidx-fragment-ktx = "1.7.1"
 androidx-compose-material3 = "1.2.1"
 androidx-foundation = "1.6.7"
 androidx-room-runtime = "2.6.1"
-androidx-recyclerview-selection = "1.1.0"
 androidx-preference-ktx = "1.2.1"
-androidx-paging-runtime-ktx = "3.3.0"
 androidx-rules = "1.5.0"
 androidx-runner = "1.5.2"
 androidx-work-runtime-ktx = "2.9.0"
@@ -85,9 +83,7 @@ androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "a
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room-runtime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room-runtime" }
-androidx-recyclerview-selection = { module = "androidx.recyclerview:recyclerview-selection", version.ref = "androidx-recyclerview-selection" }
 androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "androidx-preference-ktx" }
-androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "androidx-paging-runtime-ktx" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidx-navigation-fragment-ktx" }
 androidx-rules = { module = "androidx.test:rules", version.ref = "androidx-rules" }
 androidx-runner = { module = "androidx.test:runner", version.ref = "androidx-runner" }
