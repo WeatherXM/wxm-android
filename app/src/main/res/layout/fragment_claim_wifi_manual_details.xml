@@ -81,6 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
+                app:boxBackgroundColor="@color/alternativeBackground"
                 app:helperTextEnabled="true"
                 app:hintEnabled="false"
                 app:layout_constraintTop_toBottomOf="@id/claimingKeyTitle"
@@ -116,6 +117,7 @@
                 style="@style/Widget.WeatherXM.TextInputEditText.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:boxBackgroundColor="@color/alternativeBackground"
                 app:helperTextEnabled="true"
                 app:hintEnabled="false"
                 app:layout_constraintTop_toBottomOf="@id/serialNumberTitle">
@@ -141,7 +143,6 @@
         android:id="@+id/button_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorSurface"
         android:elevation="@dimen/elevation_normal"
         android:paddingTop="@dimen/padding_large"
         android:paddingBottom="@dimen/padding_large"

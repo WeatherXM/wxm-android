@@ -391,21 +391,22 @@
     <string name="d1_wifi">D1 | WiFi</string>
 
     <!-- Claim device -->
-    <string name="location_of_installation">Location of Installation</string>
+    <string name="confirm_station_location">Confirm station location</string>
+    <string name="confirm_station_location_desc">You need to confirm the station’s exact deployment location.</string>
     <string name="search_location">Search for location</string>
-    <string name="installation_toggle_unchecked">Not yet, will install at a later time!</string>
-    <string name="need_help_installation"><![CDATA[Need help with proper weather station installation?<br><b><a href="%1$s">View our installation guide</a></b>]]></string>
-    <string name="installation_location_warning_text">Your device will be claimed, but until you properly install it, it will not get any $WXM rewards.\n\nOnce you do so, you can enable your device by switching the toggle to “Installed and ready!” on your device details screen.</string>
     <string name="confirm_and_proceed">Confirm and Proceed</string>
     <string name="action_view_station">View Station</string>
+    <string name="action_go_to">Go to Station</string>
     <string name="action_quit_claiming">Quit Claiming</string>
+    <string name="action_cancel_claiming">Cancel Claiming</string>
     <string name="action_retry_claiming">Retry Claiming</string>
-    <string name="confirm_location_description">I acknowledge that the deployment location above is correct and can be used to verify the eligibility of the station’s rewards.</string>
+    <string name="confirm_location_description">I acknowledge that the deployment location above is correct and will be used to verify the eligibility of the station’s rewards.</string>
     <string name="set_and_claim">Set and Claim</string>
     <string name="station_claimed">Station Claimed</string>
     <string name="claiming_station">Claiming Station…</string>
     <string name="claiming_station_helium_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to the Helium\'s network bandwidth limitations!<b>]]></string>
-    <string name="success_claim_device"><![CDATA[Your station is claimed under your account:<br><b>%s</b>]]></string>
+    <string name="claiming_station_m5_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM gateway! <b>This process could take up to 2 minutes!<b>]]></string>
+    <string name="success_claim_device"><![CDATA[Your station is claimed under your account!<br><b>%s</b>]]></string>
     <string name="ble_connection_lost">Connection Failed</string>
     <string name="ble_connection_lost_desc"><![CDATA[Something went wrong with the connection. Make sure you are <b>near your weather station</b> and retry claiming. If connection still fails, please <b>unpair the station and restart the claiming process</b>. For more details check our <a href="%1$s">troubleshooting guide</a>.<br><br>Alternatively, you can contact our support.]]></string>
     <string name="setting_station_frequency">Setting Station Frequency</string>

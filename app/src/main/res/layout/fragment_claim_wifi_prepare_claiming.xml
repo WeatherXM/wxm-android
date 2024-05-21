@@ -104,7 +104,6 @@
         android:id="@+id/button_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorSurface"
         android:elevation="@dimen/elevation_normal"
         android:paddingTop="@dimen/padding_large"
         android:paddingBottom="@dimen/padding_large"
