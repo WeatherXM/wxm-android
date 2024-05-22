@@ -443,15 +443,15 @@
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
 
-                                <ImageButton
+                                <ImageView
                                     android:id="@+id/lastRunBtn"
-                                    style="@style/Widget.WeatherXM.ImageButton"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
+                                    android:layout_width="12dp"
+                                    android:layout_height="12dp"
                                     android:src="@drawable/ic_open_new"
                                     app:layout_constraintBottom_toBottomOf="@id/rewardsLastDayTitle"
                                     app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintTop_toTopOf="@id/rewardsLastDayTitle" />
+                                    app:layout_constraintTop_toTopOf="@id/rewardsLastDayTitle"
+                                    app:tint="@color/colorOnSurface" />
 
                                 <com.google.android.material.textview.MaterialTextView
                                     android:id="@+id/rewardsLastDay"
@@ -704,10 +704,9 @@
                                     android:layout_marginHorizontal="@dimen/margin_extra_small"
                                     android:enabled="false"
                                     android:valueFrom="0"
-                                    android:valueTo="100"
                                     app:layout_constraintTop_toBottomOf="@id/circSupply"
                                     app:trackHeight="4dp"
-                                    app:values="@array/network_stats_circ_supply_default_values" />
+                                    tools:values="@array/network_stats_circ_supply_default_values" />
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
                         </com.google.android.material.card.MaterialCardView>

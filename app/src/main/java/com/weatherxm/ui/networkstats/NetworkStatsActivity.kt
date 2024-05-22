@@ -13,6 +13,7 @@ import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Analytics
+import com.weatherxm.util.NumberUtils.compactNumber
 import com.weatherxm.util.initializeNetworkStatsChart
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -54,11 +55,18 @@ class NetworkStatsActivity : BaseActivity() {
         formatContractsLinks()
 
         binding.lastRunCard.setOnClickListener {
-            analytics.trackEventSelectContent(
-                Analytics.ParamValue.NETWORK_STATS.paramValue,
-                Pair(FirebaseAnalytics.Param.SOURCE, Analytics.ParamValue.LAST_RUN_HASH.paramValue)
-            )
-            // TODO: To be implemented
+            model.onNetworkStats().value?.data?.let {
+                analytics.trackEventSelectContent(
+                    Analytics.ParamValue.NETWORK_STATS.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.SOURCE,
+                        Analytics.ParamValue.LAST_RUN_HASH.paramValue
+                    )
+                )
+                navigator.openWebsite(
+                    this, getString(R.string.arbiscan_tx_explorer, it.lastTxHash)
+                )
+            }
         }
 
         binding.buyCard.setOnClickListener {
@@ -272,14 +280,19 @@ class NetworkStatsActivity : BaseActivity() {
 
             earnWxmPerMonth.text = getString(R.string.earn_wxm, data.rewardsAvgMonthly)
 
-            totalSupply.text = data.totalSupply
+            totalSupply.text = compactNumber(data.totalSupply)
+            binding.circSupply.text = compactNumber(data.circulatingSupply)
+            if (data.totalSupply != null && data.circulatingSupply != null
+                && data.totalSupply >= data.circulatingSupply
+            ) {
+                binding.circSupplyBar.valueTo = data.totalSupply.toFloat()
+                binding.circSupplyBar.values = listOf(data.circulatingSupply.toFloat())
+            } else {
+                binding.circSupplyBar.setVisible(false)
+            }
             totals.text = data.totalStations
             claimed.text = data.claimedStations
             active.text = data.activeStations
-
-            // TODO: Implement these
-//            binding.circSupply.text = ""
-//            binding.circSupplyBar.values = listOf(0F, 50F)
 
             totalsAdapter.submitList(data.totalStationStats)
             claimedAdapter.submitList(data.claimedStationStats)

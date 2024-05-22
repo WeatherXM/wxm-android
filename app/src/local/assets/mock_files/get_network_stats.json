@@ -65,6 +65,8 @@
     "tokens": {
         "total_supply": 100000000,
         "daily_minted": 35434,
+        "circulating_supply": 35000000,
+        "last_tx_hash": "0x5ef71fcc5cea02a4489e4c1720dc39f9f49148d430a9c71485746b11b40730b3",
         "allocated_per_day": [
             {
                 "ts": "2023-05-13T09:31:33.619Z",

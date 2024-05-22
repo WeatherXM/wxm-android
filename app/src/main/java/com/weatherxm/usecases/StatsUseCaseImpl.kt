@@ -60,8 +60,9 @@ class StatsUseCaseImpl(
                     } ?: String.empty()
                 },
                 rewardsAvgMonthly = formatNumber(stats.tokens?.avgMonthly),
-                totalSupply = compactNumber(stats.tokens?.totalSupply),
-                dailyMinted = compactNumber(stats.tokens?.dailyMinted),
+                totalSupply = stats.tokens?.totalSupply,
+                circulatingSupply = stats.tokens?.circSupply,
+                lastTxHash = stats.tokens?.lastTxHash ?: String.empty(),
                 totalStations = formatNumber(stats.weatherStations.onboarded?.total),
                 totalStationStats = createStationStats(stats.weatherStations.onboarded?.details),
                 claimedStations = formatNumber(stats.weatherStations.claimed?.total),
