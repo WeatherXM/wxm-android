@@ -192,11 +192,19 @@ class NetworkStatsActivity : BaseActivity() {
         }
 
         binding.totalSupplyBtn.setOnClickListener {
-            // TODO: To be implemented
+            openMessageDialog(
+                R.string.total_supply,
+                R.string.total_supply_explanation,
+                Analytics.ParamValue.TOTAL_SUPPLY.paramValue
+            )
         }
 
         binding.circSupplyBtn.setOnClickListener {
-            // TODO: To be implemented
+            openMessageDialog(
+                R.string.circulating_supply,
+                R.string.circulating_supply_explanation,
+                Analytics.ParamValue.CIRCULATING_SUPPLY.paramValue
+            )
         }
 
         binding.totalInfoBtn.setOnClickListener {

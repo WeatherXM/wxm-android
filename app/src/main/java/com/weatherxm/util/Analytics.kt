@@ -239,7 +239,9 @@ class Analytics(
         NETWORK_STATS("Network Stats"),
         TOKEN_CONTRACT("token_contract"),
         REWARD_CONTRACT("reward_contract"),
-        LAST_RUN_HASH("last_run_hash")
+        LAST_RUN_HASH("last_run_hash"),
+        TOTAL_SUPPLY("total_supply"),
+        CIRCULATING_SUPPLY("circulating_supply")
     }
 
     // Custom Param Names
