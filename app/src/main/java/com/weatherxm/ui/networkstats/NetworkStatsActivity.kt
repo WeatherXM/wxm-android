@@ -55,18 +55,7 @@ class NetworkStatsActivity : BaseActivity() {
         formatContractsLinks()
 
         binding.lastRunCard.setOnClickListener {
-            model.onNetworkStats().value?.data?.let {
-                analytics.trackEventSelectContent(
-                    Analytics.ParamValue.NETWORK_STATS.paramValue,
-                    Pair(
-                        FirebaseAnalytics.Param.SOURCE,
-                        Analytics.ParamValue.LAST_RUN_HASH.paramValue
-                    )
-                )
-                navigator.openWebsite(
-                    this, getString(R.string.arbiscan_tx_explorer, it.lastTxHash)
-                )
-            }
+            onLastRunClicked()
         }
 
         binding.buyCard.setOnClickListener {
@@ -125,6 +114,21 @@ class NetworkStatsActivity : BaseActivity() {
 
         model.fetchMainnetStatus()
         model.getNetworkStats()
+    }
+
+    private fun onLastRunClicked() {
+        model.onNetworkStats().value?.data?.let {
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.NETWORK_STATS.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.SOURCE,
+                    Analytics.ParamValue.LAST_RUN_HASH.paramValue
+                )
+            )
+            navigator.openWebsite(
+                this, getString(R.string.arbiscan_tx_explorer, it.lastTxHash)
+            )
+        }
     }
 
     private fun formatContractsLinks() {
