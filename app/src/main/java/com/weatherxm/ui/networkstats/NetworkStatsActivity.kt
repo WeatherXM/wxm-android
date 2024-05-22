@@ -54,6 +54,10 @@ class NetworkStatsActivity : BaseActivity() {
         formatContractsLinks()
 
         binding.lastRunCard.setOnClickListener {
+            analytics.trackEventSelectContent(
+                Analytics.ParamValue.NETWORK_STATS.paramValue,
+                Pair(FirebaseAnalytics.Param.SOURCE, Analytics.ParamValue.LAST_RUN_HASH.paramValue)
+            )
             // TODO: To be implemented
         }
 
@@ -119,6 +123,13 @@ class NetworkStatsActivity : BaseActivity() {
         with(binding.viewRewardsContractBtn) {
             movementMethod = BetterLinkMovementMethod.newInstance().apply {
                 setOnLinkClickListener { _, url ->
+                    analytics.trackEventSelectContent(
+                        Analytics.ParamValue.NETWORK_STATS.paramValue,
+                        Pair(
+                            FirebaseAnalytics.Param.SOURCE,
+                            Analytics.ParamValue.TOKEN_CONTRACT.paramValue
+                        )
+                    )
                     navigator.openWebsite(this@NetworkStatsActivity, url)
                     return@setOnLinkClickListener true
                 }
@@ -130,6 +141,13 @@ class NetworkStatsActivity : BaseActivity() {
         with(binding.viewTokenContractBtn) {
             movementMethod = BetterLinkMovementMethod.newInstance().apply {
                 setOnLinkClickListener { _, url ->
+                    analytics.trackEventSelectContent(
+                        Analytics.ParamValue.NETWORK_STATS.paramValue,
+                        Pair(
+                            FirebaseAnalytics.Param.SOURCE,
+                            Analytics.ParamValue.REWARD_CONTRACT.paramValue
+                        )
+                    )
                     navigator.openWebsite(this@NetworkStatsActivity, url)
                     return@setOnLinkClickListener true
                 }
