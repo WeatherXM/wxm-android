@@ -4,23 +4,15 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/alternativeBackground"
     android:paddingBottom="@dimen/padding_normal">
 
-    <com.google.android.material.card.MaterialCardView
+    <com.weatherxm.ui.components.BleActionFlowView
+        android:id="@+id/bleActionFlow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:contentPadding="0dp">
-
-        <com.weatherxm.ui.components.BleActionFlowView
-            android:id="@+id/bleActionFlow"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/margin_normal"
-            app:ble_action_flow_first_step="@string/setting_station_frequency"
-            app:ble_action_flow_second_step="@string/rebooting_station"
-            app:ble_action_flow_third_step="@string/claiming_station_step"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
-
-    </com.google.android.material.card.MaterialCardView>
+        app:ble_action_flow_first_step="@string/setting_station_frequency"
+        app:ble_action_flow_second_step="@string/rebooting_station"
+        app:ble_action_flow_third_step="@string/claiming_station_step" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

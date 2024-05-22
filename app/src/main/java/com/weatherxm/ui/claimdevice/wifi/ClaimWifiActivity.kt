@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.databinding.ActivityClaimWifiDeviceBinding
+import com.weatherxm.databinding.ActivityClaimDeviceBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_COUNT
@@ -33,7 +33,7 @@ class ClaimWifiActivity : BaseActivity() {
         const val CLAIMING_KEY = "claiming_key"
     }
 
-    private lateinit var binding: ActivityClaimWifiDeviceBinding
+    private lateinit var binding: ActivityClaimDeviceBinding
     private val model: ClaimWifiViewModel by viewModel {
         parametersOf(intent.parcelable<DeviceType>(Contracts.ARG_DEVICE_TYPE))
     }
@@ -41,7 +41,7 @@ class ClaimWifiActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityClaimWifiDeviceBinding.inflate(layoutInflater)
+        binding = ActivityClaimDeviceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // The pager adapter, which provides the pages to the view pager widget.

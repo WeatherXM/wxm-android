@@ -5,8 +5,9 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
+import com.weatherxm.databinding.ActivityClaimDeviceBinding
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_COUNT
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyFragment
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyViewModel
@@ -37,11 +38,11 @@ class ClaimHeliumActivity : BaseActivity() {
     private val frequencyModel: ClaimHeliumFrequencyViewModel by viewModel()
     private val resultModel: ClaimHeliumResultViewModel by viewModel()
     private val pairModel: ClaimHeliumPairViewModel by viewModel()
-    private lateinit var binding: ActivityClaimHeliumDeviceBinding
+    private lateinit var binding: ActivityClaimDeviceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityClaimHeliumDeviceBinding.inflate(layoutInflater)
+        binding = ActivityClaimDeviceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // The pager adapter, which provides the pages to the view pager widget.
@@ -54,6 +55,7 @@ class ClaimHeliumActivity : BaseActivity() {
             finishClaiming()
         }
 
+        binding.toolbar.title = getString(R.string.title_claim_ws2000_device)
         binding.toolbar.setNavigationOnClickListener {
             finishClaiming()
         }

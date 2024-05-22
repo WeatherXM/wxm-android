@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
-import com.google.android.material.button.MaterialButton
-import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
@@ -20,9 +18,7 @@ import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.SearchResultsAdapter
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
-import com.weatherxm.ui.components.AddressSearchView
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.EditLocationListener
 import com.weatherxm.ui.components.EditLocationMapFragment
@@ -71,29 +67,11 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
 
         getMapFragment().setListener(this)
 
-        /**
-         * Temp work-around until the design for Helium gets updated.
-         */
-        val confirmButton: MaterialButton
-        val confirmLocationToggle: MaterialSwitch
-        val addressSearchView: AddressSearchView
-        if (model.getDeviceType() == DeviceType.HELIUM) {
-            confirmButton = binding.confirm
-            confirmLocationToggle = binding.confirmLocationToggle
-            addressSearchView = binding.addressSearchView
-        } else {
-            binding.heliumRoot.setVisible(false)
-            binding.wifiRoot.setVisible(true)
-            confirmButton = binding.wifiConfirm
-            confirmLocationToggle = binding.wifiConfirmLocationToggle
-            addressSearchView = binding.wifiAddressSearchView
+        binding.confirmLocationToggle.setOnCheckedChangeListener { _, checked ->
+            binding.confirm.isEnabled = checked
         }
 
-        confirmLocationToggle.setOnCheckedChangeListener { _, checked ->
-            confirmButton.isEnabled = checked
-        }
-
-        confirmButton.setOnClickListener {
+        binding.confirm.setOnClickListener {
             val markerLocation = getMapFragment().getMarkerLocation()
             if (!model.validateLocation(markerLocation.lat, markerLocation.lon)) {
                 activity?.toast(R.string.invalid_location)
@@ -119,7 +97,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             )
         }
 
-        addressSearchView.setAdapter(adapter,
+        binding.addressSearchView.setAdapter(adapter,
             onTextChanged = { model.geocoding(it) },
             onMyLocationClicked = {
                 requestLocationPermissions(activity) {
@@ -130,11 +108,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
     }
 
     private fun getMapFragment(): EditLocationMapFragment {
-        return if (model.getDeviceType() == DeviceType.HELIUM) {
-            binding.mapView.getFragment()
-        } else {
-            binding.wifiMapView.getFragment()
-        }
+        return binding.mapView.getFragment()
     }
 
     @SuppressLint("MissingPermission")
@@ -154,7 +128,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
         val addressSearchView = if (model.getDeviceType() == DeviceType.HELIUM) {
             binding.addressSearchView
         } else {
-            binding.wifiAddressSearchView
+            binding.addressSearchView
         }
         model.onSearchResults().observe(viewLifecycleOwner) {
             if (it == null) {
