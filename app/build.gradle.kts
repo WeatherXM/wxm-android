@@ -11,13 +11,16 @@ plugins {
 }
 
 fun getVersionGitTags(printForDebugging: Boolean = false): List<String> {
+    if (printForDebugging) {
+        println("Filter and print ordered release tags")
+    }
     val versionTagsWithOptionalRCRegex = Regex("[RC-]*[0-9]*_*[0-9]+[.][0-9]+[.][0-9]+")
     return grgit.tag.list().filter {
         it.name.matches(versionTagsWithOptionalRCRegex)
     }.sortedBy {
         it.dateTime
     }.map {
-        if(printForDebugging) {
+        if (printForDebugging) {
             println("${it.name} --- (${it.dateTime})")
         }
         it.name
@@ -25,8 +28,7 @@ fun getVersionGitTags(printForDebugging: Boolean = false): List<String> {
 }
 
 fun getLastVersionGitTag(): String {
-    println("Filter and print ordered release tags")
-    var lastVersionTag = getVersionGitTags(true).last()
+    var lastVersionTag = getVersionGitTags(printForDebugging = true).last()
     if (lastVersionTag.startsWith("RC")) {
         lastVersionTag = lastVersionTag.substringAfterLast("_")
     }

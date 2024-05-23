@@ -31,6 +31,8 @@ jobs:
                 uses: actions/checkout@v2
                 with:
                     fetch-depth: 0
+            -   name: Re-fetch all tags # WA: https://github.com/actions/checkout/issues/882
+                run: git fetch --tags --force origin
             -   name: Gradle package cache
                 uses: actions/cache@v2
                 with:
