@@ -17,7 +17,9 @@ fun getVersionGitTags(printForDebugging: Boolean = false): List<String> {
     }.sortedBy {
         it.dateTime
     }.map {
-        if(printForDebugging) println(it.name)
+        if(printForDebugging) {
+            println("${it.name} --- (${it.dateTime})")
+        }
         it.name
     }
 }
