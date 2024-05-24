@@ -242,7 +242,7 @@ class NetworkStatsActivity : BaseActivity() {
                     setVisible(true)
                 }
             }
-            data.latestTxHashUrl?.let { txUrl ->
+            data.lastTxHashUrl?.let { txUrl ->
                 binding.lastRunCard.setOnClickListener {
                     analytics.trackEventSelectContent(
                         Analytics.ParamValue.NETWORK_STATS.paramValue,

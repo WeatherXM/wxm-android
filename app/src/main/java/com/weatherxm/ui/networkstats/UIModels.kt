@@ -22,7 +22,7 @@ data class NetworkStats(
     val rewardsAvgMonthly: String,
     val totalSupply: Int?,
     val circulatingSupply: Int?,
-    val latestTxHashUrl: String?,
+    val lastTxHashUrl: String?,
     val tokenUrl: String?,
     val rewardsUrl: String?,
     val totalStations: String,

@@ -18,7 +18,6 @@ import com.weatherxm.util.NumberUtils.compactNumber
 import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.Weather.EMPTY_VALUE
 import java.time.ZoneId
-import java.time.ZonedDateTime
 
 class StatsUseCaseImpl(
     private val repository: StatsRepository,
@@ -44,7 +43,9 @@ class StatsUseCaseImpl(
                 dataDaysStartDate = stats.dataDays?.first()?.ts.getFormattedDate(),
                 dataDaysEndDate = stats.dataDays?.last()?.ts.getFormattedDate(),
                 totalRewards = compactNumber(stats.tokens?.totalAllocated),
-                totalRewards30D = getTotalRewards30D(stats.tokens?.allocatedPerDay),
+                totalRewards30D = getTotalRewards30D(
+                    stats.tokens?.allocatedPerDay ?: mutableListOf()
+                ),
                 lastRewards = getValidLastOfEntries(rewardEntries),
                 rewardsEntries = rewardEntries,
                 rewardsStartDate = stats.tokens?.allocatedPerDay?.first()?.ts.getFormattedDate(),
@@ -60,7 +61,7 @@ class StatsUseCaseImpl(
                 rewardsAvgMonthly = formatNumber(stats.tokens?.avgMonthly),
                 totalSupply = stats.tokens?.totalSupply,
                 circulatingSupply = stats.tokens?.circSupply,
-                latestTxHashUrl = stats.tokens?.latestTxHashUrl,
+                lastTxHashUrl = stats.tokens?.lastTxHashUrl,
                 tokenUrl = stats.contracts?.tokenUrl,
                 rewardsUrl = stats.contracts?.rewardsUrl,
                 totalStations = formatNumber(stats.weatherStations.onboarded?.total),
@@ -85,18 +86,21 @@ class StatsUseCaseImpl(
         )
     }
 
-    private fun getTotalRewards30D(data: List<NetworkStatsTimeseries>?): String {
-        val zoned30DaysAgo = ZonedDateTime.now().minusDays(30)
-        val tokensAllocatedLast30D = data?.filter {
-            it.ts?.isAfter(zoned30DaysAgo) == true && it.value != null && it.value >= 0
-        }?.map {
-            it.value ?: 0.0
-        } ?: mutableListOf()
-
-        return if (tokensAllocatedLast30D.size >= 2) {
-            compactNumber(tokensAllocatedLast30D.last() - tokensAllocatedLast30D.first())
+    private fun getTotalRewards30D(data: List<NetworkStatsTimeseries>): String {
+        /**
+         * Due to the fact that `allocatedPerDay` (data) is an incremental value
+         * which every day is bigger than the previous one,
+         * we need to either the last value if we have <30 days of data
+         * or get the difference of the last - first value if we have >= 30 days of data.
+         */
+        return if (data.size >= 30) {
+            compactNumber(
+                (data.last().value ?: 0.0) - (data.first().value ?: 0.0)
+            )
+        } else if (data.isNotEmpty()) {
+            compactNumber(data.last().value)
         } else {
-            compactNumber(tokensAllocatedLast30D.last())
+            EMPTY_VALUE
         }
     }
 

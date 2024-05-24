@@ -392,8 +392,8 @@ data class NetworkStatsTokens(
     val avgMonthly: Double?,
     @Json(name = "circulating_supply")
     val circSupply: Int?,
-    @Json(name = "latest_tx_hash_url")
-    val latestTxHashUrl: String?
+    @Json(name = "last_tx_hash_url")
+    val lastTxHashUrl: String?
 ) : Parcelable
 
 @Keep
