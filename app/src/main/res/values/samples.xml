@@ -12,7 +12,6 @@
         <item>0</item>
         <item>70</item>
     </array>
-    <string name="claim_device_serial_number_placeholder" />
     <array name="network_stats_circ_supply_default_values">
         <item>0</item>
         <item>50</item>

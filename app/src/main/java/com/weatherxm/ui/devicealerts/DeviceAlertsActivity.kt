@@ -3,16 +3,16 @@ package com.weatherxm.ui.devicealerts
 import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityDeviceAlertsBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
 import timber.log.Timber
 
 class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
@@ -24,8 +24,6 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
         super.onCreate(savedInstanceState)
         binding = ActivityDeviceAlertsBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         device = intent?.extras?.parcelable(ARG_DEVICE)
         if (device == null) {
@@ -47,9 +45,9 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
 
         if (device?.alerts?.firstOrNull { it.alert == DeviceAlertType.NEEDS_UPDATE } != null) {
             analytics.trackEventPrompt(
-                Analytics.ParamValue.OTA_AVAILABLE.paramValue,
-                Analytics.ParamValue.WARN.paramValue,
-                Analytics.ParamValue.VIEW.paramValue
+                AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+                AnalyticsService.ParamValue.WARN.paramValue,
+                AnalyticsService.ParamValue.VIEW.paramValue
             )
         }
         adapter.submitList(device?.alerts)
@@ -57,21 +55,21 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DEVICE_ALERTS, this::class.simpleName)
+        analytics.trackScreen(AnalyticsService.Screen.DEVICE_ALERTS, classSimpleName())
     }
 
     override fun onUpdateStationClicked() {
         analytics.trackEventPrompt(
-            Analytics.ParamValue.OTA_AVAILABLE.paramValue,
-            Analytics.ParamValue.WARN.paramValue,
-            Analytics.ParamValue.ACTION.paramValue
+            AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+            AnalyticsService.ParamValue.WARN.paramValue,
+            AnalyticsService.ParamValue.ACTION.paramValue
         )
         navigator.showDeviceHeliumOTA(this, device, false)
         finish()
     }
 
     override fun onContactSupportClicked() {
-        navigator.openSupportCenter(this, Analytics.ParamValue.STATION_OFFLINE.paramValue)
+        navigator.openSupportCenter(this, AnalyticsService.ParamValue.STATION_OFFLINE.paramValue)
         finish()
     }
 
@@ -83,7 +81,7 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
         }
         navigator.openWebsite(this, url)
         analytics.trackEventSelectContent(
-            Analytics.ParamValue.WEB_DOCUMENTATION.paramValue,
+            AnalyticsService.ParamValue.WEB_DOCUMENTATION.paramValue,
             Pair(FirebaseAnalytics.Param.ITEM_ID, url)
         )
     }

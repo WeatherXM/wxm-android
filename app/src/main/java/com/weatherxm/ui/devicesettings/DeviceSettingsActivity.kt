@@ -5,23 +5,23 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import coil.ImageLoader
-import coil.request.ImageRequest
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityDeviceSettingsBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.applyOnGlobalLayout
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.MapboxUtils.getMinimap
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -51,8 +51,6 @@ class DeviceSettingsActivity : BaseActivity() {
         binding = ActivityDeviceSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.root.applyInsets()
-
         if (model.device.isEmpty()) {
             Timber.d("Could not start DeviceSettingsActivity. Device is null.")
             toast(R.string.error_generic_message)
@@ -63,9 +61,9 @@ class DeviceSettingsActivity : BaseActivity() {
         adapter = DeviceInfoAdapter {
             if (it == ActionType.UPDATE_FIRMWARE) {
                 analytics.trackEventPrompt(
-                    Analytics.ParamValue.OTA_AVAILABLE.paramValue,
-                    Analytics.ParamValue.WARN.paramValue,
-                    Analytics.ParamValue.ACTION.paramValue
+                    AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+                    AnalyticsService.ParamValue.WARN.paramValue,
+                    AnalyticsService.ParamValue.ACTION.paramValue
                 )
                 navigator.showDeviceHeliumOTA(this, model.device, false)
                 finish()
@@ -118,7 +116,7 @@ class DeviceSettingsActivity : BaseActivity() {
         }
 
         binding.contactSupportBtn.setOnClickListener {
-            navigator.openSupportCenter(this, Analytics.ParamValue.DEVICE_INFO.paramValue)
+            navigator.openSupportCenter(this, AnalyticsService.ParamValue.DEVICE_INFO.paramValue)
         }
 
         if (model.device.relation == DeviceRelation.FOLLOWED) {
@@ -161,20 +159,13 @@ class DeviceSettingsActivity : BaseActivity() {
             null
         }
         getMinimap(binding.locationLayout.width, deviceMapLocation, model.device.hex7)?.let {
-            imageLoader.enqueue(
-                ImageRequest.Builder(this).data(it).target(binding.locationMinimap).build()
-            )
-        } ?: binding.locationMinimap.setVisible(false)
-        getMinimap(binding.locationLayout.width, deviceMapLocation, model.device.hex7)?.let {
-            imageLoader.enqueue(
-                ImageRequest.Builder(this).data(it).target(binding.locationMinimap).build()
-            )
+            binding.locationMinimap.loadImage(imageLoader, it)
         } ?: binding.locationMinimap.setVisible(false)
     }
 
     private fun onRemoveStation() {
         analytics.trackEventSelectContent(
-            Analytics.ParamValue.REMOVE_DEVICE.paramValue,
+            AnalyticsService.ParamValue.REMOVE_DEVICE.paramValue,
             Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
         )
         navigator.showPasswordPrompt(this, R.string.remove_station_password_message) {
@@ -195,7 +186,7 @@ class DeviceSettingsActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.STATION_SETTINGS, this::class.simpleName)
+        analytics.trackScreen(AnalyticsService.Screen.STATION_SETTINGS, classSimpleName())
     }
 
     private fun setupInfo() {
@@ -257,17 +248,17 @@ class DeviceSettingsActivity : BaseActivity() {
         model.onDeviceInfo().observe(this) { deviceInfo ->
             if (deviceInfo.any { it.warning != null }) {
                 analytics.trackEventPrompt(
-                    Analytics.ParamValue.LOW_BATTERY.paramValue,
-                    Analytics.ParamValue.WARN.paramValue,
-                    Analytics.ParamValue.VIEW.paramValue,
+                    AnalyticsService.ParamValue.LOW_BATTERY.paramValue,
+                    AnalyticsService.ParamValue.WARN.paramValue,
+                    AnalyticsService.ParamValue.VIEW.paramValue,
                     Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
                 )
             }
             if (deviceInfo.any { it.action?.actionType == ActionType.UPDATE_FIRMWARE }) {
                 analytics.trackEventPrompt(
-                    Analytics.ParamValue.OTA_AVAILABLE.paramValue,
-                    Analytics.ParamValue.WARN.paramValue,
-                    Analytics.ParamValue.VIEW.paramValue
+                    AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+                    AnalyticsService.ParamValue.WARN.paramValue,
+                    AnalyticsService.ParamValue.VIEW.paramValue
                 )
             }
             adapter.submitList(deviceInfo)
@@ -276,8 +267,8 @@ class DeviceSettingsActivity : BaseActivity() {
                 navigator.openShare(this, model.parseDeviceInfoToShare(deviceInfo))
 
                 analytics.trackEventUserAction(
-                    actionName = Analytics.ParamValue.SHARE_STATION_INFO.paramValue,
-                    contentType = Analytics.ParamValue.STATION_INFO.paramValue,
+                    actionName = AnalyticsService.ParamValue.SHARE_STATION_INFO.paramValue,
+                    contentType = AnalyticsService.ParamValue.STATION_INFO.paramValue,
                     Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
                 )
             }

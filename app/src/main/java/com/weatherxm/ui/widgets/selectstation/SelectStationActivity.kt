@@ -6,17 +6,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityWidgetSelectStationBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.widgets.currentweather.CurrentWeatherWidgetWorkerUpdate
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.WidgetHelper
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,8 +32,6 @@ class SelectStationActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityWidgetSelectStationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         val appWidgetId = intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
@@ -81,7 +79,7 @@ class SelectStationActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.WIDGET_SELECT_STATION, this::class.simpleName)
+        analytics.trackScreen(AnalyticsService.Screen.WIDGET_SELECT_STATION, classSimpleName())
     }
 
     private fun onDevices(devices: Resource<List<UIDevice>>) {

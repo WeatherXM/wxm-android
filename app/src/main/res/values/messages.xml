@@ -23,6 +23,7 @@
     <string name="error_cell_not_found">Could not find the requested explorer cell</string>
     <string name="error_invalid_location">Invalid Location</string>
     <string name="error_connect_wallet_invalid_address">Invalid wallet address</string>
+    <string name="error_connect_wallet_scan_exception">Scanning error: %s</string>
     <string name="error_forecast_generic_message">Fetching forecast failed</string>
     <string name="error_forecast_invalid_timezone">Fetching forecast failed: Invalid Timezone</string>
     <string name="error_claim_failed_title">Claiming Failed</string>
@@ -55,7 +56,8 @@
     <!-- Warn Messages -->
     <string name="warn_validation_invalid_email">Not a valid email</string>
     <string name="warn_invalid_password">Invalid Password</string>
-    <string name="warn_validation_invalid_serial_number">Invalid serial number</string>
+    <string name="warn_validation_invalid_serial">Invalid serial number</string>
+    <string name="warn_validation_invalid_claiming_key">Invalid claiming key</string>
     <string name="warn_validation_invalid_password">Password must be >5 characters</string>
     <string name="warn_validation_invalid_address">Invalid Address</string>
     <string name="warn_validation_invalid_friendly_name">Invalid Friendly Name</string>

@@ -1,28 +1,23 @@
-package com.weatherxm.util
+package com.weatherxm.analytics
 
-import android.content.SharedPreferences
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ParametersBuilder
-import com.google.firebase.analytics.logEvent
-import com.weatherxm.BuildConfig
-import com.weatherxm.R
-import com.weatherxm.data.services.CacheService
-import com.weatherxm.ui.common.DevicesFilterType
-import com.weatherxm.ui.common.DevicesGroupBy
-import com.weatherxm.ui.common.DevicesSortFilterOptions
-import com.weatherxm.ui.common.DevicesSortOrder
-import com.weatherxm.ui.common.empty
-import timber.log.Timber
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-class Analytics(
-    private val firebaseAnalytics: FirebaseAnalytics,
-    private val cacheService: CacheService,
-    private val displayModeHelper: DisplayModeHelper,
-    preferences: SharedPreferences,
-    private val resources: Resources
-) {
+interface AnalyticsService {
+    // Some event key names
+    enum class EventKey(val key: String) {
+        SCREEN_CLASS("screen_class"),
+        SCREEN_NAME("screen_name"),
+        ITEM_ID("item_id"),
+        CONTENT_TYPE("content_type"),
+        SUCCESS("success"),
+        INDEX("index"),
+        SELECT_CONTENT("select_content")
+    }
+
     // Screen Names
-    enum class Screen(val screenName: String) {
+    @Parcelize
+    enum class Screen(val screenName: String) : Parcelable {
         SPLASH("Splash Screen"),
         ANALYTICS("Analytics Opt-In Prompt"),
         EXPLORER_LANDING("Explorer (Landing)"),
@@ -270,253 +265,32 @@ class Analytics(
         INHG("inhg"),
     }
 
-    private val onPreferencesChanged = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-        setUserProperties()
-    }
-
-    init {
-        preferences.registerOnSharedPreferenceChangeListener(onPreferencesChanged)
-        val enabled = cacheService.getAnalyticsEnabled()
-        Timber.d("Initializing Analytics [enabled=$enabled]")
-        setUserProperties()
-        setAnalyticsEnabled(enabled)
-    }
-
-    // Suppress CyclomaticComplexMethod because it is just a bunch of if/when statements.
-    @Suppress("CyclomaticComplexMethod", "LongMethod")
-    private fun setUserProperties() {
-        firebaseAnalytics.setUserId(cacheService.getUserId())
-
-        // Selected Theme
-        firebaseAnalytics.setUserProperty(
-            UserProperty.THEME.propertyName,
-            when (displayModeHelper.getDisplayMode()) {
-                resources.getString(R.string.dark_value) -> UserProperty.DARK.propertyName
-                resources.getString(R.string.light_value) -> UserProperty.LIGHT.propertyName
-                else -> UserProperty.SYSTEM.propertyName
-            }
-        )
-
-        // Selected Temperature Unit
-        Weather.getPreferredUnit(
-            resources.getString(CacheService.KEY_TEMPERATURE),
-            resources.getString(R.string.temperature_celsius)
-        ).let {
-            firebaseAnalytics.setUserProperty(
-                UserProperty.UNIT_TEMPERATURE.propertyName,
-                if (it == resources.getString(R.string.temperature_celsius)) {
-                    UserProperty.CELSIUS.propertyName
-                } else {
-                    UserProperty.FAHRENHEIT.propertyName
-                }
-            )
-        }
-
-        // Selected Wind Unit
-        Weather.getPreferredUnit(
-            resources.getString(CacheService.KEY_WIND),
-            resources.getString(R.string.wind_speed_ms)
-        ).let {
-            firebaseAnalytics.setUserProperty(
-                UserProperty.UNIT_WIND.propertyName,
-                when (it) {
-                    resources.getString(R.string.wind_speed_ms) -> UserProperty.MPS.propertyName
-                    resources.getString(R.string.wind_speed_mph) -> UserProperty.MPH.propertyName
-                    resources.getString(R.string.wind_speed_kmh) -> UserProperty.KMPH.propertyName
-                    resources.getString(R.string.wind_speed_knots) -> UserProperty.KN.propertyName
-                    else -> UserProperty.BF.propertyName
-                }
-            )
-        }
-
-        // Selected Wind Direction Unit
-        Weather.getPreferredUnit(
-            resources.getString(CacheService.KEY_WIND_DIR),
-            resources.getString(R.string.wind_direction_cardinal)
-        ).let {
-            firebaseAnalytics.setUserProperty(
-                UserProperty.UNIT_WIND_DIRECTION.propertyName,
-                if (it == resources.getString(R.string.wind_direction_cardinal)) {
-                    UserProperty.CARDINAL.propertyName
-                } else {
-                    UserProperty.DEGREES.propertyName
-                }
-            )
-        }
-
-        // Selected Precipitation Unit
-        Weather.getPreferredUnit(
-            resources.getString(CacheService.KEY_PRECIP),
-            resources.getString(R.string.precipitation_mm)
-        ).let {
-            firebaseAnalytics.setUserProperty(
-                UserProperty.UNIT_PRECIPITATION.propertyName,
-                if (it == resources.getString(R.string.precipitation_mm)) {
-                    UserProperty.MILLIMETERS.propertyName
-                } else {
-                    UserProperty.INCHES.propertyName
-                }
-            )
-        }
-
-        // Selected Pressure Unit
-        Weather.getPreferredUnit(
-            resources.getString(CacheService.KEY_PRESSURE),
-            resources.getString(R.string.pressure_hpa)
-        ).let {
-            firebaseAnalytics.setUserProperty(
-                UserProperty.UNIT_PRESSURE.propertyName,
-                if (it == resources.getString(R.string.pressure_hpa)) {
-                    UserProperty.HPA.propertyName
-                } else {
-                    UserProperty.INHG.propertyName
-                }
-            )
-        }
-
-        val sortFilterOptions = cacheService.getDevicesSortFilterOptions().let {
-            if (it.isEmpty()) {
-                DevicesSortFilterOptions()
-            } else {
-                DevicesSortFilterOptions(
-                    DevicesSortOrder.valueOf(it[0]),
-                    DevicesFilterType.valueOf(it[1]),
-                    DevicesGroupBy.valueOf(it[2])
-                )
-            }
-        }
-        firebaseAnalytics.setUserProperty(
-            CustomParam.FILTERS_SORT.paramName,
-            sortFilterOptions.getSortAnalyticsValue()
-        )
-        firebaseAnalytics.setUserProperty(
-            CustomParam.FILTERS_FILTER.paramName,
-            sortFilterOptions.getFilterAnalyticsValue()
-        )
-        firebaseAnalytics.setUserProperty(
-            CustomParam.FILTERS_GROUP.paramName,
-            sortFilterOptions.getGroupByAnalyticsValue()
-        )
-    }
-
-    fun setAnalyticsEnabled(enabled: Boolean = cacheService.getAnalyticsEnabled()) {
-        if (BuildConfig.DEBUG) {
-            Timber.d("Skipping analytics tracking in DEBUG mode [enabled=$enabled].")
-            firebaseAnalytics.setAnalyticsCollectionEnabled(false)
-        } else {
-            Timber.d("Resetting analytics tracking [enabled=$enabled]")
-            firebaseAnalytics.setAnalyticsCollectionEnabled(enabled)
-        }
-    }
-
-    fun trackScreen(screen: Screen, screenClass: String?, itemId: String? = null) {
-        if (cacheService.getAnalyticsEnabled()) {
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-                param(FirebaseAnalytics.Param.SCREEN_NAME, screen.screenName)
-                param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass ?: String.empty())
-                itemId?.let { param(FirebaseAnalytics.Param.ITEM_ID, itemId) }
-            }
-        }
-    }
-
-    fun trackScreen(screenName: String, screenClass: String?) {
-        if (cacheService.getAnalyticsEnabled()) {
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-                param(FirebaseAnalytics.Param.SCREEN_NAME, screenName)
-                param(FirebaseAnalytics.Param.SCREEN_CLASS, screenClass ?: String.empty())
-            }
-        }
-    }
-
+    fun setUserProperties(userId: String, params: List<Pair<String, String>>)
+    fun setAnalyticsEnabled(enabled: Boolean)
+    fun trackScreen(screen: Screen, screenClass: String, itemId: String? = null)
     fun trackEventUserAction(
         actionName: String,
         contentType: String? = null,
         vararg customParams: Pair<String, String>
-    ) {
-        if (!cacheService.getAnalyticsEnabled()) return
-
-        val params = ParametersBuilder().apply {
-            param(CustomParam.ACTION_NAME.paramName, actionName)
-
-            contentType?.let {
-                param(FirebaseAnalytics.Param.CONTENT_TYPE, contentType)
-            }
-
-            customParams.forEach {
-                param(it.first, it.second)
-            }
-        }
-        firebaseAnalytics.logEvent(CustomEvent.USER_ACTION.eventName, params.bundle)
-    }
+    )
 
     fun trackEventViewContent(
         contentName: String,
         contentId: String,
         vararg customParams: Pair<String, String>,
         success: Long? = null
-    ) {
-        if (!cacheService.getAnalyticsEnabled()) return
-
-        val params = ParametersBuilder().apply {
-            param(CustomParam.CONTENT_NAME.paramName, contentName)
-            param(CustomParam.CONTENT_ID.paramName, contentId)
-
-            customParams.forEach {
-                param(it.first, it.second)
-            }
-            success?.let {
-                param(FirebaseAnalytics.Param.SUCCESS, it)
-            }
-        }
-        firebaseAnalytics.logEvent(CustomEvent.VIEW_CONTENT.eventName, params.bundle)
-    }
-
-    fun trackEventFailure(failureId: String?) {
-        trackEventViewContent(
-            ParamValue.FAILURE.paramValue,
-            ParamValue.FAILURE_ID.paramValue,
-            Pair(FirebaseAnalytics.Param.ITEM_ID, failureId ?: String.empty())
-        )
-    }
+    )
 
     fun trackEventPrompt(
         promptName: String,
         promptType: String,
         action: String,
         vararg customParams: Pair<String, String>
-    ) {
-        if (!cacheService.getAnalyticsEnabled()) return
-
-        val params = ParametersBuilder().apply {
-            param(CustomParam.PROMPT_NAME.paramName, promptName)
-            param(CustomParam.PROMPT_TYPE.paramName, promptType)
-            param(CustomParam.ACTION.paramName, action)
-
-            customParams.forEach {
-                param(it.first, it.second)
-            }
-        }
-        firebaseAnalytics.logEvent(CustomEvent.PROMPT.eventName, params.bundle)
-    }
+    )
 
     fun trackEventSelectContent(
         contentType: String,
         vararg customParams: Pair<String, String>,
         index: Long? = null
-    ) {
-        if (!cacheService.getAnalyticsEnabled()) return
-
-        val params = ParametersBuilder().apply {
-            param(FirebaseAnalytics.Param.CONTENT_TYPE, contentType)
-
-            customParams.forEach {
-                param(it.first, it.second)
-            }
-
-            index?.let {
-                param(FirebaseAnalytics.Param.INDEX, it)
-            }
-        }
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, params.bundle)
-    }
+    )
 }

@@ -10,14 +10,14 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.User
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.usecases.UserUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ProfileViewModel(
     private val useCase: UserUseCase,
-    private val analytics: Analytics
+    private val analytics: AnalyticsWrapper
 ) : ViewModel() {
 
     private val onLoading = MutableLiveData<Boolean>()

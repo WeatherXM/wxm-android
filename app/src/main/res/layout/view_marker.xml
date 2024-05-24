@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         app:cardElevation="@dimen/elevation_normal"
-        app:contentPadding="@dimen/padding_small">
+        app:contentPadding="@dimen/padding_small_to_normal">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/address"

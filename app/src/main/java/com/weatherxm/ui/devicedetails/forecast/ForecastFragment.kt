@@ -6,16 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
 import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
 import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.blockParentViewPagerOnScroll
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.toISODate
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -50,9 +51,10 @@ class ForecastFragment : BaseFragment() {
         // Initialize the adapters with empty data
         val dailyForecastAdapter = DailyForecastAdapter {
             analytics.trackEventSelectContent(
-                Analytics.ParamValue.DAILY_CARD.paramValue,
+                AnalyticsService.ParamValue.DAILY_CARD.paramValue,
                 Pair(
-                    FirebaseAnalytics.Param.ITEM_ID, Analytics.ParamValue.DAILY_FORECAST.paramValue
+                    FirebaseAnalytics.Param.ITEM_ID,
+                    AnalyticsService.ParamValue.DAILY_FORECAST.paramValue
                 )
             )
             navigator.showForecastDetails(
@@ -63,9 +65,10 @@ class ForecastFragment : BaseFragment() {
         }
         val hourlyForecastAdapter = HourlyForecastAdapter {
             analytics.trackEventSelectContent(
-                Analytics.ParamValue.HOURLY_DETAILS_CARD.paramValue,
+                AnalyticsService.ParamValue.HOURLY_DETAILS_CARD.paramValue,
                 Pair(
-                    FirebaseAnalytics.Param.ITEM_ID, Analytics.ParamValue.HOURLY_FORECAST.paramValue
+                    FirebaseAnalytics.Param.ITEM_ID,
+                    AnalyticsService.ParamValue.HOURLY_FORECAST.paramValue
                 )
             )
             navigator.showForecastDetails(
@@ -121,10 +124,7 @@ class ForecastFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(
-            Analytics.Screen.DEVICE_FORECAST,
-            ForecastFragment::class.simpleName
-        )
+        analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, classSimpleName())
     }
 
     private fun fetchOrHideContent() {

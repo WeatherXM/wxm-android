@@ -9,18 +9,19 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.appcompat.content.res.AppCompatResources
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Status
 import com.weatherxm.data.User
 import com.weatherxm.databinding.FragmentProfileBinding
 import com.weatherxm.ui.common.Contracts.ARG_TOKEN_CLAIMED_AMOUNT
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.home.HomeViewModel
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.Mask
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.weiToETH
@@ -192,9 +193,6 @@ class ProfileFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(
-            Analytics.Screen.PROFILE,
-            ProfileFragment::class.simpleName
-        )
+        analytics.trackScreen(AnalyticsService.Screen.PROFILE, classSimpleName())
     }
 }

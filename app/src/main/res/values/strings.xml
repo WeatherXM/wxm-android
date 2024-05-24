@@ -15,8 +15,6 @@
     <string name="action_clear">Clear</string>
     <string name="action_try_again">Try Again</string>
     <string name="action_verify">Verify</string>
-    <string name="action_pair">Pair</string>
-    <string name="action_reset">Reset</string>
     <string name="action_have_reset_device">I\’ve Reset My Device</string>
     <string name="action_favorite">Favorite</string>
     <string name="action_pair_device">Pair Device</string>
@@ -46,6 +44,9 @@
     <string name="permission_permanently_denied_rationale">Go to the app settings to give the required permissions.</string>
     <string name="warn_cancelled">Cancelled!</string>
     <string name="permission_bluetooth_title">WeatherXM Requests Access to Bluetooth</string>
+    <string name="permission_camera">WeatherXM Requests Access to Camera</string>
+    <string name="permission_camera_desc">We will need to access your camera in order to utilise it in connecting and communicating to your WeatherXM Device.</string>
+    <string name="permission_camera_required">Camera permission is required. Please enable it in your device settings.</string>
 
     <!-- Login -->
     <string name="title_login">Login</string>
@@ -386,32 +387,28 @@
     <string name="scan_failed_desc"><![CDATA[Something went wrong! Please <b>Scan Again</b>.]]></string>
 
     <!-- Select Device Type -->
-    <string name="select_your_device_type">Select your device type</string>
-    <string name="m5_ws1000_title">WS1000 | M5</string>
-    <string name="m5_ws1000_desc">Claim Device Manually</string>
-    <string name="helium_type_title">WS2000 | Helium</string>
-    <string name="helium_type_desc">Claim Device via Bluetooth</string>
+    <string name="claim_a_weather_station">Claim a Weather Station</string>
+    <string name="select_your_station_type">Select your station type</string>
+    <string name="m5_wifi">M5 | WiFi</string>
+    <string name="d1_wifi">D1 | WiFi</string>
 
     <!-- Claim device -->
-    <string name="device_serial_number_title">Device Serial Number</string>
-    <string name="device_serial_number_hint">Enter the device\'s serial number</string>
-    <string name="device_serial_number_instructions"><![CDATA[Device\'s serial number can be found in the M5 (shown after automatic reboot, or in the settings screen - swipe right to view). You can also find this information on the box of your station.<br><br>It is 18 characters long and looks like this: <strong>12:34:56:78:9A:BC:DE:F0:12</strong>. Please type only the letters and numbers.]]></string>
-    <string name="location_of_installation">Location of Installation</string>
+    <string name="confirm_station_location">Confirm station location</string>
+    <string name="confirm_station_location_desc">You need to confirm the station’s exact deployment location.</string>
     <string name="search_location">Search for location</string>
-    <string name="installation_toggle_unchecked">Not yet, will install at a later time!</string>
-    <string name="need_help_installation"><![CDATA[Need help with proper weather station installation?<br><b><a href="%1$s">View our installation guide</a></b>]]></string>
-    <string name="installation_location_warning_text">Your device will be claimed, but until you properly install it, it will not get any $WXM rewards.\n\nOnce you do so, you can enable your device by switching the toggle to “Installed and ready!” on your device details screen.</string>
     <string name="confirm_and_proceed">Confirm and Proceed</string>
     <string name="action_view_station">View Station</string>
+    <string name="action_go_to">Go to Station</string>
     <string name="action_quit_claiming">Quit Claiming</string>
+    <string name="action_cancel_claiming">Cancel Claiming</string>
     <string name="action_retry_claiming">Retry Claiming</string>
-    <string name="location">Location</string>
-    <string name="confirm_location_description">I acknowledge that the deployment location above is correct and can be used to verify the eligibility of the station’s rewards.</string>
+    <string name="confirm_location_description">I acknowledge that the deployment location above is correct and will be used to verify the eligibility of the station’s rewards.</string>
     <string name="set_and_claim">Set and Claim</string>
     <string name="station_claimed">Station Claimed</string>
     <string name="claiming_station">Claiming Station…</string>
     <string name="claiming_station_helium_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM device! <b>This process could take up to 2 minutes due to the Helium\'s network bandwidth limitations!<b>]]></string>
-    <string name="success_claim_device"><![CDATA[Your station is claimed under your account:<br><b>%s</b>]]></string>
+    <string name="claiming_station_m5_desc"><![CDATA[Sit tight, we’re pairing your account with your WeatherXM gateway! <b>This process could take up to 2 minutes!<b>]]></string>
+    <string name="success_claim_device"><![CDATA[Your station is claimed under your account!<br><b>%s</b>]]></string>
     <string name="ble_connection_lost">Connection Failed</string>
     <string name="ble_connection_lost_desc"><![CDATA[Something went wrong with the connection. Make sure you are <b>near your weather station</b> and retry claiming. If connection still fails, please <b>unpair the station and restart the claiming process</b>. For more details check our <a href="%1$s">troubleshooting guide</a>.<br><br>Alternatively, you can contact our support.]]></string>
     <string name="setting_station_frequency">Setting Station Frequency</string>
@@ -419,16 +416,40 @@
     <string name="claiming_station_step">Claiming Station</string>
     <string name="invalid_location">Invalid Location</string>
 
-    <!-- Claim M5 -->
-    <string name="title_claim_ws1000_device">Claim WS1000 Device</string>
+    <!-- Claim - Connect to WiFi -->
+    <string name="title_claim_d1_wifi">Claim D1 | WiFi</string>
+    <string name="title_claim_m5_wifi">Claim M5 | WiFi</string>
     <string name="connection">Connection</string>
-    <string name="verify_your_device">Verify Your Device</string>
-    <string name="action_connect_m5_wifi">I\'ve Connected My M5</string>
-    <string name="connect_m5_wifi">Connect M5 via WiFi</string>
-    <string name="connect_m5_wifi_first_step"><![CDATA[Open your phone\'s WiFi manager, and connect to the “<b>WXM M5 XXX</b>” network (this is your M5 device).]]></string>
-    <string name="connect_m5_wifi_second_step"><![CDATA[After connecting to the M5, open your browser, and type <b>10.10.1.1</b> to view the available networks page.]]></string>
-    <string name="connect_m5_wifi_third_step"><![CDATA[Choose the WiFi network you’d like to connect your M5 to and transmit data.]]></string>
+    <string name="begin_station_claiming">Begin Station Claiming</string>
+    <string name="connect_gateway_wifi">Connect the gateway to your WiFi</string>
+    <string name="connect_m5_wifi_first_step"><![CDATA[Turn on the M5 gateway and swipe right to the settings screen. Select <b>“Configure WiFi”</b> and then press <b>“Continue”</b> on the screen.]]></string>
+    <string name="connect_m5_wifi_second_step"><![CDATA[Connect your phone to the <b>“WXM M5 XXX”</b> WiFi network.]]></string>
+    <string name="connect_wifi_third_step"><![CDATA[Open your phone’s browser, and navigate to <b>10.10.0.1</b>.]]></string>
+    <string name="connect_wifi_fourth_step">Choose your WiFi network from the list and enter the WiFi password to connect your gateway.</string>
+    <string name="connect_d1_wifi_first_step"><![CDATA[Turn on the WG1200 gateway and swipe right to the settings screen. Select <b>“Configure WiFi”</b> and then press <b>“Continue”</b> on the screen.]]></string>
+    <string name="connect_d1_wifi_second_step"><![CDATA[Connect your phone to the <b>“WXM_WG1200”</b> WiFi network.]]></string>
     <string name="connect_m5_wifi_watch_video">If you\’re having difficulty completing this step, make sure you watch the instructional video below!</string>
+
+    <!-- Claim - Prepare for claiming -->
+    <string name="prepare_gateway_claiming">Prepare gateway for claiming</string>
+    <string name="prepare_gateway_m1_first_step"><![CDATA[The M5 gateway should reboot automatically. After it has rebooted, navigate to the bottom of the settings screen to reveal the <b>QR Code</b> and <b>Serial Number</b>.]]></string>
+    <string name="prepare_gateway_d1_first_step"><![CDATA[The WG1200 gateway reboots automatically. After it has rebooted, navigate to the <b>“Claim Device”</b> menu, in the settings.]]></string>
+    <string name="prepare_gateway_wifi_second_step"><![CDATA[Scan the gateway’s <b>QR Code</b> that appears in the screen, as seen below.]]></string>
+    <string name="prepare_gateway_m5_notice"><![CDATA[If your gateway is running on an older firmware version, you may have to enter the <b>Serial Number Manually</b>.]]></string>
+    <string name="action_enter_serial_number_manually">Enter S/N Manually</string>
+    <string name="prepare_gateway_invalid_qr_code">The QR Code you scanned is invalid. Please try again with a valid QR Code or enter manually.</string>
+
+    <!-- Claim - Manually Enter S/N -->
+    <string name="proceed_next_step">Proceed to Next Step</string>
+    <string name="enter_gateway_serial_number">Enter gateway Serial Number</string>
+    <string name="enter_gateway_details">Enter gateway details</string>
+    <string name="enter_gateway_serial_number_desc"><![CDATA[Enter the gateway’s <b>Serial Number</b> that appears in the screen, as seen below.]]></string>
+    <string name="enter_gateway_details_desc"><![CDATA[Enter the gateway’s <b>Claiming Key</b> and <b>Serial Number</b>. They are located under the QR code.]]></string>
+    <string name="enter_gateway_m5_notice">If your gateway is running on an older firmware version, screens may differ.</string>
+    <string name="enter_your_gateway_sn">Enter your gateway’s Serial Number</string>
+    <string name="enter_your_gateway_sn_hint">12:34:56:67:78:90:12:34:56:78</string>
+    <string name="enter_your_gateway_claiming_key">Enter your gateway’s Claiming Key</string>
+    <string name="enter_your_gateway_claiming_key_hint">123456</string>
 
     <!-- Claim Helium -->
     <string name="title_claim_ws2000_device">Claim WS2000 Device</string>
@@ -539,6 +560,7 @@
     <string name="station_location_desc"><![CDATA[The deployment location you set for this station is <b>%s.</b> If the location you see on the map doesn’t match the actual deployment location, press the button below to edit.]]></string>
     <string name="station_location_favorite_desc"><![CDATA[The deployment location that the station owner has set is <b>%s.</b>]]></string>
     <string name="edit_location">Edit Location</string>
+    <string name="device_serial_number">Device Serial Number</string>
 
     <!-- Alerts -->
     <string name="alerts">Alerts</string>

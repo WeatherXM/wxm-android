@@ -9,9 +9,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimSetLocationBinding
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
-import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
+import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.SearchResultsAdapter
 import com.weatherxm.ui.common.hideKeyboard
@@ -20,19 +22,17 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.EditLocationListener
 import com.weatherxm.ui.components.EditLocationMapFragment
-import com.weatherxm.util.Analytics
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class ClaimLocationFragment : BaseFragment(), EditLocationListener {
     private val model: ClaimLocationViewModel by activityViewModel()
     private val heliumParentModel: ClaimHeliumViewModel by activityViewModel()
-    private val m5ParentModel: ClaimM5ViewModel by activityViewModel()
+    private val wifiParentModel: ClaimWifiViewModel by activityViewModel()
     private lateinit var binding: FragmentClaimSetLocationBinding
 
     companion object {
         const val TAG = "ClaimLocationFragment"
-        const val ARG_DEVICE_TYPE = "device_type"
 
         fun newInstance(deviceType: DeviceType) = ClaimLocationFragment().apply {
             arguments = Bundle().apply { putParcelable(ARG_DEVICE_TYPE, deviceType) }
@@ -79,10 +79,10 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             }
             model.setInstallationLocation(markerLocation.lat, markerLocation.lon)
 
-            if (model.getDeviceType() == DeviceType.M5_WIFI) {
-                m5ParentModel.next()
-            } else {
+            if (model.getDeviceType() == DeviceType.HELIUM) {
                 heliumParentModel.next()
+            } else {
+                wifiParentModel.next()
             }
         }
 
@@ -91,8 +91,8 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             hideKeyboard()
 
             analytics.trackEventUserAction(
-                actionName = Analytics.ParamValue.SEARCH_LOCATION.paramValue,
-                contentType = Analytics.ParamValue.CLAIMING_ADDRESS_SEARCH.paramValue,
+                actionName = AnalyticsService.ParamValue.SEARCH_LOCATION.paramValue,
+                contentType = AnalyticsService.ParamValue.CLAIMING_ADDRESS_SEARCH.paramValue,
                 Pair(FirebaseAnalytics.Param.LOCATION, it.name)
             )
         }
@@ -125,13 +125,18 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             }
         }
 
+        val addressSearchView = if (model.getDeviceType() == DeviceType.HELIUM) {
+            binding.addressSearchView
+        } else {
+            binding.addressSearchView
+        }
         model.onSearchResults().observe(viewLifecycleOwner) {
             if (it == null) {
                 context?.toast(getString(R.string.error_search_suggestions))
-            } else if (it.isEmpty() || binding.addressSearchView.getQueryLength() <= 2) {
-                binding.addressSearchView.clear()
+            } else if (it.isEmpty() || addressSearchView.getQueryLength() <= 2) {
+                addressSearchView.clear()
             } else {
-                binding.addressSearchView.setData(it)
+                addressSearchView.setData(it)
             }
         }
 
@@ -141,7 +146,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
 
         model.onMoveToLocation().observe(viewLifecycleOwner) {
             getMapFragment().moveToLocation(it)
-            binding.addressSearchView.clear()
+            addressSearchView.clear()
         }
 
         getMapFragment().initMarkerAndListeners()

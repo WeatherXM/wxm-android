@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
-import com.weatherxm.databinding.ActivityClaimHeliumDeviceBinding
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.databinding.ActivityClaimDeviceBinding
+import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity.ClaimHeliumDevicePagerAdapter.Companion.PAGE_COUNT
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyFragment
 import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyViewModel
 import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairFragment
@@ -17,13 +19,10 @@ import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.common.DeviceType
-import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.setIcon
-import com.weatherxm.ui.common.setSuccessChip
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ClaimHeliumActivity : BaseActivity() {
@@ -39,24 +38,24 @@ class ClaimHeliumActivity : BaseActivity() {
     private val frequencyModel: ClaimHeliumFrequencyViewModel by viewModel()
     private val resultModel: ClaimHeliumResultViewModel by viewModel()
     private val pairModel: ClaimHeliumPairViewModel by viewModel()
-    private lateinit var binding: ActivityClaimHeliumDeviceBinding
+    private lateinit var binding: ActivityClaimDeviceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityClaimHeliumDeviceBinding.inflate(layoutInflater)
+        binding = ActivityClaimDeviceBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         // The pager adapter, which provides the pages to the view pager widget.
         val pagerAdapter = ClaimHeliumDevicePagerAdapter(this)
         binding.pager.adapter = pagerAdapter
         binding.pager.isUserInputEnabled = false
+        binding.progress.max = PAGE_COUNT - 1
 
         onBackPressedDispatcher.addCallback {
             finishClaiming()
         }
 
+        binding.toolbar.title = getString(R.string.title_claim_ws2000_device)
         binding.toolbar.setNavigationOnClickListener {
             finishClaiming()
         }
@@ -72,22 +71,23 @@ class ClaimHeliumActivity : BaseActivity() {
         model.onBackToLocation().observe(this) {
             if (it) {
                 binding.pager.currentItem -= 1
-                binding.thirdStep.setIcon(R.drawable.ic_three_filled)
-                binding.fourthStep.setIcon(R.drawable.ic_four_outlined)
+                binding.progress.progress = binding.pager.currentItem + 1
             }
         }
 
         savedInstanceState?.let {
             binding.pager.currentItem = it.getInt(CURRENT_PAGE, 0)
+            binding.progress.progress = binding.pager.currentItem + 1
             model.setDeviceEUI(it.getString(DEV_EUI, String.empty()))
             model.setDeviceKey(it.getString(DEV_KEY, String.empty()))
             model.setClaimedDevice(it.parcelable(CLAIMED_DEVICE))
         }
+        binding.progress.progress = binding.pager.currentItem + 1
     }
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.CLAIM_HELIUM, this::class.simpleName)
+        analytics.trackScreen(AnalyticsService.Screen.CLAIM_HELIUM, classSimpleName())
     }
 
     private fun finishClaiming() {
@@ -98,26 +98,18 @@ class ClaimHeliumActivity : BaseActivity() {
     private fun onNextPressed() {
         with(binding) {
             pager.currentItem += 1
+            binding.progress.progress = binding.pager.currentItem + 1
 
             when (pager.currentItem) {
-                ClaimHeliumDevicePagerAdapter.PAGE_VERIFY_OR_PAIR -> {
-                    firstStep.setSuccessChip()
-                    secondStep.setIcon(R.drawable.ic_two_filled)
-                }
                 ClaimHeliumDevicePagerAdapter.PAGE_LOCATION -> {
-                    secondStep.setSuccessChip()
-                    thirdStep.setIcon(R.drawable.ic_three_filled)
                     locationModel.requestUserLocation()
                 }
                 ClaimHeliumDevicePagerAdapter.PAGE_FREQUENCY -> {
-                    thirdStep.setSuccessChip()
-                    fourthStep.setIcon(R.drawable.ic_four_filled)
                     frequencyModel.getCountryAndFrequencies(locationModel.getInstallationLocation())
                 }
                 ClaimHeliumDevicePagerAdapter.PAGE_RESULT -> {
                     resultModel.setSelectedDevice(pairModel.getSelectedDevice())
                     resultModel.setFrequency(model.getFrequency())
-                    fourthStep.setSuccessChip()
                 }
             }
         }
