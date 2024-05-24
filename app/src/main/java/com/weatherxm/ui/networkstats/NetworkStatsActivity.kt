@@ -52,12 +52,6 @@ class NetworkStatsActivity : BaseActivity() {
         }
         binding.activeRecycler.adapter = activeAdapter
 
-        formatContractsLinks()
-
-        binding.lastRunCard.setOnClickListener {
-            onLastRunClicked()
-        }
-
         binding.buyCard.setOnClickListener {
             navigator.openWebsite(this, getString(R.string.shop_url))
         }
@@ -114,59 +108,6 @@ class NetworkStatsActivity : BaseActivity() {
 
         model.fetchMainnetStatus()
         model.getNetworkStats()
-    }
-
-    private fun onLastRunClicked() {
-        model.onNetworkStats().value?.data?.let {
-            analytics.trackEventSelectContent(
-                Analytics.ParamValue.NETWORK_STATS.paramValue,
-                Pair(
-                    FirebaseAnalytics.Param.SOURCE,
-                    Analytics.ParamValue.LAST_RUN_HASH.paramValue
-                )
-            )
-            navigator.openWebsite(
-                this, getString(R.string.arbiscan_tx_explorer, it.lastTxHash)
-            )
-        }
-    }
-
-    private fun formatContractsLinks() {
-        with(binding.viewRewardsContractBtn) {
-            movementMethod = BetterLinkMovementMethod.newInstance().apply {
-                setOnLinkClickListener { _, url ->
-                    analytics.trackEventSelectContent(
-                        Analytics.ParamValue.NETWORK_STATS.paramValue,
-                        Pair(
-                            FirebaseAnalytics.Param.SOURCE,
-                            Analytics.ParamValue.TOKEN_CONTRACT.paramValue
-                        )
-                    )
-                    navigator.openWebsite(this@NetworkStatsActivity, url)
-                    return@setOnLinkClickListener true
-                }
-            }
-            setHtml(R.string.view_token_contract, getString(R.string.rewards_contract_arbiscan))
-            removeLinksUnderline()
-        }
-
-        with(binding.viewTokenContractBtn) {
-            movementMethod = BetterLinkMovementMethod.newInstance().apply {
-                setOnLinkClickListener { _, url ->
-                    analytics.trackEventSelectContent(
-                        Analytics.ParamValue.NETWORK_STATS.paramValue,
-                        Pair(
-                            FirebaseAnalytics.Param.SOURCE,
-                            Analytics.ParamValue.REWARD_CONTRACT.paramValue
-                        )
-                    )
-                    navigator.openWebsite(this@NetworkStatsActivity, url)
-                    return@setOnLinkClickListener true
-                }
-            }
-            setHtml(R.string.view_rewards_contract, getString(R.string.token_contract_etherscan))
-            removeLinksUnderline()
-        }
     }
 
     private fun openStationShop(stationDetails: NetworkStationStats, categoryName: String) {
@@ -281,6 +222,39 @@ class NetworkStatsActivity : BaseActivity() {
             rewardsChart.initializeNetworkStatsChart(data.rewardsEntries)
             rewardsStartDate.text = data.rewardsStartDate
             rewardsEndDate.text = data.rewardsEndDate
+            data.rewardsUrl?.let {
+                with(binding.viewRewardsContractBtn) {
+                    movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                        setOnLinkClickListener { _, url ->
+                            analytics.trackEventSelectContent(
+                                Analytics.ParamValue.NETWORK_STATS.paramValue,
+                                Pair(
+                                    FirebaseAnalytics.Param.SOURCE,
+                                    Analytics.ParamValue.TOKEN_CONTRACT.paramValue
+                                )
+                            )
+                            navigator.openWebsite(this@NetworkStatsActivity, url)
+                            return@setOnLinkClickListener true
+                        }
+                    }
+                    setHtml(R.string.view_rewards_contract, it)
+                    removeLinksUnderline()
+                    setVisible(true)
+                }
+            }
+            data.latestTxHashUrl?.let { txUrl ->
+                binding.lastRunCard.setOnClickListener {
+                    analytics.trackEventSelectContent(
+                        Analytics.ParamValue.NETWORK_STATS.paramValue,
+                        Pair(
+                            FirebaseAnalytics.Param.SOURCE,
+                            Analytics.ParamValue.LAST_RUN_HASH.paramValue
+                        )
+                    )
+                    navigator.openWebsite(this@NetworkStatsActivity, txUrl)
+                }
+                binding.lastRunOpenInNew.setVisible(true)
+            }
 
             earnWxmPerMonth.text = getString(R.string.earn_wxm, data.rewardsAvgMonthly)
 
@@ -294,6 +268,27 @@ class NetworkStatsActivity : BaseActivity() {
             } else {
                 binding.circSupplyBar.setVisible(false)
             }
+            data.tokenUrl?.let {
+                with(binding.viewTokenContractBtn) {
+                    movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                        setOnLinkClickListener { _, url ->
+                            analytics.trackEventSelectContent(
+                                Analytics.ParamValue.NETWORK_STATS.paramValue,
+                                Pair(
+                                    FirebaseAnalytics.Param.SOURCE,
+                                    Analytics.ParamValue.REWARD_CONTRACT.paramValue
+                                )
+                            )
+                            navigator.openWebsite(this@NetworkStatsActivity, url)
+                            return@setOnLinkClickListener true
+                        }
+                    }
+                    setHtml(R.string.view_token_contract, it)
+                    removeLinksUnderline()
+                    setVisible(true)
+                }
+            }
+
             totals.text = data.totalStations
             claimed.text = data.claimedStations
             active.text = data.activeStations

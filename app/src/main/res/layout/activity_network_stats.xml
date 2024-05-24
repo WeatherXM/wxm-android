@@ -297,8 +297,10 @@
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                         android:textColor="@color/colorPrimary"
                         android:textStyle="bold"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/rewardsTitle" />
+                        app:layout_constraintTop_toBottomOf="@id/rewardsTitle"
+                        tools:visibility="visible" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/rewardsMainData"
@@ -444,14 +446,16 @@
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <ImageView
-                                    android:id="@+id/lastRunBtn"
+                                    android:id="@+id/lastRunOpenInNew"
                                     android:layout_width="12dp"
                                     android:layout_height="12dp"
                                     android:src="@drawable/ic_open_new"
+                                    android:visibility="gone"
                                     app:layout_constraintBottom_toBottomOf="@id/rewardsLastDayTitle"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintTop_toTopOf="@id/rewardsLastDayTitle"
-                                    app:tint="@color/colorOnSurface" />
+                                    app:tint="@color/colorOnSurface"
+                                    tools:visibility="visible" />
 
                                 <com.google.android.material.textview.MaterialTextView
                                     android:id="@+id/rewardsLastDay"
@@ -586,8 +590,10 @@
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                         android:textColor="@color/colorPrimary"
                         android:textStyle="bold"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tokenTitle" />
+                        app:layout_constraintTop_toBottomOf="@id/tokenTitle"
+                        tools:visibility="visible" />
 
                     <LinearLayout
                         android:layout_width="match_parent"

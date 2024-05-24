@@ -18,6 +18,7 @@ import com.weatherxm.util.NumberUtils.compactNumber
 import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.Weather.EMPTY_VALUE
 import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class StatsUseCaseImpl(
     private val repository: StatsRepository,
@@ -42,11 +43,8 @@ class StatsUseCaseImpl(
                 dataDaysEntries = dataDaysEntries,
                 dataDaysStartDate = stats.dataDays?.first()?.ts.getFormattedDate(),
                 dataDaysEndDate = stats.dataDays?.last()?.ts.getFormattedDate(),
-                totalRewards = compactNumber(stats.tokens?.allocatedPerDay?.last()?.value),
-                totalRewards30D = compactNumber(
-                    (stats.tokens?.allocatedPerDay?.last()?.value ?: 0.0)
-                        - (stats.tokens?.allocatedPerDay?.first()?.value ?: 0.0)
-                ),
+                totalRewards = compactNumber(stats.tokens?.totalAllocated),
+                totalRewards30D = getTotalRewards30D(stats.tokens?.allocatedPerDay),
                 lastRewards = getValidLastOfEntries(rewardEntries),
                 rewardsEntries = rewardEntries,
                 rewardsStartDate = stats.tokens?.allocatedPerDay?.first()?.ts.getFormattedDate(),
@@ -62,7 +60,9 @@ class StatsUseCaseImpl(
                 rewardsAvgMonthly = formatNumber(stats.tokens?.avgMonthly),
                 totalSupply = stats.tokens?.totalSupply,
                 circulatingSupply = stats.tokens?.circSupply,
-                lastTxHash = stats.tokens?.lastTxHash ?: String.empty(),
+                latestTxHashUrl = stats.tokens?.latestTxHashUrl,
+                tokenUrl = stats.contracts?.tokenUrl,
+                rewardsUrl = stats.contracts?.rewardsUrl,
                 totalStations = formatNumber(stats.weatherStations.onboarded?.total),
                 totalStationStats = createStationStats(stats.weatherStations.onboarded?.details),
                 claimedStations = formatNumber(stats.weatherStations.claimed?.total),
@@ -85,6 +85,21 @@ class StatsUseCaseImpl(
         )
     }
 
+    private fun getTotalRewards30D(data: List<NetworkStatsTimeseries>?): String {
+        val zoned30DaysAgo = ZonedDateTime.now().minusDays(30)
+        val tokensAllocatedLast30D = data?.filter {
+            it.ts?.isAfter(zoned30DaysAgo) == true && it.value != null && it.value >= 0
+        }?.map {
+            it.value ?: 0.0
+        } ?: mutableListOf()
+
+        return if (tokensAllocatedLast30D.size >= 2) {
+            compactNumber(tokensAllocatedLast30D.last() - tokensAllocatedLast30D.first())
+        } else {
+            compactNumber(tokensAllocatedLast30D.last())
+        }
+    }
+
     private fun getEntriesOfTimeseries(data: List<NetworkStatsTimeseries>?): List<Entry> {
         val filteredData = data?.filter {
             it.value != null && it.value >= 0F
@@ -93,8 +108,12 @@ class StatsUseCaseImpl(
         } ?: mutableListOf()
 
         val dataSize = filteredData.size
-        return if (filteredData.last().y == filteredData[dataSize - 2].y) {
-            filteredData.dropLast(1)
+        return if (dataSize >= 2) {
+            if (filteredData.last().y == filteredData[dataSize - 2].y) {
+                filteredData.dropLast(1)
+            } else {
+                filteredData
+            }
         } else {
             filteredData
         }
