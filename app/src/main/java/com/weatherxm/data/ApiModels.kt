@@ -389,6 +389,10 @@ data class NetworkStatsTokens(
     val allocatedPerDay: List<NetworkStatsTimeseries>?,
     @Json(name = "avg_monthly")
     val avgMonthly: Double?,
+    @Json(name = "circulating_supply")
+    val circSupply: Int?,
+    @Json(name = "last_tx_hash")
+    val lastTxHash: String?,
 ) : Parcelable
 
 @Keep

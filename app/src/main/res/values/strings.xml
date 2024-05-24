@@ -80,9 +80,12 @@
     <string name="earn_prompt">Join the weather revolution</string>
     <string name="earn_wxm">Earn %s $WXM/mo</string>
     <string name="wxm_token">$WXM Token</string>
-    <string name="token_quick_info"><![CDATA[Deployed on Testnet - <a href="%1$s">Read more here</a>]]></string>
+    <string name="view_token_contract"><![CDATA[<a href="%1$s">View token contract on Etherscan</a>]]></string>
+    <string name="view_rewards_contract"><![CDATA[<a href="%1$s">View rewards contract on Arbiscan</a>]]></string>
     <string name="total_supply">Total Supply</string>
-    <string name="daily_minted">Daily Minted</string>
+    <string name="total_supply_explanation">Total supply refers to the number of $WXM that have already been created and are either in circulation or locked.</string>
+    <string name="circulating_supply">Circulating Supply</string>
+    <string name="circulating_supply_explanation">Circulating supply refers to the number of $WXM that are publicly available and circulating in the market.</string>
     <string name="manufacturer_title">Are you a station manufacturer?</string>
     <string name="manufacturer_prompt">Join the ecosystem</string>
     <string name="last_updated">Last Updated on %s</string>
@@ -213,7 +216,6 @@
     <string name="confirm_wallet_ownership_title">Confirm Wallet Ownership</string>
     <string name="confirm_wallet_ownership_desc">Please make sure you have the complete ownership of the Wallet ending in <b>%1$s</b>.\n\nIf you don\’t, you will lose all $WXM rewards from now on!</string>
     <string name="edit_wallet_password_prompt_desc"><![CDATA[In order to edit the Wallet Address you need to confirm you are the owner of this account.<br><b>Please type in your password to edit Wallet Address.</b>]]></string>
-    <string name="wallet_token_notice">IMPORTANT: During beta phase, $WXM token is deployed on testnet. Rewards will be recalculated and rewarded again after $WXM mainnet token launch.</string>
     <string name="view_transaction_history">View Transaction History</string>
 
     <!-- Registration -->

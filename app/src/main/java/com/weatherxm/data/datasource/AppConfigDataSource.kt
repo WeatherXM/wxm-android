@@ -17,6 +17,7 @@ interface AppConfigDataSource {
     fun getInstallationId(): Either<Failure, String>
     fun isMainnetEnabled(): Boolean
     fun getMainnetMessage(): String
+    fun getMainnetUrl(): String
 }
 
 class AppConfigDataSourceImpl(
@@ -30,6 +31,7 @@ class AppConfigDataSourceImpl(
         const val REMOTE_CONFIG_CHANGELOG = "android_app_changelog"
         const val REMOTE_CONFIG_MAINNET = "feat_mainnet"
         const val REMOTE_CONFIG_MAINNET_MESSAGE = "feat_mainnet_message"
+        const val REMOTE_CONFIG_MAINNET_URL = "feat_mainnet_url"
     }
 
     override fun getLastRemoteVersionCode(): Int {
@@ -78,5 +80,9 @@ class AppConfigDataSourceImpl(
 
     override fun getMainnetMessage(): String {
         return firebaseRemoteConfig.getString(REMOTE_CONFIG_MAINNET_MESSAGE)
+    }
+
+    override fun getMainnetUrl(): String {
+        return firebaseRemoteConfig.getString(REMOTE_CONFIG_MAINNET_URL)
     }
 }

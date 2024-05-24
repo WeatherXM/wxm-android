@@ -13,6 +13,7 @@ import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.MainnetInfo
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.UICell
 
@@ -74,7 +75,10 @@ class DeviceDetailsUseCaseImpl(
         return appConfigRepository.isMainnetEnabled()
     }
 
-    override fun getMainnetMessage(): String {
-        return appConfigRepository.getMainnetMessage()
+    override fun getMainnetInfo(): MainnetInfo {
+        return MainnetInfo(
+            appConfigRepository.getMainnetMessage(),
+            appConfigRepository.getMainnetUrl()
+        )
     }
 }

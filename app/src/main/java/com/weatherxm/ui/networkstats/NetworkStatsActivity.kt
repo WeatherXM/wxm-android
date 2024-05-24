@@ -13,6 +13,7 @@ import com.weatherxm.ui.common.removeLinksUnderline
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.util.NumberUtils.compactNumber
 import com.weatherxm.util.initializeNetworkStatsChart
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -49,7 +50,11 @@ class NetworkStatsActivity : BaseActivity() {
         }
         binding.activeRecycler.adapter = activeAdapter
 
-        formatTokenInfo()
+        formatContractsLinks()
+
+        binding.lastRunCard.setOnClickListener {
+            onLastRunClicked()
+        }
 
         binding.buyCard.setOnClickListener {
             navigator.openWebsite(this, getString(R.string.shop_url))
@@ -66,6 +71,18 @@ class NetworkStatsActivity : BaseActivity() {
         }
 
         setInfoButtonListeners()
+
+        model.onMainnet().observe(this) {
+            if (it.message.isNotEmpty()) {
+                binding.mainnetCard.message(it.message)
+            }
+            if (it.url.isNotEmpty()) {
+                binding.mainnetCard.listener {
+                    navigator.openWebsite(this, it.url)
+                }
+            }
+            binding.mainnetCard.setVisible(true)
+        }
 
         model.onNetworkStats().observe(this) {
             when (it.status) {
@@ -93,25 +110,59 @@ class NetworkStatsActivity : BaseActivity() {
             }
         }
 
+        model.fetchMainnetStatus()
         model.getNetworkStats()
     }
 
-    private fun formatTokenInfo() {
-        with(binding.tokenQuickInfo) {
+    private fun onLastRunClicked() {
+        model.onNetworkStats().value?.data?.let {
+            analytics.trackEventSelectContent(
+                AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.SOURCE,
+                    AnalyticsService.ParamValue.LAST_RUN_HASH.paramValue
+                )
+            )
+            navigator.openWebsite(
+                this, getString(R.string.arbiscan_tx_explorer, it.lastTxHash)
+            )
+        }
+    }
+
+    private fun formatContractsLinks() {
+        with(binding.viewRewardsContractBtn) {
             movementMethod = BetterLinkMovementMethod.newInstance().apply {
                 setOnLinkClickListener { _, url ->
                     analytics.trackEventSelectContent(
-                        AnalyticsService.ParamValue.TOKENOMICS.paramValue,
+                        AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
                         Pair(
                             FirebaseAnalytics.Param.SOURCE,
-                            AnalyticsService.ParamValue.NETWORK_STATS.paramValue
+                            AnalyticsService.ParamValue.TOKEN_CONTRACT.paramValue
                         )
                     )
                     navigator.openWebsite(this@NetworkStatsActivity, url)
                     return@setOnLinkClickListener true
                 }
             }
-            setHtml(R.string.token_quick_info, getString(R.string.docs_url_tokenomics))
+            setHtml(R.string.view_token_contract, getString(R.string.rewards_contract_arbiscan))
+            removeLinksUnderline()
+        }
+
+        with(binding.viewTokenContractBtn) {
+            movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                setOnLinkClickListener { _, url ->
+                    analytics.trackEventSelectContent(
+                        AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
+                        Pair(
+                            FirebaseAnalytics.Param.SOURCE,
+                            AnalyticsService.ParamValue.REWARD_CONTRACT.paramValue
+                        )
+                    )
+                    navigator.openWebsite(this@NetworkStatsActivity, url)
+                    return@setOnLinkClickListener true
+                }
+            }
+            setHtml(R.string.view_rewards_contract, getString(R.string.token_contract_etherscan))
             removeLinksUnderline()
         }
     }
@@ -147,6 +198,22 @@ class NetworkStatsActivity : BaseActivity() {
                 null,
                 R.string.average_monthly_rewards_explanation,
                 AnalyticsService.ParamValue.BUY_STATION.paramValue
+            )
+        }
+
+        binding.totalSupplyBtn.setOnClickListener {
+            openMessageDialog(
+                R.string.total_supply,
+                R.string.total_supply_explanation,
+                AnalyticsService.ParamValue.TOTAL_SUPPLY.paramValue
+            )
+        }
+
+        binding.circSupplyBtn.setOnClickListener {
+            openMessageDialog(
+                R.string.circulating_supply,
+                R.string.circulating_supply_explanation,
+                AnalyticsService.ParamValue.CIRCULATING_SUPPLY.paramValue
             )
         }
 
@@ -215,8 +282,16 @@ class NetworkStatsActivity : BaseActivity() {
 
             earnWxmPerMonth.text = getString(R.string.earn_wxm, data.rewardsAvgMonthly)
 
-            totalSupply.text = data.totalSupply
-            dailyMinted.text = "+${data.dailyMinted}"
+            totalSupply.text = compactNumber(data.totalSupply)
+            binding.circSupply.text = compactNumber(data.circulatingSupply)
+            if (data.totalSupply != null && data.circulatingSupply != null
+                && data.totalSupply >= data.circulatingSupply
+            ) {
+                binding.circSupplyBar.valueTo = data.totalSupply.toFloat()
+                binding.circSupplyBar.values = listOf(data.circulatingSupply.toFloat())
+            } else {
+                binding.circSupplyBar.setVisible(false)
+            }
             totals.text = data.totalStations
             claimed.text = data.claimedStations
             active.text = data.activeStations

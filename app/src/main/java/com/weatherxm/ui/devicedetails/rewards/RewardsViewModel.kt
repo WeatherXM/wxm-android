@@ -10,6 +10,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
 import com.weatherxm.data.Rewards
+import com.weatherxm.ui.common.MainnetInfo
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.empty
@@ -32,17 +33,17 @@ class RewardsViewModel(
     private val onLoading = MutableLiveData<Boolean>()
     private val onError = MutableLiveData<UIError>()
     private val onRewards = MutableLiveData<Rewards>()
-    private val onMainnet = MutableLiveData<String>()
+    private val onMainnet = MutableLiveData<MainnetInfo>()
 
     fun onLoading(): LiveData<Boolean> = onLoading
     fun onError(): LiveData<UIError> = onError
     fun onRewards(): LiveData<Rewards> = onRewards
-    fun onMainnet(): LiveData<String> = onMainnet
+    fun onMainnet(): LiveData<MainnetInfo> = onMainnet
 
     fun fetchMainnetStatus() {
         viewModelScope.launch {
             if (deviceDetailsUseCase.isMainnetEnabled()) {
-                onMainnet.postValue(deviceDetailsUseCase.getMainnetMessage())
+                onMainnet.postValue(deviceDetailsUseCase.getMainnetInfo())
             }
         }
     }

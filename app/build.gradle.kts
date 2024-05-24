@@ -28,7 +28,7 @@ fun getVersionGitTags(printForDebugging: Boolean = false): List<String> {
 }
 
 fun getLastVersionGitTag(): String {
-    var lastVersionTag = getVersionGitTags(true).last()
+    var lastVersionTag = getVersionGitTags(printForDebugging = true).last()
     if (lastVersionTag.startsWith("RC")) {
         lastVersionTag = lastVersionTag.substringAfterLast("_")
     }

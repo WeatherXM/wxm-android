@@ -201,7 +201,6 @@ class ConnectWalletActivity : BaseActivity() {
 
     private fun onEditClicked() {
         binding.editWallet.setVisible(false)
-        binding.tokenNoticeCard.setVisible(false)
         binding.viewTransactionHistoryBtn.setVisible(false)
         binding.addressContainer.isEnabled = true
         binding.addressContainer.isCounterEnabled = true
@@ -225,7 +224,6 @@ class ConnectWalletActivity : BaseActivity() {
     private fun onAddressUpdateUI(address: String?) {
         if (address.isNullOrEmpty()) {
             binding.editWallet.setVisible(false)
-            binding.tokenNoticeCard.setVisible(false)
             binding.viewTransactionHistoryBtn.setVisible(false)
             binding.scanQR.setVisible(true)
             binding.checkBoxesAndButtonContainer.setVisible(true)
@@ -243,7 +241,6 @@ class ConnectWalletActivity : BaseActivity() {
             binding.scanQR.setVisible(false)
             binding.checkBoxesAndButtonContainer.setVisible(false)
             binding.walletCompatibilityCard.setVisible(false)
-            binding.tokenNoticeCard.setVisible(true)
             binding.viewTransactionHistoryBtn.setVisible(true)
         }
     }

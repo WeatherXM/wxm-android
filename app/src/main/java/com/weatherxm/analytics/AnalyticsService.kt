@@ -182,8 +182,6 @@ interface AnalyticsService {
         SEARCH("search"),
         LOCATION("location"),
         STATION("station"),
-        TOKENOMICS("Tokenomics"),
-        NETWORK_STATS("network_stats"),
         DEVICE_DETAILS_FOLLOW("Device Details Follow"),
         DEVICE_DETAILS_SHARE("Device Details Share"),
         DEVICE_LIST_FOLLOW("Device List Follow"),
@@ -232,7 +230,13 @@ interface AnalyticsService {
         HOURLY_FORECAST("hourly_forecast"),
         DAILY_CARD("Daily Card"),
         DAILY_FORECAST("daily_forecast"),
-        DAILY_DETAILS("daily_details")
+        DAILY_DETAILS("daily_details"),
+        NETWORK_STATS("Network Stats"),
+        TOKEN_CONTRACT("token_contract"),
+        REWARD_CONTRACT("reward_contract"),
+        LAST_RUN_HASH("last_run_hash"),
+        TOTAL_SUPPLY("total_supply"),
+        CIRCULATING_SUPPLY("circulating_supply")
     }
 
     // Custom Param Names

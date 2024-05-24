@@ -71,10 +71,15 @@ class RewardsFragment : BaseFragment() {
         }
 
         model.onMainnet().observe(viewLifecycleOwner) {
-            if (!it.isNullOrEmpty()) {
-                binding.mainnetMessage.text = it
-                binding.mainnetCard.setVisible(true)
+            if (it.message.isNotEmpty()) {
+                binding.mainnetCard.message(it.message)
             }
+            if (it.url.isNotEmpty()) {
+                binding.mainnetCard.listener {
+                    navigator.openWebsite(context, it.url)
+                }
+            }
+            binding.mainnetCard.setVisible(true)
         }
 
         model.onRewards().observe(viewLifecycleOwner) {

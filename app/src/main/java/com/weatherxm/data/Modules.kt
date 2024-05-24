@@ -587,7 +587,7 @@ private val usecases = module {
         WidgetCurrentWeatherUseCaseImpl(get(), get())
     }
     single<StatsUseCase> {
-        StatsUseCaseImpl(get(), get())
+        StatsUseCaseImpl(get(), get(), get())
     }
     single<FollowUseCase> {
         FollowUseCaseImpl(get(), get())
