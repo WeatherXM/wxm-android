@@ -43,8 +43,9 @@ class StatsUseCaseImpl(
                 dataDaysStartDate = stats.dataDays?.first()?.ts.getFormattedDate(),
                 dataDaysEndDate = stats.dataDays?.last()?.ts.getFormattedDate(),
                 totalRewards = compactNumber(stats.tokens?.totalAllocated),
-                totalRewards30D = getTotalRewards30D(
-                    stats.tokens?.allocatedPerDay ?: mutableListOf()
+                totalRewards30D = compactNumber(
+                    (stats.tokens?.allocatedPerDay?.last()?.value ?: 0.0)
+                        - (stats.tokens?.allocatedPerDay?.first()?.value ?: 0.0)
                 ),
                 lastRewards = getValidLastOfEntries(rewardEntries),
                 rewardsEntries = rewardEntries,
@@ -84,24 +85,6 @@ class StatsUseCaseImpl(
             appConfigRepository.getMainnetMessage(),
             appConfigRepository.getMainnetUrl()
         )
-    }
-
-    private fun getTotalRewards30D(data: List<NetworkStatsTimeseries>): String {
-        /**
-         * Due to the fact that `allocatedPerDay` (data) is an incremental value
-         * which every day is bigger than the previous one,
-         * we need to either the last value if we have <30 days of data
-         * or get the difference of the last - first value if we have >= 30 days of data.
-         */
-        return if (data.size >= 30) {
-            compactNumber(
-                (data.last().value ?: 0.0) - (data.first().value ?: 0.0)
-            )
-        } else if (data.isNotEmpty()) {
-            compactNumber(data.last().value)
-        } else {
-            EMPTY_VALUE
-        }
     }
 
     private fun getEntriesOfTimeseries(data: List<NetworkStatsTimeseries>?): List<Entry> {
