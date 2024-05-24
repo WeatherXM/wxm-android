@@ -40,7 +40,7 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
             binding.guideGif.loadImage(imageLoader, R.raw.m5_claim)
         } else {
             binding.firstStep.setHtml(R.string.prepare_gateway_d1_first_step)
-            binding.guideGif.loadImage(imageLoader, R.raw.wg1200_claim)
+            binding.guideGif.loadImage(imageLoader, R.raw.d1_claim)
         }
         binding.secondStep.setHtml(R.string.prepare_gateway_wifi_second_step)
         binding.m5Notice.setVisible(model.deviceType == DeviceType.M5_WIFI)
