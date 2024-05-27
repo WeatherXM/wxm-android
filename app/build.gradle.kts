@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.firebase.appdistribution)
     alias(libs.plugins.firebase.perf)
     alias(libs.plugins.grgit)
+    alias(libs.plugins.compose.compiler)
 }
 
 fun getVersionGitTags(printForDebugging: Boolean = false): List<String> {
@@ -209,10 +210,6 @@ android {
         viewBinding = true
         compose = true
         buildConfig = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.14"
     }
 
     // Filter out specific build variants
