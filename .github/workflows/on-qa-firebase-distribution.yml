@@ -31,6 +31,8 @@ env:
     ORG_GRADLE_PROJECT_DEBUG_KEY_PASSWORD: ${{ secrets.DEBUG_KEY_PASSWORD }}
     # Firebase distribution only on QA Group
     ORG_GRADLE_PROJECT_FIREBASE_TEST_GROUP: ${{ secrets.FIREBASE_QA_TEST_GROUP }}
+    # Mixpanel Token
+    ORG_GRADLE_PROJECT_MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN }}
     # Gradle config
     GRADLE_USER_HOME: ${GITHUB_WORKSPACE}/.gradle
     GLOBAL_GRADLE_CACHE: gradle-cache-${GITHUB_REPOSITORY}

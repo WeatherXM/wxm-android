@@ -5,19 +5,19 @@ import androidx.activity.addCallback
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityCellInfoBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.explorer.UICell
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -33,8 +33,6 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
         super.onCreate(savedInstanceState)
         binding = ActivityCellInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         with(binding.toolbar) {
             setNavigationOnClickListener {
@@ -68,10 +66,10 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
 
         binding.capacityChip.setOnCloseIconClickListener {
             analytics.trackEventSelectContent(
-                Analytics.ParamValue.LEARN_MORE.paramValue,
+                AnalyticsService.ParamValue.LEARN_MORE.paramValue,
                 Pair(
                     FirebaseAnalytics.Param.ITEM_ID,
-                    Analytics.ParamValue.INFO_CELL_CAPACITY.paramValue
+                    AnalyticsService.ParamValue.INFO_CELL_CAPACITY.paramValue
                 )
             )
             navigator.showMessageDialog(
@@ -79,7 +77,7 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
                 getString(R.string.cell_capacity),
                 getString(R.string.cell_capacity_explanation),
                 readMoreUrl = getString(R.string.docs_url_cell_capacity),
-                analyticsScreenName = Analytics.Screen.CELL_CAPACITY_INFO.screenName
+                analyticsScreen = AnalyticsService.Screen.CELL_CAPACITY_INFO
             )
         }
 
@@ -120,7 +118,7 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(
-            Analytics.Screen.EXPLORER_CELL, this::class.simpleName, model.cell.index
+            AnalyticsService.Screen.EXPLORER_CELL, classSimpleName(), model.cell.index
         )
         model.fetchDevices()
     }
@@ -162,7 +160,7 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
         data.count { it.isOnline() }.apply {
             if (this > 1) {
                 binding.activeChip.text = getString(R.string.cell_active_stations, this)
-            } else if(this == 1) {
+            } else if (this == 1) {
                 binding.activeChip.text = getString(R.string.cell_active_station)
             } else {
                 binding.activeChip.setVisible(false)

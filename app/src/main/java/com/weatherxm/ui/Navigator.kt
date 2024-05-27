@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Parcelable
 import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.StringRes
@@ -13,8 +14,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.BoostReward
 import com.weatherxm.data.Location
 import com.weatherxm.data.Reward
@@ -23,13 +25,15 @@ import com.weatherxm.data.WXMRemoteMessage
 import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.cellinfo.CellInfoActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
-import com.weatherxm.ui.claimdevice.m5.ClaimM5Activity
+import com.weatherxm.ui.claimdevice.selectstation.SelectStationTypeActivity
+import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity
 import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
 import com.weatherxm.ui.common.Contracts.ARG_BOOST_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_CELL_CENTER
 import com.weatherxm.ui.common.Contracts.ARG_DATE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
 import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
@@ -39,6 +43,7 @@ import com.weatherxm.ui.common.Contracts.ARG_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
+import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.toast
@@ -75,12 +80,11 @@ import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
 import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
-import com.weatherxm.util.Analytics
 import timber.log.Timber
 import java.time.LocalDate
 
 @Suppress("TooManyFunctions")
-class Navigator(private val analytics: Analytics) {
+class Navigator(private val analytics: AnalyticsWrapper) {
 
     fun showExplorer(context: Context, cellCenter: Location? = null) {
         context.startActivity(
@@ -216,10 +220,6 @@ class Navigator(private val analytics: Analytics) {
         activityResultLauncher.launch(intent)
     }
 
-    fun showQRScanner(activityResultLauncher: ActivityResultLauncher<ScanOptions>) {
-        activityResultLauncher.launch(ScanOptions().setBeepEnabled(false))
-    }
-
     fun showBluetoothEnablePrompt(bluetoothLauncher: ActivityResultLauncher<Intent>) {
         bluetoothLauncher.launch(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE))
     }
@@ -312,20 +312,39 @@ class Navigator(private val analytics: Analytics) {
         }
     }
 
-    fun showClaimHeliumFlow(context: Context) {
-        // Launch claim activity
+    fun showClaimSelectStationType(context: Context) {
         context.startActivity(
-            Intent(context, ClaimHeliumActivity::class.java)
+            Intent(context, SelectStationTypeActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
     }
 
-    fun showClaimM5Flow(context: Context) {
-        // Launch claim activity
-        context.startActivity(
-            Intent(context, ClaimM5Activity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        )
+    fun showClaimWifiFlow(
+        activityResultLauncher: ActivityResultLauncher<Intent>?,
+        context: Context,
+        deviceType: DeviceType
+    ) {
+        val intent = Intent(context, ClaimWifiActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            .putExtra(ARG_DEVICE_TYPE, deviceType as Parcelable)
+        if (activityResultLauncher == null) {
+            context.startActivity(intent)
+        } else {
+            activityResultLauncher.launch(intent)
+        }
+    }
+
+    fun showClaimHeliumFlow(
+        activityResultLauncher: ActivityResultLauncher<Intent>?,
+        context: Context
+    ) {
+        val intent = Intent(context, ClaimHeliumActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        if (activityResultLauncher == null) {
+            context.startActivity(intent)
+        } else {
+            activityResultLauncher.launch(intent)
+        }
     }
 
     fun showDeviceHeliumOTA(fragment: Fragment, device: UIDevice?, deviceIsBleConnected: Boolean) {
@@ -445,14 +464,10 @@ class Navigator(private val analytics: Analytics) {
         title: String?,
         message: String?,
         readMoreUrl: String? = null,
-        analyticsScreenName: String? = null
+        analyticsScreen: AnalyticsService.Screen? = null
     ) {
-        MessageDialogFragment.newInstance(
-            title,
-            message,
-            readMoreUrl,
-            analyticsScreenName
-        ).show(fragmentManager, MessageDialogFragment.TAG)
+        MessageDialogFragment.newInstance(title, message, readMoreUrl, analyticsScreen)
+            .show(fragmentManager, MessageDialogFragment.TAG)
     }
 
     fun showHandleFollowDialog(
@@ -514,10 +529,10 @@ class Navigator(private val analytics: Analytics) {
 
     fun openSupportCenter(
         context: Context?,
-        source: String = Analytics.ParamValue.ERROR.paramValue
+        source: String = AnalyticsService.ParamValue.ERROR.paramValue
     ) {
         analytics.trackEventSelectContent(
-            Analytics.ParamValue.CONTACT_SUPPORT.paramValue,
+            AnalyticsService.ParamValue.CONTACT_SUPPORT.paramValue,
             Pair(FirebaseAnalytics.Param.SOURCE, source)
         )
 

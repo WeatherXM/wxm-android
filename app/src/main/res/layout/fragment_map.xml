@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/search_station_name_address"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+            app:backgroundTint="@color/colorSurface"
             app:defaultScrollFlagsEnabled="false"
             app:menu="@menu/explorer_menu"
             app:navigationIcon="@drawable/ic_logo"
@@ -38,6 +39,7 @@
         android:layout_height="match_parent"
         android:imeOptions="actionSend"
         app:autoShowKeyboard="true"
+        app:backgroundTint="@color/colorSurface"
         app:closeIcon="@drawable/ic_close"
         app:iconifiedByDefault="true"
         app:layout_anchor="@id/searchBar">

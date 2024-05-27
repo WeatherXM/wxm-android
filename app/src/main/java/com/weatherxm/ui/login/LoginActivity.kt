@@ -8,18 +8,18 @@ import android.view.inputmethod.EditorInfo
 import arrow.core.getOrElse
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.data.User
 import com.weatherxm.databinding.ActivityLoginBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
-import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.Validator
 import com.weatherxm.util.WidgetHelper
 import org.koin.android.ext.android.inject
@@ -35,8 +35,6 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -126,7 +124,7 @@ class LoginActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.LOGIN, this::class.simpleName)
+        analytics.trackScreen(AnalyticsService.Screen.LOGIN, classSimpleName())
     }
 
     private fun onLoginResult(result: Resource<Unit>) {
@@ -138,9 +136,11 @@ class LoginActivity : BaseActivity() {
             }
             Status.ERROR -> {
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.LOGIN.paramValue,
-                    contentId = Analytics.ParamValue.LOGIN_ID.paramValue,
-                    Pair(FirebaseAnalytics.Param.METHOD, Analytics.ParamValue.EMAIL.paramValue),
+                    contentName = AnalyticsService.ParamValue.LOGIN.paramValue,
+                    contentId = AnalyticsService.ParamValue.LOGIN_ID.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.METHOD, AnalyticsService.ParamValue.EMAIL.paramValue
+                    ),
                     success = 0L
                 )
                 setInputEnabled(true)
@@ -173,9 +173,12 @@ class LoginActivity : BaseActivity() {
                 * should track the successful login event.
                  */
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.LOGIN.paramValue,
-                    contentId = Analytics.ParamValue.LOGIN_ID.paramValue,
-                    Pair(FirebaseAnalytics.Param.METHOD, Analytics.ParamValue.EMAIL.paramValue),
+                    contentName = AnalyticsService.ParamValue.LOGIN.paramValue,
+                    contentId = AnalyticsService.ParamValue.LOGIN_ID.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.METHOD,
+                        AnalyticsService.ParamValue.EMAIL.paramValue
+                    ),
                     success = 1L
                 )
 
@@ -194,9 +197,12 @@ class LoginActivity : BaseActivity() {
             }
             Status.ERROR -> {
                 analytics.trackEventViewContent(
-                    contentName = Analytics.ParamValue.LOGIN.paramValue,
-                    contentId = Analytics.ParamValue.LOGIN_ID.paramValue,
-                    Pair(FirebaseAnalytics.Param.METHOD, Analytics.ParamValue.EMAIL.paramValue),
+                    contentName = AnalyticsService.ParamValue.LOGIN.paramValue,
+                    contentId = AnalyticsService.ParamValue.LOGIN_ID.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.METHOD,
+                        AnalyticsService.ParamValue.EMAIL.paramValue
+                    ),
                     success = 0L
                 )
                 binding.loading.visibility = View.INVISIBLE

@@ -14,9 +14,7 @@ import com.weatherxm.data.Location
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityHomeBinding
-import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeDialogFragment
 import com.weatherxm.ui.common.Contracts
-import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
@@ -98,14 +96,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         }
 
         binding.addDevice.setOnClickListener {
-            // Show device type selection dialog
-            SelectDeviceTypeDialogFragment.newInstance { selectedDeviceType ->
-                if (selectedDeviceType == DeviceType.HELIUM) {
-                    navigator.showClaimHeliumFlow(this)
-                } else {
-                    navigator.showClaimM5Flow(this)
-                }
-            }.show(this)
+            navigator.showClaimSelectStationType(this)
         }
 
         binding.networkStatsBtn.setOnClickListener {

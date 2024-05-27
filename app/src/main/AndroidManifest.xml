@@ -33,6 +33,10 @@
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute,LockedOrientationActivity">
 
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="barcode_ui" />
+
         <receiver
             android:name=".service.receivers.AppUpdateReceiver"
             android:exported="true">
@@ -197,8 +201,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.weatherxm.ui.claimdevice.m5.ClaimM5Activity"
+            android:name="com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity"
@@ -279,6 +284,10 @@
             android:theme="@style/Theme.WeatherXM" />
         <activity
             android:name="com.weatherxm.ui.deviceforecast.ForecastDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.claimdevice.selectstation.SelectStationTypeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
 

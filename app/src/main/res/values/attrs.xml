@@ -60,4 +60,8 @@
     <declare-styleable name="RewardsQualityCardView">
         <attr name="reward_quality_title" format="string" />
     </declare-styleable>
+    <declare-styleable name="DeviceTypeCardView">
+        <attr name="device_type_image" format="reference" />
+        <attr name="device_type_title" format="string" />
+    </declare-styleable>
 </resources>

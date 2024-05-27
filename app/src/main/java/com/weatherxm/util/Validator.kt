@@ -2,15 +2,17 @@ package com.weatherxm.util
 
 import android.util.Patterns
 import com.weatherxm.data.Location
+import com.weatherxm.ui.common.DeviceType
 
 @Suppress("MagicNumber")
 object Validator {
     private const val MINIMUM_PASSWORD_LENGTH = 6
     private const val ADDRESS_LENGTH = 42
-    private const val SERIAL_NUMBER_LENGTH = 18
     private const val FRIENDLY_NAME_MAX_LENGTH = 64
     private const val REGEX_ETH_ADDRESS = "^0x[a-fA-F0-9]{40}\$"
-    private const val REGEX_SERIAL_NUMBER = "^[a-fA-F0-9]{18}\$"
+    private const val REGEX_M5_SERIAL_NUMBER = "^[a-fA-F0-9]{18}\$"
+    private const val REGEX_D1_SERIAL_NUMBER = "^[a-fA-F0-9]{20}\$"
+    private const val REGEX_CLAIMING_KEY = "^[0-9]{6}\$"
     private const val REGEX_FRIENDLY_NAME = "^(?!\\s*\$).+"
     private val LATITUDE_BOUNDS = -90.0..90.0
     private val LONGITUDE_BOUNDS = -180.0..180.0
@@ -41,11 +43,16 @@ object Validator {
         return address.matches(Regex(REGEX_ETH_ADDRESS))
     }
 
-    fun validateSerialNumber(serialNumber: String?): Boolean {
-        if (serialNumber.isNullOrEmpty() || serialNumber.length != SERIAL_NUMBER_LENGTH) {
-            return false
+    fun validateSerialNumber(serialNumber: String, deviceType: DeviceType): Boolean {
+        return if (deviceType == DeviceType.M5_WIFI) {
+            serialNumber.matches(Regex(REGEX_M5_SERIAL_NUMBER))
+        } else {
+            serialNumber.matches(Regex(REGEX_D1_SERIAL_NUMBER))
         }
-        return serialNumber.matches(Regex(REGEX_SERIAL_NUMBER))
+    }
+
+    fun validateClaimingKey(claimingKey: String): Boolean {
+        return claimingKey.matches(Regex(REGEX_CLAIMING_KEY))
     }
 
     fun validateFriendlyName(friendlyName: String?): Boolean {

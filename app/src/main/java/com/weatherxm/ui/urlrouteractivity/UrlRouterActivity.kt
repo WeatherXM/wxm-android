@@ -3,7 +3,6 @@ package com.weatherxm.ui.urlrouteractivity
 import android.os.Bundle
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityUrlRouterBinding
-import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -16,8 +15,6 @@ class UrlRouterActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUrlRouterBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.root.applyInsets()
 
         model.onError().observe(this) {
             binding.logo.setVisible(false)

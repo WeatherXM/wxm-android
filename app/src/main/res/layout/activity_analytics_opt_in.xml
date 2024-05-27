@@ -5,7 +5,8 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorSurface">
+    android:background="@color/colorSurface"
+    android:fitsSystemWindows="true">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -178,6 +179,7 @@
         app:contentPadding="@dimen/padding_small"
         app:contentPaddingLeft="@dimen/padding_normal"
         app:contentPaddingRight="@dimen/padding_normal"
+        app:cardCornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout

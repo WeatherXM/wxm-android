@@ -7,16 +7,16 @@ import androidx.activity.addCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidPassword
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityDeleteAccountBinding
-import com.weatherxm.ui.common.applyInsets
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.util.Analytics
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -39,8 +39,6 @@ class DeleteAccountActivity : BaseActivity() {
         binding = ActivityDeleteAccountBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.root.applyInsets()
-
         initHtmlText()
         initListeners()
 
@@ -55,7 +53,7 @@ class DeleteAccountActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        analytics.trackScreen(Analytics.Screen.DELETE_ACCOUNT, this::class.simpleName)
+        analytics.trackScreen(AnalyticsService.Screen.DELETE_ACCOUNT, classSimpleName())
     }
 
     private fun initHtmlText() {

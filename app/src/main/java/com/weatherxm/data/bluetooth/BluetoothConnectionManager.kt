@@ -19,6 +19,7 @@ import com.juul.kable.Descriptor
 import com.juul.kable.GattRequestRejectedException
 import com.juul.kable.GattStatusException
 import com.juul.kable.GattWriteException
+import com.juul.kable.NotConnectedException
 import com.juul.kable.NotReadyException
 import com.juul.kable.Peripheral
 import com.juul.kable.peripheral
@@ -152,6 +153,8 @@ class BluetoothConnectionManager(
             writeCharacteristic = null
             peripheral.disconnect()
         } catch (e: UninitializedPropertyAccessException) {
+            Timber.d(e, "Could not disconnect peripheral.")
+        } catch (e: NotConnectedException) {
             Timber.d(e, "Could not disconnect peripheral.")
         }
     }

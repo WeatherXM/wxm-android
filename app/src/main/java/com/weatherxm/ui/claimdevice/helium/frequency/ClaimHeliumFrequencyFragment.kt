@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimHeliumFrequencyBinding
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.components.BaseFragment
-import com.weatherxm.util.Analytics
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class ClaimHeliumFrequencyFragment : BaseFragment() {
@@ -35,7 +35,7 @@ class ClaimHeliumFrequencyFragment : BaseFragment() {
                 me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {
                     setOnLinkClickListener { _, url ->
                         analytics.trackEventSelectContent(
-                            Analytics.ParamValue.DOCUMENTATION_FREQUENCY.paramValue
+                            AnalyticsService.ParamValue.DOCUMENTATION_FREQUENCY.paramValue
                         )
                         navigator.openWebsite(context, url)
                         return@setOnLinkClickListener true

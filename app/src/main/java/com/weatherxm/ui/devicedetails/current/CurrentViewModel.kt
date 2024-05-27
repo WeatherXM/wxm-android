@@ -11,7 +11,7 @@ import com.weatherxm.data.NetworkError.NoConnectionError
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.usecases.DeviceDetailsUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +22,7 @@ class CurrentViewModel(
     var device: UIDevice = UIDevice.empty(),
     private val resources: Resources,
     private val deviceDetailsUseCase: DeviceDetailsUseCase,
-    private val analytics: Analytics
+    private val analytics: AnalyticsWrapper
 ) : ViewModel() {
     private val onDevice = MutableLiveData<UIDevice>()
     private val onLoading = MutableLiveData<Boolean>()

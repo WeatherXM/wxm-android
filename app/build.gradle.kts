@@ -80,6 +80,8 @@ android {
         // Resource value fields
         resValue("string", "mapbox_access_token", getStringProperty("MAPBOX_ACCESS_TOKEN"))
 
+        buildConfigField("String", "MIXPANEL_TOKEN", "\"${getStringProperty("MIXPANEL_TOKEN")}\"")
+
         // Instrumented Tests
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -210,7 +212,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.11"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
 
     // Filter out specific build variants
@@ -323,9 +325,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.androidx.preference.ktx)
-    implementation(libs.androidx.recyclerview.selection)
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.security.crypto)
@@ -337,8 +337,9 @@ dependencies {
     // Material Components for Android
     implementation(libs.material)
 
-    // Google Play Services for Location & Maps
+    // Google Play Services for Location & Maps & QR Scanner
     implementation(libs.play.services.location)
+    implementation(libs.play.services.scanner)
 
     // Logging
     implementation(libs.timber)
@@ -397,8 +398,8 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.installations)
 
-    // QR Code Scanner
-    implementation(libs.zxing.android.embedded)
+    // Mixpanel Analytics
+    implementation(libs.mixpanel)
 
     // Retromock for mocking responses
     implementation(libs.retromock)
@@ -416,6 +417,7 @@ dependencies {
 
     // Image Loader
     implementation(libs.coil.base)
+    implementation(libs.coil.gif)
 
     // Chucker - HTTP Inspector
     debugImplementation(libs.chucker)

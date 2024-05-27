@@ -14,7 +14,7 @@ import com.weatherxm.ui.common.DevicesSortOrder
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.FollowUseCase
-import com.weatherxm.util.Analytics
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +24,7 @@ import timber.log.Timber
 class DevicesViewModel(
     private val deviceListUseCase: DeviceListUseCase,
     private val followUseCase: FollowUseCase,
-    private val analytics: Analytics,
+    private val analytics: AnalyticsWrapper,
     private val resources: Resources
 ) : ViewModel() {
     private val devices = MutableLiveData<Resource<List<UIDevice>>>().apply {

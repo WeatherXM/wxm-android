@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.icu.text.CompactDecimalFormat
 import android.icu.text.NumberFormat
 import android.location.Geocoder
+import android.os.Build.VERSION.SDK_INT
 import android.text.format.DateFormat
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
@@ -15,6 +16,8 @@ import androidx.security.crypto.EncryptedSharedPreferences.PrefKeyEncryptionSche
 import androidx.security.crypto.EncryptedSharedPreferences.PrefValueEncryptionScheme
 import androidx.security.crypto.MasterKeys
 import coil.ImageLoader
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import com.chuckerteam.chucker.api.ChuckerInterceptor
@@ -37,11 +40,20 @@ import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.mapbox.search.SearchEngine
 import com.mapbox.search.SearchEngineSettings
+import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.analytics.FirebaseAnalyticsService
+import com.weatherxm.analytics.MixpanelAnalyticsService
 import com.weatherxm.data.adapters.LocalDateJsonAdapter
 import com.weatherxm.data.adapters.LocalDateTimeJsonAdapter
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
@@ -149,9 +161,7 @@ import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyViewMod
 import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairViewModel
 import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
-import com.weatherxm.ui.claimdevice.m5.ClaimM5ViewModel
-import com.weatherxm.ui.claimdevice.m5.verify.ClaimM5VerifyViewModel
-import com.weatherxm.ui.claimdevice.selectdevicetype.SelectDeviceTypeViewModel
+import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.connectwallet.ConnectWalletViewModel
 import com.weatherxm.ui.deleteaccount.DeleteAccountViewModel
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -224,8 +234,6 @@ import com.weatherxm.usecases.PreferencesUseCase
 import com.weatherxm.usecases.PreferencesUseCaseImpl
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.usecases.RewardsUseCaseImpl
-import com.weatherxm.usecases.SelectDeviceTypeUseCase
-import com.weatherxm.usecases.SelectDeviceTypeUseCaseImpl
 import com.weatherxm.usecases.SendFeedbackUseCase
 import com.weatherxm.usecases.SendFeedbackUseCaseImpl
 import com.weatherxm.usecases.StartupUseCase
@@ -240,7 +248,6 @@ import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCaseImpl
 import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.usecases.WidgetSelectStationUseCaseImpl
-import com.weatherxm.util.Analytics
 import com.weatherxm.util.Crashlytics
 import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.LocationHelper
@@ -561,9 +568,6 @@ private val usecases = module {
     single<BluetoothScannerUseCase> {
         BluetoothScannerUseCaseImpl(get())
     }
-    single<SelectDeviceTypeUseCase> {
-        SelectDeviceTypeUseCaseImpl(get())
-    }
     single<BluetoothConnectionUseCase> {
         BluetoothConnectionUseCaseImpl(get())
     }
@@ -712,10 +716,6 @@ private val bluetooth = module {
 }
 
 val firebase = module {
-    single<FirebaseAnalytics>(createdAtStart = true) {
-        Firebase.analytics
-    }
-
     single<FirebaseCrashlytics>(createdAtStart = true) {
         Firebase.crashlytics
     }
@@ -751,6 +751,14 @@ val firebase = module {
 
     single<FirebaseInstallations> {
         FirebaseInstallations.getInstance()
+    }
+
+    single<GmsBarcodeScanner> {
+        val options = GmsBarcodeScannerOptions.Builder()
+            .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
+            .enableAutoZoom()
+            .build()
+        GmsBarcodeScanning.getClient(get(), options)
     }
 }
 
@@ -805,9 +813,23 @@ val clientIdentificationHelper = module {
 }
 
 val analytics = module {
-    single(createdAtStart = true) {
-        Analytics(get(), get(), get(), get(), get())
+    single<FirebaseAnalytics> {
+        Firebase.analytics
     }
+
+    single<MixpanelAPI> {
+        MixpanelAPI.getInstance(androidContext(), BuildConfig.MIXPANEL_TOKEN, false).apply {
+            setEnableLogging(true)
+        }
+    }
+
+    factory { FirebaseAnalyticsService(get()) as AnalyticsService }
+    factory { MixpanelAnalyticsService(get()) as AnalyticsService }
+
+    single<AnalyticsWrapper> {
+        AnalyticsWrapper(getAll<AnalyticsService>(), get(), get(), get(), androidContext())
+    }
+
 }
 
 val crashlytics = module {
@@ -826,6 +848,7 @@ private val utilities = module {
     single<CacheService> {
         CacheService(get(), get<SharedPreferences>(named(PREFERENCES_AUTH_TOKEN)), get(), get())
     }
+    @Suppress("MagicNumber")
     single<ImageLoader>(createdAtStart = true) {
         ImageLoader.Builder(androidContext())
             .memoryCache {
@@ -838,6 +861,13 @@ private val utilities = module {
                     .directory(androidContext().cacheDir.resolve("image_cache"))
                     .maxSizePercent(COIL_DISK_CACHE_SIZE_PERCENTAGE)
                     .build()
+            }
+            .components {
+                if (SDK_INT >= 28) {
+                    add(ImageDecoderDecoder.Factory())
+                } else {
+                    add(GifDecoder.Factory())
+                }
             }
             .respectCacheHeaders(false)
             .build()
@@ -945,7 +975,6 @@ private val viewmodels = module {
     }
     viewModel { StartupViewModel(get()) }
     viewModel { AnalyticsOptInViewModel(get(), get()) }
-    viewModel { SelectDeviceTypeViewModel(get()) }
     viewModel { ConnectWalletViewModel(get(), get(), get()) }
     viewModel { DeleteAccountViewModel(get(), get(), get()) }
     viewModel { DeviceEditLocationViewModel(get(), get(), get(), get()) }
@@ -968,12 +997,10 @@ private val viewmodels = module {
     viewModel { UrlRouterViewModel(get(), get(), get()) }
     viewModel { SelectStationViewModel(get()) }
     viewModel { ClaimLocationViewModel(get(), get(), get()) }
-    viewModel { ClaimM5ViewModel(get(), get(), get()) }
     viewModel { ClaimHeliumViewModel(get(), get(), get()) }
     viewModel { ClaimHeliumPairViewModel(get(), get(), get(), get()) }
     viewModel { ClaimHeliumResultViewModel(get(), get(), get()) }
     viewModel { ClaimHeliumFrequencyViewModel(get(), get()) }
-    viewModel { ClaimM5VerifyViewModel() }
     viewModel { NetworkSearchViewModel(get(), get()) }
     viewModel { params ->
         ForecastDetailsViewModel(
@@ -983,6 +1010,9 @@ private val viewmodels = module {
             get(),
             get()
         )
+    }
+    viewModel { params ->
+        ClaimWifiViewModel(deviceType = params.get(), get(), get(), get())
     }
 }
 
