@@ -66,17 +66,22 @@
         "total_supply": 100000000,
         "daily_minted": 35434,
         "circulating_supply": 35000000,
-        "last_tx_hash": "0x5ef71fcc5cea02a4489e4c1720dc39f9f49148d430a9c71485746b11b40730b3",
+        "total_allocated": 13508,
+        "last_tx_hash_url": "https://sepolia.arbiscan.io/tx/0x8a971abf1cc160a273fd8d067649d2553c51a4c4f8ffe1fe3071ebc9b55dac66",
         "allocated_per_day": [
             {
-                "ts": "2023-05-13T09:31:33.619Z",
-                "value": 12332
+                "ts": "2024-05-23T00:00:00+00:00",
+                "value": 0
             },
             {
-                "ts": "2023-06-13T09:31:33.619Z",
-                "value": 15332
+                "ts": "2024-05-24T00:00:00+00:00",
+                "value": 13508.254677715526
             }
         ]
+    },
+    "contracts": {
+        "token_url": "https://etherscan.io/token/0xde654f497a563dd7a121c176a125dd2f11f13a83",
+        "rewards_url": "https://arbiscan.io/address/0x3d5aA83d830398ad93fBAF98ee7079278b9DCD49"
     },
     "customers": {
         "total": 54321,

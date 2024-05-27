@@ -42,7 +42,7 @@ class StatsUseCaseImpl(
                 dataDaysEntries = dataDaysEntries,
                 dataDaysStartDate = stats.dataDays?.first()?.ts.getFormattedDate(),
                 dataDaysEndDate = stats.dataDays?.last()?.ts.getFormattedDate(),
-                totalRewards = compactNumber(stats.tokens?.allocatedPerDay?.last()?.value),
+                totalRewards = compactNumber(stats.tokens?.totalAllocated),
                 totalRewards30D = compactNumber(
                     (stats.tokens?.allocatedPerDay?.last()?.value ?: 0.0)
                         - (stats.tokens?.allocatedPerDay?.first()?.value ?: 0.0)
@@ -62,7 +62,9 @@ class StatsUseCaseImpl(
                 rewardsAvgMonthly = formatNumber(stats.tokens?.avgMonthly),
                 totalSupply = stats.tokens?.totalSupply,
                 circulatingSupply = stats.tokens?.circSupply,
-                lastTxHash = stats.tokens?.lastTxHash ?: String.empty(),
+                lastTxHashUrl = stats.tokens?.lastTxHashUrl,
+                tokenUrl = stats.contracts?.tokenUrl,
+                rewardsUrl = stats.contracts?.rewardsUrl,
                 totalStations = formatNumber(stats.weatherStations.onboarded?.total),
                 totalStationStats = createStationStats(stats.weatherStations.onboarded?.details),
                 claimedStations = formatNumber(stats.weatherStations.claimed?.total),
@@ -93,8 +95,12 @@ class StatsUseCaseImpl(
         } ?: mutableListOf()
 
         val dataSize = filteredData.size
-        return if (filteredData.last().y == filteredData[dataSize - 2].y) {
-            filteredData.dropLast(1)
+        return if (dataSize >= 2) {
+            if (filteredData.last().y == filteredData[dataSize - 2].y) {
+                filteredData.dropLast(1)
+            } else {
+                filteredData
+            }
         } else {
             filteredData
         }

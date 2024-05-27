@@ -50,12 +50,6 @@ class NetworkStatsActivity : BaseActivity() {
         }
         binding.activeRecycler.adapter = activeAdapter
 
-        formatContractsLinks()
-
-        binding.lastRunCard.setOnClickListener {
-            onLastRunClicked()
-        }
-
         binding.buyCard.setOnClickListener {
             navigator.openWebsite(this, getString(R.string.shop_url))
         }
@@ -112,59 +106,6 @@ class NetworkStatsActivity : BaseActivity() {
 
         model.fetchMainnetStatus()
         model.getNetworkStats()
-    }
-
-    private fun onLastRunClicked() {
-        model.onNetworkStats().value?.data?.let {
-            analytics.trackEventSelectContent(
-                AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
-                Pair(
-                    FirebaseAnalytics.Param.SOURCE,
-                    AnalyticsService.ParamValue.LAST_RUN_HASH.paramValue
-                )
-            )
-            navigator.openWebsite(
-                this, getString(R.string.arbiscan_tx_explorer, it.lastTxHash)
-            )
-        }
-    }
-
-    private fun formatContractsLinks() {
-        with(binding.viewRewardsContractBtn) {
-            movementMethod = BetterLinkMovementMethod.newInstance().apply {
-                setOnLinkClickListener { _, url ->
-                    analytics.trackEventSelectContent(
-                        AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
-                        Pair(
-                            FirebaseAnalytics.Param.SOURCE,
-                            AnalyticsService.ParamValue.TOKEN_CONTRACT.paramValue
-                        )
-                    )
-                    navigator.openWebsite(this@NetworkStatsActivity, url)
-                    return@setOnLinkClickListener true
-                }
-            }
-            setHtml(R.string.view_token_contract, getString(R.string.rewards_contract_arbiscan))
-            removeLinksUnderline()
-        }
-
-        with(binding.viewTokenContractBtn) {
-            movementMethod = BetterLinkMovementMethod.newInstance().apply {
-                setOnLinkClickListener { _, url ->
-                    analytics.trackEventSelectContent(
-                        AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
-                        Pair(
-                            FirebaseAnalytics.Param.SOURCE,
-                            AnalyticsService.ParamValue.REWARD_CONTRACT.paramValue
-                        )
-                    )
-                    navigator.openWebsite(this@NetworkStatsActivity, url)
-                    return@setOnLinkClickListener true
-                }
-            }
-            setHtml(R.string.view_rewards_contract, getString(R.string.token_contract_etherscan))
-            removeLinksUnderline()
-        }
     }
 
     private fun openStationShop(stationDetails: NetworkStationStats, categoryName: String) {
@@ -279,6 +220,7 @@ class NetworkStatsActivity : BaseActivity() {
             rewardsChart.initializeNetworkStatsChart(data.rewardsEntries)
             rewardsStartDate.text = data.rewardsStartDate
             rewardsEndDate.text = data.rewardsEndDate
+            updateContractsAndTxHash(data)
 
             earnWxmPerMonth.text = getString(R.string.earn_wxm, data.rewardsAvgMonthly)
 
@@ -292,6 +234,7 @@ class NetworkStatsActivity : BaseActivity() {
             } else {
                 binding.circSupplyBar.setVisible(false)
             }
+
             totals.text = data.totalStations
             claimed.text = data.claimedStations
             active.text = data.activeStations
@@ -301,6 +244,64 @@ class NetworkStatsActivity : BaseActivity() {
             activeAdapter.submitList(data.activeStationStats)
 
             lastUpdated.text = getString(R.string.last_updated, data.lastUpdated)
+        }
+    }
+
+    private fun updateContractsAndTxHash(data: NetworkStats) {
+        data.rewardsUrl?.let {
+            with(binding.viewRewardsContractBtn) {
+                movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                    setOnLinkClickListener { _, url ->
+                        analytics.trackEventSelectContent(
+                            AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
+                            Pair(
+                                FirebaseAnalytics.Param.SOURCE,
+                                AnalyticsService.ParamValue.TOKEN_CONTRACT.paramValue
+                            )
+                        )
+                        navigator.openWebsite(this@NetworkStatsActivity, url)
+                        return@setOnLinkClickListener true
+                    }
+                }
+                setHtml(R.string.view_rewards_contract, it)
+                removeLinksUnderline()
+                setVisible(true)
+            }
+        }
+
+        data.lastTxHashUrl?.let { txUrl ->
+            binding.lastRunCard.setOnClickListener {
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.SOURCE,
+                        AnalyticsService.ParamValue.LAST_RUN_HASH.paramValue
+                    )
+                )
+                navigator.openWebsite(this@NetworkStatsActivity, txUrl)
+            }
+            binding.lastRunOpenInNew.setVisible(true)
+        }
+
+        data.tokenUrl?.let {
+            with(binding.viewTokenContractBtn) {
+                movementMethod = BetterLinkMovementMethod.newInstance().apply {
+                    setOnLinkClickListener { _, url ->
+                        analytics.trackEventSelectContent(
+                            AnalyticsService.ParamValue.NETWORK_STATS.paramValue,
+                            Pair(
+                                FirebaseAnalytics.Param.SOURCE,
+                                AnalyticsService.ParamValue.REWARD_CONTRACT.paramValue
+                            )
+                        )
+                        navigator.openWebsite(this@NetworkStatsActivity, url)
+                        return@setOnLinkClickListener true
+                    }
+                }
+                setHtml(R.string.view_token_contract, it)
+                removeLinksUnderline()
+                setVisible(true)
+            }
         }
     }
 }
