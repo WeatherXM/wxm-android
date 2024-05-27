@@ -54,7 +54,7 @@ timber = "5.0.1"
 
 # Plugins
 android-gradle-plugin = "8.4.1"
-kotlin-android-plugin = "1.9.24"
+kotlin-android-plugin = "2.0.0"
 kotlin-parcelize-plugin = "1.9.24"
 ksp-plugin = "1.9.24-1.0.20"
 google-services-plugin = "4.4.1"
