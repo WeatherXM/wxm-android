@@ -54,9 +54,8 @@ timber = "5.0.1"
 
 # Plugins
 android-gradle-plugin = "8.4.1"
-kotlin-android-plugin = "1.9.24"
-kotlin-parcelize-plugin = "1.9.24"
-ksp-plugin = "1.9.24-1.0.20"
+kotlin = "2.0.0"
+ksp-plugin = "2.0.0-1.0.21"
 google-services-plugin = "4.4.1"
 firebase-crashlytics-plugin = "3.0.1"
 firebase-appdistribution-plugin = "5.0.0"
@@ -141,8 +140,8 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-android-plugin" }
-kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin-parcelize-plugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp-plugin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services-plugin" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics-plugin" }
@@ -150,5 +149,5 @@ firebase-appdistribution = { id = "com.google.firebase.appdistribution", version
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebase-perf-plugin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt-plugin" }
 grgit = { id = "org.ajoberstar.grgit", version.ref = "grgit" }
-
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 

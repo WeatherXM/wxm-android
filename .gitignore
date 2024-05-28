@@ -9,6 +9,7 @@ release/
 .cxx
 *.keystore
 *.jks
+.kotlin
 
 
 *.env
