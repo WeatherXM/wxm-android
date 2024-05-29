@@ -133,9 +133,7 @@
                 android:text="@string/connect_m5_wifi_watch_video"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:textColor="@color/alternativeTextColor"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/fourthStep"
-                tools:visibility="visible" />
+                app:layout_constraintTop_toBottomOf="@id/fourthStep" />
 
             <ImageView
                 android:id="@+id/watchVideoButton"
@@ -143,10 +141,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_extra_large"
                 android:contentDescription="@string/connect_m5_wifi_watch_video"
-                android:src="@drawable/m5_connect_wifi_video"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/watchVideoText"
-                tools:visibility="visible" />
+                android:src="@drawable/claiming_connect_wif_instructional_video"
+                app:layout_constraintTop_toBottomOf="@id/watchVideoText" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
