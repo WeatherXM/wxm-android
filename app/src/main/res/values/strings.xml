@@ -428,7 +428,7 @@
     <string name="connect_wifi_fourth_step">Choose your WiFi network from the list and enter the WiFi password to connect your gateway.</string>
     <string name="connect_d1_wifi_first_step"><![CDATA[Turn on the WG1200 gateway and swipe right to the settings screen. Select <b>“Configure WiFi”</b> and then press <b>“Continue”</b> on the screen.]]></string>
     <string name="connect_d1_wifi_second_step"><![CDATA[Connect your phone to the <b>“WXM_WG1200”</b> WiFi network.]]></string>
-    <string name="connect_m5_wifi_watch_video">If you\’re having difficulty completing this step, make sure you watch the instructional video below!</string>
+    <string name="connect_m5_wifi_watch_video">If you’re having difficulty completing this step, make sure you watch the instructional video below!</string>
 
     <!-- Claim - Prepare for claiming -->
     <string name="prepare_gateway_claiming">Prepare gateway for claiming</string>
