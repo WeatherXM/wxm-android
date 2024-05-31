@@ -30,14 +30,12 @@ class ClaimHeliumViewModel(
 ) : ViewModel() {
     private val onCancel = MutableLiveData(false)
     private val onNext = MutableLiveData(false)
-    private val onBackToLocation = MutableLiveData(false)
     private val onClaimResult = MutableLiveData<Resource<UIDevice>>().apply {
         value = Resource.loading()
     }
 
     fun onCancel() = onCancel
     fun onNext() = onNext
-    fun onBackToLocation() = onBackToLocation
     fun onClaimResult() = onClaimResult
 
     private var devEUI: String = String.empty()
@@ -74,10 +72,6 @@ class ClaimHeliumViewModel(
 
     fun next() {
         onNext.postValue(true)
-    }
-
-    fun backToLocation() {
-        onBackToLocation.postValue(true)
     }
 
     fun claimDevice(location: Location) {

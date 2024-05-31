@@ -19,18 +19,20 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/set_frequency"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                android:textColor="@color/darkestBlue"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:text="@string/set_frequency_desc"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 app:layout_constraintTop_toBottomOf="@id/title" />
@@ -45,21 +47,34 @@
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/description" />
 
-            <Spinner
-                android:id="@+id/frequenciesSelector"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/frequencySelectorContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="@dimen/padding_large"
-                app:layout_constraintTop_toBottomOf="@id/frequencyTitle" />
+                app:cardBackgroundColor="@color/transparent"
+                app:cardCornerRadius="@dimen/radius_extra_small"
+                app:contentPadding="@dimen/padding_extra_small"
+                app:contentPaddingLeft="@dimen/padding_small"
+                app:layout_constraintTop_toBottomOf="@id/frequencyTitle"
+                app:strokeColor="@color/darkGrey"
+                app:strokeWidth="1dp">
+
+                <Spinner
+                    android:id="@+id/frequenciesSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/frequencySelectorContainer" />
+            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/frequencySelectedText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:text="@string/frequency_selected_text"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                app:layout_constraintTop_toBottomOf="@id/frequenciesSelector" />
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/frequencySelectorContainer" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -93,36 +108,14 @@
             app:layout_constraintStart_toEndOf="@id/confirmFrequencyToggle"
             app:layout_constraintTop_toTopOf="@id/confirmFrequencyToggle" />
 
-        <LinearLayout
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/setAndClaimButton"
+            style="@style/Widget.WeatherXM.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            app:layout_constraintTop_toBottomOf="@id/confirmFrequencyText">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/backButton"
-                style="@style/Widget.WeatherXM.Button.Subtle.Borders"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_normal"
-                android:layout_weight="1"
-                android:text="@string/action_back"
-                android:textAllCaps="false"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/setAndClaimButton"
-                style="@style/Widget.WeatherXM.Button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:enabled="false"
-                android:text="@string/set_and_claim"
-                android:textAllCaps="false"
-                app:layout_constraintBottom_toBottomOf="parent" />
-        </LinearLayout>
+            android:enabled="false"
+            android:text="@string/set_and_claim"
+            app:layout_constraintTop_toBottomOf="@id/confirmFrequencyText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

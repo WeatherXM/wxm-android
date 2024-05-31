@@ -135,9 +135,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
             android:drawableStart="@drawable/ic_one_filled"
-            android:drawablePadding="@dimen/margin_normal"
+            android:drawablePadding="@dimen/padding_extra_small"
             android:drawableTint="@color/colorOnSurface"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+            android:textStyle="bold"
             tools:text="@string/connect_to_station" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -145,11 +146,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
-            android:drawableStart="@drawable/ic_two_outlined"
-            android:drawablePadding="@dimen/margin_normal"
-            android:drawableTint="@color/colorOnSurface"
+            android:drawableStart="@drawable/ic_two_filled"
+            android:drawablePadding="@dimen/padding_extra_small"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
             android:visibility="gone"
+            app:drawableTint="@color/midGrey"
             tools:text="@string/download_firmware_update"
             tools:visibility="visible" />
 
@@ -158,11 +159,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
-            android:drawableStart="@drawable/ic_three_outlined"
-            android:drawablePadding="@dimen/margin_normal"
-            android:drawableTint="@color/colorOnSurface"
+            android:drawableStart="@drawable/ic_three_filled"
+            android:drawablePadding="@dimen/padding_extra_small"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
             android:visibility="gone"
+            app:drawableTint="@color/midGrey"
             tools:text="@string/install_firmware_update"
             tools:visibility="visible" />
 

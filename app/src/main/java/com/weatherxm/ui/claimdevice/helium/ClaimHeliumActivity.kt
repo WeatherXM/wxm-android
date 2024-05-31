@@ -55,7 +55,7 @@ class ClaimHeliumActivity : BaseActivity() {
             finishClaiming()
         }
 
-        binding.toolbar.title = getString(R.string.title_claim_ws2000_device)
+        binding.toolbar.title = getString(R.string.title_claim_helium)
         binding.toolbar.setNavigationOnClickListener {
             finishClaiming()
         }
@@ -66,13 +66,6 @@ class ClaimHeliumActivity : BaseActivity() {
 
         model.onNext().observe(this) {
             if (it) onNextPressed()
-        }
-
-        model.onBackToLocation().observe(this) {
-            if (it) {
-                binding.pager.currentItem -= 1
-                binding.progress.progress = binding.pager.currentItem + 1
-            }
         }
 
         savedInstanceState?.let {

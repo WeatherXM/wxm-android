@@ -11,7 +11,7 @@
         android:id="@+id/bleActionFlow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:ble_action_flow_first_step="@string/setting_station_frequency"
+        app:ble_action_flow_first_step="@string/setting_up_station"
         app:ble_action_flow_second_step="@string/rebooting_station"
         app:ble_action_flow_third_step="@string/claiming_station_step" />
 

@@ -38,7 +38,7 @@
             app:ble_action_flow_second_step="@string/changing_frequency" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/frequencySelectorContainer"
+            android:id="@+id/mainContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipChildren="false"
@@ -75,21 +75,34 @@
                         android:textStyle="bold"
                         app:layout_constraintTop_toBottomOf="@id/description" />
 
-                    <Spinner
-                        android:id="@+id/frequenciesSelector"
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/frequencySelectorContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingVertical="@dimen/padding_large"
-                        app:layout_constraintTop_toBottomOf="@id/frequencyTitle" />
+                        app:cardBackgroundColor="@color/transparent"
+                        app:cardCornerRadius="@dimen/radius_extra_small"
+                        app:contentPadding="@dimen/padding_extra_small"
+                        app:contentPaddingLeft="@dimen/padding_small"
+                        app:layout_constraintTop_toBottomOf="@id/frequencyTitle"
+                        app:strokeColor="@color/darkGrey"
+                        app:strokeWidth="1dp">
+
+                        <Spinner
+                            android:id="@+id/frequenciesSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/frequencySelectorContainer" />
+                    </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/frequencySelectedText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
+                        android:layout_marginTop="@dimen/margin_normal"
                         android:text="@string/changing_frequency_selected_text"
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                        app:layout_constraintTop_toBottomOf="@id/frequenciesSelector" />
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@id/frequencySelectorContainer" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

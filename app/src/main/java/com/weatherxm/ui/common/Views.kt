@@ -223,7 +223,7 @@ fun ImageView.setBluetoothDrawable(context: Context) {
 fun ImageView.setNoDevicesFoundDrawable(context: Context) {
     val drawable =
         ResourcesCompat.getDrawable(resources, R.drawable.ic_no_devices_found, context.theme)
-    drawable?.setTint(ResourcesCompat.getColor(resources, R.color.darkGrey, context.theme))
+    drawable?.setTint(ResourcesCompat.getColor(resources, R.color.midGrey, context.theme))
     this.setImageDrawable(drawable)
 }
 

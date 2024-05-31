@@ -22,21 +22,20 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/select_device_to_pair"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textColor="@color/darkestBlue"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:text="@string/select_device_desc"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 app:layout_constraintTop_toBottomOf="@id/title" />
@@ -54,18 +53,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toTopOf="@id/scanAgainContainer"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
                         android:id="@+id/infoIcon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:ignore="ContentDescription"
-                        tools:src="@drawable/ic_warn" />
+                        tools:src="@drawable/ic_no_devices_found" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/infoTitle"
@@ -106,11 +106,11 @@
                     android:id="@+id/recycler"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/margin_small"
                     android:layout_marginBottom="@dimen/margin_large"
                     android:clipChildren="false"
                     android:clipToPadding="false"
                     android:scrollbars="vertical"
-                    android:visibility="gone"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toTopOf="@id/scanAgainContainer"
                     app:layout_constraintTop_toTopOf="parent"

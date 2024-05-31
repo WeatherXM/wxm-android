@@ -17,7 +17,6 @@ import com.weatherxm.databinding.ActivityChangeFrequencyStationBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
-import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
@@ -98,7 +97,7 @@ class ChangeFrequencyActivity : BaseActivity() {
                 binding.frequencySelectedText.visibility = View.GONE
             } else {
                 binding.frequencySelectedText.text = getString(
-                    R.string.changing_frequency_selected_text, result.country
+                    R.string.changing_frequency_selected_text, result.country.uppercase()
                 )
             }
 
@@ -155,7 +154,7 @@ class ChangeFrequencyActivity : BaseActivity() {
             )
             model.setSelectedFrequency(binding.frequenciesSelector.selectedItemPosition)
             initBluetoothAndStart()
-            binding.frequencySelectorContainer.hide(null)
+            binding.mainContainer.setVisible(false)
             binding.bleActionFlow.setVisible(true)
         }
 

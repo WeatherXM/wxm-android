@@ -1,6 +1,7 @@
 package com.weatherxm.ui.components
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -47,11 +48,11 @@ class BleActionFlowView : ConstraintLayout {
                     }
                     getString(R.styleable.BleActionFlowView_ble_action_flow_second_step)?.let {
                         binding.secondStep.text = it
-                        binding.secondStep.show(null)
+                        binding.secondStep.setVisible(true)
                     }
                     getString(R.styleable.BleActionFlowView_ble_action_flow_third_step)?.let {
                         binding.thirdStep.text = it
-                        binding.thirdStep.show(null)
+                        binding.thirdStep.setVisible(true)
                     }
                 } finally {
                     recycle()
@@ -211,9 +212,8 @@ class BleActionFlowView : ConstraintLayout {
                 binding.firstStep.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.ic_checkmark, 0, 0, 0
                 )
-                binding.secondStep.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_two_filled, 0, 0, 0
-                )
+                binding.secondStep.compoundDrawableTintList =
+                    ColorStateList.valueOf(context.getColor(R.color.colorOnSurface))
                 binding.firstStep.typeface = Typeface.DEFAULT
                 binding.secondStep.typeface = Typeface.DEFAULT_BOLD
             }
@@ -221,9 +221,8 @@ class BleActionFlowView : ConstraintLayout {
                 binding.secondStep.setCompoundDrawablesWithIntrinsicBounds(
                     R.drawable.ic_checkmark, 0, 0, 0
                 )
-                binding.thirdStep.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_three_filled, 0, 0, 0
-                )
+                binding.thirdStep.compoundDrawableTintList =
+                    ColorStateList.valueOf(context.getColor(R.color.colorOnSurface))
                 binding.secondStep.typeface = Typeface.DEFAULT
                 binding.thirdStep.typeface = Typeface.DEFAULT_BOLD
             }

@@ -48,10 +48,6 @@ class ClaimHeliumFrequencyFragment : BaseFragment() {
             binding.setAndClaimButton.isEnabled = checked
         }
 
-        binding.backButton.setOnClickListener {
-            parentModel.backToLocation()
-        }
-
         binding.setAndClaimButton.setOnClickListener {
             parentModel.setFrequency(
                 model.getFrequency(binding.frequenciesSelector.selectedItemPosition)
@@ -64,7 +60,7 @@ class ClaimHeliumFrequencyFragment : BaseFragment() {
                 binding.frequencySelectedText.visibility = View.GONE
             } else {
                 binding.frequencySelectedText.text = getString(
-                    R.string.frequency_selected_text, result.country
+                    R.string.frequency_selected_text, result.country.uppercase()
                 )
             }
 
