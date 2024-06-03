@@ -46,7 +46,7 @@ class RewardBoostActivity : BaseActivity() {
         val boostReward = intent?.extras?.parcelable<BoostReward>(ARG_BOOST_REWARD)
         val date = intent?.extras?.getString(ARG_DATE)
         if (boostReward == null || model.deviceId.isEmpty()) {
-            Timber.d("Could not start RewardBoostActivity. Boost Reward or DeviceId is empty.")
+            Timber.d("Could not start RewardBoostActivity. Reward Boost or DeviceId is empty.")
             toast(R.string.error_generic_message)
             finish()
             return
