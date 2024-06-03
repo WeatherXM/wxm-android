@@ -45,7 +45,7 @@ class ClaimHeliumFrequencyFragment : BaseFragment() {
             })
 
         model.onFrequencyState().observe(viewLifecycleOwner) { result ->
-            binding.setFrequencyView.defaultState(result)
+            binding.setFrequencyView.defaultState(result, true)
         }
     }
 }

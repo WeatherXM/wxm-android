@@ -52,13 +52,19 @@ class HeliumSetFrequencyView : LinearLayout {
         }
     }
 
-    fun defaultState(frequencyState: FrequencyState) {
+    fun defaultState(frequencyState: FrequencyState, isOnClaiming: Boolean) {
         if (frequencyState.country.isNullOrEmpty()) {
             binding.frequencySelectedText.visibility = View.GONE
         } else {
-            binding.frequencySelectedText.text = context.getString(
-                R.string.frequency_selected_text, frequencyState.country
-            )
+            binding.frequencySelectedText.text = if (isOnClaiming) {
+                context.getString(
+                    R.string.frequency_selected_text, frequencyState.country
+                )
+            } else {
+                context.getString(
+                    R.string.changing_frequency_selected_text, frequencyState.country
+                )
+            }
         }
 
         binding.frequenciesSelector.adapter = ArrayAdapter(
