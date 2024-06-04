@@ -5,10 +5,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.checkPermissionsAndThen
+import timber.log.Timber
 
 interface BaseInterface {
     val analytics: AnalyticsWrapper
@@ -24,15 +25,19 @@ interface BaseInterface {
             snackbar?.dismiss()
         }
 
-        if (callback != null) {
-            snackbar = Snackbar.make(viewGroup, message, Snackbar.LENGTH_INDEFINITE)
-            snackbar?.setAction(R.string.action_retry) {
-                callback()
+        try {
+            if (callback != null) {
+                snackbar = Snackbar.make(viewGroup, message, Snackbar.LENGTH_INDEFINITE)
+                snackbar?.setAction(R.string.action_retry) {
+                    callback()
+                }
+            } else {
+                snackbar = Snackbar.make(viewGroup, message, Snackbar.LENGTH_LONG)
             }
-        } else {
-            snackbar = Snackbar.make(viewGroup, message, Snackbar.LENGTH_LONG)
+            snackbar?.show()
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Failed to make Snackbar. ViewGroup - Message: $viewGroup $message")
         }
-        snackbar?.show()
     }
 
     fun requestLocationPermissions(activity: FragmentActivity?, onGranted: () -> Unit) {

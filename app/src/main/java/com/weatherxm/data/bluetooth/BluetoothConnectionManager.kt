@@ -86,7 +86,7 @@ class BluetoothConnectionManager(
     @SuppressLint("MissingPermission")
     fun getPairedDevices(): List<BluetoothDevice> {
         return bluetoothAdapter?.bondedDevices?.filter {
-            it.name != null && it.name.contains("WeatherXM")
+            it?.name != null && it.name.contains("WeatherXM")
         } ?: mutableListOf()
     }
 
@@ -155,6 +155,8 @@ class BluetoothConnectionManager(
         } catch (e: UninitializedPropertyAccessException) {
             Timber.d(e, "Could not disconnect peripheral.")
         } catch (e: NotConnectedException) {
+            Timber.d(e, "Could not disconnect peripheral.")
+        } catch (e: ConnectionLostException) {
             Timber.d(e, "Could not disconnect peripheral.")
         }
     }
