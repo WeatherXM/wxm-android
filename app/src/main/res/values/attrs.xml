@@ -65,6 +65,6 @@
         <attr name="device_type_title" format="string" />
     </declare-styleable>
     <declare-styleable name="HeliumSetFrequencyView">
-        <attr name="positive_button_text" format="string" />
+        <attr name="is_on_claiming" format="boolean" />
     </declare-styleable>
 </resources>

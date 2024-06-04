@@ -129,7 +129,7 @@ class ChangeFrequencyActivity : BaseActivity() {
                 )
                 model.setSelectedFrequency(it)
                 initBluetoothAndStart()
-                binding.setFrequencyView.hide(null)
+                binding.setFrequencyView.setVisible(false)
                 binding.bleActionFlow.setVisible(true)
             }
         )

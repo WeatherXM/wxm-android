@@ -44,7 +44,7 @@
             android:layout_marginTop="@dimen/margin_normal"
             android:layout_marginBottom="@dimen/margin_large"
             android:paddingHorizontal="@dimen/padding_large"
-            app:positive_button_text="@string/action_change" />
+            app:is_on_claiming="false" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
