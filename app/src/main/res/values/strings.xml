@@ -454,7 +454,7 @@
     <!-- Claim Helium -->
     <string name="title_claim_helium">Claim Helium</string>
     <string name="dev_eui">Dev EUI</string>
-    <string name="reboot_your_device">Reboot your device</string>
+    <string name="reset_your_device">Reset your device</string>
     <string name="reset">Reset</string>
     <string name="reset_my_device">I’ve reset my device</string>
     <string name="reset_ble_first_step"><![CDATA[Push the <b>RESET button</b> on the bottom of your WeatherXM device to enable Bluetooth pairing.<br><br>This will <b>expire in 5 minutes.</b> After that, you will need to push it again to restart the pairing!]]></string>

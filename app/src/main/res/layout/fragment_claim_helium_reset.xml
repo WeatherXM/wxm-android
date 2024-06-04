@@ -22,7 +22,7 @@
                 android:id="@+id/resetTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/reboot_your_device"
+                android:text="@string/reset_your_device"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textColor="@color/darkestBlue"
                 android:textSize="20sp"
