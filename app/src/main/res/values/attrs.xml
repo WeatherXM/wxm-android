@@ -64,4 +64,7 @@
         <attr name="device_type_image" format="reference" />
         <attr name="device_type_title" format="string" />
     </declare-styleable>
+    <declare-styleable name="HeliumSetFrequencyView">
+        <attr name="positive_button_text" format="string" />
+    </declare-styleable>
 </resources>

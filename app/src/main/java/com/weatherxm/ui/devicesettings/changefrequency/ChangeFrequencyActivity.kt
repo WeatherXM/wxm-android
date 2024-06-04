@@ -3,8 +3,6 @@ package com.weatherxm.ui.devicesettings.changefrequency
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.os.Bundle
-import android.view.View
-import android.widget.ArrayAdapter
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
@@ -18,7 +16,6 @@ import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
@@ -76,34 +73,10 @@ class ChangeFrequencyActivity : BaseActivity() {
             subtitle = model.device.name
         }
 
-        with(binding.description) {
-            movementMethod =
-                me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {
-                    setOnLinkClickListener { _, url ->
-                        analytics.trackEventSelectContent(
-                            AnalyticsService.ParamValue.DOCUMENTATION_FREQUENCY.paramValue
-                        )
-                        navigator.openWebsite(context, url)
-                        return@setOnLinkClickListener true
-                    }
-                }
-            setHtml(R.string.set_frequency_desc, getString(R.string.helium_frequencies_mapping_url))
-        }
-
         setListeners()
 
         model.onFrequencies().observe(this) { result ->
-            if (result.country.isNullOrEmpty()) {
-                binding.frequencySelectedText.visibility = View.GONE
-            } else {
-                binding.frequencySelectedText.text = getString(
-                    R.string.changing_frequency_selected_text, result.country.uppercase()
-                )
-            }
-
-            binding.frequenciesSelector.adapter = ArrayAdapter(
-                this, android.R.layout.simple_spinner_dropdown_item, result.frequencies
-            )
+            binding.setFrequencyView.defaultState(result, false)
         }
 
         model.onStatus().observe(this) {
@@ -126,37 +99,40 @@ class ChangeFrequencyActivity : BaseActivity() {
     }
 
     private fun setListeners() {
-        binding.confirmFrequencyToggle.setOnCheckedChangeListener { _, checked ->
-            binding.changeFrequencyBtn.isEnabled = checked
-        }
-
-        binding.backButton.setOnClickListener {
-            analytics.trackEventUserAction(
-                actionName = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
-                contentType = AnalyticsService.ParamValue.CHANGE_FREQUENCY.paramValue,
-                Pair(
-                    AnalyticsService.CustomParam.ACTION.paramName,
-                    AnalyticsService.ParamValue.CANCEL.paramValue
+        binding.setFrequencyView.listener(
+            onFrequencyDocumentation = {
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.DOCUMENTATION_FREQUENCY.paramValue
                 )
-            )
-            model.disconnectFromPeripheral()
-            finishActivity()
-        }
-
-        binding.changeFrequencyBtn.setOnClickListener {
-            analytics.trackEventUserAction(
-                actionName = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
-                contentType = AnalyticsService.ParamValue.CHANGE_FREQUENCY.paramValue,
-                Pair(
-                    AnalyticsService.CustomParam.ACTION.paramName,
-                    AnalyticsService.ParamValue.CHANGE.paramValue
+                navigator.openWebsite(this, it)
+            },
+            onBack = {
+                analytics.trackEventUserAction(
+                    actionName = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
+                    contentType = AnalyticsService.ParamValue.CHANGE_FREQUENCY.paramValue,
+                    Pair(
+                        AnalyticsService.CustomParam.ACTION.paramName,
+                        AnalyticsService.ParamValue.CANCEL.paramValue
+                    )
                 )
-            )
-            model.setSelectedFrequency(binding.frequenciesSelector.selectedItemPosition)
-            initBluetoothAndStart()
-            binding.mainContainer.setVisible(false)
-            binding.bleActionFlow.setVisible(true)
-        }
+                model.disconnectFromPeripheral()
+                finishActivity()
+            },
+            onSet = {
+                analytics.trackEventUserAction(
+                    actionName = AnalyticsService.ParamValue.CHANGE_FREQUENCY_RESULT.paramValue,
+                    contentType = AnalyticsService.ParamValue.CHANGE_FREQUENCY.paramValue,
+                    Pair(
+                        AnalyticsService.CustomParam.ACTION.paramName,
+                        AnalyticsService.ParamValue.CHANGE.paramValue
+                    )
+                )
+                model.setSelectedFrequency(it)
+                initBluetoothAndStart()
+                binding.setFrequencyView.hide(null)
+                binding.bleActionFlow.setVisible(true)
+            }
+        )
 
         binding.bleActionFlow.setListeners(onScanClicked = {
             analytics.trackEventSelectContent(AnalyticsService.ParamValue.BLE_SCAN_AGAIN.paramValue)
