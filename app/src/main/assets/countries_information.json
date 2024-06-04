@@ -117,7 +117,7 @@
     },
     {
         "code": "AZ",
-        "helium_frequency": "EU868",
+        "helium_frequency": null,
         "map_center": {
             "lat": 40.143105,
             "lon": 47.576927
@@ -397,7 +397,7 @@
     },
     {
         "code": "CD",
-        "helium_frequency": null,
+        "helium_frequency": "EU868",
         "map_center": {
             "lat": -4.038333,
             "lon": 21.758664
@@ -557,7 +557,7 @@
     },
     {
         "code": "SZ",
-        "helium_frequency": null,
+        "helium_frequency": "EU868",
         "map_center": {
             "lat": -26.522503,
             "lon": 31.465866
@@ -989,7 +989,7 @@
     },
     {
         "code": "LS",
-        "helium_frequency": null,
+        "helium_frequency": "EU868",
         "map_center": {
             "lat": -29.609988,
             "lon": 28.233608
@@ -1061,7 +1061,7 @@
     },
     {
         "code": "MW",
-        "helium_frequency": null,
+        "helium_frequency": "EU868",
         "map_center": {
             "lat": -13.254308,
             "lon": 34.301525
@@ -1125,7 +1125,7 @@
     },
     {
         "code": "MU",
-        "helium_frequency": null,
+        "helium_frequency": "EU868",
         "map_center": {
             "lat": -20.348404,
             "lon": 57.552152
@@ -1205,7 +1205,7 @@
     },
     {
         "code": "MZ",
-        "helium_frequency": null,
+        "helium_frequency": "EU868",
         "map_center": {
             "lat": -18.665695,
             "lon": 35.529562
@@ -1269,7 +1269,7 @@
     },
     {
         "code": "NZ",
-        "helium_frequency": "AU915",
+        "helium_frequency": "AS923_1",
         "map_center": {
             "lat": -40.900557,
             "lon": 174.885971
@@ -1589,7 +1589,7 @@
     },
     {
         "code": "SC",
-        "helium_frequency": null,
+        "helium_frequency": "EU868",
         "map_center": {
             "lat": -4.679574,
             "lon": 55.491977
