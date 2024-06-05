@@ -17,6 +17,7 @@ class RewardsClaimViewModel(
         const val ARG_WALLET = "wallet"
         const val ARG_AMOUNT = "amount"
         const val ARG_REDIRECT_URL = "redirect_url"
+        const val ARG_EMBED = "embed"
     }
 
     fun isRedirectUrl(url: Uri?): Boolean {
@@ -27,7 +28,8 @@ class RewardsClaimViewModel(
     fun getQueryParams(data: UIWalletRewards): String {
         var queryParams = "?$ARG_AMOUNT=${data.allocated}" +
             "&$ARG_WALLET=${data.walletAddress}" +
-            "&$ARG_REDIRECT_URL=${resources.getString(R.string.weatherxm_claim_redirect_url)}"
+            "&$ARG_REDIRECT_URL=${resources.getString(R.string.weatherxm_claim_redirect_url)}" +
+            "&$ARG_EMBED=true"
 
         if (!displayModeHelper.isSystem()) {
             queryParams += "&$ARG_THEME=${displayModeHelper.getDisplayMode().lowercase()}"
