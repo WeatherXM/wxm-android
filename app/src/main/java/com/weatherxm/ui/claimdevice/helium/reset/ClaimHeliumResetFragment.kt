@@ -27,11 +27,14 @@ class ClaimHeliumResetFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.confirmRebootToggle.setOnCheckedChangeListener { _, checked ->
+            binding.nextButton.isEnabled = checked
+        }
+
         binding.nextButton.setOnClickListener {
             parentModel.next()
         }
 
         binding.firstStep.setHtml(R.string.reset_ble_first_step)
-        binding.secondStep.setHtml(R.string.reset_second_step)
     }
 }

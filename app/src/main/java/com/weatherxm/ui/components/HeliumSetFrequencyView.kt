@@ -11,6 +11,7 @@ import com.weatherxm.R
 import com.weatherxm.databinding.ViewHeliumSetFrequencyBinding
 import com.weatherxm.ui.common.FrequencyState
 import com.weatherxm.ui.common.setHtml
+import com.weatherxm.ui.common.setVisible
 
 class HeliumSetFrequencyView : LinearLayout {
 
@@ -40,8 +41,10 @@ class HeliumSetFrequencyView : LinearLayout {
         this.context.theme.obtainStyledAttributes(attrs, R.styleable.HeliumSetFrequencyView, 0, 0)
             .apply {
                 try {
-                    binding.setButton.text =
-                        getString(R.styleable.HeliumSetFrequencyView_positive_button_text)
+                    getBoolean(R.styleable.HeliumSetFrequencyView_is_on_claiming, true).apply {
+                        binding.setButton.setVisible(this)
+                        binding.twoButtonsContainer.setVisible(!this)
+                    }
                 } finally {
                     recycle()
                 }
@@ -49,6 +52,7 @@ class HeliumSetFrequencyView : LinearLayout {
 
         binding.confirmFrequencyToggle.setOnCheckedChangeListener { _, checked ->
             binding.setButton.isEnabled = checked
+            binding.changeButton.isEnabled = checked
         }
     }
 

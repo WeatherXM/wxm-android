@@ -15,7 +15,6 @@ import com.weatherxm.databinding.ActivityChangeFrequencyStationBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
-import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
@@ -130,7 +129,7 @@ class ChangeFrequencyActivity : BaseActivity() {
                 )
                 model.setSelectedFrequency(it)
                 initBluetoothAndStart()
-                binding.setFrequencyView.hide(null)
+                binding.setFrequencyView.setVisible(false)
                 binding.bleActionFlow.setVisible(true)
             }
         )
