@@ -46,6 +46,7 @@ class ProfileFragment : BaseFragment() {
     // Register the launcher for the rewards claim activity and wait for a possible result
     private val rewardsClaimLauncher =
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
+            trackClaimingResult(result.resultCode == Activity.RESULT_OK)
             if (result.resultCode == Activity.RESULT_OK) {
                 model.onClaimedResult(
                     result.data?.getDoubleExtra(ARG_TOKEN_CLAIMED_AMOUNT, 0.0) ?: 0.0
@@ -189,6 +190,19 @@ class ProfileFragment : BaseFragment() {
                 binding.walletContainerCard.setCardStroke(R.color.error, 2)
             }
         }
+    }
+
+    private fun trackClaimingResult(isSuccess: Boolean) {
+        val statusValue = if (isSuccess) {
+            AnalyticsService.ParamValue.SUCCESS_ID.paramValue
+        } else {
+            AnalyticsService.ParamValue.FAILURE_ID.paramValue
+        }
+        analytics.trackEventViewContent(
+            contentName = AnalyticsService.ParamValue.TOKEN_CLAIMING_RESULT.paramValue,
+            contentId = null,
+            customParams = arrayOf(Pair(AnalyticsService.CustomParam.STATUS.paramName, statusValue))
+        )
     }
 
     override fun onResume() {
