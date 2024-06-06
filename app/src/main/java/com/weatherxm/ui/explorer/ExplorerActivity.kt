@@ -23,7 +23,7 @@ import dev.chrisbanes.insetter.applyInsetter
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import java.util.*
+import java.util.Locale
 
 class ExplorerActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     private val model: ExplorerViewModel by viewModel()
@@ -58,7 +58,7 @@ class ExplorerActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener 
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
                     resource.message?.let {
-                        showSnackbarMessage(binding.root, it) { model.fetch() }
+                        showSnackbarMessage(binding.root, it, callback = { model.fetch() })
                     }
                 }
                 Status.LOADING -> {

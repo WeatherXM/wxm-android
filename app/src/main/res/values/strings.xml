@@ -28,6 +28,7 @@
     <string name="action_buy_station">Buy Station</string>
     <string name="action_claim">Claim</string>
     <string name="action_dismiss">Dismiss</string>
+    <string name="action_close">Close</string>
     <string name="action_view_all_issues">View All Issues</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -110,6 +111,7 @@
     <string name="total_claimed_desc">Total Claimed reflects the tokens you\'ve successfully claimed and withdrawn into your personal wallet. These are the rewards you\'ve converted from your earned tokens for personal use or other purposes.</string>
     <string name="allocated_rewards">Allocated Rewards</string>
     <string name="no_allocated_rewards">Νο allocated rewards yet!</string>
+    <string name="having_trouble_claiming">Having trouble claiming? Try visiting claim.weatherxm.com from a desktop browser.</string>
     <string name="preferences_settings">Preferences &amp; Settings</string>
     <string name="preferences_desc">Set your preferences and app settings</string>
     <string name="start_earning">Start earning now!</string>

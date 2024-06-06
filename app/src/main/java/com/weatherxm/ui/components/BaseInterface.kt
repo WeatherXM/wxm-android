@@ -1,7 +1,9 @@
 package com.weatherxm.ui.components
 
 import android.Manifest
+import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
@@ -19,7 +21,9 @@ interface BaseInterface {
     fun showSnackbarMessage(
         viewGroup: ViewGroup,
         message: String,
-        callback: (() -> Unit)? = null
+        callback: (() -> Unit)? = null,
+        @StringRes actionTextResId: Int = R.string.action_retry,
+        anchorView: View? = null
     ) {
         if (snackbar?.isShown == true) {
             snackbar?.dismiss()
@@ -28,11 +32,14 @@ interface BaseInterface {
         try {
             if (callback != null) {
                 snackbar = Snackbar.make(viewGroup, message, Snackbar.LENGTH_INDEFINITE)
-                snackbar?.setAction(R.string.action_retry) {
+                snackbar?.setAction(actionTextResId) {
                     callback()
                 }
             } else {
                 snackbar = Snackbar.make(viewGroup, message, Snackbar.LENGTH_LONG)
+            }
+            anchorView?.let {
+                snackbar?.setAnchorView(it)
             }
             snackbar?.show()
         } catch (e: IllegalArgumentException) {
