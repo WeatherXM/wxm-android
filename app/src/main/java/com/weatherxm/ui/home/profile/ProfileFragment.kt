@@ -153,16 +153,22 @@ class ProfileFragment : BaseFragment() {
 
             if (parentModel.hasDevices() == false) {
                 binding.rewardsContainerCard.setCardStroke(R.color.colorPrimary, 2)
-                binding.buyStationCard.actionPrimaryBtn(
-                    getString(R.string.action_buy_station),
-                    AppCompatResources.getDrawable(requireContext(), R.drawable.ic_cart),
-                ) {
-                    navigator.openWebsite(requireContext(), getString(R.string.shop_url))
-                }.setVisible(true)
+                binding.allocatedRewardsSecondaryCard
+                    .title(R.string.start_earning)
+                    .message(R.string.start_earning_desc)
+                    .actionPrimaryBtn(
+                        getString(R.string.action_buy_station),
+                        AppCompatResources.getDrawable(requireContext(), R.drawable.ic_cart),
+                    ) {
+                        navigator.openWebsite(requireContext(), getString(R.string.shop_url))
+                    }
+                    .setVisible(true)
             }
         } else {
             binding.rewardsContainerCard.strokeWidth = 0
-            binding.buyStationCard.setVisible(false)
+            binding.allocatedRewardsSecondaryCard
+                .htmlMessage(getString(R.string.allocated_rewards_alternative_claiming))
+                .setVisible(true)
             binding.rewards
                 .subtitle(
                     getString(
