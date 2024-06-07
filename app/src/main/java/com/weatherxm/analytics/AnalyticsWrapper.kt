@@ -191,7 +191,7 @@ class AnalyticsWrapper(
 
     fun trackEventViewContent(
         contentName: String,
-        contentId: String,
+        contentId: String?,
         vararg customParams: Pair<String, String>,
         success: Long? = null
     ) {

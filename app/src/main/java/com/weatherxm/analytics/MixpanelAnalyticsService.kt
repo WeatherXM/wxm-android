@@ -55,17 +55,19 @@ class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI) : Analytics
     @Suppress("SpreadOperator")
     override fun trackEventViewContent(
         contentName: String,
-        contentId: String,
+        contentId: String?,
         vararg customParams: Pair<String, String>,
         success: Long?
     ) {
         val mixpanelParams: MutableList<Pair<String, Any>> = mutableListOf(
             Pair(AnalyticsService.CustomParam.CONTENT_NAME.paramName, contentName),
-            Pair(AnalyticsService.CustomParam.CONTENT_ID.paramName, contentId),
             *customParams.map {
                 it
             }.toTypedArray()
         )
+        contentId?.let {
+            mixpanelParams.add(Pair(AnalyticsService.CustomParam.CONTENT_ID.paramName, it))
+        }
         success?.let {
             mixpanelParams.add(Pair(AnalyticsService.EventKey.SUCCESS.key, it))
         }

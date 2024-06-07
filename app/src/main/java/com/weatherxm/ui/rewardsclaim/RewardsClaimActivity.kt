@@ -10,10 +10,12 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.weatherxm.BuildConfig
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityWebviewBinding
 import com.weatherxm.ui.common.Contracts.ARG_TOKEN_CLAIMED_AMOUNT
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
 import com.weatherxm.ui.common.UIWalletRewards
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
@@ -80,5 +82,10 @@ class RewardsClaimActivity : BaseActivity() {
 
         val queryParams = model.getQueryParams(rewardsData)
         binding.webview.loadUrl("${BuildConfig.CLAIM_APP_URL}$queryParams")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(AnalyticsService.Screen.CLAIM_DAPP, classSimpleName())
     }
 }
