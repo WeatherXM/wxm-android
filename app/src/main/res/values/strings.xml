@@ -487,7 +487,7 @@
     <string name="daily_precip">Daily Precip.</string>
     <string name="precip_rate">Precip. Rate</string>
     <string name="daily">Daily</string>
-    <string name="rate">Rate</string>
+    <string name="max_rate">Max Rate</string>
     <string name="gust">Gust</string>
     <string name="speed">Speed</string>
     <string name="solar">Solar</string>
