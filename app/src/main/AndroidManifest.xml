@@ -184,10 +184,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.journeyapps.barcodescanner.CaptureActivity"
-            android:screenOrientation="portrait"
-            tools:replace="screenOrientation" />
-        <activity
             android:name="com.weatherxm.ui.devicedetails.DeviceDetailsActivity"
             android:parentActivityName=".ui.home.HomeActivity"
             android:screenOrientation="portrait"
@@ -310,7 +306,7 @@
             android:exported="false"
             tools:node="merge">
             <meta-data
-                android:name="com.weatherxm.app.AppInitializer"
+                android:name="com.weatherxm.app.AnalyticsInitializer"
                 android:value="androidx.startup" />
         </provider>
     </application>

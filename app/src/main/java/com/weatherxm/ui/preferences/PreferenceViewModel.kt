@@ -1,13 +1,15 @@
 package com.weatherxm.ui.preferences
 
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
-import com.weatherxm.data.Failure
-import com.weatherxm.usecases.PreferencesUseCase
 import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.data.Failure
+import com.weatherxm.ui.common.empty
+import com.weatherxm.usecases.PreferencesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -16,6 +18,10 @@ class PreferenceViewModel(
     private val preferencesUseCase: PreferencesUseCase,
     private val analytics: AnalyticsWrapper
 ) : ViewModel() {
+    val onPreferencesChanged = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+        analytics.setUserProperties()
+    }
+
     // Needed for passing info to the activity to when logging out
     private val onLogout = MutableLiveData(false)
 
@@ -45,6 +51,7 @@ class PreferenceViewModel(
 
     fun logout() {
         viewModelScope.launch(Dispatchers.IO) {
+            analytics.setUserId(String.empty())
             preferencesUseCase.logout()
             onLogout.postValue(true)
         }

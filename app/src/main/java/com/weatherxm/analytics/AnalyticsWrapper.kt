@@ -1,7 +1,6 @@
 package com.weatherxm.analytics
 
 import android.content.Context
-import android.content.SharedPreferences
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.data.services.CacheService
@@ -10,47 +9,35 @@ import com.weatherxm.ui.common.DevicesGroupBy
 import com.weatherxm.ui.common.DevicesSortFilterOptions
 import com.weatherxm.ui.common.DevicesSortOrder
 import com.weatherxm.ui.common.empty
-import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.Weather
-import timber.log.Timber
 
 class AnalyticsWrapper(
     private var analytics: List<AnalyticsService>,
-    private val cacheService: CacheService,
-    private val displayModeHelper: DisplayModeHelper,
-    preferences: SharedPreferences,
     private val context: Context
 ) {
+    private var areAnalyticsEnabled: Boolean = false
+    private var userId: String = String.empty()
+    private var displayMode: String = AnalyticsService.UserProperty.SYSTEM.propertyName
+    private var devicesSortFilterOptions: List<String> = mutableListOf()
 
-    private val onPreferencesChanged = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-        setUserProperties()
+    fun setUserId(userId: String) {
+        this.userId = userId
     }
 
-    init {
-        preferences.registerOnSharedPreferenceChangeListener(onPreferencesChanged)
-        val enabled = cacheService.getAnalyticsEnabled()
-        Timber.d("Initializing Analytics [enabled=$enabled]")
-        setUserProperties()
-        setAnalyticsEnabled(enabled)
+    fun setDevicesSortFilterOptions(options: List<String>) {
+        this.devicesSortFilterOptions = options
+    }
+
+    fun setDisplayMode(displayMode: String) {
+        this.displayMode = displayMode
     }
 
     // Suppress CyclomaticComplexMethod because it is just a bunch of if/when statements.
     @Suppress("CyclomaticComplexMethod", "LongMethod")
-    private fun setUserProperties() {
+    fun setUserProperties() {
         val userParams = mutableListOf<Pair<String, String>>()
 
-        // Selected Theme
-        when (displayModeHelper.getDisplayMode()) {
-            context.getString(R.string.dark_value) -> {
-                AnalyticsService.UserProperty.DARK.propertyName
-            }
-            context.getString(R.string.light_value) -> {
-                AnalyticsService.UserProperty.LIGHT.propertyName
-            }
-            else -> AnalyticsService.UserProperty.SYSTEM.propertyName
-        }.apply {
-            userParams.add(Pair(AnalyticsService.UserProperty.THEME.propertyName, this))
-        }
+        userParams.add(Pair(AnalyticsService.UserProperty.THEME.propertyName, displayMode))
 
         // Selected Temperature Unit
         Weather.getPreferredUnit(
@@ -138,16 +125,14 @@ class AnalyticsWrapper(
             }
         }
 
-        val sortFilterOptions = cacheService.getDevicesSortFilterOptions().let {
-            if (it.isEmpty()) {
-                DevicesSortFilterOptions()
-            } else {
-                DevicesSortFilterOptions(
-                    DevicesSortOrder.valueOf(it[0]),
-                    DevicesFilterType.valueOf(it[1]),
-                    DevicesGroupBy.valueOf(it[2])
-                )
-            }
+        val sortFilterOptions = if (devicesSortFilterOptions.isEmpty()) {
+            DevicesSortFilterOptions()
+        } else {
+            DevicesSortFilterOptions(
+                DevicesSortOrder.valueOf(devicesSortFilterOptions[0]),
+                DevicesFilterType.valueOf(devicesSortFilterOptions[1]),
+                DevicesGroupBy.valueOf(devicesSortFilterOptions[2])
+            )
         }
         with(sortFilterOptions) {
             userParams.add(
@@ -165,16 +150,16 @@ class AnalyticsWrapper(
             )
         }
 
-        val userId = cacheService.getUserId()
         analytics.forEach { it.setUserProperties(userId, userParams) }
     }
 
     fun setAnalyticsEnabled(enabled: Boolean) {
+        areAnalyticsEnabled = enabled
         analytics.forEach { it.setAnalyticsEnabled(enabled) }
     }
 
     fun trackScreen(screen: AnalyticsService.Screen, screenClass: String, itemId: String? = null) {
-        if (cacheService.getAnalyticsEnabled()) {
+        if (areAnalyticsEnabled) {
             analytics.forEach { it.trackScreen(screen, screenClass, itemId) }
         }
     }
@@ -184,7 +169,7 @@ class AnalyticsWrapper(
         contentType: String? = null,
         vararg customParams: Pair<String, String>
     ) {
-        if (cacheService.getAnalyticsEnabled()) {
+        if (areAnalyticsEnabled) {
             analytics.forEach { it.trackEventUserAction(actionName, contentType, *customParams) }
         }
     }
@@ -195,7 +180,7 @@ class AnalyticsWrapper(
         vararg customParams: Pair<String, String>,
         success: Long? = null
     ) {
-        if (cacheService.getAnalyticsEnabled()) {
+        if (areAnalyticsEnabled) {
             analytics.forEach {
                 it.trackEventViewContent(
                     contentName,
@@ -221,7 +206,7 @@ class AnalyticsWrapper(
         action: String,
         vararg customParams: Pair<String, String>
     ) {
-        if (cacheService.getAnalyticsEnabled()) {
+        if (areAnalyticsEnabled) {
             analytics.forEach { it.trackEventPrompt(promptName, promptType, action, *customParams) }
         }
     }
@@ -231,7 +216,7 @@ class AnalyticsWrapper(
         vararg customParams: Pair<String, String>,
         index: Long? = null
     ) {
-        if (cacheService.getAnalyticsEnabled()) {
+        if (areAnalyticsEnabled) {
             analytics.forEach {
                 it.trackEventSelectContent(
                     contentType,
