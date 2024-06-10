@@ -680,7 +680,8 @@ data class WalletRewards(
 enum class DeviceProfile {
     M5,
     Helium,
-    D1
+    D1,
+    Pulse
 }
 
 @Suppress("EnumNaming")

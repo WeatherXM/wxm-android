@@ -110,6 +110,7 @@
     <string name="total_claimed_desc">Total Claimed reflects the tokens you\'ve successfully claimed and withdrawn into your personal wallet. These are the rewards you\'ve converted from your earned tokens for personal use or other purposes.</string>
     <string name="allocated_rewards">Allocated Rewards</string>
     <string name="no_allocated_rewards">Νο allocated rewards yet!</string>
+    <string name="allocated_rewards_alternative_claiming"><![CDATA[You can also claim your allocated rewards by visiting <b>claim.weatherxm.com</b> from a desktop web browser.]]></string>
     <string name="preferences_settings">Preferences &amp; Settings</string>
     <string name="preferences_desc">Set your preferences and app settings</string>
     <string name="start_earning">Start earning now!</string>
@@ -391,6 +392,7 @@
     <string name="select_your_station_type">Select your station type</string>
     <string name="m5_wifi">M5 | WiFi</string>
     <string name="d1_wifi">D1 | WiFi</string>
+    <string name="pulse_4g">Pulse | 4G</string>
 
     <!-- Claim device -->
     <string name="confirm_station_location">Confirm station location</string>
