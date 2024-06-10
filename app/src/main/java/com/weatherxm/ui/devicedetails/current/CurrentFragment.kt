@@ -137,7 +137,14 @@ class CurrentFragment : BaseFragment() {
             binding.alert.htmlMessage(
                 getString(R.string.error_user_device_offline, m5TroubleshootingUrl)
             ) {
-                navigator.openWebsite(context, getString(R.string.troubleshooting_m5_url))
+                navigator.openWebsite(context, m5TroubleshootingUrl)
+            }
+        } else if (relation == DeviceRelation.OWNED && profile == DeviceProfile.D1) {
+            val d1TroubleshootingUrl = getString(R.string.troubleshooting_d1_url)
+            binding.alert.htmlMessage(
+                getString(R.string.error_user_device_offline, d1TroubleshootingUrl)
+            ) {
+                navigator.openWebsite(context, d1TroubleshootingUrl)
             }
         } else if (relation == DeviceRelation.OWNED && profile == DeviceProfile.Helium) {
             val heliumTroubleshootingUrl = getString(R.string.troubleshooting_helium_url)

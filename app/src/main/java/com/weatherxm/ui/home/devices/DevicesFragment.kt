@@ -217,10 +217,10 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     }
 
     override fun onLowBatteryReadMoreClicked(device: UIDevice) {
-        val url = if (device.profile == DeviceProfile.M5) {
-            getString(R.string.docs_url_low_battery_m5)
-        } else {
-            getString(R.string.docs_url_low_battery_helium)
+        val url = when (device.profile) {
+            DeviceProfile.M5 -> getString(R.string.docs_url_low_battery_m5)
+            DeviceProfile.D1 -> getString(R.string.docs_url_low_battery_d1)
+            else -> getString(R.string.docs_url_low_battery_helium)
         }
         navigator.openWebsite(context, url)
         analytics.trackEventSelectContent(
