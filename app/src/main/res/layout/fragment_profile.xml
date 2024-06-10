@@ -182,7 +182,7 @@
                             app:profile_item_title="@string/allocated_rewards" />
 
                         <com.weatherxm.ui.components.MessageCardView
-                            android:id="@+id/buyStationCard"
+                            android:id="@+id/allocatedRewardsSecondaryCard"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="-16dp"
@@ -191,8 +191,8 @@
                             android:paddingTop="16dp"
                             android:visibility="gone"
                             app:message_includes_close_button="false"
-                            app:message_message="@string/start_earning_desc"
-                            app:message_title="@string/start_earning"
+                            tools:message_message="@string/start_earning_desc"
+                            tools:message_title="@string/start_earning"
                             tools:visibility="visible" />
 
                     </LinearLayout>
