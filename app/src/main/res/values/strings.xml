@@ -391,6 +391,7 @@
     <string name="select_your_station_type">Select your station type</string>
     <string name="m5_wifi">M5 | WiFi</string>
     <string name="d1_wifi">D1 | WiFi</string>
+    <string name="pulse_4g">Pulse | 4G</string>
 
     <!-- Claim device -->
     <string name="confirm_station_location">Confirm station location</string>

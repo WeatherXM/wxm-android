@@ -60,23 +60,36 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
-            android:layout_marginTop="@dimen/margin_normal"
             app:device_type_image="@drawable/device_type_d1"
             app:device_type_title="@string/d1_wifi"
+            app:layout_constraintBottom_toBottomOf="@id/m5WifiCard"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/m5WifiCard"
-            app:layout_constraintTop_toBottomOf="@id/title" />
+            app:layout_constraintTop_toTopOf="@id/m5WifiCard" />
 
         <com.weatherxm.ui.components.DeviceTypeCardView
             android:id="@+id/heliumCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
+            android:layout_marginEnd="@dimen/margin_small"
             app:device_type_image="@drawable/device_type_helium"
             app:device_type_title="@string/helium"
-            app:layout_constraintEnd_toEndOf="@id/m5WifiCard"
+            app:layout_constraintEnd_toStartOf="@id/pulseCard"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/m5WifiCard" />
+
+        <com.weatherxm.ui.components.DeviceTypeCardView
+            android:id="@+id/pulseCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            app:device_type_image="@drawable/device_type_pulse"
+            app:device_type_title="@string/pulse_4g"
+            app:layout_constraintBottom_toBottomOf="@id/heliumCard"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/heliumCard"
+            app:layout_constraintTop_toTopOf="@id/heliumCard" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
