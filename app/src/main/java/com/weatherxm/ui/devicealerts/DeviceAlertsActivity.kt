@@ -10,6 +10,7 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
@@ -77,7 +78,8 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
         val url = when (device?.profile) {
             DeviceProfile.M5 -> getString(R.string.docs_url_low_battery_m5)
             DeviceProfile.D1 -> getString(R.string.docs_url_low_battery_d1)
-            else -> getString(R.string.docs_url_low_battery_helium)
+            DeviceProfile.Helium -> getString(R.string.docs_url_low_battery_helium)
+            else -> String.empty()
         }
         navigator.openWebsite(this, url)
         analytics.trackEventSelectContent(
