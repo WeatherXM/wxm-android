@@ -175,7 +175,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             Status.ERROR -> {
                 Timber.d("Got error: $resource.message")
                 resource.message?.let {
-                    showSnackbarMessage(binding.root, it) { explorerModel.fetch() }
+                    showSnackbarMessage(binding.root, it, callback = { explorerModel.fetch() })
                 }
             }
             Status.LOADING -> {
@@ -195,4 +195,6 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     override fun onMapDebugInfoUpdated(zoom: Double, center: Point) {
         // Do nothing
     }
+
+    fun navView() = binding.navView
 }

@@ -21,6 +21,7 @@ import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.Mask
 import com.weatherxm.util.Rewards.formatTokens
@@ -50,6 +51,14 @@ class ProfileFragment : BaseFragment() {
             if (result.resultCode == Activity.RESULT_OK) {
                 model.onClaimedResult(
                     result.data?.getDoubleExtra(ARG_TOKEN_CLAIMED_AMOUNT, 0.0) ?: 0.0
+                )
+            } else {
+                showSnackbarMessage(
+                    binding.root,
+                    getString(R.string.having_trouble_claiming),
+                    callback = { snackbar?.dismiss() },
+                    R.string.action_close,
+                    (activity as HomeActivity).navView()
                 )
             }
         }
