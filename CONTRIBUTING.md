@@ -95,6 +95,8 @@ We have two different variables for MapBox:
   a [Mapbox account](https://account.mapbox.com)
   and create the respective tokens in the [Tokens](https://account.mapbox.com/access-tokens/)
   section. The `MAPBOX_DOWNLOADS_TOKEN` has secret scopes.
+- `MAPBOX_STYLE`
+  Optional param which can be left empty. Used for injecting a custom style to be used in the explorer.
 
 You can view Mapbox guide on Access
 Token [here](https://docs.mapbox.com/help/getting-started/access-tokens/).
