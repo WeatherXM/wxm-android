@@ -1069,7 +1069,7 @@
     },
     {
         "code": "MY",
-        "helium_frequency": "AS923_1",
+        "helium_frequency": "AS923_1B",
         "map_center": {
             "lat": 4.210484,
             "lon": 101.975766
