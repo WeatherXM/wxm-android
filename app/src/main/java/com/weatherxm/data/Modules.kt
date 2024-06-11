@@ -154,6 +154,7 @@ import com.weatherxm.ui.claimdevice.helium.frequency.ClaimHeliumFrequencyViewMod
 import com.weatherxm.ui.claimdevice.helium.pair.ClaimHeliumPairViewModel
 import com.weatherxm.ui.claimdevice.helium.result.ClaimHeliumResultViewModel
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.connectwallet.ConnectWalletViewModel
 import com.weatherxm.ui.deleteaccount.DeleteAccountViewModel
@@ -994,6 +995,7 @@ private val viewmodels = module {
     viewModel { params ->
         ClaimWifiViewModel(deviceType = params.get(), get(), get(), get())
     }
+    viewModel { ClaimPulseViewModel(get(), get(), get()) }
 }
 
 val modules = listOf(

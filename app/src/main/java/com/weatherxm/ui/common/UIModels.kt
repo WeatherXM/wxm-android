@@ -201,6 +201,7 @@ data class FrequencyState(
 enum class DeviceType : Parcelable {
     M5_WIFI,
     D1_WIFI,
+    PULSE_4G,
     HELIUM
 }
 
