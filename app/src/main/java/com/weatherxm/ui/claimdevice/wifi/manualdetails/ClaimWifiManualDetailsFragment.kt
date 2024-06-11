@@ -117,21 +117,20 @@ class ClaimWifiManualDetailsFragment : BaseFragment() {
     }
 
     private fun validateAndSetDetails() {
-        if (!model.validateSerial(binding.serialNumber.text.toString())) {
+        val isSerialValid = model.validateSerial(binding.serialNumber.text.toString())
+        val isKeyValid = model.validateClaimingKey(binding.claimingKey.text.toString())
+
+        if (!isSerialValid) {
             binding.serialNumberContainer.error = getString(R.string.warn_validation_invalid_serial)
+        } else if (model.deviceType == DeviceType.D1_WIFI && !isKeyValid) {
+            binding.claimingKeyContainer.error =
+                getString(R.string.warn_validation_invalid_claiming_key)
         } else {
             model.setSerialNumber(binding.serialNumber.text.toString())
-        }
-        if (model.deviceType == DeviceType.M5_WIFI) {
-            model.next()
-        } else {
-            if (!model.validateClaimingKey(binding.claimingKey.text.toString())) {
-                binding.claimingKeyContainer.error =
-                    getString(R.string.warn_validation_invalid_claiming_key)
-            } else {
+            if (model.deviceType == DeviceType.D1_WIFI) {
                 model.setClaimingKey(binding.claimingKey.text.toString())
-                model.next()
             }
+            model.next()
         }
     }
 

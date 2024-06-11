@@ -61,7 +61,8 @@ interface AnalyticsService {
         LOCATION_QUALITY_INFO("Location Quality info"),
         CELL_RANKING_INFO("Cell Ranking info"),
         CELL_CAPACITY_INFO("Cell Capacity info"),
-        DEVICE_FORECAST_DETAILS("Forecast Details Screen")
+        DEVICE_FORECAST_DETAILS("Forecast Details Screen"),
+        CLAIM_DAPP("Claim Dapp")
     }
 
     // Custom Event Names
@@ -84,7 +85,8 @@ interface AnalyticsService {
         FILTERS_SORT("SORT_BY"),
         FILTERS_FILTER("FILTER"),
         FILTERS_GROUP("GROUP_BY"),
-        STATUS("STATUS")
+        STATUS("STATUS"),
+        STATE("STATE")
     }
 
     // Custom Param Names
@@ -133,6 +135,7 @@ interface AnalyticsService {
         OTA_RESULT("OTA Result"),
         OTA_RESULT_ID("ota_result"),
         FAILURE("Failure"),
+        SUCCESS_ID("success"),
         FAILURE_ID("failure"),
         CLAIMING_RESULT_ID("claming_result"),
         CHANGE_STATION_NAME_RESULT_ID("change_station_name_result"),
@@ -236,7 +239,8 @@ interface AnalyticsService {
         REWARD_CONTRACT("reward_contract"),
         LAST_RUN_HASH("last_run_hash"),
         TOTAL_SUPPLY("total_supply"),
-        CIRCULATING_SUPPLY("circulating_supply")
+        CIRCULATING_SUPPLY("circulating_supply"),
+        TOKEN_CLAIMING_RESULT("Token Claiming Result")
     }
 
     // Custom Param Names
@@ -276,7 +280,7 @@ interface AnalyticsService {
 
     fun trackEventViewContent(
         contentName: String,
-        contentId: String,
+        contentId: String?,
         vararg customParams: Pair<String, String>,
         success: Long? = null
     )

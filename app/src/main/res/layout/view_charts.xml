@@ -31,7 +31,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/chart_temperature"
-            app:line_chart_primary_highlight_name="@string/rate"
+            app:line_chart_primary_highlight_name="@string/max_rate"
             app:line_chart_primary_line_name="@string/precip_rate"
             app:line_chart_secondary_highlight_name="@string/daily"
             app:line_chart_secondary_line_color="@color/chart_secondary_line"
