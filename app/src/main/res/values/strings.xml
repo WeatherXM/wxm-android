@@ -388,10 +388,12 @@
     <string name="enter_gateway_serial_number">Enter gateway Serial Number</string>
     <string name="enter_gateway_details">Enter gateway details</string>
     <string name="enter_gateway_serial_number_desc"><![CDATA[Enter the gateway’s <b>Serial Number</b> that appears in the screen, as seen below.]]></string>
+    <string name="enter_gateway_pulse_serial_number_desc"><![CDATA[Type the barcode located on the <b>back</b> of your WG3000 gateway.]]></string>
     <string name="enter_gateway_details_desc"><![CDATA[Enter the gateway’s <b>Claiming Key</b> and <b>Serial Number</b>. They are located under the QR code.]]></string>
     <string name="enter_gateway_m5_notice">If your gateway is running on an older firmware version, screens may differ.</string>
     <string name="enter_your_gateway_sn">Enter your gateway’s Serial Number</string>
     <string name="enter_your_gateway_sn_hint">12:34:56:67:78:90:12:34:56:78</string>
+    <string name="enter_your_gateway_pulse_sn_hint">P1234567890123456</string>
     <string name="enter_your_gateway_claiming_key">Enter your gateway’s Claiming Key</string>
     <string name="enter_your_gateway_claiming_key_hint">123456</string>
 

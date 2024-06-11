@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/alternativeBackground">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/button_bar"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/padding_normal"
+                android:text="@string/enter_gateway_details"
+                android:textColor="@color/darkestBlue"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:textColor="@color/alternativeTextColor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="@string/enter_gateway_pulse_serial_number_desc" />
+
+            <ImageView
+                android:id="@+id/barcodeSampleImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_extra_large"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/connect_m5_wifi_watch_video"
+                android:paddingBottom="@dimen/padding_normal_to_large"
+                android:src="@drawable/pulse_barcode"
+                app:layout_constraintTop_toBottomOf="@id/desc" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/serialNumberTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_extra_large"
+                android:text="@string/enter_your_gateway_sn"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/barcodeSampleImage" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/serialNumberContainer"
+                style="@style/Widget.WeatherXM.TextInputEditText.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxBackgroundColor="@color/alternativeBackground"
+                app:counterEnabled="true"
+                app:counterMaxLength="17"
+                app:hintEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/serialNumberTitle">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/serialNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:digits="P0123456789ABCDEFabcdef"
+                    android:hint="@string/enter_your_gateway_pulse_sn_hint"
+                    android:imeOptions="actionDone"
+                    android:inputType="text|textCapCharacters"
+                    android:singleLine="true"
+                    android:textColorHint="@color/midGrey"
+                    android:textSize="16sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <FrameLayout
+        android:id="@+id/button_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/elevation_normal"
+        android:paddingTop="@dimen/padding_large"
+        android:paddingBottom="@dimen/padding_large"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/proceedBtn"
+            style="@style/Widget.WeatherXM.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/proceed_next_step"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

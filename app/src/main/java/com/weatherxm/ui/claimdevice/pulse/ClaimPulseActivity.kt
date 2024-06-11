@@ -8,6 +8,7 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity.ClaimPulseDevicePagerAdapter.Companion.PAGE_COUNT
+import com.weatherxm.ui.claimdevice.pulse.manualdetails.ClaimPulseManualDetailsFragment
 import com.weatherxm.ui.claimdevice.pulse.preparegateway.ClaimPulsePrepareGatewayFragment
 import com.weatherxm.ui.claimdevice.pulse.reboot.ClaimPulseRebootFragment
 import com.weatherxm.ui.common.classSimpleName
@@ -89,7 +90,8 @@ class ClaimPulseActivity : BaseActivity() {
         companion object {
             const val PAGE_REBOOT = 0
             const val PAGE_PREPARE_GATEWAY = 1
-            const val PAGE_COUNT = 2
+            const val PAGE_MANUAL_DETAILS = 2
+            const val PAGE_COUNT = 3
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -99,6 +101,7 @@ class ClaimPulseActivity : BaseActivity() {
             return when (position) {
                 PAGE_REBOOT -> ClaimPulseRebootFragment()
                 PAGE_PREPARE_GATEWAY -> ClaimPulsePrepareGatewayFragment()
+                PAGE_MANUAL_DETAILS -> ClaimPulseManualDetailsFragment()
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }
         }
