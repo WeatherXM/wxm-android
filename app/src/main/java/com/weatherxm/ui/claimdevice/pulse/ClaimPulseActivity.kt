@@ -11,13 +11,16 @@ import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity.ClaimPulseDevicePagerAdapter.Companion.PAGE_COUNT
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity.ClaimPulseDevicePagerAdapter.Companion.PAGE_LOCATION
+import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity.ClaimPulseDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.claimdevice.pulse.claimingcode.ClaimPulseClaimingCodeFragment
 import com.weatherxm.ui.claimdevice.pulse.manualdetails.ClaimPulseManualDetailsFragment
 import com.weatherxm.ui.claimdevice.pulse.preparegateway.ClaimPulsePrepareGatewayFragment
 import com.weatherxm.ui.claimdevice.pulse.reboot.ClaimPulseRebootFragment
+import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -91,6 +94,11 @@ class ClaimPulseActivity : BaseActivity() {
                 PAGE_LOCATION -> {
                     locationModel.requestUserLocation()
                 }
+                PAGE_RESULT -> {
+                    binding.appBar.visible(false)
+                    binding.progress.visible(false)
+                    model.claimDevice(locationModel.getInstallationLocation())
+                }
             }
         }
     }
@@ -104,7 +112,8 @@ class ClaimPulseActivity : BaseActivity() {
             const val PAGE_MANUAL_DETAILS = 2
             const val PAGE_CLAIMING_CODE = 3
             const val PAGE_LOCATION = 4
-            const val PAGE_COUNT = 5
+            const val PAGE_RESULT = 5
+            const val PAGE_COUNT = 6
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -117,6 +126,7 @@ class ClaimPulseActivity : BaseActivity() {
                 PAGE_MANUAL_DETAILS -> ClaimPulseManualDetailsFragment()
                 PAGE_CLAIMING_CODE -> ClaimPulseClaimingCodeFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.PULSE_4G)
+                PAGE_RESULT -> ClaimResultFragment.newInstance(DeviceType.PULSE_4G)
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }
         }

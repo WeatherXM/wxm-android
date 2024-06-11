@@ -1,33 +1,62 @@
-package com.weatherxm.ui.claimdevice.wifi.result
+package com.weatherxm.ui.claimdevice.result
 
 import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenCreated
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
-import com.weatherxm.databinding.FragmentClaimWifiResultBinding
+import com.weatherxm.databinding.FragmentClaimResultBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
+import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.ui.common.DeviceType.PULSE_4G
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
-class ClaimWifiResultFragment : BaseFragment() {
-    private val parentModel: ClaimWifiViewModel by activityViewModel()
+class ClaimResultFragment : BaseFragment() {
+    private val wifiParentModel: ClaimWifiViewModel by activityViewModel()
+    private val pulseParentModel: ClaimPulseViewModel by activityViewModel()
     private val locationModel: ClaimLocationViewModel by activityViewModel()
-    private lateinit var binding: FragmentClaimWifiResultBinding
+    private lateinit var binding: FragmentClaimResultBinding
+    private lateinit var deviceType: DeviceType
+
+    companion object {
+        const val TAG = "ClaimResultFragment"
+
+        fun newInstance(deviceType: DeviceType) = ClaimResultFragment().apply {
+            arguments =
+                Bundle().apply { putParcelable(ARG_DEVICE_TYPE, deviceType) }
+        }
+    }
+
+    init {
+        lifecycleScope.launch {
+            whenCreated {
+                arguments?.parcelable<DeviceType>(ARG_DEVICE_TYPE)?.let {
+                    deviceType = it
+                }
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentClaimWifiResultBinding.inflate(inflater, container, false)
+        binding = FragmentClaimResultBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -43,15 +72,29 @@ class ClaimWifiResultFragment : BaseFragment() {
                     AnalyticsService.ParamValue.QUIT.paramValue
                 )
             )
-            parentModel.cancel()
+            if (deviceType == PULSE_4G) {
+                pulseParentModel.cancel()
+            } else {
+                wifiParentModel.cancel()
+            }
         }
 
         binding.retry.setOnClickListener {
-            parentModel.claimDevice(locationModel.getInstallationLocation())
+            if (deviceType == PULSE_4G) {
+                pulseParentModel.claimDevice(locationModel.getInstallationLocation())
+            } else {
+                wifiParentModel.claimDevice(locationModel.getInstallationLocation())
+            }
         }
 
-        parentModel.onClaimResult().observe(viewLifecycleOwner) {
-            updateUI(it)
+        if (deviceType == PULSE_4G) {
+            pulseParentModel.onClaimResult().observe(viewLifecycleOwner) {
+                updateUI(it)
+            }
+        } else {
+            wifiParentModel.onClaimResult().observe(viewLifecycleOwner) {
+                updateUI(it)
+            }
         }
     }
 
