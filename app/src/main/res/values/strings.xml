@@ -33,6 +33,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="action_scan_qr">Scan QR Code</string>
+    <string name="action_scan_barcode">Scan Barcode</string>
     <string name="contact_us">Contact us</string>
     <string name="select_date">Select Date</string>>
     <string name="read_more">Read More</string>
@@ -374,10 +375,13 @@
     <string name="prepare_gateway_claiming">Prepare gateway for claiming</string>
     <string name="prepare_gateway_m1_first_step"><![CDATA[The M5 gateway should reboot automatically. After it has rebooted, navigate to the bottom of the settings screen to reveal the <b>QR Code</b> and <b>Serial Number</b>.]]></string>
     <string name="prepare_gateway_d1_first_step"><![CDATA[The WG1200 gateway reboots automatically. After it has rebooted, navigate to the <b>“Claim Device”</b> menu, in the settings.]]></string>
+    <string name="prepare_gateway_pulse_first_step"><![CDATA[Find the <b>Barcode</b> on the back of your gateway.]]></string>
+    <string name="prepare_gateway_pulse_second_step"><![CDATA[Press <b>"Scan Barcode"</b> to activate your phone’s camera and scan the barcode automatically. Alternatively, press <b>“Enter S/N manually”</b> to proceed to the next screen and enter your barcode.]]></string>
     <string name="prepare_gateway_wifi_second_step"><![CDATA[Scan the gateway’s <b>QR Code</b> that appears in the screen, as seen below.]]></string>
     <string name="prepare_gateway_m5_notice"><![CDATA[If your gateway is running on an older firmware version, you may have to enter the <b>Serial Number Manually</b>.]]></string>
     <string name="action_enter_serial_number_manually">Enter S/N Manually</string>
     <string name="prepare_gateway_invalid_qr_code">The QR Code you scanned is invalid. Please try again with a valid QR Code or enter manually.</string>
+    <string name="prepare_gateway_invalid_barcode">The Barcode you scanned is invalid. Please try again with a valid Barcode or enter manually.</string>
 
     <!-- Claim - Manually Enter S/N -->
     <string name="proceed_next_step">Proceed to Next Step</string>
