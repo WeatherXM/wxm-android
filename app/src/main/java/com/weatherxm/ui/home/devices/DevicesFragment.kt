@@ -20,6 +20,7 @@ import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
@@ -217,10 +218,11 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     }
 
     override fun onLowBatteryReadMoreClicked(device: UIDevice) {
-        val url = if (device.profile == DeviceProfile.M5) {
-            getString(R.string.docs_url_low_battery_m5)
-        } else {
-            getString(R.string.docs_url_low_battery_helium)
+        val url = when (device.profile) {
+            DeviceProfile.M5 -> getString(R.string.docs_url_low_battery_m5)
+            DeviceProfile.D1 -> getString(R.string.docs_url_low_battery_d1)
+            DeviceProfile.Helium -> getString(R.string.docs_url_low_battery_helium)
+            else -> String.empty()
         }
         navigator.openWebsite(context, url)
         analytics.trackEventSelectContent(

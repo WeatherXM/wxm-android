@@ -4,6 +4,7 @@
     <string name="suggested_wallets_documentation">https://docs.weatherxm.com/wallet/add-edit-wallet-address#how-to-create-wallet-on-metamask</string>
     <string name="terms_of_service_url">https://weatherxm.com/mobile/terms/</string>
     <string name="troubleshooting_m5_url">https://docs.weatherxm.com/wifi-m5-bundle/m5-troubleshooting</string>
+    <string name="troubleshooting_d1_url">https://docs.weatherxm.com/wxm-devices/D1-bundle/D1-troubleshooting</string>
     <string name="troubleshooting_helium_url">https://docs.weatherxm.com/helium-bundle/helium-troubleshooting</string>
     <string name="user_panel_url">https://docs.google.com/forms/d/e/1FAIpQLSc35pJdxM0tosVh-az0goKEjE1xzBs_OVo5V23coC8z1ayD6g/viewform</string>
     <string name="short_app_survey_url">https://docs.google.com/forms/d/e/1FAIpQLSc1T-odUwpXa01nODavwEtLgO00AfPxqfrdhbn_G5Lss0dD2w/viewform?usp=pp_url</string>
@@ -23,6 +24,7 @@
     <string name="docs_url_pol_algorithm">https://docs.weatherxm.com/project/proof-of-location</string>
     <string name="docs_url_qod_algorithm">https://docs.weatherxm.com/project/quality-of-data</string>
     <string name="docs_url_low_battery_m5">https://docs.weatherxm.com/wxm-devices/wifi-m5-bundle/assemble-m5#installing-batteries</string>
+    <string name="docs_url_low_battery_d1">https://docs.weatherxm.com/wxm-devices/D1-bundle/D1-assemble#installing-batteries</string>
     <string name="docs_url_low_battery_helium">https://docs.weatherxm.com/wxm-devices/helium-bundle/helium-assemble#battery-installation-diagram-external-box</string>
     <string name="share_cell_url">https://explorer.weatherxm.com/cells/%s</string>
     <string name="share_station_url">https://explorer.weatherxm.com/stations/%s</string>
