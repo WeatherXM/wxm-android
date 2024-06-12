@@ -80,6 +80,7 @@ android {
 
         // Resource value fields
         resValue("string", "mapbox_access_token", getStringProperty("MAPBOX_ACCESS_TOKEN"))
+        resValue("string", "mapbox_style", getStringProperty("MAPBOX_STYLE"))
 
         buildConfigField("String", "MIXPANEL_TOKEN", "\"${getStringProperty("MIXPANEL_TOKEN")}\"")
 

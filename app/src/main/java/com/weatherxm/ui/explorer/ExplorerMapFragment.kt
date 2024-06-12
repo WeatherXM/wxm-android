@@ -27,8 +27,8 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.classSimpleName
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setVisible
@@ -370,7 +370,13 @@ class ExplorerMapFragment : BaseMapFragment() {
     }
 
     override fun getMapStyle(): String {
-        return getString(R.string.mapbox_style)
+        /**
+         * If a custom mapbox style is available (which are set through env param MAPBOX_STYLE)
+         * use it otherwise use the default ones found in BaseMapFragment
+         */
+        return getString(R.string.mapbox_style).ifEmpty {
+            super.getMapStyle()
+        }
     }
 
     @SuppressLint("MissingPermission")
