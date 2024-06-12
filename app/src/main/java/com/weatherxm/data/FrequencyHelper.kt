@@ -50,6 +50,7 @@ fun frequencyToHeliumBleBandValue(frequency: Frequency): Int {
         Frequency.IN865 -> 7
         Frequency.RU864 -> 9
         Frequency.AS923_1 -> 10
+        Frequency.AS923_1B -> 14
         Frequency.AS923_2 -> 11
         Frequency.AS923_3 -> 12
         Frequency.AS923_4 -> 13

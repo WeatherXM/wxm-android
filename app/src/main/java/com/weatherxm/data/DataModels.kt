@@ -56,6 +56,7 @@ enum class Frequency {
     IN865,
     RU864,
     AS923_1,
+    AS923_1B,
     AS923_2,
     AS923_3,
     AS923_4
