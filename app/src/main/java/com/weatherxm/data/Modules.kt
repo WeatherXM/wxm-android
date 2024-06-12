@@ -56,7 +56,6 @@ import com.weatherxm.data.adapters.LocalDateJsonAdapter
 import com.weatherxm.data.adapters.LocalDateTimeJsonAdapter
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager
-import com.weatherxm.data.bluetooth.BluetoothProvisioner
 import com.weatherxm.data.bluetooth.BluetoothScanner
 import com.weatherxm.data.bluetooth.BluetoothUpdater
 import com.weatherxm.data.database.AppDatabase
@@ -99,8 +98,6 @@ import com.weatherxm.data.datasource.WidgetDataSource
 import com.weatherxm.data.datasource.WidgetDataSourceImpl
 import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSource
 import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSourceImpl
-import com.weatherxm.data.datasource.bluetooth.BluetoothProvisionerDataSource
-import com.weatherxm.data.datasource.bluetooth.BluetoothProvisionerDataSourceImpl
 import com.weatherxm.data.datasource.bluetooth.BluetoothScannerDataSource
 import com.weatherxm.data.datasource.bluetooth.BluetoothScannerDataSourceImpl
 import com.weatherxm.data.datasource.bluetooth.BluetoothUpdaterDataSource
@@ -144,8 +141,6 @@ import com.weatherxm.data.repository.WidgetRepository
 import com.weatherxm.data.repository.WidgetRepositoryImpl
 import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepository
 import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepositoryImpl
-import com.weatherxm.data.repository.bluetooth.BluetoothProvisionerRepository
-import com.weatherxm.data.repository.bluetooth.BluetoothProvisionerRepositoryImpl
 import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepository
 import com.weatherxm.data.repository.bluetooth.BluetoothScannerRepositoryImpl
 import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepository
@@ -428,10 +423,6 @@ private val datasources = module {
         BluetoothUpdaterDataSourceImpl(get())
     }
 
-    single<BluetoothProvisionerDataSource> {
-        BluetoothProvisionerDataSourceImpl(get())
-    }
-
     single<DeviceOTADataSource> {
         DeviceOTADataSourceImpl(get(), get())
     }
@@ -492,9 +483,6 @@ private val repositories = module {
     }
     single<BluetoothConnectionRepository> {
         BluetoothConnectionRepositoryImpl(get())
-    }
-    single<BluetoothProvisionerRepository> {
-        BluetoothProvisionerRepositoryImpl(get())
     }
     single<BluetoothUpdaterRepository> {
         BluetoothUpdaterRepositoryImpl(get())
@@ -706,9 +694,6 @@ private val bluetooth = module {
     }
     single<BluetoothUpdater> {
         BluetoothUpdater(get(), get())
-    }
-    single<BluetoothProvisioner> {
-        BluetoothProvisioner(get())
     }
 }
 
