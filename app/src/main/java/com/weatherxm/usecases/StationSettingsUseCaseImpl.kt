@@ -3,7 +3,6 @@ package com.weatherxm.usecases
 import arrow.core.Either
 import com.weatherxm.data.CountryAndFrequencies
 import com.weatherxm.data.DeviceInfo
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
 import com.weatherxm.data.Location
@@ -33,9 +32,8 @@ class StationSettingsUseCaseImpl(
         return deviceRepository.removeDevice(serialNumber, id)
     }
 
-    override fun shouldShowOTAPrompt(device: UIDevice): Boolean {
-        return deviceOTARepository.shouldShowOTAPrompt(device.id, device.assignedFirmware)
-            && device.profile?.equals(DeviceProfile.Helium) == true
+    override fun userShouldNotifiedOfOTA(device: UIDevice): Boolean {
+        return deviceOTARepository.userShouldNotifiedOfOTA(device.id, device.assignedFirmware)
     }
 
     override suspend fun getCountryAndFrequencies(

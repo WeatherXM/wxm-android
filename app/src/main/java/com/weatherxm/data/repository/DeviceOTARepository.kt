@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
 interface DeviceOTARepository {
     suspend fun getFirmware(deviceId: String): Either<Failure, ByteArray>
     fun onUpdateSuccess(deviceId: String, otaVersion: String)
-    fun shouldShowOTAPrompt(deviceId: String, assignedOtaVersion: String?): Boolean
+    fun userShouldNotifiedOfOTA(deviceId: String, assignedOtaVersion: String?): Boolean
 }
 
 class DeviceOTARepositoryImpl(
@@ -27,7 +27,7 @@ class DeviceOTARepositoryImpl(
         deviceOTADataSource.setDeviceLastOtaTimestamp(deviceId)
     }
 
-    override fun shouldShowOTAPrompt(deviceId: String, assignedOtaVersion: String?): Boolean {
+    override fun userShouldNotifiedOfOTA(deviceId: String, assignedOtaVersion: String?): Boolean {
         return if (assignedOtaVersion.isNullOrEmpty()) {
             false
         } else {
