@@ -69,6 +69,7 @@ data class SearchResult(
                 Timber.e("Wrong Bundle Name: ${stationBundle?.name} for Device $name")
                 null
             },
+            bundleTitle = stationBundle?.title,
             connectivity = stationBundle?.connectivity,
             wsModel = stationBundle?.wsModel,
             gwModel = stationBundle?.gwModel,

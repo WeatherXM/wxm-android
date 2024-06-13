@@ -240,6 +240,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 oldItem.currentWeather?.feelsLike == newItem.currentWeather?.feelsLike &&
                 oldItem.currentWeather?.timestamp == newItem.currentWeather?.timestamp &&
                 oldItem.bundleName == newItem.bundleName &&
+                oldItem.bundleTitle == newItem.bundleTitle &&
                 oldItem.connectivity == newItem.connectivity &&
                 oldItem.wsModel == newItem.wsModel &&
                 oldItem.gwModel == newItem.gwModel &&

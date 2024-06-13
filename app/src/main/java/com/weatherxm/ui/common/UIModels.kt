@@ -68,6 +68,7 @@ data class UIDevice(
     val label: String?,
     var friendlyName: String?,
     val bundleName: BundleName?,
+    val bundleTitle: String?,
     val connectivity: String?,
     val wsModel: String?,
     val gwModel: String?,
@@ -93,6 +94,7 @@ data class UIDevice(
             String.empty(),
             String.empty(),
             String.empty(),
+            null,
             null,
             null,
             null,
@@ -565,9 +567,9 @@ enum class AnnotationGroupCode : Parcelable {
 
 @Parcelize
 enum class BundleName : Parcelable {
-    M5,
-    H1,
-    H2,
-    D1,
-    PULSE
+    m5,
+    h1,
+    h2,
+    d1,
+    pulse
 }

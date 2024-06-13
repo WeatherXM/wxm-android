@@ -135,7 +135,7 @@ class CurrentFragment : BaseFragment() {
             binding.alert.message(getString(R.string.no_data_message_public_device))
         } else {
             when (device.bundleName) {
-                BundleName.M5 -> {
+                BundleName.m5 -> {
                     val m5TroubleshootingUrl = getString(R.string.troubleshooting_m5_url)
                     binding.alert.htmlMessage(
                         getString(R.string.error_user_device_offline, m5TroubleshootingUrl)
@@ -143,7 +143,7 @@ class CurrentFragment : BaseFragment() {
                         navigator.openWebsite(context, m5TroubleshootingUrl)
                     }
                 }
-                BundleName.D1 -> {
+                BundleName.d1 -> {
                     val d1TroubleshootingUrl = getString(R.string.troubleshooting_d1_url)
                     binding.alert.htmlMessage(
                         getString(R.string.error_user_device_offline, d1TroubleshootingUrl)
@@ -151,7 +151,7 @@ class CurrentFragment : BaseFragment() {
                         navigator.openWebsite(context, d1TroubleshootingUrl)
                     }
                 }
-                BundleName.H1, BundleName.H2 -> {
+                BundleName.h1, BundleName.h2 -> {
                     val heliumTroubleshootingUrl = getString(R.string.troubleshooting_helium_url)
                     binding.alert.htmlMessage(
                         getString(R.string.error_user_device_offline, heliumTroubleshootingUrl)
@@ -159,7 +159,7 @@ class CurrentFragment : BaseFragment() {
                         navigator.openWebsite(context, heliumTroubleshootingUrl)
                     }
                 }
-                BundleName.PULSE -> {
+                BundleName.pulse -> {
                     // Do nothing
                 }
                 null -> {

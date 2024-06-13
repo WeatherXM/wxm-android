@@ -263,10 +263,10 @@ fun Chip.setBundleChip(device: UIDevice) {
         setIcon(R.drawable.ic_helium)
     } else if (device.isWifi()) {
         setIcon(R.drawable.ic_wifi)
-    } else if(device.isCellular()) {
+    } else if (device.isCellular()) {
         setIcon(R.drawable.ic_cellular)
     }
-    text = device.bundleName?.name
+    text = device.bundleTitle
 }
 
 fun Chip.setStatusChip(device: UIDevice) {

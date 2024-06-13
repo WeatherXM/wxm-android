@@ -168,7 +168,7 @@ object Rewards {
             AnnotationCode.NO_LOCATION_DATA -> {
                 if (device.relation != DeviceRelation.OWNED) {
                     context.getString(R.string.annotation_no_location_public_desc)
-                } else if (device.bundleName == BundleName.M5) {
+                } else if (device.bundleName == BundleName.m5) {
                     context.getString(R.string.annotation_no_location_m5_desc)
                 } else {
                     context.getString(R.string.annotation_no_location_helium_desc)

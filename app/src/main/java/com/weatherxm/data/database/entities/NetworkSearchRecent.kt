@@ -14,6 +14,7 @@ data class NetworkSearchRecent(
     @ColumnInfo(name = "address_place")
     val addressPlace: String?,
     val bundleName: String?,
+    val bundleTitle: String?,
     val connectivity: String?,
     @ColumnInfo(name = "ws_model")
     val wsModel: String?,

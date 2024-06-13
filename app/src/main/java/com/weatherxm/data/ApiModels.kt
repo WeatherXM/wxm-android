@@ -54,6 +54,7 @@ data class Location(
 @Parcelize
 data class Bundle(
     val name: String?,
+    val title: String?,
     val connectivity: String?,
     @Json(name = "ws_model")
     val wsModel: String?,
@@ -88,6 +89,7 @@ data class PublicDevice(
                 Timber.e("Wrong Bundle Name: ${bundle?.name} for Device $name")
                 null
             },
+            bundleTitle = bundle?.title,
             connectivity = bundle?.connectivity,
             wsModel = bundle?.wsModel,
             gwModel = bundle?.gwModel,
@@ -164,6 +166,7 @@ data class Device(
                 Timber.e("Wrong Bundle Name: ${bundle?.name} for Device $name")
                 null
             },
+            bundleTitle = bundle?.title,
             connectivity = bundle?.connectivity,
             wsModel = bundle?.wsModel,
             gwModel = bundle?.gwModel,

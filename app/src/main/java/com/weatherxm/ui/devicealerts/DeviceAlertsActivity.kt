@@ -76,9 +76,9 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
 
     override fun onLowBatteryReadMoreClicked() {
         val url = when (device?.bundleName) {
-            BundleName.M5 -> getString(R.string.docs_url_low_battery_m5)
-            BundleName.D1 -> getString(R.string.docs_url_low_battery_d1)
-            BundleName.H1, BundleName.H2 -> getString(R.string.docs_url_low_battery_helium)
+            BundleName.m5 -> getString(R.string.docs_url_low_battery_m5)
+            BundleName.d1 -> getString(R.string.docs_url_low_battery_d1)
+            BundleName.h1, BundleName.h2 -> getString(R.string.docs_url_low_battery_helium)
             else -> String.empty()
         }
         navigator.openWebsite(this, url)

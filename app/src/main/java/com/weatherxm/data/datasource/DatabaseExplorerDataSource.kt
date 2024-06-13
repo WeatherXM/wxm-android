@@ -63,7 +63,12 @@ class DatabaseExplorerDataSource(
                     center = Location(it.lat, it.lon),
                     addressPlace = it.addressPlace,
                     stationBundle = Bundle(
-                        it.bundleName, it.connectivity, it.wsModel, it.gwModel, it.hwClass
+                        it.bundleName,
+                        it.bundleTitle,
+                        it.connectivity,
+                        it.wsModel,
+                        it.gwModel,
+                        it.hwClass
                     ),
                     stationCellIndex = it.stationCellIndex,
                     stationId = it.stationId
@@ -86,6 +91,7 @@ class DatabaseExplorerDataSource(
                 lon = search.center?.lon ?: 0.0,
                 addressPlace = search.addressPlace,
                 bundleName = search.stationBundle?.name,
+                bundleTitle = search.stationBundle?.title,
                 connectivity = search.stationBundle?.connectivity,
                 wsModel = search.stationBundle?.wsModel,
                 gwModel = search.stationBundle?.gwModel,
