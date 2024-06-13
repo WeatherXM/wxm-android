@@ -157,7 +157,7 @@
         <item name="chipStrokeWidth">0dp</item>
         <item name="chipMinHeight">30dp</item>
         <item name="chipCornerRadius">@dimen/radius_medium</item>
-        <item name="chipIconSize">15dp</item>
+        <item name="chipIconSize">16dp</item>
     </style>
 
     <!--

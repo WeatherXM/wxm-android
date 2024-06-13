@@ -47,32 +47,56 @@
                 app:layout_constraintTop_toTopOf="@id/name"
                 tools:ignore="ContentDescription" />
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/addressChip"
-                style="@style/Widget.WeatherXM.Chip.Status"
-                android:layout_width="wrap_content"
+            <HorizontalScrollView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
-                app:chipBackgroundColor="@color/blueTint"
-                app:chipIcon="@drawable/ic_hex"
-                app:chipIconSize="12dp"
-                app:chipIconTint="@color/colorOnSurface"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/name"
-                tools:text="Athens, GR" />
+                android:scrollbars="none"
+                app:layout_constraintTop_toBottomOf="@id/name">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/statusChip"
-                style="@style/Widget.WeatherXM.Chip.Status"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginStart="@dimen/margin_small"
-                app:layout_constraintBottom_toBottomOf="@id/addressChip"
-                app:layout_constraintStart_toEndOf="@id/addressChip"
-                app:layout_constraintTop_toTopOf="@id/addressChip"
-                tools:chipBackgroundColor="@color/status_chip_background_online"
-                tools:chipIcon="@drawable/ic_wifi"
-                tools:text="5 mins ago" />
+                <com.google.android.material.chip.ChipGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/status"
+                        style="@style/Widget.WeatherXM.Chip.Status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipCornerRadius="@dimen/radius_small"
+                        app:chipIcon="@drawable/dot"
+                        app:chipIconSize="10dp"
+                        tools:chipBackgroundColor="@color/successTint"
+                        tools:chipIconTint="@color/success"
+                        tools:text="5 mins ago" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/bundle"
+                        style="@style/Widget.WeatherXM.Chip.Status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipBackgroundColor="@color/blueTint"
+                        app:chipCornerRadius="@dimen/radius_small"
+                        app:chipIconTint="@color/colorOnSurface"
+                        tools:chipIcon="@drawable/ic_wifi"
+                        tools:text="M5" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/address"
+                        style="@style/Widget.WeatherXM.Chip.Status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        app:chipBackgroundColor="@color/blueTint"
+                        app:chipCornerRadius="@dimen/radius_small"
+                        app:chipIcon="@drawable/ic_hex"
+                        app:chipIconTint="@color/colorOnSurface"
+                        tools:ignore="KeyboardInaccessibleWidget"
+                        tools:text="Athens, GR" />
+
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

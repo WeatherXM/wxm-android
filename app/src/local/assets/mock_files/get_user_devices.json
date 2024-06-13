@@ -18,7 +18,7 @@
             "lon": 23.730503
         },
         "attributes": {
-            "isActive": true,
+            "isActive": false,
             "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f72fffffffff",

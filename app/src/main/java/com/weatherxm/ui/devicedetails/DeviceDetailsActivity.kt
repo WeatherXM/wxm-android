@@ -29,6 +29,7 @@ import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setErrorChip
 import com.weatherxm.ui.common.setStatusChip
@@ -259,6 +260,7 @@ class DeviceDetailsActivity : BaseActivity() {
         }
 
         binding.status.setStatusChip(device)
+        binding.bundle.setBundleChip(device)
         if (!model.device.isOnline()) {
             binding.status.setOnClickListener {
                 navigator.showDeviceAlerts(this, model.device)

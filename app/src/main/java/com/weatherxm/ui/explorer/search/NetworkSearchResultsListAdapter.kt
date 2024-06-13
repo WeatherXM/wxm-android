@@ -57,6 +57,7 @@ class NetworkSearchResultsListAdapter(
             when (item.stationBundle?.connectivity) {
                 "helium" -> binding.typeIcon.setImageResource(R.drawable.ic_helium)
                 "wifi" -> binding.typeIcon.setImageResource(R.drawable.ic_wifi)
+                "cellular" -> binding.typeIcon.setImageResource(R.drawable.ic_cellular)
                 null -> binding.typeIcon.setImageResource(R.drawable.ic_address_marker)
             }
 

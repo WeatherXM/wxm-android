@@ -108,23 +108,32 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:chipCornerRadius="@dimen/radius_small"
-                            tools:chipBackgroundColor="@color/status_chip_background_online"
+                            app:chipIcon="@drawable/dot"
+                            app:chipIconSize="10dp"
+                            tools:chipBackgroundColor="@color/successTint"
+                            tools:chipIconTint="@color/success"
+                            tools:text="5 mins ago" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/bundle"
+                            style="@style/Widget.WeatherXM.Chip.Status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:chipBackgroundColor="@color/blueTint"
+                            app:chipCornerRadius="@dimen/radius_small"
+                            app:chipIconTint="@color/colorOnSurface"
                             tools:chipIcon="@drawable/ic_wifi"
-                            tools:chipIconTint="@color/status_chip_content_online"
-                            tools:text="5 mins ago"
-                            tools:textColor="@color/status_chip_content_online" />
+                            tools:text="M5" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/address"
                             style="@style/Widget.WeatherXM.Chip.Status"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin_small"
                             android:ellipsize="end"
                             app:chipBackgroundColor="@color/blueTint"
                             app:chipCornerRadius="@dimen/radius_small"
                             app:chipIcon="@drawable/ic_hex"
-                            app:chipIconSize="12dp"
                             app:chipIconTint="@color/colorOnSurface"
                             tools:ignore="KeyboardInaccessibleWidget"
                             tools:text="Athens, GR" />

@@ -17,6 +17,7 @@ import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
@@ -103,6 +104,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             }
 
             binding.status.setStatusChip(item)
+            binding.bundle.setBundleChip(item)
             setAlerts(item)
         }
 

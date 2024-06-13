@@ -11,6 +11,7 @@ import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
 import com.weatherxm.ui.common.setVisible
@@ -99,6 +100,7 @@ class CellDeviceListAdapter(
             }
 
             binding.status.setStatusChip(item)
+            binding.bundle.setBundleChip(item)
         }
 
         private fun setWeatherData(device: UIDevice) {

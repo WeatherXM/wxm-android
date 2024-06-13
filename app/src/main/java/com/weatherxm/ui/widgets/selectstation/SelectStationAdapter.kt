@@ -11,6 +11,7 @@ import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemWidgetSelectStationBinding
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
 import com.weatherxm.ui.common.setVisible
@@ -92,7 +93,7 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
             this.device = item
             binding.name.text = item.getDefaultOrFriendlyName()
 
-            binding.addressChip.text = if (item.address.isNullOrEmpty()) {
+            binding.address.text = if (item.address.isNullOrEmpty()) {
                 resources.getString(R.string.unknown_address)
             } else {
                 item.address
@@ -105,7 +106,8 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
                 setWeatherData(item)
             }
 
-            binding.statusChip.setStatusChip(item)
+            binding.status.setStatusChip(item)
+            binding.bundle.setBundleChip(item)
         }
 
         private fun setWeatherData(device: UIDevice) {

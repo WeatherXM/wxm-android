@@ -156,6 +156,7 @@ data class UIDevice(
 
     fun isHelium() = connectivity == "helium"
     fun isWifi() = connectivity == "wifi"
+    fun isCellular() = connectivity == "cellular"
 }
 
 @Keep
