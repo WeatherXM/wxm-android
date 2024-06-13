@@ -15,7 +15,6 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.setIcon
 import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.widgets.selectstation.SelectStationActivity
@@ -165,7 +164,7 @@ fun RemoteViews.setStatus(
         if (device.isHelium()) {
             R.drawable.ic_helium
         } else if (device.isWifi()) {
-           R.drawable.ic_wifi
+            R.drawable.ic_wifi
         } else {
             R.drawable.ic_cellular
         }

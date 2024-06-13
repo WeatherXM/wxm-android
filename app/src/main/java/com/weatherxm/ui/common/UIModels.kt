@@ -565,6 +565,7 @@ enum class AnnotationGroupCode : Parcelable {
     UNKNOWN
 }
 
+@Suppress("EnumNaming")
 @Parcelize
 enum class BundleName : Parcelable {
     m5,

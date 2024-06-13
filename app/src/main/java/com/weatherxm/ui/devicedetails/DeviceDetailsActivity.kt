@@ -40,7 +40,6 @@ import com.weatherxm.ui.devicedetails.current.CurrentFragment
 import com.weatherxm.ui.devicedetails.forecast.ForecastFragment
 import com.weatherxm.ui.devicedetails.rewards.RewardsFragment
 import com.weatherxm.ui.explorer.UICell
-import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
