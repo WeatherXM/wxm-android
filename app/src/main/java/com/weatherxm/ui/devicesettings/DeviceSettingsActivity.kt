@@ -8,7 +8,6 @@ import coil.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityDeviceSettingsBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceRelation
@@ -205,7 +204,7 @@ class DeviceSettingsActivity : BaseActivity() {
             binding.dividerBelowStationName.setVisible(false)
         }
 
-        if (model.device.profile == DeviceProfile.Helium) {
+        if (model.device.isHelium()) {
             // binding.reconfigureWifiContainer.setVisible(false)
             with(binding.frequencyDesc) {
                 movementMethod =

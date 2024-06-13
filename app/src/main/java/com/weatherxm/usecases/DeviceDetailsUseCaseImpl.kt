@@ -1,7 +1,6 @@
 package com.weatherxm.usecases
 
 import arrow.core.Either
-import com.weatherxm.data.DeviceProfile.Helium
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Rewards
 import com.weatherxm.data.repository.AddressRepository
@@ -52,7 +51,7 @@ class DeviceDetailsUseCaseImpl(
                         alerts.add(DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY))
                     }
 
-                    if (shouldShowOTAPrompt && profile == Helium && needsUpdate()) {
+                    if (shouldShowOTAPrompt && isHelium() && needsUpdate()) {
                         alerts.add(DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE))
                     }
                     this.alerts = alerts.sortedByDescending { alert ->

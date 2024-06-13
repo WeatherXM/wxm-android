@@ -55,7 +55,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
-import com.weatherxm.data.DeviceProfile
+import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Weather.getWeatherAnimation
 import dev.chrisbanes.insetter.applyInsetter
 import java.util.Locale
@@ -258,21 +258,16 @@ fun Chip.setErrorChip() {
     setChipIconTintResource(R.color.error)
 }
 
-fun Chip.setSuccessChip() {
-    this.setChipBackgroundColorResource(R.color.successTint)
-    this.chipIcon = ResourcesCompat.getDrawable(resources, R.drawable.ic_checkmark, context.theme)
-}
-
-fun Chip.setStatusChip(lastSeen: String?, profile: DeviceProfile?, isActive: Boolean?) {
-    text = lastSeen
-    setIcon(
-        if (profile == DeviceProfile.Helium) {
-            R.drawable.ic_helium
-        } else {
-            R.drawable.ic_wifi
-        }
+fun Chip.setStatusChip(device: UIDevice) {
+    text = device.lastWeatherStationActivity?.getRelativeFormattedTime(
+        fallbackIfTooSoon = context.getString(R.string.just_now)
     )
-    when (isActive) {
+    if (device.isHelium()) {
+        setIcon(R.drawable.ic_helium)
+    } else if (device.isWifi()) {
+        setIcon(R.drawable.ic_wifi)
+    }
+    when (device.isActive) {
         true -> {
             setChipBackgroundColorResource(R.color.status_chip_background_online)
             setTextColor(context.getColor(R.color.status_chip_content_online))

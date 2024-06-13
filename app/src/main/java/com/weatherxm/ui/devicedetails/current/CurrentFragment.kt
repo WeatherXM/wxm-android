@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
+import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceAlertType
-import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setCardStroke
@@ -125,36 +124,48 @@ class CurrentFragment : BaseFragment() {
 
     private fun setAlerts(device: UIDevice) {
         if (device.alerts.firstOrNull { it.alert == DeviceAlertType.OFFLINE } != null) {
-            onDeviceOfflineAlert(device.relation, device.profile)
+            onDeviceOfflineAlert(device)
         } else {
             binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.transparent, 0)
         }
     }
 
-    private fun onDeviceOfflineAlert(relation: DeviceRelation?, profile: DeviceProfile?) {
-        if (relation == DeviceRelation.OWNED && profile == DeviceProfile.M5) {
-            val m5TroubleshootingUrl = getString(R.string.troubleshooting_m5_url)
-            binding.alert.htmlMessage(
-                getString(R.string.error_user_device_offline, m5TroubleshootingUrl)
-            ) {
-                navigator.openWebsite(context, m5TroubleshootingUrl)
-            }
-        } else if (relation == DeviceRelation.OWNED && profile == DeviceProfile.D1) {
-            val d1TroubleshootingUrl = getString(R.string.troubleshooting_d1_url)
-            binding.alert.htmlMessage(
-                getString(R.string.error_user_device_offline, d1TroubleshootingUrl)
-            ) {
-                navigator.openWebsite(context, d1TroubleshootingUrl)
-            }
-        } else if (relation == DeviceRelation.OWNED && profile == DeviceProfile.Helium) {
-            val heliumTroubleshootingUrl = getString(R.string.troubleshooting_helium_url)
-            binding.alert.htmlMessage(
-                getString(R.string.error_user_device_offline, heliumTroubleshootingUrl)
-            ) {
-                navigator.openWebsite(context, heliumTroubleshootingUrl)
-            }
-        } else {
+    private fun onDeviceOfflineAlert(device: UIDevice) {
+        if (!device.isOwned()) {
             binding.alert.message(getString(R.string.no_data_message_public_device))
+        } else {
+            when (device.bundleName) {
+                BundleName.M5 -> {
+                    val m5TroubleshootingUrl = getString(R.string.troubleshooting_m5_url)
+                    binding.alert.htmlMessage(
+                        getString(R.string.error_user_device_offline, m5TroubleshootingUrl)
+                    ) {
+                        navigator.openWebsite(context, m5TroubleshootingUrl)
+                    }
+                }
+                BundleName.D1 -> {
+                    val d1TroubleshootingUrl = getString(R.string.troubleshooting_d1_url)
+                    binding.alert.htmlMessage(
+                        getString(R.string.error_user_device_offline, d1TroubleshootingUrl)
+                    ) {
+                        navigator.openWebsite(context, d1TroubleshootingUrl)
+                    }
+                }
+                BundleName.H1, BundleName.H2 -> {
+                    val heliumTroubleshootingUrl = getString(R.string.troubleshooting_helium_url)
+                    binding.alert.htmlMessage(
+                        getString(R.string.error_user_device_offline, heliumTroubleshootingUrl)
+                    ) {
+                        navigator.openWebsite(context, heliumTroubleshootingUrl)
+                    }
+                }
+                BundleName.PULSE -> {
+                    // Do nothing
+                }
+                null -> {
+                    // Do nothing
+                }
+            }
         }
         binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
         binding.alert.setVisible(true)

@@ -129,7 +129,7 @@ class ExplorerUseCaseImpl(
                             center = device.cellCenter,
                             stationId = device.id,
                             stationCellIndex = device.cellIndex,
-                            stationConnectivity = device.connectivity,
+                            stationBundle = device.bundle,
                             relation = getRelation(device.id)
                         )
                     } ?: mutableListOf())

@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
-import com.weatherxm.data.Connectivity
 import com.weatherxm.databinding.ListItemNetworkSearchResultBinding
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.highlightText
@@ -55,11 +54,10 @@ class NetworkSearchResultsListAdapter(
                 listener(item)
             }
 
-            when (item.stationConnectivity) {
-                Connectivity.helium -> binding.typeIcon.setImageResource(R.drawable.ic_helium)
-                Connectivity.wifi -> binding.typeIcon.setImageResource(R.drawable.ic_wifi)
+            when (item.stationBundle?.connectivity) {
+                "helium" -> binding.typeIcon.setImageResource(R.drawable.ic_helium)
+                "wifi" -> binding.typeIcon.setImageResource(R.drawable.ic_wifi)
                 null -> binding.typeIcon.setImageResource(R.drawable.ic_address_marker)
-                else -> {}
             }
 
             val resultName = item.name ?: String.empty()
@@ -111,7 +109,7 @@ class NetworkSearchResultsListAdapter(
             return oldItem.name == newItem.name &&
                 oldItem.center == newItem.center &&
                 oldItem.addressPlace == newItem.addressPlace &&
-                oldItem.stationConnectivity == newItem.stationConnectivity &&
+                oldItem.stationBundle == newItem.stationBundle &&
                 oldItem.stationId == newItem.stationId &&
                 oldItem.stationCellIndex == newItem.stationCellIndex
         }

@@ -98,15 +98,7 @@ class CellDeviceListAdapter(
                 item.address
             }
 
-            with(binding.status) {
-                setStatusChip(
-                    item.lastWeatherStationActivity?.getRelativeFormattedTime(
-                        fallbackIfTooSoon = context.getString(R.string.just_now)
-                    ),
-                    item.profile,
-                    item.isActive,
-                )
-            }
+            binding.status.setStatusChip(item)
         }
 
         private fun setWeatherData(device: UIDevice) {

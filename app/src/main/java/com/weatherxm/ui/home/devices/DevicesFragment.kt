@@ -12,10 +12,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
+import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
@@ -218,10 +218,10 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     }
 
     override fun onLowBatteryReadMoreClicked(device: UIDevice) {
-        val url = when (device.profile) {
-            DeviceProfile.M5 -> getString(R.string.docs_url_low_battery_m5)
-            DeviceProfile.D1 -> getString(R.string.docs_url_low_battery_d1)
-            DeviceProfile.Helium -> getString(R.string.docs_url_low_battery_helium)
+        val url = when (device.bundleName) {
+            BundleName.M5 -> getString(R.string.docs_url_low_battery_m5)
+            BundleName.D1 -> getString(R.string.docs_url_low_battery_d1)
+            BundleName.H1, BundleName.H2 -> getString(R.string.docs_url_low_battery_helium)
             else -> String.empty()
         }
         navigator.openWebsite(context, url)

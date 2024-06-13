@@ -258,13 +258,7 @@ class DeviceDetailsActivity : BaseActivity() {
             }
         }
 
-        binding.status.setStatusChip(
-            device.lastWeatherStationActivity?.getRelativeFormattedTime(
-                fallbackIfTooSoon = getString(R.string.just_now)
-            ),
-            device.profile,
-            device.isActive,
-        )
+        binding.status.setStatusChip(device)
         if (!model.device.isOnline()) {
             binding.status.setOnClickListener {
                 navigator.showDeviceAlerts(this, model.device)

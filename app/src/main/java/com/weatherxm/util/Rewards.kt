@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.weatherxm.R
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.ui.common.AnnotationCode
 import com.weatherxm.ui.common.AnnotationGroupCode
+import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIRewardsAnnotation
@@ -168,7 +168,7 @@ object Rewards {
             AnnotationCode.NO_LOCATION_DATA -> {
                 if (device.relation != DeviceRelation.OWNED) {
                     context.getString(R.string.annotation_no_location_public_desc)
-                } else if (device.profile == DeviceProfile.M5) {
+                } else if (device.bundleName == BundleName.M5) {
                     context.getString(R.string.annotation_no_location_m5_desc)
                 } else {
                     context.getString(R.string.annotation_no_location_helium_desc)

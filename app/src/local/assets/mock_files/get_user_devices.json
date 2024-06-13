@@ -3,7 +3,13 @@
         "id": "76d13810-absd-11ec-812e-6312632e9ec",
         "name": "Big Blue Cloud",
         "timezone": "Europe/Athens",
-        "profile": "Helium",
+        "bundle": {
+            "name": "M5",
+            "connectivity": "wifi",
+            "ws_model": "WS1000",
+            "gw_model": "WG1000",
+            "hw_class": "CONSUMER"
+        },
         "label": null,
         "relation": "owned",
         "bat_state": "low",
@@ -109,6 +115,12 @@
         "name": "Weatherwise Wintergreen Cloud",
         "timezone": "America/New_York",
         "relation": "owned",
+        "bundle": {
+            "name": "H1",
+            "connectivity": "helium",
+            "ws_model": "WS2000",
+            "hw_class": "CONSUMER"
+        },
         "label": null,
         "location": {
             "lat": 37.981262,
@@ -212,7 +224,13 @@
         "timezone": "America/Chicago",
         "relation": "owned",
         "label": null,
-        "profile": "M5",
+        "bundle": {
+            "name": "D1",
+            "connectivity": "wifi",
+            "ws_model": "WS1001",
+            "gw_model": "WS1200",
+            "hw_class": "CONSUMER"
+        },
         "location": {
             "lat": 37.981262,
             "lon": 23.730503
@@ -315,7 +333,12 @@
         "timezone": "Etc/GMT",
         "label": null,
         "relation": "owned",
-        "profile": "Helium",
+        "bundle": {
+            "name": "H2",
+            "connectivity": "helium",
+            "ws_model": "WS2000",
+            "hw_class": "CONSUMER"
+        },
         "location": {
             "lat": 37.981262,
             "lon": 23.730503
@@ -416,6 +439,13 @@
         "id": "76113810-10e9-11ec-877e-63751227e9ec",
         "name": "Brutal Fatality Cloud",
         "timezone": "America/Toronto",
+        "bundle": {
+            "name": "PULSE",
+            "connectivity": "cellular",
+            "ws_model": "WS1001",
+            "gw_model": "WS1200",
+            "hw_class": "CONSUMER"
+        },
         "label": null,
         "relation": "owned",
         "location": {

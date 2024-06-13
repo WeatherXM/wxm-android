@@ -7,7 +7,6 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Hex
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.Location
@@ -68,7 +67,11 @@ data class UIDevice(
     var relation: DeviceRelation?,
     val label: String?,
     var friendlyName: String?,
-    var profile: DeviceProfile?,
+    val bundleName: BundleName?,
+    val connectivity: String?,
+    val wsModel: String?,
+    val gwModel: String?,
+    val hwClass: String?,
     val location: Location?,
     var cellCenter: Location?,
     var hex7: Hex?,
@@ -90,6 +93,10 @@ data class UIDevice(
             String.empty(),
             String.empty(),
             String.empty(),
+            null,
+            null,
+            null,
+            null,
             null,
             null,
             null,
@@ -146,6 +153,9 @@ data class UIDevice(
             it.severity == SeverityLevel.ERROR
         } != null
     }
+
+    fun isHelium() = connectivity == "helium"
+    fun isWifi() = connectivity == "wifi"
 }
 
 @Keep
@@ -550,4 +560,13 @@ enum class AnnotationGroupCode : Parcelable {
     USER_RELOCATION_PENALTY,
     CELL_CAPACITY_REACHED,
     UNKNOWN
+}
+
+@Parcelize
+enum class BundleName : Parcelable {
+    M5,
+    H1,
+    H2,
+    D1,
+    PULSE
 }

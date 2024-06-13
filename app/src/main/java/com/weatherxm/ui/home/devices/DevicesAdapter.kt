@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.SeverityLevel
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
@@ -20,8 +21,6 @@ import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
 import com.weatherxm.ui.common.setVisible
-import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getFormattedWindDirection
@@ -103,15 +102,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 item.address
             }
 
-            with(binding.status) {
-                setStatusChip(
-                    item.lastWeatherStationActivity?.getRelativeFormattedTime(
-                        fallbackIfTooSoon = context.getString(R.string.just_now)
-                    ),
-                    item.profile,
-                    item.isActive,
-                )
-            }
+            binding.status.setStatusChip(item)
             setAlerts(item)
         }
 
@@ -246,7 +237,11 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 oldItem.currentWeather?.windDirection == newItem.currentWeather?.windDirection &&
                 oldItem.currentWeather?.feelsLike == newItem.currentWeather?.feelsLike &&
                 oldItem.currentWeather?.timestamp == newItem.currentWeather?.timestamp &&
-                oldItem.profile == newItem.profile &&
+                oldItem.bundleName == newItem.bundleName &&
+                oldItem.connectivity == newItem.connectivity &&
+                oldItem.wsModel == newItem.wsModel &&
+                oldItem.gwModel == newItem.gwModel &&
+                oldItem.hwClass == newItem.hwClass &&
                 oldItem.needsUpdate() == newItem.needsUpdate() &&
                 oldItem.alerts.size == newItem.alerts.size &&
                 oldItem.currentFirmware == newItem.currentFirmware &&

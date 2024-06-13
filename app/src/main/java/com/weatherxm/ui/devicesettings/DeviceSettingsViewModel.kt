@@ -9,7 +9,6 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.BatteryState
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.capitalizeWords
@@ -210,7 +209,7 @@ class DeviceSettingsViewModel(
                     )
                 )
             }
-            if (device.profile == DeviceProfile.Helium) {
+            if (device.isHelium()) {
                 device.label?.unmask()?.let {
                     add(UIDeviceInfo(resources.getString(R.string.dev_eui), it))
                 }

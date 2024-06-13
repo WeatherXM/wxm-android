@@ -9,7 +9,6 @@ import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
 import com.weatherxm.R
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
@@ -162,7 +161,7 @@ fun RemoteViews.setStatus(
 ) {
     setImageViewResource(
         R.id.statusIcon,
-        if (device.profile == DeviceProfile.Helium) {
+        if (device.isHelium()) {
             R.drawable.ic_helium
         } else {
             R.drawable.ic_wifi
