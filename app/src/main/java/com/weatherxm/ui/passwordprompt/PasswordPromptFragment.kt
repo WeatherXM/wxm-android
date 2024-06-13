@@ -93,7 +93,7 @@ class PasswordPromptFragment : BaseBottomSheetDialogFragment() {
                         binding.passwordContainer.error = it.message
                     }
                     Status.LOADING -> {
-                        // TODO Show progress bar?
+                        // Do nothing
                     }
                 }
             }

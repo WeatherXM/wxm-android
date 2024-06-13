@@ -11,7 +11,6 @@ import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Hex
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.Location
-import com.weatherxm.data.QoDErrorAffects
 import com.weatherxm.data.Reward
 import com.weatherxm.data.SeverityLevel
 import kotlinx.parcelize.Parcelize
@@ -40,23 +39,6 @@ data class TimelineReward(
     val type: RewardTimelineType,
     val data: Reward?
 ) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class UIRewardsAnnotation(
-    var annotation: AnnotationCode?,
-    var ratioOfAnnotation: Int? = null,
-    var qodParametersAffected: List<QoDErrorAffects> = emptyList(),
-) : Parcelable {
-    fun getAffectedParameters(): String {
-        return qodParametersAffected
-            .map {
-                it.parameter?.replace("_", " ")
-            }
-            .joinToString(", ")
-    }
-}
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -244,9 +226,6 @@ data class DevicesSortFilterOptions(
     var groupBy: DevicesGroupBy = DevicesGroupBy.NO_GROUPING
 ) {
     fun applySort(devices: List<UIDevice>): List<UIDevice> {
-        /**
-         * TODO: When we have the "date added" field on followed devices apply sorting here.
-         */
         return when (sortOrder) {
             DevicesSortOrder.DATE_ADDED -> devices
             DevicesSortOrder.NAME -> devices.sortedBy { it.getDefaultOrFriendlyName() }
@@ -518,28 +497,6 @@ enum class DevicesGroupBy : Parcelable {
     NO_GROUPING,
     RELATIONSHIP,
     STATUS
-}
-
-@Parcelize
-enum class AnnotationCode : Parcelable {
-    OBC,
-    SPIKE_INST,
-    NO_DATA,
-    NO_MEDIAN,
-    SHORT_CONST,
-    LONG_CONST,
-    FROZEN_SENSOR,
-    ANOMALOUS_INCREASE,
-    LOCATION_NOT_VERIFIED,
-    NO_LOCATION_DATA,
-    NO_WALLET,
-    CELL_CAPACITY_REACHED,
-    RELOCATED,
-    POL_THRESHOLD_NOT_REACHED,
-    QOD_THRESHOLD_NOT_REACHED,
-    UNIDENTIFIED_SPIKE,
-    UNIDENTIFIED_ANOMALOUS_CHANGE,
-    UNKNOWN
 }
 
 @Parcelize
