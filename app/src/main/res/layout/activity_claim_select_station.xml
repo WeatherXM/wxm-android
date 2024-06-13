@@ -72,10 +72,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
-            android:layout_marginEnd="@dimen/margin_small"
             app:device_type_image="@drawable/device_type_helium"
             app:device_type_title="@string/helium"
-            app:layout_constraintEnd_toStartOf="@id/pulseCard"
+            app:layout_constraintEnd_toEndOf="@id/m5WifiCard"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/m5WifiCard" />
 
@@ -83,6 +82,7 @@
             android:id="@+id/pulseCard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginStart="@dimen/margin_small"
             app:device_type_image="@drawable/device_type_pulse"
             app:device_type_title="@string/pulse_4g"
