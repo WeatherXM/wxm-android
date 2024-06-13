@@ -1,7 +1,6 @@
 package com.weatherxm.usecases
 
 import arrow.core.Either
-import com.weatherxm.data.DeviceProfile.Helium
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Rewards
 import com.weatherxm.data.repository.AddressRepository
@@ -23,7 +22,7 @@ class DeviceDetailsUseCaseImpl(
     private val rewardsRepository: RewardsRepository,
     private val addressRepository: AddressRepository,
     private val explorerRepository: ExplorerRepository,
-    private val deviceOTARepository: DeviceOTARepository,
+    private val deviceOTARepo: DeviceOTARepository,
     private val appConfigRepository: AppConfigRepository
 ) : DeviceDetailsUseCase {
 
@@ -40,24 +39,7 @@ class DeviceDetailsUseCaseImpl(
         } else {
             deviceRepository.getUserDevice(device.id).map {
                 it.toUIDevice().apply {
-                    val shouldShowOTAPrompt = deviceOTARepository.shouldShowOTAPrompt(
-                        id, assignedFirmware
-                    ) && isOwned()
-                    val alerts = mutableListOf<DeviceAlert>()
-                    if (isActive == false) {
-                        alerts.add(DeviceAlert.createError(DeviceAlertType.OFFLINE))
-                    }
-
-                    if (device.hasLowBattery() && device.isOwned()) {
-                        alerts.add(DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY))
-                    }
-
-                    if (shouldShowOTAPrompt && profile == Helium && needsUpdate()) {
-                        alerts.add(DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE))
-                    }
-                    this.alerts = alerts.sortedByDescending { alert ->
-                        alert.severity
-                    }
+                    createDeviceAlerts(deviceOTARepo.userShouldNotifiedOfOTA(id, assignedFirmware))
                 }
             }
         }

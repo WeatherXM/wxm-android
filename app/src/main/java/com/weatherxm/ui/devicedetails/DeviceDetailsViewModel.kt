@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
@@ -17,7 +18,6 @@ import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.FollowUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.RefreshHandler
 import com.weatherxm.util.Resources
@@ -96,7 +96,7 @@ class DeviceDetailsViewModel(
 
     fun createNormalizedName(): String {
         return if (!device.isEmpty()) {
-            device.toNormalizedName()
+            device.name.replace(" ", "-").lowercase()
         } else {
             String.empty()
         }

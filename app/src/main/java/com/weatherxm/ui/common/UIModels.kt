@@ -97,8 +97,11 @@ data class UIDevice(
 
     fun isFollowed(): Boolean = relation == DeviceRelation.FOLLOWED
 
-    fun needsUpdate(): Boolean {
-        return !currentFirmware.equals(assignedFirmware) && !assignedFirmware.isNullOrEmpty()
+    fun shouldPromptUpdate(): Boolean {
+        return isOwned()
+            && !currentFirmware.equals(assignedFirmware)
+            && !assignedFirmware.isNullOrEmpty()
+            && profile == DeviceProfile.Helium
     }
 
     fun getDefaultOrFriendlyName(): String {
@@ -115,18 +118,32 @@ data class UIDevice(
             ?: String.empty()
     }
 
-    fun toNormalizedName(): String {
-        return name.replace(" ", "-").lowercase()
-    }
-
     fun isEmpty() = id.isEmpty() && name.isEmpty() && cellIndex.isEmpty()
     fun isOnline() = isActive != null && isActive == true
-    fun hasLowBattery() = hasLowBattery != null && hasLowBattery == true
 
     fun hasErrors(): Boolean {
         return alerts.firstOrNull {
             it.severity == SeverityLevel.ERROR
         } != null
+    }
+
+    fun createDeviceAlerts(userShouldNotifiedOfOTA: Boolean): List<DeviceAlert> {
+        val alerts = mutableListOf<DeviceAlert>()
+        if (isActive == false) {
+            alerts.add(DeviceAlert.createError(DeviceAlertType.OFFLINE))
+        }
+
+        if (hasLowBattery == true && isOwned()) {
+            alerts.add(DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY))
+        }
+
+        if (userShouldNotifiedOfOTA && shouldPromptUpdate()) {
+            alerts.add(DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE))
+        }
+        this.alerts = alerts.sortedByDescending { alert ->
+            alert.severity
+        }
+        return alerts
     }
 }
 

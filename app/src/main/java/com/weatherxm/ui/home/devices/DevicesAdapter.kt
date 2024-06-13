@@ -247,7 +247,6 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 oldItem.currentWeather?.feelsLike == newItem.currentWeather?.feelsLike &&
                 oldItem.currentWeather?.timestamp == newItem.currentWeather?.timestamp &&
                 oldItem.profile == newItem.profile &&
-                oldItem.needsUpdate() == newItem.needsUpdate() &&
                 oldItem.alerts.size == newItem.alerts.size &&
                 oldItem.currentFirmware == newItem.currentFirmware &&
                 oldItem.assignedFirmware == newItem.assignedFirmware &&

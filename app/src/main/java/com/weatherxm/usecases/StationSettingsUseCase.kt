@@ -10,7 +10,7 @@ interface StationSettingsUseCase {
     suspend fun setFriendlyName(deviceId: String, friendlyName: String): Either<Failure, Unit>
     suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit>
     suspend fun removeDevice(serialNumber: String, id: String): Either<Failure, Unit>
-    fun shouldShowOTAPrompt(device: UIDevice): Boolean
+    fun userShouldNotifiedOfOTA(device: UIDevice): Boolean
     suspend fun getCountryAndFrequencies(lat: Double?, lon: Double?): CountryAndFrequencies
     suspend fun getDeviceInfo(deviceId: String): Either<Failure, DeviceInfo>
 }
