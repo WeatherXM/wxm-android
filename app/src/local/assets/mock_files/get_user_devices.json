@@ -4,7 +4,8 @@
         "name": "Big Blue Cloud",
         "timezone": "Europe/Athens",
         "bundle": {
-            "name": "M5",
+            "name": "m5",
+            "title": "M5",
             "connectivity": "wifi",
             "ws_model": "WS1000",
             "gw_model": "WG1000",
@@ -116,7 +117,8 @@
         "timezone": "America/New_York",
         "relation": "owned",
         "bundle": {
-            "name": "H1",
+            "name": "h1",
+            "title": "H1",
             "connectivity": "helium",
             "ws_model": "WS2000",
             "hw_class": "CONSUMER"
@@ -225,7 +227,8 @@
         "relation": "owned",
         "label": null,
         "bundle": {
-            "name": "D1",
+            "name": "d1",
+            "title": "D1",
             "connectivity": "wifi",
             "ws_model": "WS1001",
             "gw_model": "WS1200",
@@ -334,7 +337,8 @@
         "label": null,
         "relation": "owned",
         "bundle": {
-            "name": "H2",
+            "name": "h2",
+            "title": "H2",
             "connectivity": "helium",
             "ws_model": "WS2000",
             "hw_class": "CONSUMER"
@@ -440,7 +444,8 @@
         "name": "Brutal Fatality Cloud",
         "timezone": "America/Toronto",
         "bundle": {
-            "name": "PULSE",
+            "name": "pulse",
+            "title": "Pulse",
             "connectivity": "cellular",
             "ws_model": "WS1001",
             "gw_model": "WS1200",

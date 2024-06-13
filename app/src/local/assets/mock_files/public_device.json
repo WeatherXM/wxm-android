@@ -3,7 +3,8 @@
     "name": "Crazy Canary Blizzard",
     "timezone": "Europe/Athens",
     "bundle": {
-        "name": "H1",
+        "name": "h1",
+        "title": "H1",
         "connectivity": "helium",
         "ws_model": "WS2000",
         "hw_class": "CONSUMER"

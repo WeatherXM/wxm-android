@@ -3,7 +3,8 @@
         "id": "003749c0-a8f5-11ec-900c-abdec1c57354",
         "name": "Best Gingerbread Horizon",
         "bundle": {
-            "name": "H1",
+            "name": "h1",
+            "title": "H1",
             "connectivity": "helium",
             "ws_model": "WS2000",
             "hw_class": "CONSUMER"
@@ -31,7 +32,8 @@
         "name": "Tangy Wool Sunrise",
         "timezone": "Europe/Athens",
         "bundle": {
-            "name": "M5",
+            "name": "m5",
+            "title": "M5",
             "connectivity": "wifi",
             "ws_model": "WS1000",
             "gw_model": "WG1000",
@@ -59,7 +61,8 @@
         "name": "Sour Pastel Firestorm",
         "timezone": "Europe/Athens",
         "bundle": {
-            "name": "D1",
+            "name": "d1",
+            "title": "D1",
             "connectivity": "wifi",
             "ws_model": "WS1001",
             "gw_model": "WG1200",
@@ -87,7 +90,8 @@
         "name": "Mini Honey Drought",
         "timezone": "Europe/Athens",
         "bundle": {
-            "name": "PULSE",
+            "name": "pulse",
+            "title": "Pulse",
             "connectivity": "cellular",
             "ws_model": "WS1000",
             "gw_model": "WG1000",
@@ -109,5 +113,5 @@
         "isActive": false,
         "lastWeatherStationActivity": "2022-05-12T17:31:23+03:00",
         "cellIndex": "871eda743ffffff"
-    },
+    }
 ]

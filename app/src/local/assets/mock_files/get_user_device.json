@@ -4,7 +4,8 @@
     "label": null,
     "timezone": "Europe/Athens",
     "bundle": {
-        "name": "M5",
+        "name": "m5",
+        "title": "M5",
         "connectivity": "wifi",
         "ws_model": "WS1000",
         "gw_model": "WG1000",
