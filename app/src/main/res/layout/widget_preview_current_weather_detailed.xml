@@ -45,8 +45,7 @@
         android:layout_marginTop="@dimen/margin_small"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="@dimen/padding_normal"
-        android:weightSum="2">
+        android:paddingHorizontal="@dimen/padding_normal">
 
         <LinearLayout
             android:id="@+id/statusContainer"
@@ -76,6 +75,33 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/bundleContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:background="@drawable/background_rounded_blue_tint"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/padding_small"
+            android:paddingVertical="@dimen/padding_extra_small">
+
+            <ImageView
+                android:id="@+id/bundleIcon"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_wifi"
+                android:tint="@color/colorOnSurface"
+                tools:ignore="ContentDescription,UseAppTint" />
+
+            <TextView
+                android:id="@+id/bundleName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_extra_small"
+                android:text="M5"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/addressContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,8 +112,8 @@
             android:paddingVertical="@dimen/padding_extra_small">
 
             <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
                 android:src="@drawable/ic_hex"
                 android:tint="@color/colorOnSurface"
                 tools:ignore="ContentDescription,UseAppTint" />
@@ -96,7 +122,7 @@
                 android:id="@+id/address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginStart="@dimen/margin_extra_small"
                 android:text="Athens, GR"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                 tools:ignore="HardcodedText" />
