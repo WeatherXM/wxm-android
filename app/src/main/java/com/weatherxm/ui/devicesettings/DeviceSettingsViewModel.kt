@@ -219,9 +219,7 @@ class DeviceSettingsViewModel(
                 }
             }
             device.currentFirmware?.let { current ->
-                if (device.needsUpdate() && device.isOwned()
-                    && usecase.shouldShowOTAPrompt(device)
-                ) {
+                if (usecase.userShouldNotifiedOfOTA(device) && device.shouldPromptUpdate()) {
                     add(
                         UIDeviceInfo(
                             resources.getString(R.string.firmware_version),

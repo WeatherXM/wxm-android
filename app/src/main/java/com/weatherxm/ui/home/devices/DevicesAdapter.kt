@@ -245,7 +245,6 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 oldItem.wsModel == newItem.wsModel &&
                 oldItem.gwModel == newItem.gwModel &&
                 oldItem.hwClass == newItem.hwClass &&
-                oldItem.needsUpdate() == newItem.needsUpdate() &&
                 oldItem.alerts.size == newItem.alerts.size &&
                 oldItem.currentFirmware == newItem.currentFirmware &&
                 oldItem.assignedFirmware == newItem.assignedFirmware &&

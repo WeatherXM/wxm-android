@@ -111,7 +111,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
         when (resource.status) {
             Status.SUCCESS -> {
                 val device = resource.data
-                if (device != null && device.isHelium() && device.needsUpdate()) {
+                if (device != null && device.isHelium() && device.shouldPromptUpdate()) {
                     analytics.trackEventPrompt(
                         AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
                         AnalyticsService.ParamValue.WARN.paramValue,
@@ -132,7 +132,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
                         secondaryActionText = getString(R.string.action_view_station)
                     )
                     binding.bleActionFlow.onShowInformationCard()
-                } else if (device != null && (!device.isHelium() || !device.needsUpdate())) {
+                } else if (device != null) {
                     binding.bleActionFlow.setSuccessOneButtonOnlyListener {
                         onViewDevice(device)
                     }

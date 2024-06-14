@@ -32,9 +32,8 @@ class StationSettingsUseCaseImpl(
         return deviceRepository.removeDevice(serialNumber, id)
     }
 
-    override fun shouldShowOTAPrompt(device: UIDevice): Boolean {
-        return deviceOTARepository.shouldShowOTAPrompt(device.id, device.assignedFirmware)
-            && device.isHelium()
+    override fun userShouldNotifiedOfOTA(device: UIDevice): Boolean {
+        return deviceOTARepository.userShouldNotifiedOfOTA(device.id, device.assignedFirmware)
     }
 
     override suspend fun getCountryAndFrequencies(

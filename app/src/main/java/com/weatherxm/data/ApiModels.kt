@@ -4,7 +4,6 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.weatherxm.ui.common.AnnotationCode
 import com.weatherxm.ui.common.AnnotationGroupCode
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceRelation
@@ -526,33 +525,6 @@ data class RewardsTimestampScore(
     @Json(name = "base_reward_score")
     val baseRewardScore: Int?
 ) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class RewardsAnnotations(
-    val qod: List<RewardsAnnotation>?,
-    val pol: List<RewardsAnnotation>?,
-    val rm: List<RewardsAnnotation>?,
-) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
-@Parcelize
-data class RewardsAnnotation(
-    val annotation: String?,
-    val ratio: Int?,
-    val affects: List<QoDErrorAffects>?,
-) : Parcelable {
-    fun toAnnotationCode(): AnnotationCode {
-        return try {
-            AnnotationCode.valueOf(annotation ?: String.empty())
-        } catch (e: IllegalArgumentException) {
-            Timber.w(e)
-            AnnotationCode.UNKNOWN
-        }
-    }
-}
 
 @Keep
 @JsonClass(generateAdapter = true)

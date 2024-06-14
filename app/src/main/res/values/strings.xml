@@ -14,7 +14,6 @@
     <string name="action_logout">Logout</string>
     <string name="action_clear">Clear</string>
     <string name="action_try_again">Try Again</string>
-    <string name="action_verify">Verify</string>
     <string name="action_pair_station_via_bluetooth">Pair station via Bluetooth</string>
     <string name="action_favorite">Favorite</string>
     <string name="action_pair_device">Pair Device</string>
@@ -33,7 +32,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="action_scan_qr">Scan QR Code</string>
-    <string name="important_message">Important Message</string>
     <string name="contact_us">Contact us</string>
     <string name="select_date">Select Date</string>>
     <string name="read_more">Read More</string>
@@ -45,9 +43,6 @@
     <string name="permission_permanently_denied_rationale">Go to the app settings to give the required permissions.</string>
     <string name="warn_cancelled">Cancelled!</string>
     <string name="permission_bluetooth_title">WeatherXM Requests Access to Bluetooth</string>
-    <string name="permission_camera">WeatherXM Requests Access to Camera</string>
-    <string name="permission_camera_desc">We will need to access your camera in order to utilise it in connecting and communicating to your WeatherXM Device.</string>
-    <string name="permission_camera_required">Camera permission is required. Please enable it in your device settings.</string>
 
     <!-- Login -->
     <string name="title_login">Login</string>
@@ -136,7 +131,6 @@
     <string name="no_data_message">We\’re unable to show updated station data. Please make sure your station is operational and connected to the internet.</string>
     <string name="observations">Observations</string>
     <string name="forecast">Forecast</string>
-    <string name="feels_like_with_value"><![CDATA[Feels Like <b>%s</b>]]></string>
     <string name="no_data_message_public_device">We\’re unable to show live station data. Please check back later for further updates.</string>
 
     <!-- Update (Bluetooth OTA) Station -->
@@ -249,60 +243,6 @@
     <string name="weekly_streak">Weekly Streak</string>
     <string name="weekly_streak_desc">Base reward scores from %1$s to %2$s</string>
     <string name="total_station_rewards">Total Station Rewards</string>
-    <string name="annotation_obc">Values out of bounds</string>
-    <string name="annotation_obc_desc"><![CDATA[Some measurements (%s) were found to have out of bound values, compared to sensor specifications. <b>This could be due to a faulty sensor or outdated firmware.</b>]]></string>
-    <string name="annotation_spikes">Extreme spikes</string>
-    <string name="annotation_spikes_desc"><![CDATA[Abnormal spikes were detected in some weather measurements (%1$s). This could be due to a <b>faulty sensor or bad deployment.</b> Check our installation guide for more information about how to properly deploy your station.]]></string>
-    <string name="annotation_spikes_public_desc"><![CDATA[Abnormal spikes were detected in some weather measurements (%1$s). This could be due to a <b>faulty sensor or bad deployment.</b>]]></string>
-    <string name="annotation_no_median">Not enough data</string>
-    <string name="annotation_no_median_desc"><![CDATA[There seem to be gaps in the data of your station. This could be due to <b>connection issues.</b> Please, make sure that your station is properly connected. Read more on our troubleshooting guide.]]></string>
-    <string name="annotation_no_median_public_desc"><![CDATA[There seem to be gaps in the data of this station. This could be due to <b>connection issues.</b>]]></string>
-    <string name="annotation_no_data">No data</string>
-    <string name="annotation_no_data_desc"><![CDATA[Station sent no weather data in the aggregated time window. This could be due to <b>connection issues</b>, or your station’s batteries have run out. Please, make sure that your station is properly connected.]]></string>
-    <string name="annotation_no_data_public_desc"><![CDATA[No weather data found in the aggregated time window. <b>Possible connection issues.</b>]]></string>
-    <string name="annotation_short_const">Constant values</string>
-    <string name="annotation_short_const_desc"><![CDATA[Some weather measurements (%s) have not changed in the aggregated time window. This could be due to a <b>faulty sensor or bad deployment.</b> Read more on our troubleshooting guide.]]></string>
-    <string name="annotation_short_const_public_desc"><![CDATA[Some weather measurements (%s) have not changed in the aggregated time window. This could be due to a <b>faulty sensor or bad deployment.</b>]]></string>
-    <string name="annotation_long_const">Constant values</string>
-    <string name="annotation_long_const_desc"><![CDATA[Some weather measurements (%s) have not changed for 24 hours. This could be due to a <b>faulty sensor or bad deployment.</b> Read more on our troubleshooting guide.]]></string>
-    <string name="annotation_long_const_public_desc"><![CDATA[Some weather measurements (%s) have not changed for 24 hours. This could be due to a <b>faulty sensor or bad deployment.</b>]]></string>
-    <string name="annotation_frozen_sensor">Frozen sensor</string>
-    <string name="annotation_frozen_sensor_desc"><![CDATA[Could not measure wind speed, wind direction is constant and the temperature is below zero. <b>Frozen sensor.</b>]]></string>
-    <string name="annotation_anom_increase">Anomalous increase</string>
-    <string name="annotation_anom_increase_desc"><![CDATA[Anomalies were detected in some weather measurements (%1$s). This could be due to <b>bad deployment, or sometimes due to faulty sensor.</b> Check our installation guide for more information about how to properly deploy your station.]]></string>
-    <string name="annotation_anom_increase_public_desc"><![CDATA[Anomalies were detected in some weather measurements (%1$s). This could be due to <b>bad deployment, or sometimes due to faulty sensor.</b>]]></string>
-    <string name="annotation_location_not_verified_desc_pre_launch"><![CDATA[Station reported a GPS location, but it is different from the location set during station claiming.<br><br>Your rewards are not yet affected by this error. However, unless this is resolved, they will be affected when <a href="%1$s">Proof-of-Location</a> goes live in the following weeks.]]></string>
-    <string name="annotation_no_location_m5_desc_pre_launch"><![CDATA[Station did not report <b>any GPS location</b> in the aggregated time window. Make sure your station is properly deployed and the GPS antenna is connected. Check our installation guide for more information about how to properly deploy your station.<br><br>Your rewards are not yet affected by this error. However, unless this is resolved, they will be affected when <a href="%1$s">Proof-of-Location</a> goes live in the following weeks.]]></string>
-    <string name="annotation_no_location_helium_desc_pre_launch"><![CDATA[Station did not report <b>any GPS location</b> in the aggregated time window. Make sure your station is properly deployed. Check our installation guide for more information about how to properly deploy your station.<br><br>Your rewards are not yet affected by this error. However, unless this is resolved, they will be affected when <a href="%1$s">Proof-of-Location</a> goes live in the following weeks.]]></string>
-    <string name="annotation_location_not_verified">Location not verified</string>
-    <string name="annotation_location_not_verified_desc"><![CDATA[Station reported a GPS location, but it is different from the location set during station claiming.]]></string>
-    <string name="annotation_no_location">No location</string>
-    <string name="annotation_no_location_public_desc"><![CDATA[Station did not report <b>any GPS location</b> in the aggregated time window.]]></string>
-    <string name="annotation_no_location_m5_desc"><![CDATA[Station did not report <b>any GPS location</b> in the aggregated time window. Make sure your station is properly deployed and the GPS antenna is connected. Check our installation guide for more information about how to properly deploy your station.]]></string>
-    <string name="annotation_no_location_helium_desc"><![CDATA[Station did not report <b>any GPS location</b> in the aggregated time window. Make sure your station is properly deployed. Check our installation guide for more information about how to properly deploy your station.]]></string>
-    <string name="annotation_no_wallet">No wallet</string>
-    <string name="annotation_no_wallet_desc"><![CDATA[In order to participate in our daily reward scheme you need to connect a wallet.]]></string>
-    <string name="annotation_no_wallet_public_desc"><![CDATA[This station did not receive any rewards because the owner has not added a wallet.]]></string>
-    <string name="annotation_cell_capacity_reached">Cell capacity reached</string>
-    <string name="annotation_cell_capacity_reached_desc"><![CDATA[Station excluded from rewards because the cell’s capacity was reached. <b>You need to relocate your station to a different cell.</b>]]></string>
-    <string name="annotation_cell_capacity_reached_public_desc"><![CDATA[Station excluded from rewards because the cell’s capacity was reached.]]></string>
-    <string name="annotation_relocated">Station relocated</string>
-    <string name="annotation_relocated_desc"><![CDATA[Station excluded from rewards because it was relocated from its initial location.]]></string>
-    <string name="annotation_pol_threshold">PoL threshold not reached</string>
-    <string name="annotation_pol_threshold_desc"><![CDATA[Station excluded from rewards because its Proof-of-Location (PoL) score was too low. This can happen if the station is not reporting any GPS data, or the GPS location doesn’t match the location set during claiming. Read more about the PoL algorithm.]]></string>
-    <string name="annotation_pol_threshold_public_desc"><![CDATA[Station excluded from rewards because its Proof-of-Location (PoL) score was too low.]]></string>
-    <string name="annotation_qod_threshold">QoD threshold not reached</string>
-    <string name="annotation_qod_threshold_desc"><![CDATA[Station excluded from rewards because its Quality-of-Data (QoD) score was too low. This might be due to bad deployment or faulty sensors. Read more about the QoD algorithm.]]></string>
-    <string name="annotation_qod_threshold_public_desc"><![CDATA[Station excluded from rewards because its Quality-of-Data (QoD) score was too low.]]></string>
-    <string name="annotation_unidentified_change">Unidentified change</string>
-    <string name="annotation_unidentified_change_desc"><![CDATA[Unidentified anomalies were detected in some weather measurements (%1$s). This could be due to <b>bad deployment</b>, or sometimes due to a <b>faulty sensor</b>. Check our installation guide for more information about how to properly deploy your station.]]></string>
-    <string name="annotation_unidentified_change_desc_public"><![CDATA[Unidentified anomalies were detected in some weather measurements (%1$s). This could be due to <b>bad deployment</b>, or sometimes due to a <b>faulty sensor</b>]]></string>
-    <string name="annotation_unidentified_spike">Unidentified spikes</string>
-    <string name="annotation_unidentified_spike_desc"><![CDATA[Unidentified abnormal spikes were detected in some weather measurements (%1$s). This could be due to a <b>faulty sensor</b> or <b>bad deployment.</b> Check our installation guide for more information about how to properly deploy your station.]]></string>
-    <string name="annotation_unidentified_spike_desc_public"><![CDATA[Unidentified abnormal spikes were detected in some weather measurements (%1$s). This could be due to a <b>faulty sensor</b> or <b>bad deployment</b>.]]></string>
-    <string name="annotation_unknown">Unknown error</string>
-    <string name="annotation_unknown_desc"><![CDATA[There seems to be an unknown issue with your station. Please make sure you are running the latest version of our mobile app and your station is upgraded to the latest firmware.]]></string>
-    <string name="annotation_unknown_public_desc"><![CDATA[There seems to be an unknown issue with this station. Please make sure you are running the latest version of our mobile app.]]></string>
     <string name="annotation_info_text"><![CDATA[Minor issues slightly affected your rewards. This may happen occasionally, but we thought you should know. View reward details to identify and fix problems.]]></string>
     <string name="annotation_warn_text"><![CDATA[Some issues prevent your station from getting the full rewards. View reward details to identify and fix problems.]]></string>
     <string name="annotation_error_text"><![CDATA[Serious problems were detected, that prevent the station from getting the full rewards. View reward details to identify and fix problems.]]></string>
@@ -423,7 +363,6 @@
     <!-- Claim - Connect to WiFi -->
     <string name="title_claim_d1_wifi">Claim D1 | WiFi</string>
     <string name="title_claim_m5_wifi">Claim M5 | WiFi</string>
-    <string name="connection">Connection</string>
     <string name="begin_station_claiming">Begin Station Claiming</string>
     <string name="connect_gateway_wifi">Connect the gateway to your WiFi</string>
     <string name="connect_m5_wifi_first_step"><![CDATA[Turn on the M5 gateway and swipe right to the settings screen. Select <b>“Configure WiFi”</b> and then press <b>“Continue”</b> on the screen.]]></string>
@@ -525,12 +464,9 @@
     <string name="change_station_name">Change Station’s Name</string>
     <string name="station_frequency">Station\'s Frequency</string>
     <string name="change_station_frequency_helium"><![CDATA[Change the frequency this station operates. To do this, make sure you’re close to your station, and that you’ve selected the appropriate frequency for your country.<br><br>A list of the countries and their respective frequencies can be <a href="%1$s">found here.</a>]]></string>
-    <string name="change_station_frequency_m5"><![CDATA[You must set your M5’s frequency to be the same as your station’s in order to receive and transmit data.<br><br><b>Setting the wrong frequency will result in loss of communication with your station, and will affect your $WXM rewards!</b>]]></string>
     <string name="change_frequency">Change Frequency</string>
     <string name="reboot_station">Reboot Station</string>
     <string name="reboot_station_desc">This action will enable other devices to pair via bluetooth with the Station. Up to 7 devices can be paired with this station.\n\nUsing a previously paired device, get in proximity to your station, and tap the button below.</string>
-    <string name="reconfigure_wifi">Reconfigure WiFi</string>
-    <string name="reconfigure_wifi_desc">Update M5’s WiFi network connection</string>
     <string name="remove_station">Remove Station</string>
     <string name="remove_station_desc"><![CDATA[Unclaim and remove this station from your account. You will not lose any allocated rewards, but you will not be able to view the station’s data or earn additional rewards in the future.<br><a href="%1$s">Learn more about it here.</a>]]></string>
     <string name="remove_station_warning">This action is not reversible!</string>

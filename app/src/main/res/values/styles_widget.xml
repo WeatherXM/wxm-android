@@ -186,17 +186,6 @@
         <item name="android:background">@color/transparent</item>
     </style>
 
-    <style name="Widget.WeatherXM.TabLayout.Rewards.Navigation" parent="Widget.Material3.TabLayout">
-        <item name="tabBackground">@drawable/navigation_tab_background_selector</item>
-        <item name="tabMode">fixed</item>
-        <item name="tabTextColor">@color/colorPrimary</item>
-        <item name="tabSelectedTextColor">@color/colorOnPrimary</item>
-        <item name="tabPadding">0dp</item>
-        <item name="tabIndicatorHeight">0dp</item>
-        <item name="android:background">@color/transparent</item>
-        <item name="tabTextAppearance">@style/TextAppearance.WeatherXM.Default.BodyMedium</item>
-    </style>
-
     <!--
         Sliders
     -->

@@ -190,12 +190,8 @@ class DeviceSettingsActivity : BaseActivity() {
 
     private fun setupInfo() {
         binding.stationName.text = model.device.getDefaultOrFriendlyName()
-
-        // TODO: Remove this when we implement this
-        binding.reconfigureWifiContainer.setVisible(false)
-
-        if (model.device.relation != DeviceRelation.OWNED) {
-            binding.deleteStationCard.setVisible(false)
+        binding.deleteStationCard.setVisible(model.device.isOwned())
+        if (!model.device.isOwned() || !model.device.isHelium()) {
             binding.frequencyTitle.setVisible(false)
             binding.frequencyDesc.setVisible(false)
             binding.changeFrequencyBtn.setVisible(false)
@@ -219,15 +215,6 @@ class DeviceSettingsActivity : BaseActivity() {
                     getString(R.string.helium_frequencies_mapping_url)
                 )
             }
-        } else {
-            // TODO: Remove the following lines when we implement this feature
-            binding.frequencyTitle.setVisible(false)
-            binding.frequencyDesc.setVisible(false)
-            binding.changeFrequencyBtn.setVisible(false)
-            binding.dividerBelowFrequency.setVisible(false)
-            binding.dividerBelowStationName.setVisible(false)
-            // binding.frequencyDesc.setHtml(R.string.change_station_frequency_m5)
-            binding.rebootStationContainer.setVisible(false)
         }
 
         with(binding.removeStationDesc) {

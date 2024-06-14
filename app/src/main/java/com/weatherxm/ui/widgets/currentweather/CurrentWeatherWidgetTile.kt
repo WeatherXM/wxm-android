@@ -70,8 +70,6 @@ class CurrentWeatherWidgetTile : AppWidgetProvider(), KoinComponent {
             /**
              * Fix when adding a widget for the first time, without this delay that widget won't be
              * able to render correctly. So the delay here is an ugly, but working fix.
-             *
-             * TODO: Explore this more to find the root of this bug.
              */
             widgetHelper.getWidgetIds().onRight {
                 if (it.size == 1) {

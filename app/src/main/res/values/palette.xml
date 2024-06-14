@@ -4,7 +4,6 @@
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
-    <color name="purple">#9D1F63</color>
     <color name="green">#46D163</color>
     <color name="blue">#2780FF</color>
 
@@ -22,7 +21,6 @@
     <color name="light_primary">#0A3FAD</color>
     <color name="light_lightest_blue">#B5C4FF</color>
     <color name="light_blue_tint">#EFF0FF</color>
-    <color name="light_accent">#800162</color>
     <color name="light_crypto">#3A3F6A</color>
     <color name="light_translucent">#80FEFBFF</color>
 
@@ -38,7 +36,6 @@
     <color name="dark_primary">#B8C6FF</color>
     <color name="dark_lightest_blue">#00297B</color>
     <color name="dark_blue_tint">#1E2438</color>
-    <color name="dark_accent">#CD9EFC</color>
     <color name="dark_crypto">#8C97F5</color>
     <color name="dark_translucent">#26FEFBFF</color>
 
