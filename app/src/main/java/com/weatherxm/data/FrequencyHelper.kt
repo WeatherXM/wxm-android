@@ -8,7 +8,7 @@ import org.json.JSONException
 import timber.log.Timber
 
 fun otherFrequencies(frequency: Frequency): List<Frequency> {
-    return Frequency.values().toMutableList().apply {
+    return Frequency.entries.toMutableList().apply {
         removeIf {
             it == frequency
         }
@@ -30,7 +30,7 @@ fun countryToFrequency(context: Context, countryCode: String, moshi: Moshi): Fre
             }
             ?.heliumFrequency
 
-        Frequency.values().firstOrNull {
+        Frequency.entries.firstOrNull {
             it.name == frequencyName
         }
     } catch (e: JSONException) {

@@ -68,6 +68,7 @@
                         style="@style/Widget.WeatherXM.ImageButton"
                         android:layout_width="12dp"
                         android:layout_height="12dp"
+                        android:contentDescription="@string/read_more"
                         android:src="@drawable/ic_learn_more_info"
                         app:layout_constraintBottom_toBottomOf="@id/totalEarned"
                         app:layout_constraintEnd_toEndOf="parent"

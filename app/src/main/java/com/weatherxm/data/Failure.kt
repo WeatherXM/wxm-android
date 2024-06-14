@@ -23,7 +23,6 @@ sealed class Failure(val code: String? = null) {
         const val CODE_PERIPHERAL_ERROR = "PERIPHERAL_ERROR"
         const val CODE_AT_COMMAND_ERROR = "AT_COMMAND_ERROR"
         const val CODE_USER_NOT_LOGGED_IN = "USER_NOT_LOGGED_IN"
-        const val CODE_USER_RATE_LIMITED = "USER_RATE_LIMITED"
         const val CODE_GEOCODING_ERROR = "GEOCODING_ERROR"
         const val CODE_SEARCH_RESULT_NO_ADDRESS = "SEARCH_RESULT_NO_ADDRESS"
         const val CODE_SEARCH_RESULT_NOT_ACCURATE = "RESULT_NOT_ACCURATE"
@@ -38,10 +37,8 @@ sealed class Failure(val code: String? = null) {
         object GeocoderIOError : GeocoderError()
     }
 
-    object LocationAddressNotFound : Failure()
     object CountryNotFound : Failure()
     object FrequencyMappingNotFound : Failure()
-    object UnknownError : Failure()
     object InvalidRefreshTokenError : Failure()
 }
 
@@ -56,7 +53,6 @@ sealed class NetworkError(code: String?) : Failure(code) {
 sealed class BluetoothError(code: String? = null, val message: String? = null) : Failure(code) {
     class ScanningError(code: String? = CODE_BL_SCANNING_ERROR) : BluetoothError(code)
     object DeviceNotFound : BluetoothError()
-    object DfuAborted : BluetoothError()
 
     class ATCommandError(code: String? = CODE_AT_COMMAND_ERROR) : BluetoothError(code)
     class PeripheralCreationError(code: String? = CODE_PERIPHERAL_ERROR) : BluetoothError(code)
@@ -68,14 +64,6 @@ sealed class BluetoothError(code: String? = null, val message: String? = null) :
     ) : BluetoothError(code)
 
     class BluetoothDisabledException(code: String? = CODE_BL_DISABLED) : BluetoothError(code)
-    class DfuUpdateError(message: String? = null) : BluetoothError(message)
-
-    sealed class ProvisionError : BluetoothError() {
-        object GenericError : ProvisionError()
-        object WifiConfigError : ProvisionError()
-        object WifiScanError : ProvisionError()
-        object CreateSessionError : ProvisionError()
-    }
 }
 
 @Keep
@@ -141,21 +129,6 @@ sealed class ApiError(code: String?, val message: String? = null) : Failure(code
                 code: String?,
                 message: String? = null
             ) : ClaimError(code, message)
-
-            class UnknownClaimedDevice(
-                code: String? = null,
-                message: String? = null
-            ) : ClaimError(code, message)
-
-            class ClaimCancelledError(
-                code: String? = null,
-                message: String? = null
-            ) : ClaimError(code, message)
-
-            class ClaimUnknownError(
-                code: String? = null,
-                message: String? = null
-            ) : ClaimError(code, message)
         }
 
         class InvalidFromDate(code: String?, message: String? = null) : UserError(code, message)
@@ -200,11 +173,6 @@ sealed class DataError : Failure() {
 
 @Keep
 sealed class UserActionError(code: String, val message: String? = null) : Failure(code) {
-    class UserActionRateLimitedError(
-        code: String = CODE_USER_RATE_LIMITED,
-        message: String? = null
-    ) : UserActionError(code, message)
-
     class UserNotLoggedInError(code: String = CODE_USER_NOT_LOGGED_IN) : UserActionError(code)
 }
 

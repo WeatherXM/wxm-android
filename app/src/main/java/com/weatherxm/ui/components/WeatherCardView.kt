@@ -16,6 +16,7 @@ import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Weather
+import com.weatherxm.util.Weather.getFormattedHumidity
 import com.weatherxm.util.Weather.getPrecipitationPreferredUnit
 import com.weatherxm.util.Weather.getUVClassification
 import com.weatherxm.util.Weather.getWindDirectionDrawable
@@ -50,25 +51,23 @@ class WeatherCardView : LinearLayout {
     private fun updateCurrentWeatherUI() {
         with(binding) {
             icon.setWeatherAnimation(weatherData?.icon)
-            val temperatureUnit = Weather.getPreferredUnit(
+            val temperatureUnitText = Weather.getPreferredUnit(
                 context.getString(KEY_TEMPERATURE), context.getString(R.string.temperature_celsius)
             )
             temperature.text = Weather.getFormattedTemperature(
                 weatherData?.temperature, 1, includeUnit = false
             )
-            binding.temperatureUnit.text = temperatureUnit
-            binding.feelsLike.text = Weather.getFormattedTemperature(
+            temperatureUnit.text = temperatureUnitText
+            feelsLike.text = Weather.getFormattedTemperature(
                 weatherData?.feelsLike, 1, includeUnit = false
             )
-            binding.feelsLikeUnit.text = temperatureUnit
-            binding.dewPoint.setData(
+            feelsLikeUnit.text = temperatureUnitText
+            dewPoint.setData(
                 Weather.getFormattedTemperature(weatherData?.dewPoint, 1, includeUnit = false),
-                temperatureUnit
+                temperatureUnitText
             )
 
-            binding.humidity.setData(
-                Weather.getFormattedHumidity(weatherData?.humidity, includeUnit = false), "%"
-            )
+            humidity.setData(getFormattedHumidity(weatherData?.humidity, includeUnit = false), "%")
 
             val windValue = Weather.getFormattedWind(
                 weatherData?.windSpeed, weatherData?.windDirection, includeUnits = false
@@ -81,14 +80,14 @@ class WeatherCardView : LinearLayout {
                 weatherData?.windGust, weatherData?.windDirection, includeUnits = false
             )
             val windDirDrawable = getWindDirectionDrawable(context, weatherData?.windDirection)
-            binding.wind.setData(windValue, "$windUnit $windDirectionUnit", windDirDrawable)
-            binding.windGust.setData(windGustValue, "$windUnit $windDirectionUnit", windDirDrawable)
+            wind.setData(windValue, "$windUnit $windDirectionUnit", windDirDrawable)
+            windGust.setData(windGustValue, "$windUnit $windDirectionUnit", windDirDrawable)
 
-            binding.rainRate.setData(
+            rainRate.setData(
                 Weather.getFormattedPrecipitation(weatherData?.precipitation, includeUnit = false),
                 getPrecipitationPreferredUnit(true)
             )
-            binding.precipitationAccumulated.setData(
+            precipitationAccumulated.setData(
                 Weather.getFormattedPrecipitation(
                     weatherData?.precipAccumulated,
                     isRainRate = false,
@@ -100,15 +99,15 @@ class WeatherCardView : LinearLayout {
             val pressureUnit = Weather.getPreferredUnit(
                 context.getString(KEY_PRESSURE), context.getString(R.string.pressure_hpa)
             )
-            binding.pressure.setData(
+            pressure.setData(
                 Weather.getFormattedPressure(weatherData?.pressure, includeUnit = false),
                 pressureUnit
             )
-            binding.uv.setData(
+            uv.setData(
                 Weather.getFormattedUV(weatherData?.uvIndex, includeUnit = false),
                 getUVClassification(weatherData?.uvIndex)
             )
-            binding.solarRadiation.setData(
+            solarRadiation.setData(
                 Weather.getFormattedSolarRadiation(weatherData?.solarIrradiance, false),
                 context.getString(R.string.solar_radiation_unit)
             )

@@ -19,8 +19,6 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.ZoneOffset
-import java.time.ZoneOffset.UTC
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
@@ -50,22 +48,6 @@ object DateTimeHelper : KoinComponent {
         }
     }
 
-    fun ZonedDateTime.getFormattedDay(context: Context, showFullName: Boolean = false): String {
-        return when {
-            isToday() -> context.getString(R.string.today)
-            isTomorrow() -> context.getString(R.string.tomorrow)
-            isYesterday() -> context.getString(R.string.yesterday)
-            else -> {
-                val nameOfDay = if (showFullName) {
-                    dayOfWeek.getName(context)
-                } else {
-                    dayOfWeek.getShortName(context)
-                }
-                "$nameOfDay ${format(formatterMonthDay)}"
-            }
-        }
-    }
-
     fun ZonedDateTime?.getFormattedDate(includeYear: Boolean = false): String {
         return this?.let {
             if (includeYear) {
@@ -75,15 +57,6 @@ object DateTimeHelper : KoinComponent {
             }
         } ?: String.empty()
 
-    }
-
-    fun ZoneOffset.getFormattedOffset(): String {
-        // In order to show +2:00 instead of +02:00 for example
-        return this.toString().replaceFirst("0", String.empty())
-    }
-
-    fun ZoneOffset.isUTC(): Boolean {
-        return this == UTC
     }
 
     fun ZonedDateTime.getFormattedTime(
