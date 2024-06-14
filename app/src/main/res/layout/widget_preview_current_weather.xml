@@ -50,9 +50,37 @@
         android:weightSum="2">
 
         <LinearLayout
+            android:id="@+id/statusContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_rounded_success"
+            android:gravity="center"
+            android:paddingHorizontal="@dimen/padding_small"
+            android:paddingVertical="@dimen/padding_extra_small">
+
+            <ImageView
+                android:id="@+id/statusIcon"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/dot"
+                android:tint="@color/success"
+                tools:ignore="ContentDescription,UseAppTint" />
+
+            <TextView
+                android:id="@+id/lastSeen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_extra_small"
+                android:text="15:45 am"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/addressContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
             android:background="@drawable/background_rounded_blue_tint"
             android:gravity="center"
             android:paddingHorizontal="@dimen/padding_small"
@@ -73,36 +101,6 @@
                 android:text="Athens, GR"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                 tools:ignore="HardcodedText" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/statusContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_small"
-            android:background="@drawable/background_rounded_success"
-            android:gravity="center"
-            android:paddingHorizontal="@dimen/padding_small"
-            android:paddingVertical="@dimen/padding_extra_small">
-
-            <ImageView
-                android:id="@+id/statusIcon"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@drawable/ic_wifi"
-                android:tint="@color/status_chip_content_online"
-                tools:ignore="ContentDescription,UseAppTint" />
-
-            <TextView
-                android:id="@+id/lastSeen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
-                android:text="10:45 am"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                android:textColor="@color/status_chip_content_online"
-                tools:ignore="HardcodedText" />
-
         </LinearLayout>
     </LinearLayout>
 

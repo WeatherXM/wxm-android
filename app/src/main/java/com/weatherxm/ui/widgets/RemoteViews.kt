@@ -159,17 +159,6 @@ fun RemoteViews.setStatus(
     device: UIDevice,
     widgetType: WidgetType
 ) {
-    setImageViewResource(
-        R.id.statusIcon,
-        if (device.isHelium()) {
-            R.drawable.ic_helium
-        } else if (device.isWifi()) {
-            R.drawable.ic_wifi
-        } else {
-            R.drawable.ic_cellular
-        }
-    )
-
     val lastSeen = if (widgetType == WidgetType.CURRENT_WEATHER_TILE) {
         if (device.lastWeatherStationActivity?.isToday() == true) {
             device.lastWeatherStationActivity.getFormattedTime(context)
@@ -186,14 +175,10 @@ fun RemoteViews.setStatus(
                 R.id.lastSeen,
                 device.lastWeatherStationActivity?.getFormattedTime(context)
             )
-            setTextColor(
-                R.id.lastSeen,
-                context.getColor(R.color.status_chip_content_online)
-            )
             setInt(
                 R.id.statusIcon,
                 "setColorFilter",
-                context.getColor(R.color.status_chip_content_online)
+                context.getColor(R.color.success)
             )
             setInt(
                 R.id.statusContainer,
@@ -203,14 +188,10 @@ fun RemoteViews.setStatus(
         }
         false -> {
             setTextViewText(R.id.lastSeen, lastSeen)
-            setTextColor(
-                R.id.lastSeen,
-                context.getColor(R.color.status_chip_content_offline)
-            )
             setInt(
                 R.id.statusIcon,
                 "setColorFilter",
-                context.getColor(R.color.status_chip_content_offline)
+                context.getColor(R.color.error)
             )
             setInt(
                 R.id.statusContainer,
