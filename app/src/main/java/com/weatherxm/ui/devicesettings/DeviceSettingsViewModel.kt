@@ -9,6 +9,7 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.BatteryState
+import com.weatherxm.data.DeviceInfo
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.capitalizeWords
@@ -29,13 +30,15 @@ class DeviceSettingsViewModel(
 ) : ViewModel() {
     private val onEditNameChange = MutableLiveData<String>()
     private val onDeviceRemoved = MutableLiveData<Boolean>()
-    private val onDeviceInfo = MutableLiveData<List<UIDeviceInfo>>()
+    private val onDeviceInfo = MutableLiveData<UIDeviceInfo>()
     private val onError = MutableLiveData<UIError>()
     private val onLoading = MutableLiveData<Boolean>()
 
+    private val deviceInfoData = UIDeviceInfo(mutableListOf(), mutableListOf(), mutableListOf())
+
     fun onEditNameChange(): LiveData<String> = onEditNameChange
     fun onDeviceRemoved(): LiveData<Boolean> = onDeviceRemoved
-    fun onDeviceInfo(): LiveData<List<UIDeviceInfo>> = onDeviceInfo
+    fun onDeviceInfo(): LiveData<UIDeviceInfo> = onDeviceInfo
     fun onError(): LiveData<UIError> = onError
     fun onLoading(): LiveData<Boolean> = onLoading
 
@@ -132,114 +135,233 @@ class DeviceSettingsViewModel(
     }
 
     fun getDeviceInformation() {
-        val deviceInfo = getDeviceInfoFromDevice()
+        deviceInfoData.default.add(
+            UIDeviceInfoItem(resources.getString(R.string.station_default_name), device.name)
+        )
+
+        device.bundleTitle?.let {
+            deviceInfoData.default.add(
+                UIDeviceInfoItem(resources.getString(R.string.bundle_identifier), it)
+            )
+        }
+        device.claimedAt?.let {
+            deviceInfoData.default.add(
+                UIDeviceInfoItem(
+                    resources.getString(R.string.claimed_at),
+                    it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+                )
+            )
+        }
         onLoading.postValue(true)
         viewModelScope.launch {
             usecase.getDeviceInfo(device.id).onLeft {
                 analytics.trackEventFailure(it.code)
                 Timber.d("$it: Fetching remote device info failed for device: $device")
-                onDeviceInfo.postValue(deviceInfo)
-            }.onRight { infoFromAPI ->
-                Timber.d("Got device info: $deviceInfo")
-                infoFromAPI.weatherStation?.batteryState?.let {
-                    if (it == BatteryState.low) {
-                        deviceInfo.add(
-                            2,
-                            UIDeviceInfo(
-                                resources.getString(R.string.battery_level),
-                                resources.getString(R.string.battery_level_low),
-                                warning = resources.getString(R.string.battery_level_low_message)
-                            )
-                        )
-                    } else {
-                        deviceInfo.add(
-                            2,
-                            UIDeviceInfo(
-                                resources.getString(R.string.battery_level),
-                                resources.getString(R.string.battery_level_ok)
-                            )
-                        )
-                    }
+                onDeviceInfo.postValue(deviceInfoData)
+            }.onRight { info ->
+                Timber.d("Got device info: $info")
+                if (device.isHelium()) {
+                    handleInfoNoCategories(info)
+                } else {
+                    handleInfoWithCategories(info)
                 }
-
-                infoFromAPI.weatherStation?.hwVersion?.let {
-                    deviceInfo.add(UIDeviceInfo(resources.getString(R.string.hardware_version), it))
-                }
-                infoFromAPI.weatherStation?.lastHotspot?.let {
-                    deviceInfo.add(
-                        UIDeviceInfo(
-                            resources.getString(R.string.last_hotspot),
-                            it.replace("-", " ").capitalizeWords()
-                        )
-                    )
-                }
-                infoFromAPI.weatherStation?.lastTxRssi?.let {
-                    deviceInfo.add(
-                        UIDeviceInfo(
-                            resources.getString(R.string.last_tx_rssi),
-                            resources.getString(R.string.rssi, it)
-                        )
-                    )
-                }
-                infoFromAPI.gateway?.gpsSats?.let {
-                    deviceInfo.add(UIDeviceInfo(resources.getString(R.string.gps_number_sats), it))
-                }
-                infoFromAPI.gateway?.wifiRssi?.let {
-                    deviceInfo.add(
-                        UIDeviceInfo(
-                            resources.getString(R.string.wifi_rssi),
-                            resources.getString(R.string.rssi, it)
-                        )
-                    )
-                }
-                onDeviceInfo.postValue(deviceInfo)
+                onDeviceInfo.postValue(deviceInfoData)
             }
             onLoading.postValue(false)
         }
     }
 
-    private fun getDeviceInfoFromDevice(): MutableList<UIDeviceInfo> {
-        return mutableListOf<UIDeviceInfo>().apply {
-            add(UIDeviceInfo(resources.getString(R.string.station_default_name), device.name))
-            device.claimedAt?.let {
-                add(
-                    UIDeviceInfo(
-                        resources.getString(R.string.claimed_at),
-                        it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+    private fun handleInfoNoCategories(info: DeviceInfo) {
+        info.weatherStation?.model?.let {
+            deviceInfoData.default.add(
+                UIDeviceInfoItem(resources.getString(R.string.model), it)
+            )
+        }
+
+        info.weatherStation?.batteryState?.let {
+            if (it == BatteryState.low) {
+                deviceInfoData.default.add(
+                    UIDeviceInfoItem(
+                        resources.getString(R.string.battery_level),
+                        resources.getString(R.string.battery_level_low),
+                        warning = resources.getString(R.string.battery_level_low_message)
+                    )
+                )
+            } else {
+                deviceInfoData.default.add(
+                    UIDeviceInfoItem(
+                        resources.getString(R.string.battery_level),
+                        resources.getString(R.string.battery_level_ok)
                     )
                 )
             }
-            if (device.isHelium()) {
-                device.label?.unmask()?.let {
-                    add(UIDeviceInfo(resources.getString(R.string.dev_eui), it))
-                }
-            } else {
-                device.label?.unmask()?.let {
-                    add(UIDeviceInfo(resources.getString(R.string.device_serial_number), it))
-                }
-            }
-            device.currentFirmware?.let { current ->
-                if (usecase.userShouldNotifiedOfOTA(device) && device.shouldPromptUpdate()) {
-                    add(
-                        UIDeviceInfo(
-                            resources.getString(R.string.firmware_version),
-                            "$current ➞ ${device.assignedFirmware}",
-                            UIDeviceAction(
-                                resources.getString(R.string.action_update_firmware),
-                                ActionType.UPDATE_FIRMWARE
-                            )
+        }
+
+        info.weatherStation?.devEUI?.let {
+            deviceInfoData.default.add(
+                UIDeviceInfoItem(resources.getString(R.string.dev_eui), it)
+            )
+        }
+
+        device.currentFirmware?.let { current ->
+            if (usecase.userShouldNotifiedOfOTA(device) && device.shouldPromptUpdate()) {
+                deviceInfoData.default.add(
+                    UIDeviceInfoItem(
+                        resources.getString(R.string.firmware_version),
+                        "$current ➞ ${device.assignedFirmware}",
+                        UIDeviceAction(
+                            resources.getString(R.string.action_update_firmware),
+                            ActionType.UPDATE_FIRMWARE
                         )
                     )
+                )
+            } else {
+                val currentFirmware = if (device.currentFirmware.equals(device.assignedFirmware)) {
+                    current
                 } else {
-                    add(UIDeviceInfo(resources.getString(R.string.firmware_version), current))
+                    "$current ${resources.getString(R.string.latest_hint)}"
                 }
+                deviceInfoData.default.add(
+                    UIDeviceInfoItem(
+                        resources.getString(R.string.firmware_version), currentFirmware
+                    )
+                )
             }
+        }
+
+        info.weatherStation?.hwVersion?.let {
+            deviceInfoData.default.add(
+                UIDeviceInfoItem(resources.getString(R.string.hardware_version), it)
+            )
+        }
+
+        info.weatherStation?.lastHotspot?.let {
+            deviceInfoData.default.add(
+                UIDeviceInfoItem(
+                    resources.getString(R.string.last_hotspot),
+                    it.replace("-", " ").capitalizeWords()
+                )
+            )
+        }
+        info.weatherStation?.lastTxRssi?.let {
+            deviceInfoData.default.add(
+                UIDeviceInfoItem(
+                    resources.getString(R.string.last_tx_rssi),
+                    resources.getString(R.string.rssi, it)
+                )
+            )
+        }
+
+        info.weatherStation?.lastActivity?.let {
+            deviceInfoData.default.add(
+                UIDeviceInfoItem(
+                    resources.getString(R.string.last_weather_station_activity),
+                    it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+                )
+            )
         }
     }
 
-    fun parseDeviceInfoToShare(deviceInfo: List<UIDeviceInfo>): String {
+    private fun handleInfoWithCategories(info: DeviceInfo) {
+        info.weatherStation?.model?.let {
+            deviceInfoData.station.add(
+                UIDeviceInfoItem(resources.getString(R.string.model), it)
+            )
+        }
+
+        info.weatherStation?.batteryState?.let {
+            if (it == BatteryState.low) {
+                deviceInfoData.station.add(
+                    UIDeviceInfoItem(
+                        resources.getString(R.string.battery_level),
+                        resources.getString(R.string.battery_level_low),
+                        warning = resources.getString(R.string.battery_level_low_message)
+                    )
+                )
+            } else {
+                deviceInfoData.station.add(
+                    UIDeviceInfoItem(
+                        resources.getString(R.string.battery_level),
+                        resources.getString(R.string.battery_level_ok)
+                    )
+                )
+            }
+        }
+
+        info.weatherStation?.hwVersion?.let {
+            deviceInfoData.station.add(
+                UIDeviceInfoItem(resources.getString(R.string.hardware_version), it)
+            )
+        }
+
+        info.weatherStation?.lastActivity?.let {
+            deviceInfoData.station.add(
+                UIDeviceInfoItem(
+                    resources.getString(R.string.last_weather_station_activity),
+                    it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+                )
+            )
+        }
+
+        info.gateway?.model?.let {
+            deviceInfoData.gateway.add(
+                UIDeviceInfoItem(resources.getString(R.string.model), it)
+            )
+        }
+
+        info.gateway?.serialNumber?.let {
+            deviceInfoData.gateway.add(
+                UIDeviceInfoItem(resources.getString(R.string.device_serial_number), it.unmask())
+            )
+        }
+
+        device.currentFirmware?.let { current ->
+            val currentFirmware = if (device.currentFirmware.equals(device.assignedFirmware)) {
+                current
+            } else {
+                "$current ${resources.getString(R.string.latest_hint)}"
+            }
+            deviceInfoData.gateway.add(
+                UIDeviceInfoItem(
+                    resources.getString(R.string.firmware_version), currentFirmware
+                )
+            )
+        }
+
+        info.gateway?.gpsSats?.let {
+            deviceInfoData.gateway.add(
+                UIDeviceInfoItem(resources.getString(R.string.gps_number_sats), it)
+            )
+        }
+
+        info.gateway?.wifiRssi?.let {
+            deviceInfoData.gateway.add(
+                UIDeviceInfoItem(
+                    resources.getString(R.string.wifi_rssi),
+                    resources.getString(R.string.rssi, it)
+                )
+            )
+        }
+
+        info.gateway?.lastActivity?.let {
+            deviceInfoData.gateway.add(
+                UIDeviceInfoItem(
+                    resources.getString(R.string.last_weather_station_activity),
+                    it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+                )
+            )
+        }
+    }
+
+    fun parseDeviceInfoToShare(deviceInfo: UIDeviceInfo): String {
         var sharingText = String.empty()
-        deviceInfo.forEach {
+        deviceInfo.default.forEach {
+            sharingText += "${it}\n"
+        }
+        deviceInfo.gateway.forEach {
+            sharingText += "${it}\n"
+        }
+        deviceInfo.station.forEach {
             sharingText += "${it}\n"
         }
         return sharingText

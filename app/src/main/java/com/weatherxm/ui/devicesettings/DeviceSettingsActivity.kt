@@ -33,7 +33,9 @@ class DeviceSettingsActivity : BaseActivity() {
     }
     private lateinit var binding: ActivityDeviceSettingsBinding
     private val imageLoader: ImageLoader by inject()
-    private lateinit var adapter: DeviceInfoAdapter
+    private lateinit var defaultAdapter: DeviceInfoAdapter
+    private lateinit var gatewayAdapter: DeviceInfoAdapter
+    private lateinit var stationAdapter: DeviceInfoAdapter
 
     // Register the launcher for the edit location activity and wait for a possible result
     private val editLocationLauncher =
@@ -57,18 +59,7 @@ class DeviceSettingsActivity : BaseActivity() {
             return
         }
 
-        adapter = DeviceInfoAdapter {
-            if (it == ActionType.UPDATE_FIRMWARE) {
-                analytics.trackEventPrompt(
-                    AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
-                    AnalyticsService.ParamValue.WARN.paramValue,
-                    AnalyticsService.ParamValue.ACTION.paramValue
-                )
-                navigator.showDeviceHeliumOTA(this, model.device, false)
-                finish()
-            }
-        }
-        binding.recyclerDeviceInfo.adapter = adapter
+        setupRecyclers()
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -123,6 +114,36 @@ class DeviceSettingsActivity : BaseActivity() {
         }
 
         setupStationLocation()
+    }
+
+    private fun setupRecyclers() {
+        defaultAdapter = DeviceInfoAdapter {
+            if (it == ActionType.UPDATE_FIRMWARE) {
+                analytics.trackEventPrompt(
+                    AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+                    AnalyticsService.ParamValue.WARN.paramValue,
+                    AnalyticsService.ParamValue.ACTION.paramValue
+                )
+                navigator.showDeviceHeliumOTA(this, model.device, false)
+                finish()
+            }
+        }
+        binding.recyclerDefaultInfo.adapter = defaultAdapter
+        if (model.device.isHelium()) {
+            binding.gatewayDetails.setVisible(false)
+            binding.recyclerGatewayInfo.setVisible(false)
+            binding.stationDetails.setVisible(false)
+            binding.recyclerStationInfo.setVisible(false)
+        } else {
+            gatewayAdapter = DeviceInfoAdapter {
+                // Do nothing - Not reachable on non-Helium devices
+            }
+            stationAdapter = DeviceInfoAdapter {
+                // Do nothing - Not reachable on non-Helium devices
+            }
+            binding.recyclerGatewayInfo.adapter = gatewayAdapter
+            binding.recyclerStationInfo.adapter = stationAdapter
+        }
     }
 
     private fun setupStationLocation(forceUpdateMinimap: Boolean = false) {
@@ -231,22 +252,12 @@ class DeviceSettingsActivity : BaseActivity() {
         }
 
         model.onDeviceInfo().observe(this) { deviceInfo ->
-            if (deviceInfo.any { it.warning != null }) {
-                analytics.trackEventPrompt(
-                    AnalyticsService.ParamValue.LOW_BATTERY.paramValue,
-                    AnalyticsService.ParamValue.WARN.paramValue,
-                    AnalyticsService.ParamValue.VIEW.paramValue,
-                    Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
-                )
+            onDeviceInfoAnalytics(deviceInfo)
+            defaultAdapter.submitList(deviceInfo.default)
+            if (!model.device.isHelium()) {
+                gatewayAdapter.submitList(deviceInfo.gateway)
+                stationAdapter.submitList(deviceInfo.station)
             }
-            if (deviceInfo.any { it.action?.actionType == ActionType.UPDATE_FIRMWARE }) {
-                analytics.trackEventPrompt(
-                    AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
-                    AnalyticsService.ParamValue.WARN.paramValue,
-                    AnalyticsService.ParamValue.VIEW.paramValue
-                )
-            }
-            adapter.submitList(deviceInfo)
 
             binding.shareBtn.setOnClickListener {
                 navigator.openShare(this, model.parseDeviceInfoToShare(deviceInfo))
@@ -260,5 +271,25 @@ class DeviceSettingsActivity : BaseActivity() {
         }
 
         model.getDeviceInformation()
+    }
+
+    private fun onDeviceInfoAnalytics(deviceInfo: UIDeviceInfo) {
+        val allInfo =
+            mutableListOf(deviceInfo.default, deviceInfo.station, deviceInfo.gateway).flatten()
+        if (allInfo.any { it.warning != null }) {
+            analytics.trackEventPrompt(
+                AnalyticsService.ParamValue.LOW_BATTERY.paramValue,
+                AnalyticsService.ParamValue.WARN.paramValue,
+                AnalyticsService.ParamValue.VIEW.paramValue,
+                Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
+            )
+        }
+        if (allInfo.any { it.action?.actionType == ActionType.UPDATE_FIRMWARE }) {
+            analytics.trackEventPrompt(
+                AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+                AnalyticsService.ParamValue.WARN.paramValue,
+                AnalyticsService.ParamValue.VIEW.paramValue
+            )
+        }
     }
 }

@@ -15,7 +15,7 @@ import org.koin.core.component.inject
 
 class DeviceInfoAdapter(
     private val actionListener: (ActionType) -> Unit
-) : ListAdapter<UIDeviceInfo,
+) : ListAdapter<UIDeviceInfoItem,
     DeviceInfoAdapter.DeviceInfoViewHolder>(DeviceInfoDiffCallback()),
     KoinComponent {
 
@@ -37,7 +37,7 @@ class DeviceInfoAdapter(
         private val listener: (ActionType) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: UIDeviceInfo) {
+        fun bind(item: UIDeviceInfoItem) {
             binding.title.text = item.title
             binding.value.text = item.value
 
@@ -61,13 +61,19 @@ class DeviceInfoAdapter(
         }
     }
 
-    class DeviceInfoDiffCallback : DiffUtil.ItemCallback<UIDeviceInfo>() {
+    class DeviceInfoDiffCallback : DiffUtil.ItemCallback<UIDeviceInfoItem>() {
 
-        override fun areItemsTheSame(oldItem: UIDeviceInfo, newItem: UIDeviceInfo): Boolean {
+        override fun areItemsTheSame(
+            oldItem: UIDeviceInfoItem,
+            newItem: UIDeviceInfoItem
+        ): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: UIDeviceInfo, newItem: UIDeviceInfo): Boolean {
+        override fun areContentsTheSame(
+            oldItem: UIDeviceInfoItem,
+            newItem: UIDeviceInfoItem
+        ): Boolean {
             return oldItem.title == newItem.title &&
                 oldItem.value == newItem.value &&
                 oldItem.action?.actionText == newItem.action?.actionText &&

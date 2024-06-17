@@ -7,15 +7,19 @@ import com.weatherxm.data.Failure
 @Keep
 @JsonClass(generateAdapter = true)
 data class UIDeviceInfo(
+    val default: MutableList<UIDeviceInfoItem>,
+    val gateway: MutableList<UIDeviceInfoItem>,
+    val station: MutableList<UIDeviceInfoItem>
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
+data class UIDeviceInfoItem(
     val title: String,
     val value: String,
     val action: UIDeviceAction? = null,
     val warning: String? = null
-) {
-    override fun toString(): String {
-        return "$title: $value"
-    }
-}
+)
 
 @Keep
 @JsonClass(generateAdapter = true)

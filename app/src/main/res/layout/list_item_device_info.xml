@@ -13,13 +13,12 @@
         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
         android:textIsSelectable="true"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Station’s Default Name (Name in Explorer)" />
+        tools:text="@string/station_default_name" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_extra_small"
         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
         android:textIsSelectable="true"
         android:textStyle="bold"
@@ -30,7 +29,7 @@
         android:id="@+id/actionBtn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_small_to_normal"
         android:visibility="gone"
         app:iconGravity="textStart"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +42,7 @@
         android:id="@+id/warningBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_small_to_normal"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
