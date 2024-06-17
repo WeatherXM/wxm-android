@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.ApiError.UserError.InvalidToDate
 import com.weatherxm.data.Resource
@@ -14,7 +15,6 @@ import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.ChartsUseCase
 import com.weatherxm.usecases.HistoryUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
 import com.weatherxm.util.isToday
@@ -109,22 +109,6 @@ class HistoryChartsViewModel(
         updateWeatherHistoryJob?.invokeOnCompletion {
             if (it is CancellationException) {
                 Timber.d("Cancelled running history job.")
-            }
-        }
-    }
-
-    fun getDataSetIndexForHighlight(
-        x: Float,
-        dataSet: MutableMap<Int, List<Float>>,
-        fallback: Int
-    ): Int {
-        return dataSet.filterValues {
-            it.contains(x)
-        }.keys.let {
-            if (it.isNotEmpty()) {
-                it.first()
-            } else {
-                fallback
             }
         }
     }

@@ -42,7 +42,7 @@ class CurrentWeatherWidgetWorkerUpdate(
     private val workerParams: WorkerParameters
 ) : CoroutineWorker(context, workerParams), KoinComponent {
     companion object {
-        const val UPDATE_INTERVAL_IN_MINS = 15L
+        private const val UPDATE_INTERVAL_IN_MINS = 15L
 
         fun restartAllWorkers(context: Context) {
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)

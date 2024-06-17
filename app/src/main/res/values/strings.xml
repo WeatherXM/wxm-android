@@ -29,6 +29,7 @@
     <string name="action_dismiss">Dismiss</string>
     <string name="action_close">Close</string>
     <string name="action_view_all_issues">View All Issues</string>
+    <string name="action_open">Open</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="action_scan_qr">Scan QR Code</string>

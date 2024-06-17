@@ -57,8 +57,8 @@ class RewardsUseCaseImpl(
                     it.data.filter { tx ->
                         // Keep only transactions that have a reward for this device
                         tx.baseReward != null
-                    }.map {
-                        TimelineReward(RewardTimelineType.DATA, it)
+                    }.map { reward ->
+                        TimelineReward(RewardTimelineType.DATA, reward)
                     },
                     it.hasNextPage
                 )

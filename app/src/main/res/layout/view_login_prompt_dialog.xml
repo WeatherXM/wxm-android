@@ -25,6 +25,7 @@
             style="@style/Widget.WeatherXM.ImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/action_close"
             android:padding="@dimen/padding_small"
             android:src="@drawable/ic_close"
             app:layout_constraintEnd_toEndOf="parent"

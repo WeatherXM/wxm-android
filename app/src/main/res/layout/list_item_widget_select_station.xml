@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingEnd="@dimen/padding_normal_to_large"
-        android:paddingBottom="@dimen/padding_normal_to_large">
+        android:paddingBottom="@dimen/padding_normal_to_large"
+        tools:ignore="RtlSymmetry">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -41,11 +42,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                tools:src="@drawable/ic_home"
                 app:layout_constraintBottom_toBottomOf="@id/name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/name"
-                tools:ignore="ContentDescription" />
+                tools:ignore="ContentDescription"
+                tools:src="@drawable/ic_home" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/addressChip"
@@ -242,6 +243,7 @@
         android:layout_gravity="end|bottom"
         android:layout_marginEnd="-2dp"
         android:layout_marginBottom="-2dp"
+        android:importantForAccessibility="no"
         android:src="@drawable/ic_checkbox"
         android:visibility="gone"
         app:tint="@color/colorPrimary"
