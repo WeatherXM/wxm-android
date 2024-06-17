@@ -1,13 +1,14 @@
-package com.weatherxm.ui.devicesettings
+package com.weatherxm.ui.devicesettings.wifi
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import coil.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.databinding.ActivityDeviceSettingsBinding
+import com.weatherxm.databinding.ActivityDeviceSettingsWifiBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
@@ -17,25 +18,26 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.invisible
-import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
+import com.weatherxm.ui.devicesettings.DeviceInfoItemAdapter
+import com.weatherxm.ui.devicesettings.FriendlyNameDialogFragment
 import com.weatherxm.util.MapboxUtils.getMinimap
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class DeviceSettingsActivity : BaseActivity() {
-    private val model: DeviceSettingsViewModel by viewModel {
+class DeviceSettingsWifiActivity : BaseActivity() {
+    private val model: DeviceSettingsWifiViewModel by viewModel {
         parametersOf(intent.parcelable<UIDevice>(ARG_DEVICE))
     }
-    private lateinit var binding: ActivityDeviceSettingsBinding
+    private lateinit var binding: ActivityDeviceSettingsWifiBinding
     private val imageLoader: ImageLoader by inject()
-    private lateinit var defaultAdapter: DeviceInfoAdapter
-    private lateinit var gatewayAdapter: DeviceInfoAdapter
-    private lateinit var stationAdapter: DeviceInfoAdapter
+    private lateinit var defaultAdapter: DeviceInfoItemAdapter
+    private lateinit var gatewayAdapter: DeviceInfoItemAdapter
+    private lateinit var stationAdapter: DeviceInfoItemAdapter
 
     // Register the launcher for the edit location activity and wait for a possible result
     private val editLocationLauncher =
@@ -49,7 +51,7 @@ class DeviceSettingsActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDeviceSettingsBinding.inflate(layoutInflater)
+        binding = ActivityDeviceSettingsWifiBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         if (model.device.isEmpty()) {
@@ -69,9 +71,9 @@ class DeviceSettingsActivity : BaseActivity() {
 
         model.onLoading().observe(this) {
             if (it) {
-                binding.progress.visible(true)
+                binding.progress.visibility = View.VISIBLE
             } else {
-                binding.progress.invisible()
+                binding.progress.visibility = View.INVISIBLE
             }
         }
 
@@ -80,7 +82,7 @@ class DeviceSettingsActivity : BaseActivity() {
         }
 
         model.onError().observe(this) {
-            binding.progress.invisible()
+            binding.progress.visibility = View.INVISIBLE
             showSnackbarMessage(binding.root, it.errorMessage, it.retryFunction)
         }
 
@@ -97,14 +99,6 @@ class DeviceSettingsActivity : BaseActivity() {
             onRemoveStation()
         }
 
-        binding.changeFrequencyBtn.setOnClickListener {
-            navigator.showChangeFrequency(this, model.device)
-        }
-
-        binding.rebootStationBtn.setOnClickListener {
-            navigator.showRebootStation(this, model.device)
-        }
-
         binding.contactSupportBtn.setOnClickListener {
             navigator.openSupportCenter(this, AnalyticsService.ParamValue.DEVICE_INFO.paramValue)
         }
@@ -117,40 +111,19 @@ class DeviceSettingsActivity : BaseActivity() {
     }
 
     private fun setupRecyclers() {
-        defaultAdapter = DeviceInfoAdapter {
-            if (it == ActionType.UPDATE_FIRMWARE) {
-                analytics.trackEventPrompt(
-                    AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
-                    AnalyticsService.ParamValue.WARN.paramValue,
-                    AnalyticsService.ParamValue.ACTION.paramValue
-                )
-                navigator.showDeviceHeliumOTA(this, model.device, false)
-                finish()
-            }
-        }
+        defaultAdapter = DeviceInfoItemAdapter(null)
+        gatewayAdapter = DeviceInfoItemAdapter(null)
+        stationAdapter = DeviceInfoItemAdapter(null)
         binding.recyclerDefaultInfo.adapter = defaultAdapter
-        if (model.device.isHelium()) {
-            binding.gatewayDetails.setVisible(false)
-            binding.recyclerGatewayInfo.setVisible(false)
-            binding.stationDetails.setVisible(false)
-            binding.recyclerStationInfo.setVisible(false)
-        } else {
-            gatewayAdapter = DeviceInfoAdapter {
-                // Do nothing - Not reachable on non-Helium devices
-            }
-            stationAdapter = DeviceInfoAdapter {
-                // Do nothing - Not reachable on non-Helium devices
-            }
-            binding.recyclerGatewayInfo.adapter = gatewayAdapter
-            binding.recyclerStationInfo.adapter = stationAdapter
-        }
+        binding.recyclerGatewayInfo.adapter = gatewayAdapter
+        binding.recyclerStationInfo.adapter = stationAdapter
     }
 
     private fun setupStationLocation(forceUpdateMinimap: Boolean = false) {
         binding.editLocationBtn.setOnClickListener {
             navigator.showEditLocation(editLocationLauncher, this, model.device)
         }
-        binding.editLocationBtn.visible(model.device.isOwned())
+        binding.editLocationBtn.setVisible(model.device.isOwned())
 
         if (model.device.relation == DeviceRelation.FOLLOWED) {
             binding.locationDesc.setHtml(
@@ -180,7 +153,7 @@ class DeviceSettingsActivity : BaseActivity() {
         }
         getMinimap(binding.locationLayout.width, deviceMapLocation, model.device.hex7)?.let {
             binding.locationMinimap.loadImage(imageLoader, it)
-        } ?: binding.locationMinimap.visible(false)
+        } ?: binding.locationMinimap.setVisible(false)
     }
 
     private fun onRemoveStation() {
@@ -211,18 +184,8 @@ class DeviceSettingsActivity : BaseActivity() {
 
     private fun setupInfo() {
         binding.stationName.text = model.device.getDefaultOrFriendlyName()
-        binding.deleteStationCard.visible(model.device.isOwned())
-        if (!model.device.isOwned() || model.device.isHelium()) {
-            binding.frequencyTitle.visible(false)
-            binding.frequencyDesc.visible(false)
-            binding.changeFrequencyBtn.visible(false)
-            binding.rebootStationContainer.visible(false)
-            binding.dividerBelowFrequency.visible(false)
-            binding.dividerBelowStationName.visible(false)
-        }
-
-        if (model.device.isHelium()) {
-            with(binding.frequencyDesc) {
+        if (model.device.isOwned()) {
+            with(binding.removeStationDesc) {
                 movementMethod =
                     me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {
                         setOnLinkClickListener { _, url ->
@@ -231,33 +194,26 @@ class DeviceSettingsActivity : BaseActivity() {
                         }
                     }
                 setHtml(
-                    R.string.change_station_frequency_helium,
-                    getString(R.string.helium_frequencies_mapping_url)
+                    R.string.remove_station_desc,
+                    getString(R.string.docs_url)
                 )
             }
-        }
-
-        with(binding.removeStationDesc) {
-            movementMethod =
-                me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {
-                    setOnLinkClickListener { _, url ->
-                        navigator.openWebsite(context, url)
-                        return@setOnLinkClickListener true
-                    }
-                }
-            setHtml(
-                R.string.remove_station_desc,
-                getString(R.string.docs_url)
-            )
+        } else {
+            binding.deleteStationCard.setVisible(false)
         }
 
         model.onDeviceInfo().observe(this) { deviceInfo ->
-            onDeviceInfoAnalytics(deviceInfo)
-            defaultAdapter.submitList(deviceInfo.default)
-            if (!model.device.isHelium()) {
-                gatewayAdapter.submitList(deviceInfo.gateway)
-                stationAdapter.submitList(deviceInfo.station)
+            if (deviceInfo.station.any { it.warning != null }) {
+                analytics.trackEventPrompt(
+                    AnalyticsService.ParamValue.LOW_BATTERY.paramValue,
+                    AnalyticsService.ParamValue.WARN.paramValue,
+                    AnalyticsService.ParamValue.VIEW.paramValue,
+                    Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
+                )
             }
+            defaultAdapter.submitList(deviceInfo.default)
+            gatewayAdapter.submitList(deviceInfo.gateway)
+            stationAdapter.submitList(deviceInfo.station)
 
             binding.shareBtn.setOnClickListener {
                 navigator.openShare(this, model.parseDeviceInfoToShare(deviceInfo))
@@ -271,25 +227,5 @@ class DeviceSettingsActivity : BaseActivity() {
         }
 
         model.getDeviceInformation()
-    }
-
-    private fun onDeviceInfoAnalytics(deviceInfo: UIDeviceInfo) {
-        val allInfo =
-            mutableListOf(deviceInfo.default, deviceInfo.station, deviceInfo.gateway).flatten()
-        if (allInfo.any { it.warning != null }) {
-            analytics.trackEventPrompt(
-                AnalyticsService.ParamValue.LOW_BATTERY.paramValue,
-                AnalyticsService.ParamValue.WARN.paramValue,
-                AnalyticsService.ParamValue.VIEW.paramValue,
-                Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
-            )
-        }
-        if (allInfo.any { it.action?.actionType == ActionType.UPDATE_FIRMWARE }) {
-            analytics.trackEventPrompt(
-                AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
-                AnalyticsService.ParamValue.WARN.paramValue,
-                AnalyticsService.ParamValue.VIEW.paramValue
-            )
-        }
     }
 }

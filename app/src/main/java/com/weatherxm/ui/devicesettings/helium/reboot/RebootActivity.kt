@@ -1,4 +1,4 @@
-package com.weatherxm.ui.devicesettings.reboot
+package com.weatherxm.ui.devicesettings.helium.reboot
 
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter

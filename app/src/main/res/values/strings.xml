@@ -505,7 +505,7 @@
     <string name="station_location_desc"><![CDATA[The deployment location you set for this station is <b>%s.</b> If the location you see on the map doesn’t match the actual deployment location, press the button below to edit.]]></string>
     <string name="station_location_favorite_desc"><![CDATA[The deployment location that the station owner has set is <b>%s.</b>]]></string>
     <string name="edit_location">Edit Location</string>
-    <string name="device_serial_number">Device Serial Number</string>
+    <string name="serial_number">Serial Number</string>
 
     <!-- Alerts -->
     <string name="alerts">Alerts</string>

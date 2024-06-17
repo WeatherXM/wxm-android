@@ -268,7 +268,7 @@
                         app:layout_constraintTop_toTopOf="@id/stationInformation" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerDefaultInfo"
+                        android:id="@+id/recyclerInfo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_extra_small"
@@ -281,54 +281,6 @@
                         app:layout_constraintTop_toBottomOf="@id/shareBtn"
                         tools:listitem="@layout/list_item_device_info" />
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/gatewayDetails"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small_to_normal"
-                        android:text="@string/gateway_details"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@id/recyclerDefaultInfo" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerGatewayInfo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clipChildren="false"
-                        android:clipToPadding="false"
-                        android:overScrollMode="never"
-                        android:paddingBottom="@dimen/padding_normal_to_large"
-                        android:scrollbars="vertical"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintTop_toBottomOf="@id/gatewayDetails"
-                        tools:listitem="@layout/list_item_device_info" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/stationDetails"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small_to_normal"
-                        android:text="@string/station_details"
-                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@id/recyclerGatewayInfo" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerStationInfo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clipChildren="false"
-                        android:clipToPadding="false"
-                        android:overScrollMode="never"
-                        android:paddingBottom="@dimen/padding_normal_to_large"
-                        android:scrollbars="vertical"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintTop_toBottomOf="@id/stationDetails"
-                        tools:listitem="@layout/list_item_device_info" />
-
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/contactSupportBtn"
                         style="@style/Widget.WeatherXM.Button.Subtle.Borders"
@@ -336,7 +288,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal_to_large"
                         android:text="@string/contact_support_title"
-                        app:layout_constraintTop_toBottomOf="@id/recyclerStationInfo" />
+                        app:layout_constraintTop_toBottomOf="@id/recyclerInfo" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

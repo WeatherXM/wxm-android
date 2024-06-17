@@ -13,10 +13,10 @@ import com.weatherxm.util.Resources
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class DeviceInfoAdapter(
-    private val actionListener: (ActionType) -> Unit
+class DeviceInfoItemAdapter(
+    private val actionListener: ((ActionType) -> Unit)?
 ) : ListAdapter<UIDeviceInfoItem,
-    DeviceInfoAdapter.DeviceInfoViewHolder>(DeviceInfoDiffCallback()),
+    DeviceInfoItemAdapter.DeviceInfoViewHolder>(DeviceInfoDiffCallback()),
     KoinComponent {
 
     val resources: Resources by inject()
@@ -29,15 +29,19 @@ class DeviceInfoAdapter(
     }
 
     override fun onBindViewHolder(holder: DeviceInfoViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), position)
     }
 
     inner class DeviceInfoViewHolder(
         private val binding: ListItemDeviceInfoBinding,
-        private val listener: (ActionType) -> Unit
+        private val listener: ((ActionType) -> Unit)?
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: UIDeviceInfoItem) {
+        fun bind(item: UIDeviceInfoItem, position: Int) {
+            if (position == itemCount - 1) {
+                binding.bottomBorder.setVisible(false)
+            }
+
             binding.title.text = item.title
             binding.value.text = item.value
 
@@ -46,7 +50,7 @@ class DeviceInfoAdapter(
                     text = action.actionText
                     icon = AppCompatResources.getDrawable(context, R.drawable.ic_update)
                     setOnClickListener {
-                        listener.invoke(action.actionType)
+                        listener?.invoke(action.actionType)
                     }
                     visible(true)
                 }

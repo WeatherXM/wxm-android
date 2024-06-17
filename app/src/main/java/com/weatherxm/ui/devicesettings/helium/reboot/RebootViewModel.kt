@@ -1,8 +1,9 @@
-package com.weatherxm.ui.devicesettings.reboot
+package com.weatherxm.ui.devicesettings.helium.reboot
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
@@ -13,7 +14,6 @@ import com.weatherxm.ui.devicesettings.RebootState
 import com.weatherxm.ui.devicesettings.RebootStatus
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getCode
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
