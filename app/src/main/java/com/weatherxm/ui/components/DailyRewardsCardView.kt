@@ -153,14 +153,14 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
                 context.getString(R.string.annotation_info_text)
             }
         } else {
-            if (sortedSeverities[0] == SeverityLevel.INFO && annotationsSize > 1) {
-                context.getString(R.string.annotation_issues_info_text, annotationsSize)
-            } else if (sortedSeverities[0] == SeverityLevel.INFO && annotationsSize <= 1) {
-                context.getString(R.string.annotation_issue_info_text)
-            } else if (annotationsSize > 1) {
-                context.getString(R.string.annotation_issues_warn_error_text, annotationsSize)
+            if (sortedSeverities[0] == SeverityLevel.INFO) {
+                resources.getQuantityString(
+                    R.plurals.annotation_issue_info_text, annotationsSize, annotationsSize
+                )
             } else {
-                context.getString(R.string.annotation_issue_warn_error_text)
+                resources.getQuantityString(
+                    R.plurals.annotation_issue_warn_error_text, annotationsSize, annotationsSize
+                )
             }
         }
     }

@@ -158,10 +158,9 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
 
     private fun updateCellStats(data: List<UIDevice>) {
         data.count { it.isOnline() }.apply {
-            if (this > 1) {
-                binding.activeChip.text = getString(R.string.cell_active_stations, this)
-            } else if (this == 1) {
-                binding.activeChip.text = getString(R.string.cell_active_station)
+            if (this >= 1) {
+                binding.activeChip.text =
+                    resources.getQuantityString(R.plurals.cell_active_station, this, this)
             } else {
                 binding.activeChip.setVisible(false)
             }
