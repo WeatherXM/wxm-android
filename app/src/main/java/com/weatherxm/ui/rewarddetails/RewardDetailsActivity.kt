@@ -149,20 +149,19 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
             binding.issueCard.setVisible(false)
         } else {
             val issuesSize = sortedIssues.size
-            val topIssue = sortedIssues[0]
             binding.issuesDesc.setHtml(
-                if (topIssue.isInfo() && issuesSize > 1) {
-                    getString(R.string.annotation_issues_info_text, issuesSize)
-                } else if (topIssue.isInfo() && issuesSize <= 1) {
-                    getString(R.string.annotation_issue_info_text)
-                } else if (issuesSize > 1) {
-                    getString(R.string.annotation_issues_warn_error_text, issuesSize)
+                if (sortedIssues[0].isInfo()) {
+                    resources.getQuantityString(
+                        R.plurals.annotation_issue_info_text, issuesSize, issuesSize
+                    )
                 } else {
-                    getString(R.string.annotation_issue_warn_error_text)
+                    resources.getQuantityString(
+                        R.plurals.annotation_issue_warn_error_text, issuesSize, issuesSize
+                    )
                 }
             )
 
-            onIssueCard(topIssue, issuesSize > 1)
+            onIssueCard(sortedIssues[0], issuesSize > 1)
         }
     }
 

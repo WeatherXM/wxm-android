@@ -246,10 +246,6 @@
     <string name="annotation_info_text"><![CDATA[Minor issues slightly affected your rewards. This may happen occasionally, but we thought you should know. View reward details to identify and fix problems.]]></string>
     <string name="annotation_warn_text"><![CDATA[Some issues prevent your station from getting the full rewards. View reward details to identify and fix problems.]]></string>
     <string name="annotation_error_text"><![CDATA[Serious problems were detected, that prevent the station from getting the full rewards. View reward details to identify and fix problems.]]></string>
-    <string name="annotation_issue_info_text"><![CDATA[<b>1 minor issue</b> affecting station rewards.]]></string>
-    <string name="annotation_issues_info_text"><![CDATA[<b>%d minor issues</b> affecting station rewards.]]></string>
-    <string name="annotation_issue_warn_error_text"><![CDATA[<b>1 issue</b> affecting station rewards.]]></string>
-    <string name="annotation_issues_warn_error_text"><![CDATA[<b>%d issues</b> affecting station rewards.]]></string>
     <string name="rewards_empty_title">Rewards Coming Soon!</string>
     <string name="rewards_empty_message">Station hasn’t received any rewards yet. Sit back and relax, while our systems are validating the station’s location and data. The station should start receiving rewards in the next couple of days.</string>
     <string name="rewards_empty_pro_tip">Pro Tip</string>
@@ -550,8 +546,6 @@
 
 
     <!-- Cell Info -->
-    <string name="cell_active_station">1 active station</string>
-    <string name="cell_active_stations">%d active stations</string>
     <string name="cell_stations_present">%d/10 stations present</string>
     <string name="cell_capacity">Cell Capacity</string>
     <string name="cell_capacity_explanation">Cell capacity is a parameter that is used to define the maximum number of stations that are eligible for rewards in a specific cell. Every cell has a predefined capacity that depends on its geospatial characteristics*\n\nEvery station is ranked in its cell daily, based on its reward score and its seniority. As long as the station’s ranking is above the capacity threshold, it will be rewarded, whereas getting below it will lead to zero rewards. For example, in a cell with a max capacity of 5 stations, if a station is ranked 3rd it will get rewarded, but if it is ranked 7th, it won’t receive any rewards.\n\nRead more about how our Cell Capacity algorithm works.\n\n* The cell capacity is currently set to the fixed value of 10 rewardable stations, for every cell.</string>
