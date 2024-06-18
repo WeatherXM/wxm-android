@@ -11,6 +11,7 @@ import com.weatherxm.databinding.ActivitySignupBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Validator
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -81,10 +82,10 @@ class SignupActivity : BaseActivity() {
                     .animation(R.raw.anim_success, false)
                     .title(getString(R.string.success))
                     .subtitle(result.data)
-                binding.form.visibility = View.GONE
-                binding.status.visibility = View.VISIBLE
-                binding.contactSupport.visibility = View.VISIBLE
-                binding.done.visibility = View.VISIBLE
+                binding.form.setVisible(false)
+                binding.status.setVisible(true)
+                binding.contactSupport.setVisible(true)
+                binding.done.setVisible(true)
 
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.SIGNUP.paramValue,
@@ -103,12 +104,12 @@ class SignupActivity : BaseActivity() {
                     .subtitle("${result.message}")
                     .action(getString(R.string.action_retry))
                     .listener {
-                        binding.form.visibility = View.VISIBLE
-                        binding.status.visibility = View.GONE
+                        binding.form.setVisible(true)
+                        binding.status.setVisible(false)
                         binding.done.visibility = View.INVISIBLE
                     }
-                binding.form.visibility = View.GONE
-                binding.status.visibility = View.VISIBLE
+                binding.form.setVisible(false)
+                binding.status.setVisible(true)
                 binding.contactSupport.visibility = View.INVISIBLE
                 binding.done.visibility = View.INVISIBLE
 
@@ -126,8 +127,8 @@ class SignupActivity : BaseActivity() {
                 binding.statusView
                     .clear()
                     .animation(R.raw.anim_loading)
-                binding.form.visibility = View.GONE
-                binding.status.visibility = View.VISIBLE
+                binding.form.setVisible(false)
+                binding.status.setVisible(true)
                 binding.contactSupport.visibility = View.INVISIBLE
                 binding.done.visibility = View.INVISIBLE
             }

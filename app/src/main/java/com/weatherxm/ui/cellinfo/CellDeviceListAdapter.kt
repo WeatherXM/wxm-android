@@ -1,7 +1,6 @@
 package com.weatherxm.ui.cellinfo
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -84,8 +83,8 @@ class CellDeviceListAdapter(
             binding.name.text = item.name
 
             if (item.currentWeather == null || item.currentWeather.isEmpty()) {
-                binding.weatherDataLayout.visibility = View.GONE
-                binding.noDataLayout.visibility = View.VISIBLE
+                binding.weatherDataLayout.setVisible(false)
+                binding.noDataLayout.setVisible(true)
                 binding.noDataMessage.text =
                     resources.getString(R.string.no_data_message_public_device)
             } else {

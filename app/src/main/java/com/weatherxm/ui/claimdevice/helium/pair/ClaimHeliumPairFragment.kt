@@ -11,8 +11,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
@@ -221,11 +219,9 @@ class ClaimHeliumPairFragment : BaseFragment() {
     private fun showInfoMessage(@StringRes title: Int, @StringRes subtitle: Int?) {
         binding.infoTitle.text = getString(title)
         with(binding.infoSubtitle) {
+            setVisible(subtitle != null)
             subtitle?.let {
                 setHtml(it)
-                visibility = VISIBLE
-            } ?: run {
-                visibility = GONE
             }
         }
         binding.infoContainer.setVisible(true)

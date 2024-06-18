@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
@@ -13,6 +12,7 @@ import com.weatherxm.R
 import com.weatherxm.R.styleable.EmptyView_empty_action
 import com.weatherxm.databinding.ViewEmptyBinding
 import com.weatherxm.ui.common.setHtml
+import com.weatherxm.ui.common.setVisible
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 class EmptyView : LinearLayout {
@@ -64,7 +64,7 @@ class EmptyView : LinearLayout {
     fun title(title: String?): EmptyView {
         binding.title.apply {
             text = title
-            visibility = if (title != null) View.VISIBLE else View.GONE
+            setVisible(title != null)
         }
         return this
     }
@@ -77,7 +77,7 @@ class EmptyView : LinearLayout {
     fun subtitle(subtitle: String?): EmptyView {
         binding.subtitle.apply {
             text = subtitle
-            visibility = if (!subtitle.isNullOrEmpty()) View.VISIBLE else View.GONE
+            setVisible(!subtitle.isNullOrEmpty())
         }
         return this
     }
@@ -101,7 +101,7 @@ class EmptyView : LinearLayout {
                     }
                 }
             }
-            visibility = View.VISIBLE
+            setVisible(true)
         }
         return this
     }
@@ -112,7 +112,7 @@ class EmptyView : LinearLayout {
         linkClickedListener: (() -> Unit)? = null
     ): EmptyView {
         if (subtitle == null) {
-            visibility = GONE
+            setVisible(false)
             return this
         }
         binding.subtitle.apply {
@@ -129,7 +129,7 @@ class EmptyView : LinearLayout {
                     }
                 }
             }
-            visibility = View.VISIBLE
+            setVisible(true)
         }
         return this
     }
@@ -146,14 +146,16 @@ class EmptyView : LinearLayout {
     fun action(label: String?): EmptyView {
         binding.action.apply {
             text = label
-            visibility = if (label != null) View.VISIBLE else View.GONE
+            setVisible(label != null)
         }
         return this
     }
 
     fun listener(listener: OnClickListener?): EmptyView {
-        binding.action.setOnClickListener(listener)
-        binding.action.visibility = if (listener != null) VISIBLE else GONE
+        binding.action.apply {
+            setOnClickListener(listener)
+            setVisible(listener != null)
+        }
         return this
     }
 

@@ -2,7 +2,6 @@ package com.weatherxm.ui.deleteaccount
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.View
 import androidx.activity.addCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,6 +14,7 @@ import com.weatherxm.databinding.ActivityDeleteAccountBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
@@ -130,9 +130,9 @@ class DeleteAccountActivity : BaseActivity() {
     private fun onPasswordVerification(resource: Resource<State>) {
         when (resource.status) {
             Status.ERROR -> {
-                binding.statusCard.visibility = View.GONE
-                binding.infoContainer.visibility = View.VISIBLE
-                binding.checkboxCard.visibility = View.VISIBLE
+                binding.statusCard.setVisible(false)
+                binding.infoContainer.setVisible(true)
+                binding.checkboxCard.setVisible(true)
                 if (resource.data?.failure is InvalidPassword) {
                     binding.passwordContainer.error = resource.message
                     binding.passwordContainer.isErrorEnabled = true
@@ -142,15 +142,15 @@ class DeleteAccountActivity : BaseActivity() {
                 }
             }
             Status.LOADING -> {
-                binding.infoContainer.visibility = View.GONE
-                binding.checkboxCard.visibility = View.GONE
-                binding.successButtons.visibility = View.GONE
-                binding.failureButtons.visibility = View.GONE
+                binding.infoContainer.setVisible(false)
+                binding.checkboxCard.setVisible(false)
+                binding.successButtons.setVisible(false)
+                binding.failureButtons.setVisible(false)
                 binding.empty.clear()
                 binding.empty.animation(R.raw.anim_loading)
                 binding.empty.title(R.string.validating_password)
                 binding.empty.subtitle(null)
-                binding.statusCard.visibility = View.VISIBLE
+                binding.statusCard.setVisible(true)
             }
             else -> {
                 toast(R.string.error_reach_out)
@@ -166,8 +166,8 @@ class DeleteAccountActivity : BaseActivity() {
                     empty.animation(R.raw.anim_trash_success, false)
                     empty.title(R.string.deletion_success_title)
                     empty.subtitle(R.string.deletion_success_message)
-                    successButtons.visibility = View.VISIBLE
-                    failureButtons.visibility = View.GONE
+                    successButtons.setVisible(true)
+                    failureButtons.setVisible(false)
                 }
                 Status.ERROR -> {
                     empty.clear()
@@ -180,8 +180,8 @@ class DeleteAccountActivity : BaseActivity() {
                     empty.listener {
                         navigator.openSupportCenter(this@DeleteAccountActivity)
                     }
-                    successButtons.visibility = View.GONE
-                    failureButtons.visibility = View.VISIBLE
+                    successButtons.setVisible(false)
+                    failureButtons.setVisible(true)
                 }
                 Status.LOADING -> {
                     empty.clear()

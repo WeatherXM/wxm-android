@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import com.weatherxm.R
@@ -58,7 +57,7 @@ class HeliumSetFrequencyView : LinearLayout {
 
     fun defaultState(frequencyState: FrequencyState, isOnClaiming: Boolean) {
         if (frequencyState.country.isNullOrEmpty()) {
-            binding.frequencySelectedText.visibility = View.GONE
+            binding.frequencySelectedText.setVisible(false)
         } else {
             binding.frequencySelectedText.text = if (isOnClaiming) {
                 context.getString(

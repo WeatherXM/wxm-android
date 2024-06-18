@@ -32,8 +32,8 @@ import com.weatherxm.data.RewardsTimestampScore
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsRewardsBinding
 import com.weatherxm.ui.common.DeviceRelation
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.classSimpleName
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -108,7 +108,7 @@ class RewardsFragment : BaseFragment() {
                 binding.totalCard.setVisible(false)
                 binding.dailyRewardsCard.setVisible(false)
                 binding.weeklyCard.setVisible(false)
-                binding.progress.visibility = View.VISIBLE
+                binding.progress.setVisible(true)
             } else {
                 binding.swiperefresh.isRefreshing = false
                 binding.progress.visibility = View.INVISIBLE

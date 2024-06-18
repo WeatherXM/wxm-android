@@ -2,8 +2,6 @@ package com.weatherxm.ui.explorer
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withCreated
 import com.mapbox.geojson.Point
@@ -16,6 +14,7 @@ import com.weatherxm.ui.common.Animation.ShowAnimation.SlideInFromBottom
 import com.weatherxm.ui.common.Contracts.ARG_CELL_CENTER
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.show
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.BaseMapFragment
@@ -109,7 +108,7 @@ class ExplorerActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener 
             }
         }
 
-        binding.mapDebugInfoContainer.visibility = if (BuildConfig.DEBUG) VISIBLE else GONE
+        binding.mapDebugInfoContainer.setVisible(BuildConfig.DEBUG)
 
         with(intent.parcelable<Location>(ARG_CELL_CENTER)) {
             this?.let {

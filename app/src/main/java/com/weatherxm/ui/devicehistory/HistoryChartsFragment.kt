@@ -124,7 +124,7 @@ class HistoryChartsFragment : BaseFragment() {
                 if (binding.swiperefresh.isRefreshing) {
                     binding.empty.clear().setVisible(false)
                 } else {
-                    binding.chartsContainer.visibility = View.GONE
+                    binding.chartsContainer.setVisible(false)
                     binding.empty.clear().animation(R.raw.anim_loading).setVisible(true)
                 }
             }

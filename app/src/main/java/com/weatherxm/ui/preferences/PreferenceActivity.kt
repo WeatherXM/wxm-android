@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityPreferencesBinding
@@ -42,7 +41,7 @@ class PreferenceActivity : BaseActivity() {
         }
 
         if (model.hasDismissedSurveyPrompt()) {
-            binding.surveyPrompt.visibility = View.GONE
+            binding.surveyPrompt.setVisible(false)
         }
 
         model.onDismissSurveyPrompt().observe(this) {

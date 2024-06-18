@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
@@ -56,7 +55,7 @@ class MessageCardView : LinearLayout {
         try {
             attributes.getString(R.styleable.MessageCardView_message_title)?.let {
                 title(it)
-            } ?: binding.title.hide(null)
+            } ?: binding.title.setVisible(false)
 
             val text = attributes.getString(R.styleable.MessageCardView_message_message)
             val htmlText = attributes.getString(R.styleable.MessageCardView_message_html_message)
@@ -116,7 +115,7 @@ class MessageCardView : LinearLayout {
     fun title(title: String?): MessageCardView {
         binding.title.apply {
             text = title
-            visibility = if (title != null) View.VISIBLE else View.GONE
+            setVisible(title != null)
         }
         return this
     }
@@ -129,7 +128,7 @@ class MessageCardView : LinearLayout {
     fun message(subtitle: String?): MessageCardView {
         binding.message.apply {
             text = subtitle
-            visibility = if (subtitle != null) View.VISIBLE else View.GONE
+            setVisible(subtitle != null)
         }
         return this
     }
@@ -177,7 +176,7 @@ class MessageCardView : LinearLayout {
                     }
                 }
             }
-            visibility = View.VISIBLE
+            setVisible(true)
         }
         return this
     }
@@ -190,7 +189,7 @@ class MessageCardView : LinearLayout {
         with(binding.action) {
             text = label
             setOnClickListener(listener)
-            visibility = VISIBLE
+            setVisible(true)
             if (endIcon != null) {
                 icon = endIcon
                 iconGravity = ICON_GRAVITY_END
@@ -207,7 +206,7 @@ class MessageCardView : LinearLayout {
         with(binding.actionPrimary) {
             text = label
             setOnClickListener(listener)
-            visibility = VISIBLE
+            setVisible(true)
             if (startIcon != null) {
                 icon = startIcon
                 iconGravity = ICON_GRAVITY_START
@@ -217,7 +216,7 @@ class MessageCardView : LinearLayout {
     }
 
     fun closeButton(listener: OnClickListener): MessageCardView {
-        binding.closeButton.visibility = VISIBLE
+        binding.closeButton.setVisible(true)
         binding.closeButton.setOnClickListener(listener)
         return this
     }

@@ -79,7 +79,7 @@ class DeviceSettingsActivity : BaseActivity() {
 
         model.onLoading().observe(this) {
             if (it) {
-                binding.progress.visibility = View.VISIBLE
+                binding.progress.setVisible(true)
             } else {
                 binding.progress.visibility = View.INVISIBLE
             }

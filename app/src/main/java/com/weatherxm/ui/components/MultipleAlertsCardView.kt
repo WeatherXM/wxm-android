@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -41,7 +40,7 @@ class MultipleAlertsCardView : LinearLayout {
     fun title(subtitle: String?): MultipleAlertsCardView {
         binding.title.apply {
             text = subtitle
-            visibility = if (subtitle != null) View.VISIBLE else View.GONE
+            setVisible(subtitle != null)
         }
         return this
     }
@@ -49,7 +48,7 @@ class MultipleAlertsCardView : LinearLayout {
     fun action(listener: OnClickListener): MultipleAlertsCardView {
         with(binding.action) {
             setOnClickListener(listener)
-            visibility = VISIBLE
+            setVisible(true)
         }
         return this
     }

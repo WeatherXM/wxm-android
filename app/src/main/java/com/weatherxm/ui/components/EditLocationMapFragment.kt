@@ -83,7 +83,7 @@ class EditLocationMapFragment : BaseMapFragment() {
             val container = it.findViewById<MaterialCardView>(R.id.addressContainer)
             if (address != null) {
                 it.findViewById<MaterialTextView>(R.id.address).text = address
-                container.visibility = View.VISIBLE
+                container.setVisible(true)
             } else {
                 container.visibility = View.INVISIBLE
             }

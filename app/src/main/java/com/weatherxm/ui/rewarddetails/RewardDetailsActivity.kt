@@ -1,7 +1,6 @@
 package com.weatherxm.ui.rewarddetails
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import coil.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -291,7 +290,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 model.fetchRewardDetails(timestamp)
             }
         binding.mainContainer.setVisible(false)
-        binding.statusView.visibility = View.VISIBLE
+        binding.statusView.setVisible(true)
     }
 
     private fun onIssueCard(

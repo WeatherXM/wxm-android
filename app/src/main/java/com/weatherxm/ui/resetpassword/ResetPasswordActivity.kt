@@ -1,7 +1,6 @@
 package com.weatherxm.ui.resetpassword
 
 import android.os.Bundle
-import android.view.View
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
@@ -9,6 +8,7 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityResetPasswordBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.onTextChanged
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Validator
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -59,8 +59,8 @@ class ResetPasswordActivity : BaseActivity() {
                     .animation(R.raw.anim_success, false)
                     .title(getString(R.string.success_reset_password_title))
                     .subtitle(getString(R.string.success_reset_password_text))
-                binding.form.visibility = View.GONE
-                binding.status.visibility = View.VISIBLE
+                binding.form.setVisible(false)
+                binding.status.setVisible(true)
 
                 analytics.trackEventViewContent(
                     AnalyticsService.ParamValue.SEND_EMAIL_FORGOT_PASSWORD.paramValue,
@@ -76,8 +76,8 @@ class ResetPasswordActivity : BaseActivity() {
                     .subtitle("${result.message}")
                     .action(getString(R.string.action_retry))
                     .listener {
-                        binding.form.visibility = View.VISIBLE
-                        binding.status.visibility = View.GONE
+                        binding.form.setVisible(true)
+                        binding.status.setVisible(false)
                     }
 
                 analytics.trackEventViewContent(
@@ -90,8 +90,8 @@ class ResetPasswordActivity : BaseActivity() {
                 binding.statusView
                     .clear()
                     .animation(R.raw.anim_loading)
-                binding.form.visibility = View.GONE
-                binding.status.visibility = View.VISIBLE
+                binding.form.setVisible(false)
+                binding.status.setVisible(true)
             }
         }
     }

@@ -4,11 +4,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewProfileItemCardBinding
-import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.setVisible
 
 class ProfileItemCardView : LinearLayout {
@@ -42,7 +40,7 @@ class ProfileItemCardView : LinearLayout {
         try {
             attributes.getString(R.styleable.ProfileItemCardView_profile_item_title)?.let {
                 title(it)
-            } ?: binding.title.hide(null)
+            } ?: binding.title.setVisible(false)
 
             val subtitleText =
                 attributes.getString(R.styleable.ProfileItemCardView_profile_item_subtitle)
@@ -61,10 +59,10 @@ class ProfileItemCardView : LinearLayout {
         }
     }
 
-    fun title(subtitle: String?): ProfileItemCardView {
+    fun title(title: String?): ProfileItemCardView {
         binding.title.apply {
-            text = subtitle
-            visibility = if (subtitle != null) View.VISIBLE else View.GONE
+            text = title
+            setVisible(title != null)
         }
         return this
     }
@@ -72,7 +70,7 @@ class ProfileItemCardView : LinearLayout {
     fun subtitle(subtitle: String?): ProfileItemCardView {
         binding.subtitle.apply {
             text = subtitle
-            visibility = if (subtitle != null) View.VISIBLE else View.GONE
+            setVisible(subtitle != null)
         }
         return this
     }
@@ -80,7 +78,7 @@ class ProfileItemCardView : LinearLayout {
     fun chipSubtitle(subtitle: String?): ProfileItemCardView {
         binding.chipSubtitle.apply {
             text = subtitle
-            visibility = if (subtitle != null) View.VISIBLE else View.GONE
+            setVisible(subtitle != null)
         }
         return this
     }
@@ -92,7 +90,7 @@ class ProfileItemCardView : LinearLayout {
         with(binding.action) {
             text = label
             setOnClickListener(listener)
-            visibility = VISIBLE
+            setVisible(true)
         }
         return this
     }

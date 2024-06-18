@@ -62,7 +62,7 @@ class CurrentFragment : BaseFragment() {
             if (it && binding.swiperefresh.isRefreshing) {
                 binding.progress.visibility = View.INVISIBLE
             } else if (it) {
-                binding.progress.visibility = View.VISIBLE
+                binding.progress.setVisible(true)
             } else {
                 binding.swiperefresh.isRefreshing = false
                 binding.progress.visibility = View.INVISIBLE

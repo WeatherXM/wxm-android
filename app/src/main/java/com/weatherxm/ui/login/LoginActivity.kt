@@ -18,6 +18,7 @@ import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Validator
@@ -149,7 +150,7 @@ class LoginActivity : BaseActivity() {
             }
             Status.LOADING -> {
                 setInputEnabled(false)
-                binding.loading.visibility = View.VISIBLE
+                binding.loading.setVisible(true)
             }
         }
     }
@@ -210,7 +211,7 @@ class LoginActivity : BaseActivity() {
                 setInputEnabled(true)
             }
             Status.LOADING -> {
-                binding.loading.visibility = View.VISIBLE
+                binding.loading.setVisible(true)
                 setInputEnabled(false)
             }
         }

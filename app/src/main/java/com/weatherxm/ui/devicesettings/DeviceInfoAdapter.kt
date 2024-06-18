@@ -1,7 +1,6 @@
 package com.weatherxm.ui.devicesettings
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.DiffUtil
@@ -9,6 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.databinding.ListItemDeviceInfoBinding
+import com.weatherxm.ui.common.setVisible
 import com.weatherxm.util.Resources
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -48,14 +48,14 @@ class DeviceInfoAdapter(
                     setOnClickListener {
                         listener.invoke(action.actionType)
                     }
-                    visibility = View.VISIBLE
+                    setVisible(true)
                 }
             }
 
             item.warning?.let { warning ->
                 with(binding.warningBox) {
                     htmlMessage(warning)
-                    visibility = View.VISIBLE
+                    setVisible(true)
                 }
             }
         }

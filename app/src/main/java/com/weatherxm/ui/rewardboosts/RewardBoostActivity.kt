@@ -2,7 +2,6 @@ package com.weatherxm.ui.rewardboosts
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
 import coil.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
@@ -133,7 +132,7 @@ class RewardBoostActivity : BaseActivity() {
                 model.fetchRewardBoost(boostReward)
             }
         binding.mainContainer.setVisible(false)
-        binding.statusView.visibility = View.VISIBLE
+        binding.statusView.setVisible(true)
     }
 
     override fun onResume() {

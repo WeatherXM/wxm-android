@@ -159,14 +159,14 @@ fun View.show(
     animation: Animation.ShowAnimation? = Animation.ShowAnimation.FadeIn,
     listener: Animator.AnimatorListener? = null
 ) {
-    if (animation == null) this.visibility = View.VISIBLE else animate(this, animation, listener)
+    if (animation == null) this.setVisible(true) else animate(this, animation, listener)
 }
 
 fun View.hide(
     animation: Animation.HideAnimation? = Animation.HideAnimation.FadeOut,
     listener: Animator.AnimatorListener? = null
 ) {
-    if (animation == null) this.visibility = View.GONE else animate(this, animation, listener)
+    if (animation == null) this.setVisible(false) else animate(this, animation, listener)
 }
 
 fun View.setVisible(visible: Boolean) {

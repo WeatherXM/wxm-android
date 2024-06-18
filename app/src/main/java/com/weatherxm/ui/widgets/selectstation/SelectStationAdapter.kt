@@ -1,7 +1,6 @@
 package com.weatherxm.ui.widgets.selectstation
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -68,11 +67,7 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
 
         fun bind(item: UIDevice, isSelected: Boolean) {
             binding.root.isSelected = isSelected
-            binding.selectedIcon.visibility = if (isSelected) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
+            binding.selectedIcon.setVisible(isSelected)
 
             with(binding.relationIcon) {
                 when (item.relation) {
@@ -100,8 +95,8 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
             }
 
             if (item.currentWeather == null || item.currentWeather.isEmpty()) {
-                binding.weatherDataLayout.visibility = View.GONE
-                binding.noDataLayout.visibility = View.VISIBLE
+                binding.weatherDataLayout.setVisible(false)
+                binding.noDataLayout.setVisible(true)
             } else {
                 setWeatherData(item)
             }

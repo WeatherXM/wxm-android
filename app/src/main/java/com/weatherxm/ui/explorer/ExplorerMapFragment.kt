@@ -292,7 +292,7 @@ class ExplorerMapFragment : BaseMapFragment() {
                 binding.searchResultsStatusView.setVisible(false)
                 binding.recent.setVisible(false)
                 binding.searchEmptyResultsContainer.setVisible(false)
-                binding.searchProgress.visibility = View.VISIBLE
+                binding.searchProgress.setVisible(true)
             }
         }
     }
@@ -323,7 +323,7 @@ class ExplorerMapFragment : BaseMapFragment() {
                 binding.progress.visibility = View.INVISIBLE
             }
             Status.LOADING -> {
-                binding.progress.visibility = View.VISIBLE
+                binding.progress.setVisible(true)
             }
         }
     }

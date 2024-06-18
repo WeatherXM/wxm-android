@@ -11,6 +11,7 @@ import com.weatherxm.databinding.ListItemScannedDeviceBinding
 import com.weatherxm.ui.claimdevice.helium.pair.ScannedDevicesListAdapter.ScannedDeviceViewHolder
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.ScannedDevice
+import com.weatherxm.ui.common.setVisible
 
 class ScannedDevicesListAdapter(
     private val scannedDeviceListener: (ScannedDevice) -> Unit
@@ -37,7 +38,7 @@ class ScannedDevicesListAdapter(
             binding.root.setOnClickListener {
                 listener(scannedDevice)
                 binding.typeIcon.visibility = View.INVISIBLE
-                binding.loadingConnection.visibility = View.VISIBLE
+                binding.loadingConnection.setVisible(true)
             }
         }
 
@@ -55,7 +56,7 @@ class ScannedDevicesListAdapter(
             if (position == currentList.size - 1) {
                 binding.bottomBorder.visibility = View.INVISIBLE
             } else {
-                binding.bottomBorder.visibility = View.VISIBLE
+                binding.bottomBorder.setVisible(true)
             }
         }
     }
