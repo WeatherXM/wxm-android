@@ -8,7 +8,6 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.BatteryState
 import com.weatherxm.data.DeviceInfo
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.ui.devicesettings.BaseDeviceSettingsViewModel
 import com.weatherxm.ui.devicesettings.UIDeviceInfo
@@ -159,19 +158,5 @@ class DeviceSettingsWifiViewModel(
                 )
             )
         }
-    }
-
-    override fun parseDeviceInfoToShare(deviceInfo: UIDeviceInfo): String {
-        var sharingText = String.empty()
-        deviceInfo.default.forEach {
-            sharingText += "${it}\n"
-        }
-        deviceInfo.gateway.forEach {
-            sharingText += "${it}\n"
-        }
-        deviceInfo.station.forEach {
-            sharingText += "${it}\n"
-        }
-        return sharingText
     }
 }

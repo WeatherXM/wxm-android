@@ -9,7 +9,6 @@ import com.weatherxm.data.BatteryState
 import com.weatherxm.data.DeviceInfo
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.capitalizeWords
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.devicesettings.ActionType
 import com.weatherxm.ui.devicesettings.BaseDeviceSettingsViewModel
 import com.weatherxm.ui.devicesettings.UIDeviceAction
@@ -161,13 +160,5 @@ class DeviceSettingsHeliumViewModel(
                 )
             )
         }
-    }
-
-    override fun parseDeviceInfoToShare(deviceInfo: UIDeviceInfo): String {
-        var sharingText = String.empty()
-        deviceInfo.default.forEach {
-            sharingText += "${it}\n"
-        }
-        return sharingText
     }
 }

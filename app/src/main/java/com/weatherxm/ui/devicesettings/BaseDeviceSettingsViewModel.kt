@@ -11,6 +11,7 @@ import com.weatherxm.data.ApiError
 import com.weatherxm.data.DeviceInfo
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.util.Resources
@@ -125,6 +126,19 @@ abstract class BaseDeviceSettingsViewModel(
         }
     }
 
+    fun parseDeviceInfoToShare(deviceInfo: UIDeviceInfo): String {
+        var sharingText = String.empty()
+        deviceInfo.default.forEach {
+            sharingText += "${it}\n"
+        }
+        deviceInfo.gateway.forEach {
+            sharingText += "${it}\n"
+        }
+        deviceInfo.station.forEach {
+            sharingText += "${it}\n"
+        }
+        return sharingText
+    }
+
     abstract fun handleInfo(info: DeviceInfo)
-    abstract fun parseDeviceInfoToShare(deviceInfo: UIDeviceInfo): String
 }
