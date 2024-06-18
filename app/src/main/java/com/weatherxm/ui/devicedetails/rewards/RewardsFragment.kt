@@ -34,6 +34,7 @@ import com.weatherxm.databinding.FragmentDeviceDetailsRewardsBinding
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.setInvisible
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -103,7 +104,7 @@ class RewardsFragment : BaseFragment() {
 
         model.onLoading().observe(viewLifecycleOwner) {
             if (it && binding.swiperefresh.isRefreshing) {
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.setInvisible()
             } else if (it) {
                 binding.totalCard.setVisible(false)
                 binding.dailyRewardsCard.setVisible(false)
@@ -111,7 +112,7 @@ class RewardsFragment : BaseFragment() {
                 binding.progress.setVisible(true)
             } else {
                 binding.swiperefresh.isRefreshing = false
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.setInvisible()
             }
         }
 

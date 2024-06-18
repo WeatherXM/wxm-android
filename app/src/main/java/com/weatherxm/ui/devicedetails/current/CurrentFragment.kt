@@ -14,6 +14,7 @@ import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setCardStroke
+import com.weatherxm.ui.common.setInvisible
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -60,12 +61,12 @@ class CurrentFragment : BaseFragment() {
 
         model.onLoading().observe(viewLifecycleOwner) {
             if (it && binding.swiperefresh.isRefreshing) {
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.setInvisible()
             } else if (it) {
                 binding.progress.setVisible(true)
             } else {
                 binding.swiperefresh.isRefreshing = false
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.setInvisible()
             }
         }
 
@@ -113,7 +114,7 @@ class CurrentFragment : BaseFragment() {
     }
 
     private fun onDeviceUpdated(device: UIDevice) {
-        binding.progress.visibility = View.INVISIBLE
+        binding.progress.setInvisible()
         setAlerts(device)
         if (device.currentWeather == null || device.currentWeather.isEmpty()) {
             binding.historicalCharts.setVisible(false)

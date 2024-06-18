@@ -14,6 +14,7 @@ import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.blockParentViewPagerOnScroll
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setHtml
+import com.weatherxm.ui.common.setInvisible
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -104,14 +105,14 @@ class ForecastFragment : BaseFragment() {
 
         model.onLoading().observe(viewLifecycleOwner) {
             if (it && binding.swiperefresh.isRefreshing) {
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.setInvisible()
             } else if (it) {
                 binding.dailyForecastTitle.setVisible(false)
                 binding.hourlyForecastTitle.setVisible(false)
                 binding.progress.setVisible(true)
             } else {
                 binding.swiperefresh.isRefreshing = false
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.setInvisible()
             }
         }
 

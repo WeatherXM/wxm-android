@@ -18,6 +18,7 @@ import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setCardStroke
+import com.weatherxm.ui.common.setInvisible
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
@@ -111,7 +112,7 @@ class ProfileFragment : BaseFragment() {
                 binding.progress.setVisible(true)
             } else {
                 binding.swiperefresh.isRefreshing = false
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.setInvisible()
             }
         }
 

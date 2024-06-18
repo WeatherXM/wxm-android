@@ -2,7 +2,6 @@ package com.weatherxm.ui.devicesettings
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import coil.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -19,6 +18,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
+import com.weatherxm.ui.common.setInvisible
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
@@ -81,7 +81,7 @@ class DeviceSettingsActivity : BaseActivity() {
             if (it) {
                 binding.progress.setVisible(true)
             } else {
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.setInvisible()
             }
         }
 
@@ -90,7 +90,7 @@ class DeviceSettingsActivity : BaseActivity() {
         }
 
         model.onError().observe(this) {
-            binding.progress.visibility = View.INVISIBLE
+            binding.progress.setInvisible()
             showSnackbarMessage(binding.root, it.errorMessage, it.retryFunction)
         }
 

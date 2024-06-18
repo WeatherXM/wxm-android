@@ -1,7 +1,6 @@
 package com.weatherxm.ui.claimdevice.helium.pair
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -11,6 +10,7 @@ import com.weatherxm.databinding.ListItemScannedDeviceBinding
 import com.weatherxm.ui.claimdevice.helium.pair.ScannedDevicesListAdapter.ScannedDeviceViewHolder
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.ScannedDevice
+import com.weatherxm.ui.common.setInvisible
 import com.weatherxm.ui.common.setVisible
 
 class ScannedDevicesListAdapter(
@@ -37,7 +37,7 @@ class ScannedDevicesListAdapter(
         init {
             binding.root.setOnClickListener {
                 listener(scannedDevice)
-                binding.typeIcon.visibility = View.INVISIBLE
+                binding.typeIcon.setInvisible()
                 binding.loadingConnection.setVisible(true)
             }
         }
@@ -54,7 +54,7 @@ class ScannedDevicesListAdapter(
             binding.description.text = item.name
 
             if (position == currentList.size - 1) {
-                binding.bottomBorder.visibility = View.INVISIBLE
+                binding.bottomBorder.setInvisible()
             } else {
                 binding.bottomBorder.setVisible(true)
             }

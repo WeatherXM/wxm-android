@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.view.KeyEvent.ACTION_UP
 import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.MenuItem
-import android.view.View
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +30,7 @@ import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
+import com.weatherxm.ui.common.setInvisible
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseMapFragment
@@ -219,7 +219,7 @@ class ExplorerMapFragment : BaseMapFragment() {
                     return@onTextChanged
                 }
                 searchModel.cancelNetworkSearchJob()
-                binding.searchProgress.visibility = View.INVISIBLE
+                binding.searchProgress.setInvisible()
                 if (it.isEmpty()) {
                     binding.recent.setVisible(true)
                     searchModel.getRecentSearches()
@@ -271,10 +271,10 @@ class ExplorerMapFragment : BaseMapFragment() {
                     binding.searchEmptyResultsContainer.setVisible(false)
                     adapter.updateData(binding.searchView.text.toString(), resource.data)
                 }
-                binding.searchProgress.visibility = View.INVISIBLE
+                binding.searchProgress.setInvisible()
             }
             Status.ERROR -> {
-                binding.searchProgress.visibility = View.INVISIBLE
+                binding.searchProgress.setInvisible()
                 binding.resultsRecycler.setVisible(false)
                 binding.searchEmptyResultsContainer.setVisible(false)
                 binding.searchResultsStatusView
@@ -303,7 +303,7 @@ class ExplorerMapFragment : BaseMapFragment() {
             Status.SUCCESS -> {
                 if (resource.data?.geoJsonSource == null) {
                     onPolygonPointsUpdated(resource.data?.polygonPoints)
-                    binding.progress.visibility = View.INVISIBLE
+                    binding.progress.setInvisible()
                     return
                 }
 
@@ -317,10 +317,10 @@ class ExplorerMapFragment : BaseMapFragment() {
                     mapStyle?.addLayerAbove(model.getHeatMapLayer(), "waterway-label")
                 }
                 onPolygonPointsUpdated(resource.data.polygonPoints)
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.setInvisible()
             }
             Status.ERROR -> {
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.setInvisible()
             }
             Status.LOADING -> {
                 binding.progress.setVisible(true)

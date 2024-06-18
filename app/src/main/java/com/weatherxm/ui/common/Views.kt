@@ -173,6 +173,10 @@ fun View.setVisible(visible: Boolean) {
     if (visible) this.visibility = View.VISIBLE else this.visibility = View.GONE
 }
 
+fun View.setInvisible() {
+    this.visibility = View.INVISIBLE
+}
+
 fun View.isVisibleOnScreen(): Boolean {
     if (!isShown) {
         return false

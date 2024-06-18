@@ -1,7 +1,6 @@
 package com.weatherxm.ui.signup
 
 import android.os.Bundle
-import android.view.View
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
@@ -11,6 +10,7 @@ import com.weatherxm.databinding.ActivitySignupBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
+import com.weatherxm.ui.common.setInvisible
 import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Validator
@@ -106,12 +106,12 @@ class SignupActivity : BaseActivity() {
                     .listener {
                         binding.form.setVisible(true)
                         binding.status.setVisible(false)
-                        binding.done.visibility = View.INVISIBLE
+                        binding.done.setInvisible()
                     }
                 binding.form.setVisible(false)
                 binding.status.setVisible(true)
-                binding.contactSupport.visibility = View.INVISIBLE
-                binding.done.visibility = View.INVISIBLE
+                binding.contactSupport.setInvisible()
+                binding.done.setInvisible()
 
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.SIGNUP.paramValue,
@@ -129,8 +129,8 @@ class SignupActivity : BaseActivity() {
                     .animation(R.raw.anim_loading)
                 binding.form.setVisible(false)
                 binding.status.setVisible(true)
-                binding.contactSupport.visibility = View.INVISIBLE
-                binding.done.visibility = View.INVISIBLE
+                binding.contactSupport.setInvisible()
+                binding.done.setInvisible()
             }
         }
     }

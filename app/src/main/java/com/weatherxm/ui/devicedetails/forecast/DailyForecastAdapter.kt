@@ -1,13 +1,13 @@
 package com.weatherxm.ui.devicedetails.forecast
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.databinding.ListItemForecastBinding
 import com.weatherxm.ui.common.UIForecastDay
+import com.weatherxm.ui.common.setInvisible
 import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndMonthDay
 import com.weatherxm.util.Resources
@@ -78,7 +78,7 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
             binding.date.text = item.date.getRelativeDayAndMonthDay(itemView.context)
             binding.icon.setWeatherAnimation(item.icon)
             if (minTemperature == Float.MAX_VALUE || maxTemperature == Float.MIN_VALUE) {
-                binding.temperature.visibility = View.INVISIBLE
+                binding.temperature.setInvisible()
             } else {
                 binding.temperature.apply {
                     valueFrom = minTemperature
