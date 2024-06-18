@@ -137,7 +137,7 @@ interface AnalyticsService {
         FAILURE("Failure"),
         SUCCESS_ID("success"),
         FAILURE_ID("failure"),
-        CLAIMING_RESULT_ID("claming_result"),
+        CLAIMING_RESULT_ID("claiming_result"),
         CHANGE_STATION_NAME_RESULT_ID("change_station_name_result"),
         CHANGE_FREQUENCY_RESULT_ID("change_frequency_result"),
         WALLET_MISSING("Wallet Missing"),

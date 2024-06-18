@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="annotation_issue_info_text">
+        <item quantity="one"><![CDATA[<b>1 minor issue</b> affecting station rewards.]]></item>
+        <item quantity="other"><![CDATA[<b>%d minor issues</b> affecting station rewards.]]></item>
+    </plurals>
+    <plurals name="annotation_issue_warn_error_text">
+        <item quantity="one"><![CDATA[<b>1 issue</b> affecting station rewards.]]></item>
+        <item quantity="other"><![CDATA[<b>%d issues</b> affecting station rewards.]]></item>
+    </plurals>
+    <plurals name="cell_active_station">
+        <item quantity="one">1 active station</item>
+        <item quantity="other">%d active stations</item>
+    </plurals>
+</resources>

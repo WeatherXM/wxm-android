@@ -51,7 +51,6 @@ class AddressRepositoryImpl(
         query: String
     ): Either<Failure, List<SearchSuggestion>> {
         val countryCode = locationDataSource.getUserCountry()
-        var retriedWithoutCountryLimit = false
 
         return cacheSearch.getSearchSuggestions(query, countryCode)
             .onRight {
@@ -60,8 +59,7 @@ class AddressRepositoryImpl(
             .handleErrorWith {
                 networkSearch.getSearchSuggestions(query, countryCode).flatMap { countryResults ->
                     // If no results, search again globally without country limitations
-                    if (countryResults.isEmpty() && !retriedWithoutCountryLimit) {
-                        retriedWithoutCountryLimit = true
+                    if (countryResults.isEmpty()) {
                         networkSearch.getSearchSuggestions(query).onRight { globalResults ->
                             Timber.d("Saving suggestions in cache [query=$query]")
                             cacheSearch.setSearchSuggestions(query, globalResults)

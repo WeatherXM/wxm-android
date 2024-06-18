@@ -25,6 +25,7 @@
         android:layout_width="12dp"
         android:layout_height="16dp"
         android:clickable="false"
+        android:contentDescription="@string/action_open"
         android:src="@drawable/ic_open_new" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

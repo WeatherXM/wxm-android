@@ -44,7 +44,6 @@ import androidx.core.text.HtmlCompat
 import androidx.core.text.parseAsHtml
 import androidx.core.text.toHtml
 import androidx.core.text.toSpanned
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -172,14 +171,6 @@ fun View.hide(
 
 fun View.setVisible(visible: Boolean) {
     if (visible) this.visibility = View.VISIBLE else this.visibility = View.GONE
-}
-
-fun View.toggleVisibility() {
-    if (this.isVisible) {
-        hide()
-    } else {
-        show()
-    }
 }
 
 fun View.isVisibleOnScreen(): Boolean {

@@ -95,6 +95,7 @@
                 android:layout_height="24dp"
                 android:padding="2dp"
                 android:src="@drawable/ic_close"
+                android:contentDescription="@string/action_close"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
