@@ -13,7 +13,7 @@ import com.weatherxm.data.SeverityLevel
 import com.weatherxm.databinding.ViewDailyRewardsCardBinding
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.getRewardIcon
@@ -63,7 +63,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
         val formattedTimestamp = data.timestamp?.getFormattedDate(true)
         binding.dailyRewardTimestamp.text =
             context.getString(R.string.earnings_for, formattedTimestamp ?: EMPTY_VALUE)
-        binding.dailyRewardTimestamp.setVisible(formattedTimestamp != null)
+        binding.dailyRewardTimestamp.visible(formattedTimestamp != null)
 
         binding.reward.text = data.totalReward?.let {
             context.getString(R.string.reward, formatTokens(it.toBigDecimal()))
@@ -86,8 +86,8 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
                 AppCompatResources.getDrawable(context, R.drawable.ic_error_hex_filled)
             )
             binding.boostsIcon.setColor(R.color.midGrey)
-            binding.boosts.setVisible(false)
-            binding.noActiveBoosts.setVisible(true)
+            binding.boosts.visible(false)
+            binding.noActiveBoosts.visible(true)
         } else {
             binding.boostsIcon.setImageDrawable(
                 AppCompatResources.getDrawable(context, R.drawable.ic_checkmark_hex_filled)
@@ -96,10 +96,10 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             binding.boosts.text = context.getString(
                 R.string.wxm_amount, formatTokens(data.totalBoostReward.toBigDecimal())
             )
-            binding.noActiveBoosts.setVisible(false)
-            binding.boosts.setVisible(true)
+            binding.noActiveBoosts.visible(false)
+            binding.boosts.visible(true)
         }
-        binding.viewRewardDetails.setVisible(
+        binding.viewRewardDetails.visible(
             onViewDetails != null && data.annotationSummary.isNullOrEmpty()
         )
         setupAnnotations(data.annotationSummary, useShortAnnotationText, onViewDetails)
@@ -113,7 +113,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
         val sortedSeverities = annotations?.map { it.severityLevel }?.sortedByDescending { it }
 
         if (sortedSeverities.isNullOrEmpty()) {
-            binding.annotationCard.setVisible(false)
+            binding.annotationCard.visible(false)
             binding.parentCard.strokeWidth = 0
             return
         }
@@ -197,7 +197,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
                     onViewDetails.invoke()
                 }
             }
-            setVisible(true)
+            visible(true)
         }
     }
 }

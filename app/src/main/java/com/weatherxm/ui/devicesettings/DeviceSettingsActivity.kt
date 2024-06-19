@@ -2,7 +2,6 @@ package com.weatherxm.ui.devicesettings
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import coil.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -18,7 +17,8 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.MapboxUtils.getMinimap
@@ -78,9 +78,9 @@ class DeviceSettingsActivity : BaseActivity() {
 
         model.onLoading().observe(this) {
             if (it) {
-                binding.progress.visibility = View.VISIBLE
+                binding.progress.visible(true)
             } else {
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.invisible()
             }
         }
 
@@ -89,7 +89,7 @@ class DeviceSettingsActivity : BaseActivity() {
         }
 
         model.onError().observe(this) {
-            binding.progress.visibility = View.INVISIBLE
+            binding.progress.invisible()
             showSnackbarMessage(binding.root, it.errorMessage, it.retryFunction)
         }
 
@@ -129,7 +129,7 @@ class DeviceSettingsActivity : BaseActivity() {
         binding.editLocationBtn.setOnClickListener {
             navigator.showEditLocation(editLocationLauncher, this, model.device)
         }
-        binding.editLocationBtn.setVisible(model.device.isOwned())
+        binding.editLocationBtn.visible(model.device.isOwned())
 
         if (model.device.relation == DeviceRelation.FOLLOWED) {
             binding.locationDesc.setHtml(
@@ -159,7 +159,7 @@ class DeviceSettingsActivity : BaseActivity() {
         }
         getMinimap(binding.locationLayout.width, deviceMapLocation, model.device.hex7)?.let {
             binding.locationMinimap.loadImage(imageLoader, it)
-        } ?: binding.locationMinimap.setVisible(false)
+        } ?: binding.locationMinimap.visible(false)
     }
 
     private fun onRemoveStation() {
@@ -190,18 +190,17 @@ class DeviceSettingsActivity : BaseActivity() {
 
     private fun setupInfo() {
         binding.stationName.text = model.device.getDefaultOrFriendlyName()
-        binding.deleteStationCard.setVisible(model.device.isOwned())
-        if (!model.device.isOwned() || !model.device.isHelium()) {
-            binding.frequencyTitle.setVisible(false)
-            binding.frequencyDesc.setVisible(false)
-            binding.changeFrequencyBtn.setVisible(false)
-            binding.rebootStationContainer.setVisible(false)
-            binding.dividerBelowFrequency.setVisible(false)
-            binding.dividerBelowStationName.setVisible(false)
+        binding.deleteStationCard.visible(model.device.isOwned())
+        if (!model.device.isOwned() || model.device.isHelium()) {
+            binding.frequencyTitle.visible(false)
+            binding.frequencyDesc.visible(false)
+            binding.changeFrequencyBtn.visible(false)
+            binding.rebootStationContainer.visible(false)
+            binding.dividerBelowFrequency.visible(false)
+            binding.dividerBelowStationName.visible(false)
         }
 
         if (model.device.isHelium()) {
-            // binding.reconfigureWifiContainer.setVisible(false)
             with(binding.frequencyDesc) {
                 movementMethod =
                     me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {

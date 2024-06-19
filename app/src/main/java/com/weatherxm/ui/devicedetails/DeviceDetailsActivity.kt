@@ -33,7 +33,7 @@ import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setErrorChip
 import com.weatherxm.ui.common.setStatusChip
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicedetails.current.CurrentFragment
@@ -174,7 +174,7 @@ class DeviceDetailsActivity : BaseActivity() {
 
     private fun onFollowStatus(followStatus: Resource<Unit>, dialogOverlay: AlertDialog) {
         model.onFollowStatus().observe(this) {
-            binding.loadingAnimation.setVisible(followStatus.status == Status.LOADING)
+            binding.loadingAnimation.visible(followStatus.status == Status.LOADING)
             when (followStatus.status) {
                 Status.SUCCESS -> dialogOverlay.cancel()
                 Status.ERROR -> {
@@ -244,7 +244,7 @@ class DeviceDetailsActivity : BaseActivity() {
                     isEnabled = true
                 }
 
-                null -> setVisible(false)
+                null -> visible(false)
             }
         }
 
@@ -306,7 +306,7 @@ class DeviceDetailsActivity : BaseActivity() {
                 setupAlertChipClickListener(AnalyticsService.ParamValue.LOW_BATTERY_ID.paramValue)
             }
         }
-        binding.alertChip.setVisible(alertsWithoutOffline.isNotEmpty())
+        binding.alertChip.visible(alertsWithoutOffline.isNotEmpty())
     }
 
     private fun setupAlertChipClickListener(analyticsItemId: String?) {

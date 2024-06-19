@@ -11,7 +11,7 @@ import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -81,29 +81,29 @@ class RewardsListActivity : BaseActivity() {
             Status.SUCCESS -> {
                 if (!resource.data.isNullOrEmpty()) {
                     adapter.setData(resource.data)
-                    binding.recycler.setVisible(true)
-                    binding.status.setVisible(false)
-                    binding.emptyRewardsCard.setVisible(false)
+                    binding.recycler.visible(true)
+                    binding.status.visible(false)
+                    binding.emptyRewardsCard.visible(false)
                 } else {
-                    binding.recycler.setVisible(false)
-                    binding.emptyRewardsCard.setVisible(true)
+                    binding.recycler.visible(false)
+                    binding.emptyRewardsCard.visible(true)
                 }
             }
             Status.ERROR -> {
                 Timber.d("Got error: $resource.message")
-                binding.recycler.setVisible(false)
+                binding.recycler.visible(false)
                 binding.status.animation(R.raw.anim_error)
                     .title(getString(R.string.error_rewards_no_data))
                     .subtitle(resource.message)
                     .action(getString(R.string.action_retry))
                     .listener { model.fetchFirstPageRewards(deviceId) }
-                    .setVisible(true)
+                    .visible(true)
             }
             Status.LOADING -> {
-                binding.recycler.setVisible(false)
+                binding.recycler.visible(false)
                 binding.status.clear()
                     .animation(R.raw.anim_loading)
-                    .setVisible(true)
+                    .visible(true)
             }
         }
     }
@@ -114,14 +114,14 @@ class RewardsListActivity : BaseActivity() {
                 if (!resource.data.isNullOrEmpty()) {
                     adapter.setData(resource.data)
                 }
-                binding.loadingNewPage.setVisible(false)
+                binding.loadingNewPage.visible(false)
             }
             Status.ERROR -> {
                 Timber.d("Got error: $resource.message")
-                binding.loadingNewPage.setVisible(false)
+                binding.loadingNewPage.visible(false)
             }
             Status.LOADING -> {
-                binding.loadingNewPage.setVisible(true)
+                binding.loadingNewPage.visible(true)
             }
         }
     }

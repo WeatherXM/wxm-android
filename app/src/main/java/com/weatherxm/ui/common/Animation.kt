@@ -2,8 +2,6 @@ package com.weatherxm.ui.common
 
 import android.animation.Animator.AnimatorListener
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.annotation.Keep
 
 @Keep
@@ -28,7 +26,7 @@ fun animate(view: View, animation: Animation, listener: AnimatorListener? = null
         is Animation.ShowAnimation -> {
             val animator = view.animate()
                 // For the Show animation to run properly, the view visibility must be changed first
-                .withStartAction { view.visibility = VISIBLE }
+                .withStartAction { view.visible(true) }
                 .alpha(1F)
             when (animation) {
                 Animation.ShowAnimation.SlideInFromTop -> {
@@ -51,7 +49,7 @@ fun animate(view: View, animation: Animation, listener: AnimatorListener? = null
         is Animation.HideAnimation -> {
             val animator = view.animate()
                 // For the Hide animation to run properly, the view visibility must be changed last
-                .withEndAction { view.visibility = GONE }
+                .withEndAction { view.visible(false) }
                 .alpha(0F)
             when (animation) {
                 Animation.HideAnimation.SlideOutToBottom -> {

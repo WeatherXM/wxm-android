@@ -14,7 +14,7 @@ import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.explorer.UICell
@@ -93,22 +93,22 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
 
         model.address().observe(this) {
             binding.title.text = it
-            binding.title.setVisible(true)
+            binding.title.visible(true)
         }
 
         model.onFollowStatus().observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    binding.empty.setVisible(false)
+                    binding.empty.visible(false)
                     dialogOverlay.cancel()
                 }
                 Status.ERROR -> {
                     toast(it.message ?: getString(R.string.error_reach_out_short))
-                    binding.empty.setVisible(false)
+                    binding.empty.visible(false)
                     dialogOverlay.cancel()
                 }
                 Status.LOADING -> {
-                    binding.empty.animation(R.raw.anim_loading).setVisible(true)
+                    binding.empty.animation(R.raw.anim_loading).visible(true)
                     dialogOverlay.show()
                 }
             }
@@ -129,14 +129,14 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
                 if (!response.data.isNullOrEmpty()) {
                     updateCellStats(response.data)
                     adapter.submitList(response.data)
-                    binding.empty.setVisible(false)
-                    binding.recycler.setVisible(true)
+                    binding.empty.visible(false)
+                    binding.recycler.visible(true)
                 } else {
                     binding.empty.clear()
                         .animation(R.raw.anim_error)
                         .title(getString(R.string.error_generic_message))
-                    binding.recycler.setVisible(false)
-                    binding.empty.setVisible(true)
+                    binding.recycler.visible(false)
+                    binding.empty.visible(true)
                 }
             }
             Status.ERROR -> {
@@ -145,13 +145,13 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
                     .animation(R.raw.anim_error)
                     .title(getString(R.string.error_generic_message))
                     .subtitle(response.message)
-                binding.recycler.setVisible(false)
-                binding.empty.setVisible(true)
+                binding.recycler.visible(false)
+                binding.empty.visible(true)
             }
             Status.LOADING -> {
                 binding.empty.clear().animation(R.raw.anim_loading)
-                binding.recycler.setVisible(false)
-                binding.empty.setVisible(true)
+                binding.recycler.visible(false)
+                binding.empty.visible(true)
             }
         }
     }
@@ -162,11 +162,11 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
                 binding.activeChip.text =
                     resources.getQuantityString(R.plurals.cell_active_station, this, this)
             } else {
-                binding.activeChip.setVisible(false)
+                binding.activeChip.visible(false)
             }
         }
         binding.capacityChip.text = getString(R.string.cell_stations_present, data.size)
-        binding.cellStatsContainer.setVisible(true)
+        binding.cellStatsContainer.visible(true)
     }
 
     override fun onDeviceClicked(device: UIDevice) {

@@ -11,7 +11,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.databinding.ViewWeatherCardBinding
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
@@ -116,9 +116,9 @@ class WeatherCardView : LinearLayout {
 
     fun setData(data: HourlyWeather?) {
         if (data == null || data.isEmpty()) {
-            binding.weatherDataLayout.setVisible(false)
-            binding.secondaryCard.setVisible(false)
-            binding.noDataLayout.setVisible(true)
+            binding.weatherDataLayout.visible(false)
+            binding.secondaryCard.visible(false)
+            binding.noDataLayout.visible(true)
         } else {
             weatherData = data
             updateCurrentWeatherUI()

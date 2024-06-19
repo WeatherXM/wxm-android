@@ -1,8 +1,6 @@
 package com.weatherxm.ui.home.devices
 
 import android.view.LayoutInflater
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -21,7 +19,8 @@ import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
+import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getFormattedWindDirection
@@ -84,15 +83,15 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                         setColor(R.color.follow_heart_color)
                         isEnabled = true
                     }
-                    null -> setVisible(false)
+                    null -> visible(false)
                 }
             }
 
             binding.name.text = item.getDefaultOrFriendlyName()
 
             if (item.currentWeather == null || item.currentWeather.isEmpty()) {
-                binding.weatherDataLayout.visibility = GONE
-                binding.noDataLayout.visibility = VISIBLE
+                binding.weatherDataLayout.visible(false)
+                binding.noDataLayout.visible(true)
             } else {
                 setWeatherData(item)
             }
@@ -130,14 +129,14 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                         .setIcon(R.drawable.ic_warning_hex_filled)
                     binding.root.setCardStroke(R.color.warning, 2)
                 }
-                binding.alert.setVisible(false)
-                binding.multipleAlerts.setVisible(true)
+                binding.alert.visible(false)
+                binding.multipleAlerts.visible(true)
             } else if (item.alerts.size == 1) {
-                binding.multipleAlerts.setVisible(false)
+                binding.multipleAlerts.visible(false)
                 handleSingleAlert(item.alerts[0], item)
             } else {
-                binding.multipleAlerts.setVisible(false)
-                binding.alert.setVisible(false)
+                binding.multipleAlerts.visible(false)
+                binding.alert.visible(false)
                 binding.root.strokeWidth = 0
             }
         }
@@ -176,7 +175,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                     )
                 }
             }
-            binding.alert.setVisible(true)
+            binding.alert.visible(true)
         }
 
         private fun setWeatherData(item: UIDevice) {

@@ -1,7 +1,6 @@
 package com.weatherxm.ui.widgets.selectstation
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -14,7 +13,8 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
+import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getFormattedWindDirection
@@ -68,11 +68,7 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
 
         fun bind(item: UIDevice, isSelected: Boolean) {
             binding.root.isSelected = isSelected
-            binding.selectedIcon.visibility = if (isSelected) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
+            binding.selectedIcon.visible(isSelected)
 
             with(binding.relationIcon) {
                 when (item.relation) {
@@ -86,7 +82,7 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
                         setColor(R.color.follow_heart_color)
                         isEnabled = true
                     }
-                    else -> setVisible(false)
+                    else -> visible(false)
                 }
             }
 
@@ -100,8 +96,8 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
             }
 
             if (item.currentWeather == null || item.currentWeather.isEmpty()) {
-                binding.weatherDataLayout.visibility = View.GONE
-                binding.noDataLayout.visibility = View.VISIBLE
+                binding.weatherDataLayout.visible(false)
+                binding.noDataLayout.visible(true)
             } else {
                 setWeatherData(item)
             }

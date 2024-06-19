@@ -11,7 +11,7 @@ import com.weatherxm.data.BoostReward
 import com.weatherxm.databinding.ListItemRewardBoostBinding
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.setBoostFallbackBackground
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.util.Rewards.formatTokens
 
 class RewardBoostAdapter(
@@ -49,7 +49,7 @@ class RewardBoostAdapter(
 
             if (!item.imgUrl.isNullOrEmpty()) {
                 binding.backgroundImage.loadImage(imageLoader, item.imgUrl)
-                binding.backgroundImage.setVisible(true)
+                binding.backgroundImage.visible(true)
             }
         }
     }

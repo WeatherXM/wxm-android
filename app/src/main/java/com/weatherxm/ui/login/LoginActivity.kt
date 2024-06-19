@@ -3,7 +3,6 @@ package com.weatherxm.ui.login
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import arrow.core.getOrElse
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -18,6 +17,8 @@ import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
+import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Validator
@@ -132,7 +133,7 @@ class LoginActivity : BaseActivity() {
             Status.SUCCESS -> {
                 Timber.d("Login success. Get user to check if he has a wallet")
                 setInputEnabled(false)
-                binding.loading.visibility = View.INVISIBLE
+                binding.loading.invisible()
             }
             Status.ERROR -> {
                 analytics.trackEventViewContent(
@@ -144,12 +145,12 @@ class LoginActivity : BaseActivity() {
                     success = 0L
                 )
                 setInputEnabled(true)
-                binding.loading.visibility = View.INVISIBLE
+                binding.loading.invisible()
                 result.message?.let { showSnackbarMessage(binding.root, it) }
             }
             Status.LOADING -> {
                 setInputEnabled(false)
-                binding.loading.visibility = View.VISIBLE
+                binding.loading.visible(true)
             }
         }
     }
@@ -158,7 +159,7 @@ class LoginActivity : BaseActivity() {
         when (result.status) {
             Status.SUCCESS -> {
                 setInputEnabled(false)
-                binding.loading.visibility = View.INVISIBLE
+                binding.loading.invisible()
                 val user = result.data
                 Timber.d("User: $user")
                 if (model.shouldShowAnalyticsOptIn()) {
@@ -205,12 +206,12 @@ class LoginActivity : BaseActivity() {
                     ),
                     success = 0L
                 )
-                binding.loading.visibility = View.INVISIBLE
+                binding.loading.invisible()
                 showSnackbarMessage(binding.root, "${result.message}.")
                 setInputEnabled(true)
             }
             Status.LOADING -> {
-                binding.loading.visibility = View.VISIBLE
+                binding.loading.visible(true)
                 setInputEnabled(false)
             }
         }

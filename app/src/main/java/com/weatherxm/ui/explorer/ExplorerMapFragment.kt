@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.view.KeyEvent.ACTION_UP
 import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.MenuItem
-import android.view.View
 import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -31,7 +30,8 @@ import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseMapFragment
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
@@ -156,14 +156,14 @@ class ExplorerMapFragment : BaseMapFragment() {
 
     private fun handleRecentSearches(searchResults: List<SearchResult>) {
         if (searchResults.isEmpty()) {
-            binding.resultsRecycler.setVisible(false)
+            binding.resultsRecycler.visible(false)
             binding.searchEmptyResultsTitle.text = getString(R.string.search_no_recent_results)
             binding.searchEmptyResultsDesc.text =
                 getString(R.string.search_no_recent_results_message)
-            binding.searchEmptyResultsContainer.setVisible(true)
+            binding.searchEmptyResultsContainer.visible(true)
         } else {
-            binding.resultsRecycler.setVisible(true)
-            binding.searchEmptyResultsContainer.setVisible(false)
+            binding.resultsRecycler.visible(true)
+            binding.searchEmptyResultsContainer.visible(false)
             adapter.updateData(String.empty(), searchResults)
         }
     }
@@ -194,7 +194,7 @@ class ExplorerMapFragment : BaseMapFragment() {
                 binding.searchView.editText.setText(searchModel.getQuery())
                 useSearchOnTextChangedListener = true
                 if (searchModel.getQuery().isEmpty()) {
-                    binding.recent.setVisible(true)
+                    binding.recent.visible(true)
                     searchModel.getRecentSearches()
                 }
             }
@@ -219,9 +219,9 @@ class ExplorerMapFragment : BaseMapFragment() {
                     return@onTextChanged
                 }
                 searchModel.cancelNetworkSearchJob()
-                binding.searchProgress.visibility = View.INVISIBLE
+                binding.searchProgress.invisible()
                 if (it.isEmpty()) {
-                    binding.recent.setVisible(true)
+                    binding.recent.visible(true)
                     searchModel.getRecentSearches()
                 }
             }
@@ -259,24 +259,24 @@ class ExplorerMapFragment : BaseMapFragment() {
     private fun onSearchResults(resource: Resource<List<SearchResult>>) {
         when (resource.status) {
             Status.SUCCESS -> {
-                binding.searchResultsStatusView.setVisible(false)
+                binding.searchResultsStatusView.visible(false)
                 if (resource.data.isNullOrEmpty()) {
-                    binding.resultsRecycler.setVisible(false)
-                    binding.searchEmptyResultsContainer.setVisible(true)
+                    binding.resultsRecycler.visible(false)
+                    binding.searchEmptyResultsContainer.visible(true)
                     binding.searchEmptyResultsTitle.text = getString(R.string.search_no_results)
                     binding.searchEmptyResultsDesc.text =
                         getString(R.string.search_no_results_message)
                 } else {
-                    binding.resultsRecycler.setVisible(true)
-                    binding.searchEmptyResultsContainer.setVisible(false)
+                    binding.resultsRecycler.visible(true)
+                    binding.searchEmptyResultsContainer.visible(false)
                     adapter.updateData(binding.searchView.text.toString(), resource.data)
                 }
-                binding.searchProgress.visibility = View.INVISIBLE
+                binding.searchProgress.invisible()
             }
             Status.ERROR -> {
-                binding.searchProgress.visibility = View.INVISIBLE
-                binding.resultsRecycler.setVisible(false)
-                binding.searchEmptyResultsContainer.setVisible(false)
+                binding.searchProgress.invisible()
+                binding.resultsRecycler.visible(false)
+                binding.searchEmptyResultsContainer.visible(false)
                 binding.searchResultsStatusView
                     .clear()
                     .animation(R.raw.anim_error)
@@ -286,13 +286,13 @@ class ExplorerMapFragment : BaseMapFragment() {
                     .listener {
                         validateAndSearch()
                     }
-                    .setVisible(true)
+                    .visible(true)
             }
             Status.LOADING -> {
-                binding.searchResultsStatusView.setVisible(false)
-                binding.recent.setVisible(false)
-                binding.searchEmptyResultsContainer.setVisible(false)
-                binding.searchProgress.visibility = View.VISIBLE
+                binding.searchResultsStatusView.visible(false)
+                binding.recent.visible(false)
+                binding.searchEmptyResultsContainer.visible(false)
+                binding.searchProgress.visible(true)
             }
         }
     }
@@ -303,7 +303,7 @@ class ExplorerMapFragment : BaseMapFragment() {
             Status.SUCCESS -> {
                 if (resource.data?.geoJsonSource == null) {
                     onPolygonPointsUpdated(resource.data?.polygonPoints)
-                    binding.progress.visibility = View.INVISIBLE
+                    binding.progress.invisible()
                     return
                 }
 
@@ -317,13 +317,13 @@ class ExplorerMapFragment : BaseMapFragment() {
                     mapStyle?.addLayerAbove(model.getHeatMapLayer(), "waterway-label")
                 }
                 onPolygonPointsUpdated(resource.data.polygonPoints)
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.invisible()
             }
             Status.ERROR -> {
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.invisible()
             }
             Status.LOADING -> {
-                binding.progress.visibility = View.VISIBLE
+                binding.progress.visible(true)
             }
         }
     }

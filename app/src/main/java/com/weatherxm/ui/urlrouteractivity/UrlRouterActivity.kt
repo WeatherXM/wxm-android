@@ -3,7 +3,7 @@ package com.weatherxm.ui.urlrouteractivity
 import android.os.Bundle
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityUrlRouterBinding
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -17,16 +17,16 @@ class UrlRouterActivity : BaseActivity() {
         setContentView(binding.root)
 
         model.onError().observe(this) {
-            binding.logo.setVisible(false)
+            binding.logo.visible(false)
             binding.empty.clear()
                 .animation(R.raw.anim_error)
                 .title(R.string.parsing_url_failed)
                 .subtitle(it)
-                .setVisible(true)
+                .visible(true)
         }
 
         model.onDevice().observe(this) {
-            binding.logo.setVisible(false)
+            binding.logo.visible(false)
             navigator.showDeviceDetails(
                 this,
                 device = it,
@@ -36,13 +36,13 @@ class UrlRouterActivity : BaseActivity() {
         }
 
         model.onCell().observe(this) {
-            binding.logo.setVisible(false)
+            binding.logo.visible(false)
             navigator.showCellInfo(this, it, openExplorerOnBack = true)
             finish()
         }
 
         model.onRemoteMessage().observe(this) {
-            binding.logo.setVisible(false)
+            binding.logo.visible(false)
             it.url?.let { url ->
                 if (isTaskRoot) {
                     navigator.showStartup(this)

@@ -159,18 +159,33 @@ fun View.show(
     animation: Animation.ShowAnimation? = Animation.ShowAnimation.FadeIn,
     listener: Animator.AnimatorListener? = null
 ) {
-    if (animation == null) this.visibility = View.VISIBLE else animate(this, animation, listener)
+    if (animation == null) this.visible(true) else animate(this, animation, listener)
 }
 
 fun View.hide(
     animation: Animation.HideAnimation? = Animation.HideAnimation.FadeOut,
     listener: Animator.AnimatorListener? = null
 ) {
-    if (animation == null) this.visibility = View.GONE else animate(this, animation, listener)
+    if (animation == null) this.visible(false) else animate(this, animation, listener)
 }
 
-fun View.setVisible(visible: Boolean) {
+/**
+ * Makes the view VISIBLE or GONE depending on the boolean value as described:
+ * https://developer.android.com/reference/android/view/View#attr_android:visibility
+ * VISIBLE: Visible on screen
+ * GONE: Completely hidden, as if the view had not been added. No space taken for layout purposes.
+ */
+fun View.visible(visible: Boolean) {
     if (visible) this.visibility = View.VISIBLE else this.visibility = View.GONE
+}
+
+/**
+ * Makes the view INVISIBLE.
+ * https://developer.android.com/reference/android/view/View#INVISIBLE
+ * INVISIBLE: Not displayed, but taken into account during layout (space is left for it).
+ */
+fun View.invisible() {
+    this.visibility = View.INVISIBLE
 }
 
 fun View.isVisibleOnScreen(): Boolean {
@@ -357,8 +372,8 @@ fun TextView.removeLinksUnderline() {
 fun TextView.setDisplayTimezone(timezone: String?) {
     timezone?.let {
         text = context.getString(R.string.displayed_times, it)
-        setVisible(true)
-    } ?: setVisible(false)
+        visible(true)
+    } ?: visible(false)
 }
 
 fun LottieAnimationView.setWeatherAnimation(animation: String?) {

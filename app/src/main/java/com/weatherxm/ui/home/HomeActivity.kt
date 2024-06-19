@@ -16,7 +16,7 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityHomeBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.BaseMapFragment
 import com.weatherxm.ui.explorer.ExplorerData
@@ -146,8 +146,8 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             else -> binding.addDevice.hide()
         }
         binding.navView.show()
-        binding.networkStatsBtn.setVisible(destination.id == R.id.navigation_explorer)
-        binding.myLocationBtn.setVisible(destination.id == R.id.navigation_explorer)
+        binding.networkStatsBtn.visible(destination.id == R.id.navigation_explorer)
+        binding.myLocationBtn.visible(destination.id == R.id.navigation_explorer)
     }
 
     override fun onResume() {
@@ -161,9 +161,9 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         * shows the "Add Device" floating button visible again. This code is to fix this.
          */
         val navDestination = navController.currentDestination?.id
-        binding.networkStatsBtn.setVisible(navDestination == R.id.navigation_explorer)
-        binding.myLocationBtn.setVisible(navDestination == R.id.navigation_explorer)
-        binding.addDevice.setVisible(navDestination == R.id.navigation_devices)
+        binding.networkStatsBtn.visible(navDestination == R.id.navigation_explorer)
+        binding.myLocationBtn.visible(navDestination == R.id.navigation_explorer)
+        binding.addDevice.visible(navDestination == R.id.navigation_devices)
     }
 
     private fun onExplorerState(resource: Resource<ExplorerData>) {

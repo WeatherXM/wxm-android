@@ -18,7 +18,8 @@ import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setCardStroke
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.home.HomeActivity
@@ -108,10 +109,10 @@ class ProfileFragment : BaseFragment() {
 
         model.onLoading().observe(viewLifecycleOwner) {
             if (it && !binding.swiperefresh.isRefreshing) {
-                binding.progress.visibility = View.VISIBLE
+                binding.progress.visible(true)
             } else {
                 binding.swiperefresh.isRefreshing = false
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.invisible()
             }
         }
 
@@ -172,13 +173,13 @@ class ProfileFragment : BaseFragment() {
                     ) {
                         navigator.openWebsite(requireContext(), getString(R.string.shop_url))
                     }
-                    .setVisible(true)
+                    .visible(true)
             }
         } else {
             binding.rewardsContainerCard.strokeWidth = 0
             binding.allocatedRewardsSecondaryCard
                 .htmlMessage(getString(R.string.allocated_rewards_alternative_claiming))
-                .setVisible(true)
+                .visible(true)
             binding.rewards
                 .subtitle(
                     getString(
@@ -195,13 +196,13 @@ class ProfileFragment : BaseFragment() {
         binding.wallet.clear()
         binding.toolbar.subtitle = user?.email
         user?.wallet?.address?.let {
-            binding.noWalletCard.setVisible(false)
+            binding.noWalletCard.visible(false)
             binding.walletContainerCard.strokeWidth = 0
             binding.wallet.chipSubtitle(Mask.maskHash(it))
         } ?: kotlin.run {
             binding.wallet.subtitle(getString(R.string.no_wallet_added))
             if (parentModel.hasDevices() == true) {
-                binding.noWalletCard.setVisible(true)
+                binding.noWalletCard.visible(true)
                 binding.walletContainerCard.setCardStroke(R.color.error, 2)
             }
         }

@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewHeaderBinding
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import org.koin.core.component.KoinComponent
 
 open class HeaderView : LinearLayout, KoinComponent {
@@ -49,12 +49,12 @@ open class HeaderView : LinearLayout, KoinComponent {
 
     fun subtitle(subtitle: String): HeaderView {
         binding.subtitle.text = subtitle
-        binding.subtitle.setVisible(true)
+        binding.subtitle.visible(true)
         return this
     }
 
     fun hideSubtitle(): HeaderView {
-        binding.subtitle.setVisible(false)
+        binding.subtitle.visible(false)
         return this
     }
 
@@ -62,7 +62,7 @@ open class HeaderView : LinearLayout, KoinComponent {
         binding.infoButton.setOnClickListener {
             listener.invoke()
         }
-        binding.infoButton.setVisible(true)
+        binding.infoButton.visible(true)
         return this
     }
 }

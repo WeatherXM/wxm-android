@@ -32,9 +32,10 @@ import com.weatherxm.data.RewardsTimestampScore
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsRewardsBinding
 import com.weatherxm.ui.common.DeviceRelation
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.classSimpleName
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
@@ -79,12 +80,12 @@ class RewardsFragment : BaseFragment() {
                     navigator.openWebsite(context, it.url)
                 }
             }
-            binding.mainnetCard.setVisible(true)
+            binding.mainnetCard.visible(true)
         }
 
         model.onRewards().observe(viewLifecycleOwner) {
             val totalRewards = it.totalRewards ?: 0F
-            binding.emptyCard.setVisible(it.isEmpty())
+            binding.emptyCard.visible(it.isEmpty())
             if (!it.isEmpty()) {
                 binding.dailyRewardsCard.updateUI(
                     it.latest,
@@ -95,30 +96,30 @@ class RewardsFragment : BaseFragment() {
                 binding.totalRewards.text =
                     getString(R.string.wxm_amount, formatTokens(totalRewards.toBigDecimal()))
                 updateWeeklyStreak(it.timeline)
-                binding.dailyRewardsCard.setVisible(true)
-                binding.totalCard.setVisible(true)
-                binding.weeklyCard.setVisible(true)
+                binding.dailyRewardsCard.visible(true)
+                binding.totalCard.visible(true)
+                binding.weeklyCard.visible(true)
             }
         }
 
         model.onLoading().observe(viewLifecycleOwner) {
             if (it && binding.swiperefresh.isRefreshing) {
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.invisible()
             } else if (it) {
-                binding.totalCard.setVisible(false)
-                binding.dailyRewardsCard.setVisible(false)
-                binding.weeklyCard.setVisible(false)
-                binding.progress.visibility = View.VISIBLE
+                binding.totalCard.visible(false)
+                binding.dailyRewardsCard.visible(false)
+                binding.weeklyCard.visible(false)
+                binding.progress.visible(true)
             } else {
                 binding.swiperefresh.isRefreshing = false
-                binding.progress.visibility = View.INVISIBLE
+                binding.progress.invisible()
             }
         }
 
         model.onError().observe(viewLifecycleOwner) {
-            binding.totalCard.setVisible(false)
-            binding.dailyRewardsCard.setVisible(false)
-            binding.weeklyCard.setVisible(false)
+            binding.totalCard.visible(false)
+            binding.dailyRewardsCard.visible(false)
+            binding.weeklyCard.visible(false)
             showSnackbarMessage(binding.root, it.errorMessage, it.retryFunction)
         }
 

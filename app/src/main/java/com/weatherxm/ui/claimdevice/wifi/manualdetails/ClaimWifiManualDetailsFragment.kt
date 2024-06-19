@@ -15,7 +15,7 @@ import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.android.ext.android.inject
@@ -103,9 +103,9 @@ class ClaimWifiManualDetailsFragment : BaseFragment() {
             binding.desc.setHtml(R.string.enter_gateway_details_desc)
             binding.guideImage.setImageResource(R.drawable.d1_qr_claim)
         }
-        binding.claimingKeyTitle.setVisible(model.deviceType == DeviceType.D1_WIFI)
-        binding.claimingKeyContainer.setVisible(model.deviceType == DeviceType.D1_WIFI)
-        binding.m5Notice.setVisible(model.deviceType == DeviceType.M5_WIFI)
+        binding.claimingKeyTitle.visible(model.deviceType == DeviceType.D1_WIFI)
+        binding.claimingKeyContainer.visible(model.deviceType == DeviceType.D1_WIFI)
+        binding.m5Notice.visible(model.deviceType == DeviceType.M5_WIFI)
     }
 
     private fun handleProceedBtnStatus(serial: String, claimingKey: String?) {
