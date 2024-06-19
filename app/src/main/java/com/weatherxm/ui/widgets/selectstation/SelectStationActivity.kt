@@ -14,7 +14,7 @@ import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.widgets.currentweather.CurrentWeatherWidgetWorkerUpdate
 import com.weatherxm.util.WidgetHelper
@@ -48,8 +48,8 @@ class SelectStationActivity : BaseActivity() {
         binding.recycler.adapter = adapter
 
         model.devices().observe(this) {
-            binding.signInBtn.setVisible(false)
-            binding.confirmBtn.setVisible(true)
+            binding.signInBtn.visible(false)
+            binding.confirmBtn.visible(true)
             onDevices(it)
         }
 
@@ -59,10 +59,10 @@ class SelectStationActivity : BaseActivity() {
                 .title(getString(R.string.action_sign_in))
                 .subtitle(R.string.select_station_not_logged_in)
                 .listener(null)
-            binding.confirmBtn.setVisible(false)
-            binding.recycler.setVisible(false)
-            binding.empty.setVisible(true)
-            binding.signInBtn.setVisible(true)
+            binding.confirmBtn.visible(false)
+            binding.recycler.visible(false)
+            binding.empty.visible(true)
+            binding.signInBtn.visible(true)
         }
 
         binding.confirmBtn.setOnClickListener {
@@ -87,15 +87,15 @@ class SelectStationActivity : BaseActivity() {
             Status.SUCCESS -> {
                 if (!devices.data.isNullOrEmpty()) {
                     adapter.submitList(devices.data)
-                    binding.empty.setVisible(false)
-                    binding.recycler.setVisible(true)
+                    binding.empty.visible(false)
+                    binding.recycler.visible(true)
                 } else {
                     binding.empty.animation(R.raw.anim_empty_devices, false)
                     binding.empty.title(getString(R.string.empty_weather_stations))
                     binding.empty.subtitle(getString(R.string.empty_select_station))
                     binding.empty.listener(null)
-                    binding.empty.setVisible(true)
-                    binding.recycler.setVisible(false)
+                    binding.empty.visible(true)
+                    binding.recycler.visible(false)
                 }
             }
             Status.ERROR -> {
@@ -104,14 +104,14 @@ class SelectStationActivity : BaseActivity() {
                 binding.empty.subtitle(devices.message)
                 binding.empty.action(getString(R.string.action_retry))
                 binding.empty.listener { model.fetch() }
-                binding.empty.setVisible(true)
-                binding.recycler.setVisible(false)
+                binding.empty.visible(true)
+                binding.recycler.visible(false)
             }
             Status.LOADING -> {
-                binding.recycler.setVisible(false)
+                binding.recycler.visible(false)
                 binding.empty.clear()
                 binding.empty.animation(R.raw.anim_loading)
-                binding.empty.setVisible(true)
+                binding.empty.visible(true)
             }
         }
     }

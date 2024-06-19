@@ -21,7 +21,7 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.home.HomeViewModel
@@ -102,16 +102,16 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     private fun onFollowStatus(status: Resource<Unit>) {
         when (status.status) {
             Status.SUCCESS -> {
-                binding.empty.setVisible(false)
+                binding.empty.visible(false)
                 dialogOverlay.cancel()
             }
             Status.ERROR -> {
                 context.toast(status.message ?: getString(R.string.error_reach_out_short))
-                binding.empty.setVisible(false)
+                binding.empty.visible(false)
                 dialogOverlay.cancel()
             }
             Status.LOADING -> {
-                binding.empty.animation(R.raw.anim_loading).setVisible(true)
+                binding.empty.animation(R.raw.anim_loading).visible(true)
                 dialogOverlay.show()
             }
         }
@@ -124,8 +124,8 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                 if (!devices.data.isNullOrEmpty()) {
                     adapter.submitList(devices.data)
                     adapter.notifyDataSetChanged()
-                    binding.empty.setVisible(false)
-                    binding.recycler.setVisible(true)
+                    binding.empty.visible(false)
+                    binding.recycler.visible(true)
                     parentModel.getWalletMissing(devices.data)
                 } else {
                     parentModel.setHasDevices(false)
@@ -137,9 +137,9 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                         .listener {
                             parentModel.openExplorer()
                         }
-                        .setVisible(true)
+                        .visible(true)
                     adapter.submitList(mutableListOf())
-                    binding.recycler.setVisible(false)
+                    binding.recycler.visible(false)
                 }
             }
             Status.ERROR -> {
@@ -149,18 +149,18 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     .subtitle(devices.message)
                     .action(getString(R.string.action_retry))
                     .listener { model.fetch() }
-                    .setVisible(true)
-                binding.recycler.setVisible(false)
+                    .visible(true)
+                binding.recycler.visible(false)
             }
             Status.LOADING -> {
                 if (binding.swiperefresh.isRefreshing) {
-                    binding.empty.clear().setVisible(false)
+                    binding.empty.clear().visible(false)
                 } else if (adapter.currentList.isNotEmpty()) {
-                    binding.empty.clear().setVisible(false)
+                    binding.empty.clear().visible(false)
                     binding.swiperefresh.isRefreshing = true
                 } else {
-                    binding.recycler.setVisible(false)
-                    binding.empty.clear().animation(R.raw.anim_loading).setVisible(true)
+                    binding.recycler.visible(false)
+                    binding.empty.clear().animation(R.raw.anim_loading).visible(true)
                 }
             }
         }
@@ -181,7 +181,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                     AnalyticsService.ParamValue.WARN.paramValue,
                     AnalyticsService.ParamValue.DISMISS.paramValue
                 )
-                binding.walletWarning.setVisible(false)
+                binding.walletWarning.visible(false)
                 parentModel.setWalletWarningDismissTimestamp()
             }
             analytics.trackEventPrompt(
@@ -190,7 +190,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                 AnalyticsService.ParamValue.VIEW.paramValue
             )
         }
-        binding.walletWarning.setVisible(walletMissing)
+        binding.walletWarning.visible(walletMissing)
     }
 
     override fun onResume() {

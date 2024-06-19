@@ -21,7 +21,7 @@ import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.screenLocation
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setDisplayTimezone
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
@@ -92,20 +92,20 @@ class ForecastDetailsActivity : BaseActivity() {
                     val forecastDay = model.forecast().forecastDays[selectedDayPosition]
                     setupDailyAdapter(forecastDay, selectedDayPosition)
                     updateUI(forecastDay)
-                    binding.statusView.setVisible(false)
-                    binding.mainContainer.setVisible(true)
+                    binding.statusView.visible(false)
+                    binding.mainContainer.visible(true)
                 }
                 Status.ERROR -> {
                     binding.statusView.clear()
                         .animation(R.raw.anim_error)
                         .title(getString(R.string.error_generic_message))
                         .subtitle(it.message)
-                    binding.mainContainer.setVisible(false)
+                    binding.mainContainer.visible(false)
                 }
                 Status.LOADING -> {
                     binding.statusView.clear().animation(R.raw.anim_loading)
-                    binding.mainContainer.setVisible(false)
-                    binding.statusView.setVisible(true)
+                    binding.mainContainer.visible(false)
+                    binding.statusView.visible(true)
                 }
             }
         }
@@ -164,7 +164,7 @@ class ForecastDetailsActivity : BaseActivity() {
             initPressureChart(charts.pressure)
             initSolarChart(charts.uv, charts.solarRadiation)
             autoHighlightCharts(0F)
-            setVisible(!charts.isEmpty())
+            visible(!charts.isEmpty())
         }
     }
 
@@ -234,7 +234,7 @@ class ForecastDetailsActivity : BaseActivity() {
                     setImageResource(R.drawable.ic_favorite)
                     setColor(R.color.follow_heart_color)
                 }
-                else -> setVisible(false)
+                else -> visible(false)
             }
         }
     }

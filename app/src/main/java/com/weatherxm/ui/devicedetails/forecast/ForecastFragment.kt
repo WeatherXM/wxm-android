@@ -14,8 +14,8 @@ import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.blockParentViewPagerOnScroll
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.setInvisible
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.toISODate
@@ -97,22 +97,22 @@ class ForecastFragment : BaseFragment() {
         model.onForecast().observe(viewLifecycleOwner) {
             hourlyForecastAdapter.submitList(it.next24Hours)
             dailyForecastAdapter.submitList(it.forecastDays)
-            binding.dailyForecastRecycler.setVisible(true)
-            binding.dailyForecastTitle.setVisible(true)
-            binding.hourlyForecastRecycler.setVisible(true)
-            binding.hourlyForecastTitle.setVisible(true)
+            binding.dailyForecastRecycler.visible(true)
+            binding.dailyForecastTitle.visible(true)
+            binding.hourlyForecastRecycler.visible(true)
+            binding.hourlyForecastTitle.visible(true)
         }
 
         model.onLoading().observe(viewLifecycleOwner) {
             if (it && binding.swiperefresh.isRefreshing) {
-                binding.progress.setInvisible()
+                binding.progress.invisible()
             } else if (it) {
-                binding.dailyForecastTitle.setVisible(false)
-                binding.hourlyForecastTitle.setVisible(false)
-                binding.progress.setVisible(true)
+                binding.dailyForecastTitle.visible(false)
+                binding.hourlyForecastTitle.visible(false)
+                binding.progress.visible(true)
             } else {
                 binding.swiperefresh.isRefreshing = false
-                binding.progress.setInvisible()
+                binding.progress.invisible()
             }
         }
 
@@ -130,14 +130,14 @@ class ForecastFragment : BaseFragment() {
 
     private fun fetchOrHideContent() {
         if (model.device.relation != UNFOLLOWED) {
-            binding.hiddenContentContainer.setVisible(false)
+            binding.hiddenContentContainer.visible(false)
             model.fetchForecast()
         } else if (model.device.relation == UNFOLLOWED) {
-            binding.dailyForecastRecycler.setVisible(false)
-            binding.dailyForecastTitle.setVisible(false)
-            binding.hourlyForecastTitle.setVisible(false)
-            binding.hourlyForecastRecycler.setVisible(false)
-            binding.hiddenContentContainer.setVisible(true)
+            binding.dailyForecastRecycler.visible(false)
+            binding.dailyForecastTitle.visible(false)
+            binding.hourlyForecastTitle.visible(false)
+            binding.hourlyForecastRecycler.visible(false)
+            binding.hiddenContentContainer.visible(true)
         }
     }
 

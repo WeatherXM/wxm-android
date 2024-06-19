@@ -10,7 +10,7 @@ import com.weatherxm.data.Connectivity
 import com.weatherxm.databinding.ListItemNetworkSearchResultBinding
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.highlightText
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.explorer.SearchResult
 
 class NetworkSearchResultsListAdapter(
@@ -91,7 +91,7 @@ class NetworkSearchResultsListAdapter(
             item.addressPlace?.let {
                 binding.resultDesc.text = it
             }
-            binding.resultDesc.setVisible(!item.addressPlace.isNullOrEmpty())
+            binding.resultDesc.visible(!item.addressPlace.isNullOrEmpty())
         }
     }
 

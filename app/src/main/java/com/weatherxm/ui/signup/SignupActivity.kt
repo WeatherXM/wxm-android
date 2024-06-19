@@ -10,8 +10,8 @@ import com.weatherxm.databinding.ActivitySignupBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.onTextChanged
-import com.weatherxm.ui.common.setInvisible
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Validator
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -82,10 +82,10 @@ class SignupActivity : BaseActivity() {
                     .animation(R.raw.anim_success, false)
                     .title(getString(R.string.success))
                     .subtitle(result.data)
-                binding.form.setVisible(false)
-                binding.status.setVisible(true)
-                binding.contactSupport.setVisible(true)
-                binding.done.setVisible(true)
+                binding.form.visible(false)
+                binding.status.visible(true)
+                binding.contactSupport.visible(true)
+                binding.done.visible(true)
 
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.SIGNUP.paramValue,
@@ -104,14 +104,14 @@ class SignupActivity : BaseActivity() {
                     .subtitle("${result.message}")
                     .action(getString(R.string.action_retry))
                     .listener {
-                        binding.form.setVisible(true)
-                        binding.status.setVisible(false)
-                        binding.done.setInvisible()
+                        binding.form.visible(true)
+                        binding.status.visible(false)
+                        binding.done.invisible()
                     }
-                binding.form.setVisible(false)
-                binding.status.setVisible(true)
-                binding.contactSupport.setInvisible()
-                binding.done.setInvisible()
+                binding.form.visible(false)
+                binding.status.visible(true)
+                binding.contactSupport.invisible()
+                binding.done.invisible()
 
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.SIGNUP.paramValue,
@@ -127,10 +127,10 @@ class SignupActivity : BaseActivity() {
                 binding.statusView
                     .clear()
                     .animation(R.raw.anim_loading)
-                binding.form.setVisible(false)
-                binding.status.setVisible(true)
-                binding.contactSupport.setInvisible()
-                binding.done.setInvisible()
+                binding.form.visible(false)
+                binding.status.visible(true)
+                binding.contactSupport.invisible()
+                binding.done.invisible()
             }
         }
     }

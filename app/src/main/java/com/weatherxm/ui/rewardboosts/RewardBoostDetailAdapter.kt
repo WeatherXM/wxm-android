@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.databinding.ListItemBoostDetailBinding
 import com.weatherxm.ui.common.BoostDetailInfo
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 
 class RewardBoostDetailAdapter :
     ListAdapter<BoostDetailInfo, RewardBoostDetailAdapter.RewardBoostDetailViewHolder>(
@@ -31,7 +31,7 @@ class RewardBoostDetailAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: BoostDetailInfo) {
-            binding.topDivider.setVisible(absoluteAdapterPosition == 0)
+            binding.topDivider.visible(absoluteAdapterPosition == 0)
             binding.key.text = item.title
             binding.value.text = item.value
         }

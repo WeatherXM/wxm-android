@@ -8,7 +8,7 @@ import android.widget.LinearLayout
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewRewardQualityCardBinding
 import com.weatherxm.ui.common.setCardStroke
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.util.Rewards.getRewardScoreColor
 import org.koin.core.component.KoinComponent
 
@@ -70,7 +70,7 @@ open class RewardsQualityCardView : LinearLayout, KoinComponent {
     }
 
     fun hideIcon(): RewardsQualityCardView {
-        binding.statusIcon.setVisible(false)
+        binding.statusIcon.visible(false)
         // Make the status description start from the same position as the title
         binding.statusDesc.setPadding(
             resources.getDimension(R.dimen.padding_normal).toInt(), 0, 0, 0
@@ -93,7 +93,7 @@ open class RewardsQualityCardView : LinearLayout, KoinComponent {
         }
         binding.slider.trackActiveTintList =
             ColorStateList.valueOf(context.getColor(getRewardScoreColor(score)))
-        binding.sliderContainer.setVisible(true)
+        binding.sliderContainer.visible(true)
         return this
     }
 
@@ -101,7 +101,7 @@ open class RewardsQualityCardView : LinearLayout, KoinComponent {
         binding.infoButton.setOnClickListener {
             listener.invoke()
         }
-        binding.infoButton.setVisible(true)
+        binding.infoButton.visible(true)
         return this
     }
 }

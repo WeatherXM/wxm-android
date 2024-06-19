@@ -16,7 +16,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.getRichText
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
@@ -53,7 +53,7 @@ class ConnectWalletActivity : BaseActivity() {
             }
 
         binding.walletCompatibilityCard.closeButton {
-            binding.walletCompatibilityCard.setVisible(false)
+            binding.walletCompatibilityCard.visible(false)
             analytics.trackEventPrompt(
                 AnalyticsService.ParamValue.WALLET_COMPATIBILITY.paramValue,
                 AnalyticsService.ParamValue.INFO.paramValue,
@@ -200,19 +200,19 @@ class ConnectWalletActivity : BaseActivity() {
     }
 
     private fun onEditClicked() {
-        binding.editWallet.setVisible(false)
-        binding.viewTransactionHistoryBtn.setVisible(false)
+        binding.editWallet.visible(false)
+        binding.viewTransactionHistoryBtn.visible(false)
         binding.addressContainer.isEnabled = true
         binding.addressContainer.isCounterEnabled = true
         binding.address.setText(model.currentAddress().value)
         binding.termsCheckbox.isChecked = false
         binding.ownershipCheckbox.isChecked = false
         binding.saveBtn.isEnabled = false
-        binding.scanQR.setVisible(true)
-        binding.checkBoxesAndButtonContainer.setVisible(true)
+        binding.scanQR.visible(true)
+        binding.checkBoxesAndButtonContainer.visible(true)
         binding.ownershipCheckbox.isEnabled = true
         binding.termsCheckbox.isEnabled = true
-        binding.walletCompatibilityCard.setVisible(true)
+        binding.walletCompatibilityCard.visible(true)
 
         analytics.trackEventPrompt(
             AnalyticsService.ParamValue.WALLET_COMPATIBILITY.paramValue,
@@ -223,10 +223,10 @@ class ConnectWalletActivity : BaseActivity() {
 
     private fun onAddressUpdateUI(address: String?) {
         if (address.isNullOrEmpty()) {
-            binding.editWallet.setVisible(false)
-            binding.viewTransactionHistoryBtn.setVisible(false)
-            binding.scanQR.setVisible(true)
-            binding.checkBoxesAndButtonContainer.setVisible(true)
+            binding.editWallet.visible(false)
+            binding.viewTransactionHistoryBtn.visible(false)
+            binding.scanQR.visible(true)
+            binding.checkBoxesAndButtonContainer.visible(true)
 
             analytics.trackEventPrompt(
                 AnalyticsService.ParamValue.WALLET_COMPATIBILITY.paramValue,
@@ -234,14 +234,14 @@ class ConnectWalletActivity : BaseActivity() {
                 AnalyticsService.ParamValue.VIEW.paramValue
             )
         } else {
-            binding.editWallet.setVisible(true)
+            binding.editWallet.visible(true)
             binding.address.setText(Mask.maskHash(address))
             binding.address.isEnabled = false
             binding.addressContainer.isCounterEnabled = false
-            binding.scanQR.setVisible(false)
-            binding.checkBoxesAndButtonContainer.setVisible(false)
-            binding.walletCompatibilityCard.setVisible(false)
-            binding.viewTransactionHistoryBtn.setVisible(true)
+            binding.scanQR.visible(false)
+            binding.checkBoxesAndButtonContainer.visible(false)
+            binding.walletCompatibilityCard.visible(false)
+            binding.viewTransactionHistoryBtn.visible(true)
         }
     }
 
@@ -252,18 +252,18 @@ class ConnectWalletActivity : BaseActivity() {
                 result.data?.let {
                     showSnackbarMessage(binding.root, it)
                 }
-                binding.loading.setVisible(false)
+                binding.loading.visible(false)
                 setResult(Activity.RESULT_OK)
             }
             Status.ERROR -> {
                 result.message?.let {
                     showSnackbarMessage(binding.root, it)
                 }
-                binding.loading.setVisible(false)
+                binding.loading.visible(false)
                 setInputEnabled(true)
             }
             Status.LOADING -> {
-                binding.loading.setVisible(true)
+                binding.loading.visible(true)
                 setInputEnabled(false)
             }
         }

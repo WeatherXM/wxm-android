@@ -9,7 +9,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.weatherxm.databinding.ViewRewardIssueBinding
 import com.weatherxm.ui.common.setCardStroke
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 
 class RewardIssueCardView : LinearLayout {
 
@@ -45,7 +45,7 @@ class RewardIssueCardView : LinearLayout {
     fun title(title: String?): RewardIssueCardView {
         binding.title.apply {
             text = title
-            setVisible(title != null)
+            visible(title != null)
         }
         return this
     }
@@ -58,7 +58,7 @@ class RewardIssueCardView : LinearLayout {
     fun message(subtitle: String?): RewardIssueCardView {
         binding.message.apply {
             text = subtitle
-            setVisible(subtitle != null)
+            visible(subtitle != null)
         }
         return this
     }
@@ -80,7 +80,7 @@ class RewardIssueCardView : LinearLayout {
         with(binding.action) {
             text = label
             setOnClickListener(listener)
-            setVisible(true)
+            visible(true)
         }
         return this
     }

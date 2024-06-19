@@ -12,7 +12,7 @@ import com.weatherxm.R
 import com.weatherxm.R.styleable.EmptyView_empty_action
 import com.weatherxm.databinding.ViewEmptyBinding
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 class EmptyView : LinearLayout {
@@ -64,7 +64,7 @@ class EmptyView : LinearLayout {
     fun title(title: String?): EmptyView {
         binding.title.apply {
             text = title
-            setVisible(title != null)
+            visible(title != null)
         }
         return this
     }
@@ -77,7 +77,7 @@ class EmptyView : LinearLayout {
     fun subtitle(subtitle: String?): EmptyView {
         binding.subtitle.apply {
             text = subtitle
-            setVisible(!subtitle.isNullOrEmpty())
+            visible(!subtitle.isNullOrEmpty())
         }
         return this
     }
@@ -101,7 +101,7 @@ class EmptyView : LinearLayout {
                     }
                 }
             }
-            setVisible(true)
+            visible(true)
         }
         return this
     }
@@ -112,7 +112,7 @@ class EmptyView : LinearLayout {
         linkClickedListener: (() -> Unit)? = null
     ): EmptyView {
         if (subtitle == null) {
-            setVisible(false)
+            visible(false)
             return this
         }
         binding.subtitle.apply {
@@ -129,7 +129,7 @@ class EmptyView : LinearLayout {
                     }
                 }
             }
-            setVisible(true)
+            visible(true)
         }
         return this
     }
@@ -146,7 +146,7 @@ class EmptyView : LinearLayout {
     fun action(label: String?): EmptyView {
         binding.action.apply {
             text = label
-            setVisible(label != null)
+            visible(label != null)
         }
         return this
     }
@@ -154,7 +154,7 @@ class EmptyView : LinearLayout {
     fun listener(listener: OnClickListener?): EmptyView {
         binding.action.apply {
             setOnClickListener(listener)
-            setVisible(listener != null)
+            visible(listener != null)
         }
         return this
     }

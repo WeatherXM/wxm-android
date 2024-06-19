@@ -10,7 +10,7 @@ import com.weatherxm.R
 import com.weatherxm.databinding.ViewHeliumSetFrequencyBinding
 import com.weatherxm.ui.common.FrequencyState
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 
 class HeliumSetFrequencyView : LinearLayout {
 
@@ -41,8 +41,8 @@ class HeliumSetFrequencyView : LinearLayout {
             .apply {
                 try {
                     getBoolean(R.styleable.HeliumSetFrequencyView_is_on_claiming, true).apply {
-                        binding.setButton.setVisible(this)
-                        binding.twoButtonsContainer.setVisible(!this)
+                        binding.setButton.visible(this)
+                        binding.twoButtonsContainer.visible(!this)
                     }
                 } finally {
                     recycle()
@@ -57,7 +57,7 @@ class HeliumSetFrequencyView : LinearLayout {
 
     fun defaultState(frequencyState: FrequencyState, isOnClaiming: Boolean) {
         if (frequencyState.country.isNullOrEmpty()) {
-            binding.frequencySelectedText.setVisible(false)
+            binding.frequencySelectedText.visible(false)
         } else {
             binding.frequencySelectedText.text = if (isOnClaiming) {
                 context.getString(

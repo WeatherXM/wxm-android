@@ -7,7 +7,7 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityUpdatePromptBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -43,7 +43,7 @@ class UpdatePromptActivity : BaseActivity() {
 
         if (model.isUpdateMandatory()) {
             binding.toolbar.navigationIcon = null
-            binding.continueWithoutUpdatingBtn.setVisible(false)
+            binding.continueWithoutUpdatingBtn.visible(false)
         }
 
         binding.updateBtn.setOnClickListener {

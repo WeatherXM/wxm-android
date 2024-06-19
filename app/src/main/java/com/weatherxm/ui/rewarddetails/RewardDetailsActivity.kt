@@ -25,7 +25,7 @@ import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
@@ -91,8 +91,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 }
                 Status.LOADING -> {
                     binding.statusView.clear().animation(R.raw.anim_loading)
-                    binding.mainContainer.setVisible(false)
-                    binding.statusView.setVisible(true)
+                    binding.mainContainer.visible(false)
+                    binding.statusView.visible(true)
                 }
             }
         }
@@ -133,19 +133,19 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
             getString(R.string.active_boosts_desc, formatTokens(data.boost?.totalDailyReward))
         )
         val hasBoosts = data.boost?.data == null || data.boost.data.isEmpty()
-        binding.boostsRecycler.setVisible(!hasBoosts)
-        binding.boostsDesc.setVisible(!hasBoosts)
-        binding.noActiveBoostsCard.setVisible(hasBoosts)
+        binding.boostsRecycler.visible(!hasBoosts)
+        binding.boostsDesc.visible(!hasBoosts)
+        binding.noActiveBoostsCard.visible(hasBoosts)
 
-        binding.statusView.setVisible(false)
-        binding.mainContainer.setVisible(true)
+        binding.statusView.visible(false)
+        binding.mainContainer.visible(true)
     }
 
     private fun updateIssues(sortedIssues: List<RewardsAnnotationGroup>?) {
         if (sortedIssues.isNullOrEmpty()) {
-            binding.issuesTitle.setVisible(false)
-            binding.issuesDesc.setVisible(false)
-            binding.issueCard.setVisible(false)
+            binding.issuesTitle.visible(false)
+            binding.issuesDesc.visible(false)
+            binding.issueCard.visible(false)
         } else {
             val issuesSize = sortedIssues.size
             binding.issuesDesc.setHtml(
@@ -289,8 +289,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
             .listener {
                 model.fetchRewardDetails(timestamp)
             }
-        binding.mainContainer.setVisible(false)
-        binding.statusView.setVisible(true)
+        binding.mainContainer.visible(false)
+        binding.statusView.visible(true)
     }
 
     private fun onIssueCard(
@@ -348,7 +348,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 }
             }
         }
-        binding.issueCard.setVisible(true)
+        binding.issueCard.visible(true)
     }
 
     private fun onMessageDialog(

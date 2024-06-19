@@ -14,7 +14,7 @@ import com.weatherxm.ui.common.Animation.ShowAnimation.SlideInFromBottom
 import com.weatherxm.ui.common.Contracts.ARG_CELL_CENTER
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.show
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.BaseMapFragment
@@ -108,7 +108,7 @@ class ExplorerActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener 
             }
         }
 
-        binding.mapDebugInfoContainer.setVisible(BuildConfig.DEBUG)
+        binding.mapDebugInfoContainer.visible(BuildConfig.DEBUG)
 
         with(intent.parcelable<Location>(ARG_CELL_CENTER)) {
             this?.let {

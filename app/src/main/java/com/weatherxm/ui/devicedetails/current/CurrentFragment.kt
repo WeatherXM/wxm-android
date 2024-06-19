@@ -14,8 +14,8 @@ import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setCardStroke
-import com.weatherxm.ui.common.setInvisible
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -61,12 +61,12 @@ class CurrentFragment : BaseFragment() {
 
         model.onLoading().observe(viewLifecycleOwner) {
             if (it && binding.swiperefresh.isRefreshing) {
-                binding.progress.setInvisible()
+                binding.progress.invisible()
             } else if (it) {
-                binding.progress.setVisible(true)
+                binding.progress.visible(true)
             } else {
                 binding.swiperefresh.isRefreshing = false
-                binding.progress.setInvisible()
+                binding.progress.invisible()
             }
         }
 
@@ -82,7 +82,7 @@ class CurrentFragment : BaseFragment() {
             navigator.showHistoryActivity(requireContext(), model.device)
         }
 
-        binding.followCard.setVisible(model.device.isUnfollowed())
+        binding.followCard.visible(model.device.isUnfollowed())
         binding.historicalCharts.isEnabled = !model.device.isUnfollowed()
         binding.followPromptBtn.setOnClickListener {
             handleFollowClick()
@@ -114,13 +114,13 @@ class CurrentFragment : BaseFragment() {
     }
 
     private fun onDeviceUpdated(device: UIDevice) {
-        binding.progress.setInvisible()
+        binding.progress.invisible()
         setAlerts(device)
         if (device.currentWeather == null || device.currentWeather.isEmpty()) {
-            binding.historicalCharts.setVisible(false)
+            binding.historicalCharts.visible(false)
         }
         binding.currentWeatherCard.setData(device.currentWeather)
-        binding.followCard.setVisible(device.isUnfollowed())
+        binding.followCard.visible(device.isUnfollowed())
         binding.historicalCharts.isEnabled = !device.isUnfollowed()
     }
 
@@ -158,6 +158,6 @@ class CurrentFragment : BaseFragment() {
             binding.alert.message(getString(R.string.no_data_message_public_device))
         }
         binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
-        binding.alert.setVisible(true)
+        binding.alert.visible(true)
     }
 }

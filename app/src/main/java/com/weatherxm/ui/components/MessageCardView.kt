@@ -17,7 +17,7 @@ import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 class MessageCardView : LinearLayout {
@@ -55,7 +55,7 @@ class MessageCardView : LinearLayout {
         try {
             attributes.getString(R.styleable.MessageCardView_message_title)?.let {
                 title(it)
-            } ?: binding.title.setVisible(false)
+            } ?: binding.title.visible(false)
 
             val text = attributes.getString(R.styleable.MessageCardView_message_message)
             val htmlText = attributes.getString(R.styleable.MessageCardView_message_html_message)
@@ -67,7 +67,7 @@ class MessageCardView : LinearLayout {
                 binding.message.hide(null)
             }
 
-            binding.closeButton.setVisible(
+            binding.closeButton.visible(
                 attributes.getBoolean(
                     R.styleable.MessageCardView_message_includes_close_button, true
                 )
@@ -77,7 +77,7 @@ class MessageCardView : LinearLayout {
                 if (this != 0) {
                     binding.icon.setImageResource(this)
                 }
-                binding.icon.setVisible(this != 0)
+                binding.icon.visible(this != 0)
             }
 
             attributes.getColor(R.styleable.MessageCardView_message_background_tint, 0).apply {
@@ -115,7 +115,7 @@ class MessageCardView : LinearLayout {
     fun title(title: String?): MessageCardView {
         binding.title.apply {
             text = title
-            setVisible(title != null)
+            visible(title != null)
         }
         return this
     }
@@ -128,7 +128,7 @@ class MessageCardView : LinearLayout {
     fun message(subtitle: String?): MessageCardView {
         binding.message.apply {
             text = subtitle
-            setVisible(subtitle != null)
+            visible(subtitle != null)
         }
         return this
     }
@@ -142,7 +142,7 @@ class MessageCardView : LinearLayout {
         binding.icon.setImageDrawable(
             AppCompatResources.getDrawable(context, R.drawable.ic_warning_hex_filled)
         )
-        binding.icon.setVisible(true)
+        binding.icon.visible(true)
         binding.card.setCardBackgroundColor(context.getColor(R.color.warningTint))
         if (includeStroke) {
             binding.card.setCardStroke(R.color.warning, 2)
@@ -154,7 +154,7 @@ class MessageCardView : LinearLayout {
         binding.icon.setImageDrawable(
             AppCompatResources.getDrawable(context, R.drawable.ic_error_hex_filled)
         )
-        binding.icon.setVisible(true)
+        binding.icon.visible(true)
         binding.card.setCardBackgroundColor(context.getColor(R.color.errorTint))
         if (includeStroke) {
             binding.card.setCardStroke(R.color.error, 2)
@@ -176,7 +176,7 @@ class MessageCardView : LinearLayout {
                     }
                 }
             }
-            setVisible(true)
+            visible(true)
         }
         return this
     }
@@ -189,7 +189,7 @@ class MessageCardView : LinearLayout {
         with(binding.action) {
             text = label
             setOnClickListener(listener)
-            setVisible(true)
+            visible(true)
             if (endIcon != null) {
                 icon = endIcon
                 iconGravity = ICON_GRAVITY_END
@@ -206,7 +206,7 @@ class MessageCardView : LinearLayout {
         with(binding.actionPrimary) {
             text = label
             setOnClickListener(listener)
-            setVisible(true)
+            visible(true)
             if (startIcon != null) {
                 icon = startIcon
                 iconGravity = ICON_GRAVITY_START
@@ -216,7 +216,7 @@ class MessageCardView : LinearLayout {
     }
 
     fun closeButton(listener: OnClickListener): MessageCardView {
-        binding.closeButton.setVisible(true)
+        binding.closeButton.visible(true)
         binding.closeButton.setOnClickListener(listener)
         return this
     }

@@ -10,7 +10,7 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentHistoryChartsBinding
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.setDisplayTimezone
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import timber.log.Timber
@@ -70,7 +70,7 @@ class HistoryChartsFragment : BaseFragment() {
                 binding.swiperefresh.isRefreshing = false
                 val data = resource.data
                 if (data == null || data.isEmpty()) {
-                    binding.chartsContainer.setVisible(false)
+                    binding.chartsContainer.visible(false)
                     binding.empty.clear()
                         .title(getString(R.string.empty_history_day_title))
                         .subtitle(
@@ -82,7 +82,7 @@ class HistoryChartsFragment : BaseFragment() {
                             } ?: getString(R.string.empty_history_day_subtitle)
                         )
                         .animation(R.raw.anim_empty_generic)
-                        .setVisible(true)
+                        .visible(true)
                 } else {
                     Timber.d("Updating charts for ${data.date}")
                     binding.charts.clearCharts()
@@ -104,28 +104,28 @@ class HistoryChartsFragment : BaseFragment() {
                         // Auto highlight past dates on 00:00
                         binding.charts.autoHighlightCharts(0F)
                     }
-                    binding.empty.setVisible(false)
-                    binding.chartsContainer.setVisible(true)
+                    binding.empty.visible(false)
+                    binding.chartsContainer.visible(true)
                 }
             }
             Status.ERROR -> {
                 Timber.d("Got error: $resource.message")
                 binding.swiperefresh.isRefreshing = false
-                binding.chartsContainer.setVisible(false)
+                binding.chartsContainer.visible(false)
                 binding.empty.clear()
                     .animation(R.raw.anim_error)
                     .title(getString(R.string.error_history_no_data_on_day))
                     .subtitle(resource.message)
                     .action(getString(R.string.action_retry))
                     .listener { callback?.onSwipeRefresh() }
-                    .setVisible(true)
+                    .visible(true)
             }
             Status.LOADING -> {
                 if (binding.swiperefresh.isRefreshing) {
-                    binding.empty.clear().setVisible(false)
+                    binding.empty.clear().visible(false)
                 } else {
-                    binding.chartsContainer.setVisible(false)
-                    binding.empty.clear().animation(R.raw.anim_loading).setVisible(true)
+                    binding.chartsContainer.visible(false)
+                    binding.empty.clear().animation(R.raw.anim_loading).visible(true)
                 }
             }
         }

@@ -10,7 +10,7 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityPreferencesBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.classSimpleName
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.WidgetHelper
 import org.koin.android.ext.android.inject
@@ -41,18 +41,18 @@ class PreferenceActivity : BaseActivity() {
         }
 
         if (model.hasDismissedSurveyPrompt()) {
-            binding.surveyPrompt.setVisible(false)
+            binding.surveyPrompt.visible(false)
         }
 
         model.onDismissSurveyPrompt().observe(this) {
-            if (it) binding.surveyPrompt.setVisible(true)
+            if (it) binding.surveyPrompt.visible(true)
         }
 
         model.isLoggedIn().observe(this) { result ->
             result
                 .mapLeft {
                     Timber.d("Not logged in. Hide survey prompt.")
-                    binding.surveyPrompt.setVisible(false)
+                    binding.surveyPrompt.visible(false)
                 }
         }
 

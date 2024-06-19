@@ -19,7 +19,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setBoostFallbackBackground
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import org.koin.android.ext.android.inject
@@ -69,8 +69,8 @@ class RewardBoostActivity : BaseActivity() {
                 }
                 Status.LOADING -> {
                     binding.statusView.clear().animation(R.raw.anim_loading)
-                    binding.mainContainer.setVisible(false)
-                    binding.statusView.setVisible(true)
+                    binding.mainContainer.visible(false)
+                    binding.statusView.visible(true)
                 }
             }
         }
@@ -84,7 +84,7 @@ class RewardBoostActivity : BaseActivity() {
         binding.boostCard.setBoostFallbackBackground()
         if (data.imgUrl.isNotEmpty()) {
             binding.backgroundImage.loadImage(imageLoader, data.imgUrl)
-            binding.backgroundImage.setVisible(true)
+            binding.backgroundImage.visible(true)
         }
 
         binding.title.text = data.title
@@ -97,13 +97,13 @@ class RewardBoostActivity : BaseActivity() {
                 getString(R.string.boost_tokens_lost, data.lostRewards)
             }
         } else {
-            binding.rewardsDesc.setVisible(false)
-            binding.divider.setVisible(false)
-            binding.dailyBoostScoreTitle.setVisible(false)
-            binding.dailyBoostScore.setVisible(false)
+            binding.rewardsDesc.visible(false)
+            binding.divider.visible(false)
+            binding.dailyBoostScoreTitle.visible(false)
+            binding.dailyBoostScore.visible(false)
         }
         binding.boostDetailsDesc.text = data.boostDesc
-        binding.boostDetailsDesc.setVisible(data.boostDesc.isNotEmpty())
+        binding.boostDetailsDesc.visible(data.boostDesc.isNotEmpty())
         binding.boostAboutDesc.text = data.about
         binding.aboutReadMore.setOnClickListener {
             analytics.trackEventSelectContent(
@@ -112,14 +112,14 @@ class RewardBoostActivity : BaseActivity() {
             )
             navigator.openWebsite(this, data.docUrl)
         }
-        binding.aboutReadMore.setVisible(data.docUrl.isNotEmpty())
+        binding.aboutReadMore.visible(data.docUrl.isNotEmpty())
 
         val detailsAdapter = RewardBoostDetailAdapter()
         binding.detailsRecycler.adapter = detailsAdapter
         detailsAdapter.submitList(data.details)
 
-        binding.statusView.setVisible(false)
-        binding.mainContainer.setVisible(true)
+        binding.statusView.visible(false)
+        binding.mainContainer.visible(true)
     }
 
     private fun onFetchError(boostReward: BoostReward, subtitle: String?) {
@@ -131,8 +131,8 @@ class RewardBoostActivity : BaseActivity() {
             .listener {
                 model.fetchRewardBoost(boostReward)
             }
-        binding.mainContainer.setVisible(false)
-        binding.statusView.setVisible(true)
+        binding.mainContainer.visible(false)
+        binding.statusView.visible(true)
     }
 
     override fun onResume() {

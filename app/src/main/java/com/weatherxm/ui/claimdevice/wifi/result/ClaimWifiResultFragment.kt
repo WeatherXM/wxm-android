@@ -13,7 +13,7 @@ import com.weatherxm.databinding.FragmentClaimWifiResultBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -56,8 +56,8 @@ class ClaimWifiResultFragment : BaseFragment() {
     }
 
     private fun updateUI(resource: Resource<UIDevice>) {
-        binding.cancel.setVisible(resource.status == Status.ERROR)
-        binding.retry.setVisible(resource.status == Status.ERROR)
+        binding.cancel.visible(resource.status == Status.ERROR)
+        binding.retry.visible(resource.status == Status.ERROR)
         when (resource.status) {
             Status.SUCCESS -> {
                 binding.statusView.animation(R.raw.anim_success, false)
@@ -81,7 +81,7 @@ class ClaimWifiResultFragment : BaseFragment() {
                         activity?.setResult(Activity.RESULT_OK)
                         activity?.finish()
                     }
-                    binding.goToStationBtn.setVisible(true)
+                    binding.goToStationBtn.visible(true)
                 }
                 analytics.trackEventViewContent(
                     contentName = AnalyticsService.ParamValue.CLAIMING_RESULT.paramValue,

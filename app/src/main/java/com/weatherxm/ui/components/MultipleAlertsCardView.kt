@@ -9,7 +9,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.res.ResourcesCompat
 import com.weatherxm.databinding.ViewMultipleAlertsCardBinding
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 
 class MultipleAlertsCardView : LinearLayout {
 
@@ -40,7 +40,7 @@ class MultipleAlertsCardView : LinearLayout {
     fun title(subtitle: String?): MultipleAlertsCardView {
         binding.title.apply {
             text = subtitle
-            setVisible(subtitle != null)
+            visible(subtitle != null)
         }
         return this
     }
@@ -48,7 +48,7 @@ class MultipleAlertsCardView : LinearLayout {
     fun action(listener: OnClickListener): MultipleAlertsCardView {
         with(binding.action) {
             setOnClickListener(listener)
-            setVisible(true)
+            visible(true)
         }
         return this
     }
@@ -57,7 +57,7 @@ class MultipleAlertsCardView : LinearLayout {
         binding.icon.setImageDrawable(
             ResourcesCompat.getDrawable(resources, drawableResId, context.theme)
         )
-        binding.icon.setVisible(true)
+        binding.icon.visible(true)
         return this
     }
 

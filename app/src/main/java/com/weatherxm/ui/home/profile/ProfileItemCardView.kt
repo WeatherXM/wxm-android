@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewProfileItemCardBinding
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 
 class ProfileItemCardView : LinearLayout {
 
@@ -40,7 +40,7 @@ class ProfileItemCardView : LinearLayout {
         try {
             attributes.getString(R.styleable.ProfileItemCardView_profile_item_title)?.let {
                 title(it)
-            } ?: binding.title.setVisible(false)
+            } ?: binding.title.visible(false)
 
             val subtitleText =
                 attributes.getString(R.styleable.ProfileItemCardView_profile_item_subtitle)
@@ -52,7 +52,7 @@ class ProfileItemCardView : LinearLayout {
                 if (this != 0) {
                     binding.icon.setImageResource(this)
                 }
-                binding.icon.setVisible(this != 0)
+                binding.icon.visible(this != 0)
             }
         } finally {
             attributes.recycle()
@@ -62,7 +62,7 @@ class ProfileItemCardView : LinearLayout {
     fun title(title: String?): ProfileItemCardView {
         binding.title.apply {
             text = title
-            setVisible(title != null)
+            visible(title != null)
         }
         return this
     }
@@ -70,7 +70,7 @@ class ProfileItemCardView : LinearLayout {
     fun subtitle(subtitle: String?): ProfileItemCardView {
         binding.subtitle.apply {
             text = subtitle
-            setVisible(subtitle != null)
+            visible(subtitle != null)
         }
         return this
     }
@@ -78,7 +78,7 @@ class ProfileItemCardView : LinearLayout {
     fun chipSubtitle(subtitle: String?): ProfileItemCardView {
         binding.chipSubtitle.apply {
             text = subtitle
-            setVisible(subtitle != null)
+            visible(subtitle != null)
         }
         return this
     }
@@ -90,14 +90,14 @@ class ProfileItemCardView : LinearLayout {
         with(binding.action) {
             text = label
             setOnClickListener(listener)
-            setVisible(true)
+            visible(true)
         }
         return this
     }
 
     fun clear() {
-        binding.subtitle.setVisible(false)
-        binding.chipSubtitle.setVisible(false)
-        binding.action.setVisible(false)
+        binding.subtitle.visible(false)
+        binding.chipSubtitle.visible(false)
+        binding.action.visible(false)
     }
 }
