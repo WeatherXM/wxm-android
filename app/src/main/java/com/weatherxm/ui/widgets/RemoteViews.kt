@@ -9,7 +9,6 @@ import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
 import com.weatherxm.R
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
@@ -21,7 +20,6 @@ import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.widgets.selectstation.SelectStationActivity
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
-import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Weather
 import com.weatherxm.util.isToday
 
@@ -132,17 +130,22 @@ fun RemoteViews.onDevice(
         }
     )
 
-    this.setStatus(context, device, widgetType)
+    if (device.isHelium()) {
+        setImageViewResource(R.id.bundleIcon, R.drawable.ic_helium)
+    } else if (device.isWifi()) {
+        setImageViewResource(R.id.bundleIcon, R.drawable.ic_wifi)
+    } else if (device.isCellular()) {
+        setImageViewResource(R.id.bundleIcon, R.drawable.ic_cellular)
+    }
+    setTextViewText(R.id.bundleName, device.bundleTitle)
+
+    this.setStatus(context, device)
 
     if (device.currentWeather == null || device.currentWeather.isEmpty()) {
         setViewVisibility(R.id.weatherDataLayout, View.GONE)
         setViewVisibility(R.id.noDataLayout, View.VISIBLE)
         setViewPadding(R.id.root, 2, 2, 2, 2)
-        val backgroundResId = if (widgetType == WidgetType.CURRENT_WEATHER_DETAILED) {
-            R.drawable.background_rounded_surface_error_stroke
-        } else {
-            R.drawable.background_rounded_error_stroke
-        }
+        val backgroundResId = R.drawable.background_rounded_surface_error_stroke
         setInt(R.id.root, "setBackgroundResource", backgroundResId)
     } else {
         setViewVisibility(R.id.noDataLayout, View.GONE)
@@ -155,45 +158,17 @@ fun RemoteViews.onDevice(
     appWidgetManager.updateAppWidget(appWidgetId, this)
 }
 
-fun RemoteViews.setStatus(
-    context: Context,
-    device: UIDevice,
-    widgetType: WidgetType
-) {
-    setImageViewResource(
-        R.id.statusIcon,
-        if (device.profile == DeviceProfile.Helium) {
-            R.drawable.ic_helium
-        } else {
-            R.drawable.ic_wifi
-        }
-    )
-
-    val lastSeen = if (widgetType == WidgetType.CURRENT_WEATHER_TILE) {
-        if (device.lastWeatherStationActivity?.isToday() == true) {
-            device.lastWeatherStationActivity.getFormattedTime(context)
-        } else {
-            device.lastWeatherStationActivity?.getFormattedDate()
-        }
+fun RemoteViews.setStatus(context: Context, device: UIDevice) {
+    val lastSeen = if (device.lastWeatherStationActivity?.isToday() == true || device.isOnline()) {
+        device.lastWeatherStationActivity?.getFormattedTime(context)
     } else {
-        device.lastWeatherStationActivity?.getRelativeFormattedTime()
+        device.lastWeatherStationActivity?.getFormattedDate()
     }
+    setTextViewText(R.id.lastSeen, lastSeen)
 
     when (device.isActive) {
         true -> {
-            setTextViewText(
-                R.id.lastSeen,
-                device.lastWeatherStationActivity?.getFormattedTime(context)
-            )
-            setTextColor(
-                R.id.lastSeen,
-                context.getColor(R.color.status_chip_content_online)
-            )
-            setInt(
-                R.id.statusIcon,
-                "setColorFilter",
-                context.getColor(R.color.status_chip_content_online)
-            )
+            setInt(R.id.statusIcon, "setColorFilter", context.getColor(R.color.success))
             setInt(
                 R.id.statusContainer,
                 "setBackgroundResource",
@@ -201,16 +176,7 @@ fun RemoteViews.setStatus(
             )
         }
         false -> {
-            setTextViewText(R.id.lastSeen, lastSeen)
-            setTextColor(
-                R.id.lastSeen,
-                context.getColor(R.color.status_chip_content_offline)
-            )
-            setInt(
-                R.id.statusIcon,
-                "setColorFilter",
-                context.getColor(R.color.status_chip_content_offline)
-            )
+            setInt(R.id.statusIcon, "setColorFilter", context.getColor(R.color.error))
             setInt(
                 R.id.statusContainer,
                 "setBackgroundResource",

@@ -7,7 +7,6 @@ import coil.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityDeviceSettingsBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceRelation
@@ -192,7 +191,7 @@ class DeviceSettingsActivity : BaseActivity() {
     private fun setupInfo() {
         binding.stationName.text = model.device.getDefaultOrFriendlyName()
         binding.deleteStationCard.visible(model.device.isOwned())
-        if (!model.device.isOwned() || model.device.profile != DeviceProfile.Helium) {
+        if (!model.device.isOwned() || model.device.isHelium()) {
             binding.frequencyTitle.visible(false)
             binding.frequencyDesc.visible(false)
             binding.changeFrequencyBtn.visible(false)
@@ -201,7 +200,7 @@ class DeviceSettingsActivity : BaseActivity() {
             binding.dividerBelowStationName.visible(false)
         }
 
-        if (model.device.profile == DeviceProfile.Helium) {
+        if (model.device.isHelium()) {
             with(binding.frequencyDesc) {
                 movementMethod =
                     me.saket.bettermovementmethod.BetterLinkMovementMethod.newInstance().apply {

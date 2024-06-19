@@ -111,7 +111,7 @@ class ClaimHeliumResultFragment : BaseFragment() {
         when (resource.status) {
             Status.SUCCESS -> {
                 val device = resource.data
-                if (device != null && device.shouldPromptUpdate()) {
+                if (device != null && device.isHelium() && device.shouldPromptUpdate()) {
                     analytics.trackEventPrompt(
                         AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
                         AnalyticsService.ParamValue.WARN.paramValue,

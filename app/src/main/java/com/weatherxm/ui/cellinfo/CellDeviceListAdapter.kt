@@ -10,10 +10,10 @@ import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
 import com.weatherxm.ui.common.visible
-import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getFormattedWindDirection
@@ -97,15 +97,8 @@ class CellDeviceListAdapter(
                 item.address
             }
 
-            with(binding.status) {
-                setStatusChip(
-                    item.lastWeatherStationActivity?.getRelativeFormattedTime(
-                        fallbackIfTooSoon = context.getString(R.string.just_now)
-                    ),
-                    item.profile,
-                    item.isActive,
-                )
-            }
+            binding.status.setStatusChip(item)
+            binding.bundle.setBundleChip(item)
         }
 
         private fun setWeatherData(device: UIDevice) {

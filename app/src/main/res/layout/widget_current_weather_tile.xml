@@ -23,27 +23,26 @@
                 android:id="@+id/statusContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_small"
                 android:layout_alignParentStart="true"
+                android:gravity="center_vertical"
                 android:paddingHorizontal="@dimen/padding_small"
                 android:paddingVertical="@dimen/padding_extra_small"
                 tools:background="@drawable/background_rounded_success">
 
                 <ImageView
                     android:id="@+id/statusIcon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/ic_wifi"
-                    android:tint="@color/status_chip_content_online"
-                    tools:ignore="ContentDescription,UseAppTint" />
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:src="@drawable/dot"
+                    tools:ignore="ContentDescription,UseAppTint"
+                    tools:tint="@color/success" />
 
                 <TextView
                     android:id="@+id/lastSeen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginStart="@dimen/margin_extra_small"
                     android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                    android:textColor="@color/status_chip_content_online"
                     tools:text="15:45 am" />
 
             </LinearLayout>
@@ -99,7 +98,7 @@
                     style="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     tools:text="26" />
 
@@ -108,7 +107,7 @@
                     style="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     tools:text="°C" />
             </LinearLayout>
 
@@ -127,7 +126,7 @@
 
                 <TextView
                     android:id="@+id/feelsLike"
-                    style="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                    style="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_small"

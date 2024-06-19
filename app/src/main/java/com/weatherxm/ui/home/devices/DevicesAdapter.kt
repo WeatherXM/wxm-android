@@ -15,11 +15,11 @@ import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
 import com.weatherxm.ui.common.visible
-import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getFormattedWindDirection
@@ -101,15 +101,8 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 item.address
             }
 
-            with(binding.status) {
-                setStatusChip(
-                    item.lastWeatherStationActivity?.getRelativeFormattedTime(
-                        fallbackIfTooSoon = context.getString(R.string.just_now)
-                    ),
-                    item.profile,
-                    item.isActive,
-                )
-            }
+            binding.status.setStatusChip(item)
+            binding.bundle.setBundleChip(item)
             setAlerts(item)
         }
 
@@ -244,7 +237,12 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 oldItem.currentWeather?.windDirection == newItem.currentWeather?.windDirection &&
                 oldItem.currentWeather?.feelsLike == newItem.currentWeather?.feelsLike &&
                 oldItem.currentWeather?.timestamp == newItem.currentWeather?.timestamp &&
-                oldItem.profile == newItem.profile &&
+                oldItem.bundleName == newItem.bundleName &&
+                oldItem.bundleTitle == newItem.bundleTitle &&
+                oldItem.connectivity == newItem.connectivity &&
+                oldItem.wsModel == newItem.wsModel &&
+                oldItem.gwModel == newItem.gwModel &&
+                oldItem.hwClass == newItem.hwClass &&
                 oldItem.alerts.size == newItem.alerts.size &&
                 oldItem.currentFirmware == newItem.currentFirmware &&
                 oldItem.assignedFirmware == newItem.assignedFirmware &&

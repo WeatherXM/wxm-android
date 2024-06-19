@@ -3,7 +3,13 @@
         {
             "id": "5be3efc0-4e23-11ed-8c4c-a94cd304a808",
             "name": "Office #29",
-            "connectivity": "helium",
+            "bundle": {
+                "name": "h1",
+                "title": "H1",
+                "connectivity": "helium",
+                "ws_model": "WS2000",
+                "hw_class": "CONSUMER"
+            },
             "cell_index": "87754e64dffffff",
             "cell_center": {
                 "lon": 0,

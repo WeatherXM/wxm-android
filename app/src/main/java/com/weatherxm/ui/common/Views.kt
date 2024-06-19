@@ -54,7 +54,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
-import com.weatherxm.data.DeviceProfile
+import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Weather.getWeatherAnimation
 import dev.chrisbanes.insetter.applyInsetter
 import java.util.Locale
@@ -264,30 +264,33 @@ fun Chip.setErrorChip() {
     setChipIconTintResource(R.color.error)
 }
 
-fun Chip.setStatusChip(lastSeen: String?, profile: DeviceProfile?, isActive: Boolean?) {
-    text = lastSeen
-    setIcon(
-        if (profile == DeviceProfile.Helium) {
-            R.drawable.ic_helium
-        } else {
-            R.drawable.ic_wifi
-        }
+fun Chip.setBundleChip(device: UIDevice) {
+    if (device.isHelium()) {
+        setIcon(R.drawable.ic_helium)
+    } else if (device.isWifi()) {
+        setIcon(R.drawable.ic_wifi)
+    } else if (device.isCellular()) {
+        setIcon(R.drawable.ic_cellular)
+    }
+    text = device.bundleTitle
+}
+
+fun Chip.setStatusChip(device: UIDevice) {
+    text = device.lastWeatherStationActivity?.getRelativeFormattedTime(
+        fallbackIfTooSoon = context.getString(R.string.just_now)
     )
-    when (isActive) {
+    when (device.isActive) {
         true -> {
-            setChipBackgroundColorResource(R.color.status_chip_background_online)
-            setTextColor(context.getColor(R.color.status_chip_content_online))
-            setChipIconTintResource(R.color.status_chip_content_online)
+            setChipBackgroundColorResource(R.color.successTint)
+            setChipIconTintResource(R.color.success)
         }
         false -> {
-            setChipBackgroundColorResource(R.color.status_chip_background_offline)
-            setTextColor(context.getColor(R.color.status_chip_content_offline))
-            setChipIconTintResource(R.color.status_chip_content_offline)
+            setChipBackgroundColorResource(R.color.errorTint)
+            setChipIconTintResource(R.color.error)
         }
         else -> {
             setChipBackgroundColorResource(R.color.midGrey)
-            setTextColor(context.getColor(R.color.midGrey))
-            setChipIconTintResource(R.color.midGrey)
+            setChipIconTintResource(R.color.darkGrey)
         }
     }
 }

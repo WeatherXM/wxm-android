@@ -6,12 +6,14 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.squareup.moshi.JsonClass
-import com.weatherxm.data.Connectivity
+import com.weatherxm.data.Bundle
 import com.weatherxm.data.Location
+import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -49,7 +51,7 @@ data class SearchResult(
     var name: String?,
     var center: Location?,
     var addressPlace: String? = null,
-    var stationConnectivity: Connectivity? = null,
+    var stationBundle: Bundle? = null,
     var stationCellIndex: String? = null,
     var stationId: String? = null,
     var relation: DeviceRelation? = null,
@@ -61,7 +63,17 @@ data class SearchResult(
             cellIndex = stationCellIndex ?: String.empty(),
             cellCenter = center,
             relation = relation,
-            profile = null,
+            bundleName = try {
+                BundleName.valueOf(stationBundle?.name ?: String.empty())
+            } catch (e: IllegalArgumentException) {
+                Timber.e("Wrong Bundle Name: ${stationBundle?.name} for Device $name")
+                null
+            },
+            bundleTitle = stationBundle?.title,
+            connectivity = stationBundle?.connectivity,
+            wsModel = stationBundle?.wsModel,
+            gwModel = stationBundle?.gwModel,
+            hwClass = stationBundle?.hwClass,
             isActive = null,
             lastWeatherStationActivity = null,
             timezone = null,

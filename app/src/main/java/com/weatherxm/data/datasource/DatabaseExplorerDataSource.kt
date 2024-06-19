@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.right
+import com.weatherxm.data.Bundle
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
@@ -61,7 +62,14 @@ class DatabaseExplorerDataSource(
                     name = it.name,
                     center = Location(it.lat, it.lon),
                     addressPlace = it.addressPlace,
-                    stationConnectivity = it.stationConnectivity,
+                    stationBundle = Bundle(
+                        it.bundleName,
+                        it.bundleTitle,
+                        it.connectivity,
+                        it.wsModel,
+                        it.gwModel,
+                        it.hwClass
+                    ),
                     stationCellIndex = it.stationCellIndex,
                     stationId = it.stationId
                 )
@@ -82,7 +90,12 @@ class DatabaseExplorerDataSource(
                 lat = search.center?.lat ?: 0.0,
                 lon = search.center?.lon ?: 0.0,
                 addressPlace = search.addressPlace,
-                stationConnectivity = search.stationConnectivity,
+                bundleName = search.stationBundle?.name,
+                bundleTitle = search.stationBundle?.title,
+                connectivity = search.stationBundle?.connectivity,
+                wsModel = search.stationBundle?.wsModel,
+                gwModel = search.stationBundle?.gwModel,
+                hwClass = search.stationBundle?.hwClass,
                 stationCellIndex = search.stationCellIndex,
                 stationId = search.stationId,
             )

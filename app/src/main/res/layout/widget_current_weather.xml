@@ -50,21 +50,75 @@
             android:layout_marginTop="@dimen/margin_small"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/padding_normal"
-            android:weightSum="2">
+            android:paddingHorizontal="@dimen/padding_normal">
 
             <LinearLayout
-                android:id="@+id/addressContainer"
+                android:id="@+id/statusContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/padding_small"
+                android:paddingVertical="@dimen/padding_extra_small"
+                tools:background="@drawable/background_rounded_success">
+
+                <ImageView
+                    android:id="@+id/statusIcon"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:src="@drawable/dot"
+                    tools:ignore="ContentDescription,UseAppTint"
+                    tools:tint="@color/success" />
+
+                <TextView
+                    android:id="@+id/lastSeen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_extra_small"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                    tools:text="15:45 am" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/bundleContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
                 android:background="@drawable/background_rounded_blue_tint"
                 android:gravity="center"
                 android:paddingHorizontal="@dimen/padding_small"
                 android:paddingVertical="@dimen/padding_extra_small">
 
                 <ImageView
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
+                    android:id="@+id/bundleIcon"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:tint="@color/colorOnSurface"
+                    tools:ignore="ContentDescription,UseAppTint"
+                    tools:src="@drawable/ic_wifi" />
+
+                <TextView
+                    android:id="@+id/bundleName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_extra_small"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                    tools:text="M5" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/addressContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:background="@drawable/background_rounded_blue_tint"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/padding_small"
+                android:paddingVertical="@dimen/padding_extra_small">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:src="@drawable/ic_hex"
                     android:tint="@color/colorOnSurface"
                     tools:ignore="ContentDescription,UseAppTint" />
@@ -73,37 +127,11 @@
                     android:id="@+id/address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
+                    android:layout_marginStart="@dimen/margin_extra_small"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                     tools:text="Athens, GR" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/statusContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
-                android:gravity="center"
-                android:paddingHorizontal="@dimen/padding_small"
-                android:paddingVertical="@dimen/padding_extra_small"
-                tools:background="@drawable/background_rounded_success">
-
-                <ImageView
-                    android:id="@+id/statusIcon"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_wifi"
-                    android:tint="@color/colorOnSurface"
-                    tools:ignore="ContentDescription,UseAppTint" />
-
-                <TextView
-                    android:id="@+id/lastSeen"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                    tools:text="15:45" />
-
             </LinearLayout>
         </LinearLayout>
 
@@ -111,7 +139,7 @@
             android:id="@+id/weatherDataLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small_to_normal"
+            android:layout_marginTop="@dimen/margin_small"
             android:background="@drawable/background_rounded_surface"
             android:baselineAligned="false"
             android:orientation="horizontal"

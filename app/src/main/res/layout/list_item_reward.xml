@@ -21,7 +21,7 @@
         android:layout_width="12dp"
         android:layout_height="12dp"
         android:layout_marginStart="44dp"
-        android:background="@drawable/token_transaction_date_icon"
+        android:background="@drawable/dot"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/prev_line" />
 

@@ -40,12 +40,6 @@
     <!-- History Charts -->
     <color name="chart_secondary_line">@color/light_lightest_blue</color>
 
-    <!-- Status Chip (last seen) -->
-    <color name="status_chip_background_online">@color/light_success_tint</color>
-    <color name="status_chip_background_offline">@color/light_error_tint</color>
-    <color name="status_chip_content_online">@color/textColor</color>
-    <color name="status_chip_content_offline">@color/textColor</color>
-
     <!-- Network Stats -->
     <color name="network_stats_slider">@color/network_stats_slider_light</color>
     <color name="network_stats_button">@color/light_lightest_blue</color>

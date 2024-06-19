@@ -3,10 +3,17 @@
     "name": "Weatherwise Wintergreen Stratocumulus",
     "label": "01:23:45:67:89:AB:CD:DE:EF",
     "timezone": "Europe/Athens",
-    "profile": "Helium",
     "location": {
         "lat": 37.981262,
         "lon": 23.730503
+    },
+    "bundle": {
+        "name": "m5",
+        "title": "M5",
+        "connectivity": "wifi",
+        "ws_model": "WS1000",
+        "gw_model": "WG1000",
+        "hw_class": "CONSUMER"
     },
     "attributes": {
         "isActive": true,

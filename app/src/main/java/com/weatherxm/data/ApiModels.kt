@@ -5,6 +5,7 @@ import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.weatherxm.ui.common.AnnotationGroupCode
+import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
@@ -50,11 +51,26 @@ data class Location(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
+data class Bundle(
+    val name: String?,
+    val title: String?,
+    val connectivity: String?,
+    @Json(name = "ws_model")
+    val wsModel: String?,
+    @Json(name = "gw_model")
+    val gwModel: String?,
+    @Json(name = "hw_class")
+    val hwClass: String?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
 data class PublicDevice(
     val id: String,
     val name: String,
     val timezone: String?,
-    val profile: DeviceProfile?,
+    val bundle: Bundle?,
     val isActive: Boolean?,
     val lastWeatherStationActivity: ZonedDateTime?,
     val cellIndex: String,
@@ -66,7 +82,17 @@ data class PublicDevice(
             id = id,
             name = name,
             cellIndex = cellIndex,
-            profile = profile,
+            bundleName = try {
+                BundleName.valueOf(bundle?.name ?: String.empty())
+            } catch (e: IllegalArgumentException) {
+                Timber.e("Wrong Bundle Name: ${bundle?.name} for Device $name")
+                null
+            },
+            bundleTitle = bundle?.title,
+            connectivity = bundle?.connectivity,
+            wsModel = bundle?.wsModel,
+            gwModel = bundle?.gwModel,
+            hwClass = bundle?.hwClass,
             isActive = isActive,
             lastWeatherStationActivity = lastWeatherStationActivity,
             timezone = timezone,
@@ -95,7 +121,7 @@ data class Device(
     val label: String?,
     val location: Location?,
     val timezone: String?,
-    val profile: DeviceProfile?,
+    val bundle: Bundle?,
     val attributes: Attributes?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
@@ -133,7 +159,17 @@ data class Device(
             name = name,
             cellIndex = attributes?.hex7?.index ?: String.empty(),
             cellCenter = attributes?.hex7?.center,
-            profile = profile,
+            bundleName = try {
+                BundleName.valueOf(bundle?.name ?: String.empty())
+            } catch (e: IllegalArgumentException) {
+                Timber.e("Wrong Bundle Name: ${bundle?.name} for Device $name")
+                null
+            },
+            bundleTitle = bundle?.title,
+            connectivity = bundle?.connectivity,
+            wsModel = bundle?.wsModel,
+            gwModel = bundle?.gwModel,
+            hwClass = bundle?.hwClass,
             isActive = attributes?.isActive,
             lastWeatherStationActivity = attributes?.lastWeatherStationActivity,
             timezone = timezone,
@@ -436,7 +472,7 @@ data class NetworkSearchResults(
 data class NetworkSearchDeviceResult(
     val id: String?,
     val name: String?,
-    val connectivity: Connectivity?,
+    val bundle: Bundle?,
     @Json(name = "cell_index")
     val cellIndex: String?,
     @Json(name = "cell_center")
@@ -648,13 +684,6 @@ data class WalletRewards(
     @Json(name = "total_claimed")
     val totalClaimed: Double?,
 ) : Parcelable
-
-enum class DeviceProfile {
-    M5,
-    Helium,
-    D1,
-    Pulse
-}
 
 @Suppress("EnumNaming")
 enum class Connectivity {

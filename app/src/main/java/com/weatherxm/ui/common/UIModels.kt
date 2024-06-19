@@ -7,7 +7,6 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.data.Hex
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.Location
@@ -50,7 +49,12 @@ data class UIDevice(
     var relation: DeviceRelation?,
     val label: String?,
     var friendlyName: String?,
-    var profile: DeviceProfile?,
+    val bundleName: BundleName?,
+    val bundleTitle: String?,
+    val connectivity: String?,
+    val wsModel: String?,
+    val gwModel: String?,
+    val hwClass: String?,
     val location: Location?,
     var cellCenter: Location?,
     var hex7: Hex?,
@@ -87,6 +91,11 @@ data class UIDevice(
             null,
             null,
             null,
+            null,
+            null,
+            null,
+            null,
+            null,
             null
         )
     }
@@ -101,7 +110,7 @@ data class UIDevice(
         return isOwned()
             && !currentFirmware.equals(assignedFirmware)
             && !assignedFirmware.isNullOrEmpty()
-            && profile == DeviceProfile.Helium
+            && (bundleName == BundleName.h1 || bundleName == BundleName.h2)
     }
 
     fun getDefaultOrFriendlyName(): String {
@@ -145,6 +154,10 @@ data class UIDevice(
         }
         return alerts
     }
+
+    fun isHelium() = connectivity == "helium"
+    fun isWifi() = connectivity == "wifi"
+    fun isCellular() = connectivity == "cellular"
 }
 
 @Keep
@@ -524,4 +537,14 @@ enum class AnnotationGroupCode : Parcelable {
     USER_RELOCATION_PENALTY,
     CELL_CAPACITY_REACHED,
     UNKNOWN
+}
+
+@Suppress("EnumNaming")
+@Parcelize
+enum class BundleName : Parcelable {
+    m5,
+    h1,
+    h2,
+    d1,
+    pulse
 }

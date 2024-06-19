@@ -2,7 +2,6 @@ package com.weatherxm.data.database
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
-import com.weatherxm.data.Connectivity
 import java.time.ZonedDateTime
 import java.util.Date
 
@@ -17,16 +16,6 @@ class DatabaseConverters {
     @TypeConverter
     fun fromZonedDateTime(zonedDateTime: ZonedDateTime): String {
         return zonedDateTime.toString()
-    }
-
-    @TypeConverter
-    fun fromConnectivity(connectivity: Connectivity): String {
-        return connectivity.name
-    }
-
-    @TypeConverter
-    fun toConnectivity(connectivity: String): Connectivity {
-        return enumValueOf<Connectivity>(connectivity)
     }
 
     @TypeConverter

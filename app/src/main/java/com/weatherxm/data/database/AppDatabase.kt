@@ -10,7 +10,7 @@ import com.weatherxm.data.database.entities.NetworkSearchRecent
 
 @Database(
     entities = [DeviceHourlyHistory::class, NetworkSearchRecent::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(DatabaseConverters::class)

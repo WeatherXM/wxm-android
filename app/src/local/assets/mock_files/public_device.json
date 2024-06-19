@@ -2,6 +2,13 @@
     "id": "76d13810-absd-11ec-812e-6312632e9ec",
     "name": "Crazy Canary Blizzard",
     "timezone": "Europe/Athens",
+    "bundle": {
+        "name": "h1",
+        "title": "H1",
+        "connectivity": "helium",
+        "ws_model": "WS2000",
+        "hw_class": "CONSUMER"
+    },
     "isActive": true,
     "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
     "cellIndex": "8a283082a677fff",

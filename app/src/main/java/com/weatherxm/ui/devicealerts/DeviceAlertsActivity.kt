@@ -4,8 +4,8 @@ import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.DeviceProfile
 import com.weatherxm.databinding.ActivityDeviceAlertsBinding
+import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.UIDevice
@@ -75,10 +75,10 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
     }
 
     override fun onLowBatteryReadMoreClicked() {
-        val url = when (device?.profile) {
-            DeviceProfile.M5 -> getString(R.string.docs_url_low_battery_m5)
-            DeviceProfile.D1 -> getString(R.string.docs_url_low_battery_d1)
-            DeviceProfile.Helium -> getString(R.string.docs_url_low_battery_helium)
+        val url = when (device?.bundleName) {
+            BundleName.m5 -> getString(R.string.docs_url_low_battery_m5)
+            BundleName.d1 -> getString(R.string.docs_url_low_battery_d1)
+            BundleName.h1, BundleName.h2 -> getString(R.string.docs_url_low_battery_helium)
             else -> String.empty()
         }
         navigator.openWebsite(this, url)
