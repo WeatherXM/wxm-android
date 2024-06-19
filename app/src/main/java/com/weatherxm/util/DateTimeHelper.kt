@@ -48,6 +48,13 @@ object DateTimeHelper : KoinComponent {
         }
     }
 
+    fun ZonedDateTime?.getFormattedDateAndTime(context: Context): String {
+        val lastUpdatedDate = getFormattedDate(true)
+        val lastUpdatedTime = this?.getFormattedTime(context, true)
+        return "$lastUpdatedDate, $lastUpdatedTime"
+
+    }
+
     fun ZonedDateTime?.getFormattedDate(includeYear: Boolean = false): String {
         return this?.let {
             if (includeYear) {

@@ -39,7 +39,7 @@ class DeviceInfoItemAdapter(
 
         fun bind(item: UIDeviceInfoItem, position: Int) {
             if (position == itemCount - 1) {
-                binding.bottomBorder.setVisible(false)
+                binding.bottomBorder.visible(false)
             }
 
             binding.title.text = item.title

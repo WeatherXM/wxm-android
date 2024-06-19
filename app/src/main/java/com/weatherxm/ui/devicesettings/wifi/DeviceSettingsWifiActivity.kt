@@ -18,8 +18,8 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.setVisible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicesettings.DeviceInfoItemAdapter
 import com.weatherxm.ui.devicesettings.FriendlyNameDialogFragment
@@ -123,7 +123,7 @@ class DeviceSettingsWifiActivity : BaseActivity() {
         binding.editLocationBtn.setOnClickListener {
             navigator.showEditLocation(editLocationLauncher, this, model.device)
         }
-        binding.editLocationBtn.setVisible(model.device.isOwned())
+        binding.editLocationBtn.visible(model.device.isOwned())
 
         if (model.device.relation == DeviceRelation.FOLLOWED) {
             binding.locationDesc.setHtml(
@@ -153,7 +153,7 @@ class DeviceSettingsWifiActivity : BaseActivity() {
         }
         getMinimap(binding.locationLayout.width, deviceMapLocation, model.device.hex7)?.let {
             binding.locationMinimap.loadImage(imageLoader, it)
-        } ?: binding.locationMinimap.setVisible(false)
+        } ?: binding.locationMinimap.visible(false)
     }
 
     private fun onRemoveStation() {
@@ -199,7 +199,7 @@ class DeviceSettingsWifiActivity : BaseActivity() {
                 )
             }
         } else {
-            binding.deleteStationCard.setVisible(false)
+            binding.deleteStationCard.visible(false)
         }
 
         model.onDeviceInfo().observe(this) { deviceInfo ->
@@ -226,6 +226,6 @@ class DeviceSettingsWifiActivity : BaseActivity() {
             }
         }
 
-        model.getDeviceInformation()
+        model.getDeviceInformation(this)
     }
 }

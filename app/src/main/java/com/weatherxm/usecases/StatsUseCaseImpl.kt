@@ -13,7 +13,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.networkstats.NetworkStationStats
 import com.weatherxm.ui.networkstats.NetworkStats
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
-import com.weatherxm.util.DateTimeHelper.getFormattedTime
+import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
 import com.weatherxm.util.NumberUtils.compactNumber
 import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.Weather.EMPTY_VALUE
@@ -27,10 +27,6 @@ class StatsUseCaseImpl(
 
     override suspend fun getNetworkStats(): Either<Failure, NetworkStats> {
         return repository.getNetworkStats().map { stats ->
-            val timestampInUserTz = stats.lastUpdated?.withZoneSameInstant(ZoneId.systemDefault())
-            val lastUpdatedDate = timestampInUserTz?.getFormattedDate(includeYear = true)
-            val lastUpdatedTime = timestampInUserTz?.getFormattedTime(context)
-
             val dataDaysEntries = getEntriesOfTimeseries(stats.dataDays)
             val rewardEntries = getEntriesOfTimeseries(stats.tokens?.allocatedPerDay)
             return@map NetworkStats(
@@ -71,7 +67,9 @@ class StatsUseCaseImpl(
                 claimedStationStats = createStationStats(stats.weatherStations.claimed?.details),
                 activeStations = formatNumber(stats.weatherStations.active?.total),
                 activeStationStats = createStationStats(stats.weatherStations.active?.details),
-                lastUpdated = "$lastUpdatedDate, $lastUpdatedTime"
+                lastUpdated = stats.lastUpdated
+                    ?.withZoneSameInstant(ZoneId.systemDefault())
+                    .getFormattedDateAndTime(context)
             )
         }
     }

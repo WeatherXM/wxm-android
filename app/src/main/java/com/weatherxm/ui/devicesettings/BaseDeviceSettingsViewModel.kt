@@ -1,5 +1,6 @@
 package com.weatherxm.ui.devicesettings
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,7 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
+import com.weatherxm.data.BatteryState
 import com.weatherxm.data.DeviceInfo
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
@@ -140,5 +142,28 @@ abstract class BaseDeviceSettingsViewModel(
         return sharingText
     }
 
-    abstract fun handleInfo(info: DeviceInfo)
+    protected fun handleLowBatteryInfo(
+        target: MutableList<UIDeviceInfoItem>,
+        batteryState: BatteryState
+    ) {
+        if (batteryState == BatteryState.low) {
+            target.add(
+                UIDeviceInfoItem(
+                    resources.getString(R.string.battery_level),
+                    resources.getString(R.string.battery_level_low),
+                    warning = resources.getString(R.string.battery_level_low_message)
+                )
+            )
+        } else {
+            target.add(
+                UIDeviceInfoItem(
+                    resources.getString(R.string.battery_level),
+                    resources.getString(R.string.battery_level_ok)
+                )
+            )
+        }
+    }
+
+    abstract fun getDeviceInformation(context: Context)
+    abstract fun handleInfo(context: Context, info: DeviceInfo)
 }

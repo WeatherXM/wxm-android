@@ -481,10 +481,11 @@
     <string name="hardware_version">Hardware Version</string>
     <string name="firmware_version">Firmware Version</string>
     <string name="gps_number_sats">GPS - Number of connected satellites</string>
+    <string name="satellites">%1$s Satellites @ %2$s</string>
     <string name="last_hotspot">Last Hotspot Seen</string>
     <string name="last_tx_rssi">Last Tx RSSI</string>
     <string name="wifi_rssi">WiFi Signal (RSSI)</string>
-    <string name="rssi">%s dBm</string>
+    <string name="rssi">%1$s dBm @ %2$s</string>
     <string name="claimed_at">Claimed at</string>
     <string name="battery_level">Battery Level</string>
     <string name="battery_level_ok">Good</string>

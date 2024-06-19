@@ -264,6 +264,6 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
             }
         }
 
-        model.getDeviceInformation()
+        model.getDeviceInformation(this)
     }
 }
