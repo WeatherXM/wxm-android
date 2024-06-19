@@ -9,7 +9,7 @@ import com.weatherxm.databinding.ListItemRewardEndOfDataBinding
 import com.weatherxm.ui.common.RewardTimelineType
 import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Resources
 import org.koin.core.component.KoinComponent
@@ -96,7 +96,7 @@ class RewardsListAdapter(
             val formattedDate = timestamp.getFormattedDate(true)
 
             if (position == 0) {
-                binding.prevLine.setVisible(false)
+                binding.prevLine.visible(false)
                 binding.date.text = formattedDate
             } else {
                 val prevFormattedDate =
@@ -104,13 +104,13 @@ class RewardsListAdapter(
                         ?: String.empty()
 
                 if (formattedDate == prevFormattedDate) {
-                    binding.prevLine.setVisible(false)
-                    binding.datePoint.setVisible(false)
-                    binding.date.setVisible(false)
+                    binding.prevLine.visible(false)
+                    binding.datePoint.visible(false)
+                    binding.date.visible(false)
                 } else {
-                    binding.prevLine.setVisible(true)
-                    binding.datePoint.setVisible(true)
-                    binding.date.setVisible(true)
+                    binding.prevLine.visible(true)
+                    binding.datePoint.visible(true)
+                    binding.date.visible(true)
                     binding.date.text = formattedDate
                 }
             }

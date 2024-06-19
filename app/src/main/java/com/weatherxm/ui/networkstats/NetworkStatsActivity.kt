@@ -11,7 +11,7 @@ import com.weatherxm.databinding.ActivityNetworkStatsBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.removeLinksUnderline
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.NumberUtils.compactNumber
 import com.weatherxm.util.initializeNetworkStatsChart
@@ -75,16 +75,16 @@ class NetworkStatsActivity : BaseActivity() {
                     navigator.openWebsite(this, it.url)
                 }
             }
-            binding.mainnetCard.setVisible(true)
+            binding.mainnetCard.visible(true)
         }
 
         model.onNetworkStats().observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    binding.empty.setVisible(false)
+                    binding.empty.visible(false)
                     it.data?.let { data ->
                         updateUI(data)
-                        binding.dataContainer.setVisible(true)
+                        binding.dataContainer.visible(true)
                     }
                 }
                 Status.ERROR -> {
@@ -93,13 +93,13 @@ class NetworkStatsActivity : BaseActivity() {
                         .subtitle(it.message)
                         .action(getString(R.string.action_retry))
                         .listener { model.getNetworkStats() }
-                    binding.dataContainer.setVisible(false)
+                    binding.dataContainer.visible(false)
                 }
                 Status.LOADING -> {
-                    binding.dataContainer.setVisible(false)
+                    binding.dataContainer.visible(false)
                     binding.empty.clear()
                         .animation(R.raw.anim_loading)
-                        .setVisible(true)
+                        .visible(true)
                 }
             }
         }
@@ -232,7 +232,7 @@ class NetworkStatsActivity : BaseActivity() {
                 binding.circSupplyBar.valueTo = data.totalSupply.toFloat()
                 binding.circSupplyBar.values = listOf(data.circulatingSupply.toFloat())
             } else {
-                binding.circSupplyBar.setVisible(false)
+                binding.circSupplyBar.visible(false)
             }
 
             totals.text = data.totalStations
@@ -265,7 +265,7 @@ class NetworkStatsActivity : BaseActivity() {
                 }
                 setHtml(R.string.view_rewards_contract, it)
                 removeLinksUnderline()
-                setVisible(true)
+                visible(true)
             }
         }
 
@@ -280,7 +280,7 @@ class NetworkStatsActivity : BaseActivity() {
                 )
                 navigator.openWebsite(this@NetworkStatsActivity, txUrl)
             }
-            binding.lastRunOpenInNew.setVisible(true)
+            binding.lastRunOpenInNew.visible(true)
         }
 
         data.tokenUrl?.let {
@@ -300,7 +300,7 @@ class NetworkStatsActivity : BaseActivity() {
                 }
                 setHtml(R.string.view_token_contract, it)
                 removeLinksUnderline()
-                setVisible(true)
+                visible(true)
             }
         }
     }

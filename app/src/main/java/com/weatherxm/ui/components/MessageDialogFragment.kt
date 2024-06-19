@@ -15,7 +15,7 @@ import com.weatherxm.databinding.FragmentMessageDialogBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
@@ -85,7 +85,7 @@ class MessageDialogFragment : BaseBottomSheetDialogFragment() {
 
         title?.let {
             binding.title.text = it
-        } ?: binding.title.setVisible(false)
+        } ?: binding.title.visible(false)
 
         message?.let {
             binding.message.text = it
@@ -95,7 +95,7 @@ class MessageDialogFragment : BaseBottomSheetDialogFragment() {
             binding.readMoreAction.setOnClickListener {
                 navigator.openWebsite(context, url)
             }
-            binding.readMoreAction.setVisible(true)
+            binding.readMoreAction.visible(true)
         }
     }
 

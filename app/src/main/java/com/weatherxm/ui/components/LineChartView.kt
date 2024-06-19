@@ -10,7 +10,7 @@ import com.github.mikephil.charting.charts.LineChart
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewLineChartBinding
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 
 class LineChartView : LinearLayout {
 
@@ -47,28 +47,28 @@ class LineChartView : LinearLayout {
                 getString(R.styleable.LineChartView_line_chart_primary_line_name)?.let {
                     binding.primaryLineName.text = it
                 } ?: kotlin.run {
-                    binding.primaryLineName.setVisible(false)
-                    binding.primaryLineColor.setVisible(false)
+                    binding.primaryLineName.visible(false)
+                    binding.primaryLineColor.visible(false)
                 }
 
                 getString(R.styleable.LineChartView_line_chart_secondary_line_name)?.let {
                     binding.secondaryLineName.text = it
                 } ?: kotlin.run {
-                    binding.secondaryLineName.setVisible(false)
-                    binding.secondaryLineColor.setVisible(false)
+                    binding.secondaryLineName.visible(false)
+                    binding.secondaryLineColor.visible(false)
                 }
 
                 getString(R.styleable.LineChartView_line_chart_primary_highlight_name)?.let {
                     binding.primaryDataName.text = it
                 } ?: kotlin.run {
-                    binding.primaryDataName.setVisible(false)
+                    binding.primaryDataName.visible(false)
                 }
 
                 getString(R.styleable.LineChartView_line_chart_secondary_highlight_name)?.let {
                     binding.secondaryDataName.text = it
                 } ?: kotlin.run {
-                    binding.secondaryDataName.setVisible(false)
-                    binding.divider.setVisible(false)
+                    binding.secondaryDataName.visible(false)
+                    binding.divider.visible(false)
                 }
 
                 binding.secondaryLineColor.setChipBackgroundColorResource(
@@ -127,17 +127,17 @@ class LineChartView : LinearLayout {
     }
 
     fun primaryLine(lineName: String?, dataName: String) {
-        binding.primaryLineName.setVisible(!lineName.isNullOrEmpty())
-        binding.primaryLineColor.setVisible(!lineName.isNullOrEmpty())
+        binding.primaryLineName.visible(!lineName.isNullOrEmpty())
+        binding.primaryLineColor.visible(!lineName.isNullOrEmpty())
         binding.primaryDataName.text = dataName
         binding.primaryLineName.text = lineName
     }
 
     fun secondaryLine(lineName: String?, dataName: String?) {
-        binding.secondaryLineName.setVisible(!lineName.isNullOrEmpty())
-        binding.secondaryLineColor.setVisible(!lineName.isNullOrEmpty())
-        binding.secondaryDataName.setVisible(!dataName.isNullOrEmpty())
-        binding.divider.setVisible(!dataName.isNullOrEmpty())
+        binding.secondaryLineName.visible(!lineName.isNullOrEmpty())
+        binding.secondaryLineColor.visible(!lineName.isNullOrEmpty())
+        binding.secondaryDataName.visible(!dataName.isNullOrEmpty())
+        binding.divider.visible(!dataName.isNullOrEmpty())
         binding.secondaryDataName.text = dataName
         binding.secondaryLineName.text = lineName
     }

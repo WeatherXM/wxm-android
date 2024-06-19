@@ -14,7 +14,7 @@ import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.android.ext.android.inject
@@ -43,7 +43,7 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
             binding.guideGif.loadImage(imageLoader, R.raw.d1_claim)
         }
         binding.secondStep.setHtml(R.string.prepare_gateway_wifi_second_step)
-        binding.m5Notice.setVisible(model.deviceType == DeviceType.M5_WIFI)
+        binding.m5Notice.visible(model.deviceType == DeviceType.M5_WIFI)
 
         binding.enterManuallyBtn.setOnClickListener {
             model.next()

@@ -9,6 +9,7 @@ import com.weatherxm.databinding.ViewAddressSearchBinding
 import com.weatherxm.ui.common.SearchResultsAdapter
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.onTextChanged
+import com.weatherxm.ui.common.visible
 
 class AddressSearchView : LinearLayout {
 
@@ -42,7 +43,7 @@ class AddressSearchView : LinearLayout {
     ) {
         this.adapter = adapter
         binding.recycler.adapter = adapter
-        binding.recycler.visibility = GONE
+        binding.recycler.visible(false)
         binding.searchBox.onTextChanged {
             if (it.isEmpty() || it.length <= 2) {
                 clear()
@@ -61,11 +62,11 @@ class AddressSearchView : LinearLayout {
 
     fun setData(newData: List<SearchSuggestion>) {
         adapter.updateData(binding.searchBox.text.toString(), newData)
-        binding.recycler.visibility = VISIBLE
+        binding.recycler.visible(true)
     }
 
     fun clear() {
         adapter.updateData(String.empty(), mutableListOf())
-        binding.recycler.visibility = GONE
+        binding.recycler.visible(false)
     }
 }

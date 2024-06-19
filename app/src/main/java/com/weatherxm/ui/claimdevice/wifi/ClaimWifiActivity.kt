@@ -21,7 +21,7 @@ import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -103,8 +103,8 @@ class ClaimWifiActivity : BaseActivity() {
                     locationModel.requestUserLocation()
                 }
                 PAGE_RESULT -> {
-                    binding.appBar.setVisible(false)
-                    binding.progress.setVisible(false)
+                    binding.appBar.visible(false)
+                    binding.progress.visible(false)
                     model.claimDevice(locationModel.getInstallationLocation())
                 }
             }

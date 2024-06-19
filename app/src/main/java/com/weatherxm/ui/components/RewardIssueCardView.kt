@@ -4,12 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.weatherxm.databinding.ViewRewardIssueBinding
 import com.weatherxm.ui.common.setCardStroke
+import com.weatherxm.ui.common.visible
 
 class RewardIssueCardView : LinearLayout {
 
@@ -45,7 +45,7 @@ class RewardIssueCardView : LinearLayout {
     fun title(title: String?): RewardIssueCardView {
         binding.title.apply {
             text = title
-            visibility = if (title != null) View.VISIBLE else View.GONE
+            visible(title != null)
         }
         return this
     }
@@ -58,7 +58,7 @@ class RewardIssueCardView : LinearLayout {
     fun message(subtitle: String?): RewardIssueCardView {
         binding.message.apply {
             text = subtitle
-            visibility = if (subtitle != null) View.VISIBLE else View.GONE
+            visible(subtitle != null)
         }
         return this
     }
@@ -80,7 +80,7 @@ class RewardIssueCardView : LinearLayout {
         with(binding.action) {
             text = label
             setOnClickListener(listener)
-            visibility = VISIBLE
+            visible(true)
         }
         return this
     }

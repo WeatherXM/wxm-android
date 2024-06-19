@@ -11,8 +11,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
@@ -28,7 +26,7 @@ import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setBluetoothDrawable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setNoDevicesFoundDrawable
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.setWarningDrawable
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseFragment
@@ -69,7 +67,7 @@ class ClaimHeliumPairFragment : BaseFragment() {
         adapter = ScannedDevicesListAdapter {
             model.setupBluetoothClaiming(it)
             setEnabledScannedDevices(false)
-            binding.progressBar.setVisible(false)
+            binding.progressBar.visible(false)
         }
 
         binding.recycler.adapter = adapter
@@ -96,8 +94,8 @@ class ClaimHeliumPairFragment : BaseFragment() {
             navigator.openSupportCenter(context = context)
         }
         binding.retry.setOnClickListener {
-            binding.connectionErrorContainer.setVisible(false)
-            binding.mainContainer.setVisible(true)
+            binding.connectionErrorContainer.visible(false)
+            binding.mainContainer.visible(true)
             model.setupBluetoothClaiming()
         }
 
@@ -114,8 +112,8 @@ class ClaimHeliumPairFragment : BaseFragment() {
         model.onNewScannedDevice().observe(viewLifecycleOwner) {
             adapter.submitList(it)
             adapter.notifyDataSetChanged()
-            binding.infoContainer.setVisible(false)
-            binding.recycler.setVisible(true)
+            binding.infoContainer.visible(false)
+            binding.recycler.visible(true)
         }
 
         model.onScanStatus().observe(viewLifecycleOwner) {
@@ -134,8 +132,8 @@ class ClaimHeliumPairFragment : BaseFragment() {
         model.onBLEConnectionLost().observe(viewLifecycleOwner) {
             if (it) {
                 setEnabledScannedDevices(true)
-                binding.mainContainer.setVisible(false)
-                binding.connectionErrorContainer.setVisible(true)
+                binding.mainContainer.visible(false)
+                binding.connectionErrorContainer.visible(true)
             }
         }
 
@@ -191,27 +189,27 @@ class ClaimHeliumPairFragment : BaseFragment() {
     private fun updateUI(result: Resource<Unit>) {
         when (result.status) {
             Status.SUCCESS -> {
-                binding.progressBar.setVisible(false)
+                binding.progressBar.visible(false)
                 binding.scanAgain.isEnabled = true
                 if (adapter.currentList.isNotEmpty()) {
-                    binding.infoContainer.setVisible(false)
+                    binding.infoContainer.visible(false)
                 } else {
-                    binding.recycler.setVisible(false)
+                    binding.recycler.visible(false)
                     binding.infoIcon.setNoDevicesFoundDrawable(requireContext())
                     showInfoMessage(R.string.no_devices_found, R.string.no_devices_found_desc)
                 }
             }
             Status.ERROR -> {
-                binding.progressBar.setVisible(false)
+                binding.progressBar.visible(false)
                 binding.scanAgain.isEnabled = true
-                binding.recycler.setVisible(false)
+                binding.recycler.visible(false)
                 binding.infoIcon.setWarningDrawable(requireContext())
                 showInfoMessage(R.string.scan_failed_title, R.string.scan_failed_desc)
             }
             Status.LOADING -> {
-                binding.progressBar.setVisible(true)
+                binding.progressBar.visible(true)
                 binding.scanAgain.isEnabled = false
-                binding.recycler.setVisible(false)
+                binding.recycler.visible(false)
                 binding.infoIcon.setBluetoothDrawable(requireContext())
                 showInfoMessage(R.string.scanning_in_progress, null)
             }
@@ -221,20 +219,18 @@ class ClaimHeliumPairFragment : BaseFragment() {
     private fun showInfoMessage(@StringRes title: Int, @StringRes subtitle: Int?) {
         binding.infoTitle.text = getString(title)
         with(binding.infoSubtitle) {
+            visible(subtitle != null)
             subtitle?.let {
                 setHtml(it)
-                visibility = VISIBLE
-            } ?: run {
-                visibility = GONE
             }
         }
-        binding.infoContainer.setVisible(true)
+        binding.infoContainer.visible(true)
     }
 
     private fun showNoBluetoothAccessText() {
         binding.infoIcon.setBluetoothDrawable(requireContext())
         showInfoMessage(R.string.no_bluetooth_access, R.string.no_bluetooth_access_desc)
-        binding.accessBluetoothPrompt.setVisible(true)
+        binding.accessBluetoothPrompt.visible(true)
     }
 
     private fun enableBluetoothAndScan() {
@@ -279,7 +275,7 @@ class ClaimHeliumPairFragment : BaseFragment() {
                 onDenied = {
                     binding.infoIcon.setBluetoothDrawable(requireContext())
                     showInfoMessage(R.string.no_location_access, R.string.no_location_access_desc)
-                    binding.accessBluetoothPrompt.setVisible(true)
+                    binding.accessBluetoothPrompt.visible(true)
                 }
             )
         }

@@ -5,7 +5,6 @@ import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -13,7 +12,8 @@ import androidx.core.widget.TextViewCompat
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewBleActionFlowBinding
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.show
 
 @Suppress("TooManyFunctions")
@@ -49,11 +49,11 @@ class BleActionFlowView : ConstraintLayout {
                     }
                     getString(R.styleable.BleActionFlowView_ble_action_flow_second_step)?.let {
                         binding.secondStep.text = it
-                        binding.secondStep.setVisible(true)
+                        binding.secondStep.visible(true)
                     }
                     getString(R.styleable.BleActionFlowView_ble_action_flow_third_step)?.let {
                         binding.thirdStep.text = it
-                        binding.thirdStep.setVisible(true)
+                        binding.thirdStep.visible(true)
                     }
                 } finally {
                     recycle()
@@ -113,13 +113,13 @@ class BleActionFlowView : ConstraintLayout {
 
     fun onNotPaired() {
         hideButtons()
-        binding.stationName.setVisible(false)
-        binding.firmwareVersionTitle.setVisible(false)
-        binding.firmwareVersions.setVisible(false)
-        binding.steps.setVisible(false)
-        binding.status.setVisible(false)
-        binding.notPairedInfoContainer.setVisible(true)
-        binding.pairDevice.setVisible(true)
+        binding.stationName.visible(false)
+        binding.firmwareVersionTitle.visible(false)
+        binding.firmwareVersions.visible(false)
+        binding.steps.visible(false)
+        binding.status.visible(false)
+        binding.notPairedInfoContainer.visible(true)
+        binding.pairDevice.visible(true)
     }
 
     @Suppress("LongParameterList")
@@ -132,17 +132,17 @@ class BleActionFlowView : ConstraintLayout {
         onErrorAction: (() -> Unit)? = null
     ) {
         hideButtons()
-        binding.steps.setVisible(false)
+        binding.steps.visible(false)
         binding.status.clear()
             .animation(R.raw.anim_error)
             .title(title)
 
         if (isScanOrBleError) {
             binding.status.subtitle(message)
-            binding.scanAgain.setVisible(true)
+            binding.scanAgain.visible(true)
         } else {
             binding.retry.text = retryActionText
-            binding.failureButtonsContainer.setVisible(true)
+            binding.failureButtonsContainer.visible(true)
             binding.status
                 .htmlSubtitle(message, errorCode) { onErrorAction?.invoke() }
                 .action(resources.getString(R.string.contact_support_title))
@@ -160,7 +160,7 @@ class BleActionFlowView : ConstraintLayout {
         secondaryActionText: String? = null
     ) {
         hideButtons()
-        binding.steps.setVisible(false)
+        binding.steps.visible(false)
         binding.status.clear()
             .animation(R.raw.anim_success, false)
             .title(title)
@@ -170,14 +170,14 @@ class BleActionFlowView : ConstraintLayout {
             binding.status.subtitle(message)
         }
         if (secondaryActionText != null) {
-            binding.successOneButtonOnly.setVisible(false)
+            binding.successOneButtonOnly.visible(false)
             binding.successPrimaryAction.text = primaryActionText
             binding.successSecondaryAction.text = secondaryActionText
-            binding.successPrimaryAction.setVisible(true)
-            binding.successSecondaryAction.setVisible(true)
+            binding.successPrimaryAction.visible(true)
+            binding.successSecondaryAction.visible(true)
         } else {
             binding.successOneButtonOnly.text = primaryActionText
-            binding.successOneButtonOnly.setVisible(true)
+            binding.successOneButtonOnly.visible(true)
         }
     }
 
@@ -189,12 +189,12 @@ class BleActionFlowView : ConstraintLayout {
     ) {
         if (!binding.steps.isVisible) {
             hideButtons()
-            binding.notPairedInfoContainer.setVisible(false)
-            binding.installationProgressBar.setVisible(false)
-            binding.stationName.setVisible(true)
-            binding.firmwareVersions.setVisible(true)
-            binding.firmwareVersionTitle.setVisible(true)
-            binding.steps.setVisible(true)
+            binding.notPairedInfoContainer.visible(false)
+            binding.installationProgressBar.visible(false)
+            binding.stationName.visible(true)
+            binding.firmwareVersions.visible(true)
+            binding.firmwareVersionTitle.visible(true)
+            binding.steps.visible(true)
             binding.status.clear()
                 .animation(R.raw.anim_loading)
                 .show()
@@ -233,7 +233,7 @@ class BleActionFlowView : ConstraintLayout {
             }
         }
         if (showProgressBar) {
-            binding.installationProgressBar.setVisible(true)
+            binding.installationProgressBar.visible(true)
         }
     }
 
@@ -242,23 +242,23 @@ class BleActionFlowView : ConstraintLayout {
     }
 
     fun onShowInformationCard() {
-        binding.informationCard.setVisible(true)
+        binding.informationCard.visible(true)
     }
 
     fun onShowStationUpdateMetadata(stationName: String, firmwareVersions: String) {
         binding.stationName.text = stationName
         binding.firmwareVersions.text = firmwareVersions
-        binding.stationName.setVisible(true)
-        binding.firmwareVersionTitle.setVisible(true)
-        binding.firmwareVersions.setVisible(true)
+        binding.stationName.visible(true)
+        binding.firmwareVersionTitle.visible(true)
+        binding.firmwareVersions.visible(true)
     }
 
     private fun hideButtons() {
-        binding.successOneButtonOnly.visibility = View.INVISIBLE
-        binding.successPrimaryAction.setVisible(false)
-        binding.successSecondaryAction.setVisible(false)
-        binding.failureButtonsContainer.visibility = View.INVISIBLE
-        binding.scanAgain.visibility = View.INVISIBLE
-        binding.pairDevice.visibility = View.INVISIBLE
+        binding.successOneButtonOnly.invisible()
+        binding.successPrimaryAction.visible(false)
+        binding.successSecondaryAction.visible(false)
+        binding.failureButtonsContainer.invisible()
+        binding.scanAgain.invisible()
+        binding.pairDevice.invisible()
     }
 }

@@ -16,7 +16,7 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.EditLocationListener
@@ -102,19 +102,19 @@ class DeviceEditLocationActivity : BaseActivity(), EditLocationListener {
     }
 
     private fun onUpdatedDevice(resource: Resource<UIDevice>) {
-        binding.progress.setVisible(resource.status == Status.LOADING)
+        binding.progress.visible(resource.status == Status.LOADING)
         binding.confirmBtn.isEnabled = resource.status == Status.ERROR
 
         if (resource.status == Status.SUCCESS) {
-            binding.appBar.setVisible(false)
-            binding.mainContainer.setVisible(false)
+            binding.appBar.visible(false)
+            binding.mainContainer.visible(false)
             binding.successView.htmlSubtitle(R.string.location_confirmed_desc)
             binding.dismissBtn.setOnClickListener {
                 val resultValue = Intent().putExtra(ARG_DEVICE, resource.data)
                 setResult(Activity.RESULT_OK, resultValue)
                 finish()
             }
-            binding.successContainer.setVisible(true)
+            binding.successContainer.visible(true)
         } else if (resource.status == Status.ERROR) {
             resource.message?.let { toast(it, Toast.LENGTH_LONG) }
         }

@@ -1,7 +1,6 @@
 package com.weatherxm.ui.cellinfo
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,7 +12,7 @@ import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
@@ -77,15 +76,15 @@ class CellDeviceListAdapter(
                         setImageResource(R.drawable.ic_favorite_outline)
                         setColor(R.color.follow_heart_color)
                     }
-                    null -> setVisible(false)
+                    null -> visible(false)
                 }
             }
 
             binding.name.text = item.name
 
             if (item.currentWeather == null || item.currentWeather.isEmpty()) {
-                binding.weatherDataLayout.visibility = View.GONE
-                binding.noDataLayout.visibility = View.VISIBLE
+                binding.weatherDataLayout.visible(false)
+                binding.noDataLayout.visible(true)
                 binding.noDataMessage.text =
                     resources.getString(R.string.no_data_message_public_device)
             } else {

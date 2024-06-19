@@ -12,7 +12,8 @@ import com.mapbox.maps.viewannotation.geometry
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.weatherxm.R
 import com.weatherxm.data.Location
-import com.weatherxm.ui.common.setVisible
+import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
 import timber.log.Timber
 
@@ -28,8 +29,8 @@ class EditLocationMapFragment : BaseMapFragment() {
         }
         this.map = map
 
-        binding.appBar.setVisible(false)
-        binding.searchView.setVisible(false)
+        binding.appBar.visible(false)
+        binding.searchView.visible(false)
         this.listener?.onMapReady()
     }
 
@@ -70,7 +71,7 @@ class EditLocationMapFragment : BaseMapFragment() {
                     geometry(map.cameraState.center)
                 })
             }
-            it.findViewById<MaterialCardView>(R.id.addressContainer).visibility = View.INVISIBLE
+            it.findViewById<MaterialCardView>(R.id.addressContainer).invisible()
         }
     }
 
@@ -83,9 +84,9 @@ class EditLocationMapFragment : BaseMapFragment() {
             val container = it.findViewById<MaterialCardView>(R.id.addressContainer)
             if (address != null) {
                 it.findViewById<MaterialTextView>(R.id.address).text = address
-                container.visibility = View.VISIBLE
+                container.visible(true)
             } else {
-                container.visibility = View.INVISIBLE
+                container.invisible()
             }
         }
     }
