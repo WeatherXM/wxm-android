@@ -14,8 +14,8 @@ import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -102,6 +102,12 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
     }
 
     private fun showIncorrectQRMessage() {
-        showSnackbarMessage(binding.root, getString(R.string.prepare_gateway_invalid_qr_code))
+        showSnackbarMessage(
+            binding.root,
+            getString(R.string.prepare_gateway_invalid_qr_code),
+            callback = { snackbar?.dismiss() },
+            R.string.action_dismiss,
+            binding.buttonBar
+        )
     }
 }
