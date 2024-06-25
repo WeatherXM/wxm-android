@@ -35,6 +35,8 @@ insetter = "0.6.1"
 jwtdecode = "2.0.2"
 kable = "0.32.0"
 koin-android = "3.5.6"
+kotest = "5.9.1"
+kotest-koin = "1.3.0"
 kpermissions = "3.5.0"
 lottie = "6.4.1"
 material = "1.12.0"
@@ -42,6 +44,7 @@ mapbox = "11.4.1"
 mapbox-sdk-services = "7.0.0"
 mapbox-search-android = "2.2.0"
 mixpanel = "7.5.2"
+mockk = "1.13.11"
 moshi = "1.15.1"
 mpAndroidCharts = "v3.1.0"
 networkResponseAdapter = "5.0.0"
@@ -50,6 +53,7 @@ play-services-barcode-scanner = "16.1.0"
 okhttp-bom = "4.12.0"
 retrofit = "2.11.0"
 retromock = "1.1.1"
+roboelectric = "4.12.2"
 timber = "5.0.1"
 
 # Plugins
@@ -115,6 +119,9 @@ jwtdecode = { module = "com.auth0.android:jwtdecode", version.ref = "jwtdecode" 
 kable = { module = "com.juul.kable:core", version.ref = "kable" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin-android" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-android" }
+kotest = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
+kotest-assertions = { module = "io.kotest:kotest-assertions-core-jvm", version.ref = "kotest" }
+kotest-koin = { module = "io.kotest.extensions:kotest-extensions-koin-jvm", version.ref = "kotest-koin" }
 kpermissions = { module = "com.github.fondesa:kpermissions", version.ref = "kpermissions" }
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 mapbox = { module = "com.mapbox.maps:android", version.ref = "mapbox" }
@@ -124,6 +131,8 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 mixpanel = { module = "com.mixpanel.android:mixpanel-android", version.ref = "mixpanel" }
 moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 moshi-adapters = { module = "com.squareup.moshi:moshi-adapters", version.ref = "moshi" }
+mockk = { module = "io.mockk:mockk-android", version.ref = "mockk" }
+mockk-agent = { module = "io.mockk:mockk-agent", version.ref = "mockk" }
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 mpAndroidCharts = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpAndroidCharts" }
 networkResponseAdapter = { module = "com.github.haroldadmin:NetworkResponseAdapter", version.ref = "networkResponseAdapter" }
@@ -135,6 +144,7 @@ play-services-scanner = { module = "com.google.android.gms:play-services-code-sc
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 retromock = { module = "co.infinum:retromock", version.ref = "retromock" }
+roboelectric = { module = "org.robolectric:robolectric", version.ref = "roboelectric" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 
