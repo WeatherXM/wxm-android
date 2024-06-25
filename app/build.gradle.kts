@@ -294,12 +294,25 @@ android {
     lint {
         abortOnError = false
     }
+
+    android.testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
-    // Instrumented Tests
+    // Tests
     androidTestImplementation(libs.androidx.runner)
     androidTestImplementation(libs.androidx.rules)
+    androidTestImplementation(libs.koin.test)
+    testImplementation(libs.kotest)
+    testImplementation(libs.kotest.assertions)
+    testImplementation(libs.kotest.koin)
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.agent)
+    testImplementation(libs.koin.test)
 
     // Desugaring for Java8 feature support
     coreLibraryDesugaring(libs.desugar.jdk.libs)
@@ -371,7 +384,6 @@ dependencies {
 
     // Dependency Injection
     implementation(libs.koin.android)
-    androidTestImplementation(libs.koin.test)
 
     // Data types and more
     implementation(platform(libs.arrow.stack.bom))
