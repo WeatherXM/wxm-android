@@ -37,7 +37,7 @@ class DeviceSettingsWifiViewModel(
         )
 
         device.bundleTitle?.let {
-            data.default.add(UIDeviceInfoItem(resources.getString(R.string.bundle_identifier), it))
+            data.default.add(UIDeviceInfoItem(resources.getString(R.string.bundle_name), it))
         }
         device.claimedAt?.let {
             data.default.add(
@@ -63,32 +63,6 @@ class DeviceSettingsWifiViewModel(
     }
 
     override fun handleInfo(context: Context, info: DeviceInfo) {
-        // Get weather station info
-        info.weatherStation?.apply {
-            model?.let {
-                data.station.add(UIDeviceInfoItem(resources.getString(R.string.model), it))
-            }
-
-            batteryState?.let {
-                handleLowBatteryInfo(data.station, it)
-            }
-
-            hwVersion?.let {
-                data.station.add(
-                    UIDeviceInfoItem(resources.getString(R.string.hardware_version), it)
-                )
-            }
-
-            lastActivity?.let {
-                data.station.add(
-                    UIDeviceInfoItem(
-                        resources.getString(R.string.last_weather_station_activity),
-                        it.getFormattedDateAndTime(context)
-                    )
-                )
-            }
-        }
-
         // Get gateway info
         info.gateway?.apply {
             model?.let {
@@ -129,6 +103,32 @@ class DeviceSettingsWifiViewModel(
                 data.gateway.add(
                     UIDeviceInfoItem(
                         resources.getString(R.string.last_gateway_activity),
+                        it.getFormattedDateAndTime(context)
+                    )
+                )
+            }
+        }
+
+        // Get weather station info
+        info.weatherStation?.apply {
+            model?.let {
+                data.station.add(UIDeviceInfoItem(resources.getString(R.string.model), it))
+            }
+
+            hwVersion?.let {
+                data.station.add(
+                    UIDeviceInfoItem(resources.getString(R.string.hardware_version), it)
+                )
+            }
+
+            batteryState?.let {
+                handleLowBatteryInfo(data.station, it)
+            }
+
+            lastActivity?.let {
+                data.station.add(
+                    UIDeviceInfoItem(
+                        resources.getString(R.string.last_weather_station_activity),
                         it.getFormattedDateAndTime(context)
                     )
                 )

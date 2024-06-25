@@ -477,7 +477,7 @@
     <string name="gateway_details">Gateway Details</string>
     <string name="station_details">Station Details</string>
     <string name="station_default_name">Public Name (in Explorer)</string>
-    <string name="bundle_identifier">Bundle Identifier</string>
+    <string name="bundle_name">Bundle Name</string>
     <string name="hardware_version">Hardware Version</string>
     <string name="firmware_version">Firmware Version</string>
     <string name="gps_number_sats">GPS - Number of connected satellites</string>

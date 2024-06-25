@@ -37,9 +37,11 @@ class DeviceSettingsHeliumViewModel(
         data.default.add(
             UIDeviceInfoItem(resources.getString(R.string.station_default_name), device.name)
         )
-
         device.bundleTitle?.let {
-            data.default.add(UIDeviceInfoItem(resources.getString(R.string.bundle_identifier), it))
+            data.default.add(UIDeviceInfoItem(resources.getString(R.string.bundle_name), it))
+        }
+        device.wsModel?.let {
+            data.default.add(UIDeviceInfoItem(resources.getString(R.string.model), it))
         }
         device.claimedAt?.let {
             data.default.add(
@@ -66,14 +68,6 @@ class DeviceSettingsHeliumViewModel(
 
     override fun handleInfo(context: Context, info: DeviceInfo) {
         info.weatherStation?.apply {
-            model?.let {
-                data.default.add(UIDeviceInfoItem(resources.getString(R.string.model), it))
-            }
-
-            batteryState?.let {
-                handleLowBatteryInfo(data.default, it)
-            }
-
             devEUI?.let {
                 data.default.add(UIDeviceInfoItem(resources.getString(R.string.dev_eui), it))
             }
@@ -84,6 +78,10 @@ class DeviceSettingsHeliumViewModel(
                 data.default.add(
                     UIDeviceInfoItem(resources.getString(R.string.hardware_version), it)
                 )
+            }
+
+            batteryState?.let {
+                handleLowBatteryInfo(data.default, it)
             }
 
             val lastHotspotTimestamp =
