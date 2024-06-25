@@ -74,7 +74,13 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
         binding.confirm.setOnClickListener {
             val markerLocation = getMapFragment().getMarkerLocation()
             if (!model.validateLocation(markerLocation.lat, markerLocation.lon)) {
-                activity?.toast(R.string.invalid_location)
+                showSnackbarMessage(
+                    binding.root,
+                    getString(R.string.invalid_location),
+                    callback = { snackbar?.dismiss() },
+                    R.string.action_dismiss,
+                    binding.confirm
+                )
                 return@setOnClickListener
             }
             model.setInstallationLocation(markerLocation.lat, markerLocation.lon)
