@@ -191,7 +191,7 @@ class DeviceSettingsActivity : BaseActivity() {
     private fun setupInfo() {
         binding.stationName.text = model.device.getDefaultOrFriendlyName()
         binding.deleteStationCard.visible(model.device.isOwned())
-        if (!model.device.isOwned() || model.device.isHelium()) {
+        if (!model.device.isOwned() || !model.device.isHelium()) {
             binding.frequencyTitle.visible(false)
             binding.frequencyDesc.visible(false)
             binding.changeFrequencyBtn.visible(false)
