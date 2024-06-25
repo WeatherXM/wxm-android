@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import coil.ImageLoader
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.weatherxm.R
@@ -15,7 +14,6 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
-import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -68,10 +66,12 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
             }
             .addOnFailureListener { e ->
                 Timber.e(e, "Failure when scanning QR of the device")
-                context?.toast(
-                    R.string.error_connect_wallet_scan_exception,
-                    e.message ?: String.empty(),
-                    Toast.LENGTH_LONG
+                showSnackbarMessage(
+                    binding.root,
+                    getString(R.string.error_connect_wallet_scan_exception, e.message),
+                    callback = { snackbar?.dismiss() },
+                    R.string.action_dismiss,
+                    binding.buttonBar
                 )
             }
     }
@@ -102,6 +102,12 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
     }
 
     private fun showIncorrectQRMessage() {
-        showSnackbarMessage(binding.root, getString(R.string.prepare_gateway_invalid_qr_code))
+        showSnackbarMessage(
+            binding.root,
+            getString(R.string.prepare_gateway_invalid_qr_code),
+            callback = { snackbar?.dismiss() },
+            R.string.action_dismiss,
+            binding.buttonBar
+        )
     }
 }
