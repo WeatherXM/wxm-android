@@ -18,7 +18,6 @@ import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.SearchResultsAdapter
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.EditLocationListener
 import com.weatherxm.ui.components.EditLocationMapFragment
@@ -138,7 +137,13 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
         }
         model.onSearchResults().observe(viewLifecycleOwner) {
             if (it == null) {
-                context?.toast(getString(R.string.error_search_suggestions))
+                showSnackbarMessage(
+                    binding.root,
+                    getString(R.string.error_search_suggestions),
+                    callback = { snackbar?.dismiss() },
+                    R.string.action_dismiss,
+                    binding.confirm
+                )
             } else if (it.isEmpty() || addressSearchView.getQueryLength() <= 2) {
                 addressSearchView.clear()
             } else {
