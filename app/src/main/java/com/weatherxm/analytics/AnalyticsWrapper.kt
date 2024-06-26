@@ -30,13 +30,9 @@ class AnalyticsWrapper(
         this.devicesSortFilterOptions = options
     }
 
-    fun getDevicesSortFilterOptions() = devicesSortFilterOptions
-
     fun setDisplayMode(displayMode: String) {
         this.displayMode = displayMode
     }
-
-    fun getDisplayMode() = displayMode
 
     // Suppress CyclomaticComplexMethod because it is just a bunch of if/when statements.
     @Suppress("CyclomaticComplexMethod", "LongMethod")
