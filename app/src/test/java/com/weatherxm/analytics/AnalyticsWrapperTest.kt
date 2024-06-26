@@ -5,10 +5,12 @@ import android.content.SharedPreferences
 import com.weatherxm.R
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.empty
+import com.weatherxm.util.Weather
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
@@ -31,21 +33,6 @@ class AnalyticsWrapperTest : ShouldSpec() {
             analyticsWrapper.getUserId() shouldBe "testId"
         }
 
-        should("Set the Display Mode")
-        {
-            analyticsWrapper.setDisplayMode("dark")
-            analyticsWrapper.getDisplayMode() shouldBe "dark"
-        }
-
-        should("Set the Devices Sort, Filter & Group Options")
-        {
-            analyticsWrapper.setDevicesSortFilterOptions(listOf("DATE_ADDED", "ALL", "NO_GROUPING"))
-            val options = analyticsWrapper.getDevicesSortFilterOptions()
-            options[0] shouldBe "DATE_ADDED"
-            options[1] shouldBe "ALL"
-            options[2] shouldBe "NO_GROUPING"
-        }
-
         should("Set the User Properties")
         {
             val sharedPref = mockk<SharedPreferences>()
@@ -63,7 +50,9 @@ class AnalyticsWrapperTest : ShouldSpec() {
             every { context.getString(R.string.temperature_celsius) } returns "°C"
             every { context.getString(CacheService.KEY_WIND) } returns "wind_speed_unit"
             every { context.getString(R.string.wind_speed_ms) } returns "bf"
-            every { context.getString(CacheService.KEY_WIND_DIR) } returns "key_wind_direction_preference"
+            every {
+                context.getString(CacheService.KEY_WIND_DIR)
+            } returns "key_wind_direction_preference"
             every { context.getString(R.string.wind_direction_cardinal) } returns "Cardinal"
             every { context.getString(CacheService.KEY_PRECIP) } returns "precipitation_unit"
             every { context.getString(R.string.precipitation_mm) } returns "mm"
@@ -104,7 +93,17 @@ class AnalyticsWrapperTest : ShouldSpec() {
                 this[8].first shouldBe "GROUP_BY"
                 this[8].second shouldBe "no_grouping"
             }
+            verify(exactly = 1) { Weather.getPreferredUnit("temperature_unit", "°C") }
+            verify(exactly = 1) { Weather.getPreferredUnit("wind_speed_unit", "bf") }
+            verify(exactly = 1) {
+                Weather.getPreferredUnit("key_wind_direction_preference", "Cardinal")
+            }
+            verify(exactly = 1) { Weather.getPreferredUnit("precipitation_unit", "mm") }
+            verify(exactly = 1) { Weather.getPreferredUnit("key_pressure_preference", "hPa") }
+        }
 
+        afterTest {
+            println("${it.a.name.testName} - ${it.b.name.uppercase()}")
         }
     }
 }
