@@ -139,9 +139,9 @@ class DeviceSettingsWifiViewModel(
     private fun handleFirmwareInfo() {
         device.currentFirmware?.let { current ->
             val currentFirmware = if (device.currentFirmware.equals(device.assignedFirmware)) {
-                current
-            } else {
                 "$current ${resources.getString(R.string.latest_hint)}"
+            } else {
+                current
             }
             data.gateway.add(
                 UIDeviceInfoItem(resources.getString(R.string.firmware_version), currentFirmware)

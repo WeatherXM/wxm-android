@@ -133,9 +133,9 @@ class DeviceSettingsHeliumViewModel(
             } else {
                 val currentFirmware =
                     if (device.currentFirmware.equals(device.assignedFirmware)) {
-                        current
-                    } else {
                         "$current ${resources.getString(R.string.latest_hint)}"
+                    } else {
+                        current
                     }
                 data.default.add(
                     UIDeviceInfoItem(
