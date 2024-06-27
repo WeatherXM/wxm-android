@@ -1,6 +1,6 @@
 package com.weatherxm.util
 
-import android.util.Patterns
+import androidx.core.util.PatternsCompat
 import com.weatherxm.data.Location
 import com.weatherxm.ui.common.DeviceType
 
@@ -21,7 +21,7 @@ object Validator {
     private const val MINIMUM_NETWORK_SEARCH_QUERY = 2
 
     fun validateUsername(username: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(username).matches()
+        return PatternsCompat.EMAIL_ADDRESS.matcher(username).matches()
     }
 
     fun validatePassword(password: String): Boolean {
