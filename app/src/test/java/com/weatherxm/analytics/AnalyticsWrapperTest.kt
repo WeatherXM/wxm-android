@@ -19,22 +19,19 @@ class AnalyticsWrapperTest : ShouldSpec() {
     private val analyticsWrapper = AnalyticsWrapper(mutableListOf(), context)
 
     init {
-        should("Enable/Disable Analytics")
-        {
+        should("Enable/Disable Analytics") {
             analyticsWrapper.setAnalyticsEnabled(false)
             analyticsWrapper.getAnalyticsEnabled() shouldBe false
             analyticsWrapper.setAnalyticsEnabled(true)
             analyticsWrapper.getAnalyticsEnabled() shouldBe true
         }
 
-        should("Set the user ID")
-        {
+        should("Set the user ID") {
             analyticsWrapper.setUserId("testId")
             analyticsWrapper.getUserId() shouldBe "testId"
         }
 
-        should("Set the User Properties")
-        {
+        should("Set the User Properties") {
             val sharedPref = mockk<SharedPreferences>()
             startKoin {
                 modules(
@@ -103,7 +100,7 @@ class AnalyticsWrapperTest : ShouldSpec() {
         }
 
         afterTest {
-            println("${it.a.name.testName} - ${it.b.name.uppercase()}")
+            println("[${it.b.name.uppercase()}] - ${it.a.name.testName}")
         }
     }
 }
