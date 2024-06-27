@@ -28,8 +28,8 @@ fun getVersionGitTags(printForDebugging: Boolean = false): List<String> {
     }
 }
 
-fun getLastVersionGitTag(): String {
-    var lastVersionTag = getVersionGitTags(printForDebugging = true).last()
+fun getLastVersionGitTag(printForDebugging: Boolean = true): String {
+    var lastVersionTag = getVersionGitTags(printForDebugging).last()
     if (lastVersionTag.startsWith("RC")) {
         lastVersionTag = lastVersionTag.substringAfterLast("_")
     }
@@ -76,7 +76,8 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 10 + getVersionGitTags().size
-        versionName = "${getLastVersionGitTag()}-${getGitCommitHash()}"
+        val skipTagsLogging = !project.hasProperty("SKIP_TAGS_LOGGING")
+        versionName = "${getLastVersionGitTag(skipTagsLogging)}-${getGitCommitHash()}"
 
         // Resource value fields
         resValue("string", "mapbox_access_token", getStringProperty("MAPBOX_ACCESS_TOKEN"))
