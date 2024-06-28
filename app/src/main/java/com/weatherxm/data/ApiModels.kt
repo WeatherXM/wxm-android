@@ -74,6 +74,7 @@ data class PublicDevice(
     val isActive: Boolean?,
     val lastWeatherStationActivity: ZonedDateTime?,
     val cellIndex: String,
+    val cellCenter: Location?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
 ) : Parcelable {
@@ -82,6 +83,7 @@ data class PublicDevice(
             id = id,
             name = name,
             cellIndex = cellIndex,
+            cellCenter = cellCenter,
             bundleName = try {
                 BundleName.valueOf(bundle?.name ?: String.empty())
             } catch (e: IllegalArgumentException) {
@@ -102,7 +104,6 @@ data class PublicDevice(
             friendlyName = null,
             location = null,
             currentFirmware = null,
-            cellCenter = null,
             assignedFirmware = null,
             claimedAt = null,
             address = null,

@@ -25,7 +25,11 @@
         },
         "isActive": false,
         "lastWeatherStationActivity": "2022-02-11T19:43:21+02:00",
-        "cellIndex": "871eda743ffffff"
+        "cellIndex": "871eda743ffffff",
+        "cellCenter": {
+            "lat": 37.97364,
+            "lon": 23.77605
+        }
     },
     {
         "id": "02548470-a8f5-11ec-966b-a173bf0cd052",
@@ -54,7 +58,11 @@
         },
         "isActive": false,
         "lastWeatherStationActivity": "2022-02-14T19:53:29+02:00",
-        "cellIndex": "871eda743ffffff"
+        "cellIndex": "871eda743ffffff",
+        "cellCenter": {
+            "lat": 37.97364,
+            "lon": 23.77605
+        }
     },
     {
         "id": "04566ef0-a8f5-11ec-900c-abdec1c57354",
@@ -83,7 +91,11 @@
         },
         "isActive": false,
         "lastWeatherStationActivity": "2022-03-04T13:02:53+02:00",
-        "cellIndex": "871eda743ffffff"
+        "cellIndex": "871eda743ffffff",
+        "cellCenter": {
+            "lat": 37.97364,
+            "lon": 23.77605
+        }
     },
     {
         "id": "11f58640-a8f5-11ec-900c-abdec1c57354",
@@ -112,6 +124,10 @@
         },
         "isActive": false,
         "lastWeatherStationActivity": "2022-05-12T17:31:23+03:00",
-        "cellIndex": "871eda743ffffff"
+        "cellIndex": "871eda743ffffff",
+        "cellCenter": {
+            "lat": 37.97364,
+            "lon": 23.77605
+        }
     }
 ]
