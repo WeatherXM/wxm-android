@@ -164,7 +164,9 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         binding.networkStatsBtn.visible(navDestination == R.id.navigation_explorer)
         binding.myLocationBtn.visible(navDestination == R.id.navigation_explorer)
         /**
-         * https://linear.app/weatherxm/issue/FE-961/add-button-is-not-visible
+         * Don't use the visible function for the addButton 
+         * because of a specific case hiding it in the devices list.
+         * Therefore we use the hide() function which fits our purpose.
          */
         if (navDestination == R.id.navigation_profile) {
             binding.addDevice.hide()
