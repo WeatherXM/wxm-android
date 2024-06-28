@@ -156,14 +156,19 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         // Fetch user's devices
         devicesViewModel.fetch()
 
-        /*
-        * Changing the theme from Profile -> Settings and going back to profile
-        * shows the "Add Device" floating button visible again. This code is to fix this.
+        /**
+         * Changing the theme from Profile -> Settings and going back to profile
+         * shows the "Add Device" floating button visible again. This code is to fix this.
          */
         val navDestination = navController.currentDestination?.id
         binding.networkStatsBtn.visible(navDestination == R.id.navigation_explorer)
         binding.myLocationBtn.visible(navDestination == R.id.navigation_explorer)
-        binding.addDevice.visible(navDestination == R.id.navigation_devices)
+        /**
+         * https://linear.app/weatherxm/issue/FE-961/add-button-is-not-visible
+         */
+        if (navDestination == R.id.navigation_profile) {
+            binding.addDevice.hide()
+        }
     }
 
     private fun onExplorerState(resource: Resource<ExplorerData>) {
