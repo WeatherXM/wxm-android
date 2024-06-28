@@ -7,6 +7,7 @@ import android.text.format.DateFormat
 import arrow.core.Either
 import com.github.mikephil.charting.data.Entry
 import com.weatherxm.data.Connectivity
+import com.weatherxm.data.HOUR_FORMAT_24H
 import com.weatherxm.data.NetworkError
 import com.weatherxm.data.NetworkStatsContracts
 import com.weatherxm.data.NetworkStatsCustomers
@@ -21,6 +22,7 @@ import com.weatherxm.data.repository.StatsRepository
 import com.weatherxm.ui.common.MainnetInfo
 import com.weatherxm.ui.networkstats.NetworkStationStats
 import com.weatherxm.usecases.StatsUseCaseImpl
+import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
 import com.weatherxm.util.NumberUtils
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -29,10 +31,12 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import org.koin.core.context.startKoin
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class StatsUseCaseTest : KoinTest, BehaviorSpec({
     val repo = mockk<StatsRepository>()
@@ -40,14 +44,12 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
     val context = mockk<Context>()
     val usecase = StatsUseCaseImpl(repo, appConfigRepository, context)
 
-    /**
-     * STOPSHIP:
-     * TODO:
-     * 1. Check RoboElectric for mocking compactDecimalFormat and numberFormat
-     */
     startKoin {
         modules(
             module {
+                single<DateTimeFormatter>(named(HOUR_FORMAT_24H)) {
+                    DateTimeFormatter.ofPattern(HOUR_FORMAT_24H)
+                }
                 single<CompactDecimalFormat> {
                     mockk<CompactDecimalFormat>()
                 }
@@ -120,7 +122,7 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
         every { NumberUtils.formatNumber(any()) } returns "1"
     }
 
-    context("Getting mainnet-related info") {
+    context("Get mainnet-related info") {
         given("that mainnet is enabled") {
             then("return the correct value") {
                 usecase.isMainnetEnabled() shouldBe true
@@ -130,7 +132,7 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
             }
         }
     }
-    context("Getting Network Stats") {
+    context("Get Network Stats") {
         given("an API call that fetches the Network Stats") {
             When("the API call fails") {
                 coEvery {
@@ -183,7 +185,9 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
                             NetworkStationStats("test", "test", 40.0, "1"),
                             NetworkStationStats("test", "test", 60.0, "1")
                         )
-                        it.lastUpdated shouldBe "Jun 27, 2024, timestampInUserTz?.getFormattedTime(context)"
+                        it.lastUpdated shouldBe
+                            lastDate?.withZoneSameInstant(ZoneId.systemDefault())
+                                .getFormattedDateAndTime(context)
                     }
                 }
             }

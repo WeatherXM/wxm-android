@@ -12,7 +12,7 @@ import io.kotest.matchers.shouldBe
 import java.math.BigDecimal
 
 class RewardsTest : BehaviorSpec({
-    context("Getting reward score color and icon") {
+    context("Get reward score color and icon") {
         given("a reward score") {
             When("it is null or non-supported") {
                 then("the color should be `unknown`") {
