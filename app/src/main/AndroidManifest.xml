@@ -236,15 +236,19 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.weatherxm.ui.devicesettings.DeviceSettingsActivity"
+            android:name="com.weatherxm.ui.devicesettings.wifi.DeviceSettingsWifiActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.weatherxm.ui.devicesettings.reboot.RebootActivity"
+            android:name="com.weatherxm.ui.devicesettings.helium.DeviceSettingsHeliumActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
-            android:name="com.weatherxm.ui.devicesettings.changefrequency.ChangeFrequencyActivity"
+            android:name="com.weatherxm.ui.devicesettings.helium.reboot.RebootActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+        <activity
+            android:name="com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity

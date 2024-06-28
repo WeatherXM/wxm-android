@@ -1,5 +1,6 @@
 package com.weatherxm.ui.devicesettings
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,19 +10,17 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.BatteryState
+import com.weatherxm.data.DeviceInfo
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
-import com.weatherxm.ui.common.capitalizeWords
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
-class DeviceSettingsViewModel(
+abstract class BaseDeviceSettingsViewModel(
     var device: UIDevice,
     private val usecase: StationSettingsUseCase,
     private val resources: Resources,
@@ -29,13 +28,11 @@ class DeviceSettingsViewModel(
 ) : ViewModel() {
     private val onEditNameChange = MutableLiveData<String>()
     private val onDeviceRemoved = MutableLiveData<Boolean>()
-    private val onDeviceInfo = MutableLiveData<List<UIDeviceInfo>>()
     private val onError = MutableLiveData<UIError>()
-    private val onLoading = MutableLiveData<Boolean>()
+    protected val onLoading = MutableLiveData<Boolean>()
 
     fun onEditNameChange(): LiveData<String> = onEditNameChange
     fun onDeviceRemoved(): LiveData<Boolean> = onDeviceRemoved
-    fun onDeviceInfo(): LiveData<List<UIDeviceInfo>> = onDeviceInfo
     fun onError(): LiveData<UIError> = onError
     fun onLoading(): LiveData<Boolean> = onLoading
 
@@ -131,117 +128,42 @@ class DeviceSettingsViewModel(
         }
     }
 
-    fun getDeviceInformation() {
-        val deviceInfo = getDeviceInfoFromDevice()
-        onLoading.postValue(true)
-        viewModelScope.launch {
-            usecase.getDeviceInfo(device.id).onLeft {
-                analytics.trackEventFailure(it.code)
-                Timber.d("$it: Fetching remote device info failed for device: $device")
-                onDeviceInfo.postValue(deviceInfo)
-            }.onRight { infoFromAPI ->
-                Timber.d("Got device info: $deviceInfo")
-                infoFromAPI.weatherStation?.batteryState?.let {
-                    if (it == BatteryState.low) {
-                        deviceInfo.add(
-                            2,
-                            UIDeviceInfo(
-                                resources.getString(R.string.battery_level),
-                                resources.getString(R.string.battery_level_low),
-                                warning = resources.getString(R.string.battery_level_low_message)
-                            )
-                        )
-                    } else {
-                        deviceInfo.add(
-                            2,
-                            UIDeviceInfo(
-                                resources.getString(R.string.battery_level),
-                                resources.getString(R.string.battery_level_ok)
-                            )
-                        )
-                    }
-                }
-
-                infoFromAPI.weatherStation?.hwVersion?.let {
-                    deviceInfo.add(UIDeviceInfo(resources.getString(R.string.hardware_version), it))
-                }
-                infoFromAPI.weatherStation?.lastHotspot?.let {
-                    deviceInfo.add(
-                        UIDeviceInfo(
-                            resources.getString(R.string.last_hotspot),
-                            it.replace("-", " ").capitalizeWords()
-                        )
-                    )
-                }
-                infoFromAPI.weatherStation?.lastTxRssi?.let {
-                    deviceInfo.add(
-                        UIDeviceInfo(
-                            resources.getString(R.string.last_tx_rssi),
-                            resources.getString(R.string.rssi, it)
-                        )
-                    )
-                }
-                infoFromAPI.gateway?.gpsSats?.let {
-                    deviceInfo.add(UIDeviceInfo(resources.getString(R.string.gps_number_sats), it))
-                }
-                infoFromAPI.gateway?.wifiRssi?.let {
-                    deviceInfo.add(
-                        UIDeviceInfo(
-                            resources.getString(R.string.wifi_rssi),
-                            resources.getString(R.string.rssi, it)
-                        )
-                    )
-                }
-                onDeviceInfo.postValue(deviceInfo)
-            }
-            onLoading.postValue(false)
-        }
-    }
-
-    private fun getDeviceInfoFromDevice(): MutableList<UIDeviceInfo> {
-        return mutableListOf<UIDeviceInfo>().apply {
-            add(UIDeviceInfo(resources.getString(R.string.station_default_name), device.name))
-            device.claimedAt?.let {
-                add(
-                    UIDeviceInfo(
-                        resources.getString(R.string.claimed_at),
-                        it.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
-                    )
-                )
-            }
-            if (device.isHelium()) {
-                device.label?.unmask()?.let {
-                    add(UIDeviceInfo(resources.getString(R.string.dev_eui), it))
-                }
-            } else {
-                device.label?.unmask()?.let {
-                    add(UIDeviceInfo(resources.getString(R.string.device_serial_number), it))
-                }
-            }
-            device.currentFirmware?.let { current ->
-                if (usecase.userShouldNotifiedOfOTA(device) && device.shouldPromptUpdate()) {
-                    add(
-                        UIDeviceInfo(
-                            resources.getString(R.string.firmware_version),
-                            "$current ➞ ${device.assignedFirmware}",
-                            UIDeviceAction(
-                                resources.getString(R.string.action_update_firmware),
-                                ActionType.UPDATE_FIRMWARE
-                            )
-                        )
-                    )
-                } else {
-                    add(UIDeviceInfo(resources.getString(R.string.firmware_version), current))
-                }
-            }
-        }
-    }
-
-    fun parseDeviceInfoToShare(deviceInfo: List<UIDeviceInfo>): String {
+    fun parseDeviceInfoToShare(deviceInfo: UIDeviceInfo): String {
         var sharingText = String.empty()
-        deviceInfo.forEach {
+        deviceInfo.default.forEach {
+            sharingText += "${it}\n"
+        }
+        deviceInfo.gateway.forEach {
+            sharingText += "${it}\n"
+        }
+        deviceInfo.station.forEach {
             sharingText += "${it}\n"
         }
         return sharingText
     }
+
+    protected fun handleLowBatteryInfo(
+        target: MutableList<UIDeviceInfoItem>,
+        batteryState: BatteryState
+    ) {
+        if (batteryState == BatteryState.low) {
+            target.add(
+                UIDeviceInfoItem(
+                    resources.getString(R.string.battery_level),
+                    resources.getString(R.string.battery_level_low),
+                    warning = resources.getString(R.string.battery_level_low_message)
+                )
+            )
+        } else {
+            target.add(
+                UIDeviceInfoItem(
+                    resources.getString(R.string.battery_level),
+                    resources.getString(R.string.battery_level_ok)
+                )
+            )
+        }
+    }
+
+    abstract fun getDeviceInformation(context: Context)
+    abstract fun handleInfo(context: Context, info: DeviceInfo)
 }

@@ -17,7 +17,7 @@ class Resources(private val resources: Resources) {
         return resources.getString(stringRes)
     }
 
-    fun getString(@StringRes stringRes: Int, concatenatedString: String): String {
-        return resources.getString(stringRes, concatenatedString)
+    fun getString(@StringRes stringRes: Int, vararg formatArgs: Any): String {
+        return resources.getString(stringRes, *formatArgs)
     }
 }

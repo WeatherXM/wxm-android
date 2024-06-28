@@ -13,8 +13,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.databinding.ViewWeatherCardBinding
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.setWeatherAnimation
-import com.weatherxm.util.DateTimeHelper.getFormattedDate
-import com.weatherxm.util.DateTimeHelper.getFormattedTime
+import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getFormattedHumidity
 import com.weatherxm.util.Weather.getPrecipitationPreferredUnit
@@ -122,10 +121,10 @@ class WeatherCardView : LinearLayout {
         } else {
             weatherData = data
             updateCurrentWeatherUI()
-            val lastUpdatedDate = data.timestamp.getFormattedDate(includeYear = true)
-            val lastUpdatedTime = data.timestamp.getFormattedTime(context)
-            binding.lastUpdatedOn.text =
-                context.getString(R.string.last_updated, "$lastUpdatedDate, $lastUpdatedTime")
+            binding.lastUpdatedOn.text = context.getString(
+                R.string.last_updated,
+                data.timestamp.getFormattedDateAndTime(context)
+            )
         }
 
     }

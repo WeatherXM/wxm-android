@@ -346,8 +346,12 @@ data class Gateway(
     val serialNumber: String?,
     @Json(name = "gps_sats")
     val gpsSats: String?,
+    @Json(name = "gps_sats_last_activity")
+    val gpsSatsLastActivity: ZonedDateTime?,
     @Json(name = "wifi_rssi")
     val wifiRssi: String?,
+    @Json(name = "wifi_rssi_last_activity")
+    val wifiRssiLastActivity: ZonedDateTime?,
 ) : Parcelable
 
 @Keep
@@ -364,8 +368,12 @@ data class WeatherStation(
     val hwVersion: String?,
     @Json(name = "last_hs_name")
     val lastHotspot: String?,
+    @Json(name = "last_hs_name_last_activity")
+    val lastHotspotLastActivity: ZonedDateTime?,
     @Json(name = "last_tx_rssi")
     val lastTxRssi: String?,
+    @Json(name = "last_tx_rssi_last_activity")
+    val lastTxRssiLastActivity: ZonedDateTime?,
     @Json(name = "bat_state")
     val batteryState: BatteryState?
 ) : Parcelable

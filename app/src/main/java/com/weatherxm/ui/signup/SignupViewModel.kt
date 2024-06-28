@@ -4,12 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError.AuthError.InvalidUsername
 import com.weatherxm.data.ApiError.AuthError.SignupError.UserAlreadyExists
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.usecases.AuthUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch

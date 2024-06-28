@@ -165,9 +165,10 @@ import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationViewModel
 import com.weatherxm.ui.deviceforecast.ForecastDetailsViewModel
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
 import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
-import com.weatherxm.ui.devicesettings.DeviceSettingsViewModel
-import com.weatherxm.ui.devicesettings.changefrequency.ChangeFrequencyViewModel
-import com.weatherxm.ui.devicesettings.reboot.RebootViewModel
+import com.weatherxm.ui.devicesettings.helium.DeviceSettingsHeliumViewModel
+import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyViewModel
+import com.weatherxm.ui.devicesettings.helium.reboot.RebootViewModel
+import com.weatherxm.ui.devicesettings.wifi.DeviceSettingsWifiViewModel
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.explorer.UICellJsonAdapter
 import com.weatherxm.ui.explorer.search.NetworkSearchViewModel
@@ -913,7 +914,15 @@ private val viewmodels = module {
             get()
         )
     }
-    viewModel { params -> DeviceSettingsViewModel(device = params.get(), get(), get(), get()) }
+    viewModel { params -> DeviceSettingsWifiViewModel(device = params.get(), get(), get(), get()) }
+    viewModel { params ->
+        DeviceSettingsHeliumViewModel(
+            device = params.get(),
+            get(),
+            get(),
+            get()
+        )
+    }
     viewModel { params -> RebootViewModel(device = params.get(), get(), get(), get(), get()) }
     viewModel { params ->
         ChangeFrequencyViewModel(device = params.get(), get(), get(), get(), get(), get())

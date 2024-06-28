@@ -468,16 +468,24 @@
     <string name="remove_station_desc"><![CDATA[Unclaim and remove this station from your account. You will not lose any allocated rewards, but you will not be able to view the station’s data or earn additional rewards in the future.<br><a href="%1$s">Learn more about it here.</a>]]></string>
     <string name="remove_station_warning">This action is not reversible!</string>
     <string name="remove_station_password_message"><![CDATA[In order to remove your station you need to confirm you are the owner of this account.<br><b>Please type in your password to remove your station.</b>]]></string>
-    <string name="station_information">Station Information</string>
+    <string name="information">Information</string>
+    <string name="model">Model</string>
     <string name="share">Share</string>
+    <string name="latest_hint">(Latest)</string>
+    <string name="last_weather_station_activity">Last Weather Station Activity</string>
+    <string name="last_gateway_activity">Last Gateway Activity</string>
+    <string name="gateway_details">Gateway Details</string>
+    <string name="station_details">Station Details</string>
     <string name="station_default_name">Public Name (in Explorer)</string>
+    <string name="bundle_name">Bundle Name</string>
     <string name="hardware_version">Hardware Version</string>
     <string name="firmware_version">Firmware Version</string>
     <string name="gps_number_sats">GPS - Number of connected satellites</string>
+    <string name="satellites">%1$s Satellites @ %2$s</string>
     <string name="last_hotspot">Last Hotspot Seen</string>
     <string name="last_tx_rssi">Last Tx RSSI</string>
     <string name="wifi_rssi">WiFi Signal (RSSI)</string>
-    <string name="rssi">%s dBm</string>
+    <string name="rssi">%1$s dBm @ %2$s</string>
     <string name="claimed_at">Claimed at</string>
     <string name="battery_level">Battery Level</string>
     <string name="battery_level_ok">Good</string>
@@ -498,7 +506,7 @@
     <string name="station_location_desc"><![CDATA[The deployment location you set for this station is <b>%s.</b> If the location you see on the map doesn’t match the actual deployment location, press the button below to edit.]]></string>
     <string name="station_location_favorite_desc"><![CDATA[The deployment location that the station owner has set is <b>%s.</b>]]></string>
     <string name="edit_location">Edit Location</string>
-    <string name="device_serial_number">Device Serial Number</string>
+    <string name="serial_number">Serial Number</string>
 
     <!-- Alerts -->
     <string name="alerts">Alerts</string>

@@ -1,4 +1,4 @@
-package com.weatherxm.ui.devicesettings.changefrequency
+package com.weatherxm.ui.devicesettings.helium.changefrequency
 
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter

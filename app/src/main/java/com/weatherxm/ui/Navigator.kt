@@ -59,9 +59,10 @@ import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationActivity
 import com.weatherxm.ui.deviceforecast.ForecastDetailsActivity
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAActivity
 import com.weatherxm.ui.devicehistory.HistoryActivity
-import com.weatherxm.ui.devicesettings.DeviceSettingsActivity
-import com.weatherxm.ui.devicesettings.changefrequency.ChangeFrequencyActivity
-import com.weatherxm.ui.devicesettings.reboot.RebootActivity
+import com.weatherxm.ui.devicesettings.helium.DeviceSettingsHeliumActivity
+import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyActivity
+import com.weatherxm.ui.devicesettings.helium.reboot.RebootActivity
+import com.weatherxm.ui.devicesettings.wifi.DeviceSettingsWifiActivity
 import com.weatherxm.ui.explorer.ExplorerActivity
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.ui.home.HomeActivity
@@ -192,13 +193,16 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     }
 
     fun showStationSettings(context: Context?, device: UIDevice) {
-        context?.let {
-            it.startActivity(
-                Intent(it, DeviceSettingsActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .putExtra(ARG_DEVICE, device)
-            )
+        val intent = if (device.isHelium()) {
+            Intent(context, DeviceSettingsHeliumActivity::class.java)
+        } else {
+            Intent(context, DeviceSettingsWifiActivity::class.java)
         }
+        context?.startActivity(
+            intent
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                .putExtra(ARG_DEVICE, device)
+        )
     }
 
     fun openShare(context: Context, text: String) {
