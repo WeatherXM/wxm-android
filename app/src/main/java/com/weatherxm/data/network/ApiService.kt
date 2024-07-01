@@ -134,7 +134,7 @@ interface ApiService {
     ): NetworkResponse<Unit, ErrorResponse>
 
     @Mock
-    @MockResponse(body = "mock_files/public_hexes.json")
+    @MockResponse(body = "mock_files/public_cells.json")
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @GET("/api/v1/cells")
     @Headers(NO_AUTH_HEADER)
