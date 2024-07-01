@@ -8,12 +8,12 @@ import com.weatherxm.ui.common.DeviceType
 object Validator {
     private const val MINIMUM_PASSWORD_LENGTH = 6
     private const val ADDRESS_LENGTH = 42
-    private const val FRIENDLY_NAME_MAX_LENGTH = 64
+    private const val FRIENDLY_NAME_MAX_LENGTH = 24
     private const val REGEX_ETH_ADDRESS = "^0x[a-fA-F0-9]{40}\$"
     private const val REGEX_M5_SERIAL_NUMBER = "^[a-fA-F0-9]{18}\$"
     private const val REGEX_D1_SERIAL_NUMBER = "^[a-fA-F0-9]{20}\$"
     private const val REGEX_CLAIMING_KEY = "^[0-9]{6}\$"
-    private const val REGEX_FRIENDLY_NAME = "^(?!\\s*\$).+"
+    private const val REGEX_FRIENDLY_NAME = "^\\S.{1,24}$"
     private val LATITUDE_BOUNDS = -90.0..90.0
     private val LONGITUDE_BOUNDS = -180.0..180.0
     private val EMPTY_LOCATION = Location(0.0, 0.0)

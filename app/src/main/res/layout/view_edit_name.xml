@@ -24,7 +24,7 @@
             android:layout_marginTop="@dimen/margin_normal"
             android:hint="@string/edit_name_hint"
             app:counterEnabled="true"
-            app:counterMaxLength="64"
+            app:counterMaxLength="24"
             app:helperText="@string/edit_name_helper_text"
             app:layout_constraintTop_toBottomOf="@id/title">
 
