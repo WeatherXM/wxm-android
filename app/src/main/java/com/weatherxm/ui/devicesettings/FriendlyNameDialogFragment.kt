@@ -10,6 +10,7 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.databinding.ViewEditNameBinding
 import com.weatherxm.ui.common.classSimpleName
+import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.util.Validator
 import org.koin.android.ext.android.inject
 
@@ -32,6 +33,11 @@ class FriendlyNameDialogFragment(
         builder.setView(binding.root)
 
         binding.newName.setText(currentFriendlyName)
+
+        binding.newName.onTextChanged {
+            binding.newNameContainer.error = null
+            binding.save.isEnabled = it.isNotEmpty()
+        }
 
         binding.cancel.setOnClickListener {
             analytics.trackEventUserAction(
