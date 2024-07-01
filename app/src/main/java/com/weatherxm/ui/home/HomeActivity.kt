@@ -156,14 +156,21 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         // Fetch user's devices
         devicesViewModel.fetch()
 
-        /*
-        * Changing the theme from Profile -> Settings and going back to profile
-        * shows the "Add Device" floating button visible again. This code is to fix this.
+        /**
+         * Changing the theme from Profile -> Settings and going back to profile
+         * shows the "Add Device" floating button visible again. This code is to fix this.
          */
         val navDestination = navController.currentDestination?.id
         binding.networkStatsBtn.visible(navDestination == R.id.navigation_explorer)
         binding.myLocationBtn.visible(navDestination == R.id.navigation_explorer)
-        binding.addDevice.visible(navDestination == R.id.navigation_devices)
+        /**
+         * Don't use the visible function for the addButton 
+         * because of a specific case hiding it in the devices list.
+         * Therefore we use the hide() function which fits our purpose.
+         */
+        if (navDestination == R.id.navigation_profile) {
+            binding.addDevice.hide()
+        }
     }
 
     private fun onExplorerState(resource: Resource<ExplorerData>) {
