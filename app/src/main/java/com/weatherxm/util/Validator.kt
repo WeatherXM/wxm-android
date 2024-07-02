@@ -14,7 +14,7 @@ object Validator {
     private const val REGEX_D1_SERIAL_NUMBER = "^[a-fA-F0-9]{20}\$"
     private const val REGEX_PULSE_SERIAL_NUMBER = "^[a-fA-F0-9]{16}\$"
     private const val REGEX_CLAIMING_KEY = "^[0-9]{6}\$"
-    private const val REGEX_FRIENDLY_NAME = "^\\S.{1,24}$"
+    private const val REGEX_FRIENDLY_NAME = "^\\S.{0,24}$"
     private val LATITUDE_BOUNDS = -90.0..90.0
     private val LONGITUDE_BOUNDS = -180.0..180.0
     private val EMPTY_LOCATION = Location(0.0, 0.0)
