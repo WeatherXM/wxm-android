@@ -12,6 +12,7 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentClaimSetLocationBinding
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
+import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.DeviceType
@@ -28,6 +29,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
     private val model: ClaimLocationViewModel by activityViewModel()
     private val heliumParentModel: ClaimHeliumViewModel by activityViewModel()
     private val wifiParentModel: ClaimWifiViewModel by activityViewModel()
+    private val pulseParentModel: ClaimPulseViewModel by activityViewModel()
     private lateinit var binding: FragmentClaimSetLocationBinding
 
     companion object {
@@ -84,10 +86,10 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
             }
             model.setInstallationLocation(markerLocation.lat, markerLocation.lon)
 
-            if (model.getDeviceType() == DeviceType.HELIUM) {
-                heliumParentModel.next()
-            } else {
-                wifiParentModel.next()
+            when (model.getDeviceType()) {
+                DeviceType.M5_WIFI, DeviceType.D1_WIFI -> wifiParentModel.next()
+                DeviceType.PULSE_4G -> pulseParentModel.next()
+                DeviceType.HELIUM -> heliumParentModel.next()
             }
         }
 

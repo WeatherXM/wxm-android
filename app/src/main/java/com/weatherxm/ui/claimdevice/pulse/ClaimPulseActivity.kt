@@ -7,11 +7,15 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
+import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
+import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity.ClaimPulseDevicePagerAdapter.Companion.PAGE_COUNT
+import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity.ClaimPulseDevicePagerAdapter.Companion.PAGE_LOCATION
 import com.weatherxm.ui.claimdevice.pulse.claimingcode.ClaimPulseClaimingCodeFragment
 import com.weatherxm.ui.claimdevice.pulse.manualdetails.ClaimPulseManualDetailsFragment
 import com.weatherxm.ui.claimdevice.pulse.preparegateway.ClaimPulsePrepareGatewayFragment
 import com.weatherxm.ui.claimdevice.pulse.reboot.ClaimPulseRebootFragment
+import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.components.BaseActivity
@@ -26,6 +30,7 @@ class ClaimPulseActivity : BaseActivity() {
 
     private lateinit var binding: ActivityClaimDeviceBinding
     private val model: ClaimPulseViewModel by viewModel()
+    private val locationModel: ClaimLocationViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +87,11 @@ class ClaimPulseActivity : BaseActivity() {
         with(binding) {
             pager.currentItem += incrementPage
             binding.progress.progress = pager.currentItem + 1
+            when (pager.currentItem) {
+                PAGE_LOCATION -> {
+                    locationModel.requestUserLocation()
+                }
+            }
         }
     }
 
@@ -93,7 +103,8 @@ class ClaimPulseActivity : BaseActivity() {
             const val PAGE_PREPARE_GATEWAY = 1
             const val PAGE_MANUAL_DETAILS = 2
             const val PAGE_CLAIMING_CODE = 3
-            const val PAGE_COUNT = 4
+            const val PAGE_LOCATION = 4
+            const val PAGE_COUNT = 5
         }
 
         override fun getItemCount(): Int = PAGE_COUNT
@@ -105,6 +116,7 @@ class ClaimPulseActivity : BaseActivity() {
                 PAGE_PREPARE_GATEWAY -> ClaimPulsePrepareGatewayFragment()
                 PAGE_MANUAL_DETAILS -> ClaimPulseManualDetailsFragment()
                 PAGE_CLAIMING_CODE -> ClaimPulseClaimingCodeFragment()
+                PAGE_LOCATION -> ClaimLocationFragment.newInstance(DeviceType.PULSE_4G)
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }
         }
