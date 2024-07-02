@@ -16,8 +16,9 @@ import io.mockk.verify
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
+import org.koin.test.KoinTest
 
-class AnalyticsWrapperTest : BehaviorSpec({
+class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
     val context = mockk<Context>()
     val sharedPref = mockk<SharedPreferences>()
     val service1 = mockk<AnalyticsService>()
