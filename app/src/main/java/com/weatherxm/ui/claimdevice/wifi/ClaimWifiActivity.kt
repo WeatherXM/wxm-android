@@ -9,13 +9,13 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityClaimDeviceBinding
 import com.weatherxm.ui.claimdevice.location.ClaimLocationFragment
 import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
+import com.weatherxm.ui.claimdevice.result.ClaimResultFragment
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_COUNT
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_LOCATION
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity.ClaimDevicePagerAdapter.Companion.PAGE_RESULT
 import com.weatherxm.ui.claimdevice.wifi.connectwifi.ClaimWifiConnectWifiFragment
 import com.weatherxm.ui.claimdevice.wifi.manualdetails.ClaimWifiManualDetailsFragment
 import com.weatherxm.ui.claimdevice.wifi.preparegateway.ClaimWifiPrepareGatewayFragment
-import com.weatherxm.ui.claimdevice.wifi.result.ClaimWifiResultFragment
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.classSimpleName
@@ -133,7 +133,7 @@ class ClaimWifiActivity : BaseActivity() {
                 PAGE_PREPARE_GATEWAY -> ClaimWifiPrepareGatewayFragment()
                 PAGE_MANUAL_DETAILS -> ClaimWifiManualDetailsFragment()
                 PAGE_LOCATION -> ClaimLocationFragment.newInstance(deviceType)
-                PAGE_RESULT -> ClaimWifiResultFragment()
+                PAGE_RESULT -> ClaimResultFragment.newInstance(deviceType)
                 else -> throw IllegalStateException("Oops! You forgot to add a fragment here.")
             }
         }
