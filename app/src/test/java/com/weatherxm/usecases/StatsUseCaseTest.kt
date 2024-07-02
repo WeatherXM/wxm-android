@@ -1,4 +1,4 @@
-package com.weatherxm.ui.usecases
+package com.weatherxm.usecases
 
 import android.content.Context
 import android.icu.text.CompactDecimalFormat

@@ -1,4 +1,4 @@
-package com.weatherxm.ui.util
+package com.weatherxm.util
 
 import com.weatherxm.R
 import com.weatherxm.ui.common.AnnotationGroupCode
