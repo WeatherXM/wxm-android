@@ -1,4 +1,4 @@
-package data.repository
+package com.weatherxm.data.repository
 
 import arrow.core.Either
 import com.weatherxm.data.ApiError

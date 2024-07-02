@@ -1,4 +1,4 @@
-package ui.usecases
+package com.weatherxm.ui.usecases
 
 import arrow.core.Either
 import com.weatherxm.data.ApiError

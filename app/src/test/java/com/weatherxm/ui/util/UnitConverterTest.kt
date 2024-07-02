@@ -1,4 +1,4 @@
-package ui.util
+package com.weatherxm.ui.util
 
 import com.weatherxm.util.UnitConverter.celsiusToFahrenheit
 import com.weatherxm.util.UnitConverter.degreesToCardinal
