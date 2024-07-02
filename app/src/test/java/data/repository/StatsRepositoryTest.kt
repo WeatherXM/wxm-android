@@ -5,6 +5,7 @@ import com.weatherxm.data.ApiError
 import com.weatherxm.data.NetworkError
 import com.weatherxm.data.NetworkStatsResponse
 import com.weatherxm.data.datasource.StatsDataSource
+import com.weatherxm.data.repository.StatsRepository
 import com.weatherxm.data.repository.StatsRepositoryImpl
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -14,8 +15,13 @@ import io.mockk.coVerify
 import io.mockk.mockk
 
 class StatsRepositoryTest : BehaviorSpec({
-    val dataSource = mockk<StatsDataSource>()
-    val repo = StatsRepositoryImpl(dataSource)
+    lateinit var dataSource: StatsDataSource
+    lateinit var repo: StatsRepository
+
+    beforeTest {
+        dataSource = mockk<StatsDataSource>()
+        repo = StatsRepositoryImpl(dataSource)
+    }
 
     context("Get Network Stats") {
         When("the request is successful") {
