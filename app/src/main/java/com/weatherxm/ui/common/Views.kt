@@ -124,6 +124,11 @@ fun Editable?.unmask(): String = this.toString().unmask()
 fun String.unmask(): String = this.replace(":", String.empty())
 
 /**
+ * Remove starting "P" character from Serial Number text of Pulse
+ */
+fun String.removePulsePrefix(): String = this.removePrefix("P")
+
+/**
  * hello world ---> Hello World
  */
 fun String.capitalizeWords(): String {
