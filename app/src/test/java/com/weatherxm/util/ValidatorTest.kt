@@ -1,4 +1,4 @@
-package com.weatherxm.ui.util
+package com.weatherxm.util
 
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.util.Validator.validateClaimingKey
