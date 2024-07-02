@@ -1,4 +1,4 @@
-package data
+package com.weatherxm.data
 
 import android.content.Context
 import com.squareup.moshi.Moshi

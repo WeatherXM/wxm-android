@@ -1,4 +1,4 @@
-package ui.usecases
+package com.weatherxm.ui.usecases
 
 import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.usecases.AnalyticsOptInUseCase
