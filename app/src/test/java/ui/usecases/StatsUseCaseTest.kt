@@ -31,6 +31,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.KoinTest
@@ -192,5 +193,9 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
                 }
             }
         }
+    }
+
+    afterSpec {
+        stopKoin()
     }
 })

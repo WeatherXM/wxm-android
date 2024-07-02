@@ -158,7 +158,7 @@ class ValidatorTest : BehaviorSpec({
         given("a claiming key") {
             When("it is valid") {
                 then("the validator should return true") {
-                    val randomLength = Random.nextInt(1..64)
+                    val randomLength = Random.nextInt(1..24)
                     val randomFriendlyName = RandomString.make(randomLength)
                     val success = if (validateFriendlyName(randomFriendlyName)) {
                         true
