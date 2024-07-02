@@ -12,6 +12,7 @@ object Validator {
     private const val REGEX_ETH_ADDRESS = "^0x[a-fA-F0-9]{40}\$"
     private const val REGEX_M5_SERIAL_NUMBER = "^[a-fA-F0-9]{18}\$"
     private const val REGEX_D1_SERIAL_NUMBER = "^[a-fA-F0-9]{20}\$"
+    private const val REGEX_PULSE_SERIAL_NUMBER = "^[a-fA-F0-9]{16}\$"
     private const val REGEX_CLAIMING_KEY = "^[0-9]{6}\$"
     private const val REGEX_FRIENDLY_NAME = "^\\S.{1,24}$"
     private val LATITUDE_BOUNDS = -90.0..90.0
@@ -44,10 +45,11 @@ object Validator {
     }
 
     fun validateSerialNumber(serialNumber: String, deviceType: DeviceType): Boolean {
-        return if (deviceType == DeviceType.M5_WIFI) {
-            serialNumber.matches(Regex(REGEX_M5_SERIAL_NUMBER))
-        } else {
-            serialNumber.matches(Regex(REGEX_D1_SERIAL_NUMBER))
+        return when (deviceType) {
+            DeviceType.M5_WIFI -> serialNumber.matches(Regex(REGEX_M5_SERIAL_NUMBER))
+            DeviceType.D1_WIFI -> serialNumber.matches(Regex(REGEX_D1_SERIAL_NUMBER))
+            DeviceType.PULSE_4G -> serialNumber.matches(Regex(REGEX_PULSE_SERIAL_NUMBER))
+            else -> false
         }
     }
 

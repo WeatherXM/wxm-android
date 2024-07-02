@@ -23,6 +23,7 @@ interface AnalyticsService {
         EXPLORER_LANDING("Explorer (Landing)"),
         EXPLORER("Explorer"),
         CLAIM_M5("Claim M5"),
+        CLAIM_PULSE("Claim Pulse"),
         CLAIM_HELIUM("Claim Helium"),
         WALLET("Wallet"),
         DELETE_ACCOUNT("Delete Account"),

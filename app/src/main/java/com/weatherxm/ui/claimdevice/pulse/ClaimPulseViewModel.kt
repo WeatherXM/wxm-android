@@ -1,4 +1,4 @@
-package com.weatherxm.ui.claimdevice.wifi
+package com.weatherxm.ui.claimdevice.pulse
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,7 +16,6 @@ import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
@@ -24,8 +23,7 @@ import com.weatherxm.util.Validator
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class ClaimWifiViewModel(
-    val deviceType: DeviceType,
+class ClaimPulseViewModel(
     private val claimDeviceUseCase: ClaimDeviceUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper
@@ -52,7 +50,7 @@ class ClaimWifiViewModel(
     }
 
     fun setSerialNumber(serial: String) {
-        currentSerialNumber = if (serial.contains(":")) serial.unmask() else serial
+        currentSerialNumber = serial.removePrefix("P")
     }
 
     fun getSerialNumber(): String {
@@ -67,11 +65,8 @@ class ClaimWifiViewModel(
         return currentClaimingKey
     }
 
-    fun validateSerial(serialNumber: String): Boolean {
-        return Validator.validateSerialNumber(
-            if (serialNumber.contains(":")) serialNumber.unmask() else serialNumber,
-            deviceType
-        )
+    fun validateSerial(serial: String): Boolean {
+        return Validator.validateSerialNumber(serial, DeviceType.PULSE_4G)
     }
 
     fun validateClaimingKey(key: String): Boolean {

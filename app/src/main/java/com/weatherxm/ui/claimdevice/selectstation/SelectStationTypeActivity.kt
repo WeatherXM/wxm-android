@@ -41,9 +41,9 @@ class SelectStationTypeActivity : BaseActivity() {
             navigator.showClaimHeliumFlow(claimingLauncher, this)
         }
 
-//        binding.pulseCard.listener {
-//            // TODO: Implement this
-//        }
+        binding.pulseCard.listener {
+            navigator.showClaimPulseFlow(claimingLauncher, this)
+        }
     }
 
     override fun onResume() {

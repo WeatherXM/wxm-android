@@ -207,6 +207,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />
         <activity
+            android:name="com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WeatherXM" />
+        <activity
             android:name="com.weatherxm.ui.rewardslist.RewardsListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM" />

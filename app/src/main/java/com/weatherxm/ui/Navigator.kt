@@ -25,6 +25,7 @@ import com.weatherxm.data.WXMRemoteMessage
 import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.cellinfo.CellInfoActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity
+import com.weatherxm.ui.claimdevice.pulse.ClaimPulseActivity
 import com.weatherxm.ui.claimdevice.selectstation.SelectStationTypeActivity
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiActivity
 import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
@@ -343,6 +344,19 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         context: Context
     ) {
         val intent = Intent(context, ClaimHeliumActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        if (activityResultLauncher == null) {
+            context.startActivity(intent)
+        } else {
+            activityResultLauncher.launch(intent)
+        }
+    }
+
+    fun showClaimPulseFlow(
+        activityResultLauncher: ActivityResultLauncher<Intent>?,
+        context: Context
+    ) {
+        val intent = Intent(context, ClaimPulseActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         if (activityResultLauncher == null) {
             context.startActivity(intent)
