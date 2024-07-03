@@ -16,7 +16,7 @@ plugins {
  * Load key-values from "production.env" properties file into extension properties (ext)
  */
 task("loadProductionEnv") {
-    if(!project.hasProperty("SKIP_PRODUCTION_ENV")) {
+    if (!project.hasProperty("SKIP_PRODUCTION_ENV")) {
         val env = rootProject.file("production.env")
 
         if (env.exists()) {

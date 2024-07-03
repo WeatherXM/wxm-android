@@ -9,6 +9,11 @@ plugins {
     alias(libs.plugins.firebase.perf)
     alias(libs.plugins.grgit)
     alias(libs.plugins.compose.compiler)
+    jacoco // Alternative is Kover but still in beta: https://github.com/Kotlin/kotlinx-kover
+}
+
+jacoco {
+    toolVersion = "0.8.12"
 }
 
 fun getVersionGitTags(printForDebugging: Boolean = false): List<String> {
@@ -205,6 +210,10 @@ android {
                 "proguard-rules.pro"
             )
             manifestPlaceholders["crashlyticsEnabled"] = false
+        }
+        debug {
+            enableAndroidTestCoverage = true
+            enableUnitTestCoverage = true
         }
     }
 
