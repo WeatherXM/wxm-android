@@ -21,7 +21,6 @@ import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.StatsRepository
 import com.weatherxm.ui.common.MainnetInfo
 import com.weatherxm.ui.networkstats.NetworkStationStats
-import com.weatherxm.usecases.StatsUseCaseImpl
 import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
 import com.weatherxm.util.NumberUtils
 import io.kotest.core.spec.style.BehaviorSpec

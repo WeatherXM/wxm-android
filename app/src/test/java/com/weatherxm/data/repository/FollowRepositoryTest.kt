@@ -4,7 +4,6 @@ import arrow.core.Either
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.datasource.CacheFollowDataSource
 import com.weatherxm.data.datasource.NetworkFollowDataSource
-import com.weatherxm.data.repository.FollowRepositoryImpl
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
@@ -20,7 +19,9 @@ class FollowRepositoryTest : BehaviorSpec({
     beforeSpec {
         coEvery { networkSource.followStation("") } returns Either.Left(ApiError.DeviceNotFound(""))
         coEvery { networkSource.followStation("testId") } returns Either.Right(Unit)
-        coEvery { networkSource.unfollowStation("") } returns Either.Left(ApiError.DeviceNotFound(""))
+        coEvery {
+            networkSource.unfollowStation("")
+        } returns Either.Left(ApiError.DeviceNotFound(""))
         coEvery { networkSource.unfollowStation("testId") } returns Either.Right(Unit)
         coJustRun { cacheSource.followStation("") }
         coJustRun { cacheSource.followStation("testId") }

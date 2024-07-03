@@ -3,7 +3,6 @@ package com.weatherxm.usecases
 import arrow.core.Either
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.repository.FollowRepository
-import com.weatherxm.usecases.FollowUseCaseImpl
 import com.weatherxm.util.WidgetHelper
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe

@@ -1,15 +1,11 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
-import com.weatherxm.data.ApiError
 import com.weatherxm.data.NetworkError
 import com.weatherxm.data.NetworkStatsResponse
 import com.weatherxm.data.datasource.StatsDataSource
-import com.weatherxm.data.repository.StatsRepository
-import com.weatherxm.data.repository.StatsRepositoryImpl
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
