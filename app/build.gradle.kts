@@ -305,7 +305,7 @@ android {
 }
 
 dependencies {
-    // Tests
+    // Testing
     androidTestImplementation(libs.androidx.runner)
     androidTestImplementation(libs.androidx.rules)
     androidTestImplementation(libs.koin.test)
@@ -315,6 +315,7 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.mockk.agent)
     testImplementation(libs.koin.test)
+    testImplementation(libs.androidx.arch.core.testing)
 
     // Desugaring for Java8 feature support
     coreLibraryDesugaring(libs.desugar.jdk.libs)
