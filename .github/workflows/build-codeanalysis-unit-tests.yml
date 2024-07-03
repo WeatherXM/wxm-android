@@ -121,3 +121,11 @@ jobs:
                     java-version: '17'
             -   name: Run Unit Tests
                 run: ./gradlew :app:testRemoteProdDebugUnitTest -PSKIP_PRODUCTION_ENV -PSKIP_TAGS_LOGGING
+            -   name: Create Test Report
+                uses: dorny/test-reporter@v1
+                if: success() || failure() # run this step even if previous step failed
+                with:
+                    name: Test Report
+                    path: app/build/test-results/testRemoteProdDebugUnitTest/*.xml
+                    only-summary: true
+                    reporter: java-junit
