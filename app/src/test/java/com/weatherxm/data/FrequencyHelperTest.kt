@@ -2,13 +2,9 @@ package com.weatherxm.data
 
 import android.content.Context
 import com.squareup.moshi.Moshi
-import com.weatherxm.data.Frequency
 import com.weatherxm.data.adapters.LocalDateJsonAdapter
 import com.weatherxm.data.adapters.LocalDateTimeJsonAdapter
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
-import com.weatherxm.data.countryToFrequency
-import com.weatherxm.data.frequencyToHeliumBleBandValue
-import com.weatherxm.data.otherFrequencies
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.shouldBe

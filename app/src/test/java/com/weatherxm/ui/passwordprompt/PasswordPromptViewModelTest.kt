@@ -83,7 +83,8 @@ class PasswordPromptViewModelTest : BehaviorSpec({
                         runTest {
                             viewModel.checkPassword("testInvalid")
                         }
-                        viewModel.onValidPassword().value shouldBe Resource.error("Invalid Password")
+                        viewModel.onValidPassword().value shouldBe
+                            Resource.error("Invalid Password")
                     }
                 }
             }

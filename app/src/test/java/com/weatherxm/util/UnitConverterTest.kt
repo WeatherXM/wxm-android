@@ -8,7 +8,6 @@ import com.weatherxm.util.UnitConverter.msToBeaufort
 import com.weatherxm.util.UnitConverter.msToKmh
 import com.weatherxm.util.UnitConverter.msToKnots
 import com.weatherxm.util.UnitConverter.msToMph
-import com.weatherxm.util.Validator.validateUsername
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
@@ -71,7 +70,7 @@ class UnitConverterTest : BehaviorSpec({
             then("the correct Cardinal value") {
                 degreesToCardinal(-10) shouldBe "N"
                 degreesToCardinal(0) shouldBe "N"
-                degreesToCardinal( 22) shouldBe "NNE"
+                degreesToCardinal(22) shouldBe "NNE"
                 degreesToCardinal(45) shouldBe "NE"
                 degreesToCardinal(67) shouldBe "ENE"
                 degreesToCardinal(112) shouldBe "ESE"

@@ -1,8 +1,6 @@
 package com.weatherxm.usecases
 
 import com.weatherxm.data.repository.UserPreferencesRepository
-import com.weatherxm.usecases.AnalyticsOptInUseCase
-import com.weatherxm.usecases.AnalyticsOptInUseCaseImpl
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.Runs
 import io.mockk.every
