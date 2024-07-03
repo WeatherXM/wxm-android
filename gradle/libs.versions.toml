@@ -1,5 +1,6 @@
 [versions]
 androidx-activity = "1.9.0"
+androidx-arch-core-testing = "2.2.0"
 androidx-core-splashscreen = "1.0.1"
 androidx-core-ktx = "1.13.1"
 androidx-coordinatorlayout = "1.2.0"
@@ -53,7 +54,6 @@ play-services-barcode-scanner = "16.1.0"
 okhttp-bom = "4.12.0"
 retrofit = "2.11.0"
 retromock = "1.1.1"
-roboelectric = "4.12.2"
 timber = "5.0.1"
 
 # Plugins
@@ -69,6 +69,7 @@ grgit = "5.2.2"
 
 [libraries]
 androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activity" }
+androidx-arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "androidx-arch-core-testing" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle-ktx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-ktx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle-ktx" }
@@ -144,7 +145,6 @@ play-services-scanner = { module = "com.google.android.gms:play-services-code-sc
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 retromock = { module = "co.infinum:retromock", version.ref = "retromock" }
-roboelectric = { module = "org.robolectric:robolectric", version.ref = "roboelectric" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 
