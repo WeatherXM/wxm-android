@@ -10,23 +10,23 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/footerContainer"
+        app:layout_constraintBottom_toTopOf="@id/button_bar"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintVertical_chainStyle="packed">
+            android:layout_height="match_parent">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/rebootTitle"
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/reboot_your_gateway"
+                android:text="@string/prepare_gateway_claiming"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textColor="@color/darkestBlue"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -37,7 +37,7 @@
                 android:layout_marginEnd="@dimen/margin_normal"
                 android:src="@drawable/ic_one_filled"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rebootTitle"
+                app:layout_constraintTop_toBottomOf="@id/title"
                 app:tint="@color/alternativeTextColor"
                 tools:ignore="ContentDescription" />
 
@@ -46,12 +46,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_small"
-                android:text="@string/reboot_gateway_4g_step_1"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:textColor="@color/alternativeTextColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/firstStepIcon"
-                app:layout_constraintTop_toTopOf="@id/firstStepIcon" />
+                app:layout_constraintTop_toTopOf="@id/firstStepIcon"
+                tools:text="@string/prepare_gateway_pulse_first_step" />
 
             <ImageView
                 android:id="@+id/secondStepIcon"
@@ -70,32 +70,30 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_small"
-                android:text="@string/reboot_gateway_4g_step_2"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:textColor="@color/alternativeTextColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/secondStepIcon"
-                app:layout_constraintTop_toTopOf="@id/secondStepIcon" />
+                app:layout_constraintTop_toTopOf="@id/secondStepIcon"
+                tools:text="@string/prepare_gateway_pulse_second_step" />
 
             <ImageView
-                android:id="@+id/rebootIcon"
+                android:id="@+id/barcodeSampleImage"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginTop="@dimen/margin_extra_large"
-                android:scaleType="centerInside"
-                android:src="@drawable/pulse_reboot"
-                app:layout_constraintTop_toBottomOf="@id/secondStep"
-                tools:ignore="ContentDescription" />
-
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_normal"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/connect_m5_wifi_watch_video"
+                android:src="@drawable/pulse_barcode"
+                app:layout_constraintTop_toBottomOf="@id/secondStep" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
-        android:id="@+id/footerContainer"
+        android:id="@+id/button_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/alternativeBackground"
         android:elevation="@dimen/elevation_normal"
         android:paddingTop="@dimen/padding_large"
         android:paddingBottom="@dimen/padding_large"
@@ -105,60 +103,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/infoIcon"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_learn_more_info"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/enterManuallyBtn"
+                style="@style/Widget.WeatherXM.Button.Subtle.Borders"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:text="@string/action_enter_serial_number_manually"
+                app:layout_constraintEnd_toStartOf="@id/scanBtn"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/alternativeTextColor"
-                tools:ignore="ContentDescription" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/infoText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:text="@string/reboot_gateway_info_text"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                android:textColor="@color/alternativeTextColor"
-                app:layout_constraintBottom_toTopOf="@id/confirmRebootToggle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/infoIcon" />
-
-            <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/confirmRebootToggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_normal"
-                app:layout_constraintBottom_toTopOf="@id/nextButton"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/confirmRebootText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
-                android:text="@string/reboot_your_gateway_4g_station_has_rebooted"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                app:layout_constraintBottom_toBottomOf="@id/confirmRebootToggle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/confirmRebootToggle"
-                app:layout_constraintTop_toTopOf="@id/confirmRebootToggle" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/nextButton"
+                android:id="@+id/scanBtn"
                 style="@style/Widget.WeatherXM.Button"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:enabled="false"
-                android:text="@string/proceed_next_step"
-                android:textAllCaps="false"
-                app:layout_constraintBottom_toBottomOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_marginStart="@dimen/margin_small"
+                android:text="@string/action_scan_barcode"
+                app:icon="@drawable/ic_barcode"
+                app:iconGravity="textStart"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/enterManuallyBtn"
+                app:layout_constraintTop_toTopOf="parent" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </FrameLayout>
 
