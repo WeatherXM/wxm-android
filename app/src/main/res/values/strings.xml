@@ -426,6 +426,11 @@
     <string name="reboot_gateway_4g_step_2"><![CDATA[Press the <b>POWER button</b> once again until it turns back on.]]></string>
     <string name="reboot_gateway_info_text">After reboot, the gateway should display a 6-digit key on the screen. Write it down as you will need to type it in a next step.</string>
     <string name="reboot_your_gateway_4g_station_has_rebooted">The station has been rebooted.</string>
+    <string name="type_gateway_claiming_key">Type your gateway’s claiming key</string>
+    <string name="type_gateway_claiming_key_step_1">Upon reboot, the WG3000 gateway will display a 6-digit key on its display after a few minutes. Type it below.</string>
+    <string name="type_gateway_claiming_key_step_2"><![CDATA[If the gateway does not display the 6-digit key, navigate to <b>4-Device Settings -> 4.1-Device Claiming</b> and wait for the <b>6-digit key</b> to be generated.]]></string>
+    <string name="type_gateway_claiming_key_6_digit">Enter your gateway’s 6-digit key</string>
+    <string name="type_gateway_claiming_key_6_digit_hint">Enter 6-digit key</string>
 
     <!-- Forecast -->
     <string name="forecast_empty">Oops! No forecast weather data could not be found.</string>
