@@ -137,6 +137,25 @@ class ValidatorTest : BehaviorSpec({
                 }
             }
         }
+        given("a serial number of Pulse") {
+            When("it is valid") {
+                then("the validator should return true") {
+                    validateSerialNumber("0123456789ABCDEF", DeviceType.PULSE_4G) shouldBe true
+                }
+            }
+            When("it is invalid") {
+                then("the validator should return false") {
+                    validateSerialNumber("0123456789ABCDE", DeviceType.PULSE_4G) shouldBe false
+                    validateSerialNumber("0123456789ABCDEX", DeviceType.PULSE_4G) shouldBe false
+                    validateSerialNumber("0123456789ABCDEF0", DeviceType.PULSE_4G) shouldBe false
+                }
+            }
+        }
+        given("a Helium serial number (not supported through this method)") {
+            then("the validator should return false") {
+                validateSerialNumber("0123456789ABCDEF", DeviceType.HELIUM) shouldBe false
+            }
+        }
     }
     context("Validation of Claiming Key") {
         given("a claiming key") {
