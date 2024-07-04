@@ -35,13 +35,13 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
-                uses: actions/checkout@v2
+                uses: actions/checkout@v4
                 with:
                     fetch-depth: 0
             -   name: Re-fetch all tags # WA: https://github.com/actions/checkout/issues/882
                 run: git fetch --tags --force origin
             -   name: Gradle package cache
-                uses: actions/cache@v2
+                uses: actions/cache@v4
                 with:
                     key: ${{ env.GLOBAL_GRADLE_CACHE }}
                     path: ${{ env.GRADLE_USER_HOME }}
@@ -54,7 +54,7 @@ jobs:
                     gpg -d --passphrase "${{ secrets.ENCODED_RELEASE_KEYSTORE_PASSPHRASE }}" --batch release-keystore.asc > ./${{ secrets.RELEASE_KEYSTORE }}
                     gpg -d --passphrase "${{ secrets.DEBUG_KEYSTORE_PASSWORD }}" --batch debug-keystore.asc > ./${{ secrets.DEBUG_KEYSTORE }}
             -   name: Setup JDK 17
-                uses: actions/setup-java@v3
+                uses: actions/setup-java@v4
                 with:
                     distribution: 'temurin'
                     java-version: '17'
