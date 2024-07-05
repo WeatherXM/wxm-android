@@ -16,7 +16,6 @@ import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.common.removePulsePrefix
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
@@ -51,7 +50,7 @@ class ClaimPulseViewModel(
     }
 
     fun setSerialNumber(serial: String) {
-        currentSerialNumber = serial.removePulsePrefix()
+        currentSerialNumber = serial
     }
 
     fun getSerialNumber(): String {
@@ -67,7 +66,7 @@ class ClaimPulseViewModel(
     }
 
     fun validateSerial(serial: String): Boolean {
-        return Validator.validateSerialNumber(serial.removePulsePrefix(), DeviceType.PULSE_4G)
+        return Validator.validateSerialNumber(serial, DeviceType.PULSE_4G)
     }
 
     fun validateClaimingKey(key: String): Boolean {
