@@ -69,15 +69,18 @@
                 android:layout_height="wrap_content"
                 app:boxBackgroundColor="@color/alternativeBackground"
                 app:counterEnabled="true"
-                app:counterMaxLength="17"
+                app:counterMaxLength="16"
                 app:hintEnabled="false"
+                app:prefixText="P"
+                app:prefixTextAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                app:expandedHintEnabled="false"
                 app:layout_constraintTop_toBottomOf="@id/serialNumberTitle">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/serialNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:digits="P0123456789ABCDEFabcdef"
+                    android:digits="0123456789ABCDEFabcdef"
                     android:hint="@string/enter_your_gateway_pulse_sn_hint"
                     android:imeOptions="actionDone"
                     android:inputType="text|textCapCharacters"

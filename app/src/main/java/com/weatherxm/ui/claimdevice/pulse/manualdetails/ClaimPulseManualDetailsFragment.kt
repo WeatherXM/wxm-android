@@ -35,6 +35,20 @@ class ClaimPulseManualDetailsFragment : BaseFragment() {
             InputFilter.AllCaps(), InputFilter.LengthFilter(PULSE_SERIAL_MAX_LENGTH)
         )
 
+        binding.serialNumber.setOnFocusChangeListener { v, hasFocus ->
+            /**
+             * Hacky way to show hint, as then unfocused, the starting "P" gets overlapped
+             * by the prefix "P", so it's shown correctly.
+             * But when focused, the hint starts after the prefix "P" (so we have two "P" there)
+             * so we want to remove the starting "P" from the hint and keep only the prefix.
+             */
+            binding.serialNumber.hint = if (hasFocus) {
+                getString(R.string.enter_your_gateway_pulse_sn_hint).removePrefix("P")
+            } else {
+                getString(R.string.enter_your_gateway_pulse_sn_hint)
+            }
+        }
+
         binding.serialNumber.onTextChanged {
             binding.serialNumberContainer.error = null
             binding.proceedBtn.isEnabled = it.length == PULSE_SERIAL_MAX_LENGTH
@@ -65,6 +79,6 @@ class ClaimPulseManualDetailsFragment : BaseFragment() {
     }
 
     companion object {
-        const val PULSE_SERIAL_MAX_LENGTH = 17
+        const val PULSE_SERIAL_MAX_LENGTH = 16
     }
 }
