@@ -52,27 +52,22 @@ class PreferenceFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
-        val openDocumentationButton: Preference? =
-            findPreference(getString(R.string.documentation_title))
+        val openDocsButton: Preference? = findPreference(getString(R.string.documentation_title))
         val announcementsButton: Preference? =
             findPreference(getString(R.string.announcements_title))
         val contactSupportButton: Preference? =
             findPreference(getString(R.string.contact_support_title))
-        val userResearchButton: Preference? =
-            findPreference(getString(R.string.user_panel_title))
-        val displayPreference =
-            findPreference<ListPreference>(getString(R.string.key_theme))
-        val shortWxmSurvey: Preference? =
-            findPreference(getString(R.string.short_app_survey))
+        val userResearchButton: Preference? = findPreference(getString(R.string.user_panel_title))
+        val displayPreference = findPreference<ListPreference>(getString(R.string.key_theme))
+        val shortWxmSurvey: Preference? = findPreference(getString(R.string.short_app_survey))
         val analyticsPreference =
             findPreference<SwitchPreferenceCompat>(getString(R.string.key_google_analytics))
         val notificationsPreference =
             findPreference<SwitchPreferenceCompat>(getString(R.string.notifications_preference_key))
         val logoutBtn: Preference? = findPreference(getString(R.string.action_logout))
-        val resetPassBtn: Preference? =
-            findPreference(getString(R.string.change_password))
-        val deleteAccountButton: Preference? =
-            findPreference(getString(R.string.delete_account))
+        val resetPassBtn: Preference? = findPreference(getString(R.string.change_password))
+        val deleteAccountButton: Preference? = findPreference(getString(R.string.delete_account))
+        val appVersionPref: Preference? = findPreference(getString(R.string.title_app_version))
 
         /*
          * Disable switching of notifications toggle as we prompt user to do it via the settings
@@ -80,7 +75,7 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         notificationsPreference?.setOnPreferenceChangeListener { _, _ ->
             false
         }
-        openDocumentationButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        openDocsButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             analytics.trackEventSelectContent(AnalyticsService.ParamValue.DOCUMENTATION.paramValue)
             navigator.openWebsite(context, getString(R.string.docs_url))
             true
@@ -101,10 +96,15 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             navigator.openWebsite(this.context, getString(R.string.user_panel_url))
             true
         }
-
         displayPreference?.setOnPreferenceChangeListener { _, newValue ->
             displayModeHelper.setDisplayMode(newValue.toString())
             true
+        }
+        /**
+         * If `installationId` is available, append it at the end of the app version
+         */
+        model.getInstallationId()?.let {
+            appVersionPref?.summary = getString(R.string.app_version) + "-$it"
         }
 
         model.isLoggedIn().observe(this) { result ->
