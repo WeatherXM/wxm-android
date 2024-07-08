@@ -51,14 +51,21 @@ class FrequencyHelperTest : KoinTest, BehaviorSpec({
     context("Mapping of Country to Frequency") {
         given("a country code (`GR`)") {
             val context = mockk<Context>()
-            every {
-                context.assets.open("countries_information.json")
-            } returns ByteArrayInputStream(
-                ("[{\"code\": \"GR\"," +
-                    "\"helium_frequency\": \"EU868\"," +
-                    "\"map_center\": {\"lat\": 39.074208,\"lon\": 21.824312}}]"
-                    ).toByteArray()
-            )
+
+            /**
+             * Open the file under test/resources/countries_information.json as an InputStream
+             * otherwise use a default ByteArrayInputStream as specified below
+             */
+            val mappingInputStream =
+                this.javaClass.classLoader?.getResourceAsStream("countries_information.json")
+                    ?: ByteArrayInputStream(
+                        ("[{\"code\": \"GR\"," +
+                            "\"helium_frequency\": \"EU868\"," +
+                            "\"map_center\": {\"lat\": 39.074208,\"lon\": 21.824312}}]"
+                            ).toByteArray()
+                    )
+
+            every { context.assets.open("countries_information.json") } returns mappingInputStream
             then("return the correct frequency (EU868)") {
                 countryToFrequency(context, "GR", moshi) shouldBe Frequency.EU868
             }
@@ -66,65 +73,26 @@ class FrequencyHelperTest : KoinTest, BehaviorSpec({
     }
 
     context("Mapping of Frequency to Helium Band Value for BLE") {
+        val expectedResults = mapOf(
+            "EU868" to 5,
+            "US915" to 8,
+            "AU915" to 1,
+            "CN470" to 2,
+            "KR920" to 6,
+            "IN865" to 7,
+            "RU864" to 9,
+            "AS923_1" to 10,
+            "AS923_1B" to 14,
+            "AS923_2" to 11,
+            "AS923_3" to 12,
+            "AS923_4" to 13
+        )
         given("a frequency value") {
-            When("EU868") {
-                then("Band Value = 5") {
-                    frequencyToHeliumBleBandValue(Frequency.EU868) shouldBe 5
-                }
-            }
-            When("US915") {
-                then("Band Value = 8") {
-                    frequencyToHeliumBleBandValue(Frequency.US915) shouldBe 8
-                }
-            }
-            When("AU915") {
-                then("Band Value = 1") {
-                    frequencyToHeliumBleBandValue(Frequency.AU915) shouldBe 1
-                }
-            }
-            When("CN470") {
-                then("Band Value = 2") {
-                    frequencyToHeliumBleBandValue(Frequency.CN470) shouldBe 2
-                }
-            }
-            When("KR920") {
-                then("Band Value = 6") {
-                    frequencyToHeliumBleBandValue(Frequency.KR920) shouldBe 6
-                }
-            }
-            When("IN865") {
-                then("Band Value = 7") {
-                    frequencyToHeliumBleBandValue(Frequency.IN865) shouldBe 7
-                }
-            }
-            When("RU864") {
-                then("Band Value = 9") {
-                    frequencyToHeliumBleBandValue(Frequency.RU864) shouldBe 9
-                }
-            }
-            When("AS923_1") {
-                then("Band Value = 10") {
-                    frequencyToHeliumBleBandValue(Frequency.AS923_1) shouldBe 10
-                }
-            }
-            When("AS923_1B") {
-                then("Band Value = 14") {
-                    frequencyToHeliumBleBandValue(Frequency.AS923_1B) shouldBe 14
-                }
-            }
-            When("AS923_2") {
-                then("Band Value = 11") {
-                    frequencyToHeliumBleBandValue(Frequency.AS923_2) shouldBe 11
-                }
-            }
-            When("AS923_3") {
-                then("Band Value = 12") {
-                    frequencyToHeliumBleBandValue(Frequency.AS923_3) shouldBe 12
-                }
-            }
-            When("AS923_4") {
-                then("Band Value = 13") {
-                    frequencyToHeliumBleBandValue(Frequency.AS923_4) shouldBe 13
+            Frequency.entries.forEach {
+                When(it.name) {
+                    then("Band Value = ${expectedResults[it.name]}") {
+                        frequencyToHeliumBleBandValue(it) shouldBe expectedResults[it.name]
+                    }
                 }
             }
         }

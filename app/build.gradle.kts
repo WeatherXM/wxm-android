@@ -310,6 +310,12 @@ android {
             it.useJUnitPlatform()
         }
     }
+
+    sourceSets {
+        getByName("test") {
+            resources.srcDirs("src/main/assets")
+        }
+    }
 }
 
 dependencies {

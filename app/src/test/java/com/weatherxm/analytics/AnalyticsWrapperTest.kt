@@ -12,6 +12,7 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.verify
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -57,7 +58,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
             every { context.getString(CacheService.KEY_TEMPERATURE) } returns "temperature_unit"
             every { context.getString(R.string.temperature_celsius) } returns "°C"
             every { context.getString(CacheService.KEY_WIND) } returns "wind_speed_unit"
-            every { context.getString(R.string.wind_speed_ms) } returns "bf"
+            every { context.getString(R.string.wind_speed_ms) } returns "m/s"
             every {
                 context.getString(CacheService.KEY_WIND_DIR)
             } returns "key_wind_direction_preference"
@@ -68,12 +69,9 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
             every { context.getString(R.string.pressure_hpa) } returns "hPa"
 
             every { sharedPref.getString("temperature_unit", String.empty()) } returns "°C"
-            every { sharedPref.getString("wind_speed_unit", String.empty()) } returns "bf"
+            every { sharedPref.getString("wind_speed_unit", String.empty()) } returns "m/s"
             every {
-                sharedPref.getString(
-                    "key_wind_direction_preference",
-                    String.empty()
-                )
+                sharedPref.getString("key_wind_direction_preference", String.empty())
             } returns "Cardinal"
             every { sharedPref.getString("precipitation_unit", String.empty()) } returns "mm"
             every { sharedPref.getString("key_pressure_preference", String.empty()) } returns "hPa"
@@ -81,6 +79,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
             analyticsWrapper.setDisplayMode("dark")
             analyticsWrapper.setDevicesSortFilterOptions(listOf("DATE_ADDED", "ALL", "NO_GROUPING"))
             analyticsWrapper.getUserId() shouldBe "testId"
+            mockkObject(Weather)
             with(analyticsWrapper.setUserProperties()) {
                 size shouldBe 9
                 this[0].first shouldBe "theme"
@@ -102,9 +101,9 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                 this[8].first shouldBe "GROUP_BY"
                 this[8].second shouldBe "no_grouping"
             }
-            // verify(exactly = 5) { Weather.getPreferredUnit(any() as String, any() as String) }
+            verify(exactly = 5) { Weather.getPreferredUnit(any(), any()) }
             verify(exactly = 1) { Weather.getPreferredUnit("temperature_unit", "°C") }
-            verify(exactly = 1) { Weather.getPreferredUnit("wind_speed_unit", "bf") }
+            verify(exactly = 1) { Weather.getPreferredUnit("wind_speed_unit", "m/s") }
             verify(exactly = 1) {
                 Weather.getPreferredUnit("key_wind_direction_preference", "Cardinal")
             }
