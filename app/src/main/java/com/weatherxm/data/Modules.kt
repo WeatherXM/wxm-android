@@ -541,7 +541,7 @@ private val usecases = module {
         ConnectWalletUseCaseImpl(get())
     }
     single<PreferencesUseCase> {
-        PreferencesUseCaseImpl(get(), get())
+        PreferencesUseCaseImpl(get(), get(), get())
     }
     single<SendFeedbackUseCase> {
         SendFeedbackUseCaseImpl(get())

@@ -249,7 +249,6 @@ android {
         variant.resValue("string", "app_version", version)
 
         // Proper apk file name
-
         variant.outputs
             .map { it as com.android.build.gradle.internal.api.ApkVariantOutputImpl }
             .forEach { output ->

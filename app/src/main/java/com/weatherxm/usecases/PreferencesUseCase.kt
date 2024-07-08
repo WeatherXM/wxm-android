@@ -2,6 +2,7 @@ package com.weatherxm.usecases
 
 import arrow.core.Either
 import com.weatherxm.data.Failure
+import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.UserPreferencesRepository
 
@@ -11,10 +12,12 @@ interface PreferencesUseCase {
     fun hasDismissedSurveyPrompt(): Boolean
     fun dismissSurveyPrompt()
     fun setAnalyticsEnabled(enabled: Boolean)
+    fun getInstallationId(): String?
 }
 
 class PreferencesUseCaseImpl(
     private val authRepository: AuthRepository,
+    private val appConfigRepository: AppConfigRepository,
     private val userPreferencesRepository: UserPreferencesRepository
 ) : PreferencesUseCase {
 
@@ -36,5 +39,9 @@ class PreferencesUseCaseImpl(
 
     override fun setAnalyticsEnabled(enabled: Boolean) {
         return userPreferencesRepository.setAnalyticsEnabled(enabled)
+    }
+
+    override fun getInstallationId(): String? {
+        return appConfigRepository.getInstallationId()
     }
 }

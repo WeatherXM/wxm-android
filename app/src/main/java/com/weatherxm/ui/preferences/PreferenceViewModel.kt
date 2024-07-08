@@ -70,4 +70,6 @@ class PreferenceViewModel(
         preferencesUseCase.setAnalyticsEnabled(enabled)
         analytics.setAnalyticsEnabled(enabled)
     }
+
+    fun getInstallationId(): String? = preferencesUseCase.getInstallationId()
 }
