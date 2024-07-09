@@ -46,10 +46,10 @@ class ClaimPulsePrepareGatewayFragment : BaseFragment() {
     private fun scanBarcode() {
         scanner.startScan()
             .addOnSuccessListener { barcode ->
-                val scannedInfo = barcode.rawValue ?: String.empty()
+                val scannedInfo = barcode.rawValue?.removePrefix("P") ?: String.empty()
                 if (model.validateSerial(scannedInfo)) {
                     model.setSerialNumber(scannedInfo)
-                    // TODO: Go to next page 
+                    model.next(2)
                 } else {
                     showSnackbarMessage(
                         binding.root, getString(R.string.prepare_gateway_invalid_barcode)
