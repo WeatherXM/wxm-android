@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimPulsePrepareClaimingBinding
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseFragment
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -52,16 +50,22 @@ class ClaimPulsePrepareGatewayFragment : BaseFragment() {
                     model.next(2)
                 } else {
                     showSnackbarMessage(
-                        binding.root, getString(R.string.prepare_gateway_invalid_barcode)
+                        binding.root,
+                        getString(R.string.prepare_gateway_invalid_barcode),
+                        callback = { snackbar?.dismiss() },
+                        R.string.action_dismiss,
+                        binding.buttonBar
                     )
                 }
             }
             .addOnFailureListener { e ->
                 Timber.e(e, "Failure when scanning Barcode of the device")
-                context?.toast(
-                    R.string.error_connect_wallet_scan_exception,
-                    e.message ?: String.empty(),
-                    Toast.LENGTH_LONG
+                showSnackbarMessage(
+                    binding.root,
+                    getString(R.string.error_connect_wallet_scan_exception, e.message),
+                    callback = { snackbar?.dismiss() },
+                    R.string.action_dismiss,
+                    binding.buttonBar
                 )
             }
     }
