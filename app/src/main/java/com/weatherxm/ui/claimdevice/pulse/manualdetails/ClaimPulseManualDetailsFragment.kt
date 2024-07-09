@@ -38,14 +38,27 @@ class ClaimPulseManualDetailsFragment : BaseFragment() {
         binding.serialNumber.setOnFocusChangeListener { v, hasFocus ->
             /**
              * Hacky way to show hint, as then unfocused, the starting "P" gets overlapped
-             * by the prefix "P", so it's shown correctly.
+             * by the prefix/placeholder "P", so it's shown correctly.
              * But when focused, the hint starts after the prefix "P" (so we have two "P" there)
              * so we want to remove the starting "P" from the hint and keep only the prefix.
+             *
+             * The following cases apply as to when we use "prefix" or "placeholder" due to a bug
+             * which a double "PP" is shown in the UI if the camera is opened first and this screen
+             * is shown afterwards:
+             * 1. hasFocus ✔️ isInputEmpty ✔️ ----> use PREFIX
+             * 2. hasFocus ✔️ isInputEmpty ❌ ----> use PREFIX
+             * 3. hasFocus ❌ isInputEmpty ✔️ ----> use PLACEHOLDER
+             * 4. hasFocus ❌ isInputEmpty ❌ ----> use PREFIX
              */
-            binding.serialNumber.hint = if (hasFocus) {
-                getString(R.string.enter_your_gateway_pulse_sn_hint).removePrefix("P")
+            if (!hasFocus && binding.serialNumber.text?.isEmpty() == true) {
+                binding.serialNumber.hint = getString(R.string.enter_your_gateway_pulse_sn_hint)
+                binding.serialNumberContainer.prefixText = null
+                binding.serialNumberContainer.placeholderText = "P"
             } else {
-                getString(R.string.enter_your_gateway_pulse_sn_hint)
+                binding.serialNumber.hint =
+                    getString(R.string.enter_your_gateway_pulse_sn_hint).removePrefix("P")
+                binding.serialNumberContainer.prefixText = "P"
+                binding.serialNumberContainer.placeholderText = null
             }
         }
 
