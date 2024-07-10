@@ -489,7 +489,7 @@ private val repositories = module {
 
 private val usecases = module {
     single<StartupUseCase> {
-        StartupUseCaseImpl(get(), get(), get())
+        StartupUseCaseImpl(get(), get(), get(), get())
     }
     single<ExplorerUseCase> {
         ExplorerUseCaseImpl(get(), get(), get(), get(), get(), get(), get())

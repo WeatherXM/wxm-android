@@ -18,7 +18,7 @@ class NotificationsDataSourceImpl(
     private val firebaseMessaging: FirebaseMessaging
 ) : NotificationsDataSource {
     override suspend fun getFcmToken(): String {
-        return firebaseMessaging.token.await()
+        return firebaseMessaging.token.result
     }
 
     override suspend fun setFcmToken(
