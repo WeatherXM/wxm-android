@@ -40,6 +40,7 @@ sealed class Failure(val code: String? = null) {
     object CountryNotFound : Failure()
     object FrequencyMappingNotFound : Failure()
     object InvalidRefreshTokenError : Failure()
+    object InstallationIdNotFound : Failure()
 }
 
 @Keep

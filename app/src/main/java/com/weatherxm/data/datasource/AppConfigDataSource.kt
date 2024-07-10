@@ -1,10 +1,12 @@
 package com.weatherxm.data.datasource
 
-import arrow.core.Either
+import arrow.core.handleErrorWith
+import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.weatherxm.BuildConfig
-import com.weatherxm.data.Failure
+import com.weatherxm.data.safeAwait
 import com.weatherxm.data.services.CacheService
+import timber.log.Timber
 
 interface AppConfigDataSource {
     fun shouldUpdate(): Boolean
@@ -14,7 +16,7 @@ interface AppConfigDataSource {
     fun setLastRemindedVersion()
     fun getLastRemoteVersionCode(): Int
     fun setInstallationId(installationId: String)
-    fun getInstallationId(): Either<Failure, String>
+    fun getInstallationId(): String?
     fun isMainnetEnabled(): Boolean
     fun getMainnetMessage(): String
     fun getMainnetUrl(): String
@@ -22,6 +24,7 @@ interface AppConfigDataSource {
 
 class AppConfigDataSourceImpl(
     private val firebaseRemoteConfig: FirebaseRemoteConfig,
+    private val firebaseInstallations: FirebaseInstallations,
     private val cacheService: CacheService
 ) : AppConfigDataSource {
 
@@ -70,8 +73,15 @@ class AppConfigDataSourceImpl(
         cacheService.setInstallationId(installationId)
     }
 
-    override fun getInstallationId(): Either<Failure, String> {
+    override fun getInstallationId(): String? {
         return cacheService.getInstallationId()
+            .handleErrorWith {
+                firebaseInstallations.id.safeAwait().onRight {
+                    Timber.d("Installation ID: $it")
+                    setInstallationId(it)
+                }
+            }
+            .getOrNull()
     }
 
     override fun isMainnetEnabled(): Boolean {

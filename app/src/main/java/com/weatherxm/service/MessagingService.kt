@@ -51,7 +51,7 @@ class MessagingService : FirebaseMessagingService() {
      * FCM registration token is initially generated so this is where you would retrieve the token.
      */
     override fun onNewToken(token: String) {
-        Timber.d("Refreshed Firebase token: $token")
+        Timber.d("Refreshed FCM token: $token")
     }
 
     private fun handleNotification(remoteMessage: RemoteMessage, context: Context) {

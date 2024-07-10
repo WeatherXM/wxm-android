@@ -88,6 +88,8 @@ import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
+import com.weatherxm.data.datasource.NotificationsDataSource
+import com.weatherxm.data.datasource.NotificationsDataSourceImpl
 import com.weatherxm.data.datasource.RewardsDataSource
 import com.weatherxm.data.datasource.RewardsDataSourceImpl
 import com.weatherxm.data.datasource.StatsDataSource
@@ -123,6 +125,8 @@ import com.weatherxm.data.repository.FollowRepository
 import com.weatherxm.data.repository.FollowRepositoryImpl
 import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.data.repository.LocationRepositoryImpl
+import com.weatherxm.data.repository.NotificationsRepository
+import com.weatherxm.data.repository.NotificationsRepositoryImpl
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.data.repository.StatsRepository
@@ -328,121 +332,95 @@ private val datasources = module {
     single<LocationDataSource> {
         LocationDataSourceImpl(androidContext(), get(), get())
     }
-
     single<NetworkWeatherHistoryDataSource> {
         NetworkWeatherHistoryDataSource(get())
     }
-
     single<DatabaseWeatherHistoryDataSource> {
         DatabaseWeatherHistoryDataSource(get())
     }
-
     single<NetworkUserDataSource> {
         NetworkUserDataSource(get())
     }
-
     single<CacheUserDataSource> {
         CacheUserDataSource(get())
     }
-
     single<NetworkDeviceDataSource> {
         NetworkDeviceDataSource(get())
     }
-
     single<CacheDeviceDataSource> {
         CacheDeviceDataSource(get())
     }
-
     single<NetworkWalletDataSource> {
         NetworkWalletDataSource(get())
     }
-
     single<CacheWalletDataSource> {
         CacheWalletDataSource(get())
     }
-
     single<RewardsDataSource> {
         RewardsDataSourceImpl(get())
     }
-
     single<NetworkAuthDataSource> {
         NetworkAuthDataSource(get())
     }
-
     single<CacheAuthDataSource> {
         CacheAuthDataSource(get())
     }
-
     single<AppConfigDataSource> {
-        AppConfigDataSourceImpl(get(), get())
+        AppConfigDataSourceImpl(get(), get(), get())
     }
-
     single<UserPreferenceDataSource> {
         UserPreferenceDataSourceImpl(get())
     }
-
     single<NetworkExplorerDataSource> {
         NetworkExplorerDataSource(get())
     }
-
     single<DatabaseExplorerDataSource> {
         DatabaseExplorerDataSource(get())
     }
-
     single<NetworkAddressDataSource> {
         NetworkAddressDataSource(androidContext(), get(), get())
     }
-
     single<CacheAddressDataSource> {
         CacheAddressDataSource(get())
     }
-
     single<NetworkWeatherForecastDataSource> {
         NetworkWeatherForecastDataSource(get())
     }
-
     single<CacheWeatherForecastDataSource> {
         CacheWeatherForecastDataSource(get())
     }
-
     single<NetworkAddressSearchDataSource> {
         NetworkAddressSearchDataSource(get())
     }
-
     single<CacheAddressSearchDataSource> {
         CacheAddressSearchDataSource(get())
     }
-
     single<BluetoothScannerDataSource> {
         BluetoothScannerDataSourceImpl(get())
     }
-
     single<BluetoothConnectionDataSource> {
         BluetoothConnectionDataSourceImpl(get())
     }
-
     single<BluetoothUpdaterDataSource> {
         BluetoothUpdaterDataSourceImpl(get())
     }
-
     single<DeviceOTADataSource> {
         DeviceOTADataSourceImpl(get(), get())
     }
-
     single<WidgetDataSource> {
         WidgetDataSourceImpl(get())
     }
-
     single<StatsDataSource> {
         StatsDataSourceImpl(get())
     }
-
     single<NetworkFollowDataSource> {
         NetworkFollowDataSource(get())
     }
-
     single<CacheFollowDataSource> {
         CacheFollowDataSource(get())
+    }
+    single<NotificationsDataSource> {
+        NotificationsDataSourceImpl(get(), get())
     }
 }
 
@@ -472,7 +450,7 @@ private val repositories = module {
         WeatherHistoryRepositoryImpl(get(), get())
     }
     single<AppConfigRepository> {
-        AppConfigRepositoryImpl(get(), get())
+        AppConfigRepositoryImpl(get())
     }
     single<AddressRepository> {
         AddressRepositoryImpl(get(), get(), get(), get(), get())
@@ -504,6 +482,9 @@ private val repositories = module {
     single<LocationRepository> {
         LocationRepositoryImpl(get(), get(), get())
     }
+    single<NotificationsRepository> {
+        NotificationsRepositoryImpl(get(), get())
+    }
 }
 
 private val usecases = module {
@@ -532,7 +513,7 @@ private val usecases = module {
         RewardsUseCaseImpl(get(), androidContext().resources)
     }
     single<AuthUseCase> {
-        AuthUseCaseImpl(get(), get(), get())
+        AuthUseCaseImpl(get(), get(), get(), get())
     }
     single<UserUseCase> {
         UserUseCaseImpl(get(), get(), get(), get())
@@ -541,13 +522,13 @@ private val usecases = module {
         ConnectWalletUseCaseImpl(get())
     }
     single<PreferencesUseCase> {
-        PreferencesUseCaseImpl(get(), get(), get())
+        PreferencesUseCaseImpl(get(), get(), get(), get())
     }
     single<SendFeedbackUseCase> {
         SendFeedbackUseCaseImpl(get())
     }
     single<DeleteAccountUseCase> {
-        DeleteAccountUseCaseImpl(get(), get())
+        DeleteAccountUseCaseImpl(get(), get(), get())
     }
     single<PasswordPromptUseCase> {
         PasswordPromptUseCaseImpl(get())
@@ -710,7 +691,7 @@ val firebase = module {
                 // Log Firebase Cloud Messaging token for testing
                 it.token
                     .addOnSuccessListener { token ->
-                        Timber.d("FCM registration token: $token")
+                        Timber.d("FCM token: $token")
                     }
                     .addOnFailureListener { e ->
                         Timber.w(e, "Could not get FCM token.")
