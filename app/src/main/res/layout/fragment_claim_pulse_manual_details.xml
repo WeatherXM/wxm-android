@@ -71,7 +71,7 @@
                 app:counterEnabled="true"
                 app:counterMaxLength="16"
                 app:hintEnabled="false"
-                app:prefixText="P"
+                app:placeholderText="P"
                 app:prefixTextAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 app:expandedHintEnabled="false"
                 app:layout_constraintTop_toBottomOf="@id/serialNumberTitle">
