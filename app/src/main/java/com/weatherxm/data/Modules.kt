@@ -483,7 +483,7 @@ private val repositories = module {
         LocationRepositoryImpl(get(), get(), get())
     }
     single<NotificationsRepository> {
-        NotificationsRepositoryImpl(get(), get())
+        NotificationsRepositoryImpl(get(), get(), get())
     }
 }
 
