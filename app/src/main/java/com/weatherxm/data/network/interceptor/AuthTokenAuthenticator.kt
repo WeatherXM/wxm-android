@@ -16,6 +16,7 @@ import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.network.RefreshBody
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor.Companion.AUTH_HEADER
 import com.weatherxm.data.path
+import com.weatherxm.data.repository.NotificationsRepository
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.Contracts
@@ -27,6 +28,8 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import timber.log.Timber
 
 @Suppress("LongParameterList")
@@ -38,15 +41,16 @@ class AuthTokenAuthenticator(
     private val navigator: Navigator,
     private val context: Context,
     private val widgetHelper: WidgetHelper
-) : Authenticator {
+) : Authenticator, KoinComponent {
     private lateinit var refreshJob: Deferred<AuthToken?>
+
+    private val notificationsRepository: NotificationsRepository by inject()
 
     override fun authenticate(route: Route?, response: Response): Request? {
         // The original request
         val request = response.request
 
         Timber.d("[${request.path()}] Status: ${response.code}. Invoking authenticator.")
-
         return runBlocking {
             if (!this@AuthTokenAuthenticator::refreshJob.isInitialized || !refreshJob.isActive) {
                 refreshJob = async {
@@ -54,6 +58,7 @@ class AuthTokenAuthenticator(
                         .onLeft {
                             Timber.w("[${request.path()}] Failed to authenticate. Forced Logout.")
                             runBlocking {
+                                notificationsRepository.deleteFcmToken()
                                 cacheService.getAuthToken().onRight {
                                     authService.logout(AccessTokenBody(it.access))
                                 }
