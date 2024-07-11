@@ -14,26 +14,17 @@ import com.google.firebase.messaging.RemoteMessage
 import com.weatherxm.R
 import com.weatherxm.data.RemoteMessageType
 import com.weatherxm.data.WXMRemoteMessage
-import com.weatherxm.data.repository.NotificationsRepository
+import com.weatherxm.service.workers.RefreshFcmApiWorker
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_URL
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
 import com.weatherxm.util.hasPermission
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import timber.log.Timber
 import kotlin.random.Random
 
-class MessagingService : FirebaseMessagingService(), KoinComponent {
-    private val notificationsRepository: NotificationsRepository by inject()
-    private val scope = CoroutineScope(Job() + Dispatchers.IO)
+class MessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Timber.d("From: ${remoteMessage.from}")
@@ -61,10 +52,11 @@ class MessagingService : FirebaseMessagingService(), KoinComponent {
      * FCM registration token is initially generated so this is where you would retrieve the token.
      */
     override fun onNewToken(token: String) {
-        scope.launch {
-            notificationsRepository.onRefreshedToken(token)
-        }
         Timber.d("Refreshed FCM token: $token")
+        /**
+         * Init and invoke the work manager to update FCM token in the server
+         */
+        RefreshFcmApiWorker.initAndRefreshToken(applicationContext, token)
     }
 
     private fun handleNotification(remoteMessage: RemoteMessage, context: Context) {
@@ -115,10 +107,5 @@ class MessagingService : FirebaseMessagingService(), KoinComponent {
          * that will replace the shown notification's info with the updated one.
          */
         manager.notify(remoteMessage.notification?.title, 0, notification)
-    }
-
-    override fun onDestroy() {
-        scope.cancel()
-        super.onDestroy()
     }
 }

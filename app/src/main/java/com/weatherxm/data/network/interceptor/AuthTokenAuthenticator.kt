@@ -1,10 +1,11 @@
 package com.weatherxm.data.network.interceptor
 
-import android.appwidget.AppWidgetManager
 import android.content.Context
-import android.content.Intent
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import arrow.core.Either
 import arrow.core.flatMap
+import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.CacheAuthDataSource
@@ -16,11 +17,8 @@ import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.network.RefreshBody
 import com.weatherxm.data.network.interceptor.ApiRequestInterceptor.Companion.AUTH_HEADER
 import com.weatherxm.data.path
-import com.weatherxm.data.repository.NotificationsRepository
-import com.weatherxm.data.services.CacheService
+import com.weatherxm.service.workers.ForceLogoutWorker
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.Contracts
-import com.weatherxm.util.WidgetHelper
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -29,62 +27,37 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import timber.log.Timber
 
-@Suppress("LongParameterList")
 class AuthTokenAuthenticator(
     private val authService: AuthService,
     private val cacheAuthDataSource: CacheAuthDataSource,
-    private val databaseExplorerDataSource: DatabaseExplorerDataSource,
-    private val cacheService: CacheService,
     private val navigator: Navigator,
     private val context: Context,
-    private val widgetHelper: WidgetHelper
 ) : Authenticator, KoinComponent {
     private lateinit var refreshJob: Deferred<AuthToken?>
-
-    private val notificationsRepository: NotificationsRepository by inject()
 
     override fun authenticate(route: Route?, response: Response): Request? {
         // The original request
         val request = response.request
-
         Timber.d("[${request.path()}] Status: ${response.code}. Invoking authenticator.")
+
         return runBlocking {
             if (!this@AuthTokenAuthenticator::refreshJob.isInitialized || !refreshJob.isActive) {
                 refreshJob = async {
-                    refresh(request)
-                        .onLeft {
-                            Timber.w("[${request.path()}] Failed to authenticate. Forced Logout.")
-                            runBlocking {
-                                notificationsRepository.deleteFcmToken()
-                                cacheService.getAuthToken().onRight {
-                                    authService.logout(AccessTokenBody(it.access))
-                                }
-                                databaseExplorerDataSource.deleteAll()
-                                cacheService.clearAll()
-                                widgetHelper.getWidgetIds().onRight {
-                                    val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
-                                    val ids = it.map { id ->
-                                        id.toInt()
-                                    }
-                                    intent.putExtra(
-                                        AppWidgetManager.EXTRA_APPWIDGET_IDS,
-                                        ids.toIntArray()
-                                    )
-                                    intent.putExtra(Contracts.ARG_IS_CUSTOM_APPWIDGET_UPDATE, true)
-                                    intent.putExtra(Contracts.ARG_WIDGET_SHOULD_LOGIN, true)
-                                    context.sendBroadcast(intent)
-                                }
-                                navigator.showLogin(
-                                    context,
-                                    true,
-                                    context.getString(R.string.session_expired)
-                                )
-                            }
-                        }
-                        .getOrNull()
+                    refresh(request).getOrElse {
+                        Timber.w("[${request.path()}] Failed to authenticate. Forced Logout.")
+                        /**
+                         * Init and invoke the work manager
+                         * to delete FCM token from the server
+                         */
+                        val updateTokenWork = OneTimeWorkRequestBuilder<ForceLogoutWorker>().build()
+                        WorkManager.getInstance(context).enqueue(updateTokenWork)
+                        navigator.showLogin(
+                            context, true, context.getString(R.string.session_expired)
+                        )
+                        return@getOrElse null
+                    }
                 }
             }
 

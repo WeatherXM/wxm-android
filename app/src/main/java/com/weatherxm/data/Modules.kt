@@ -483,13 +483,13 @@ private val repositories = module {
         LocationRepositoryImpl(get(), get(), get())
     }
     single<NotificationsRepository> {
-        NotificationsRepositoryImpl(get(), get(), get())
+        NotificationsRepositoryImpl(get(), get())
     }
 }
 
 private val usecases = module {
     single<StartupUseCase> {
-        StartupUseCaseImpl(get(), get(), get(), get())
+        StartupUseCaseImpl(androidContext(), get(), get(), get())
     }
     single<ExplorerUseCase> {
         ExplorerUseCaseImpl(get(), get(), get(), get(), get(), get(), get())
@@ -600,7 +600,7 @@ private val network = module {
     }
 
     single<AuthTokenAuthenticator> {
-        AuthTokenAuthenticator(get(), get(), get(), get(), get(), get(), get())
+        AuthTokenAuthenticator(get(), get(), get(), get())
     }
 
     single<ApiRequestInterceptor> {
