@@ -53,7 +53,7 @@ retromock = "1.1.1"
 timber = "5.0.1"
 
 # Plugins
-android-gradle-plugin = "8.5.0"
+android-gradle-plugin = "8.5.1"
 kotlin = "2.0.0"
 ksp-plugin = "2.0.0-1.0.23"
 google-services-plugin = "4.4.2"
