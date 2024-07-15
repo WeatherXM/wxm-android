@@ -21,9 +21,9 @@ import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.screenLocation
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setDisplayTimezone
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.LineChartView
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndShort
