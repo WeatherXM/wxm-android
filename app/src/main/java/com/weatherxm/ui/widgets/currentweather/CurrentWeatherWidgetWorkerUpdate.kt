@@ -121,10 +121,6 @@ class CurrentWeatherWidgetWorkerUpdate(
                 }
             }
             .getOrElse { failure ->
-                Timber.w(
-                    Exception("Fetching user device for widget failed: ${failure.code}"),
-                    failure.toString()
-                )
                 when (failure) {
                     is UserNotLoggedInError -> Result.success()
                     is ForbiddenError -> {
@@ -132,7 +128,13 @@ class CurrentWeatherWidgetWorkerUpdate(
                         context.sendBroadcast(intent)
                         Result.success()
                     }
-                    else -> Result.retry()
+                    else -> {
+                        Timber.w(
+                            Exception("Fetching user device for widget failed: ${failure.code}"),
+                            failure.toString()
+                        )
+                        Result.retry()
+                    }
                 }
             }
     }
