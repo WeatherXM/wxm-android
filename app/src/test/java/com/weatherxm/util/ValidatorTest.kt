@@ -1,5 +1,6 @@
 package com.weatherxm.util
 
+import com.weatherxm.TestUtils.createRandomString
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.util.Validator.validateClaimingKey
 import com.weatherxm.util.Validator.validateEthAddress
@@ -11,7 +12,6 @@ import com.weatherxm.util.Validator.validateSerialNumber
 import com.weatherxm.util.Validator.validateUsername
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import net.bytebuddy.utility.RandomString
 import kotlin.random.Random
 import kotlin.random.nextInt
 
@@ -38,16 +38,14 @@ class ValidatorTest : BehaviorSpec({
             When("it is valid") {
                 then("the validator should return true") {
                     for (length: Int in 6..10) {
-                        val randomPassword = RandomString.make(length)
-                        validatePassword(randomPassword) shouldBe true
+                        validatePassword(createRandomString(length)) shouldBe true
                     }
                 }
             }
             When("it is invalid") {
                 then("the validator should return false") {
                     for (length: Int in 1..5) {
-                        val randomPassword = RandomString.make(length)
-                        validatePassword(randomPassword) shouldBe false
+                        validatePassword(createRandomString(length)) shouldBe false
                     }
                 }
             }
@@ -58,16 +56,14 @@ class ValidatorTest : BehaviorSpec({
             When("it is valid") {
                 then("the validator should return true") {
                     for (length: Int in 2..10) {
-                        val randomQuery = RandomString.make(length)
-                        validateNetworkSearchQuery(randomQuery) shouldBe true
+                        validateNetworkSearchQuery(createRandomString(length)) shouldBe true
                     }
                     validateNetworkSearchQuery("t e") shouldBe true
                 }
             }
             When("it is invalid") {
                 then("the validator should return false") {
-                    val randomQuery = RandomString.make(1)
-                    validateNetworkSearchQuery(randomQuery) shouldBe false
+                    validateNetworkSearchQuery(createRandomString(length = 1)) shouldBe false
                     validateNetworkSearchQuery("  ") shouldBe false
                     validateNetworkSearchQuery("t ") shouldBe false
                 }
@@ -177,8 +173,7 @@ class ValidatorTest : BehaviorSpec({
         given("a claiming key") {
             When("it is valid") {
                 then("the validator should return true") {
-                    val randomLength = Random.nextInt(1..24)
-                    val randomFriendlyName = RandomString.make(randomLength)
+                    val randomFriendlyName = createRandomString(Random.nextInt(1..24))
                     val success = if (validateFriendlyName(randomFriendlyName)) {
                         true
                     } else {

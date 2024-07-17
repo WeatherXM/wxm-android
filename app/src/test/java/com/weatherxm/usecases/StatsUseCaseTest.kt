@@ -6,6 +6,8 @@ import android.icu.text.NumberFormat
 import android.text.format.DateFormat
 import arrow.core.Either
 import com.github.mikephil.charting.data.Entry
+import com.weatherxm.TestUtils.isNoConnectionError
+import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.Connectivity
 import com.weatherxm.data.HOUR_FORMAT_24H
 import com.weatherxm.data.NetworkError
@@ -43,22 +45,6 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
     val appConfigRepository = mockk<AppConfigRepository>()
     val context = mockk<Context>()
     val usecase = StatsUseCaseImpl(repo, appConfigRepository, context)
-
-    startKoin {
-        modules(
-            module {
-                single<DateTimeFormatter>(named(HOUR_FORMAT_24H)) {
-                    DateTimeFormatter.ofPattern(HOUR_FORMAT_24H)
-                }
-                single<CompactDecimalFormat> {
-                    mockk<CompactDecimalFormat>()
-                }
-                single<NumberFormat> {
-                    mockk<NumberFormat>()
-                }
-            }
-        )
-    }
 
     val testMessage = "testMessage"
     val testUrl = "testUrl"
@@ -110,7 +96,31 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
         lastUpdated = lastDate
     )
 
+    fun mockGetNetworkStatsResponse(isSuccess: Boolean) {
+        coEvery { repo.getNetworkStats() } returns if (isSuccess) {
+            Either.Right(testNetworkStats)
+        } else {
+            Either.Left(NetworkError.NoConnectionError())
+        }
+    }
+
     beforeSpec {
+        startKoin {
+            modules(
+                module {
+                    single<DateTimeFormatter>(named(HOUR_FORMAT_24H)) {
+                        DateTimeFormatter.ofPattern(HOUR_FORMAT_24H)
+                    }
+                    single<CompactDecimalFormat> {
+                        mockk<CompactDecimalFormat>()
+                    }
+                    single<NumberFormat> {
+                        mockk<NumberFormat>()
+                    }
+                }
+            )
+        }
+
         every { appConfigRepository.isMainnetEnabled() } returns true
         every { appConfigRepository.getMainnetUrl() } returns testUrl
         every { appConfigRepository.getMainnetMessage() } returns testMessage
@@ -132,19 +142,17 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
             }
         }
     }
+
     context("Get Network Stats") {
         given("an API call that fetches the Network Stats") {
             When("the API call fails") {
-                coEvery {
-                    repo.getNetworkStats()
-                } returns Either.Left(NetworkError.NoConnectionError())
+                mockGetNetworkStatsResponse(false)
                 then("a failure should be returned") {
-                    usecase.getNetworkStats()
-                        .isLeft { it is NetworkError.NoConnectionError } shouldBe true
+                    usecase.getNetworkStats().isLeft { it.isNoConnectionError() } shouldBe true
                 }
             }
             When("the API call returns some data") {
-                coEvery { repo.getNetworkStats() } returns Either.Right(testNetworkStats)
+                mockGetNetworkStatsResponse(true)
                 then("the correct transformation to the UI Model should take place") {
                     val response = usecase.getNetworkStats()
                     response.isRight() shouldBe true

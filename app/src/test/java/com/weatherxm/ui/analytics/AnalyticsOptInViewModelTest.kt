@@ -14,7 +14,14 @@ class AnalyticsOptInViewModelTest : BehaviorSpec({
     lateinit var usecase: AnalyticsOptInUseCase
     lateinit var wrapper: AnalyticsWrapper
 
-    beforeTest {
+    fun verifyExpectedCalls(falseExpectedCalls: Int, trueExpectedCalls: Int) {
+        verify(exactly = falseExpectedCalls) { usecase.setAnalyticsEnabled(false) }
+        verify(exactly = falseExpectedCalls) { wrapper.setAnalyticsEnabled(false) }
+        verify(exactly = trueExpectedCalls) { usecase.setAnalyticsEnabled(true) }
+        verify(exactly = trueExpectedCalls) { wrapper.setAnalyticsEnabled(true) }
+    }
+
+    beforeContainer {
         usecase = mockk<AnalyticsOptInUseCase>()
         wrapper = mockk<AnalyticsWrapper>()
         viewModel = AnalyticsOptInViewModel(usecase, wrapper)
@@ -26,19 +33,13 @@ class AnalyticsOptInViewModelTest : BehaviorSpec({
         When("analytics should be enabled") {
             then("the usecase and the wrapper should get called once") {
                 viewModel.setAnalyticsEnabled(true)
-                verify(exactly = 0) { usecase.setAnalyticsEnabled(false) }
-                verify(exactly = 0) { wrapper.setAnalyticsEnabled(false) }
-                verify(exactly = 1) { usecase.setAnalyticsEnabled(true) }
-                verify(exactly = 1) { wrapper.setAnalyticsEnabled(true) }
+                verifyExpectedCalls(0, 1)
             }
         }
         When("analytics should be disabled") {
             then("the usecase and the wrapper should get called once") {
                 viewModel.setAnalyticsEnabled(false)
-                verify(exactly = 0) { usecase.setAnalyticsEnabled(true) }
-                verify(exactly = 0) { wrapper.setAnalyticsEnabled(true) }
-                verify(exactly = 1) { usecase.setAnalyticsEnabled(false) }
-                verify(exactly = 1) { wrapper.setAnalyticsEnabled(false) }
+                verifyExpectedCalls(1, 0)
             }
         }
     }

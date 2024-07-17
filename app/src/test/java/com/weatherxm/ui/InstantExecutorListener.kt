@@ -6,7 +6,7 @@ import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.Spec
 
 /**
- * Based off
+ * Based on
  * 1. https://gist.github.com/OliverCulleyDeLange/84aa4d2b299b2dfff3746bfdf346cd3e
  * 2. https://jeroenmols.com/blog/2019/01/17/livedatajunit5/
  */

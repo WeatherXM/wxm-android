@@ -8,27 +8,20 @@ import java.util.Date
 
 class DatabaseConvertersTest : BehaviorSpec({
     val converters = DatabaseConverters()
-    val testZonedDateTime = ZonedDateTime.of(
-        2022,
-        1,
-        1,
-        0,
-        0,
-        0,
-        0,
-        ZoneOffset.UTC
-    )
+    val testZonedDateTime = ZonedDateTime.of(2022, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)
+    val testISODateTime = "2022-01-01T00:00Z"
     val testDate = Date.from(testZonedDateTime.toInstant())
+    val testInstant = testZonedDateTime.toInstant().toEpochMilli()
 
     context("Convert to and from ZonedDateTime") {
         given("a ZonedDateTime") {
             then("return a String") {
-                converters.fromZonedDateTime(testZonedDateTime) shouldBe "2022-01-01T00:00Z"
+                converters.fromZonedDateTime(testZonedDateTime) shouldBe testISODateTime
             }
         }
         given("a String") {
             then("return a ZonedDateTime") {
-                converters.toZonedDateTime("2022-01-01T00:00Z") shouldBe testZonedDateTime
+                converters.toZonedDateTime(testISODateTime) shouldBe testZonedDateTime
             }
         }
     }
@@ -36,12 +29,12 @@ class DatabaseConvertersTest : BehaviorSpec({
     context("Convert to and from Date") {
         given("a Date") {
             then("return a String") {
-                converters.fromDate(testDate) shouldBe testZonedDateTime.toInstant().toEpochMilli()
+                converters.fromDate(testDate) shouldBe testInstant
             }
         }
         given("a String") {
             then("return a ZonedDateTime") {
-                converters.toDate(testZonedDateTime.toInstant().toEpochMilli()) shouldBe testDate
+                converters.toDate(testInstant) shouldBe testDate
             }
         }
     }

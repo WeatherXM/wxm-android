@@ -1,6 +1,8 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
+import com.weatherxm.TestUtils.isDeviceNotFound
+import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.datasource.CacheFollowDataSource
 import com.weatherxm.data.datasource.NetworkFollowDataSource
@@ -16,34 +18,39 @@ class FollowRepositoryTest : BehaviorSpec({
     val cacheSource = mockk<CacheFollowDataSource>()
     val repo = FollowRepositoryImpl(networkSource, cacheSource)
 
+    val validId = "testId"
+    val emptyId = ""
+
     beforeSpec {
-        coEvery { networkSource.followStation("") } returns Either.Left(ApiError.DeviceNotFound(""))
-        coEvery { networkSource.followStation("testId") } returns Either.Right(Unit)
         coEvery {
-            networkSource.unfollowStation("")
+            networkSource.followStation(emptyId)
         } returns Either.Left(ApiError.DeviceNotFound(""))
-        coEvery { networkSource.unfollowStation("testId") } returns Either.Right(Unit)
-        coJustRun { cacheSource.followStation("") }
-        coJustRun { cacheSource.followStation("testId") }
-        coJustRun { cacheSource.unfollowStation("") }
-        coJustRun { cacheSource.unfollowStation("testId") }
+        coEvery { networkSource.followStation(validId) } returns Either.Right(Unit)
+        coEvery {
+            networkSource.unfollowStation(emptyId)
+        } returns Either.Left(ApiError.DeviceNotFound(""))
+        coEvery { networkSource.unfollowStation(validId) } returns Either.Right(Unit)
+        coJustRun { cacheSource.followStation(emptyId) }
+        coJustRun { cacheSource.followStation(validId) }
+        coJustRun { cacheSource.unfollowStation(emptyId) }
+        coJustRun { cacheSource.unfollowStation(validId) }
     }
 
     context("Follow request in Repository") {
         given("a device ID") {
             When("it's invalid") {
                 then("return a Failure") {
-                    repo.followStation("").isLeft { it is ApiError.DeviceNotFound } shouldBe true
-                    coVerify(exactly = 1) { networkSource.followStation("") }
+                    repo.followStation(emptyId).isLeft { it.isDeviceNotFound()} shouldBe true
+                    coVerify(exactly = 1) { networkSource.followStation(emptyId) }
                 }
             }
             When("it's valid") {
                 then("return a success") {
-                    repo.followStation("testId") shouldBe Either.Right(Unit)
-                    coVerify(exactly = 1) { networkSource.followStation("testId") }
+                    repo.followStation(validId) shouldBe Either.Right(Unit)
+                    coVerify(exactly = 1) { networkSource.followStation(validId) }
                 }
                 and("Save it in the cache") {
-                    coVerify(exactly = 1) { cacheSource.followStation("testId") }
+                    coVerify(exactly = 1) { cacheSource.followStation(validId) }
                 }
             }
         }
@@ -53,20 +60,20 @@ class FollowRepositoryTest : BehaviorSpec({
         given("a device ID") {
             When("it's invalid") {
                 then("return a Failure") {
-                    repo.unfollowStation("").isLeft { it is ApiError.DeviceNotFound } shouldBe true
-                    coVerify(exactly = 1) { networkSource.unfollowStation("") }
+                    repo.unfollowStation(emptyId).isLeft { it.isDeviceNotFound() } shouldBe true
+                    coVerify(exactly = 1) { networkSource.unfollowStation(emptyId) }
                 }
                 and("Re-save it back in the cache") {
-                    coVerify(exactly = 1) { cacheSource.followStation("") }
+                    coVerify(exactly = 1) { cacheSource.followStation(emptyId) }
                 }
             }
             When("it's valid") {
                 then("return a success") {
-                    repo.unfollowStation("testId") shouldBe Either.Right(Unit)
-                    coVerify(exactly = 1) { networkSource.unfollowStation("testId") }
+                    repo.unfollowStation(validId).isSuccess(Unit)
+                    coVerify(exactly = 1) { networkSource.unfollowStation(validId) }
                 }
                 and("Remove it from the cache") {
-                    coVerify(exactly = 1) { cacheSource.unfollowStation("testId") }
+                    coVerify(exactly = 1) { cacheSource.unfollowStation(validId) }
                 }
             }
         }

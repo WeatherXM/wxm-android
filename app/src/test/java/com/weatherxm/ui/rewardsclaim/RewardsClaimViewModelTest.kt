@@ -13,6 +13,11 @@ class RewardsClaimViewModelTest : BehaviorSpec({
     val displayModeHelper = mockk<DisplayModeHelper>()
     val resources = mockk<Resources>()
     val viewModel = RewardsClaimViewModel(displayModeHelper, resources)
+    val testWalletRewards = UIWalletRewards(10.0, 20.0, 30.0, "0x00")
+
+    fun mockDisplayIsSystem(expected: Boolean) {
+        every { displayModeHelper.isSystem() } returns expected
+    }
 
     beforeSpec {
         every {
@@ -24,22 +29,18 @@ class RewardsClaimViewModelTest : BehaviorSpec({
     context("Get Query Params") {
         given("Some data in the form of UIWalletRewards") {
             When("The Display Mode is set at system") {
-                every { displayModeHelper.isSystem() } returns true
+                mockDisplayIsSystem(true)
                 then("return the query params as String") {
-                    val queryParams =
-                        viewModel.getQueryParams(UIWalletRewards(10.0, 20.0, 30.0, "0x00"))
-                    queryParams shouldBe "?amount=30.0" +
+                    viewModel.getQueryParams(testWalletRewards) shouldBe "?amount=30.0" +
                         "&wallet=0x00" +
                         "&redirect_url=weatherxm://token-claim" +
                         "&embed=true"
                 }
             }
             When("The Display Mode is set as non-system (either dark or light)") {
-                every { displayModeHelper.isSystem() } returns false
-                then("return the query params as String") {
-                    val queryParams =
-                        viewModel.getQueryParams(UIWalletRewards(10.0, 20.0, 30.0, "0x00"))
-                    queryParams shouldBe "?amount=30.0" +
+                mockDisplayIsSystem(false)
+                then("return the query params as String including the theme") {
+                    viewModel.getQueryParams(testWalletRewards) shouldBe "?amount=30.0" +
                         "&wallet=0x00" +
                         "&redirect_url=weatherxm://token-claim" +
                         "&embed=true" +

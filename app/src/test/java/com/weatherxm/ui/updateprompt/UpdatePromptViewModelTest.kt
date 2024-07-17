@@ -10,18 +10,25 @@ import io.mockk.verify
 class UpdatePromptViewModelTest : BehaviorSpec({
     val repo = mockk<AppConfigRepository>()
     val viewModel = UpdatePromptViewModel(repo)
+    val testChangelog = "Changelog"
+
+    fun mockUpdateMandatory(expected: Boolean) = every { repo.isUpdateMandatory() } returns expected
+
+    beforeSpec {
+        every { repo.getChangelog() } returns testChangelog
+    }
 
     context("Get update-related information") {
         given("Whether the update is mandatory or not") {
             When("Update is mandatory") {
-                every { repo.isUpdateMandatory() } returns true
+                mockUpdateMandatory(true)
                 then("isUpdateMandatory returns true") {
                     viewModel.isUpdateMandatory() shouldBe true
                     verify(exactly = 1) { repo.isUpdateMandatory() }
                 }
             }
             When("Update is not mandatory") {
-                every { repo.isUpdateMandatory() } returns false
+                mockUpdateMandatory(false)
                 then("isUpdateMandatory returns false") {
                     viewModel.isUpdateMandatory() shouldBe false
                     verify(exactly = 2) { repo.isUpdateMandatory() }
@@ -29,9 +36,8 @@ class UpdatePromptViewModelTest : BehaviorSpec({
             }
         }
         given("Update Changelog") {
-            every { repo.getChangelog() } returns "Changelog"
             then("getChangelog returns the correct string") {
-                viewModel.getChangelog() shouldBe "Changelog"
+                viewModel.getChangelog() shouldBe testChangelog
                 verify(exactly = 1) { repo.getChangelog() }
             }
         }

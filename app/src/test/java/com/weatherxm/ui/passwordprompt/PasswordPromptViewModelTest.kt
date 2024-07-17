@@ -2,15 +2,15 @@ package com.weatherxm.ui.passwordprompt
 
 import arrow.core.Either
 import com.weatherxm.R
+import com.weatherxm.TestUtils.isError
+import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
-import com.weatherxm.data.Resource
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.usecases.PasswordPromptUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
@@ -32,59 +32,52 @@ class PasswordPromptViewModelTest : BehaviorSpec({
     val resources = mockk<Resources>()
     val analytics = mockk<AnalyticsWrapper>()
     val viewModel = PasswordPromptViewModel(usecase, resources, analytics)
+    val tooSmallPassword = "test"
+    val validPassword = "testValid"
+    val invalidPassword = "testInvalid"
+    val invalidPassMsg = "Invalid Password"
 
     listener(InstantExecutorListener())
-
-    startKoin {
-        modules(
-            module {
-                single<Resources> {
-                    resources
-                }
-            }
-        )
-    }
+    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
-        Dispatchers.setMain(StandardTestDispatcher())
-    }
-
-    beforeTest {
-        every { resources.getString(R.string.error_invalid_password) } returns "Invalid Password"
-        every { analytics.trackEventFailure(any()) } just Runs
-        coEvery { usecase.isPasswordCorrect("testValid") } returns Either.Right(Unit)
+        startKoin {
+            modules(
+                module {
+                    single<Resources> {
+                        resources
+                    }
+                }
+            )
+        }
 
         val failure = ApiError.AuthError.LoginError.InvalidPassword("")
-        coEvery { usecase.isPasswordCorrect("testInvalid") } returns Either.Left(failure)
-        every {
-            failure.getDefaultMessage(R.string.error_invalid_password)
-        } returns "Invalid Password"
+        every { resources.getString(R.string.error_invalid_password) } returns invalidPassMsg
+        every { analytics.trackEventFailure(any()) } just Runs
+        every { failure.getDefaultMessage(R.string.error_invalid_password) } returns invalidPassMsg
+        coEvery { usecase.isPasswordCorrect(validPassword) } returns Either.Right(Unit)
+        coEvery { usecase.isPasswordCorrect(invalidPassword) } returns Either.Left(failure)
     }
 
     context("Check if Password is correct") {
         given("a Password") {
-            When("it's an invalid password") {
+            When("it's an invalid password (too small)") {
                 then("Return an Invalid Password Error") {
-                    viewModel.checkPassword("test")
-                    viewModel.onValidPassword().value shouldBe Resource.error("Invalid Password")
+                    viewModel.checkPassword(tooSmallPassword)
+                    viewModel.onValidPassword().value?.isError(invalidPassMsg)
                 }
             }
             When("it's a valid password") {
                 When("password is correct") {
                     then("return success") {
-                        runTest {
-                            viewModel.checkPassword("testValid")
-                        }
-                        viewModel.onValidPassword().value shouldBe Resource.success(Unit)
+                        runTest { viewModel.checkPassword(validPassword) }
+                        viewModel.onValidPassword().value?.isSuccess(Unit)
                     }
                 }
                 When("password is incorrect") {
                     then("return a failure") {
-                        runTest {
-                            viewModel.checkPassword("testInvalid")
-                        }
-                        viewModel.onValidPassword().value shouldBe
-                            Resource.error("Invalid Password")
+                        runTest { viewModel.checkPassword(invalidPassword) }
+                        viewModel.onValidPassword().value?.isError(invalidPassMsg)
                     }
                 }
             }
