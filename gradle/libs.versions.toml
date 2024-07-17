@@ -1,27 +1,27 @@
 [versions]
 androidx-activity = "1.9.0"
-androidx-core-splashscreen = "1.0.1"
-androidx-core-ktx = "1.13.1"
-androidx-coordinatorlayout = "1.2.0"
-androidx-constraintlayout = "2.1.4"
-androidx-collection-ktx = "1.4.1"
-androidx-browser = "1.8.0"
-androidx-appcompat = "1.7.0"
 androidx-annotation = "1.8.0"
+androidx-appcompat = "1.7.0"
+androidx-browser = "1.8.0"
+androidx-collection-ktx = "1.4.1"
+androidx-compose-foundation = "1.6.8"
+androidx-compose-material3 = "1.2.1"
+androidx-constraintlayout = "2.1.4"
+androidx-coordinatorlayout = "1.2.0"
+androidx-core-ktx = "1.13.1"
+androidx-core-splashscreen = "1.0.1"
+androidx-fragment-ktx = "1.8.1"
 androidx-lifecycle-ktx = "2.8.3"
 androidx-navigation-fragment-ktx = "2.7.7"
-androidx-fragment-ktx = "1.8.1"
-androidx-compose-material3 = "1.2.1"
-androidx-foundation = "1.6.8"
-androidx-room-runtime = "2.6.1"
 androidx-preference-ktx = "1.2.1"
-androidx-rules = "1.6.1"
-androidx-runner = "1.6.1"
-androidx-work-runtime-ktx = "2.9.0"
-androidx-viewpager2 = "1.1.0"
-androidx-swiperefreshlayout = "1.1.0"
-androidx-startup-runtime = "1.1.1"
+androidx-room = "2.6.1"
 androidx-security-crypto = "1.0.0"
+androidx-startup-runtime = "1.1.1"
+androidx-swiperefreshlayout = "1.1.0"
+androidx-test-rules = "1.6.1"
+androidx-test-runner = "1.6.1"
+androidx-viewpager2 = "1.1.0"
+androidx-work-runtime-ktx = "2.9.0"
 better-link-movement-method = "2.2.0"
 arrow = "1.2.4"
 chucker = "4.0.0"
@@ -33,7 +33,7 @@ firebase-bom = "33.1.2"
 input-mask-android = "7.2.6"
 insetter = "0.6.1"
 jwtdecode = "2.0.2"
-kable = "0.32.0"
+kable = "0.33.2"
 koin-android = "3.5.6"
 kpermissions = "3.5.0"
 lottie = "6.4.1"
@@ -54,43 +54,43 @@ timber = "5.0.1"
 
 # Plugins
 android-gradle-plugin = "8.5.1"
+detekt-plugin = "1.23.6"
+firebase-appdistribution-plugin = "5.0.0"
+firebase-crashlytics-plugin = "3.0.2"
+firebase-perf-plugin = "1.4.2"
+google-services-plugin = "4.4.2"
+grgit = "5.2.2"
 kotlin = "2.0.0"
 ksp-plugin = "2.0.0-1.0.23"
-google-services-plugin = "4.4.2"
-firebase-crashlytics-plugin = "3.0.2"
-firebase-appdistribution-plugin = "5.0.0"
-firebase-perf-plugin = "1.4.2"
-detekt-plugin = "1.23.6"
-grgit = "5.2.2"
 
 [libraries]
 androidx-activity = { module = "androidx.activity:activity", version.ref = "androidx-activity" }
+androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+androidx-browser = { module = "androidx.browser:browser", version.ref = "androidx-browser" }
+androidx-collection-ktx = { module = "androidx.collection:collection-ktx", version.ref = "androidx-collection-ktx" }
+androidx-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidx-compose-foundation" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidx-compose-material3" }
+androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
+androidx-coordinatorlayout = { module = "androidx.coordinatorlayout:coordinatorlayout", version.ref = "androidx-coordinatorlayout" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core-ktx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-core-splashscreen" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "androidx-fragment-ktx" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "androidx-lifecycle-ktx" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle-ktx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle-ktx" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "androidx-navigation-fragment-ktx" }
-androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "androidx-fragment-ktx" }
-androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-core-splashscreen" }
-androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core-ktx" }
-androidx-coordinatorlayout = { module = "androidx.coordinatorlayout:coordinatorlayout", version.ref = "androidx-coordinatorlayout" }
-androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "androidx-constraintlayout" }
-androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidx-compose-material3" }
-androidx-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidx-foundation" }
-androidx-collection-ktx = { module = "androidx.collection:collection-ktx", version.ref = "androidx-collection-ktx" }
-androidx-browser = { module = "androidx.browser:browser", version.ref = "androidx-browser" }
-androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
-androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidx-annotation" }
-androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room-runtime" }
-androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room-runtime" }
-androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "androidx-preference-ktx" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidx-navigation-fragment-ktx" }
-androidx-rules = { module = "androidx.test:rules", version.ref = "androidx-rules" }
-androidx-runner = { module = "androidx.test:runner", version.ref = "androidx-runner" }
-androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work-runtime-ktx" }
-androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "androidx-viewpager2" }
-androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "androidx-swiperefreshlayout" }
-androidx-startup-runtime = { module = "androidx.startup:startup-runtime", version.ref = "androidx-startup-runtime" }
+androidx-preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "androidx-preference-ktx" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "androidx-room" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidx-security-crypto" }
+androidx-startup-runtime = { module = "androidx.startup:startup-runtime", version.ref = "androidx-startup-runtime" }
+androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "androidx-swiperefreshlayout" }
+androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test-rules" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test-runner" }
+androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "androidx-viewpager2" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work-runtime-ktx" }
 arrow-stack-bom = { group = "io.arrow-kt", name = "arrow-stack", version.ref = "arrow" }
 arrow-core = { module = "io.arrow-kt:arrow-core" }
 arrow-fx-coroutines = { module = "io.arrow-kt:arrow-fx-coroutines" }
@@ -112,7 +112,7 @@ firebase-installations = { module = "com.google.firebase:firebase-installations"
 input-mask-android = { module = "com.redmadrobot:input-mask-android", version.ref = "input-mask-android" }
 insetter = { module = "dev.chrisbanes.insetter:insetter", version.ref = "insetter" }
 jwtdecode = { module = "com.auth0.android:jwtdecode", version.ref = "jwtdecode" }
-kable = { module = "com.juul.kable:core", version.ref = "kable" }
+kable = { module = "com.juul.kable:kable-core", version.ref = "kable" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin-android" }
 koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin-android" }
 kpermissions = { module = "com.github.fondesa:kpermissions", version.ref = "kpermissions" }
@@ -137,17 +137,16 @@ retrofit-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", 
 retromock = { module = "co.infinum:retromock", version.ref = "retromock" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
-
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt-plugin" }
+firebase-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebase-appdistribution-plugin" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics-plugin" }
+firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebase-perf-plugin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services-plugin" }
+grgit = { id = "org.ajoberstar.grgit", version.ref = "grgit" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp-plugin" }
-google-services = { id = "com.google.gms.google-services", version.ref = "google-services-plugin" }
-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics-plugin" }
-firebase-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebase-appdistribution-plugin" }
-firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebase-perf-plugin" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt-plugin" }
-grgit = { id = "org.ajoberstar.grgit", version.ref = "grgit" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
