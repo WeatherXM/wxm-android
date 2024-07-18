@@ -1,8 +1,6 @@
 package com.weatherxm.data.repository.bluetooth
 
-import android.bluetooth.BluetoothDevice
-import arrow.core.Either
-import com.weatherxm.data.Failure
+import com.juul.kable.Advertisement
 import com.weatherxm.data.datasource.bluetooth.BluetoothScannerDataSource
 import kotlinx.coroutines.flow.Flow
 
@@ -10,15 +8,7 @@ class BluetoothScannerRepositoryImpl(
     private val dataSource: BluetoothScannerDataSource
 ) : BluetoothScannerRepository {
 
-    override suspend fun registerOnScanning(): Flow<BluetoothDevice> {
-        return dataSource.registerOnScanning()
-    }
-
-    override suspend fun startScanning(): Flow<Either<Failure, Int>> {
-        return dataSource.startScanning()
-    }
-
-    override fun stopScanning() {
-        dataSource.stopScanning()
+    override suspend fun scan(): Flow<Advertisement> {
+        return dataSource.scan()
     }
 }

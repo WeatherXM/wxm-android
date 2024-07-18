@@ -1,15 +1,17 @@
 package com.weatherxm.ui.components
 
 import android.bluetooth.BluetoothDevice
+import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Failure
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 open class BluetoothHeliumViewModel(
@@ -18,7 +20,29 @@ open class BluetoothHeliumViewModel(
     protected val connectionUseCase: BluetoothConnectionUseCase,
     protected val analytics: AnalyticsWrapper
 ) : ViewModel() {
+    companion object {
+        const val SCAN_DURATION = 5000L
+        const val SCAN_COUNTDOWN_INTERVAL = 5L
+    }
+
     protected var scannedDevice = ScannedDevice.empty()
+    protected var scanningJob: Job? = null
+
+    @Suppress("MagicNumber")
+    protected open var timer = object : CountDownTimer(SCAN_DURATION, SCAN_COUNTDOWN_INTERVAL) {
+        override fun onTick(msUntilDone: Long) {
+            val progress = ((SCAN_DURATION - msUntilDone) * 100L / SCAN_DURATION).toInt()
+            if (progress == 100) {
+                viewModelScope.launch {
+                    setPeripheralAndConnect()
+                }
+            }
+        }
+
+        override fun onFinish() {
+            stopScanning()
+        }
+    }
 
     init {
         viewModelScope.launch {
@@ -32,15 +56,6 @@ open class BluetoothHeliumViewModel(
                         onNotPaired()
                     }
                 }
-            }
-        }
-    }
-
-    private val scanningJob: Job = viewModelScope.launch {
-        scanUseCase?.registerOnScanning()?.collect {
-            if (it.name?.contains(deviceBleAddress) == true) {
-                scannedDevice = it
-                scanUseCase.stopScanning()
             }
         }
     }
@@ -61,25 +76,21 @@ open class BluetoothHeliumViewModel(
         // To be overridden
     }
 
-    @Suppress("MagicNumber")
     protected fun scanAndConnect() {
-        viewModelScope.launch {
-            scanUseCase?.startScanning()?.collect {
-                it.onRight { progress ->
-                    if (progress == 100) {
-                        setPeripheralAndConnect()
-                    }
-                }.onLeft { failure ->
-                    analytics.trackEventFailure(failure.code)
-                    onScanFailure(failure)
+        scanningJob = viewModelScope.launch {
+            scanUseCase?.scan()?.collect {
+                timer.start()
+                if (it.name?.contains(deviceBleAddress) == true) {
+                    scannedDevice = it
+                    timer.cancel()
+                    scanningJob?.cancel("Device Found: $deviceBleAddress")
                 }
             }
         }
     }
 
     protected suspend fun setPeripheralAndConnect(ignorePairing: Boolean = false) {
-        if (scannedDevice == ScannedDevice.empty()) {
-            onScanFailure(BluetoothError.DeviceNotFound)
+        if (deviceNotScanned()) {
             return
         }
         connectionUseCase.setPeripheral(scannedDevice.address).onRight {
@@ -91,11 +102,9 @@ open class BluetoothHeliumViewModel(
     }
 
     suspend fun connect(ignorePairing: Boolean = false) {
-        if (scannedDevice == ScannedDevice.empty()) {
-            onScanFailure(BluetoothError.DeviceNotFound)
+        if (deviceNotScanned()) {
             return
         }
-
         if (deviceIsPaired()) {
             connectionUseCase.connectToPeripheral().onRight {
                 onConnected()
@@ -126,11 +135,22 @@ open class BluetoothHeliumViewModel(
     }
 
     fun stopScanning() {
-        scanUseCase?.stopScanning()
-        scanningJob.cancel()
+        if (scanningJob?.isActive == true) {
+            scanningJob?.cancel()
+            timer.cancel()
+        }
     }
 
     private fun deviceIsPaired(): Boolean {
         return connectionUseCase.getPairedDevices().any { it.address == scannedDevice.address }
+    }
+
+    private fun deviceNotScanned(): Boolean {
+        return if (scannedDevice == ScannedDevice.empty()) {
+            onScanFailure(BluetoothError.DeviceNotFound)
+            true
+        } else {
+            false
+        }
     }
 }
