@@ -49,24 +49,24 @@ class ClaimHeliumPairViewModel(
     override var timer = object : CountDownTimer(SCAN_DURATION, SCAN_COUNTDOWN_INTERVAL) {
         override fun onTick(msUntilDone: Long) {
             val progress = ((SCAN_DURATION - msUntilDone) * 100L / SCAN_DURATION).toInt()
-            if (progress == 100) {
-                onScanProgress.postValue(progress)
-                onScanStatus.postValue(Resource.success(Unit))
-            } else {
-                onScanProgress.postValue(progress)
-            }
+            Timber.d("Scanning progress: $progress")
+            onScanProgress.postValue(progress)
         }
 
         override fun onFinish() {
-            stopScanning()
+            super@ClaimHeliumPairViewModel.stopScanning()
+            onScanProgress.postValue(100)
+            onScanStatus.postValue(Resource.success(Unit))
         }
     }
 
     @Suppress("MagicNumber")
     fun scanBleDevices() {
+        onScanStatus.postValue(Resource.loading())
+        scannedDevices.clear()
         scanningJob = viewModelScope.launch {
+            timer.start()
             scanUseCase.scan().collect {
-                timer.start()
                 if (!scannedDevices.contains(it)) {
                     Timber.d("New scanned device collected: $it")
                     scannedDevices.add(it)

@@ -99,6 +99,7 @@ class BluetoothUpdater(
                 message: String?
             ) {
                 Timber.e(
+                    Exception("BLE Updater Error"),
                     "[BLE Updater]: onError: $deviceAddress, " +
                         "error: $error, errorType: $errorType, message: $message"
                 )

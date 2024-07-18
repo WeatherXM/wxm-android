@@ -13,6 +13,7 @@ import com.weatherxm.usecases.BluetoothScannerUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 open class BluetoothHeliumViewModel(
     private val deviceBleAddress: String,
@@ -22,7 +23,7 @@ open class BluetoothHeliumViewModel(
 ) : ViewModel() {
     companion object {
         const val SCAN_DURATION = 5000L
-        const val SCAN_COUNTDOWN_INTERVAL = 5L
+        const val SCAN_COUNTDOWN_INTERVAL = 50L
     }
 
     protected var scannedDevice = ScannedDevice.empty()
@@ -32,15 +33,14 @@ open class BluetoothHeliumViewModel(
     protected open var timer = object : CountDownTimer(SCAN_DURATION, SCAN_COUNTDOWN_INTERVAL) {
         override fun onTick(msUntilDone: Long) {
             val progress = ((SCAN_DURATION - msUntilDone) * 100L / SCAN_DURATION).toInt()
-            if (progress == 100) {
-                viewModelScope.launch {
-                    setPeripheralAndConnect()
-                }
-            }
+            Timber.d("Scanning progress: $progress")
         }
 
         override fun onFinish() {
             stopScanning()
+            viewModelScope.launch {
+                setPeripheralAndConnect()
+            }
         }
     }
 
@@ -78,8 +78,8 @@ open class BluetoothHeliumViewModel(
 
     protected fun scanAndConnect() {
         scanningJob = viewModelScope.launch {
+            timer.start()
             scanUseCase?.scan()?.collect {
-                timer.start()
                 if (it.name?.contains(deviceBleAddress) == true) {
                     scannedDevice = it
                     timer.cancel()
