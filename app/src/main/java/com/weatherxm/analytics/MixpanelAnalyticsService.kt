@@ -1,6 +1,7 @@
 package com.weatherxm.analytics
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI
+import com.weatherxm.BuildConfig
 import org.json.JSONObject
 
 class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI) : AnalyticsService {
@@ -24,11 +25,12 @@ class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI) : Analytics
         screenClass: String,
         itemId: String?
     ) {
-        val params = mutableListOf(Pair(AnalyticsService.EventKey.SCREEN_CLASS.key, screenClass))
+        val params =
+            mutableListOf(Pair(AnalyticsService.EventKey.SCREEN_NAME.key, screen.screenName))
         itemId?.let {
             params.add(Pair(AnalyticsService.EventKey.ITEM_ID.key, it))
         }
-        mixpanelAPI.track(AnalyticsService.EventKey.SCREEN_NAME.key, paramsToJSON(params))
+        mixpanelAPI.track(AnalyticsService.EventKey.SCREEN_VIEW.key, paramsToJSON(params))
     }
 
     @Suppress("SpreadOperator")
@@ -120,6 +122,9 @@ class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI) : Analytics
 
     private fun paramsToJSON(params: List<Pair<String, Any>>): JSONObject {
         val entries = JSONObject()
+
+        // We want on every event to have the APP ID to identify the source of the event
+        entries.put(AnalyticsService.CustomParam.APP_ID.paramName, BuildConfig.APPLICATION_ID)
 
         params.forEach {
             entries.put(it.first, it.second)

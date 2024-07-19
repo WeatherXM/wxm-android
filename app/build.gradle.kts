@@ -76,7 +76,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 10 + getVersionGitTags().size
-        versionName = "${getLastVersionGitTag()}-${getGitCommitHash()}"
+        versionName = getLastVersionGitTag()
 
         // Resource value fields
         resValue("string", "mapbox_access_token", getStringProperty("MAPBOX_ACCESS_TOKEN"))
@@ -232,6 +232,9 @@ android {
         // Base version
         var version = versionName
 
+        // Add short Git Commit Hash after the version
+        version = "$version-${getGitCommitHash()}"
+
         // Add flavor in version, if mock or dev
         val flavor = variant.flavorName.lowercase()
         if (flavor.contains("mock")) {
@@ -250,10 +253,10 @@ android {
 
         // Proper apk file name
         variant.outputs
-            .map { it as com.android.build.gradle.internal.api.ApkVariantOutputImpl }
-            .forEach { output ->
-                output.versionNameOverride = version
-                output.outputFileName = "weatherxm-$version.apk"
+            .map {
+                (it as com.android.build.gradle.internal.api.ApkVariantOutputImpl).apply {
+                    outputFileName = "weatherxm-$version.apk"
+                }
             }
 
         // Delete mock files on release APK flavor
