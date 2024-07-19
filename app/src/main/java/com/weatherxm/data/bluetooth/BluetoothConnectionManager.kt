@@ -189,13 +189,21 @@ class BluetoothConnectionManager(
             Timber.w(e, "Connection to peripheral failed with ConnectionRejectedException")
             Either.Left(BluetoothError.ConnectionRejectedError())
         } catch (e: CancellationException) {
-            Timber.w(e, "Connection to peripheral failed with CancellationException")
+            /**
+             * Timber.d because that we do not need to log in our Crashlytics that the device
+             * has been disconnected because the user cancelled the connection
+             */
+            Timber.d(e, "Connection to peripheral failed with CancellationException")
             Either.Left(BluetoothError.CancellationError())
         } catch (e: BluetoothDisabledException) {
             Timber.w(e, "Connection to peripheral failed with BluetoothDisabledException")
             Either.Left(BluetoothError.BluetoothDisabledException())
         } catch (e: ConnectionLostException) {
-            Timber.w(e, "Connection to peripheral failed with ConnectionLostException")
+            /**
+             * Timber.d because that we do not need to log in our Crashlytics that the device
+             * has been disconnected probably because it's too far away
+             */
+            Timber.d(e, "Connection to peripheral failed with ConnectionLostException")
             Either.Left(BluetoothError.ConnectionLostException())
         } catch (e: GattRequestRejectedException) {
             Timber.w(e, "Connection to peripheral failed with GattRequestRejectedException")
@@ -236,9 +244,7 @@ class BluetoothConnectionManager(
             peripheral.write(descriptor, ENABLE_NOTIFICATION_VALUE)
         } catch (e: GattWriteException) {
             Timber.w(
-                e,
-                "[enable descriptor notification]: " +
-                    "GattWriteException - Result: ${e.result}, Name: ${e.result.name}"
+                e, "[enable descriptor notification]: GattWriteException - Result: ${e.result}"
             )
         } catch (e: GattRequestRejectedException) {
             Timber.w(e, "[enable descriptor notification]: GattRequestRejectedException")

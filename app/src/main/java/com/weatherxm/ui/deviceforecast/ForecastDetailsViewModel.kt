@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
@@ -16,7 +17,6 @@ import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.usecases.ChartsUseCase
 import com.weatherxm.usecases.ForecastUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
@@ -80,13 +80,25 @@ class ForecastDetailsViewModel(
     }
 
     fun getSelectedDayPosition(selectedISODate: String?): Int {
-        return if (selectedISODate != null) {
-            val selectedLocalDate = LocalDate.parse(selectedISODate)
-            forecast.forecastDays.indexOfFirst {
-                it.date == selectedLocalDate
-            }
-        } else {
+        if (selectedISODate == null) {
+            return 0
+        }
+
+        val selectedLocalDate = LocalDate.parse(selectedISODate)
+        val position = forecast.forecastDays.indexOfFirst {
+            it.date == selectedLocalDate
+        }
+
+        return if (position == -1) {
+            /**
+             * Temporary code so we can figure out why some crashes occur, in which cases/dates
+             */
+            val allDates = forecast.forecastDays.joinToString(" : ") { it.date.toString() }
+            Timber.e("Could not find selected day " +
+                "($selectedISODate - $selectedLocalDate) in forecast: $allDates")
             0
+        } else {
+            position
         }
     }
 

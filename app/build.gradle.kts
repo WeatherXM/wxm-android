@@ -1,14 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.firebase.appdistribution)
+    alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.firebase.perf)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.grgit)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.google.services)
-    alias(libs.plugins.firebase.crashlytics)
-    alias(libs.plugins.firebase.appdistribution)
-    alias(libs.plugins.firebase.perf)
-    alias(libs.plugins.grgit)
-    alias(libs.plugins.compose.compiler)
     jacoco // Alternative is Kover but still in beta: https://github.com/Kotlin/kotlinx-kover
 }
 
@@ -320,16 +320,16 @@ android {
 
 dependencies {
     // Testing
-    androidTestImplementation(libs.androidx.runner)
-    androidTestImplementation(libs.androidx.rules)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.rules)
     androidTestImplementation(libs.koin.test)
+    testImplementation(libs.androidx.arch.core.testing)
+    testImplementation(libs.koin.test)
     testImplementation(libs.kotest)
     testImplementation(libs.kotest.assertions)
     testImplementation(libs.kotest.koin)
     testImplementation(libs.mockk)
     testImplementation(libs.mockk.agent)
-    testImplementation(libs.koin.test)
-    testImplementation(libs.androidx.arch.core.testing)
 
     // Desugaring for Java8 feature support
     coreLibraryDesugaring(libs.desugar.jdk.libs)
@@ -340,7 +340,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.collection.ktx)
-    implementation(libs.androidx.foundation)
+    implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.coordinatorlayout)
