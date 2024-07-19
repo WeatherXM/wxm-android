@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.Either
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.Failure
-import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.PreferencesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,7 +50,7 @@ class PreferenceViewModel(
 
     fun logout() {
         viewModelScope.launch(Dispatchers.IO) {
-            analytics.setUserId(String.empty())
+            analytics.onLogout()
             preferencesUseCase.logout()
             onLogout.postValue(true)
         }

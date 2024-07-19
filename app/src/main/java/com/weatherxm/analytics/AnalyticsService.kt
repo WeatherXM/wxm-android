@@ -271,8 +271,10 @@ interface AnalyticsService {
         INHG("inhg"),
     }
 
-    fun setUserProperties(userId: String, params: List<Pair<String, String>>)
+    fun setUserId(userId: String)
+    fun setUserProperties(params: List<Pair<String, String>>)
     fun setAnalyticsEnabled(enabled: Boolean)
+    fun onLogout()
     fun trackScreen(screen: Screen, screenClass: String, itemId: String? = null)
     fun trackEventUserAction(
         actionName: String,

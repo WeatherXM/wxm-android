@@ -16,12 +16,13 @@ class AnalyticsWrapper(
     private val context: Context
 ) {
     private var areAnalyticsEnabled: Boolean = false
-    private var userId: String = String.empty()
     private var displayMode: String = AnalyticsService.UserProperty.SYSTEM.propertyName
     private var devicesSortFilterOptions: List<String> = mutableListOf()
 
     fun setUserId(userId: String) {
-        this.userId = userId
+        if (userId.isNotEmpty()) {
+            analytics.forEach { it.setUserId(userId) }
+        }
     }
 
     fun setDevicesSortFilterOptions(options: List<String>) {
@@ -150,12 +151,16 @@ class AnalyticsWrapper(
             )
         }
 
-        analytics.forEach { it.setUserProperties(userId, userParams) }
+        analytics.forEach { it.setUserProperties(userParams) }
     }
 
     fun setAnalyticsEnabled(enabled: Boolean) {
         areAnalyticsEnabled = enabled
         analytics.forEach { it.setAnalyticsEnabled(enabled) }
+    }
+
+    fun onLogout() {
+        analytics.forEach { it.onLogout() }
     }
 
     fun trackScreen(screen: AnalyticsService.Screen, screenClass: String, itemId: String? = null) {

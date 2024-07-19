@@ -3,21 +3,29 @@ package com.weatherxm.analytics
 import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.weatherxm.BuildConfig
 import org.json.JSONObject
+import timber.log.Timber
 
 class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI) : AnalyticsService {
 
-    override fun setUserProperties(userId: String, params: List<Pair<String, String>>) {
+    override fun setUserId(userId: String) {
         mixpanelAPI.identify(userId)
+    }
+
+    override fun setUserProperties(params: List<Pair<String, String>>) {
         mixpanelAPI.people.set(paramsToJSON(params))
     }
 
     override fun setAnalyticsEnabled(enabled: Boolean) {
-
         if (enabled) {
             mixpanelAPI.optInTracking()
         } else {
             mixpanelAPI.optOutTracking()
         }
+    }
+
+    override fun onLogout() {
+        Timber.d("Logged out, resetting Mixpanel")
+        mixpanelAPI.reset()
     }
 
     override fun trackScreen(

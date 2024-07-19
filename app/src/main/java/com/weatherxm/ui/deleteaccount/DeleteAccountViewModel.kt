@@ -78,6 +78,7 @@ class DeleteAccountViewModel(
         onStatus.postValue(Resource.loading(State(Status.ACCOUNT_DELETION)))
         deleteAccountUseCase.deleteAccount()
             .onRight {
+                analytics.onLogout()
                 onStatus.postValue(Resource.success(State(Status.ACCOUNT_DELETION)))
             }
             .onLeft {
