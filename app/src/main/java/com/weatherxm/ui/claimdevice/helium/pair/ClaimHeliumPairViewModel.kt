@@ -54,9 +54,9 @@ class ClaimHeliumPairViewModel(
         }
 
         override fun onFinish() {
-            super@ClaimHeliumPairViewModel.stopScanning()
             onScanProgress.postValue(100)
             onScanStatus.postValue(Resource.success(Unit))
+            super@ClaimHeliumPairViewModel.stopScanning()
         }
     }
 
@@ -118,9 +118,6 @@ class ClaimHeliumPairViewModel(
 
         super.stopScanning()
         super.scannedDevice = scannedDevice
-
-        viewModelScope.launch {
-            super.setPeripheralAndConnect(true)
-        }
+        super.setPeripheralAndConnect(true)
     }
 }

@@ -11,7 +11,6 @@ import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -37,10 +36,8 @@ open class BluetoothHeliumViewModel(
         }
 
         override fun onFinish() {
+            setPeripheralAndConnect()
             stopScanning()
-            viewModelScope.launch {
-                setPeripheralAndConnect()
-            }
         }
     }
 
@@ -77,27 +74,29 @@ open class BluetoothHeliumViewModel(
     }
 
     protected fun scanAndConnect() {
+        timer.start()
         scanningJob = viewModelScope.launch {
-            timer.start()
             scanUseCase?.scan()?.collect {
                 if (it.name?.contains(deviceBleAddress) == true) {
                     scannedDevice = it
-                    timer.cancel()
-                    scanningJob?.cancel("Device Found: $deviceBleAddress")
+                    setPeripheralAndConnect()
+                    stopScanning()
                 }
             }
         }
     }
 
-    protected suspend fun setPeripheralAndConnect(ignorePairing: Boolean = false) {
+    protected fun setPeripheralAndConnect(ignorePairing: Boolean = false) {
         if (deviceNotScanned()) {
             return
         }
-        connectionUseCase.setPeripheral(scannedDevice.address).onRight {
-            connect(ignorePairing)
-        }.onLeft {
-            analytics.trackEventFailure(it.code)
-            onConnectionFailure(it)
+        viewModelScope.launch {
+            connectionUseCase.setPeripheral(scannedDevice.address).onRight {
+                connect(ignorePairing)
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                onConnectionFailure(it)
+            }
         }
     }
 
@@ -136,8 +135,9 @@ open class BluetoothHeliumViewModel(
 
     fun stopScanning() {
         if (scanningJob?.isActive == true) {
-            scanningJob?.cancel()
+            // Cancel doesn't fire onFinish() in the timer
             timer.cancel()
+            scanningJob?.cancel()
         }
     }
 
