@@ -98,7 +98,7 @@ class BluetoothConnectionDataSourceImpl(
         val coroutineContext = coroutineContext
         return suspendCoroutine { continuation ->
             CoroutineScope(coroutineContext).launch {
-                connectionManager.reboot(AT_REBOOT_COMMAND) {
+                connectionManager.setATCommand(AT_REBOOT_COMMAND) {
                     continuation.resumeWith(Result.success(it))
                 }
             }
