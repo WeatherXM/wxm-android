@@ -45,7 +45,7 @@ class FirebaseAnalyticsService(
     }
 
     override fun onLogout() {
-        // Nothing to do here.
+        firebaseAnalytics.setUserId(null)
     }
 
     override fun trackEventUserAction(
