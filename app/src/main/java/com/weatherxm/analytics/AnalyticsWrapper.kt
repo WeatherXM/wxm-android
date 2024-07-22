@@ -18,6 +18,16 @@ class AnalyticsWrapper(
     private var areAnalyticsEnabled: Boolean = false
     private var displayMode: String = AnalyticsService.UserProperty.SYSTEM.propertyName
     private var devicesSortFilterOptions: List<String> = mutableListOf()
+    private var devicesOwn: Int = 0
+    private var hasWallet: Boolean = false
+
+    fun setDevicesOwn(devicesOwn: Int) {
+        this.devicesOwn = devicesOwn
+    }
+
+    fun setHasWallet(hasWallet: Boolean) {
+        this.hasWallet = hasWallet
+    }
 
     fun setUserId(userId: String) {
         if (userId.isNotEmpty()) {
@@ -150,6 +160,14 @@ class AnalyticsWrapper(
                 )
             )
         }
+
+        userParams.add(
+            Pair(AnalyticsService.UserProperty.STATIONS_OWN.propertyName, devicesOwn.toString())
+        )
+
+        userParams.add(
+            Pair(AnalyticsService.UserProperty.HAS_WALLET.propertyName, hasWallet.toString())
+        )
 
         analytics.forEach { it.setUserProperties(userParams) }
         return userParams

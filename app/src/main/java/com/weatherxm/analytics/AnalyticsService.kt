@@ -269,6 +269,8 @@ interface AnalyticsService {
         INCHES("in"),
         HPA("hpa"),
         INHG("inhg"),
+        STATIONS_OWN("STATIONS_OWN"),
+        HAS_WALLET("HAS_WALLET")
     }
 
     fun setUserId(userId: String)

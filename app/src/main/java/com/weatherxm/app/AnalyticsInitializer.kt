@@ -19,6 +19,8 @@ class AnalyticsInitializer : Initializer<Unit>, KoinComponent {
         analyticsWrapper.setAnalyticsEnabled(enabled)
         analyticsWrapper.setUserId(cacheService.getUserId())
         analyticsWrapper.setDevicesSortFilterOptions(cacheService.getDevicesSortFilterOptions())
+        analyticsWrapper.setDevicesOwn(cacheService.getDevicesOwn())
+        analyticsWrapper.setHasWallet(cacheService.hasWallet())
         analyticsWrapper.setUserProperties()
         return
     }
