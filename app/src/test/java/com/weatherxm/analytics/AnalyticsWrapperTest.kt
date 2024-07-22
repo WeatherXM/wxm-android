@@ -30,7 +30,9 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
 
     fun AnalyticsService.mockResponses() {
         every { setAnalyticsEnabled(any() as Boolean) } just Runs
-        every { setUserProperties(any() as String, any()) } just Runs
+        every { onLogout() } just Runs
+        every { setUserId(any()) } just Runs
+        every { setUserProperties(any()) } just Runs
         every { trackScreen(any() as AnalyticsService.Screen, any(), any()) } just Runs
         every { trackEventUserAction(any(), any()) } just Runs
         every { trackEventViewContent(any(), any()) } just Runs
@@ -81,7 +83,6 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
             analyticsWrapper.setUserId(testUserID)
             analyticsWrapper.setDisplayMode(testDisplayMode)
             analyticsWrapper.setDevicesSortFilterOptions(listOf("DATE_ADDED", "ALL", "NO_GROUPING"))
-            analyticsWrapper.getUserId() shouldBe testUserID
             with(analyticsWrapper.setUserProperties()) {
                 size shouldBe 9
                 this[0] shouldBe ("theme" to testDisplayMode)
@@ -94,6 +95,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                 this[7] shouldBe ("FILTER" to "all")
                 this[8] shouldBe ("GROUP_BY" to "no_grouping")
             }
+            verifier.verifyUserIdSet(testUserID)
             verifier.verifyUserPropertiesSet()
         }
         given("a boolean flag indicating if analytics are enabled or not") {
@@ -153,6 +155,10 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                     verifier.verifyTrackEventSelectContent(testArg, 0)
                 }
             }
+        }
+        given("A logout event") {
+            analyticsWrapper.onLogout()
+            verifier.verifyOnLogout()
         }
     }
 

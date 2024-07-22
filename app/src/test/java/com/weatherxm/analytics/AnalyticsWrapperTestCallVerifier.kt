@@ -9,6 +9,11 @@ class AnalyticsWrapperTestCallVerifier(
     private val service2: AnalyticsService,
     private val analyticsWrapper: AnalyticsWrapper
 ) {
+    fun verifyUserIdSet(userId: String) {
+        verify(exactly = 1) { service1.setUserId(userId) }
+        verify(exactly = 1) { service2.setUserId(userId) }
+    }
+
     fun verifyUserPropertiesSet() {
         verify(exactly = 5) { Weather.getPreferredUnit(any(), any()) }
         verify(exactly = 1) { Weather.getPreferredUnit("temperature_unit", "°C") }
@@ -24,6 +29,11 @@ class AnalyticsWrapperTestCallVerifier(
         analyticsWrapper.getAnalyticsEnabled() shouldBe enabled
         verify(exactly = 1) { service1.setAnalyticsEnabled(enabled) }
         verify(exactly = 1) { service2.setAnalyticsEnabled(enabled) }
+    }
+
+    fun verifyOnLogout() {
+        verify(exactly = 1) { service1.onLogout() }
+        verify(exactly = 1) { service2.onLogout() }
     }
 
     fun verifyTrackScreen(screen: AnalyticsService.Screen, arg1: String, arg2: String, times: Int) {
