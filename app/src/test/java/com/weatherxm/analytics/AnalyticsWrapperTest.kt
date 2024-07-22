@@ -27,6 +27,8 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
     val verifier = AnalyticsWrapperTestCallVerifier(service1, service2, analyticsWrapper)
     val testUserID = "test123"
     val testDisplayMode = "dark"
+    val testDevicesOwn = 6
+    val testHasWallet = true
 
     fun AnalyticsService.mockResponses() {
         every { setAnalyticsEnabled(any() as Boolean) } just Runs
@@ -81,10 +83,12 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
     context("Set user params and track events") {
         given("some predefined users params") {
             analyticsWrapper.setUserId(testUserID)
+            analyticsWrapper.setDevicesOwn(testDevicesOwn)
+            analyticsWrapper.setHasWallet(testHasWallet)
             analyticsWrapper.setDisplayMode(testDisplayMode)
             analyticsWrapper.setDevicesSortFilterOptions(listOf("DATE_ADDED", "ALL", "NO_GROUPING"))
             with(analyticsWrapper.setUserProperties()) {
-                size shouldBe 9
+                size shouldBe 11
                 this[0] shouldBe ("theme" to testDisplayMode)
                 this[1] shouldBe ("UNIT_TEMPERATURE" to "c")
                 this[2] shouldBe ("UNIT_WIND" to "mps")
@@ -94,6 +98,8 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                 this[6] shouldBe ("SORT_BY" to "date_added")
                 this[7] shouldBe ("FILTER" to "all")
                 this[8] shouldBe ("GROUP_BY" to "no_grouping")
+                this[9] shouldBe ("STATIONS_OWN" to "$testDevicesOwn")
+                this[10] shouldBe ("HAS_WALLET" to "$testHasWallet")
             }
             verifier.verifyUserIdSet(testUserID)
             verifier.verifyUserPropertiesSet()
