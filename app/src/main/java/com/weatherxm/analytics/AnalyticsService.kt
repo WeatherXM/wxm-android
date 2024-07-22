@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 interface AnalyticsService {
     // Some event key names
     enum class EventKey(val key: String) {
-        SCREEN_CLASS("screen_class"),
+        SCREEN_VIEW("screen_view"),
         SCREEN_NAME("screen_name"),
         ITEM_ID("item_id"),
         CONTENT_TYPE("content_type"),
@@ -87,7 +87,8 @@ interface AnalyticsService {
         FILTERS_FILTER("FILTER"),
         FILTERS_GROUP("GROUP_BY"),
         STATUS("STATUS"),
-        STATE("STATE")
+        STATE("STATE"),
+        APP_ID("APP_ID")
     }
 
     // Custom Param Names
@@ -268,10 +269,14 @@ interface AnalyticsService {
         INCHES("in"),
         HPA("hpa"),
         INHG("inhg"),
+        STATIONS_OWN("STATIONS_OWN"),
+        HAS_WALLET("HAS_WALLET")
     }
 
-    fun setUserProperties(userId: String, params: List<Pair<String, String>>)
+    fun setUserId(userId: String)
+    fun setUserProperties(params: List<Pair<String, String>>)
     fun setAnalyticsEnabled(enabled: Boolean)
+    fun onLogout()
     fun trackScreen(screen: Screen, screenClass: String, itemId: String? = null)
     fun trackEventUserAction(
         actionName: String,

@@ -1,12 +1,17 @@
 package com.weatherxm.analytics
 
 import com.mixpanel.android.mpmetrics.MixpanelAPI
+import com.weatherxm.BuildConfig
 import org.json.JSONObject
+import timber.log.Timber
 
 class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI) : AnalyticsService {
 
-    override fun setUserProperties(userId: String, params: List<Pair<String, String>>) {
+    override fun setUserId(userId: String) {
         mixpanelAPI.identify(userId)
+    }
+
+    override fun setUserProperties(params: List<Pair<String, String>>) {
         mixpanelAPI.people.set(paramsToJSON(params))
     }
 
@@ -18,16 +23,22 @@ class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI) : Analytics
         }
     }
 
+    override fun onLogout() {
+        Timber.d("Logged out, resetting Mixpanel")
+        mixpanelAPI.reset()
+    }
+
     override fun trackScreen(
         screen: AnalyticsService.Screen,
         screenClass: String,
         itemId: String?
     ) {
-        val params = mutableListOf(Pair(AnalyticsService.EventKey.SCREEN_CLASS.key, screenClass))
+        val params =
+            mutableListOf(Pair(AnalyticsService.EventKey.SCREEN_NAME.key, screen.screenName))
         itemId?.let {
             params.add(Pair(AnalyticsService.EventKey.ITEM_ID.key, it))
         }
-        mixpanelAPI.track(AnalyticsService.EventKey.SCREEN_NAME.key, paramsToJSON(params))
+        mixpanelAPI.track(AnalyticsService.EventKey.SCREEN_VIEW.key, paramsToJSON(params))
     }
 
     @Suppress("SpreadOperator")
@@ -119,6 +130,9 @@ class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI) : Analytics
 
     private fun paramsToJSON(params: List<Pair<String, Any>>): JSONObject {
         val entries = JSONObject()
+
+        // We want on every event to have the APP ID to identify the source of the event
+        entries.put(AnalyticsService.CustomParam.APP_ID.paramName, BuildConfig.APPLICATION_ID)
 
         params.forEach {
             entries.put(it.first, it.second)

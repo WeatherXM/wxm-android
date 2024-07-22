@@ -14,8 +14,8 @@ import com.weatherxm.databinding.ActivityDeleteAccountBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -163,31 +163,30 @@ class DeleteAccountActivity : BaseActivity() {
             when (result.status) {
                 Status.SUCCESS -> {
                     empty.clear()
-                    empty.animation(R.raw.anim_trash_success, false)
-                    empty.title(R.string.deletion_success_title)
-                    empty.subtitle(R.string.deletion_success_message)
+                        .animation(R.raw.anim_trash_success, false)
+                        .title(R.string.deletion_success_title)
+                        .subtitle(R.string.deletion_success_message)
                     successButtons.visible(true)
                     failureButtons.visible(false)
                 }
                 Status.ERROR -> {
                     empty.clear()
-                    empty.animation(R.raw.anim_trash_error, false)
-                    empty.title(R.string.deletion_failure_title)
-                    empty.htmlSubtitle(R.string.deletion_failure_message, result.message) {
-                        navigator.openSupportCenter(this@DeleteAccountActivity)
-                    }
-                    empty.action(getString(R.string.contact_support_title))
-                    empty.listener {
-                        navigator.openSupportCenter(this@DeleteAccountActivity)
-                    }
+                        .animation(R.raw.anim_trash_error, false)
+                        .title(R.string.deletion_failure_title)
+                        .htmlSubtitle(R.string.deletion_failure_message, result.message) {
+                            navigator.openSupportCenter(this@DeleteAccountActivity)
+                        }
+                        .action(getString(R.string.contact_support_title))
+                        .listener {
+                            navigator.openSupportCenter(this@DeleteAccountActivity)
+                        }
                     successButtons.visible(false)
                     failureButtons.visible(true)
                 }
                 Status.LOADING -> {
                     empty.clear()
-                    empty.animation(R.raw.anim_trash_loading)
-                    empty.title(R.string.deleting_account)
-                    empty.subtitle(null)
+                        .animation(R.raw.anim_trash_loading)
+                        .title(R.string.deleting_account)
                 }
             }
         }

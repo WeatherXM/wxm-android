@@ -6,11 +6,15 @@ import com.google.firebase.analytics.logEvent
 import com.weatherxm.BuildConfig
 import timber.log.Timber
 
-class FirebaseAnalyticsService(private val firebaseAnalytics: FirebaseAnalytics) :
-    AnalyticsService {
+class FirebaseAnalyticsService(
+    private val firebaseAnalytics: FirebaseAnalytics
+) : AnalyticsService {
 
-    override fun setUserProperties(userId: String, params: List<Pair<String, String>>) {
+    override fun setUserId(userId: String) {
         firebaseAnalytics.setUserId(userId)
+    }
+
+    override fun setUserProperties(params: List<Pair<String, String>>) {
         params.forEach {
             firebaseAnalytics.setUserProperty(it.first, it.second)
         }
@@ -38,6 +42,10 @@ class FirebaseAnalyticsService(private val firebaseAnalytics: FirebaseAnalytics)
             Timber.d("Resetting analytics tracking [enabled=$enabled]")
             firebaseAnalytics.setAnalyticsCollectionEnabled(enabled)
         }
+    }
+
+    override fun onLogout() {
+        firebaseAnalytics.setUserId(null)
     }
 
     override fun trackEventUserAction(

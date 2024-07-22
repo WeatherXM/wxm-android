@@ -40,6 +40,8 @@ class CacheService(
         const val KEY_DEVICES_SORT = "devices_sort"
         const val KEY_DEVICES_FILTER = "devices_filter"
         const val KEY_DEVICES_GROUP_BY = "devices_group_by"
+        const val KEY_DEVICES_OWN = "devices_own"
+        const val KEY_HAS_WALLET = "has_wallet"
         const val WIDGET_ID = "widget_id"
         const val KEY_USER_ID = "user_id"
         const val KEY_INSTALLATION_ID = "installation_id"
@@ -155,6 +157,11 @@ class CacheService(
 
     fun setWalletAddress(address: String) {
         this.walletAddress = address
+        preferences.edit().putBoolean(KEY_HAS_WALLET, true).apply()
+    }
+
+    fun hasWallet(): Boolean {
+        return preferences.getBoolean(KEY_HAS_WALLET, false)
     }
 
     fun getUser(): Either<Failure, User> {
@@ -302,6 +309,11 @@ class CacheService(
 
     fun setUserDevicesIds(ids: List<String>) {
         userStationsIds = ids
+        preferences.edit().putInt(KEY_DEVICES_OWN, ids.size).apply()
+    }
+
+    fun getDevicesOwn(): Int {
+        return preferences.getInt(KEY_DEVICES_OWN, 0)
     }
 
     fun getCountriesInfo(): List<CountryInfo> {
