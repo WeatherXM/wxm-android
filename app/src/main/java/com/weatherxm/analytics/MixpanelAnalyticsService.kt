@@ -11,7 +11,6 @@ class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI) : Analytics
     }
 
     override fun setAnalyticsEnabled(enabled: Boolean) {
-
         if (enabled) {
             mixpanelAPI.optInTracking()
         } else {

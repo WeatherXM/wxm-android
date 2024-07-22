@@ -9,6 +9,11 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
+    jacoco // Alternative is Kover but still in beta: https://github.com/Kotlin/kotlinx-kover
+}
+
+jacoco {
+    toolVersion = "0.8.12"
 }
 
 fun getVersionGitTags(printForDebugging: Boolean = false): List<String> {
@@ -28,8 +33,8 @@ fun getVersionGitTags(printForDebugging: Boolean = false): List<String> {
     }
 }
 
-fun getLastVersionGitTag(): String {
-    var lastVersionTag = getVersionGitTags(printForDebugging = true).last()
+fun getLastVersionGitTag(printForDebugging: Boolean = true): String {
+    var lastVersionTag = getVersionGitTags(printForDebugging).last()
     if (lastVersionTag.startsWith("RC")) {
         lastVersionTag = lastVersionTag.substringAfterLast("_")
     }
@@ -76,7 +81,8 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 10 + getVersionGitTags().size
-        versionName = "${getLastVersionGitTag()}-${getGitCommitHash()}"
+        val skipTagsLogging = !project.hasProperty("SKIP_TAGS_LOGGING")
+        versionName = "${getLastVersionGitTag(skipTagsLogging)}-${getGitCommitHash()}"
 
         // Resource value fields
         resValue("string", "mapbox_access_token", getStringProperty("MAPBOX_ACCESS_TOKEN"))
@@ -205,6 +211,10 @@ android {
             )
             manifestPlaceholders["crashlyticsEnabled"] = false
         }
+        debug {
+            enableAndroidTestCoverage = true
+            enableUnitTestCoverage = true
+        }
     }
 
     buildFeatures {
@@ -294,12 +304,32 @@ android {
     lint {
         abortOnError = false
     }
+
+    android.testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
+
+    sourceSets {
+        getByName("test") {
+            resources.srcDirs("src/main/assets")
+        }
+    }
 }
 
 dependencies {
-    // Instrumented Tests
+    // Testing
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.koin.test)
+    testImplementation(libs.androidx.arch.core.testing)
+    testImplementation(libs.koin.test)
+    testImplementation(libs.kotest)
+    testImplementation(libs.kotest.assertions)
+    testImplementation(libs.kotest.koin)
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockk.agent)
 
     // Desugaring for Java8 feature support
     coreLibraryDesugaring(libs.desugar.jdk.libs)
@@ -371,7 +401,6 @@ dependencies {
 
     // Dependency Injection
     implementation(libs.koin.android)
-    androidTestImplementation(libs.koin.test)
 
     // Data types and more
     implementation(platform(libs.arrow.stack.bom))

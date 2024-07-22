@@ -24,6 +24,8 @@ class AnalyticsWrapper(
         this.userId = userId
     }
 
+    fun getUserId(): String = userId
+
     fun setDevicesSortFilterOptions(options: List<String>) {
         this.devicesSortFilterOptions = options
     }
@@ -34,7 +36,7 @@ class AnalyticsWrapper(
 
     // Suppress CyclomaticComplexMethod because it is just a bunch of if/when statements.
     @Suppress("CyclomaticComplexMethod", "LongMethod")
-    fun setUserProperties() {
+    fun setUserProperties(): List<Pair<String, String>> {
         val userParams = mutableListOf<Pair<String, String>>()
 
         userParams.add(Pair(AnalyticsService.UserProperty.THEME.propertyName, displayMode))
@@ -151,12 +153,15 @@ class AnalyticsWrapper(
         }
 
         analytics.forEach { it.setUserProperties(userId, userParams) }
+        return userParams
     }
 
     fun setAnalyticsEnabled(enabled: Boolean) {
         areAnalyticsEnabled = enabled
         analytics.forEach { it.setAnalyticsEnabled(enabled) }
     }
+
+    fun getAnalyticsEnabled() = areAnalyticsEnabled
 
     fun trackScreen(screen: AnalyticsService.Screen, screenClass: String, itemId: String? = null) {
         if (areAnalyticsEnabled) {
