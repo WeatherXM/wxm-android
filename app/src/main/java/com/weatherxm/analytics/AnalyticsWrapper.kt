@@ -11,6 +11,8 @@ import com.weatherxm.ui.common.DevicesSortOrder
 import com.weatherxm.ui.common.empty
 import com.weatherxm.util.Weather
 
+// Suppress it as it's just a bunch of set/get functions
+@Suppress("TooManyFunctions")
 class AnalyticsWrapper(
     private var analytics: List<AnalyticsService>,
     private val context: Context
