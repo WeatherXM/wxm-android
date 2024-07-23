@@ -379,16 +379,13 @@ dependencies {
     implementation(libs.moshi.adapters)
     ksp(libs.moshi.kotlin.codegen)
 
-    // HTTP client
+    // HTTP client & Response Adapter
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.moshi)
-
+    implementation(libs.retrofit.adapter.either)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
-
-    // Network response wrapper
-    implementation(libs.networkResponseAdapter)
 
     // JWT auth utilities
     implementation(libs.jwtdecode)
@@ -408,7 +405,6 @@ dependencies {
     // Data types and more
     implementation(platform(libs.arrow.stack.bom))
     implementation(libs.arrow.core)
-    implementation(libs.arrow.fx.coroutines)
 
     // Mapbox
     implementation(libs.mapbox)
