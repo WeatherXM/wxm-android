@@ -101,5 +101,9 @@ class HeliumSetFrequencyView : LinearLayout {
         binding.setButton.setOnClickListener {
             onSet(binding.frequenciesSelector.selectedItemPosition)
         }
+
+        binding.changeButton.setOnClickListener {
+            onSet(binding.frequenciesSelector.selectedItemPosition)
+        }
     }
 }
