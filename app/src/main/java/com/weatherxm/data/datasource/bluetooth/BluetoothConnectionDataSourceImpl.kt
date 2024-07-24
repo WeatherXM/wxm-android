@@ -12,10 +12,12 @@ import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_DEV_
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_REBOOT_COMMAND
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_SET_FREQUENCY_COMMAND
 import com.weatherxm.data.frequencyToHeliumBleBandValue
+import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import timber.log.Timber
 import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.suspendCoroutine
@@ -80,27 +82,34 @@ class BluetoothConnectionDataSourceImpl(
 
     override suspend fun setFrequency(frequency: Frequency): Either<Failure, Unit> {
         val coroutineContext = coroutineContext
-        return suspendCoroutine { continuation ->
+        return suspendCancellableCoroutine { continuation ->
             CoroutineScope(coroutineContext).launch {
                 /**
                  * /r/n is needed so we need to add them at the end of the command here
                  */
                 val command =
                     "$AT_SET_FREQUENCY_COMMAND${frequencyToHeliumBleBandValue(frequency)}\r\n"
-                connectionManager.setATCommand(command) {
-                    continuation.resumeWith(Result.success(it))
-                }
+                setATCommandAndResume(command, continuation)
             }
         }
     }
 
     override suspend fun reboot(): Either<Failure, Unit> {
         val coroutineContext = coroutineContext
-        return suspendCoroutine { continuation ->
+        return suspendCancellableCoroutine { continuation ->
             CoroutineScope(coroutineContext).launch {
-                connectionManager.setATCommand(AT_REBOOT_COMMAND) {
-                    continuation.resumeWith(Result.success(it))
-                }
+                setATCommandAndResume(AT_REBOOT_COMMAND, continuation)
+            }
+        }
+    }
+
+    private suspend fun setATCommandAndResume(
+        command: String,
+        continuation: CancellableContinuation<Either<Failure, Unit>>
+    ) {
+        connectionManager.setATCommand(command) {
+            if (continuation.isActive) {
+                continuation.resumeWith(Result.success(it))
             }
         }
     }
