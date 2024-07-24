@@ -66,9 +66,8 @@ import timber.log.Timber
 import java.io.IOException
 import java.net.SocketTimeoutException
 
-fun Request.path(): String = this.url.encodedPath
-
-fun Response.path(): String = this.request.path()
+val errorResponseAdapter: JsonAdapter<ErrorResponse> =
+    Moshi.Builder().build().adapter(ErrorResponse::class.java)
 
 /**
  * Map a network response containing Throwable to Either using Failure sealed classes as left.
@@ -92,10 +91,8 @@ fun <T : Any> Either<Throwable, T>.leftToFailure(): Either<Failure, T> {
                 Timber.d(it, "Network response: ServerError")
                 Timber.w(it, it.toString())
 
-                val moshi = Moshi.Builder().build()
-                val adapter: JsonAdapter<ErrorResponse> = moshi.adapter(ErrorResponse::class.java)
                 val error = try {
-                    adapter.fromJson(it.response()?.errorBody()?.string() ?: "")
+                    errorResponseAdapter.fromJson(it.response()?.errorBody()?.string() ?: "")
                 } catch (e: JsonDataException) {
                     Timber.e(e, "Network response: JsonDataException")
                     ErrorResponse.empty()
@@ -140,6 +137,10 @@ fun <T : Any> Either<Throwable, T>.leftToFailure(): Either<Failure, T> {
         }
     }
 }
+
+fun Request.path(): String = this.url.encodedPath
+
+fun Response.path(): String = this.request.path()
 
 /**
  * Await the completion of the task, blocking the thread.
