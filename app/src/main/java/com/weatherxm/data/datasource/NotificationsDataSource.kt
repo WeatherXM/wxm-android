@@ -9,7 +9,7 @@ import kotlinx.coroutines.tasks.await
 
 interface NotificationsDataSource {
     suspend fun setFcmToken(installationId: String, fcmToken: String): Either<Failure, Unit>
-    suspend fun deleteFcmToken(installationId: String, fcmToken: String): Either<Failure, Unit>
+    suspend fun deleteFcmToken(installationId: String): Either<Failure, Unit>
     suspend fun getFcmToken(): String
 }
 
@@ -28,10 +28,7 @@ class NotificationsDataSourceImpl(
         return apiService.setFcmToken(installationId, fcmToken).map()
     }
 
-    override suspend fun deleteFcmToken(
-        installationId: String,
-        fcmToken: String
-    ): Either<Failure, Unit> {
-        return apiService.deleteFcmToken(installationId, fcmToken).map()
+    override suspend fun deleteFcmToken(installationId: String): Either<Failure, Unit> {
+        return apiService.deleteFcmToken(installationId).map()
     }
 }
