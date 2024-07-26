@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
@@ -15,7 +16,6 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.DeviceDetailsUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.Job
@@ -49,6 +49,15 @@ class RewardsViewModel(
     }
 
     fun fetchRewardsFromNetwork() {
+        /**
+         * If we got here directly from a notification,
+         * then we need to wait for the View Model to load the device from the network,
+         * then proceed in fetching the rewards
+         */
+        if (device.isEmpty()) {
+            return
+        }
+
         fetchRewardsJob?.let {
             if (it.isActive) {
                 it.cancel("Cancelling running history job.")

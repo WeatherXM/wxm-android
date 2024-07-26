@@ -23,18 +23,20 @@ import com.weatherxm.data.SeverityLevel
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityDeviceDetailsBinding
 import com.weatherxm.ui.common.Contracts
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
+import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setErrorChip
 import com.weatherxm.ui.common.setStatusChip
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicedetails.current.CurrentFragment
 import com.weatherxm.ui.devicedetails.forecast.ForecastFragment
@@ -48,7 +50,8 @@ import timber.log.Timber
 class DeviceDetailsActivity : BaseActivity() {
     private val model: DeviceDetailsViewModel by viewModel {
         parametersOf(
-            intent.parcelable<UIDevice>(Contracts.ARG_DEVICE),
+            intent.parcelable<UIDevice>(Contracts.ARG_DEVICE) ?: UIDevice.empty(),
+            intent.getStringExtra(ARG_DEVICE_ID) ?: String.empty(),
             intent.getBooleanExtra(Contracts.ARG_OPEN_EXPLORER_ON_BACK, false)
         )
     }
@@ -83,8 +86,8 @@ class DeviceDetailsActivity : BaseActivity() {
 
         val dialogOverlay = MaterialAlertDialogBuilder(this).create()
 
-        if (model.device.isEmpty()) {
-            Timber.d("Could not start DeviceDetailsActivity. Device is null.")
+        if (model.device.isEmpty() && model.deviceId.isEmpty()) {
+            Timber.d("Could not start DeviceDetailsActivity. Device and DeviceID are null.")
             toast(R.string.error_generic_message)
             finish()
             return

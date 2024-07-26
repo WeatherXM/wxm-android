@@ -13,4 +13,5 @@ interface DeviceDetailsUseCase {
     suspend fun getRewards(deviceId: String): Either<Failure, Rewards>
     fun isMainnetEnabled(): Boolean
     fun getMainnetInfo(): MainnetInfo
+    suspend fun getUserOwnedDevice(deviceId: String): Either<Failure, UIDevice>
 }
