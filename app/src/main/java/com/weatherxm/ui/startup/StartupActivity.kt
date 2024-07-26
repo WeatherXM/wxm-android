@@ -5,8 +5,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mapbox.common.MapboxOptions
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.common.classSimpleName
+import com.weatherxm.ui.components.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class StartupActivity : BaseActivity() {
@@ -27,6 +27,10 @@ class StartupActivity : BaseActivity() {
                 StartupState.ShowAnalyticsOptIn -> navigator.showAnalyticsOptIn(this)
                 StartupState.ShowUpdate -> navigator.showUpdatePrompt(this)
                 is StartupState.ShowUrlRouter -> navigator.showUrlRouter(this, state.remoteMessage)
+                is StartupState.ShowDeviceDetails -> navigator.showDeviceDetailsWithBackStack(
+                    this,
+                    deviceId = state.deviceId
+                )
             }
             finish()
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

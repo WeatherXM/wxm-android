@@ -156,7 +156,7 @@ fun <T> Task<T>.safeAwait(): Either<Throwable, T> = Either.catch {
 }
 
 fun JWT.details(): String {
-    return "token=${Mask.maskHash(this.toString())}, expires=${this.expiresAt}"
+    return "JWT token=${Mask.maskHash(this.toString())}, expires=${this.expiresAt}"
 }
 
 fun Constraints.Companion.requireNetwork(): Constraints = Constraints.Builder()
