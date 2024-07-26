@@ -879,6 +879,7 @@ private val viewmodels = module {
     viewModel { params ->
         DeviceDetailsViewModel(
             device = params.get(),
+            deviceId = params.get(),
             openExplorerOnBack = params.get(),
             get(),
             get(),

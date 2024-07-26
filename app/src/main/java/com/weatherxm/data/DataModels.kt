@@ -81,6 +81,11 @@ enum class RemoteMessageType(val id: String, val publicName: String, val desc: S
         "Announcements",
         "These notifications are used for WeatherXM-related announcements."
     ),
+    STATION(
+        "station",
+        "Station Notifications",
+        "These notifications are used for announcements regarding your station(s)."
+    ),
     DEFAULT("DEFAULT", "Default", "These are general purpose notifications.");
 
     companion object {
