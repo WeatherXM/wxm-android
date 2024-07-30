@@ -2,7 +2,7 @@ package com.weatherxm.data.datasource
 
 import arrow.core.Either
 import com.weatherxm.data.Failure
-import com.weatherxm.data.map
+import com.weatherxm.data.leftToFailure
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.services.CacheService
 
@@ -24,7 +24,7 @@ class DeviceOTADataSourceImpl(
     }
 
     override suspend fun getFirmware(deviceId: String): Either<Failure, ByteArray> {
-        return apiService.getFirmware(deviceId).map().map {
+        return apiService.getFirmware(deviceId).leftToFailure().map {
             it.bytes()
         }
     }

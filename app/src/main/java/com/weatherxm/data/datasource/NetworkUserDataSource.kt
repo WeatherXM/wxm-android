@@ -3,16 +3,16 @@ package com.weatherxm.data.datasource
 import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.User
-import com.weatherxm.data.map
+import com.weatherxm.data.leftToFailure
 import com.weatherxm.data.network.ApiService
 
 class NetworkUserDataSource(private val apiService: ApiService) : UserDataSource {
     override suspend fun getUser(): Either<Failure, User> {
-        return apiService.getUser().map()
+        return apiService.getUser().leftToFailure()
     }
 
     override suspend fun deleteAccount(): Either<Failure, Unit> {
-        return apiService.deleteAccount().map()
+        return apiService.deleteAccount().leftToFailure()
     }
 
     override suspend fun getUserUsername(): Either<Failure, String> {

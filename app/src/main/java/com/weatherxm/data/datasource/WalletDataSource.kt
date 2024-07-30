@@ -2,7 +2,7 @@ package com.weatherxm.data.datasource
 
 import arrow.core.Either
 import com.weatherxm.data.Failure
-import com.weatherxm.data.map
+import com.weatherxm.data.leftToFailure
 import com.weatherxm.data.network.AddressBody
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.services.CacheService
@@ -15,11 +15,11 @@ interface WalletDataSource {
 class NetworkWalletDataSource(private val apiService: ApiService) : WalletDataSource {
 
     override suspend fun getWalletAddress(): Either<Failure, String?> {
-        return apiService.getWallet().map().map { it.address }
+        return apiService.getWallet().leftToFailure().map { it.address }
     }
 
     override suspend fun setWalletAddress(address: String): Either<Failure, Unit> {
-        return apiService.setWallet(AddressBody(address)).map()
+        return apiService.setWallet(AddressBody(address)).leftToFailure()
     }
 }
 
