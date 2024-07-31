@@ -12,8 +12,8 @@ import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
-import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -136,38 +136,12 @@ class CurrentFragment : BaseFragment() {
             binding.alert.message(getString(R.string.no_data_message_public_device))
         } else {
             when (device.bundleName) {
-                BundleName.m5 -> {
-                    val m5TroubleshootingUrl = getString(R.string.troubleshooting_m5_url)
-                    binding.alert.htmlMessage(
-                        getString(R.string.error_user_device_offline, m5TroubleshootingUrl)
-                    ) {
-                        navigator.openWebsite(context, m5TroubleshootingUrl)
-                    }
-                }
-                BundleName.d1 -> {
-                    val d1TroubleshootingUrl = getString(R.string.troubleshooting_d1_url)
-                    binding.alert.htmlMessage(
-                        getString(R.string.error_user_device_offline, d1TroubleshootingUrl)
-                    ) {
-                        navigator.openWebsite(context, d1TroubleshootingUrl)
-                    }
-                }
+                BundleName.m5 -> showOfflineAlert(getString(R.string.troubleshooting_m5_url))
+                BundleName.d1 -> showOfflineAlert(getString(R.string.troubleshooting_d1_url))
                 BundleName.h1, BundleName.h2 -> {
-                    val heliumTroubleshootingUrl = getString(R.string.troubleshooting_helium_url)
-                    binding.alert.htmlMessage(
-                        getString(R.string.error_user_device_offline, heliumTroubleshootingUrl)
-                    ) {
-                        navigator.openWebsite(context, heliumTroubleshootingUrl)
-                    }
+                    showOfflineAlert(getString(R.string.troubleshooting_helium_url))
                 }
-                BundleName.pulse -> {
-                    val pulseTroubleshootingUrl = getString(R.string.troubleshooting_helium_url)
-                    binding.alert.htmlMessage(
-                        getString(R.string.error_user_device_offline, pulseTroubleshootingUrl)
-                    ) {
-                        navigator.openWebsite(context, pulseTroubleshootingUrl)
-                    }
-                }
+                BundleName.pulse -> showOfflineAlert(getString(R.string.troubleshooting_pulse_url))
                 null -> {
                     // Do nothing
                 }
@@ -175,5 +149,11 @@ class CurrentFragment : BaseFragment() {
         }
         binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
         binding.alert.visible(true)
+    }
+
+    private fun showOfflineAlert(url: String) {
+        binding.alert.htmlMessage(getString(R.string.error_user_device_offline, url)) {
+            navigator.openWebsite(context, url)
+        }
     }
 }
