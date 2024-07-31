@@ -79,6 +79,7 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
             BundleName.m5 -> getString(R.string.docs_url_low_battery_m5)
             BundleName.d1 -> getString(R.string.docs_url_low_battery_d1)
             BundleName.h1, BundleName.h2 -> getString(R.string.docs_url_low_battery_helium)
+            BundleName.pulse -> getString(R.string.docs_url_low_battery_pulse)
             else -> String.empty()
         }
         navigator.openWebsite(this, url)

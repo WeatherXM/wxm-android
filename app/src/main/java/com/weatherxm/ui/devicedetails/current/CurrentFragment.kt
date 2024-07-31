@@ -161,7 +161,12 @@ class CurrentFragment : BaseFragment() {
                     }
                 }
                 BundleName.pulse -> {
-                    // Do nothing
+                    val pulseTroubleshootingUrl = getString(R.string.troubleshooting_helium_url)
+                    binding.alert.htmlMessage(
+                        getString(R.string.error_user_device_offline, pulseTroubleshootingUrl)
+                    ) {
+                        navigator.openWebsite(context, pulseTroubleshootingUrl)
+                    }
                 }
                 null -> {
                     // Do nothing
