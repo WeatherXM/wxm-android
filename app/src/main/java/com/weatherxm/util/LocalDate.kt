@@ -47,7 +47,8 @@ class LocalDateIterator(
     }
 }
 
-operator fun LocalDate.rangeTo(other: LocalDate) = LocalDateRange(this, other)
+// Cast needed otherwise it gets defined as ComparableRange
+operator fun LocalDate.rangeTo(other: LocalDate) = LocalDateRange(this, other) as LocalDateRange
 
 fun LocalDate.isYesterday(): Boolean {
     val now = LocalDate.now()

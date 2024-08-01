@@ -24,8 +24,6 @@ class LocalDateTimeRange(
     override fun toString() = "LocalDateTimeRange[${start()}...${end()}]"
 
     override fun hashCode(): Int = toString().hashCode()
-
-    infix fun step(duration: Duration) = LocalDateTimeRange(start(), end(), duration)
 }
 
 class LocalDateTimeIterator(

@@ -107,7 +107,7 @@ class NetworkAddressDataSource(
     override suspend fun getCountryAndFrequencies(
         location: Location
     ): Either<Failure, CountryAndFrequencies> {
-        return GeocoderCompat.getFromLocation(location)
+        return GeocoderCompat.getFromLocation(location.lat, location.lon)
             .flatMap { address ->
                 countryToFrequency(context, address.countryCode, moshi)?.let { frequency ->
                     CountryAndFrequencies(
