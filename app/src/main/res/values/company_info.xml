@@ -1,11 +1,12 @@
 <resources>
     <string name="support_center_url">https://support.weatherxm.com</string>
     <string name="website_contact">https://weatherxm.com/contact/</string>
-    <string name="suggested_wallets_documentation">https://docs.weatherxm.com/wallet/add-edit-wallet-address#how-to-create-wallet-on-metamask</string>
+    <string name="suggested_wallets_documentation">https://docs.weatherxm.com/mobile-app/wallet/add-edit-wallet-address#how-to-create-wallet-on-metamask</string>
     <string name="terms_of_service_url">https://weatherxm.com/mobile/terms/</string>
-    <string name="troubleshooting_m5_url">https://docs.weatherxm.com/wifi-m5-bundle/m5-troubleshooting</string>
-    <string name="troubleshooting_d1_url">https://docs.weatherxm.com/wxm-devices/D1-bundle/D1-troubleshooting</string>
-    <string name="troubleshooting_helium_url">https://docs.weatherxm.com/helium-bundle/helium-troubleshooting</string>
+    <string name="troubleshooting_m5_url">https://docs.weatherxm.com/wxm-devices/m5/troubleshooting</string>
+    <string name="troubleshooting_d1_url">https://docs.weatherxm.com/wxm-devices/d1/troubleshooting</string>
+    <string name="troubleshooting_helium_url">https://docs.weatherxm.com/wxm-devices/helium/troubleshooting</string>
+    <string name="troubleshooting_pulse_url">https://docs.weatherxm.com/wxm-devices/pulse/troubleshooting</string>
     <string name="user_panel_url">https://docs.google.com/forms/d/e/1FAIpQLSc35pJdxM0tosVh-az0goKEjE1xzBs_OVo5V23coC8z1ayD6g/viewform</string>
     <string name="short_app_survey_url">https://docs.google.com/forms/d/e/1FAIpQLSc1T-odUwpXa01nODavwEtLgO00AfPxqfrdhbn_G5Lss0dD2w/viewform?usp=pp_url</string>
     <string name="delete_account_survey_url">https://docs.google.com/forms/d/e/1FAIpQLSdWPLpyUx2fNIiohQ-XaskbkZuoUSqYhwIkGGjupJ7IDEX_aA/viewform?usp=pp_url</string>
@@ -17,13 +18,14 @@
     <string name="shop_url">https://shop.weatherxm.com/</string>
     <string name="docs_url">https://docs.weatherxm.com</string>
     <string name="announcements_url">https://announcements.weatherxm.com</string>
-    <string name="docs_url_cell_capacity">https://docs.weatherxm.com/project/cell-capacity</string>
-    <string name="docs_url_reward_mechanism">https://docs.weatherxm.com/reward-mechanism</string>
-    <string name="docs_url_pol_algorithm">https://docs.weatherxm.com/project/proof-of-location</string>
-    <string name="docs_url_qod_algorithm">https://docs.weatherxm.com/project/quality-of-data</string>
-    <string name="docs_url_low_battery_m5">https://docs.weatherxm.com/wxm-devices/wifi-m5-bundle/assemble-m5#installing-batteries</string>
-    <string name="docs_url_low_battery_d1">https://docs.weatherxm.com/wxm-devices/D1-bundle/D1-assemble#installing-batteries</string>
-    <string name="docs_url_low_battery_helium">https://docs.weatherxm.com/wxm-devices/helium-bundle/helium-assemble#battery-installation-diagram-external-box</string>
+    <string name="docs_url_cell_capacity">https://docs.weatherxm.com/rewards/cell-capacity</string>
+    <string name="docs_url_reward_mechanism">https://docs.weatherxm.com/rewards/reward-mechanism</string>
+    <string name="docs_url_pol_algorithm">https://docs.weatherxm.com/rewards/proof-of-location</string>
+    <string name="docs_url_qod_algorithm">https://docs.weatherxm.com/rewards/quality-of-data</string>
+    <string name="docs_url_low_battery_m5">https://docs.weatherxm.com/wxm-devices/m5/assemble#installing-batteries</string>
+    <string name="docs_url_low_battery_d1">https://docs.weatherxm.com/wxm-devices/d1/assemble#installing-batteries</string>
+    <string name="docs_url_low_battery_helium">https://docs.weatherxm.com/wxm-devices/helium/assemble#battery-installation-diagram-external-box</string>
+    <string name="docs_url_low_battery_pulse">https://docs.weatherxm.com/wxm-devices/pulse/assemble#installing-batteries</string>
     <string name="share_cell_url">https://explorer.weatherxm.com/cells/%s</string>
     <string name="share_station_url">https://explorer.weatherxm.com/stations/%s</string>
     <string name="weatherxm_claim_redirect_url">weatherxm://token-claim</string>

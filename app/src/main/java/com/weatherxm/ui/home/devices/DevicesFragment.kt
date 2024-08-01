@@ -21,8 +21,8 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.home.HomeViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -222,6 +222,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             BundleName.m5 -> getString(R.string.docs_url_low_battery_m5)
             BundleName.d1 -> getString(R.string.docs_url_low_battery_d1)
             BundleName.h1, BundleName.h2 -> getString(R.string.docs_url_low_battery_helium)
+            BundleName.pulse -> getString(R.string.docs_url_low_battery_pulse)
             else -> String.empty()
         }
         navigator.openWebsite(context, url)
