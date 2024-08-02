@@ -32,8 +32,11 @@ object TestUtils {
     }
 
     /**
+     * https://stackoverflow.com/a/76813421/5403137
+     *
      * Reflection methods to access private fields
      */
+    @Suppress("NestedBlockDepth")
     private fun getModifiersField(): Field {
         return try {
             Field::class.java.getDeclaredField("modifiers")

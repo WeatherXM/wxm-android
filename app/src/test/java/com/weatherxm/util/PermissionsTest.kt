@@ -26,12 +26,12 @@ class PermissionsTest : BehaviorSpec({
 
     given("A Permission") {
         When("The permission is granted") {
-            Then("hasPermission should return true") {
+            then("hasPermission should return true") {
                 context.hasPermission(grantedPermission) shouldBe true
             }
         }
         When("The permission is denied") {
-            Then("hasPermission should return false") {
+            then("hasPermission should return false") {
                 context.hasPermission(deniedPermission) shouldBe false
             }
         }

@@ -67,7 +67,7 @@ class LocalDateRangeTest : BehaviorSpec({
     }
 
     given("Some LocalDates") {
-        Then("Relative comparisons should work") {
+        then("Relative comparisons should work") {
             yesterday.testRelativeComparisons(
                 expectedYesterday = true,
                 expectedToday = false,

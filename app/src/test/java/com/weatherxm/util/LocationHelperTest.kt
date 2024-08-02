@@ -34,7 +34,7 @@ class LocationHelperTest : BehaviorSpec({
                     fineLocationPerm = PackageManager.PERMISSION_GRANTED,
                     coarseLocationPerm = PackageManager.PERMISSION_DENIED
                 )
-                Then("hasLocationPermissions should return true") {
+                then("hasLocationPermissions should return true") {
                     locationHelper.hasLocationPermissions() shouldBe true
                 }
             }
@@ -43,7 +43,7 @@ class LocationHelperTest : BehaviorSpec({
                     fineLocationPerm = PackageManager.PERMISSION_DENIED,
                     coarseLocationPerm = PackageManager.PERMISSION_GRANTED
                 )
-                Then("hasLocationPermissions should return true") {
+                then("hasLocationPermissions should return true") {
                     locationHelper.hasLocationPermissions() shouldBe true
                 }
             }
@@ -52,7 +52,7 @@ class LocationHelperTest : BehaviorSpec({
                     fineLocationPerm = PackageManager.PERMISSION_DENIED,
                     coarseLocationPerm = PackageManager.PERMISSION_DENIED
                 )
-                Then("hasLocationPermissions should return false") {
+                then("hasLocationPermissions should return false") {
                     locationHelper.hasLocationPermissions() shouldBe false
                 }
             }

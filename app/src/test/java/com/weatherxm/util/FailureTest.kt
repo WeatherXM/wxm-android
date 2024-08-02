@@ -14,7 +14,8 @@ import io.kotest.matchers.shouldBe
 class FailureTest : BehaviorSpec({
     context("Map Failure to UI messages") {
         given("UnsupportedAppVersion") {
-            UnsupportedAppVersion("").getDefaultMessageResId() shouldBe R.string.error_unsupported_error
+            UnsupportedAppVersion("").getDefaultMessageResId() shouldBe
+                R.string.error_unsupported_error
         }
         given("NoConnectionError") {
             then("should return R.string.error_network_generic") {

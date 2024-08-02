@@ -10,7 +10,7 @@ class ZonedDateTimeTest : BehaviorSpec({
 
     given("A ZonedDateTime") {
         When("is today") {
-            Then("return true") {
+            then("return true") {
                 today.isToday() shouldBe true
             }
             and("Get ISO Date") {
@@ -24,7 +24,7 @@ class ZonedDateTimeTest : BehaviorSpec({
             }
         }
         When("is not today") {
-            Then("return false") {
+            then("return false") {
                 tomorrow.isToday() shouldBe false
             }
             and("Compare with different ZonedDateTime if they are same day & hour") {
