@@ -27,7 +27,6 @@ import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Failure
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.util.AppBuildConfig.versionSDK
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -162,9 +161,8 @@ class BluetoothConnectionManager(
 
     /**
      * Suppress MissingPermission as we will call this function only after we have it granted
-     * Suppress NewApi because we use versionSDK to get the current API level
      */
-    @SuppressLint("MissingPermission", "NewApi")
+    @SuppressLint("MissingPermission")
     suspend fun connectToPeripheral(): Either<Failure, Unit> {
         return try {
             /*
@@ -172,7 +170,7 @@ class BluetoothConnectionManager(
              */
             Timber.d("[BLE Communication]: Connecting to peripheral...")
             bondStateChangedFilter.priority = SYSTEM_HIGH_PRIORITY
-            if (versionSDK() >= Build.VERSION_CODES.TIRAMISU) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 context.registerReceiver(
                     bondStateChangedReceiver, bondStateChangedFilter, Context.RECEIVER_EXPORTED
                 )

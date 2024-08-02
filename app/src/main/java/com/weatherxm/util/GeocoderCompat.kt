@@ -1,6 +1,5 @@
 package com.weatherxm.util
 
-import android.annotation.SuppressLint
 import android.location.Address
 import android.location.Geocoder
 import android.os.Build
@@ -9,7 +8,6 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.weatherxm.data.Failure.GeocoderError
-import com.weatherxm.util.AppBuildConfig.versionSDK
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -26,10 +24,7 @@ object GeocoderCompat : KoinComponent {
      * Compatibility method that uses the new Geocoder in API 33+
      * and defaults to the old Geocoder in older API versions.
      * Returns a non-null Address, or GeocoderError.
-     *
-     * Suppress NewApi because we use versionSDK to get the current API level
      */
-    @SuppressLint("NewApi")
     suspend fun getFromLocation(
         latitude: Double,
         longitude: Double
@@ -40,7 +35,7 @@ object GeocoderCompat : KoinComponent {
                 return GeocoderError.NoGeocoderError.left()
             }
 
-            val address = if (versionSDK() >= Build.VERSION_CODES.TIRAMISU) {
+            val address = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 geocoder.getFromLocationApi33(latitude, longitude)
             } else {
                 geocoder.getFromLocationApi1(latitude, longitude)

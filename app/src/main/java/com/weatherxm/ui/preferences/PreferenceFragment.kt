@@ -1,7 +1,6 @@
 package com.weatherxm.ui.preferences
 
 import android.Manifest.permission.POST_NOTIFICATIONS
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
@@ -18,7 +17,6 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
-import com.weatherxm.util.AppBuildConfig.versionSDK
 import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.hasPermission
 import org.koin.android.ext.android.inject
@@ -196,16 +194,12 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             .show(this)
     }
 
-    /**
-     * Suppress NewApi because we use versionSDK to get the current API level
-     */
-    @SuppressLint("NewApi")
     private fun handleNotificationsPreference() {
         val notificationsPreference =
             findPreference<SwitchPreferenceCompat>(getString(R.string.notifications_preference_key))
 
         notificationsPreference?.isChecked =
-            if (versionSDK() >= Build.VERSION_CODES.TIRAMISU) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 context?.hasPermission(POST_NOTIFICATIONS) == true
             } else {
                 NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()

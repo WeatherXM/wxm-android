@@ -1,7 +1,6 @@
 package com.weatherxm.service
 
 import android.Manifest.permission.POST_NOTIFICATIONS
-import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -20,7 +19,6 @@ import com.weatherxm.ui.common.Contracts.ARG_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_URL
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
-import com.weatherxm.util.AppBuildConfig.versionSDK
 import com.weatherxm.util.hasPermission
 import timber.log.Timber
 import kotlin.random.Random
@@ -35,7 +33,7 @@ class MessagingService : FirebaseMessagingService() {
             Timber.d("Message Data payload: ${remoteMessage.data}")
             Timber.d("Message Notification Body: ${it.body}")
 
-            val showNotification = if (versionSDK() >= Build.VERSION_CODES.TIRAMISU) {
+            val showNotification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 hasPermission(POST_NOTIFICATIONS)
             } else {
                 NotificationManagerCompat.from(this).areNotificationsEnabled()
@@ -56,16 +54,12 @@ class MessagingService : FirebaseMessagingService() {
         Timber.d("Refreshed Firebase token: $token")
     }
 
-    /**
-     * Suppress NewApi because we use versionSDK to get the current API level
-     */
-    @SuppressLint("NewApi")
     private fun handleNotification(remoteMessage: RemoteMessage, context: Context) {
         val type =
             RemoteMessageType.parse(remoteMessage.data.getOrDefault(ARG_TYPE, String.empty()))
 
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        if (versionSDK() >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 type.id, type.publicName, NotificationManager.IMPORTANCE_DEFAULT
             )
