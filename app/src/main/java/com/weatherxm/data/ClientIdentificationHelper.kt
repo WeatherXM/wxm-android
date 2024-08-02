@@ -1,9 +1,11 @@
 package com.weatherxm.data
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import com.weatherxm.data.repository.AppConfigRepository
+import com.weatherxm.util.AppBuildConfig.versionSDK
 import timber.log.Timber
 
 class ClientIdentificationHelper(
@@ -15,11 +17,15 @@ class ClientIdentificationHelper(
         return "${applicationInfo()}; ${androidInfo()}; ${deviceInfo()}"
     }
 
+    /**
+     * Suppress NewApi because we use versionSDK to get the current API level
+     */
+    @SuppressLint("NewApi")
     private fun applicationInfo(): String {
         return try {
             val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
             val name = packageInfo.versionName
-            val code = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val code = if (versionSDK() >= Build.VERSION_CODES.P) {
                 packageInfo.longVersionCode
             } else {
                 packageInfo.versionCode
@@ -33,7 +39,7 @@ class ClientIdentificationHelper(
     }
 
     private fun androidInfo(): String {
-        return "Android: ${Build.VERSION.SDK_INT} (${Build.VERSION.RELEASE})"
+        return "Android: ${versionSDK()} (${Build.VERSION.RELEASE})"
     }
 
     private fun deviceInfo(): String {

@@ -1,5 +1,6 @@
 package com.weatherxm.ui.widgets
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.appwidget.AppWidgetManager
@@ -18,6 +19,7 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.widgets.selectstation.SelectStationActivity
+import com.weatherxm.util.AppBuildConfig.versionSDK
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Weather
@@ -87,6 +89,10 @@ fun RemoteViews.onError(appWidgetManager: AppWidgetManager, appWidgetId: Int) {
     appWidgetManager.updateAppWidget(appWidgetId, this)
 }
 
+/**
+ * Suppress NewApi because we use versionSDK to get the current API level
+ */
+@SuppressLint("NewApi")
 fun RemoteViews.onDevice(
     context: Context,
     appWidgetManager: AppWidgetManager,
@@ -105,7 +111,7 @@ fun RemoteViews.onDevice(
 
     val pendingIntent: PendingIntent = TaskStackBuilder.create(context).run {
         addNextIntentWithParentStack(deviceDetailsActivity)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (versionSDK() >= Build.VERSION_CODES.S) {
             getPendingIntent(
                 appWidgetId,
                 PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE

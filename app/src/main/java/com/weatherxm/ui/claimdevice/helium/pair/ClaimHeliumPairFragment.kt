@@ -30,6 +30,7 @@ import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.setWarningDrawable
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.util.AppBuildConfig.versionSDK
 import com.weatherxm.util.checkPermissionsAndThen
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -233,12 +234,16 @@ class ClaimHeliumPairFragment : BaseFragment() {
         binding.accessBluetoothPrompt.visible(true)
     }
 
+    /**
+     * Suppress NewApi because we use versionSDK to get the current API level
+     */
+    @SuppressLint("NewApi")
     private fun enableBluetoothAndScan() {
         bluetoothAdapter?.let {
             if (it.isEnabled) {
                 checkAndScanBleDevices()
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (versionSDK() >= Build.VERSION_CODES.S) {
                     activity?.checkPermissionsAndThen(
                         permissions = arrayOf(BLUETOOTH_CONNECT),
                         rationaleTitle = getString(R.string.permission_bluetooth_title),
@@ -257,8 +262,12 @@ class ClaimHeliumPairFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Suppress NewApi because we use versionSDK to get the current API level
+     */
+    @SuppressLint("NewApi")
     private fun checkAndScanBleDevices() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (versionSDK() >= Build.VERSION_CODES.S) {
             activity?.checkPermissionsAndThen(
                 permissions = arrayOf(BLUETOOTH_SCAN, BLUETOOTH_CONNECT),
                 rationaleTitle = getString(R.string.permission_bluetooth_title),
