@@ -223,7 +223,9 @@ suspend fun BehaviorSpecWhenContainerScope.testWind(
     val value = if (isBeaufortUsed) expectedValue.toInt() else expectedValue
 
     and("use Cardinal wind direction") {
-        every { sharedPreferences.getString("wind_direction", "Cardinal") } returns "Cardinal"
+        every {
+            sharedPreferences.getString("key_wind_direction_preference", "Cardinal")
+        } returns "Cardinal"
         then("it should return the value with the $expectedUnit unit") {
             getFormattedWind(10.55F, 10) shouldBe "$value$expectedUnit N"
         }
@@ -237,7 +239,9 @@ suspend fun BehaviorSpecWhenContainerScope.testWind(
         }
     }
     and("use Degrees direction") {
-        every { sharedPreferences.getString("wind_direction", "Cardinal") } returns "Degrees"
+        every {
+            sharedPreferences.getString("key_wind_direction_preference", "Cardinal")
+        } returns "Degrees"
         then("it should return the value with the $expectedUnit unit") {
             getFormattedWind(10.55F, 10) shouldBe "$value$expectedUnit 10°"
         }

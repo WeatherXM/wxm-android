@@ -1,8 +1,8 @@
 package com.weatherxm.util
 
-import android.content.Context
 import android.text.format.DateFormat
 import com.weatherxm.R
+import com.weatherxm.TestConfig.context
 import com.weatherxm.data.DATE_FORMAT_FULL
 import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
 import com.weatherxm.data.DATE_FORMAT_MONTH_SHORT
@@ -19,7 +19,6 @@ import com.weatherxm.util.DateTimeHelper.timestampToLocalDate
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.mockk
 import io.mockk.mockkStatic
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -33,7 +32,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class DateTimeHelperTest : BehaviorSpec({
-    val context = mockk<Context>()
     val localDateTime = LocalDateTime.of(2024, 5, 30, 14, 0)
     val zonedDateTime = ZonedDateTime.of(2024, 5, 30, 14, 0, 0, 0, ZoneId.of("UTC"))
     val todayLocalDate = LocalDate.now()

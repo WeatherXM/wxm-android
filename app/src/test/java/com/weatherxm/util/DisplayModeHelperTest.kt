@@ -1,6 +1,5 @@
 package com.weatherxm.util
 
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -10,6 +9,7 @@ import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import com.weatherxm.R
+import com.weatherxm.TestConfig.sharedPref
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import io.kotest.core.spec.style.BehaviorSpec
@@ -23,11 +23,10 @@ import io.mockk.mockkStatic
 import io.mockk.verify
 
 class DisplayModeHelperTest : BehaviorSpec({
-    val resources = mockk<Resources>()
+    val androidResources = mockk<Resources>()
     val configuration = mockk<Configuration>()
-    val sharedPreferences = mockk<SharedPreferences>()
     val analyticsWrapper = mockk<AnalyticsWrapper>()
-    val displayModeHelper = DisplayModeHelper(resources, sharedPreferences, analyticsWrapper)
+    val displayModeHelper = DisplayModeHelper(androidResources, sharedPref, analyticsWrapper)
 
     val theme = "theme"
     val system = "system"
@@ -35,11 +34,11 @@ class DisplayModeHelperTest : BehaviorSpec({
     val light = "light"
 
     beforeSpec {
-        every { resources.configuration } returns configuration
-        every { resources.getString(R.string.key_theme) } returns theme
-        every { resources.getString(R.string.dark_value) } returns dark
-        every { resources.getString(R.string.light_value) } returns light
-        every { resources.getString(R.string.system_value) } returns system
+        every { androidResources.configuration } returns configuration
+        every { androidResources.getString(R.string.key_theme) } returns theme
+        every { androidResources.getString(R.string.dark_value) } returns dark
+        every { androidResources.getString(R.string.light_value) } returns light
+        every { androidResources.getString(R.string.system_value) } returns system
         every { analyticsWrapper.setDisplayMode(any()) } just Runs
         mockkStatic(AppCompatDelegate::class)
         every { AppCompatDelegate.setDefaultNightMode(any()) } just Runs
@@ -50,7 +49,7 @@ class DisplayModeHelperTest : BehaviorSpec({
         setDefaultNightMode: Int
     ) {
         // Mock response from shared preferences which acts as "current theme" value
-        every { sharedPreferences.getString(theme, system) } returns mode
+        every { sharedPref.getString(theme, system) } returns mode
 
         then("The setter should work properly") {
             displayModeHelper.setDisplayMode(mode)
@@ -108,7 +107,7 @@ class DisplayModeHelperTest : BehaviorSpec({
             // Re-mock AppCompatDelegate to reset calls and use the `exactly` arg below
             mockkStatic(AppCompatDelegate::class)
             every { AppCompatDelegate.setDefaultNightMode(any()) } just Runs
-            every { sharedPreferences.getString(theme, system) } returns system
+            every { sharedPref.getString(theme, system) } returns system
             displayModeHelper.setDisplayMode()
             then("System should be set") {
                 verify(exactly = 1) {

@@ -1,12 +1,8 @@
 package com.weatherxm.util
 
-import android.content.SharedPreferences
 import com.weatherxm.R
-import com.weatherxm.data.services.CacheService.Companion.KEY_PRECIP
-import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
-import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
-import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
-import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
+import com.weatherxm.TestConfig.resources
+import com.weatherxm.TestConfig.sharedPref
 import com.weatherxm.util.Weather.getFormattedHumidity
 import com.weatherxm.util.Weather.getFormattedPrecipitation
 import com.weatherxm.util.Weather.getFormattedPrecipitationProbability
@@ -17,54 +13,22 @@ import com.weatherxm.util.Weather.getFormattedUV
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.mockk
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
+import org.koin.test.KoinTest
 
-class WeatherTest : BehaviorSpec({
-    val resources = mockk<Resources>()
-    val sharedPreferences = mockk<SharedPreferences>()
+class WeatherTest : KoinTest, BehaviorSpec({
 
     beforeSpec {
         startKoin {
             modules(
                 module {
                     single { resources }
-                    single { sharedPreferences }
+                    single { sharedPref }
                 }
             )
         }
-
-        every { resources.getString(R.string.uv_low) } returns "Low"
-        every { resources.getString(R.string.uv_moderate) } returns "Moderate"
-        every { resources.getString(R.string.uv_high) } returns "High"
-        every { resources.getString(R.string.uv_very_high) } returns "Very High"
-        every { resources.getString(R.string.uv_extreme) } returns "Extreme"
-        every { resources.getString(KEY_TEMPERATURE) } returns "temperature_unit"
-        every { resources.getString(R.string.temperature_celsius) } returns "°C"
-        every { resources.getString(R.string.degrees_mark) } returns "°"
-        every { sharedPreferences.getString("temperature_unit", "°C") } returns "°C"
-        every { resources.getString(R.string.solar_radiation_unit) } returns "W/m2"
-        every { resources.getString(KEY_PRESSURE) } returns "pressure_unit"
-        every { resources.getString(R.string.pressure_hpa) } returns "hPa"
-        every { sharedPreferences.getString("pressure_unit", "hPa") } returns "hPa"
-        every { resources.getString(KEY_PRECIP) } returns "precip_unit"
-        every { resources.getString(R.string.precipitation_mm) } returns "mm"
-        every { resources.getString(R.string.precipitation_mm_hour) } returns "mm/h"
-        every { resources.getString(R.string.precipitation_in) } returns "in"
-        every { resources.getString(R.string.precipitation_in_hour) } returns "in/h"
-        every { sharedPreferences.getString("precip_unit", "mm") } returns "mm"
-        every { resources.getString(KEY_WIND) } returns "wind"
-        every { resources.getString(R.string.wind_speed_ms) } returns "m/s"
-        every { resources.getString(R.string.wind_speed_beaufort) } returns "bf"
-        every { resources.getString(R.string.wind_speed_kmh) } returns "km/h"
-        every { resources.getString(R.string.wind_speed_mph) } returns "mph"
-        every { resources.getString(R.string.wind_speed_knots) } returns "knots"
-        every { sharedPreferences.getString("wind", "m/s") } returns "m/s"
-        every { resources.getString(KEY_WIND_DIR) } returns "wind_direction"
-        every { resources.getString(R.string.wind_direction_cardinal) } returns "Cardinal"
-        every { sharedPreferences.getString("wind_direction", "Cardinal") } returns "Cardinal"
     }
 
     given("A Weather icon") {
@@ -160,7 +124,7 @@ class WeatherTest : BehaviorSpec({
                     testTemperature("°C", 25, 25.5F)
                 }
                 and("is in Fahrenheit") {
-                    every { sharedPreferences.getString("temperature_unit", "°C") } returns "°F"
+                    every { sharedPref.getString("temperature_unit", "°C") } returns "°F"
                     testTemperature("°F", 77, 77.9F)
                 }
             }
@@ -188,7 +152,7 @@ class WeatherTest : BehaviorSpec({
                     testPressure("hPa", 1000.4F)
                 }
                 and("unit is in inHg") {
-                    every { sharedPreferences.getString("pressure_unit", "hPa") } returns "inHg"
+                    every { sharedPref.getString("key_pressure_preference", "hPa") } returns "inHg"
                     testPressure("inHg", 29.54F)
                 }
             }
@@ -205,7 +169,7 @@ class WeatherTest : BehaviorSpec({
                     testPrecipitation("mm/h", "mm", 10.6F)
                 }
                 and("unit is in inches") {
-                    every { sharedPreferences.getString("precip_unit", "mm") } returns "in"
+                    every { sharedPref.getString("precipitation_unit", "mm") } returns "in"
                     testPrecipitation("in/h", "in", 0.42F)
                 }
             }
@@ -219,23 +183,23 @@ class WeatherTest : BehaviorSpec({
             }
             When("value is not null") {
                 and("is in m/s") {
-                    testWind(sharedPreferences, "m/s", 10.6F, false)
+                    testWind(sharedPref, "m/s", 10.6F, false)
                 }
                 and("is in beaufort") {
-                    every { sharedPreferences.getString("wind", "m/s") } returns "bf"
-                    testWind(sharedPreferences, "bf", 5F, true)
+                    every { sharedPref.getString("wind_speed_unit", "m/s") } returns "bf"
+                    testWind(sharedPref, "bf", 5F, true)
                 }
                 and("is in km/h") {
-                    every { sharedPreferences.getString("wind", "m/s") } returns "km/h"
-                    testWind(sharedPreferences, "km/h", 38F, false)
+                    every { sharedPref.getString("wind_speed_unit", "m/s") } returns "km/h"
+                    testWind(sharedPref, "km/h", 38F, false)
                 }
                 and("is in mph") {
-                    every { sharedPreferences.getString("wind", "m/s") } returns "mph"
-                    testWind(sharedPreferences, "mph", 23.6F, false)
+                    every { sharedPref.getString("wind_speed_unit", "m/s") } returns "mph"
+                    testWind(sharedPref, "mph", 23.6F, false)
                 }
                 and("is in knots") {
-                    every { sharedPreferences.getString("wind", "m/s") } returns "knots"
-                    testWind(sharedPreferences, "knots", 20.5F, false)
+                    every { sharedPref.getString("wind_speed_unit", "m/s") } returns "knots"
+                    testWind(sharedPref, "knots", 20.5F, false)
                 }
             }
         }

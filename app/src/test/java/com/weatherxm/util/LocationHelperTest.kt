@@ -2,10 +2,10 @@ package com.weatherxm.util
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.weatherxm.TestConfig.context
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -13,7 +13,6 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 
 class LocationHelperTest : BehaviorSpec({
-    val context = mockk<Context>()
     val fusedLocationProvider = mockk<FusedLocationProviderClient>()
     val locationHelper = LocationHelper(context, fusedLocationProvider)
 

@@ -2,11 +2,11 @@ package com.weatherxm.util
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProviderInfo
-import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
 import arrow.core.Either
 import com.weatherxm.R
+import com.weatherxm.TestConfig.context
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.widgets.WidgetType
@@ -23,7 +23,6 @@ import io.mockk.verify
 
 class WidgetHelperTest : BehaviorSpec({
     val cacheService = mockk<CacheService>()
-    val context = mockk<Context>()
     val appWidgetManager = mockk<AppWidgetManager>()
     val appWidgetProviderInfo = mockk<AppWidgetProviderInfo>()
     val widgetHelper = WidgetHelper(cacheService, context)
