@@ -9,7 +9,11 @@ import kotlinx.coroutines.flow.Flow
 
 class BluetoothScanner {
     private val scanner = Scanner {
-        filters = listOf(Filter.NamePrefix("WeatherXM"))
+        filters {
+            match {
+                name = Filter.Name.Prefix("WeatherXM")
+            }
+        }
         logging {
             engine = SystemLogEngine
             level = Logging.Level.Warnings
