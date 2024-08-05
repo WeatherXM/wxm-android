@@ -34,6 +34,7 @@ class GeocoderCompatTest : BehaviorSpec({
         mockkStatic(Geocoder::class)
     }
 
+    @Suppress("DEPRECATION")
     context("Get Address from Location using Geocoder") {
         When("Geocoder is NOT available") {
             every { Geocoder.isPresent() } returns false
@@ -66,10 +67,18 @@ class GeocoderCompatTest : BehaviorSpec({
                     }
                 }
             }
-            // FIXME: Fix it to test above Tiramisu API level
-//            When("Build.VERSION.SDK_INT >= TIRAMISU") {
-//                every { versionSDK() } returns 33
-//            }
+            When("Build.VERSION.SDK_INT >= TIRAMISU") {
+                setStaticFieldViaReflection(
+                    Build.VERSION::class.java.getDeclaredField("SDK_INT"),
+                    33
+                )
+                When("Geocoder does NOT return an address") {
+                    // TODO: Handle API 33 in Geocoding
+                }
+                When("Geocoder returns an address") {
+                    // TODO: Handle API 33 in Geocoding
+                }
+            }
         }
     }
 

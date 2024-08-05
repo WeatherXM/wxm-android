@@ -23,6 +23,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.show
 import com.weatherxm.util.NumberUtils.roundToDecimals
 import com.weatherxm.util.NumberUtils.roundToInt
+import com.weatherxm.util.Weather.EMPTY_VALUE
 import com.weatherxm.util.Weather.getDecimalsPrecipitation
 import com.weatherxm.util.Weather.getDecimalsPressure
 
@@ -586,7 +587,7 @@ fun LineChart.initializeNetworkStatsChart(entries: List<Entry>) {
 
 class CustomXAxisFormatter(private val times: MutableList<String>?) : ValueFormatter() {
     override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-        return times?.getOrNull(value.toInt()) ?: value.toString()
+        return times?.getOrNull(value.toInt()) ?: EMPTY_VALUE
     }
 }
 
