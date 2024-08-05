@@ -13,10 +13,11 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
 import com.weatherxm.ui.common.empty
+import com.weatherxm.util.NumberUtils.roundToDecimals
+import com.weatherxm.util.NumberUtils.roundToInt
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
-import java.math.RoundingMode
 
 @Suppress("TooManyFunctions")
 object Weather : KoinComponent {
@@ -459,13 +460,5 @@ object Weather : KoinComponent {
         } else {
             DECIMALS_PRESSURE_INHG
         }
-    }
-
-    fun roundToDecimals(value: Number, decimals: Int = 1): Float {
-        return value.toFloat().toBigDecimal().setScale(decimals, RoundingMode.HALF_UP).toFloat()
-    }
-
-    fun roundToInt(value: Number): Int {
-        return value.toFloat().toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()
     }
 }

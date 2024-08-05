@@ -35,7 +35,7 @@ class NumberUtilsTest : BehaviorSpec({
                 then("compactNumber should return EMPTY_VALUE") {
                     NumberUtils.compactNumber(null) shouldBe EMPTY_VALUE
                 }
-                and("formatNumber should return EMPTY_VALUE") {
+                then("formatNumber should return EMPTY_VALUE") {
                     NumberUtils.formatNumber(null) shouldBe EMPTY_VALUE
                 }
             }
@@ -43,8 +43,19 @@ class NumberUtilsTest : BehaviorSpec({
                 then("compactNumber should return a valid number") {
                     NumberUtils.compactNumber(100) shouldBe "100"
                 }
-                and("formatNumber should return a valid number") {
+                then("formatNumber should return a valid number") {
                     NumberUtils.formatNumber(100) shouldBe "100"
+                }
+                then("roundToDecimals should return a valid number") {
+                    NumberUtils.roundToDecimals(100.123456) shouldBe 100.1F
+                    NumberUtils.roundToDecimals(100.15) shouldBe 100.2F
+                    NumberUtils.roundToDecimals(100.02) shouldBe 100.0F
+                }
+                then("roundToInt should return a valid number") {
+                    NumberUtils.roundToInt(1.0) shouldBe 1
+                    NumberUtils.roundToInt(1.49) shouldBe 1
+                    NumberUtils.roundToInt(1.5) shouldBe 2
+                    NumberUtils.roundToInt(1.51) shouldBe 2
                 }
             }
         }

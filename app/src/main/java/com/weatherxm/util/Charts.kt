@@ -21,10 +21,10 @@ import com.weatherxm.R
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.show
+import com.weatherxm.util.NumberUtils.roundToDecimals
+import com.weatherxm.util.NumberUtils.roundToInt
 import com.weatherxm.util.Weather.getDecimalsPrecipitation
 import com.weatherxm.util.Weather.getDecimalsPressure
-import com.weatherxm.util.Weather.roundToDecimals
-import com.weatherxm.util.Weather.roundToInt
 
 private const val CHART_OFFSET = 5F
 private const val LINE_WIDTH = 2F
