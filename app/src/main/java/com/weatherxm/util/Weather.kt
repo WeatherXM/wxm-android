@@ -409,11 +409,7 @@ object Weather : KoinComponent {
     }
 
     fun getPreferredUnit(keyOnSharedPref: String, defaultUnit: String): String {
-        val savedUnit = sharedPref.getString(keyOnSharedPref, String.empty())
-        if (!savedUnit.isNullOrEmpty()) {
-            return savedUnit
-        }
-        return defaultUnit
+        return sharedPref.getString(keyOnSharedPref, defaultUnit) ?: defaultUnit
     }
 
     fun getPrecipitationPreferredUnit(isRainRate: Boolean = true): String {
