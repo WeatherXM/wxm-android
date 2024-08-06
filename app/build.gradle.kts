@@ -443,7 +443,6 @@ dependencies {
 
     // BLE Scanning and Communication
     implementation(libs.kable)
-    implementation(libs.esp.idf.provisioning.android)
     implementation(libs.dfu)
 
     // Image Loader

@@ -29,12 +29,11 @@ chucker = "4.0.0"
 coil-base = "2.7.0"
 desugar_jdk_libs = "2.0.4"
 dfu = "2.5.0"
-esp-idf-provisioning-android = "lib-2.1.2"
 firebase-bom = "33.1.2"
 input-mask-android = "7.2.6"
 insetter = "0.6.1"
 jwtdecode = "2.0.2"
-kable = "0.33.2"
+kable = "0.34.0"
 koin-android = "3.5.6"
 kotest = "5.9.1"
 kotest-koin = "1.3.0"
@@ -105,7 +104,6 @@ coil-base = { module = "io.coil-kt:coil-base", version.ref = "coil-base" }
 coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil-base" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 dfu = { module = "no.nordicsemi.android:dfu", version.ref = "dfu" }
-esp-idf-provisioning-android = { module = "com.github.espressif:esp-idf-provisioning-android", version.ref = "esp-idf-provisioning-android" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-perf = { module = "com.google.firebase:firebase-perf" }
