@@ -6,7 +6,6 @@ import android.content.Intent
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.weatherxm.data.repository.AuthRepository
-import com.weatherxm.data.repository.NotificationsRepository
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.util.WidgetHelper
 import org.koin.core.component.KoinComponent
@@ -19,11 +18,9 @@ class ForceLogoutWorker(
 ) : CoroutineWorker(context, workerParams), KoinComponent {
     private val authRepository: AuthRepository by inject()
     private val widgetHelper: WidgetHelper by inject()
-    private val notificationsRepository: NotificationsRepository by inject()
 
     override suspend fun doWork(): Result {
         Timber.d("Starting Work Manager for forced logout.")
-        notificationsRepository.deleteFcmToken()
         authRepository.logout()
         widgetHelper.getWidgetIds().onRight {
             val intent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)

@@ -4,7 +4,6 @@ import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AuthRepository
-import com.weatherxm.data.repository.NotificationsRepository
 import com.weatherxm.data.repository.UserPreferencesRepository
 
 interface PreferencesUseCase {
@@ -19,7 +18,6 @@ interface PreferencesUseCase {
 class PreferencesUseCaseImpl(
     private val authRepository: AuthRepository,
     private val appConfigRepository: AppConfigRepository,
-    private val notificationsRepository: NotificationsRepository,
     private val userPreferencesRepository: UserPreferencesRepository
 ) : PreferencesUseCase {
 
@@ -28,7 +26,6 @@ class PreferencesUseCaseImpl(
     }
 
     override suspend fun logout() {
-        notificationsRepository.deleteFcmToken()
         authRepository.logout()
     }
 

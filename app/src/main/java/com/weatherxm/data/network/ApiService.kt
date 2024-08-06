@@ -265,13 +265,4 @@ interface ApiService {
         @Path("installationId") installationId: String,
         @Path("fcmToken") fcmToken: String
     ): Either<Throwable, Unit>
-
-    @Mock
-    @MockBehavior(durationDeviation = 500, durationMillis = 2000)
-    @MockResponse(code = 200, body = "mock_files/empty_response.json")
-    @DELETE("/api/v1/me/notifications/fcm/installations/{installationId}/tokens")
-    suspend fun deleteFcmToken(
-        @Path("installationId") installationId: String,
-        @Path("fcmToken") fcmToken: String
-    ): Either<Throwable, Unit>
 }

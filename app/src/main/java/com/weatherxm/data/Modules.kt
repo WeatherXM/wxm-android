@@ -426,7 +426,7 @@ private val datasources = module {
 
 private val repositories = module {
     single<AuthRepository> {
-        AuthRepositoryImpl(get(), get(), get(), get(), get())
+        AuthRepositoryImpl(get(), get(), get(), get(), get(), get())
     }
     single<UserRepository> {
         UserRepositoryImpl(get(), get())
@@ -522,13 +522,13 @@ private val usecases = module {
         ConnectWalletUseCaseImpl(get())
     }
     single<PreferencesUseCase> {
-        PreferencesUseCaseImpl(get(), get(), get(), get())
+        PreferencesUseCaseImpl(get(), get(), get())
     }
     single<SendFeedbackUseCase> {
         SendFeedbackUseCaseImpl(get())
     }
     single<DeleteAccountUseCase> {
-        DeleteAccountUseCaseImpl(get(), get(), get())
+        DeleteAccountUseCaseImpl(get(), get())
     }
     single<PasswordPromptUseCase> {
         PasswordPromptUseCaseImpl(get())

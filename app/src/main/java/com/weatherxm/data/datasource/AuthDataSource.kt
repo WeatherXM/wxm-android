@@ -20,7 +20,11 @@ interface AuthDataSource {
         lastName: String?
     ): Either<Failure, Unit>
 
-    suspend fun logout(accessToken: String): Either<Failure, Unit>
+    suspend fun logout(
+        accessToken: String,
+        installationId: String? = null
+    ): Either<Failure, Unit>
+
     suspend fun refresh(authToken: AuthToken): Either<Failure, AuthToken>
     suspend fun getAuthToken(): Either<Failure, AuthToken>
     suspend fun setAuthToken(token: AuthToken)

@@ -14,10 +14,4 @@ class NotificationsRepositoryImpl(
             dataSource.setFcmToken(it, fcmToken ?: dataSource.getFcmToken())
         } ?: Either.Left(Failure.InstallationIdNotFound)
     }
-
-    override suspend fun deleteFcmToken(): Either<Failure, Unit> {
-        return appConfigDataSource.getInstallationId()?.let {
-            dataSource.deleteFcmToken(it)
-        } ?: Either.Left(Failure.InstallationIdNotFound)
-    }
 }

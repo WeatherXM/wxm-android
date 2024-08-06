@@ -5,5 +5,4 @@ import com.weatherxm.data.Failure
 
 interface NotificationsRepository {
     suspend fun setFcmToken(fcmToken: String? = null): Either<Failure, Unit>
-    suspend fun deleteFcmToken(): Either<Failure, Unit>
 }
