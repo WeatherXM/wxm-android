@@ -1,6 +1,5 @@
 package com.weatherxm.util
 
-import android.location.Geocoder
 import com.weatherxm.R
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.data.ApiError.GenericError.UnknownError

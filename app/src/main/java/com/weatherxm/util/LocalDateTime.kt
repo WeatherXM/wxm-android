@@ -53,6 +53,8 @@ class LocalDateTimeIterator(
             endInclusive == other.endInclusive &&
             step == other.step
     }
+
+    override fun hashCode(): Int = toString().hashCode()
 }
 
 operator fun LocalDateTime.rangeTo(other: LocalDateTime) = LocalDateTimeRange(this, other)
