@@ -9,12 +9,14 @@ import com.weatherxm.data.DATE_FORMAT_MONTH_SHORT
 import com.weatherxm.data.HOUR_FORMAT_12H_FULL
 import com.weatherxm.data.HOUR_FORMAT_12H_HOUR_ONLY
 import com.weatherxm.data.HOUR_FORMAT_24H
+import com.weatherxm.ui.common.empty
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndMonthDay
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndShort
 import com.weatherxm.util.DateTimeHelper.getRelativeDayOrFull
+import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.DateTimeHelper.timestampToLocalDate
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
@@ -34,6 +36,8 @@ import java.util.Locale
 class DateTimeHelperTest : BehaviorSpec({
     val localDateTime = LocalDateTime.of(2024, 5, 30, 14, 0)
     val zonedDateTime = ZonedDateTime.of(2024, 5, 30, 14, 0, 0, 0, ZoneId.of("UTC"))
+    val nowZoned = ZonedDateTime.now()
+    val nowRelativeMessage = "Just Now"
     val todayLocalDate = LocalDate.now()
     val yesterdayLocalDate = LocalDate.now().minusDays(1)
     val tomorrowLocalDate = LocalDate.now().plusDays(1)
@@ -109,6 +113,16 @@ class DateTimeHelperTest : BehaviorSpec({
     }
 
     given("A ZonedDateTime") {
+        When("It's null") {
+            then("Get formatted date and time") {
+                null.getFormattedDate() shouldBe String.empty()
+            }
+        }
+        When("It's now") {
+            then("Get formatted date and time") {
+                nowZoned.getRelativeFormattedTime(nowRelativeMessage) shouldBe nowRelativeMessage
+            }
+        }
         When("user uses 24-hour format") {
             every { DateFormat.is24HourFormat(context) } returns true
             then("Get formatted date and time") {

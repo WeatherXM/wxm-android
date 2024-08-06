@@ -46,6 +46,13 @@ class LocalDateTimeIterator(
         current = current.plus(step)
         return next
     }
+
+    override fun equals(other: Any?): Boolean {
+        return other is LocalDateTimeIterator &&
+            current == other.current &&
+            endInclusive == other.endInclusive &&
+            step == other.step
+    }
 }
 
 operator fun LocalDateTime.rangeTo(other: LocalDateTime) = LocalDateTimeRange(this, other)

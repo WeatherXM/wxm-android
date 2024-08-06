@@ -25,16 +25,19 @@ class LocalDateRangeTest : BehaviorSpec({
     }
 
     given("A LocalDateRange") {
+        then("Getting all using map function") {
+            range.all() shouldBe range.map { it }
+        }
         then("The start should be yesterday") {
             range.start() shouldBe yesterday
         }
-        and("The end should be now") {
+        then("The end should be now") {
             range.end() shouldBe now
         }
-        and("Printing it should be $validPrintedRange") {
+        then("Printing it should be $validPrintedRange") {
             range.toString() shouldBe validPrintedRange
         }
-        and("The hashcode should be the same") {
+        then("The hashcode should be the same") {
             range.hashCode() shouldBe validPrintedRange.hashCode()
         }
         and("Equality should be true") {
@@ -45,16 +48,20 @@ class LocalDateRangeTest : BehaviorSpec({
         }
         When("An iterator gets created") {
             val iterator = LocalDateIterator(yesterday, now)
+            val overridenIterator = range.iterator()
+            then("Iterator should be equal to the overriden one") {
+                (iterator == overridenIterator) shouldBe true
+            }
             then("It should have next values") {
                 iterator.hasNext() shouldBe true
             }
-            and("The first value should be yesterday") {
+            then("The first value should be yesterday") {
                 iterator.next() shouldBe yesterday
             }
-            and("The second value should be today") {
+            then("The second value should be today") {
                 iterator.next() shouldBe yesterday.plusDays(1)
             }
-            and("Iterating out of bounds should produce NoSuchElementException") {
+            then("Iterating out of bounds should produce NoSuchElementException") {
                 try {
                     iterator.next()
                 } catch (e: NoSuchElementException) {

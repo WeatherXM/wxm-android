@@ -1,21 +1,43 @@
 package com.weatherxm.util
 
+import android.location.Geocoder
 import com.weatherxm.R
+import com.weatherxm.TestConfig.resources
 import com.weatherxm.data.ApiError.GenericError.UnknownError
 import com.weatherxm.data.ApiError.GenericError.UnsupportedAppVersion
 import com.weatherxm.data.ApiError.GenericError.ValidationError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkError
 import com.weatherxm.util.Failure.getCode
+import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.every
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 
 class FailureTest : BehaviorSpec({
+    beforeSpec {
+        startKoin {
+            modules(
+                module {
+                    single<Resources> {
+                        resources
+                    }
+                }
+            )
+        }
+        every { resources.getString(R.string.error_unsupported_error) } returns "Error Unsupported"
+    }
+
     context("Map Failure to UI messages") {
         given("UnsupportedAppVersion") {
-            UnsupportedAppVersion("").getDefaultMessageResId() shouldBe
-                R.string.error_unsupported_error
+            val unsupportedAppVersion = UnsupportedAppVersion("")
+            unsupportedAppVersion.getDefaultMessageResId() shouldBe R.string.error_unsupported_error
+            unsupportedAppVersion.getDefaultMessage() shouldBe "Error Unsupported"
+
         }
         given("NoConnectionError") {
             then("should return R.string.error_network_generic") {
@@ -63,5 +85,9 @@ class FailureTest : BehaviorSpec({
                 UnsupportedAppVersion(null).getCode() shouldBe Failure.CODE_UNKNOWN
             }
         }
+    }
+
+    afterSpec {
+        stopKoin()
     }
 })

@@ -29,6 +29,7 @@ class WidgetHelperTest : BehaviorSpec({
 
     val testDeviceId = "deviceId"
     val testWidgetIds = listOf("1")
+    val testWidgetIdNullInfo = -1
 
     beforeSpec {
         every { cacheService.getWidgetIds() } returns Either.Right(testWidgetIds)
@@ -84,6 +85,12 @@ class WidgetHelperTest : BehaviorSpec({
             }
             When("is unknown") {
                 testWidgetTypeById(0, WidgetType.CURRENT_WEATHER)
+            }
+        }
+        given("A widget ID with null info") {
+            every { appWidgetManager.getAppWidgetInfo(testWidgetIdNullInfo) } returns null
+            then("getWidgetTypeById should return CURRENT_WEATHER") {
+                widgetHelper.getWidgetTypeById(appWidgetManager, testWidgetIdNullInfo) shouldBe null
             }
         }
     }
