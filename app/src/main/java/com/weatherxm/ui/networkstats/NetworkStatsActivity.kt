@@ -66,18 +66,6 @@ class NetworkStatsActivity : BaseActivity() {
 
         setInfoButtonListeners()
 
-        model.onMainnet().observe(this) {
-            if (it.message.isNotEmpty()) {
-                binding.mainnetCard.message(it.message)
-            }
-            if (it.url.isNotEmpty()) {
-                binding.mainnetCard.listener {
-                    navigator.openWebsite(this, it.url)
-                }
-            }
-            binding.mainnetCard.visible(true)
-        }
-
         model.onNetworkStats().observe(this) {
             when (it.status) {
                 Status.SUCCESS -> {
@@ -104,7 +92,6 @@ class NetworkStatsActivity : BaseActivity() {
             }
         }
 
-        model.fetchMainnetStatus()
         model.getNetworkStats()
     }
 

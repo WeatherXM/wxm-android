@@ -378,14 +378,6 @@ data class BoostDetailInfo(
 
 @Keep
 @JsonClass(generateAdapter = true)
-@Parcelize
-data class MainnetInfo(
-    val message: String,
-    val url: String
-) : Parcelable
-
-@Keep
-@JsonClass(generateAdapter = true)
 data class Charts(
     var date: LocalDate,
     var temperature: LineChartData,
