@@ -17,8 +17,6 @@ env:
     ORG_GRADLE_PROJECT_RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
     # Firebase distribution on tech team group
     ORG_GRADLE_PROJECT_FIREBASE_TEST_GROUP: ${{ secrets.FIREBASE_TECH_TEAM_TEST_GROUP }}
-    # Mixpanel Token
-    ORG_GRADLE_PROJECT_MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN }}
     # Gradle config
     GRADLE_USER_HOME: ${GITHUB_WORKSPACE}/.gradle
     GLOBAL_GRADLE_CACHE: gradle-cache-${GITHUB_REPOSITORY}
@@ -32,6 +30,8 @@ jobs:
             ORG_GRADLE_PROJECT_API_URL: ${{ secrets.API_URL }}
             # Claim DApp URL
             ORG_GRADLE_PROJECT_CLAIM_APP_URL: ${{ secrets.CLAIM_APP_URL }}
+            # Mixpanel Token
+            ORG_GRADLE_PROJECT_MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN }}
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
@@ -67,6 +67,8 @@ jobs:
             ORG_GRADLE_PROJECT_API_URL: ${{ secrets.API_URL }}
             # Claim DApp URL
             ORG_GRADLE_PROJECT_CLAIM_APP_URL: ${{ secrets.CLAIM_APP_URL }}
+            # Mixpanel Token
+            ORG_GRADLE_PROJECT_MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN }}
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
@@ -99,6 +101,8 @@ jobs:
             ORG_GRADLE_PROJECT_API_URL: ${{ secrets.API_URL }}
             # Claim DApp URL
             ORG_GRADLE_PROJECT_CLAIM_APP_URL: ${{ secrets.CLAIM_APP_URL }}
+            # Mixpanel Token
+            ORG_GRADLE_PROJECT_MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN }}
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
@@ -139,6 +143,8 @@ jobs:
             ORG_GRADLE_PROJECT_API_URL: ${{ secrets.API_URL }}
             # Claim DApp URL
             ORG_GRADLE_PROJECT_CLAIM_APP_URL: ${{ secrets.CLAIM_APP_URL }}
+            # Mixpanel Token
+            ORG_GRADLE_PROJECT_MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN }}
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
