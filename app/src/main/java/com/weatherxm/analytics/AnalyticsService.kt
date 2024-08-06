@@ -37,7 +37,7 @@ interface AnalyticsService {
         PASSWORD_RESET("Password Reset"),
         PROFILE("Account"),
         CURRENT_WEATHER("Device Current Weather"),
-        DEVICE_FORECAST("Device Forecast Tab"),
+        DEVICE_FORECAST("Device Forecast"),
         DEVICE_REWARDS("Device Rewards"),
         STATION_SETTINGS("Device Settings"),
         DEVICE_REWARD_TRANSACTIONS("Device Reward Transactions"),
@@ -62,7 +62,7 @@ interface AnalyticsService {
         LOCATION_QUALITY_INFO("Location Quality info"),
         CELL_RANKING_INFO("Cell Ranking info"),
         CELL_CAPACITY_INFO("Cell Capacity info"),
-        DEVICE_FORECAST_DETAILS("Forecast Details Screen"),
+        DEVICE_FORECAST_DETAILS("Device Forecast Details"),
         CLAIM_DAPP("Claim Dapp")
     }
 
