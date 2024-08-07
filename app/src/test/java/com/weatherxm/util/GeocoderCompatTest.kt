@@ -4,6 +4,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.Build
 import arrow.core.Either
+import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.setStaticFieldViaReflection
 import com.weatherxm.data.Failure
 import com.weatherxm.util.GeocoderCompat.getFromLocation
@@ -63,7 +64,7 @@ class GeocoderCompatTest : BehaviorSpec({
                         geocoder.getFromLocation(any<Double>(), any<Double>(), 1)
                     } returns listOf(address)
                     then("return that address") {
-                        getFromLocation(0.0, 0.0) shouldBe Either.Right(address)
+                        getFromLocation(0.0, 0.0).isSuccess(address)
                     }
                 }
             }

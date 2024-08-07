@@ -6,10 +6,11 @@ import android.text.format.DateFormat
 import arrow.core.Either
 import com.github.mikephil.charting.data.Entry
 import com.weatherxm.TestConfig.context
-import com.weatherxm.TestUtils.isNoConnectionError
+import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.mockEitherLeft
 import com.weatherxm.data.Connectivity
+import com.weatherxm.data.Failure
 import com.weatherxm.data.HOUR_FORMAT_24H
-import com.weatherxm.data.NetworkError
 import com.weatherxm.data.NetworkStatsContracts
 import com.weatherxm.data.NetworkStatsCustomers
 import com.weatherxm.data.NetworkStatsResponse
@@ -26,7 +27,6 @@ import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
 import com.weatherxm.util.NumberUtils
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -44,6 +44,7 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
     val appConfigRepository = mockk<AppConfigRepository>()
     val usecase = StatsUseCaseImpl(repo, appConfigRepository, context)
 
+    val failure = mockk<Failure>()
     val testMessage = "testMessage"
     val testUrl = "testUrl"
     val firstDate = ZonedDateTime.of(2024, 6, 25, 2, 0, 0, 0, ZoneId.of("UTC"))
@@ -94,14 +95,6 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
         lastUpdated = lastDate
     )
 
-    fun mockGetNetworkStatsResponse(isSuccess: Boolean) {
-        coEvery { repo.getNetworkStats() } returns if (isSuccess) {
-            Either.Right(testNetworkStats)
-        } else {
-            Either.Left(NetworkError.NoConnectionError())
-        }
-    }
-
     beforeSpec {
         startKoin {
             modules(
@@ -144,13 +137,13 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
     context("Get Network Stats") {
         given("an API call that fetches the Network Stats") {
             When("the API call fails") {
-                mockGetNetworkStatsResponse(false)
+                mockEitherLeft({ repo.getNetworkStats() }, failure)
                 then("a failure should be returned") {
-                    usecase.getNetworkStats().isLeft { it.isNoConnectionError() } shouldBe true
+                    usecase.getNetworkStats() shouldBe Either.Left(failure)
                 }
             }
             When("the API call returns some data") {
-                mockGetNetworkStatsResponse(true)
+                coMockEitherRight({ repo.getNetworkStats() }, testNetworkStats)
                 then("the correct transformation to the UI Model should take place") {
                     val response = usecase.getNetworkStats()
                     response.isRight() shouldBe true

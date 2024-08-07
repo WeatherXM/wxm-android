@@ -1,20 +1,17 @@
 package com.weatherxm
 
 import arrow.core.Either
-import com.weatherxm.data.ApiError
 import com.weatherxm.data.Failure
-import com.weatherxm.data.NetworkError
 import com.weatherxm.data.Resource
 import io.kotest.matchers.shouldBe
+import io.mockk.coEvery
+import io.mockk.every
 import net.bytebuddy.utility.RandomString
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 
 object TestUtils {
-    fun Failure.isDeviceNotFound() = this is ApiError.DeviceNotFound
-    fun Failure.isNoConnectionError() = this is NetworkError.NoConnectionError
-
     fun <T : Any> Either<Failure, T?>.isSuccess(successData: T?) {
         this shouldBe Either.Right(successData)
     }
@@ -25,6 +22,18 @@ object TestUtils {
 
     fun <T : Any> Resource<T>?.isError(errorMsg: String) {
         this shouldBe Resource.error(errorMsg)
+    }
+
+    fun mockEitherLeft(function: suspend () -> Either<Failure, Any?>, failure: Failure) {
+        coEvery { function() } returns Either.Left(failure)
+    }
+
+    fun mockEitherRight(function: () -> Either<Failure, Any?>, data: Any?) {
+        every { function() } returns Either.Right(data)
+    }
+
+    fun coMockEitherRight(function: suspend () -> Either<Failure, Any?>, data: Any?) {
+        coEvery { function() } returns Either.Right(data)
     }
 
     fun createRandomString(length: Int): String {

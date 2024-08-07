@@ -163,9 +163,9 @@ class LoginActivity : BaseActivity() {
                 val user = result.data
                 Timber.d("User: $user")
                 if (model.shouldShowAnalyticsOptIn()) {
-                    navigator.showHome(this)
-                } else {
                     navigator.showAnalyticsOptIn(this)
+                } else {
+                    navigator.showHome(this)
                 }
 
                 /*
