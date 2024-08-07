@@ -34,25 +34,15 @@
                 app:layout_scrollFlags="noScroll"
                 tools:visibility="visible" />
 
-            <com.weatherxm.ui.components.MainnetCardView
-                android:id="@+id/mainnetCard"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/margin_normal_to_large"
-                android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible" />
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/totalCard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_normal"
-                android:layout_marginTop="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_normal_to_large"
                 app:cardElevation="@dimen/elevation_small"
                 app:contentPadding="@dimen/padding_large"
-                app:layout_constraintTop_toBottomOf="@id/mainnetCard">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"

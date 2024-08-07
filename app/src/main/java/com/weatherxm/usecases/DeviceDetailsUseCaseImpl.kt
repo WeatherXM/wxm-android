@@ -4,7 +4,6 @@ import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Rewards
 import com.weatherxm.data.repository.AddressRepository
-import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
@@ -12,7 +11,6 @@ import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
-import com.weatherxm.ui.common.MainnetInfo
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.UICell
 
@@ -22,8 +20,7 @@ class DeviceDetailsUseCaseImpl(
     private val rewardsRepository: RewardsRepository,
     private val addressRepository: AddressRepository,
     private val explorerRepository: ExplorerRepository,
-    private val deviceOTARepo: DeviceOTARepository,
-    private val appConfigRepository: AppConfigRepository
+    private val deviceOTARepo: DeviceOTARepository
 ) : DeviceDetailsUseCase {
 
     override suspend fun getUserDevice(device: UIDevice): Either<Failure, UIDevice> {
@@ -51,16 +48,5 @@ class DeviceDetailsUseCaseImpl(
 
     override suspend fun getRewards(deviceId: String): Either<Failure, Rewards> {
         return rewardsRepository.getRewards(deviceId)
-    }
-
-    override fun isMainnetEnabled(): Boolean {
-        return appConfigRepository.isMainnetEnabled()
-    }
-
-    override fun getMainnetInfo(): MainnetInfo {
-        return MainnetInfo(
-            appConfigRepository.getMainnetMessage(),
-            appConfigRepository.getMainnetUrl()
-        )
     }
 }

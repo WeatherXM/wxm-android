@@ -71,18 +71,6 @@ class RewardsFragment : BaseFragment() {
             }
         }
 
-        model.onMainnet().observe(viewLifecycleOwner) {
-            if (it.message.isNotEmpty()) {
-                binding.mainnetCard.message(it.message)
-            }
-            if (it.url.isNotEmpty()) {
-                binding.mainnetCard.listener {
-                    navigator.openWebsite(context, it.url)
-                }
-            }
-            binding.mainnetCard.visible(true)
-        }
-
         model.onRewards().observe(viewLifecycleOwner) {
             val totalRewards = it.totalRewards ?: 0F
             binding.emptyCard.visible(it.isEmpty())
@@ -131,7 +119,6 @@ class RewardsFragment : BaseFragment() {
             navigator.showRewardsList(requireContext(), model.device)
         }
 
-        model.fetchMainnetStatus()
         model.fetchRewardsFromNetwork()
     }
 
