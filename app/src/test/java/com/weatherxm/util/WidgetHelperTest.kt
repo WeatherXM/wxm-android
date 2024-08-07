@@ -7,6 +7,8 @@ import android.os.Parcelable
 import arrow.core.Either
 import com.weatherxm.R
 import com.weatherxm.TestConfig.context
+import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.TestUtils.mockEitherRight
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.widgets.WidgetType
@@ -32,7 +34,7 @@ class WidgetHelperTest : BehaviorSpec({
     val testWidgetIdNullInfo = -1
 
     beforeSpec {
-        every { cacheService.getWidgetIds() } returns Either.Right(testWidgetIds)
+        mockEitherRight({ cacheService.getWidgetIds() }, testWidgetIds)
         every { appWidgetManager.getAppWidgetInfo(any()) } returns appWidgetProviderInfo
         mockkStatic(AppWidgetManager::class)
         every { AppWidgetManager.getInstance(context) } returns appWidgetManager
@@ -66,7 +68,7 @@ class WidgetHelperTest : BehaviorSpec({
     context("Get widget-related information") {
         given("Some widget IDs") {
             then("getWidgetIds should return a list of widget IDs") {
-                widgetHelper.getWidgetIds() shouldBe Either.Right(testWidgetIds)
+                widgetHelper.getWidgetIds().isSuccess(testWidgetIds)
             }
         }
         given("A widget layout associated with a widget") {
