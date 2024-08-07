@@ -1,26 +1,20 @@
 package com.weatherxm.analytics
 
-import android.content.Context
 import android.content.SharedPreferences
-import com.weatherxm.R
-import com.weatherxm.data.services.CacheService
-import com.weatherxm.ui.common.empty
-import com.weatherxm.util.Weather
+import com.weatherxm.TestConfig.context
+import com.weatherxm.TestConfig.sharedPref
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkObject
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 
 class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
-    val context = mockk<Context>()
-    val sharedPref = mockk<SharedPreferences>()
     val service1 = mockk<AnalyticsService>()
     val service2 = mockk<AnalyticsService>()
     val analyticsWrapper = AnalyticsWrapper(listOf(service1, service2), context)
@@ -55,29 +49,6 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
 
         service1.mockResponses()
         service2.mockResponses()
-
-        every { context.getString(CacheService.KEY_TEMPERATURE) } returns "temperature_unit"
-        every { context.getString(R.string.temperature_celsius) } returns "°C"
-        every { context.getString(CacheService.KEY_WIND) } returns "wind_speed_unit"
-        every { context.getString(R.string.wind_speed_ms) } returns "m/s"
-        every {
-            context.getString(CacheService.KEY_WIND_DIR)
-        } returns "key_wind_direction_preference"
-        every { context.getString(R.string.wind_direction_cardinal) } returns "Cardinal"
-        every { context.getString(CacheService.KEY_PRECIP) } returns "precipitation_unit"
-        every { context.getString(R.string.precipitation_mm) } returns "mm"
-        every { context.getString(CacheService.KEY_PRESSURE) } returns "key_pressure_preference"
-        every { context.getString(R.string.pressure_hpa) } returns "hPa"
-
-        every { sharedPref.getString("temperature_unit", String.empty()) } returns "°C"
-        every { sharedPref.getString("wind_speed_unit", String.empty()) } returns "m/s"
-        every {
-            sharedPref.getString("key_wind_direction_preference", String.empty())
-        } returns "Cardinal"
-        every { sharedPref.getString("precipitation_unit", String.empty()) } returns "mm"
-        every { sharedPref.getString("key_pressure_preference", String.empty()) } returns "hPa"
-
-        mockkObject(Weather)
     }
 
     context("Set user params and track events") {

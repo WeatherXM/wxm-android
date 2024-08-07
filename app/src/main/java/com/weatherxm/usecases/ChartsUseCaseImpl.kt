@@ -8,6 +8,7 @@ import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.LocalDateTimeRange
+import com.weatherxm.util.NumberUtils
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.convertPrecipitation
 import com.weatherxm.util.Weather.convertWindSpeed
@@ -114,7 +115,7 @@ class ChartsUseCaseImpl(private val context: Context) : ChartsUseCase {
                 } ?: uvEntries.add(emptyEntry)
 
                 hourlyWeather.solarIrradiance?.let {
-                    solarRadiationEntries.add(Entry(counter, Weather.roundToDecimals(it)))
+                    solarRadiationEntries.add(Entry(counter, NumberUtils.roundToDecimals(it)))
                 } ?: solarRadiationEntries.add(emptyEntry)
 
             } ?: kotlin.run {

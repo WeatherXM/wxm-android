@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.os.Looper
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -71,8 +70,7 @@ class LocationHelper(
     }
 
     fun hasLocationPermissions(): Boolean {
-        val permGrantedCode = PackageManager.PERMISSION_GRANTED
-        return ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) == permGrantedCode
-            || ContextCompat.checkSelfPermission(context, ACCESS_COARSE_LOCATION) == permGrantedCode
+        return context.hasPermission(ACCESS_FINE_LOCATION) ||
+            context.hasPermission(ACCESS_COARSE_LOCATION)
     }
 }

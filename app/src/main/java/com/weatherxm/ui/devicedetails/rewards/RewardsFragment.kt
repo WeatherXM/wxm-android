@@ -207,9 +207,9 @@ class RewardsFragment : BaseFragment() {
                     Bar(height = normalizedValue, colorId = getRewardScoreColor(it))
                 }
             }
-            context?.let {
+            entry.timestamp?.dayOfWeek?.getFirstLetter()?.let {
                 Text(
-                    text = entry.timestamp?.dayOfWeek?.getFirstLetter(it) ?: String.empty(),
+                    text = context?.getString(it) ?: String.empty(),
                     Modifier.padding(0.dp, 4.dp, 0.dp, 0.dp),
                     fontSize = 12.sp,
                     color = Color(requireContext().getColor(R.color.colorOnSurface)),

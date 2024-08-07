@@ -52,7 +52,7 @@ class DailyTileForecastAdapter(
 
             checkSelectionStatus(item, position)
 
-            binding.timestamp.text = item.date.dayOfWeek.getShortName(itemView.context)
+            binding.timestamp.text = itemView.context.getString(item.date.dayOfWeek.getShortName())
             binding.icon.setWeatherAnimation(item.icon)
             binding.temperaturePrimary.text = getFormattedTemperature(item.maxTemp)
             binding.temperatureSecondary.text = getFormattedTemperature(item.minTemp)

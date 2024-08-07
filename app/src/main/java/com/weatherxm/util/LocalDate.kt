@@ -37,6 +37,12 @@ class LocalDateIterator(
         return current.toEpochDay() <= endInclusive.toEpochDay()
     }
 
+    override fun equals(other: Any?): Boolean {
+        return other is LocalDateIterator &&
+            current == other.current &&
+            endInclusive == other.endInclusive
+    }
+
     override fun next(): LocalDate {
         if (!hasNext()) {
             throw NoSuchElementException("Reached the end of this LocalDateRange")
@@ -45,9 +51,12 @@ class LocalDateIterator(
         current = current.plusDays(1)
         return next
     }
+
+    override fun hashCode(): Int = toString().hashCode()
 }
 
-operator fun LocalDate.rangeTo(other: LocalDate) = LocalDateRange(this, other)
+// Cast needed otherwise it gets defined as ComparableRange
+operator fun LocalDate.rangeTo(other: LocalDate) = LocalDateRange(this, other) as LocalDateRange
 
 fun LocalDate.isYesterday(): Boolean {
     val now = LocalDate.now()

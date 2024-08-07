@@ -13,7 +13,7 @@ import com.weatherxm.util.DateTimeHelper.getRelativeDayAndMonthDay
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getWindDirectionDrawable
-import com.weatherxm.util.Weather.roundToDecimals
+import com.weatherxm.util.NumberUtils.roundToDecimals
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

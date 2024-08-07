@@ -1,7 +1,7 @@
 package com.weatherxm.data
 
-import android.content.Context
 import com.squareup.moshi.Moshi
+import com.weatherxm.TestConfig.context
 import com.weatherxm.data.adapters.LocalDateJsonAdapter
 import com.weatherxm.data.adapters.LocalDateTimeJsonAdapter
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
@@ -9,7 +9,6 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.mockk
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
@@ -23,7 +22,6 @@ import java.time.ZonedDateTime
 class FrequencyHelperTest : KoinTest, BehaviorSpec({
     val moshi: Moshi by inject(Moshi::class.java)
     val defaultFrequency = Frequency.EU868
-    val context = mockk<Context>()
 
     /**
      * Open the file under test/resources/countries_information.json as an InputStream

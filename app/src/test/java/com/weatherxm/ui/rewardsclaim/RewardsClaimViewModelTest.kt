@@ -1,9 +1,9 @@
 package com.weatherxm.ui.rewardsclaim
 
 import com.weatherxm.R
+import com.weatherxm.TestConfig.resources
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.util.DisplayModeHelper
-import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -11,7 +11,6 @@ import io.mockk.mockk
 
 class RewardsClaimViewModelTest : BehaviorSpec({
     val displayModeHelper = mockk<DisplayModeHelper>()
-    val resources = mockk<Resources>()
     val viewModel = RewardsClaimViewModel(displayModeHelper, resources)
     val testWalletRewards = UIWalletRewards(10.0, 20.0, 30.0, "0x00")
 

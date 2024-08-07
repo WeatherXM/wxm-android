@@ -2,6 +2,7 @@ package com.weatherxm.ui.passwordprompt
 
 import arrow.core.Either
 import com.weatherxm.R
+import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.analytics.AnalyticsWrapper
@@ -29,7 +30,6 @@ import org.koin.dsl.module
 @OptIn(ExperimentalCoroutinesApi::class)
 class PasswordPromptViewModelTest : BehaviorSpec({
     val usecase = mockk<PasswordPromptUseCase>()
-    val resources = mockk<Resources>()
     val analytics = mockk<AnalyticsWrapper>()
     val viewModel = PasswordPromptViewModel(usecase, resources, analytics)
     val tooSmallPassword = "test"

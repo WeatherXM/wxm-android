@@ -2,6 +2,7 @@ package com.weatherxm.util
 
 import com.weatherxm.R
 import com.weatherxm.ui.common.AnnotationGroupCode
+import com.weatherxm.ui.common.empty
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.getRewardIcon
 import com.weatherxm.util.Rewards.getRewardScoreColor
@@ -62,6 +63,11 @@ class RewardsTest : BehaviorSpec({
     }
     context("Formatting tokens as a text with min 2 and max 3 decimals") {
         given("a token amount") {
+            When("it is null") {
+                then("the formatter should return an empty string") {
+                    formatTokens(null) shouldBe String.empty()
+                }
+            }
             When("it is zero") {
                 then("the formatter should return 0.00") {
                     formatTokens(0F) shouldBe "0.00"
