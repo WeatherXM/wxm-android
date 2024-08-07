@@ -85,11 +85,9 @@ class RewardsTest : BehaviorSpec({
                 }
             }
             When("it has >=3 decimals") {
-                then("the formatter should return the amount with 3 or 4 decimals") {
-                    formatTokens(10.001F) shouldBe "10.001"
-                    formatTokens(10.0001F) shouldBe "10.0001"
-                    formatTokens(10.0006F) shouldBe "10.0006"
-                    formatTokens(10.00006F) shouldBe "10.0001"
+                then("the formatter should return the amount with 2 decimals") {
+                    formatTokens(10.001F) shouldBe "10.00"
+                    formatTokens(10.005F) shouldBe "10.01"
                 }
             }
         }
@@ -103,7 +101,7 @@ class RewardsTest : BehaviorSpec({
             }
             When("it is bigger than zero") {
                 then("the validator should return make the conversion and format the tokens") {
-                    formatTokens(weiToETH(9.9999999E14F.toBigDecimal())) shouldBe "0.001"
+                    formatTokens(weiToETH(BigDecimal.valueOf(10000000000000000))) shouldBe "0.01"
                 }
             }
         }
