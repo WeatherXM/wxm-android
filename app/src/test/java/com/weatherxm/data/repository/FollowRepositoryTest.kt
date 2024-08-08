@@ -1,10 +1,10 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
+import com.weatherxm.TestConfig.failure
+import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.TestUtils.mockEitherLeft
-import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.CacheFollowDataSource
 import com.weatherxm.data.datasource.NetworkFollowDataSource
 import io.kotest.core.spec.style.BehaviorSpec
@@ -18,14 +18,13 @@ class FollowRepositoryTest : BehaviorSpec({
     val cacheSource = mockk<CacheFollowDataSource>()
     val repo = FollowRepositoryImpl(networkSource, cacheSource)
 
-    val failure = mockk<Failure>()
     val validId = "testId"
     val emptyId = ""
 
     beforeSpec {
-        mockEitherLeft({ networkSource.followStation(emptyId) }, failure)
+        coMockEitherLeft({ networkSource.followStation(emptyId) }, failure)
         coMockEitherRight({ networkSource.followStation(validId) }, Unit)
-        mockEitherLeft({ networkSource.unfollowStation(emptyId) }, failure)
+        coMockEitherLeft({ networkSource.unfollowStation(emptyId) }, failure)
         coMockEitherRight({ networkSource.unfollowStation(validId) }, Unit)
         coJustRun { cacheSource.followStation(emptyId) }
         coJustRun { cacheSource.followStation(validId) }

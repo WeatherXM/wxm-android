@@ -3,9 +3,7 @@ package com.weatherxm.ui.analytics
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.usecases.AnalyticsOptInUseCase
 import io.kotest.core.spec.style.BehaviorSpec
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
 
@@ -25,8 +23,8 @@ class AnalyticsOptInViewModelTest : BehaviorSpec({
         usecase = mockk<AnalyticsOptInUseCase>()
         wrapper = mockk<AnalyticsWrapper>()
         viewModel = AnalyticsOptInViewModel(usecase, wrapper)
-        every { usecase.setAnalyticsEnabled(any()) } just Runs
-        every { wrapper.setAnalyticsEnabled(any()) } just Runs
+        justRun { usecase.setAnalyticsEnabled(any()) }
+        justRun { wrapper.setAnalyticsEnabled(any()) }
     }
 
     context("Analytics-related code in Analytics Use Case & Analytics Wrapper is called") {

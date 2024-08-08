@@ -2,9 +2,7 @@ package com.weatherxm.usecases
 
 import com.weatherxm.data.repository.UserPreferencesRepository
 import io.kotest.core.spec.style.BehaviorSpec
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
 
@@ -15,7 +13,7 @@ class AnalyticsOptInUseCaseTest : BehaviorSpec({
     beforeTest {
         repo = mockk<UserPreferencesRepository>()
         usecase = AnalyticsOptInUseCaseImpl(repo)
-        every { repo.setAnalyticsEnabled(any()) } just Runs
+        justRun { repo.setAnalyticsEnabled(any()) }
     }
 
     context("Analytics-related code in User Preferences Repository is called") {

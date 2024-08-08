@@ -2,10 +2,10 @@ package com.weatherxm.ui.passwordprompt
 
 import com.weatherxm.R
 import com.weatherxm.TestConfig.resources
+import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.TestUtils.mockEitherLeft
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.ui.InstantExecutorListener
@@ -13,9 +13,8 @@ import com.weatherxm.usecases.PasswordPromptUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
-import io.mockk.Runs
 import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -53,10 +52,10 @@ class PasswordPromptViewModelTest : BehaviorSpec({
 
         val failure = ApiError.AuthError.LoginError.InvalidPassword("")
         every { resources.getString(R.string.error_invalid_password) } returns invalidPassMsg
-        every { analytics.trackEventFailure(any()) } just Runs
+        justRun { analytics.trackEventFailure(any()) }
         every { failure.getDefaultMessage(R.string.error_invalid_password) } returns invalidPassMsg
         coMockEitherRight({ usecase.isPasswordCorrect(validPassword) }, Unit)
-        mockEitherLeft({ usecase.isPasswordCorrect(invalidPassword) }, failure)
+        coMockEitherLeft({ usecase.isPasswordCorrect(invalidPassword) }, failure)
     }
 
     context("Check if Password is correct") {

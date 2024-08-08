@@ -16,11 +16,10 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
-import io.mockk.runs
 import io.mockk.verify
 
 class WidgetHelperTest : BehaviorSpec({
@@ -52,7 +51,7 @@ class WidgetHelperTest : BehaviorSpec({
         every {
             anyConstructed<Intent>().putExtra(Contracts.ARG_WIDGET_SHOULD_SELECT_STATION, true)
         } returns mockk()
-        every { context.sendBroadcast(any()) } just runs
+        justRun { context.sendBroadcast(any()) }
     }
 
     suspend fun BehaviorSpecWhenContainerScope.testWidgetTypeById(

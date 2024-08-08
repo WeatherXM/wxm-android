@@ -1,10 +1,10 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
+import com.weatherxm.TestConfig.failure
+import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.TestUtils.mockEitherLeft
-import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkStatsResponse
 import com.weatherxm.data.datasource.StatsDataSource
 import io.kotest.core.spec.style.BehaviorSpec
@@ -16,7 +16,6 @@ class StatsRepositoryTest : BehaviorSpec({
     lateinit var dataSource: StatsDataSource
     lateinit var repo: StatsRepository
     val mockResponse = mockk<NetworkStatsResponse>()
-    val failure = mockk<Failure>()
 
     beforeContainer {
         dataSource = mockk<StatsDataSource>()
@@ -33,7 +32,7 @@ class StatsRepositoryTest : BehaviorSpec({
         }
         When("the request fails") {
             then("return a failure") {
-                mockEitherLeft({ repo.getNetworkStats() }, failure)
+                coMockEitherLeft({ repo.getNetworkStats() }, failure)
                 repo.getNetworkStats() shouldBe Either.Left(failure)
                 coVerify(exactly = 1) { dataSource.getNetworkStats() }
             }

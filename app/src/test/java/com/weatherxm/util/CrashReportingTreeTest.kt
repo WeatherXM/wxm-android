@@ -2,9 +2,7 @@ package com.weatherxm.util
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.kotest.core.spec.style.BehaviorSpec
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
 import timber.log.Timber
@@ -17,8 +15,8 @@ class CrashReportingTreeTest : BehaviorSpec({
     beforeContainer {
         crashlytics = mockk<FirebaseCrashlytics>()
         Timber.plant(CrashReportingTree(crashlytics))
-        every { crashlytics.log(any()) } just Runs
-        every { crashlytics.recordException(any()) } just Runs
+        justRun { crashlytics.log(any()) }
+        justRun { crashlytics.recordException(any()) }
     }
 
     given("CrashReportingTree planted in Timber") {
