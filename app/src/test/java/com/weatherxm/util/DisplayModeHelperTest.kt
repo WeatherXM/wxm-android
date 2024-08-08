@@ -15,9 +15,8 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
 import io.kotest.matchers.shouldBe
-import io.mockk.Runs
 import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
@@ -39,9 +38,9 @@ class DisplayModeHelperTest : BehaviorSpec({
         every { androidResources.getString(R.string.dark_value) } returns dark
         every { androidResources.getString(R.string.light_value) } returns light
         every { androidResources.getString(R.string.system_value) } returns system
-        every { analyticsWrapper.setDisplayMode(any()) } just Runs
+        justRun { analyticsWrapper.setDisplayMode(any()) }
         mockkStatic(AppCompatDelegate::class)
-        every { AppCompatDelegate.setDefaultNightMode(any()) } just Runs
+        justRun { AppCompatDelegate.setDefaultNightMode(any()) }
     }
 
     suspend fun BehaviorSpecWhenContainerScope.testDisplayMode(
@@ -106,7 +105,7 @@ class DisplayModeHelperTest : BehaviorSpec({
         given("no selected display mode") {
             // Re-mock AppCompatDelegate to reset calls and use the `exactly` arg below
             mockkStatic(AppCompatDelegate::class)
-            every { AppCompatDelegate.setDefaultNightMode(any()) } just Runs
+            justRun { AppCompatDelegate.setDefaultNightMode(any()) }
             every { sharedPref.getString(theme, system) } returns system
             displayModeHelper.setDisplayMode()
             then("System should be set") {

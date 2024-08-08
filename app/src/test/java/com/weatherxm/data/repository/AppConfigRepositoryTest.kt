@@ -3,14 +3,13 @@ package com.weatherxm.data.repository
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.installations.FirebaseInstallations
-import com.weatherxm.TestUtils.mockEitherLeft
+import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.mockEitherRight
 import com.weatherxm.data.datasource.AppConfigDataSource
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.Runs
 import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.slot
@@ -28,8 +27,8 @@ class AppConfigRepositoryTest : BehaviorSpec({
 
     beforeSpec {
         every { dataSource.getChangelog() } returns changelog
-        every { dataSource.setLastRemindedVersion() } just Runs
-        every { dataSource.setInstallationId(installationId) } just Runs
+        justRun { dataSource.setLastRemindedVersion() }
+        justRun { dataSource.setInstallationId(installationId) }
         mockkStatic("com.google.firebase.installations.FirebaseInstallations")
         every { mockGetIdTask.addOnCompleteListener(capture(slot)) } answers {
             slot.captured.onComplete(mockGetIdTask)
@@ -91,7 +90,7 @@ class AppConfigRepositoryTest : BehaviorSpec({
             }
         }
         When("We cannot get the installation ID from the data source") {
-            mockEitherLeft({ dataSource.getInstallationId() }, mockk())
+            coMockEitherLeft({ dataSource.getInstallationId() }, mockk())
             and("We get the installation ID from firebase installations") {
                 every { mockGetIdTask.exception } returns null
                 then("return it") {

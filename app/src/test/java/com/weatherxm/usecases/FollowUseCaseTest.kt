@@ -1,18 +1,16 @@
 package com.weatherxm.usecases
 
 import arrow.core.Either
+import com.weatherxm.TestConfig.failure
+import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.TestUtils.mockEitherLeft
-import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.FollowRepository
 import com.weatherxm.util.WidgetHelper
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.Runs
 import io.mockk.coVerify
-import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
 
@@ -21,16 +19,15 @@ class FollowUseCaseTest : BehaviorSpec({
     val widgetHelper = mockk<WidgetHelper>()
     val usecase = FollowUseCaseImpl(repo, widgetHelper)
 
-    val failure = mockk<Failure>()
     val validId = "testId"
     val emptyId = ""
 
     beforeSpec {
-        mockEitherLeft({ repo.followStation(emptyId) }, failure)
+        coMockEitherLeft({ repo.followStation(emptyId) }, failure)
         coMockEitherRight({ repo.followStation(validId) }, Unit)
-        mockEitherLeft({ repo.unfollowStation(emptyId) }, failure)
+        coMockEitherLeft({ repo.unfollowStation(emptyId) }, failure)
         coMockEitherRight({ repo.unfollowStation(validId) }, Unit)
-        every { widgetHelper.onUnfollowEvent(validId) } just Runs
+        justRun { widgetHelper.onUnfollowEvent(validId) }
     }
 
     context("Follow request in usecase") {

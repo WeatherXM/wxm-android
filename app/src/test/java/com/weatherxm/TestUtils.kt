@@ -24,7 +24,11 @@ object TestUtils {
         this shouldBe Resource.error(errorMsg)
     }
 
-    fun mockEitherLeft(function: suspend () -> Either<Failure, Any?>, failure: Failure) {
+    fun mockEitherLeft(function: () -> Either<Failure, Any?>, failure: Failure) {
+        every { function() } returns Either.Left(failure)
+    }
+
+    fun coMockEitherLeft(function: suspend () -> Either<Failure, Any?>, failure: Failure) {
         coEvery { function() } returns Either.Left(failure)
     }
 

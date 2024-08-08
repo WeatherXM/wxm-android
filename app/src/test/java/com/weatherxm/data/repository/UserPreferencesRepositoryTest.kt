@@ -3,9 +3,8 @@ package com.weatherxm.data.repository
 import com.weatherxm.data.datasource.UserPreferenceDataSource
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.Runs
 import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
 
@@ -19,11 +18,11 @@ class UserPreferencesRepositoryTest : BehaviorSpec({
     val sortFilterGroupOptions = listOf(sort, filter, group)
 
     beforeSpec {
-        every { dataSource.setAnalyticsEnabled(any()) } just Runs
-        every { dataSource.dismissSurveyPrompt() } just Runs
-        every { dataSource.setWalletWarningDismissTimestamp() } just Runs
+        justRun { dataSource.setAnalyticsEnabled(any()) }
+        justRun { dataSource.dismissSurveyPrompt() }
+        justRun { dataSource.setWalletWarningDismissTimestamp() }
         every { dataSource.getWalletWarningDismissTimestamp() } returns 0
-        every { dataSource.setDevicesSortFilterOptions(sort, filter, group) } just Runs
+        justRun { dataSource.setDevicesSortFilterOptions(sort, filter, group) }
         every { dataSource.getDevicesSortFilterOptions() } returns sortFilterGroupOptions
     }
 

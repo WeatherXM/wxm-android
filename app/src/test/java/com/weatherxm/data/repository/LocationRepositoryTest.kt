@@ -3,7 +3,7 @@ package com.weatherxm.data.repository
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.TestUtils.mockEitherLeft
+import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.data.Location
 import com.weatherxm.data.datasource.CacheAddressSearchDataSource
 import com.weatherxm.data.datasource.LocationDataSource
@@ -39,7 +39,7 @@ class LocationRepositoryTest : BehaviorSpec({
             }
         }
         When("it's not in the cache") {
-            mockEitherLeft(
+            coMockEitherLeft(
                 { cacheSearchSource.getSuggestionLocation(searchSuggestion) }, mockk()
             )
             and("we can get it from the network") {

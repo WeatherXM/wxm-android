@@ -5,9 +5,7 @@ import com.weatherxm.TestConfig.context
 import com.weatherxm.TestConfig.sharedPref
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -25,15 +23,15 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
     val testHasWallet = true
 
     fun AnalyticsService.mockResponses() {
-        every { setAnalyticsEnabled(any() as Boolean) } just Runs
-        every { onLogout() } just Runs
-        every { setUserId(any()) } just Runs
-        every { setUserProperties(any()) } just Runs
-        every { trackScreen(any() as AnalyticsService.Screen, any(), any()) } just Runs
-        every { trackEventUserAction(any(), any()) } just Runs
-        every { trackEventViewContent(any(), any()) } just Runs
-        every { trackEventPrompt(any(), any(), any()) } just Runs
-        every { trackEventSelectContent(any()) } just Runs
+        justRun { setAnalyticsEnabled(any() as Boolean) }
+        justRun { onLogout() }
+        justRun { setUserId(any()) }
+        justRun { setUserProperties(any()) }
+        justRun { trackScreen(any() as AnalyticsService.Screen, any(), any()) }
+        justRun { trackEventUserAction(any(), any()) }
+        justRun { trackEventViewContent(any(), any()) }
+        justRun { trackEventPrompt(any(), any(), any()) }
+        justRun { trackEventSelectContent(any()) }
     }
 
     beforeSpec {

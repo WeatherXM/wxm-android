@@ -6,10 +6,10 @@ import android.text.format.DateFormat
 import arrow.core.Either
 import com.github.mikephil.charting.data.Entry
 import com.weatherxm.TestConfig.context
+import com.weatherxm.TestConfig.failure
+import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
-import com.weatherxm.TestUtils.mockEitherLeft
 import com.weatherxm.data.Connectivity
-import com.weatherxm.data.Failure
 import com.weatherxm.data.HOUR_FORMAT_24H
 import com.weatherxm.data.NetworkStatsContracts
 import com.weatherxm.data.NetworkStatsCustomers
@@ -114,7 +114,7 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
     context("Get Network Stats") {
         given("an API call that fetches the Network Stats") {
             When("the API call fails") {
-                mockEitherLeft({ repo.getNetworkStats() }, failure)
+                coMockEitherLeft({ repo.getNetworkStats() }, failure)
                 then("a failure should be returned") {
                     usecase.getNetworkStats() shouldBe Either.Left(failure)
                 }

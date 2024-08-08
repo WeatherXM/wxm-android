@@ -1,10 +1,10 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
+import com.weatherxm.TestConfig.failure
+import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.TestUtils.mockEitherLeft
-import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
 import io.kotest.core.spec.style.BehaviorSpec
@@ -20,7 +20,6 @@ class WalletRepositoryTest : BehaviorSpec({
     lateinit var repo: WalletRepository
 
     val walletAddress = "address"
-    val failure = mockk<Failure>()
 
     beforeInvocation { testCase, _ ->
         if (testCase.isRootTest()) {
@@ -39,7 +38,7 @@ class WalletRepositoryTest : BehaviorSpec({
             }
         }
         When("it's not in the cache") {
-            mockEitherLeft({ cacheSource.getWalletAddress() }, failure)
+            coMockEitherLeft({ cacheSource.getWalletAddress() }, failure)
             and("we can get it from the network") {
                 and("it's null") {
                     coMockEitherRight({ networkSource.getWalletAddress() }, null)
@@ -61,7 +60,7 @@ class WalletRepositoryTest : BehaviorSpec({
                 }
             }
             and("we can't get it from the network") {
-                mockEitherLeft({ networkSource.getWalletAddress() }, failure)
+                coMockEitherLeft({ networkSource.getWalletAddress() }, failure)
                 then("return a failure") {
                     repo.getWalletAddress() shouldBe Either.Left(failure)
                 }
@@ -82,7 +81,7 @@ class WalletRepositoryTest : BehaviorSpec({
                     }
                 }
                 and("it's not successful") {
-                    mockEitherLeft({ networkSource.setWalletAddress(walletAddress) }, failure)
+                    coMockEitherLeft({ networkSource.setWalletAddress(walletAddress) }, failure)
                     then("return a failure") {
                         repo.setWalletAddress(walletAddress) shouldBe Either.Left(failure)
                     }
