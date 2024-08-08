@@ -1,10 +1,6 @@
 package com.weatherxm.data.repository
 
-import arrow.core.handleErrorWith
-import com.google.firebase.installations.FirebaseInstallations
 import com.weatherxm.data.datasource.AppConfigDataSource
-import com.weatherxm.data.safeAwait
-import timber.log.Timber
 
 interface AppConfigRepository {
     fun shouldUpdate(): Boolean
@@ -18,8 +14,7 @@ interface AppConfigRepository {
 }
 
 class AppConfigRepositoryImpl(
-    private val appConfigDataSource: AppConfigDataSource,
-    private val firebaseInstallations: FirebaseInstallations
+    private val appConfigDataSource: AppConfigDataSource
 ) : AppConfigRepository {
 
     override fun shouldUpdate(): Boolean {
@@ -47,13 +42,6 @@ class AppConfigRepositoryImpl(
      */
     override fun getInstallationId(): String? {
         return appConfigDataSource.getInstallationId()
-            .handleErrorWith {
-                firebaseInstallations.id.safeAwait().onRight {
-                    Timber.d("Installation ID: $it")
-                    appConfigDataSource.setInstallationId(it)
-                }
-            }
-            .getOrNull()
     }
 
     override fun isMainnetEnabled(): Boolean {

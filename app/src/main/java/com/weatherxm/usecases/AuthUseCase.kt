@@ -5,6 +5,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.User
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.repository.AuthRepository
+import com.weatherxm.data.repository.NotificationsRepository
 import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.data.repository.UserRepository
 
@@ -25,6 +26,7 @@ interface AuthUseCase {
 class AuthUseCaseImpl(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository,
+    private val notificationsRepository: NotificationsRepository,
     private val userPreferencesRepository: UserPreferencesRepository
 ) : AuthUseCase {
 
@@ -43,7 +45,9 @@ class AuthUseCaseImpl(
     }
 
     override suspend fun login(username: String, password: String): Either<Failure, AuthToken> {
-        return authRepository.login(username, password)
+        return authRepository.login(username, password).onRight {
+            notificationsRepository.setFcmToken()
+        }
     }
 
     override suspend fun getUser(): Either<Failure, User> {

@@ -29,18 +29,21 @@ class AuthRequestInterceptor(
     }
 
     private fun extractAuthToken(response: Response): Response {
-        if (response.isSuccessful) {
-            try {
+        if (!response.isSuccessful) {
+            return response
+        }
+
+        try {
+            val body = response.peekBody(Long.MAX_VALUE).string()
+            if (body.isNotEmpty()) {
                 Timber.d("[${response.path()}] Trying to extract auth token.")
-                val body = response.peekBody(Long.MAX_VALUE).string()
-                val authToken = authTokenJsonAdapter.fromJson(body)
-                authToken?.let {
+                authTokenJsonAdapter.fromJson(body)?.let {
                     Timber.d("[${response.path()}] Saving token from response.")
-                    runBlocking { cacheAuthDataSource.setAuthToken(authToken) }
+                    runBlocking { cacheAuthDataSource.setAuthToken(it) }
                 }
-            } catch (e: IOException) {
-                Timber.d(e, "[${response.path()}] Failed to extract auth token.")
             }
+        } catch (e: IOException) {
+            Timber.d(e, "[${response.path()}] Failed to extract auth token.")
         }
         return response
     }

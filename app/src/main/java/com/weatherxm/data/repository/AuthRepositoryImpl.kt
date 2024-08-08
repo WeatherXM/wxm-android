@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.flatMap
 import com.weatherxm.BuildConfig
 import com.weatherxm.data.Failure
+import com.weatherxm.data.datasource.AppConfigDataSource
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.DatabaseExplorerDataSource
@@ -18,6 +19,7 @@ class AuthRepositoryImpl(
     private val networkAuthDataSource: NetworkAuthDataSource,
     private val cacheUserDataSource: CacheUserDataSource,
     private val databaseExplorerDataSource: DatabaseExplorerDataSource,
+    private val appConfigDataSource: AppConfigDataSource,
     private val cacheService: CacheService
 ) : AuthRepository {
 
@@ -30,7 +32,7 @@ class AuthRepositoryImpl(
 
     override suspend fun logout() {
         cacheService.getAuthToken().onRight {
-            networkAuthDataSource.logout(it.access)
+            networkAuthDataSource.logout(it.access, appConfigDataSource.getInstallationId())
         }
         databaseExplorerDataSource.deleteAll()
         cacheService.clearAll()

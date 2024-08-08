@@ -10,7 +10,6 @@ import androidx.work.Constraints
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
@@ -20,6 +19,7 @@ import arrow.core.getOrElse
 import arrow.core.right
 import com.weatherxm.data.ApiError.GenericError.JWTError.ForbiddenError
 import com.weatherxm.data.UserActionError.UserNotLoggedInError
+import com.weatherxm.data.requireNetwork
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.data.services.CacheService.Companion.KEY_CURRENT_WEATHER_WIDGET_IDS
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
@@ -59,9 +59,6 @@ class CurrentWeatherWidgetWorkerUpdate(
 
         fun initAndStart(context: Context, appWidgetId: Int, deviceId: String) {
             Timber.d("Updating Work Manager for widget [$appWidgetId].")
-            val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
             val data = Data.Builder()
                 .putInt(ARG_WIDGET_ID, appWidgetId)
                 .putString(ARG_DEVICE_ID, deviceId)
@@ -70,7 +67,7 @@ class CurrentWeatherWidgetWorkerUpdate(
             val widgetUpdateRequest = PeriodicWorkRequestBuilder<CurrentWeatherWidgetWorkerUpdate>(
                 UPDATE_INTERVAL_IN_MINS,
                 TimeUnit.MINUTES
-            ).setConstraints(constraints).setInputData(data).build()
+            ).setConstraints(Constraints.requireNetwork()).setInputData(data).build()
 
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 "CURRENT_WEATHER_UPDATE_WORK_$appWidgetId",

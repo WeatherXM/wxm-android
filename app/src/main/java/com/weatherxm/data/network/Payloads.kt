@@ -28,8 +28,9 @@ data class RefreshBody(
 
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class AccessTokenBody(
-    val accessToken: String
+data class LogoutBody(
+    val accessToken: String,
+    val installationId: String? = null
 ) : Parcelable
 
 @JsonClass(generateAdapter = true)

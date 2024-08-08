@@ -31,7 +31,10 @@ class CacheAuthDataSource(private val cacheService: CacheService) : AuthDataSour
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 
-    override suspend fun logout(accessToken: String): Either<Failure, Unit> {
+    override suspend fun logout(
+        accessToken: String,
+        installationId: String?
+    ): Either<Failure, Unit> {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 

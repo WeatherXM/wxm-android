@@ -14,6 +14,7 @@ import com.google.firebase.messaging.RemoteMessage
 import com.weatherxm.R
 import com.weatherxm.data.RemoteMessageType
 import com.weatherxm.data.WXMRemoteMessage
+import com.weatherxm.service.workers.RefreshFcmApiWorker
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_URL
@@ -51,7 +52,11 @@ class MessagingService : FirebaseMessagingService() {
      * FCM registration token is initially generated so this is where you would retrieve the token.
      */
     override fun onNewToken(token: String) {
-        Timber.d("Refreshed Firebase token: $token")
+        Timber.d("Refreshed FCM token: $token")
+        /**
+         * Init and invoke the work manager to update FCM token in the server
+         */
+        RefreshFcmApiWorker.initAndRefreshToken(applicationContext, token)
     }
 
     private fun handleNotification(remoteMessage: RemoteMessage, context: Context) {
