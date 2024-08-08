@@ -236,17 +236,7 @@ fun RemoteViews.setWeatherData(
         setTextViewText(R.id.windUnit, "$windUnit $windDirectionUnit")
         setImageViewBitmap(R.id.windIconDirection, windDirectionDrawable?.toBitmap())
 
-        @Suppress("UseCheckOrError")
-        setImageViewResource(
-            R.id.stationHomeFollowIcon,
-            when (device.relation) {
-                DeviceRelation.OWNED -> R.drawable.ic_home
-                DeviceRelation.FOLLOWED -> R.drawable.ic_favorite
-                DeviceRelation.UNFOLLOWED -> R.drawable.ic_favorite_outline
-                null -> throw IllegalStateException("Oops! No device relation here.")
-            }
-        )
-
+        setRelationIcon(device.relation)
 
         val rainRateValue = Weather.getFormattedPrecipitation(
             device.currentWeather?.precipitation, includeUnit = false
@@ -295,4 +285,17 @@ fun RemoteViews.setWeatherData(
 
         setTextViewText(R.id.uvValue, Weather.getFormattedUV(device.currentWeather?.uvIndex))
     }
+}
+
+private fun RemoteViews.setRelationIcon(relation: DeviceRelation?) {
+    @Suppress("UseCheckOrError")
+    setImageViewResource(
+        R.id.stationHomeFollowIcon,
+        when (relation) {
+            DeviceRelation.OWNED -> R.drawable.ic_home
+            DeviceRelation.FOLLOWED -> R.drawable.ic_favorite
+            DeviceRelation.UNFOLLOWED -> R.drawable.ic_favorite_outline
+            null -> throw IllegalStateException("Oops! No device relation here.")
+        }
+    )
 }
