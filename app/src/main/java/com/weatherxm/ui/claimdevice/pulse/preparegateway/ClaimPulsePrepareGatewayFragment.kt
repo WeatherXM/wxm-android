@@ -31,6 +31,7 @@ class ClaimPulsePrepareGatewayFragment : BaseFragment() {
         binding.secondStep.setHtml(R.string.prepare_gateway_pulse_second_step)
 
         binding.enterManuallyBtn.setOnClickListener {
+            dismissSnackbar()
             model.next()
         }
 
@@ -45,6 +46,7 @@ class ClaimPulsePrepareGatewayFragment : BaseFragment() {
         scanner.startScan()
             .addOnSuccessListener { barcode ->
                 val scannedInfo = barcode.rawValue?.removePrefix("P") ?: String.empty()
+                dismissSnackbar()
                 if (model.validateSerial(scannedInfo)) {
                     model.setSerialNumber(scannedInfo)
                     model.next(2)
