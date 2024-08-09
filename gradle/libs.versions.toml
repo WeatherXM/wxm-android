@@ -25,6 +25,7 @@ androidx-viewpager2 = "1.1.0"
 androidx-work-runtime-ktx = "2.9.0"
 better-link-movement-method = "2.2.0"
 arrow = "1.2.4"
+barcode-scanner = "4.3.0"
 chucker = "4.0.0"
 coil-base = "2.7.0"
 desugar_jdk_libs = "2.0.4"
@@ -97,6 +98,7 @@ androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref =
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work-runtime-ktx" }
 arrow-stack-bom = { group = "io.arrow-kt", name = "arrow-stack", version.ref = "arrow" }
 arrow-core = { module = "io.arrow-kt:arrow-core" }
+barcode-scanner = { module = "com.journeyapps:zxing-android-embedded", version.ref = "barcode-scanner" }
 better-link-movement-method = { module = "me.saket:better-link-movement-method", version.ref = "better-link-movement-method" }
 chucker-no-op = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
 chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }

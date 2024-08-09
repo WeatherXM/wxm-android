@@ -1,24 +1,43 @@
 package com.weatherxm.ui.claimdevice.pulse.preparegateway
 
+import android.Manifest.permission.CAMERA
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanOptions
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentClaimPulsePrepareClaimingBinding
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.components.BaseFragment
-import org.koin.android.ext.android.inject
+import com.weatherxm.util.checkPermissionsAndThen
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
-import timber.log.Timber
 
 class ClaimPulsePrepareGatewayFragment : BaseFragment() {
     private val model: ClaimPulseViewModel by activityViewModel()
-    private val scanner: GmsBarcodeScanner by inject()
     private lateinit var binding: FragmentClaimPulsePrepareClaimingBinding
+
+    // Register the launcher and result handler for QR code scanner
+    private val barcodeLauncher = registerForActivityResult(ScanContract()) {
+        if (!it.contents.isNullOrEmpty()) {
+            println("[BARCODE SCAN RESULT]: $it")
+            val scannedInfo = it.contents.removePrefix("P")
+            if (model.validateSerial(scannedInfo)) {
+                model.setSerialNumber(scannedInfo)
+                model.next(2)
+            } else {
+                showSnackbarMessage(
+                    binding.root,
+                    getString(R.string.prepare_gateway_invalid_barcode),
+                    callback = { snackbar?.dismiss() },
+                    R.string.action_dismiss,
+                    binding.buttonBar
+                )
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,38 +54,23 @@ class ClaimPulsePrepareGatewayFragment : BaseFragment() {
         }
 
         binding.scanBtn.setOnClickListener {
-            scanBarcode()
+            activity?.checkPermissionsAndThen(
+                permissions = arrayOf(CAMERA),
+                rationaleTitle = getString(R.string.camera_permission_required_title),
+                rationaleMessage = getString(R.string.camera_permission_required),
+                onGranted = {
+                    barcodeLauncher.launch(
+                        ScanOptions()
+                            .setDesiredBarcodeFormats(ScanOptions.CODE_128)
+                            .setBeepEnabled(false)
+                    )
+                },
+                onDenied = {
+                    // Do nothing
+                }
+            )
         }
 
         return binding.root
-    }
-
-    private fun scanBarcode() {
-        scanner.startScan()
-            .addOnSuccessListener { barcode ->
-                val scannedInfo = barcode.rawValue?.removePrefix("P") ?: String.empty()
-                if (model.validateSerial(scannedInfo)) {
-                    model.setSerialNumber(scannedInfo)
-                    model.next(2)
-                } else {
-                    showSnackbarMessage(
-                        binding.root,
-                        getString(R.string.prepare_gateway_invalid_barcode),
-                        callback = { snackbar?.dismiss() },
-                        R.string.action_dismiss,
-                        binding.buttonBar
-                    )
-                }
-            }
-            .addOnFailureListener { e ->
-                Timber.e(e, "Failure when scanning Barcode of the device")
-                showSnackbarMessage(
-                    binding.root,
-                    getString(R.string.error_connect_wallet_scan_exception, e.message),
-                    callback = { snackbar?.dismiss() },
-                    R.string.action_dismiss,
-                    binding.buttonBar
-                )
-            }
     }
 }
