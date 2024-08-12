@@ -9,6 +9,7 @@ import com.weatherxm.data.datasource.CacheFollowDataSource
 import com.weatherxm.data.datasource.NetworkFollowDataSource
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -20,6 +21,7 @@ class FollowRepositoryTest : BehaviorSpec({
 
     val validId = "testId"
     val emptyId = ""
+    val ids = listOf(validId, validId)
 
     beforeSpec {
         coMockEitherLeft({ networkSource.followStation(emptyId) }, failure)
@@ -30,6 +32,8 @@ class FollowRepositoryTest : BehaviorSpec({
         coJustRun { cacheSource.followStation(validId) }
         coJustRun { cacheSource.unfollowStation(emptyId) }
         coJustRun { cacheSource.unfollowStation(validId) }
+        coJustRun { cacheSource.setFollowedDevicesIds(ids) }
+        coEvery { cacheSource.getFollowedDevicesIds() } returns ids
     }
 
     context("Follow request in Repository") {
@@ -71,6 +75,21 @@ class FollowRepositoryTest : BehaviorSpec({
                 and("Remove it from the cache") {
                     coVerify(exactly = 1) { cacheSource.unfollowStation(validId) }
                 }
+            }
+        }
+    }
+
+    context("Get/set followed devices IDs") {
+        given("a list of device IDs") {
+            then("Set them in cache") {
+                repo.setFollowedDevicesIds(ids)
+                coVerify(exactly = 1) { cacheSource.setFollowedDevicesIds(ids) }
+            }
+        }
+        given("a request to get the device IDs of followed stations") {
+            then("Get them from cache") {
+                repo.getFollowedDevicesIds() shouldBe ids
+                coVerify(exactly = 1) { cacheSource.getFollowedDevicesIds() }
             }
         }
     }
