@@ -1,6 +1,5 @@
 package com.weatherxm.data.repository
 
-import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
@@ -15,7 +14,6 @@ import com.weatherxm.data.datasource.RewardsDataSource
 import com.weatherxm.data.repository.RewardsRepositoryImpl.Companion.TIMELINE_MINUS_MONTHS_TO_FETCH
 import com.weatherxm.util.toISODate
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
 import io.mockk.mockk
 import java.time.ZoneId
 import java.time.ZonedDateTime

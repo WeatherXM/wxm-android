@@ -4,7 +4,6 @@ import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
-import io.kotest.assertions.fail
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.every

@@ -1,7 +1,6 @@
 package com.weatherxm.data.repository.bluetooth
 
 import android.bluetooth.BluetoothDevice
-import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight

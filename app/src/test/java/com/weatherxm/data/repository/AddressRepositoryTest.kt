@@ -1,6 +1,5 @@
 package com.weatherxm.data.repository
 
-import arrow.core.Either
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.ResultAccuracy
 import com.mapbox.search.result.SearchAddress

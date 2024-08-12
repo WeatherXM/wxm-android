@@ -3,7 +3,6 @@ package com.weatherxm.usecases
 import android.icu.text.CompactDecimalFormat
 import android.icu.text.NumberFormat
 import android.text.format.DateFormat
-import arrow.core.Either
 import com.github.mikephil.charting.data.Entry
 import com.weatherxm.TestConfig.context
 import com.weatherxm.TestConfig.failure

@@ -16,7 +16,6 @@ import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_PL
 import com.weatherxm.ui.explorer.SearchResult
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
-import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk

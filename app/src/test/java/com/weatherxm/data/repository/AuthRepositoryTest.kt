@@ -1,6 +1,5 @@
 package com.weatherxm.data.repository
 
-import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
@@ -13,9 +12,9 @@ import com.weatherxm.data.datasource.NetworkAuthDataSource
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.services.CacheService
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 
@@ -32,6 +31,7 @@ class AuthRepositoryTest : BehaviorSpec({
     val firstName = "firstName"
     val lastName = "lastName"
     val authToken = AuthToken("access", "refresh")
+    val mockedAuthToken = mockk<AuthToken>()
 
     beforeContainer {
         networkAuthDataSource = mockk<NetworkAuthDataSource>()
@@ -51,11 +51,6 @@ class AuthRepositoryTest : BehaviorSpec({
         coJustRun { networkAuthDataSource.logout(authToken.access) }
         justRun { cacheService.clearAll() }
         coMockEitherRight({ cacheUserDataSource.getUserUsername() }, email)
-//        mockkStatic(Base64::class)
-//        every { Base64.decode(any<String>(), any()) } returns byteArrayOf()
-//        mockkConstructor(JWT::class)
-//        every { JWT(authToken.access) } returns mockk()
-//        every { JWT(authToken.refresh) } returns mockk()
     }
 
     context("Perform Auth related actions") {
@@ -103,33 +98,31 @@ class AuthRepositoryTest : BehaviorSpec({
             }
         }
         given("An isLoggedIn check") {
-            // TODO: Explore RoboElectric here because of JWT & Base64 mocking issues 
-//            When("auth token is in cache") {
-//                and("access token is valid") {
-//                    coMockEitherRight({ cacheAuthDataSource.getAuthToken() }, authToken)
-//                    every { authToken.isAccessTokenValid() } returns true
-//                    every { authToken.isRefreshTokenValid() } returns false
-//                    then("return true") {
-//                        every { Base64.decode(any<String>(), any()) } returns byteArrayOf()
-//                        authRepository.isLoggedIn().isSuccess(true)
-//                    }
-//                }
-//                and("refresh token is valid") {
-//                    coMockEitherRight({ cacheAuthDataSource.getAuthToken() }, authToken)
-//                    every { authToken.isAccessTokenValid() } returns false
-//                    every { authToken.isRefreshTokenValid() } returns true
-//                    then("return true") {
-//                        authRepository.isLoggedIn().isSuccess(true)
-//                    }
-//                }
-//                and("nor access or refresh token are valid") {
-//                    coMockEitherRight({ cacheAuthDataSource.getAuthToken() }, authToken)
-//                    every { authToken.isRefreshTokenValid() } returns false
-//                    then("return false") {
-//                        authRepository.isLoggedIn().isSuccess(false)
-//                    }
-//                }
-//            }
+            When("auth token is in cache") {
+                and("access token is valid") {
+                    coMockEitherRight({ cacheAuthDataSource.getAuthToken() }, mockedAuthToken)
+                    every { mockedAuthToken.isAccessTokenValid() } returns true
+                    every { mockedAuthToken.isRefreshTokenValid() } returns false
+                    then("return true") {
+                        authRepository.isLoggedIn().isSuccess(true)
+                    }
+                }
+                and("refresh token is valid") {
+                    coMockEitherRight({ cacheAuthDataSource.getAuthToken() }, mockedAuthToken)
+                    every { mockedAuthToken.isAccessTokenValid() } returns false
+                    every { mockedAuthToken.isRefreshTokenValid() } returns true
+                    then("return true") {
+                        authRepository.isLoggedIn().isSuccess(true)
+                    }
+                }
+                and("nor access or refresh token are valid") {
+                    coMockEitherRight({ cacheAuthDataSource.getAuthToken() }, mockedAuthToken)
+                    every { mockedAuthToken.isRefreshTokenValid() } returns false
+                    then("return false") {
+                        authRepository.isLoggedIn().isSuccess(false)
+                    }
+                }
+            }
             When("auth token is not in cache") {
                 coMockEitherLeft({ cacheAuthDataSource.getAuthToken() }, failure)
                 then("return false") {

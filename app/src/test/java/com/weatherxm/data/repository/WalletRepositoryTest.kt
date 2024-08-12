@@ -1,6 +1,5 @@
 package com.weatherxm.data.repository
 
-import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
@@ -10,7 +9,6 @@ import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.test.isRootTest
-import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk
