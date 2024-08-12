@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
+import androidx.core.graphics.drawable.toBitmap
 import com.weatherxm.R
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
@@ -220,19 +221,22 @@ fun RemoteViews.setWeatherData(
     val windUnit = Weather.getPreferredUnit(
         context.getString(KEY_WIND), context.getString(R.string.wind_speed_ms)
     )
-    val windDirectionUnit = Weather.getFormattedWindDirection(device.currentWeather?.windDirection)
+    val windDirection = device.currentWeather?.windDirection
+    val windDirectionUnit = Weather.getFormattedWindDirection(windDirection)
+    val windDirectionDrawable = Weather.getWindDirectionDrawable(context, windDirection)
     if (widgetType != WidgetType.CURRENT_WEATHER_TILE) {
         val humidity = Weather.getFormattedHumidity(device.currentWeather?.humidity, false)
         setTextViewText(R.id.humidityValue, humidity)
         setTextViewText(R.id.humidityUnit, "%")
 
         val windValue = Weather.getFormattedWind(
-            device.currentWeather?.windSpeed,
-            device.currentWeather?.windDirection,
-            includeUnits = false
+            device.currentWeather?.windSpeed, windDirection, includeUnits = false
         )
         setTextViewText(R.id.windValue, windValue)
         setTextViewText(R.id.windUnit, "$windUnit $windDirectionUnit")
+        setImageViewBitmap(R.id.windIconDirection, windDirectionDrawable?.toBitmap())
+
+        setRelationIcon(device.relation)
 
         val rainRateValue = Weather.getFormattedPrecipitation(
             device.currentWeather?.precipitation, includeUnit = false
@@ -246,12 +250,11 @@ fun RemoteViews.setWeatherData(
      */
     if (widgetType == WidgetType.CURRENT_WEATHER_DETAILED) {
         val windGustValue = Weather.getFormattedWind(
-            device.currentWeather?.windGust,
-            device.currentWeather?.windDirection,
-            includeUnits = false
+            device.currentWeather?.windGust, windDirection, includeUnits = false
         )
         setTextViewText(R.id.windGustValue, windGustValue)
         setTextViewText(R.id.windGustUnit, "$windUnit $windDirectionUnit")
+        setImageViewBitmap(R.id.windGustIconDirection, windDirectionDrawable?.toBitmap())
 
         val dailyPrecipValue = Weather.getFormattedPrecipitation(
             device.currentWeather?.precipAccumulated, isRainRate = false, includeUnit = false
@@ -282,4 +285,17 @@ fun RemoteViews.setWeatherData(
 
         setTextViewText(R.id.uvValue, Weather.getFormattedUV(device.currentWeather?.uvIndex))
     }
+}
+
+private fun RemoteViews.setRelationIcon(relation: DeviceRelation?) {
+    @Suppress("UseCheckOrError")
+    setImageViewResource(
+        R.id.stationHomeFollowIcon,
+        when (relation) {
+            DeviceRelation.OWNED -> R.drawable.ic_home
+            DeviceRelation.FOLLOWED -> R.drawable.ic_favorite
+            DeviceRelation.UNFOLLOWED -> R.drawable.ic_favorite_outline
+            null -> throw IllegalStateException("Oops! No device relation here.")
+        }
+    )
 }

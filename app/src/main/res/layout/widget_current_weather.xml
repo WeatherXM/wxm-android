@@ -290,12 +290,12 @@
                         android:gravity="center">
 
                         <ImageView
-                            android:id="@+id/windIcon"
+                            android:id="@+id/windIconDirection"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_weather_wind"
                             android:tint="@color/colorPrimaryVariant"
-                            tools:ignore="UseAppTint,contentDescription" />
+                            tools:ignore="UseAppTint,contentDescription"
+                            tools:src="@drawable/ic_wind_direction" />
                     </LinearLayout>
 
                     <TextView
