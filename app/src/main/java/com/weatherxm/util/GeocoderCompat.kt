@@ -8,7 +8,6 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.weatherxm.data.Failure.GeocoderError
-import com.weatherxm.data.Location
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -20,15 +19,6 @@ object GeocoderCompat : KoinComponent {
 
     /** Max results to return */
     private const val MAX_RESULTS = 1
-
-    /**
-     * Compatibility method that uses the new Geocoder in API 33+
-     * and defaults to the old Geocoder in older API versions.
-     * Returns a non-null Address, or GeocoderError.
-     */
-    suspend fun getFromLocation(location: Location): Either<GeocoderError, Address> {
-        return getFromLocation(location.lat, location.lon)
-    }
 
     /**
      * Compatibility method that uses the new Geocoder in API 33+
