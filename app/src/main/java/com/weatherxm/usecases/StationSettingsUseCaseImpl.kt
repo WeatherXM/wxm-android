@@ -4,9 +4,7 @@ import arrow.core.Either
 import com.weatherxm.data.CountryAndFrequencies
 import com.weatherxm.data.DeviceInfo
 import com.weatherxm.data.Failure
-import com.weatherxm.data.Frequency
 import com.weatherxm.data.Location
-import com.weatherxm.data.otherFrequencies
 import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
@@ -41,7 +39,7 @@ class StationSettingsUseCaseImpl(
         lon: Double?
     ): CountryAndFrequencies {
         if (lat == null || lon == null) {
-            return CountryAndFrequencies(null, Frequency.US915, otherFrequencies(Frequency.US915))
+            return CountryAndFrequencies.default()
         }
         return addressRepository.getCountryAndFrequencies(Location(lat, lon))
     }
