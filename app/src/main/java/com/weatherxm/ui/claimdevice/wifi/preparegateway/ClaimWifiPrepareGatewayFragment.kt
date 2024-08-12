@@ -44,6 +44,7 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
         binding.m5Notice.visible(model.deviceType == DeviceType.M5_WIFI)
 
         binding.enterManuallyBtn.setOnClickListener {
+            dismissSnackbar()
             model.next()
         }
 
@@ -58,6 +59,7 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
         scanner.startScan()
             .addOnSuccessListener { barcode ->
                 val scannedInfo = barcode.rawValue ?: String.empty()
+                dismissSnackbar()
                 if (model.deviceType == DeviceType.M5_WIFI) {
                     handleM5QR(scannedInfo)
                 } else {

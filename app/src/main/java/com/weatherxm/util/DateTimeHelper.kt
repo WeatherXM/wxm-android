@@ -117,7 +117,7 @@ object DateTimeHelper : KoinComponent {
             isYesterday() -> context.getString(R.string.yesterday)
             else -> null
         }
-        val nameOfDay = dayOfWeek.getName(context)
+        val nameOfDay = context.getString(dayOfWeek.getName())
         return if (relativeDay != null) {
             "$relativeDay, $nameOfDay ${format(formatterMonthDay)}"
         } else {
@@ -132,7 +132,7 @@ object DateTimeHelper : KoinComponent {
             isYesterday() -> context.getString(R.string.yesterday)
             else -> null
         }
-        val nameOfDay = dayOfWeek.getShortName(context)
+        val nameOfDay = context.getString(dayOfWeek.getShortName())
         return if (relativeDay != null) {
             "$relativeDay, $nameOfDay, ${format(formatterShort)}"
         } else {

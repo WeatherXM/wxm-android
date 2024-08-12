@@ -25,6 +25,7 @@ class ClaimPulsePrepareGatewayFragment : BaseFragment() {
             println("[BARCODE SCAN RESULT]: $it")
             val scannedInfo = it.contents.removePrefix("P")
             if (model.validateSerial(scannedInfo)) {
+                dismissSnackbar()
                 model.setSerialNumber(scannedInfo)
                 model.next(2)
             } else {
@@ -50,6 +51,7 @@ class ClaimPulsePrepareGatewayFragment : BaseFragment() {
         binding.secondStep.setHtml(R.string.prepare_gateway_pulse_second_step)
 
         binding.enterManuallyBtn.setOnClickListener {
+            dismissSnackbar()
             model.next()
         }
 
