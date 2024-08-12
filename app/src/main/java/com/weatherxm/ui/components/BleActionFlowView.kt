@@ -11,10 +11,10 @@ import androidx.core.view.isVisible
 import androidx.core.widget.TextViewCompat
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewBleActionFlowBinding
-import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.invisible
-import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.show
+import com.weatherxm.ui.common.visible
 
 @Suppress("TooManyFunctions")
 class BleActionFlowView : ConstraintLayout {
@@ -185,19 +185,22 @@ class BleActionFlowView : ConstraintLayout {
         currentStep: Int,
         @StringRes title: Int,
         @StringRes message: Int? = null,
-        showProgressBar: Boolean = false
+        showProgressBar: Boolean = false,
+        showFirmwareInfo: Boolean = false
     ) {
         if (!binding.steps.isVisible) {
             hideButtons()
             binding.notPairedInfoContainer.visible(false)
             binding.installationProgressBar.visible(false)
             binding.stationName.visible(true)
-            binding.firmwareVersions.visible(true)
-            binding.firmwareVersionTitle.visible(true)
             binding.steps.visible(true)
             binding.status.clear()
                 .animation(R.raw.anim_loading)
                 .show()
+        }
+        if (showFirmwareInfo) {
+            binding.firmwareVersions.visible(true)
+            binding.firmwareVersionTitle.visible(true)
         }
         binding.status.title(title)
         if (message != null) {

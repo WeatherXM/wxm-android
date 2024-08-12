@@ -140,6 +140,7 @@
                         android:layout_height="match_parent"
                         android:alpha="0.5"
                         android:indeterminate="false"
+                        app:trackCornerRadius="@dimen/radius_medium"
                         android:indeterminateOnly="false"
                         android:visibility="gone"
                         app:indicatorColor="@color/lightestBlue"

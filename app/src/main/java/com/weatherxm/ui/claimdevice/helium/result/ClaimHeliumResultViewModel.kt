@@ -3,6 +3,7 @@ package com.weatherxm.ui.claimdevice.helium.result
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Frequency
@@ -12,7 +13,6 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.usecases.BluetoothConnectionUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

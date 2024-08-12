@@ -31,7 +31,6 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -41,7 +40,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.coroutineContext
@@ -366,28 +364,6 @@ class BluetoothConnectionManager(
                 Timber.e(it)
                 listener.invoke(Either.Left(BluetoothError.ATCommandError()))
             }.collect()
-        }
-    }
-
-    suspend fun reboot(command: String, listener: (Either<Failure, Unit>) -> Unit) {
-        if (!write(command)) {
-            listener.invoke(Either.Left(BluetoothError.ConnectionRejectedError()))
-            return
-        }
-
-        readCharacteristic?.let { characteristic ->
-            coroutineScope {
-                // TODO: Reboot command doesn't seem to do something.
-                val job = launch {
-                    peripheral.observe(characteristic).cancellable().collect()
-                }
-                withContext(coroutineContext) {
-                    if (command == AT_REBOOT_COMMAND) {
-                        job.cancel()
-                        listener.invoke(Either.Right(Unit))
-                    }
-                }
-            }
         }
     }
 }

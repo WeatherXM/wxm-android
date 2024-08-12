@@ -21,9 +21,6 @@ import coil.decode.ImageDecoderDecoder
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import com.chuckerteam.chucker.api.ChuckerInterceptor
-import com.espressif.provisioning.ESPConstants
-import com.espressif.provisioning.ESPDevice
-import com.espressif.provisioning.ESPProvisionManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.SettingsClient
@@ -664,17 +661,8 @@ private val bluetooth = module {
     single<BluetoothAdapter?> {
         ContextCompat.getSystemService(androidContext(), BluetoothManager::class.java)?.adapter
     }
-    single<ESPProvisionManager> {
-        ESPProvisionManager.getInstance(androidContext())
-    }
-    single<ESPDevice> {
-        val espProvisionerManager = get() as ESPProvisionManager
-        espProvisionerManager.createESPDevice(
-            ESPConstants.TransportType.TRANSPORT_BLE, ESPConstants.SecurityType.SECURITY_0
-        )
-    }
     single<BluetoothScanner> {
-        BluetoothScanner(get())
+        BluetoothScanner()
     }
     single<BluetoothConnectionManager> {
         BluetoothConnectionManager(get(), get())

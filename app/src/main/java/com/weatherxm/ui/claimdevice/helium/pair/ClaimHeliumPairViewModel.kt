@@ -1,9 +1,11 @@
 package com.weatherxm.ui.claimdevice.helium.pair
 
+import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.BluetoothError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
@@ -13,7 +15,6 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -21,7 +22,7 @@ import timber.log.Timber
 class ClaimHeliumPairViewModel(
     private val resources: Resources,
     analytics: AnalyticsWrapper,
-    private val scanDevicesUseCase: BluetoothScannerUseCase,
+    private val scanUseCase: BluetoothScannerUseCase,
     connectionUseCase: BluetoothConnectionUseCase
 ) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics) {
     private var scannedDevices: MutableList<ScannedDevice> = mutableListOf()
@@ -45,21 +46,31 @@ class ClaimHeliumPairViewModel(
     fun getSelectedDevice(): ScannedDevice = super.scannedDevice
 
     @Suppress("MagicNumber")
+    override var timer = object : CountDownTimer(SCAN_DURATION, SCAN_COUNTDOWN_INTERVAL) {
+        override fun onTick(msUntilDone: Long) {
+            val progress = ((SCAN_DURATION - msUntilDone) * 100L / SCAN_DURATION).toInt()
+            Timber.d("Scanning progress: $progress")
+            onScanProgress.postValue(progress)
+        }
+
+        override fun onFinish() {
+            onScanProgress.postValue(100)
+            onScanStatus.postValue(Resource.success(Unit))
+            super@ClaimHeliumPairViewModel.stopScanning()
+        }
+    }
+
+    @Suppress("MagicNumber")
     fun scanBleDevices() {
-        viewModelScope.launch {
-            onScanStatus.postValue(Resource.loading())
-            scannedDevices.clear()
-            scanDevicesUseCase.startScanning().collect {
-                it.onRight { progress ->
-                    if (progress == 100) {
-                        onScanProgress.postValue(progress)
-                        onScanStatus.postValue(Resource.success(Unit))
-                    } else {
-                        onScanProgress.postValue(progress)
-                    }
-                }.onLeft { failure ->
-                    analytics.trackEventFailure(failure.code)
-                    onScanStatus.postValue(Resource.error(String.empty()))
+        onScanStatus.postValue(Resource.loading())
+        scannedDevices.clear()
+        scanningJob = viewModelScope.launch {
+            timer.start()
+            scanUseCase.scan().collect {
+                if (!scannedDevices.contains(it)) {
+                    Timber.d("New scanned device collected: $it")
+                    scannedDevices.add(it)
+                    onNewScannedDevice.postValue(scannedDevices)
                 }
             }
         }
@@ -107,25 +118,6 @@ class ClaimHeliumPairViewModel(
 
         super.stopScanning()
         super.scannedDevice = scannedDevice
-
-        viewModelScope.launch {
-            super.setPeripheralAndConnect(true)
-        }
-    }
-
-    private fun collectOnBLEScanning() {
-        viewModelScope.launch {
-            scanDevicesUseCase.registerOnScanning().collect {
-                if (!scannedDevices.contains(it)) {
-                    Timber.d("New scanned device collected: $it")
-                    scannedDevices.add(it)
-                    this@ClaimHeliumPairViewModel.onNewScannedDevice.postValue(scannedDevices)
-                }
-            }
-        }
-    }
-
-    init {
-        collectOnBLEScanning()
+        super.setPeripheralAndConnect(true)
     }
 }

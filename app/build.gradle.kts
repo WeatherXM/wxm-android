@@ -88,8 +88,6 @@ android {
         resValue("string", "mapbox_access_token", getStringProperty("MAPBOX_ACCESS_TOKEN"))
         resValue("string", "mapbox_style", getStringProperty("MAPBOX_STYLE"))
 
-        buildConfigField("String", "MIXPANEL_TOKEN", "\"${getStringProperty("MIXPANEL_TOKEN")}\"")
-
         // Instrumented Tests
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -125,6 +123,7 @@ android {
         create("mock") {
             val apiURL = getFlavorProperty("API_URL", "remotemock.env")
             val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "remotemock.env")
+            val mixpanelToken = getFlavorProperty("MIXPANEL_TOKEN", "remotemock.env")
             dimension = "server"
             applicationIdSuffix = ".mock"
             resValue("string", "app_name", "WXM Remote Mock")
@@ -133,10 +132,12 @@ android {
             buildConfigField("String", "API_URL", "\"$apiURL\"")
             buildConfigField("String", "AUTH_URL", "\"$apiURL\"")
             buildConfigField("String", "CLAIM_APP_URL", "\"$claimDAppUrl\"")
+            buildConfigField("String", "MIXPANEL_TOKEN", "\"$mixpanelToken\"")
         }
         create("staging") {
             val apiURL = getFlavorProperty("API_URL", "staging.env")
             val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "staging.env")
+            val mixpanelToken = getFlavorProperty("MIXPANEL_TOKEN", "staging.env")
             dimension = "server"
             applicationIdSuffix = ".staging"
             resValue("string", "app_name", "WXM Staging")
@@ -145,6 +146,7 @@ android {
             buildConfigField("String", "API_URL", "\"$apiURL\"")
             buildConfigField("String", "AUTH_URL", "\"$apiURL\"")
             buildConfigField("String", "CLAIM_APP_URL", "\"$claimDAppUrl\"")
+            buildConfigField("String", "MIXPANEL_TOKEN", "\"$mixpanelToken\"")
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotes = "Release notes for staging version"
@@ -155,6 +157,7 @@ android {
         create("dev") {
             val apiURL = getFlavorProperty("API_URL", "development.env")
             val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "development.env")
+            val mixpanelToken = getFlavorProperty("MIXPANEL_TOKEN", "development.env")
             dimension = "server"
             applicationIdSuffix = ".dev"
             resValue("string", "app_name", "WXM Dev")
@@ -163,6 +166,7 @@ android {
             buildConfigField("String", "API_URL", "\"$apiURL\"")
             buildConfigField("String", "AUTH_URL", "\"$apiURL\"")
             buildConfigField("String", "CLAIM_APP_URL", "\"$claimDAppUrl\"")
+            buildConfigField("String", "MIXPANEL_TOKEN", "\"$mixpanelToken\"")
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotes = "Release notes for development version"
@@ -173,6 +177,7 @@ android {
         create("prod") {
             val apiURL = getFlavorProperty("API_URL", "production.env")
             val claimDAppUrl = getFlavorProperty("CLAIM_APP_URL", "production.env")
+            val mixpanelToken = getFlavorProperty("MIXPANEL_TOKEN", "production.env")
             dimension = "server"
             resValue("string", "app_name", "WeatherXM")
             manifestPlaceholders["auth_host"] = "app.weatherxm.com"
@@ -180,6 +185,7 @@ android {
             buildConfigField("String", "API_URL", "\"$apiURL\"")
             buildConfigField("String", "AUTH_URL", "\"$apiURL\"")
             buildConfigField("String", "CLAIM_APP_URL", "\"$claimDAppUrl\"")
+            buildConfigField("String", "MIXPANEL_TOKEN", "\"$mixpanelToken\"")
             firebaseAppDistribution {
                 artifactType = "APK"
                 releaseNotes = "Release notes for production version"
@@ -437,7 +443,6 @@ dependencies {
 
     // BLE Scanning and Communication
     implementation(libs.kable)
-    implementation(libs.esp.idf.provisioning.android)
     implementation(libs.dfu)
 
     // Image Loader

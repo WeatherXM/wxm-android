@@ -203,13 +203,24 @@ class DeviceHeliumOTAActivity : BaseActivity() {
         with(binding.bleActionFlow) {
             when (status) {
                 OTAStatus.CONNECT_TO_STATION -> {
-                    onStep(0, R.string.connecting_to_station)
+                    onStep(0, R.string.connecting_to_station, showFirmwareInfo = true)
                 }
                 OTAStatus.DOWNLOADING -> {
-                    onStep(1, R.string.downloading_update, R.string.downloading_update_subtitle)
+                    onStep(
+                        1,
+                        R.string.downloading_update,
+                        R.string.downloading_update_subtitle,
+                        showFirmwareInfo = true
+                    )
                 }
                 else -> {
-                    onStep(2, R.string.installing_update, R.string.installing_update_subtitle, true)
+                    onStep(
+                        2,
+                        R.string.installing_update,
+                        R.string.installing_update_subtitle,
+                        showProgressBar = true,
+                        showFirmwareInfo = true
+                    )
                 }
             }
         }
