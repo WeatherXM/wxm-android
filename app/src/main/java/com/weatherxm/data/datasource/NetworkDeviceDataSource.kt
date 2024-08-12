@@ -24,8 +24,8 @@ class NetworkDeviceDataSource(private val apiService: ApiService) : DeviceDataSo
         val CLAIM_RETRY_DELAY = TimeUnit.SECONDS.toMillis(5L)
     }
 
-    override suspend fun getUserDevices(deviceIds: String?): Either<Failure, List<Device>> {
-        return apiService.getUserDevices(deviceIds).leftToFailure()
+    override suspend fun getUserDevices(): Either<Failure, List<Device>> {
+        return apiService.getUserDevices().leftToFailure()
     }
 
     override suspend fun getUserDevice(deviceId: String): Either<Failure, Device> {

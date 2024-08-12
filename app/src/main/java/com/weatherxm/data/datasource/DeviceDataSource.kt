@@ -7,7 +7,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 
 interface DeviceDataSource {
-    suspend fun getUserDevices(deviceIds: String? = null): Either<Failure, List<Device>>
+    suspend fun getUserDevices(): Either<Failure, List<Device>>
     suspend fun getUserDevice(deviceId: String): Either<Failure, Device>
     suspend fun claimDevice(
         serialNumber: String,
