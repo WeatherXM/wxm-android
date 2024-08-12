@@ -100,7 +100,7 @@ class WeatherHistoryRepositoryTest : BehaviorSpec({
                     every { timestamp } returns
                         today.atStartOfDay().plusHours(3).atZone(currentZone)
                 })
-                for (i in 0..22) {
+                repeat(23) {
                     data.add(hourlyWeather)
                 }
                 verifyNetworkCallAfterDatabaseMiss()
@@ -110,7 +110,7 @@ class WeatherHistoryRepositoryTest : BehaviorSpec({
                 data.add(mockk<HourlyWeather> {
                     every { timestamp } returns today.atStartOfDay(currentZone)
                 })
-                for (i in 0..21) {
+                repeat(22) {
                     data.add(hourlyWeather)
                 }
                 data.add(mockk<HourlyWeather> {
@@ -127,7 +127,7 @@ class WeatherHistoryRepositoryTest : BehaviorSpec({
                 data.add(mockk<HourlyWeather> {
                     every { timestamp } returns today.atStartOfDay(currentZone)
                 })
-                for (i in 0..21) {
+                repeat(22) {
                     data.add(hourlyWeather)
                 }
                 data.add(mockk<HourlyWeather> {
