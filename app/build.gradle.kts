@@ -383,6 +383,9 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.play.services.scanner)
 
+    // Barcode Scanner
+    implementation(libs.barcode.scanner)
+
     // Logging
     implementation(libs.timber)
 

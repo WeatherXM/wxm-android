@@ -728,7 +728,6 @@ val firebase = module {
     single<GmsBarcodeScanner> {
         val options = GmsBarcodeScannerOptions.Builder()
             .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
-            .enableAutoZoom()
             .build()
         GmsBarcodeScanning.getClient(get(), options)
     }

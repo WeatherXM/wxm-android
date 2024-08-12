@@ -70,7 +70,7 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
                 Timber.e(e, "Failure when scanning QR of the device")
                 showSnackbarMessage(
                     binding.root,
-                    getString(R.string.error_connect_wallet_scan_exception, e.message),
+                    getString(R.string.error_scan_exception, e.message),
                     callback = { snackbar?.dismiss() },
                     R.string.action_dismiss,
                     binding.buttonBar
