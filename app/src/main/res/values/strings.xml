@@ -244,6 +244,7 @@
     <string name="boosts">Boosts</string>
     <string name="no_active">No Active</string>
     <string name="view_reward_details">View Reward Details</string>
+    <string name="show_split">Show Split</string>
     <string name="weekly_streak">Weekly Streak</string>
     <string name="weekly_streak_desc">Base reward scores from %1$s to %2$s</string>
     <string name="total_station_rewards">Total Station Rewards</string>
