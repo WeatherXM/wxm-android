@@ -117,6 +117,12 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
             getString(R.string.base_reward_desc, actualBaseReward, maxBaseReward)
         )
         binding.showSplitBtn.visible(data.hasSplitRewards())
+        binding.showSplitBtn.setOnClickListener {
+            model.getWalletAddress {
+                RewardSplitDialogFragment.newInstance()
+                    .show(supportFragmentManager, RewardSplitDialogFragment.TAG)
+            }
+        }
 
         updateIssues(sortedIssues)
 

@@ -702,9 +702,9 @@ data class WalletRewards(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class RewardSplit(
-    val wallet: String?,
-    val stake: Int?,
-    val reward: Double?
+    val wallet: String,
+    val stake: Int,
+    val reward: Float
 ) : Parcelable
 
 @Suppress("EnumNaming")
