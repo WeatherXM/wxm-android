@@ -9,6 +9,7 @@ import com.weatherxm.TestConfig.context
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.data.Connectivity
 import com.weatherxm.data.HOUR_FORMAT_24H
 import com.weatherxm.data.NetworkStatsContracts
@@ -116,7 +117,7 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
             When("the API call fails") {
                 coMockEitherLeft({ repo.getNetworkStats() }, failure)
                 then("a failure should be returned") {
-                    usecase.getNetworkStats() shouldBe Either.Left(failure)
+                    usecase.getNetworkStats().isError()
                 }
             }
             When("the API call returns some data") {

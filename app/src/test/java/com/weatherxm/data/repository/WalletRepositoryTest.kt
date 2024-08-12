@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.datasource.CacheWalletDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
@@ -62,7 +63,7 @@ class WalletRepositoryTest : BehaviorSpec({
             and("we can't get it from the network") {
                 coMockEitherLeft({ networkSource.getWalletAddress() }, failure)
                 then("return a failure") {
-                    repo.getWalletAddress() shouldBe Either.Left(failure)
+                    repo.getWalletAddress().isError()
                 }
             }
         }
@@ -83,7 +84,7 @@ class WalletRepositoryTest : BehaviorSpec({
                 and("it's not successful") {
                     coMockEitherLeft({ networkSource.setWalletAddress(walletAddress) }, failure)
                     then("return a failure") {
-                        repo.setWalletAddress(walletAddress) shouldBe Either.Left(failure)
+                        repo.setWalletAddress(walletAddress).isError()
                     }
                 }
             }

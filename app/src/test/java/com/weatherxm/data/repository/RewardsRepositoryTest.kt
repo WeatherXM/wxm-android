@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.BoostRewardResponse
 import com.weatherxm.data.RewardDetails
@@ -56,7 +57,7 @@ class RewardsRepositoryTest : BehaviorSpec({
                             deviceId, 0, timezone = timezone, fromDate = fromDate
                         )
                     }, failure)
-                    repository.getRewardsTimeline(deviceId, 0) shouldBe Either.Left(failure)
+                    repository.getRewardsTimeline(deviceId, 0).isError()
                 }
             }
         }
@@ -70,7 +71,7 @@ class RewardsRepositoryTest : BehaviorSpec({
             When("it's a failure") {
                 then("return the failure") {
                     coMockEitherLeft({ dataSource.getRewards(deviceId) }, failure)
-                    repository.getRewards(deviceId) shouldBe Either.Left(failure)
+                    repository.getRewards(deviceId).isError()
                 }
             }
         }
@@ -91,7 +92,7 @@ class RewardsRepositoryTest : BehaviorSpec({
                             { dataSource.getRewardDetails(deviceId, dateISO) },
                             failure
                         )
-                        repository.getRewardDetails(deviceId, now) shouldBe Either.Left(failure)
+                        repository.getRewardDetails(deviceId, now).isError()
                     }
                 }
             }
@@ -113,7 +114,7 @@ class RewardsRepositoryTest : BehaviorSpec({
                             { dataSource.getBoostReward(deviceId, boostCode) },
                             failure
                         )
-                        repository.getBoostReward(deviceId, boostCode) shouldBe Either.Left(failure)
+                        repository.getBoostReward(deviceId, boostCode).isError()
                     }
                 }
             }
@@ -133,7 +134,7 @@ class RewardsRepositoryTest : BehaviorSpec({
             When("it's a failure") {
                 then("return the failure") {
                     coMockEitherLeft({ dataSource.getWalletRewards(walletAddress) }, failure)
-                    repository.getWalletRewards(walletAddress) shouldBe Either.Left(failure)
+                    repository.getWalletRewards(walletAddress).isError()
                 }
             }
         }

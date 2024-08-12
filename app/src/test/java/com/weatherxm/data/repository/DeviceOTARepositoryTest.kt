@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.mockEitherLeft
 import com.weatherxm.TestUtils.mockEitherRight
@@ -44,7 +45,7 @@ class DeviceOTARepositoryTest : BehaviorSpec({
                 When("Firmware is NOT available") {
                     coMockEitherLeft({ dataSource.getFirmware(deviceId) }, failure)
                     then("return null") {
-                        repo.getFirmware(deviceId) shouldBe Either.Left(failure)
+                        repo.getFirmware(deviceId).isError()
                     }
                 }
             }

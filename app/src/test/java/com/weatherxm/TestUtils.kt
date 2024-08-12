@@ -1,8 +1,10 @@
 package com.weatherxm
 
 import arrow.core.Either
+import com.weatherxm.TestConfig.failure
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
+import io.kotest.assertions.fail
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.every
@@ -14,6 +16,10 @@ import java.lang.reflect.Modifier
 object TestUtils {
     fun <T : Any> Either<Failure, T?>.isSuccess(successData: T?) {
         this shouldBe Either.Right(successData)
+    }
+
+    fun <T : Any> Either<Failure, T?>.isError() {
+        this shouldBe Either.Left(failure)
     }
 
     fun <T : Any> Resource<T>?.isSuccess(data: T?) {

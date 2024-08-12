@@ -9,6 +9,7 @@ import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.CountryAndFrequencies
 import com.weatherxm.data.Frequency
@@ -125,7 +126,7 @@ class AddressRepositoryTest : BehaviorSpec({
                         failure
                     )
                     then("return that failure") {
-                        repo.getSearchSuggestions(query) shouldBe Either.Left(failure)
+                        repo.getSearchSuggestions(query).isError()
                     }
                 }
                 When("the response is a success") {
@@ -155,7 +156,7 @@ class AddressRepositoryTest : BehaviorSpec({
                                     failure
                                 )
                                 then("return that failure") {
-                                    repo.getSearchSuggestions(query) shouldBe Either.Left(failure)
+                                    repo.getSearchSuggestions(query).isError()
                                 }
                             }
                             When("the response is a success") {
@@ -205,7 +206,7 @@ class AddressRepositoryTest : BehaviorSpec({
                         failure
                     )
                     then("return that failure") {
-                        repo.getSuggestionLocation(searchSuggestion) shouldBe Either.Left(failure)
+                        repo.getSuggestionLocation(searchSuggestion).isError()
                     }
                 }
                 When("the response is a success") {
@@ -277,7 +278,7 @@ class AddressRepositoryTest : BehaviorSpec({
             When("the response is a failure") {
                 coMockEitherLeft({ networkSource.getAddressFromPoint(point) }, failure)
                 then("return that failure") {
-                    repo.getAddressFromPoint(point) shouldBe Either.Left(failure)
+                    repo.getAddressFromPoint(point).isError()
                 }
             }
             When("the response is a success") {

@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkSearchResults
@@ -68,7 +69,7 @@ class ExplorerRepositoryTest : BehaviorSpec({
         and("the data source returns a failure") {
             coMockEitherLeft({ function() }, failure)
             then("return that failure") {
-                function() shouldBe Either.Left(failure)
+                function().isError()
             }
         }
     }
@@ -83,7 +84,7 @@ class ExplorerRepositoryTest : BehaviorSpec({
         When("the data source returns a failure") {
             coMockEitherLeft({ networkSource.getCells() }, failure)
             then("return that failure") {
-                repo.getCells() shouldBe Either.Left(failure)
+                repo.getCells().isError()
             }
         }
     }
@@ -99,7 +100,7 @@ class ExplorerRepositoryTest : BehaviorSpec({
             When("the data source returns a failure") {
                 coMockEitherLeft({ networkSource.getCellDevices(cellIndex) }, failure)
                 then("return that failure") {
-                    repo.getCellDevices(cellIndex) shouldBe Either.Left(failure)
+                    repo.getCellDevices(cellIndex).isError()
                 }
             }
         }
@@ -120,7 +121,7 @@ class ExplorerRepositoryTest : BehaviorSpec({
                         failure
                     )
                     then("return that failure") {
-                        repo.getCellDevice(cellIndex, deviceId) shouldBe Either.Left(failure)
+                        repo.getCellDevice(cellIndex, deviceId).isError()
                     }
                 }
             }
@@ -172,7 +173,7 @@ class ExplorerRepositoryTest : BehaviorSpec({
             When("the data source returns a failure") {
                 coMockEitherLeft({ databaseSource.getRecentSearches() }, failure)
                 then("return that failure") {
-                    repo.getRecentSearches() shouldBe Either.Left(failure)
+                    repo.getRecentSearches().isError()
                 }
             }
             When("We set a new SearchResult in recent searches") {

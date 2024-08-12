@@ -1,13 +1,12 @@
 package com.weatherxm.data.repository
 
-import arrow.core.Either
 import com.weatherxm.TestConfig.failure
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.mockEitherLeft
 import com.weatherxm.TestUtils.mockEitherRight
 import com.weatherxm.data.datasource.WidgetDataSource
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
@@ -49,7 +48,7 @@ class WidgetRepositoryTest : BehaviorSpec({
                 When("is a failure") {
                     mockEitherLeft({ dataSource.getWidgetDevice(widgetId) }, failure)
                     then("The device ID should not be returned") {
-                        repository.getWidgetDevice(widgetId) shouldBe Either.Left(failure)
+                        repository.getWidgetDevice(widgetId).isError()
                     }
                 }
             }

@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.User
 import com.weatherxm.data.datasource.CacheUserDataSource
@@ -47,7 +48,7 @@ class UserRepositoryTest : BehaviorSpec({
             and("it's a failure") {
                 then("return that failure") {
                     coMockEitherLeft({ cacheSource.getUserUsername() }, failure)
-                    repository.getUserUsername() shouldBe Either.Left(failure)
+                    repository.getUserUsername().isError()
                 }
             }
         }
@@ -66,7 +67,7 @@ class UserRepositoryTest : BehaviorSpec({
             and("it's a failure") {
                 then("return that failure") {
                     coMockEitherLeft({ networkSource.deleteAccount() }, failure)
-                    repository.deleteAccount() shouldBe Either.Left(failure)
+                    repository.deleteAccount().isError()
                 }
             }
         }
@@ -99,7 +100,7 @@ class UserRepositoryTest : BehaviorSpec({
                 and("it's a failure") {
                     then("return that failure") {
                         coMockEitherLeft({ networkSource.getUser() }, failure)
-                        repository.getUser(true) shouldBe Either.Left(failure)
+                        repository.getUser(true).isError()
                     }
                 }
             }

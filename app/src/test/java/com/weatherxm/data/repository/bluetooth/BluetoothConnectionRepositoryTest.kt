@@ -5,6 +5,7 @@ import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.Frequency
 import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSource
@@ -58,7 +59,7 @@ class BluetoothConnectionRepositoryTest : BehaviorSpec({
                 }
                 When("failure") {
                     coMockEitherLeft({ dataSource.setPeripheral(macAddress) }, failure)
-                    repository.setPeripheral(macAddress) shouldBe Either.Left(failure)
+                    repository.setPeripheral(macAddress).isError()
                 }
             }
             and("Connect to Peripheral") {
@@ -68,7 +69,7 @@ class BluetoothConnectionRepositoryTest : BehaviorSpec({
                 }
                 When("failure") {
                     coMockEitherLeft({ dataSource.connectToPeripheral() }, failure)
-                    repository.connectToPeripheral() shouldBe Either.Left(failure)
+                    repository.connectToPeripheral().isError()
                 }
             }
             and("Disconnect from Peripheral") {
@@ -82,7 +83,7 @@ class BluetoothConnectionRepositoryTest : BehaviorSpec({
                 }
                 When("failure") {
                     coMockEitherLeft({ dataSource.fetchClaimingKey() }, failure)
-                    repository.fetchClaimingKey() shouldBe Either.Left(failure)
+                    repository.fetchClaimingKey().isError()
                 }
             }
             and("Fetch Device EUI") {
@@ -92,7 +93,7 @@ class BluetoothConnectionRepositoryTest : BehaviorSpec({
                 }
                 When("failure") {
                     coMockEitherLeft({ dataSource.fetchClaimingKey() }, failure)
-                    repository.fetchClaimingKey() shouldBe Either.Left(failure)
+                    repository.fetchClaimingKey().isError()
                 }
             }
             and("Set Frequency") {
@@ -102,7 +103,7 @@ class BluetoothConnectionRepositoryTest : BehaviorSpec({
                 }
                 When("failure") {
                     coMockEitherLeft({ dataSource.setFrequency(frequency) }, failure)
-                    repository.setFrequency(frequency) shouldBe Either.Left(failure)
+                    repository.setFrequency(frequency).isError()
                 }
             }
             and("Reboot") {
@@ -115,7 +116,7 @@ class BluetoothConnectionRepositoryTest : BehaviorSpec({
                 }
                 When("failure") {
                     coMockEitherLeft({ dataSource.reboot() }, failure)
-                    repository.reboot() shouldBe Either.Left(failure)
+                    repository.reboot().isError()
                 }
             }
 

@@ -1,9 +1,9 @@
 package com.weatherxm.data.repository
 
-import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.Attributes
 import com.weatherxm.data.Device
@@ -111,7 +111,7 @@ class DeviceRepositoryTest : BehaviorSpec({
             When("the response is a failure") {
                 coMockEitherLeft({ networkDeviceSource.getUserDevices() }, failure)
                 then("return that failure") {
-                    repo.getUserDevices() shouldBe Either.Left(failure)
+                    repo.getUserDevices().isError()
                 }
             }
             When("the response is a success") {
@@ -144,7 +144,7 @@ class DeviceRepositoryTest : BehaviorSpec({
                 When("the response is a failure") {
                     coMockEitherLeft({ networkDeviceSource.getUserDevice(ownedId) }, failure)
                     then("return that failure") {
-                        repo.getUserDevice(ownedId) shouldBe Either.Left(failure)
+                        repo.getUserDevice(ownedId).isError()
                     }
                 }
                 When("the response is a success") {
@@ -171,7 +171,7 @@ class DeviceRepositoryTest : BehaviorSpec({
                     failure
                 )
                 then("return that failure") {
-                    repo.claimDevice(serialNumber, location) shouldBe Either.Left(failure)
+                    repo.claimDevice(serialNumber, location).isError()
                 }
             }
             When("the response is a success") {
@@ -196,7 +196,7 @@ class DeviceRepositoryTest : BehaviorSpec({
             When("the response is a failure") {
                 coMockEitherLeft({ networkDeviceSource.removeDevice(serialNumber) }, failure)
                 then("return that failure") {
-                    repo.removeDevice(serialNumber, ownedId) shouldBe Either.Left(failure)
+                    repo.removeDevice(serialNumber, ownedId).isError()
                 }
             }
             When("the response is a success") {
@@ -224,9 +224,7 @@ class DeviceRepositoryTest : BehaviorSpec({
                             failure
                         )
                         then("return that failure") {
-                            repo.setFriendlyName(serialNumber, friendlyName) shouldBe Either.Left(
-                                failure
-                            )
+                            repo.setFriendlyName(serialNumber, friendlyName).isError()
                         }
                     }
                     When("the response is a success") {
@@ -247,7 +245,7 @@ class DeviceRepositoryTest : BehaviorSpec({
                         failure
                     )
                     then("return that failure") {
-                        repo.clearFriendlyName(serialNumber) shouldBe Either.Left(failure)
+                        repo.clearFriendlyName(serialNumber).isError()
                     }
                 }
                 When("the response is a success") {
@@ -266,7 +264,7 @@ class DeviceRepositoryTest : BehaviorSpec({
             When("the response is a failure") {
                 coMockEitherLeft({ networkDeviceSource.getDeviceInfo(ownedId) }, failure)
                 then("return that failure") {
-                    repo.getDeviceInfo(ownedId) shouldBe Either.Left(failure)
+                    repo.getDeviceInfo(ownedId).isError()
                 }
             }
             When("the response is a success") {
@@ -286,7 +284,7 @@ class DeviceRepositoryTest : BehaviorSpec({
                     failure
                 )
                 then("return that failure") {
-                    repo.setLocation(serialNumber, 0.0, 0.0) shouldBe Either.Left(failure)
+                    repo.setLocation(serialNumber, 0.0, 0.0).isError()
                 }
             }
             When("the response is a success") {

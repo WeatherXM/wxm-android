@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.datasource.CacheFollowDataSource
 import com.weatherxm.data.datasource.NetworkFollowDataSource
@@ -40,7 +41,7 @@ class FollowRepositoryTest : BehaviorSpec({
         given("a device ID") {
             When("it's invalid") {
                 then("return a Failure") {
-                    repo.followStation(emptyId) shouldBe Either.Left(failure)
+                    repo.followStation(emptyId).isError()
                     coVerify(exactly = 1) { networkSource.followStation(emptyId) }
                 }
             }
@@ -60,7 +61,7 @@ class FollowRepositoryTest : BehaviorSpec({
         given("a device ID") {
             When("it's invalid") {
                 then("return a Failure") {
-                    repo.unfollowStation(emptyId) shouldBe Either.Left(failure)
+                    repo.unfollowStation(emptyId).isError()
                     coVerify(exactly = 1) { networkSource.unfollowStation(emptyId) }
                 }
                 and("Re-save it back in the cache") {

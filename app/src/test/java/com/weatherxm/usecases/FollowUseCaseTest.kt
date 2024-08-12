@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.repository.FollowRepository
 import com.weatherxm.util.WidgetHelper
@@ -34,7 +35,7 @@ class FollowUseCaseTest : BehaviorSpec({
         given("a device ID") {
             When("it's invalid") {
                 then("return a Failure") {
-                    usecase.followStation(emptyId) shouldBe Either.Left(failure)
+                    usecase.followStation(emptyId).isError()
                     coVerify(exactly = 1) { repo.followStation(emptyId) }
                 }
             }
@@ -51,7 +52,7 @@ class FollowUseCaseTest : BehaviorSpec({
         given("a device ID") {
             When("it's invalid") {
                 then("return a Failure") {
-                    usecase.unfollowStation(emptyId) shouldBe Either.Left(failure)
+                    usecase.unfollowStation(emptyId).isError()
                     coVerify(exactly = 1) { repo.unfollowStation(emptyId) }
                 }
             }

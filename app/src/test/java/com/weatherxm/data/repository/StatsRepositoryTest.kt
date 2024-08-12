@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.NetworkStatsResponse
 import com.weatherxm.data.datasource.StatsDataSource
@@ -33,7 +34,7 @@ class StatsRepositoryTest : BehaviorSpec({
         When("the request fails") {
             then("return a failure") {
                 coMockEitherLeft({ repo.getNetworkStats() }, failure)
-                repo.getNetworkStats() shouldBe Either.Left(failure)
+                repo.getNetworkStats().isError()
                 coVerify(exactly = 1) { dataSource.getNetworkStats() }
             }
         }

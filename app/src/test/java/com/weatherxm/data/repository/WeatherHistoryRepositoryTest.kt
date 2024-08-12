@@ -1,16 +1,15 @@
 package com.weatherxm.data.repository
 
-import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
 import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
-import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
@@ -41,10 +40,7 @@ class WeatherHistoryRepositoryTest : BehaviorSpec({
     suspend fun BehaviorSpecWhenContainerScope.verifyNetworkCallAfterDatabaseMiss() {
         coMockEitherRight({ dbSource.getWeatherHistory(deviceId, today, today) }, data)
         then("proceed with a network call to fetch the data") {
-            coMockEitherRight(
-                { networkSource.getWeatherHistory(deviceId, today, today) },
-                data
-            )
+            coMockEitherRight({ networkSource.getWeatherHistory(deviceId, today, today) }, data)
             repo.getHourlyWeatherHistory(deviceId, today).isSuccess(data)
             coVerify(exactly = 1) {
                 networkSource.getWeatherHistory(deviceId, today, today)
@@ -54,23 +50,13 @@ class WeatherHistoryRepositoryTest : BehaviorSpec({
 
     suspend fun BehaviorSpecWhenContainerScope.testFetchDataFromNetwork() {
         When("the network call fails") {
-            coMockEitherLeft(
-                { networkSource.getWeatherHistory(deviceId, today, today) },
-                failure
-            )
+            coMockEitherLeft({ networkSource.getWeatherHistory(deviceId, today, today) }, failure)
             then("return the failure") {
-                repo.getHourlyWeatherHistory(
-                    deviceId,
-                    today,
-                    true
-                ) shouldBe Either.Left(failure)
+                repo.getHourlyWeatherHistory(deviceId, today, true).isError()
             }
         }
         When("network call succeeds & data are empty") {
-            coMockEitherRight(
-                { networkSource.getWeatherHistory(deviceId, today, today) },
-                data
-            )
+            coMockEitherRight({ networkSource.getWeatherHistory(deviceId, today, today) }, data)
             then("return the data") {
                 repo.getHourlyWeatherHistory(deviceId, today, true).isSuccess(data)
             }
@@ -80,10 +66,7 @@ class WeatherHistoryRepositoryTest : BehaviorSpec({
         }
         When("network call succeeds & data are NOT empty") {
             data.add(hourlyWeather)
-            coMockEitherRight(
-                { networkSource.getWeatherHistory(deviceId, today, today) },
-                data
-            )
+            coMockEitherRight({ networkSource.getWeatherHistory(deviceId, today, today) }, data)
             then("return the data") {
                 repo.getHourlyWeatherHistory(deviceId, today, true).isSuccess(data)
             }
@@ -95,15 +78,9 @@ class WeatherHistoryRepositoryTest : BehaviorSpec({
 
     suspend fun BehaviorSpecWhenContainerScope.testFetchDataFromDatabaseFirst() {
         When("fetching data from database fails") {
-            coMockEitherLeft(
-                { dbSource.getWeatherHistory(deviceId, today, today) },
-                failure
-            )
+            coMockEitherLeft({ dbSource.getWeatherHistory(deviceId, today, today) }, failure)
             then("proceed with a network call to fetch the data") {
-                coMockEitherRight(
-                    { networkSource.getWeatherHistory(deviceId, today, today) },
-                    data
-                )
+                coMockEitherRight({ networkSource.getWeatherHistory(deviceId, today, today) }, data)
                 repo.getHourlyWeatherHistory(deviceId, today).isSuccess(data)
                 coVerify(exactly = 1) { networkSource.getWeatherHistory(deviceId, today, today) }
             }
@@ -120,8 +97,8 @@ class WeatherHistoryRepositoryTest : BehaviorSpec({
             and("but data are NOT complete (FIRST ENTRY IS TOO LATE)") {
                 data.clear()
                 data.add(mockk<HourlyWeather> {
-                    every { timestamp } returns today.atStartOfDay().plusHours(3)
-                        .atZone(currentZone)
+                    every { timestamp } returns
+                        today.atStartOfDay().plusHours(3).atZone(currentZone)
                 })
                 for (i in 0..22) {
                     data.add(hourlyWeather)

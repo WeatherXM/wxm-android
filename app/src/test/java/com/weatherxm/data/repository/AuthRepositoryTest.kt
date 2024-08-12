@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.datasource.CacheUserDataSource
@@ -72,7 +73,7 @@ class AuthRepositoryTest : BehaviorSpec({
                 When("login failed") {
                     coMockEitherLeft({ networkAuthDataSource.login(email, password) }, failure)
                     then("return the failure") {
-                        authRepository.login(email, password) shouldBe Either.Left(failure)
+                        authRepository.login(email, password).isError()
                     }
                 }
             }
@@ -132,7 +133,7 @@ class AuthRepositoryTest : BehaviorSpec({
             When("auth token is not in cache") {
                 coMockEitherLeft({ cacheAuthDataSource.getAuthToken() }, failure)
                 then("return false") {
-                    authRepository.isLoggedIn() shouldBe Either.Left(failure)
+                    authRepository.isLoggedIn().isError()
                 }
             }
         }
@@ -152,7 +153,7 @@ class AuthRepositoryTest : BehaviorSpec({
                     failure
                 )
                 then("return that failure") {
-                    authRepository.signup(email, firstName, lastName) shouldBe Either.Left(failure)
+                    authRepository.signup(email, firstName, lastName).isError()
                 }
             }
         }
@@ -165,7 +166,7 @@ class AuthRepositoryTest : BehaviorSpec({
                 When("the reset prompt failed") {
                     coMockEitherLeft({ networkAuthDataSource.resetPassword(email) }, failure)
                     then("return that failure") {
-                        authRepository.resetPassword(email) shouldBe Either.Left(failure)
+                        authRepository.resetPassword(email).isError()
                     }
                 }
             }
@@ -186,7 +187,7 @@ class AuthRepositoryTest : BehaviorSpec({
                     When("it's a failure") {
                         coMockEitherLeft({ networkAuthDataSource.login(email, password) }, failure)
                         then("return that failure") {
-                            authRepository.isPasswordCorrect(password) shouldBe Either.Left(failure)
+                            authRepository.isPasswordCorrect(password).isError()
                             coVerify(exactly = 1) { networkAuthDataSource.login(email, password) }
                         }
                     }
@@ -195,7 +196,7 @@ class AuthRepositoryTest : BehaviorSpec({
             When("we don't have the user's username") {
                 coMockEitherLeft({ cacheUserDataSource.getUserUsername() }, failure)
                 then("return that failure") {
-                    authRepository.isPasswordCorrect(password) shouldBe Either.Left(failure)
+                    authRepository.isPasswordCorrect(password).isError()
                 }
             }
         }
