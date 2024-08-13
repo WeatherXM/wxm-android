@@ -300,9 +300,6 @@
     <string name="boost_period">Boost period</string>
     <string name="got_all_beta_rewards">Great! Got all beta rewards for this day!</string>
 
-    <!-- Mainnet -->
-    <string name="mainnet_welcome">Welcome to Mainnet!</string>
-
     <!-- Claim Rewards -->
     <string name="claim_rewards">Claim Rewards</string>
 

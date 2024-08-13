@@ -5,17 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
 import com.weatherxm.data.Rewards
-import com.weatherxm.ui.common.MainnetInfo
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.DeviceDetailsUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.Job
@@ -33,20 +32,10 @@ class RewardsViewModel(
     private val onLoading = MutableLiveData<Boolean>()
     private val onError = MutableLiveData<UIError>()
     private val onRewards = MutableLiveData<Rewards>()
-    private val onMainnet = MutableLiveData<MainnetInfo>()
 
     fun onLoading(): LiveData<Boolean> = onLoading
     fun onError(): LiveData<UIError> = onError
     fun onRewards(): LiveData<Rewards> = onRewards
-    fun onMainnet(): LiveData<MainnetInfo> = onMainnet
-
-    fun fetchMainnetStatus() {
-        viewModelScope.launch {
-            if (deviceDetailsUseCase.isMainnetEnabled()) {
-                onMainnet.postValue(deviceDetailsUseCase.getMainnetInfo())
-            }
-        }
-    }
 
     fun fetchRewardsFromNetwork() {
         fetchRewardsJob?.let {

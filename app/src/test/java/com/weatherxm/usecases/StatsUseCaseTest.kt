@@ -18,9 +18,7 @@ import com.weatherxm.data.NetworkStatsStationDetails
 import com.weatherxm.data.NetworkStatsTimeseries
 import com.weatherxm.data.NetworkStatsTokens
 import com.weatherxm.data.NetworkStatsWeatherStations
-import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.StatsRepository
-import com.weatherxm.ui.common.MainnetInfo
 import com.weatherxm.ui.networkstats.NetworkStationStats
 import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
 import com.weatherxm.util.NumberUtils
@@ -41,33 +39,25 @@ import java.time.format.DateTimeFormatter
 
 class StatsUseCaseTest : KoinTest, BehaviorSpec({
     val repo = mockk<StatsRepository>()
-    val appConfigRepository = mockk<AppConfigRepository>()
-    val usecase = StatsUseCaseImpl(repo, appConfigRepository, context)
+    val usecase = StatsUseCaseImpl(repo, context)
 
-    val testMessage = "testMessage"
-    val testUrl = "testUrl"
     val firstDate = ZonedDateTime.of(2024, 6, 25, 2, 0, 0, 0, ZoneId.of("UTC"))
     val middleDate = ZonedDateTime.of(2024, 6, 26, 2, 0, 0, 0, ZoneId.of("UTC"))
     val lastDate = ZonedDateTime.of(2024, 6, 27, 2, 0, 0, 0, ZoneId.of("UTC"))
     val testNetworkStats = NetworkStatsResponse(
         weatherStations = NetworkStatsWeatherStations(
             NetworkStatsStation(
-                100,
-                listOf(
+                100, listOf(
                     NetworkStatsStationDetails("test", Connectivity.wifi, "test", 50, 0.5),
                     NetworkStatsStationDetails("test", Connectivity.helium, "test", 50, 0.5)
                 )
-            ),
-            NetworkStatsStation(
-                100,
-                listOf(
+            ), NetworkStatsStation(
+                100, listOf(
                     NetworkStatsStationDetails("test", Connectivity.wifi, "test", 60, 0.6),
                     NetworkStatsStationDetails("test", Connectivity.helium, "test", 40, 0.4)
                 )
-            ),
-            NetworkStatsStation(
-                100,
-                listOf(
+            ), NetworkStatsStation(
+                100, listOf(
                     NetworkStatsStationDetails("test", Connectivity.wifi, "test", 40, 0.4),
                     NetworkStatsStationDetails("test", Connectivity.helium, "test", 60, 0.6)
                 )
@@ -79,15 +69,10 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
             NetworkStatsTimeseries(lastDate, 20000.0)
         ),
         tokens = NetworkStatsTokens(
-            100000000,
-            5000000,
-            listOf(
+            100000000, 5000000, listOf(
                 NetworkStatsTimeseries(middleDate, 1000.0),
                 NetworkStatsTimeseries(lastDate, 100000.0)
-            ),
-            500135.0,
-            5000000,
-            "testTxHash"
+            ), 500135.0, 5000000, "testTxHash"
         ),
         contracts = NetworkStatsContracts("testTokenUrl", "testRewardsUrl"),
         customers = NetworkStatsCustomers(1000, 900),
@@ -104,41 +89,24 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
 
     beforeSpec {
         startKoin {
-            modules(
-                module {
-                    single<DateTimeFormatter>(named(HOUR_FORMAT_24H)) {
-                        DateTimeFormatter.ofPattern(HOUR_FORMAT_24H)
-                    }
-                    single<CompactDecimalFormat> {
-                        mockk<CompactDecimalFormat>()
-                    }
-                    single<NumberFormat> {
-                        mockk<NumberFormat>()
-                    }
+            modules(module {
+                single<DateTimeFormatter>(named(HOUR_FORMAT_24H)) {
+                    DateTimeFormatter.ofPattern(HOUR_FORMAT_24H)
                 }
-            )
+                single<CompactDecimalFormat> {
+                    mockk<CompactDecimalFormat>()
+                }
+                single<NumberFormat> {
+                    mockk<NumberFormat>()
+                }
+            })
         }
-
-        every { appConfigRepository.isMainnetEnabled() } returns true
-        every { appConfigRepository.getMainnetUrl() } returns testUrl
-        every { appConfigRepository.getMainnetMessage() } returns testMessage
 
         mockkStatic(DateFormat::class)
         every { DateFormat.is24HourFormat(context) } returns true
 
         every { NumberUtils.compactNumber(any()) } returns "1"
         every { NumberUtils.formatNumber(any()) } returns "1"
-    }
-
-    context("Get mainnet-related info") {
-        given("that mainnet is enabled") {
-            then("return the correct value") {
-                usecase.isMainnetEnabled() shouldBe true
-            }
-            and("get the correct mainnet info") {
-                usecase.getMainnetInfo() shouldBe MainnetInfo(testMessage, testUrl)
-            }
-        }
     }
 
     context("Get Network Stats") {
