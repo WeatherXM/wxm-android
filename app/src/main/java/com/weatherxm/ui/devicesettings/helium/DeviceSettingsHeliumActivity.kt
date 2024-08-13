@@ -10,16 +10,17 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityDeviceSettingsHeliumBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.RewardSplitStakeholderAdapter
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyOnGlobalLayout
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.invisible
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicesettings.ActionType
 import com.weatherxm.ui.devicesettings.DeviceInfoItemAdapter
@@ -250,6 +251,14 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
                     AnalyticsService.ParamValue.WARN.paramValue,
                     AnalyticsService.ParamValue.VIEW.paramValue
                 )
+            }
+            deviceInfo.rewardSplit?.let {
+                binding.rewardSplittingCard.visible(true)
+                binding.rewardSplittingDesc.text =
+                    getString(R.string.reward_split_desc, it.splits.size)
+                val rewardSplitAdapter = RewardSplitStakeholderAdapter(it.wallet, true)
+                binding.recyclerRewardSplit.adapter = rewardSplitAdapter
+                rewardSplitAdapter.submitList(it.splits)
             }
             adapter.submitList(deviceInfo.default)
 

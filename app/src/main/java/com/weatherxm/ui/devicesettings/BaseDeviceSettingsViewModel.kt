@@ -165,5 +165,5 @@ abstract class BaseDeviceSettingsViewModel(
     }
 
     abstract fun getDeviceInformation(context: Context)
-    abstract fun handleInfo(context: Context, info: DeviceInfo)
+    abstract suspend fun handleInfo(context: Context, info: DeviceInfo)
 }

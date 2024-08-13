@@ -11,6 +11,7 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityDeviceSettingsWifiBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.RewardSplitStakeholderAdapter
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyOnGlobalLayout
 import com.weatherxm.ui.common.classSimpleName
@@ -210,6 +211,14 @@ class DeviceSettingsWifiActivity : BaseActivity() {
                     AnalyticsService.ParamValue.VIEW.paramValue,
                     Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
                 )
+            }
+            deviceInfo.rewardSplit?.let {
+                binding.rewardSplittingCard.visible(true)
+                binding.rewardSplittingDesc.text =
+                    getString(R.string.reward_split_desc, it.splits.size)
+                val rewardSplitAdapter = RewardSplitStakeholderAdapter(it.wallet, true)
+                binding.recyclerRewardSplit.adapter = rewardSplitAdapter
+                rewardSplitAdapter.submitList(it.splits)
             }
             defaultAdapter.submitList(deviceInfo.default)
             gatewayAdapter.submitList(deviceInfo.gateway)

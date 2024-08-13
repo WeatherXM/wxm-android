@@ -888,10 +888,21 @@ private val viewmodels = module {
             get()
         )
     }
-    viewModel { params -> DeviceSettingsWifiViewModel(device = params.get(), get(), get(), get()) }
+    viewModel { params ->
+        DeviceSettingsWifiViewModel(
+            device = params.get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
     viewModel { params ->
         DeviceSettingsHeliumViewModel(
             device = params.get(),
+            get(),
+            get(),
             get(),
             get(),
             get()
