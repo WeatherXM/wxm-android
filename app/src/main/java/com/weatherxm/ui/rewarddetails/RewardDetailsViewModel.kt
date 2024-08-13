@@ -11,7 +11,7 @@ import com.weatherxm.data.ApiError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.data.RewardDetails
-import com.weatherxm.data.RewardSplit
+import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.AuthUseCase
@@ -37,16 +37,15 @@ class RewardDetailsViewModel(
 
     fun onRewardDetails(): LiveData<Resource<RewardDetails>> = onRewardDetails
 
-    private var rewardSplits: List<RewardSplit> = emptyList()
+    private var rewardSplitsData = RewardSplitsData(listOf(), String.empty())
     private var walletAddressJob: Job? = null
-    private var walletAddress = String.empty()
     private var isLoggedIn: Boolean? = null
 
     private suspend fun fetchWalletAddress() {
         if (isLoggedIn == true) {
             walletAddressJob = viewModelScope.launch {
                 userUseCase.getWalletAddress().onRight {
-                    walletAddress = it
+                    rewardSplitsData.wallet = it
                 }
             }
         }
@@ -57,11 +56,11 @@ class RewardDetailsViewModel(
             if (walletAddressJob?.isActive == true) {
                 walletAddressJob?.join()
             }
-            listener(walletAddress)
+            listener(rewardSplitsData.wallet)
         }
     }
 
-    fun getRewardSplits() = rewardSplits
+    fun getRewardSplitsData() = rewardSplitsData
 
     fun fetchRewardDetails(timestamp: ZonedDateTime) {
         viewModelScope.launch {
@@ -75,8 +74,8 @@ class RewardDetailsViewModel(
                      */
                     if (it.hasSplitRewards()) {
                         fetchWalletAddress()
+                        rewardSplitsData.splits = it.rewardSplit ?: emptyList()
                     }
-                    rewardSplits = it.rewardSplit ?: emptyList()
                     onRewardDetails.postValue(Resource.success(it))
                 }
                 .onLeft {

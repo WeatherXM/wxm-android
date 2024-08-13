@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentRewardSplitDialogBinding
+import com.weatherxm.ui.common.RewardSplitStakeholderAdapter
 import com.weatherxm.ui.components.BaseBottomSheetDialogFragment
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
@@ -32,12 +33,13 @@ class RewardSplitDialogFragment : BaseBottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.message.text = getString(R.string.reward_split_desc, model.getRewardSplits().size)
+        binding.message.text =
+            getString(R.string.reward_split_desc, model.getRewardSplitsData().splits.size)
 
         model.getWalletAddress {
-            val adapter = RewardSplitStakeholderAdapter(it)
+            val adapter = RewardSplitStakeholderAdapter(it, false)
             binding.stakeholderRecycler.adapter = adapter
-            adapter.submitList(model.getRewardSplits())
+            adapter.submitList(model.getRewardSplitsData().splits)
         }
 
         binding.doneBtn.setOnClickListener {

@@ -1,4 +1,4 @@
-package com.weatherxm.ui.rewarddetails
+package com.weatherxm.ui.common
 
 import android.annotation.SuppressLint
 import android.graphics.Typeface
@@ -14,7 +14,8 @@ import com.weatherxm.util.Mask
 import com.weatherxm.util.Rewards.formatTokens
 
 class RewardSplitStakeholderAdapter(
-    private val walletAddress: String
+    private val walletAddress: String,
+    private val isInStationSettings: Boolean
 ) : ListAdapter<RewardSplit, RewardSplitStakeholderAdapter.RewardSplitStakeholderViewHolder>(
     RewardSplitStakeholderDiffCallback()
 ) {
@@ -52,9 +53,14 @@ class RewardSplitStakeholderAdapter(
             } else {
                 binding.address.text = Mask.maskHash(item.wallet)
             }
-            binding.amount.text =
-                itemView.context.getString(R.string.wxm_amount, formatTokens(item.reward))
-            binding.percentage.text = "(${item.stake}%)"
+
+            if (isInStationSettings) {
+                binding.percentage.text = "${item.stake}%"
+            } else {
+                binding.amount.text =
+                    itemView.context.getString(R.string.wxm_amount, formatTokens(item.reward))
+                binding.percentage.text = "(${item.stake}%)"
+            }
         }
     }
 }

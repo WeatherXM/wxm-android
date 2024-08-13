@@ -704,7 +704,7 @@ data class WalletRewards(
 data class RewardSplit(
     val wallet: String,
     val stake: Int,
-    val reward: Float
+    val reward: Float?
 ) : Parcelable
 
 @Suppress("EnumNaming")
