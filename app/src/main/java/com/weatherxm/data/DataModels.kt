@@ -16,7 +16,13 @@ data class CountryAndFrequencies(
     val country: String?,
     val recommendedFrequency: Frequency,
     val otherFrequencies: List<Frequency>,
-) : Parcelable
+) : Parcelable {
+    companion object {
+        fun default(): CountryAndFrequencies {
+            return CountryAndFrequencies(null, Frequency.US915, otherFrequencies(Frequency.US915))
+        }
+    }
+}
 
 @Keep
 @JsonClass(generateAdapter = true)

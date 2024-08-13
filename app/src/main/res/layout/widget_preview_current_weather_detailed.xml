@@ -297,7 +297,7 @@
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_weather_wind"
+                            android:src="@drawable/ic_wind_direction"
                             android:tint="@color/colorPrimaryVariant"
                             tools:ignore="UseAppTint,contentDescription" />
                     </LinearLayout>
@@ -329,7 +329,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignBaseline="@id/windValue"
                         android:layout_toEndOf="@id/windValue"
-                        android:text=" km/h SSW"
+                        android:text=" km/h S"
                         android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
                         tools:ignore="HardcodedText" />
 
@@ -424,7 +424,7 @@
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_weather_wind"
+                            android:src="@drawable/ic_wind_direction"
                             android:tint="@color/colorPrimaryVariant"
                             tools:ignore="UseAppTint,contentDescription" />
 
@@ -457,7 +457,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignBaseline="@id/windGustValue"
                         android:layout_toEndOf="@id/windGustValue"
-                        android:text=" km/h SSW"
+                        android:text=" km/h S"
                         android:textAppearance="@style/TextAppearance.WeatherXM.Devices.List.WeatherData.Unit"
                         tools:ignore="HardcodedText" />
 

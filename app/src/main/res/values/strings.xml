@@ -45,6 +45,8 @@
     <string name="permission_permanently_denied_rationale">Go to the app settings to give the required permissions.</string>
     <string name="warn_cancelled">Cancelled!</string>
     <string name="permission_bluetooth_title">WeatherXM Requests Access to Bluetooth</string>
+    <string name="camera_permission_required_title">Access to your camera</string>
+    <string name="camera_permission_required">Camera permission is required. Please enable it in your device settings.</string>
 
     <!-- Login -->
     <string name="title_login">Login</string>
@@ -297,9 +299,6 @@
     <string name="total_tokens_to_be_rewarded">Total tokens to be rewarded (max)</string>
     <string name="boost_period">Boost period</string>
     <string name="got_all_beta_rewards">Great! Got all beta rewards for this day!</string>
-
-    <!-- Mainnet -->
-    <string name="mainnet_welcome">Welcome to Mainnet!</string>
 
     <!-- Claim Rewards -->
     <string name="claim_rewards">Claim Rewards</string>

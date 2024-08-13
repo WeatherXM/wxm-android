@@ -46,7 +46,7 @@ class StartupUseCaseImpl(
                     .map {
                         Timber.d("Already logged in.")
                         RefreshFcmApiWorker.initAndRefreshToken(context, null)
-                        if (!userPreferencesRepository.shouldShowAnalyticsOptIn()) {
+                        if (userPreferencesRepository.shouldShowAnalyticsOptIn()) {
                             trySend(StartupState.ShowAnalyticsOptIn)
                         } else {
                             trySend(StartupState.ShowHome)

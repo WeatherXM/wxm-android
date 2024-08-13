@@ -13,7 +13,6 @@ import com.mapbox.search.result.SearchResult
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.data.CountryAndFrequencies
 import com.weatherxm.data.Failure
-import com.weatherxm.data.Frequency
 import com.weatherxm.data.Location
 import com.weatherxm.data.MapBoxError.ReverseGeocodingError
 import com.weatherxm.data.datasource.CacheAddressDataSource
@@ -21,7 +20,6 @@ import com.weatherxm.data.datasource.CacheAddressSearchDataSource
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
-import com.weatherxm.data.otherFrequencies
 import timber.log.Timber
 
 interface AddressRepository {
@@ -50,13 +48,12 @@ class AddressRepositoryImpl(
     override suspend fun getSearchSuggestions(
         query: String
     ): Either<Failure, List<SearchSuggestion>> {
-        val countryCode = locationDataSource.getUserCountry()
-
-        return cacheSearch.getSearchSuggestions(query, countryCode)
+        return cacheSearch.getSearchSuggestions(query, null)
             .onRight {
                 Timber.d("Found suggestions in cache [query=$query]")
             }
             .handleErrorWith {
+                val countryCode = locationDataSource.getUserCountry()
                 networkSearch.getSearchSuggestions(query, countryCode).flatMap { countryResults ->
                     // If no results, search again globally without country limitations
                     if (countryResults.isEmpty()) {
@@ -106,9 +103,8 @@ class AddressRepositoryImpl(
     }
 
     override suspend fun getCountryAndFrequencies(location: Location): CountryAndFrequencies {
-        return networkAddress.getCountryAndFrequencies(location).fold({
-            CountryAndFrequencies(null, Frequency.US915, otherFrequencies(Frequency.US915))
-        }, { it })
+        return networkAddress.getCountryAndFrequencies(location)
+            .fold({ CountryAndFrequencies.default() }, { it })
     }
 
     /**
@@ -119,7 +115,7 @@ class AddressRepositoryImpl(
             accuracy == ResultAccuracy.Point,
             accuracy == ResultAccuracy.Rooftop,
             accuracy == ResultAccuracy.Street
-        ).any()
+        ).any { it }
     }
 
     /**

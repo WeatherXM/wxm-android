@@ -1,9 +1,10 @@
 package com.weatherxm.data.repository
 
-import arrow.core.Either
-import com.weatherxm.TestUtils.isDeviceNotFound
+import com.weatherxm.TestConfig.failure
+import com.weatherxm.TestUtils.coMockEitherLeft
+import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.ApiError
 import com.weatherxm.data.datasource.CacheFollowDataSource
 import com.weatherxm.data.datasource.NetworkFollowDataSource
 import io.kotest.core.spec.style.BehaviorSpec
@@ -20,33 +21,32 @@ class FollowRepositoryTest : BehaviorSpec({
 
     val validId = "testId"
     val emptyId = ""
+    val ids = listOf(validId, validId)
 
     beforeSpec {
-        coEvery {
-            networkSource.followStation(emptyId)
-        } returns Either.Left(ApiError.DeviceNotFound(""))
-        coEvery { networkSource.followStation(validId) } returns Either.Right(Unit)
-        coEvery {
-            networkSource.unfollowStation(emptyId)
-        } returns Either.Left(ApiError.DeviceNotFound(""))
-        coEvery { networkSource.unfollowStation(validId) } returns Either.Right(Unit)
+        coMockEitherLeft({ networkSource.followStation(emptyId) }, failure)
+        coMockEitherRight({ networkSource.followStation(validId) }, Unit)
+        coMockEitherLeft({ networkSource.unfollowStation(emptyId) }, failure)
+        coMockEitherRight({ networkSource.unfollowStation(validId) }, Unit)
         coJustRun { cacheSource.followStation(emptyId) }
         coJustRun { cacheSource.followStation(validId) }
         coJustRun { cacheSource.unfollowStation(emptyId) }
         coJustRun { cacheSource.unfollowStation(validId) }
+        coJustRun { cacheSource.setFollowedDevicesIds(ids) }
+        coEvery { cacheSource.getFollowedDevicesIds() } returns ids
     }
 
     context("Follow request in Repository") {
         given("a device ID") {
             When("it's invalid") {
                 then("return a Failure") {
-                    repo.followStation(emptyId).isLeft { it.isDeviceNotFound()} shouldBe true
+                    repo.followStation(emptyId).isError()
                     coVerify(exactly = 1) { networkSource.followStation(emptyId) }
                 }
             }
             When("it's valid") {
                 then("return a success") {
-                    repo.followStation(validId) shouldBe Either.Right(Unit)
+                    repo.followStation(validId).isSuccess(Unit)
                     coVerify(exactly = 1) { networkSource.followStation(validId) }
                 }
                 and("Save it in the cache") {
@@ -60,7 +60,7 @@ class FollowRepositoryTest : BehaviorSpec({
         given("a device ID") {
             When("it's invalid") {
                 then("return a Failure") {
-                    repo.unfollowStation(emptyId).isLeft { it.isDeviceNotFound() } shouldBe true
+                    repo.unfollowStation(emptyId).isError()
                     coVerify(exactly = 1) { networkSource.unfollowStation(emptyId) }
                 }
                 and("Re-save it back in the cache") {
@@ -75,6 +75,21 @@ class FollowRepositoryTest : BehaviorSpec({
                 and("Remove it from the cache") {
                     coVerify(exactly = 1) { cacheSource.unfollowStation(validId) }
                 }
+            }
+        }
+    }
+
+    context("Get/set followed devices IDs") {
+        given("a list of device IDs") {
+            then("Set them in cache") {
+                repo.setFollowedDevicesIds(ids)
+                coVerify(exactly = 1) { cacheSource.setFollowedDevicesIds(ids) }
+            }
+        }
+        given("a request to get the device IDs of followed stations") {
+            then("Get them from cache") {
+                repo.getFollowedDevicesIds() shouldBe ids
+                coVerify(exactly = 1) { cacheSource.getFollowedDevicesIds() }
             }
         }
     }

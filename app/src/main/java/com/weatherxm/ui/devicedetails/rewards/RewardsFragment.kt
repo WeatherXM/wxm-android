@@ -71,18 +71,6 @@ class RewardsFragment : BaseFragment() {
             }
         }
 
-        model.onMainnet().observe(viewLifecycleOwner) {
-            if (it.message.isNotEmpty()) {
-                binding.mainnetCard.message(it.message)
-            }
-            if (it.url.isNotEmpty()) {
-                binding.mainnetCard.listener {
-                    navigator.openWebsite(context, it.url)
-                }
-            }
-            binding.mainnetCard.visible(true)
-        }
-
         model.onRewards().observe(viewLifecycleOwner) {
             val totalRewards = it.totalRewards ?: 0F
             binding.emptyCard.visible(it.isEmpty())
@@ -131,7 +119,6 @@ class RewardsFragment : BaseFragment() {
             navigator.showRewardsList(requireContext(), model.device)
         }
 
-        model.fetchMainnetStatus()
         model.fetchRewardsFromNetwork()
     }
 
@@ -207,9 +194,9 @@ class RewardsFragment : BaseFragment() {
                     Bar(height = normalizedValue, colorId = getRewardScoreColor(it))
                 }
             }
-            context?.let {
+            entry.timestamp?.dayOfWeek?.getFirstLetter()?.let {
                 Text(
-                    text = entry.timestamp?.dayOfWeek?.getFirstLetter(it) ?: String.empty(),
+                    text = context?.getString(it) ?: String.empty(),
                     Modifier.padding(0.dp, 4.dp, 0.dp, 0.dp),
                     fontSize = 12.sp,
                     color = Color(requireContext().getColor(R.color.colorOnSurface)),

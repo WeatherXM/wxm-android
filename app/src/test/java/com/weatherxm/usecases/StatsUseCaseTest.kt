@@ -1,16 +1,16 @@
 package com.weatherxm.usecases
 
-import android.content.Context
 import android.icu.text.CompactDecimalFormat
 import android.icu.text.NumberFormat
 import android.text.format.DateFormat
-import arrow.core.Either
 import com.github.mikephil.charting.data.Entry
-import com.weatherxm.TestUtils.isNoConnectionError
-import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.TestConfig.context
+import com.weatherxm.TestConfig.failure
+import com.weatherxm.TestUtils.coMockEitherLeft
+import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.data.Connectivity
 import com.weatherxm.data.HOUR_FORMAT_24H
-import com.weatherxm.data.NetworkError
 import com.weatherxm.data.NetworkStatsContracts
 import com.weatherxm.data.NetworkStatsCustomers
 import com.weatherxm.data.NetworkStatsResponse
@@ -19,15 +19,12 @@ import com.weatherxm.data.NetworkStatsStationDetails
 import com.weatherxm.data.NetworkStatsTimeseries
 import com.weatherxm.data.NetworkStatsTokens
 import com.weatherxm.data.NetworkStatsWeatherStations
-import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.StatsRepository
-import com.weatherxm.ui.common.MainnetInfo
 import com.weatherxm.ui.networkstats.NetworkStationStats
 import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
 import com.weatherxm.util.NumberUtils
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -42,12 +39,8 @@ import java.time.format.DateTimeFormatter
 
 class StatsUseCaseTest : KoinTest, BehaviorSpec({
     val repo = mockk<StatsRepository>()
-    val appConfigRepository = mockk<AppConfigRepository>()
-    val context = mockk<Context>()
-    val usecase = StatsUseCaseImpl(repo, appConfigRepository, context)
+    val usecase = StatsUseCaseImpl(repo, context)
 
-    val testMessage = "testMessage"
-    val testUrl = "testUrl"
     val firstDate = ZonedDateTime.of(2024, 6, 25, 2, 0, 0, 0, ZoneId.of("UTC"))
     val middleDate = ZonedDateTime.of(2024, 6, 26, 2, 0, 0, 0, ZoneId.of("UTC"))
     val lastDate = ZonedDateTime.of(2024, 6, 27, 2, 0, 0, 0, ZoneId.of("UTC"))
@@ -96,34 +89,20 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
         lastUpdated = lastDate
     )
 
-    fun mockGetNetworkStatsResponse(isSuccess: Boolean) {
-        coEvery { repo.getNetworkStats() } returns if (isSuccess) {
-            Either.Right(testNetworkStats)
-        } else {
-            Either.Left(NetworkError.NoConnectionError())
-        }
-    }
-
     beforeSpec {
         startKoin {
-            modules(
-                module {
-                    single<DateTimeFormatter>(named(HOUR_FORMAT_24H)) {
-                        DateTimeFormatter.ofPattern(HOUR_FORMAT_24H)
-                    }
-                    single<CompactDecimalFormat> {
-                        mockk<CompactDecimalFormat>()
-                    }
-                    single<NumberFormat> {
-                        mockk<NumberFormat>()
-                    }
+            modules(module {
+                single<DateTimeFormatter>(named(HOUR_FORMAT_24H)) {
+                    DateTimeFormatter.ofPattern(HOUR_FORMAT_24H)
                 }
-            )
+                single<CompactDecimalFormat> {
+                    mockk<CompactDecimalFormat>()
+                }
+                single<NumberFormat> {
+                    mockk<NumberFormat>()
+                }
+            })
         }
-
-        every { appConfigRepository.isMainnetEnabled() } returns true
-        every { appConfigRepository.getMainnetUrl() } returns testUrl
-        every { appConfigRepository.getMainnetMessage() } returns testMessage
 
         mockkStatic(DateFormat::class)
         every { DateFormat.is24HourFormat(context) } returns true
@@ -132,27 +111,16 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
         every { NumberUtils.formatNumber(any()) } returns "1"
     }
 
-    context("Get mainnet-related info") {
-        given("that mainnet is enabled") {
-            then("return the correct value") {
-                usecase.isMainnetEnabled() shouldBe true
-            }
-            and("get the correct mainnet info") {
-                usecase.getMainnetInfo() shouldBe MainnetInfo(testMessage, testUrl)
-            }
-        }
-    }
-
     context("Get Network Stats") {
         given("an API call that fetches the Network Stats") {
             When("the API call fails") {
-                mockGetNetworkStatsResponse(false)
+                coMockEitherLeft({ repo.getNetworkStats() }, failure)
                 then("a failure should be returned") {
-                    usecase.getNetworkStats().isLeft { it.isNoConnectionError() } shouldBe true
+                    usecase.getNetworkStats().isError()
                 }
             }
             When("the API call returns some data") {
-                mockGetNetworkStatsResponse(true)
+                coMockEitherRight({ repo.getNetworkStats() }, testNetworkStats)
                 then("the correct transformation to the UI Model should take place") {
                     val response = usecase.getNetworkStats()
                     response.isRight() shouldBe true

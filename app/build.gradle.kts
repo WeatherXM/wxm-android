@@ -317,6 +317,12 @@ android {
     android.testOptions {
         unitTests.all {
             it.useJUnitPlatform()
+            it.jvmArgs = listOf(
+                "--add-opens",
+                "java.base/java.lang=ALL-UNNAMED",
+                "--add-opens",
+                "java.base/java.lang.reflect=ALL-UNNAMED"
+            )
         }
     }
 
@@ -376,6 +382,9 @@ dependencies {
     // Google Play Services for Location & Maps & QR Scanner
     implementation(libs.play.services.location)
     implementation(libs.play.services.scanner)
+
+    // Barcode Scanner
+    implementation(libs.barcode.scanner)
 
     // Logging
     implementation(libs.timber)

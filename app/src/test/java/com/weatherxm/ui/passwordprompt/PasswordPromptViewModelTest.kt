@@ -1,7 +1,9 @@
 package com.weatherxm.ui.passwordprompt
 
-import arrow.core.Either
 import com.weatherxm.R
+import com.weatherxm.TestConfig.resources
+import com.weatherxm.TestUtils.coMockEitherLeft
+import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.analytics.AnalyticsWrapper
@@ -11,10 +13,8 @@ import com.weatherxm.usecases.PasswordPromptUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
-import io.mockk.Runs
-import io.mockk.coEvery
 import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,7 +29,6 @@ import org.koin.dsl.module
 @OptIn(ExperimentalCoroutinesApi::class)
 class PasswordPromptViewModelTest : BehaviorSpec({
     val usecase = mockk<PasswordPromptUseCase>()
-    val resources = mockk<Resources>()
     val analytics = mockk<AnalyticsWrapper>()
     val viewModel = PasswordPromptViewModel(usecase, resources, analytics)
     val tooSmallPassword = "test"
@@ -53,10 +52,10 @@ class PasswordPromptViewModelTest : BehaviorSpec({
 
         val failure = ApiError.AuthError.LoginError.InvalidPassword("")
         every { resources.getString(R.string.error_invalid_password) } returns invalidPassMsg
-        every { analytics.trackEventFailure(any()) } just Runs
+        justRun { analytics.trackEventFailure(any()) }
         every { failure.getDefaultMessage(R.string.error_invalid_password) } returns invalidPassMsg
-        coEvery { usecase.isPasswordCorrect(validPassword) } returns Either.Right(Unit)
-        coEvery { usecase.isPasswordCorrect(invalidPassword) } returns Either.Left(failure)
+        coMockEitherRight({ usecase.isPasswordCorrect(validPassword) }, Unit)
+        coMockEitherLeft({ usecase.isPasswordCorrect(invalidPassword) }, failure)
     }
 
     context("Check if Password is correct") {
