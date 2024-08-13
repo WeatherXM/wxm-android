@@ -1,11 +1,11 @@
 package com.weatherxm.usecases
 
-import android.content.Context
 import android.icu.text.CompactDecimalFormat
 import android.icu.text.NumberFormat
 import android.text.format.DateFormat
 import arrow.core.Either
 import com.github.mikephil.charting.data.Entry
+import com.weatherxm.TestConfig.context
 import com.weatherxm.TestUtils.isNoConnectionError
 import com.weatherxm.data.Connectivity
 import com.weatherxm.data.HOUR_FORMAT_24H
@@ -39,7 +39,6 @@ import java.time.format.DateTimeFormatter
 
 class StatsUseCaseTest : KoinTest, BehaviorSpec({
     val repo = mockk<StatsRepository>()
-    val context = mockk<Context>()
     val usecase = StatsUseCaseImpl(repo, context)
 
     val firstDate = ZonedDateTime.of(2024, 6, 25, 2, 0, 0, 0, ZoneId.of("UTC"))

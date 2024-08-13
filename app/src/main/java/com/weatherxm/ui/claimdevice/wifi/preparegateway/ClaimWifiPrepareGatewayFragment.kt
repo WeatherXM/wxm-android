@@ -44,6 +44,7 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
         binding.m5Notice.visible(model.deviceType == DeviceType.M5_WIFI)
 
         binding.enterManuallyBtn.setOnClickListener {
+            dismissSnackbar()
             model.next()
         }
 
@@ -58,6 +59,7 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
         scanner.startScan()
             .addOnSuccessListener { barcode ->
                 val scannedInfo = barcode.rawValue ?: String.empty()
+                dismissSnackbar()
                 if (model.deviceType == DeviceType.M5_WIFI) {
                     handleM5QR(scannedInfo)
                 } else {
@@ -68,7 +70,7 @@ class ClaimWifiPrepareGatewayFragment : BaseFragment() {
                 Timber.e(e, "Failure when scanning QR of the device")
                 showSnackbarMessage(
                     binding.root,
-                    getString(R.string.error_connect_wallet_scan_exception, e.message),
+                    getString(R.string.error_scan_exception, e.message),
                     callback = { snackbar?.dismiss() },
                     R.string.action_dismiss,
                     binding.buttonBar

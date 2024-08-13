@@ -45,6 +45,8 @@
     <string name="permission_permanently_denied_rationale">Go to the app settings to give the required permissions.</string>
     <string name="warn_cancelled">Cancelled!</string>
     <string name="permission_bluetooth_title">WeatherXM Requests Access to Bluetooth</string>
+    <string name="camera_permission_required_title">Access to your camera</string>
+    <string name="camera_permission_required">Camera permission is required. Please enable it in your device settings.</string>
 
     <!-- Login -->
     <string name="title_login">Login</string>

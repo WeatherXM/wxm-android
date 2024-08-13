@@ -106,7 +106,7 @@ class ConnectWalletActivity : BaseActivity() {
                 .addOnFailureListener { e ->
                     Timber.e(e, "Failure when scanning QR of wallet")
                     toast(
-                        R.string.error_connect_wallet_scan_exception,
+                        R.string.error_scan_exception,
                         e.message ?: String.empty(),
                         Toast.LENGTH_LONG
                     )

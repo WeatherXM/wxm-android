@@ -31,7 +31,6 @@ class DisplayModeHelper(
             when (savedValue) {
                 resources.getString(R.string.dark_value) -> MODE_NIGHT_YES
                 resources.getString(R.string.light_value) -> MODE_NIGHT_NO
-                resources.getString(R.string.system_value) -> MODE_NIGHT_FOLLOW_SYSTEM
                 else -> MODE_NIGHT_FOLLOW_SYSTEM
             }
         )
@@ -70,9 +69,6 @@ class DisplayModeHelper(
         return when (savedValue.toString()) {
             resources.getString(R.string.dark_value) -> true
             resources.getString(R.string.light_value) -> false
-            resources.getString(R.string.system_value) -> {
-                systemNightMode == Configuration.UI_MODE_NIGHT_YES
-            }
             else -> {
                 systemNightMode == Configuration.UI_MODE_NIGHT_YES
             }

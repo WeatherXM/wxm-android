@@ -18,6 +18,12 @@ interface BaseInterface {
     val navigator: Navigator
     var snackbar: Snackbar?
 
+    fun dismissSnackbar() {
+        if (snackbar?.isShown == true) {
+            snackbar?.dismiss()
+        }
+    }
+
     fun showSnackbarMessage(
         viewGroup: ViewGroup,
         message: String,
@@ -25,9 +31,7 @@ interface BaseInterface {
         @StringRes actionTextResId: Int = R.string.action_retry,
         anchorView: View? = null
     ) {
-        if (snackbar?.isShown == true) {
-            snackbar?.dismiss()
-        }
+        dismissSnackbar()
 
         try {
             if (callback != null) {
