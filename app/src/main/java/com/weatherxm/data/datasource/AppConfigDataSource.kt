@@ -67,6 +67,10 @@ class AppConfigDataSourceImpl(
         cacheService.setInstallationId(installationId)
     }
 
+    /**
+     * Get the installation id from the cache if exists, or else from Firebase.
+     * Return null if both fail.
+     */
     override fun getInstallationId(): String? {
         return cacheService.getInstallationId()
             .handleErrorWith {
