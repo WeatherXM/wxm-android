@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
@@ -13,6 +14,7 @@ import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.RewardSplit
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
@@ -27,7 +29,8 @@ class RewardDetailsViewModel(
     private val analytics: AnalyticsWrapper,
     private val resources: Resources,
     private val usecase: RewardsUseCase,
-    private val userUseCase: UserUseCase
+    private val userUseCase: UserUseCase,
+    private val authUseCase: AuthUseCase
 ) : ViewModel() {
 
     private val onRewardDetails = MutableLiveData<Resource<RewardDetails>>()
@@ -37,11 +40,14 @@ class RewardDetailsViewModel(
     private var rewardSplits: List<RewardSplit> = emptyList()
     private var walletAddressJob: Job? = null
     private var walletAddress = String.empty()
+    private var isLoggedIn: Boolean? = null
 
     private suspend fun fetchWalletAddress() {
-        walletAddressJob = viewModelScope.launch {
-            userUseCase.getWalletAddress().onRight {
-                walletAddress = it
+        if (isLoggedIn == true) {
+            walletAddressJob = viewModelScope.launch {
+                userUseCase.getWalletAddress().onRight {
+                    walletAddress = it
+                }
             }
         }
     }
@@ -91,5 +97,11 @@ class RewardDetailsViewModel(
                 }
             )
         )
+    }
+
+    init {
+        viewModelScope.launch {
+            isLoggedIn = authUseCase.isLoggedIn().getOrElse { false }
+        }
     }
 }

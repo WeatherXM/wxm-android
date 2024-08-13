@@ -948,6 +948,7 @@ private val viewmodels = module {
             get(),
             get(),
             get(),
+            get(),
             get()
         )
     }

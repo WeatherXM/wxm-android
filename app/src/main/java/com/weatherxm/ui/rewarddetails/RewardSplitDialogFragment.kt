@@ -39,5 +39,9 @@ class RewardSplitDialogFragment : BaseBottomSheetDialogFragment() {
             binding.stakeholderRecycler.adapter = adapter
             adapter.submitList(model.getRewardSplits())
         }
+
+        binding.doneBtn.setOnClickListener {
+            dismiss()
+        }
     }
 }

@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fitsSystemWindows="false"
+    android:background="@drawable/background_rounded_surface"
     android:orientation="vertical">
 
     <LinearLayout
@@ -52,7 +53,7 @@
             tools:listitem="@layout/list_item_reward_split_stakeholder" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/showSplitBtn"
+            android:id="@+id/doneBtn"
             style="@style/Widget.WeatherXM.Button.Ghost"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
