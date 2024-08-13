@@ -1,18 +1,15 @@
 package com.weatherxm.usecases
 
-import arrow.core.Either
-import com.weatherxm.TestUtils.isDeviceNotFound
+import com.weatherxm.TestConfig.failure
+import com.weatherxm.TestUtils.coMockEitherLeft
+import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.ApiError
 import com.weatherxm.data.repository.FollowRepository
 import com.weatherxm.util.WidgetHelper
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
-import io.mockk.Runs
-import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
 
@@ -25,18 +22,18 @@ class FollowUseCaseTest : BehaviorSpec({
     val emptyId = ""
 
     beforeSpec {
-        coEvery { repo.followStation(emptyId) } returns Either.Left(ApiError.DeviceNotFound(""))
-        coEvery { repo.followStation(validId) } returns Either.Right(Unit)
-        coEvery { repo.unfollowStation(emptyId) } returns Either.Left(ApiError.DeviceNotFound(""))
-        coEvery { repo.unfollowStation(validId) } returns Either.Right(Unit)
-        every { widgetHelper.onUnfollowEvent(validId) } just Runs
+        coMockEitherLeft({ repo.followStation(emptyId) }, failure)
+        coMockEitherRight({ repo.followStation(validId) }, Unit)
+        coMockEitherLeft({ repo.unfollowStation(emptyId) }, failure)
+        coMockEitherRight({ repo.unfollowStation(validId) }, Unit)
+        justRun { widgetHelper.onUnfollowEvent(validId) }
     }
 
     context("Follow request in usecase") {
         given("a device ID") {
             When("it's invalid") {
                 then("return a Failure") {
-                    usecase.followStation(emptyId).isLeft { it.isDeviceNotFound() } shouldBe true
+                    usecase.followStation(emptyId).isError()
                     coVerify(exactly = 1) { repo.followStation(emptyId) }
                 }
             }
@@ -53,7 +50,7 @@ class FollowUseCaseTest : BehaviorSpec({
         given("a device ID") {
             When("it's invalid") {
                 then("return a Failure") {
-                    usecase.unfollowStation(emptyId).isLeft { it.isDeviceNotFound() } shouldBe true
+                    usecase.unfollowStation(emptyId).isError()
                     coVerify(exactly = 1) { repo.unfollowStation(emptyId) }
                 }
             }

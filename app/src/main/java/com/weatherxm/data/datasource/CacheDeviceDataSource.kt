@@ -8,7 +8,7 @@ import com.weatherxm.data.Location
 import com.weatherxm.data.services.CacheService
 
 class CacheDeviceDataSource(private val cacheService: CacheService) : DeviceDataSource {
-    override suspend fun getUserDevices(deviceIds: String?): Either<Failure, List<Device>> {
+    override suspend fun getUserDevices(): Either<Failure, List<Device>> {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 

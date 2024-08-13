@@ -7,6 +7,8 @@ import android.os.Parcelable
 import arrow.core.Either
 import com.weatherxm.R
 import com.weatherxm.TestConfig.context
+import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.TestUtils.mockEitherRight
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.widgets.WidgetType
@@ -14,11 +16,10 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.just
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkStatic
-import io.mockk.runs
 import io.mockk.verify
 
 class WidgetHelperTest : BehaviorSpec({
@@ -32,7 +33,7 @@ class WidgetHelperTest : BehaviorSpec({
     val testWidgetIdNullInfo = -1
 
     beforeSpec {
-        every { cacheService.getWidgetIds() } returns Either.Right(testWidgetIds)
+        mockEitherRight({ cacheService.getWidgetIds() }, testWidgetIds)
         every { appWidgetManager.getAppWidgetInfo(any()) } returns appWidgetProviderInfo
         mockkStatic(AppWidgetManager::class)
         every { AppWidgetManager.getInstance(context) } returns appWidgetManager
@@ -50,7 +51,7 @@ class WidgetHelperTest : BehaviorSpec({
         every {
             anyConstructed<Intent>().putExtra(Contracts.ARG_WIDGET_SHOULD_SELECT_STATION, true)
         } returns mockk()
-        every { context.sendBroadcast(any()) } just runs
+        justRun { context.sendBroadcast(any()) }
     }
 
     suspend fun BehaviorSpecWhenContainerScope.testWidgetTypeById(
@@ -66,7 +67,7 @@ class WidgetHelperTest : BehaviorSpec({
     context("Get widget-related information") {
         given("Some widget IDs") {
             then("getWidgetIds should return a list of widget IDs") {
-                widgetHelper.getWidgetIds() shouldBe Either.Right(testWidgetIds)
+                widgetHelper.getWidgetIds().isSuccess(testWidgetIds)
             }
         }
         given("A widget layout associated with a widget") {

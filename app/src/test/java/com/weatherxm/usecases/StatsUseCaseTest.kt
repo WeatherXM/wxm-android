@@ -3,13 +3,14 @@ package com.weatherxm.usecases
 import android.icu.text.CompactDecimalFormat
 import android.icu.text.NumberFormat
 import android.text.format.DateFormat
-import arrow.core.Either
 import com.github.mikephil.charting.data.Entry
 import com.weatherxm.TestConfig.context
-import com.weatherxm.TestUtils.isNoConnectionError
+import com.weatherxm.TestConfig.failure
+import com.weatherxm.TestUtils.coMockEitherLeft
+import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.data.Connectivity
 import com.weatherxm.data.HOUR_FORMAT_24H
-import com.weatherxm.data.NetworkError
 import com.weatherxm.data.NetworkStatsContracts
 import com.weatherxm.data.NetworkStatsCustomers
 import com.weatherxm.data.NetworkStatsResponse
@@ -24,7 +25,6 @@ import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
 import com.weatherxm.util.NumberUtils
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -47,17 +47,22 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
     val testNetworkStats = NetworkStatsResponse(
         weatherStations = NetworkStatsWeatherStations(
             NetworkStatsStation(
-                100, listOf(
+                100,
+                listOf(
                     NetworkStatsStationDetails("test", Connectivity.wifi, "test", 50, 0.5),
                     NetworkStatsStationDetails("test", Connectivity.helium, "test", 50, 0.5)
                 )
-            ), NetworkStatsStation(
-                100, listOf(
+            ),
+            NetworkStatsStation(
+                100,
+                listOf(
                     NetworkStatsStationDetails("test", Connectivity.wifi, "test", 60, 0.6),
                     NetworkStatsStationDetails("test", Connectivity.helium, "test", 40, 0.4)
                 )
-            ), NetworkStatsStation(
-                100, listOf(
+            ),
+            NetworkStatsStation(
+                100,
+                listOf(
                     NetworkStatsStationDetails("test", Connectivity.wifi, "test", 40, 0.4),
                     NetworkStatsStationDetails("test", Connectivity.helium, "test", 60, 0.6)
                 )
@@ -69,23 +74,20 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
             NetworkStatsTimeseries(lastDate, 20000.0)
         ),
         tokens = NetworkStatsTokens(
-            100000000, 5000000, listOf(
+            100000000,
+            5000000,
+            listOf(
                 NetworkStatsTimeseries(middleDate, 1000.0),
                 NetworkStatsTimeseries(lastDate, 100000.0)
-            ), 500135.0, 5000000, "testTxHash"
+            ),
+            500135.0,
+            5000000,
+            "testTxHash"
         ),
         contracts = NetworkStatsContracts("testTokenUrl", "testRewardsUrl"),
         customers = NetworkStatsCustomers(1000, 900),
         lastUpdated = lastDate
     )
-
-    fun mockGetNetworkStatsResponse(isSuccess: Boolean) {
-        coEvery { repo.getNetworkStats() } returns if (isSuccess) {
-            Either.Right(testNetworkStats)
-        } else {
-            Either.Left(NetworkError.NoConnectionError())
-        }
-    }
 
     beforeSpec {
         startKoin {
@@ -112,13 +114,13 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
     context("Get Network Stats") {
         given("an API call that fetches the Network Stats") {
             When("the API call fails") {
-                mockGetNetworkStatsResponse(false)
+                coMockEitherLeft({ repo.getNetworkStats() }, failure)
                 then("a failure should be returned") {
-                    usecase.getNetworkStats().isLeft { it.isNoConnectionError() } shouldBe true
+                    usecase.getNetworkStats().isError()
                 }
             }
             When("the API call returns some data") {
-                mockGetNetworkStatsResponse(true)
+                coMockEitherRight({ repo.getNetworkStats() }, testNetworkStats)
                 then("the correct transformation to the UI Model should take place") {
                     val response = usecase.getNetworkStats()
                     response.isRight() shouldBe true

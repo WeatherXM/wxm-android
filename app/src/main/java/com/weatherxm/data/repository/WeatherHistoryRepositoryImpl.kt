@@ -74,7 +74,7 @@ class WeatherHistoryRepositoryImpl(
     /**
      * Returns true if a data-day is complete. In this first implementation, since we know
      * we are requesting hourly aggregations, it's safe to assume we need at least (or exactly)
-     * 24 hourly items and definitely values within 2 hours from the  the start/end of day.
+     * 24 hourly items and definitely values within 2 hours from the the start/end of day.
      *
      * TODO This could be improved with a more sophisticated timeseries continuity check.
      */
@@ -96,6 +96,8 @@ class WeatherHistoryRepositoryImpl(
             return false
         }
 
+        // TODO: Examine the below line. Might be overkill, `firstNotNullOf` should be enough (?)
+        // Find the first timezone in the data otherwise return false
         val tz = data.firstNotNullOfOrNull { it.timestamp.zone } ?: return false
 
         // Check if the first element is within startOfDayMaxOffsetHours hours from the start of day

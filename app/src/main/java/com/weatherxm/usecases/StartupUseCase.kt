@@ -42,7 +42,7 @@ class StartupUseCaseImpl(
                 authRepository.isLoggedIn()
                     .map {
                         Timber.d("Already logged in.")
-                        if (!userPreferencesRepository.shouldShowAnalyticsOptIn()) {
+                        if (userPreferencesRepository.shouldShowAnalyticsOptIn()) {
                             trySend(StartupState.ShowAnalyticsOptIn)
                         } else {
                             trySend(StartupState.ShowHome)

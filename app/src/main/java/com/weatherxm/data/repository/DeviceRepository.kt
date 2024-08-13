@@ -15,7 +15,7 @@ import com.weatherxm.data.datasource.NetworkDeviceDataSource
 import timber.log.Timber
 
 interface DeviceRepository {
-    suspend fun getUserDevices(deviceIds: List<String>? = null): Either<Failure, List<Device>>
+    suspend fun getUserDevices(): Either<Failure, List<Device>>
     suspend fun getUserDevice(deviceId: String): Either<Failure, Device>
     suspend fun claimDevice(
         serialNumber: String, location: Location, secret: String? = null
@@ -38,14 +38,8 @@ class DeviceRepositoryImpl(
     private val cacheFollowDataSource: CacheFollowDataSource
 ) : DeviceRepository {
 
-    override suspend fun getUserDevices(deviceIds: List<String>?): Either<Failure, List<Device>> {
-        val ids: String? = if (!deviceIds.isNullOrEmpty()) {
-            deviceIds.reduce { temp, vars -> "$temp,$vars" }
-        } else {
-            null
-        }
-
-        return networkDeviceDataSource.getUserDevices(ids).map { devices ->
+    override suspend fun getUserDevices(): Either<Failure, List<Device>> {
+        return networkDeviceDataSource.getUserDevices().map { devices ->
             devices.onEach {
                 it.address = getDeviceAddress(it)
             }.apply {
@@ -75,7 +69,7 @@ class DeviceRepositoryImpl(
         serialNumber: String, location: Location, secret: String?
     ): Either<Failure, Device> {
         return networkDeviceDataSource.claimDevice(serialNumber, location, secret).onRight {
-            val userDevicesIds = cacheDeviceDataSource.getUserDevicesIds().toMutableList()
+            val userDevicesIds = getUserDevicesIds().toMutableList()
             userDevicesIds.add(it.id)
             cacheDeviceDataSource.setUserDevicesIds(userDevicesIds)
         }
@@ -111,7 +105,7 @@ class DeviceRepositoryImpl(
 
     override suspend fun removeDevice(serialNumber: String, id: String): Either<Failure, Unit> {
         return networkDeviceDataSource.removeDevice(serialNumber).onRight {
-            val userDevicesIds = cacheDeviceDataSource.getUserDevicesIds().toMutableList()
+            val userDevicesIds = getUserDevicesIds().toMutableList()
             userDevicesIds.remove(id)
             cacheDeviceDataSource.setUserDevicesIds(userDevicesIds)
         }
