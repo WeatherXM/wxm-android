@@ -26,7 +26,6 @@ import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicesettings.ActionType
 import com.weatherxm.ui.devicesettings.DeviceInfoItemAdapter
 import com.weatherxm.ui.devicesettings.FriendlyNameDialogFragment
-import com.weatherxm.ui.rewarddetails.RewardSplitDialogFragment
 import com.weatherxm.util.MapboxUtils.getMinimap
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
