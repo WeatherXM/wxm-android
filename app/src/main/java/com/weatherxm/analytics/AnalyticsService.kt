@@ -88,7 +88,9 @@ interface AnalyticsService {
         FILTERS_GROUP("GROUP_BY"),
         STATUS("STATUS"),
         STATE("STATE"),
-        APP_ID("APP_ID")
+        APP_ID("APP_ID"),
+        DEVICE_STATE("DEVICE_STATE"),
+        USER_STATE("USER_STATE")
     }
 
     // Custom Param Names
@@ -242,7 +244,15 @@ interface AnalyticsService {
         LAST_RUN_HASH("last_run_hash"),
         TOTAL_SUPPLY("total_supply"),
         CIRCULATING_SUPPLY("circulating_supply"),
-        TOKEN_CLAIMING_RESULT("Token Claiming Result")
+        TOKEN_CLAIMING_RESULT("Token Claiming Result"),
+        REWARD_SPLIT_PRESSED("Reward Split pressed"),
+        STAKEHOLDER("Stakeholder"),
+        REWARD_SPLITTING_DAILY_REWARD("Reward Splitting In Daily Reward"),
+        REWARD_SPLITTING_DEVICE_SETTINGS("Reward Splitting In Device Settings"),
+        REWARD_SPLITTING("reward_splitting"),
+        NO_REWARD_SPLITTING("no_reward_splitting"),
+        STAKEHOLDER_LOWERCASE("stakeholder"),
+        NON_STAKEHOLDER("non_stakeholder")
     }
 
     // Custom Param Names

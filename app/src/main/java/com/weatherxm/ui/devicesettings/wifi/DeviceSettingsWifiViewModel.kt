@@ -72,7 +72,7 @@ class DeviceSettingsWifiViewModel(
     }
 
     override suspend fun handleInfo(context: Context, info: DeviceInfo) {
-        handleRewardSplitInfo(info.rewardSplit)
+        handleRewardSplitInfo(info.rewardSplit ?: emptyList())
 
         // Get gateway info
         info.gateway?.apply {
@@ -147,10 +147,7 @@ class DeviceSettingsWifiViewModel(
         }
     }
 
-    private suspend fun handleRewardSplitInfo(splits: List<RewardSplit>?) {
-        if (splits == null || splits.size < 2) {
-            return
-        }
+    private suspend fun handleRewardSplitInfo(splits: List<RewardSplit>) {
         var walletAddress = String.empty()
         coroutineScope {
             val getWalletAddressJob = launch {

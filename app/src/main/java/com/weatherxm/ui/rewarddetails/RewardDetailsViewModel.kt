@@ -51,16 +51,20 @@ class RewardDetailsViewModel(
         }
     }
 
-    fun getWalletAddress(listener: (String) -> Unit) {
+    fun getWalletAddress(listener: (RewardSplitsData) -> Unit) {
         viewModelScope.launch {
             if (walletAddressJob?.isActive == true) {
                 walletAddressJob?.join()
             }
-            listener(rewardSplitsData.wallet)
+            listener(rewardSplitsData)
         }
     }
 
-    fun getRewardSplitsData() = rewardSplitsData
+    fun isStakeHolder(): Boolean {
+        return rewardSplitsData.splits.firstOrNull { split ->
+            rewardSplitsData.wallet == split.wallet
+        } != null
+    }
 
     fun fetchRewardDetails(timestamp: ZonedDateTime) {
         viewModelScope.launch {
