@@ -314,7 +314,7 @@
                         android:id="@+id/rewardSplittingTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/reward_splitting"
+                        android:text="@string/reward_split"
                         android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
                         app:layout_constraintTop_toTopOf="parent" />
 
