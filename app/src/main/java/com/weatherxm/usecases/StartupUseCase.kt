@@ -1,8 +1,10 @@
 package com.weatherxm.usecases
 
+import android.content.Context
 import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.UserPreferencesRepository
+import com.weatherxm.service.workers.RefreshFcmApiWorker
 import com.weatherxm.ui.startup.StartupState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -20,6 +22,7 @@ interface StartupUseCase {
 }
 
 class StartupUseCaseImpl(
+    private val context: Context,
     private val authRepository: AuthRepository,
     private val userPreferencesRepository: UserPreferencesRepository,
     private val appConfigRepository: AppConfigRepository
@@ -42,6 +45,7 @@ class StartupUseCaseImpl(
                 authRepository.isLoggedIn()
                     .map {
                         Timber.d("Already logged in.")
+                        RefreshFcmApiWorker.initAndRefreshToken(context, null)
                         if (userPreferencesRepository.shouldShowAnalyticsOptIn()) {
                             trySend(StartupState.ShowAnalyticsOptIn)
                         } else {

@@ -1,5 +1,7 @@
 package com.weatherxm.data
 
+import androidx.work.Constraints
+import androidx.work.NetworkType
 import arrow.core.Either
 import com.auth0.android.jwt.JWT
 import com.google.android.gms.tasks.Task
@@ -156,3 +158,7 @@ fun <T> Task<T>.safeAwait(): Either<Throwable, T> = Either.catch {
 fun JWT.details(): String {
     return "token=${Mask.maskHash(this.toString())}, expires=${this.expiresAt}"
 }
+
+fun Constraints.Companion.requireNetwork(): Constraints = Constraints.Builder()
+    .setRequiredNetworkType(NetworkType.CONNECTED)
+    .build()
