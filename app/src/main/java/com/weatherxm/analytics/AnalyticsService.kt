@@ -216,7 +216,6 @@ interface AnalyticsService {
         NOTIFICATIONS("notifications"),
         ON("on"),
         OFF("off"),
-        APP_SURVEY("App Survey"),
         USER_RESEARCH_PANEL("User Research Panel"),
         WEB_DOCUMENTATION("Web Documentation"),
         INFO_DAILY_REWARDS("info_daily_rewards"),

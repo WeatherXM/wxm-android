@@ -186,7 +186,7 @@ import com.weatherxm.ui.rewardboosts.RewardBoostViewModel
 import com.weatherxm.ui.rewarddetails.RewardDetailsViewModel
 import com.weatherxm.ui.rewardsclaim.RewardsClaimViewModel
 import com.weatherxm.ui.rewardslist.RewardsListViewModel
-import com.weatherxm.ui.sendfeedback.SendFeedbackViewModel
+import com.weatherxm.ui.deleteaccountsurvey.DeleteAccountSurveyViewModel
 import com.weatherxm.ui.signup.SignupViewModel
 import com.weatherxm.ui.startup.StartupViewModel
 import com.weatherxm.ui.updateprompt.UpdatePromptViewModel
@@ -965,7 +965,7 @@ private val viewmodels = module {
         )
     }
     viewModel { params -> RewardBoostViewModel(params.get(), get(), get(), get()) }
-    viewModel { SendFeedbackViewModel(get(), get(), get()) }
+    viewModel { DeleteAccountSurveyViewModel(get(), get()) }
     viewModel { SignupViewModel(get(), get(), get()) }
     viewModel { UpdatePromptViewModel(get()) }
     viewModel { UrlRouterViewModel(get(), get(), get()) }

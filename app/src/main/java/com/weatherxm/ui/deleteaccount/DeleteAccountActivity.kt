@@ -109,7 +109,7 @@ class DeleteAccountActivity : BaseActivity() {
             }
 
             takeSurvey.setOnClickListener {
-                navigator.showSendFeedback(sendFeedbackLauncher, this@DeleteAccountActivity, true)
+                navigator.showDeleteAccountSurvey(sendFeedbackLauncher, this@DeleteAccountActivity)
             }
 
             retryDeletion.setOnClickListener {

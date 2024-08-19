@@ -34,7 +34,6 @@ class CacheService(
         const val KEY_LAST_REMINDED_VERSION = "last_reminded_version"
         const val KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP = "analytics_opt_in_or_out_timestamp"
         const val KEY_USERNAME = "username"
-        const val KEY_DISMISSED_SURVEY_PROMPT = "dismissed_survey_prompt"
         const val KEY_WALLET_WARNING_DISMISSED_TIMESTAMP = "wallet_warning_dismissed_timestamp"
         const val KEY_CURRENT_WEATHER_WIDGET_IDS = "current_weather_widget_ids"
         const val KEY_DEVICES_SORT = "devices_sort"
@@ -205,14 +204,6 @@ class CacheService(
 
     fun setSuggestionLocation(suggestion: SearchSuggestion, location: Location) {
         locations[suggestion.id] = location
-    }
-
-    fun hasDismissedSurveyPrompt(): Boolean {
-        return preferences.getBoolean(KEY_DISMISSED_SURVEY_PROMPT, false)
-    }
-
-    fun dismissSurveyPrompt() {
-        preferences.edit().putBoolean(KEY_DISMISSED_SURVEY_PROMPT, true).apply()
     }
 
     fun setWalletWarningDismissTimestamp() {

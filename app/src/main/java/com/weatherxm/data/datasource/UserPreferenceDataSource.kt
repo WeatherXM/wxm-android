@@ -7,8 +7,6 @@ interface UserPreferenceDataSource {
     fun setAnalyticsEnabled(enabled: Boolean)
     fun getDevicesSortFilterOptions(): List<String>
     fun setDevicesSortFilterOptions(sortOrder: String, filter: String, groupBy: String)
-    fun hasDismissedSurveyPrompt(): Boolean
-    fun dismissSurveyPrompt()
     fun setWalletWarningDismissTimestamp()
     fun getWalletWarningDismissTimestamp(): Long
 }
@@ -31,14 +29,6 @@ class UserPreferenceDataSourceImpl(
 
     override fun setDevicesSortFilterOptions(sortOrder: String, filter: String, groupBy: String) {
         cacheService.setDevicesSortFilterOptions(sortOrder, filter, groupBy)
-    }
-
-    override fun hasDismissedSurveyPrompt(): Boolean {
-        return cacheService.hasDismissedSurveyPrompt()
-    }
-
-    override fun dismissSurveyPrompt() {
-        cacheService.dismissSurveyPrompt()
     }
 
     override fun setWalletWarningDismissTimestamp() {
