@@ -52,7 +52,7 @@ play-services-location = "21.3.0"
 play-services-barcode-scanner = "16.1.0"
 okhttp-bom = "4.12.0"
 retrofit = "2.11.0"
-retrofit-adapter = "1.0.11"
+retrofit-adapter = "1.0.12"
 retromock = "1.1.1"
 timber = "5.0.1"
 
