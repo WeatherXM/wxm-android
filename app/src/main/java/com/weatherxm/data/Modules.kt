@@ -29,7 +29,10 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.remoteconfig.ConfigUpdate
+import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.google.gson.FieldNamingPolicy
@@ -91,6 +94,8 @@ import com.weatherxm.data.datasource.RewardsDataSource
 import com.weatherxm.data.datasource.RewardsDataSourceImpl
 import com.weatherxm.data.datasource.StatsDataSource
 import com.weatherxm.data.datasource.StatsDataSourceImpl
+import com.weatherxm.data.datasource.SurveyDataSource
+import com.weatherxm.data.datasource.SurveyDataSourceImpl
 import com.weatherxm.data.datasource.UserPreferenceDataSource
 import com.weatherxm.data.datasource.UserPreferenceDataSourceImpl
 import com.weatherxm.data.datasource.WidgetDataSource
@@ -128,6 +133,8 @@ import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.data.repository.StatsRepository
 import com.weatherxm.data.repository.StatsRepositoryImpl
+import com.weatherxm.data.repository.SurveyRepository
+import com.weatherxm.data.repository.SurveyRepositoryImpl
 import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.data.repository.UserPreferencesRepositoryImpl
 import com.weatherxm.data.repository.UserRepository
@@ -238,6 +245,8 @@ import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.usecases.StationSettingsUseCaseImpl
 import com.weatherxm.usecases.StatsUseCase
 import com.weatherxm.usecases.StatsUseCaseImpl
+import com.weatherxm.usecases.SurveyUseCase
+import com.weatherxm.usecases.SurveyUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.usecases.UserUseCaseImpl
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
@@ -285,7 +294,7 @@ private const val CONNECT_TIMEOUT = 30L
 private const val READ_TIMEOUT = 30L
 private const val WRITE_TIMEOUT = 60L
 private const val FIREBASE_CONFIG_FETCH_INTERVAL_DEBUG = 30L
-private const val FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE = 3600L
+private const val FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE = 1800L
 
 private const val COIL_MEMORY_CACHE_SIZE_PERCENTAGE = 0.25
 private const val COIL_DISK_CACHE_SIZE_PERCENTAGE = 0.02
@@ -419,6 +428,9 @@ private val datasources = module {
     single<NotificationsDataSource> {
         NotificationsDataSourceImpl(get(), get())
     }
+    single<SurveyDataSource> {
+        SurveyDataSourceImpl(get(), get())
+    }
 }
 
 private val repositories = module {
@@ -481,6 +493,9 @@ private val repositories = module {
     }
     single<NotificationsRepository> {
         NotificationsRepositoryImpl(get(), get())
+    }
+    single<SurveyRepository> {
+        SurveyRepositoryImpl(get())
     }
 }
 
@@ -562,6 +577,9 @@ private val usecases = module {
     }
     single<EditLocationUseCase> {
         EditLocationUseCaseImpl(get(), get())
+    }
+    single<SurveyUseCase> {
+        SurveyUseCaseImpl(get())
     }
 }
 
@@ -698,6 +716,17 @@ val firebase = module {
                     FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE
                 }
             })
+
+            addOnConfigUpdateListener(object : ConfigUpdateListener {
+                override fun onUpdate(configUpdate: ConfigUpdate) {
+                    activate()
+                }
+
+                override fun onError(error: FirebaseRemoteConfigException) {
+                    Timber.e("Config update error with code: " + error.code, error)
+                }
+            })
+
             fetchAndActivate()
         }
     }
@@ -946,7 +975,7 @@ private val viewmodels = module {
     viewModel { DevicesViewModel(get(), get(), get(), get()) }
     viewModel { ExplorerViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get()) }
-    viewModel { ProfileViewModel(get(), get()) }
+    viewModel { ProfileViewModel(get(), get(), get()) }
     viewModel { LoginViewModel(get(), get(), get()) }
     viewModel { NetworkStatsViewModel(get()) }
     viewModel { PasswordPromptViewModel(get(), get(), get()) }

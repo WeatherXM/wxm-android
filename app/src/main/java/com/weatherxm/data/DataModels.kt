@@ -53,6 +53,17 @@ data class WXMRemoteMessage(
     val url: String? = null
 ) : Parcelable
 
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class Survey(
+    val id: String,
+    val title: String,
+    val message: String,
+    val actionLabel: String,
+    val url: String
+) : Parcelable
+
 enum class Frequency {
     EU868,
     US915,
