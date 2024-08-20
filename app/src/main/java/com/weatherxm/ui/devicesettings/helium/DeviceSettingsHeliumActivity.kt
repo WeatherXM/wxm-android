@@ -285,14 +285,9 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
             } else {
                 AnalyticsService.ParamValue.NON_STAKEHOLDER.paramValue
             }
-            analytics.trackEventViewContent(
-                AnalyticsService.ParamValue.REWARD_SPLITTING_DEVICE_SETTINGS.paramValue,
-                contentId = null,
-                Pair(
-                    AnalyticsService.CustomParam.DEVICE_STATE.paramName,
-                    AnalyticsService.ParamValue.REWARD_SPLITTING.paramValue
-                ),
-                Pair(AnalyticsService.CustomParam.USER_STATE.paramName, stakeHolderValue)
+            trackRewardSplitViewContent(
+                AnalyticsService.ParamValue.REWARD_SPLITTING.paramValue,
+                stakeHolderValue
             )
         } else {
             val stakeHolderValue = if (model.device.isOwned()) {
@@ -300,15 +295,19 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
             } else {
                 AnalyticsService.ParamValue.NON_STAKEHOLDER.paramValue
             }
-            analytics.trackEventViewContent(
-                AnalyticsService.ParamValue.REWARD_SPLITTING_DEVICE_SETTINGS.paramValue,
-                contentId = null,
-                Pair(
-                    AnalyticsService.CustomParam.DEVICE_STATE.paramName,
-                    AnalyticsService.ParamValue.NO_REWARD_SPLITTING.paramValue
-                ),
-                Pair(AnalyticsService.CustomParam.USER_STATE.paramName, stakeHolderValue)
+            trackRewardSplitViewContent(
+                AnalyticsService.ParamValue.NO_REWARD_SPLITTING.paramValue,
+                stakeHolderValue
             )
         }
+    }
+
+    private fun trackRewardSplitViewContent(deviceState: String, userState: String) {
+        analytics.trackEventViewContent(
+            AnalyticsService.ParamValue.REWARD_SPLITTING_DEVICE_SETTINGS.paramValue,
+            contentId = null,
+            Pair(AnalyticsService.CustomParam.DEVICE_STATE.paramName, deviceState),
+            Pair(AnalyticsService.CustomParam.USER_STATE.paramName, userState)
+        )
     }
 }
