@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
@@ -13,7 +14,6 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.usecases.ForecastUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
@@ -39,12 +39,13 @@ class ForecastViewModel(
 
     fun fetchForecast(forceRefresh: Boolean = false) {
         /**
-         * If we got here directly from a search result, wait for the activity to load the device,
-         * then proceed in fetching the forecast because the timezone property is null otherwise
+         * If we got here directly from a search result or through a notification,
+         * then we need to wait for the View Model to load the device from the network,
+         * and then proceed in fetching the forecast because the timezone property is null otherwise
          *
-         * Or do not fetch forecast if we this device is UNFOLLOWED
+         * Or do not fetch forecast at all if this device is UNFOLLOWED
          */
-        if (device.isDeviceFromSearchResult || device.isUnfollowed()) {
+        if (device.isEmpty() || device.isDeviceFromSearchResult || device.isUnfollowed()) {
             return
         }
         onLoading.postValue(true)

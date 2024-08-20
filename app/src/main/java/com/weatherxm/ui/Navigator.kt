@@ -1,5 +1,7 @@
 package com.weatherxm.ui
 
+import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.bluetooth.BluetoothAdapter
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -191,6 +193,21 @@ class Navigator(private val analytics: AnalyticsWrapper) {
                     .putExtra(ARG_OPEN_EXPLORER_ON_BACK, openExplorerOnBack)
             )
         }
+    }
+
+    fun showDeviceDetailsWithBackStack(context: Context?, deviceId: String) {
+        val deviceDetailsActivity = Intent(context, DeviceDetailsActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .putExtra(ARG_DEVICE_ID, deviceId)
+
+        val pendingIntent: PendingIntent = TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(deviceDetailsActivity)
+            this.getPendingIntent(
+                0,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        }
+        pendingIntent.send()
     }
 
     fun showStationSettings(context: Context?, device: UIDevice) {

@@ -34,10 +34,14 @@ class DeviceDetailsUseCaseImpl(
                 }
             }
         } else {
-            deviceRepository.getUserDevice(device.id).map {
-                it.toUIDevice().apply {
-                    createDeviceAlerts(deviceOTARepo.userShouldNotifiedOfOTA(id, assignedFirmware))
-                }
+            getUserOwnedDevice(device.id)
+        }
+    }
+
+    override suspend fun getUserOwnedDevice(deviceId: String): Either<Failure, UIDevice> {
+        return deviceRepository.getUserDevice(deviceId).map {
+            it.toUIDevice().apply {
+                createDeviceAlerts(deviceOTARepo.userShouldNotifiedOfOTA(id, assignedFirmware))
             }
         }
     }
