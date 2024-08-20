@@ -159,6 +159,7 @@ import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.connectwallet.ConnectWalletViewModel
 import com.weatherxm.ui.deleteaccount.DeleteAccountViewModel
+import com.weatherxm.ui.deleteaccountsurvey.DeleteAccountSurveyViewModel
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.ui.devicedetails.current.CurrentViewModel
 import com.weatherxm.ui.devicedetails.forecast.ForecastViewModel
@@ -186,7 +187,6 @@ import com.weatherxm.ui.rewardboosts.RewardBoostViewModel
 import com.weatherxm.ui.rewarddetails.RewardDetailsViewModel
 import com.weatherxm.ui.rewardsclaim.RewardsClaimViewModel
 import com.weatherxm.ui.rewardslist.RewardsListViewModel
-import com.weatherxm.ui.deleteaccountsurvey.DeleteAccountSurveyViewModel
 import com.weatherxm.ui.signup.SignupViewModel
 import com.weatherxm.ui.startup.StartupViewModel
 import com.weatherxm.ui.updateprompt.UpdatePromptViewModel
@@ -208,6 +208,8 @@ import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCaseImpl
 import com.weatherxm.usecases.ConnectWalletUseCase
 import com.weatherxm.usecases.ConnectWalletUseCaseImpl
+import com.weatherxm.usecases.DeleteAccountSurveyUseCase
+import com.weatherxm.usecases.DeleteAccountSurveyUseCaseImpl
 import com.weatherxm.usecases.DeleteAccountUseCase
 import com.weatherxm.usecases.DeleteAccountUseCaseImpl
 import com.weatherxm.usecases.DeviceDetailsUseCase
@@ -230,8 +232,6 @@ import com.weatherxm.usecases.PreferencesUseCase
 import com.weatherxm.usecases.PreferencesUseCaseImpl
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.usecases.RewardsUseCaseImpl
-import com.weatherxm.usecases.SendFeedbackUseCase
-import com.weatherxm.usecases.SendFeedbackUseCaseImpl
 import com.weatherxm.usecases.StartupUseCase
 import com.weatherxm.usecases.StartupUseCaseImpl
 import com.weatherxm.usecases.StationSettingsUseCase
@@ -521,8 +521,8 @@ private val usecases = module {
     single<PreferencesUseCase> {
         PreferencesUseCaseImpl(get(), get(), get())
     }
-    single<SendFeedbackUseCase> {
-        SendFeedbackUseCaseImpl(get())
+    single<DeleteAccountSurveyUseCase> {
+        DeleteAccountSurveyUseCaseImpl(get())
     }
     single<DeleteAccountUseCase> {
         DeleteAccountUseCaseImpl(get(), get())
