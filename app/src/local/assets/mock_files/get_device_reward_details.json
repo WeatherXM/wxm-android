@@ -22,6 +22,18 @@
             }
         ]
     },
+    "reward_split": [
+        {
+            "wallet": "0x0000000000000000000000000000000000000000",
+            "reward": "10.555",
+            "stake": 95
+        },
+        {
+            "wallet": "0x0000000000000000000000000000000000000001",
+            "reward": "1.555",
+            "stake": 5
+        }
+    ],
     "annotation_summary": [
         {
             "severity_level": "INFO",

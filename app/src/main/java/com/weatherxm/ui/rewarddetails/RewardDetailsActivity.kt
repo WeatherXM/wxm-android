@@ -25,8 +25,8 @@ import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
@@ -116,6 +116,13 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         binding.baseRewardDesc.setHtml(
             getString(R.string.base_reward_desc, actualBaseReward, maxBaseReward)
         )
+        binding.showSplitBtn.visible(data.hasSplitRewards())
+        binding.showSplitBtn.setOnClickListener {
+            model.getWalletAddress {
+                RewardSplitDialogFragment.newInstance()
+                    .show(supportFragmentManager, RewardSplitDialogFragment.TAG)
+            }
+        }
 
         updateIssues(sortedIssues)
 

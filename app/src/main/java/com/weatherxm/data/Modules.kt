@@ -943,7 +943,16 @@ private val viewmodels = module {
     viewModel { ResetPasswordViewModel(get(), get(), get()) }
     viewModel { RewardsClaimViewModel(get(), get()) }
     viewModel { RewardsListViewModel(get(), get()) }
-    viewModel { params -> RewardDetailsViewModel(device = params.get(), get(), get(), get()) }
+    viewModel { params ->
+        RewardDetailsViewModel(
+            device = params.get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
     viewModel { params -> RewardBoostViewModel(params.get(), get(), get(), get()) }
     viewModel { SendFeedbackViewModel(get(), get(), get()) }
     viewModel { SignupViewModel(get(), get(), get()) }
