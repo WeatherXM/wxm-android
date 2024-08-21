@@ -330,6 +330,8 @@ data class DeviceInfo(
     val name: String,
     @Json(name = "claimed_at")
     val claimedAt: ZonedDateTime?,
+    @Json(name = "reward_split")
+    val rewardSplit: List<RewardSplit>?,
     val gateway: Gateway?,
     @Json(name = "weather_station")
     val weatherStation: WeatherStation?

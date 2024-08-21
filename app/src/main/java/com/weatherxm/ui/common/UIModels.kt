@@ -383,7 +383,9 @@ data class BoostDetailInfo(
 data class RewardSplitsData(
     var splits: List<RewardSplit>,
     var wallet: String
-) : Parcelable
+) : Parcelable {
+    fun hasSplitRewards() = splits.size >= 2
+}
 
 @Keep
 @JsonClass(generateAdapter = true)
