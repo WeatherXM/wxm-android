@@ -9,6 +9,7 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.DeviceInfo
 import com.weatherxm.data.RewardSplit
+import com.weatherxm.data.WeatherStation
 import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
@@ -72,7 +73,7 @@ class DeviceSettingsWifiViewModel(
     }
 
     override suspend fun handleInfo(context: Context, info: DeviceInfo) {
-        handleRewardSplitInfo(info.rewardSplit)
+        handleRewardSplitInfo(info.rewardSplit ?: emptyList())
 
         // Get gateway info
         info.gateway?.apply {
@@ -121,7 +122,11 @@ class DeviceSettingsWifiViewModel(
         }
 
         // Get weather station info
-        info.weatherStation?.apply {
+        handleWeatherStationInfo(context, info.weatherStation)
+    }
+
+    private fun handleWeatherStationInfo(context: Context, weatherStation: WeatherStation?) {
+        weatherStation?.apply {
             model?.let {
                 data.station.add(UIDeviceInfoItem(resources.getString(R.string.model), it))
             }
@@ -147,10 +152,7 @@ class DeviceSettingsWifiViewModel(
         }
     }
 
-    private suspend fun handleRewardSplitInfo(splits: List<RewardSplit>?) {
-        if (splits == null || splits.size < 2) {
-            return
-        }
+    private suspend fun handleRewardSplitInfo(splits: List<RewardSplit>) {
         var walletAddress = String.empty()
         coroutineScope {
             val getWalletAddressJob = launch {

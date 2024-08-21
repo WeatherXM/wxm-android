@@ -11,6 +11,7 @@ import com.weatherxm.databinding.ActivityDeviceSettingsHeliumBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.RewardSplitStakeholderAdapter
+import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyOnGlobalLayout
 import com.weatherxm.ui.common.classSimpleName
@@ -252,14 +253,9 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
                     AnalyticsService.ParamValue.VIEW.paramValue
                 )
             }
-            deviceInfo.rewardSplit?.let {
-                binding.rewardSplittingCard.visible(true)
-                binding.rewardSplittingDesc.text =
-                    getString(R.string.reward_split_desc, it.splits.size)
-                val rewardSplitAdapter = RewardSplitStakeholderAdapter(it.wallet, true)
-                binding.recyclerRewardSplit.adapter = rewardSplitAdapter
-                rewardSplitAdapter.submitList(it.splits)
-            }
+
+            handleSplitRewards(deviceInfo.rewardSplit)
+
             adapter.submitList(deviceInfo.default)
 
             binding.shareBtn.setOnClickListener {
@@ -274,5 +270,44 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
         }
 
         model.getDeviceInformation(this)
+    }
+
+    private fun handleSplitRewards(data: RewardSplitsData?) {
+        if (data?.hasSplitRewards() == true) {
+            binding.rewardSplitCard.visible(true)
+            binding.rewardSplitDesc.text = getString(R.string.reward_split_desc, data.splits.size)
+            val rewardSplitAdapter = RewardSplitStakeholderAdapter(data.wallet, true)
+            binding.recyclerRewardSplit.adapter = rewardSplitAdapter
+            rewardSplitAdapter.submitList(data.splits)
+
+            val stakeHolderValue = if (model.isStakeholder(data)) {
+                AnalyticsService.ParamValue.STAKEHOLDER_LOWERCASE.paramValue
+            } else {
+                AnalyticsService.ParamValue.NON_STAKEHOLDER.paramValue
+            }
+            trackRewardSplitViewContent(
+                AnalyticsService.ParamValue.REWARD_SPLITTING.paramValue,
+                stakeHolderValue
+            )
+        } else {
+            val stakeHolderValue = if (model.device.isOwned()) {
+                AnalyticsService.ParamValue.STAKEHOLDER_LOWERCASE.paramValue
+            } else {
+                AnalyticsService.ParamValue.NON_STAKEHOLDER.paramValue
+            }
+            trackRewardSplitViewContent(
+                AnalyticsService.ParamValue.NO_REWARD_SPLITTING.paramValue,
+                stakeHolderValue
+            )
+        }
+    }
+
+    private fun trackRewardSplitViewContent(deviceState: String, userState: String) {
+        analytics.trackEventViewContent(
+            AnalyticsService.ParamValue.REWARD_SPLITTING_DEVICE_SETTINGS.paramValue,
+            contentId = null,
+            Pair(AnalyticsService.CustomParam.DEVICE_STATE.paramName, deviceState),
+            Pair(AnalyticsService.CustomParam.USER_STATE.paramName, userState)
+        )
     }
 }

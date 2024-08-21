@@ -11,6 +11,7 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.BatteryState
 import com.weatherxm.data.DeviceInfo
+import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.empty
@@ -140,6 +141,12 @@ abstract class BaseDeviceSettingsViewModel(
             sharingText += "${it}\n"
         }
         return sharingText
+    }
+
+    fun isStakeholder(rewardSplitsData: RewardSplitsData): Boolean {
+        return rewardSplitsData.splits.firstOrNull { split ->
+            rewardSplitsData.wallet == split.wallet
+        } != null
     }
 
     protected fun handleLowBatteryInfo(

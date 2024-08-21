@@ -75,7 +75,7 @@ class DeviceSettingsHeliumViewModel(
     }
 
     override suspend fun handleInfo(context: Context, info: DeviceInfo) {
-        handleRewardSplitInfo(info.rewardSplit)
+        handleRewardSplitInfo(info.rewardSplit ?: emptyList())
 
         info.weatherStation?.apply {
             devEUI?.let {
@@ -127,10 +127,7 @@ class DeviceSettingsHeliumViewModel(
         }
     }
 
-    private suspend fun handleRewardSplitInfo(splits: List<RewardSplit>?) {
-        if (splits == null || splits.size < 2) {
-            return
-        }
+    private suspend fun handleRewardSplitInfo(splits: List<RewardSplit>) {
         var walletAddress = String.empty()
         coroutineScope {
             val getWalletAddressJob = launch {
