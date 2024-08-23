@@ -39,7 +39,6 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
-import com.weatherxm.ui.common.Contracts.ARG_IS_DELETE_ACCOUNT_FORM
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_REWARD
@@ -56,6 +55,7 @@ import com.weatherxm.ui.components.LoginPromptDialogFragment
 import com.weatherxm.ui.components.MessageDialogFragment
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
 import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
+import com.weatherxm.ui.deleteaccountsurvey.DeleteAccountSurveyActivity
 import com.weatherxm.ui.devicealerts.DeviceAlertsActivity
 import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationActivity
@@ -79,7 +79,6 @@ import com.weatherxm.ui.rewarddetails.RewardDetailsActivity
 import com.weatherxm.ui.rewardissues.RewardIssuesActivity
 import com.weatherxm.ui.rewardsclaim.RewardsClaimActivity
 import com.weatherxm.ui.rewardslist.RewardsListActivity
-import com.weatherxm.ui.sendfeedback.SendFeedbackActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
@@ -231,14 +230,12 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
     }
 
-    fun showSendFeedback(
+    fun showDeleteAccountSurvey(
         activityResultLauncher: ActivityResultLauncher<Intent>,
-        context: Context,
-        isDeleteAccountForm: Boolean = false
+        context: Context
     ) {
-        val intent = Intent(context, SendFeedbackActivity::class.java)
+        val intent = Intent(context, DeleteAccountSurveyActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            .putExtra(ARG_IS_DELETE_ACCOUNT_FORM, isDeleteAccountForm)
         activityResultLauncher.launch(intent)
     }
 
@@ -320,18 +317,6 @@ class Navigator(private val analytics: AnalyticsWrapper) {
             Intent(context, ConnectWalletActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
         )
-    }
-
-    fun showSendFeedback(
-        activityResultLauncher: ActivityResultLauncher<Intent>,
-        fragment: Fragment
-    ) {
-        fragment.context?.let {
-            activityResultLauncher.launch(
-                Intent(it, SendFeedbackActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            )
-        }
     }
 
     fun showClaimSelectStationType(context: Context) {

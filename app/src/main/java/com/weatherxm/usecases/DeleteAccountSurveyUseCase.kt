@@ -2,11 +2,13 @@ package com.weatherxm.usecases
 
 import com.weatherxm.data.repository.UserRepository
 
-interface SendFeedbackUseCase {
+interface DeleteAccountSurveyUseCase {
     fun getUserId(): String
 }
 
-class SendFeedbackUseCaseImpl(private val userRepository: UserRepository) : SendFeedbackUseCase {
+class DeleteAccountSurveyUseCaseImpl(
+    private val userRepository: UserRepository
+) : DeleteAccountSurveyUseCase {
     override fun getUserId(): String {
         return userRepository.getUserId()
     }

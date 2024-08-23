@@ -19,7 +19,6 @@ class UserPreferencesRepositoryTest : BehaviorSpec({
 
     beforeSpec {
         justRun { dataSource.setAnalyticsEnabled(any()) }
-        justRun { dataSource.dismissSurveyPrompt() }
         justRun { dataSource.setWalletWarningDismissTimestamp() }
         every { dataSource.getWalletWarningDismissTimestamp() } returns 0
         justRun { dataSource.setDevicesSortFilterOptions(sort, filter, group) }
@@ -52,27 +51,6 @@ class UserPreferencesRepositoryTest : BehaviorSpec({
             every { dataSource.getAnalyticsOptInTimestamp() } returns 1
             then("return false") {
                 repo.shouldShowAnalyticsOptIn() shouldBe false
-            }
-        }
-    }
-
-    context("Get/Set Survey Prompt Dismiss Information") {
-        When("we have not dismissed the survey prompt") {
-            every { dataSource.hasDismissedSurveyPrompt() } returns false
-            then("return false") {
-                repo.hasDismissedSurveyPrompt() shouldBe false
-            }
-        }
-        When("we have dismissed the survey prompt") {
-            every { dataSource.hasDismissedSurveyPrompt() } returns true
-            then("return true") {
-                repo.hasDismissedSurveyPrompt() shouldBe true
-            }
-        }
-        When("we dismiss the survey prompt") {
-            then("dismiss it") {
-                repo.dismissSurveyPrompt()
-                verify(exactly = 1) { dataSource.dismissSurveyPrompt() }
             }
         }
     }

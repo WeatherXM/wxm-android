@@ -463,7 +463,7 @@
     <string name="edit_name_helper_text">This friendly name is private. It will be visible only to you when you are logged in.</string>
     <string name="edit_name_hint">Enter a new friendly name</string>
 
-    <!-- Feedback -->
+    <!-- Delete Account Survey -->
     <string name="send_feedback">Short App Survey</string>
     <string name="thank_you_feedback">Thank you for your feedback!</string>
 

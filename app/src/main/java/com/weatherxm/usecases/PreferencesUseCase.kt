@@ -9,8 +9,6 @@ import com.weatherxm.data.repository.UserPreferencesRepository
 interface PreferencesUseCase {
     suspend fun isLoggedIn(): Either<Failure, Boolean>
     suspend fun logout()
-    fun hasDismissedSurveyPrompt(): Boolean
-    fun dismissSurveyPrompt()
     fun setAnalyticsEnabled(enabled: Boolean)
     fun getInstallationId(): String?
 }
@@ -27,14 +25,6 @@ class PreferencesUseCaseImpl(
 
     override suspend fun logout() {
         authRepository.logout()
-    }
-
-    override fun hasDismissedSurveyPrompt(): Boolean {
-        return userPreferencesRepository.hasDismissedSurveyPrompt()
-    }
-
-    override fun dismissSurveyPrompt() {
-        return userPreferencesRepository.dismissSurveyPrompt()
     }
 
     override fun setAnalyticsEnabled(enabled: Boolean) {

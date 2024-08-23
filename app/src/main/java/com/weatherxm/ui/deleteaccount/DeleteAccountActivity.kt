@@ -3,7 +3,6 @@ package com.weatherxm.ui.deleteaccount
 import android.app.Activity
 import android.os.Bundle
 import androidx.activity.addCallback
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
@@ -25,11 +24,9 @@ class DeleteAccountActivity : BaseActivity() {
     private val model: DeleteAccountViewModel by viewModel()
 
     // Register the launcher for the claim device activity and wait for a possible result
-    private val sendFeedbackLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
+    private val surveyLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
                 toast(getString(R.string.thank_you_feedback))
             }
         }
@@ -109,7 +106,7 @@ class DeleteAccountActivity : BaseActivity() {
             }
 
             takeSurvey.setOnClickListener {
-                navigator.showSendFeedback(sendFeedbackLauncher, this@DeleteAccountActivity, true)
+                navigator.showDeleteAccountSurvey(surveyLauncher, this@DeleteAccountActivity)
             }
 
             retryDeletion.setOnClickListener {
