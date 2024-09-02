@@ -3,7 +3,7 @@ package com.weatherxm.data.datasource
 import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.HourlyWeather
-import com.weatherxm.data.leftToFailure
+import com.weatherxm.data.mapResponse
 import com.weatherxm.data.network.ApiService
 import java.time.LocalDate
 
@@ -16,7 +16,7 @@ class NetworkWeatherHistoryDataSource(
         toDate: LocalDate
     ): Either<Failure, List<HourlyWeather>> {
         return apiService.getWeatherHistory(deviceId, fromDate.toString(), toDate.toString())
-            .leftToFailure()
+            .mapResponse()
             .map { response ->
                 response
                     .mapNotNull { it.hourly }

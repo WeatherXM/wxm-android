@@ -30,8 +30,8 @@
  -keep,allowobfuscation,allowshrinking interface retrofit2.Call
  -keep,allowobfuscation,allowshrinking class retrofit2.Response
 
- # For the network response adapter (https://github.com/skydoves/retrofit-adapters/issues/24)
- -keep,allowobfuscation,allowshrinking class arrow.core.Either
+ # Keep NetworkResponse Interface
+ -keep,allowobfuscation,allowshrinking interface com.haroldadmin.cnradapter.NetworkResponse
 
  # With R8 full mode generic signatures are stripped for classes that are not
  # kept. Suspend functions are wrapped in continuations where the type argument

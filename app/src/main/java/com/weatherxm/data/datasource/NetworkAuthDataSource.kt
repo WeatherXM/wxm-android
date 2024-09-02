@@ -2,7 +2,7 @@ package com.weatherxm.data.datasource
 
 import arrow.core.Either
 import com.weatherxm.data.Failure
-import com.weatherxm.data.leftToFailure
+import com.weatherxm.data.mapResponse
 import com.weatherxm.data.network.AuthService
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.network.LoginBody
@@ -14,11 +14,11 @@ import com.weatherxm.data.network.ResetPasswordBody
 class NetworkAuthDataSource(private val authService: AuthService) : AuthDataSource {
 
     override suspend fun refresh(authToken: AuthToken): Either<Failure, AuthToken> {
-        return authService.refresh(RefreshBody(authToken.refresh)).leftToFailure()
+        return authService.refresh(RefreshBody(authToken.refresh)).mapResponse()
     }
 
     override suspend fun login(username: String, password: String): Either<Failure, AuthToken> {
-        return authService.login(LoginBody(username, password)).leftToFailure()
+        return authService.login(LoginBody(username, password)).mapResponse()
     }
 
     override suspend fun signup(
@@ -26,18 +26,18 @@ class NetworkAuthDataSource(private val authService: AuthService) : AuthDataSour
         firstName: String?,
         lastName: String?
     ): Either<Failure, Unit> {
-        return authService.register(RegistrationBody(username, firstName, lastName)).leftToFailure()
+        return authService.register(RegistrationBody(username, firstName, lastName)).mapResponse()
     }
 
     override suspend fun logout(
         accessToken: String,
         installationId: String?
     ): Either<Failure, Unit> {
-        return authService.logout(LogoutBody(accessToken, installationId)).leftToFailure()
+        return authService.logout(LogoutBody(accessToken, installationId)).mapResponse()
     }
 
     override suspend fun resetPassword(email: String): Either<Failure, Unit> {
-        return authService.resetPassword(ResetPasswordBody(email)).leftToFailure()
+        return authService.resetPassword(ResetPasswordBody(email)).mapResponse()
     }
 
     override suspend fun getAuthToken(): Either<Failure, AuthToken> {

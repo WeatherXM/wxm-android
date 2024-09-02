@@ -42,10 +42,10 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.mapbox.search.SearchEngine
 import com.mapbox.search.SearchEngineSettings
 import com.mixpanel.android.mpmetrics.MixpanelAPI
-import com.skydoves.retrofit.adapters.arrow.EitherCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.weatherxm.BuildConfig
 import com.weatherxm.analytics.AnalyticsService
@@ -626,10 +626,6 @@ private val network = module {
         AuthRequestInterceptor(get(), get())
     }
 
-    single<EitherCallAdapterFactory> {
-        EitherCallAdapterFactory.create()
-    }
-
     single<Retrofit>(named(RETROFIT_AUTH)) {
         // Create client
         val client: OkHttpClient = OkHttpClient.Builder()
@@ -646,7 +642,7 @@ private val network = module {
         Retrofit.Builder()
             .baseUrl(BuildConfig.AUTH_URL)
             .addConverterFactory(get() as MoshiConverterFactory)
-            .addCallAdapterFactory(get() as EitherCallAdapterFactory)
+            .addCallAdapterFactory(NetworkResponseAdapterFactory())
             .client(client)
             .build()
     }
@@ -669,7 +665,7 @@ private val network = module {
         Retrofit.Builder()
             .baseUrl(BuildConfig.API_URL)
             .addConverterFactory(get() as MoshiConverterFactory)
-            .addCallAdapterFactory(get() as EitherCallAdapterFactory)
+            .addCallAdapterFactory(NetworkResponseAdapterFactory())
             .client(client)
             .build()
     }

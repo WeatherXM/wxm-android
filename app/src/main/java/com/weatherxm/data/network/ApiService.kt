@@ -1,9 +1,9 @@
 package com.weatherxm.data.network
 
-import arrow.core.Either
 import co.infinum.retromock.meta.Mock
 import co.infinum.retromock.meta.MockBehavior
 import co.infinum.retromock.meta.MockResponse
+import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.data.BoostRewardResponse
 import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceInfo
@@ -34,13 +34,13 @@ interface ApiService {
     @Mock
     @MockResponse(body = "mock_files/user.json")
     @GET("/api/v1/me")
-    suspend fun getUser(): Either<Throwable, User>
+    suspend fun getUser(): NetworkResponse<User, ErrorResponse>
 
     @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @MockResponse(code = 204, body = "mock_files/empty_response.json")
     @DELETE("/api/v1/me")
-    suspend fun deleteAccount(): Either<Throwable, Unit>
+    suspend fun deleteAccount(): NetworkResponse<Unit, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/get_user_devices.json")
@@ -48,7 +48,7 @@ interface ApiService {
     @GET("/api/v1/me/devices")
     suspend fun getUserDevices(
         @Query("ids") deviceIds: String? = null,
-    ): Either<Throwable, List<Device>>
+    ): NetworkResponse<List<Device>, ErrorResponse>
 
     @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
@@ -56,7 +56,7 @@ interface ApiService {
     @POST("/api/v1/me/devices/disclaim")
     suspend fun removeDevice(
         @Body address: DeleteDeviceBody,
-    ): Either<Throwable, Unit>
+    ): NetworkResponse<Unit, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/get_user_device.json")
@@ -64,7 +64,7 @@ interface ApiService {
     @GET("/api/v1/me/devices/{deviceId}")
     suspend fun getUserDevice(
         @Path("deviceId") deviceId: String,
-    ): Either<Throwable, Device>
+    ): NetworkResponse<Device, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/get_user_device_info.json")
@@ -72,13 +72,13 @@ interface ApiService {
     @GET("/api/v1/me/devices/{deviceId}/info")
     suspend fun getUserDeviceInfo(
         @Path("deviceId") deviceId: String,
-    ): Either<Throwable, DeviceInfo>
+    ): NetworkResponse<DeviceInfo, ErrorResponse>
 
     @Mock
     @MockBehavior(durationDeviation = 300, durationMillis = 1000)
     @MockResponse(code = 200, body = "mock_files/get_wallet.json")
     @GET("/api/v1/me/wallet")
-    suspend fun getWallet(): Either<Throwable, Wallet>
+    suspend fun getWallet(): NetworkResponse<Wallet, ErrorResponse>
 
     @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
@@ -86,7 +86,7 @@ interface ApiService {
     @POST("/api/v1/me/wallet")
     suspend fun setWallet(
         @Body address: AddressBody,
-    ): Either<Throwable, Unit>
+    ): NetworkResponse<Unit, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/get_user_device_weather_forecast.json")
@@ -96,7 +96,7 @@ interface ApiService {
         @Query("fromDate") fromDate: String,
         @Query("toDate") toDate: String,
         @Query("exclude") exclude: String? = null,
-    ): Either<Throwable, List<WeatherData>>
+    ): NetworkResponse<List<WeatherData>, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/get_user_device_weather_history.json")
@@ -106,7 +106,7 @@ interface ApiService {
         @Query("fromDate") fromDate: String,
         @Query("toDate") toDate: String,
         @Query("exclude") exclude: String? = "daily",
-    ): Either<Throwable, List<WeatherData>>
+    ): NetworkResponse<List<WeatherData>, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/claim_device.json")
@@ -114,7 +114,7 @@ interface ApiService {
     @POST("/api/v1/me/devices/claim")
     suspend fun claimDevice(
         @Body address: ClaimDeviceBody,
-    ): Either<Throwable, Device>
+    ): NetworkResponse<Device, ErrorResponse>
 
     @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
@@ -123,7 +123,7 @@ interface ApiService {
     suspend fun setFriendlyName(
         @Path("deviceId") deviceId: String,
         @Body friendlyName: FriendlyNameBody,
-    ): Either<Throwable, Unit>
+    ): NetworkResponse<Unit, ErrorResponse>
 
     @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
@@ -131,14 +131,14 @@ interface ApiService {
     @DELETE("/api/v1/me/devices/{deviceId}/friendlyName")
     suspend fun clearFriendlyName(
         @Path("deviceId") deviceId: String
-    ): Either<Throwable, Unit>
+    ): NetworkResponse<Unit, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/public_cells.json")
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @GET("/api/v1/cells")
     @Headers(NO_AUTH_HEADER)
-    suspend fun getCells(): Either<Throwable, List<PublicHex>>
+    suspend fun getCells(): NetworkResponse<List<PublicHex>, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/public_devices.json")
@@ -147,7 +147,7 @@ interface ApiService {
     @Headers(NO_AUTH_HEADER)
     suspend fun getCellDevices(
         @Path("index") index: String
-    ): Either<Throwable, List<PublicDevice>>
+    ): NetworkResponse<List<PublicDevice>, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/public_device.json")
@@ -157,7 +157,7 @@ interface ApiService {
     suspend fun getCellDevice(
         @Path("index") index: String,
         @Path("deviceId") deviceId: String
-    ): Either<Throwable, PublicDevice>
+    ): NetworkResponse<PublicDevice, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/get_network_search_results.json")
@@ -168,7 +168,7 @@ interface ApiService {
         @Query("query") query: String,
         @Query("exact") exact: Boolean? = null,
         @Query("exclude") exclude: String? = null,
-    ): Either<Throwable, NetworkSearchResults>
+    ): NetworkResponse<NetworkSearchResults, ErrorResponse>
 
     @Suppress("LongParameterList")
     @Mock
@@ -182,7 +182,7 @@ interface ApiService {
         @Query("timezone") timezone: String? = null,
         @Query("fromDate") fromDate: String? = null,
         @Query("toDate") toDate: String? = null,
-    ): Either<Throwable, RewardsTimeline>
+    ): NetworkResponse<RewardsTimeline, ErrorResponse>
 
     @Suppress("LongParameterList")
     @Mock
@@ -191,7 +191,7 @@ interface ApiService {
     @Headers(NO_AUTH_HEADER)
     suspend fun getRewards(
         @Path("deviceId") deviceId: String
-    ): Either<Throwable, Rewards>
+    ): NetworkResponse<Rewards, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/get_device_reward_details.json")
@@ -200,7 +200,7 @@ interface ApiService {
     suspend fun getRewardDetails(
         @Path("deviceId") deviceId: String,
         @Query("date") date: String,
-    ): Either<Throwable, RewardDetails>
+    ): NetworkResponse<RewardDetails, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/get_device_reward_boost.json")
@@ -209,20 +209,20 @@ interface ApiService {
     suspend fun getRewardBoost(
         @Path("deviceId") deviceId: String,
         @Path("boostCode") boostCode: String
-    ): Either<Throwable, BoostRewardResponse>
+    ): NetworkResponse<BoostRewardResponse, ErrorResponse>
 
     @GET("/api/v1/me/devices/{deviceId}/firmware")
     @Streaming
     suspend fun getFirmware(
         @Path("deviceId") deviceId: String
-    ): Either<Throwable, ResponseBody>
+    ): NetworkResponse<ResponseBody, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/get_network_stats.json")
     @GET("/api/v1/network/stats")
     @Headers(NO_AUTH_HEADER)
     suspend fun getNetworkStats(
-    ): Either<Throwable, NetworkStatsResponse>
+    ): NetworkResponse<NetworkStatsResponse, ErrorResponse>
 
     @Mock
     @MockResponse(body = "mock_files/wallet_rewards.json")
@@ -230,7 +230,7 @@ interface ApiService {
     @Headers(NO_AUTH_HEADER)
     suspend fun getWalletRewards(
         @Query("address") address: String? = null,
-    ): Either<Throwable, WalletRewards>
+    ): NetworkResponse<WalletRewards, ErrorResponse>
 
     @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
@@ -238,7 +238,7 @@ interface ApiService {
     @POST("/api/v1/me/devices/{deviceId}/follow")
     suspend fun followStation(
         @Path("deviceId") deviceId: String
-    ): Either<Throwable, Unit>
+    ): NetworkResponse<Unit, ErrorResponse>
 
     @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
@@ -247,7 +247,7 @@ interface ApiService {
     suspend fun setLocation(
         @Path("deviceId") deviceId: String,
         @Body location: LocationBody
-    ): Either<Throwable, Device>
+    ): NetworkResponse<Device, ErrorResponse>
 
     @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
@@ -255,7 +255,7 @@ interface ApiService {
     @DELETE("/api/v1/me/devices/{deviceId}/follow")
     suspend fun unfollowStation(
         @Path("deviceId") deviceId: String
-    ): Either<Throwable, Unit>
+    ): NetworkResponse<Unit, ErrorResponse>
 
     @Mock
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
@@ -264,5 +264,5 @@ interface ApiService {
     suspend fun setFcmToken(
         @Path("installationId") installationId: String,
         @Path("fcmToken") fcmToken: String
-    ): Either<Throwable, Unit>
+    ): NetworkResponse<Unit, ErrorResponse>
 }
