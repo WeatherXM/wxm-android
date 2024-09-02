@@ -8,6 +8,7 @@ import arrow.core.flatMap
 import com.weatherxm.R
 import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.CacheAuthDataSource
+import com.weatherxm.data.mapResponse
 import com.weatherxm.data.datasource.DatabaseExplorerDataSource
 import com.weatherxm.data.leftToFailure
 import com.weatherxm.data.network.AccessTokenBody
@@ -111,7 +112,7 @@ class AuthTokenAuthenticator(
             .flatMap { authToken ->
                 Timber.d("[${request.path()}] Trying to refresh token.")
                 runBlocking {
-                    authService.refresh(RefreshBody(authToken.refresh)).map()
+                    authService.refresh(RefreshBody(authToken.refresh)).mapResponse()
                         .onLeft {
                             Timber.d("[${request.path()}] Token refresh failed.")
                         }

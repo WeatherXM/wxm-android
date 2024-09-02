@@ -5,24 +5,24 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.NetworkSearchResults
 import com.weatherxm.data.PublicDevice
 import com.weatherxm.data.PublicHex
-import com.weatherxm.data.map
+import com.weatherxm.data.mapResponse
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.ui.explorer.SearchResult
 
 class NetworkExplorerDataSource(private val apiService: ApiService) : ExplorerDataSource {
     override suspend fun getCells(): Either<Failure, List<PublicHex>> {
-        return apiService.getCells().map()
+        return apiService.getCells().mapResponse()
     }
 
     override suspend fun getCellDevices(index: String): Either<Failure, List<PublicDevice>> {
-        return apiService.getCellDevices(index).map()
+        return apiService.getCellDevices(index).mapResponse()
     }
 
     override suspend fun getCellDevice(
         index: String,
         deviceId: String
     ): Either<Failure, PublicDevice> {
-        return apiService.getCellDevice(index, deviceId).map()
+        return apiService.getCellDevice(index, deviceId).mapResponse()
     }
 
     override suspend fun networkSearch(
@@ -30,7 +30,7 @@ class NetworkExplorerDataSource(private val apiService: ApiService) : ExplorerDa
         exact: Boolean?,
         exclude: String?
     ): Either<Failure, NetworkSearchResults> {
-        return apiService.networkSearch(query, exact, exclude).map()
+        return apiService.networkSearch(query, exact, exclude).mapResponse()
     }
 
     override suspend fun getRecentSearches(): Either<Failure, List<SearchResult>> {

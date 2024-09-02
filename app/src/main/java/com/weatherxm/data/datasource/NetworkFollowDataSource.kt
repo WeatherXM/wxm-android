@@ -2,16 +2,16 @@ package com.weatherxm.data.datasource
 
 import arrow.core.Either
 import com.weatherxm.data.Failure
-import com.weatherxm.data.map
+import com.weatherxm.data.mapResponse
 import com.weatherxm.data.network.ApiService
 
 class NetworkFollowDataSource(private val apiService: ApiService) : FollowDataSource {
     override suspend fun followStation(deviceId: String): Either<Failure, Unit> {
-        return apiService.followStation(deviceId).map()
+        return apiService.followStation(deviceId).mapResponse()
     }
 
     override suspend fun unfollowStation(deviceId: String): Either<Failure, Unit> {
-        return apiService.unfollowStation(deviceId).map()
+        return apiService.unfollowStation(deviceId).mapResponse()
     }
 
     override suspend fun getFollowedDevicesIds(): List<String> {

@@ -7,7 +7,7 @@ import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.Rewards
 import com.weatherxm.data.RewardsTimeline
 import com.weatherxm.data.WalletRewards
-import com.weatherxm.data.map
+import com.weatherxm.data.mapResponse
 import com.weatherxm.data.network.ApiService
 
 interface RewardsDataSource {
@@ -47,28 +47,28 @@ class RewardsDataSourceImpl(private val apiService: ApiService) : RewardsDataSou
             timezone,
             fromDate,
             toDate
-        ).map()
+        ).mapResponse()
     }
 
     override suspend fun getRewards(deviceId: String): Either<Failure, Rewards> {
-        return apiService.getRewards(deviceId).map()
+        return apiService.getRewards(deviceId).mapResponse()
     }
 
     override suspend fun getRewardDetails(
         deviceId: String,
         date: String
     ): Either<Failure, RewardDetails> {
-        return apiService.getRewardDetails(deviceId, date).map()
+        return apiService.getRewardDetails(deviceId, date).mapResponse()
     }
 
     override suspend fun getBoostReward(
         deviceId: String,
         boostCode: String
     ): Either<Failure, BoostRewardResponse> {
-        return apiService.getRewardBoost(deviceId, boostCode).map()
+        return apiService.getRewardBoost(deviceId, boostCode).mapResponse()
     }
 
     override suspend fun getWalletRewards(walletAddress: String): Either<Failure, WalletRewards> {
-        return apiService.getWalletRewards(walletAddress).map()
+        return apiService.getWalletRewards(walletAddress).mapResponse()
     }
 }

@@ -75,7 +75,7 @@ fun Response.path(): String = this.request.path()
  * Suppress ComplexMethod because it is just a bunch of "when statements"
  */
 @Suppress("ComplexMethod")
-fun <T : Any> NetworkResponse<T, ErrorResponse>.map(): Either<Failure, T> {
+fun <T : Any> NetworkResponse<T, ErrorResponse>.mapResponse(): Either<Failure, T> {
     Timber.d("Mapping network response")
     return try {
         when (this) {
