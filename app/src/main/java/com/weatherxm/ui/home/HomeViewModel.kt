@@ -1,13 +1,15 @@
 package com.weatherxm.ui.home
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.weatherxm.data.DataError
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.SingleLiveEvent
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.WalletInfo
+import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.UserUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
@@ -18,12 +20,10 @@ class HomeViewModel(
     private var hasDevices: Boolean? = null
 
     // Needed for passing info to show the wallet missing warning card and badges
-    private val onWalletMissingWarning = MutableLiveData(false)
-    private val onWalletMissing = MutableLiveData(false)
+    private val onWalletInfo = MutableLiveData<WalletInfo>()
     private val onOpenExplorer = SingleLiveEvent<Boolean>()
 
-    fun onWalletMissingWarning() = onWalletMissingWarning
-    fun onWalletMissing() = onWalletMissing
+    fun onWalletInfo(): LiveData<WalletInfo> = onWalletInfo
     fun onOpenExplorer() = onOpenExplorer
 
     fun openExplorer() {
@@ -39,16 +39,25 @@ class HomeViewModel(
         }
         hasDevices = true
         viewModelScope.launch {
-            onWalletMissingWarning.postValue(userUseCase.shouldShowWalletMissingWarning())
             userUseCase.getWalletAddress()
                 .onRight {
-                    onWalletMissing.postValue(it.isEmpty())
+                    onWalletInfo.postValue(
+                        WalletInfo(
+                            it,
+                            showMissingBadge = it.isEmpty(),
+                            showMissingWarning = userUseCase.shouldShowWalletMissingWarning(it)
+                        )
+                    )
                 }
                 .onLeft {
-                    if (it !is DataError.NoWalletAddressError) {
-                        analytics.trackEventFailure(it.code)
-                    }
-                    onWalletMissing.postValue(it is DataError.NoWalletAddressError)
+                    analytics.trackEventFailure(it.code)
+                    onWalletInfo.postValue(
+                        WalletInfo(
+                            String.empty(),
+                            showMissingBadge = false,
+                            showMissingWarning = false
+                        )
+                    )
                 }
         }
     }
@@ -61,8 +70,13 @@ class HomeViewModel(
         userUseCase.setWalletWarningDismissTimestamp()
     }
 
-    fun setWalletNotMissing() {
-        onWalletMissingWarning.postValue(false)
-        onWalletMissing.postValue(false)
+    fun setWalletNotMissing(walletAddress: String?) {
+        onWalletInfo.postValue(
+            WalletInfo(
+                walletAddress ?: String.empty(),
+                showMissingBadge = false,
+                showMissingWarning = false
+            )
+        )
     }
 }

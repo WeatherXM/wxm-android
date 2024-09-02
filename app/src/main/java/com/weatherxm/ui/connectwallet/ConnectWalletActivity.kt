@@ -1,6 +1,7 @@
 package com.weatherxm.ui.connectwallet
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
@@ -11,13 +12,14 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityConnectWalletBinding
+import com.weatherxm.ui.common.Contracts.ARG_WALLET
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.getRichText
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Mask
@@ -221,8 +223,8 @@ class ConnectWalletActivity : BaseActivity() {
         )
     }
 
-    private fun onAddressUpdateUI(address: String?) {
-        if (address.isNullOrEmpty()) {
+    private fun onAddressUpdateUI(address: String) {
+        if (address.isEmpty()) {
             binding.editWallet.visible(false)
             binding.viewTransactionHistoryBtn.visible(false)
             binding.scanQR.visible(true)
@@ -253,7 +255,8 @@ class ConnectWalletActivity : BaseActivity() {
                     showSnackbarMessage(binding.root, it)
                 }
                 binding.loading.visible(false)
-                setResult(Activity.RESULT_OK)
+                val walletAddress = Intent().putExtra(ARG_WALLET, result.data)
+                setResult(Activity.RESULT_OK, walletAddress)
             }
             Status.ERROR -> {
                 result.message?.let {

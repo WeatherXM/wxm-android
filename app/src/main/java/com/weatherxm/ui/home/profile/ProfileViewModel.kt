@@ -74,7 +74,7 @@ class ProfileViewModel(
         surveyUseCase.dismissSurvey(surveyId)
     }
 
-    private fun fetchWalletRewards(walletAddress: String?) {
+    fun fetchWalletRewards(walletAddress: String?) {
         viewModelScope.launch {
             onLoading.postValue(true)
             useCase.getWalletRewards(walletAddress).onRight {

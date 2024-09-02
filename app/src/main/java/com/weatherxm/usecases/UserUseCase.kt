@@ -1,10 +1,6 @@
 package com.weatherxm.usecases
 
 import arrow.core.Either
-import arrow.core.flatMap
-import arrow.core.left
-import arrow.core.right
-import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.User
 import com.weatherxm.data.repository.RewardsRepository
@@ -18,7 +14,7 @@ import java.util.concurrent.TimeUnit
 interface UserUseCase {
     suspend fun getUser(forceRefresh: Boolean = false): Either<Failure, User>
     suspend fun getWalletAddress(): Either<Failure, String>
-    suspend fun shouldShowWalletMissingWarning(): Boolean
+    fun shouldShowWalletMissingWarning(walletAddress: String): Boolean
     fun setWalletWarningDismissTimestamp()
     suspend fun getWalletRewards(walletAddress: String?): Either<Failure, UIWalletRewards>
 }
@@ -38,19 +34,13 @@ class UserUseCaseImpl(
     }
 
     override suspend fun getWalletAddress(): Either<Failure, String> {
-        return walletRepository.getWalletAddress()
-            .flatMap { it?.right() ?: DataError.NoWalletAddressError.left<Failure>() }
+        return walletRepository.getWalletAddress().map { it ?: String.empty() }
     }
 
-    override suspend fun shouldShowWalletMissingWarning(): Boolean {
-        val hasWalletAddress = walletRepository.getWalletAddress()
-            .flatMap { b -> b?.right() ?: DataError.NoWalletAddressError.left<Failure>() }
-            .fold({ it !is DataError.NoWalletAddressError }, { it.isNotEmpty() })
-
+    override fun shouldShowWalletMissingWarning(walletAddress: String): Boolean {
         val dismissTimestamp = userPreferencesRepository.getWalletWarningDismissTimestamp()
         val now = System.currentTimeMillis()
-
-        return !hasWalletAddress && now - dismissTimestamp > WALLET_WARNING_DISMISS_EXPIRATION
+        return walletAddress.isEmpty() && now - dismissTimestamp > WALLET_WARNING_DISMISS_EXPIRATION
     }
 
     override fun setWalletWarningDismissTimestamp() {

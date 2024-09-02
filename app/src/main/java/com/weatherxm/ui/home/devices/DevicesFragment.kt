@@ -16,6 +16,7 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.common.BundleName
+import com.weatherxm.ui.common.Contracts.ARG_WALLET
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
@@ -39,7 +40,8 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     private val connectWalletLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                parentModel.setWalletNotMissing()
+                val walletAddress = result.data?.getStringExtra(ARG_WALLET)
+                parentModel.setWalletNotMissing(walletAddress)
             }
         }
 
@@ -53,15 +55,6 @@ class DevicesFragment : BaseFragment(), DeviceListener {
 
         binding.root.applyInsets()
 
-        binding.toolbar.setOnMenuItemClickListener { menuItem ->
-            return@setOnMenuItemClickListener if (menuItem.itemId == R.id.sort_filter) {
-                SortFilterDialogFragment.newInstance().show(this)
-                true
-            } else {
-                false
-            }
-        }
-
         adapter = DeviceAdapter(this)
         binding.recycler.adapter = adapter
 
@@ -73,14 +66,11 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             model.onScroll(scrollY - oldScrollY)
         }
 
+        binding.sortFilterBtn.setOnClickListener {
+            SortFilterDialogFragment.newInstance().show(this)
+        }
+
         model.devices().observe(viewLifecycleOwner) {
-            with(binding.toolbar.menu.findItem(R.id.sort_filter).icon) {
-                if (model.getDevicesSortFilterOptions().areDefaultFiltersOn()) {
-                    this?.setTint(requireContext().getColor(R.color.colorOnSurface))
-                } else {
-                    this?.setTint(requireContext().getColor(R.color.colorPrimary))
-                }
-            }
             onDevices(it)
         }
 
@@ -88,8 +78,8 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             onFollowStatus(it)
         }
 
-        parentModel.onWalletMissingWarning().observe(viewLifecycleOwner) {
-            onWalletMissingWarning(it)
+        parentModel.onWalletInfo().observe(viewLifecycleOwner) {
+            onWalletMissingWarning(it.showMissingWarning)
         }
         return binding.root
     }

@@ -22,6 +22,7 @@ import com.weatherxm.ui.components.BaseMapFragment
 import com.weatherxm.ui.explorer.ExplorerData
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
+import com.weatherxm.ui.home.profile.ProfileViewModel
 import dev.chrisbanes.insetter.applyInsetter
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -31,6 +32,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     private val model: HomeViewModel by viewModel()
     private val explorerModel: ExplorerViewModel by viewModel()
     private val devicesViewModel: DevicesViewModel by viewModel()
+    private val profileModel: ProfileViewModel by viewModel()
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var navController: NavController
@@ -103,8 +105,8 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             navigator.showNetworkStats(this)
         }
 
-        model.onWalletMissing().observe(this) {
-            handleBadge(it)
+        model.onWalletInfo().observe(this) {
+            handleBadge(it.showMissingBadge)
         }
 
         model.onOpenExplorer().observe(this) {
@@ -164,7 +166,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         binding.networkStatsBtn.visible(navDestination == R.id.navigation_explorer)
         binding.myLocationBtn.visible(navDestination == R.id.navigation_explorer)
         /**
-         * Don't use the visible function for the addButton 
+         * Don't use the visible function for the addButton
          * because of a specific case hiding it in the devices list.
          * Therefore we use the hide() function which fits our purpose.
          */

@@ -297,12 +297,6 @@ data class DevicesSortFilterOptions(
         return groupedDevices
     }
 
-    fun areDefaultFiltersOn(): Boolean {
-        return sortOrder == DevicesSortOrder.DATE_ADDED &&
-            filterType == DevicesFilterType.ALL &&
-            groupBy == DevicesGroupBy.NO_GROUPING
-    }
-
     fun getSortAnalyticsValue(): String {
         return when (sortOrder) {
             DevicesSortOrder.DATE_ADDED -> {
@@ -505,6 +499,15 @@ data class LineChartData(
         return dataSets
     }
 }
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class WalletInfo(
+    val address: String,
+    val showMissingBadge: Boolean,
+    val showMissingWarning: Boolean
+) : Parcelable
 
 @Suppress("EnumNaming")
 enum class RewardTimelineType {

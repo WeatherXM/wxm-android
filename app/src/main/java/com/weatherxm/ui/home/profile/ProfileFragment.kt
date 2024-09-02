@@ -14,6 +14,7 @@ import com.weatherxm.data.Status
 import com.weatherxm.data.User
 import com.weatherxm.databinding.FragmentProfileBinding
 import com.weatherxm.ui.common.Contracts.ARG_TOKEN_CLAIMED_AMOUNT
+import com.weatherxm.ui.common.Contracts.ARG_WALLET
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
@@ -28,19 +29,19 @@ import com.weatherxm.util.Mask
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.weiToETH
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class ProfileFragment : BaseFragment() {
     private lateinit var binding: FragmentProfileBinding
-    private val model: ProfileViewModel by viewModel()
+    private val model: ProfileViewModel by activityViewModel()
     private val parentModel: HomeViewModel by activityViewModel()
 
     // Register the launcher for the connect wallet activity and wait for a possible result
     private val connectWalletLauncher =
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                parentModel.setWalletNotMissing()
+                val walletAddress = result.data?.getStringExtra(ARG_WALLET)
+                parentModel.setWalletNotMissing(walletAddress)
                 model.fetchUser(true)
             }
         }
