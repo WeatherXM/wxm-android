@@ -2,9 +2,8 @@ package com.weatherxm.data.datasource
 
 import arrow.core.Either
 import com.weatherxm.data.Failure
-import com.weatherxm.data.map
-import com.weatherxm.data.network.AccessTokenBody
 import com.weatherxm.data.mapResponse
+import com.weatherxm.data.network.AccessTokenBody
 import com.weatherxm.data.network.AuthService
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.network.LoginBody

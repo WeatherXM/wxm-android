@@ -8,11 +8,9 @@ import arrow.core.flatMap
 import com.weatherxm.R
 import com.weatherxm.data.Failure
 import com.weatherxm.data.datasource.CacheAuthDataSource
-import com.weatherxm.data.mapResponse
 import com.weatherxm.data.datasource.DatabaseExplorerDataSource
-import com.weatherxm.data.leftToFailure
+import com.weatherxm.data.mapResponse
 import com.weatherxm.data.network.AccessTokenBody
-import com.weatherxm.data.map
 import com.weatherxm.data.network.AuthService
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.network.RefreshBody
