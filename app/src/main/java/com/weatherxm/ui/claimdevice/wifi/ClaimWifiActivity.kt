@@ -74,7 +74,7 @@ class ClaimWifiActivity : BaseActivity() {
             if (model.validateSerial(savedSn)) {
                 model.setSerialNumber(savedSn)
             }
-            val savedKey = it.getString(CLAIMING_KEY, null)
+            val savedKey = it.getString(CLAIMING_KEY, String.empty())
             if (model.validateClaimingKey(savedKey)) {
                 model.setClaimingKey(savedKey)
             }
