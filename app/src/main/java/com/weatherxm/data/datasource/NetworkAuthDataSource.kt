@@ -3,10 +3,10 @@ package com.weatherxm.data.datasource
 import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.mapResponse
-import com.weatherxm.data.network.AccessTokenBody
 import com.weatherxm.data.network.AuthService
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.network.LoginBody
+import com.weatherxm.data.network.LogoutBody
 import com.weatherxm.data.network.RefreshBody
 import com.weatherxm.data.network.RegistrationBody
 import com.weatherxm.data.network.ResetPasswordBody
@@ -29,8 +29,11 @@ class NetworkAuthDataSource(private val authService: AuthService) : AuthDataSour
         return authService.register(RegistrationBody(username, firstName, lastName)).mapResponse()
     }
 
-    override suspend fun logout(accessToken: String): Either<Failure, Unit> {
-        return authService.logout(AccessTokenBody(accessToken)).mapResponse()
+    override suspend fun logout(
+        accessToken: String,
+        installationId: String?
+    ): Either<Failure, Unit> {
+        return authService.logout(LogoutBody(accessToken, installationId)).mapResponse()
     }
 
     override suspend fun resetPassword(email: String): Either<Failure, Unit> {

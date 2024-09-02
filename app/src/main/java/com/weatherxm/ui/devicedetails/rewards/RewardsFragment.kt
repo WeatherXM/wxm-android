@@ -111,6 +111,11 @@ class RewardsFragment : BaseFragment() {
             showSnackbarMessage(binding.root, it.errorMessage, it.retryFunction)
         }
 
+        parentModel.onDeviceFirstFetch().observe(viewLifecycleOwner) {
+            model.device = it
+            model.fetchRewardsFromNetwork()
+        }
+
         binding.swiperefresh.setOnRefreshListener {
             model.fetchRewardsFromNetwork()
         }

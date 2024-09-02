@@ -34,7 +34,6 @@ class CacheService(
         const val KEY_LAST_REMINDED_VERSION = "last_reminded_version"
         const val KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP = "analytics_opt_in_or_out_timestamp"
         const val KEY_USERNAME = "username"
-        const val KEY_DISMISSED_SURVEY_PROMPT = "dismissed_survey_prompt"
         const val KEY_WALLET_WARNING_DISMISSED_TIMESTAMP = "wallet_warning_dismissed_timestamp"
         const val KEY_CURRENT_WEATHER_WIDGET_IDS = "current_weather_widget_ids"
         const val KEY_DEVICES_SORT = "devices_sort"
@@ -45,6 +44,7 @@ class CacheService(
         const val WIDGET_ID = "widget_id"
         const val KEY_USER_ID = "user_id"
         const val KEY_INSTALLATION_ID = "installation_id"
+        const val KEY_DISMISSED_SURVEY_ID = "dismissed_survey_id"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -207,14 +207,6 @@ class CacheService(
         locations[suggestion.id] = location
     }
 
-    fun hasDismissedSurveyPrompt(): Boolean {
-        return preferences.getBoolean(KEY_DISMISSED_SURVEY_PROMPT, false)
-    }
-
-    fun dismissSurveyPrompt() {
-        preferences.edit().putBoolean(KEY_DISMISSED_SURVEY_PROMPT, true).apply()
-    }
-
     fun setWalletWarningDismissTimestamp() {
         preferences.edit()
             .putLong(KEY_WALLET_WARNING_DISMISSED_TIMESTAMP, System.currentTimeMillis())
@@ -314,6 +306,14 @@ class CacheService(
 
     fun getDevicesOwn(): Int {
         return preferences.getInt(KEY_DEVICES_OWN, 0)
+    }
+
+    fun getLastDismissedSurveyId(): String? {
+        return preferences.getString(KEY_DISMISSED_SURVEY_ID, null)
+    }
+
+    fun setLastDismissedSurveyId(surveyId: String) {
+        preferences.edit().putString(KEY_DISMISSED_SURVEY_ID, surveyId).apply()
     }
 
     fun getCountriesInfo(): List<CountryInfo> {

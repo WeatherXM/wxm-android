@@ -25,8 +25,8 @@ import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.Rewards.formatTokens
@@ -117,6 +117,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
             getString(R.string.base_reward_desc, actualBaseReward, maxBaseReward)
         )
 
+        handleSplitRewards(data)
+
         updateIssues(sortedIssues)
 
         data.base?.qodScore?.let {
@@ -139,6 +141,56 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
 
         binding.statusView.visible(false)
         binding.mainContainer.visible(true)
+    }
+
+    private fun handleSplitRewards(data: RewardDetails) {
+        if (!data.hasSplitRewards()) {
+            val stakeHolderValue = if (model.device.isOwned()) {
+                AnalyticsService.ParamValue.STAKEHOLDER_LOWERCASE.paramValue
+            } else {
+                AnalyticsService.ParamValue.NON_STAKEHOLDER.paramValue
+            }
+            trackRewardSplitViewContent(
+                AnalyticsService.ParamValue.NO_REWARD_SPLITTING.paramValue,
+                stakeHolderValue
+            )
+        } else {
+            model.getWalletAddress {
+                val stakeHolderValue = if (model.isStakeHolder()) {
+                    AnalyticsService.ParamValue.STAKEHOLDER_LOWERCASE.paramValue
+                } else {
+                    AnalyticsService.ParamValue.NON_STAKEHOLDER.paramValue
+                }
+                trackRewardSplitViewContent(
+                    AnalyticsService.ParamValue.REWARD_SPLITTING.paramValue,
+                    stakeHolderValue
+                )
+            }
+            binding.showSplitBtn.setOnClickListener {
+                model.getWalletAddress {
+                    analytics.trackEventUserAction(
+                        AnalyticsService.ParamValue.REWARD_SPLIT_PRESSED.paramValue,
+                        AnalyticsService.ParamValue.STAKEHOLDER.paramValue,
+                        Pair(
+                            AnalyticsService.CustomParam.STATE.paramName,
+                            model.isStakeHolder().toString().lowercase()
+                        )
+                    )
+                    RewardSplitDialogFragment.newInstance()
+                        .show(supportFragmentManager, RewardSplitDialogFragment.TAG)
+                }
+            }
+            binding.showSplitBtn.visible(true)
+        }
+    }
+
+    private fun trackRewardSplitViewContent(deviceState: String, userState: String) {
+        analytics.trackEventViewContent(
+            AnalyticsService.ParamValue.REWARD_SPLITTING_DAILY_REWARD.paramValue,
+            contentId = null,
+            Pair(AnalyticsService.CustomParam.DEVICE_STATE.paramName, deviceState),
+            Pair(AnalyticsService.CustomParam.USER_STATE.paramName, userState)
+        )
     }
 
     private fun updateIssues(sortedIssues: List<RewardsAnnotationGroup>?) {

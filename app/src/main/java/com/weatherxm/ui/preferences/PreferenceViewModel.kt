@@ -24,15 +24,7 @@ class PreferenceViewModel(
     // Needed for passing info to the activity to when logging out
     private val onLogout = MutableLiveData(false)
 
-    // Needed for passing info to the fragment when user has clicked the start survey button
-    private val onShowSurveyScreen = MutableLiveData(false)
-
-    // Needed for passing info to the activity when the survey has been completed
-    private val onDismissSurveyPrompt = MutableLiveData(false)
-
     fun onLogout() = onLogout
-    fun onShowSurveyScreen() = onShowSurveyScreen
-    fun onDismissSurveyPrompt() = onDismissSurveyPrompt
 
     fun isLoggedIn(): LiveData<Either<Failure, Boolean>> = isLoggedIn
 
@@ -44,25 +36,12 @@ class PreferenceViewModel(
         }
     }
 
-    fun showSurveyScreen() {
-        onShowSurveyScreen.postValue(true)
-    }
-
     fun logout() {
         viewModelScope.launch(Dispatchers.IO) {
             analytics.onLogout()
             preferencesUseCase.logout()
             onLogout.postValue(true)
         }
-    }
-
-    fun hasDismissedSurveyPrompt(): Boolean {
-        return preferencesUseCase.hasDismissedSurveyPrompt()
-    }
-
-    fun dismissSurveyPrompt() {
-        preferencesUseCase.dismissSurveyPrompt()
-        onDismissSurveyPrompt.postValue(true)
     }
 
     fun setAnalyticsEnabled(enabled: Boolean) {

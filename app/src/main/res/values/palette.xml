@@ -49,6 +49,9 @@
     <color name="light_warning_tint">#FBDEBC</color>
     <color name="dark_warning_tint">#46381B</color>
 
+    <!-- Translucent -->
+    <color name="translucent_light_layer1">#33EAEBF9</color>
+
     <!-- Fade -->
     <color name="fade_light_top">#00FEFBFF</color>
     <color name="fade_dark_top">#0031364A</color>

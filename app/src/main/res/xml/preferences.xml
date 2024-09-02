@@ -44,12 +44,6 @@
             app:key="@string/user_panel_title"
             app:summary="@string/user_panel_desc"
             app:title="@string/user_panel_title" />
-
-        <Preference
-            app:iconSpaceReserved="false"
-            app:key="@string/short_app_survey"
-            app:summary="@string/short_app_survey_desc"
-            app:title="@string/short_app_survey" />
     </PreferenceCategory>
 
     <PreferenceCategory

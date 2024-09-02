@@ -3,13 +3,15 @@ package com.weatherxm.ui.devicesettings
 import androidx.annotation.Keep
 import com.squareup.moshi.JsonClass
 import com.weatherxm.data.Failure
+import com.weatherxm.ui.common.RewardSplitsData
 
 @Keep
 @JsonClass(generateAdapter = true)
 data class UIDeviceInfo(
     val default: MutableList<UIDeviceInfoItem>,
     val gateway: MutableList<UIDeviceInfoItem>,
-    val station: MutableList<UIDeviceInfoItem>
+    val station: MutableList<UIDeviceInfoItem>,
+    var rewardSplit: RewardSplitsData?
 )
 
 @Keep

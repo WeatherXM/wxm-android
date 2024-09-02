@@ -47,16 +47,48 @@
                 app:header_title="@string/daily_reward"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/totalDailyReward"
+            <RelativeLayout
+                android:id="@+id/totalDailyRewardContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:paddingBottom="@dimen/padding_normal"
-                android:textAppearance="@style/TextAppearance.WeatherXM.TitleSmall"
-                android:textSize="32sp"
-                app:layout_constraintTop_toBottomOf="@id/header"
-                tools:text="+ 2.5643 $WXM" />
+                app:layout_constraintTop_toBottomOf="@id/header">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/totalDailyReward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/showSplitBtn"
+                    android:layout_alignBottom="@id/showSplitBtn"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:layout_toStartOf="@id/showSplitBtn"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:textColor="@color/colorPrimaryVariant"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    app:autoSizeMaxTextSize="32sp"
+                    app:autoSizeMinTextSize="24sp"
+                    app:autoSizeTextType="uniform"
+                    tools:text="+ 2.56 $WXM" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/showSplitBtn"
+                    style="@style/Widget.WeatherXM.Button.Ghost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:paddingHorizontal="@dimen/padding_normal_to_large"
+                    android:text="@string/show_split"
+                    android:visibility="gone"
+                    app:icon="@drawable/ic_split"
+                    app:iconTint="@color/colorPrimary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:visibility="visible" />
+
+            </RelativeLayout>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/issuesTitle"
@@ -66,7 +98,7 @@
                 android:text="@string/issues_title"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Title"
                 android:textColor="@color/colorOnSurface"
-                app:layout_constraintTop_toBottomOf="@id/totalDailyReward" />
+                app:layout_constraintTop_toBottomOf="@id/totalDailyRewardContainer" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/issuesDesc"
@@ -76,7 +108,7 @@
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                 android:textColor="@color/darkGrey"
                 app:layout_constraintTop_toBottomOf="@id/issuesTitle"
-                tools:text="@string/annotation_issue_info_text" />
+                tools:text="1 minor issue affecting station rewards." />
 
             <com.weatherxm.ui.components.RewardIssueCardView
                 android:id="@+id/issueCard"
@@ -84,7 +116,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
                 android:clipToPadding="false"
-                android:paddingBottom="@dimen/padding_normal"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/issuesDesc"
                 tools:visibility="visible" />
@@ -94,6 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
+                android:paddingTop="@dimen/padding_normal"
                 android:text="@string/base_reward"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Title"
                 android:textColor="@color/colorOnSurface"

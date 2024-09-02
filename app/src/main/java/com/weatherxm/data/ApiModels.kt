@@ -330,6 +330,8 @@ data class DeviceInfo(
     val name: String,
     @Json(name = "claimed_at")
     val claimedAt: ZonedDateTime?,
+    @Json(name = "reward_split")
+    val rewardSplit: List<RewardSplit>?,
     val gateway: Gateway?,
     @Json(name = "weather_station")
     val weatherStation: WeatherStation?
@@ -570,9 +572,11 @@ data class RewardDetails(
     val boost: BoostRewards?,
     @Json(name = "annotation_summary")
     val annotationSummary: List<RewardsAnnotationGroup>?,
+    @Json(name = "reward_split")
+    val rewardSplit: List<RewardSplit>?
 ) : Parcelable {
     companion object {
-        fun empty() = RewardDetails(null, null, null, null, null)
+        fun empty() = RewardDetails(null, null, null, null, null, null)
     }
 
     fun toSortedAnnotations(): List<RewardsAnnotationGroup>? {
@@ -581,8 +585,10 @@ data class RewardDetails(
         }
     }
 
+    fun hasSplitRewards() = !rewardSplit.isNullOrEmpty() && rewardSplit.size >= 2
+
     fun isEmpty() = timestamp == null && totalDailyReward == null && base == null
-        && boost == null && annotationSummary == null
+        && boost == null && annotationSummary == null && rewardSplit == null
 }
 
 @Keep
@@ -692,6 +698,15 @@ data class WalletRewards(
     val available: Double?,
     @Json(name = "total_claimed")
     val totalClaimed: Double?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class RewardSplit(
+    val wallet: String,
+    val stake: Int,
+    val reward: Float?
 ) : Parcelable
 
 @Suppress("EnumNaming")

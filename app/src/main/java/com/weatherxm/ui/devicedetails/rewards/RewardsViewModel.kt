@@ -38,6 +38,15 @@ class RewardsViewModel(
     fun onRewards(): LiveData<Rewards> = onRewards
 
     fun fetchRewardsFromNetwork() {
+        /**
+         * If we got here directly from a notification,
+         * then we need to wait for the View Model to load the device from the network,
+         * then proceed in fetching the rewards
+         */
+        if (device.isEmpty()) {
+            return
+        }
+
         fetchRewardsJob?.let {
             if (it.isActive) {
                 it.cancel("Cancelling running history job.")

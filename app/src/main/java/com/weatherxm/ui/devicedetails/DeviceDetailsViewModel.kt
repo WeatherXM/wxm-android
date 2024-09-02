@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit
 @Suppress("LongParameterList")
 class DeviceDetailsViewModel(
     var device: UIDevice = UIDevice.empty(),
+    var deviceId: String = String.empty(),
     var openExplorerOnBack: Boolean,
     private val deviceDetailsUseCase: DeviceDetailsUseCase,
     private val authUseCase: AuthUseCase,
@@ -59,21 +60,30 @@ class DeviceDetailsViewModel(
 
     fun isLoggedIn() = isLoggedIn
 
-    suspend fun deviceAutoRefresh() = refreshHandler.flow()
-        .map {
-            deviceDetailsUseCase.getUserDevice(device)
-                .onRight {
-                    Timber.d("Got Device using polling: ${it.name}")
-                    if (device.isDeviceFromSearchResult) {
-                        onDeviceFirstFetch.postValue(it)
-                    }
-                    this.device = it
-                    onDevicePolling.postValue(it)
-                }
-                .onLeft {
-                    analytics.trackEventFailure(it.code)
-                }
+    suspend fun deviceAutoRefresh() = refreshHandler.flow().map {
+        if (!device.isEmpty()) {
+            deviceDetailsUseCase.getUserDevice(device).onRight {
+                onDeviceAutoRefresh(it)
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+            }
+        } else {
+            deviceDetailsUseCase.getUserOwnedDevice(deviceId).onRight {
+                onDeviceAutoRefresh(it)
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+            }
         }
+    }
+
+    private fun onDeviceAutoRefresh(device: UIDevice) {
+        Timber.d("Got Device using polling: ${device.name}")
+        if (this.device.isEmpty()) {
+            onDeviceFirstFetch.postValue(device)
+        }
+        this.device = device
+        onDevicePolling.postValue(device)
+    }
 
     fun updateDevice(device: UIDevice) {
         this.device = device
