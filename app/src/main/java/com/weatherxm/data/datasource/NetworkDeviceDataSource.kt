@@ -7,7 +7,7 @@ import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceInfo
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
-import com.weatherxm.data.leftToFailure
+import com.weatherxm.data.map
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.ClaimDeviceBody
 import com.weatherxm.data.network.DeleteDeviceBody
@@ -25,11 +25,11 @@ class NetworkDeviceDataSource(private val apiService: ApiService) : DeviceDataSo
     }
 
     override suspend fun getUserDevices(): Either<Failure, List<Device>> {
-        return apiService.getUserDevices().leftToFailure()
+        return apiService.getUserDevices().map()
     }
 
     override suspend fun getUserDevice(deviceId: String): Either<Failure, Device> {
-        return apiService.getUserDevice(deviceId).leftToFailure()
+        return apiService.getUserDevice(deviceId).map()
     }
 
     override suspend fun claimDevice(
@@ -39,7 +39,7 @@ class NetworkDeviceDataSource(private val apiService: ApiService) : DeviceDataSo
         numOfRetries: Int
     ): Either<Failure, Device> {
         return apiService.claimDevice(ClaimDeviceBody(serialNumber, location, secret))
-            .leftToFailure()
+            .map()
             .handleErrorWith {
                 if (it is DeviceClaiming && numOfRetries < CLAIM_MAX_RETRIES) {
                     Timber.d("Claiming Failed with ${it.code}. Retrying after 5 seconds...")
@@ -55,19 +55,19 @@ class NetworkDeviceDataSource(private val apiService: ApiService) : DeviceDataSo
         deviceId: String,
         friendlyName: String
     ): Either<Failure, Unit> {
-        return apiService.setFriendlyName(deviceId, FriendlyNameBody(friendlyName)).leftToFailure()
+        return apiService.setFriendlyName(deviceId, FriendlyNameBody(friendlyName)).map()
     }
 
     override suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit> {
-        return apiService.clearFriendlyName(deviceId).leftToFailure()
+        return apiService.clearFriendlyName(deviceId).map()
     }
 
     override suspend fun removeDevice(serialNumber: String): Either<Failure, Unit> {
-        return apiService.removeDevice(DeleteDeviceBody(serialNumber)).leftToFailure()
+        return apiService.removeDevice(DeleteDeviceBody(serialNumber)).map()
     }
 
     override suspend fun getDeviceInfo(deviceId: String): Either<Failure, DeviceInfo> {
-        return apiService.getUserDeviceInfo(deviceId).leftToFailure()
+        return apiService.getUserDeviceInfo(deviceId).map()
     }
 
     override suspend fun getUserDevicesIds(): List<String> {
@@ -83,6 +83,6 @@ class NetworkDeviceDataSource(private val apiService: ApiService) : DeviceDataSo
         lat: Double,
         lon: Double
     ): Either<Failure, Device> {
-        return apiService.setLocation(deviceId, LocationBody(lat, lon)).leftToFailure()
+        return apiService.setLocation(deviceId, LocationBody(lat, lon)).map()
     }
 }

@@ -61,8 +61,6 @@ data class ErrorResponse(
         const val MAX_FOLLOWED = "MaxFollowed"
         const val WALLET_ADDRESS_NOT_FOUND = "WalletAddressNotFound"
         const val UNSUPPORTED_APPLICATION_VERSION = "UnsupportedApplicationVersion"
-
-        fun empty(): ErrorResponse = ErrorResponse("", "", "", "")
     }
 
     override fun toString(): String {
