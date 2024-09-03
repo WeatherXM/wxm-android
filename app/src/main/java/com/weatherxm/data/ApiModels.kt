@@ -108,6 +108,8 @@ data class PublicDevice(
             claimedAt = null,
             address = null,
             hex7 = null,
+            totalRewards = null,
+            actualReward = null,
             hasLowBattery = null
         )
     }
@@ -184,6 +186,8 @@ data class Device(
             claimedAt = attributes?.claimedAt,
             address = address,
             currentWeather = currentWeather,
+            totalRewards = rewards?.totalRewards,
+            actualReward = rewards?.actualReward,
             hasLowBattery = batteryState == BatteryState.low
         )
     }
@@ -505,6 +509,8 @@ data class NetworkSearchAddressResult(
 data class Rewards(
     @Json(name = "total_rewards")
     val totalRewards: Float?,
+    @Json(name = "actual_reward")
+    val actualReward: Float?,
     val latest: Reward?,
     val timeline: List<RewardsTimestampScore>?
 ) : Parcelable {

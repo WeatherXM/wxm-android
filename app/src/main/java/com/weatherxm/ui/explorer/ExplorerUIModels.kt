@@ -87,6 +87,8 @@ data class SearchResult(
             label = null,
             location = null,
             hex7 = null,
+            totalRewards = null,
+            actualReward = null,
             hasLowBattery = null
         )
     }

@@ -18,6 +18,7 @@ import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.Contracts.ARG_WALLET
 import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
@@ -27,6 +28,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.home.HomeViewModel
+import com.weatherxm.util.Rewards.formatTokens
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class DevicesFragment : BaseFragment(), DeviceListener {
@@ -79,6 +81,10 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             onFollowStatus(it)
         }
 
+        model.onDevicesRewards().observe(viewLifecycleOwner) {
+            onDevicesRewards(it)
+        }
+
         parentModel.onWalletInfo().observe(viewLifecycleOwner) {
             onWalletMissingWarning(it.showMissingWarning)
         }
@@ -112,7 +118,6 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         when (devices.status) {
             Status.SUCCESS -> {
                 binding.swiperefresh.isRefreshing = false
-                binding.loadingRewards.invisible()
                 parentModel.getWalletInfo(devices.data)
                 if (!devices.data.isNullOrEmpty()) {
                     adapter.submitList(devices.data)
@@ -136,6 +141,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             Status.ERROR -> {
                 binding.swiperefresh.isRefreshing = false
                 binding.loadingRewards.invisible()
+                binding.totalEarned.text = getString(R.string.wxm_amount, "?")
                 binding.empty.animation(R.raw.anim_error, false)
                     .title(getString(R.string.error_generic_message))
                     .subtitle(devices.message)
@@ -157,6 +163,13 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                 }
             }
         }
+    }
+
+    private fun onDevicesRewards(rewards: DevicesRewards) {
+        binding.loadingRewards.invisible()
+        binding.totalEarned.text = getString(R.string.wxm_amount, formatTokens(rewards.total))
+        binding.totalEarnedContainer.visible(rewards.ownedStations == 0 || rewards.total > 0F)
+        binding.noRewardsYet.visible(rewards.ownedStations > 0 && rewards.total == 0F)
     }
 
     private fun onWalletMissingWarning(walletMissing: Boolean) {
