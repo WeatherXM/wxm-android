@@ -52,7 +52,7 @@ class ProfileFragment : BaseFragment() {
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             trackClaimingResult(result.resultCode == Activity.RESULT_OK)
             if (result.resultCode == Activity.RESULT_OK) {
-                parentModel.onClaimedResult(
+                model.onClaimedResult(
                     result.data?.getDoubleExtra(ARG_TOKEN_CLAIMED_AMOUNT, 0.0) ?: 0.0
                 )
             } else {
@@ -129,7 +129,7 @@ class ProfileFragment : BaseFragment() {
             }
         }
 
-        parentModel.onWalletRewards().observe(viewLifecycleOwner) { resource ->
+        model.onWalletRewards().observe(viewLifecycleOwner) { resource ->
             Timber.d("Data updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
