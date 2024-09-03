@@ -18,7 +18,6 @@ object Contracts {
     const val ARG_REWARD = "reward"
     const val ARG_REWARD_DETAILS = "reward_details"
     const val ARG_BOOST_REWARD = "boost_reward"
-    const val ARG_WALLET = "wallet"
     const val ARG_WALLET_REWARDS = "wallet_rewards"
     const val ARG_TOKEN_CLAIMED_AMOUNT = "claimed_amount"
     const val ARG_REMOTE_MESSAGE = "remote_message"

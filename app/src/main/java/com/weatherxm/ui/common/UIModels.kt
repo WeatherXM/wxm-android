@@ -507,8 +507,7 @@ data class LineChartData(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
-data class WalletInfo(
-    val address: String,
+data class WalletWarnings(
     val showMissingBadge: Boolean,
     val showMissingWarning: Boolean
 ) : Parcelable

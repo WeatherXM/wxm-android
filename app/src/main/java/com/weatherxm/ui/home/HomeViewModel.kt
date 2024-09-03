@@ -7,8 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.SingleLiveEvent
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.WalletInfo
-import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.WalletWarnings
 import com.weatherxm.usecases.UserUseCase
 import kotlinx.coroutines.launch
 
@@ -20,10 +19,10 @@ class HomeViewModel(
     private var hasDevices: Boolean? = null
 
     // Needed for passing info to show the wallet missing warning card and badges
-    private val onWalletInfo = MutableLiveData<WalletInfo>()
+    private val onWalletWarnings = MutableLiveData<WalletWarnings>()
     private val onOpenExplorer = SingleLiveEvent<Boolean>()
 
-    fun onWalletInfo(): LiveData<WalletInfo> = onWalletInfo
+    fun onWalletWarnings(): LiveData<WalletWarnings> = onWalletWarnings
     fun onOpenExplorer() = onOpenExplorer
 
     fun openExplorer() {
@@ -32,22 +31,20 @@ class HomeViewModel(
 
     fun hasDevices() = hasDevices
 
-    fun getWalletInfo(devices: List<UIDevice>?) {
+    fun getWalletWarnings(devices: List<UIDevice>?) {
         hasDevices = devices?.firstOrNull { it.isOwned() } != null
         viewModelScope.launch {
             userUseCase.getWalletAddress().onRight {
-                onWalletInfo.postValue(
-                    WalletInfo(
-                        it,
+                onWalletWarnings.postValue(
+                    WalletWarnings(
                         showMissingBadge = it.isEmpty(),
                         showMissingWarning = userUseCase.shouldShowWalletMissingWarning(it)
                     )
                 )
             }.onLeft {
                 analytics.trackEventFailure(it.code)
-                onWalletInfo.postValue(
-                    WalletInfo(
-                        String.empty(),
+                onWalletWarnings.postValue(
+                    WalletWarnings(
                         showMissingBadge = false,
                         showMissingWarning = false
                     )
@@ -60,10 +57,9 @@ class HomeViewModel(
         userUseCase.setWalletWarningDismissTimestamp()
     }
 
-    fun setWalletNotMissing(walletAddress: String?) {
-        onWalletInfo.postValue(
-            WalletInfo(
-                walletAddress ?: String.empty(),
+    fun setWalletNotMissing() {
+        onWalletWarnings.postValue(
+            WalletWarnings(
                 showMissingBadge = false,
                 showMissingWarning = false
             )

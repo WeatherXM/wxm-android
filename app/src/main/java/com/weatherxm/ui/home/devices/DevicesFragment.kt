@@ -16,7 +16,6 @@ import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.common.BundleName
-import com.weatherxm.ui.common.Contracts.ARG_WALLET
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.UIDevice
@@ -43,8 +42,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     private val connectWalletLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val walletAddress = result.data?.getStringExtra(ARG_WALLET)
-                parentModel.setWalletNotMissing(walletAddress)
+                parentModel.setWalletNotMissing()
             }
         }
 
@@ -85,7 +83,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             onDevicesRewards(it)
         }
 
-        parentModel.onWalletInfo().observe(viewLifecycleOwner) {
+        parentModel.onWalletWarnings().observe(viewLifecycleOwner) {
             onWalletMissingWarning(it.showMissingWarning)
         }
         return binding.root
@@ -118,7 +116,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         when (devices.status) {
             Status.SUCCESS -> {
                 binding.swiperefresh.isRefreshing = false
-                parentModel.getWalletInfo(devices.data)
+                parentModel.getWalletWarnings(devices.data)
                 if (!devices.data.isNullOrEmpty()) {
                     adapter.submitList(devices.data)
                     adapter.notifyDataSetChanged()

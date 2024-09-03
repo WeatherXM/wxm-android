@@ -1,7 +1,6 @@
 package com.weatherxm.ui.connectwallet
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
@@ -12,7 +11,6 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityConnectWalletBinding
-import com.weatherxm.ui.common.Contracts.ARG_WALLET
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.getRichText
@@ -255,8 +253,7 @@ class ConnectWalletActivity : BaseActivity() {
                     showSnackbarMessage(binding.root, it)
                 }
                 binding.loading.visible(false)
-                val walletAddress = Intent().putExtra(ARG_WALLET, result.data)
-                setResult(Activity.RESULT_OK, walletAddress)
+                setResult(Activity.RESULT_OK)
             }
             Status.ERROR -> {
                 result.message?.let {

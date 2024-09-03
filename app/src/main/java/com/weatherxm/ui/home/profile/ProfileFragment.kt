@@ -14,7 +14,6 @@ import com.weatherxm.data.Status
 import com.weatherxm.data.User
 import com.weatherxm.databinding.FragmentProfileBinding
 import com.weatherxm.ui.common.Contracts.ARG_TOKEN_CLAIMED_AMOUNT
-import com.weatherxm.ui.common.Contracts.ARG_WALLET
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
@@ -41,8 +40,7 @@ class ProfileFragment : BaseFragment() {
     private val connectWalletLauncher =
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val walletAddress = result.data?.getStringExtra(ARG_WALLET)
-                parentModel.setWalletNotMissing(walletAddress)
+                parentModel.setWalletNotMissing()
                 model.fetchUser(true)
             }
         }

@@ -103,7 +103,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             navigator.showNetworkStats(this)
         }
 
-        model.onWalletInfo().observe(this) {
+        model.onWalletWarnings().observe(this) {
             handleBadge(it.showMissingBadge)
         }
 
