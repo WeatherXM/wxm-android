@@ -19,13 +19,17 @@ import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.Contracts.ARG_WALLET
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.home.HomeViewModel
+import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.Rewards.weiToETH
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class DevicesFragment : BaseFragment(), DeviceListener {
@@ -78,7 +82,22 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             onFollowStatus(it)
         }
 
+        parentModel.onWalletRewards().observe(viewLifecycleOwner) {
+            onWalletRewards(it)
+        }
+
         parentModel.onWalletInfo().observe(viewLifecycleOwner) {
+            if (it.address.isNotEmpty()) {
+                parentModel.fetchWalletRewards(it.address)
+            } else if (parentModel.hasDevices() == true) {
+                binding.totalEarnedContainer.visible(false)
+                binding.noRewardsYet.visible(true)
+            } else {
+                binding.loadingRewards.invisible()
+                binding.totalEarned.text = getString(R.string.wxm_amount, formatTokens(0F))
+                binding.totalEarnedContainer.visible(true)
+                binding.noRewardsYet.visible(false)
+            }
             onWalletMissingWarning(it.showMissingWarning)
         }
         return binding.root
@@ -111,14 +130,13 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         when (devices.status) {
             Status.SUCCESS -> {
                 binding.swiperefresh.isRefreshing = false
+                parentModel.getWalletInfo(devices.data)
                 if (!devices.data.isNullOrEmpty()) {
                     adapter.submitList(devices.data)
                     adapter.notifyDataSetChanged()
                     binding.empty.visible(false)
                     binding.recycler.visible(true)
-                    parentModel.getWalletMissing(devices.data)
                 } else {
-                    parentModel.setHasDevices(false)
                     binding.empty.clear()
                         .animation(R.raw.anim_empty_devices, false)
                         .title(getString(R.string.empty_weather_stations))
@@ -181,6 +199,32 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             )
         }
         binding.walletWarning.visible(walletMissing)
+    }
+
+    private fun onWalletRewards(resource: Resource<UIWalletRewards>) {
+        when (resource.status) {
+            Status.SUCCESS -> {
+                resource.data?.totalEarned?.let {
+                    binding.totalEarned.text = getString(
+                        R.string.wxm_amount, formatTokens(weiToETH(it.toBigDecimal()))
+                    )
+                    binding.totalEarnedContainer.visible(it > 0.0)
+                    binding.noRewardsYet.visible(it == 0.0)
+                }
+                binding.loadingRewards.invisible()
+            }
+            Status.ERROR -> {
+                binding.totalEarnedContainer.visible(true)
+                binding.totalEarned.text = getString(R.string.wxm_amount, "?")
+                binding.noRewardsYet.visible(false)
+                binding.loadingRewards.invisible()
+            }
+            Status.LOADING -> {
+                binding.totalEarnedContainer.visible(true)
+                binding.noRewardsYet.visible(false)
+                binding.loadingRewards.visible(true)
+            }
+        }
     }
 
     override fun onResume() {

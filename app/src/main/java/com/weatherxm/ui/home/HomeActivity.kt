@@ -22,7 +22,6 @@ import com.weatherxm.ui.components.BaseMapFragment
 import com.weatherxm.ui.explorer.ExplorerData
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
-import com.weatherxm.ui.home.profile.ProfileViewModel
 import dev.chrisbanes.insetter.applyInsetter
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,7 +31,6 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     private val model: HomeViewModel by viewModel()
     private val explorerModel: ExplorerViewModel by viewModel()
     private val devicesViewModel: DevicesViewModel by viewModel()
-    private val profileModel: ProfileViewModel by viewModel()
 
     private lateinit var binding: ActivityHomeBinding
     private lateinit var navController: NavController

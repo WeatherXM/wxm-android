@@ -29,11 +29,12 @@ import com.weatherxm.util.Mask
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.weiToETH
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class ProfileFragment : BaseFragment() {
     private lateinit var binding: FragmentProfileBinding
-    private val model: ProfileViewModel by activityViewModel()
+    private val model: ProfileViewModel by viewModel()
     private val parentModel: HomeViewModel by activityViewModel()
 
     // Register the launcher for the connect wallet activity and wait for a possible result
@@ -51,7 +52,7 @@ class ProfileFragment : BaseFragment() {
         registerForActivityResult(StartActivityForResult()) { result: ActivityResult ->
             trackClaimingResult(result.resultCode == Activity.RESULT_OK)
             if (result.resultCode == Activity.RESULT_OK) {
-                model.onClaimedResult(
+                parentModel.onClaimedResult(
                     result.data?.getDoubleExtra(ARG_TOKEN_CLAIMED_AMOUNT, 0.0) ?: 0.0
                 )
             } else {
@@ -109,45 +110,41 @@ class ProfileFragment : BaseFragment() {
             )
         }
 
-        model.onLoading().observe(viewLifecycleOwner) {
-            if (it && !binding.swiperefresh.isRefreshing) {
-                binding.progress.visible(true)
-            } else {
-                binding.swiperefresh.isRefreshing = false
-                binding.progress.invisible()
-            }
-        }
-
         model.onUser().observe(viewLifecycleOwner) { resource ->
             Timber.d("Data updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
+                    //    parentModel.fetchWalletRewards(resource.data?.wallet?.address)
                     updateUserUI(resource.data)
+                    toggleLoading(false)
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
                     resource.message?.let { context.toast(it) }
+                    toggleLoading(false)
                 }
                 Status.LOADING -> {
-                    // Do nothing
+                    toggleLoading(true)
                 }
             }
         }
 
-        model.onWalletRewards().observe(viewLifecycleOwner) { resource ->
+        parentModel.onWalletRewards().observe(viewLifecycleOwner) { resource ->
             Timber.d("Data updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
                     resource.data?.let {
                         updateRewardsUI(it)
                     }
+                    toggleLoading(false)
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
                     resource.message?.let { context.toast(it) }
+                    toggleLoading(false)
                 }
                 Status.LOADING -> {
-                    // Do nothing
+                    toggleLoading(true)
                 }
             }
         }
@@ -168,6 +165,20 @@ class ProfileFragment : BaseFragment() {
 
         model.fetchUser()
         model.getSurvey()
+    }
+
+    private fun toggleLoading(isLoading: Boolean) {
+        if (isLoading) {
+            if (!binding.swiperefresh.isRefreshing) {
+                binding.progress.visible(true)
+            } else {
+                binding.swiperefresh.isRefreshing = false
+                binding.progress.invisible()
+            }
+        } else {
+            binding.swiperefresh.isRefreshing = false
+            binding.progress.invisible()
+        }
     }
 
     private fun updateRewardsUI(data: UIWalletRewards) {
