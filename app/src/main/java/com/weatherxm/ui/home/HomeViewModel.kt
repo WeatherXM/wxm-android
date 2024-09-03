@@ -44,35 +44,26 @@ class HomeViewModel(
     fun hasDevices() = hasDevices
 
     fun getWalletInfo(devices: List<UIDevice>?) {
-        if (devices?.firstOrNull { it.isOwned() } == null) {
-            onWalletInfo.postValue(
-                WalletInfo(String.empty(), showMissingBadge = false, showMissingWarning = false)
-            )
-            hasDevices = false
-            return
-        }
-        hasDevices = true
+        hasDevices = devices?.firstOrNull { it.isOwned() } != null
         viewModelScope.launch {
-            userUseCase.getWalletAddress()
-                .onRight {
-                    onWalletInfo.postValue(
-                        WalletInfo(
-                            it,
-                            showMissingBadge = it.isEmpty(),
-                            showMissingWarning = userUseCase.shouldShowWalletMissingWarning(it)
-                        )
+            userUseCase.getWalletAddress().onRight {
+                onWalletInfo.postValue(
+                    WalletInfo(
+                        it,
+                        showMissingBadge = it.isEmpty(),
+                        showMissingWarning = userUseCase.shouldShowWalletMissingWarning(it)
                     )
-                }
-                .onLeft {
-                    analytics.trackEventFailure(it.code)
-                    onWalletInfo.postValue(
-                        WalletInfo(
-                            String.empty(),
-                            showMissingBadge = false,
-                            showMissingWarning = false
-                        )
+                )
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                onWalletInfo.postValue(
+                    WalletInfo(
+                        String.empty(),
+                        showMissingBadge = false,
+                        showMissingWarning = false
                     )
-                }
+                )
+            }
         }
     }
 

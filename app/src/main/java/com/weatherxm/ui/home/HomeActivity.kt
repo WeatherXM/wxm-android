@@ -192,7 +192,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     }
 
     private fun handleBadge(missingWallet: Boolean) {
-        if (missingWallet) {
+        if (missingWallet && model.hasDevices() == true) {
             binding.navView.getOrCreateBadge(R.id.navigation_profile)
         } else {
             binding.navView.removeBadge(R.id.navigation_profile)

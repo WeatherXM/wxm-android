@@ -175,7 +175,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     }
 
     private fun onWalletMissingWarning(walletMissing: Boolean) {
-        if (walletMissing) {
+        if (walletMissing && parentModel.hasDevices() == true) {
             binding.walletWarning.action(getString(R.string.add_wallet_now)) {
                 analytics.trackEventPrompt(
                     AnalyticsService.ParamValue.WALLET_MISSING.paramValue,
@@ -198,7 +198,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                 AnalyticsService.ParamValue.VIEW.paramValue
             )
         }
-        binding.walletWarning.visible(walletMissing)
+        binding.walletWarning.visible(walletMissing && parentModel.hasDevices() == true)
     }
 
     private fun onWalletRewards(resource: Resource<UIWalletRewards>) {
