@@ -24,7 +24,7 @@
     <string name="action_view_all">View All</string>
     <string name="action_finish">Finish</string>
     <string name="action_sign_in">Sign In</string>
-    <string name="action_buy_station">Buy Station</string>
+    <string name="action_buy_station">Buy a Station</string>
     <string name="action_claim">Claim</string>
     <string name="action_dismiss">Dismiss</string>
     <string name="action_close">Close</string>
@@ -588,5 +588,11 @@
     <string name="weekly_range_bar_desc">The pale blue bar shows the minimum and maximum temperatures for the entire week.</string>
     <string name="daily_range_bar">Daily Range Bar</string>
     <string name="daily_range_bar_desc">Inside the weekly range, the strong blue bar indicates daily’s temperature range. It shows how today’s high and low temperatures fit within the weekly range.</string>
+
+    <!-- Station Rewards -->
+    <string name="station_rewards">Station Rewards</string>
+    <string name="total_earned_stations">Total earned for %d Stations</string>
+    <string name="oh_no">Oh no!</string>
+    <string name="it_seems_no_stations_yet">It seems you don’t have any stations yet.</string>
 
 </resources>

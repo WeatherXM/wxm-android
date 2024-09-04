@@ -196,9 +196,12 @@ class DevicesFragment : BaseFragment(), DeviceListener {
 
     private fun onDevicesRewards(rewards: DevicesRewards) {
         binding.loadingRewards.invisible()
+        binding.totalEarnedCard.setOnClickListener {
+            navigator.showDevicesRewards(this, rewards)
+        }
         binding.totalEarned.text = getString(R.string.wxm_amount, formatTokens(rewards.total))
-        binding.totalEarnedContainer.visible(rewards.ownedStations == 0 || rewards.total > 0F)
-        binding.noRewardsYet.visible(rewards.ownedStations > 0 && rewards.total == 0F)
+        binding.totalEarnedContainer.visible(rewards.devices.isEmpty() || rewards.total > 0F)
+        binding.noRewardsYet.visible(rewards.devices.isNotEmpty() && rewards.total == 0F)
     }
 
     private fun onWalletMissingWarning(walletMissing: Boolean) {

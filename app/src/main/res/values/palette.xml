@@ -68,7 +68,8 @@
     <color name="network_stats_slider_light">#BED6FF</color>
     <color name="network_stats_slider_dark">#2E4C80</color>
 
-    <!-- Reward Scores -->
+    <!-- Rewards -->
     <color name="reward_score_unknown">#BAC7CB</color>
+    <color name="last_run_color">#00B55D</color>
     <!-- End -->
 </resources>

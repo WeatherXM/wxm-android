@@ -516,9 +516,18 @@ data class WalletWarnings(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class DevicesRewards(
-    val ownedStations: Int,
     val total: Float,
     val latest: Float,
+    val devices: List<DeviceTotalRewards>
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceTotalRewards(
+    val id: String,
+    val deviceName: String,
+    val total: Float?,
 ) : Parcelable
 
 @Suppress("EnumNaming")

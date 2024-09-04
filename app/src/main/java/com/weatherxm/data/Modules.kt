@@ -179,6 +179,7 @@ import com.weatherxm.ui.devicesettings.helium.DeviceSettingsHeliumViewModel
 import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyViewModel
 import com.weatherxm.ui.devicesettings.helium.reboot.RebootViewModel
 import com.weatherxm.ui.devicesettings.wifi.DeviceSettingsWifiViewModel
+import com.weatherxm.ui.devicesrewards.DevicesRewardsViewModel
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.explorer.UICellJsonAdapter
 import com.weatherxm.ui.explorer.search.NetworkSearchViewModel
@@ -1013,6 +1014,7 @@ private val viewmodels = module {
         ClaimWifiViewModel(deviceType = params.get(), get(), get(), get())
     }
     viewModel { ClaimPulseViewModel(get(), get(), get()) }
+    viewModel { DevicesRewardsViewModel(get()) }
 }
 
 val modules = listOf(
