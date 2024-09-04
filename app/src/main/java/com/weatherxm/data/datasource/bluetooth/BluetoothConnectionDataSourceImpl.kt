@@ -9,7 +9,6 @@ import com.weatherxm.data.Frequency
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_CLAIMING_KEY_COMMAND
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_DEV_EUI_COMMAND
-import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_REBOOT_COMMAND
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_SET_FREQUENCY_COMMAND
 import com.weatherxm.data.frequencyToHeliumBleBandValue
 import kotlinx.coroutines.CancellableContinuation
@@ -102,7 +101,7 @@ class BluetoothConnectionDataSourceImpl(
         val coroutineContext = coroutineContext
         return suspendCancellableCoroutine { continuation ->
             CoroutineScope(coroutineContext).launch {
-                connectionManager.reboot(AT_REBOOT_COMMAND) {
+                connectionManager.reboot {
                     continuation.resumeWith(Result.success(it))
                 }
             }

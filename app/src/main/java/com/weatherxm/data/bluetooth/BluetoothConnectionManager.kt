@@ -373,8 +373,8 @@ class BluetoothConnectionManager(
      * Custom fix needed for firmware versions < 2.9.0 where ATZ commands
      * does NOT return an OK before rebooting so we return immediately here
      */
-    suspend fun reboot(command: String, listener: (Either<Failure, Unit>) -> Unit) {
-        if (!write(command)) {
+    suspend fun reboot(listener: (Either<Failure, Unit>) -> Unit) {
+        if (!write(AT_REBOOT_COMMAND)) {
             listener.invoke(Either.Left(BluetoothError.ConnectionRejectedError()))
             return
         }
@@ -385,10 +385,8 @@ class BluetoothConnectionManager(
                     peripheral.observe(characteristic).cancellable().collect()
                 }
                 withContext(coroutineContext) {
-                    if (command == AT_REBOOT_COMMAND) {
-                        job.cancel()
-                        listener.invoke(Either.Right(Unit))
-                    }
+                    job.cancel()
+                    listener.invoke(Either.Right(Unit))
                 }
             }
         }
