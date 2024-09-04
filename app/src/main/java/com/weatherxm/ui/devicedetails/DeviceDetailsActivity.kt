@@ -133,6 +133,13 @@ class DeviceDetailsActivity : BaseActivity() {
             }
         }
 
+        model.onDeviceFirstFetch().observe(this) {
+            if (it == null) {
+                toast(R.string.error_device_not_found)
+                finish()
+            }
+        }
+
         model.onFollowStatus().observe(this) {
             onFollowStatus(it, dialogOverlay)
         }

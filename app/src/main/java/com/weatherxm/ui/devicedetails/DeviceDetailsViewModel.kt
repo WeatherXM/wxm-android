@@ -50,9 +50,9 @@ class DeviceDetailsViewModel(
     private var isLoggedIn: Boolean? = null
     private val onDevicePolling = MutableLiveData<UIDevice>()
     private val onUpdatedDevice = MutableLiveData<UIDevice>()
-    private val onDeviceFirstFetch = MutableLiveData<UIDevice>()
+    private val onDeviceFirstFetch = MutableLiveData<UIDevice?>()
 
-    fun onDeviceFirstFetch(): LiveData<UIDevice> = onDeviceFirstFetch
+    fun onDeviceFirstFetch(): LiveData<UIDevice?> = onDeviceFirstFetch
     fun onDevicePolling(): LiveData<UIDevice> = onDevicePolling
     fun onUpdatedDevice(): LiveData<UIDevice> = onUpdatedDevice
     fun onFollowStatus(): LiveData<Resource<Unit>> = onFollowStatus
@@ -71,6 +71,11 @@ class DeviceDetailsViewModel(
             deviceDetailsUseCase.getUserOwnedDevice(deviceId).onRight {
                 onDeviceAutoRefresh(it)
             }.onLeft {
+                /**
+                 * Fetching the device failed, we should propagate null so that the Activity
+                 * terminates and not getting stuck in a loading state
+                 */
+                onDeviceFirstFetch.postValue(null)
                 analytics.trackEventFailure(it.code)
             }
         }
