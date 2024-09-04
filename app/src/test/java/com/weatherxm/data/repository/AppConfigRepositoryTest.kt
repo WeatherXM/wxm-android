@@ -1,43 +1,24 @@
 package com.weatherxm.data.repository
 
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.installations.FirebaseInstallations
-import com.weatherxm.TestUtils.coMockEitherLeft
-import com.weatherxm.TestUtils.mockEitherRight
 import com.weatherxm.data.datasource.AppConfigDataSource
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.slot
 import io.mockk.verify
 
 class AppConfigRepositoryTest : BehaviorSpec({
     val dataSource = mockk<AppConfigDataSource>()
-    val firebaseInstallations = mockk<FirebaseInstallations>()
-    val repo = AppConfigRepositoryImpl(dataSource, firebaseInstallations)
+    val repo = AppConfigRepositoryImpl(dataSource)
 
     val changelog = "changelog"
     val installationId = "installationId"
-    val mockGetIdTask = mockk<Task<String>>()
-    val slot = slot<OnCompleteListener<String>>()
 
     beforeSpec {
         every { dataSource.getChangelog() } returns changelog
+        every { dataSource.getInstallationId() } returns installationId
         justRun { dataSource.setLastRemindedVersion() }
-        justRun { dataSource.setInstallationId(installationId) }
-        mockkStatic("com.google.firebase.installations.FirebaseInstallations")
-        every { mockGetIdTask.addOnCompleteListener(capture(slot)) } answers {
-            slot.captured.onComplete(mockGetIdTask)
-            mockGetIdTask
-        }
-        every { mockGetIdTask.isComplete } returns true
-        every { mockGetIdTask.isCanceled } returns false
-        every { mockGetIdTask.result } returns installationId
-        every { firebaseInstallations.id } returns mockGetIdTask
     }
 
     context("Get app update related information") {
@@ -83,26 +64,9 @@ class AppConfigRepositoryTest : BehaviorSpec({
     }
 
     context("Get installation ID") {
-        When("We get the installation ID from the data source") {
-            mockEitherRight({ dataSource.getInstallationId() }, installationId)
+        given("We get the installation ID from the data source") {
             then("return it") {
                 repo.getInstallationId() shouldBe installationId
-            }
-        }
-        When("We cannot get the installation ID from the data source") {
-            coMockEitherLeft({ dataSource.getInstallationId() }, mockk())
-            and("We get the installation ID from firebase installations") {
-                every { mockGetIdTask.exception } returns null
-                then("return it") {
-                    repo.getInstallationId() shouldBe installationId
-                    verify(exactly = 1) { dataSource.setInstallationId(installationId) }
-                }
-            }
-            and("We cannot get the installation ID from firebase installations") {
-                every { mockGetIdTask.exception } returns Exception()
-                then("return null") {
-                    repo.getInstallationId() shouldBe null
-                }
             }
         }
     }

@@ -5,17 +5,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
-import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityPreferencesBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.classSimpleName
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.WidgetHelper
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 class PreferenceActivity : BaseActivity() {
     private lateinit var binding: ActivityPreferencesBinding
@@ -30,30 +27,6 @@ class PreferenceActivity : BaseActivity() {
 
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
-        }
-
-        binding.surveyPrompt.action(getString(R.string.short_app_survey_prompt_desc), null) {
-            model.showSurveyScreen()
-        }
-
-        binding.surveyPrompt.closeButton {
-            model.dismissSurveyPrompt()
-        }
-
-        if (model.hasDismissedSurveyPrompt()) {
-            binding.surveyPrompt.visible(false)
-        }
-
-        model.onDismissSurveyPrompt().observe(this) {
-            if (it) binding.surveyPrompt.visible(true)
-        }
-
-        model.isLoggedIn().observe(this) { result ->
-            result
-                .mapLeft {
-                    Timber.d("Not logged in. Hide survey prompt.")
-                    binding.surveyPrompt.visible(false)
-                }
         }
 
         model.onLogout().observe(this) { hasLoggedOut ->

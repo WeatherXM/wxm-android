@@ -1,11 +1,8 @@
 package com.weatherxm.ui.preferences
 
 import android.Manifest.permission.POST_NOTIFICATIONS
-import android.app.Activity
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.NotificationManagerCompat
 import androidx.preference.ListPreference
 import androidx.preference.Preference
@@ -15,7 +12,6 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.Navigator
-import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.util.DisplayModeHelper
 import com.weatherxm.util.hasPermission
@@ -33,17 +29,6 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         const val TAG = "PreferenceFragment"
     }
 
-    // Register the launcher for the claim device activity and wait for a possible result
-    private val sendFeedbackLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result: ActivityResult ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                context.toast(getString(R.string.thank_you_feedback))
-                model.dismissSurveyPrompt()
-            }
-        }
-
     override fun onResume() {
         handleNotificationsPreference()
         super.onResume()
@@ -59,7 +44,6 @@ class PreferenceFragment : PreferenceFragmentCompat() {
             findPreference(getString(R.string.contact_support_title))
         val userResearchButton: Preference? = findPreference(getString(R.string.user_panel_title))
         val displayPreference = findPreference<ListPreference>(getString(R.string.key_theme))
-        val shortWxmSurvey: Preference? = findPreference(getString(R.string.short_app_survey))
         val analyticsPreference =
             findPreference<SwitchPreferenceCompat>(getString(R.string.key_google_analytics))
         val notificationsPreference =
@@ -112,7 +96,6 @@ class PreferenceFragment : PreferenceFragmentCompat() {
                 .mapLeft {
                     Timber.d("Not logged in. Hide account preferences.")
                     onLoggedOut(
-                        shortWxmSurvey,
                         logoutBtn,
                         resetPassBtn,
                         deleteAccountButton,
@@ -122,7 +105,6 @@ class PreferenceFragment : PreferenceFragmentCompat() {
                 .map {
                     Timber.d("Logged in. Handle button clicks")
                     onLoggedIn(
-                        shortWxmSurvey,
                         logoutBtn,
                         resetPassBtn,
                         deleteAccountButton,
@@ -130,14 +112,9 @@ class PreferenceFragment : PreferenceFragmentCompat() {
                     )
                 }
         }
-
-        model.onShowSurveyScreen().observe(this) {
-            if (it) navigator.showSendFeedback(sendFeedbackLauncher, this)
-        }
     }
 
     private fun onLoggedOut(
-        shortWxmSurvey: Preference?,
         logoutBtn: Preference?,
         resetPassBtn: Preference?,
         deleteAccountButton: Preference?,
@@ -146,12 +123,10 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         logoutBtn?.isVisible = false
         resetPassBtn?.isVisible = false
         deleteAccountButton?.isVisible = false
-        shortWxmSurvey?.isVisible = false
         analyticsPreference?.isVisible = false
     }
 
     private fun onLoggedIn(
-        shortWxmSurvey: Preference?,
         logoutBtn: Preference?,
         resetPassBtn: Preference?,
         deleteAccountButton: Preference?,
@@ -167,11 +142,6 @@ class PreferenceFragment : PreferenceFragmentCompat() {
         }
         resetPassBtn?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             navigator.showResetPassword(this)
-            true
-        }
-        shortWxmSurvey?.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            analytics.trackEventSelectContent(AnalyticsService.ParamValue.APP_SURVEY.paramValue)
-            navigator.showSendFeedback(sendFeedbackLauncher, this)
             true
         }
         deleteAccountButton?.onPreferenceClickListener = Preference.OnPreferenceClickListener {

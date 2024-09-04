@@ -17,10 +17,10 @@ import com.weatherxm.ui.common.Contracts.ARG_TOKEN_CLAIMED_AMOUNT
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
-import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.invisible
-import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.home.HomeViewModel
@@ -75,6 +75,7 @@ class ProfileFragment : BaseFragment() {
 
         binding.swiperefresh.setOnRefreshListener {
             model.fetchUser()
+            model.getSurvey()
         }
 
         binding.walletContainerCard.setOnClickListener {
@@ -150,7 +151,22 @@ class ProfileFragment : BaseFragment() {
             }
         }
 
+        model.onSurvey().observe(viewLifecycleOwner) {
+            binding.surveyCard
+                .title(it.title)
+                .message(it.message)
+                .action(it.actionLabel) {
+                    navigator.openWebsite(context, it.url)
+                }
+                .close {
+                    model.dismissSurvey(it.id)
+                    binding.surveyCard.visible(false)
+                }
+                .visible(true)
+        }
+
         model.fetchUser()
+        model.getSurvey()
     }
 
     private fun updateRewardsUI(data: UIWalletRewards) {

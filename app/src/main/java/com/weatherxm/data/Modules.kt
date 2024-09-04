@@ -29,7 +29,10 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
 import com.google.firebase.installations.FirebaseInstallations
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.remoteconfig.ConfigUpdate
+import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.google.gson.FieldNamingPolicy
@@ -85,10 +88,14 @@ import com.weatherxm.data.datasource.NetworkUserDataSource
 import com.weatherxm.data.datasource.NetworkWalletDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
+import com.weatherxm.data.datasource.NotificationsDataSource
+import com.weatherxm.data.datasource.NotificationsDataSourceImpl
 import com.weatherxm.data.datasource.RewardsDataSource
 import com.weatherxm.data.datasource.RewardsDataSourceImpl
 import com.weatherxm.data.datasource.StatsDataSource
 import com.weatherxm.data.datasource.StatsDataSourceImpl
+import com.weatherxm.data.datasource.SurveyDataSource
+import com.weatherxm.data.datasource.SurveyDataSourceImpl
 import com.weatherxm.data.datasource.UserPreferenceDataSource
 import com.weatherxm.data.datasource.UserPreferenceDataSourceImpl
 import com.weatherxm.data.datasource.WidgetDataSource
@@ -120,10 +127,14 @@ import com.weatherxm.data.repository.FollowRepository
 import com.weatherxm.data.repository.FollowRepositoryImpl
 import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.data.repository.LocationRepositoryImpl
+import com.weatherxm.data.repository.NotificationsRepository
+import com.weatherxm.data.repository.NotificationsRepositoryImpl
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.data.repository.StatsRepository
 import com.weatherxm.data.repository.StatsRepositoryImpl
+import com.weatherxm.data.repository.SurveyRepository
+import com.weatherxm.data.repository.SurveyRepositoryImpl
 import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.data.repository.UserPreferencesRepositoryImpl
 import com.weatherxm.data.repository.UserRepository
@@ -155,6 +166,7 @@ import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.connectwallet.ConnectWalletViewModel
 import com.weatherxm.ui.deleteaccount.DeleteAccountViewModel
+import com.weatherxm.ui.deleteaccountsurvey.DeleteAccountSurveyViewModel
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.ui.devicedetails.current.CurrentViewModel
 import com.weatherxm.ui.devicedetails.forecast.ForecastViewModel
@@ -182,7 +194,6 @@ import com.weatherxm.ui.rewardboosts.RewardBoostViewModel
 import com.weatherxm.ui.rewarddetails.RewardDetailsViewModel
 import com.weatherxm.ui.rewardsclaim.RewardsClaimViewModel
 import com.weatherxm.ui.rewardslist.RewardsListViewModel
-import com.weatherxm.ui.sendfeedback.SendFeedbackViewModel
 import com.weatherxm.ui.signup.SignupViewModel
 import com.weatherxm.ui.startup.StartupViewModel
 import com.weatherxm.ui.updateprompt.UpdatePromptViewModel
@@ -204,6 +215,8 @@ import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCaseImpl
 import com.weatherxm.usecases.ConnectWalletUseCase
 import com.weatherxm.usecases.ConnectWalletUseCaseImpl
+import com.weatherxm.usecases.DeleteAccountSurveyUseCase
+import com.weatherxm.usecases.DeleteAccountSurveyUseCaseImpl
 import com.weatherxm.usecases.DeleteAccountUseCase
 import com.weatherxm.usecases.DeleteAccountUseCaseImpl
 import com.weatherxm.usecases.DeviceDetailsUseCase
@@ -226,14 +239,14 @@ import com.weatherxm.usecases.PreferencesUseCase
 import com.weatherxm.usecases.PreferencesUseCaseImpl
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.usecases.RewardsUseCaseImpl
-import com.weatherxm.usecases.SendFeedbackUseCase
-import com.weatherxm.usecases.SendFeedbackUseCaseImpl
 import com.weatherxm.usecases.StartupUseCase
 import com.weatherxm.usecases.StartupUseCaseImpl
 import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.usecases.StationSettingsUseCaseImpl
 import com.weatherxm.usecases.StatsUseCase
 import com.weatherxm.usecases.StatsUseCaseImpl
+import com.weatherxm.usecases.SurveyUseCase
+import com.weatherxm.usecases.SurveyUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.usecases.UserUseCaseImpl
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
@@ -281,7 +294,7 @@ private const val CONNECT_TIMEOUT = 30L
 private const val READ_TIMEOUT = 30L
 private const val WRITE_TIMEOUT = 60L
 private const val FIREBASE_CONFIG_FETCH_INTERVAL_DEBUG = 30L
-private const val FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE = 3600L
+private const val FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE = 1800L
 
 private const val COIL_MEMORY_CACHE_SIZE_PERCENTAGE = 0.25
 private const val COIL_DISK_CACHE_SIZE_PERCENTAGE = 0.02
@@ -325,127 +338,104 @@ private val datasources = module {
     single<LocationDataSource> {
         LocationDataSourceImpl(androidContext(), get(), get())
     }
-
     single<NetworkWeatherHistoryDataSource> {
         NetworkWeatherHistoryDataSource(get())
     }
-
     single<DatabaseWeatherHistoryDataSource> {
         DatabaseWeatherHistoryDataSource(get())
     }
-
     single<NetworkUserDataSource> {
         NetworkUserDataSource(get())
     }
-
     single<CacheUserDataSource> {
         CacheUserDataSource(get())
     }
-
     single<NetworkDeviceDataSource> {
         NetworkDeviceDataSource(get())
     }
-
     single<CacheDeviceDataSource> {
         CacheDeviceDataSource(get())
     }
-
     single<NetworkWalletDataSource> {
         NetworkWalletDataSource(get())
     }
-
     single<CacheWalletDataSource> {
         CacheWalletDataSource(get())
     }
-
     single<RewardsDataSource> {
         RewardsDataSourceImpl(get())
     }
-
     single<NetworkAuthDataSource> {
         NetworkAuthDataSource(get())
     }
-
     single<CacheAuthDataSource> {
         CacheAuthDataSource(get())
     }
-
     single<AppConfigDataSource> {
-        AppConfigDataSourceImpl(get(), get())
+        AppConfigDataSourceImpl(get(), get(), get())
     }
-
     single<UserPreferenceDataSource> {
         UserPreferenceDataSourceImpl(get())
     }
-
     single<NetworkExplorerDataSource> {
         NetworkExplorerDataSource(get())
     }
-
     single<DatabaseExplorerDataSource> {
         DatabaseExplorerDataSource(get())
     }
-
     single<NetworkAddressDataSource> {
         NetworkAddressDataSource(androidContext(), get(), get())
     }
-
     single<CacheAddressDataSource> {
         CacheAddressDataSource(get())
     }
-
     single<NetworkWeatherForecastDataSource> {
         NetworkWeatherForecastDataSource(get())
     }
-
     single<CacheWeatherForecastDataSource> {
         CacheWeatherForecastDataSource(get())
     }
-
     single<NetworkAddressSearchDataSource> {
         NetworkAddressSearchDataSource(get())
     }
-
     single<CacheAddressSearchDataSource> {
         CacheAddressSearchDataSource(get())
     }
-
     single<BluetoothScannerDataSource> {
         BluetoothScannerDataSourceImpl(get())
     }
-
     single<BluetoothConnectionDataSource> {
         BluetoothConnectionDataSourceImpl(get())
     }
-
     single<BluetoothUpdaterDataSource> {
         BluetoothUpdaterDataSourceImpl(get())
     }
-
     single<DeviceOTADataSource> {
         DeviceOTADataSourceImpl(get(), get())
     }
-
     single<WidgetDataSource> {
         WidgetDataSourceImpl(get())
     }
-
     single<StatsDataSource> {
         StatsDataSourceImpl(get())
     }
-
     single<NetworkFollowDataSource> {
         NetworkFollowDataSource(get())
     }
-
     single<CacheFollowDataSource> {
         CacheFollowDataSource(get())
+    }
+    single<NotificationsDataSource> {
+        NotificationsDataSourceImpl(get(), get())
+    }
+    single<SurveyDataSource> {
+        SurveyDataSourceImpl(get(), get())
     }
 }
 
 private val repositories = module {
     single<AuthRepository> {
-        AuthRepositoryImpl(get(), get(), get(), get(), get())
+        AuthRepositoryImpl(get(), get(), get(), get(), get(), get())
     }
     single<UserRepository> {
         UserRepositoryImpl(get(), get())
@@ -469,7 +459,7 @@ private val repositories = module {
         WeatherHistoryRepositoryImpl(get(), get())
     }
     single<AppConfigRepository> {
-        AppConfigRepositoryImpl(get(), get())
+        AppConfigRepositoryImpl(get())
     }
     single<AddressRepository> {
         AddressRepositoryImpl(get(), get(), get(), get(), get())
@@ -501,11 +491,17 @@ private val repositories = module {
     single<LocationRepository> {
         LocationRepositoryImpl(get(), get(), get())
     }
+    single<NotificationsRepository> {
+        NotificationsRepositoryImpl(get(), get())
+    }
+    single<SurveyRepository> {
+        SurveyRepositoryImpl(get())
+    }
 }
 
 private val usecases = module {
     single<StartupUseCase> {
-        StartupUseCaseImpl(get(), get(), get())
+        StartupUseCaseImpl(androidContext(), get(), get(), get())
     }
     single<ExplorerUseCase> {
         ExplorerUseCaseImpl(get(), get(), get(), get(), get(), get(), get())
@@ -529,7 +525,7 @@ private val usecases = module {
         RewardsUseCaseImpl(get(), androidContext().resources)
     }
     single<AuthUseCase> {
-        AuthUseCaseImpl(get(), get(), get())
+        AuthUseCaseImpl(get(), get(), get(), get())
     }
     single<UserUseCase> {
         UserUseCaseImpl(get(), get(), get(), get())
@@ -540,8 +536,8 @@ private val usecases = module {
     single<PreferencesUseCase> {
         PreferencesUseCaseImpl(get(), get(), get())
     }
-    single<SendFeedbackUseCase> {
-        SendFeedbackUseCaseImpl(get())
+    single<DeleteAccountSurveyUseCase> {
+        DeleteAccountSurveyUseCaseImpl(get())
     }
     single<DeleteAccountUseCase> {
         DeleteAccountUseCaseImpl(get(), get())
@@ -582,6 +578,9 @@ private val usecases = module {
     single<EditLocationUseCase> {
         EditLocationUseCaseImpl(get(), get())
     }
+    single<SurveyUseCase> {
+        SurveyUseCaseImpl(get())
+    }
 }
 
 private val location = module {
@@ -616,7 +615,7 @@ private val network = module {
     }
 
     single<AuthTokenAuthenticator> {
-        AuthTokenAuthenticator(get(), get(), get(), get(), get(), get(), get())
+        AuthTokenAuthenticator(get(), get(), get(), get())
     }
 
     single<ApiRequestInterceptor> {
@@ -694,7 +693,7 @@ val firebase = module {
                 // Log Firebase Cloud Messaging token for testing
                 it.token
                     .addOnSuccessListener { token ->
-                        Timber.d("FCM registration token: $token")
+                        Timber.d("FCM token: $token")
                     }
                     .addOnFailureListener { e ->
                         Timber.w(e, "Could not get FCM token.")
@@ -713,6 +712,17 @@ val firebase = module {
                     FIREBASE_CONFIG_FETCH_INTERVAL_RELEASE
                 }
             })
+
+            addOnConfigUpdateListener(object : ConfigUpdateListener {
+                override fun onUpdate(configUpdate: ConfigUpdate) {
+                    activate()
+                }
+
+                override fun onError(error: FirebaseRemoteConfigException) {
+                    Timber.e("Config update error with code: " + error.code, error)
+                }
+            })
+
             fetchAndActivate()
         }
     }
@@ -894,6 +904,7 @@ private val viewmodels = module {
     viewModel { params ->
         DeviceDetailsViewModel(
             device = params.get(),
+            deviceId = params.get(),
             openExplorerOnBack = params.get(),
             get(),
             get(),
@@ -902,10 +913,21 @@ private val viewmodels = module {
             get()
         )
     }
-    viewModel { params -> DeviceSettingsWifiViewModel(device = params.get(), get(), get(), get()) }
+    viewModel { params ->
+        DeviceSettingsWifiViewModel(
+            device = params.get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
     viewModel { params ->
         DeviceSettingsHeliumViewModel(
             device = params.get(),
+            get(),
+            get(),
             get(),
             get(),
             get()
@@ -949,7 +971,7 @@ private val viewmodels = module {
     viewModel { DevicesViewModel(get(), get(), get(), get()) }
     viewModel { ExplorerViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get()) }
-    viewModel { ProfileViewModel(get(), get()) }
+    viewModel { ProfileViewModel(get(), get(), get()) }
     viewModel { LoginViewModel(get(), get(), get()) }
     viewModel { NetworkStatsViewModel(get()) }
     viewModel { PasswordPromptViewModel(get(), get(), get()) }
@@ -957,9 +979,18 @@ private val viewmodels = module {
     viewModel { ResetPasswordViewModel(get(), get(), get()) }
     viewModel { RewardsClaimViewModel(get(), get()) }
     viewModel { RewardsListViewModel(get(), get()) }
-    viewModel { params -> RewardDetailsViewModel(device = params.get(), get(), get(), get()) }
+    viewModel { params ->
+        RewardDetailsViewModel(
+            device = params.get(),
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
+        )
+    }
     viewModel { params -> RewardBoostViewModel(params.get(), get(), get(), get()) }
-    viewModel { SendFeedbackViewModel(get(), get(), get()) }
+    viewModel { DeleteAccountSurveyViewModel(get(), get()) }
     viewModel { SignupViewModel(get(), get(), get()) }
     viewModel { UpdatePromptViewModel(get()) }
     viewModel { UrlRouterViewModel(get(), get(), get()) }

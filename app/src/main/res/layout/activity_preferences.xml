@@ -33,27 +33,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.weatherxm.ui.components.MessageCardView
-                android:id="@+id/surveyPrompt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_normal"
-                android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
-                app:message_background_tint="@color/blueTint"
-                app:message_icon="@drawable/ic_survey"
-                app:message_icon_color="@color/colorPrimaryVariant"
-                app:message_includes_close_button="true"
-                app:message_stroke_color="@color/infoStrokeColor"
-                app:message_title="@string/short_app_survey"
-                tools:visibility="visible" />
-
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/preferencesFragment"
                 android:name="com.weatherxm.ui.preferences.PreferenceFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintTop_toBottomOf="@id/surveyPrompt" />
+                android:layout_height="match_parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

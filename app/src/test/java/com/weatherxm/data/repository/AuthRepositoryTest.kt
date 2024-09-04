@@ -5,6 +5,7 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.data.datasource.AppConfigDataSource
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.DatabaseExplorerDataSource
@@ -23,6 +24,7 @@ class AuthRepositoryTest : BehaviorSpec({
     lateinit var cacheAuthDataSource: CacheAuthDataSource
     lateinit var cacheUserDataSource: CacheUserDataSource
     lateinit var databaseExplorerDataSource: DatabaseExplorerDataSource
+    lateinit var appConfigDataSource: AppConfigDataSource
     lateinit var cacheService: CacheService
     lateinit var authRepository: AuthRepository
 
@@ -30,6 +32,7 @@ class AuthRepositoryTest : BehaviorSpec({
     val password = "password"
     val firstName = "firstName"
     val lastName = "lastName"
+    val installationId = "installationId"
     val authToken = AuthToken("access", "refresh")
     val mockedAuthToken = mockk<AuthToken>()
 
@@ -38,17 +41,20 @@ class AuthRepositoryTest : BehaviorSpec({
         cacheAuthDataSource = mockk<CacheAuthDataSource>()
         cacheUserDataSource = mockk<CacheUserDataSource>()
         databaseExplorerDataSource = mockk<DatabaseExplorerDataSource>()
+        appConfigDataSource = mockk<AppConfigDataSource>()
         cacheService = mockk<CacheService>()
         authRepository = AuthRepositoryImpl(
             cacheAuthDataSource,
             networkAuthDataSource,
             cacheUserDataSource,
             databaseExplorerDataSource,
+            appConfigDataSource,
             cacheService
         )
+        every { appConfigDataSource.getInstallationId() } returns installationId
         coJustRun { cacheUserDataSource.setUserUsername(email) }
         coJustRun { databaseExplorerDataSource.deleteAll() }
-        coJustRun { networkAuthDataSource.logout(authToken.access) }
+        coJustRun { networkAuthDataSource.logout(authToken.access, installationId) }
         justRun { cacheService.clearAll() }
         coMockEitherRight({ cacheUserDataSource.getUserUsername() }, email)
     }
@@ -78,7 +84,9 @@ class AuthRepositoryTest : BehaviorSpec({
                 coMockEitherRight({ cacheService.getAuthToken() }, authToken)
                 authRepository.logout()
                 then("logout using the network") {
-                    coVerify(exactly = 1) { networkAuthDataSource.logout(authToken.access) }
+                    coVerify(exactly = 1) {
+                        networkAuthDataSource.logout(authToken.access, installationId)
+                    }
                 }
                 then("clear the cache and the database") {
                     coVerify(exactly = 1) { databaseExplorerDataSource.deleteAll() }
@@ -89,7 +97,9 @@ class AuthRepositoryTest : BehaviorSpec({
                 coMockEitherLeft({ cacheService.getAuthToken() }, failure)
                 authRepository.logout()
                 then("do NOT logout using the network") {
-                    coVerify(exactly = 0) { networkAuthDataSource.logout(authToken.access) }
+                    coVerify(exactly = 0) {
+                        networkAuthDataSource.logout(authToken.access, installationId)
+                    }
                 }
                 then("clear the cache and the database") {
                     coVerify(exactly = 1) { databaseExplorerDataSource.deleteAll() }

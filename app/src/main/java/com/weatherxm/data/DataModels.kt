@@ -53,6 +53,17 @@ data class WXMRemoteMessage(
     val url: String? = null
 ) : Parcelable
 
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class Survey(
+    val id: String,
+    val title: String,
+    val message: String,
+    val actionLabel: String,
+    val url: String
+) : Parcelable
+
 enum class Frequency {
     EU868,
     US915,
@@ -80,6 +91,11 @@ enum class RemoteMessageType(val id: String, val publicName: String, val desc: S
         "announcement",
         "Announcements",
         "These notifications are used for WeatherXM-related announcements."
+    ),
+    STATION(
+        "station",
+        "Station Notifications",
+        "These notifications are used for announcements regarding your station(s)."
     ),
     DEFAULT("DEFAULT", "Default", "These are general purpose notifications.");
 

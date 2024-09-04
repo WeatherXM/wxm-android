@@ -6,8 +6,6 @@ interface UserPreferencesRepository {
     fun shouldShowAnalyticsOptIn(): Boolean
     fun setAnalyticsEnabled(enabled: Boolean)
     fun getWalletWarningDismissTimestamp(): Long
-    fun hasDismissedSurveyPrompt(): Boolean
-    fun dismissSurveyPrompt()
     fun setWalletWarningDismissTimestamp()
     fun getDevicesSortFilterOptions(): List<String>
     fun setDevicesSortFilterOptions(sortOrder: String, filter: String, groupBy: String)
@@ -23,14 +21,6 @@ class UserPreferencesRepositoryImpl(
 
     override fun setAnalyticsEnabled(enabled: Boolean) {
         datasource.setAnalyticsEnabled(enabled)
-    }
-
-    override fun hasDismissedSurveyPrompt(): Boolean {
-        return datasource.hasDismissedSurveyPrompt()
-    }
-
-    override fun dismissSurveyPrompt() {
-        datasource.dismissSurveyPrompt()
     }
 
     override fun setWalletWarningDismissTimestamp() {

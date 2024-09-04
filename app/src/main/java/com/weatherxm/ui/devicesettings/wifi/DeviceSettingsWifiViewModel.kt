@@ -4,18 +4,25 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.DeviceInfo
+import com.weatherxm.data.RewardSplit
+import com.weatherxm.data.WeatherStation
+import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.ui.devicesettings.BaseDeviceSettingsViewModel
 import com.weatherxm.ui.devicesettings.UIDeviceInfo
 import com.weatherxm.ui.devicesettings.UIDeviceInfoItem
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.StationSettingsUseCase
+import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -23,11 +30,14 @@ class DeviceSettingsWifiViewModel(
     device: UIDevice,
     private val usecase: StationSettingsUseCase,
     private val resources: Resources,
+    private val userUseCase: UserUseCase,
+    private val authUseCase: AuthUseCase,
     private val analytics: AnalyticsWrapper
 ) : BaseDeviceSettingsViewModel(device, usecase, resources, analytics) {
     private val onDeviceInfo = MutableLiveData<UIDeviceInfo>()
 
-    private val data = UIDeviceInfo(mutableListOf(), mutableListOf(), mutableListOf())
+    private val data =
+        UIDeviceInfo(mutableListOf(), mutableListOf(), mutableListOf(), null)
 
     fun onDeviceInfo(): LiveData<UIDeviceInfo> = onDeviceInfo
 
@@ -62,7 +72,9 @@ class DeviceSettingsWifiViewModel(
         }
     }
 
-    override fun handleInfo(context: Context, info: DeviceInfo) {
+    override suspend fun handleInfo(context: Context, info: DeviceInfo) {
+        handleRewardSplitInfo(info.rewardSplit ?: emptyList())
+
         // Get gateway info
         info.gateway?.apply {
             model?.let {
@@ -110,7 +122,11 @@ class DeviceSettingsWifiViewModel(
         }
 
         // Get weather station info
-        info.weatherStation?.apply {
+        handleWeatherStationInfo(context, info.weatherStation)
+    }
+
+    private fun handleWeatherStationInfo(context: Context, weatherStation: WeatherStation?) {
+        weatherStation?.apply {
             model?.let {
                 data.station.add(UIDeviceInfoItem(resources.getString(R.string.model), it))
             }
@@ -133,6 +149,22 @@ class DeviceSettingsWifiViewModel(
                     )
                 )
             }
+        }
+    }
+
+    private suspend fun handleRewardSplitInfo(splits: List<RewardSplit>) {
+        var walletAddress = String.empty()
+        coroutineScope {
+            val getWalletAddressJob = launch {
+                val isLoggedIn = authUseCase.isLoggedIn().getOrElse { false }
+                if (isLoggedIn) {
+                    userUseCase.getWalletAddress().onRight {
+                        walletAddress = it
+                    }
+                }
+            }
+            getWalletAddressJob.join()
+            data.rewardSplit = RewardSplitsData(splits, walletAddress)
         }
     }
 

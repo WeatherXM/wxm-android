@@ -11,6 +11,7 @@ import com.weatherxm.data.Hex
 import com.weatherxm.data.HourlyWeather
 import com.weatherxm.data.Location
 import com.weatherxm.data.Reward
+import com.weatherxm.data.RewardSplit
 import com.weatherxm.data.SeverityLevel
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
@@ -375,6 +376,16 @@ data class BoostDetailInfo(
     val title: String,
     val value: String
 ) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class RewardSplitsData(
+    var splits: List<RewardSplit>,
+    var wallet: String
+) : Parcelable {
+    fun hasSplitRewards() = splits.size >= 2
+}
 
 @Keep
 @JsonClass(generateAdapter = true)

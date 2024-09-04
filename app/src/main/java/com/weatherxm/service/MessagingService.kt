@@ -14,10 +14,13 @@ import com.google.firebase.messaging.RemoteMessage
 import com.weatherxm.R
 import com.weatherxm.data.RemoteMessageType
 import com.weatherxm.data.WXMRemoteMessage
+import com.weatherxm.service.workers.RefreshFcmApiWorker
+import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_URL
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
 import com.weatherxm.util.hasPermission
 import timber.log.Timber
@@ -51,7 +54,11 @@ class MessagingService : FirebaseMessagingService() {
      * FCM registration token is initially generated so this is where you would retrieve the token.
      */
     override fun onNewToken(token: String) {
-        Timber.d("Refreshed Firebase token: $token")
+        Timber.d("Refreshed FCM token: $token")
+        /**
+         * Init and invoke the work manager to update FCM token in the server
+         */
+        RefreshFcmApiWorker.initAndRefreshToken(applicationContext, token)
     }
 
     private fun handleNotification(remoteMessage: RemoteMessage, context: Context) {
@@ -67,31 +74,14 @@ class MessagingService : FirebaseMessagingService() {
             manager.createNotificationChannel(channel)
         }
 
-        /**
-         * In order to have multiple distinct intents we need to use unique requestCodes:
-         * https://developer.android.com/reference/android/app/PendingIntent.html
-         * So we generate a random number from 0-100 which is simple enough to sufficiently
-         * achieve it
-         */
-        val requestCode = Random.nextInt()
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(
-            context,
-            requestCode,
-            Intent(context, UrlRouterActivity::class.java).apply {
-                putExtra(
-                    ARG_REMOTE_MESSAGE,
-                    WXMRemoteMessage(type, remoteMessage.data.getOrDefault(ARG_URL, String.empty()))
-                )
-            },
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
         val notification = NotificationCompat.Builder(context, type.id).apply {
-            setContentIntent(pendingIntent)
+            setContentIntent(createPendingIntent(context, remoteMessage, type))
             setSmallIcon(R.drawable.ic_logo)
             setContentTitle(remoteMessage.notification?.title)
             setContentText(remoteMessage.notification?.body)
             setAutoCancel(true)
         }.build()
+
         /**
          * As long as the title of the notification and the ID are different,
          * different notifications will show up:
@@ -102,5 +92,41 @@ class MessagingService : FirebaseMessagingService() {
          * that will replace the shown notification's info with the updated one.
          */
         manager.notify(remoteMessage.notification?.title, 0, notification)
+    }
+
+    private fun createPendingIntent(
+        context: Context,
+        remoteMessage: RemoteMessage,
+        type: RemoteMessageType
+    ): PendingIntent? {
+        val intent = if (type == RemoteMessageType.STATION) {
+            Intent(context, DeviceDetailsActivity::class.java).apply {
+                putExtra(
+                    ARG_DEVICE_ID,
+                    remoteMessage.data.getOrDefault(ARG_DEVICE_ID, String.empty())
+                )
+            }
+        } else {
+            Intent(context, UrlRouterActivity::class.java).apply {
+                putExtra(
+                    ARG_REMOTE_MESSAGE,
+                    WXMRemoteMessage(type, remoteMessage.data.getOrDefault(ARG_URL, String.empty()))
+                )
+            }
+        }
+
+        /**
+         * In order to have multiple distinct intents we need to use unique requestCodes:
+         * https://developer.android.com/reference/android/app/PendingIntent.html
+         * So we generate a random number from 0-100 which is simple enough to sufficiently
+         * achieve it
+         */
+        val requestCode = Random.nextInt()
+        return PendingIntent.getActivity(
+            context,
+            requestCode,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
     }
 }

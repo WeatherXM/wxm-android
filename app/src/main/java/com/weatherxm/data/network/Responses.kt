@@ -20,7 +20,7 @@ data class AuthToken(
         return try {
             val jwt = JWT(token)
             val isExpired = jwt.isExpired(0)
-            Timber.d("Token ${if (isExpired) "expired" else "valid"} [${jwt.details()}]")
+            Timber.d("JWT Token ${if (isExpired) "expired" else "valid"} [${jwt.details()}]")
             !isExpired
         } catch (e: DecodeException) {
             Timber.w(e, "Invalid auth token.")
