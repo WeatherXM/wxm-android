@@ -45,6 +45,11 @@ class BluetoothConnectionRepositoryImpl(
 
     override suspend fun reboot(): Either<Failure, Unit> {
         return dataSource.reboot().onRight {
+            /**
+             * Custom fix needed for firmware versions < 2.3.0 where ATZ commands
+             * does NOT return an OK before rebooting so in Connection Manager we returned
+             * immediately Either.Right(Unit) so here we should reboot implicitly by disconnecting
+             */
             dataSource.disconnectFromPeripheral()
         }
     }

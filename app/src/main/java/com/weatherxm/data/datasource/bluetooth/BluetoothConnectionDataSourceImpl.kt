@@ -9,7 +9,6 @@ import com.weatherxm.data.Frequency
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_CLAIMING_KEY_COMMAND
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_DEV_EUI_COMMAND
-import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_REBOOT_COMMAND
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_SET_FREQUENCY_COMMAND
 import com.weatherxm.data.frequencyToHeliumBleBandValue
 import kotlinx.coroutines.CancellableContinuation
@@ -94,11 +93,17 @@ class BluetoothConnectionDataSourceImpl(
         }
     }
 
+    /**
+     * Custom fix needed for firmware versions < 2.9.0
+     * by calling reboot function and not setATCommandAndResume
+     */
     override suspend fun reboot(): Either<Failure, Unit> {
         val coroutineContext = coroutineContext
         return suspendCancellableCoroutine { continuation ->
             CoroutineScope(coroutineContext).launch {
-                setATCommandAndResume(AT_REBOOT_COMMAND, continuation)
+                connectionManager.reboot {
+                    continuation.resumeWith(Result.success(it))
+                }
             }
         }
     }
