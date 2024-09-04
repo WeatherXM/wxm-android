@@ -526,7 +526,7 @@ data class DevicesRewards(
 @Parcelize
 data class DeviceTotalRewards(
     val id: String,
-    val deviceName: String,
+    val name: String,
     val total: Float?,
 ) : Parcelable
 

@@ -97,9 +97,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_large"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/totalEarnedStations"
                 app:show_pro_tip="false" />
 
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/rewardsByStation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:text="@string/rewards_by_station"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/totalEarnedStations" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/devicesRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:overScrollMode="never"
+                android:scrollbars="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/rewardsByStation"
+                tools:listitem="@layout/list_item_device_rewards" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

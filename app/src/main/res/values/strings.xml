@@ -593,5 +593,7 @@
     <string name="station_rewards">Station Rewards</string>
     <string name="oh_no">Oh no!</string>
     <string name="it_seems_no_stations_yet">It seems you don’t have any stations yet.</string>
+    <string name="rewards_by_station">Rewards by Station</string>
+    <string name="rewards_breakdown">Rewards breakdown</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.weatherxm.ui.devicesrewards
 
 import android.os.Bundle
+import com.mapbox.maps.extension.style.expressions.dsl.generated.has
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityDevicesRewardsBinding
 import com.weatherxm.ui.common.Contracts
@@ -18,6 +19,8 @@ class DevicesRewardsActivity : BaseActivity() {
     }
     private lateinit var binding: ActivityDevicesRewardsBinding
 
+    lateinit var adapter: DeviceRewardsAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDevicesRewardsBinding.inflate(layoutInflater)
@@ -31,16 +34,27 @@ class DevicesRewardsActivity : BaseActivity() {
             navigator.openWebsite(this, getString(R.string.shop_url))
         }
 
-        binding.mainContainer.visible(model.rewards.devices.isNotEmpty())
-        binding.noStationsContainer.visible(model.rewards.devices.isEmpty())
-        binding.emptyRewardsCard.visible(
-            model.rewards.devices.isNotEmpty() && model.rewards.total == 0F
-        )
-        binding.totalEarnedStationsTitle.text = resources.getQuantityString(
-            R.plurals.total_earned_stations, model.rewards.devices.size, model.rewards.devices.size
-        )
-        binding.totalEarnedStations.text =
-            getString(R.string.wxm_amount, formatTokens(model.rewards.total))
-        binding.lastRun.text = getString(R.string.reward, formatTokens(model.rewards.latest))
+        val hasDevices = model.rewards.devices.isNotEmpty()
+
+        if (hasDevices) {
+            binding.totalEarnedStationsTitle.text = resources.getQuantityString(
+                R.plurals.total_earned_stations,
+                model.rewards.devices.size,
+                model.rewards.devices.size
+            )
+            binding.totalEarnedStations.text =
+                getString(R.string.wxm_amount, formatTokens(model.rewards.total))
+            binding.lastRun.text = getString(R.string.reward, formatTokens(model.rewards.latest))
+            binding.mainContainer.visible(true)
+            binding.emptyRewardsCard.visible(model.rewards.total == 0F)
+
+            adapter = DeviceRewardsAdapter { _, _ ->
+                // TODO: Expanded/collapsed use a map holding the info and populate it
+            }
+            binding.devicesRecycler.adapter = adapter
+            adapter.submitList(model.rewards.devices)
+        } else {
+            binding.noStationsContainer.visible(true)
+        }
     }
 }
