@@ -67,4 +67,7 @@
     <declare-styleable name="HeliumSetFrequencyView">
         <attr name="is_on_claiming" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="EmptyRewardsCardView">
+        <attr name="show_pro_tip" format="boolean" />
+    </declare-styleable>
 </resources>

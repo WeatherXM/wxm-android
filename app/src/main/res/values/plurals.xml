@@ -12,4 +12,8 @@
         <item quantity="one">1 active station</item>
         <item quantity="other">%d active stations</item>
     </plurals>
+    <plurals name="total_earned_stations">
+        <item quantity="one">Total earned for 1 Station</item>
+        <item quantity="other">Total earned for %d Stations</item>
+    </plurals>
 </resources>

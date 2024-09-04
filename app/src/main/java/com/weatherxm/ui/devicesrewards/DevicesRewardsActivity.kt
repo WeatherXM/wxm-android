@@ -33,8 +33,12 @@ class DevicesRewardsActivity : BaseActivity() {
 
         binding.mainContainer.visible(model.rewards.devices.isNotEmpty())
         binding.noStationsContainer.visible(model.rewards.devices.isEmpty())
-        binding.totalEarnedStationsTitle.text =
-            getString(R.string.total_earned_stations, model.rewards.devices.size)
+        binding.emptyRewardsCard.visible(
+            model.rewards.devices.isNotEmpty() && model.rewards.total == 0F
+        )
+        binding.totalEarnedStationsTitle.text = resources.getQuantityString(
+            R.plurals.total_earned_stations, model.rewards.devices.size, model.rewards.devices.size
+        )
         binding.totalEarnedStations.text =
             getString(R.string.wxm_amount, formatTokens(model.rewards.total))
         binding.lastRun.text = getString(R.string.reward, formatTokens(model.rewards.latest))

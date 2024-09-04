@@ -591,7 +591,6 @@
 
     <!-- Station Rewards -->
     <string name="station_rewards">Station Rewards</string>
-    <string name="total_earned_stations">Total earned for %d Stations</string>
     <string name="oh_no">Oh no!</string>
     <string name="it_seems_no_stations_yet">It seems you don’t have any stations yet.</string>
 
