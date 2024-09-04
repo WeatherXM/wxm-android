@@ -94,11 +94,17 @@ class BluetoothConnectionDataSourceImpl(
         }
     }
 
+    /**
+     * Custom fix needed for firmware versions < 2.9.0
+     * by calling reboot function and not setATCommandAndResume
+     */
     override suspend fun reboot(): Either<Failure, Unit> {
         val coroutineContext = coroutineContext
         return suspendCancellableCoroutine { continuation ->
             CoroutineScope(coroutineContext).launch {
-                setATCommandAndResume(AT_REBOOT_COMMAND, continuation)
+                connectionManager.reboot(AT_REBOOT_COMMAND) {
+                    continuation.resumeWith(Result.success(it))
+                }
             }
         }
     }
