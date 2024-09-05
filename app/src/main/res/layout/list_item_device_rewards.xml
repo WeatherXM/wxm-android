@@ -17,11 +17,12 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/name"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_small"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             app:layout_constraintEnd_toStartOf="@id/amount"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Magnificent Magnolia Altocumulus" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -40,14 +41,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/action_open"
+            android:src="@drawable/ic_arrow_down"
             app:layout_constraintBottom_toBottomOf="@id/name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/name"
-            app:tint="@color/darkGrey"
-            tools:src="@drawable/ic_arrow_down" />
+            app:tint="@color/darkGrey" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/detailsContainer"
+        <FrameLayout
+            android:id="@+id/detailsWithLoadingContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_large"
@@ -55,14 +56,100 @@
             app:layout_constraintTop_toBottomOf="@id/name"
             tools:visibility="visible">
 
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/rewardsBreakdown"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/detailsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/rewards_breakdown"
-                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/rewardsBreakdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rewards_breakdown"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/earnedByTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:text="@string/earned_by_this_station"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                    app:layout_constraintBottom_toTopOf="@id/earnedBy"
+                    app:layout_constraintEnd_toStartOf="@id/chartRangeSelector"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/chartRangeSelector" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/earnedBy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                    app:layout_constraintBottom_toBottomOf="@id/chartRangeSelector"
+                    app:layout_constraintEnd_toStartOf="@id/chartRangeSelector"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/earnedByTitle"
+                    tools:text="389,023.54 $WXM" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chartRangeSelector"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:background="@drawable/background_rounded_layer_1"
+                    android:padding="@dimen/padding_extra_small"
+                    app:chipSpacingHorizontal="@dimen/margin_extra_small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rewardsBreakdown"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/week"
+                        style="@style/Widget.WeatherXM.Chip.Selector"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:text="@string/seven_days_abbr" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/month"
+                        style="@style/Widget.WeatherXM.Chip.Selector"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:text="@string/one_month_abbr" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/year"
+                        style="@style/Widget.WeatherXM.Chip.Selector"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checkable="true"
+                        android:text="@string/one_year_abbr" />
+                </com.google.android.material.chip.ChipGroup>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/boostsRecycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:scrollbars="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@id/chartRangeSelector"
+                    tools:listitem="@layout/list_item_device_rewards_boost" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.weatherxm.ui.components.EmptyView
+                android:id="@+id/detailsStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:empty_animation="@raw/anim_loading" />
+        </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

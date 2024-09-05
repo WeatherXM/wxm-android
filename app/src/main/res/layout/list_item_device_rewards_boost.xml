@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_large"
+    tools:background="@color/colorSurface">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Beta rewards details" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/boostProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="1dp"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.LabelMedium"
+        android:textColor="@color/dark_text"
+        app:layout_constraintBottom_toBottomOf="@id/boostProgressSlider"
+        app:layout_constraintEnd_toEndOf="@id/boostProgressSlider"
+        app:layout_constraintStart_toStartOf="@id/boostProgressSlider"
+        app:layout_constraintTop_toTopOf="@id/boostProgressSlider"
+        tools:text="70%" />
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/boostProgressSlider"
+        style="@style/Widget.WeatherXM.Slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-10dp"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:layout_marginEnd="-9dp"
+        android:enabled="false"
+        android:valueFrom="0"
+        android:valueTo="100"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:trackHeight="23dp"
+        tools:trackColorActive="@color/beta_rewards_alt_color"
+        tools:trackColorInactive="@color/beta_rewards_color"
+        tools:values="@array/reward_slider_default_values" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/totalTokensSoFarTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_normal"
+        android:text="@string/total_tokens_earned_so_far"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+        app:layout_constraintEnd_toStartOf="@id/totalTokensSoFar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/boostProgressSlider" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/totalTokensSoFar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.LabelMedium"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/totalTokensSoFarTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/totalTokensSoFarTitle"
+        tools:text="132.23 $WXM" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/firstDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin_small"
+        app:dividerColor="@color/layer2"
+        app:layout_constraintTop_toBottomOf="@id/totalTokensSoFarTitle" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/totalTokensMaxTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_normal"
+        android:text="@string/total_tokens_to_be_rewarded"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+        app:layout_constraintEnd_toStartOf="@id/totalTokensMax"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/firstDivider" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/totalTokensMax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.LabelMedium"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/totalTokensMaxTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/totalTokensMaxTitle"
+        tools:text="132.23 $WXM" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/secondDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/margin_small"
+        app:dividerColor="@color/layer2"
+        app:layout_constraintTop_toBottomOf="@id/totalTokensMaxTitle" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/boostPeriodTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_normal"
+        android:text="@string/boost_period"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+        app:layout_constraintEnd_toStartOf="@id/boostPeriod"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/secondDivider" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/boostPeriod"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.WeatherXM.Default.LabelMedium"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/boostPeriodTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/boostPeriodTitle"
+        tools:text="Feb 14 2024 - Mar 25 2025" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

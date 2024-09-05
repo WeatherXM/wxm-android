@@ -715,6 +715,50 @@ data class RewardSplit(
     val reward: Float?
 ) : Parcelable
 
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceRewardsSummary(
+    val total: Float?,
+    val data: List<DeviceRewardsSummaryData>?,
+    val details: List<DeviceRewardsSummaryDetails>?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceRewardsSummaryData(
+    val ts: ZonedDateTime,
+    val rewards: List<DeviceRewardsSummaryDataReward>?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceRewardsSummaryDataReward(
+    val type: String?,
+    val code: String?,
+    val value: Float?,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceRewardsSummaryDetails(
+    val type: String?,
+    val code: String?,
+    @Json(name = "current_rewards")
+    val currentRewards: Float?,
+    @Json(name = "total_rewards")
+    val totalRewards: Float?,
+    @Json(name = "boost_period_start")
+    val boostPeriodStart: ZonedDateTime?,
+    @Json(name = "boost_period_end")
+    val boostPeriodEnd: ZonedDateTime?,
+    @Json(name = "completed_percentage")
+    val completedPercentage: Float?
+) : Parcelable
+
 @Suppress("EnumNaming")
 enum class Connectivity {
     wifi,

@@ -1,7 +1,6 @@
 package com.weatherxm.ui.devicesrewards
 
 import android.os.Bundle
-import com.mapbox.maps.extension.style.expressions.dsl.generated.has
 import com.weatherxm.R
 import com.weatherxm.databinding.ActivityDevicesRewardsBinding
 import com.weatherxm.ui.common.Contracts
@@ -34,8 +33,11 @@ class DevicesRewardsActivity : BaseActivity() {
             navigator.openWebsite(this, getString(R.string.shop_url))
         }
 
-        val hasDevices = model.rewards.devices.isNotEmpty()
+        model.onDeviceRewardDetails().observe(this) {
+            adapter.replaceItem(it.first, it.second)
+        }
 
+        val hasDevices = model.rewards.devices.isNotEmpty()
         if (hasDevices) {
             binding.totalEarnedStationsTitle.text = resources.getQuantityString(
                 R.plurals.total_earned_stations,
@@ -48,9 +50,16 @@ class DevicesRewardsActivity : BaseActivity() {
             binding.mainContainer.visible(true)
             binding.emptyRewardsCard.visible(model.rewards.total == 0F)
 
-            adapter = DeviceRewardsAdapter { _, _ ->
-                // TODO: Expanded/collapsed use a map holding the info and populate it
-            }
+            adapter = DeviceRewardsAdapter(
+                onExpandToggle = { position, isExpanded, deviceId ->
+                    if (isExpanded && model.rewards.devices[position].details == null) {
+                        model.getDeviceRewardsSummary(deviceId, position, null)
+                    }
+                },
+                onRangeChipClicked = { position, checkedRangeChipId, deviceId ->
+                    model.getDeviceRewardsSummary(deviceId, position, checkedRangeChipId)
+                }
+            )
             binding.devicesRecycler.adapter = adapter
             adapter.submitList(model.rewards.devices)
         } else {

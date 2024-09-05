@@ -71,5 +71,7 @@
     <!-- Rewards -->
     <color name="reward_score_unknown">#BAC7CB</color>
     <color name="last_run_color">#00B55D</color>
+    <color name="beta_rewards_color">#9B3EDE</color>
+    <color name="beta_rewards_alt_color">#6A00B6</color>
     <!-- End -->
 </resources>

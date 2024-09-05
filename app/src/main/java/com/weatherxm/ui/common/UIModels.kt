@@ -13,6 +13,7 @@ import com.weatherxm.data.Location
 import com.weatherxm.data.Reward
 import com.weatherxm.data.RewardSplit
 import com.weatherxm.data.SeverityLevel
+import com.weatherxm.data.repository.RewardsRepositoryImpl
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -528,9 +529,31 @@ data class DeviceTotalRewards(
     val id: String,
     val name: String,
     val total: Float?,
+    var details: DeviceTotalRewardsDetails? = null
 ) : Parcelable
 
-@Suppress("EnumNaming")
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceTotalRewardsDetails(
+    val total: Float?,
+    val mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode?,
+    val boosts: List<DeviceTotalRewardsBoost>?,
+    val fetchError: Boolean
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceTotalRewardsBoost(
+    val boostCode: String?,
+    val completedPercentage: Int?,
+    val maxRewards: Float?,
+    val currentRewards: Float?,
+    val boostPeriodStart: ZonedDateTime?,
+    val boostPeriodEnd: ZonedDateTime?
+) : Parcelable
+
 enum class RewardTimelineType {
     DATA,
     END_OF_LIST

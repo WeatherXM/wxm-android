@@ -6,9 +6,11 @@ import com.weatherxm.R
 import com.weatherxm.data.BoostCode
 import com.weatherxm.data.BoostReward
 import com.weatherxm.data.BoostRewardDetails
+import com.weatherxm.data.DeviceRewardsSummary
 import com.weatherxm.data.Failure
 import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.repository.RewardsRepository
+import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.ui.common.BoostDetailInfo
 import com.weatherxm.ui.common.RewardTimelineType
 import com.weatherxm.ui.common.TimelineReward
@@ -36,6 +38,11 @@ interface RewardsUseCase {
         deviceId: String,
         boostReward: BoostReward
     ): Either<Failure, UIBoost>
+
+    suspend fun getDeviceRewardsSummary(
+        deviceId: String,
+        mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
+    ): Either<Failure, DeviceRewardsSummary>
 }
 
 class RewardsUseCaseImpl(
@@ -132,6 +139,13 @@ class RewardsUseCaseImpl(
                 boostDetails
             )
         }
+    }
+
+    override suspend fun getDeviceRewardsSummary(
+        deviceId: String,
+        mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
+    ): Either<Failure, DeviceRewardsSummary> {
+        return repository.getDeviceRewardsSummary(deviceId, mode)
     }
 
     private fun getBoostDesc(

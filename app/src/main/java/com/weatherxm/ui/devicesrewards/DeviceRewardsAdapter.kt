@@ -7,16 +7,27 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
+import com.weatherxm.data.repository.RewardsRepositoryImpl.Companion.RewardsSummaryMode
 import com.weatherxm.databinding.ListItemDeviceRewardsBinding
 import com.weatherxm.ui.common.DeviceTotalRewards
-import com.weatherxm.ui.common.toggleVisibility
+import com.weatherxm.ui.common.DeviceTotalRewardsDetails
+import com.weatherxm.ui.common.hide
+import com.weatherxm.ui.common.show
+import com.weatherxm.ui.common.visible
 import com.weatherxm.util.Rewards.formatTokens
 
 class DeviceRewardsAdapter(
-    private val onExpandToggle: (Int, Boolean) -> Unit
+    private val onExpandToggle: (Int, Boolean, String) -> Unit,
+    private val onRangeChipClicked: (Int, Int, String) -> Unit,
 ) : ListAdapter<DeviceTotalRewards, DeviceRewardsAdapter.DeviceRewardsViewHolder>(
     DeviceRewardsDiffCallback()
 ) {
+    private val expandedPositions = mutableSetOf(0)
+
+    fun replaceItem(position: Int, details: DeviceTotalRewardsDetails) {
+        getItem(position).details = details
+        notifyItemChanged(position)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceRewardsViewHolder {
         val binding = ListItemDeviceRewardsBinding.inflate(
@@ -31,31 +42,64 @@ class DeviceRewardsAdapter(
         holder.bind(getItem(position))
     }
 
-    inner class DeviceRewardsViewHolder(private val binding: ListItemDeviceRewardsBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    inner class DeviceRewardsViewHolder(
+        private val binding: ListItemDeviceRewardsBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        val adapter = DeviceRewardsBoostAdapter()
+        private var ignoreRangeChipListener = false
 
         fun bind(item: DeviceTotalRewards) {
             binding.root.setOnClickListener {
-                onExpandClick()
+                onExpandClick(item)
             }
 
-            if (absoluteAdapterPosition == 0) {
-                onExpandClick(ignoreEvent = true)
-            } else {
-                binding.openDeviceRewards.setImageResource(R.drawable.ic_arrow_down)
+            binding.chartRangeSelector.setOnCheckedStateChangeListener { _, _ ->
+                onChipClicked(item)
+            }
+
+            if (expandedPositions.contains(absoluteAdapterPosition)) {
+                if (absoluteAdapterPosition == 0 && item.details == null) {
+                    onExpandToggle.invoke(absoluteAdapterPosition, true, item.id)
+                }
+                binding.openDeviceRewards.setImageResource(R.drawable.ic_arrow_up)
+                binding.detailsWithLoadingContainer.show()
             }
 
             binding.name.text = item.name
             binding.amount.text =
                 itemView.context.getString(R.string.wxm_amount, formatTokens(item.total))
+
+            item.details?.let {
+                if (it.fetchError) {
+                    binding.detailsStatus.animation(R.raw.anim_error).visible(true)
+                } else {
+                    binding.earnedBy.text = formatTokens(it.total)
+                    binding.boostsRecycler.adapter = adapter
+                    adapter.submitList(it.boosts)
+
+                    ignoreRangeChipListener = true
+                    when (it.mode) {
+                        RewardsSummaryMode.WEEK -> binding.chartRangeSelector.check(R.id.week)
+                        RewardsSummaryMode.MONTH -> binding.chartRangeSelector.check(R.id.month)
+                        RewardsSummaryMode.YEAR -> binding.chartRangeSelector.check(R.id.year)
+                        null -> binding.chartRangeSelector.clearCheck()
+                    }.also {
+                        ignoreRangeChipListener = false
+                    }
+
+                    binding.detailsStatus.visible(false)
+                    binding.detailsContainer.visible(true)
+                }
+            } ?: binding.detailsStatus.visible(true)
         }
 
-        private fun onExpandClick(ignoreEvent: Boolean = false) {
-            /*
+        private fun onExpandClick(item: DeviceTotalRewards) {
+            /**
              * We define a new variable here because toggleVisibility uses an animation and has a
              * delay so we cannot use `binding.hourlyRecycler.isVisible` directly`.
              */
-            val willBeExpanded = !binding.detailsContainer.isVisible
+            val willBeExpanded = !binding.detailsWithLoadingContainer.isVisible
 
             binding.openDeviceRewards.setImageResource(
                 if (willBeExpanded) {
@@ -65,10 +109,32 @@ class DeviceRewardsAdapter(
                 }
             )
 
-            binding.detailsContainer.toggleVisibility()
+            if (willBeExpanded) {
+                binding.detailsWithLoadingContainer.show()
+                expandedPositions.add(absoluteAdapterPosition)
+            } else {
+                binding.detailsWithLoadingContainer.hide()
+                expandedPositions.remove(absoluteAdapterPosition)
+            }
 
-            if (!ignoreEvent) {
-                onExpandToggle.invoke(absoluteAdapterPosition, willBeExpanded)
+            onExpandToggle.invoke(absoluteAdapterPosition, willBeExpanded, item.id)
+        }
+
+        private fun onChipClicked(item: DeviceTotalRewards) {
+            val checkedChipId = binding.chartRangeSelector.checkedChipId
+            val layer1 = itemView.context.getColorStateList(R.color.layer1)
+            val layer2 = itemView.context.getColorStateList(R.color.layer2)
+            binding.week.chipBackgroundColor = layer1
+            binding.month.chipBackgroundColor = layer1
+            binding.year.chipBackgroundColor = layer1
+            when (checkedChipId) {
+                R.id.week -> binding.week.chipBackgroundColor = layer2
+                R.id.month -> binding.month.chipBackgroundColor = layer2
+                R.id.year -> binding.year.chipBackgroundColor = layer2
+            }
+
+            if (!ignoreRangeChipListener) {
+                onRangeChipClicked.invoke(absoluteAdapterPosition, checkedChipId, item.id)
             }
         }
     }
@@ -89,6 +155,7 @@ class DeviceRewardsDiffCallback : DiffUtil.ItemCallback<DeviceTotalRewards>() {
     ): Boolean {
         return oldItem.id == newItem.id &&
             oldItem.name == newItem.name &&
-            oldItem.total == newItem.total
+            oldItem.total == newItem.total &&
+            oldItem.details == newItem.details
     }
 }

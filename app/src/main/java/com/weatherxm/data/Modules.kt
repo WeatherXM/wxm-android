@@ -1014,7 +1014,7 @@ private val viewmodels = module {
         ClaimWifiViewModel(deviceType = params.get(), get(), get(), get())
     }
     viewModel { ClaimPulseViewModel(get(), get(), get()) }
-    viewModel { DevicesRewardsViewModel(get()) }
+    viewModel { DevicesRewardsViewModel(get(), get(), get()) }
 }
 
 val modules = listOf(
