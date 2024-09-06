@@ -30,7 +30,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="TextAppearance.WeatherXM.TitleSmall" parent="TextAppearance.Material3.BodyLarge">
+    <style name="TextAppearance.WeatherXM.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
         <item name="android:textColor">@color/colorPrimaryVariant</item>
         <item name="android:textStyle">bold</item>
     </style>

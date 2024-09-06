@@ -134,6 +134,8 @@ class DeviceRewardsAdapter(
             }
 
             if (!ignoreRangeChipListener) {
+                binding.detailsStatus.animation(R.raw.anim_loading).visible(true)
+                binding.detailsContainer.visible(false)
                 onRangeChipClicked.invoke(absoluteAdapterPosition, checkedChipId, item.id)
             }
         }

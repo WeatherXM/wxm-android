@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+        android:textColor="@color/textColor"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Beta rewards details" />
 

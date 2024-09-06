@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_small"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+            android:textColor="@color/textColor"
             app:layout_constraintEnd_toStartOf="@id/amount"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -31,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_small_to_normal"
             android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+            android:textColor="@color/textColor"
             app:layout_constraintBottom_toBottomOf="@id/name"
             app:layout_constraintEnd_toStartOf="@id/openDeviceRewards"
             app:layout_constraintTop_toTopOf="@id/name"
@@ -69,6 +71,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/rewards_breakdown"
                     android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                    android:textColor="@color/textColor"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textview.MaterialTextView
