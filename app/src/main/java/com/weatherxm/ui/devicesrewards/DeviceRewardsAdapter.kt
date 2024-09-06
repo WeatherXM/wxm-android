@@ -54,8 +54,12 @@ class DeviceRewardsAdapter(
                 onExpandClick(item)
             }
 
-            binding.chartRangeSelector.setOnCheckedStateChangeListener { _, _ ->
-                onChipClicked(item)
+            binding.chartRangeSelector.listener {
+                if (!ignoreRangeChipListener) {
+                    binding.detailsStatus.animation(R.raw.anim_loading).visible(true)
+                    binding.detailsContainer.visible(false)
+                    onRangeChipClicked.invoke(absoluteAdapterPosition, it, item.id)
+                }
             }
 
             if (expandedPositions.contains(absoluteAdapterPosition)) {
@@ -80,9 +84,9 @@ class DeviceRewardsAdapter(
 
                     ignoreRangeChipListener = true
                     when (it.mode) {
-                        RewardsSummaryMode.WEEK -> binding.chartRangeSelector.check(R.id.week)
-                        RewardsSummaryMode.MONTH -> binding.chartRangeSelector.check(R.id.month)
-                        RewardsSummaryMode.YEAR -> binding.chartRangeSelector.check(R.id.year)
+                        RewardsSummaryMode.WEEK -> binding.chartRangeSelector.checkWeek()
+                        RewardsSummaryMode.MONTH -> binding.chartRangeSelector.checkMonth()
+                        RewardsSummaryMode.YEAR -> binding.chartRangeSelector.checkYear()
                         null -> binding.chartRangeSelector.clearCheck()
                     }.also {
                         ignoreRangeChipListener = false
@@ -118,26 +122,6 @@ class DeviceRewardsAdapter(
             }
 
             onExpandToggle.invoke(absoluteAdapterPosition, willBeExpanded, item.id)
-        }
-
-        private fun onChipClicked(item: DeviceTotalRewards) {
-            val checkedChipId = binding.chartRangeSelector.checkedChipId
-            val layer1 = itemView.context.getColorStateList(R.color.layer1)
-            val layer2 = itemView.context.getColorStateList(R.color.layer2)
-            binding.week.chipBackgroundColor = layer1
-            binding.month.chipBackgroundColor = layer1
-            binding.year.chipBackgroundColor = layer1
-            when (checkedChipId) {
-                R.id.week -> binding.week.chipBackgroundColor = layer2
-                R.id.month -> binding.month.chipBackgroundColor = layer2
-                R.id.year -> binding.year.chipBackgroundColor = layer2
-            }
-
-            if (!ignoreRangeChipListener) {
-                binding.detailsStatus.animation(R.raw.anim_loading).visible(true)
-                binding.detailsContainer.visible(false)
-                onRangeChipClicked.invoke(absoluteAdapterPosition, checkedChipId, item.id)
-            }
         }
     }
 }

@@ -98,42 +98,13 @@
                     app:layout_constraintTop_toBottomOf="@id/earnedByTitle"
                     tools:text="389,023.54 $WXM" />
 
-                <com.google.android.material.chip.ChipGroup
+                <com.weatherxm.ui.components.RangeSelectorView
                     android:id="@+id/chartRangeSelector"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
-                    android:background="@drawable/background_rounded_layer_1"
-                    android:padding="@dimen/padding_extra_small"
-                    app:chipSpacingHorizontal="@dimen/margin_extra_small"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rewardsBreakdown"
-                    app:singleSelection="true">
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/week"
-                        style="@style/Widget.WeatherXM.Chip.Selector"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:text="@string/seven_days_abbr" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/month"
-                        style="@style/Widget.WeatherXM.Chip.Selector"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:text="@string/one_month_abbr" />
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/year"
-                        style="@style/Widget.WeatherXM.Chip.Selector"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checkable="true"
-                        android:text="@string/one_year_abbr" />
-                </com.google.android.material.chip.ChipGroup>
+                    app:layout_constraintTop_toBottomOf="@id/rewardsBreakdown" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/boostsRecycler"

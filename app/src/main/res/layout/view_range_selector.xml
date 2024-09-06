@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:background="@color/colorSurface"
+    tools:orientation="vertical"
+    tools:parentTag="LinearLayout">
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chartRangeSelector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_rounded_layer_1"
+        android:padding="@dimen/padding_extra_small"
+        app:chipSpacingHorizontal="@dimen/margin_extra_small"
+        app:singleSelection="true"
+        tools:checkedChip="@id/week">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/week"
+            style="@style/Widget.WeatherXM.Chip.Selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="@string/seven_days_abbr" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/month"
+            style="@style/Widget.WeatherXM.Chip.Selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="@string/one_month_abbr" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/year"
+            style="@style/Widget.WeatherXM.Chip.Selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="@string/one_year_abbr" />
+    </com.google.android.material.chip.ChipGroup>
+
+</merge>
