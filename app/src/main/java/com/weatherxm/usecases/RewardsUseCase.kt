@@ -1,17 +1,22 @@
 package com.weatherxm.usecases
 
 import android.content.res.Resources
+import androidx.compose.ui.util.fastForEachIndexed
 import arrow.core.Either
+import com.github.mikephil.charting.data.Entry
 import com.weatherxm.R
 import com.weatherxm.data.BoostCode
 import com.weatherxm.data.BoostReward
 import com.weatherxm.data.BoostRewardDetails
-import com.weatherxm.data.DeviceRewardsSummary
 import com.weatherxm.data.Failure
 import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.ui.common.BoostDetailInfo
+import com.weatherxm.ui.common.DeviceTotalRewardsBoost
+import com.weatherxm.ui.common.DeviceTotalRewardsDetails
+import com.weatherxm.ui.common.DevicesRewardsByRange
+import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.ui.common.RewardTimelineType
 import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.UIBoost
@@ -39,10 +44,14 @@ interface RewardsUseCase {
         boostReward: BoostReward
     ): Either<Failure, UIBoost>
 
-    suspend fun getDeviceRewardsSummary(
+    suspend fun getDevicesRewardsByRange(
+        mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
+    ): Either<Failure, DevicesRewardsByRange>
+
+    suspend fun getDeviceRewardsByRange(
         deviceId: String,
         mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
-    ): Either<Failure, DeviceRewardsSummary>
+    ): Either<Failure, DeviceTotalRewardsDetails>
 }
 
 class RewardsUseCaseImpl(
@@ -141,11 +150,52 @@ class RewardsUseCaseImpl(
         }
     }
 
-    override suspend fun getDeviceRewardsSummary(
+    override suspend fun getDevicesRewardsByRange(
+        mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
+    ): Either<Failure, DevicesRewardsByRange> {
+        return repository.getDevicesRewardsByRange(mode).map { rewards ->
+            val times = mutableListOf<String>()
+            val entries = mutableListOf<Entry>()
+
+            rewards.data?.fastForEachIndexed { i, timeseries ->
+                /**
+                 * 7D = Show 3-letter days - e.g. Mon, Tue, Wed,
+                 * 1M = DD/MM or MM/DD based on Locale - e.g. 25/01 or 01/25
+                 * 1Y = Show 3-letter months as the design - e.g. Sep, Oct, Nov
+                 */
+                times.add(timeseries.ts.toString())
+                entries.add(Entry(i.toFloat(), timeseries.totalRewards ?: 0F))
+            }
+
+            DevicesRewardsByRange(
+                rewards.total,
+                mode,
+                LineChartData(times, entries)
+            )
+        }
+    }
+
+    override suspend fun getDeviceRewardsByRange(
         deviceId: String,
         mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
-    ): Either<Failure, DeviceRewardsSummary> {
-        return repository.getDeviceRewardsSummary(deviceId, mode)
+    ): Either<Failure, DeviceTotalRewardsDetails> {
+        return repository.getDeviceRewardsByRange(deviceId, mode).map { summary ->
+            DeviceTotalRewardsDetails(
+                summary.total,
+                mode,
+                summary.details?.map {
+                    DeviceTotalRewardsBoost(
+                        it.code,
+                        it.completedPercentage?.toInt(),
+                        it.totalRewards,
+                        it.currentRewards,
+                        it.boostPeriodStart,
+                        it.boostPeriodEnd
+                    )
+                },
+                false
+            )
+        }
     }
 
     private fun getBoostDesc(

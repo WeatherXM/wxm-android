@@ -111,16 +111,57 @@
                 app:layout_constraintTop_toBottomOf="@id/totalEarnedStations">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/totalEarnedContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipChildren="false"
                     android:clipToPadding="false">
 
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/totalEarnedTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:text="@string/total_earned"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@id/totalEarned"
+                        app:layout_constraintEnd_toStartOf="@id/totalEarnedRangeSelector"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/totalEarnedRangeSelector" />
 
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/totalEarned"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                        app:layout_constraintBottom_toBottomOf="@id/totalEarnedRangeSelector"
+                        app:layout_constraintEnd_toStartOf="@id/totalEarnedRangeSelector"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/totalEarnedTitle"
+                        tools:text="389,023.54 $WXM" />
 
+                    <com.weatherxm.ui.components.RangeSelectorView
+                        android:id="@+id/totalEarnedRangeSelector"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.weatherxm.ui.components.EmptyView
+                        android:id="@+id/totalEarnedStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:visibility="gone"
+                        app:empty_animation="@raw/anim_loading"
+                        app:layout_constraintTop_toBottomOf="@id/totalEarnedRangeSelector" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
+
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/rewardsByStation"

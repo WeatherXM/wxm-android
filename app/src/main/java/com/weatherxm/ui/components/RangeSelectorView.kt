@@ -39,4 +39,16 @@ class RangeSelectorView : ConstraintLayout {
             listener.invoke(checkedIds[0])
         }
     }
+
+    fun enable() {
+        binding.week.isEnabled = true
+        binding.month.isEnabled = true
+        binding.year.isEnabled = true
+    }
+
+    fun disable() {
+        binding.week.isEnabled = false
+        binding.month.isEnabled = false
+        binding.year.isEnabled = false
+    }
 }

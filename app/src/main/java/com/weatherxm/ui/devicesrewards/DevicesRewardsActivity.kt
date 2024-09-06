@@ -2,6 +2,7 @@ package com.weatherxm.ui.devicesrewards
 
 import android.os.Bundle
 import com.weatherxm.R
+import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityDevicesRewardsBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DevicesRewards
@@ -33,9 +34,44 @@ class DevicesRewardsActivity : BaseActivity() {
             navigator.openWebsite(this, getString(R.string.shop_url))
         }
 
+        binding.totalEarnedRangeSelector.listener {
+            model.getDevicesRewardsByRangeTotals(it)
+        }
+
+        model.onRewardsByRange().observe(this) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    binding.totalEarnedStatus.visible(false)
+                    binding.totalEarnedRangeSelector.enable()
+                    binding.totalEarned.text =
+                        getString(R.string.wxm_amount, formatTokens(it.data?.total))
+                }
+                Status.ERROR -> {
+                    binding.totalEarnedRangeSelector.enable()
+                    binding.totalEarnedStatus.animation(R.raw.anim_error).visible(true)
+                }
+                Status.LOADING -> {
+                    binding.totalEarnedRangeSelector.disable()
+                    binding.totalEarnedStatus.animation(R.raw.anim_loading).visible(true)
+                }
+            }
+        }
+
         model.onDeviceRewardDetails().observe(this) {
             adapter.replaceItem(it.first, it.second)
         }
+
+        adapter = DeviceRewardsAdapter(
+            onExpandToggle = { position, isExpanded, deviceId ->
+                if (isExpanded && model.rewards.devices[position].details == null) {
+                    model.getDeviceRewardsByRange(deviceId, position, null)
+                }
+            },
+            onRangeChipClicked = { position, checkedRangeChipId, deviceId ->
+                model.getDeviceRewardsByRange(deviceId, position, checkedRangeChipId)
+            }
+        )
+        binding.devicesRecycler.adapter = adapter
 
         val hasDevices = model.rewards.devices.isNotEmpty()
         if (hasDevices) {
@@ -50,18 +86,10 @@ class DevicesRewardsActivity : BaseActivity() {
             binding.mainContainer.visible(true)
             binding.emptyRewardsCard.visible(model.rewards.total == 0F)
 
-            adapter = DeviceRewardsAdapter(
-                onExpandToggle = { position, isExpanded, deviceId ->
-                    if (isExpanded && model.rewards.devices[position].details == null) {
-                        model.getDeviceRewardsSummary(deviceId, position, null)
-                    }
-                },
-                onRangeChipClicked = { position, checkedRangeChipId, deviceId ->
-                    model.getDeviceRewardsSummary(deviceId, position, checkedRangeChipId)
-                }
-            )
-            binding.devicesRecycler.adapter = adapter
             adapter.submitList(model.rewards.devices)
+
+            binding.totalEarnedRangeSelector.checkWeek()
+            model.getDevicesRewardsByRangeTotals()
         } else {
             binding.noStationsContainer.visible(true)
         }

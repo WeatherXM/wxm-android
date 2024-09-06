@@ -718,6 +718,23 @@ data class RewardSplit(
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
+data class DevicesRewards(
+    val total: Float?,
+    val data: List<DevicesRewardsData>?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DevicesRewardsData(
+    val ts: ZonedDateTime,
+    @Json(name = "total_rewards")
+    val totalRewards: Float?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
 data class DeviceRewardsSummary(
     val total: Float?,
     val data: List<DeviceRewardsSummaryData>?,

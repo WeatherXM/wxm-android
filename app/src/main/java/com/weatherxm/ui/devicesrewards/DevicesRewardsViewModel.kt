@@ -6,11 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.data.Resource
 import com.weatherxm.data.repository.RewardsRepositoryImpl
-import com.weatherxm.ui.common.DeviceTotalRewardsBoost
 import com.weatherxm.ui.common.DeviceTotalRewardsDetails
 import com.weatherxm.ui.common.DevicesRewards
+import com.weatherxm.ui.common.DevicesRewardsByRange
 import com.weatherxm.usecases.RewardsUseCase
+import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.launch
 
 class DevicesRewardsViewModel(
@@ -23,36 +25,34 @@ class DevicesRewardsViewModel(
      * The Int here represents the position in the list/adapter
      */
     private val onDeviceRewardDetails = MutableLiveData<Pair<Int, DeviceTotalRewardsDetails>>()
+    private val onRewardsByRange = MutableLiveData<Resource<DevicesRewardsByRange>>()
+
     fun onDeviceRewardDetails():
         LiveData<Pair<Int, DeviceTotalRewardsDetails>> = onDeviceRewardDetails
 
-    fun getDeviceRewardsSummary(deviceId: String, position: Int, checkedRangeChipId: Int? = null) {
-        viewModelScope.launch {
-            val mode = when (checkedRangeChipId) {
-                R.id.week -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK
-                R.id.month -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH
-                R.id.year -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR
-                else -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK
-            }
+    fun onRewardsByRange(): LiveData<Resource<DevicesRewardsByRange>> = onRewardsByRange
 
-            usecase.getDeviceRewardsSummary(deviceId, mode).onRight { summary ->
-                val deviceTotalRewardDetails = DeviceTotalRewardsDetails(
-                    summary.total,
-                    mode,
-                    summary.details?.map {
-                        DeviceTotalRewardsBoost(
-                            it.code,
-                            it.completedPercentage?.toInt(),
-                            it.totalRewards,
-                            it.currentRewards,
-                            it.boostPeriodStart,
-                            it.boostPeriodEnd
-                        )
-                    },
-                    false
-                )
-                rewards.devices[position].details = deviceTotalRewardDetails
-                onDeviceRewardDetails.postValue(Pair(position, deviceTotalRewardDetails))
+    fun getDevicesRewardsByRangeTotals(checkedRangeChipId: Int? = null) {
+        viewModelScope.launch {
+            onRewardsByRange.postValue(Resource.loading())
+
+            val mode = chipToMode(checkedRangeChipId)
+            usecase.getDevicesRewardsByRange(mode).onRight {
+                onRewardsByRange.postValue(Resource.success(it))
+            }.onLeft {
+                onRewardsByRange.postValue(Resource.error(it.getDefaultMessage()))
+                analytics.trackEventFailure(it.code)
+            }
+        }
+    }
+
+    fun getDeviceRewardsByRange(deviceId: String, position: Int, checkedRangeChipId: Int? = null) {
+        viewModelScope.launch {
+            val mode = chipToMode(checkedRangeChipId)
+
+            usecase.getDeviceRewardsByRange(deviceId, mode).onRight {
+                rewards.devices[position].details = it
+                onDeviceRewardDetails.postValue(Pair(position, it))
             }.onLeft { failure ->
                 val erroneousDetails = DeviceTotalRewardsDetails(null, null, null, true)
                 rewards.devices[position].details = erroneousDetails
@@ -61,4 +61,14 @@ class DevicesRewardsViewModel(
             }
         }
     }
+
+    private fun chipToMode(chipId: Int?): RewardsRepositoryImpl.Companion.RewardsSummaryMode {
+        return when (chipId) {
+            R.id.week -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK
+            R.id.month -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH
+            R.id.year -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR
+            else -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK
+        }
+    }
+
 }

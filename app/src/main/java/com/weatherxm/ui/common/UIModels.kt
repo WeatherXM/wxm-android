@@ -515,6 +515,14 @@ data class WalletWarnings(
 
 @Keep
 @JsonClass(generateAdapter = true)
+data class DevicesRewardsByRange(
+    val total: Float?,
+    val mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode?,
+    val lineChartData: LineChartData
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
 @Parcelize
 data class DevicesRewards(
     val total: Float,

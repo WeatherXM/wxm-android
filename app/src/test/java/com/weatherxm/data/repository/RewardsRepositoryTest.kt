@@ -7,6 +7,7 @@ import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.BoostRewardResponse
 import com.weatherxm.data.DeviceRewardsSummary
+import com.weatherxm.data.DevicesRewards
 import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.Rewards
 import com.weatherxm.data.RewardsTimeline
@@ -36,6 +37,7 @@ class RewardsRepositoryTest : BehaviorSpec({
     val walletRewards = mockk<WalletRewards>()
     val rewardsTimeline = mockk<RewardsTimeline>()
     val boostReward = mockk<BoostRewardResponse>()
+    val devicesRewards = mockk<DevicesRewards>()
     val deviceRewardsSummary = mockk<DeviceRewardsSummary>()
 
     given("A device id") {
@@ -120,24 +122,48 @@ class RewardsRepositoryTest : BehaviorSpec({
             }
         }
         and("a mode") {
+        }
+    }
+    given("A mode") {
+        and("requesting devices rewards") {
+            When("it's a success") {
+                then("return that devices rewards") {
+                    coMockEitherRight(
+                        { dataSource.getDevicesRewardsByRange(mode.name.lowercase()) },
+                        devicesRewards
+                    )
+                    repository.getDevicesRewardsByRange(mode).isSuccess(devicesRewards)
+                }
+            }
+            When("it's a failure") {
+                then("return the failure") {
+                    coMockEitherLeft(
+                        { dataSource.getDevicesRewardsByRange(mode.name.lowercase()) },
+                        failure
+                    )
+                    repository.getDevicesRewardsByRange(mode).isError()
+                }
+            }
+        }
+        and("a device ID") {
             and("requesting device rewards summary") {
                 When("it's a success") {
                     then("return that rewards summary") {
                         coMockEitherRight(
-                            { dataSource.getDeviceRewardsSummary(deviceId, mode.name.lowercase()) },
+                            { dataSource.getDeviceRewardsByRange(deviceId, mode.name.lowercase()) },
                             deviceRewardsSummary
                         )
-                        repository.getDeviceRewardsSummary(deviceId, mode)
+                        repository.getDeviceRewardsByRange(deviceId, mode)
                             .isSuccess(deviceRewardsSummary)
                     }
                 }
                 When("it's a failure") {
                     then("return the failure") {
                         coMockEitherLeft(
-                            { dataSource.getDeviceRewardsSummary(deviceId, mode.name.lowercase()) },
+                            { dataSource.getDeviceRewardsByRange(deviceId, mode.name.lowercase()) },
                             failure
                         )
-                        repository.getDeviceRewardsSummary(deviceId, mode).isError()
+                        repository.getDeviceRewardsByRange(deviceId, mode).isError()
                     }
                 }
             }
