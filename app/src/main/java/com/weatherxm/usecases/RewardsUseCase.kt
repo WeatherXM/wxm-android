@@ -1,6 +1,6 @@
 package com.weatherxm.usecases
 
-import android.content.res.Resources
+import android.content.Context
 import androidx.compose.ui.util.fastForEachIndexed
 import arrow.core.Either
 import com.github.mikephil.charting.data.Entry
@@ -23,10 +23,15 @@ import com.weatherxm.ui.common.UIBoost
 import com.weatherxm.ui.common.UIRewardsTimeline
 import com.weatherxm.ui.common.empty
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
+import com.weatherxm.util.DateTimeHelper.getFormattedMonthDate
 import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.getName
+import com.weatherxm.util.getShortName
 import timber.log.Timber
 import java.time.ZonedDateTime
+import java.time.format.TextStyle
+import java.util.Locale
 
 interface RewardsUseCase {
     suspend fun getRewardsTimeline(
@@ -56,7 +61,7 @@ interface RewardsUseCase {
 
 class RewardsUseCaseImpl(
     private val repository: RewardsRepository,
-    private val resources: Resources
+    private val context: Context
 ) : RewardsUseCase {
     override suspend fun getRewardsTimeline(
         deviceId: String,
@@ -102,7 +107,7 @@ class RewardsUseCaseImpl(
             it.details?.stationHours?.let { amount ->
                 boostDetails.add(
                     BoostDetailInfo(
-                        resources.getString(R.string.rewardable_station_hours), formatNumber(amount)
+                        context.getString(R.string.rewardable_station_hours), formatNumber(amount)
                     )
                 )
             }
@@ -110,8 +115,8 @@ class RewardsUseCaseImpl(
             it.details?.maxDailyReward?.let { amount ->
                 boostDetails.add(
                     BoostDetailInfo(
-                        resources.getString(R.string.daily_tokens_to_be_rewarded),
-                        resources.getString(R.string.wxm_amount, formatTokens(amount))
+                        context.getString(R.string.daily_tokens_to_be_rewarded),
+                        context.getString(R.string.wxm_amount, formatTokens(amount))
                     )
                 )
             }
@@ -119,8 +124,8 @@ class RewardsUseCaseImpl(
             it.details?.maxTotalReward?.let { amount ->
                 boostDetails.add(
                     BoostDetailInfo(
-                        resources.getString(R.string.total_tokens_to_be_rewarded),
-                        resources.getString(R.string.wxm_amount, formatTokens(amount))
+                        context.getString(R.string.total_tokens_to_be_rewarded),
+                        context.getString(R.string.wxm_amount, formatTokens(amount))
                     )
                 )
             }
@@ -130,8 +135,7 @@ class RewardsUseCaseImpl(
                 val boostStopDate = it.details.boostStopDate.getFormattedDate(true)
                 boostDetails.add(
                     BoostDetailInfo(
-                        resources.getString(R.string.boost_period),
-                        "$boostStartDate - $boostStopDate"
+                        context.getString(R.string.boost_period), "$boostStartDate - $boostStopDate"
                     )
                 )
             }
@@ -154,8 +158,9 @@ class RewardsUseCaseImpl(
         mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
     ): Either<Failure, DevicesRewardsByRange> {
         return repository.getDevicesRewardsByRange(mode).map { rewards ->
-            val times = mutableListOf<String>()
+            val xLabels = mutableListOf<String>()
             val entries = mutableListOf<Entry>()
+            val datesChartTooltip = mutableListOf<String>()
 
             rewards.data?.fastForEachIndexed { i, timeseries ->
                 /**
@@ -163,14 +168,27 @@ class RewardsUseCaseImpl(
                  * 1M = DD/MM or MM/DD based on Locale - e.g. 25/01 or 01/25
                  * 1Y = Show 3-letter months as the design - e.g. Sep, Oct, Nov
                  */
-                times.add(timeseries.ts.toString())
+                when (mode) {
+                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK -> {
+                        datesChartTooltip.add(context.getString(timeseries.ts.dayOfWeek.getName()))
+                        xLabels.add(context.getString(timeseries.ts.dayOfWeek.getShortName()))
+                    }
+                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH -> {
+                        datesChartTooltip.add(timeseries.ts.getFormattedDate())
+                        xLabels.add(timeseries.ts.getFormattedMonthDate())
+                    }
+                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR -> {
+                        datesChartTooltip.add(
+                            timeseries.ts.month.getDisplayName(TextStyle.FULL, Locale.US)
+                        )
+                        xLabels.add(timeseries.ts.month.getDisplayName(TextStyle.SHORT, Locale.US))
+                    }
+                }
                 entries.add(Entry(i.toFloat(), timeseries.totalRewards ?: 0F))
             }
 
             DevicesRewardsByRange(
-                rewards.total,
-                mode,
-                LineChartData(times, entries)
+                rewards.total, mode, datesChartTooltip, LineChartData(xLabels, entries)
             )
         }
     }
@@ -208,10 +226,8 @@ class RewardsUseCaseImpl(
                     details?.participationStartDate.getFormattedDate(true)
                 val participationStopDate =
                     details?.participationStopDate.getFormattedDate(true)
-                resources.getString(
-                    R.string.boost_details_beta_desc,
-                    participationStartDate,
-                    participationStopDate
+                context.getString(
+                    R.string.boost_details_beta_desc, participationStartDate, participationStopDate
                 )
             } else {
                 String.empty()

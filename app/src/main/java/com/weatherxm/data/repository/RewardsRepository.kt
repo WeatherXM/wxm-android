@@ -87,7 +87,9 @@ class RewardsRepositoryImpl(private val dataSource: RewardsDataSource) : Rewards
         return dataSource.getWalletRewards(walletAddress)
     }
 
-    override suspend fun getDevicesRewardsByRange(mode: RewardsSummaryMode): Either<Failure, DevicesRewards> {
+    override suspend fun getDevicesRewardsByRange(
+        mode: RewardsSummaryMode
+    ): Either<Failure, DevicesRewards> {
         return dataSource.getDevicesRewardsByRange(mode.name.lowercase())
     }
 

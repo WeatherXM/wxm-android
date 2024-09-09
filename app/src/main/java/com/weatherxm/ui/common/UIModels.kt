@@ -518,6 +518,7 @@ data class WalletWarnings(
 data class DevicesRewardsByRange(
     val total: Float?,
     val mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode?,
+    val datesChartTooltip: List<String>,
     val lineChartData: LineChartData
 )
 

@@ -53,6 +53,9 @@
     <color name="light_warning_tint">#FBDEBC</color>
     <color name="dark_warning_tint">#46381B</color>
 
+    <!-- Tooltip -->
+    <color name="tooltip">#E645464F</color>
+
     <!-- Translucent -->
     <color name="translucent_light_layer1">#33EAEBF9</color>
 

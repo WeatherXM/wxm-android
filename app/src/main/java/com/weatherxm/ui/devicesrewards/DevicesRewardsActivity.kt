@@ -6,10 +6,12 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.ActivityDevicesRewardsBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DevicesRewards
+import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.initializeTotalEarnedChart
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -45,13 +47,25 @@ class DevicesRewardsActivity : BaseActivity() {
                     binding.totalEarnedRangeSelector.enable()
                     binding.totalEarned.text =
                         getString(R.string.wxm_amount, formatTokens(it.data?.total))
+                    it.data?.let { data ->
+                        binding.totalEarnedChart.initializeTotalEarnedChart(
+                            data.lineChartData,
+                            data.datesChartTooltip
+                        )
+                    }
+                    binding.totalEarned.visible(true)
+                    binding.totalEarnedChart.visible(true)
                 }
                 Status.ERROR -> {
                     binding.totalEarnedRangeSelector.enable()
+                    binding.totalEarnedChart.invisible()
+                    binding.totalEarned.invisible()
                     binding.totalEarnedStatus.animation(R.raw.anim_error).visible(true)
                 }
                 Status.LOADING -> {
                     binding.totalEarnedRangeSelector.disable()
+                    binding.totalEarnedChart.invisible()
+                    binding.totalEarned.invisible()
                     binding.totalEarnedStatus.animation(R.raw.anim_loading).visible(true)
                 }
             }

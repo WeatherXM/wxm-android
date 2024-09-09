@@ -602,5 +602,6 @@
     <string name="beta_reward_details">Beta rewards details</string>
     <string name="other_boost_reward_details">Other boost reward details</string>
     <string name="total_tokens_earned_so_far">Total tokens earned so far</string>=
+    <string name="total_with_colon">Total:</string>
 
 </resources>

@@ -2,9 +2,9 @@
 
 package com.weatherxm.util
 
+import TooltipMarkerView
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Typeface
 import android.view.MotionEvent
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
@@ -60,7 +60,6 @@ private fun LineChart.setDefaultSettings(context: Context) {
 
     // X axis settings
     with(xAxis) {
-        typeface = Typeface.MONOSPACE
         position = XAxis.XAxisPosition.BOTTOM
         setDrawAxisLine(false)
         granularity = X_AXIS_DEFAULT_TIME_GRANULARITY
@@ -133,7 +132,6 @@ private fun LineDataSet.setDefaultSettings(context: Context, resources: Resource
 }
 
 private fun YAxis.setDefaultSettings(context: Context, isAxisLeft: Boolean = true) {
-    typeface = Typeface.MONOSPACE
     isGranularityEnabled = true
     resetAxisMinimum()
     resetAxisMaximum()
@@ -577,9 +575,57 @@ fun LineChart.initializeNetworkStatsChart(entries: List<Entry>) {
     // Y Axis settings
     axisLeft.isEnabled = false
     axisRight.isEnabled = false
-    xAxis.isEnabled = false
     isScaleYEnabled = false
+
+    // X Axis settings
+    xAxis.isEnabled = false
     isScaleXEnabled = false
+
+    show()
+    notifyDataSetChanged()
+}
+
+@Suppress("MagicNumber")
+fun LineChart.initializeTotalEarnedChart(
+    totalEarnedData: LineChartData,
+    datesChartTooltip: List<String>
+) {
+    val dataSet = LineDataSet(totalEarnedData.entries, String.empty())
+    val lineData = LineData(dataSet)
+    data = lineData
+
+    // General Chart Settings
+    setDefaultSettings(context)
+    isScaleXEnabled = false
+
+    // Line and highlight Settings
+    lineData.setDrawValues(false)
+    dataSet.setDefaultSettings(context, resources)
+    dataSet.setDrawCircles(false)
+    dataSet.mode = LineDataSet.Mode.LINEAR
+    dataSet.highLightColor = context.getColor(R.color.darkGrey)
+    dataSet.color = context.getColor(R.color.chart_primary)
+
+    // Y Axis settings
+    axisLeft.isEnabled = false
+    axisRight.isEnabled = true
+    axisRight.gridColor = context.getColor(R.color.midGrey)
+    axisRight.setDrawAxisLine(false)
+    axisRight.setDrawGridLines(true)
+
+    // X axis settings
+    with(xAxis) {
+        setDrawAxisLine(true)
+        setDrawGridLines(false)
+        if (totalEarnedData.entries.size <= 7) {
+            granularity = 1F
+        }
+        axisLineColor = context.getColor(R.color.colorOnSurface)
+        valueFormatter = CustomXAxisFormatter(totalEarnedData.timestamps)
+    }
+
+    marker = TooltipMarkerView(context, datesChartTooltip)
+    setDrawMarkers(true)
 
     show()
     notifyDataSetChanged()
