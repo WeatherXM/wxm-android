@@ -54,7 +54,16 @@ class DevicesRewardsViewModel(
                 rewards.devices[position].details = it
                 onDeviceRewardDetails.postValue(Pair(position, it))
             }.onLeft { failure ->
-                val erroneousDetails = DeviceTotalRewardsDetails(null, null, null, true)
+                val erroneousDetails = DeviceTotalRewardsDetails(
+                    null,
+                    null,
+                    null,
+                    mutableListOf(),
+                    null,
+                    null,
+                    null,
+                    true
+                )
                 rewards.devices[position].details = erroneousDetails
                 onDeviceRewardDetails.postValue(Pair(position, erroneousDetails))
                 analytics.trackEventFailure(failure.code)

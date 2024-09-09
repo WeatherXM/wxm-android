@@ -599,9 +599,8 @@ fun LineChart.initializeTotalEarnedChart(
     isScaleXEnabled = false
 
     // Line and highlight Settings
-    lineData.setDrawValues(false)
     dataSet.setDefaultSettings(context, resources)
-    dataSet.setDrawCircles(false)
+    if (dataSet.values.size > 1) dataSet.setDrawCircles(false)
     dataSet.mode = LineDataSet.Mode.LINEAR
     dataSet.highLightColor = context.getColor(R.color.darkGrey)
     dataSet.color = context.getColor(R.color.chart_primary)
@@ -626,6 +625,92 @@ fun LineChart.initializeTotalEarnedChart(
 
     marker = TooltipMarkerView(context, datesChartTooltip)
     setDrawMarkers(true)
+
+    show()
+    notifyDataSetChanged()
+}
+
+@Suppress("MagicNumber")
+private fun MutableList<LineDataSet>.initRewardBreakDown(color: Int) {
+    forEach {
+        it.setDrawFilled(true)
+        it.lineWidth = 0.2F
+        it.fillAlpha = 255
+        it.mode = LineDataSet.Mode.LINEAR
+        it.color = color
+        it.fillColor = color
+        it.setCircleColor(color)
+        if (it.values.size > 1) it.setDrawCircles(false)
+    }
+}
+
+@Suppress("MagicNumber")
+fun LineChart.initializeRewardsBreakdownChart(
+    baseData: LineChartData?,
+    betaData: LineChartData?,
+    othersData: LineChartData?,
+    datesChartTooltip: List<String>?
+) {
+    val dataSets = mutableListOf<ILineDataSet>()
+
+    val baseLineDataSetsWithValues = baseData?.getLineDataSetsWithValues("")
+    val baseEmptyLineDataSets = baseData?.getEmptyLineDataSets("")
+    val betaDataDataSetsWithValues = betaData?.getLineDataSetsWithValues("")
+    val betaDataEmptyLineDataSets = betaData?.getEmptyLineDataSets("")
+    val otherDataDataSetsWithValues = othersData?.getLineDataSetsWithValues("")
+    val otherDataEmptyLineDataSets = othersData?.getEmptyLineDataSets("")
+
+    otherDataDataSetsWithValues?.let {
+        dataSets.addAll(it.primaryLineInit(context, resources))
+        it.initRewardBreakDown(context.getColor(R.color.chart_other_reward_color))
+    }
+    otherDataEmptyLineDataSets?.let {
+        dataSets.addAll(it)
+    }
+
+    betaDataDataSetsWithValues?.let {
+        dataSets.addAll(it.primaryLineInit(context, resources))
+        it.initRewardBreakDown(context.getColor(R.color.beta_rewards_color))
+    }
+    betaDataEmptyLineDataSets?.let {
+        dataSets.addAll(it)
+    }
+
+    baseLineDataSetsWithValues?.let {
+        dataSets.addAll(it.primaryLineInit(context, resources))
+        it.initRewardBreakDown(context.getColor(R.color.chart_primary))
+    }
+    baseEmptyLineDataSets?.let {
+        dataSets.addAll(it)
+    }
+
+    val lineData = LineData(dataSets)
+    data = lineData
+
+    // General Chart Settings
+    setDefaultSettings(context)
+    isScaleXEnabled = false
+
+    // Y Axis settings
+    axisLeft.isEnabled = false
+    axisRight.isEnabled = true
+    axisRight.gridColor = context.getColor(R.color.midGrey)
+    axisRight.setDrawAxisLine(false)
+    axisRight.setDrawGridLines(true)
+
+    // X axis settings
+    with(xAxis) {
+        setDrawAxisLine(true)
+        setDrawGridLines(false)
+        if (baseData != null && baseData.entries.size <= 7) {
+            granularity = 1F
+        }
+        axisLineColor = context.getColor(R.color.colorOnSurface)
+        valueFormatter = CustomXAxisFormatter(baseData?.timestamps)
+    }
+
+//    marker = TooltipMarkerView(context, datesChartTooltip)
+//    setDrawMarkers(true)
 
     show()
     notifyDataSetChanged()

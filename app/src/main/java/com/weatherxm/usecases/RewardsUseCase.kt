@@ -10,6 +10,7 @@ import com.weatherxm.data.BoostReward
 import com.weatherxm.data.BoostRewardDetails
 import com.weatherxm.data.Failure
 import com.weatherxm.data.RewardDetails
+import com.weatherxm.data.RewardsCode
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.ui.common.BoostDetailInfo
@@ -198,6 +199,105 @@ class RewardsUseCaseImpl(
         mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
     ): Either<Failure, DeviceTotalRewardsDetails> {
         return repository.getDeviceRewardsByRange(deviceId, mode).map { summary ->
+            val xLabels = mutableListOf<String>()
+            val baseEntries = mutableListOf<Entry>()
+            val betaEntries = mutableListOf<Entry>()
+            val otherEntries = mutableListOf<Entry>()
+            val datesChartTooltip = mutableListOf<String>()
+
+            summary.data?.fastForEachIndexed { i, timeseries ->
+                val counter = i.toFloat()
+                val emptyEntry = Entry(counter, Float.NaN)
+                /**
+                 * 7D = Show 3-letter days - e.g. Mon, Tue, Wed,
+                 * 1M = DD/MM or MM/DD based on Locale - e.g. 25/01 or 01/25
+                 * 1Y = Show 3-letter months as the design - e.g. Sep, Oct, Nov
+                 */
+                when (mode) {
+                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK -> {
+                        datesChartTooltip.add(context.getString(timeseries.ts.dayOfWeek.getName()))
+                        xLabels.add(context.getString(timeseries.ts.dayOfWeek.getShortName()))
+                    }
+                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH -> {
+                        datesChartTooltip.add(timeseries.ts.getFormattedDate())
+                        xLabels.add(timeseries.ts.getFormattedMonthDate())
+                    }
+                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR -> {
+                        datesChartTooltip.add(
+                            timeseries.ts.month.getDisplayName(TextStyle.FULL, Locale.US)
+                        )
+                        xLabels.add(timeseries.ts.month.getDisplayName(TextStyle.SHORT, Locale.US))
+                    }
+                }
+
+                val baseCode = RewardsCode.base_reward.name
+                val betaCode = RewardsCode.beta_rewards.name
+
+
+                var sum = 0F
+                var baseSum = 0F
+                var betaSum = 0F
+                var othersSum = 0F
+
+                timeseries.rewards?.forEach {
+                    if (it.code == baseCode) {
+                        baseSum += it.value ?: 0F
+                    }
+                    if (it.code == betaCode) {
+                        betaSum += it.value ?: 0F
+                    }
+                    if (it.code != baseCode && it.code != betaCode) {
+                        othersSum += it.value ?: 0F
+                    }
+                    sum += it.value ?: 0F
+                }
+                if(baseSum == 0F) {
+                    baseEntries.add(emptyEntry)
+                } else {
+                    baseEntries.add(Entry(counter, baseSum))
+                }
+                if(betaSum == 0F) {
+                    betaEntries.add(emptyEntry)
+                } else {
+                    betaEntries.add(Entry(counter, betaSum + baseSum))
+                }
+                if(othersSum == 0F) {
+                    otherEntries.add(emptyEntry)
+                } else {
+                    otherEntries.add(Entry(counter, othersSum + betaSum + baseSum))
+                }
+//                baseEntries.add(Entry(counter, baseSum))
+//                betaEntries.add(Entry(counter, betaSum + baseSum))
+//                otherEntries.add(Entry(counter, othersSum + betaSum + baseSum))
+
+
+//                timeseries.rewards?.firstOrNull {
+//                    it.code == baseCode
+//                }?.value?.let {
+//                    baseEntries.add(Entry(counter, it))
+//                } ?: baseEntries.add(emptyEntry)
+//
+//                timeseries.rewards?.firstOrNull {
+//                    it.code == betaCode
+//                }?.value?.let {
+//                    betaEntries.add(Entry(counter, it))
+//                } ?: betaEntries.add(emptyEntry)
+//
+//                timeseries.rewards?.sumOf {
+//                    if (it.code != baseCode && it.code != betaCode) {
+//                        it.value?.toDouble() ?: 0.0
+//                    } else {
+//                        0.0
+//                    }
+//                }.also {
+//                    if (it == null || it == 0.0) {
+//                        otherEntries.add(emptyEntry)
+//                    } else {
+//                        otherEntries.add(Entry(counter, it.toFloat()))
+//                    }
+//                }
+            }
+
             DeviceTotalRewardsDetails(
                 summary.total,
                 mode,
@@ -211,6 +311,10 @@ class RewardsUseCaseImpl(
                         it.boostPeriodEnd
                     )
                 },
+                datesChartTooltip,
+                LineChartData(xLabels, baseEntries),
+                LineChartData(xLabels, betaEntries),
+                LineChartData(xLabels, otherEntries),
                 false
             )
         }

@@ -169,7 +169,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/rewardsByStation"
                 android:layout_width="match_parent"

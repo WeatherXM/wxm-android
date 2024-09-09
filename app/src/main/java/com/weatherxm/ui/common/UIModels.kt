@@ -415,10 +415,11 @@ data class Charts(
 
 @Keep
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class LineChartData(
     var timestamps: MutableList<String>,
     var entries: MutableList<Entry>
-) {
+) : Parcelable {
     fun isDataValid(): Boolean {
         return timestamps.isNotEmpty() && entries.filterNot { it.y.isNaN() }.isNotEmpty()
     }
@@ -548,6 +549,10 @@ data class DeviceTotalRewardsDetails(
     val total: Float?,
     val mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode?,
     val boosts: List<DeviceTotalRewardsBoost>?,
+    val datesChartTooltip: List<String>,
+    val baseChartData: LineChartData?,
+    val betaChartData: LineChartData?,
+    val otherChartData: LineChartData?,
     val fetchError: Boolean
 ) : Parcelable
 

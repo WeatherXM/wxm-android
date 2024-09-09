@@ -41,6 +41,7 @@
     <string name="seven_days_abbr">7D</string>
     <string name="one_month_abbr">1M</string>
     <string name="one_year_abbr">1Y</string>
+    <string name="other">Other</string>
 
     <!-- Permissions -->
     <string name="permission_location_title">Access to your location</string>
@@ -603,5 +604,7 @@
     <string name="other_boost_reward_details">Other boost reward details</string>
     <string name="total_tokens_earned_so_far">Total tokens earned so far</string>=
     <string name="total_with_colon">Total:</string>
+    <string name="base_rewards">Base Rewards</string>
+    <string name="beta_rewards">Beta Rewards</string>
 
 </resources>

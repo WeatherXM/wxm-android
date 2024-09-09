@@ -802,6 +802,12 @@ enum class SeverityLevel {
 }
 
 @Suppress("EnumNaming")
+enum class RewardsCode {
+    base_reward,
+    beta_rewards
+}
+
+@Suppress("EnumNaming")
 enum class BoostCode {
     beta_rewards
 }

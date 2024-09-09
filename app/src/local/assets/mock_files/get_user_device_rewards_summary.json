@@ -88,6 +88,11 @@
                     "type": "boost",
                     "code": "beta_rewards",
                     "value": 4.4
+                },
+                {
+                    "type": "boost",
+                    "code": "cell_reward",
+                    "value": 3.4
                 }
             ]
         },
@@ -102,6 +107,11 @@
                 {
                     "type": "boost",
                     "code": "beta_rewards",
+                    "value": 3.4
+                },
+                {
+                    "type": "boost",
+                    "code": "cell_reward",
                     "value": 3.4
                 }
             ]
