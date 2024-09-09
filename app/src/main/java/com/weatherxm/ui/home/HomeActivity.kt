@@ -103,8 +103,8 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
             navigator.showNetworkStats(this)
         }
 
-        model.onWalletMissing().observe(this) {
-            handleBadge(it)
+        model.onWalletWarnings().observe(this) {
+            handleBadge(it.showMissingBadge)
         }
 
         model.onOpenExplorer().observe(this) {
@@ -164,7 +164,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         binding.networkStatsBtn.visible(navDestination == R.id.navigation_explorer)
         binding.myLocationBtn.visible(navDestination == R.id.navigation_explorer)
         /**
-         * Don't use the visible function for the addButton 
+         * Don't use the visible function for the addButton
          * because of a specific case hiding it in the devices list.
          * Therefore we use the hide() function which fits our purpose.
          */
@@ -192,7 +192,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
     }
 
     private fun handleBadge(missingWallet: Boolean) {
-        if (missingWallet) {
+        if (missingWallet && model.hasDevices() == true) {
             binding.navView.getOrCreateBadge(R.id.navigation_profile)
         } else {
             binding.navView.removeBadge(R.id.navigation_profile)

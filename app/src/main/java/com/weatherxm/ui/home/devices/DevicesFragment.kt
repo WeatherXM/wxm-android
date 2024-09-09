@@ -17,14 +17,17 @@ import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.home.HomeViewModel
+import com.weatherxm.util.Rewards.formatTokens
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class DevicesFragment : BaseFragment(), DeviceListener {
@@ -53,15 +56,6 @@ class DevicesFragment : BaseFragment(), DeviceListener {
 
         binding.root.applyInsets()
 
-        binding.toolbar.setOnMenuItemClickListener { menuItem ->
-            return@setOnMenuItemClickListener if (menuItem.itemId == R.id.sort_filter) {
-                SortFilterDialogFragment.newInstance().show(this)
-                true
-            } else {
-                false
-            }
-        }
-
         adapter = DeviceAdapter(this)
         binding.recycler.adapter = adapter
 
@@ -73,14 +67,11 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             model.onScroll(scrollY - oldScrollY)
         }
 
+        binding.sortFilterBtn.setOnClickListener {
+            SortFilterDialogFragment.newInstance().show(this)
+        }
+
         model.devices().observe(viewLifecycleOwner) {
-            with(binding.toolbar.menu.findItem(R.id.sort_filter).icon) {
-                if (model.getDevicesSortFilterOptions().areDefaultFiltersOn()) {
-                    this?.setTint(requireContext().getColor(R.color.colorOnSurface))
-                } else {
-                    this?.setTint(requireContext().getColor(R.color.colorPrimary))
-                }
-            }
             onDevices(it)
         }
 
@@ -88,8 +79,12 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             onFollowStatus(it)
         }
 
-        parentModel.onWalletMissingWarning().observe(viewLifecycleOwner) {
-            onWalletMissingWarning(it)
+        model.onDevicesRewards().observe(viewLifecycleOwner) {
+            onDevicesRewards(it)
+        }
+
+        parentModel.onWalletWarnings().observe(viewLifecycleOwner) {
+            onWalletMissingWarning(it.showMissingWarning)
         }
         return binding.root
     }
@@ -121,14 +116,13 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         when (devices.status) {
             Status.SUCCESS -> {
                 binding.swiperefresh.isRefreshing = false
+                parentModel.getWalletWarnings(devices.data)
                 if (!devices.data.isNullOrEmpty()) {
                     adapter.submitList(devices.data)
                     adapter.notifyDataSetChanged()
                     binding.empty.visible(false)
                     binding.recycler.visible(true)
-                    parentModel.getWalletMissing(devices.data)
                 } else {
-                    parentModel.setHasDevices(false)
                     binding.empty.clear()
                         .animation(R.raw.anim_empty_devices, false)
                         .title(getString(R.string.empty_weather_stations))
@@ -144,6 +138,8 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             }
             Status.ERROR -> {
                 binding.swiperefresh.isRefreshing = false
+                binding.loadingRewards.invisible()
+                binding.totalEarned.text = getString(R.string.wxm_amount, "?")
                 binding.empty.animation(R.raw.anim_error, false)
                     .title(getString(R.string.error_generic_message))
                     .subtitle(devices.message)
@@ -161,13 +157,21 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                 } else {
                     binding.recycler.visible(false)
                     binding.empty.clear().animation(R.raw.anim_loading).visible(true)
+                    binding.loadingRewards.visible(true)
                 }
             }
         }
     }
 
+    private fun onDevicesRewards(rewards: DevicesRewards) {
+        binding.loadingRewards.invisible()
+        binding.totalEarned.text = getString(R.string.wxm_amount, formatTokens(rewards.total))
+        binding.totalEarnedContainer.visible(rewards.ownedStations == 0 || rewards.total > 0F)
+        binding.noRewardsYet.visible(rewards.ownedStations > 0 && rewards.total == 0F)
+    }
+
     private fun onWalletMissingWarning(walletMissing: Boolean) {
-        if (walletMissing) {
+        if (walletMissing && parentModel.hasDevices() == true) {
             binding.walletWarning.action(getString(R.string.add_wallet_now)) {
                 analytics.trackEventPrompt(
                     AnalyticsService.ParamValue.WALLET_MISSING.paramValue,
@@ -190,7 +194,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                 AnalyticsService.ParamValue.VIEW.paramValue
             )
         }
-        binding.walletWarning.visible(walletMissing)
+        binding.walletWarning.visible(walletMissing && parentModel.hasDevices() == true)
     }
 
     override fun onResume() {

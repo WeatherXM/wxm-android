@@ -23,29 +23,20 @@ class ProfileViewModel(
     private val surveyUseCase: SurveyUseCase,
     private val analytics: AnalyticsWrapper
 ) : ViewModel() {
-
-    private val onLoading = MutableLiveData<Boolean>()
-    private val onUser = MutableLiveData<Resource<User>>()
-    private val onWalletRewards = MutableLiveData<Resource<UIWalletRewards>>()
-    private val onSurvey = SingleLiveEvent<Survey>()
-
-    fun onLoading(): LiveData<Boolean> = onLoading
-    fun onUser(): LiveData<Resource<User>> = onUser
-    fun onWalletRewards(): LiveData<Resource<UIWalletRewards>> = onWalletRewards
-    fun onSurvey(): LiveData<Survey> = onSurvey
-
     private var currentWalletRewards: UIWalletRewards? = null
 
-    fun onClaimedResult(amountClaimed: Double) {
-        currentWalletRewards?.apply {
-            allocated -= amountClaimed
-            totalClaimed += amountClaimed
-        }
-        onWalletRewards.postValue(Resource.success(currentWalletRewards))
+    private val onUser = MutableLiveData<Resource<User>>()
+    private val onSurvey = SingleLiveEvent<Survey>()
+    private val onWalletRewards = MutableLiveData<Resource<UIWalletRewards>>().apply {
+        value = Resource.loading()
     }
 
+    fun onUser(): LiveData<Resource<User>> = onUser
+    fun onSurvey(): LiveData<Survey> = onSurvey
+    fun onWalletRewards(): LiveData<Resource<UIWalletRewards>> = onWalletRewards
+
     fun fetchUser(forceRefresh: Boolean = false) {
-        onLoading.postValue(true)
+        onUser.postValue(Resource.loading())
         viewModelScope.launch {
             useCase.getUser(forceRefresh)
                 .onRight {
@@ -57,7 +48,6 @@ class ProfileViewModel(
                     onUser.postValue(
                         Resource.error(it.getDefaultMessage(R.string.error_reach_out_short))
                     )
-                    onLoading.postValue(false)
                 }
         }
     }
@@ -74,9 +64,17 @@ class ProfileViewModel(
         surveyUseCase.dismissSurvey(surveyId)
     }
 
+    fun onClaimedResult(amountClaimed: Double) {
+        currentWalletRewards?.apply {
+            allocated -= amountClaimed
+            totalClaimed += amountClaimed
+        }
+        onWalletRewards.postValue(Resource.success(currentWalletRewards))
+    }
+
     private fun fetchWalletRewards(walletAddress: String?) {
         viewModelScope.launch {
-            onLoading.postValue(true)
+            onWalletRewards.postValue(Resource.loading())
             useCase.getWalletRewards(walletAddress).onRight {
                 Timber.d("Got Wallet Rewards: $it")
                 currentWalletRewards = it
@@ -92,7 +90,6 @@ class ProfileViewModel(
                     )
                 }
             }
-            onLoading.postValue(false)
         }
     }
 }

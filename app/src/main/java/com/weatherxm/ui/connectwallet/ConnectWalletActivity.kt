@@ -16,8 +16,8 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.getRichText
 import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Mask
@@ -221,8 +221,8 @@ class ConnectWalletActivity : BaseActivity() {
         )
     }
 
-    private fun onAddressUpdateUI(address: String?) {
-        if (address.isNullOrEmpty()) {
+    private fun onAddressUpdateUI(address: String) {
+        if (address.isEmpty()) {
             binding.editWallet.visible(false)
             binding.viewTransactionHistoryBtn.visible(false)
             binding.scanQR.visible(true)

@@ -69,6 +69,8 @@ data class UIDevice(
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
     val hasLowBattery: Boolean?,
+    val totalRewards: Float?,
+    val actualReward: Float?,
     var alerts: List<DeviceAlert> = listOf(),
     val isDeviceFromSearchResult: Boolean = false
 ) : Parcelable {
@@ -77,6 +79,8 @@ data class UIDevice(
             String.empty(),
             String.empty(),
             String.empty(),
+            null,
+            null,
             null,
             null,
             null,
@@ -297,12 +301,6 @@ data class DevicesSortFilterOptions(
         return groupedDevices
     }
 
-    fun areDefaultFiltersOn(): Boolean {
-        return sortOrder == DevicesSortOrder.DATE_ADDED &&
-            filterType == DevicesFilterType.ALL &&
-            groupBy == DevicesGroupBy.NO_GROUPING
-    }
-
     fun getSortAnalyticsValue(): String {
         return when (sortOrder) {
             DevicesSortOrder.DATE_ADDED -> {
@@ -505,6 +503,23 @@ data class LineChartData(
         return dataSets
     }
 }
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class WalletWarnings(
+    val showMissingBadge: Boolean,
+    val showMissingWarning: Boolean
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DevicesRewards(
+    val ownedStations: Int,
+    val total: Float,
+    val latest: Float,
+) : Parcelable
 
 @Suppress("EnumNaming")
 enum class RewardTimelineType {

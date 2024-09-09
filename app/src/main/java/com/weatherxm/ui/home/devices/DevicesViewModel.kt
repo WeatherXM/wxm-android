@@ -5,16 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.DevicesFilterType
 import com.weatherxm.ui.common.DevicesGroupBy
+import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.DevicesSortFilterOptions
 import com.weatherxm.ui.common.DevicesSortOrder
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.FollowUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.Dispatchers
@@ -31,11 +32,13 @@ class DevicesViewModel(
         value = Resource.loading()
     }
     private val onFollowStatus = MutableLiveData<Resource<Unit>>()
+    private val onDevicesRewards = MutableLiveData<DevicesRewards>()
 
     // Needed for passing info to the activity to show/hide elements when scrolling on the list
     private val showOverlayViews = MutableLiveData(true)
 
     fun devices(): LiveData<Resource<List<UIDevice>>> = devices
+    fun onDevicesRewards(): LiveData<DevicesRewards> = onDevicesRewards
     fun onFollowStatus(): LiveData<Resource<Unit>> = onFollowStatus
     fun showOverlayViews() = showOverlayViews
 
@@ -46,12 +49,27 @@ class DevicesViewModel(
                 .map { devices ->
                     Timber.d("Got ${devices.size} devices")
                     this@DevicesViewModel.devices.postValue(Resource.success(devices))
+                    calculateRewards(devices)
                 }
                 .mapLeft {
                     analytics.trackEventFailure(it.code)
                     this@DevicesViewModel.devices.postValue(Resource.error(it.getDefaultMessage()))
                 }
         }
+    }
+
+    private fun calculateRewards(devices: List<UIDevice>) {
+        var ownedStations = 0
+        var totalRewards = 0F
+        var latestRewards = 0F
+        devices.forEach {
+            if (it.isOwned()) {
+                ownedStations++
+                totalRewards += it.totalRewards ?: 0F
+                latestRewards += it.actualReward ?: 0F
+            }
+        }
+        onDevicesRewards.postValue(DevicesRewards(ownedStations, totalRewards, latestRewards))
     }
 
     fun onScroll(dy: Int) {

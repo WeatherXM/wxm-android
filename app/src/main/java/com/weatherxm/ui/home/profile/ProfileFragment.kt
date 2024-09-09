@@ -108,27 +108,21 @@ class ProfileFragment : BaseFragment() {
             )
         }
 
-        model.onLoading().observe(viewLifecycleOwner) {
-            if (it && !binding.swiperefresh.isRefreshing) {
-                binding.progress.visible(true)
-            } else {
-                binding.swiperefresh.isRefreshing = false
-                binding.progress.invisible()
-            }
-        }
-
         model.onUser().observe(viewLifecycleOwner) { resource ->
             Timber.d("Data updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
+                    //    parentModel.fetchWalletRewards(resource.data?.wallet?.address)
                     updateUserUI(resource.data)
+                    toggleLoading(false)
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
                     resource.message?.let { context.toast(it) }
+                    toggleLoading(false)
                 }
                 Status.LOADING -> {
-                    // Do nothing
+                    toggleLoading(true)
                 }
             }
         }
@@ -140,13 +134,15 @@ class ProfileFragment : BaseFragment() {
                     resource.data?.let {
                         updateRewardsUI(it)
                     }
+                    toggleLoading(false)
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
                     resource.message?.let { context.toast(it) }
+                    toggleLoading(false)
                 }
                 Status.LOADING -> {
-                    // Do nothing
+                    toggleLoading(true)
                 }
             }
         }
@@ -167,6 +163,20 @@ class ProfileFragment : BaseFragment() {
 
         model.fetchUser()
         model.getSurvey()
+    }
+
+    private fun toggleLoading(isLoading: Boolean) {
+        if (isLoading) {
+            if (!binding.swiperefresh.isRefreshing) {
+                binding.progress.visible(true)
+            } else {
+                binding.swiperefresh.isRefreshing = false
+                binding.progress.invisible()
+            }
+        } else {
+            binding.swiperefresh.isRefreshing = false
+            binding.progress.invisible()
+        }
     }
 
     private fun updateRewardsUI(data: UIWalletRewards) {

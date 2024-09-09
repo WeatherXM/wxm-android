@@ -12,19 +12,113 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/background_bottom_rounded_corners">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingEnd="@dimen/padding_small"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:menu="@menu/devices_list_menu"
-            app:title="@string/my_stations"
-            tools:ignore="RtlSymmetry" />
+            android:background="@color/colorSurface">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/padding_small_to_normal"
+                android:paddingBottom="@dimen/padding_small_to_normal">
+
+                <ImageView
+                    android:id="@+id/logo"
+                    android:layout_width="48dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_logo"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/totalEarnedCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/layer1"
+                    app:cardCornerRadius="@dimen/radius_medium"
+                    app:contentPadding="@dimen/padding_small"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/totalEarnedContainer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/margin_normal"
+                            app:layout_constraintEnd_toStartOf="@id/openRewards"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/totalEarnedTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/total_earned"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/totalEarned"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                                android:textStyle="bold"
+                                app:layout_constraintTop_toBottomOf="@id/totalEarnedTitle"
+                                tools:text="100,99 $WXM" />
+
+                            <com.google.android.material.progressindicator.CircularProgressIndicator
+                                android:id="@+id/loadingRewards"
+                                style="@style/Widget.WeatherXM.ProgressBar.Circular"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="invisible"
+                                app:indicatorInset="0dp"
+                                app:indicatorSize="24dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/totalEarnedTitle" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/noRewardsYet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/margin_small"
+                            android:text="@string/no_rewards_yet"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            android:visibility="gone"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/openRewards"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/openRewards"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:contentDescription="@string/action_open"
+                            android:src="@drawable/ic_open_right"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Content -->
@@ -51,7 +145,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_normal"
-                    android:layout_marginTop="@dimen/margin_large"
+                    android:layout_marginTop="@dimen/margin_normal_to_large"
                     android:visibility="gone"
                     app:layout_constraintTop_toTopOf="parent"
                     app:message_background_tint="@color/warningTint"
@@ -61,16 +155,43 @@
                     app:message_title="@string/wallet_address_missing"
                     tools:visibility="visible" />
 
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/myStationsTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_normal"
+                    android:layout_marginTop="@dimen/margin_normal_to_large"
+                    android:text="@string/my_stations"
+                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@id/sortFilterBtn"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/walletWarning" />
+
+                <ImageButton
+                    android:id="@+id/sortFilterBtn"
+                    style="@style/Widget.WeatherXM.ImageButton"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="@dimen/margin_normal"
+                    android:contentDescription="@string/sort_filter"
+                    android:src="@drawable/ic_sort_filter"
+                    app:layout_constraintBottom_toBottomOf="@id/myStationsTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/myStationsTitle"
+                    app:tint="@color/colorPrimary" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small_to_normal"
+                    android:layout_marginTop="@dimen/margin_extra_small"
                     android:overScrollMode="never"
                     android:scrollbars="vertical"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/walletWarning"
+                    app:layout_constraintTop_toBottomOf="@id/myStationsTitle"
                     tools:listitem="@layout/list_item_device" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
