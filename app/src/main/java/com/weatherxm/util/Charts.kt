@@ -128,8 +128,8 @@ private fun LineDataSet.setDefaultSettings(context: Context, resources: Resource
     highLightColor = context.getColor(R.color.colorPrimary)
     setDrawHorizontalHighlightIndicator(false)
     enableDashedHighlightLine(10F, 4F, 0F)
-    color = resources.getColor(R.color.colorPrimary, context.theme)
-    setCircleColor(resources.getColor(R.color.colorPrimary, context.theme))
+    color = resources.getColor(R.color.chart_primary_line, context.theme)
+    setCircleColor(resources.getColor(R.color.chart_primary_line, context.theme))
 }
 
 private fun YAxis.setDefaultSettings(context: Context, isAxisLeft: Boolean = true) {
