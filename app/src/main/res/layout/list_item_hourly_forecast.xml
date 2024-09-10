@@ -44,6 +44,30 @@
             android:textStyle="bold"
             tools:text="15.4°C" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/precipProbabilityIcon"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:contentDescription="@string/action_open"
+                android:src="@drawable/ic_weather_precip_probability"
+                app:tint="@color/darkestBlue" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/precipProbability"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_extra_small"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:textColor="@color/darkestBlue"
+                tools:text="11%" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

@@ -105,14 +105,29 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/dailyForecastTitle"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_extra_large"
+                android:layout_marginEnd="@dimen/margin_normal"
                 android:text="@string/next_7_days"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textColor="@color/darkestBlue"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/infoButton"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/hourlyForecastRecycler" />
+
+            <ImageButton
+                android:id="@+id/infoButton"
+                style="@style/Widget.WeatherXM.ImageButton"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/read_more"
+                android:src="@drawable/ic_learn_more_info"
+                app:layout_constraintBottom_toBottomOf="@id/dailyForecastTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/dailyForecastTitle"
+                app:tint="@color/colorPrimary" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/dailyForecastRecycler"
