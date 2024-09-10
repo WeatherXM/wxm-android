@@ -15,7 +15,7 @@ import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.show
 import com.weatherxm.ui.common.visible
 import com.weatherxm.util.Rewards.formatTokens
-import com.weatherxm.util.initializeRewardsBreakdownChart
+import com.weatherxm.util.initRewardsBreakdownChart
 
 class DeviceRewardsAdapter(
     private val onExpandToggle: (Int, Boolean, String) -> Unit,
@@ -92,7 +92,7 @@ class DeviceRewardsAdapter(
                     }.also {
                         ignoreRangeChipListener = false
                     }
-                    binding.rewardBreakdownChart.initializeRewardsBreakdownChart(
+                    binding.rewardBreakdownChart.initRewardsBreakdownChart(
                         it.baseChartData,
                         it.betaChartData,
                         it.otherChartData,

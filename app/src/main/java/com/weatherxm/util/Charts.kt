@@ -586,7 +586,7 @@ fun LineChart.initializeNetworkStatsChart(entries: List<Entry>) {
 }
 
 @Suppress("MagicNumber")
-fun LineChart.initializeTotalEarnedChart(
+fun LineChart.initTotalEarnedChart(
     totalEarnedData: LineChartData,
     datesChartTooltip: List<String>
 ) {
@@ -645,7 +645,7 @@ private fun MutableList<LineDataSet>.initRewardBreakDown(color: Int) {
 }
 
 @Suppress("MagicNumber")
-fun LineChart.initializeRewardsBreakdownChart(
+fun LineChart.initRewardsBreakdownChart(
     baseData: LineChartData,
     betaData: LineChartData,
     othersData: LineChartData,

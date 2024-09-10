@@ -11,7 +11,7 @@ import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.Rewards.formatTokens
-import com.weatherxm.util.initializeTotalEarnedChart
+import com.weatherxm.util.initTotalEarnedChart
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -48,7 +48,7 @@ class DevicesRewardsActivity : BaseActivity() {
                     binding.totalEarned.text =
                         getString(R.string.wxm_amount, formatTokens(it.data?.total))
                     it.data?.let { data ->
-                        binding.totalEarnedChart.initializeTotalEarnedChart(
+                        binding.totalEarnedChart.initTotalEarnedChart(
                             data.lineChartData,
                             data.datesChartTooltip
                         )
