@@ -11,6 +11,7 @@ import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.ui.common.DeviceTotalRewardsDetails
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.DevicesRewardsByRange
+import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.launch
@@ -57,11 +58,11 @@ class DevicesRewardsViewModel(
                 val erroneousDetails = DeviceTotalRewardsDetails(
                     null,
                     null,
-                    null,
                     mutableListOf(),
-                    null,
-                    null,
-                    null,
+                    mutableListOf(),
+                    LineChartData.empty(),
+                    LineChartData.empty(),
+                    LineChartData.empty(),
                     true
                 )
                 rewards.devices[position].details = erroneousDetails

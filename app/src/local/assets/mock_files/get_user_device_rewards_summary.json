@@ -68,11 +68,6 @@
                     "type": "base",
                     "code": "base_reward",
                     "value": 15.4
-                },
-                {
-                    "type": "boost",
-                    "code": "beta_rewards",
-                    "value": 2.4
                 }
             ]
         },
@@ -125,6 +120,14 @@
             "boost_period_start": "2024-08-28T22:00:00+02:00",
             "boost_period_end": "2025-01-01T22:00:00+02:00",
             "completed_percentage": 10.4
+        },
+        {
+            "code": "cell_reward",
+            "current_rewards": 26.532,
+            "total_rewards": 56.532,
+            "boost_period_start": "2024-08-28T22:00:00+02:00",
+            "boost_period_end": "2025-01-01T22:00:00+02:00",
+            "completed_percentage": 50.5
         }
     ]
 }

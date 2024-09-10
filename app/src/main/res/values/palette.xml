@@ -5,7 +5,6 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="green">#46D163</color>
-    <color name="light_green">#07C38D</color>
     <color name="blue">#2780FF</color>
 
     <!-- Color Palette/Library Design Team -->
@@ -76,6 +75,8 @@
     <color name="reward_score_unknown">#BAC7CB</color>
     <color name="last_run_color">#00B55D</color>
     <color name="beta_rewards_color">#9B3EDE</color>
-    <color name="beta_rewards_alt_color">#6A00B6</color>
+    <color name="beta_rewards_fill">#6A00B6</color>
+    <color name="other_reward">#07C38D</color>
+    <color name="other_reward_fill">#9907C38D</color>
     <!-- End -->
 </resources>

@@ -646,42 +646,51 @@ private fun MutableList<LineDataSet>.initRewardBreakDown(color: Int) {
 
 @Suppress("MagicNumber")
 fun LineChart.initializeRewardsBreakdownChart(
-    baseData: LineChartData?,
-    betaData: LineChartData?,
-    othersData: LineChartData?,
-    datesChartTooltip: List<String>?
+    baseData: LineChartData,
+    betaData: LineChartData,
+    othersData: LineChartData,
+    datesChartTooltip: List<String>
 ) {
     val dataSets = mutableListOf<ILineDataSet>()
 
-    val baseLineDataSetsWithValues = baseData?.getLineDataSetsWithValues("")
-    val baseEmptyLineDataSets = baseData?.getEmptyLineDataSets("")
-    val betaDataDataSetsWithValues = betaData?.getLineDataSetsWithValues("")
-    val betaDataEmptyLineDataSets = betaData?.getEmptyLineDataSets("")
-    val otherDataDataSetsWithValues = othersData?.getLineDataSetsWithValues("")
-    val otherDataEmptyLineDataSets = othersData?.getEmptyLineDataSets("")
+    val baseLineDataSetsWithValues = baseData.getLineDataSetsWithValues("")
+    val baseEmptyLineDataSets = baseData.getEmptyLineDataSets("")
+    val betaDataDataSetsWithValues = betaData.getLineDataSetsWithValues("")
+    val betaDataEmptyLineDataSets = betaData.getEmptyLineDataSets("")
+    val otherDataDataSetsWithValues = othersData.getLineDataSetsWithValues("")
+    val otherDataEmptyLineDataSets = othersData.getEmptyLineDataSets("")
 
-    otherDataDataSetsWithValues?.let {
-        dataSets.addAll(it.primaryLineInit(context, resources))
-        it.initRewardBreakDown(context.getColor(R.color.chart_other_reward_color))
-    }
-    otherDataEmptyLineDataSets?.let {
-        dataSets.addAll(it)
-    }
-
-    betaDataDataSetsWithValues?.let {
-        dataSets.addAll(it.primaryLineInit(context, resources))
-        it.initRewardBreakDown(context.getColor(R.color.beta_rewards_color))
-    }
-    betaDataEmptyLineDataSets?.let {
-        dataSets.addAll(it)
+    if (otherDataDataSetsWithValues.isNotEmpty()) {
+        dataSets.addAll(otherDataDataSetsWithValues.primaryLineInit(context, resources))
+        otherDataDataSetsWithValues.initRewardBreakDown(
+            context.getColor(R.color.other_reward)
+        )
     }
 
-    baseLineDataSetsWithValues?.let {
-        dataSets.addAll(it.primaryLineInit(context, resources))
-        it.initRewardBreakDown(context.getColor(R.color.chart_primary))
+    if (otherDataEmptyLineDataSets.isNotEmpty()) {
+        dataSets.addAll(otherDataEmptyLineDataSets)
     }
-    baseEmptyLineDataSets?.let {
-        dataSets.addAll(it)
+
+    if (betaDataDataSetsWithValues.isNotEmpty()) {
+        dataSets.addAll(betaDataDataSetsWithValues.primaryLineInit(context, resources))
+        betaDataDataSetsWithValues.initRewardBreakDown(
+            context.getColor(R.color.beta_rewards_color)
+        )
+    }
+
+    if (betaDataEmptyLineDataSets.isNotEmpty()) {
+        dataSets.addAll(betaDataEmptyLineDataSets)
+    }
+
+    if (baseLineDataSetsWithValues.isNotEmpty()) {
+        dataSets.addAll(baseLineDataSetsWithValues.primaryLineInit(context, resources))
+        baseLineDataSetsWithValues.initRewardBreakDown(
+            context.getColor(R.color.chart_primary)
+        )
+    }
+
+    if (baseEmptyLineDataSets.isNotEmpty()) {
+        dataSets.addAll(baseEmptyLineDataSets)
     }
 
     val lineData = LineData(dataSets)
@@ -702,15 +711,15 @@ fun LineChart.initializeRewardsBreakdownChart(
     with(xAxis) {
         setDrawAxisLine(true)
         setDrawGridLines(false)
-        if (baseData != null && baseData.entries.size <= 7) {
+        if (baseData.entries.size <= 7) {
             granularity = 1F
         }
         axisLineColor = context.getColor(R.color.colorOnSurface)
-        valueFormatter = CustomXAxisFormatter(baseData?.timestamps)
+        valueFormatter = CustomXAxisFormatter(baseData.timestamps)
     }
 
-//    marker = TooltipMarkerView(context, datesChartTooltip)
-//    setDrawMarkers(true)
+    marker = TooltipMarkerView(context, datesChartTooltip, baseData, betaData, othersData)
+    setDrawMarkers(true)
 
     show()
     notifyDataSetChanged()

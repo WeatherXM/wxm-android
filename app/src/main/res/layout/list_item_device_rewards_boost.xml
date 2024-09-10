@@ -42,7 +42,7 @@
         android:valueTo="100"
         app:layout_constraintTop_toBottomOf="@id/title"
         app:trackHeight="23dp"
-        tools:trackColorActive="@color/beta_rewards_alt_color"
+        tools:trackColorActive="@color/beta_rewards_fill"
         tools:trackColorInactive="@color/beta_rewards_color"
         tools:values="@array/reward_slider_default_values" />
 

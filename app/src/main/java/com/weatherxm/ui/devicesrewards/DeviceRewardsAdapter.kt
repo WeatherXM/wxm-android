@@ -88,7 +88,7 @@ class DeviceRewardsAdapter(
                         RewardsSummaryMode.WEEK -> binding.chartRangeSelector.checkWeek()
                         RewardsSummaryMode.MONTH -> binding.chartRangeSelector.checkMonth()
                         RewardsSummaryMode.YEAR -> binding.chartRangeSelector.checkYear()
-                        null -> binding.chartRangeSelector.clearCheck()
+                        else -> binding.chartRangeSelector.clearCheck()
                     }.also {
                         ignoreRangeChipListener = false
                     }
@@ -99,9 +99,9 @@ class DeviceRewardsAdapter(
                         it.datesChartTooltip
                     )
 
-                    binding.baseRewardsLegend.visible(it.baseChartData?.isDataValid() == true)
-                    binding.betaRewardsLegend.visible(it.betaChartData?.isDataValid() == true)
-                    binding.othersRewardsLegend.visible(it.otherChartData?.isDataValid() == true)
+                    binding.baseRewardsLegend.visible(it.baseChartData.isDataValid())
+                    binding.betaRewardsLegend.visible(it.betaChartData.isDataValid())
+                    binding.othersRewardsLegend.visible(it.otherChartData.isDataValid())
                     binding.detailsStatus.visible(false)
                     binding.detailsContainer.visible(true)
                 }

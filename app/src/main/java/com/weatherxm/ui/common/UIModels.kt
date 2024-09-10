@@ -420,6 +420,10 @@ data class LineChartData(
     var timestamps: MutableList<String>,
     var entries: MutableList<Entry>
 ) : Parcelable {
+    companion object {
+        fun empty() = LineChartData(mutableListOf(), mutableListOf())
+    }
+
     fun isDataValid(): Boolean {
         return timestamps.isNotEmpty() && entries.filterNot { it.y.isNaN() }.isNotEmpty()
     }
@@ -504,6 +508,15 @@ data class LineChartData(
 
         return dataSets
     }
+
+    fun getEntryValueForTooltip(position: Float): Float {
+        val value = entries.getOrNull(position.toInt())?.y ?: 0F
+        return if (value.isNaN()) {
+            0F
+        } else {
+            value
+        }
+    }
 }
 
 @Keep
@@ -548,11 +561,11 @@ data class DeviceTotalRewards(
 data class DeviceTotalRewardsDetails(
     val total: Float?,
     val mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode?,
-    val boosts: List<DeviceTotalRewardsBoost>?,
+    val boosts: List<DeviceTotalRewardsBoost>,
     val datesChartTooltip: List<String>,
-    val baseChartData: LineChartData?,
-    val betaChartData: LineChartData?,
-    val otherChartData: LineChartData?,
+    val baseChartData: LineChartData,
+    val betaChartData: LineChartData,
+    val otherChartData: LineChartData,
     val fetchError: Boolean
 ) : Parcelable
 

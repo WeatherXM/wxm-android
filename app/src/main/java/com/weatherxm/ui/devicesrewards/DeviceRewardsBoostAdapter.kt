@@ -47,7 +47,7 @@ class DeviceRewardsBoostAdapter :
                 if (boostCode != null && BoostCode.valueOf(boostCode) == BoostCode.beta_rewards) {
                     binding.title.text = itemView.context.getString(R.string.beta_reward_details)
                     binding.boostProgressSlider.trackActiveTintList =
-                        itemView.context.getColorStateList(R.color.beta_rewards_alt_color)
+                        itemView.context.getColorStateList(R.color.beta_rewards_fill)
                     binding.boostProgressSlider.trackInactiveTintList =
                         itemView.context.getColorStateList(R.color.beta_rewards_color)
                 } else {
@@ -74,9 +74,9 @@ class DeviceRewardsBoostAdapter :
         private fun onUnknownBoost() {
             binding.title.text = itemView.context.getString(R.string.other_boost_reward_details)
             binding.boostProgressSlider.trackActiveTintList =
-                itemView.context.getColorStateList(R.color.light_primary)
+                itemView.context.getColorStateList(R.color.other_reward)
             binding.boostProgressSlider.trackInactiveTintList =
-                itemView.context.getColorStateList(R.color.blue)
+                itemView.context.getColorStateList(R.color.other_reward_fill)
         }
     }
 }

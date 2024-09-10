@@ -33,6 +33,7 @@ import timber.log.Timber
 import java.time.ZonedDateTime
 import java.time.format.TextStyle
 import java.util.Locale
+import kotlin.math.roundToInt
 
 interface RewardsUseCase {
     suspend fun getRewardsTimeline(
@@ -251,51 +252,21 @@ class RewardsUseCaseImpl(
                     }
                     sum += it.value ?: 0F
                 }
-                if(baseSum == 0F) {
+                if (baseSum == 0F) {
                     baseEntries.add(emptyEntry)
                 } else {
                     baseEntries.add(Entry(counter, baseSum))
                 }
-                if(betaSum == 0F) {
+                if (betaSum == 0F) {
                     betaEntries.add(emptyEntry)
                 } else {
                     betaEntries.add(Entry(counter, betaSum + baseSum))
                 }
-                if(othersSum == 0F) {
+                if (othersSum == 0F) {
                     otherEntries.add(emptyEntry)
                 } else {
                     otherEntries.add(Entry(counter, othersSum + betaSum + baseSum))
                 }
-//                baseEntries.add(Entry(counter, baseSum))
-//                betaEntries.add(Entry(counter, betaSum + baseSum))
-//                otherEntries.add(Entry(counter, othersSum + betaSum + baseSum))
-
-
-//                timeseries.rewards?.firstOrNull {
-//                    it.code == baseCode
-//                }?.value?.let {
-//                    baseEntries.add(Entry(counter, it))
-//                } ?: baseEntries.add(emptyEntry)
-//
-//                timeseries.rewards?.firstOrNull {
-//                    it.code == betaCode
-//                }?.value?.let {
-//                    betaEntries.add(Entry(counter, it))
-//                } ?: betaEntries.add(emptyEntry)
-//
-//                timeseries.rewards?.sumOf {
-//                    if (it.code != baseCode && it.code != betaCode) {
-//                        it.value?.toDouble() ?: 0.0
-//                    } else {
-//                        0.0
-//                    }
-//                }.also {
-//                    if (it == null || it == 0.0) {
-//                        otherEntries.add(emptyEntry)
-//                    } else {
-//                        otherEntries.add(Entry(counter, it.toFloat()))
-//                    }
-//                }
             }
 
             DeviceTotalRewardsDetails(
@@ -304,13 +275,13 @@ class RewardsUseCaseImpl(
                 summary.details?.map {
                     DeviceTotalRewardsBoost(
                         it.code,
-                        it.completedPercentage?.toInt(),
+                        it.completedPercentage?.roundToInt(),
                         it.totalRewards,
                         it.currentRewards,
                         it.boostPeriodStart,
                         it.boostPeriodEnd
                     )
-                },
+                } ?: mutableListOf(),
                 datesChartTooltip,
                 LineChartData(xLabels, baseEntries),
                 LineChartData(xLabels, betaEntries),
