@@ -121,8 +121,6 @@ class RewardsRepositoryTest : BehaviorSpec({
                 }
             }
         }
-        and("a mode") {
-        }
     }
     given("A mode") {
         and("requesting devices rewards") {
