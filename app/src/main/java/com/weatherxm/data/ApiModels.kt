@@ -753,9 +753,9 @@ data class DeviceRewardsSummaryData(
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class DeviceRewardsSummaryDataReward(
-    val type: String?,
-    val code: String?,
-    val value: Float?,
+    val type: String,
+    val code: String,
+    val value: Float,
 ) : Parcelable
 
 @Keep

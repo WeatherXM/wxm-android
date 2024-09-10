@@ -206,9 +206,7 @@ class RewardsUseCaseImpl(
             val otherEntries = mutableListOf<Entry>()
             val datesChartTooltip = mutableListOf<String>()
 
-            summary.data?.fastForEachIndexed { i, timeseries ->
-                val counter = i.toFloat()
-                val emptyEntry = Entry(counter, Float.NaN)
+            summary.data?.fastForEachIndexed { counter, timeseries ->
                 /**
                  * 7D = Show 3-letter days - e.g. Mon, Tue, Wed,
                  * 1M = DD/MM or MM/DD based on Locale - e.g. 25/01 or 01/25
@@ -233,8 +231,6 @@ class RewardsUseCaseImpl(
 
                 val baseCode = RewardsCode.base_reward.name
                 val betaCode = RewardsCode.beta_rewards.name
-
-
                 var sum = 0F
                 var baseSum = 0F
                 var betaSum = 0F
@@ -242,30 +238,30 @@ class RewardsUseCaseImpl(
 
                 timeseries.rewards?.forEach {
                     if (it.code == baseCode) {
-                        baseSum += it.value ?: 0F
+                        baseSum += it.value
                     }
                     if (it.code == betaCode) {
-                        betaSum += it.value ?: 0F
+                        betaSum += it.value
                     }
                     if (it.code != baseCode && it.code != betaCode) {
-                        othersSum += it.value ?: 0F
+                        othersSum += it.value
                     }
-                    sum += it.value ?: 0F
+                    sum += it.value
                 }
                 if (baseSum == 0F) {
-                    baseEntries.add(emptyEntry)
+                    baseEntries.add(Entry(counter.toFloat(), Float.NaN))
                 } else {
-                    baseEntries.add(Entry(counter, baseSum))
+                    baseEntries.add(Entry(counter.toFloat(), baseSum))
                 }
                 if (betaSum == 0F) {
-                    betaEntries.add(emptyEntry)
+                    betaEntries.add(Entry(counter.toFloat(), Float.NaN))
                 } else {
-                    betaEntries.add(Entry(counter, betaSum + baseSum))
+                    betaEntries.add(Entry(counter.toFloat(), betaSum + baseSum))
                 }
                 if (othersSum == 0F) {
-                    otherEntries.add(emptyEntry)
+                    otherEntries.add(Entry(counter.toFloat(), Float.NaN))
                 } else {
-                    otherEntries.add(Entry(counter, othersSum + betaSum + baseSum))
+                    otherEntries.add(Entry(counter.toFloat(), othersSum + betaSum + baseSum))
                 }
             }
 
