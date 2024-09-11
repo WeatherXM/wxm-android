@@ -66,7 +66,7 @@ class RemoteBannersRepositoryTest : BehaviorSpec({
     context("Dismiss Info Banner") {
         given("the info banner ID") {
             then("dismiss this info banner with that ID") {
-                repo.dismissSurvey(infoBannerId)
+                repo.dismissInfoBanner(infoBannerId)
                 verify(exactly = 1) { dataSource.dismissInfoBanner(infoBannerId) }
             }
         }

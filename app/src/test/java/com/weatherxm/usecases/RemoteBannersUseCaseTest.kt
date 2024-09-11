@@ -66,7 +66,7 @@ class RemoteBannersUseCaseTest : BehaviorSpec({
     context("Dismiss Info Banner") {
         given("the info banner ID") {
             then("dismiss this info banner with that ID") {
-                usecase.dismissSurvey(infoBannerId)
+                usecase.dismissInfoBanner(infoBannerId)
                 verify(exactly = 1) { repo.dismissInfoBanner(infoBannerId) }
             }
         }
