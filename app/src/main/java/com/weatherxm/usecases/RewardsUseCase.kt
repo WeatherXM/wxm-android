@@ -236,6 +236,13 @@ class RewardsUseCaseImpl(
                 var betaSum = 0F
                 var othersSum = 0F
 
+                /**
+                 * In order for the "chart with filled layers" to work properly, we need to add
+                 * each layer atop the others. So in our case that we have base -> beta -> others
+                 * the beta entries should be the sum of base and beta (so that the layer is above
+                 * base) and others should be the sum of base, beta and others (so that the layer is
+                 * above base & beta).
+                 */
                 timeseries.rewards?.forEach {
                     if (it.code == baseCode) {
                         baseSum += it.value

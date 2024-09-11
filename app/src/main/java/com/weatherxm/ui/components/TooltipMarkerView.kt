@@ -39,8 +39,11 @@ class TooltipMarkerView(
         totalView.text = formatTokens(e.y)
 
 
-        // TODO: SHOW IN TOOLTIP ONLY THE VALUE (AND NOT THE SUM WHICH IS USED IN THE CHART
-        // TODO: WE NEED TO: beta - base, others - beta - base
+        /**
+         * As explained in the comment in RewardsUseCase, the "chart with filled layers" to work
+         * has "beta = base + beta", "others = base + beta + others", so in here to show the correct
+         * value in tooltip we need to make the respective subtractions.
+         */
         var baseValue = 0F
         var betaValue = 0F
         var othersValue: Float
