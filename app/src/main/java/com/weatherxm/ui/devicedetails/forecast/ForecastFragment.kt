@@ -115,16 +115,7 @@ class ForecastFragment : BaseFragment() {
         }
 
         model.onLoading().observe(viewLifecycleOwner) {
-            if (it && binding.swiperefresh.isRefreshing) {
-                binding.progress.invisible()
-            } else if (it) {
-                binding.dailyForecastTitle.visible(false)
-                binding.hourlyForecastTitle.visible(false)
-                binding.progress.visible(true)
-            } else {
-                binding.swiperefresh.isRefreshing = false
-                binding.progress.invisible()
-            }
+            onLoading(it)
         }
 
         model.onError().observe(viewLifecycleOwner) {
@@ -137,6 +128,19 @@ class ForecastFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         analytics.trackScreen(AnalyticsService.Screen.DEVICE_FORECAST, classSimpleName())
+    }
+
+    private fun onLoading(isLoading: Boolean) {
+        if (isLoading && binding.swiperefresh.isRefreshing) {
+            binding.progress.invisible()
+        } else if (isLoading) {
+            binding.dailyForecastTitle.visible(false)
+            binding.hourlyForecastTitle.visible(false)
+            binding.progress.visible(true)
+        } else {
+            binding.swiperefresh.isRefreshing = false
+            binding.progress.invisible()
+        }
     }
 
     private fun fetchOrHideContent() {
