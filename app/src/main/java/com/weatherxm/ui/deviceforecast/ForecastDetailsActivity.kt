@@ -5,8 +5,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.Status
-import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
-import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.databinding.ActivityForecastDetailsBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY
@@ -14,7 +12,6 @@ import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecastDay
-import com.weatherxm.ui.common.boldText
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.moveItemToCenter
 import com.weatherxm.ui.common.parcelable
@@ -34,10 +31,6 @@ import com.weatherxm.util.Weather.getFormattedPressure
 import com.weatherxm.util.Weather.getFormattedTemperature
 import com.weatherxm.util.Weather.getFormattedUV
 import com.weatherxm.util.Weather.getFormattedWind
-import com.weatherxm.util.Weather.getFormattedWindDirection
-import com.weatherxm.util.Weather.getPrecipitationPreferredUnit
-import com.weatherxm.util.Weather.getPreferredUnit
-import com.weatherxm.util.Weather.getUVClassification
 import com.weatherxm.util.Weather.getWindDirectionDrawable
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -120,28 +113,16 @@ class ForecastDetailsActivity : BaseActivity() {
         binding.dailyMaxTemp.text = getFormattedTemperature(forecast.maxTemp)
         binding.dailyMinTemp.text = getFormattedTemperature(forecast.minTemp)
         binding.precipProbabilityCard.setData(
-            getFormattedPrecipitationProbability(forecast.precipProbability, false), "%"
+            getFormattedPrecipitationProbability(forecast.precipProbability)
         )
-        val windValue =
-            getFormattedWind(forecast.windSpeed, forecast.windDirection, includeUnits = false)
-        val windUnit = getPreferredUnit(getString(KEY_WIND), getString(R.string.wind_speed_ms))
-        val windDirectionUnit = getFormattedWindDirection(forecast.windDirection)
-        val formattedWindUnit = "$windUnit $windDirectionUnit".boldText(windDirectionUnit)
         binding.windCard.setIcon(getWindDirectionDrawable(this, forecast.windDirection))
-        binding.windCard.setData(windValue, spannableStringBuilder = formattedWindUnit)
+        binding.windCard.setData(getFormattedWind(forecast.windSpeed, forecast.windDirection))
         binding.dailyPrecipCard.setData(
-            getFormattedPrecipitation(forecast.precip, isRainRate = false, includeUnit = false),
-            getPrecipitationPreferredUnit(false)
+            getFormattedPrecipitation(forecast.precip, isRainRate = false)
         )
-        binding.uvCard.setData(getFormattedUV(forecast.uv, false), getUVClassification(forecast.uv))
-        binding.humidityCard.setData(
-            getFormattedHumidity(forecast.humidity, includeUnit = false), "%"
-        )
-        val pressureUnit =
-            getPreferredUnit(getString(KEY_PRESSURE), getString(R.string.pressure_hpa))
-        binding.pressureCard.setData(
-            getFormattedPressure(forecast.pressure, includeUnit = false), pressureUnit
-        )
+        binding.uvCard.setData(getFormattedUV(forecast.uv))
+        binding.humidityCard.setData(getFormattedHumidity(forecast.humidity))
+        binding.pressureCard.setData(getFormattedPressure(forecast.pressure))
 
         // Update Hourly Tiles
         hourlyAdapter = HourlyForecastAdapter(null)
