@@ -2,7 +2,6 @@ package com.weatherxm.ui.components
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.text.SpannableStringBuilder
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
@@ -50,17 +49,7 @@ class WeatherMeasurementCardView : LinearLayout {
         }
     }
 
-    fun setData(
-        value: String,
-        unit: String? = null,
-        spannableStringBuilder: SpannableStringBuilder? = null
-    ) {
+    fun setData(value: String) {
         binding.value.text = value
-        unit?.let {
-            binding.unit.text = it
-        }
-        spannableStringBuilder?.let {
-            binding.unit.text = it
-        }
     }
 }
