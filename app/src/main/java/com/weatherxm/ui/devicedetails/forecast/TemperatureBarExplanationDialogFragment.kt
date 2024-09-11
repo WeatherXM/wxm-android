@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentTemperatureBarExplanationDialogBinding
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.components.BaseBottomSheetDialogFragment
 
 class TemperatureBarExplanationDialogFragment : BaseBottomSheetDialogFragment() {
@@ -35,5 +37,12 @@ class TemperatureBarExplanationDialogFragment : BaseBottomSheetDialogFragment() 
 
     fun show(fragment: Fragment) {
         show(fragment.childFragmentManager, TAG)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(
+            AnalyticsService.Screen.TEMPERATURE_BARS_EXPLANATION, classSimpleName()
+        )
     }
 }

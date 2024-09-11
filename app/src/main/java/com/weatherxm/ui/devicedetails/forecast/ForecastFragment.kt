@@ -83,6 +83,13 @@ class ForecastFragment : BaseFragment() {
         binding.hourlyForecastRecycler.blockParentViewPagerOnScroll()
 
         binding.temperatureBarsInfoButton.setOnClickListener {
+            analytics.trackEventSelectContent(
+                AnalyticsService.ParamValue.LEARN_MORE.paramValue,
+                Pair(
+                    FirebaseAnalytics.Param.ITEM_ID,
+                    AnalyticsService.ParamValue.FORECAST_NEXT_7_DAYS.paramValue
+                )
+            )
             TemperatureBarExplanationDialogFragment().show(this)
         }
 
