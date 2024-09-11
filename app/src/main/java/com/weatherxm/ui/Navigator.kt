@@ -54,6 +54,7 @@ import com.weatherxm.ui.components.DatePicker
 import com.weatherxm.ui.components.LoginPromptDialogFragment
 import com.weatherxm.ui.components.MessageDialogFragment
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
+import com.weatherxm.ui.deeplinkrouteractivity.DeepLinkRouterActivity
 import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
 import com.weatherxm.ui.deleteaccountsurvey.DeleteAccountSurveyActivity
 import com.weatherxm.ui.devicealerts.DeviceAlertsActivity
@@ -82,7 +83,6 @@ import com.weatherxm.ui.rewardslist.RewardsListActivity
 import com.weatherxm.ui.signup.SignupActivity
 import com.weatherxm.ui.startup.StartupActivity
 import com.weatherxm.ui.updateprompt.UpdatePromptActivity
-import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
 import timber.log.Timber
 import java.time.LocalDate
 
@@ -181,7 +181,7 @@ class Navigator(private val analytics: AnalyticsWrapper) {
 
     fun showDeviceDetails(
         context: Context?,
-        device: UIDevice = UIDevice.empty(),
+        device: UIDevice,
         openExplorerOnBack: Boolean = false
     ) {
         context?.let {
@@ -194,10 +194,10 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
     }
 
-    fun showDeviceDetailsWithBackStack(context: Context?, deviceId: String) {
+    fun showDeviceDetailsWithBackStack(context: Context?, device: UIDevice) {
         val deviceDetailsActivity = Intent(context, DeviceDetailsActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            .putExtra(ARG_DEVICE_ID, deviceId)
+            .putExtra(ARG_DEVICE, device)
 
         val pendingIntent: PendingIntent = TaskStackBuilder.create(context).run {
             addNextIntentWithParentStack(deviceDetailsActivity)
@@ -403,9 +403,9 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         )
     }
 
-    fun showUrlRouter(context: Context, wxmRemoteMessage: WXMRemoteMessage? = null) {
+    fun showDeepLinkRouter(context: Context, wxmRemoteMessage: WXMRemoteMessage? = null) {
         context.startActivity(
-            Intent(context, UrlRouterActivity::class.java)
+            Intent(context, DeepLinkRouterActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 .putExtra(ARG_REMOTE_MESSAGE, wxmRemoteMessage)
         )

@@ -5,13 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.NetworkError.NoConnectionError
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.usecases.DeviceDetailsUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +35,7 @@ class CurrentViewModel(
     fun fetchDevice() {
         onLoading.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
-            deviceDetailsUseCase.getUserDevice(device)
+            deviceDetailsUseCase.getDevice(device)
                 .map {
                     Timber.d("Got Device: ${it.name}")
                     device = it

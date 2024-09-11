@@ -31,16 +31,17 @@ class StartupViewModel(private val startupUseCase: StartupUseCase) : ViewModel()
         when (type) {
             RemoteMessageType.ANNOUNCEMENT -> {
                 onStartupState.postValue(
-                    StartupState.ShowUrlRouter(
-                        WXMRemoteMessage(type, intent.getStringExtra(ARG_URL))
+                    StartupState.ShowDeepLinkRouter(
+                        WXMRemoteMessage(type, url = intent.getStringExtra(ARG_URL))
                     )
                 )
             }
             RemoteMessageType.STATION -> {
-                val deviceId = intent.getStringExtra(ARG_DEVICE_ID)
-                deviceId?.let {
-                    onStartupState.postValue(StartupState.ShowDeviceDetails(it))
-                } ?: defaultStartup()
+                onStartupState.postValue(
+                    StartupState.ShowDeepLinkRouter(
+                        WXMRemoteMessage(type, deviceId = intent.getStringExtra(ARG_DEVICE_ID))
+                    )
+                )
             }
             else -> defaultStartup()
         }

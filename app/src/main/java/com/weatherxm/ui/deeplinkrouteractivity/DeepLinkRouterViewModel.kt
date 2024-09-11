@@ -1,6 +1,7 @@
-package com.weatherxm.ui.urlrouteractivity
+package com.weatherxm.ui.deeplinkrouteractivity
 
 import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import com.weatherxm.R
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
+import com.weatherxm.data.RemoteMessageType
 import com.weatherxm.data.WXMRemoteMessage
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_PLACES
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
@@ -25,7 +27,7 @@ import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class UrlRouterViewModel(
+class DeepLinkRouterViewModel(
     private val usecase: ExplorerUseCase,
     private val devicesUseCase: DeviceListUseCase,
     private val resources: Resources
@@ -36,34 +38,61 @@ class UrlRouterViewModel(
     }
 
     private val onError = MutableLiveData<String>()
-    private val onDevice = MutableLiveData<UIDevice>()
+
+    // The Boolean here is to represent `showExplorerOnBack` argument.
+    private val onDevice = MutableLiveData<Pair<UIDevice, Boolean>>()
     private val onCell = MutableLiveData<UICell>()
-    private val onRemoteMessage = MutableLiveData<WXMRemoteMessage>()
+    private val onAnnouncement = MutableLiveData<String>()
 
     fun onError(): LiveData<String> = onError
-    fun onDevice(): LiveData<UIDevice> = onDevice
+    fun onDevice(): LiveData<Pair<UIDevice, Boolean>> = onDevice
     fun onCell(): LiveData<UICell> = onCell
-    fun onRemoteMessage(): LiveData<WXMRemoteMessage> = onRemoteMessage
+    fun onAnnouncement(): LiveData<String> = onAnnouncement
 
-    fun parseUrl(intent: Intent) {
-        intent.parcelable<WXMRemoteMessage>(ARG_REMOTE_MESSAGE)?.let {
-            if (it.url.isNullOrEmpty()) {
-                onError.postValue(resources.getString(R.string.could_not_parse_url))
-            } else {
-                onRemoteMessage.postValue(it)
-            }
-        } ?: run {
-            val pathSegments = intent.data?.pathSegments ?: mutableListOf()
+    fun parseIntent(intent: Intent) {
+        val remoteMessage = intent.parcelable<WXMRemoteMessage>(ARG_REMOTE_MESSAGE)
+        if (remoteMessage != null) {
+            handleRemoteMessage(remoteMessage)
+        } else {
+            handleUrl(intent.data)
+        }
+    }
 
-            // e.g. https://exporer.weatherxm.com/stations/my-weather-station
-            if (pathSegments.size == 2 && pathSegments[0].equals(STATIONS_PATH_SEGMENT)) {
-                searchForDevice(pathSegments[1])
-            } else if (pathSegments.size == 2 && pathSegments[0].equals(CELLS_PATH_SEGMENT)) {
-                searchForCell(pathSegments[1])
-            } else {
-                Timber.w("Error parsing the URL: ${intent.data?.path}")
-                onError.postValue(resources.getString(R.string.could_not_parse_url))
-            }
+    private fun handleRemoteMessage(remoteMessage: WXMRemoteMessage) {
+        if (remoteMessage.type == RemoteMessageType.STATION) {
+            handleDeviceNotification(remoteMessage)
+        } else if (remoteMessage.type == RemoteMessageType.ANNOUNCEMENT) {
+            handleAnnouncement(remoteMessage)
+        }
+    }
+
+    private fun handleAnnouncement(remoteMessage: WXMRemoteMessage) {
+        remoteMessage.url?.let {
+            onAnnouncement.postValue(it)
+        } ?: onError.postValue(resources.getString(R.string.could_not_parse_url))
+    }
+
+    private fun handleDeviceNotification(remoteMessage: WXMRemoteMessage) {
+        viewModelScope.launch {
+            devicesUseCase.getUserDevices().getOrElse { mutableListOf() }.firstOrNull {
+                it.id == remoteMessage.deviceId
+            }?.let {
+                onDevice.postValue(Pair(it, false))
+            } ?: onError.postValue(resources.getString(R.string.error_device_not_found))
+        }
+    }
+
+    private fun handleUrl(data: Uri?) {
+        val pathSegments = data?.pathSegments ?: mutableListOf()
+
+        // e.g. https://exporer.weatherxm.com/stations/my-weather-station
+        if (pathSegments.size == 2 && pathSegments[0].equals(STATIONS_PATH_SEGMENT)) {
+            searchForDevice(pathSegments[1])
+        } else if (pathSegments.size == 2 && pathSegments[0].equals(CELLS_PATH_SEGMENT)) {
+            searchForCell(pathSegments[1])
+        } else {
+            Timber.w("Error parsing the URL: ${data?.path}")
+            onError.postValue(resources.getString(R.string.could_not_parse_url))
         }
     }
 
@@ -86,7 +115,7 @@ class UrlRouterViewModel(
             usecase.networkSearch(deviceName, exact = true, exclude = EXCLUDE_PLACES)
                 .onRight {
                     if (it.size == 1) {
-                        getDevice(it[0])
+                        getDeviceFromSearchResult(it[0])
                     } else if (it.size > 1) {
                         onError.postValue(resources.getString(R.string.more_than_one_results))
                     } else {
@@ -99,18 +128,18 @@ class UrlRouterViewModel(
         }
     }
 
-    private suspend fun getDevice(searchResult: SearchResult) {
+    private suspend fun getDeviceFromSearchResult(searchResult: SearchResult) {
         devicesUseCase.getUserDevices().getOrElse { mutableListOf() }.firstOrNull {
             it.id == searchResult.stationId
         }?.let {
-            onDevice.postValue(it)
+            onDevice.postValue(Pair(it, true))
         } ?: kotlin.run {
             usecase.getCellDevice(
                 searchResult.stationCellIndex ?: String.empty(),
                 searchResult.stationId ?: String.empty()
             ).onRight {
                 it.cellCenter = searchResult.center
-                onDevice.postValue(it)
+                onDevice.postValue(Pair(it, true))
             }.onLeft {
                 handleError(it)
             }

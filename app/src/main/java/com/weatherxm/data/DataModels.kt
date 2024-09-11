@@ -50,7 +50,8 @@ data class CountryInfo(
 @Parcelize
 data class WXMRemoteMessage(
     val type: RemoteMessageType,
-    val url: String? = null
+    val url: String? = null,
+    val deviceId: String? = null
 ) : Parcelable
 
 @Keep

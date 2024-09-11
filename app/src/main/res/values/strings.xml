@@ -561,7 +561,7 @@
     <string name="remove_favorites">Remove from favorites?</string>
     <string name="remove_favorites_desc"><![CDATA[Are you sure you want to remove <b>%s</b> from your favorites list?]]></string>
     <string name="follow_prompt">Add weather station on your favorites to see historical &amp; forecast data</string>
-    <string name="parsing_url_failed">Parsing the URL failed</string>
+    <string name="parsing_failed">Parsing failed</string>
     <string name="could_not_parse_url">Could not parse the requested URL. Invalid.</string>
     <string name="more_than_one_results">Invalid URL. Multiple results returned that could not be parsed.</string>
     <string name="share_url_no_results">Invalid URL. No results returned.</string>
@@ -576,7 +576,6 @@
     <string name="confirm_location">Confirm Location</string>
     <string name="location_confirmed">Location Confirmed!</string>
     <string name="location_confirmed_desc"><![CDATA[Your station’s location has been updated. The station should start earning rewards again when your location is verified by our systems in <b>~2–3 days</b>.]]></string>
-
 
     <!-- Cell Info -->
     <string name="cell_stations_present">%d/10 stations present</string>

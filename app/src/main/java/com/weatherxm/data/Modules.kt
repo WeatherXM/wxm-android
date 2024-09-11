@@ -197,7 +197,7 @@ import com.weatherxm.ui.rewardslist.RewardsListViewModel
 import com.weatherxm.ui.signup.SignupViewModel
 import com.weatherxm.ui.startup.StartupViewModel
 import com.weatherxm.ui.updateprompt.UpdatePromptViewModel
-import com.weatherxm.ui.urlrouteractivity.UrlRouterViewModel
+import com.weatherxm.ui.deeplinkrouteractivity.DeepLinkRouterViewModel
 import com.weatherxm.ui.widgets.selectstation.SelectStationViewModel
 import com.weatherxm.usecases.AnalyticsOptInUseCase
 import com.weatherxm.usecases.AnalyticsOptInUseCaseImpl
@@ -904,7 +904,6 @@ private val viewmodels = module {
     viewModel { params ->
         DeviceDetailsViewModel(
             device = params.get(),
-            deviceId = params.get(),
             openExplorerOnBack = params.get(),
             get(),
             get(),
@@ -993,7 +992,7 @@ private val viewmodels = module {
     viewModel { DeleteAccountSurveyViewModel(get(), get()) }
     viewModel { SignupViewModel(get(), get(), get()) }
     viewModel { UpdatePromptViewModel(get()) }
-    viewModel { UrlRouterViewModel(get(), get(), get()) }
+    viewModel { DeepLinkRouterViewModel(get(), get(), get()) }
     viewModel { SelectStationViewModel(get()) }
     viewModel { ClaimLocationViewModel(get(), get(), get()) }
     viewModel { ClaimHeliumViewModel(get(), get(), get()) }

@@ -23,7 +23,7 @@ class DeviceDetailsUseCaseImpl(
     private val deviceOTARepo: DeviceOTARepository
 ) : DeviceDetailsUseCase {
 
-    override suspend fun getUserDevice(device: UIDevice): Either<Failure, UIDevice> {
+    override suspend fun getDevice(device: UIDevice): Either<Failure, UIDevice> {
         return if (device.isUnfollowed()) {
             explorerRepository.getCellDevice(device.cellIndex, device.id).map {
                 it.toUIDevice().apply {
@@ -34,11 +34,11 @@ class DeviceDetailsUseCaseImpl(
                 }
             }
         } else {
-            getUserOwnedDevice(device.id)
+            getUserDevice(device.id)
         }
     }
 
-    override suspend fun getUserOwnedDevice(deviceId: String): Either<Failure, UIDevice> {
+    override suspend fun getUserDevice(deviceId: String): Either<Failure, UIDevice> {
         return deviceRepository.getUserDevice(deviceId).map {
             it.toUIDevice().apply {
                 createDeviceAlerts(deviceOTARepo.userShouldNotifiedOfOTA(id, assignedFirmware))
