@@ -35,7 +35,7 @@
                 android:layout_marginTop="@dimen/margin_small"
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                android:textColor="@color/crypto"
+                android:textColor="@color/darkGrey"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/icon"
                 app:layout_constraintTop_toTopOf="parent"
