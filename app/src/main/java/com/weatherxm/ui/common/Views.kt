@@ -52,6 +52,7 @@ import coil.request.ImageRequest
 import com.airbnb.lottie.LottieAnimationView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
+import com.google.android.material.shape.CornerFamily
 import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
@@ -408,6 +409,23 @@ fun Fragment.hideKeyboard() {
 
 fun Activity.hideKeyboard() {
     hideKeyboard(currentFocus ?: View(this))
+}
+
+fun MaterialCardView.setCardRadius(
+    topLeftCorner: Float,
+    topRightCorner: Float,
+    bottomLeftCorner: Float,
+    bottomRightCorner: Float
+) {
+    setShapeAppearanceModel(
+        shapeAppearanceModel
+            .toBuilder()
+            .setTopLeftCorner(CornerFamily.ROUNDED, topLeftCorner)
+            .setTopRightCorner(CornerFamily.ROUNDED, topRightCorner)
+            .setBottomRightCorner(CornerFamily.ROUNDED, bottomLeftCorner)
+            .setBottomLeftCorner(CornerFamily.ROUNDED, bottomRightCorner)
+            .build()
+    )
 }
 
 fun MaterialCardView.setCardStroke(@ColorRes colorResId: Int, width: Int) {

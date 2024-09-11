@@ -8,11 +8,8 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Resource
-import com.weatherxm.data.SingleLiveEvent
-import com.weatherxm.data.Survey
 import com.weatherxm.data.User
 import com.weatherxm.ui.common.UIWalletRewards
-import com.weatherxm.usecases.RemoteBannersUseCase
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.launch
@@ -20,19 +17,16 @@ import timber.log.Timber
 
 class ProfileViewModel(
     private val useCase: UserUseCase,
-    private val remoteBannersUseCase: RemoteBannersUseCase,
     private val analytics: AnalyticsWrapper
 ) : ViewModel() {
     private var currentWalletRewards: UIWalletRewards? = null
 
     private val onUser = MutableLiveData<Resource<User>>()
-    private val onSurvey = SingleLiveEvent<Survey>()
     private val onWalletRewards = MutableLiveData<Resource<UIWalletRewards>>().apply {
         value = Resource.loading()
     }
 
     fun onUser(): LiveData<Resource<User>> = onUser
-    fun onSurvey(): LiveData<Survey> = onSurvey
     fun onWalletRewards(): LiveData<Resource<UIWalletRewards>> = onWalletRewards
 
     fun fetchUser(forceRefresh: Boolean = false) {
@@ -50,18 +44,6 @@ class ProfileViewModel(
                     )
                 }
         }
-    }
-
-    fun getSurvey() {
-        remoteBannersUseCase.getSurvey().apply {
-            if (this != null) {
-                onSurvey.postValue(this)
-            }
-        }
-    }
-
-    fun dismissSurvey(surveyId: String) {
-        remoteBannersUseCase.dismissSurvey(surveyId)
     }
 
     fun onClaimedResult(amountClaimed: Double) {

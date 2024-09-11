@@ -969,8 +969,8 @@ private val viewmodels = module {
     viewModel { DeviceEditLocationViewModel(get(), get(), get(), get()) }
     viewModel { DevicesViewModel(get(), get(), get(), get()) }
     viewModel { ExplorerViewModel(get(), get(), get()) }
-    viewModel { HomeViewModel(get(), get()) }
-    viewModel { ProfileViewModel(get(), get(), get()) }
+    viewModel { HomeViewModel(get(), get(), get()) }
+    viewModel { ProfileViewModel(get(), get()) }
     viewModel { LoginViewModel(get(), get(), get()) }
     viewModel { NetworkStatsViewModel(get()) }
     viewModel { PasswordPromptViewModel(get(), get(), get()) }
