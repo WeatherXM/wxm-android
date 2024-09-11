@@ -90,12 +90,12 @@ import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
 import com.weatherxm.data.datasource.NotificationsDataSource
 import com.weatherxm.data.datasource.NotificationsDataSourceImpl
+import com.weatherxm.data.datasource.RemoteBannersDataSource
+import com.weatherxm.data.datasource.RemoteBannersDataSourceImpl
 import com.weatherxm.data.datasource.RewardsDataSource
 import com.weatherxm.data.datasource.RewardsDataSourceImpl
 import com.weatherxm.data.datasource.StatsDataSource
 import com.weatherxm.data.datasource.StatsDataSourceImpl
-import com.weatherxm.data.datasource.SurveyDataSource
-import com.weatherxm.data.datasource.SurveyDataSourceImpl
 import com.weatherxm.data.datasource.UserPreferenceDataSource
 import com.weatherxm.data.datasource.UserPreferenceDataSourceImpl
 import com.weatherxm.data.datasource.WidgetDataSource
@@ -129,12 +129,12 @@ import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.data.repository.LocationRepositoryImpl
 import com.weatherxm.data.repository.NotificationsRepository
 import com.weatherxm.data.repository.NotificationsRepositoryImpl
+import com.weatherxm.data.repository.RemoteBannersRepository
+import com.weatherxm.data.repository.RemoteBannersRepositoryImpl
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.data.repository.StatsRepository
 import com.weatherxm.data.repository.StatsRepositoryImpl
-import com.weatherxm.data.repository.SurveyRepository
-import com.weatherxm.data.repository.SurveyRepositoryImpl
 import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.data.repository.UserPreferencesRepositoryImpl
 import com.weatherxm.data.repository.UserRepository
@@ -237,6 +237,8 @@ import com.weatherxm.usecases.PasswordPromptUseCase
 import com.weatherxm.usecases.PasswordPromptUseCaseImpl
 import com.weatherxm.usecases.PreferencesUseCase
 import com.weatherxm.usecases.PreferencesUseCaseImpl
+import com.weatherxm.usecases.RemoteBannersUseCase
+import com.weatherxm.usecases.RemoteBannersUseCaseImpl
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.usecases.RewardsUseCaseImpl
 import com.weatherxm.usecases.StartupUseCase
@@ -245,8 +247,6 @@ import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.usecases.StationSettingsUseCaseImpl
 import com.weatherxm.usecases.StatsUseCase
 import com.weatherxm.usecases.StatsUseCaseImpl
-import com.weatherxm.usecases.SurveyUseCase
-import com.weatherxm.usecases.SurveyUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.usecases.UserUseCaseImpl
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
@@ -428,8 +428,8 @@ private val datasources = module {
     single<NotificationsDataSource> {
         NotificationsDataSourceImpl(get(), get())
     }
-    single<SurveyDataSource> {
-        SurveyDataSourceImpl(get(), get())
+    single<RemoteBannersDataSource> {
+        RemoteBannersDataSourceImpl(get(), get())
     }
 }
 
@@ -494,8 +494,8 @@ private val repositories = module {
     single<NotificationsRepository> {
         NotificationsRepositoryImpl(get(), get())
     }
-    single<SurveyRepository> {
-        SurveyRepositoryImpl(get())
+    single<RemoteBannersRepository> {
+        RemoteBannersRepositoryImpl(get())
     }
 }
 
@@ -578,8 +578,8 @@ private val usecases = module {
     single<EditLocationUseCase> {
         EditLocationUseCaseImpl(get(), get())
     }
-    single<SurveyUseCase> {
-        SurveyUseCaseImpl(get())
+    single<RemoteBannersUseCase> {
+        RemoteBannersUseCaseImpl(get())
     }
 }
 

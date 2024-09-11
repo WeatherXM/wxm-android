@@ -12,7 +12,7 @@ import com.weatherxm.data.SingleLiveEvent
 import com.weatherxm.data.Survey
 import com.weatherxm.data.User
 import com.weatherxm.ui.common.UIWalletRewards
-import com.weatherxm.usecases.SurveyUseCase
+import com.weatherxm.usecases.RemoteBannersUseCase
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.launch
@@ -20,7 +20,7 @@ import timber.log.Timber
 
 class ProfileViewModel(
     private val useCase: UserUseCase,
-    private val surveyUseCase: SurveyUseCase,
+    private val remoteBannersUseCase: RemoteBannersUseCase,
     private val analytics: AnalyticsWrapper
 ) : ViewModel() {
     private var currentWalletRewards: UIWalletRewards? = null
@@ -53,7 +53,7 @@ class ProfileViewModel(
     }
 
     fun getSurvey() {
-        surveyUseCase.getSurvey().apply {
+        remoteBannersUseCase.getSurvey().apply {
             if (this != null) {
                 onSurvey.postValue(this)
             }
@@ -61,7 +61,7 @@ class ProfileViewModel(
     }
 
     fun dismissSurvey(surveyId: String) {
-        surveyUseCase.dismissSurvey(surveyId)
+        remoteBannersUseCase.dismissSurvey(surveyId)
     }
 
     fun onClaimedResult(amountClaimed: Double) {

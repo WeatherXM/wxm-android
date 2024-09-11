@@ -45,6 +45,7 @@ class CacheService(
         const val KEY_USER_ID = "user_id"
         const val KEY_INSTALLATION_ID = "installation_id"
         const val KEY_DISMISSED_SURVEY_ID = "dismissed_survey_id"
+        const val KEY_DISMISSED_INFO_BANNER_ID = "dismissed_info_banner_id"
 
         // Default in-memory cache expiration time 15 minutes
         val DEFAULT_CACHE_EXPIRATION = TimeUnit.MINUTES.toMillis(15L)
@@ -314,6 +315,14 @@ class CacheService(
 
     fun setLastDismissedSurveyId(surveyId: String) {
         preferences.edit().putString(KEY_DISMISSED_SURVEY_ID, surveyId).apply()
+    }
+
+    fun getLastDismissedInfoBannerId(): String? {
+        return preferences.getString(KEY_DISMISSED_INFO_BANNER_ID, null)
+    }
+
+    fun setLastDismissedInfoBannerId(infoBannerId: String) {
+        preferences.edit().putString(KEY_DISMISSED_INFO_BANNER_ID, infoBannerId).apply()
     }
 
     fun getCountriesInfo(): List<CountryInfo> {

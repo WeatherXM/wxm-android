@@ -114,11 +114,17 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
                 </com.google.android.material.card.MaterialCardView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.MaterialToolbar>
+
+        <com.weatherxm.ui.components.InfoBannerCardView
+            android:id="@+id/infoBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Content -->
