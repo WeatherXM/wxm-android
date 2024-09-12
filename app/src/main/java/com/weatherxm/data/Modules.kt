@@ -504,7 +504,7 @@ private val usecases = module {
         StartupUseCaseImpl(androidContext(), get(), get(), get())
     }
     single<ExplorerUseCase> {
-        ExplorerUseCaseImpl(get(), get(), get(), get(), get(), get(), get())
+        ExplorerUseCaseImpl(get(), get(), get(), get(), get())
     }
     single<DeviceDetailsUseCase> {
         DeviceDetailsUseCaseImpl(get(), get(), get(), get(), get())

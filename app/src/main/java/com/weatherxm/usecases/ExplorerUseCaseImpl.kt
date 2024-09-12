@@ -3,14 +3,11 @@ package com.weatherxm.usecases
 import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.getOrElse
-import com.google.gson.Gson
 import com.mapbox.geojson.Feature
 import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
-import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
-import com.weatherxm.R
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
@@ -22,11 +19,9 @@ import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.explorer.ExplorerData
-import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
 import com.weatherxm.ui.explorer.SearchResult
 import com.weatherxm.ui.explorer.UICell
-import com.weatherxm.util.Resources
 
 @Suppress("LongParameterList")
 class ExplorerUseCaseImpl(
@@ -34,24 +29,10 @@ class ExplorerUseCaseImpl(
     private val addressRepository: AddressRepository,
     private val followRepository: FollowRepository,
     private val deviceRepository: DeviceRepository,
-    private val gson: Gson,
-    private val locationRepository: LocationRepository,
-    private val resources: Resources
+    private val locationRepository: LocationRepository
 ) : ExplorerUseCase {
     // Points and heatmap to paint
     private var heatmap: GeoJsonSource = geoJsonSource(HEATMAP_SOURCE_ID)
-
-    override fun polygonPointsToLatLng(pointsOfPolygon: List<Location>): List<MutableList<Point>> {
-        val latLongs = listOf(pointsOfPolygon.map { coordinates ->
-            Point.fromLngLat(coordinates.lon, coordinates.lat)
-        }.toMutableList())
-
-        // Custom/Temporary fix for: https://github.com/mapbox/mapbox-maps-android/issues/733
-        latLongs.map { coordinates ->
-            coordinates.add(coordinates[0])
-        }
-        return latLongs
-    }
 
     override suspend fun getCellInfo(index: String): Either<Failure, UICell> {
         return explorerRepository.getCells().flatMap {
@@ -76,16 +57,7 @@ class ExplorerUseCaseImpl(
                 }
             ))
 
-            val polygonPoints = it.map { publicHex ->
-                PolygonAnnotationOptions()
-                    .withFillColor(resources.getColor(R.color.hex_fill_color))
-                    .withFillOpacity(FILL_OPACITY_HEXAGONS)
-                    .withFillOutlineColor(resources.getColor(R.color.white))
-                    .withData(gson.toJsonTree(UICell(publicHex.index, publicHex.center)))
-                    .withPoints(polygonPointsToLatLng(publicHex.polygon))
-            }
-
-            ExplorerData(geoJsonSource, polygonPoints)
+            ExplorerData(geoJsonSource, it)
         }
     }
 

@@ -29,15 +29,16 @@ import com.weatherxm.data.Status
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.hideKeyboard
-import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.invisible
-import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.common.onTextChanged
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseMapFragment
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.HEATMAP_SOURCE_ID
 import com.weatherxm.ui.explorer.search.NetworkSearchResultsListAdapter
 import com.weatherxm.ui.explorer.search.NetworkSearchViewModel
 import com.weatherxm.ui.networkstats.NetworkStatsActivity
+import com.weatherxm.util.MapboxUtils
 import com.weatherxm.util.Validator
 import dev.chrisbanes.insetter.applyInsetter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -88,7 +89,7 @@ class ExplorerMapFragment : BaseMapFragment() {
         })
 
         polygonManager.addClickListener {
-            model.onPolygonClick(it)
+            MapboxUtils.getCustomData(it)?.let { cell -> navigator.showCellInfo(context, cell) }
             true
         }
 
@@ -134,8 +135,16 @@ class ExplorerMapFragment : BaseMapFragment() {
             onSearchResults(it)
         }
 
-        model.explorerState().observe(this) {
-            onExplorerState(map, it)
+        model.onStatus().observe(this) {
+            onStatus(it.status)
+        }
+
+        model.onExplorerData().observe(this) {
+            onExplorerData(map, it)
+        }
+
+        model.onNewPolygons().observe(this) {
+            onPolygonPointsUpdated(it)
         }
 
         // Set camera to the last saved location the user was at
@@ -297,26 +306,10 @@ class ExplorerMapFragment : BaseMapFragment() {
         }
     }
 
-    private fun onExplorerState(map: MapboxMap, resource: Resource<ExplorerData>) {
-        Timber.d("Data updated: ${resource.status}")
-        when (resource.status) {
+    private fun onStatus(status: Status) {
+        Timber.d("Data updated: $status")
+        when (status) {
             Status.SUCCESS -> {
-                if (resource.data?.geoJsonSource == null) {
-                    onPolygonPointsUpdated(resource.data?.polygonPoints)
-                    binding.progress.invisible()
-                    return
-                }
-
-                val mapStyle = map.style
-                if (mapStyle?.styleSourceExists(HEATMAP_SOURCE_ID) == true) {
-                    resource.data.geoJsonSource.data?.let {
-                        (mapStyle.getSource(HEATMAP_SOURCE_ID) as GeoJsonSource).data(it)
-                    }
-                } else {
-                    mapStyle?.addSource(resource.data.geoJsonSource)
-                    mapStyle?.addLayerAbove(model.getHeatMapLayer(), "waterway-label")
-                }
-                onPolygonPointsUpdated(resource.data.polygonPoints)
                 binding.progress.invisible()
             }
             Status.ERROR -> {
@@ -326,6 +319,19 @@ class ExplorerMapFragment : BaseMapFragment() {
                 binding.progress.visible(true)
             }
         }
+    }
+
+    private fun onExplorerData(map: MapboxMap, data: ExplorerData) {
+        val mapStyle = map.style
+        if (mapStyle?.styleSourceExists(HEATMAP_SOURCE_ID) == true) {
+            data.geoJsonSource.data?.let {
+                (mapStyle.getSource(HEATMAP_SOURCE_ID) as GeoJsonSource).data(it)
+            }
+        } else {
+            mapStyle?.addSource(data.geoJsonSource)
+            mapStyle?.addLayerAbove(model.getHeatMapLayer(), "waterway-label")
+        }
+        onPolygonPointsUpdated(data.polygonsToDraw)
     }
 
     override fun onResume() {
@@ -358,15 +364,13 @@ class ExplorerMapFragment : BaseMapFragment() {
         )
     }
 
-    private fun onPolygonPointsUpdated(polygonPoints: List<PolygonAnnotationOptions>?) {
-        if (polygonPoints.isNullOrEmpty()) {
-            Timber.d("No devices found. Skipping map update.")
+    private fun onPolygonPointsUpdated(polygonsToDraw: List<PolygonAnnotationOptions>?) {
+        if (polygonsToDraw.isNullOrEmpty()) {
+            Timber.d("No new polygons found. Skipping map update.")
             return
         }
 
-        // First clear the map and the relevant attributes
-        polygonManager.deleteAll()
-        polygonManager.create(polygonPoints)
+        polygonManager.create(polygonsToDraw)
     }
 
     override fun getMapStyle(): String {

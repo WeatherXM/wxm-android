@@ -1,5 +1,6 @@
 package com.weatherxm.util
 
+import com.google.gson.Gson
 import com.mapbox.api.staticmap.v1.MapboxStaticMap
 import com.mapbox.api.staticmap.v1.StaticMapCriteria
 import com.mapbox.api.staticmap.v1.models.StaticMarkerAnnotation
@@ -7,10 +8,12 @@ import com.mapbox.api.staticmap.v1.models.StaticPolylineAnnotation
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.utils.PolylineUtils
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
+import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.R
 import com.weatherxm.data.Hex
 import com.weatherxm.data.Location
+import com.weatherxm.data.PublicHex
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.ui.explorer.UICellJsonAdapter
@@ -21,6 +24,7 @@ import org.koin.core.component.inject
 object MapboxUtils : KoinComponent {
     private val adapter: UICellJsonAdapter by inject()
     private val resources: Resources by inject()
+    private val gson: Gson by inject()
 
     fun getCustomData(polygonAnnotation: PolygonAnnotation): UICell? {
         val data = polygonAnnotation.getJsonObjectCopy().getAsJsonObject("custom_data")
@@ -82,5 +86,28 @@ object MapboxUtils : KoinComponent {
                 build()
             }.url()
         }
+    }
+
+    fun List<PublicHex>.toPolygonAnnotationOptions(): List<PolygonAnnotationOptions> {
+        return map {
+            PolygonAnnotationOptions()
+                .withFillColor(resources.getColor(R.color.hex_fill_color))
+                .withFillOpacity(FILL_OPACITY_HEXAGONS)
+                .withFillOutlineColor(resources.getColor(R.color.white))
+                .withData(gson.toJsonTree(UICell(it.index, it.center)))
+                .withPoints(polygonPointsToLatLng(it.polygon))
+        }
+    }
+
+    fun polygonPointsToLatLng(pointsOfPolygon: List<Location>): List<MutableList<Point>> {
+        val latLongs = listOf(pointsOfPolygon.map { coordinates ->
+            Point.fromLngLat(coordinates.lon, coordinates.lat)
+        }.toMutableList())
+
+        // Custom/Temporary fix for: https://github.com/mapbox/mapbox-maps-android/issues/733
+        latLongs.map { coordinates ->
+            coordinates.add(coordinates[0])
+        }
+        return latLongs
     }
 }

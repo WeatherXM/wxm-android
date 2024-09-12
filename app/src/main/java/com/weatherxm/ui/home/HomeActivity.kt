@@ -19,7 +19,6 @@ import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.BaseMapFragment
-import com.weatherxm.ui.explorer.ExplorerData
 import com.weatherxm.ui.explorer.ExplorerViewModel
 import com.weatherxm.ui.home.devices.DevicesViewModel
 import dev.chrisbanes.insetter.applyInsetter
@@ -53,11 +52,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         // Setup navigation view
         binding.navView.setupWithNavController(navController)
 
-        explorerModel.onCellSelected().observe(this) {
-            navigator.showCellInfo(this, it)
-        }
-
-        explorerModel.explorerState().observe(this) { resource ->
+        explorerModel.onStatus().observe(this) { resource ->
             onExplorerState(resource)
         }
 
@@ -173,7 +168,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
         }
     }
 
-    private fun onExplorerState(resource: Resource<ExplorerData>) {
+    private fun onExplorerState(resource: Resource<Unit>) {
         Timber.d("Status updated: ${resource.status}")
         when (resource.status) {
             Status.SUCCESS -> {

@@ -9,18 +9,19 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.style.expressions.dsl.generated.interpolate
 import com.mapbox.maps.extension.style.layers.generated.HeatmapLayer
 import com.mapbox.maps.extension.style.layers.generated.heatmapLayer
-import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
+import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.Location
+import com.weatherxm.data.PublicHex
 import com.weatherxm.data.Resource
 import com.weatherxm.data.SingleLiveEvent
 import com.weatherxm.ui.components.BaseMapFragment.Companion.DEFAULT_ZOOM_LEVEL
 import com.weatherxm.ui.components.BaseMapFragment.Companion.USER_LOCATION_ZOOM_LEVEL
 import com.weatherxm.usecases.ExplorerUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.LocationHelper
-import com.weatherxm.util.MapboxUtils
+import com.weatherxm.util.MapboxUtils.toPolygonAnnotationOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -39,19 +40,14 @@ class ExplorerViewModel(
         const val HEATMAP_WEIGHT_KEY = ExplorerUseCase.DEVICE_COUNT_KEY
     }
 
-    // All public devices shown on map
-    private val state = MutableLiveData<Resource<ExplorerData>>().apply {
-        value = Resource.loading()
-    }
+    // Explorer Data
+    private val onExplorerData = MutableLiveData<ExplorerData>()
 
-    /*
-     * The cell info.
-     *
-     * We use SingleLiveEvent because MutableLiveData persists and re-posts the value
-     * to the observers on configuration change (like a theme change) and the effects of the
-     * observers happen again (like re-opening a closed BottomSheetDialog).
-     */
-    private val onCellSelected = SingleLiveEvent<UICell>()
+    // Success/Loading/Error Status
+    private val onStatus = MutableLiveData<Resource<Unit>>()
+
+    // New Polygons to be drawn
+    private val onNewPolygons = SingleLiveEvent<List<PolygonAnnotationOptions>>()
 
     /**
      * Needed for passing info to the fragment to handle when a prefilled location is used
@@ -181,12 +177,16 @@ class ExplorerViewModel(
 
     private var useUserLocation: Boolean = true
 
+    // Save currently shown hexes by their indexes in order to send to the UI only the added/removed
+    private var hexesIndexes = listOf<String>()
+
     fun onMyLocationClicked() = onMyLocationClicked
     fun onNavigateToLocation() = onNavigateToLocation
     fun showMapOverlayViews() = showMapOverlayViews
     fun onSearchOpenStatus() = onSearchOpenStatus
-    fun explorerState(): LiveData<Resource<ExplorerData>> = state
-    fun onCellSelected(): LiveData<UICell> = onCellSelected
+    fun onStatus(): LiveData<Resource<Unit>> = onStatus
+    fun onNewPolygons(): LiveData<List<PolygonAnnotationOptions>> = onNewPolygons
+    fun onExplorerData(): LiveData<ExplorerData> = onExplorerData
 
     fun navigateToLocation(location: Location, isUserLocation: Boolean = false) {
         Timber.d("Got starting location [${location.lat}, ${location.lon}")
@@ -211,16 +211,57 @@ class ExplorerViewModel(
     }
 
     fun fetch() {
-        state.postValue(Resource.loading())
+        onStatus.postValue(Resource.loading())
 
         viewModelScope.launch(Dispatchers.IO) {
             explorerUseCase.getCells()
-                .map {
-                    state.postValue(Resource.success(it))
+                .map { response ->
+                    if (hexesIndexes.isEmpty()) {
+                        hexesIndexes = response.publicHexes.map {
+                            it.index
+                        }
+                        /**
+                         * The explorer map is empty so send all the hexes to be drawn
+                         */
+                        response.polygonsToDraw = response.publicHexes.toPolygonAnnotationOptions()
+                        onExplorerData.postValue(response)
+                    } else {
+                        val newHexes = mutableListOf<PublicHex>()
+
+                        val responseHexesIndexes = response.publicHexes.map {
+                            /**
+                             * Add only the hexes in the response that are new
+                             */
+                            if (!hexesIndexes.contains(it.index)) {
+                                newHexes.add(it)
+                            }
+                            it.index
+                        }
+
+                        /**
+                         * Save the updated hexes indexes to compare with the next response
+                         */
+                        hexesIndexes = responseHexesIndexes
+
+                        /**
+                         * Save all the polygons in ExplorerData as it's used to pre-draw the map
+                         * (before loading of new data takes place) when a user visits another
+                         * screen and comes back in the explorer
+                         */
+                        onExplorerData.value?.polygonsToDraw =
+                            response.publicHexes.toPolygonAnnotationOptions()
+
+                        /**
+                         * Send only the new polygons in the response
+                         * in order not to re-draw the whole explorer map but only the new hexes
+                         */
+                        onNewPolygons.postValue(newHexes.toPolygonAnnotationOptions())
+                    }
+                    onStatus.postValue(Resource.success(Unit))
                 }
                 .mapLeft {
                     analytics.trackEventFailure(it.code)
-                    state.postValue(
+                    onStatus.postValue(
                         Resource.error(it.getDefaultMessage(R.string.error_reach_out_short))
                     )
                 }
@@ -234,15 +275,6 @@ class ExplorerViewModel(
 
     fun onSearchOpenStatus(isOpen: Boolean) {
         onSearchOpenStatus.postValue(isOpen)
-    }
-
-    /**
-     * Handler for polygon clicks. Show devices list for that hex.
-     */
-    fun onPolygonClick(polygon: PolygonAnnotation) {
-        MapboxUtils.getCustomData(polygon)?.let {
-            onCellSelected.postValue(it)
-        }
     }
 
     fun setCurrentCamera(zoom: Double, center: Point) {
