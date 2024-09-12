@@ -57,7 +57,7 @@ class DeviceRewardsAdapter(
 
             binding.chartRangeSelector.listener {
                 if (!ignoreRangeChipListener) {
-                    binding.detailsStatus.animation(R.raw.anim_loading).visible(true)
+                    binding.detailsStatus.clear().animation(R.raw.anim_loading).visible(true)
                     binding.detailsContainer.visible(false)
                     onRangeChipClicked.invoke(absoluteAdapterPosition, it, item.id)
                 }
@@ -77,7 +77,7 @@ class DeviceRewardsAdapter(
 
             item.details?.let {
                 if (it.fetchError) {
-                    binding.detailsStatus.animation(R.raw.anim_error).visible(true)
+                    onError(it.errorMessage, item.id)
                 } else {
                     binding.earnedBy.text = formatTokens(it.total)
                     binding.boostsRecycler.adapter = adapter
@@ -132,6 +132,22 @@ class DeviceRewardsAdapter(
             }
 
             onExpandToggle.invoke(absoluteAdapterPosition, willBeExpanded, item.id)
+        }
+
+        private fun onError(errorMessage: String?, deviceId: String) {
+            binding.detailsStatus
+                .animation(R.raw.anim_error)
+                .title(itemView.context.getString(R.string.error_generic_message))
+                .subtitle(errorMessage)
+                .action(itemView.context.getString(R.string.action_retry))
+                .listener {
+                    onRangeChipClicked.invoke(
+                        absoluteAdapterPosition,
+                        binding.chartRangeSelector.checkedChipId(),
+                        deviceId
+                    )
+                }
+                .visible(true)
         }
     }
 }

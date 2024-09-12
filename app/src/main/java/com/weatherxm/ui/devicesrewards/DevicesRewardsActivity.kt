@@ -57,16 +57,13 @@ class DevicesRewardsActivity : BaseActivity() {
                     binding.totalEarnedChart.visible(true)
                 }
                 Status.ERROR -> {
-                    binding.totalEarnedRangeSelector.enable()
-                    binding.totalEarnedChart.invisible()
-                    binding.totalEarned.invisible()
-                    binding.totalEarnedStatus.animation(R.raw.anim_error).visible(true)
+                    onError(it.message)
                 }
                 Status.LOADING -> {
                     binding.totalEarnedRangeSelector.disable()
                     binding.totalEarnedChart.invisible()
                     binding.totalEarned.invisible()
-                    binding.totalEarnedStatus.animation(R.raw.anim_loading).visible(true)
+                    binding.totalEarnedStatus.clear().animation(R.raw.anim_loading).visible(true)
                 }
             }
         }
@@ -107,5 +104,22 @@ class DevicesRewardsActivity : BaseActivity() {
         } else {
             binding.noStationsContainer.visible(true)
         }
+    }
+
+    private fun onError(message: String?) {
+        binding.totalEarnedRangeSelector.enable()
+        binding.totalEarnedChart.invisible()
+        binding.totalEarned.invisible()
+        binding.totalEarnedStatus
+            .animation(R.raw.anim_error)
+            .title(getString(R.string.error_generic_message))
+            .subtitle(message)
+            .action(getString(R.string.action_retry))
+            .listener {
+                model.getDevicesRewardsByRangeTotals(
+                    binding.totalEarnedRangeSelector.checkedChipId()
+                )
+            }
+            .visible(true)
     }
 }

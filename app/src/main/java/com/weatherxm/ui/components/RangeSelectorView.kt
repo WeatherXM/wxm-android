@@ -34,6 +34,8 @@ class RangeSelectorView : ConstraintLayout {
     fun checkYear() = binding.chartRangeSelector.check(R.id.year)
     fun clearCheck() = binding.chartRangeSelector.clearCheck()
 
+    fun checkedChipId() = binding.chartRangeSelector.checkedChipId
+
     fun listener(listener: (Int) -> Unit) {
         binding.chartRangeSelector.setOnCheckedStateChangeListener { _, checkedIds ->
             listener.invoke(checkedIds[0])
