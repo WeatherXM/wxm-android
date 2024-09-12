@@ -20,8 +20,7 @@ import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_URL
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
-import com.weatherxm.ui.urlrouteractivity.UrlRouterActivity
+import com.weatherxm.ui.deeplinkrouteractivity.DeepLinkRouterActivity
 import com.weatherxm.util.hasPermission
 import timber.log.Timber
 import kotlin.random.Random
@@ -75,7 +74,9 @@ class MessagingService : FirebaseMessagingService() {
         }
 
         val notification = NotificationCompat.Builder(context, type.id).apply {
-            setContentIntent(createPendingIntent(context, remoteMessage, type))
+            createPendingIntent(context, remoteMessage, type)?.let {
+                setContentIntent(it)
+            }
             setSmallIcon(R.drawable.ic_logo)
             setContentTitle(remoteMessage.notification?.title)
             setContentText(remoteMessage.notification?.body)
@@ -99,21 +100,23 @@ class MessagingService : FirebaseMessagingService() {
         remoteMessage: RemoteMessage,
         type: RemoteMessageType
     ): PendingIntent? {
-        val intent = if (type == RemoteMessageType.STATION) {
-            Intent(context, DeviceDetailsActivity::class.java).apply {
-                putExtra(
-                    ARG_DEVICE_ID,
-                    remoteMessage.data.getOrDefault(ARG_DEVICE_ID, String.empty())
+        val intent = Intent(context, DeepLinkRouterActivity::class.java)
+        val wxmRemoteMessage = when (type) {
+            RemoteMessageType.STATION -> {
+                WXMRemoteMessage(
+                    type, deviceId = remoteMessage.data.getOrDefault(ARG_DEVICE_ID, String.empty())
                 )
             }
-        } else {
-            Intent(context, UrlRouterActivity::class.java).apply {
-                putExtra(
-                    ARG_REMOTE_MESSAGE,
-                    WXMRemoteMessage(type, remoteMessage.data.getOrDefault(ARG_URL, String.empty()))
+            RemoteMessageType.ANNOUNCEMENT -> {
+                WXMRemoteMessage(
+                    type, url = remoteMessage.data.getOrDefault(ARG_URL, String.empty())
                 )
+            }
+            else -> {
+                return null
             }
         }
+        intent.putExtra(ARG_REMOTE_MESSAGE, wxmRemoteMessage)
 
         /**
          * In order to have multiple distinct intents we need to use unique requestCodes:

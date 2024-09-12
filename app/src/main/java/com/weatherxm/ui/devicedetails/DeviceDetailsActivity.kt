@@ -86,7 +86,7 @@ class DeviceDetailsActivity : BaseActivity() {
 
         val dialogOverlay = MaterialAlertDialogBuilder(this).create()
 
-        if (model.device.isEmpty() && model.deviceId.isEmpty()) {
+        if (model.device.isEmpty()) {
             Timber.d("Could not start DeviceDetailsActivity. Device and DeviceID are null.")
             toast(R.string.error_generic_message)
             finish()

@@ -29,7 +29,6 @@ import java.util.concurrent.TimeUnit
 @Suppress("LongParameterList")
 class DeviceDetailsViewModel(
     var device: UIDevice = UIDevice.empty(),
-    var deviceId: String = String.empty(),
     var openExplorerOnBack: Boolean,
     private val deviceDetailsUseCase: DeviceDetailsUseCase,
     private val authUseCase: AuthUseCase,
@@ -61,18 +60,10 @@ class DeviceDetailsViewModel(
     fun isLoggedIn() = isLoggedIn
 
     suspend fun deviceAutoRefresh() = refreshHandler.flow().map {
-        if (!device.isEmpty()) {
-            deviceDetailsUseCase.getUserDevice(device).onRight {
-                onDeviceAutoRefresh(it)
-            }.onLeft {
-                analytics.trackEventFailure(it.code)
-            }
-        } else {
-            deviceDetailsUseCase.getUserOwnedDevice(deviceId).onRight {
-                onDeviceAutoRefresh(it)
-            }.onLeft {
-                analytics.trackEventFailure(it.code)
-            }
+        deviceDetailsUseCase.getDevice(device).onRight {
+            onDeviceAutoRefresh(it)
+        }.onLeft {
+            analytics.trackEventFailure(it.code)
         }
     }
 
