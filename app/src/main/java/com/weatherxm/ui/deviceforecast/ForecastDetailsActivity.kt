@@ -173,10 +173,18 @@ class ForecastDetailsActivity : BaseActivity() {
         }
     }
 
+    @Suppress("MagicNumber")
     private fun scrollToChart(chart: LineChartView) {
         val (chartX, chartY) = chart.screenLocation()
         val currentY = binding.mainContainer.scrollY
-        val finalY = chartY - binding.appBar.height - binding.root.paddingTop + currentY
+
+        /**
+         * It didn't seem to scroll properly at the top of the chart's card,
+         * as the title and the legends were cropped. So we subtract the custom value `110` here
+         * at the end of the equation in order to fix this issue
+         * and scroll properly to the top of the card containing the chart
+         */
+        val finalY = chartY - binding.appBar.height - binding.root.paddingTop + currentY - 110
         binding.mainContainer.smoothScrollTo(chartX, finalY, SCROLL_DURATION_MS)
     }
 
