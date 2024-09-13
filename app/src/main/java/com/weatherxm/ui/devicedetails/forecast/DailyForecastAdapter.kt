@@ -5,15 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.databinding.ListItemForecastBinding
 import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setWeatherAnimation
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndMonthDay
+import com.weatherxm.util.NumberUtils.roundToDecimals
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getWindDirectionDrawable
-import com.weatherxm.util.NumberUtils.roundToDecimals
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -26,6 +28,7 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
     private var maxTemperature: Float = Float.MIN_VALUE
 
     val resources: Resources by inject()
+    val analytics: AnalyticsWrapper by inject()
 
     override fun submitList(list: List<UIForecastDay>?) {
         /*
@@ -72,6 +75,10 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
 
         fun bind(item: UIForecastDay) {
             binding.root.setOnClickListener {
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.FORECAST_DAY.paramValue,
+                    index = absoluteAdapterPosition.toLong()
+                )
                 onClickListener(item)
             }
 

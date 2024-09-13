@@ -38,14 +38,14 @@
     <color name="status_bar_color">#80003b77</color>
 
     <!-- History Chart -->
-    <color name="chart_secondary_line">@color/dark_darkest_blue</color>
+    <color name="chart_primary_line">@color/dark_chart_primary</color>
+    <color name="chart_secondary_line">@color/dark_chart_secondary</color>
 
     <!-- Network Stats -->
     <color name="network_stats_slider">@color/network_stats_slider_dark</color>
     <color name="network_stats_button">@color/dark_primary</color>
 
     <!-- Forecast -->
-    <color name="daily_temps_divider">@color/light_background</color>
     <color name="daily_selected_tile">@color/dark_top</color>
     <color name="daily_unselected_tile">@color/layer1</color>
 </resources>
