@@ -566,8 +566,7 @@ data class DeviceTotalRewardsDetails(
     val baseChartData: LineChartData,
     val betaChartData: LineChartData,
     val otherChartData: LineChartData,
-    val fetchError: Boolean,
-    val errorMessage: String? = null
+    val fetchError: Boolean
 ) : Parcelable
 
 @Keep

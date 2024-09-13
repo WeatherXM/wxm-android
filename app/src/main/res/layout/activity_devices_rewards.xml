@@ -160,6 +160,16 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/totalEarnedRangeSelector" />
 
+                    <com.weatherxm.ui.components.RetryCardView
+                        android:id="@+id/retryCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small_to_normal"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/totalEarnedRangeSelector"
+                        tools:visibility="visible" />
+
                     <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/totalEarnedChart"
                         android:layout_width="match_parent"

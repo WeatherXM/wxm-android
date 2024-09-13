@@ -63,8 +63,7 @@ class DevicesRewardsViewModel(
                     LineChartData.empty(),
                     LineChartData.empty(),
                     LineChartData.empty(),
-                    true,
-                    failure.getDefaultMessage()
+                    true
                 )
                 rewards.devices[position].details = erroneousDetails
                 onDeviceRewardDetails.postValue(Pair(position, erroneousDetails))

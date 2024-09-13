@@ -57,9 +57,7 @@ class DeviceRewardsAdapter(
 
             binding.chartRangeSelector.listener {
                 if (!ignoreRangeChipListener) {
-                    binding.detailsStatus.clear().animation(R.raw.anim_loading).visible(true)
-                    binding.detailsContainer.visible(false)
-                    onRangeChipClicked.invoke(absoluteAdapterPosition, it, item.id)
+                    invokeOnRangeChip(it, item.id)
                 }
             }
 
@@ -75,37 +73,46 @@ class DeviceRewardsAdapter(
             binding.amount.text =
                 itemView.context.getString(R.string.wxm_amount, formatTokens(item.total))
 
+            // If details is null we are in the LOADING state
             item.details?.let {
                 if (it.fetchError) {
-                    onError(it.errorMessage, item.id)
+                    onError(item.id)
                 } else {
-                    binding.earnedBy.text = formatTokens(it.total)
-                    binding.boostsRecycler.adapter = adapter
-                    adapter.submitList(it.boosts)
-
-                    ignoreRangeChipListener = true
-                    when (it.mode) {
-                        RewardsSummaryMode.WEEK -> binding.chartRangeSelector.checkWeek()
-                        RewardsSummaryMode.MONTH -> binding.chartRangeSelector.checkMonth()
-                        RewardsSummaryMode.YEAR -> binding.chartRangeSelector.checkYear()
-                        else -> binding.chartRangeSelector.clearCheck()
-                    }.also {
-                        ignoreRangeChipListener = false
-                    }
-                    binding.rewardBreakdownChart.initRewardsBreakdownChart(
-                        it.baseChartData,
-                        it.betaChartData,
-                        it.otherChartData,
-                        it.datesChartTooltip
-                    )
-
-                    binding.baseRewardsLegend.visible(it.baseChartData.isDataValid())
-                    binding.betaRewardsLegend.visible(it.betaChartData.isDataValid())
-                    binding.othersRewardsLegend.visible(it.otherChartData.isDataValid())
-                    binding.detailsStatus.visible(false)
-                    binding.detailsContainer.visible(true)
+                    onDetails(it)
                 }
-            } ?: binding.detailsStatus.visible(true)
+            } ?: kotlin.run {
+                binding.retryCard.visible(false)
+                binding.detailsStatus.visible(true)
+            }
+        }
+
+        private fun onDetails(details: DeviceTotalRewardsDetails) {
+            binding.earnedBy.text = formatTokens(details.total)
+            binding.boostsRecycler.adapter = adapter
+            adapter.submitList(details.boosts)
+
+            ignoreRangeChipListener = true
+            when (details.mode) {
+                RewardsSummaryMode.WEEK -> binding.chartRangeSelector.checkWeek()
+                RewardsSummaryMode.MONTH -> binding.chartRangeSelector.checkMonth()
+                RewardsSummaryMode.YEAR -> binding.chartRangeSelector.checkYear()
+                else -> binding.chartRangeSelector.clearCheck()
+            }.also {
+                ignoreRangeChipListener = false
+            }
+            binding.rewardBreakdownChart.initRewardsBreakdownChart(
+                details.baseChartData,
+                details.betaChartData,
+                details.otherChartData,
+                details.datesChartTooltip
+            )
+
+            binding.baseRewardsLegend.visible(details.baseChartData.isDataValid())
+            binding.betaRewardsLegend.visible(details.betaChartData.isDataValid())
+            binding.othersRewardsLegend.visible(details.otherChartData.isDataValid())
+            binding.retryCard.visible(false)
+            binding.detailsStatus.visible(false)
+            binding.detailsContainer.visible(true)
         }
 
         private fun onExpandClick(item: DeviceTotalRewards) {
@@ -134,20 +141,19 @@ class DeviceRewardsAdapter(
             onExpandToggle.invoke(absoluteAdapterPosition, willBeExpanded, item.id)
         }
 
-        private fun onError(errorMessage: String?, deviceId: String) {
-            binding.detailsStatus
-                .animation(R.raw.anim_error)
-                .title(itemView.context.getString(R.string.error_generic_message))
-                .subtitle(errorMessage)
-                .action(itemView.context.getString(R.string.action_retry))
-                .listener {
-                    onRangeChipClicked.invoke(
-                        absoluteAdapterPosition,
-                        binding.chartRangeSelector.checkedChipId(),
-                        deviceId
-                    )
-                }
-                .visible(true)
+        private fun onError(deviceId: String) {
+            binding.detailsStatus.visible(false)
+            binding.retryCard.listener {
+                invokeOnRangeChip(binding.chartRangeSelector.checkedChipId(), deviceId)
+            }
+            binding.retryCard.visible(true)
+        }
+
+        private fun invokeOnRangeChip(checkedChipId: Int, deviceId: String) {
+            binding.detailsStatus.animation(R.raw.anim_loading).visible(true)
+            binding.detailsContainer.visible(false)
+            binding.retryCard.visible(false)
+            onRangeChipClicked.invoke(absoluteAdapterPosition, checkedChipId, deviceId)
         }
     }
 }

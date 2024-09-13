@@ -59,119 +59,141 @@
             tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/detailsContainer"
+                android:id="@+id/detailsWithHeaderContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:layout_height="wrap_content">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/rewardsBreakdown"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/detailsHeader"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/rewards_breakdown"
-                    android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-                    android:textColor="@color/textColor"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/earnedByTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_small"
-                    android:text="@string/earned_by_this_station"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                    app:layout_constraintBottom_toTopOf="@id/earnedBy"
-                    app:layout_constraintEnd_toStartOf="@id/chartRangeSelector"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/chartRangeSelector" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/rewardsBreakdown"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rewards_breakdown"
+                        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                        android:textColor="@color/textColor"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/earnedBy"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_small"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-                    app:layout_constraintBottom_toBottomOf="@id/chartRangeSelector"
-                    app:layout_constraintEnd_toStartOf="@id/chartRangeSelector"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/earnedByTitle"
-                    tools:text="389,023.54 $WXM" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/earnedByTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:text="@string/earned_by_this_station"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        app:layout_constraintBottom_toTopOf="@id/earnedBy"
+                        app:layout_constraintEnd_toStartOf="@id/chartRangeSelector"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/chartRangeSelector" />
 
-                <com.weatherxm.ui.components.RangeSelectorView
-                    android:id="@+id/chartRangeSelector"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_normal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/rewardsBreakdown" />
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/earnedBy"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                        app:layout_constraintBottom_toBottomOf="@id/chartRangeSelector"
+                        app:layout_constraintEnd_toStartOf="@id/chartRangeSelector"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/earnedByTitle"
+                        tools:text="389,023.54 $WXM" />
 
-                <com.github.mikephil.charting.charts.LineChart
-                    android:id="@+id/rewardBreakdownChart"
-                    android:layout_width="match_parent"
-                    android:layout_height="220dp"
-                    app:layout_constraintTop_toBottomOf="@id/chartRangeSelector" />
+                    <com.weatherxm.ui.components.RangeSelectorView
+                        android:id="@+id/chartRangeSelector"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/rewardsBreakdown" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/baseRewardsLegend"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:drawableStart="@drawable/ic_rectangle"
-                    android:drawablePadding="@dimen/padding_extra_small"
-                    android:drawableTint="@color/chart_primary"
-                    android:text="@string/base_rewards"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                    android:textColor="@color/textColor"
-                    app:layout_constraintTop_toBottomOf="@id/rewardBreakdownChart" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/betaRewardsLegend"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/detailsContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    android:drawableStart="@drawable/ic_rectangle"
-                    android:drawablePadding="@dimen/padding_extra_small"
-                    android:drawableTint="@color/beta_rewards_color"
-                    android:text="@string/beta_rewards"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                    android:textColor="@color/textColor"
                     android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@id/baseRewardsLegend"
-                    tools:visibility="visible" />
+                    app:layout_constraintTop_toBottomOf="@id/detailsHeader"
+                    tools:visibility="visible">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/othersRewardsLegend"
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/rewardBreakdownChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/baseRewardsLegend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:drawableStart="@drawable/ic_rectangle"
+                        android:drawablePadding="@dimen/padding_extra_small"
+                        android:drawableTint="@color/chart_primary"
+                        android:text="@string/base_rewards"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/textColor"
+                        app:layout_constraintTop_toBottomOf="@id/rewardBreakdownChart" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/betaRewardsLegend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        android:drawableStart="@drawable/ic_rectangle"
+                        android:drawablePadding="@dimen/padding_extra_small"
+                        android:drawableTint="@color/beta_rewards_color"
+                        android:text="@string/beta_rewards"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/textColor"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/baseRewardsLegend"
+                        tools:visibility="visible" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/othersRewardsLegend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        android:drawableStart="@drawable/ic_rectangle"
+                        android:drawablePadding="@dimen/padding_extra_small"
+                        android:drawableTint="@color/other_reward"
+                        android:text="@string/others"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                        android:textColor="@color/textColor"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/betaRewardsLegend"
+                        tools:visibility="visible" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/boostsRecycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:overScrollMode="never"
+                        android:scrollbars="vertical"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintTop_toBottomOf="@id/othersRewardsLegend"
+                        tools:listitem="@layout/list_item_device_rewards_boost" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <com.weatherxm.ui.components.EmptyView
+                    android:id="@+id/detailsStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    android:drawableStart="@drawable/ic_rectangle"
-                    android:drawablePadding="@dimen/padding_extra_small"
-                    android:drawableTint="@color/other_reward"
-                    android:text="@string/others"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                    android:textColor="@color/textColor"
                     android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@id/betaRewardsLegend"
-                    tools:visibility="visible" />
+                    app:empty_animation="@raw/anim_loading"
+                    app:layout_constraintTop_toBottomOf="@id/detailsHeader" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/boostsRecycler"
+                <com.weatherxm.ui.components.RetryCardView
+                    android:id="@+id/retryCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:overScrollMode="never"
-                    android:scrollbars="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintTop_toBottomOf="@id/othersRewardsLegend"
-                    tools:listitem="@layout/list_item_device_rewards_boost" />
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@id/detailsHeader" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <com.weatherxm.ui.components.EmptyView
-                android:id="@+id/detailsStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:empty_animation="@raw/anim_loading" />
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
