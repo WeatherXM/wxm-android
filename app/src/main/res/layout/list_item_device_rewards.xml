@@ -132,7 +132,7 @@
                         android:layout_marginTop="@dimen/margin_small"
                         android:drawableStart="@drawable/ic_rectangle"
                         android:drawablePadding="@dimen/padding_extra_small"
-                        android:drawableTint="@color/chart_primary"
+                        android:drawableTint="@color/blue"
                         android:text="@string/base_rewards"
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                         android:textColor="@color/textColor"

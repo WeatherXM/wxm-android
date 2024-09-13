@@ -40,7 +40,6 @@
     <!-- History Charts -->
     <color name="chart_primary_line">@color/light_chart_primary</color>
     <color name="chart_secondary_line">@color/light_chart_secondary</color>
-    <color name="chart_other_reward_color">@color/light_green</color>
 
     <!-- Network Stats -->
     <color name="network_stats_slider">@color/network_stats_slider_light</color>

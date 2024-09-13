@@ -603,7 +603,7 @@ fun LineChart.initTotalEarnedChart(
     if (dataSet.values.size > 1) dataSet.setDrawCircles(false)
     dataSet.mode = LineDataSet.Mode.LINEAR
     dataSet.highLightColor = context.getColor(R.color.darkGrey)
-    dataSet.color = context.getColor(R.color.chart_primary)
+    dataSet.color = context.getColor(R.color.blue)
 
     // Y Axis settings
     axisLeft.isEnabled = false
@@ -685,7 +685,7 @@ fun LineChart.initRewardsBreakdownChart(
     if (baseLineDataSetsWithValues.isNotEmpty()) {
         dataSets.addAll(baseLineDataSetsWithValues.primaryLineInit(context, resources))
         baseLineDataSetsWithValues.initRewardBreakDown(
-            context.getColor(R.color.chart_primary)
+            context.getColor(R.color.blue)
         )
     }
 
