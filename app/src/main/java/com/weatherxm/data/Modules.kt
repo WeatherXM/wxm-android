@@ -214,8 +214,8 @@ import com.weatherxm.usecases.ChartsUseCase
 import com.weatherxm.usecases.ChartsUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCaseImpl
-import com.weatherxm.usecases.ConnectWalletUseCase
-import com.weatherxm.usecases.ConnectWalletUseCaseImpl
+import com.weatherxm.usecases.WalletUseCase
+import com.weatherxm.usecases.WalletUseCaseImpl
 import com.weatherxm.usecases.DeleteAccountSurveyUseCase
 import com.weatherxm.usecases.DeleteAccountSurveyUseCaseImpl
 import com.weatherxm.usecases.DeleteAccountUseCase
@@ -531,8 +531,8 @@ private val usecases = module {
     single<UserUseCase> {
         UserUseCaseImpl(get(), get(), get(), get())
     }
-    single<ConnectWalletUseCase> {
-        ConnectWalletUseCaseImpl(get())
+    single<WalletUseCase> {
+        WalletUseCaseImpl(get())
     }
     single<PreferencesUseCase> {
         PreferencesUseCaseImpl(get(), get(), get())
