@@ -5,14 +5,14 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.repository.WalletRepository
 import com.weatherxm.ui.common.empty
 
-interface ConnectWalletUseCase {
+interface WalletUseCase {
     suspend fun getWalletAddress(): Either<Failure, String>
     suspend fun setWalletAddress(address: String): Either<Failure, Unit>
 }
 
-class ConnectWalletUseCaseImpl(
+class WalletUseCaseImpl(
     private val walletRepository: WalletRepository
-) : ConnectWalletUseCase {
+) : WalletUseCase {
 
     override suspend fun getWalletAddress(): Either<Failure, String> {
         return walletRepository.getWalletAddress().map { it ?: String.empty() }
