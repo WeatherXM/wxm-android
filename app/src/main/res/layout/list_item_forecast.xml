@@ -21,6 +21,17 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Today, Tuesday 31/1" />
 
+        <ImageView
+            android:id="@+id/openRewards"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/action_open"
+            android:src="@drawable/ic_open_right"
+            app:layout_constraintBottom_toBottomOf="@id/date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/date"
+            app:tint="@color/colorPrimary" />
+
         <LinearLayout
             android:id="@+id/temperatureContainer"
             android:layout_width="0dp"
@@ -33,29 +44,6 @@
             app:layout_constraintTop_toBottomOf="@id/date">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/max_temperature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
-                android:textStyle="bold"
-                tools:text="25°C" />
-
-            <com.google.android.material.slider.RangeSlider
-                android:id="@+id/temperature"
-                style="@style/Widget.WeatherXM.Slider"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:enabled="false"
-                android:layout_gravity="center"
-                android:layoutDirection="rtl"
-                android:layout_weight="1"
-                app:trackColorActive="@color/crypto"
-                app:trackColorInactive="@color/colorBackground"
-                app:values="@array/temperature_slider_sample_values"
-                tools:valueFrom="13"
-                tools:valueTo="28" />
-
-            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/min_temperature"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -63,10 +51,29 @@
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textColor="@color/textColor"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/max_temperature"
-                app:layout_constraintEnd_toStartOf="@id/icon"
-                app:layout_constraintTop_toTopOf="@id/max_temperature"
-                tools:text="10°C" />
+                tools:text="13°C" />
+
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/temperature"
+                style="@style/Widget.WeatherXM.Slider"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:enabled="false"
+                app:trackColorActive="@color/crypto"
+                app:trackColorInactive="@color/colorBackground"
+                app:values="@array/temperature_slider_sample_values"
+                tools:valueFrom="10"
+                tools:valueTo="28" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/max_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                android:textStyle="bold"
+                tools:text="21°C" />
 
         </LinearLayout>
 

@@ -28,8 +28,6 @@ class SortFilterDialogFragment : BaseBottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "SortFilterDialogFragment"
-
-        fun newInstance() = SortFilterDialogFragment()
     }
 
     override fun onCreateView(

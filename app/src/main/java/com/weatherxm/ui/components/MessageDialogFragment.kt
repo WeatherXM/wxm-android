@@ -9,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withCreated
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.FragmentMessageDialogBinding
 import com.weatherxm.ui.Navigator
@@ -62,8 +61,6 @@ class MessageDialogFragment : BaseBottomSheetDialogFragment() {
             }
         }
     }
-
-    override fun getTheme(): Int = R.style.ThemeOverlay_WeatherXM_BottomSheetDialog_Layer1
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog

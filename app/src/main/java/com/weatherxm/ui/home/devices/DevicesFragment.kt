@@ -68,7 +68,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         }
 
         binding.sortFilterBtn.setOnClickListener {
-            SortFilterDialogFragment.newInstance().show(this)
+            SortFilterDialogFragment().show(this)
         }
 
         model.devices().observe(viewLifecycleOwner) {

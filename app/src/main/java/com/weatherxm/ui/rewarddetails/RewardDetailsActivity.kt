@@ -176,8 +176,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                             model.isStakeHolder().toString().lowercase()
                         )
                     )
-                    RewardSplitDialogFragment.newInstance()
-                        .show(supportFragmentManager, RewardSplitDialogFragment.TAG)
+                    RewardSplitDialogFragment().show(this)
                 }
             }
             binding.showSplitBtn.visible(true)

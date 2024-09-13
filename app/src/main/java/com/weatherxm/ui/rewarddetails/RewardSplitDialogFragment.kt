@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.weatherxm.R
 import com.weatherxm.databinding.FragmentRewardSplitDialogBinding
 import com.weatherxm.ui.common.RewardSplitStakeholderAdapter
@@ -17,8 +18,6 @@ class RewardSplitDialogFragment : BaseBottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "RewardSplitDialogFragment"
-
-        fun newInstance() = RewardSplitDialogFragment()
     }
 
     override fun onCreateView(
@@ -43,5 +42,9 @@ class RewardSplitDialogFragment : BaseBottomSheetDialogFragment() {
         binding.doneBtn.setOnClickListener {
             dismiss()
         }
+    }
+
+    fun show(activity: AppCompatActivity) {
+        show(activity.supportFragmentManager, TAG)
     }
 }

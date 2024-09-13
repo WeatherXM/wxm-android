@@ -13,8 +13,8 @@ import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
 import com.weatherxm.ui.common.HourlyForecastAdapter
 import com.weatherxm.ui.common.blockParentViewPagerOnScroll
 import com.weatherxm.ui.common.classSimpleName
-import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -81,6 +81,10 @@ class ForecastFragment : BaseFragment() {
         binding.dailyForecastRecycler.adapter = dailyForecastAdapter
         binding.hourlyForecastRecycler.adapter = hourlyForecastAdapter
         binding.hourlyForecastRecycler.blockParentViewPagerOnScroll()
+
+        binding.temperatureBarsInfoButton.setOnClickListener {
+            TemperatureBarExplanationDialogFragment().show(this)
+        }
 
         parentModel.onFollowStatus().observe(viewLifecycleOwner) {
             if (it.status == Status.SUCCESS) {
