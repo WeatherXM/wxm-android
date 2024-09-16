@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit
 interface UserUseCase {
     suspend fun getUser(forceRefresh: Boolean = false): Either<Failure, User>
     suspend fun getWalletAddress(): Either<Failure, String>
+    suspend fun setWalletAddress(address: String): Either<Failure, Unit>
     fun shouldShowWalletMissingWarning(walletAddress: String): Boolean
     fun setWalletWarningDismissTimestamp()
     suspend fun getWalletRewards(walletAddress: String?): Either<Failure, UIWalletRewards>
@@ -36,6 +37,10 @@ class UserUseCaseImpl(
 
     override suspend fun getWalletAddress(): Either<Failure, String> {
         return walletRepository.getWalletAddress().map { it ?: String.empty() }
+    }
+
+    override suspend fun setWalletAddress(address: String): Either<Failure, Unit> {
+        return walletRepository.setWalletAddress(address)
     }
 
     override fun shouldShowWalletMissingWarning(walletAddress: String): Boolean {

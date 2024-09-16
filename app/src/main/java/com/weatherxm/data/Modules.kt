@@ -244,8 +244,6 @@ import com.weatherxm.usecases.StatsUseCase
 import com.weatherxm.usecases.StatsUseCaseImpl
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.usecases.UserUseCaseImpl
-import com.weatherxm.usecases.WalletUseCase
-import com.weatherxm.usecases.WalletUseCaseImpl
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCase
 import com.weatherxm.usecases.WidgetCurrentWeatherUseCaseImpl
 import com.weatherxm.usecases.WidgetSelectStationUseCase
@@ -526,9 +524,6 @@ private val usecases = module {
     }
     single<UserUseCase> {
         UserUseCaseImpl(get(), get(), get(), get())
-    }
-    single<WalletUseCase> {
-        WalletUseCaseImpl(get())
     }
     single<PreferencesUseCase> {
         PreferencesUseCaseImpl(get(), get(), get())
