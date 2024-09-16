@@ -21,7 +21,7 @@ interface AuthUseCase {
     suspend fun resetPassword(email: String): Either<Failure, Unit>
     suspend fun isLoggedIn(): Either<Failure, Boolean>
     fun shouldShowAnalyticsOptIn(): Boolean
-    suspend fun isPasswordCorrect(password: String): Either<Failure, Unit>
+    suspend fun isPasswordCorrect(password: String): Either<Failure, Boolean>
 }
 
 class AuthUseCaseImpl(
@@ -63,7 +63,7 @@ class AuthUseCaseImpl(
         return userPreferencesRepository.shouldShowAnalyticsOptIn()
     }
 
-    override suspend fun isPasswordCorrect(password: String): Either<Failure, Unit> {
-        return authRepository.isPasswordCorrect(password).map { }
+    override suspend fun isPasswordCorrect(password: String): Either<Failure, Boolean> {
+        return authRepository.isPasswordCorrect(password)
     }
 }
