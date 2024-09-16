@@ -206,8 +206,8 @@ data class Attributes(
     val lastWeatherStationActivity: ZonedDateTime?,
     val claimedAt: ZonedDateTime?,
     val friendlyName: String?,
-    val hex3: Hex,
-    val hex7: Hex,
+    val hex3: Hex?,
+    val hex7: Hex?,
 ) : Parcelable
 
 @Keep
