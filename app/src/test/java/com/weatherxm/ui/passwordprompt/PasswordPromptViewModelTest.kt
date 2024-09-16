@@ -54,7 +54,7 @@ class PasswordPromptViewModelTest : BehaviorSpec({
         every { resources.getString(R.string.error_invalid_password) } returns invalidPassMsg
         justRun { analytics.trackEventFailure(any()) }
         every { failure.getDefaultMessage(R.string.error_invalid_password) } returns invalidPassMsg
-        coMockEitherRight({ usecase.isPasswordCorrect(validPassword) }, Unit)
+        coMockEitherRight({ usecase.isPasswordCorrect(validPassword) }, true)
         coMockEitherLeft({ usecase.isPasswordCorrect(invalidPassword) }, failure)
     }
 
