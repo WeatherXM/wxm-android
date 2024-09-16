@@ -2,10 +2,10 @@ package com.weatherxm.ui.deleteaccountsurvey
 
 import androidx.lifecycle.ViewModel
 import com.weatherxm.data.ClientIdentificationHelper
-import com.weatherxm.usecases.DeleteAccountSurveyUseCase
+import com.weatherxm.usecases.UserUseCase
 
 class DeleteAccountSurveyViewModel(
-    private val useCase: DeleteAccountSurveyUseCase,
+    private val useCase: UserUseCase,
     private val clientIdentificationHelper: ClientIdentificationHelper
 ) : ViewModel() {
     companion object {

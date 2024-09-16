@@ -1,7 +1,7 @@
 package com.weatherxm.usecases
 
-import android.content.Context
 import android.net.Uri
+import com.weatherxm.TestConfig
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
@@ -23,8 +23,7 @@ import kotlinx.coroutines.flow.Flow
 class BluetoothUpdaterUseCaseTest : BehaviorSpec({
     val repository = mockk<BluetoothUpdaterRepository>()
     val deviceOtaRepository = mockk<DeviceOTARepository>()
-    val context = mockk<Context>()
-    val usecase = BluetoothUpdaterUseCaseImpl(context, repository, deviceOtaRepository)
+    val usecase = BluetoothUpdaterUseCaseImpl(TestConfig.context, repository, deviceOtaRepository)
 
     val deviceId = "deviceId"
     val otaVersion = "1.0.0"
@@ -33,7 +32,7 @@ class BluetoothUpdaterUseCaseTest : BehaviorSpec({
     val uri = mockk<Uri>()
 
     beforeSpec {
-        every { context.cacheDir.path } returns "./"
+        every { TestConfig.context.cacheDir.path } returns "./"
         coEvery { repository.update(any()) } returns flow
         mockkStatic(Uri::class)
         every { Uri.fromFile(any()) } returns uri
