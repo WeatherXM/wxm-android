@@ -142,7 +142,7 @@ data class UIDevice(
         } != null
     }
 
-    fun createDeviceAlerts(userShouldNotifiedOfOTA: Boolean): List<DeviceAlert> {
+    fun createDeviceAlerts(shouldNotifyOTA: Boolean): List<DeviceAlert> {
         val alerts = mutableListOf<DeviceAlert>()
         if (isActive == false) {
             alerts.add(DeviceAlert.createError(DeviceAlertType.OFFLINE))
@@ -152,7 +152,7 @@ data class UIDevice(
             alerts.add(DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY))
         }
 
-        if (userShouldNotifiedOfOTA && shouldPromptUpdate()) {
+        if (shouldNotifyOTA && shouldPromptUpdate()) {
             alerts.add(DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE))
         }
         this.alerts = alerts.sortedByDescending { alert ->

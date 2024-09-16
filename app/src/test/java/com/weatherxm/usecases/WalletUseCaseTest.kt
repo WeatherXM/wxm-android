@@ -42,7 +42,7 @@ class WalletUseCaseTest : BehaviorSpec({
     }
 
     context("Set the Wallet Address") {
-        given("A repository providing the set functionality") {
+        given("A repository providing the SET functionality") {
             When("it's a success") {
                 coMockEitherRight({ repo.setWalletAddress(walletAddress) }, Unit)
                 then("return the success") {
