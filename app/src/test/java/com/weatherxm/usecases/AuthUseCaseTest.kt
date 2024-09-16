@@ -140,4 +140,21 @@ class AuthUseCaseTest : BehaviorSpec({
             }
         }
     }
+
+    context("Get if a password is correct or not") {
+        given("The repository which returns the answer") {
+            When("the response is a failure") {
+                coMockEitherLeft({ authRepository.isPasswordCorrect(password) }, failure)
+                then("return that failure") {
+                    usecase.isPasswordCorrect(password).isError()
+                }
+            }
+            When("the response is a success") {
+                coMockEitherRight({ authRepository.isPasswordCorrect(password) }, true)
+                then("return the response") {
+                    usecase.isPasswordCorrect(password).isSuccess(true)
+                }
+            }
+        }
+    }
 })

@@ -4,6 +4,8 @@ import arrow.core.Either
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.common.Charts
+import com.weatherxm.ui.common.LineChartData
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.every
@@ -47,6 +49,32 @@ object TestUtils {
 
     fun createRandomString(length: Int): String {
         return RandomString.make(length)
+    }
+
+    fun Charts.isEqual(other: Charts) {
+        this.date shouldBe other.date
+        this.temperature.isEqual(other.temperature)
+        this.feelsLike.isEqual(other.feelsLike)
+        this.precipitation.isEqual(other.precipitation)
+        this.precipitationAccumulated.isEqual(other.precipitationAccumulated)
+        this.precipProbability.isEqual(other.precipProbability)
+        this.windSpeed.isEqual(other.windSpeed)
+        this.windGust.isEqual(other.windGust)
+        this.windDirection.isEqual(other.windDirection)
+        this.humidity.isEqual(other.humidity)
+        this.pressure.isEqual(other.pressure)
+        this.uv.isEqual(other.uv)
+        this.solarRadiation.isEqual(other.solarRadiation)
+    }
+
+    private fun LineChartData.isEqual(other: LineChartData) {
+        this.timestamps.forEachIndexed { i, item ->
+            item shouldBe other.timestamps[i]
+        }
+        this.entries.forEachIndexed { i, item ->
+            item.x shouldBe other.entries[i].x
+            item.y shouldBe other.entries[i].y
+        }
     }
 
     /**
