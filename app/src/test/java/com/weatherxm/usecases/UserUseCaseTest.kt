@@ -39,7 +39,8 @@ class UserUseCaseTest : BehaviorSpec({
     val userId = "userId"
     val now = System.currentTimeMillis()
     val twoDaysAgo = now - TimeUnit.HOURS.toMillis(48L)
-    val walletRewards = WalletRewards(null, null, null, null, null)
+    val emptyWalletRewards = WalletRewards(null, null, null, null, null)
+    val walletRewards = WalletRewards(null, 10.0, 0, 10.0, 10.0)
 
     beforeSpec {
         justRun { userPreferencesRepository.setWalletWarningDismissTimestamp() }
@@ -154,16 +155,34 @@ class UserUseCaseTest : BehaviorSpec({
                     usecase.getWalletRewards(String.empty()).isSuccess(UIWalletRewards.empty())
                 }
             }
+            When("Wallet Address is null") {
+                then("return empty rewards") {
+                    usecase.getWalletRewards(null).isSuccess(UIWalletRewards.empty())
+                }
+            }
             When("Wallet Address is NOT empty") {
                 and("it's a success") {
-                    then("return the rewards") {
+                    and("the rewards returned are empty") {
+                        coMockEitherRight(
+                            { rewardsRepository.getWalletRewards(walletAddress) },
+                            emptyWalletRewards
+                        )
+                        then("return the default rewards") {
+                            usecase.getWalletRewards(walletAddress).isSuccess(
+                                UIWalletRewards(0.0, 0.0, 0.0, walletAddress)
+                            )
+                        }
+                    }
+                    and("the rewards returned are not empty") {
                         coMockEitherRight(
                             { rewardsRepository.getWalletRewards(walletAddress) },
                             walletRewards
                         )
-                        usecase.getWalletRewards(walletAddress).isSuccess(
-                            UIWalletRewards(0.0, 0.0, 0.0, walletAddress)
-                        )
+                        then("return the rewards") {
+                            usecase.getWalletRewards(walletAddress).isSuccess(
+                                UIWalletRewards(10.0, 10.0, 10.0, walletAddress)
+                            )
+                        }
                     }
                 }
                 and("it's a failure") {
