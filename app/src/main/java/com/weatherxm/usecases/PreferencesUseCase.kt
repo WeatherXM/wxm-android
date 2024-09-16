@@ -28,7 +28,7 @@ class PreferencesUseCaseImpl(
     }
 
     override fun setAnalyticsEnabled(enabled: Boolean) {
-        return userPreferencesRepository.setAnalyticsEnabled(enabled)
+        userPreferencesRepository.setAnalyticsEnabled(enabled)
     }
 
     override fun getInstallationId(): String? {

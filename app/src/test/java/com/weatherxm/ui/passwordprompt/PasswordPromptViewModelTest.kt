@@ -9,7 +9,7 @@ import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.ui.InstantExecutorListener
-import com.weatherxm.usecases.PasswordPromptUseCase
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
@@ -28,7 +28,7 @@ import org.koin.dsl.module
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PasswordPromptViewModelTest : BehaviorSpec({
-    val usecase = mockk<PasswordPromptUseCase>()
+    val usecase = mockk<AuthUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
     val viewModel = PasswordPromptViewModel(usecase, resources, analytics)
     val tooSmallPassword = "test"
