@@ -41,7 +41,7 @@ class DeleteAccountUseCaseTest : BehaviorSpec({
     }
 
     context("Delete an account") {
-        given("A repository providing the delete functionality") {
+        given("A repository providing the DELETE functionality") {
             When("it's a success") {
                 coMockEitherRight({ userRepository.deleteAccount() }, Unit)
                 then("return the success") {

@@ -20,7 +20,7 @@ class DeviceListUseCaseImpl(
         return deviceRepository.getUserDevices().map { response ->
             val devices = response.map {
                 it.toUIDevice().apply {
-                    createDeviceAlerts(deviceOTARepo.userShouldNotifiedOfOTA(id, assignedFirmware))
+                    createDeviceAlerts(deviceOTARepo.shouldNotifyOTA(id, assignedFirmware))
                 }
             }
 

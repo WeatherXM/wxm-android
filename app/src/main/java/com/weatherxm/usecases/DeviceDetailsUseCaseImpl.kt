@@ -41,7 +41,7 @@ class DeviceDetailsUseCaseImpl(
     override suspend fun getUserDevice(deviceId: String): Either<Failure, UIDevice> {
         return deviceRepository.getUserDevice(deviceId).map {
             it.toUIDevice().apply {
-                createDeviceAlerts(deviceOTARepo.userShouldNotifiedOfOTA(id, assignedFirmware))
+                createDeviceAlerts(deviceOTARepo.shouldNotifyOTA(id, assignedFirmware))
             }
         }
     }

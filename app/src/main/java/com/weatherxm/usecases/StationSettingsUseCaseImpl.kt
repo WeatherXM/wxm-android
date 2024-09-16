@@ -30,8 +30,8 @@ class StationSettingsUseCaseImpl(
         return deviceRepository.removeDevice(serialNumber, id)
     }
 
-    override fun userShouldNotifiedOfOTA(device: UIDevice): Boolean {
-        return deviceOTARepository.userShouldNotifiedOfOTA(device.id, device.assignedFirmware)
+    override fun shouldNotifyOTA(device: UIDevice): Boolean {
+        return deviceOTARepository.shouldNotifyOTA(device.id, device.assignedFirmware)
     }
 
     override suspend fun getCountryAndFrequencies(

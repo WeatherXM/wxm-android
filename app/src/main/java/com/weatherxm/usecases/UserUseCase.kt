@@ -52,7 +52,7 @@ class UserUseCaseImpl(
         walletAddress: String?
     ): Either<Failure, UIWalletRewards> {
         return if (walletAddress.isNullOrEmpty()) {
-            Either.Right(UIWalletRewards(0.0, 0.0, 0.0, String.empty()))
+            Either.Right(UIWalletRewards.empty())
         } else {
             rewardsRepository.getWalletRewards(walletAddress).map { rewards ->
                 UIWalletRewards(

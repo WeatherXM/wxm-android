@@ -145,7 +145,7 @@ class DeviceSettingsHeliumViewModel(
 
     private fun handleFirmwareInfo() {
         device.currentFirmware?.let { current ->
-            if (usecase.userShouldNotifiedOfOTA(device) && device.shouldPromptUpdate()) {
+            if (usecase.shouldNotifyOTA(device) && device.shouldPromptUpdate()) {
                 data.default.add(
                     UIDeviceInfoItem(
                         title = resources.getString(R.string.firmware_version),
