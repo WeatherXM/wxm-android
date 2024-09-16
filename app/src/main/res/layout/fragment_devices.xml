@@ -114,7 +114,6 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
                 </com.google.android.material.card.MaterialCardView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -138,61 +137,89 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/layer1"
                 android:clipChildren="false">
 
-                <com.weatherxm.ui.components.MessageCardView
-                    android:id="@+id/walletWarning"
+                <com.weatherxm.ui.components.InfoBannerCardView
+                    android:id="@+id/infoBanner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/margin_normal"
-                    android:layout_marginTop="@dimen/margin_normal_to_large"
                     android:visibility="gone"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:message_background_tint="@color/warningTint"
-                    app:message_icon="@drawable/ic_warning_hex_filled"
-                    app:message_includes_close_button="true"
-                    app:message_message="@string/wallet_address_missing_desc"
-                    app:message_title="@string/wallet_address_missing"
                     tools:visibility="visible" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/myStationsTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/margin_normal"
-                    android:layout_marginTop="@dimen/margin_normal_to_large"
-                    android:text="@string/my_stations"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@id/sortFilterBtn"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/walletWarning" />
-
-                <ImageButton
-                    android:id="@+id/sortFilterBtn"
-                    style="@style/Widget.WeatherXM.ImageButton"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginEnd="@dimen/margin_normal"
-                    android:contentDescription="@string/sort_filter"
-                    android:src="@drawable/ic_sort_filter"
-                    app:layout_constraintBottom_toBottomOf="@id/myStationsTitle"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/myStationsTitle"
-                    app:tint="@color/colorPrimary" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/contentContainerCard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    android:overScrollMode="never"
-                    android:scrollbars="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/myStationsTitle"
-                    tools:listitem="@layout/list_item_device" />
+                    app:cardBackgroundColor="@color/colorBackground"
+                    app:cardCornerRadius="0dp"
+                    app:contentPadding="0dp"
+                    app:layout_constraintTop_toBottomOf="@id/infoBanner"
+                    tools:cardCornerRadius="@dimen/radius_large">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clipChildren="false">
+
+                        <com.weatherxm.ui.components.MessageCardView
+                            android:id="@+id/walletWarning"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/margin_normal"
+                            android:layout_marginTop="@dimen/margin_normal_to_large"
+                            android:visibility="gone"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:message_background_tint="@color/warningTint"
+                            app:message_icon="@drawable/ic_warning_hex_filled"
+                            app:message_includes_close_button="true"
+                            app:message_message="@string/wallet_address_missing_desc"
+                            app:message_title="@string/wallet_address_missing"
+                            tools:visibility="visible" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/myStationsTitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/margin_normal"
+                            android:layout_marginTop="@dimen/margin_normal_to_large"
+                            android:text="@string/my_stations"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toStartOf="@id/sortFilterBtn"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/walletWarning" />
+
+                        <ImageButton
+                            android:id="@+id/sortFilterBtn"
+                            style="@style/Widget.WeatherXM.ImageButton"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_marginEnd="@dimen/margin_normal"
+                            android:contentDescription="@string/sort_filter"
+                            android:src="@drawable/ic_sort_filter"
+                            app:layout_constraintBottom_toBottomOf="@id/myStationsTitle"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/myStationsTitle"
+                            app:tint="@color/colorPrimary" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycler"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_extra_small"
+                            android:overScrollMode="never"
+                            android:scrollbars="vertical"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/myStationsTitle"
+                            tools:listitem="@layout/list_item_device" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

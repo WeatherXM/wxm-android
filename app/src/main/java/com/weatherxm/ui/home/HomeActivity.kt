@@ -150,6 +150,7 @@ class HomeActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener {
 
         // Fetch user's devices
         devicesViewModel.fetch()
+        model.getInfoBanner()
 
         /**
          * Changing the theme from Profile -> Settings and going back to profile

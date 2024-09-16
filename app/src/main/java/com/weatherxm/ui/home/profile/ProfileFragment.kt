@@ -75,7 +75,7 @@ class ProfileFragment : BaseFragment() {
 
         binding.swiperefresh.setOnRefreshListener {
             model.fetchUser()
-            model.getSurvey()
+            parentModel.getSurvey()
         }
 
         binding.walletContainerCard.setOnClickListener {
@@ -147,7 +147,7 @@ class ProfileFragment : BaseFragment() {
             }
         }
 
-        model.onSurvey().observe(viewLifecycleOwner) {
+        parentModel.onSurvey().observe(viewLifecycleOwner) {
             binding.surveyCard
                 .title(it.title)
                 .message(it.message)
@@ -155,14 +155,14 @@ class ProfileFragment : BaseFragment() {
                     navigator.openWebsite(context, it.url)
                 }
                 .close {
-                    model.dismissSurvey(it.id)
+                    parentModel.dismissSurvey(it.id)
                     binding.surveyCard.visible(false)
                 }
                 .visible(true)
         }
 
         model.fetchUser()
-        model.getSurvey()
+        parentModel.getSurvey()
     }
 
     private fun toggleLoading(isLoading: Boolean) {

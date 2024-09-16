@@ -8,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.data.InfoBanner
 import com.weatherxm.data.Resource
 import com.weatherxm.data.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
@@ -23,6 +25,7 @@ import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.setCardRadius
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
@@ -60,6 +63,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         binding.recycler.adapter = adapter
 
         binding.swiperefresh.setOnRefreshListener {
+            parentModel.getInfoBanner()
             model.fetch()
         }
 
@@ -83,10 +87,37 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             onDevicesRewards(it)
         }
 
+        parentModel.onInfoBanner().observe(viewLifecycleOwner) {
+            onInfoBanner(it)
+        }
+
         parentModel.onWalletWarnings().observe(viewLifecycleOwner) {
             onWalletMissingWarning(it.showMissingWarning)
         }
         return binding.root
+    }
+
+    private fun onInfoBanner(infoBanner: InfoBanner?) {
+        if (infoBanner != null) {
+            binding.infoBanner
+                .title(infoBanner.title)
+                .message(infoBanner.message)
+                .action(infoBanner.actionLabel, infoBanner.showActionButton) {
+                    navigator.openWebsite(context, infoBanner.url)
+                }
+                .close(infoBanner.showCloseButton) {
+                    parentModel.dismissInfoBanner(infoBanner.id)
+                    binding.contentContainerCard.setCardRadius(0F, 0F, 0F, 0F)
+                    binding.infoBanner.visible(false)
+                }
+                .visible(true)
+
+            val radius = resources.getDimension(R.dimen.radius_large)
+            binding.contentContainerCard.setCardRadius(radius, radius, 0F, 0F)
+        } else if (binding.infoBanner.isVisible) {
+            binding.infoBanner.visible(false)
+            binding.contentContainerCard.setCardRadius(0F, 0F, 0F, 0F)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -65,6 +65,19 @@ data class Survey(
     val url: String
 ) : Parcelable
 
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class InfoBanner(
+    val id: String,
+    val title: String,
+    val message: String,
+    val actionLabel: String,
+    val url: String,
+    val showActionButton: Boolean,
+    val showCloseButton: Boolean
+) : Parcelable
+
 enum class Frequency {
     EU868,
     US915,
