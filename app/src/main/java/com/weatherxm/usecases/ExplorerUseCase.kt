@@ -1,7 +1,6 @@
 package com.weatherxm.usecases
 
 import arrow.core.Either
-import com.mapbox.geojson.Point
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Location
 import com.weatherxm.ui.common.UIDevice
@@ -14,7 +13,6 @@ interface ExplorerUseCase {
         const val DEVICE_COUNT_KEY = "device_count"
     }
 
-    fun polygonPointsToLatLng(pointsOfPolygon: List<Location>): List<MutableList<Point>>
     suspend fun getCells(): Either<Failure, ExplorerData>
     suspend fun getCellDevices(cell: UICell): Either<Failure, List<UIDevice>>
     suspend fun getCellDevice(index: String, deviceId: String): Either<Failure, UIDevice>

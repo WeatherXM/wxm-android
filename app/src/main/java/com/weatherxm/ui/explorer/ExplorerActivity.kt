@@ -14,8 +14,8 @@ import com.weatherxm.ui.common.Animation.ShowAnimation.SlideInFromBottom
 import com.weatherxm.ui.common.Contracts.ARG_CELL_CENTER
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.show
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.BaseMapFragment
 import dev.chrisbanes.insetter.applyInsetter
@@ -48,7 +48,7 @@ class ExplorerActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener 
             }
         }
 
-        model.explorerState().observe(this) { resource ->
+        model.onStatus().observe(this) { resource ->
             Timber.d("Status updated: ${resource.status}")
             when (resource.status) {
                 Status.SUCCESS -> {
@@ -65,11 +65,6 @@ class ExplorerActivity : BaseActivity(), BaseMapFragment.OnMapDebugInfoListener 
                 }
             }
         }
-
-        model.onCellSelected().observe(this) {
-            navigator.showCellInfo(this, it)
-        }
-
         binding.networkStatsBtn.setOnClickListener {
             navigator.showNetworkStats(this)
         }

@@ -1,17 +1,23 @@
 package com.weatherxm.util
 
 import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
+import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.search.result.SearchSuggestion
 import com.squareup.moshi.Moshi
 import com.weatherxm.R
 import com.weatherxm.data.Hex
 import com.weatherxm.data.Location
+import com.weatherxm.data.PublicHex
+import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.ui.explorer.UICellJsonAdapter
 import com.weatherxm.util.MapboxUtils.getCustomData
 import com.weatherxm.util.MapboxUtils.parseSearchSuggestion
+import com.weatherxm.util.MapboxUtils.polygonPointsToLatLng
+import com.weatherxm.util.MapboxUtils.toPolygonAnnotationOptions
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -21,6 +27,7 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
 class MapboxUtilsTest : BehaviorSpec({
+    lateinit var gson: Gson
     val resources = mockk<android.content.res.Resources>()
     val searchSuggestion = mockk<SearchSuggestion>()
     val polygonAnnotation = mockk<PolygonAnnotation>()
@@ -49,6 +56,19 @@ class MapboxUtilsTest : BehaviorSpec({
         "path-0.0+FFFFFF+3388ff-0.5(emjkFwjbeDntAxCfm@ixAef@c%7DAotAyCgm@hxA)" +
         "/27.228970,38.717426,11.000000,0.000000,0.000000" +
         "/500x200@2x?access_token=pk.TEST"
+    val publicHex = PublicHex(
+        "cellIndex",
+        0,
+        Location(lat = 38.71742582818318, lon = 27.22897028978693),
+        listOf(
+            Location(lat = 38.72482636074315, lon = 27.214679947948405),
+            Location(lat = 38.71114716956354, lon = 27.21391178034676),
+            Location(lat = 38.70374631403231, lon = 27.22820018964633),
+            Location(lat = 38.71002341064811, lon = 27.24325838250108),
+            Location(lat = 38.72370239640629, lon = 27.24403062984063),
+            Location(lat = 38.73110449138368, lon = 27.22974060478422)
+        )
+    )
 
     beforeSpec {
         startKoin {
@@ -61,11 +81,16 @@ class MapboxUtilsTest : BehaviorSpec({
                     single<Resources> {
                         Resources(resources)
                     }
+                    single<Gson> {
+                        GsonBuilder().setPrettyPrinting()
+                            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+                            .create()
+                    }
                 }
             )
         }
 
-        val gson = GsonBuilder().setPrettyPrinting()
+        gson = GsonBuilder().setPrettyPrinting()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .create()
         every {
@@ -80,6 +105,8 @@ class MapboxUtilsTest : BehaviorSpec({
         every { searchSuggestion.address?.country } returns null
         every { searchSuggestion.address?.postcode } returns null
         every { resources.getString(R.string.mapbox_access_token) } returns "pk.TEST"
+        every { resources.getColor(R.color.hex_fill_color, null) } returns 0
+        every { resources.getColor(R.color.white, null) } returns 0
     }
 
     context("Parse PolygonAnnotation to UICell UI Model") {
@@ -128,6 +155,35 @@ class MapboxUtilsTest : BehaviorSpec({
                 then("return the name, street, place, region, country and postcode") {
                     parseSearchSuggestion(searchSuggestion) shouldBe
                         "$address, $street, $place, $region, $country, $postcode"
+                }
+            }
+        }
+    }
+
+    context("Parse a list of public hexes to a list of PolygonAnnotationOptions") {
+        given("A list of Public Hexes") {
+            When("The list is empty") {
+                then("return an empty list") {
+                    listOf<PublicHex>().toPolygonAnnotationOptions() shouldBe emptyList()
+                }
+            }
+            When("The list is not empty") {
+                then("return the respective PolygonAnnotation list") {
+                    val expectedResult = listOf(
+                        PolygonAnnotationOptions()
+                            .withFillColor(resources.getColor(R.color.hex_fill_color, null))
+                            .withFillOpacity(FILL_OPACITY_HEXAGONS)
+                            .withFillOutlineColor(resources.getColor(R.color.white, null))
+                            .withData(gson.toJsonTree(UICell(publicHex.index, publicHex.center)))
+                            .withPoints(polygonPointsToLatLng(publicHex.polygon))
+                    )
+
+                    val returnedList = listOf(publicHex).toPolygonAnnotationOptions()
+                    returnedList[0].fillColor shouldBe expectedResult[0].fillColor
+                    returnedList[0].fillOpacity shouldBe expectedResult[0].fillOpacity
+                    returnedList[0].fillOutlineColor shouldBe expectedResult[0].fillOutlineColor
+                    returnedList[0].getData() shouldBe expectedResult[0].getData()
+                    returnedList[0].getPoints() shouldBe expectedResult[0].getPoints()
                 }
             }
         }

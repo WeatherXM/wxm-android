@@ -8,6 +8,7 @@ import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.squareup.moshi.JsonClass
 import com.weatherxm.data.Bundle
 import com.weatherxm.data.Location
+import com.weatherxm.data.PublicHex
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
@@ -18,8 +19,9 @@ import timber.log.Timber
 @Keep
 @JsonClass(generateAdapter = true)
 data class ExplorerData(
-    var geoJsonSource: GeoJsonSource,
-    var polygonPoints: List<PolygonAnnotationOptions>,
+    val geoJsonSource: GeoJsonSource,
+    val publicHexes: List<PublicHex>,
+    var polygonsToDraw: List<PolygonAnnotationOptions> = listOf()
 )
 
 @Keep
