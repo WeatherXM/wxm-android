@@ -68,6 +68,24 @@ object TestConfig : AbstractProjectConfig() {
             every {
                 sharedPref.getString("key_wind_direction_preference", "Cardinal")
             } returns "Cardinal"
+            every { context.getString(R.string.wxm_amount, any() as String) } returns "10 \$WXM"
+            every {
+                context.getString(R.string.rewardable_station_hours)
+            } returns "Rewardable station-hours"
+            every {
+                context.getString(R.string.daily_tokens_to_be_rewarded)
+            } returns "Daily tokens to be rewarded (max)"
+            every {
+                context.getString(R.string.total_tokens_to_be_rewarded)
+            } returns "Total tokens to be rewarded (max)"
+            every { context.getString(R.string.boost_period) } returns "Boost Period"
+            every {
+                context.getString(
+                    R.string.boost_details_beta_desc,
+                    any() as String,
+                    any() as String
+                )
+            } returns "Boost details description"
         }
 
         override suspend fun afterProject() {
