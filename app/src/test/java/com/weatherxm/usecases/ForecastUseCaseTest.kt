@@ -15,7 +15,7 @@ import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UIForecastDay
 import com.weatherxm.ui.common.empty
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeTypeOf
 import io.mockk.mockk
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -113,15 +113,15 @@ class ForecastUseCaseTest : BehaviorSpec({
         given("A repository providing the forecast data") {
             When("Device has a null timezone property") {
                 then("return INVALID_TIMEZONE failure") {
-                    val failure = usecase.getForecast(device, forceRefresh).leftOrNull()
-                    (failure is ApiError.UserError.InvalidTimezone) shouldBe true
+                    usecase.getForecast(device, forceRefresh).leftOrNull()
+                        .shouldBeTypeOf<ApiError.UserError.InvalidTimezone>()
                 }
             }
             When("Device does has an empty timezone property") {
                 device.timezone = String.empty()
                 then("return INVALID_TIMEZONE failure") {
-                    val failure = usecase.getForecast(device, forceRefresh).leftOrNull()
-                    (failure is ApiError.UserError.InvalidTimezone) shouldBe true
+                    usecase.getForecast(device, forceRefresh).leftOrNull()
+                        .shouldBeTypeOf<ApiError.UserError.InvalidTimezone>()
                 }
             }
             When("Device has a valid timezone property") {
