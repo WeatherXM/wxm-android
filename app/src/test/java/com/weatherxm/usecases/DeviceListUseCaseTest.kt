@@ -138,7 +138,8 @@ class DeviceListUseCaseTest : BehaviorSpec({
                         uiDevices
                             .sortedBy { it.getDefaultOrFriendlyName() }
                             .filter { it.isOwned() }
-                            .groupBy { it.relation }.forEach {
+                            .groupBy { it.relation }
+                            .forEach {
                                 if (it.key == DeviceRelation.OWNED) {
                                     finalDevices.addAll(0, it.value)
                                 } else {
@@ -159,7 +160,8 @@ class DeviceListUseCaseTest : BehaviorSpec({
                         uiDevices
                             .sortedByDescending { it.lastWeatherStationActivity }
                             .filter { it.isFollowed() }
-                            .groupBy { it.isActive }.forEach {
+                            .groupBy { it.isActive }
+                            .forEach {
                                 finalDevices.addAll(it.value)
                             }
                         usecase.getUserDevices().isSuccess(finalDevices)
