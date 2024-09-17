@@ -107,7 +107,8 @@ class RewardsUseCaseImpl(
             it.details?.stationHours?.let { amount ->
                 boostDetails.add(
                     BoostDetailInfo(
-                        context.getString(R.string.rewardable_station_hours), formatNumber(amount)
+                        context.getString(R.string.rewardable_station_hours),
+                        formatNumber(amount)
                     )
                 )
             }
@@ -135,7 +136,8 @@ class RewardsUseCaseImpl(
                 val boostStopDate = it.details.boostStopDate.getFormattedDate(true)
                 boostDetails.add(
                     BoostDetailInfo(
-                        context.getString(R.string.boost_period), "$boostStartDate - $boostStopDate"
+                        context.getString(R.string.boost_period),
+                        "$boostStartDate - $boostStopDate"
                     )
                 )
             }
@@ -298,7 +300,9 @@ class RewardsUseCaseImpl(
                 val participationStopDate =
                     details?.participationStopDate.getFormattedDate(true)
                 context.getString(
-                    R.string.boost_details_beta_desc, participationStartDate, participationStopDate
+                    R.string.boost_details_beta_desc,
+                    participationStartDate,
+                    participationStopDate
                 )
             } else {
                 String.empty()
