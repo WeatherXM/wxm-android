@@ -7,11 +7,15 @@ import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.DataError
 import com.weatherxm.data.Location
+import com.weatherxm.data.NetworkSearchAddressResult
+import com.weatherxm.data.NetworkSearchDeviceResult
+import com.weatherxm.data.NetworkSearchResults
 import com.weatherxm.data.PublicDevice
 import com.weatherxm.data.PublicHex
 import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
+import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_PLACES
 import com.weatherxm.data.repository.FollowRepository
 import com.weatherxm.data.repository.LocationRepository
 import com.weatherxm.ui.common.DeviceRelation
@@ -75,6 +79,15 @@ class ExplorerUseCaseTest : BehaviorSpec({
         this.address = address
         this.relation = DeviceRelation.UNFOLLOWED
     }
+
+    val query = "query"
+    val exact = false
+    val exclude = EXCLUDE_PLACES
+    val emptyNetworkSearchResults = NetworkSearchResults(null, null)
+    val networkSearchDeviceResult = NetworkSearchDeviceResult(null, null, null, null, null)
+    val networkSearchAddressResult = NetworkSearchAddressResult(null, null, null)
+    val networkSearchResults =
+        NetworkSearchResults(listOf(networkSearchDeviceResult), listOf(networkSearchAddressResult))
 
     beforeSpec {
         coEvery { addressRepo.getAddressFromLocation(cell.index, cell.center) } returns address
@@ -168,6 +181,42 @@ class ExplorerUseCaseTest : BehaviorSpec({
                 coMockEitherLeft({ explorerRepo.getCellDevice(index, ownedDevice.id) }, failure)
                 then("return that failure") {
                     usecase.getCellDevice(index, ownedDevice.id).isError()
+                }
+            }
+        }
+    }
+
+    context("Perform network search") {
+        given("A repository accepting the query and providing the results") {
+            When("it's a success") {
+                and("the response contain no results (empty response)") {
+                    coMockEitherRight(
+                        { explorerRepo.networkSearch(query, exact, exclude) },
+                        emptyNetworkSearchResults
+                    )
+                    then("return an empty list") {
+                        usecase.networkSearch(query, exact, exclude).isSuccess(emptyList())
+                    }
+                }
+                and("the response contain devices and addresses") {
+                    coMockEitherRight(
+                        { explorerRepo.networkSearch(query, exact, exclude) },
+                        networkSearchResults
+                    )
+                    then("return a list of SearchResult") {
+                        usecase.networkSearch(query, exact, exclude).isSuccess(
+                            listOf(
+                                SearchResult(null, null, relation = DeviceRelation.UNFOLLOWED),
+                                SearchResult(null, null),
+                            )
+                        )
+                    }
+                }
+            }
+            When("it's a failure") {
+                coMockEitherLeft({ explorerRepo.networkSearch(query, exact, exclude) }, failure)
+                then("return that failure") {
+                    usecase.networkSearch(query, exact, exclude).isError()
                 }
             }
         }
