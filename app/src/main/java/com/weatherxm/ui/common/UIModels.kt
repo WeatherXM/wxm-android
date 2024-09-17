@@ -557,7 +557,7 @@ data class DeviceTotalRewardsDetails(
     val total: Float?,
     val mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode?,
     val boosts: List<DeviceTotalRewardsBoost>,
-    val totalsForTooltip: List<Float>,
+    val totals: List<Float>,
     val datesChartTooltip: List<String>,
     val baseChartData: LineChartData,
     val betaChartData: LineChartData,

@@ -202,7 +202,7 @@ class RewardsUseCaseImpl(
             val baseEntries = mutableListOf<Entry>()
             val betaEntries = mutableListOf<Entry>()
             val otherEntries = mutableListOf<Entry>()
-            val totalsForTooltip = mutableListOf<Float>()
+            val totals = mutableListOf<Float>()
             val datesChartTooltip = mutableListOf<String>()
 
             summary.data?.fastForEachIndexed { counter, timeseries ->
@@ -254,7 +254,7 @@ class RewardsUseCaseImpl(
                     }
                     sum += it.value
                 }
-                totalsForTooltip.add(sum)
+                totals.add(sum)
 
                 if (baseSum == 0F) {
                     baseEntries.add(Entry(counter.toFloat(), Float.NaN))
@@ -277,7 +277,7 @@ class RewardsUseCaseImpl(
                 summary.total,
                 mode,
                 summary.details?.map { it.toDeviceTotalRewardsBoost() } ?: mutableListOf(),
-                totalsForTooltip,
+                totals,
                 datesChartTooltip,
                 LineChartData(xLabels, baseEntries),
                 LineChartData(xLabels, betaEntries),

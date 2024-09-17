@@ -654,7 +654,7 @@ fun LineChart.initRewardsBreakdownChart(
     baseData: LineChartData,
     betaData: LineChartData,
     othersData: LineChartData,
-    totalsForTooltip: List<Float>,
+    totals: List<Float>,
     datesChartTooltip: List<String>
 ) {
     val dataSets = mutableListOf<ILineDataSet>()
@@ -713,6 +713,7 @@ fun LineChart.initRewardsBreakdownChart(
     axisRight.setDrawAxisLine(false)
     axisRight.setDrawGridLines(true)
     axisRight.axisMinimum = 0F
+    axisRight.axisMaximum = totals.max() * 1.5F
 
     // X axis settings
     with(xAxis) {
@@ -728,7 +729,7 @@ fun LineChart.initRewardsBreakdownChart(
     marker = TooltipMarkerView(
         context,
         datesChartTooltip,
-        totalsForTooltip,
+        totals,
         baseData,
         betaData,
         othersData
