@@ -23,6 +23,7 @@ import com.weatherxm.data.repository.AddressRepositoryImpl.Companion.MAX_GEOCODI
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeTypeOf
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
@@ -67,9 +68,8 @@ class AddressRepositoryTest : BehaviorSpec({
         When("distance meters is null") {
             every { searchResult.distanceMeters } returns null
             then("return failure SearchResultNotNearbyError") {
-                repo.getAddressFromPoint(point).isLeft {
-                    it is ReverseGeocodingError.SearchResultNotNearbyError
-                } shouldBe true
+                repo.getAddressFromPoint(point).leftOrNull()
+                    .shouldBeTypeOf<ReverseGeocodingError.SearchResultNotNearbyError>()
             }
         }
         When("distance meters is more than $MAX_GEOCODING_DISTANCE_METERS") {
@@ -77,9 +77,8 @@ class AddressRepositoryTest : BehaviorSpec({
                 searchResult.distanceMeters
             } returns MAX_GEOCODING_DISTANCE_METERS + 1
             then("return failure SearchResultNotNearbyError") {
-                repo.getAddressFromPoint(point).isLeft {
-                    it is ReverseGeocodingError.SearchResultNotNearbyError
-                } shouldBe true
+                repo.getAddressFromPoint(point).leftOrNull()
+                    .shouldBeTypeOf<ReverseGeocodingError.SearchResultNotNearbyError>()
             }
         }
         When("distance meters is less than $MAX_GEOCODING_DISTANCE_METERS") {
@@ -89,9 +88,8 @@ class AddressRepositoryTest : BehaviorSpec({
             When("address is null") {
                 every { searchResult.address } returns null
                 then("return failure SearchResultNoAddressError") {
-                    repo.getAddressFromPoint(point).isLeft {
-                        it is ReverseGeocodingError.SearchResultNoAddressError
-                    } shouldBe true
+                    repo.getAddressFromPoint(point).leftOrNull()
+                        .shouldBeTypeOf<ReverseGeocodingError.SearchResultNoAddressError>()
                 }
             }
             When("address is not null") {
@@ -285,9 +283,8 @@ class AddressRepositoryTest : BehaviorSpec({
                 When("accuracy is not point or rooftop or street") {
                     every { searchResult.accuracy } returns ResultAccuracy.Approximate
                     then("return failure SearchResultNotAccurateError") {
-                        repo.getAddressFromPoint(point).isLeft {
-                            it is ReverseGeocodingError.SearchResultNotAccurateError
-                        } shouldBe true
+                        repo.getAddressFromPoint(point).leftOrNull()
+                            .shouldBeTypeOf<ReverseGeocodingError.SearchResultNotAccurateError>()
                     }
                 }
                 When("accuracy is point") {

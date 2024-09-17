@@ -15,7 +15,7 @@ import com.weatherxm.data.MapBoxError.ReverseGeocodingError
 import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceRepository
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeTypeOf
 import io.mockk.mockk
 
 class EditLocationUseCaseTest : BehaviorSpec({
@@ -106,9 +106,8 @@ class EditLocationUseCaseTest : BehaviorSpec({
                             { addressRepository.getAddressFromPoint(point) },
                             emptySearchAddress
                         )
-                        val failure = usecase.getAddressFromPoint(point).leftOrNull()
-                        (failure is
-                            ReverseGeocodingError.SearchResultAddressFormatError) shouldBe true
+                        usecase.getAddressFromPoint(point).leftOrNull()
+                            .shouldBeTypeOf<ReverseGeocodingError.SearchResultAddressFormatError>()
                     }
                 }
                 and("the address format is valid") {
