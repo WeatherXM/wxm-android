@@ -604,6 +604,7 @@ fun LineChart.initTotalEarnedChart(
     dataSet.mode = LineDataSet.Mode.LINEAR
     dataSet.highLightColor = context.getColor(R.color.darkGrey)
     dataSet.color = context.getColor(R.color.blue)
+    dataSet.axisDependency = YAxis.AxisDependency.RIGHT
 
     // Y Axis settings
     axisLeft.isEnabled = false
@@ -611,6 +612,7 @@ fun LineChart.initTotalEarnedChart(
     axisRight.gridColor = context.getColor(R.color.midGrey)
     axisRight.setDrawAxisLine(false)
     axisRight.setDrawGridLines(true)
+    axisRight.axisMinimum = 0F
 
     // X axis settings
     with(xAxis) {
@@ -640,6 +642,7 @@ private fun MutableList<LineDataSet>.initRewardBreakDown(color: Int) {
         it.color = color
         it.fillColor = color
         it.setCircleColor(color)
+        it.axisDependency = YAxis.AxisDependency.RIGHT
         if (it.values.size > 1) it.setDrawCircles(false)
     }
 }
@@ -706,6 +709,7 @@ fun LineChart.initRewardsBreakdownChart(
     axisRight.gridColor = context.getColor(R.color.midGrey)
     axisRight.setDrawAxisLine(false)
     axisRight.setDrawGridLines(true)
+    axisRight.axisMinimum = 0F
 
     // X axis settings
     with(xAxis) {
