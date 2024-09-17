@@ -14,7 +14,6 @@ import com.weatherxm.data.RewardsCode
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.ui.common.BoostDetailInfo
-import com.weatherxm.ui.common.DeviceTotalRewardsBoost
 import com.weatherxm.ui.common.DeviceTotalRewardsDetails
 import com.weatherxm.ui.common.DevicesRewardsByRange
 import com.weatherxm.ui.common.LineChartData
@@ -33,7 +32,6 @@ import timber.log.Timber
 import java.time.ZonedDateTime
 import java.time.format.TextStyle
 import java.util.Locale
-import kotlin.math.roundToInt
 
 interface RewardsUseCase {
     suspend fun getRewardsTimeline(
@@ -278,16 +276,7 @@ class RewardsUseCaseImpl(
             DeviceTotalRewardsDetails(
                 summary.total,
                 mode,
-                summary.details?.map {
-                    DeviceTotalRewardsBoost(
-                        it.code,
-                        it.completedPercentage?.roundToInt(),
-                        it.totalRewards,
-                        it.currentRewards,
-                        it.boostPeriodStart,
-                        it.boostPeriodEnd
-                    )
-                } ?: mutableListOf(),
+                summary.details?.map { it.toDeviceTotalRewardsBoost() } ?: mutableListOf(),
                 totalsForTooltip,
                 datesChartTooltip,
                 LineChartData(xLabels, baseEntries),

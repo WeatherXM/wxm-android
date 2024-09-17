@@ -7,12 +7,14 @@ import com.squareup.moshi.JsonClass
 import com.weatherxm.ui.common.AnnotationGroupCode
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.DeviceTotalRewardsBoost
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.ZonedDateTime
+import kotlin.math.roundToInt
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -774,7 +776,18 @@ data class DeviceRewardsSummaryDetails(
     val boostPeriodEnd: ZonedDateTime?,
     @Json(name = "completed_percentage")
     val completedPercentage: Float?
-) : Parcelable
+) : Parcelable {
+    fun toDeviceTotalRewardsBoost(): DeviceTotalRewardsBoost {
+        return DeviceTotalRewardsBoost(
+            code,
+            completedPercentage?.roundToInt(),
+            totalRewards,
+            currentRewards,
+            boostPeriodStart,
+            boostPeriodEnd
+        )
+    }
+}
 
 @Suppress("EnumNaming")
 enum class Connectivity {
