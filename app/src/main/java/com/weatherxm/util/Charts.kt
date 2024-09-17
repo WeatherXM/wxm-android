@@ -612,7 +612,9 @@ fun LineChart.initTotalEarnedChart(
     axisRight.gridColor = context.getColor(R.color.midGrey)
     axisRight.setDrawAxisLine(false)
     axisRight.setDrawGridLines(true)
-    axisRight.axisMinimum = 0F
+    if (dataSet.yMin == 0F) {
+        axisRight.axisMinimum = 0F
+    }
 
     // X axis settings
     with(xAxis) {
