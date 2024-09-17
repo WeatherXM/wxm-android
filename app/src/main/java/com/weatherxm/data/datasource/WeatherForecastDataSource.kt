@@ -4,7 +4,7 @@ import androidx.annotation.StringDef
 import arrow.core.Either
 import com.weatherxm.data.Failure
 import com.weatherxm.data.WeatherData
-import java.time.ZonedDateTime
+import java.time.LocalDate
 
 interface WeatherForecastDataSource {
 
@@ -20,8 +20,8 @@ interface WeatherForecastDataSource {
 
     suspend fun getForecast(
         deviceId: String,
-        fromDate: ZonedDateTime,
-        toDate: ZonedDateTime,
+        fromDate: LocalDate,
+        toDate: LocalDate,
         exclude: @Exclude String? = null
     ): Either<Failure, List<WeatherData>>
 
