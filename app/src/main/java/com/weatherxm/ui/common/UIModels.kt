@@ -510,12 +510,7 @@ data class LineChartData(
     }
 
     fun getEntryValueForTooltip(position: Float): Float {
-        val value = entries.getOrNull(position.toInt())?.y ?: 0F
-        return if (value.isNaN()) {
-            0F
-        } else {
-            value
-        }
+        return entries.getOrNull(position.toInt())?.y?.takeIf { !it.isNaN() } ?: 0F
     }
 }
 
