@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_extra_small"
-            app:dividerColor="@color/layer1"
+            app:dividerColor="@color/light_layer1"
             app:layout_constraintTop_toBottomOf="@id/date" />
 
         <com.google.android.material.textview.MaterialTextView
