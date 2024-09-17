@@ -652,6 +652,7 @@ fun LineChart.initRewardsBreakdownChart(
     baseData: LineChartData,
     betaData: LineChartData,
     othersData: LineChartData,
+    totalsForTooltip: List<Float>,
     datesChartTooltip: List<String>
 ) {
     val dataSets = mutableListOf<ILineDataSet>()
@@ -722,7 +723,14 @@ fun LineChart.initRewardsBreakdownChart(
         valueFormatter = CustomXAxisFormatter(baseData.timestamps)
     }
 
-    marker = TooltipMarkerView(context, datesChartTooltip, baseData, betaData, othersData)
+    marker = TooltipMarkerView(
+        context,
+        datesChartTooltip,
+        totalsForTooltip,
+        baseData,
+        betaData,
+        othersData
+    )
     setDrawMarkers(true)
 
     show()

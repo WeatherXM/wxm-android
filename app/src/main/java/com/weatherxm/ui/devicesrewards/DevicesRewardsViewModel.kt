@@ -60,6 +60,7 @@ class DevicesRewardsViewModel(
                     null,
                     mutableListOf(),
                     mutableListOf(),
+                    mutableListOf(),
                     LineChartData.empty(),
                     LineChartData.empty(),
                     LineChartData.empty(),

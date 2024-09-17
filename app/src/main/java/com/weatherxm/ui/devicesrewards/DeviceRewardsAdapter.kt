@@ -104,6 +104,7 @@ class DeviceRewardsAdapter(
                 details.baseChartData,
                 details.betaChartData,
                 details.otherChartData,
+                details.totalsForTooltip,
                 details.datesChartTooltip
             )
 

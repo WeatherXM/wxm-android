@@ -204,6 +204,7 @@ class RewardsUseCaseImpl(
             val baseEntries = mutableListOf<Entry>()
             val betaEntries = mutableListOf<Entry>()
             val otherEntries = mutableListOf<Entry>()
+            val totalsForTooltip = mutableListOf<Float>()
             val datesChartTooltip = mutableListOf<String>()
 
             summary.data?.fastForEachIndexed { counter, timeseries ->
@@ -255,6 +256,8 @@ class RewardsUseCaseImpl(
                     }
                     sum += it.value
                 }
+                totalsForTooltip.add(sum)
+
                 if (baseSum == 0F) {
                     baseEntries.add(Entry(counter.toFloat(), Float.NaN))
                 } else {
@@ -285,6 +288,7 @@ class RewardsUseCaseImpl(
                         it.boostPeriodEnd
                     )
                 } ?: mutableListOf(),
+                totalsForTooltip,
                 datesChartTooltip,
                 LineChartData(xLabels, baseEntries),
                 LineChartData(xLabels, betaEntries),

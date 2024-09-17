@@ -15,6 +15,7 @@ import com.weatherxm.util.Rewards.formatTokens
 class TooltipMarkerView(
     context: Context,
     private val dates: List<String>,
+    private val totals: List<Float> = mutableListOf(),
     private val baseData: LineChartData = LineChartData.empty(),
     private val betaData: LineChartData = LineChartData.empty(),
     private val othersData: LineChartData = LineChartData.empty(),
@@ -36,8 +37,6 @@ class TooltipMarkerView(
          * as the entry's x to get the value in the dates list
          */
         dateView.text = dates.getOrNull(e.x.toInt()) ?: String.empty()
-        totalView.text = formatTokens(e.y)
-
 
         /**
          * As explained in the comment in RewardsUseCase, the "chart with filled layers" to work
@@ -46,32 +45,48 @@ class TooltipMarkerView(
          */
         var baseValue = 0F
         var betaValue = 0F
-        var othersValue: Float
+        var othersValue = 0F
 
-        baseData.isDataValid().also {
-            baseTitleView.visible(it)
-            baseView.visible(it)
-            if (it) {
-                baseValue = baseData.getEntryValueForTooltip(e.x)
-                baseView.text = formatTokens(baseValue)
+        baseData.isDataValid().takeIf { it }?.also {
+            baseTitleView.visible(true)
+            baseView.visible(true)
+            baseValue = baseData.getEntryValueForTooltip(e.x)
+            baseView.text = formatTokens(baseValue)
+        } ?: run {
+            baseTitleView.visible(false)
+            baseView.visible(false)
+        }
+        betaData.isDataValid().takeIf { it }?.also {
+            betaTitleView.visible(true)
+            betaView.visible(true)
+            betaValue = betaData.getEntryValueForTooltip(e.x)
+            betaView.text = formatTokens((betaValue - baseValue).coerceAtLeast(0F))
+        } ?: run {
+            betaTitleView.visible(false)
+            betaView.visible(false)
+        }
+        othersData.isDataValid().takeIf { it }?.also {
+            othersTitleView.visible(true)
+            othersView.visible(true)
+            othersValue = othersData.getEntryValueForTooltip(e.x)
+            othersView.text = if (betaValue > 0) {
+                formatTokens((othersValue - betaValue).coerceAtLeast(0F))
+            } else {
+                formatTokens((othersValue - baseValue).coerceAtLeast(0F))
             }
+        } ?: run {
+            othersTitleView.visible(false)
+            othersView.visible(false)
         }
 
-        betaData.isDataValid().also {
-            betaTitleView.visible(it)
-            betaView.visible(it)
-            if (it) {
-                betaValue = betaData.getEntryValueForTooltip(e.x)
-                betaView.text = formatTokens((betaValue - baseValue).coerceAtLeast(0F))
-            }
-        }
-        othersData.isDataValid().also {
-            othersTitleView.visible(it)
-            othersView.visible(it)
-            if (it) {
-                othersValue = othersData.getEntryValueForTooltip(e.x)
-                othersView.text = formatTokens((othersValue - betaValue).coerceAtLeast(0F))
-            }
+        /**
+         * In Rewards Breakdown chart we cannot get the total from e.y that's why we use
+         * the explicit `totals` list in order to get the correct number
+         */
+        if(totals.isEmpty()) {
+            totalView.text = formatTokens(e.y)
+        } else {
+            totalView.text = formatTokens(totals.getOrNull(e.x.toInt()) ?: 0F)
         }
 
         super.refreshContent(e, highlight)
