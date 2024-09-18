@@ -81,6 +81,7 @@ class DeviceRewardsAdapter(
                     onDetails(it)
                 }
             } ?: kotlin.run {
+                binding.chartRangeSelector.disable()
                 binding.retryCard.visible(false)
                 binding.detailsStatus.visible(true)
             }
@@ -113,6 +114,7 @@ class DeviceRewardsAdapter(
             binding.othersRewardsLegend.visible(details.otherChartData.isDataValid())
             binding.retryCard.visible(false)
             binding.detailsStatus.visible(false)
+            binding.chartRangeSelector.enable()
             binding.detailsContainer.visible(true)
         }
 
@@ -147,11 +149,13 @@ class DeviceRewardsAdapter(
             binding.retryCard.listener {
                 invokeOnRangeChip(binding.chartRangeSelector.checkedChipId(), deviceId)
             }
+            binding.chartRangeSelector.enable()
             binding.retryCard.visible(true)
         }
 
         private fun invokeOnRangeChip(checkedChipId: Int, deviceId: String) {
             binding.detailsStatus.animation(R.raw.anim_loading).visible(true)
+            binding.chartRangeSelector.disable()
             binding.detailsContainer.visible(false)
             binding.retryCard.visible(false)
             onRangeChipClicked.invoke(absoluteAdapterPosition, checkedChipId, deviceId)
