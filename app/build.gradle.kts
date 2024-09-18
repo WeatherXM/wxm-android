@@ -211,15 +211,13 @@ android {
             }
             // Change minifyEnabled to true if you want to test code obfuscation in debug mode
             isMinifyEnabled = false
+            enableAndroidTestCoverage = true
+            enableUnitTestCoverage = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
             manifestPlaceholders["crashlyticsEnabled"] = false
-        }
-        debug {
-            enableAndroidTestCoverage = true
-            enableUnitTestCoverage = true
         }
     }
 
@@ -331,6 +329,55 @@ android {
             resources.srcDirs("src/main/assets")
         }
     }
+}
+
+tasks.register("jacocoTestReport", type = JacocoReport::class) {
+    dependsOn("testRemoteProdDebugUnitTest", "createRemoteProdDebugUnitTestCoverageReport")
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running unit tests."
+
+    reports {
+        xml.required = true
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir("reports/jacoco/html")
+        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/jacoco.xml")
+    }
+
+    val fileFilter = listOf(
+        "**/databinding/*.*",
+        "**/app/*.*",
+        "**/ui/**/*Activity*.*",
+        "**/ui/**/*Fragment*.*",
+        "**/ui/**/*Adapter*.*",
+        "**/ui/**/*CardView*.*",
+        "**/ui/components/Base*.*",
+        "**/ui/components/*View.*",
+        "**/ui/components/ChartsView*.*",
+        "**/ui/components/DailyRewardsCardView*.*",
+        "**/ui/components/HidingBottomNavigationView*.*",
+        "**/ui/components/DateNavigator*.class",
+        "**/ui/components/DatePicker.class",
+        "**/ui/widgets/RemoteViews*.*",
+        "**/ui/widgets/currentweather/*.*",
+        "**/ui/Navigator.class",
+        "**/BuildConfig.class"
+    )
+    val debugTree = fileTree(
+        mapOf(
+            "dir" to "${buildDir}/intermediates/classes/remoteProdDebug/transformRemoteProdDebugClassesWithAsm/dirs/com",
+            "excludes" to fileFilter
+        )
+    )
+    val mainSrc = "/src/main/java"
+
+    sourceDirectories = files(listOf(mainSrc))
+    classDirectories = files(listOf(debugTree))
+    executionData = fileTree(
+        mapOf(
+            "dir" to "$buildDir",
+            "includes" to listOf("/outputs/unit_test_code_coverage/remoteProdDebugUnitTest/testRemoteProdDebugUnitTest.exec")
+        )
+    )
 }
 
 dependencies {
