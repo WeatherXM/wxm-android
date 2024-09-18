@@ -360,11 +360,12 @@ tasks.register("jacocoTestReport", type = JacocoReport::class) {
         "**/ui/widgets/RemoteViews*.*",
         "**/ui/widgets/currentweather/*.*",
         "**/ui/Navigator.class",
+        "**/util/ChartsKt*.*",
         "**/BuildConfig.class"
     )
     val debugTree = fileTree(
         mapOf(
-            "dir" to "${buildDir}/intermediates/classes/remoteProdDebug/transformRemoteProdDebugClassesWithAsm/dirs/com",
+            "dir" to "${layout.buildDirectory.get()}/intermediates/classes/remoteProdDebug/transformRemoteProdDebugClassesWithAsm/dirs/com",
             "excludes" to fileFilter
         )
     )
@@ -374,7 +375,7 @@ tasks.register("jacocoTestReport", type = JacocoReport::class) {
     classDirectories = files(listOf(debugTree))
     executionData = fileTree(
         mapOf(
-            "dir" to "$buildDir",
+            "dir" to "${layout.buildDirectory.get()}",
             "includes" to listOf("/outputs/unit_test_code_coverage/remoteProdDebugUnitTest/testRemoteProdDebugUnitTest.exec")
         )
     )
