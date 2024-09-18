@@ -346,6 +346,11 @@ tasks.register("jacocoTestReport", type = JacocoReport::class) {
     val fileFilter = listOf(
         "**/databinding/*.*",
         "**/app/*.*",
+        "**/data/database/AppDatabase*.*",
+        "**/data/database/dao/**",
+        "**/data/database/entities/**",
+        "**/data/network/**",
+        "**/service/**",
         "**/ui/**/*Activity*.*",
         "**/ui/**/*Fragment*.*",
         "**/ui/**/*Adapter*.*",
@@ -365,7 +370,9 @@ tasks.register("jacocoTestReport", type = JacocoReport::class) {
     )
     val debugTree = fileTree(
         mapOf(
-            "dir" to "${layout.buildDirectory.get()}/intermediates/classes/remoteProdDebug/transformRemoteProdDebugClassesWithAsm/dirs/com",
+            "dir" to "${layout.buildDirectory.get()}/" +
+                "intermediates/classes/remoteProdDebug/" +
+                "transformRemoteProdDebugClassesWithAsm/dirs/com",
             "excludes" to fileFilter
         )
     )
@@ -376,7 +383,11 @@ tasks.register("jacocoTestReport", type = JacocoReport::class) {
     executionData = fileTree(
         mapOf(
             "dir" to "${layout.buildDirectory.get()}",
-            "includes" to listOf("/outputs/unit_test_code_coverage/remoteProdDebugUnitTest/testRemoteProdDebugUnitTest.exec")
+            "includes" to listOf(
+                "/outputs/unit_test_code_coverage/" +
+                    "remoteProdDebugUnitTest/" +
+                    "testRemoteProdDebugUnitTest.exec"
+            )
         )
     )
 }
