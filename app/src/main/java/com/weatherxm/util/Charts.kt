@@ -614,7 +614,10 @@ fun LineChart.initTotalEarnedChart(
     axisRight.setDrawGridLines(true)
     if (dataSet.yMin == 0F) {
         axisRight.axisMinimum = 0F
+    } else {
+        axisRight.axisMinimum = dataSet.yMin * 0.8F
     }
+    axisRight.axisMaximum = dataSet.yMax * 1.2F
 
     // X axis settings
     with(xAxis) {
