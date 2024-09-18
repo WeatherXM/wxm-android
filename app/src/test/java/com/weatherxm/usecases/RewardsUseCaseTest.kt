@@ -22,6 +22,7 @@ import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.UIBoost
 import com.weatherxm.ui.common.UIRewardsTimeline
 import com.weatherxm.ui.common.empty
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.NumberUtils
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.every
@@ -38,6 +39,7 @@ class RewardsUseCaseTest : BehaviorSpec({
     val deviceId = "deviceId"
     val page = 0
     val timestamp = ZonedDateTime.now()
+    val formattedDate = timestamp.getFormattedDate(true)
     val emptyReward = Reward(timestamp, null, null, null, null, null)
     val validReward = Reward(timestamp, 10F, 0F, 10F, 100, null)
 
@@ -72,7 +74,7 @@ class RewardsUseCaseTest : BehaviorSpec({
             BoostDetailInfo("Rewardable station-hours", "10"),
             BoostDetailInfo("Daily tokens to be rewarded (max)", "10 \$WXM"),
             BoostDetailInfo("Total tokens to be rewarded (max)", "10 \$WXM"),
-            BoostDetailInfo("Boost Period", "Sep 17, 2024 - Sep 17, 2024")
+            BoostDetailInfo("Boost Period", "$formattedDate - $formattedDate")
         )
     )
     val emptyUiBoost =
