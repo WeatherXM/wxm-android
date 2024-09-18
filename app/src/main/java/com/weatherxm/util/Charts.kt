@@ -510,12 +510,6 @@ fun LineChart.initSolarChart(
         }
         dataSets.addAll(radiationDataEmptyLineDataSets)
 
-        with(axisRight) {
-            isEnabled = true
-            isGranularityEnabled = true
-            granularity = 1F
-            axisMinimum = 0F
-        }
         radiationDataLineDataSetsWithValues.size + radiationDataEmptyLineDataSets.size
     } else {
         0
@@ -542,6 +536,7 @@ fun LineChart.initSolarChart(
         isGranularityEnabled = true
         granularity = 1F
     }
+    axisRight.axisMinimum = 0F
 
     // X axis settings
     xAxis.valueFormatter = CustomXAxisFormatter(uvData.timestamps)
