@@ -53,6 +53,9 @@
     <color name="light_warning_tint">#FBDEBC</color>
     <color name="dark_warning_tint">#46381B</color>
 
+    <!-- Tooltip -->
+    <color name="tooltip">#E645464F</color>
+
     <!-- Translucent -->
     <color name="translucent_light_layer1">#33EAEBF9</color>
 
@@ -68,7 +71,12 @@
     <color name="network_stats_slider_light">#BED6FF</color>
     <color name="network_stats_slider_dark">#2E4C80</color>
 
-    <!-- Reward Scores -->
+    <!-- Rewards -->
     <color name="reward_score_unknown">#BAC7CB</color>
+    <color name="last_run_color">#00B55D</color>
+    <color name="beta_rewards_color">#9B3EDE</color>
+    <color name="beta_rewards_fill">#6A00B6</color>
+    <color name="other_reward">#07C38D</color>
+    <color name="other_reward_fill">#9907C38D</color>
     <!-- End -->
 </resources>

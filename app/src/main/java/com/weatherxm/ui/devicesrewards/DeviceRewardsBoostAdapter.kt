@@ -1,0 +1,104 @@
+package com.weatherxm.ui.devicesrewards
+
+import android.annotation.SuppressLint
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.weatherxm.R
+import com.weatherxm.data.BoostCode
+import com.weatherxm.databinding.ListItemDeviceRewardsBoostBinding
+import com.weatherxm.ui.common.DeviceTotalRewardsBoost
+import com.weatherxm.ui.common.visible
+import com.weatherxm.util.DateTimeHelper.getFormattedDate
+import com.weatherxm.util.Rewards.formatTokens
+import timber.log.Timber
+
+class DeviceRewardsBoostAdapter :
+    ListAdapter<DeviceTotalRewardsBoost, DeviceRewardsBoostAdapter.DeviceRewardsBoostViewHolder>(
+        DeviceRewardsBoostDiffCallback()
+    ) {
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): DeviceRewardsBoostViewHolder {
+        val binding = ListItemDeviceRewardsBoostBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return DeviceRewardsBoostViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: DeviceRewardsBoostViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    inner class DeviceRewardsBoostViewHolder(
+        private val binding: ListItemDeviceRewardsBoostBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        @SuppressLint("SetTextI18n")
+        fun bind(item: DeviceTotalRewardsBoost) {
+            val boostCode = item.boostCode
+            try {
+                if (boostCode != null && BoostCode.valueOf(boostCode) == BoostCode.beta_rewards) {
+                    binding.title.text = itemView.context.getString(R.string.beta_reward_details)
+                    binding.boostProgressSlider.trackActiveTintList =
+                        itemView.context.getColorStateList(R.color.beta_rewards_fill)
+                    binding.boostProgressSlider.trackInactiveTintList =
+                        itemView.context.getColorStateList(R.color.beta_rewards_color)
+                } else {
+                    onUnknownBoost()
+                }
+            } catch (e: IllegalArgumentException) {
+                Timber.e("Unsupported Boost Code: $boostCode")
+                onUnknownBoost()
+            }
+
+            item.completedPercentage?.let {
+                binding.boostProgress.text = "$it%"
+                binding.boostProgressSlider.values = listOf(it.toFloat())
+            } ?: binding.boostProgressSlider.visible(false)
+
+            binding.totalTokensSoFar.text = formatTokens(item.currentRewards)
+            binding.totalTokensMax.text = formatTokens(item.maxRewards)
+
+            val boostStartDate = item.boostPeriodStart.getFormattedDate(true)
+            val boostStopDate = item.boostPeriodEnd.getFormattedDate(true)
+            binding.boostPeriod.text = "$boostStartDate - $boostStopDate"
+        }
+
+        private fun onUnknownBoost() {
+            binding.title.text = itemView.context.getString(R.string.other_boost_reward_details)
+            binding.boostProgressSlider.trackActiveTintList =
+                itemView.context.getColorStateList(R.color.other_reward)
+            binding.boostProgressSlider.trackInactiveTintList =
+                itemView.context.getColorStateList(R.color.other_reward_fill)
+        }
+    }
+}
+
+class DeviceRewardsBoostDiffCallback : DiffUtil.ItemCallback<DeviceTotalRewardsBoost>() {
+
+    override fun areItemsTheSame(
+        oldItem: DeviceTotalRewardsBoost,
+        newItem: DeviceTotalRewardsBoost
+    ): Boolean {
+        return oldItem == newItem
+    }
+
+    override fun areContentsTheSame(
+        oldItem: DeviceTotalRewardsBoost,
+        newItem: DeviceTotalRewardsBoost
+    ): Boolean {
+        return oldItem.boostCode == newItem.boostCode &&
+            oldItem.maxRewards == newItem.maxRewards &&
+            oldItem.currentRewards == newItem.currentRewards &&
+            oldItem.boostPeriodEnd == newItem.boostPeriodEnd &&
+            oldItem.boostPeriodStart == newItem.boostPeriodStart &&
+            oldItem.completedPercentage == newItem.completedPercentage
+    }
+}

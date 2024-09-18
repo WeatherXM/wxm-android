@@ -2,6 +2,8 @@ package com.weatherxm.data.datasource
 
 import arrow.core.Either
 import com.weatherxm.data.BoostRewardResponse
+import com.weatherxm.data.DeviceRewardsSummary
+import com.weatherxm.data.DevicesRewards
 import com.weatherxm.data.Failure
 import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.Rewards
@@ -29,6 +31,11 @@ interface RewardsDataSource {
     ): Either<Failure, BoostRewardResponse>
 
     suspend fun getWalletRewards(walletAddress: String): Either<Failure, WalletRewards>
+    suspend fun getDevicesRewardsByRange(mode: String): Either<Failure, DevicesRewards>
+    suspend fun getDeviceRewardsByRange(
+        deviceId: String,
+        mode: String
+    ): Either<Failure, DeviceRewardsSummary>
 }
 
 class RewardsDataSourceImpl(private val apiService: ApiService) : RewardsDataSource {
@@ -70,5 +77,16 @@ class RewardsDataSourceImpl(private val apiService: ApiService) : RewardsDataSou
 
     override suspend fun getWalletRewards(walletAddress: String): Either<Failure, WalletRewards> {
         return apiService.getWalletRewards(walletAddress).mapResponse()
+    }
+
+    override suspend fun getDevicesRewardsByRange(mode: String): Either<Failure, DevicesRewards> {
+        return apiService.getDevicesRewardsByRange(mode).mapResponse()
+    }
+
+    override suspend fun getDeviceRewardsByRange(
+        deviceId: String,
+        mode: String
+    ): Either<Failure, DeviceRewardsSummary> {
+        return apiService.getDeviceRewardsByRange(deviceId, mode).mapResponse()
     }
 }

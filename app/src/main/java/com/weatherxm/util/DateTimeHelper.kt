@@ -52,7 +52,6 @@ object DateTimeHelper : KoinComponent {
         val lastUpdatedDate = getFormattedDate(true)
         val lastUpdatedTime = this?.getFormattedTime(context, true)
         return "$lastUpdatedDate, $lastUpdatedTime"
-
     }
 
     fun ZonedDateTime?.getFormattedDate(includeYear: Boolean = false): String {
@@ -63,7 +62,10 @@ object DateTimeHelper : KoinComponent {
                 "${month.getDisplayName(TextStyle.SHORT, Locale.US)} $dayOfMonth"
             }
         } ?: String.empty()
+    }
 
+    fun ZonedDateTime.getFormattedMonthDate(): String {
+        return format(formatterMonthDay)
     }
 
     fun ZonedDateTime.getFormattedTime(

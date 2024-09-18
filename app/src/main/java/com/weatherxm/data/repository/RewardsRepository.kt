@@ -2,6 +2,8 @@ package com.weatherxm.data.repository
 
 import arrow.core.Either
 import com.weatherxm.data.BoostRewardResponse
+import com.weatherxm.data.DeviceRewardsSummary
+import com.weatherxm.data.DevicesRewards
 import com.weatherxm.data.Failure
 import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.Rewards
@@ -30,11 +32,25 @@ interface RewardsRepository {
     ): Either<Failure, BoostRewardResponse>
 
     suspend fun getWalletRewards(walletAddress: String): Either<Failure, WalletRewards>
+    suspend fun getDevicesRewardsByRange(
+        mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
+    ): Either<Failure, DevicesRewards>
+
+    suspend fun getDeviceRewardsByRange(
+        deviceId: String,
+        mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
+    ): Either<Failure, DeviceRewardsSummary>
 }
 
 class RewardsRepositoryImpl(private val dataSource: RewardsDataSource) : RewardsRepository {
     companion object {
         const val TIMELINE_MINUS_MONTHS_TO_FETCH = 3L
+
+        enum class RewardsSummaryMode {
+            WEEK,
+            MONTH,
+            YEAR
+        }
     }
 
     override suspend fun getRewardsTimeline(
@@ -69,5 +85,18 @@ class RewardsRepositoryImpl(private val dataSource: RewardsDataSource) : Rewards
 
     override suspend fun getWalletRewards(walletAddress: String): Either<Failure, WalletRewards> {
         return dataSource.getWalletRewards(walletAddress)
+    }
+
+    override suspend fun getDevicesRewardsByRange(
+        mode: RewardsSummaryMode
+    ): Either<Failure, DevicesRewards> {
+        return dataSource.getDevicesRewardsByRange(mode.name.lowercase())
+    }
+
+    override suspend fun getDeviceRewardsByRange(
+        deviceId: String,
+        mode: RewardsSummaryMode
+    ): Either<Failure, DeviceRewardsSummary> {
+        return dataSource.getDeviceRewardsByRange(deviceId, mode.name.lowercase())
     }
 }

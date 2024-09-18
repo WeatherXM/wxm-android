@@ -24,7 +24,7 @@
     <string name="action_view_all">View All</string>
     <string name="action_finish">Finish</string>
     <string name="action_sign_in">Sign In</string>
-    <string name="action_buy_station">Buy Station</string>
+    <string name="action_buy_station">Buy a Station</string>
     <string name="action_claim">Claim</string>
     <string name="action_dismiss">Dismiss</string>
     <string name="action_close">Close</string>
@@ -38,6 +38,15 @@
     <string name="contact_us">Contact us</string>
     <string name="select_date">Select Date</string>>
     <string name="read_more">Read More</string>
+    <string name="seven_days_abbr">7D</string>
+    <string name="one_month_abbr">1M</string>
+    <string name="one_year_abbr">1Y</string>
+    <string name="others">Others</string>
+    <string name="total_with_colon">Total:</string>
+    <string name="base">Base:</string>
+    <string name="beta">Beta:</string>
+    <string name="other">Other:</string>
+    <string name="tap_to_retry">Tap to Retry</string>
 
     <!-- Permissions -->
     <string name="permission_location_title">Access to your location</string>
@@ -588,5 +597,18 @@
     <string name="weekly_range_bar_desc">The pale blue bar shows the minimum and maximum temperatures for the entire week.</string>
     <string name="daily_range_bar">Daily Range Bar</string>
     <string name="daily_range_bar_desc">Inside the weekly range, the strong blue bar indicates daily’s temperature range. It shows how today’s high and low temperatures fit within the weekly range.</string>
+
+    <!-- Station Rewards -->
+    <string name="station_rewards">Station Rewards</string>
+    <string name="oh_no">Oh no!</string>
+    <string name="it_seems_no_stations_yet">It seems you don’t have any stations yet.</string>
+    <string name="rewards_by_station">Rewards by Station</string>
+    <string name="rewards_breakdown">Rewards breakdown</string>
+    <string name="earned_by_this_station">Earned by this station</string>
+    <string name="beta_reward_details">Beta rewards details</string>
+    <string name="other_boost_reward_details">Other boost reward details</string>
+    <string name="total_tokens_earned_so_far">Total tokens earned so far</string>
+    <string name="base_rewards">Base Rewards</string>
+    <string name="beta_rewards">Beta Rewards</string>
 
 </resources>

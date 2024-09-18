@@ -1,0 +1,133 @@
+{
+    "total": 100.0,
+    "data": [
+        {
+            "ts": "2024-08-29T22:00:00+02:00",
+            "rewards": [
+                {
+                    "type": "base",
+                    "code": "base_reward",
+                    "value": 10.4
+                },
+                {
+                    "type": "boost",
+                    "code": "beta_rewards",
+                    "value": 4.4
+                }
+            ]
+        },
+        {
+            "ts": "2024-08-30T22:00:00+02:00",
+            "rewards": [
+                {
+                    "type": "base",
+                    "code": "base_reward",
+                    "value": 10.4
+                },
+                {
+                    "type": "boost",
+                    "code": "beta_rewards",
+                    "value": 4.4
+                }
+            ]
+        },
+        {
+            "ts": "2024-08-31T22:00:00+02:00",
+            "rewards": [
+                {
+                    "type": "base",
+                    "code": "base_reward",
+                    "value": 10.4
+                },
+                {
+                    "type": "boost",
+                    "code": "beta_rewards",
+                    "value": 4.4
+                }
+            ]
+        },
+        {
+            "ts": "2024-09-01T22:00:00+02:00",
+            "rewards": [
+                {
+                    "type": "base",
+                    "code": "base_reward",
+                    "value": 15.4
+                },
+                {
+                    "type": "boost",
+                    "code": "beta_rewards",
+                    "value": 6.4
+                }
+            ]
+        },
+        {
+            "ts": "2024-09-02T22:00:00+02:00",
+            "rewards": [
+                {
+                    "type": "base",
+                    "code": "base_reward",
+                    "value": 15.4
+                }
+            ]
+        },
+        {
+            "ts": "2024-09-03T22:00:00+02:00",
+            "rewards": [
+                {
+                    "type": "base",
+                    "code": "base_reward",
+                    "value": 10.4
+                },
+                {
+                    "type": "boost",
+                    "code": "beta_rewards",
+                    "value": 4.4
+                },
+                {
+                    "type": "boost",
+                    "code": "cell_reward",
+                    "value": 3.4
+                }
+            ]
+        },
+        {
+            "ts": "2024-09-04T22:00:00+02:00",
+            "rewards": [
+                {
+                    "type": "base",
+                    "code": "base_reward",
+                    "value": 11.4
+                },
+                {
+                    "type": "boost",
+                    "code": "beta_rewards",
+                    "value": 3.4
+                },
+                {
+                    "type": "boost",
+                    "code": "cell_reward",
+                    "value": 3.4
+                }
+            ]
+        }
+    ],
+    "details": [
+        {
+            "code": "beta_rewards",
+            "current_rewards": 56.532,
+            "total_rewards": 560.532,
+            "boost_period_start": "2024-08-28T22:00:00+02:00",
+            "boost_period_end": "2025-01-01T22:00:00+02:00",
+            "completed_percentage": 10.4
+        },
+        {
+            "code": "cell_reward",
+            "current_rewards": 26.532,
+            "total_rewards": 56.532,
+            "boost_period_start": "2024-08-28T22:00:00+02:00",
+            "boost_period_end": "2025-01-01T22:00:00+02:00",
+            "completed_percentage": 50.5
+        }
+    ]
+}

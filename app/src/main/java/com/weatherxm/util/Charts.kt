@@ -2,9 +2,9 @@
 
 package com.weatherxm.util
 
+import TooltipMarkerView
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Typeface
 import android.view.MotionEvent
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.AxisBase
@@ -60,7 +60,6 @@ private fun LineChart.setDefaultSettings(context: Context) {
 
     // X axis settings
     with(xAxis) {
-        typeface = Typeface.MONOSPACE
         position = XAxis.XAxisPosition.BOTTOM
         setDrawAxisLine(false)
         granularity = X_AXIS_DEFAULT_TIME_GRANULARITY
@@ -133,7 +132,6 @@ private fun LineDataSet.setDefaultSettings(context: Context, resources: Resource
 }
 
 private fun YAxis.setDefaultSettings(context: Context, isAxisLeft: Boolean = true) {
-    typeface = Typeface.MONOSPACE
     isGranularityEnabled = true
     resetAxisMinimum()
     resetAxisMaximum()
@@ -572,9 +570,169 @@ fun LineChart.initializeNetworkStatsChart(entries: List<Entry>) {
     // Y Axis settings
     axisLeft.isEnabled = false
     axisRight.isEnabled = false
-    xAxis.isEnabled = false
     isScaleYEnabled = false
+
+    // X Axis settings
+    xAxis.isEnabled = false
     isScaleXEnabled = false
+
+    show()
+    notifyDataSetChanged()
+}
+
+@Suppress("MagicNumber")
+fun LineChart.initTotalEarnedChart(
+    totalEarnedData: LineChartData,
+    datesChartTooltip: List<String>
+) {
+    val dataSet = LineDataSet(totalEarnedData.entries, String.empty())
+    val lineData = LineData(dataSet)
+    data = lineData
+
+    // General Chart Settings
+    setDefaultSettings(context)
+    isScaleXEnabled = false
+
+    // Line and highlight Settings
+    dataSet.setDefaultSettings(context, resources)
+    if (dataSet.values.size > 1) dataSet.setDrawCircles(false)
+    dataSet.mode = LineDataSet.Mode.LINEAR
+    dataSet.highLightColor = context.getColor(R.color.darkGrey)
+    dataSet.color = context.getColor(R.color.blue)
+    dataSet.axisDependency = YAxis.AxisDependency.RIGHT
+
+    // Y Axis settings
+    axisLeft.isEnabled = false
+    axisRight.isEnabled = true
+    axisRight.gridColor = context.getColor(R.color.midGrey)
+    axisRight.setDrawAxisLine(false)
+    axisRight.setDrawGridLines(true)
+    if (dataSet.yMin == 0F) {
+        axisRight.axisMinimum = 0F
+    } else {
+        axisRight.axisMinimum = dataSet.yMin * 0.8F
+    }
+    axisRight.axisMaximum = dataSet.yMax * 1.2F
+
+    // X axis settings
+    with(xAxis) {
+        setDrawAxisLine(true)
+        setDrawGridLines(false)
+        if (totalEarnedData.entries.size <= 7) {
+            granularity = 1F
+        }
+        axisLineColor = context.getColor(R.color.colorOnSurface)
+        valueFormatter = CustomXAxisFormatter(totalEarnedData.timestamps)
+    }
+
+    marker = TooltipMarkerView(context, datesChartTooltip)
+    setDrawMarkers(true)
+
+    show()
+    notifyDataSetChanged()
+}
+
+@Suppress("MagicNumber")
+private fun MutableList<LineDataSet>.initRewardBreakDown(color: Int) {
+    forEach {
+        it.setDrawFilled(true)
+        it.lineWidth = 0.2F
+        it.fillAlpha = 255
+        it.mode = LineDataSet.Mode.LINEAR
+        it.color = color
+        it.fillColor = color
+        it.setCircleColor(color)
+        it.axisDependency = YAxis.AxisDependency.RIGHT
+        if (it.values.size > 1) it.setDrawCircles(false)
+    }
+}
+
+@Suppress("MagicNumber")
+fun LineChart.initRewardsBreakdownChart(
+    baseData: LineChartData,
+    betaData: LineChartData,
+    othersData: LineChartData,
+    totals: List<Float>,
+    datesChartTooltip: List<String>
+) {
+    val dataSets = mutableListOf<ILineDataSet>()
+
+    val baseLineDataSetsWithValues = baseData.getLineDataSetsWithValues("")
+    val baseEmptyLineDataSets = baseData.getEmptyLineDataSets("")
+    val betaDataDataSetsWithValues = betaData.getLineDataSetsWithValues("")
+    val betaDataEmptyLineDataSets = betaData.getEmptyLineDataSets("")
+    val otherDataDataSetsWithValues = othersData.getLineDataSetsWithValues("")
+    val otherDataEmptyLineDataSets = othersData.getEmptyLineDataSets("")
+
+    if (otherDataDataSetsWithValues.isNotEmpty()) {
+        dataSets.addAll(otherDataDataSetsWithValues.primaryLineInit(context, resources))
+        otherDataDataSetsWithValues.initRewardBreakDown(
+            context.getColor(R.color.other_reward)
+        )
+    }
+
+    if (otherDataEmptyLineDataSets.isNotEmpty()) {
+        dataSets.addAll(otherDataEmptyLineDataSets)
+    }
+
+    if (betaDataDataSetsWithValues.isNotEmpty()) {
+        dataSets.addAll(betaDataDataSetsWithValues.primaryLineInit(context, resources))
+        betaDataDataSetsWithValues.initRewardBreakDown(
+            context.getColor(R.color.beta_rewards_color)
+        )
+    }
+
+    if (betaDataEmptyLineDataSets.isNotEmpty()) {
+        dataSets.addAll(betaDataEmptyLineDataSets)
+    }
+
+    if (baseLineDataSetsWithValues.isNotEmpty()) {
+        dataSets.addAll(baseLineDataSetsWithValues.primaryLineInit(context, resources))
+        baseLineDataSetsWithValues.initRewardBreakDown(
+            context.getColor(R.color.blue)
+        )
+    }
+
+    if (baseEmptyLineDataSets.isNotEmpty()) {
+        dataSets.addAll(baseEmptyLineDataSets)
+    }
+
+    val lineData = LineData(dataSets)
+    data = lineData
+
+    // General Chart Settings
+    setDefaultSettings(context)
+    isScaleXEnabled = false
+
+    // Y Axis settings
+    axisLeft.isEnabled = false
+    axisRight.isEnabled = true
+    axisRight.gridColor = context.getColor(R.color.midGrey)
+    axisRight.setDrawAxisLine(false)
+    axisRight.setDrawGridLines(true)
+    axisRight.axisMinimum = 0F
+    axisRight.axisMaximum = totals.max() * 1.5F
+
+    // X axis settings
+    with(xAxis) {
+        setDrawAxisLine(true)
+        setDrawGridLines(false)
+        if (baseData.entries.size <= 7) {
+            granularity = 1F
+        }
+        axisLineColor = context.getColor(R.color.colorOnSurface)
+        valueFormatter = CustomXAxisFormatter(baseData.timestamps)
+    }
+
+    marker = TooltipMarkerView(
+        context,
+        datesChartTooltip,
+        totals,
+        baseData,
+        betaData,
+        othersData
+    )
+    setDrawMarkers(true)
 
     show()
     notifyDataSetChanged()

@@ -8,6 +8,7 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError
 import com.weatherxm.data.Resource
+import com.weatherxm.ui.common.DeviceTotalRewards
 import com.weatherxm.ui.common.DevicesFilterType
 import com.weatherxm.ui.common.DevicesGroupBy
 import com.weatherxm.ui.common.DevicesRewards
@@ -59,17 +60,19 @@ class DevicesViewModel(
     }
 
     private fun calculateRewards(devices: List<UIDevice>) {
-        var ownedStations = 0
         var totalRewards = 0F
         var latestRewards = 0F
+        val devicesWithRewards = mutableListOf<DeviceTotalRewards>()
         devices.forEach {
             if (it.isOwned()) {
-                ownedStations++
                 totalRewards += it.totalRewards ?: 0F
                 latestRewards += it.actualReward ?: 0F
+                devicesWithRewards.add(
+                    DeviceTotalRewards(it.id, it.getDefaultOrFriendlyName(), it.totalRewards)
+                )
             }
         }
-        onDevicesRewards.postValue(DevicesRewards(ownedStations, totalRewards, latestRewards))
+        onDevicesRewards.postValue(DevicesRewards(totalRewards, latestRewards, devicesWithRewards))
     }
 
     fun onScroll(dy: Int) {

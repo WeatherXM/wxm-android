@@ -13,6 +13,7 @@ import com.weatherxm.data.Location
 import com.weatherxm.data.Reward
 import com.weatherxm.data.RewardSplit
 import com.weatherxm.data.SeverityLevel
+import com.weatherxm.data.repository.RewardsRepositoryImpl
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -414,10 +415,15 @@ data class Charts(
 
 @Keep
 @JsonClass(generateAdapter = true)
+@Parcelize
 data class LineChartData(
     var timestamps: MutableList<String>,
     var entries: MutableList<Entry>
-) {
+) : Parcelable {
+    companion object {
+        fun empty() = LineChartData(mutableListOf(), mutableListOf())
+    }
+
     fun isDataValid(): Boolean {
         return timestamps.isNotEmpty() && entries.filterNot { it.y.isNaN() }.isNotEmpty()
     }
@@ -502,6 +508,10 @@ data class LineChartData(
 
         return dataSets
     }
+
+    fun getEntryValueForTooltip(position: Float): Float {
+        return entries.getOrNull(position.toInt())?.y?.takeIf { !it.isNaN() } ?: 0F
+    }
 }
 
 @Keep
@@ -514,14 +524,59 @@ data class WalletWarnings(
 
 @Keep
 @JsonClass(generateAdapter = true)
+data class DevicesRewardsByRange(
+    val total: Float?,
+    val mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode?,
+    val datesChartTooltip: List<String>,
+    val lineChartData: LineChartData
+)
+
+@Keep
+@JsonClass(generateAdapter = true)
 @Parcelize
 data class DevicesRewards(
-    val ownedStations: Int,
     val total: Float,
     val latest: Float,
+    val devices: List<DeviceTotalRewards>
 ) : Parcelable
 
-@Suppress("EnumNaming")
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceTotalRewards(
+    val id: String,
+    val name: String,
+    val total: Float?,
+    var details: DeviceTotalRewardsDetails? = null
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceTotalRewardsDetails(
+    val total: Float?,
+    val mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode?,
+    val boosts: List<DeviceTotalRewardsBoost>,
+    val totals: List<Float>,
+    val datesChartTooltip: List<String>,
+    val baseChartData: LineChartData,
+    val betaChartData: LineChartData,
+    val otherChartData: LineChartData,
+    val fetchError: Boolean
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceTotalRewardsBoost(
+    val boostCode: String?,
+    val completedPercentage: Int?,
+    val maxRewards: Float?,
+    val currentRewards: Float?,
+    val boostPeriodStart: ZonedDateTime?,
+    val boostPeriodEnd: ZonedDateTime?
+) : Parcelable
+
 enum class RewardTimelineType {
     DATA,
     END_OF_LIST

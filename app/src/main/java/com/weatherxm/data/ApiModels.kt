@@ -7,12 +7,14 @@ import com.squareup.moshi.JsonClass
 import com.weatherxm.ui.common.AnnotationGroupCode
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.DeviceTotalRewardsBoost
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.ZonedDateTime
+import kotlin.math.roundToInt
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -715,6 +717,78 @@ data class RewardSplit(
     val reward: Float?
 ) : Parcelable
 
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DevicesRewards(
+    val total: Float?,
+    val data: List<DevicesRewardsData>?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DevicesRewardsData(
+    val ts: ZonedDateTime,
+    @Json(name = "total_rewards")
+    val totalRewards: Float?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceRewardsSummary(
+    val total: Float?,
+    val data: List<DeviceRewardsSummaryData>?,
+    val details: List<DeviceRewardsSummaryDetails>?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceRewardsSummaryData(
+    val ts: ZonedDateTime,
+    val rewards: List<DeviceRewardsSummaryDataReward>?
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceRewardsSummaryDataReward(
+    val type: String,
+    val code: String,
+    val value: Float,
+) : Parcelable
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class DeviceRewardsSummaryDetails(
+    val type: String?,
+    val code: String?,
+    @Json(name = "current_rewards")
+    val currentRewards: Float?,
+    @Json(name = "total_rewards")
+    val totalRewards: Float?,
+    @Json(name = "boost_period_start")
+    val boostPeriodStart: ZonedDateTime?,
+    @Json(name = "boost_period_end")
+    val boostPeriodEnd: ZonedDateTime?,
+    @Json(name = "completed_percentage")
+    val completedPercentage: Float?
+) : Parcelable {
+    fun toDeviceTotalRewardsBoost(): DeviceTotalRewardsBoost {
+        return DeviceTotalRewardsBoost(
+            code,
+            completedPercentage?.roundToInt(),
+            totalRewards,
+            currentRewards,
+            boostPeriodStart,
+            boostPeriodEnd
+        )
+    }
+}
+
 @Suppress("EnumNaming")
 enum class Connectivity {
     wifi,
@@ -738,6 +812,12 @@ enum class SeverityLevel {
     INFO,
     WARNING,
     ERROR
+}
+
+@Suppress("EnumNaming")
+enum class RewardsCode {
+    base_reward,
+    beta_rewards
 }
 
 @Suppress("EnumNaming")

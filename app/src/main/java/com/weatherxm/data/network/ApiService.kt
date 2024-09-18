@@ -7,6 +7,8 @@ import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.data.BoostRewardResponse
 import com.weatherxm.data.Device
 import com.weatherxm.data.DeviceInfo
+import com.weatherxm.data.DeviceRewardsSummary
+import com.weatherxm.data.DevicesRewards
 import com.weatherxm.data.NetworkSearchResults
 import com.weatherxm.data.NetworkStatsResponse
 import com.weatherxm.data.PublicDevice
@@ -210,6 +212,21 @@ interface ApiService {
         @Path("deviceId") deviceId: String,
         @Path("boostCode") boostCode: String
     ): NetworkResponse<BoostRewardResponse, ErrorResponse>
+
+    @Mock
+    @MockResponse(body = "mock_files/get_user_devices_rewards.json")
+    @GET("/api/v1/me/devices/rewards")
+    suspend fun getDevicesRewardsByRange(
+        @Query("mode") address: String,
+    ): NetworkResponse<DevicesRewards, ErrorResponse>
+
+    @Mock
+    @MockResponse(body = "mock_files/get_user_device_rewards_summary.json")
+    @GET("/api/v1/me/devices/{deviceId}/rewards")
+    suspend fun getDeviceRewardsByRange(
+        @Path("deviceId") deviceId: String,
+        @Query("mode") address: String,
+    ): NetworkResponse<DeviceRewardsSummary, ErrorResponse>
 
     @GET("/api/v1/me/devices/{deviceId}/firmware")
     @Streaming

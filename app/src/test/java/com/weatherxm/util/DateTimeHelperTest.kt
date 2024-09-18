@@ -12,6 +12,7 @@ import com.weatherxm.data.HOUR_FORMAT_24H
 import com.weatherxm.ui.common.empty
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
+import com.weatherxm.util.DateTimeHelper.getFormattedMonthDate
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndMonthDay
 import com.weatherxm.util.DateTimeHelper.getRelativeDayAndShort
@@ -156,6 +157,11 @@ class DateTimeHelperTest : BehaviorSpec({
         When("includeYear = false") {
             then("Get formatted date without year") {
                 zonedDateTime.getFormattedDate(false) shouldBe "May 30"
+            }
+        }
+        When("It's a custom date") {
+            then("Get d/M") {
+                zonedDateTime.getFormattedMonthDate() shouldBe "30/5"
             }
         }
     }

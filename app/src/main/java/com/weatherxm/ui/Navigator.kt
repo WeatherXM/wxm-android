@@ -35,6 +35,7 @@ import com.weatherxm.ui.common.Contracts.ARG_BOOST_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_CELL_CENTER
 import com.weatherxm.ui.common.Contracts.ARG_DATE
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.Contracts.ARG_DEVICES_REWARDS
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_EXPLORER_CELL
@@ -46,6 +47,7 @@ import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_WALLET_REWARDS
 import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.toast
@@ -67,6 +69,7 @@ import com.weatherxm.ui.devicesettings.helium.DeviceSettingsHeliumActivity
 import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyActivity
 import com.weatherxm.ui.devicesettings.helium.reboot.RebootActivity
 import com.weatherxm.ui.devicesettings.wifi.DeviceSettingsWifiActivity
+import com.weatherxm.ui.devicesrewards.DevicesRewardsActivity
 import com.weatherxm.ui.explorer.ExplorerActivity
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.ui.home.HomeActivity
@@ -477,6 +480,16 @@ class Navigator(private val analytics: AnalyticsWrapper) {
                 .putExtra(ARG_DEVICE, device)
                 .putExtra(ARG_FORECAST_SELECTED_DAY, forecastSelectedISODate)
         )
+    }
+
+    fun showDevicesRewards(fragment: Fragment, devicesRewards: DevicesRewards) {
+        fragment.context?.let {
+            it.startActivity(
+                Intent(it, DevicesRewardsActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    .putExtra(ARG_DEVICES_REWARDS, devicesRewards)
+            )
+        }
     }
 
     fun showMessageDialog(

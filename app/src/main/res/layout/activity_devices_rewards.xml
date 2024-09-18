@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@color/alternativeBackground"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:liftOnScroll="false">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorSurface"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="@string/station_rewards" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/mainContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_normal_to_large"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingHorizontal="@dimen/padding_normal"
+        android:visibility="gone"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        tools:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/padding_normal">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/totalEarnedStationsTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:textColor="@color/darkGrey"
+                app:layout_constraintEnd_toStartOf="@id/lastRunTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Total earned for 4 Stations" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/lastRunTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/last_run"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                android:textColor="@color/darkGrey"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/totalEarnedStations"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/lastRun"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/totalEarnedStationsTitle"
+                tools:text="3.023,54 $WXM" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/lastRun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+                android:textColor="@color/last_run_color"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/totalEarnedStations"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/totalEarnedStations"
+                tools:text="+13.21 $WXM" />
+
+            <com.weatherxm.ui.components.EmptyRewardsCardView
+                android:id="@+id/emptyRewardsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/totalEarnedStations"
+                app:show_pro_tip="false" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/totalEarnedCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                app:cardElevation="@dimen/elevation_normal"
+                app:contentPadding="@dimen/padding_small_to_normal"
+                app:layout_constraintTop_toBottomOf="@id/totalEarnedStations">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/totalEarnedContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipChildren="false"
+                    android:clipToPadding="false">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/totalEarnedTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:text="@string/total_earned"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@id/totalEarned"
+                        app:layout_constraintEnd_toStartOf="@id/totalEarnedRangeSelector"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/totalEarnedRangeSelector" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/totalEarned"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_small"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                        app:layout_constraintBottom_toBottomOf="@id/totalEarnedRangeSelector"
+                        app:layout_constraintEnd_toStartOf="@id/totalEarnedRangeSelector"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/totalEarnedTitle"
+                        tools:text="389,023.54 $WXM" />
+
+                    <com.weatherxm.ui.components.RangeSelectorView
+                        android:id="@+id/totalEarnedRangeSelector"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.weatherxm.ui.components.EmptyView
+                        android:id="@+id/totalEarnedStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:visibility="gone"
+                        app:empty_animation="@raw/anim_loading"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/totalEarnedRangeSelector" />
+
+                    <com.weatherxm.ui.components.RetryCardView
+                        android:id="@+id/retryCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small_to_normal"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/totalEarnedRangeSelector"
+                        tools:visibility="visible" />
+
+                    <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/totalEarnedChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp"
+                        app:layout_constraintTop_toBottomOf="@id/totalEarnedRangeSelector" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/rewardsByStation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_large"
+                android:text="@string/rewards_by_station"
+                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/totalEarnedCard" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/devicesRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:overScrollMode="never"
+                android:scrollbars="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@id/rewardsByStation"
+                tools:listitem="@layout/list_item_device_rewards" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/noStationsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_normal"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_large"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_face_sad_cry"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/darkGrey"
+            tools:ignore="ContentDescription" />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            android:gravity="center"
+            android:text="@string/oh_no"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.HeadlineSmall"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            android:gravity="center"
+            android:text="@string/it_seems_no_stations_yet"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:gravity="center"
+            android:text="@string/start_earning_desc"
+            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buyStationBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_large"
+            android:text="@string/action_buy_station"
+            app:icon="@drawable/ic_cart"
+            app:iconGravity="textStart"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
+    <com.weatherxm.ui.components.EmptyView
+        android:id="@+id/statusView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:padding="@dimen/padding_extra_large"
+        android:visibility="gone"
+        tools:empty_animation="@raw/anim_empty_devices"
+        tools:empty_subtitle="How are you?"
+        tools:empty_title="Nothing here" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
