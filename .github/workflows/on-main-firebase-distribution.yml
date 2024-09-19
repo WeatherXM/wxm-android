@@ -1,4 +1,4 @@
-name: Build Development and Distribute on Firebase
+name: Build Development - Distribute it on Firebase - Deploy Coverage Report
 on:
     push:
         branches: [ main ]
@@ -23,7 +23,7 @@ env:
     GRADLE_USER_HOME: ${GITHUB_WORKSPACE}/.gradle
     GLOBAL_GRADLE_CACHE: gradle-cache-${GITHUB_REPOSITORY}
 jobs:
-    development_dist:
+    development_dist_and_coverage_report:
         environment: development
         env:
             # API URL for Dev Flavor
@@ -59,24 +59,7 @@ jobs:
                     distribution: 'temurin'
                     java-version: '17'
             -   name: Build development release and distribute on Firebase
-                run: |
-                    ./gradlew :app:assembleRemoteDevDebug :app:appDistributionUploadRemoteDevDebug -PSKIP_PRODUCTION_ENV
-                    rm ./ci-service-account.json
-    deploy_coverage:
-        permissions:
-            contents: read
-            pages: write
-            id-token: write
-        environment: production
-        env:
-            # API URL for Prod Flavor
-            ORG_GRADLE_PROJECT_API_URL: ${{ secrets.API_URL }}
-            # Claim DApp URL
-            ORG_GRADLE_PROJECT_CLAIM_APP_URL: ${{ secrets.CLAIM_APP_URL }}
-            # Mixpanel Token
-            ORG_GRADLE_PROJECT_MIXPANEL_TOKEN: ${{ secrets.MIXPANEL_TOKEN }}
-        runs-on: ubuntu-latest
-        steps:
+                run: ./gradlew :app:assembleRemoteDevDebug :app:appDistributionUploadRemoteDevDebug -PSKIP_PRODUCTION_ENV
             -   name: Generate JaCoCo coverage report
                 run: ./gradlew :app:jacocoCoverageTestReport -PSKIP_PRODUCTION_ENV -PSKIP_TAGS_LOGGING
             -   name: Upload JaCoCo Coverage Report (HTML) to Pages Artifact
