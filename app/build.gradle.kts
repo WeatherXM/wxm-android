@@ -337,9 +337,11 @@ tasks.register("jacocoCoverageTestReport", type = JacocoReport::class) {
     description = "Generate Jacoco coverage reports after running unit tests."
 
     reports {
+        html.required = true
         xml.required = true
-        csv.required = false
+        csv.required = true
         html.outputLocation = layout.buildDirectory.dir("reports/jacoco/coverage-report")
+        csv.outputLocation = layout.buildDirectory.file("reports/jacoco/report.csv")
         xml.outputLocation = layout.buildDirectory.file("reports/jacoco/report.xml")
     }
 
