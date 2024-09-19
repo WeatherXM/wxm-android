@@ -24,6 +24,10 @@ env:
     GLOBAL_GRADLE_CACHE: gradle-cache-${GITHUB_REPOSITORY}
 jobs:
     development_dist_and_coverage_report:
+        permissions:
+            contents: read
+            pages: write
+            id-token: write
         environment: development
         env:
             # API URL for Dev Flavor
