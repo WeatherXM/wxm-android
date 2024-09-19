@@ -179,3 +179,9 @@ jobs:
                     min-coverage-overall: 0 # TODO: Define this
                     min-coverage-changed-files: 0 # TODO: Define this
                     update-comment: true
+            -   name: Preview Coverage HTML Report
+                id: preview_coverage_html_report
+                uses: pavi2410/html-preview-action@v4
+                with:
+                    html_file: "app/build/reports/jacoco/html/index.xml"
+                    job_summary: true
