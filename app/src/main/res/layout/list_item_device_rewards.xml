@@ -185,6 +185,7 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     app:empty_animation="@raw/anim_loading"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/detailsHeader" />
 
                 <com.weatherxm.ui.components.RetryCardView
@@ -192,6 +193,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/detailsHeader" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>

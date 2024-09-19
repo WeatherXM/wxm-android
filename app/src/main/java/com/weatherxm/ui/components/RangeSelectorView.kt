@@ -32,13 +32,14 @@ class RangeSelectorView : ConstraintLayout {
     fun checkWeek() = binding.chartRangeSelector.check(R.id.week)
     fun checkMonth() = binding.chartRangeSelector.check(R.id.month)
     fun checkYear() = binding.chartRangeSelector.check(R.id.year)
-    fun clearCheck() = binding.chartRangeSelector.clearCheck()
 
     fun checkedChipId() = binding.chartRangeSelector.checkedChipId
 
     fun listener(listener: (Int) -> Unit) {
         binding.chartRangeSelector.setOnCheckedStateChangeListener { _, checkedIds ->
-            listener.invoke(checkedIds[0])
+            if (checkedIds.isNotEmpty()) {
+                listener.invoke(checkedIds[0])
+            }
         }
     }
 

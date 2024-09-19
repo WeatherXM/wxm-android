@@ -12,6 +12,7 @@ import com.weatherxm.databinding.ListItemDeviceRewardsBinding
 import com.weatherxm.ui.common.DeviceTotalRewards
 import com.weatherxm.ui.common.DeviceTotalRewardsDetails
 import com.weatherxm.ui.common.hide
+import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.show
 import com.weatherxm.ui.common.visible
 import com.weatherxm.util.Rewards.formatTokens
@@ -97,7 +98,7 @@ class DeviceRewardsAdapter(
                 RewardsSummaryMode.WEEK -> binding.chartRangeSelector.checkWeek()
                 RewardsSummaryMode.MONTH -> binding.chartRangeSelector.checkMonth()
                 RewardsSummaryMode.YEAR -> binding.chartRangeSelector.checkYear()
-                else -> binding.chartRangeSelector.clearCheck()
+                else -> throw NotImplementedError("Unknown rewards mode ${details.mode}")
             }.also {
                 ignoreRangeChipListener = false
             }
@@ -156,7 +157,7 @@ class DeviceRewardsAdapter(
         private fun invokeOnRangeChip(checkedChipId: Int, deviceId: String) {
             binding.detailsStatus.animation(R.raw.anim_loading).visible(true)
             binding.chartRangeSelector.disable()
-            binding.detailsContainer.visible(false)
+            binding.detailsContainer.invisible()
             binding.retryCard.visible(false)
             onRangeChipClicked.invoke(absoluteAdapterPosition, checkedChipId, deviceId)
         }
