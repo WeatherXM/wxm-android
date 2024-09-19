@@ -331,7 +331,7 @@ android {
     }
 }
 
-tasks.register("jacocoTestReport", type = JacocoReport::class) {
+tasks.register("jacocoCoverageTestReport", type = JacocoReport::class) {
     dependsOn("testRemoteProdDebugUnitTest", "createRemoteProdDebugUnitTestCoverageReport")
     group = "Reporting"
     description = "Generate Jacoco coverage reports after running unit tests."
@@ -340,7 +340,7 @@ tasks.register("jacocoTestReport", type = JacocoReport::class) {
         xml.required = true
         csv.required = false
         html.outputLocation = layout.buildDirectory.dir("reports/jacoco/html")
-        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/jacoco.xml")
+        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/report.xml")
     }
 
     val fileFilter = listOf(
