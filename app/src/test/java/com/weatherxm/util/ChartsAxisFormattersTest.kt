@@ -3,7 +3,7 @@ package com.weatherxm.util
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
-class ChartsTest : BehaviorSpec({
+class ChartsAxisFormattersTest : BehaviorSpec({
     val times = mutableListOf("12:00", "13:00", "14:00", "15:00")
     val xAxisFormatter = CustomXAxisFormatter(times)
     val yAxisFormatter = CustomYAxisFormatter()

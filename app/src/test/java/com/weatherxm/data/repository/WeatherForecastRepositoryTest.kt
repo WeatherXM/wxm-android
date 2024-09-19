@@ -21,7 +21,7 @@ class WeatherForecastRepositoryTest : BehaviorSpec({
     lateinit var repo: WeatherForecastRepositoryImpl
 
     val deviceId = "deviceId"
-    val now = ZonedDateTime.now()
+    val now = ZonedDateTime.now().toLocalDate()
     val fromDate = now.minusDays(PREFETCH_DAYS)
     val toDateLessThanPrefetched = fromDate.plusDays(PREFETCH_DAYS - 1)
     val forecastData = mockk<List<WeatherData>>()

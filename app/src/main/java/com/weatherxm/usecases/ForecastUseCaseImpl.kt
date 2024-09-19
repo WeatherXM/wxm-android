@@ -27,10 +27,10 @@ class ForecastUseCaseImpl(
             return Either.Left(ApiError.UserError.InvalidTimezone(INVALID_TIMEZONE))
         }
         val nowDeviceTz = ZonedDateTime.now(ZoneId.of(device.timezone))
-        val dateEndInDeviceTz = nowDeviceTz.plusDays(7)
+        val dateEndInDeviceTz = nowDeviceTz.plusDays(7).toLocalDate()
         return weatherForecastRepository.getDeviceForecast(
             device.id,
-            nowDeviceTz,
+            nowDeviceTz.toLocalDate(),
             dateEndInDeviceTz,
             forceRefresh
         ).map { result ->

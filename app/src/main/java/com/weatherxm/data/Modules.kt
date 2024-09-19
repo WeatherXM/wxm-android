@@ -165,6 +165,7 @@ import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.connectwallet.ConnectWalletViewModel
+import com.weatherxm.ui.deeplinkrouteractivity.DeepLinkRouterViewModel
 import com.weatherxm.ui.deleteaccount.DeleteAccountViewModel
 import com.weatherxm.ui.deleteaccountsurvey.DeleteAccountSurveyViewModel
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -198,7 +199,6 @@ import com.weatherxm.ui.rewardslist.RewardsListViewModel
 import com.weatherxm.ui.signup.SignupViewModel
 import com.weatherxm.ui.startup.StartupViewModel
 import com.weatherxm.ui.updateprompt.UpdatePromptViewModel
-import com.weatherxm.ui.deeplinkrouteractivity.DeepLinkRouterViewModel
 import com.weatherxm.ui.widgets.selectstation.SelectStationViewModel
 import com.weatherxm.usecases.AnalyticsOptInUseCase
 import com.weatherxm.usecases.AnalyticsOptInUseCaseImpl
@@ -214,10 +214,6 @@ import com.weatherxm.usecases.ChartsUseCase
 import com.weatherxm.usecases.ChartsUseCaseImpl
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.usecases.ClaimDeviceUseCaseImpl
-import com.weatherxm.usecases.ConnectWalletUseCase
-import com.weatherxm.usecases.ConnectWalletUseCaseImpl
-import com.weatherxm.usecases.DeleteAccountSurveyUseCase
-import com.weatherxm.usecases.DeleteAccountSurveyUseCaseImpl
 import com.weatherxm.usecases.DeleteAccountUseCase
 import com.weatherxm.usecases.DeleteAccountUseCaseImpl
 import com.weatherxm.usecases.DeviceDetailsUseCase
@@ -234,8 +230,6 @@ import com.weatherxm.usecases.ForecastUseCase
 import com.weatherxm.usecases.ForecastUseCaseImpl
 import com.weatherxm.usecases.HistoryUseCase
 import com.weatherxm.usecases.HistoryUseCaseImpl
-import com.weatherxm.usecases.PasswordPromptUseCase
-import com.weatherxm.usecases.PasswordPromptUseCaseImpl
 import com.weatherxm.usecases.PreferencesUseCase
 import com.weatherxm.usecases.PreferencesUseCaseImpl
 import com.weatherxm.usecases.RemoteBannersUseCase
@@ -531,20 +525,11 @@ private val usecases = module {
     single<UserUseCase> {
         UserUseCaseImpl(get(), get(), get(), get())
     }
-    single<ConnectWalletUseCase> {
-        ConnectWalletUseCaseImpl(get())
-    }
     single<PreferencesUseCase> {
         PreferencesUseCaseImpl(get(), get(), get())
     }
-    single<DeleteAccountSurveyUseCase> {
-        DeleteAccountSurveyUseCaseImpl(get())
-    }
     single<DeleteAccountUseCase> {
         DeleteAccountUseCaseImpl(get(), get())
-    }
-    single<PasswordPromptUseCase> {
-        PasswordPromptUseCaseImpl(get())
     }
     single<BluetoothScannerUseCase> {
         BluetoothScannerUseCaseImpl(get())

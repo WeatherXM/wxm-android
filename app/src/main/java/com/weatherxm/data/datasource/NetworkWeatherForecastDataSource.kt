@@ -5,7 +5,7 @@ import com.weatherxm.data.Failure
 import com.weatherxm.data.WeatherData
 import com.weatherxm.data.mapResponse
 import com.weatherxm.data.network.ApiService
-import java.time.ZonedDateTime
+import java.time.LocalDate
 
 class NetworkWeatherForecastDataSource(
     private val apiService: ApiService
@@ -13,14 +13,14 @@ class NetworkWeatherForecastDataSource(
 
     override suspend fun getForecast(
         deviceId: String,
-        fromDate: ZonedDateTime,
-        toDate: ZonedDateTime,
+        fromDate: LocalDate,
+        toDate: LocalDate,
         exclude: String?
     ): Either<Failure, List<WeatherData>> {
         return apiService.getForecast(
             deviceId,
-            fromDate.toLocalDate().toString(),
-            toDate.toLocalDate().toString(),
+            fromDate.toString(),
+            toDate.toString(),
             exclude
         ).mapResponse()
     }

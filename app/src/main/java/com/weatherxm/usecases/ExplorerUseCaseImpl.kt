@@ -92,7 +92,7 @@ class ExplorerUseCaseImpl(
         exact: Boolean?,
         exclude: String?
     ): Either<Failure, List<SearchResult>> {
-        return explorerRepository.networkSearch(query, exact).map {
+        return explorerRepository.networkSearch(query, exact, exclude).map {
             mutableListOf<SearchResult>().apply {
                 addAll(
                     it.devices?.map { device ->

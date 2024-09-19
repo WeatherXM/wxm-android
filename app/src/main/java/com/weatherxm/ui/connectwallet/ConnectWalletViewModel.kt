@@ -4,18 +4,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.ApiError.UserError.WalletError.InvalidWalletAddress
 import com.weatherxm.data.Failure
 import com.weatherxm.data.Resource
 import com.weatherxm.ui.common.empty
-import com.weatherxm.usecases.ConnectWalletUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
 
 class ConnectWalletViewModel(
-    private val connectWalletUseCase: ConnectWalletUseCase,
+    private val useCase: UserUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper
 ) : ViewModel() {
@@ -34,7 +34,7 @@ class ConnectWalletViewModel(
     fun saveAddress(address: String) {
         isAddressSaved.postValue(Resource.loading())
         viewModelScope.launch {
-            connectWalletUseCase.setWalletAddress(address)
+            useCase.setWalletAddress(address)
                 .mapLeft {
                     analytics.trackEventFailure(it.code)
                     handleFailure(it)
@@ -86,7 +86,7 @@ class ConnectWalletViewModel(
     init {
         // Get initial value from repository
         viewModelScope.launch {
-            connectWalletUseCase.getWalletAddress().map { currentAddress.postValue(it) }
+            useCase.getWalletAddress().map { currentAddress.postValue(it) }
         }
     }
 }

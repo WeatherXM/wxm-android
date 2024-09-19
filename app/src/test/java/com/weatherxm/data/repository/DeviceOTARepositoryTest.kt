@@ -58,15 +58,15 @@ class DeviceOTARepositoryTest : BehaviorSpec({
             and("Check if user should be notified of OTA") {
                 When("OTA version is null or empty") {
                     then("return false") {
-                        repo.userShouldNotifiedOfOTA(deviceId, null) shouldBe false
-                        repo.userShouldNotifiedOfOTA(deviceId, "") shouldBe false
+                        repo.shouldNotifyOTA(deviceId, null) shouldBe false
+                        repo.shouldNotifyOTA(deviceId, "") shouldBe false
                     }
                 }
                 When("OTA version is valid") {
                     and("There isn't any other OTA version we have notified the user before") {
                         mockEitherLeft({ dataSource.getDeviceLastOtaVersion(deviceId) }, failure)
                         then("return true") {
-                            repo.userShouldNotifiedOfOTA(deviceId, version) shouldBe true
+                            repo.shouldNotifyOTA(deviceId, version) shouldBe true
                         }
                     }
                     and("There is another OTA version we have notified the user before") {
@@ -80,13 +80,13 @@ class DeviceOTARepositoryTest : BehaviorSpec({
                                     dataSource.getDeviceLastOtaTimestamp(deviceId)
                                 } returns otaNotificationThresholdExpired
                                 then("return true") {
-                                    repo.userShouldNotifiedOfOTA(deviceId, version) shouldBe true
+                                    repo.shouldNotifyOTA(deviceId, version) shouldBe true
                                 }
                             }
                             and("Notification Threshold has NOT expired") {
                                 every { dataSource.getDeviceLastOtaTimestamp(deviceId) } returns now
                                 then("return false") {
-                                    repo.userShouldNotifiedOfOTA(deviceId, version) shouldBe false
+                                    repo.shouldNotifyOTA(deviceId, version) shouldBe false
                                 }
                             }
                         }
@@ -96,7 +96,7 @@ class DeviceOTARepositoryTest : BehaviorSpec({
                                 version
                             )
                             then("return true") {
-                                repo.userShouldNotifiedOfOTA(deviceId, version2) shouldBe true
+                                repo.shouldNotifyOTA(deviceId, version2) shouldBe true
                             }
                         }
                     }

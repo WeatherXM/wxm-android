@@ -6,14 +6,14 @@ import com.weatherxm.data.WeatherData
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import timber.log.Timber
-import java.time.ZonedDateTime
+import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
 interface WeatherForecastRepository {
     suspend fun getDeviceForecast(
         deviceId: String,
-        fromDate: ZonedDateTime,
-        toDate: ZonedDateTime,
+        fromDate: LocalDate,
+        toDate: LocalDate,
         forceRefresh: Boolean
     ): Either<Failure, List<WeatherData>>
 
@@ -31,8 +31,8 @@ class WeatherForecastRepositoryImpl(
 
     override suspend fun getDeviceForecast(
         deviceId: String,
-        fromDate: ZonedDateTime,
-        toDate: ZonedDateTime,
+        fromDate: LocalDate,
+        toDate: LocalDate,
         forceRefresh: Boolean
     ): Either<Failure, List<WeatherData>> {
         if (forceRefresh) {
