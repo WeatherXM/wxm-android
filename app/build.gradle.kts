@@ -339,7 +339,7 @@ tasks.register("jacocoCoverageTestReport", type = JacocoReport::class) {
     reports {
         xml.required = true
         csv.required = false
-        html.outputLocation = layout.buildDirectory.dir("reports/jacoco/html")
+        html.outputLocation = layout.buildDirectory.dir("reports/jacoco/coverage-report")
         xml.outputLocation = layout.buildDirectory.file("reports/jacoco/report.xml")
     }
 
