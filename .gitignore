@@ -21,3 +21,4 @@ publishing/
 
 *.apk
 *.aab
+app/ota*.zip
