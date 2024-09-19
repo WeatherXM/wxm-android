@@ -179,9 +179,17 @@ jobs:
                     min-coverage-overall: 0 # TODO: Define this
                     min-coverage-changed-files: 0 # TODO: Define this
                     update-comment: true
+            -   name: Setup Pages
+                uses: actions/configure-pages@v5
+            -   name: upload artifact
+                uses: actions/upload-pages-artifact@v3
+                with:
+                    path: 'app/build/reports/jacoco/html/'
+            -   name: deploy to Github Pages
+                id: deployment
+                uses: actions/deploy-pages@v4
             -   name: Preview Coverage HTML Report
-                id: preview_coverage_html_report
                 uses: pavi2410/html-preview-action@v4
                 with:
-                    html_file: "app/build/reports/jacoco/html/index.xml"
+                    html_file: 'app/build/reports/jacoco/html/index.html'
                     job_summary: true
