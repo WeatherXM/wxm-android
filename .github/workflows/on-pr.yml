@@ -168,12 +168,12 @@ jobs:
                     distribution: 'temurin'
                     java-version: '17'
             -   name: Generate JaCoCo coverage report
-                run: ./gradlew :app:createRemoteProdDebugUnitTestCoverageReport -PSKIP_PRODUCTION_ENV -PSKIP_TAGS_LOGGING
+                run: ./gradlew :app:jacocoCoverageTestReport -PSKIP_PRODUCTION_ENV -PSKIP_TAGS_LOGGING
             -   name: Add JaCoCo coverage report in the PR as a comment
-                uses: madrapps/jacoco-report@v1.6.1
+                uses: madrapps/jacoco-report@v1.7.1
                 with:
                     title: '# Coverage Report (Type: [Instructions](https://www.jacoco.org/jacoco/trunk/doc/counters.html))'
-                    paths: app/build/reports/coverage/test/remoteProd/debug/report.xml
+                    paths: app/build/reports/jacoco/report.xml
                     token: ${{ secrets.GITHUB_TOKEN }}
                     pass-emoji: ✅
                     min-coverage-overall: 0 # TODO: Define this

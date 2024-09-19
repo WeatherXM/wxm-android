@@ -7,13 +7,11 @@ import android.content.Context
 import android.content.res.Resources
 import android.view.MotionEvent
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.github.mikephil.charting.listener.ChartTouchListener
 import com.github.mikephil.charting.listener.OnChartGestureListener
@@ -21,9 +19,6 @@ import com.weatherxm.R
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.show
-import com.weatherxm.util.NumberUtils.roundToDecimals
-import com.weatherxm.util.NumberUtils.roundToInt
-import com.weatherxm.util.Weather.EMPTY_VALUE
 import com.weatherxm.util.Weather.getDecimalsPrecipitation
 import com.weatherxm.util.Weather.getDecimalsPressure
 
@@ -34,7 +29,6 @@ private const val MAXIMUM_GRID_LINES_Y_AXIS = 4
 private const val Y_AXIS_1_DECIMAL_GRANULARITY = 0.1F
 private const val Y_AXIS_PRECIP_INCHES_GRANULARITY = 0.01F
 private const val Y_AXIS_PRESSURE_INHG_GRANULARITY = 0.01F
-private const val Y_AXIS_LABEL_LENGTH = 4
 private const val X_AXIS_DEFAULT_TIME_GRANULARITY = 3F
 
 @Suppress("MagicNumber")
@@ -736,33 +730,4 @@ fun LineChart.initRewardsBreakdownChart(
 
     show()
     notifyDataSetChanged()
-}
-
-class CustomXAxisFormatter(private val times: MutableList<String>?) : ValueFormatter() {
-    override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-        return times?.getOrNull(value.toInt()) ?: EMPTY_VALUE
-    }
-}
-
-class CustomYAxisFormatter(
-    private val decimals: Int = 0,
-    private val isAxisLeft: Boolean = true
-) : ValueFormatter() {
-    @Suppress("MagicNumber")
-    override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-        val label = if (decimals > 0 && value < 10000) {
-            "${roundToDecimals(value, decimals)}"
-        } else if (value < 10000) {
-            "${roundToInt(value)}"
-        } else {
-            // 10000-99999
-            "${roundToInt(value / 1000)}K"
-        }
-
-        return if (isAxisLeft) {
-            label.padStart(Y_AXIS_LABEL_LENGTH, ' ')
-        } else {
-            label.padEnd(Y_AXIS_LABEL_LENGTH, ' ')
-        }
-    }
 }
