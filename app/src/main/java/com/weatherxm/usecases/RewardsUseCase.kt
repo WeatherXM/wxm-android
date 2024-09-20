@@ -11,6 +11,7 @@ import com.weatherxm.data.BoostRewardDetails
 import com.weatherxm.data.Failure
 import com.weatherxm.data.RewardDetails
 import com.weatherxm.data.RewardsCode
+import com.weatherxm.data.Status
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.ui.common.BoostDetailInfo
@@ -284,7 +285,7 @@ class RewardsUseCaseImpl(
                 LineChartData(xLabels, baseEntries),
                 LineChartData(xLabels, betaEntries),
                 LineChartData(xLabels, otherEntries),
-                false
+                Status.SUCCESS
             )
         }
     }

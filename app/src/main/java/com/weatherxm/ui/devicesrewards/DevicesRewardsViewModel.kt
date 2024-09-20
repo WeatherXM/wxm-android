@@ -7,13 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.Resource
+import com.weatherxm.data.Status
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.ui.common.DeviceTotalRewardsDetails
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.DevicesRewardsByRange
-import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class DevicesRewardsViewModel(
@@ -21,6 +22,7 @@ class DevicesRewardsViewModel(
     val usecase: RewardsUseCase,
     private val analytics: AnalyticsWrapper
 ) : ViewModel() {
+    val devicesJobs = mutableMapOf<Int, Job>()
 
     /**
      * The Int here represents the position in the list/adapter
@@ -33,7 +35,7 @@ class DevicesRewardsViewModel(
 
     fun onRewardsByRange(): LiveData<Resource<DevicesRewardsByRange>> = onRewardsByRange
 
-    fun getDevicesRewardsByRangeTotals(checkedRangeChipId: Int? = null) {
+    fun getDevicesRewardsByRangeTotals(checkedRangeChipId: Int = R.id.week) {
         viewModelScope.launch {
             onRewardsByRange.postValue(Resource.loading())
 
@@ -47,38 +49,43 @@ class DevicesRewardsViewModel(
         }
     }
 
-    fun getDeviceRewardsByRange(deviceId: String, position: Int, checkedRangeChipId: Int? = null) {
-        viewModelScope.launch {
-            val mode = chipToMode(checkedRangeChipId)
+    fun getDeviceRewardsByRange(
+        deviceId: String,
+        position: Int,
+        checkedRangeChipId: Int = R.id.week
+    ) {
+        val job = viewModelScope.launch {
+            val selectedMode = chipToMode(checkedRangeChipId)
+            rewards.devices[position].details.status = Status.LOADING
+            rewards.devices[position].details.mode = selectedMode
+            onDeviceRewardDetails.postValue(Pair(position, rewards.devices[position].details))
 
-            usecase.getDeviceRewardsByRange(deviceId, mode).onRight {
+            usecase.getDeviceRewardsByRange(deviceId, selectedMode).onRight {
                 rewards.devices[position].details = it
                 onDeviceRewardDetails.postValue(Pair(position, it))
             }.onLeft { failure ->
-                val erroneousDetails = DeviceTotalRewardsDetails(
-                    null,
-                    null,
-                    mutableListOf(),
-                    mutableListOf(),
-                    mutableListOf(),
-                    LineChartData.empty(),
-                    LineChartData.empty(),
-                    LineChartData.empty(),
-                    true
-                )
+                val erroneousDetails = DeviceTotalRewardsDetails.empty().apply {
+                    this.mode = selectedMode
+                    this.status = Status.ERROR
+                }
                 rewards.devices[position].details = erroneousDetails
                 onDeviceRewardDetails.postValue(Pair(position, erroneousDetails))
                 analytics.trackEventFailure(failure.code)
             }
         }
+        devicesJobs[position] = job
     }
 
-    private fun chipToMode(chipId: Int?): RewardsRepositoryImpl.Companion.RewardsSummaryMode {
+    fun cancelFetching(position: Int) {
+        devicesJobs[position]?.cancel()
+    }
+
+    private fun chipToMode(chipId: Int): RewardsRepositoryImpl.Companion.RewardsSummaryMode {
         return when (chipId) {
             R.id.week -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK
             R.id.month -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH
             R.id.year -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR
-            else -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK
+            else -> throw NotImplementedError("Unknown chip ID $chipId")
         }
     }
 

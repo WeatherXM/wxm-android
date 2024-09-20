@@ -75,13 +75,11 @@ class DevicesRewardsActivity : BaseActivity() {
         }
 
         adapter = DeviceRewardsAdapter(
-            onExpandToggle = { position, isExpanded, deviceId ->
-                if (isExpanded && model.rewards.devices[position].details == null) {
-                    model.getDeviceRewardsByRange(deviceId, position, null)
-                }
-            },
-            onRangeChipClicked = { position, checkedRangeChipId, deviceId ->
+            onFetchNewData = { deviceId, position, checkedRangeChipId ->
                 model.getDeviceRewardsByRange(deviceId, position, checkedRangeChipId)
+            },
+            onCancelFetching = { position ->
+                model.cancelFetching(position)
             }
         )
         binding.devicesRecycler.adapter = adapter
@@ -103,6 +101,7 @@ class DevicesRewardsActivity : BaseActivity() {
 
             binding.totalEarnedRangeSelector.checkWeek()
             model.getDevicesRewardsByRangeTotals()
+            model.getDeviceRewardsByRange(model.rewards.devices[0].id, 0)
         } else {
             binding.noStationsContainer.visible(true)
         }
