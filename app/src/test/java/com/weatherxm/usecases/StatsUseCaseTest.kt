@@ -104,7 +104,6 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
             })
         }
 
-        mockkStatic(DateFormat::class)
         every { DateFormat.is24HourFormat(context) } returns true
 
         every { NumberUtils.compactNumber(any()) } returns "1"

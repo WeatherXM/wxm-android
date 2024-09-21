@@ -166,27 +166,8 @@ class RewardsUseCaseImpl(
             val datesChartTooltip = mutableListOf<String>()
 
             rewards.data?.fastForEachIndexed { i, timeseries ->
-                /**
-                 * 7D = Show 3-letter days - e.g. Mon, Tue, Wed,
-                 * 1M = DD/MM or MM/DD based on Locale - e.g. 25/01 or 01/25
-                 * 1Y = Show 3-letter months as the design - e.g. Sep, Oct, Nov
-                 */
-                when (mode) {
-                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK -> {
-                        datesChartTooltip.add(context.getString(timeseries.ts.dayOfWeek.getName()))
-                        xLabels.add(context.getString(timeseries.ts.dayOfWeek.getShortName()))
-                    }
-                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH -> {
-                        datesChartTooltip.add(timeseries.ts.getFormattedDate())
-                        xLabels.add(timeseries.ts.getFormattedMonthDate())
-                    }
-                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR -> {
-                        datesChartTooltip.add(
-                            timeseries.ts.month.getDisplayName(TextStyle.FULL, Locale.US)
-                        )
-                        xLabels.add(timeseries.ts.month.getDisplayName(TextStyle.SHORT, Locale.US))
-                    }
-                }
+                datesChartTooltip.add(getTooltipDate(timeseries.ts, mode))
+                xLabels.add(getXAxisLabel(timeseries.ts, mode))
                 entries.add(Entry(i.toFloat(), timeseries.totalRewards ?: 0F))
             }
 
@@ -209,27 +190,8 @@ class RewardsUseCaseImpl(
             val datesChartTooltip = mutableListOf<String>()
 
             summary.data?.fastForEachIndexed { counter, timeseries ->
-                /**
-                 * 7D = Show 3-letter days - e.g. Mon, Tue, Wed,
-                 * 1M = DD/MM or MM/DD based on Locale - e.g. 25/01 or 01/25
-                 * 1Y = Show 3-letter months as the design - e.g. Sep, Oct, Nov
-                 */
-                when (mode) {
-                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK -> {
-                        datesChartTooltip.add(context.getString(timeseries.ts.dayOfWeek.getName()))
-                        xLabels.add(context.getString(timeseries.ts.dayOfWeek.getShortName()))
-                    }
-                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH -> {
-                        datesChartTooltip.add(timeseries.ts.getFormattedDate())
-                        xLabels.add(timeseries.ts.getFormattedMonthDate())
-                    }
-                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR -> {
-                        datesChartTooltip.add(
-                            timeseries.ts.month.getDisplayName(TextStyle.FULL, Locale.US)
-                        )
-                        xLabels.add(timeseries.ts.month.getDisplayName(TextStyle.SHORT, Locale.US))
-                    }
-                }
+                datesChartTooltip.add(getTooltipDate(timeseries.ts, mode))
+                xLabels.add(getXAxisLabel(timeseries.ts, mode))
 
                 val baseCode = RewardsCode.base_reward.name
                 val betaCode = RewardsCode.beta_rewards.name
@@ -287,6 +249,50 @@ class RewardsUseCaseImpl(
                 LineChartData(xLabels, otherEntries),
                 Status.SUCCESS
             )
+        }
+    }
+
+    private fun getTooltipDate(
+        timestamp: ZonedDateTime,
+        mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
+    ): String {
+        /**
+         * 7D = Show full days - e.g. Monday, Tuesday, Wednesday,
+         * 1M = Show short month name with the month day - e.g. Jan 1, Feb 21, Mar 30,
+         * 1Y = Show months - e.g. September, October, November
+         */
+        return when (mode) {
+            RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK -> {
+                context.getString(timestamp.dayOfWeek.getName())
+            }
+            RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH -> {
+                timestamp.getFormattedDate()
+            }
+            RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR -> {
+                timestamp.month.getDisplayName(TextStyle.FULL, Locale.US)
+            }
+        }
+    }
+
+    private fun getXAxisLabel(
+        timestamp: ZonedDateTime,
+        mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
+    ): String {
+        /**
+         * 7D = Show 3-letter days - e.g. Mon, Tue, Wed,
+         * 1M = DD/MM or MM/DD based on Locale - e.g. 25/01 or 01/25
+         * 1Y = Show 3-letter months as the design - e.g. Sep, Oct, Nov
+         */
+        return when (mode) {
+            RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK -> {
+                context.getString(timestamp.dayOfWeek.getShortName())
+            }
+            RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH -> {
+                timestamp.getFormattedMonthDate()
+            }
+            RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR -> {
+                timestamp.month.getDisplayName(TextStyle.SHORT, Locale.US)
+            }
         }
     }
 

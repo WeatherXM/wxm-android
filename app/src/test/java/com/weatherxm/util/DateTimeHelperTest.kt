@@ -46,14 +46,6 @@ class DateTimeHelperTest : BehaviorSpec({
     val timestamp = 1717077600000L
 
     beforeSpec {
-        mockkStatic(DateFormat::class)
-        every {
-            DateFormat.getBestDateTimePattern(
-                Locale.getDefault(),
-                DATE_FORMAT_MONTH_DAY
-            )
-        } returns "d/M"
-
         startKoin {
             modules(
                 module {
