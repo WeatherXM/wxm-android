@@ -2,7 +2,7 @@ package com.weatherxm.ui.devicesettings
 
 import androidx.annotation.Keep
 import com.squareup.moshi.JsonClass
-import com.weatherxm.data.Failure
+import com.weatherxm.data.models.Failure
 import com.weatherxm.ui.common.RewardSplitsData
 
 @Keep

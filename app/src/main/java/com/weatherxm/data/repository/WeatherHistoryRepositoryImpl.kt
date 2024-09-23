@@ -5,9 +5,9 @@ import arrow.core.flatMap
 import arrow.core.handleErrorWith
 import arrow.core.left
 import arrow.core.right
-import com.weatherxm.data.DataError
-import com.weatherxm.data.Failure
-import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.models.DataError
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.HourlyWeather
 import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
 import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
 import timber.log.Timber

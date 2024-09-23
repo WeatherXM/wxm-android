@@ -2,8 +2,8 @@ package com.weatherxm.data.datasource
 
 import androidx.annotation.StringDef
 import arrow.core.Either
-import com.weatherxm.data.Failure
-import com.weatherxm.data.WeatherData
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.WeatherData
 import java.time.LocalDate
 
 interface WeatherForecastDataSource {

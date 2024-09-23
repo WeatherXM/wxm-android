@@ -5,10 +5,10 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.ApiError
-import com.weatherxm.data.DailyData
-import com.weatherxm.data.HourlyWeather
-import com.weatherxm.data.WeatherData
+import com.weatherxm.data.models.ApiError
+import com.weatherxm.data.models.DailyData
+import com.weatherxm.data.models.HourlyWeather
+import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast

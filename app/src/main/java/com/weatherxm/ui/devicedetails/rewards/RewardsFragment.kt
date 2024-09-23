@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.RewardsTimestampScore
-import com.weatherxm.data.Status
+import com.weatherxm.data.models.RewardsTimestampScore
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsRewardsBinding
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.classSimpleName

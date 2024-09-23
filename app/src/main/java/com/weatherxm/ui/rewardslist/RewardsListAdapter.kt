@@ -3,7 +3,7 @@ package com.weatherxm.ui.rewardslist
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.weatherxm.data.Reward
+import com.weatherxm.data.models.Reward
 import com.weatherxm.databinding.ListItemRewardBinding
 import com.weatherxm.databinding.ListItemRewardEndOfDataBinding
 import com.weatherxm.ui.common.RewardTimelineType

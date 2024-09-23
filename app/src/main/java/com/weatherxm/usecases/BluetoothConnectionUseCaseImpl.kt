@@ -2,8 +2,8 @@ package com.weatherxm.usecases
 
 import android.bluetooth.BluetoothDevice
 import arrow.core.Either
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Frequency
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.repository.bluetooth.BluetoothConnectionRepository
 import kotlinx.coroutines.flow.Flow
 

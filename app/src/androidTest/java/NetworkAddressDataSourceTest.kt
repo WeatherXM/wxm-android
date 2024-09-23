@@ -2,7 +2,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.mapbox.search.SearchEngine
 import com.mapbox.search.SearchEngineSettings
 import com.squareup.moshi.Moshi
-import com.weatherxm.data.Location
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.datasource.NetworkAddressDataSource
 import kotlinx.coroutines.runBlocking
 import org.junit.Before

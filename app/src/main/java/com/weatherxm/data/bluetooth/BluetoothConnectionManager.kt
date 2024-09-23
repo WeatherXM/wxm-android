@@ -23,8 +23,8 @@ import com.juul.kable.NotConnectedException
 import com.juul.kable.NotReadyException
 import com.juul.kable.Peripheral
 import com.juul.kable.peripheral
-import com.weatherxm.data.BluetoothError
-import com.weatherxm.data.Failure
+import com.weatherxm.data.models.BluetoothError
+import com.weatherxm.data.models.Failure
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import kotlinx.coroutines.CancellationException

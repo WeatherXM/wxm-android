@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.weatherxm.R
-import com.weatherxm.data.Resource
-import com.weatherxm.data.Status
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.FragmentHistoryChartsBinding
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.setDisplayTimezone

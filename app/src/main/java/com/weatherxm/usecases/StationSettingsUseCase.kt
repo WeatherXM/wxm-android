@@ -1,9 +1,9 @@
 package com.weatherxm.usecases
 
 import arrow.core.Either
-import com.weatherxm.data.CountryAndFrequencies
-import com.weatherxm.data.DeviceInfo
-import com.weatherxm.data.Failure
+import com.weatherxm.data.models.CountryAndFrequencies
+import com.weatherxm.data.models.DeviceInfo
+import com.weatherxm.data.models.Failure
 import com.weatherxm.ui.common.UIDevice
 
 interface StationSettingsUseCase {

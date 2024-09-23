@@ -7,7 +7,7 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.OTAState
+import com.weatherxm.data.models.OTAState
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepository
 import io.kotest.core.spec.style.BehaviorSpec

@@ -1,4 +1,4 @@
-package com.weatherxm.data
+package com.weatherxm.ui.common
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LifecycleOwner

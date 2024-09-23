@@ -8,9 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.BluetoothError
-import com.weatherxm.data.Resource
-import com.weatherxm.data.Status
+import com.weatherxm.data.models.BluetoothError
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityHeliumOtaBinding
 import com.weatherxm.ui.common.Contracts.ARG_BLE_DEVICE_CONNECTED
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE

@@ -5,7 +5,7 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.NetworkStatsResponse
+import com.weatherxm.data.models.NetworkStatsResponse
 import com.weatherxm.data.datasource.StatsDataSource
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coVerify

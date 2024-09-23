@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.weatherxm.data.Resource
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.explorer.SearchResult
 import com.weatherxm.usecases.ExplorerUseCase

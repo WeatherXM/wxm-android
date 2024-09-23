@@ -1,11 +1,12 @@
 @file:Suppress("MatchingDeclarationName")
 
-package com.weatherxm.data
+package com.weatherxm.data.models
 
 import android.os.Parcelable
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import com.weatherxm.data.otherFrequencies
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 

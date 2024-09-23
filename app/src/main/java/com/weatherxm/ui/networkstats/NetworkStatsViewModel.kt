@@ -3,7 +3,7 @@ package com.weatherxm.ui.networkstats
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.weatherxm.data.Resource
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.usecases.StatsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.launch

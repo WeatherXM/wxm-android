@@ -2,7 +2,7 @@ package com.weatherxm
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.weatherxm.data.Failure
+import com.weatherxm.data.models.Failure
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRECIP
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE

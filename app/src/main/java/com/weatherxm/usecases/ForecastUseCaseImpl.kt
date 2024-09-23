@@ -1,9 +1,9 @@
 package com.weatherxm.usecases
 
 import arrow.core.Either
-import com.weatherxm.data.ApiError
-import com.weatherxm.data.Failure
-import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.models.ApiError
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.HourlyWeather
 import com.weatherxm.data.network.ErrorResponse.Companion.INVALID_TIMEZONE
 import com.weatherxm.data.repository.WeatherForecastRepository
 import com.weatherxm.ui.common.UIDevice

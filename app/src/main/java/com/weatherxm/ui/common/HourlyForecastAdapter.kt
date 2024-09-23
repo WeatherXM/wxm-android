@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.models.HourlyWeather
 import com.weatherxm.databinding.ListItemHourlyForecastBinding
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Weather

@@ -3,8 +3,8 @@ package com.weatherxm.data.repository
 import arrow.core.Either
 import arrow.core.handleErrorWith
 import com.mapbox.search.result.SearchSuggestion
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Location
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.datasource.CacheAddressSearchDataSource
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.NetworkAddressSearchDataSource

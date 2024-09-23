@@ -1,7 +1,7 @@
 package com.weatherxm.util
 
 import androidx.core.util.PatternsCompat
-import com.weatherxm.data.Location
+import com.weatherxm.data.models.Location
 import com.weatherxm.ui.common.DeviceType
 
 @Suppress("MagicNumber")

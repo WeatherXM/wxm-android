@@ -4,7 +4,7 @@ import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.coMockEitherLeft
-import com.weatherxm.data.Location
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.datasource.CacheAddressSearchDataSource
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.NetworkAddressSearchDataSource

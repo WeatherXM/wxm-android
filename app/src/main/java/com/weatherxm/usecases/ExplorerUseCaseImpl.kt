@@ -8,9 +8,9 @@ import com.mapbox.geojson.FeatureCollection
 import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
-import com.weatherxm.data.DataError
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Location
+import com.weatherxm.data.models.DataError
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository

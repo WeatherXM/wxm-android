@@ -6,10 +6,10 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.Failure
-import com.weatherxm.data.NetworkSearchResults
-import com.weatherxm.data.PublicDevice
-import com.weatherxm.data.PublicHex
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.NetworkSearchResults
+import com.weatherxm.data.models.PublicDevice
+import com.weatherxm.data.models.PublicHex
 import com.weatherxm.data.datasource.DatabaseExplorerDataSource
 import com.weatherxm.data.datasource.NetworkExplorerDataSource
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_PLACES

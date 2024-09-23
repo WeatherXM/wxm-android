@@ -2,11 +2,11 @@ package com.weatherxm.util
 
 import com.weatherxm.R
 import com.weatherxm.TestConfig.resources
-import com.weatherxm.data.ApiError.GenericError.UnknownError
-import com.weatherxm.data.ApiError.GenericError.UnsupportedAppVersion
-import com.weatherxm.data.ApiError.GenericError.ValidationError
-import com.weatherxm.data.Failure
-import com.weatherxm.data.NetworkError
+import com.weatherxm.data.models.ApiError.GenericError.UnknownError
+import com.weatherxm.data.models.ApiError.GenericError.UnsupportedAppVersion
+import com.weatherxm.data.models.ApiError.GenericError.ValidationError
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.NetworkError
 import com.weatherxm.util.Failure.getCode
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Failure.getDefaultMessageResId

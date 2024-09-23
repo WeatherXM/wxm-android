@@ -2,11 +2,11 @@ package com.weatherxm.data.repository
 
 import arrow.core.Either
 import arrow.core.recover
-import com.weatherxm.data.Device
-import com.weatherxm.data.DeviceInfo
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Location
-import com.weatherxm.data.Relation
+import com.weatherxm.data.models.Device
+import com.weatherxm.data.models.DeviceInfo
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.Relation
 import com.weatherxm.data.datasource.CacheAddressDataSource
 import com.weatherxm.data.datasource.CacheDeviceDataSource
 import com.weatherxm.data.datasource.CacheFollowDataSource

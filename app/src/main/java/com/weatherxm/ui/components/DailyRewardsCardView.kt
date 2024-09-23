@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources
 import com.weatherxm.R
-import com.weatherxm.data.Reward
-import com.weatherxm.data.RewardsAnnotationGroup
-import com.weatherxm.data.SeverityLevel
+import com.weatherxm.data.models.Reward
+import com.weatherxm.data.models.RewardsAnnotationGroup
+import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.databinding.ViewDailyRewardsCardBinding
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor

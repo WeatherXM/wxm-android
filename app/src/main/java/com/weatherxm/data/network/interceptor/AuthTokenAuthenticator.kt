@@ -7,7 +7,7 @@ import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.getOrElse
 import com.weatherxm.R
-import com.weatherxm.data.Failure
+import com.weatherxm.data.models.Failure
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.mapResponse
 import com.weatherxm.data.network.AuthService

@@ -6,8 +6,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import com.weatherxm.R
-import com.weatherxm.data.Resource
-import com.weatherxm.data.Status
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityDeviceEditLocationBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceRelation

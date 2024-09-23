@@ -1,8 +1,8 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
-import com.weatherxm.data.Failure
-import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.HourlyWeather
 import java.time.LocalDate
 
 interface WeatherHistoryRepository {

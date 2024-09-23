@@ -3,8 +3,8 @@ package com.weatherxm.ui.resetpassword
 import android.os.Bundle
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.Resource
-import com.weatherxm.data.Status
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityResetPasswordBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.onTextChanged

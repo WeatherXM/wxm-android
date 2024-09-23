@@ -5,10 +5,10 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.CountryAndFrequencies
-import com.weatherxm.data.DeviceInfo
-import com.weatherxm.data.Frequency
-import com.weatherxm.data.Location
+import com.weatherxm.data.models.CountryAndFrequencies
+import com.weatherxm.data.models.DeviceInfo
+import com.weatherxm.data.models.Frequency
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository

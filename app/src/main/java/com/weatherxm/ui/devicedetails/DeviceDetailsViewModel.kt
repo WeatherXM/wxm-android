@@ -8,9 +8,9 @@ import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.ApiError
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Resource
+import com.weatherxm.data.models.ApiError
+import com.weatherxm.data.models.Failure
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty

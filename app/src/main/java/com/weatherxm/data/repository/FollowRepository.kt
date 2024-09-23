@@ -1,7 +1,7 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
-import com.weatherxm.data.Failure
+import com.weatherxm.data.models.Failure
 import com.weatherxm.data.datasource.CacheFollowDataSource
 import com.weatherxm.data.datasource.NetworkFollowDataSource
 

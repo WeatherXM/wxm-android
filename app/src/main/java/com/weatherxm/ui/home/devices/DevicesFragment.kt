@@ -13,9 +13,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.InfoBanner
-import com.weatherxm.data.Resource
-import com.weatherxm.data.Status
+import com.weatherxm.data.models.InfoBanner
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceRelation

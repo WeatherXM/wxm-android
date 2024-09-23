@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Resource
+import com.weatherxm.data.models.Failure
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.RewardTimelineType
 import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.usecases.RewardsUseCase

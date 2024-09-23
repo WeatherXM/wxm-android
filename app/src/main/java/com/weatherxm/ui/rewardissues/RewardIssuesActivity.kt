@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.RewardDetails
+import com.weatherxm.data.models.RewardDetails
 import com.weatherxm.databinding.ActivityRewardIssuesBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_REWARD_DETAILS

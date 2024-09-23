@@ -1,8 +1,8 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
-import com.weatherxm.data.Failure
-import com.weatherxm.data.User
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.User
 import com.weatherxm.data.datasource.CacheUserDataSource
 import com.weatherxm.data.datasource.NetworkUserDataSource
 import kotlinx.coroutines.NonCancellable

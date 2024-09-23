@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.ApiError
-import com.weatherxm.data.Resource
-import com.weatherxm.data.User
+import com.weatherxm.data.models.ApiError
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.data.models.User
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
