@@ -12,11 +12,11 @@ import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isEqual
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
 import com.weatherxm.data.models.BoostReward
 import com.weatherxm.data.models.BoostRewardDetails
 import com.weatherxm.data.models.BoostRewardMetadata
 import com.weatherxm.data.models.BoostRewardResponse
-import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
 import com.weatherxm.data.models.DeviceRewardsSummary
 import com.weatherxm.data.models.DeviceRewardsSummaryData
 import com.weatherxm.data.models.DeviceRewardsSummaryDataReward
@@ -24,10 +24,9 @@ import com.weatherxm.data.models.DeviceRewardsSummaryDetails
 import com.weatherxm.data.models.DevicesRewards
 import com.weatherxm.data.models.DevicesRewardsData
 import com.weatherxm.data.models.Reward
-import com.weatherxm.datamodels..RewardDetails
+import com.weatherxm.data.models.RewardDetails
 import com.weatherxm.data.models.RewardsCode
 import com.weatherxm.data.models.RewardsTimeline
-import com.weatherxm.ui.common.Status
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.data.repository.RewardsRepositoryImpl.Companion.RewardsSummaryMode
 import com.weatherxm.ui.common.BoostDetailInfo
@@ -36,6 +35,7 @@ import com.weatherxm.ui.common.DeviceTotalRewardsDetails
 import com.weatherxm.ui.common.DevicesRewardsByRange
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.ui.common.RewardTimelineType
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.UIBoost
 import com.weatherxm.ui.common.UIRewardsTimeline
@@ -361,7 +361,8 @@ class RewardsUseCaseTest : BehaviorSpec({
                     )
                     then("return the DeviceTotalRewardsDetails for WEEK mode") {
                         usecase.getDeviceRewardsByRange(deviceId, RewardsSummaryMode.WEEK)
-                            .getOrNull().also {
+                            .getOrNull()
+                            .also {
                                 it?.total shouldBe deviceTotalRewardsDetails.total
                                 it?.mode shouldBe deviceTotalRewardsDetails.mode
                                 it?.boosts shouldBe deviceTotalRewardsDetails.boosts
@@ -370,7 +371,9 @@ class RewardsUseCaseTest : BehaviorSpec({
                                     deviceTotalRewardsDetails.datesChartTooltip
                                 it?.baseChartData?.isEqual(deviceTotalRewardsDetails.baseChartData)
                                 it?.betaChartData?.isEqual(deviceTotalRewardsDetails.betaChartData)
-                                it?.otherChartData?.isEqual(deviceTotalRewardsDetails.otherChartData)
+                                it?.otherChartData?.isEqual(
+                                    deviceTotalRewardsDetails.otherChartData
+                                )
                                 it?.status shouldBe deviceTotalRewardsDetails.status
                             }
                     }
