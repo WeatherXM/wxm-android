@@ -383,6 +383,10 @@ data class WeatherStation(
     val lastTxRssi: String?,
     @Json(name = "last_tx_rssi_last_activity")
     val lastTxRssiLastActivity: ZonedDateTime?,
+    @Json(name = "station_rssi")
+    val stationRssi: Int?,
+    @Json(name = "station_rssi_last_activity")
+    val stationRssiLastActivity: ZonedDateTime?,
     @Json(name = "bat_state")
     val batteryState: BatteryState?
 ) : Parcelable

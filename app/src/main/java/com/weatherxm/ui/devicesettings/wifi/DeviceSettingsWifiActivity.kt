@@ -9,7 +9,9 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityDeviceSettingsWifiBinding
+import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.RewardSplitStakeholderAdapter
 import com.weatherxm.ui.common.RewardSplitsData
@@ -115,7 +117,17 @@ class DeviceSettingsWifiActivity : BaseActivity() {
     private fun setupRecyclers() {
         defaultAdapter = DeviceInfoItemAdapter(null)
         gatewayAdapter = DeviceInfoItemAdapter(null)
-        stationAdapter = DeviceInfoItemAdapter(null)
+        stationAdapter = DeviceInfoItemAdapter {
+            if (it.alert == DeviceAlertType.LOW_STATION_RSSI) {
+                val url = when (model.device.bundleName) {
+                    BundleName.m5 -> getString(R.string.troubleshooting_m5_url)
+                    BundleName.d1 -> getString(R.string.troubleshooting_d1_url)
+                    else -> String.empty()
+                }
+                navigator.openWebsite(this, url)
+                finish()
+            }
+        }
         binding.recyclerDefaultInfo.adapter = defaultAdapter
         binding.recyclerGatewayInfo.adapter = gatewayAdapter
         binding.recyclerStationInfo.adapter = stationAdapter
@@ -205,7 +217,7 @@ class DeviceSettingsWifiActivity : BaseActivity() {
         }
 
         model.onDeviceInfo().observe(this) { deviceInfo ->
-            if (deviceInfo.station.any { it.warning != null }) {
+            if (deviceInfo.station.any { it.deviceAlert?.alert == DeviceAlertType.LOW_BATTERY }) {
                 analytics.trackEventPrompt(
                     AnalyticsService.ParamValue.LOW_BATTERY.paramValue,
                     AnalyticsService.ParamValue.WARN.paramValue,

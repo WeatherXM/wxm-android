@@ -25,6 +25,9 @@
     },
     "weather_station": {
         "model": "WS1000",
-        "last_activity": "2100-08-02T10:48:22+03:00"
+        "last_activity": "2100-08-02T10:48:22+03:00",
+        "station_rssi_last_activity": "2100-08-02T10:48:22+03:00",
+        "station_rssi": -90,
+        "bat_state": "low"
     }
 }

@@ -10,6 +10,8 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.data.models.WeatherStation
+import com.weatherxm.ui.common.DeviceAlert
+import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
@@ -125,6 +127,7 @@ class DeviceSettingsWifiViewModel(
         handleWeatherStationInfo(context, info.weatherStation)
     }
 
+    @Suppress("MagicNumber")
     private fun handleWeatherStationInfo(context: Context, weatherStation: WeatherStation?) {
         weatherStation?.apply {
             model?.let {
@@ -134,6 +137,25 @@ class DeviceSettingsWifiViewModel(
             hwVersion?.let {
                 data.station.add(
                     UIDeviceInfoItem(resources.getString(R.string.hardware_version), it)
+                )
+            }
+
+            val lastStationRssiTs =
+                stationRssiLastActivity?.getFormattedDateAndTime(context) ?: String.empty()
+            stationRssi?.let {
+                val deviceAlert = if (true) {
+                    DeviceAlert.createError(DeviceAlertType.LOW_STATION_RSSI)
+                } else if (it in -95..-81) {
+                    DeviceAlert.createWarning(DeviceAlertType.LOW_STATION_RSSI)
+                } else {
+                    null
+                }
+                data.station.add(
+                    UIDeviceInfoItem(
+                        resources.getString(R.string.station_gateway_rssi),
+                        resources.getString(R.string.rssi, it.toString(), lastStationRssiTs),
+                        deviceAlert
+                    )
                 )
             }
 
