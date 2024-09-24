@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.Status
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityForecastDetailsBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_FORECAST_SELECTED_DAY

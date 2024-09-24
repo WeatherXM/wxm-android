@@ -12,10 +12,10 @@ import com.mapbox.maps.extension.style.layers.generated.heatmapLayer
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.Location
-import com.weatherxm.data.PublicHex
-import com.weatherxm.data.Resource
-import com.weatherxm.data.SingleLiveEvent
+import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.PublicHex
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.ui.components.BaseMapFragment.Companion.DEFAULT_ZOOM_LEVEL
 import com.weatherxm.ui.components.BaseMapFragment.Companion.USER_LOCATION_ZOOM_LEVEL
 import com.weatherxm.usecases.ExplorerUseCase

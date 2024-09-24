@@ -13,7 +13,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.Status
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.FragmentPasswordPromptBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.onTextChanged

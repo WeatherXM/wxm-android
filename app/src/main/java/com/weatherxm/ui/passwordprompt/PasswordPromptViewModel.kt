@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.Resource
-import com.weatherxm.data.SingleLiveEvent
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources

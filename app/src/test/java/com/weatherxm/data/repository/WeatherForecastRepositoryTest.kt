@@ -4,7 +4,7 @@ import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.WeatherData
+import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import com.weatherxm.data.repository.WeatherForecastRepositoryImpl.Companion.PREFETCH_DAYS

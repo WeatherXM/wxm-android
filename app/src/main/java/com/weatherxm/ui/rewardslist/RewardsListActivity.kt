@@ -3,8 +3,8 @@ package com.weatherxm.ui.rewardslist
 import android.os.Bundle
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.Resource
-import com.weatherxm.data.Status
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityRewardsListBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.TimelineReward

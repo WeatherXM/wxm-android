@@ -5,7 +5,7 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.models.HourlyWeather
 import com.weatherxm.data.datasource.DatabaseWeatherHistoryDataSource
 import com.weatherxm.data.datasource.NetworkWeatherHistoryDataSource
 import io.kotest.core.spec.style.BehaviorSpec

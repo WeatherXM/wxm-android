@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.ApiError
-import com.weatherxm.data.Resource
+import com.weatherxm.data.models.ApiError
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.DeviceTotalRewards
 import com.weatherxm.ui.common.DevicesFilterType
 import com.weatherxm.ui.common.DevicesGroupBy

@@ -4,9 +4,9 @@ import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.right
-import com.weatherxm.data.DataError
-import com.weatherxm.data.Failure
-import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.models.DataError
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.HourlyWeather
 import com.weatherxm.data.database.dao.BaseDao
 import com.weatherxm.data.database.dao.DeviceHistoryDao
 import com.weatherxm.data.database.entities.DeviceHourlyHistory

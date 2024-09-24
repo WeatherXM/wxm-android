@@ -2,7 +2,7 @@ package com.weatherxm.data.repository
 
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.Failure
+import com.weatherxm.data.models.Failure
 import com.weatherxm.data.datasource.AppConfigDataSource
 import com.weatherxm.data.datasource.NotificationsDataSource
 import io.kotest.core.spec.style.BehaviorSpec

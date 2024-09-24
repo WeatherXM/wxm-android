@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Parcelable
 import arrow.core.Either
 import com.weatherxm.R
-import com.weatherxm.data.Failure
+import com.weatherxm.data.models.Failure
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.widgets.WidgetType

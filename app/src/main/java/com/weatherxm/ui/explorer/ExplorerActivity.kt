@@ -6,8 +6,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withCreated
 import com.mapbox.geojson.Point
 import com.weatherxm.BuildConfig
-import com.weatherxm.data.Location
-import com.weatherxm.data.Status
+import com.weatherxm.data.models.Location
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityExplorerBinding
 import com.weatherxm.ui.common.Animation.HideAnimation.SlideOutToBottom
 import com.weatherxm.ui.common.Animation.ShowAnimation.SlideInFromBottom

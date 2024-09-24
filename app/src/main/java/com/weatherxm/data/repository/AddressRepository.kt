@@ -11,10 +11,10 @@ import com.mapbox.search.result.ResultAccuracy
 import com.mapbox.search.result.SearchAddress
 import com.mapbox.search.result.SearchResult
 import com.mapbox.search.result.SearchSuggestion
-import com.weatherxm.data.CountryAndFrequencies
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Location
-import com.weatherxm.data.MapBoxError.ReverseGeocodingError
+import com.weatherxm.data.models.CountryAndFrequencies
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.MapBoxError.ReverseGeocodingError
 import com.weatherxm.data.datasource.CacheAddressDataSource
 import com.weatherxm.data.datasource.CacheAddressSearchDataSource
 import com.weatherxm.data.datasource.LocationDataSource

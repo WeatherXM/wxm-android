@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.Status
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceAlertType

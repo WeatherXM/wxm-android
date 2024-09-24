@@ -1,6 +1,6 @@
 package com.weatherxm.data.repository.bluetooth
 
-import com.weatherxm.data.OTAState
+import com.weatherxm.data.models.OTAState
 import com.weatherxm.data.datasource.bluetooth.BluetoothUpdaterDataSource
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe

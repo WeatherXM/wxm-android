@@ -3,9 +3,9 @@ package com.weatherxm.usecases
 import android.content.Context
 import arrow.core.Either
 import com.github.mikephil.charting.data.Entry
-import com.weatherxm.data.Failure
-import com.weatherxm.data.NetworkStatsStationDetails
-import com.weatherxm.data.NetworkStatsTimeseries
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.NetworkStatsStationDetails
+import com.weatherxm.data.models.NetworkStatsTimeseries
 import com.weatherxm.data.repository.StatsRepository
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.networkstats.NetworkStationStats

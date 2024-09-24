@@ -7,7 +7,7 @@ import androidx.annotation.RequiresApi
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.weatherxm.data.Failure.GeocoderError
+import com.weatherxm.data.models.Failure.GeocoderError
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

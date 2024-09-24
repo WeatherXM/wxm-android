@@ -2,7 +2,7 @@ package com.weatherxm.data.database.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.models.HourlyWeather
 import java.time.ZonedDateTime
 
 @Entity(primaryKeys = ["device_id", "timestamp"])

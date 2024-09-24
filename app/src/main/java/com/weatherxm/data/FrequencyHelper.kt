@@ -4,6 +4,8 @@ import android.content.Context
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
+import com.weatherxm.data.models.CountryInfo
+import com.weatherxm.data.models.Frequency
 import org.json.JSONException
 import timber.log.Timber
 

@@ -8,8 +8,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.Resource
-import com.weatherxm.data.Status
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityConnectWalletBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty

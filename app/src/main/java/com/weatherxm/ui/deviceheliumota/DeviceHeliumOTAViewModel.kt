@@ -4,10 +4,10 @@ import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
-import com.weatherxm.data.BluetoothError
-import com.weatherxm.data.BluetoothOTAState
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Resource
+import com.weatherxm.data.models.BluetoothError
+import com.weatherxm.data.models.BluetoothOTAState
+import com.weatherxm.data.models.Failure
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.components.BluetoothHeliumViewModel

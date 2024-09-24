@@ -5,7 +5,7 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.Device
+import com.weatherxm.data.models.Device
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.WidgetRepository
 import io.kotest.core.spec.style.BehaviorSpec

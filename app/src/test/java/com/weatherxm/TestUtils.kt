@@ -2,8 +2,8 @@ package com.weatherxm
 
 import arrow.core.Either
 import com.weatherxm.TestConfig.failure
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Resource
+import com.weatherxm.data.models.Failure
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.LineChartData
 import io.kotest.matchers.shouldBe

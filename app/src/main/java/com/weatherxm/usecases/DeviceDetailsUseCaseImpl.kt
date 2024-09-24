@@ -1,8 +1,8 @@
 package com.weatherxm.usecases
 
 import arrow.core.Either
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Rewards
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Rewards
 import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository

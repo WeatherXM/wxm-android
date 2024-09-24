@@ -6,7 +6,7 @@ import androidx.annotation.StringRes
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.Status
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityNetworkStatsBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.removeLinksUnderline

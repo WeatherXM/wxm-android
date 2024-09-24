@@ -2,7 +2,7 @@ package com.weatherxm.data.network
 
 import android.os.Parcelable
 import com.squareup.moshi.JsonClass
-import com.weatherxm.data.Location
+import com.weatherxm.data.models.Location
 import kotlinx.parcelize.Parcelize
 
 @JsonClass(generateAdapter = true)

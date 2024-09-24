@@ -4,8 +4,8 @@ import android.content.Context
 import android.net.Uri
 import androidx.core.net.toUri
 import arrow.core.Either
-import com.weatherxm.data.Failure
-import com.weatherxm.data.OTAState
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.OTAState
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.bluetooth.BluetoothUpdaterRepository
 import kotlinx.coroutines.Dispatchers

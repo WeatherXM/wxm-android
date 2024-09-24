@@ -3,8 +3,8 @@ package com.weatherxm.usecases
 import arrow.core.Either
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.SearchSuggestion
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Location
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
 import com.weatherxm.ui.common.UIDevice
 
 interface EditLocationUseCase {

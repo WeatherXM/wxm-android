@@ -1,8 +1,8 @@
 package com.weatherxm.data.datasource
 
 import arrow.core.Either
-import com.weatherxm.data.Failure
-import com.weatherxm.data.WeatherData
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.services.CacheService
 import java.time.LocalDate
 

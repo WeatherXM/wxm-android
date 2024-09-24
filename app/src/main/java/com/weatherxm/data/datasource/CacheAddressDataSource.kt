@@ -3,9 +3,9 @@ package com.weatherxm.data.datasource
 import arrow.core.Either
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.SearchResult
-import com.weatherxm.data.CountryAndFrequencies
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Location
+import com.weatherxm.data.models.CountryAndFrequencies
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.services.CacheService
 
 /**

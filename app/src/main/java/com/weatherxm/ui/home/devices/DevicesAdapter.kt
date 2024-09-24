@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.SeverityLevel
+import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
 import com.weatherxm.ui.common.DeviceAlert

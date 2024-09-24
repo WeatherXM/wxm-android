@@ -11,9 +11,9 @@ import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotation
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.R
-import com.weatherxm.data.Hex
-import com.weatherxm.data.Location
-import com.weatherxm.data.PublicHex
+import com.weatherxm.data.models.Hex
+import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.PublicHex
 import com.weatherxm.ui.explorer.ExplorerViewModel.Companion.FILL_OPACITY_HEXAGONS
 import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.ui.explorer.UICellJsonAdapter

@@ -6,8 +6,8 @@ import android.telephony.TelephonyManager
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import com.weatherxm.data.CountryInfo
-import com.weatherxm.data.Location
+import com.weatherxm.data.models.CountryInfo
+import com.weatherxm.data.models.Location
 import com.weatherxm.data.services.CacheService
 import org.json.JSONException
 import timber.log.Timber

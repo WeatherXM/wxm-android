@@ -1,7 +1,7 @@
 package com.weatherxm.data.repository
 
-import com.weatherxm.data.InfoBanner
-import com.weatherxm.data.Survey
+import com.weatherxm.data.models.InfoBanner
+import com.weatherxm.data.models.Survey
 import com.weatherxm.data.datasource.RemoteBannersDataSource
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe

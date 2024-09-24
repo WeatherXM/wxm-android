@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.InfoBanner
-import com.weatherxm.data.SingleLiveEvent
-import com.weatherxm.data.Survey
+import com.weatherxm.data.models.InfoBanner
+import com.weatherxm.ui.common.SingleLiveEvent
+import com.weatherxm.data.models.Survey
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.WalletWarnings
 import com.weatherxm.usecases.RemoteBannersUseCase

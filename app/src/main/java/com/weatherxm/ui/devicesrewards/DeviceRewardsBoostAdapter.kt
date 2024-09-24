@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
-import com.weatherxm.data.BoostCode
+import com.weatherxm.data.models.BoostCode
 import com.weatherxm.databinding.ListItemDeviceRewardsBoostBinding
 import com.weatherxm.ui.common.DeviceTotalRewardsBoost
 import com.weatherxm.ui.common.visible

@@ -6,7 +6,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import com.weatherxm.R
-import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.models.HourlyWeather
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND

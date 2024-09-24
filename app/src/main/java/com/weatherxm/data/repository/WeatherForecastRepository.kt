@@ -1,8 +1,8 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
-import com.weatherxm.data.Failure
-import com.weatherxm.data.WeatherData
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.WeatherData
 import com.weatherxm.data.datasource.CacheWeatherForecastDataSource
 import com.weatherxm.data.datasource.NetworkWeatherForecastDataSource
 import timber.log.Timber

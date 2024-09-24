@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.Resource
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.ui.common.DeviceTotalRewardsDetails
 import com.weatherxm.ui.common.DevicesRewards

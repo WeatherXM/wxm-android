@@ -17,8 +17,8 @@ import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.getOrElse
 import arrow.core.right
-import com.weatherxm.data.ApiError.GenericError.JWTError.ForbiddenError
-import com.weatherxm.data.UserActionError.UserNotLoggedInError
+import com.weatherxm.data.models.ApiError.GenericError.JWTError.ForbiddenError
+import com.weatherxm.data.models.UserActionError.UserNotLoggedInError
 import com.weatherxm.data.requireNetwork
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.data.services.CacheService.Companion.KEY_CURRENT_WEATHER_WIDGET_IDS

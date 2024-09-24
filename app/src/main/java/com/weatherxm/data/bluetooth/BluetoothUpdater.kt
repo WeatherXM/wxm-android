@@ -3,8 +3,8 @@ package com.weatherxm.data.bluetooth
 import android.content.Context
 import android.net.Uri
 import com.weatherxm.R
-import com.weatherxm.data.BluetoothOTAState
-import com.weatherxm.data.OTAState
+import com.weatherxm.data.models.BluetoothOTAState
+import com.weatherxm.data.models.OTAState
 import com.weatherxm.service.DfuService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow

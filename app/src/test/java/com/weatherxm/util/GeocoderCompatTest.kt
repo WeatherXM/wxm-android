@@ -6,7 +6,7 @@ import android.os.Build
 import arrow.core.Either
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.setStaticFieldViaReflection
-import com.weatherxm.data.Failure
+import com.weatherxm.data.models.Failure
 import com.weatherxm.util.GeocoderCompat.getFromLocation
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe

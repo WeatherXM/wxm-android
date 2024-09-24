@@ -2,7 +2,7 @@ package com.weatherxm.data.datasource
 
 import arrow.core.Either
 import arrow.core.getOrElse
-import com.weatherxm.data.Failure
+import com.weatherxm.data.models.Failure
 import com.weatherxm.data.services.CacheService
 
 interface WidgetDataSource {

@@ -6,7 +6,7 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.Frequency
+import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.datasource.bluetooth.BluetoothConnectionDataSource
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe

@@ -5,8 +5,8 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.User
-import com.weatherxm.data.WalletRewards
+import com.weatherxm.data.models.User
+import com.weatherxm.data.models.WalletRewards
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.data.repository.UserPreferencesRepository
 import com.weatherxm.data.repository.UserRepository

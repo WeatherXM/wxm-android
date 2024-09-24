@@ -4,9 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
-import com.weatherxm.data.ApiError.AuthError.InvalidUsername
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Resource
+import com.weatherxm.data.models.ApiError.AuthError.InvalidUsername
+import com.weatherxm.data.models.Failure
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessageResId

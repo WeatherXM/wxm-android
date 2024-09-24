@@ -6,9 +6,9 @@ import coil.ImageLoader
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.BoostCode
-import com.weatherxm.data.BoostReward
-import com.weatherxm.data.Status
+import com.weatherxm.data.models.BoostCode
+import com.weatherxm.data.models.BoostReward
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityRewardBoostBinding
 import com.weatherxm.ui.common.Contracts.ARG_BOOST_REWARD
 import com.weatherxm.ui.common.Contracts.ARG_DATE

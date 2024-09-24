@@ -5,6 +5,7 @@ import com.weatherxm.TestConfig.context
 import com.weatherxm.data.adapters.LocalDateJsonAdapter
 import com.weatherxm.data.adapters.LocalDateTimeJsonAdapter
 import com.weatherxm.data.adapters.ZonedDateTimeJsonAdapter
+import com.weatherxm.data.models.Frequency
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.shouldBe

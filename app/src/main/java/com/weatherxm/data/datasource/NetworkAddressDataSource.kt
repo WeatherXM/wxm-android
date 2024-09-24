@@ -14,11 +14,11 @@ import com.mapbox.search.SearchEngine
 import com.mapbox.search.common.SearchCancellationException
 import com.mapbox.search.result.SearchResult
 import com.squareup.moshi.Moshi
-import com.weatherxm.data.CancellationError
-import com.weatherxm.data.CountryAndFrequencies
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Location
-import com.weatherxm.data.MapBoxError
+import com.weatherxm.data.models.CancellationError
+import com.weatherxm.data.models.CountryAndFrequencies
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.MapBoxError
 import com.weatherxm.data.countryToFrequency
 import com.weatherxm.data.otherFrequencies
 import com.weatherxm.util.GeocoderCompat
