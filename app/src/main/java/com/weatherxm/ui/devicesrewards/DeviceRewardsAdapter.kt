@@ -53,7 +53,7 @@ class DeviceRewardsAdapter(
         private var ignoreRangeChipListener = false
 
         fun bind(item: DeviceTotalRewards) {
-            binding.root.setOnClickListener {
+            binding.headerCard.setOnClickListener {
                 onExpandClick(item)
             }
 
@@ -192,15 +192,6 @@ class DeviceRewardsDiffCallback : DiffUtil.ItemCallback<DeviceTotalRewards>() {
         return oldItem.id == newItem.id &&
             oldItem.name == newItem.name &&
             oldItem.total == newItem.total &&
-            oldItem.details == newItem.details &&
-            oldItem.details.total == newItem.details.total &&
-            oldItem.details.mode == newItem.details.mode &&
-            oldItem.details.status == newItem.details.status &&
-            oldItem.details.totals.size == newItem.details.totals.size &&
-            oldItem.details.boosts.size == newItem.details.boosts.size &&
-            oldItem.details.datesChartTooltip.size == newItem.details.datesChartTooltip.size &&
-            oldItem.details.baseChartData == newItem.details.baseChartData &&
-            oldItem.details.betaChartData == newItem.details.betaChartData &&
-            oldItem.details.otherChartData == newItem.details.otherChartData
+            oldItem.details == newItem.details
     }
 }
