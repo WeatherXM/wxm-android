@@ -627,7 +627,7 @@ fun LineChart.initTotalEarnedChart(
 }
 
 @Suppress("MagicNumber")
-private fun MutableList<LineDataSet>.initRewardBreakDown(color: Int) {
+private fun MutableList<LineDataSet>.initRewardBreakDown(color: Int, highlightColor: Int) {
     forEach {
         it.setDrawFilled(true)
         it.lineWidth = 0.2F
@@ -637,6 +637,7 @@ private fun MutableList<LineDataSet>.initRewardBreakDown(color: Int) {
         it.fillColor = color
         it.setCircleColor(color)
         it.axisDependency = YAxis.AxisDependency.RIGHT
+        it.highLightColor = highlightColor
         if (it.values.size > 1) it.setDrawCircles(false)
     }
 }
@@ -661,7 +662,7 @@ fun LineChart.initRewardsBreakdownChart(
     if (otherDataDataSetsWithValues.isNotEmpty()) {
         dataSets.addAll(otherDataDataSetsWithValues.primaryLineInit(context, resources))
         otherDataDataSetsWithValues.initRewardBreakDown(
-            context.getColor(R.color.other_reward)
+            context.getColor(R.color.other_reward), context.getColor(R.color.darkGrey)
         )
     }
 
@@ -672,7 +673,7 @@ fun LineChart.initRewardsBreakdownChart(
     if (betaDataDataSetsWithValues.isNotEmpty()) {
         dataSets.addAll(betaDataDataSetsWithValues.primaryLineInit(context, resources))
         betaDataDataSetsWithValues.initRewardBreakDown(
-            context.getColor(R.color.beta_rewards_color)
+            context.getColor(R.color.beta_rewards_color), context.getColor(R.color.darkGrey)
         )
     }
 
@@ -683,7 +684,7 @@ fun LineChart.initRewardsBreakdownChart(
     if (baseLineDataSetsWithValues.isNotEmpty()) {
         dataSets.addAll(baseLineDataSetsWithValues.primaryLineInit(context, resources))
         baseLineDataSetsWithValues.initRewardBreakDown(
-            context.getColor(R.color.blue)
+            context.getColor(R.color.blue), context.getColor(R.color.darkGrey)
         )
     }
 

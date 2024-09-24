@@ -103,7 +103,8 @@ class DeviceRewardsAdapter(
         }
 
         private fun onDetails(details: DeviceTotalRewardsDetails) {
-            binding.earnedBy.text = formatTokens(details.total)
+            binding.earnedBy.text =
+                itemView.context.getString(R.string.wxm_amount, formatTokens(details.total))
             binding.boostsRecycler.adapter = adapter
             adapter.submitList(details.boosts)
 

@@ -13,7 +13,6 @@ import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.Reward
 import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.data.models.SeverityLevel
-import com.weatherxm.ui.common.Status
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate

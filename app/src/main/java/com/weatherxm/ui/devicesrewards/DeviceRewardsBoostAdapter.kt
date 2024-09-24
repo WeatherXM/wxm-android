@@ -66,8 +66,8 @@ class DeviceRewardsBoostAdapter :
             binding.totalTokensSoFar.text = formatTokens(item.currentRewards)
             binding.totalTokensMax.text = formatTokens(item.maxRewards)
 
-            val boostStartDate = item.boostPeriodStart.getFormattedDate(true)
-            val boostStopDate = item.boostPeriodEnd.getFormattedDate(true)
+            val boostStartDate = item.boostPeriodStart.getFormattedDate(true, includeComma = false)
+            val boostStopDate = item.boostPeriodEnd.getFormattedDate(true, includeComma = false)
             binding.boostPeriod.text = "$boostStartDate - $boostStopDate"
         }
 
