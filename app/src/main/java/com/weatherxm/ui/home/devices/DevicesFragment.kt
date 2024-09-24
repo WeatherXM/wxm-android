@@ -197,6 +197,9 @@ class DevicesFragment : BaseFragment(), DeviceListener {
     private fun onDevicesRewards(rewards: DevicesRewards) {
         binding.loadingRewards.invisible()
         binding.totalEarnedCard.setOnClickListener {
+            analytics.trackEventUserAction(
+                AnalyticsService.ParamValue.TOKENS_EARNED_PRESSED.paramValue
+            )
             navigator.showDevicesRewards(this, rewards)
         }
         binding.totalEarned.text = getString(R.string.wxm_amount, formatTokens(rewards.total))
