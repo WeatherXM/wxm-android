@@ -1,4 +1,4 @@
-package com.weatherxm.data
+package com.weatherxm.data.models
 
 import androidx.annotation.Keep
 

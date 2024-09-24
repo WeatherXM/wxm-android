@@ -3,7 +3,7 @@ package com.weatherxm.data.repository
 import arrow.core.Either
 import arrow.core.flatMap
 import com.weatherxm.BuildConfig
-import com.weatherxm.data.Failure
+import com.weatherxm.data.models.Failure
 import com.weatherxm.data.datasource.AppConfigDataSource
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.datasource.CacheUserDataSource

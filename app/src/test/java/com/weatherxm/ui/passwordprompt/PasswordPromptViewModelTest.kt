@@ -7,7 +7,7 @@ import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.ApiError
+import com.weatherxm.data.models.ApiError
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.util.Failure.getDefaultMessage

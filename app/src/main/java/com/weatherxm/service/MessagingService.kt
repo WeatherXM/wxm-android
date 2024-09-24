@@ -12,8 +12,8 @@ import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.weatherxm.R
-import com.weatherxm.data.RemoteMessageType
-import com.weatherxm.data.WXMRemoteMessage
+import com.weatherxm.data.models.RemoteMessageType
+import com.weatherxm.data.models.WXMRemoteMessage
 import com.weatherxm.service.workers.RefreshFcmApiWorker
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE

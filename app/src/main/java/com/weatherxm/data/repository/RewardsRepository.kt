@@ -1,14 +1,14 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
-import com.weatherxm.data.BoostRewardResponse
-import com.weatherxm.data.DeviceRewardsSummary
-import com.weatherxm.data.DevicesRewards
-import com.weatherxm.data.Failure
-import com.weatherxm.data.RewardDetails
-import com.weatherxm.data.Rewards
-import com.weatherxm.data.RewardsTimeline
-import com.weatherxm.data.WalletRewards
+import com.weatherxm.data.models.BoostRewardResponse
+import com.weatherxm.data.models.DeviceRewardsSummary
+import com.weatherxm.data.models.DevicesRewards
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.RewardDetails
+import com.weatherxm.data.models.Rewards
+import com.weatherxm.data.models.RewardsTimeline
+import com.weatherxm.data.models.WalletRewards
 import com.weatherxm.data.datasource.RewardsDataSource
 import com.weatherxm.util.toISODate
 import java.time.ZoneId

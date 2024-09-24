@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import com.weatherxm.R
-import com.weatherxm.data.BoostReward
+import com.weatherxm.data.models.BoostReward
 import com.weatherxm.databinding.ListItemRewardBoostBinding
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.setBoostFallbackBackground

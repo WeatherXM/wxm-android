@@ -1,4 +1,6 @@
-package com.weatherxm.data
+package com.weatherxm.ui.common
+
+import com.weatherxm.data.models.Failure
 
 /**
  * Status of a resource that is provided to the UI.

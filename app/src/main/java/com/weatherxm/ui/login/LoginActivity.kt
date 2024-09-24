@@ -8,9 +8,9 @@ import arrow.core.getOrElse
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.Resource
-import com.weatherxm.data.Status
-import com.weatherxm.data.User
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
+import com.weatherxm.data.models.User
 import com.weatherxm.databinding.ActivityLoginBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_USER_MESSAGE

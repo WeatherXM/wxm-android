@@ -10,9 +10,9 @@ import androidx.lifecycle.viewModelScope
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.R
-import com.weatherxm.data.ApiError
-import com.weatherxm.data.Location
-import com.weatherxm.data.Resource
+import com.weatherxm.data.models.ApiError
+import com.weatherxm.data.models.Location
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.components.BaseMapFragment.Companion.REVERSE_GEOCODING_DELAY
 import com.weatherxm.usecases.EditLocationUseCase

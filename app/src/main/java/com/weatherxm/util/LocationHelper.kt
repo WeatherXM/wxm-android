@@ -12,7 +12,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.Priority
-import com.weatherxm.data.Location
+import com.weatherxm.data.models.Location
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 

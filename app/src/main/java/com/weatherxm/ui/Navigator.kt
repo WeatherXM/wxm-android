@@ -19,11 +19,11 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.BoostReward
-import com.weatherxm.data.Location
-import com.weatherxm.data.Reward
-import com.weatherxm.data.RewardDetails
-import com.weatherxm.data.WXMRemoteMessage
+import com.weatherxm.data.models.BoostReward
+import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.Reward
+import com.weatherxm.data.models.RewardDetails
+import com.weatherxm.data.models.WXMRemoteMessage
 import com.weatherxm.ui.analytics.AnalyticsOptInActivity
 import com.weatherxm.ui.cellinfo.CellInfoActivity
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumActivity

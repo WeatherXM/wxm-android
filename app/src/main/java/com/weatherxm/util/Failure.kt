@@ -2,11 +2,11 @@ package com.weatherxm.util
 
 import androidx.annotation.StringRes
 import com.weatherxm.R
-import com.weatherxm.data.ApiError.GenericError.UnsupportedAppVersion
-import com.weatherxm.data.ApiError.GenericError.ValidationError
-import com.weatherxm.data.Failure
-import com.weatherxm.data.NetworkError.ConnectionTimeoutError
-import com.weatherxm.data.NetworkError.NoConnectionError
+import com.weatherxm.data.models.ApiError.GenericError.UnsupportedAppVersion
+import com.weatherxm.data.models.ApiError.GenericError.ValidationError
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.NetworkError.ConnectionTimeoutError
+import com.weatherxm.data.models.NetworkError.NoConnectionError
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

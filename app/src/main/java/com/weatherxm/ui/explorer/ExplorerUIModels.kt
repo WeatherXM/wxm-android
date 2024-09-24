@@ -6,9 +6,9 @@ import com.mapbox.geojson.Point
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.squareup.moshi.JsonClass
-import com.weatherxm.data.Bundle
-import com.weatherxm.data.Location
-import com.weatherxm.data.PublicHex
+import com.weatherxm.data.models.Bundle
+import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.PublicHex
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice

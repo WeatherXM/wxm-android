@@ -8,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.ApiError
-import com.weatherxm.data.BatteryState
-import com.weatherxm.data.DeviceInfo
+import com.weatherxm.data.models.ApiError
+import com.weatherxm.data.models.BatteryState
+import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError

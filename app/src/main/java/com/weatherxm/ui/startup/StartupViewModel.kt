@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.weatherxm.data.RemoteMessageType
-import com.weatherxm.data.WXMRemoteMessage
+import com.weatherxm.data.models.RemoteMessageType
+import com.weatherxm.data.models.WXMRemoteMessage
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_URL

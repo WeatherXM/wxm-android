@@ -352,6 +352,7 @@ tasks.register("jacocoCoverageTestReport", type = JacocoReport::class) {
         "**/data/*Error*.*",
         "**/data/*Adapter*.*",
         "**/data/bluetooth/**",
+        "**/data/models/**",
         "**/data/database/AppDatabase*.*",
         "**/data/database/dao/**",
         "**/data/database/entities/**",

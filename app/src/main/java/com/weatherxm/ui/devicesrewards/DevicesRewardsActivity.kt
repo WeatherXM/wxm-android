@@ -2,7 +2,7 @@ package com.weatherxm.ui.devicesrewards
 
 import android.os.Bundle
 import com.weatherxm.R
-import com.weatherxm.data.Status
+import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityDevicesRewardsBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DevicesRewards

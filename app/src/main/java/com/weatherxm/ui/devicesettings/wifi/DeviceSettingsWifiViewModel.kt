@@ -7,9 +7,9 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.DeviceInfo
-import com.weatherxm.data.RewardSplit
-import com.weatherxm.data.WeatherStation
+import com.weatherxm.data.models.DeviceInfo
+import com.weatherxm.data.models.RewardSplit
+import com.weatherxm.data.models.WeatherStation
 import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty

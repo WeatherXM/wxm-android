@@ -4,9 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
-import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidCredentials
-import com.weatherxm.data.ApiError.AuthError.LoginError.InvalidPassword
-import com.weatherxm.data.Resource
+import com.weatherxm.data.models.ApiError.AuthError.LoginError.InvalidCredentials
+import com.weatherxm.data.models.ApiError.AuthError.LoginError.InvalidPassword
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.DeleteAccountUseCase
 import com.weatherxm.analytics.AnalyticsWrapper
@@ -28,12 +28,12 @@ class DeleteAccountViewModel(
     fun onStatus() = onStatus
 
     fun isOnSafeState(): Boolean {
-        return onStatus.value?.status != com.weatherxm.data.Status.LOADING
+        return onStatus.value?.status != com.weatherxm.ui.common.Status.LOADING
     }
 
     fun isAccountedDeleted(): Boolean {
         return onStatus.value?.data?.status == Status.ACCOUNT_DELETION
-            && onStatus.value?.status == com.weatherxm.data.Status.SUCCESS
+            && onStatus.value?.status == com.weatherxm.ui.common.Status.SUCCESS
     }
 
     @Suppress("MagicNumber")

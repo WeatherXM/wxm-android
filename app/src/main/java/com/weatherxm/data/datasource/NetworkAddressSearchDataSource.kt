@@ -13,10 +13,10 @@ import com.mapbox.search.common.IsoLanguageCode
 import com.mapbox.search.common.SearchCancellationException
 import com.mapbox.search.result.SearchResult
 import com.mapbox.search.result.SearchSuggestion
-import com.weatherxm.data.CancellationError
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Location
-import com.weatherxm.data.MapBoxError
+import com.weatherxm.data.models.CancellationError
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.MapBoxError
 import timber.log.Timber
 import kotlin.coroutines.suspendCoroutine
 

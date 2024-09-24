@@ -2,7 +2,7 @@ package com.weatherxm.data.datasource
 
 import arrow.core.Either
 import com.google.firebase.messaging.FirebaseMessaging
-import com.weatherxm.data.Failure
+import com.weatherxm.data.models.Failure
 import com.weatherxm.data.mapResponse
 import com.weatherxm.data.network.ApiService
 import kotlinx.coroutines.tasks.await

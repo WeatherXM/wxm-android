@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
-import com.weatherxm.data.RewardSplit
+import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.databinding.ListItemRewardSplitStakeholderBinding
 import com.weatherxm.util.Mask
 import com.weatherxm.util.Rewards.formatTokens

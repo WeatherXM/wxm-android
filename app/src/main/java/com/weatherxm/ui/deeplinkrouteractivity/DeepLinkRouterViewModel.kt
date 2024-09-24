@@ -8,11 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.getOrElse
 import com.weatherxm.R
-import com.weatherxm.data.ApiError
-import com.weatherxm.data.DataError
-import com.weatherxm.data.Failure
-import com.weatherxm.data.RemoteMessageType
-import com.weatherxm.data.WXMRemoteMessage
+import com.weatherxm.data.models.ApiError
+import com.weatherxm.data.models.DataError
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.RemoteMessageType
+import com.weatherxm.data.models.WXMRemoteMessage
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_PLACES
 import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.UIDevice

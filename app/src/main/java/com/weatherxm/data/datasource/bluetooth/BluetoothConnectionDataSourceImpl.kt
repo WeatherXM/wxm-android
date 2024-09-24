@@ -3,9 +3,9 @@ package com.weatherxm.data.datasource.bluetooth
 import android.bluetooth.BluetoothDevice
 import arrow.core.Either
 import arrow.core.handleErrorWith
-import com.weatherxm.data.BluetoothError
-import com.weatherxm.data.Failure
-import com.weatherxm.data.Frequency
+import com.weatherxm.data.models.BluetoothError
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_CLAIMING_KEY_COMMAND
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_DEV_EUI_COMMAND

@@ -1,8 +1,8 @@
 package com.weatherxm.data.datasource
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.weatherxm.data.InfoBanner
-import com.weatherxm.data.Survey
+import com.weatherxm.data.models.InfoBanner
+import com.weatherxm.data.models.Survey
 import com.weatherxm.data.services.CacheService
 
 interface RemoteBannersDataSource {

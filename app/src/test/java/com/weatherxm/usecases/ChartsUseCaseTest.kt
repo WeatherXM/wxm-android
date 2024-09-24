@@ -9,7 +9,7 @@ import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestConfig.sharedPref
 import com.weatherxm.TestUtils.isEqual
 import com.weatherxm.data.HOUR_FORMAT_24H
-import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.models.HourlyWeather
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.util.LocalDateTimeRange

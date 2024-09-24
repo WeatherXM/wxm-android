@@ -1,6 +1,6 @@
 package com.weatherxm.usecases
 
-import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.models.HourlyWeather
 import com.weatherxm.ui.common.Charts
 import java.time.LocalDate
 

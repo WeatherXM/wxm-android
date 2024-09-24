@@ -8,9 +8,9 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.ApiError.UserError.InvalidFromDate
-import com.weatherxm.data.ApiError.UserError.InvalidToDate
-import com.weatherxm.data.Resource
+import com.weatherxm.data.models.ApiError.UserError.InvalidFromDate
+import com.weatherxm.data.models.ApiError.UserError.InvalidToDate
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.ChartsUseCase

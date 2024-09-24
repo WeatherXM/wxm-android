@@ -11,7 +11,7 @@ import com.mapbox.maps.viewannotation.annotationAnchor
 import com.mapbox.maps.viewannotation.geometry
 import com.mapbox.maps.viewannotation.viewAnnotationOptions
 import com.weatherxm.R
-import com.weatherxm.data.Location
+import com.weatherxm.data.models.Location
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast

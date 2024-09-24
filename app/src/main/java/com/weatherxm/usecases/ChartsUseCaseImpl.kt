@@ -3,7 +3,7 @@ package com.weatherxm.usecases
 import android.content.Context
 import android.graphics.drawable.Drawable
 import com.github.mikephil.charting.data.Entry
-import com.weatherxm.data.HourlyWeather
+import com.weatherxm.data.models.HourlyWeather
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.util.DateTimeHelper.getFormattedTime

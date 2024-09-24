@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
-import com.weatherxm.data.Status
 import com.weatherxm.data.repository.RewardsRepositoryImpl.Companion.RewardsSummaryMode
 import com.weatherxm.databinding.ListItemDeviceRewardsBinding
 import com.weatherxm.ui.common.DeviceTotalRewards
 import com.weatherxm.ui.common.DeviceTotalRewardsDetails
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.show

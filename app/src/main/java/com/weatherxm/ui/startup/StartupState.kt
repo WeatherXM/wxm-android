@@ -1,7 +1,7 @@
 package com.weatherxm.ui.startup
 
 import androidx.annotation.Keep
-import com.weatherxm.data.WXMRemoteMessage
+import com.weatherxm.data.models.WXMRemoteMessage
 
 @Keep
 sealed class StartupState {

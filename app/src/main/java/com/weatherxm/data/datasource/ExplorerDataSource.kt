@@ -1,10 +1,10 @@
 package com.weatherxm.data.datasource
 
 import arrow.core.Either
-import com.weatherxm.data.Failure
-import com.weatherxm.data.NetworkSearchResults
-import com.weatherxm.data.PublicDevice
-import com.weatherxm.data.PublicHex
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.NetworkSearchResults
+import com.weatherxm.data.models.PublicDevice
+import com.weatherxm.data.models.PublicHex
 import com.weatherxm.ui.explorer.SearchResult
 
 interface ExplorerDataSource {
