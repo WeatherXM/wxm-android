@@ -579,6 +579,12 @@ fun LineChart.initTotalEarnedChart(
     totalEarnedData: LineChartData,
     datesChartTooltip: List<String>
 ) {
+    /**
+     * Clear the chart in order to remove any previous highlight/tooltips when new data are loaded
+     */
+    if (highlighted != null) {
+        highlightValue(null)
+    }
     val dataSet = LineDataSet(totalEarnedData.entries, String.empty())
     val lineData = LineData(dataSet)
     data = lineData
@@ -601,12 +607,22 @@ fun LineChart.initTotalEarnedChart(
     axisRight.gridColor = context.getColor(R.color.midGrey)
     axisRight.setDrawAxisLine(false)
     axisRight.setDrawGridLines(true)
-    if (dataSet.yMin == 0F) {
+    /**
+     * Use a smaller axisMinimum in order to have a proper label in that minimum
+     */
+    if (dataSet.yMin < 2F) {
         axisRight.axisMinimum = 0F
     } else {
-        axisRight.axisMinimum = dataSet.yMin * 0.8F
+        axisRight.axisMinimum = dataSet.yMin * 0.5F
     }
-    axisRight.axisMaximum = dataSet.yMax * 1.2F
+    /**
+     * Use a bigger axisMaximum in order for the chart not to be filled up fully in some cases
+     */
+    if(dataSet.yMax < 2) {
+        axisRight.axisMaximum = dataSet.yMax * 2F
+    } else {
+        axisRight.axisMaximum = dataSet.yMax * 1.5F
+    }
 
     // X axis settings
     with(xAxis) {
@@ -650,6 +666,12 @@ fun LineChart.initRewardsBreakdownChart(
     totals: List<Float>,
     datesChartTooltip: List<String>
 ) {
+    /**
+     * Clear the chart in order to remove any previous highlight/tooltips when new data are loaded
+     */
+    if (highlighted != null) {
+        highlightValue(null)
+    }
     val dataSets = mutableListOf<ILineDataSet>()
 
     val baseLineDataSetsWithValues = baseData.getLineDataSetsWithValues("")
@@ -706,7 +728,14 @@ fun LineChart.initRewardsBreakdownChart(
     axisRight.setDrawAxisLine(false)
     axisRight.setDrawGridLines(true)
     axisRight.axisMinimum = 0F
-    axisRight.axisMaximum = totals.max() * 1.5F
+    /**
+     * Use a bigger axisMaximum in order for the chart not to be filled up fully in some cases
+     */
+    if(totals.max() < 2) {
+        axisRight.axisMaximum = totals.max() * 2F
+    } else {
+        axisRight.axisMaximum = totals.max() * 1.5F
+    }
 
     // X axis settings
     with(xAxis) {
