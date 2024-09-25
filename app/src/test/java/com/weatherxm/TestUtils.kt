@@ -1,18 +1,25 @@
 package com.weatherxm
 
 import arrow.core.Either
+import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.data.models.Failure
-import com.weatherxm.ui.common.Resource
+import com.weatherxm.data.models.NetworkError
+import com.weatherxm.data.network.ErrorResponse
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.LineChartData
+import com.weatherxm.ui.common.Resource
+import io.kotest.core.spec.style.scopes.BehaviorSpecGivenContainerScope
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.every
 import net.bytebuddy.utility.RandomString
+import retrofit2.Response
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
+import java.net.SocketTimeoutException
 
 object TestUtils {
     fun <T : Any> Either<Failure, T?>.isSuccess(successData: T?) {
@@ -21,6 +28,10 @@ object TestUtils {
 
     fun <T : Any> Either<Failure, T?>.isError() {
         this shouldBe Either.Left(failure)
+    }
+
+    fun <T : Any> Either<Failure, T?>.isNetworkError() {
+        this.leftOrNull().shouldBeInstanceOf<NetworkError>()
     }
 
     fun <T : Any> Resource<T>?.isSuccess(data: T?) {
@@ -45,6 +56,21 @@ object TestUtils {
 
     fun coMockEitherRight(function: suspend () -> Either<Failure, Any?>, data: Any?) {
         coEvery { function() } returns Either.Right(data)
+    }
+
+    fun <T : Any> coMockNetworkSuccess(
+        function: suspend () -> NetworkResponse<T, ErrorResponse>,
+        response: NetworkResponse<T, ErrorResponse>
+    ) {
+        coEvery { function() } returns response
+    }
+
+    fun retrofitResponse(data: Any): Response<Any> {
+        return Response.success(data)
+    }
+
+    fun <T : Any> coMockNetworkError(function: suspend () -> NetworkResponse<T, ErrorResponse>) {
+        coEvery { function() } returns NetworkResponse.NetworkError(SocketTimeoutException())
     }
 
     fun createRandomString(length: Int): String {
