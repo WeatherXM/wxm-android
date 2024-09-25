@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.repository.RewardsRepositoryImpl.Companion.RewardsSummaryMode
 import com.weatherxm.databinding.ListItemDeviceRewardsBinding
 import com.weatherxm.ui.common.DeviceTotalRewards
@@ -18,13 +20,17 @@ import com.weatherxm.ui.common.show
 import com.weatherxm.ui.common.visible
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.initRewardsBreakdownChart
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class DeviceRewardsAdapter(
     private val onFetchNewData: (String, Int, Int) -> Unit,
     private val onCancelFetching: (Int) -> Unit,
 ) : ListAdapter<DeviceTotalRewards, DeviceRewardsAdapter.DeviceRewardsViewHolder>(
     DeviceRewardsDiffCallback()
-) {
+), KoinComponent {
+
+    private val analytics: AnalyticsWrapper by inject()
     private val expandedPositions = mutableSetOf(0)
 
     fun replaceItem(position: Int, details: DeviceTotalRewardsDetails) {
@@ -142,6 +148,13 @@ class DeviceRewardsAdapter(
             )
 
             if (willBeExpanded) {
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.DEVICE_REWARD_ANALYTICS_CARD.paramValue,
+                    Pair(
+                        AnalyticsService.CustomParam.STATE.paramName,
+                        AnalyticsService.ParamValue.OPEN.paramValue
+                    )
+                )
                 expandedPositions.add(absoluteAdapterPosition)
                 if (item.details.status != Status.SUCCESS) {
                     onFetchNewData.invoke(
@@ -153,6 +166,13 @@ class DeviceRewardsAdapter(
                     binding.detailsWithLoadingContainer.show()
                 }
             } else {
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.DEVICE_REWARD_ANALYTICS_CARD.paramValue,
+                    Pair(
+                        AnalyticsService.CustomParam.STATE.paramName,
+                        AnalyticsService.ParamValue.CLOSED.paramValue
+                    )
+                )
                 onCancelFetching.invoke(absoluteAdapterPosition)
                 expandedPositions.remove(absoluteAdapterPosition)
                 binding.detailsWithLoadingContainer.hide()

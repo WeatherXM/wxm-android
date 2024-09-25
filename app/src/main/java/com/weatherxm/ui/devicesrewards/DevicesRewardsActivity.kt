@@ -2,10 +2,12 @@ package com.weatherxm.ui.devicesrewards
 
 import android.os.Bundle
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityDevicesRewardsBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DevicesRewards
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
@@ -105,6 +107,11 @@ class DevicesRewardsActivity : BaseActivity() {
         } else {
             binding.noStationsContainer.visible(true)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(AnalyticsService.Screen.REWARD_ANALYTICS, classSimpleName())
     }
 
     private fun onError() {
