@@ -124,7 +124,6 @@ class ChartsUseCaseTest : BehaviorSpec({
             solarRadiationEntries.add(Entry(i.toFloat(), 500F))
         }
 
-        mockkStatic(DateFormat::class)
         every { DateFormat.is24HourFormat(context) } returns true
     }
 
