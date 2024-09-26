@@ -9,13 +9,11 @@ import com.weatherxm.data.models.Frequency
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.shouldBe
-import io.mockk.every
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent.inject
 import org.koin.test.KoinTest
-import java.io.ByteArrayInputStream
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
@@ -24,17 +22,6 @@ class FrequencyHelperTest : KoinTest, BehaviorSpec({
     val moshi: Moshi by inject(Moshi::class.java)
     val defaultFrequency = Frequency.EU868
 
-    /**
-     * Open the file under test/resources/countries_information.json as an InputStream
-     * otherwise use a default ByteArrayInputStream as specified below
-     */
-    val mapInputStream = javaClass.classLoader?.getResourceAsStream("countries_information.json")
-        ?: ByteArrayInputStream(
-            ("[{\"code\": \"GR\"," +
-                "\"helium_frequency\": \"EU868\"," +
-                "\"map_center\": {\"lat\": 39.074208,\"lon\": 21.824312}}]"
-                ).toByteArray()
-        )
     val expectedMapResults = mapOf(
         "EU868" to 5,
         "US915" to 8,
@@ -62,10 +49,6 @@ class FrequencyHelperTest : KoinTest, BehaviorSpec({
                 }
             }
         )
-    }
-
-    beforeSpec {
-        every { context.assets.open("countries_information.json") } returns mapInputStream
     }
 
     context("Get all frequencies but one") {

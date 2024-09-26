@@ -103,7 +103,7 @@ object TestUtils {
     }
 
     suspend fun BehaviorSpecWhenContainerScope.testThrowNotImplemented(
-        function: suspend () -> Either<Failure, Any?>
+        function: suspend () -> Any?
     ) {
         then("Should throw a NotImplementedError") {
             shouldThrow<NotImplementedError> { function() }
