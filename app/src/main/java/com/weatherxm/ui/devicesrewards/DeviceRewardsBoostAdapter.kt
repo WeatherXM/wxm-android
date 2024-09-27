@@ -63,8 +63,10 @@ class DeviceRewardsBoostAdapter :
                 binding.boostProgressSlider.values = listOf(it.toFloat())
             } ?: binding.boostProgressSlider.visible(false)
 
-            binding.totalTokensSoFar.text = formatTokens(item.currentRewards)
-            binding.totalTokensMax.text = formatTokens(item.maxRewards)
+            binding.totalTokensSoFar.text =
+                itemView.context.getString(R.string.wxm_amount, formatTokens(item.currentRewards))
+            binding.totalTokensMax.text =
+                itemView.context.getString(R.string.wxm_amount, formatTokens(item.maxRewards))
 
             val boostStartDate = item.boostPeriodStart.getFormattedDate(true, includeComma = false)
             val boostStopDate = item.boostPeriodEnd.getFormattedDate(true, includeComma = false)
