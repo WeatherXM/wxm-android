@@ -18,6 +18,7 @@ import com.weatherxm.ui.common.DeviceTotalRewardsDetails
 import com.weatherxm.ui.common.DevicesRewardsByRange
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.ui.common.RewardTimelineType
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.UIBoost
 import com.weatherxm.ui.common.UIRewardsTimeline
@@ -165,27 +166,8 @@ class RewardsUseCaseImpl(
             val datesChartTooltip = mutableListOf<String>()
 
             rewards.data?.fastForEachIndexed { i, timeseries ->
-                /**
-                 * 7D = Show 3-letter days - e.g. Mon, Tue, Wed,
-                 * 1M = DD/MM or MM/DD based on Locale - e.g. 25/01 or 01/25
-                 * 1Y = Show 3-letter months as the design - e.g. Sep, Oct, Nov
-                 */
-                when (mode) {
-                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK -> {
-                        datesChartTooltip.add(context.getString(timeseries.ts.dayOfWeek.getName()))
-                        xLabels.add(context.getString(timeseries.ts.dayOfWeek.getShortName()))
-                    }
-                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH -> {
-                        datesChartTooltip.add(timeseries.ts.getFormattedDate())
-                        xLabels.add(timeseries.ts.getFormattedMonthDate())
-                    }
-                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR -> {
-                        datesChartTooltip.add(
-                            timeseries.ts.month.getDisplayName(TextStyle.FULL, Locale.US)
-                        )
-                        xLabels.add(timeseries.ts.month.getDisplayName(TextStyle.SHORT, Locale.US))
-                    }
-                }
+                datesChartTooltip.add(getTooltipDate(timeseries.ts, mode))
+                xLabels.add(getXAxisLabel(timeseries.ts, mode))
                 entries.add(Entry(i.toFloat(), timeseries.totalRewards ?: 0F))
             }
 
@@ -208,34 +190,18 @@ class RewardsUseCaseImpl(
             val datesChartTooltip = mutableListOf<String>()
 
             summary.data?.fastForEachIndexed { counter, timeseries ->
-                /**
-                 * 7D = Show 3-letter days - e.g. Mon, Tue, Wed,
-                 * 1M = DD/MM or MM/DD based on Locale - e.g. 25/01 or 01/25
-                 * 1Y = Show 3-letter months as the design - e.g. Sep, Oct, Nov
-                 */
-                when (mode) {
-                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK -> {
-                        datesChartTooltip.add(context.getString(timeseries.ts.dayOfWeek.getName()))
-                        xLabels.add(context.getString(timeseries.ts.dayOfWeek.getShortName()))
-                    }
-                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH -> {
-                        datesChartTooltip.add(timeseries.ts.getFormattedDate())
-                        xLabels.add(timeseries.ts.getFormattedMonthDate())
-                    }
-                    RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR -> {
-                        datesChartTooltip.add(
-                            timeseries.ts.month.getDisplayName(TextStyle.FULL, Locale.US)
-                        )
-                        xLabels.add(timeseries.ts.month.getDisplayName(TextStyle.SHORT, Locale.US))
-                    }
-                }
+                datesChartTooltip.add(getTooltipDate(timeseries.ts, mode))
+                xLabels.add(getXAxisLabel(timeseries.ts, mode))
 
                 val baseCode = RewardsCode.base_reward.name
                 val betaCode = RewardsCode.beta_rewards.name
                 var sum = 0F
                 var baseSum = 0F
+                var baseFound = false
                 var betaSum = 0F
+                var betaFound = false
                 var othersSum = 0F
+                var othersFound = false
 
                 /**
                  * In order for the "chart with filled layers" to work properly, we need to add
@@ -247,31 +213,42 @@ class RewardsUseCaseImpl(
                 timeseries.rewards?.forEach {
                     if (it.code == baseCode) {
                         baseSum += it.value
+                        baseFound = true
                     }
                     if (it.code == betaCode) {
                         betaSum += it.value
+                        betaFound = true
                     }
                     if (it.code != baseCode && it.code != betaCode) {
                         othersSum += it.value
+                        othersFound = true
                     }
                     sum += it.value
                 }
                 totals.add(sum)
 
-                if (baseSum == 0F) {
+                if (!baseFound) {
                     baseEntries.add(Entry(counter.toFloat(), Float.NaN))
                 } else {
                     baseEntries.add(Entry(counter.toFloat(), baseSum))
                 }
-                if (betaSum == 0F) {
+                if (!betaFound) {
                     betaEntries.add(Entry(counter.toFloat(), Float.NaN))
                 } else {
-                    betaEntries.add(Entry(counter.toFloat(), betaSum + baseSum))
+                    if(betaSum == 0F) {
+                        betaEntries.add(Entry(counter.toFloat(), 0F))
+                    } else {
+                        betaEntries.add(Entry(counter.toFloat(), betaSum + baseSum))
+                    }
                 }
-                if (othersSum == 0F) {
+                if (!othersFound) {
                     otherEntries.add(Entry(counter.toFloat(), Float.NaN))
                 } else {
-                    otherEntries.add(Entry(counter.toFloat(), othersSum + betaSum + baseSum))
+                    if(othersSum == 0F) {
+                        otherEntries.add(Entry(counter.toFloat(), 0F))
+                    } else {
+                        otherEntries.add(Entry(counter.toFloat(), othersSum + betaSum + baseSum))
+                    }
                 }
             }
 
@@ -284,8 +261,52 @@ class RewardsUseCaseImpl(
                 LineChartData(xLabels, baseEntries),
                 LineChartData(xLabels, betaEntries),
                 LineChartData(xLabels, otherEntries),
-                false
+                Status.SUCCESS
             )
+        }
+    }
+
+    private fun getTooltipDate(
+        timestamp: ZonedDateTime,
+        mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
+    ): String {
+        /**
+         * 7D = Show full days - e.g. Monday, Tuesday, Wednesday,
+         * 1M = Show short month name with the month day - e.g. Jan 1, Feb 21, Mar 30,
+         * 1Y = Show months - e.g. September, October, November
+         */
+        return when (mode) {
+            RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK -> {
+                context.getString(timestamp.dayOfWeek.getName())
+            }
+            RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH -> {
+                timestamp.getFormattedDate()
+            }
+            RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR -> {
+                timestamp.month.getDisplayName(TextStyle.FULL, Locale.US)
+            }
+        }
+    }
+
+    private fun getXAxisLabel(
+        timestamp: ZonedDateTime,
+        mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode
+    ): String {
+        /**
+         * 7D = Show 3-letter days - e.g. Mon, Tue, Wed,
+         * 1M = DD/MM or MM/DD based on Locale - e.g. 25/01 or 01/25
+         * 1Y = Show 3-letter months as the design - e.g. Sep, Oct, Nov
+         */
+        return when (mode) {
+            RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK -> {
+                context.getString(timestamp.dayOfWeek.getShortName())
+            }
+            RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH -> {
+                timestamp.getFormattedMonthDate()
+            }
+            RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR -> {
+                timestamp.month.getDisplayName(TextStyle.SHORT, Locale.US)
+            }
         }
     }
 

@@ -14,10 +14,10 @@
         android:layout_height="wrap_content"
         android:background="@drawable/background_rounded_layer_1"
         android:padding="@dimen/padding_extra_small"
+        app:checkedChip="@id/week"
         app:chipSpacingHorizontal="@dimen/margin_extra_small"
         app:selectionRequired="true"
-        app:singleSelection="true"
-        tools:checkedChip="@id/week">
+        app:singleSelection="true">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/week"

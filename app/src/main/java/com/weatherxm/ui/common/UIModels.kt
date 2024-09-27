@@ -510,8 +510,8 @@ data class LineChartData(
         return dataSets
     }
 
-    fun getEntryValueForTooltip(position: Float): Float {
-        return entries.getOrNull(position.toInt())?.y?.takeIf { !it.isNaN() } ?: 0F
+    fun getEntryValueForTooltip(position: Float): Float? {
+        return entries.getOrNull(position.toInt())?.y?.takeIf { !it.isNaN() }
     }
 }
 
@@ -548,7 +548,7 @@ data class DeviceTotalRewards(
     val id: String,
     val name: String,
     val total: Float?,
-    var details: DeviceTotalRewardsDetails? = null
+    var details: DeviceTotalRewardsDetails
 ) : Parcelable
 
 @Keep
@@ -556,15 +556,34 @@ data class DeviceTotalRewards(
 @Parcelize
 data class DeviceTotalRewardsDetails(
     val total: Float?,
-    val mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode?,
+    var mode: RewardsRepositoryImpl.Companion.RewardsSummaryMode?,
     val boosts: List<DeviceTotalRewardsBoost>,
     val totals: List<Float>,
     val datesChartTooltip: List<String>,
     val baseChartData: LineChartData,
     val betaChartData: LineChartData,
     val otherChartData: LineChartData,
-    val fetchError: Boolean
-) : Parcelable
+    var status: Status
+) : Parcelable {
+    companion object {
+        fun empty() = DeviceTotalRewardsDetails(
+            null,
+            RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK,
+            listOf(),
+            listOf(),
+            listOf(),
+            LineChartData.empty(),
+            LineChartData.empty(),
+            LineChartData.empty(),
+            Status.LOADING
+        )
+    }
+
+    fun isEmpty(): Boolean {
+        return total == null && mode == null && totals.isEmpty() &&
+            boosts.isEmpty() && status == Status.LOADING
+    }
+}
 
 @Keep
 @JsonClass(generateAdapter = true)
