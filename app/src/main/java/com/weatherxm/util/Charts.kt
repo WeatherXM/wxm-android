@@ -618,7 +618,7 @@ fun LineChart.initTotalEarnedChart(
     /**
      * Use a bigger axisMaximum in order for the chart not to be filled up fully in some cases
      */
-    if(dataSet.yMax < 2) {
+    if (dataSet.yMax < 2) {
         axisRight.axisMaximum = dataSet.yMax * 2F
     } else {
         axisRight.axisMaximum = dataSet.yMax * 1.5F
@@ -731,10 +731,11 @@ fun LineChart.initRewardsBreakdownChart(
     /**
      * Use a bigger axisMaximum in order for the chart not to be filled up fully in some cases
      */
-    if(totals.max() < 2) {
-        axisRight.axisMaximum = totals.max() * 2F
+    val max = if (totals.isEmpty()) 0F else totals.max()
+    if (max < 2) {
+        axisRight.axisMaximum = max * 2F
     } else {
-        axisRight.axisMaximum = totals.max() * 1.5F
+        axisRight.axisMaximum = max * 1.5F
     }
 
     // X axis settings
