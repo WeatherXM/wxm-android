@@ -45,45 +45,42 @@ class TooltipMarkerView(
          */
         var baseValue = 0F
         var betaValue = 0F
-        var othersValue = 0F
 
-        baseData.isDataValid().takeIf { it }?.also {
-            baseTitleView.visible(true)
-            baseView.visible(true)
-            baseValue = baseData.getEntryValueForTooltip(e.x)
-            baseView.text = formatTokens(baseValue)
-        } ?: run {
-            baseTitleView.visible(false)
-            baseView.visible(false)
-        }
-        betaData.isDataValid().takeIf { it }?.also {
-            betaTitleView.visible(true)
-            betaView.visible(true)
-            betaValue = betaData.getEntryValueForTooltip(e.x)
-            betaView.text = formatTokens((betaValue - baseValue).coerceAtLeast(0F))
-        } ?: run {
-            betaTitleView.visible(false)
-            betaView.visible(false)
-        }
-        othersData.isDataValid().takeIf { it }?.also {
-            othersTitleView.visible(true)
-            othersView.visible(true)
-            othersValue = othersData.getEntryValueForTooltip(e.x)
-            othersView.text = if (betaValue > 0) {
-                formatTokens((othersValue - betaValue).coerceAtLeast(0F))
-            } else {
-                formatTokens((othersValue - baseValue).coerceAtLeast(0F))
+        baseData.getEntryValueForTooltip(e.x).also {
+            baseTitleView.visible(it != null)
+            baseView.visible(it != null)
+            if(it != null) {
+                baseValue = it
+                baseView.text = formatTokens(it)
             }
-        } ?: run {
-            othersTitleView.visible(false)
-            othersView.visible(false)
+        }
+
+        betaData.getEntryValueForTooltip(e.x).also {
+            betaTitleView.visible(it != null)
+            betaView.visible(it != null)
+            if (it != null) {
+                betaValue = it
+                betaView.text = formatTokens((it - baseValue).coerceAtLeast(0F))
+            }
+        }
+
+        othersData.getEntryValueForTooltip(e.x).also {
+            othersTitleView.visible(it != null)
+            othersView.visible(it != null)
+            if (it != null) {
+                othersView.text = if (betaValue > 0) {
+                    formatTokens((it - betaValue).coerceAtLeast(0F))
+                } else {
+                    formatTokens((it - baseValue).coerceAtLeast(0F))
+                }
+            }
         }
 
         /**
          * In Rewards Breakdown chart we cannot get the total from e.y that's why we use
          * the explicit `totals` list in order to get the correct number
          */
-        if(totals.isEmpty()) {
+        if (totals.isEmpty()) {
             totalView.text = formatTokens(e.y)
         } else {
             totalView.text = formatTokens(totals.getOrNull(e.x.toInt()) ?: 0F)

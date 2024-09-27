@@ -11,7 +11,6 @@ import com.weatherxm.data.models.BoostRewardDetails
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.RewardDetails
 import com.weatherxm.data.models.RewardsCode
-import com.weatherxm.ui.common.Status
 import com.weatherxm.data.repository.RewardsRepository
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.ui.common.BoostDetailInfo
@@ -19,6 +18,7 @@ import com.weatherxm.ui.common.DeviceTotalRewardsDetails
 import com.weatherxm.ui.common.DevicesRewardsByRange
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.ui.common.RewardTimelineType
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.ui.common.UIBoost
 import com.weatherxm.ui.common.UIRewardsTimeline
@@ -197,8 +197,11 @@ class RewardsUseCaseImpl(
                 val betaCode = RewardsCode.beta_rewards.name
                 var sum = 0F
                 var baseSum = 0F
+                var baseFound = false
                 var betaSum = 0F
+                var betaFound = false
                 var othersSum = 0F
+                var othersFound = false
 
                 /**
                  * In order for the "chart with filled layers" to work properly, we need to add
@@ -210,31 +213,42 @@ class RewardsUseCaseImpl(
                 timeseries.rewards?.forEach {
                     if (it.code == baseCode) {
                         baseSum += it.value
+                        baseFound = true
                     }
                     if (it.code == betaCode) {
                         betaSum += it.value
+                        betaFound = true
                     }
                     if (it.code != baseCode && it.code != betaCode) {
                         othersSum += it.value
+                        othersFound = true
                     }
                     sum += it.value
                 }
                 totals.add(sum)
 
-                if (baseSum == 0F) {
+                if (!baseFound) {
                     baseEntries.add(Entry(counter.toFloat(), Float.NaN))
                 } else {
                     baseEntries.add(Entry(counter.toFloat(), baseSum))
                 }
-                if (betaSum == 0F) {
+                if (!betaFound) {
                     betaEntries.add(Entry(counter.toFloat(), Float.NaN))
                 } else {
-                    betaEntries.add(Entry(counter.toFloat(), betaSum + baseSum))
+                    if(betaSum == 0F) {
+                        betaEntries.add(Entry(counter.toFloat(), 0F))
+                    } else {
+                        betaEntries.add(Entry(counter.toFloat(), betaSum + baseSum))
+                    }
                 }
-                if (othersSum == 0F) {
+                if (!othersFound) {
                     otherEntries.add(Entry(counter.toFloat(), Float.NaN))
                 } else {
-                    otherEntries.add(Entry(counter.toFloat(), othersSum + betaSum + baseSum))
+                    if(othersSum == 0F) {
+                        otherEntries.add(Entry(counter.toFloat(), 0F))
+                    } else {
+                        otherEntries.add(Entry(counter.toFloat(), othersSum + betaSum + baseSum))
+                    }
                 }
             }
 

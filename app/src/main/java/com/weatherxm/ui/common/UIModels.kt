@@ -509,8 +509,8 @@ data class LineChartData(
         return dataSets
     }
 
-    fun getEntryValueForTooltip(position: Float): Float {
-        return entries.getOrNull(position.toInt())?.y?.takeIf { !it.isNaN() } ?: 0F
+    fun getEntryValueForTooltip(position: Float): Float? {
+        return entries.getOrNull(position.toInt())?.y?.takeIf { !it.isNaN() }
     }
 }
 
