@@ -18,6 +18,7 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.java.KoinJavaComponent.inject
 import org.koin.test.KoinTest
+import java.io.ByteArrayInputStream
 
 class LocationDataSourceTest : KoinTest, BehaviorSpec({
     val cacheService = mockk<CacheService>()
@@ -30,6 +31,19 @@ class LocationDataSourceTest : KoinTest, BehaviorSpec({
     val validCountriesInfo = listOf(CountryInfo("GR", "EU868", location))
     val otherCountriesInfo = listOf(CountryInfo("US", null, location))
     val invalidCountriesInfo = listOf(CountryInfo("GR", null, null))
+
+    /**
+     * Open the file under test/resources/countries_information.json as an InputStream
+     * otherwise use a default ByteArrayInputStream as specified below
+     */
+    val countriesInformation =
+        javaClass.classLoader?.getResourceAsStream("countries_information.json")
+            ?: ByteArrayInputStream(
+                ("[{\"code\": \"GR\"," +
+                    "\"helium_frequency\": \"EU868\"," +
+                    "\"map_center\": {\"lat\": 39.074208,\"lon\": 21.824312}}]"
+                    ).toByteArray()
+            )
 
     startKoin {
         modules(
@@ -47,6 +61,9 @@ class LocationDataSourceTest : KoinTest, BehaviorSpec({
         every { telephonyManager.simCountryIso } returns String.empty()
         every { telephonyManager.networkCountryIso } returns String.empty()
         coJustRun { cacheService.setCountriesInfo(any()) }
+        every {
+            context.assets.open("countries_information.json")
+        } returns countriesInformation
     }
 
     context("Get user country") {

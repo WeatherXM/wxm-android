@@ -19,7 +19,6 @@ import io.kotest.core.names.DuplicateTestNameMode
 import io.kotest.core.spec.AutoScan
 import io.mockk.every
 import io.mockk.mockk
-import java.io.ByteArrayInputStream
 
 object TestConfig : AbstractProjectConfig() {
     override val duplicateTestNameMode = DuplicateTestNameMode.Error
@@ -29,19 +28,6 @@ object TestConfig : AbstractProjectConfig() {
     val failure = mockk<Failure>()
     val successUnitResponse =
         NetworkResponse.Success<Unit, ErrorResponse>(Unit, retrofitResponse(Unit))
-
-    /**
-     * Open the file under test/resources/countries_information.json as an InputStream
-     * otherwise use a default ByteArrayInputStream as specified below
-     */
-    val countriesInformation =
-        javaClass.classLoader?.getResourceAsStream("countries_information.json")
-            ?: ByteArrayInputStream(
-                ("[{\"code\": \"GR\"," +
-                    "\"helium_frequency\": \"EU868\"," +
-                    "\"map_center\": {\"lat\": 39.074208,\"lon\": 21.824312}}]"
-                    ).toByteArray()
-            )
 
     @AutoScan
     object MyProjectListener : BeforeProjectListener, AfterProjectListener {
@@ -105,9 +91,6 @@ object TestConfig : AbstractProjectConfig() {
                     any() as String
                 )
             } returns "Boost details description"
-            every {
-                context.assets.open("countries_information.json")
-            } returns countriesInformation
         }
 
         override suspend fun afterProject() {
