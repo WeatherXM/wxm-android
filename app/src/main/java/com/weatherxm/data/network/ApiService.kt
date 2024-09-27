@@ -57,7 +57,7 @@ interface ApiService {
     @MockResponse(code = 204, body = "mock_files/empty_response.json")
     @POST("/api/v1/me/devices/disclaim")
     suspend fun removeDevice(
-        @Body address: DeleteDeviceBody,
+        @Body deleteDeviceBody: DeleteDeviceBody,
     ): NetworkResponse<Unit, ErrorResponse>
 
     @Mock
@@ -115,7 +115,7 @@ interface ApiService {
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @POST("/api/v1/me/devices/claim")
     suspend fun claimDevice(
-        @Body address: ClaimDeviceBody,
+        @Body claimDeviceBody: ClaimDeviceBody,
     ): NetworkResponse<Device, ErrorResponse>
 
     @Mock
