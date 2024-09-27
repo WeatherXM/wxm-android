@@ -64,7 +64,8 @@ interface AnalyticsService {
         CELL_CAPACITY_INFO("Cell Capacity info"),
         DEVICE_FORECAST_DETAILS("Device Forecast Details"),
         CLAIM_DAPP("Claim Dapp"),
-        TEMPERATURE_BARS_EXPLANATION("Temperature Bars Explanation")
+        TEMPERATURE_BARS_EXPLANATION("Temperature Bars Explanation"),
+        REWARD_ANALYTICS("Reward Analytics")
     }
 
     // Custom Event Names
@@ -254,7 +255,11 @@ interface AnalyticsService {
         STAKEHOLDER_LOWERCASE("stakeholder"),
         NON_STAKEHOLDER("non_stakeholder"),
         FORECAST_DAY("Forecast Day"),
-        FORECAST_NEXT_7_DAYS("forecast_next_7_days")
+        FORECAST_NEXT_7_DAYS("forecast_next_7_days"),
+        TOKENS_EARNED_PRESSED("Tokens Earned pressed"),
+        DEVICE_REWARD_ANALYTICS_CARD("Device Reward Analytics Card"),
+        OPEN("open"),
+        CLOSED("closed")
     }
 
     // Custom Param Names

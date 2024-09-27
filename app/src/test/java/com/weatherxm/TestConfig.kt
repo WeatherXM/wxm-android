@@ -2,6 +2,8 @@ package com.weatherxm
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.text.format.DateFormat
+import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRECIP
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
@@ -16,6 +18,8 @@ import io.kotest.core.names.DuplicateTestNameMode
 import io.kotest.core.spec.AutoScan
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import java.util.Locale
 
 object TestConfig : AbstractProjectConfig() {
     override val duplicateTestNameMode = DuplicateTestNameMode.Error
@@ -27,6 +31,13 @@ object TestConfig : AbstractProjectConfig() {
     @AutoScan
     object MyProjectListener : BeforeProjectListener, AfterProjectListener {
         override suspend fun beforeProject() {
+            mockkStatic(DateFormat::class)
+            every {
+                DateFormat.getBestDateTimePattern(
+                    Locale.getDefault(),
+                    DATE_FORMAT_MONTH_DAY
+                )
+            } returns "d/M"
             every { resources.getString(R.string.uv_low) } returns "Low"
             every { resources.getString(R.string.uv_moderate) } returns "Moderate"
             every { resources.getString(R.string.uv_high) } returns "High"

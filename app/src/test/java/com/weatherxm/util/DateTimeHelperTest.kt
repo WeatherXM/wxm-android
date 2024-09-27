@@ -22,7 +22,6 @@ import com.weatherxm.util.DateTimeHelper.timestampToLocalDate
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
-import io.mockk.mockkStatic
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.qualifier.named
@@ -46,14 +45,6 @@ class DateTimeHelperTest : BehaviorSpec({
     val timestamp = 1717077600000L
 
     beforeSpec {
-        mockkStatic(DateFormat::class)
-        every {
-            DateFormat.getBestDateTimePattern(
-                Locale.getDefault(),
-                DATE_FORMAT_MONTH_DAY
-            )
-        } returns "d/M"
-
         startKoin {
             modules(
                 module {
