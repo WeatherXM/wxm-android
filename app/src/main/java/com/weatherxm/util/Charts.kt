@@ -579,6 +579,12 @@ fun LineChart.initTotalEarnedChart(
     totalEarnedData: LineChartData,
     datesChartTooltip: List<String>
 ) {
+    /**
+     * Clear the chart in order to remove any previous highlight/tooltips when new data are loaded
+     */
+    if (highlighted != null) {
+        highlightValue(null)
+    }
     val dataSet = LineDataSet(totalEarnedData.entries, String.empty())
     val lineData = LineData(dataSet)
     data = lineData
@@ -601,12 +607,22 @@ fun LineChart.initTotalEarnedChart(
     axisRight.gridColor = context.getColor(R.color.midGrey)
     axisRight.setDrawAxisLine(false)
     axisRight.setDrawGridLines(true)
-    if (dataSet.yMin == 0F) {
+    /**
+     * Use a smaller axisMinimum in order to have a proper label in that minimum
+     */
+    if (dataSet.yMin < 2F) {
         axisRight.axisMinimum = 0F
     } else {
-        axisRight.axisMinimum = dataSet.yMin * 0.8F
+        axisRight.axisMinimum = dataSet.yMin * 0.5F
     }
-    axisRight.axisMaximum = dataSet.yMax * 1.2F
+    /**
+     * Use a bigger axisMaximum in order for the chart not to be filled up fully in some cases
+     */
+    if (dataSet.yMax < 2) {
+        axisRight.axisMaximum = dataSet.yMax * 2F
+    } else {
+        axisRight.axisMaximum = dataSet.yMax * 1.5F
+    }
 
     // X axis settings
     with(xAxis) {
@@ -627,7 +643,7 @@ fun LineChart.initTotalEarnedChart(
 }
 
 @Suppress("MagicNumber")
-private fun MutableList<LineDataSet>.initRewardBreakDown(color: Int) {
+private fun MutableList<LineDataSet>.initRewardBreakDown(color: Int, highlightColor: Int) {
     forEach {
         it.setDrawFilled(true)
         it.lineWidth = 0.2F
@@ -637,6 +653,7 @@ private fun MutableList<LineDataSet>.initRewardBreakDown(color: Int) {
         it.fillColor = color
         it.setCircleColor(color)
         it.axisDependency = YAxis.AxisDependency.RIGHT
+        it.highLightColor = highlightColor
         if (it.values.size > 1) it.setDrawCircles(false)
     }
 }
@@ -649,6 +666,12 @@ fun LineChart.initRewardsBreakdownChart(
     totals: List<Float>,
     datesChartTooltip: List<String>
 ) {
+    /**
+     * Clear the chart in order to remove any previous highlight/tooltips when new data are loaded
+     */
+    if (highlighted != null) {
+        highlightValue(null)
+    }
     val dataSets = mutableListOf<ILineDataSet>()
 
     val baseLineDataSetsWithValues = baseData.getLineDataSetsWithValues("")
@@ -661,7 +684,7 @@ fun LineChart.initRewardsBreakdownChart(
     if (otherDataDataSetsWithValues.isNotEmpty()) {
         dataSets.addAll(otherDataDataSetsWithValues.primaryLineInit(context, resources))
         otherDataDataSetsWithValues.initRewardBreakDown(
-            context.getColor(R.color.other_reward)
+            context.getColor(R.color.other_reward), context.getColor(R.color.darkGrey)
         )
     }
 
@@ -672,7 +695,7 @@ fun LineChart.initRewardsBreakdownChart(
     if (betaDataDataSetsWithValues.isNotEmpty()) {
         dataSets.addAll(betaDataDataSetsWithValues.primaryLineInit(context, resources))
         betaDataDataSetsWithValues.initRewardBreakDown(
-            context.getColor(R.color.beta_rewards_color)
+            context.getColor(R.color.beta_rewards_color), context.getColor(R.color.darkGrey)
         )
     }
 
@@ -683,7 +706,7 @@ fun LineChart.initRewardsBreakdownChart(
     if (baseLineDataSetsWithValues.isNotEmpty()) {
         dataSets.addAll(baseLineDataSetsWithValues.primaryLineInit(context, resources))
         baseLineDataSetsWithValues.initRewardBreakDown(
-            context.getColor(R.color.blue)
+            context.getColor(R.color.blue), context.getColor(R.color.darkGrey)
         )
     }
 
@@ -705,7 +728,15 @@ fun LineChart.initRewardsBreakdownChart(
     axisRight.setDrawAxisLine(false)
     axisRight.setDrawGridLines(true)
     axisRight.axisMinimum = 0F
-    axisRight.axisMaximum = totals.max() * 1.5F
+    /**
+     * Use a bigger axisMaximum in order for the chart not to be filled up fully in some cases
+     */
+    val max = if (totals.isEmpty()) 0F else totals.max()
+    if (max < 2) {
+        axisRight.axisMaximum = max * 2F
+    } else {
+        axisRight.axisMaximum = max * 1.5F
+    }
 
     // X axis settings
     with(xAxis) {

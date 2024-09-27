@@ -9,6 +9,7 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.DeviceTotalRewards
+import com.weatherxm.ui.common.DeviceTotalRewardsDetails
 import com.weatherxm.ui.common.DevicesFilterType
 import com.weatherxm.ui.common.DevicesGroupBy
 import com.weatherxm.ui.common.DevicesRewards
@@ -68,7 +69,12 @@ class DevicesViewModel(
                 totalRewards += it.totalRewards ?: 0F
                 latestRewards += it.actualReward ?: 0F
                 devicesWithRewards.add(
-                    DeviceTotalRewards(it.id, it.getDefaultOrFriendlyName(), it.totalRewards)
+                    DeviceTotalRewards(
+                        it.id,
+                        it.getDefaultOrFriendlyName(),
+                        it.totalRewards,
+                        DeviceTotalRewardsDetails.empty()
+                    )
                 )
             }
         }

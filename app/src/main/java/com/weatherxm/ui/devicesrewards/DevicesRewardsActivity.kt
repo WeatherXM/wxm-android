@@ -2,10 +2,12 @@ package com.weatherxm.ui.devicesrewards
 
 import android.os.Bundle
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityDevicesRewardsBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.DevicesRewards
+import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.visible
@@ -75,13 +77,11 @@ class DevicesRewardsActivity : BaseActivity() {
         }
 
         adapter = DeviceRewardsAdapter(
-            onExpandToggle = { position, isExpanded, deviceId ->
-                if (isExpanded && model.rewards.devices[position].details == null) {
-                    model.getDeviceRewardsByRange(deviceId, position, null)
-                }
-            },
-            onRangeChipClicked = { position, checkedRangeChipId, deviceId ->
+            onFetchNewData = { deviceId, position, checkedRangeChipId ->
                 model.getDeviceRewardsByRange(deviceId, position, checkedRangeChipId)
+            },
+            onCancelFetching = { position ->
+                model.cancelFetching(position)
             }
         )
         binding.devicesRecycler.adapter = adapter
@@ -103,9 +103,15 @@ class DevicesRewardsActivity : BaseActivity() {
 
             binding.totalEarnedRangeSelector.checkWeek()
             model.getDevicesRewardsByRangeTotals()
+            model.getDeviceRewardsByRange(model.rewards.devices[0].id, 0)
         } else {
             binding.noStationsContainer.visible(true)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        analytics.trackScreen(AnalyticsService.Screen.REWARD_ANALYTICS, classSimpleName())
     }
 
     private fun onError() {

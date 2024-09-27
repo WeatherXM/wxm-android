@@ -50,44 +50,47 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <androidx.constraintlayout.widget.ConstraintLayout
+                        <LinearLayout
                             android:id="@+id/totalEarnedContainer"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/margin_normal"
+                            android:orientation="vertical"
                             app:layout_constraintEnd_toStartOf="@id/openRewards"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/totalEarnedTitle"
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/total_earned"
                                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <com.google.android.material.textview.MaterialTextView
-                                android:id="@+id/totalEarned"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
-                                android:textStyle="bold"
-                                app:layout_constraintTop_toBottomOf="@id/totalEarnedTitle"
-                                tools:text="100,99 $WXM" />
-
-                            <com.google.android.material.progressindicator.CircularProgressIndicator
-                                android:id="@+id/loadingRewards"
-                                style="@style/Widget.WeatherXM.ProgressBar.Circular"
+                            <FrameLayout
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:visibility="invisible"
-                                app:indicatorInset="0dp"
-                                app:indicatorSize="24dp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/totalEarnedTitle" />
+                                android:layout_height="wrap_content">
 
-                        </androidx.constraintlayout.widget.ConstraintLayout>
+                                <com.google.android.material.textview.MaterialTextView
+                                    android:id="@+id/totalEarned"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                                    android:textStyle="bold"
+                                    tools:text="100,99 $WXM" />
+
+                                <com.google.android.material.progressindicator.CircularProgressIndicator
+                                    android:id="@+id/loadingRewards"
+                                    style="@style/Widget.WeatherXM.ProgressBar.Circular"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:visibility="invisible"
+                                    app:indicatorInset="0dp"
+                                    app:indicatorSize="18dp" />
+
+                            </FrameLayout>
+                        </LinearLayout>
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/noRewardsYet"

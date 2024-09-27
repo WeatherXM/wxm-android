@@ -7,23 +7,30 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.repository.RewardsRepositoryImpl.Companion.RewardsSummaryMode
 import com.weatherxm.databinding.ListItemDeviceRewardsBinding
 import com.weatherxm.ui.common.DeviceTotalRewards
 import com.weatherxm.ui.common.DeviceTotalRewardsDetails
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.show
 import com.weatherxm.ui.common.visible
 import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.initRewardsBreakdownChart
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class DeviceRewardsAdapter(
-    private val onExpandToggle: (Int, Boolean, String) -> Unit,
-    private val onRangeChipClicked: (Int, Int, String) -> Unit,
+    private val onFetchNewData: (String, Int, Int) -> Unit,
+    private val onCancelFetching: (Int) -> Unit,
 ) : ListAdapter<DeviceTotalRewards, DeviceRewardsAdapter.DeviceRewardsViewHolder>(
     DeviceRewardsDiffCallback()
-) {
+), KoinComponent {
+
+    private val analytics: AnalyticsWrapper by inject()
     private val expandedPositions = mutableSetOf(0)
 
     fun replaceItem(position: Int, details: DeviceTotalRewardsDetails) {
@@ -52,56 +59,61 @@ class DeviceRewardsAdapter(
         private var ignoreRangeChipListener = false
 
         fun bind(item: DeviceTotalRewards) {
-            binding.root.setOnClickListener {
+            binding.headerCard.setOnClickListener {
                 onExpandClick(item)
             }
 
             binding.chartRangeSelector.listener {
                 if (!ignoreRangeChipListener) {
-                    invokeOnRangeChip(it, item.id)
+                    onFetchNewData.invoke(item.id, absoluteAdapterPosition, it)
                 }
-            }
-
-            if (expandedPositions.contains(absoluteAdapterPosition)) {
-                if (absoluteAdapterPosition == 0 && item.details == null) {
-                    onExpandToggle.invoke(absoluteAdapterPosition, true, item.id)
-                }
-                binding.openDeviceRewards.setImageResource(R.drawable.ic_arrow_up)
-                binding.detailsWithLoadingContainer.show()
             }
 
             binding.name.text = item.name
             binding.amount.text =
                 itemView.context.getString(R.string.wxm_amount, formatTokens(item.total))
 
-            // If details is null we are in the LOADING state
-            item.details?.let {
-                if (it.fetchError) {
-                    onError(item.id)
-                } else {
-                    onDetails(it)
+            if (expandedPositions.contains(absoluteAdapterPosition)) {
+                binding.openDeviceRewards.setImageResource(R.drawable.ic_arrow_up)
+                binding.detailsWithLoadingContainer.show()
+            }
+
+            preCheckMode(item.details.mode)
+            when (item.details.status) {
+                Status.SUCCESS -> {
+                    onDetails(item.details)
                 }
-            } ?: kotlin.run {
-                binding.chartRangeSelector.disable()
-                binding.retryCard.visible(false)
-                binding.detailsStatus.visible(true)
+                Status.ERROR -> {
+                    onError(item.id)
+                }
+                Status.LOADING -> {
+                    binding.chartRangeSelector.disable()
+                    binding.detailsContainer.invisible()
+                    binding.earnedBy.invisible()
+                    binding.retryCard.visible(false)
+                    binding.detailsStatus.visible(true)
+                }
+            }
+        }
+
+        private fun preCheckMode(mode: RewardsSummaryMode?) {
+            ignoreRangeChipListener = true
+            when (mode) {
+                RewardsSummaryMode.WEEK -> binding.chartRangeSelector.checkWeek()
+                RewardsSummaryMode.MONTH -> binding.chartRangeSelector.checkMonth()
+                RewardsSummaryMode.YEAR -> binding.chartRangeSelector.checkYear()
+                else -> throw NotImplementedError("Unknown rewards mode $mode")
+            }.also {
+                ignoreRangeChipListener = false
             }
         }
 
         private fun onDetails(details: DeviceTotalRewardsDetails) {
-            binding.earnedBy.text = formatTokens(details.total)
+            binding.earnedBy.text =
+                itemView.context.getString(R.string.wxm_amount, formatTokens(details.total))
             binding.boostsRecycler.adapter = adapter
             adapter.submitList(details.boosts)
 
-            ignoreRangeChipListener = true
-            when (details.mode) {
-                RewardsSummaryMode.WEEK -> binding.chartRangeSelector.checkWeek()
-                RewardsSummaryMode.MONTH -> binding.chartRangeSelector.checkMonth()
-                RewardsSummaryMode.YEAR -> binding.chartRangeSelector.checkYear()
-                else -> throw NotImplementedError("Unknown rewards mode ${details.mode}")
-            }.also {
-                ignoreRangeChipListener = false
-            }
             binding.rewardBreakdownChart.initRewardsBreakdownChart(
                 details.baseChartData,
                 details.betaChartData,
@@ -116,6 +128,7 @@ class DeviceRewardsAdapter(
             binding.retryCard.visible(false)
             binding.detailsStatus.visible(false)
             binding.chartRangeSelector.enable()
+            binding.earnedBy.visible(true)
             binding.detailsContainer.visible(true)
         }
 
@@ -135,31 +148,50 @@ class DeviceRewardsAdapter(
             )
 
             if (willBeExpanded) {
-                binding.detailsWithLoadingContainer.show()
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.DEVICE_REWARD_ANALYTICS_CARD.paramValue,
+                    Pair(
+                        AnalyticsService.CustomParam.STATE.paramName,
+                        AnalyticsService.ParamValue.OPEN.paramValue
+                    )
+                )
                 expandedPositions.add(absoluteAdapterPosition)
+                if (item.details.status != Status.SUCCESS) {
+                    onFetchNewData.invoke(
+                        item.id,
+                        absoluteAdapterPosition,
+                        binding.chartRangeSelector.checkedChipId()
+                    )
+                } else {
+                    binding.detailsWithLoadingContainer.show()
+                }
             } else {
-                binding.detailsWithLoadingContainer.hide()
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.DEVICE_REWARD_ANALYTICS_CARD.paramValue,
+                    Pair(
+                        AnalyticsService.CustomParam.STATE.paramName,
+                        AnalyticsService.ParamValue.CLOSED.paramValue
+                    )
+                )
+                onCancelFetching.invoke(absoluteAdapterPosition)
                 expandedPositions.remove(absoluteAdapterPosition)
+                binding.detailsWithLoadingContainer.hide()
             }
-
-            onExpandToggle.invoke(absoluteAdapterPosition, willBeExpanded, item.id)
         }
 
         private fun onError(deviceId: String) {
             binding.detailsStatus.visible(false)
+            binding.detailsContainer.invisible()
+            binding.earnedBy.invisible()
             binding.retryCard.listener {
-                invokeOnRangeChip(binding.chartRangeSelector.checkedChipId(), deviceId)
+                onFetchNewData.invoke(
+                    deviceId,
+                    absoluteAdapterPosition,
+                    binding.chartRangeSelector.checkedChipId()
+                )
             }
             binding.chartRangeSelector.enable()
             binding.retryCard.visible(true)
-        }
-
-        private fun invokeOnRangeChip(checkedChipId: Int, deviceId: String) {
-            binding.detailsStatus.animation(R.raw.anim_loading).visible(true)
-            binding.chartRangeSelector.disable()
-            binding.detailsContainer.invisible()
-            binding.retryCard.visible(false)
-            onRangeChipClicked.invoke(absoluteAdapterPosition, checkedChipId, deviceId)
         }
     }
 }

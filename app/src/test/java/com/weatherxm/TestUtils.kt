@@ -130,7 +130,7 @@ object TestUtils {
         this.solarRadiation.isEqual(other.solarRadiation)
     }
 
-    private fun LineChartData.isEqual(other: LineChartData) {
+    fun LineChartData.isEqual(other: LineChartData) {
         this.timestamps.forEachIndexed { i, item ->
             item shouldBe other.timestamps[i]
         }

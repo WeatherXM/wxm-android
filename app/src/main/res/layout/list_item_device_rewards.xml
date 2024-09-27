@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/margin_normal"
     app:cardElevation="@dimen/elevation_normal"
-    app:contentPadding="@dimen/padding_small_to_normal">
+    app:contentPadding="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,52 +14,66 @@
         android:clipChildren="false"
         android:clipToPadding="false">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/name"
-            android:layout_width="0dp"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/headerCard"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-            android:textColor="@color/textColor"
-            app:layout_constraintEnd_toStartOf="@id/amount"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Magnificent Magnolia Altocumulus" />
+            app:contentPadding="@dimen/padding_small_to_normal"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_small_to_normal"
-            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-            android:textColor="@color/textColor"
-            app:layout_constraintBottom_toBottomOf="@id/name"
-            app:layout_constraintEnd_toStartOf="@id/openDeviceRewards"
-            app:layout_constraintTop_toTopOf="@id/name"
-            tools:text="1.000,24 $WXM" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/openDeviceRewards"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/action_open"
-            android:src="@drawable/ic_arrow_down"
-            app:layout_constraintBottom_toBottomOf="@id/name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/name"
-            app:tint="@color/darkGrey" />
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                    android:textColor="@color/textColor"
+                    app:layout_constraintEnd_toStartOf="@id/amount"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Magnificent Magnolia Altocumulus" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_small_to_normal"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                    android:textColor="@color/textColor"
+                    app:layout_constraintBottom_toBottomOf="@id/name"
+                    app:layout_constraintEnd_toStartOf="@id/openDeviceRewards"
+                    app:layout_constraintTop_toTopOf="@id/name"
+                    tools:text="1.000,24 $WXM" />
+
+                <ImageView
+                    android:id="@+id/openDeviceRewards"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/action_open"
+                    android:src="@drawable/ic_arrow_down"
+                    app:layout_constraintBottom_toBottomOf="@id/name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/name"
+                    app:tint="@color/darkGrey" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <FrameLayout
             android:id="@+id/detailsWithLoadingContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginHorizontal="@dimen/margin_small_to_normal"
+            android:layout_marginTop="@dimen/margin_small_to_normal"
+            android:paddingBottom="@dimen/padding_small_to_normal"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/name"
+            app:layout_constraintTop_toBottomOf="@id/headerCard"
             tools:visibility="visible">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/detailsWithHeaderContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

@@ -27,7 +27,6 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.qualifier.named
@@ -104,7 +103,6 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
             })
         }
 
-        mockkStatic(DateFormat::class)
         every { DateFormat.is24HourFormat(context) } returns true
 
         every { NumberUtils.compactNumber(any()) } returns "1"

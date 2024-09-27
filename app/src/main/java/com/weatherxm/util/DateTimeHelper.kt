@@ -54,10 +54,14 @@ object DateTimeHelper : KoinComponent {
         return "$lastUpdatedDate, $lastUpdatedTime"
     }
 
-    fun ZonedDateTime?.getFormattedDate(includeYear: Boolean = false): String {
+    fun ZonedDateTime?.getFormattedDate(
+        includeYear: Boolean = false,
+        includeComma: Boolean = true
+    ): String {
+        val comma = if (includeComma) "," else ""
         return this?.let {
             if (includeYear) {
-                "${month.getDisplayName(TextStyle.SHORT, Locale.US)} $dayOfMonth, $year"
+                "${month.getDisplayName(TextStyle.SHORT, Locale.US)} $dayOfMonth$comma $year"
             } else {
                 "${month.getDisplayName(TextStyle.SHORT, Locale.US)} $dayOfMonth"
             }
