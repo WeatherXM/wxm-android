@@ -143,12 +143,12 @@ class DeviceSettingsWifiViewModel(
             val lastStationRssiTs =
                 stationRssiLastActivity?.getFormattedDateAndTime(context) ?: String.empty()
             stationRssi?.let {
-                val deviceAlert = if (true) {
-                    DeviceAlert.createError(DeviceAlertType.LOW_STATION_RSSI)
-                } else if (it in -95..-81) {
+                val deviceAlert = if (it >= -80) {
+                    null
+                } else if (it >= -95) {
                     DeviceAlert.createWarning(DeviceAlertType.LOW_STATION_RSSI)
                 } else {
-                    null
+                    DeviceAlert.createError(DeviceAlertType.LOW_STATION_RSSI)
                 }
                 data.station.add(
                     UIDeviceInfoItem(
