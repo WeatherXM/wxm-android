@@ -74,8 +74,15 @@ class RewardsTest : BehaviorSpec({
                 }
             }
             When("it is an integer") {
-                then("the formatter should return the integer with 2 decimals e.g. 10.00") {
-                    formatTokens(10F) shouldBe "10.00"
+                and("it is == 1000") {
+                    then("return the integer with thousands separator and 2 decimals") {
+                        formatTokens(1000F) shouldBe "1,000.00"
+                    }
+                }
+                and("it is < 1000") {
+                    then("the formatter should return the integer with 2 decimals e.g. 10.00") {
+                        formatTokens(10F) shouldBe "10.00"
+                    }
                 }
             }
             When("it has up to 2 decimals") {

@@ -841,7 +841,7 @@ private val utilities = module {
         }
     }
     single<NumberFormat> {
-        NumberFormat.getInstance()
+        NumberFormat.getInstance(Locale.getDefault())
     }
     single<SearchEngine> {
         SearchEngine.createSearchEngine(SearchEngineSettings())

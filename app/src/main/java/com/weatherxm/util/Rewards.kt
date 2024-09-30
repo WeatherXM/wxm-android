@@ -47,6 +47,8 @@ object Rewards {
     fun formatTokens(amount: BigDecimal): String {
         val decimalFormat = DecimalFormat("0.00")
         decimalFormat.roundingMode = RoundingMode.HALF_UP
+        decimalFormat.groupingSize = 3
+        decimalFormat.isGroupingUsed = true
         return decimalFormat.format(amount)
     }
 
