@@ -14,12 +14,12 @@ import com.mapbox.search.SearchEngine
 import com.mapbox.search.common.SearchCancellationException
 import com.mapbox.search.result.SearchResult
 import com.squareup.moshi.Moshi
+import com.weatherxm.data.countryToFrequency
 import com.weatherxm.data.models.CancellationError
 import com.weatherxm.data.models.CountryAndFrequencies
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.MapBoxError
-import com.weatherxm.data.countryToFrequency
 import com.weatherxm.data.otherFrequencies
 import com.weatherxm.util.GeocoderCompat
 import timber.log.Timber
@@ -34,8 +34,8 @@ class NetworkAddressDataSource(
         /**
          * Limit of search results
          */
-        private const val SEARCH_LIMIT = 1
-        private val SEARCH_TYPES = mutableListOf(
+        const val SEARCH_LIMIT = 1
+        val SEARCH_TYPES = mutableListOf(
             QueryType.ADDRESS,
             QueryType.NEIGHBORHOOD,
             QueryType.DISTRICT,
@@ -51,11 +51,11 @@ class NetworkAddressDataSource(
     ): Either<Failure, String> {
         return GeocoderCompat.getFromLocation(location.lat, location.lon)
             .map { address ->
-                if (address.locality != null) {
+                if (!address.locality.isNullOrEmpty()) {
                     "${address.locality}, ${address.countryCode}"
-                } else if (address.subAdminArea != null) {
+                } else if (!address.subAdminArea.isNullOrEmpty()) {
                     "${address.subAdminArea}, ${address.countryCode}"
-                } else if (address.adminArea != null) {
+                } else if (!address.adminArea.isNullOrEmpty()) {
                     "${address.adminArea}, ${address.countryCode}"
                 } else {
                     address.countryName
@@ -63,10 +63,7 @@ class NetworkAddressDataSource(
             }
     }
 
-    override suspend fun setLocationAddress(
-        hexIndex: String,
-        address: String
-    ): Either<Failure, Unit> {
+    override suspend fun setLocationAddress(hexIndex: String, address: String) {
         throw NotImplementedError("Won't be implemented. Ignore this.")
     }
 
@@ -113,7 +110,7 @@ class NetworkAddressDataSource(
                     CountryAndFrequencies(
                         address.countryName, frequency, otherFrequencies(frequency)
                     ).right()
-                } ?: Failure.FrequencyMappingNotFound.left()
+                } ?: Failure.CountryNotFound.left()
             }
             .mapLeft {
                 Failure.CountryNotFound

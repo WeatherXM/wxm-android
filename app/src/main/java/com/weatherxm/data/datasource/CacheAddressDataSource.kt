@@ -20,12 +20,8 @@ class CacheAddressDataSource(private val cacheService: CacheService) : AddressDa
         return cacheService.getLocationAddress(hexIndex)
     }
 
-    override suspend fun setLocationAddress(
-        hexIndex: String,
-        address: String
-    ): Either<Failure, Unit> {
+    override suspend fun setLocationAddress(hexIndex: String, address: String) {
         cacheService.setLocationAddress(hexIndex, address)
-        return Either.Right(Unit)
     }
 
     override suspend fun getAddressFromPoint(point: Point): Either<Failure, SearchResult> {

@@ -2,6 +2,7 @@ package com.weatherxm
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.location.Geocoder
 import android.text.format.DateFormat
 import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -32,10 +33,12 @@ object TestConfig : AbstractProjectConfig() {
     val failure = mockk<Failure>()
     val successUnitResponse =
         NetworkResponse.Success<Unit, ErrorResponse>(Unit, retrofitResponse(Unit))
+    val geocoder = mockk<Geocoder>()
 
     @AutoScan
     object MyProjectListener : BeforeProjectListener, AfterProjectListener {
         override suspend fun beforeProject() {
+            mockkStatic(Geocoder::class)
             mockkStatic(DateFormat::class)
             every {
                 DateFormat.getBestDateTimePattern(
