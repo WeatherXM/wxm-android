@@ -413,6 +413,7 @@ dependencies {
     testImplementation(libs.kotest.koin)
     testImplementation(libs.mockk)
     testImplementation(libs.mockk.agent)
+    testImplementation(libs.json)
 
     // Desugaring for Java8 feature support
     coreLibraryDesugaring(libs.desugar.jdk.libs)
