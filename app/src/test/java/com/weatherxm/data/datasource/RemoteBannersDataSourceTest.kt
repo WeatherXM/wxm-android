@@ -50,7 +50,9 @@ class RemoteBannersDataSourceTest : BehaviorSpec({
         } returns actionLabel
         every { remoteConfig.getBoolean(RemoteBannersDataSourceImpl.SURVEY_SHOW) } returns true
         every { remoteConfig.getString(RemoteBannersDataSourceImpl.INFO_BANNER_ID) } returns id
-        every { remoteConfig.getString(RemoteBannersDataSourceImpl.INFO_BANNER_TITLE) } returns title
+        every {
+            remoteConfig.getString(RemoteBannersDataSourceImpl.INFO_BANNER_TITLE)
+        } returns title
         every {
             remoteConfig.getString(RemoteBannersDataSourceImpl.INFO_BANNER_MESSAGE)
         } returns message

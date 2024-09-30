@@ -12,7 +12,6 @@ import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.ErrorResponse
 import com.weatherxm.data.services.CacheService
 import io.kotest.core.spec.style.BehaviorSpec
-import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.mockk
 import io.mockk.verify

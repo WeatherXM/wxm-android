@@ -80,7 +80,7 @@ class ChartsUseCaseTest : BehaviorSpec({
 
         LocalDateTimeRange(
             localDate.atStartOfDay(),
-            localDate.plusDays(1).atStartOfDay().minusHours(1)
+            localDate.plusDays(1).atStartOfDay().minusHours(2)
         ).forEachIndexed { _, localDateTime ->
             hourlyWeatherData.add(
                 HourlyWeather(
@@ -102,6 +102,35 @@ class ChartsUseCaseTest : BehaviorSpec({
                     500F
                 )
             )
+        }
+
+        /**
+         * Add a gap at the end
+         */
+        LocalDateTimeRange(
+            localDate.plusDays(1).atStartOfDay().minusHours(2),
+            localDate.plusDays(1).atStartOfDay().minusHours(1)
+        ).forEachIndexed { _, localDateTime ->
+            hourlyWeatherData.add(
+                HourlyWeather(
+                    localDateTime.atZone(ZoneId.systemDefault()),
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                )
+            )
 
             mockkStatic(AppCompatResources::class)
             every {
@@ -109,7 +138,7 @@ class ChartsUseCaseTest : BehaviorSpec({
             } returns null
         }
 
-        repeat(24) { i ->
+        repeat(23) { i ->
             temperatureEntries.add(Entry(i.toFloat(), 35F))
             feelsLikeEntries.add(Entry(i.toFloat(), 34F))
             precipEntries.add(Entry(i.toFloat(), 10F))
@@ -123,6 +152,21 @@ class ChartsUseCaseTest : BehaviorSpec({
             humidityEntries.add(Entry(i.toFloat(), 75F))
             solarRadiationEntries.add(Entry(i.toFloat(), 500F))
         }
+        /**
+         * Add a gap at the end
+         */
+        temperatureEntries.add(Entry(23F, Float.NaN))
+        feelsLikeEntries.add(Entry(23F, Float.NaN))
+        precipEntries.add(Entry(23F, Float.NaN))
+        precipAccumulatedEntries.add(Entry(23F, Float.NaN))
+        precipProbabilityEntries.add(Entry(23F, Float.NaN))
+        windSpeedEntries.add(Entry(23F, Float.NaN))
+        windGustEntries.add(Entry(23F, Float.NaN))
+        pressureEntries.add(Entry(23F, Float.NaN))
+        windDirectionEntries.add(Entry(23F, Float.NaN))
+        uvEntries.add(Entry(23F, Float.NaN))
+        humidityEntries.add(Entry(23F, Float.NaN))
+        solarRadiationEntries.add(Entry(23F, Float.NaN))
 
         every { DateFormat.is24HourFormat(context) } returns true
     }
