@@ -11,6 +11,7 @@ import java.text.DecimalFormat
 object Rewards {
     private const val DIVISOR_WEI_TO_ETH = "1000000000000000000"
     private const val ETH_DECIMALS = 18
+    private const val GROUPING_SIZE = 3
 
     @Suppress("MagicNumber")
     @ColorRes
@@ -47,7 +48,7 @@ object Rewards {
     fun formatTokens(amount: BigDecimal): String {
         val decimalFormat = DecimalFormat("0.00")
         decimalFormat.roundingMode = RoundingMode.HALF_UP
-        decimalFormat.groupingSize = 3
+        decimalFormat.groupingSize = GROUPING_SIZE
         decimalFormat.isGroupingUsed = true
         return decimalFormat.format(amount)
     }
