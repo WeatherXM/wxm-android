@@ -1,13 +1,13 @@
 package com.weatherxm.util
 
 import android.icu.text.CompactDecimalFormat
-import android.icu.text.NumberFormat
 import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.text.NumberFormat
 
 object NumberUtils : KoinComponent {
     private val compactDecimalFormat: CompactDecimalFormat by inject()
@@ -25,6 +25,8 @@ object NumberUtils : KoinComponent {
 
     fun formatNumber(number: Number?, decimals: Int = 0): String {
         return number?.let {
+            // STOPSHIP: the below should be checked
+            numberFormat.roundingMode = RoundingMode.HALF_UP
             numberFormat.minimumFractionDigits = decimals
             numberFormat.maximumFractionDigits = decimals
             numberFormat.format(it)

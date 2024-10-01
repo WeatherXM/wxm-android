@@ -1,9 +1,7 @@
 package com.weatherxm.util
 
 import android.icu.text.CompactDecimalFormat
-import android.icu.text.NumberFormat
 import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
-import com.weatherxm.ui.common.empty
 import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.NumberUtils.weiToETH
 import io.kotest.core.spec.style.BehaviorSpec
@@ -14,6 +12,8 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import java.math.BigDecimal
+import java.text.NumberFormat
+import java.util.Locale
 
 class NumberUtilsTest : BehaviorSpec({
     beforeSpec {
@@ -24,13 +24,12 @@ class NumberUtilsTest : BehaviorSpec({
                         mockk<CompactDecimalFormat>()
                     }
                     single<NumberFormat> {
-                        mockk<NumberFormat>()
+                        NumberFormat.getInstance(Locale.US)
                     }
                 }
             )
         }
         every { NumberUtils.compactNumber(any()) } returns "100"
-        every { NumberUtils.formatNumber(any()) } returns "100"
     }
 
     context("Formatting of numbers") {
@@ -47,8 +46,15 @@ class NumberUtilsTest : BehaviorSpec({
                 then("compactNumber should return a valid number") {
                     NumberUtils.compactNumber(100) shouldBe "100"
                 }
-                then("formatNumber should return a valid number") {
-                    NumberUtils.formatNumber(100) shouldBe "100"
+                and("it's a number containing decimals") {
+                    then("formatNumber should return a valid number") {
+                        NumberUtils.formatNumber(100.4, 1) shouldBe "100.4"
+                    }
+                }
+                and("it's a number containing thousands") {
+                    then("formatNumber should return a valid number") {
+                        NumberUtils.formatNumber(1000.4, 1) shouldBe "1,000.4"
+                    }
                 }
                 then("roundToDecimals should return a valid number") {
                     NumberUtils.roundToDecimals(100.123456) shouldBe 100.1F
@@ -63,7 +69,7 @@ class NumberUtilsTest : BehaviorSpec({
         given("a token amount") {
             When("it is null") {
                 then("the formatter should return an empty string") {
-                    formatTokens(null) shouldBe String.empty()
+                    formatTokens(null) shouldBe EMPTY_VALUE
                 }
             }
             When("it is zero") {

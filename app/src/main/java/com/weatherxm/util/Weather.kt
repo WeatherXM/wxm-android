@@ -144,12 +144,17 @@ object Weather : KoinComponent {
         return "$formattedValue$unit"
     }
 
-    fun getFormattedPrecipitationProbability(value: Int?): String {
+    fun getFormattedPrecipitationProbability(value: Int?, includeUnit: Boolean = true): String {
+        val unit = if (includeUnit) {
+            "%"
+        } else {
+            String.empty()
+        }
         if (value == null) {
-            return "$EMPTY_VALUE%"
+            return "$EMPTY_VALUE$unit"
         }
 
-        return "$value%"
+        return "$value$unit"
     }
 
     fun getFormattedHumidity(value: Int?, includeUnit: Boolean = true): String {

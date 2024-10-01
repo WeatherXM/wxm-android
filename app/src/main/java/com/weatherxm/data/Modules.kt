@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothManager
 import android.content.SharedPreferences
 import android.icu.text.CompactDecimalFormat
 import android.icu.text.DecimalFormatSymbols
-import android.icu.text.NumberFormat
 import android.location.Geocoder
 import android.os.Build.VERSION.SDK_INT
 import android.text.format.DateFormat
@@ -264,6 +263,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
+import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime

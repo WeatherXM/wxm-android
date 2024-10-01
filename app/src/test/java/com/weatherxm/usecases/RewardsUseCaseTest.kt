@@ -1,7 +1,6 @@
 package com.weatherxm.usecases
 
 import android.icu.text.CompactDecimalFormat
-import android.icu.text.NumberFormat
 import android.text.format.DateFormat
 import com.github.mikephil.charting.data.Entry
 import com.weatherxm.R
@@ -50,6 +49,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import java.text.NumberFormat
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -188,7 +188,7 @@ class RewardsUseCaseTest : BehaviorSpec({
                         mockk<CompactDecimalFormat>()
                     }
                     single<NumberFormat> {
-                        mockk<NumberFormat>()
+                        NumberFormat.getInstance(Locale.getDefault())
                     }
                     single<DateTimeFormatter>(named(DATE_FORMAT_MONTH_DAY)) {
                         val usersLocaleDateFormat =
@@ -202,7 +202,6 @@ class RewardsUseCaseTest : BehaviorSpec({
             )
         }
         every { NumberUtils.compactNumber(any()) } returns "10"
-        every { NumberUtils.formatNumber(any()) } returns "10"
         every { context.getString(R.string.monday) } returns "Monday"
         every { context.getString(R.string.mon) } returns "Mon"
     }
