@@ -14,8 +14,8 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
 import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import com.weatherxm.ui.common.empty
+import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.NumberUtils.roundToDecimals
-import com.weatherxm.util.NumberUtils.roundToInt
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import timber.log.Timber
@@ -106,15 +106,15 @@ object Weather : KoinComponent {
             return "$EMPTY_VALUE$unit"
         }
 
-        return if (ignoreConversion) {
-            if (decimals == 0) {
-                "${roundToInt(value)}$unit"
-            } else {
-                "${roundToDecimals(value)}$unit"
-            }
+        val formattedValue = if (ignoreConversion) {
+            roundToDecimals(value, decimals)
         } else {
-            "${convertTemp(value, decimals)}$unit"
+            convertTemp(value, decimals)
+        }.let {
+            formatNumber(it, decimals)
         }
+
+        return "$formattedValue$unit"
     }
 
     fun getFormattedPrecipitation(
@@ -133,24 +133,23 @@ object Weather : KoinComponent {
             return "$EMPTY_VALUE$unit"
         }
 
-        return if (ignoreConversion) {
-            "${roundToDecimals(value, getDecimalsPrecipitation())}$unit"
+        val formattedValue = if (ignoreConversion) {
+            roundToDecimals(value, getDecimalsPrecipitation())
         } else {
-            "${convertPrecipitation(value)}$unit"
+            convertPrecipitation(value)
+        }.let {
+            formatNumber(it, getDecimalsPrecipitation())
         }
+
+        return "$formattedValue$unit"
     }
 
-    fun getFormattedPrecipitationProbability(value: Int?, includeUnit: Boolean = true): String {
-        val unit = if (includeUnit) {
-            "%"
-        } else {
-            String.empty()
-        }
+    fun getFormattedPrecipitationProbability(value: Int?): String {
         if (value == null) {
-            return "$EMPTY_VALUE$unit"
+            return "$EMPTY_VALUE%"
         }
 
-        return "$value$unit"
+        return "$value%"
     }
 
     fun getFormattedHumidity(value: Int?, includeUnit: Boolean = true): String {
@@ -210,11 +209,15 @@ object Weather : KoinComponent {
             return "$EMPTY_VALUE$unit"
         }
 
-        return if (ignoreConversion) {
-            "${roundToDecimals(value, getDecimalsPressure())}$unit"
+        val formattedValue = if (ignoreConversion) {
+            roundToDecimals(value, getDecimalsPressure())
         } else {
-            "${convertPressure(value)}$unit"
+            convertPressure(value)
+        }.let {
+            formatNumber(it, getDecimalsPressure())
         }
+
+        return "$formattedValue$unit"
     }
 
     fun getFormattedSolarRadiation(value: Float?, includeUnit: Boolean = true): String {
@@ -228,7 +231,7 @@ object Weather : KoinComponent {
             return "$EMPTY_VALUE$unit"
         }
 
-        return "${roundToDecimals(value)}$unit"
+        return "${formatNumber(roundToDecimals(value), 1)}$unit"
     }
 
     private fun getFormattedWindSpeed(
@@ -236,11 +239,12 @@ object Weather : KoinComponent {
         includeUnit: Boolean = true,
         ignoreConversion: Boolean = false
     ): String {
+        val preferredUnit = getPreferredUnit(
+            resources.getString(KEY_WIND),
+            resources.getString(R.string.wind_speed_ms)
+        )
         val unit = if (includeUnit) {
-            getPreferredUnit(
-                resources.getString(KEY_WIND),
-                resources.getString(R.string.wind_speed_ms)
-            )
+            preferredUnit
         } else {
             String.empty()
         }
@@ -248,16 +252,21 @@ object Weather : KoinComponent {
             return "$EMPTY_VALUE$unit"
         }
 
-        return if (ignoreConversion) {
-            val beaufortUsed = unit == resources.getString(R.string.wind_speed_beaufort)
-            if (beaufortUsed) {
-                "${roundToInt(value)}$unit"
-            } else {
-                "${roundToDecimals(value)}$unit"
-            }
+        val decimals = if (preferredUnit == resources.getString(R.string.wind_speed_beaufort)) {
+            0
         } else {
-            "${convertWindSpeed(value)}$unit"
+            1
         }
+
+        val formattedValue = if (ignoreConversion) {
+            roundToDecimals(value, decimals)
+        } else {
+            convertWindSpeed(value)
+        }.let {
+            formatNumber(it, decimals)
+        }
+
+        return "$formattedValue$unit"
     }
 
     fun getFormattedWindDirection(value: Int?): String {
@@ -309,27 +318,15 @@ object Weather : KoinComponent {
         } ?: AppCompatResources.getDrawable(context, R.drawable.ic_weather_wind)
     }
 
-    fun convertTemp(value: Number?, decimals: Int = 0): Number? {
-        if (value == null) {
-            Timber.d("Temperature value is null!")
-            // Return null when value is null, so we catch it later on and show it as EMPTY
-            return null
-        }
-
+    fun convertTemp(value: Number, decimals: Int = 0): Number {
         val defaultUnit = resources.getString(R.string.temperature_celsius)
         val savedUnit = sharedPref.getString(resources.getString(KEY_TEMPERATURE), defaultUnit)
 
         // Return the value based on the weather unit the user wants
-        val valueToReturn = if (savedUnit != defaultUnit) {
-            UnitConverter.celsiusToFahrenheit(value.toFloat())
+        return if (savedUnit != defaultUnit) {
+            roundToDecimals(UnitConverter.celsiusToFahrenheit(value.toFloat()), decimals)
         } else {
-            value
-        }
-
-        return if (decimals == 0) {
-            roundToInt(valueToReturn)
-        } else {
-            roundToDecimals(valueToReturn)
+            roundToDecimals(value, decimals)
         }
     }
 

@@ -3,8 +3,8 @@ package com.weatherxm.util
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
+import com.weatherxm.util.NumberUtils.formatNumber
 import com.weatherxm.util.NumberUtils.roundToDecimals
-import com.weatherxm.util.NumberUtils.roundToInt
 
 private const val Y_AXIS_LABEL_LENGTH = 4
 
@@ -20,13 +20,11 @@ class CustomYAxisFormatter(
 ) : ValueFormatter() {
     @Suppress("MagicNumber")
     override fun getAxisLabel(value: Float, axis: AxisBase?): String {
-        val label = if (decimals > 0 && value < 10000) {
-            "${roundToDecimals(value, decimals)}"
-        } else if (value < 10000) {
-            "${roundToInt(value)}"
+        val label = if (value < 10000) {
+            formatNumber(roundToDecimals(value, decimals), decimals)
         } else {
             // 10000-99999
-            "${roundToInt(value / 1000)}K"
+            "${formatNumber(roundToDecimals(value / 1000, 0), 0)}K"
         }
 
         return if (isAxisLeft) {

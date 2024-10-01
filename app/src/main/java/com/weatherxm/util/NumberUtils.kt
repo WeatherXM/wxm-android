@@ -23,9 +23,10 @@ object NumberUtils : KoinComponent {
         } ?: EMPTY_VALUE
     }
 
-    fun formatNumber(number: Number?, maxDecimals: Int = 0): String {
+    fun formatNumber(number: Number?, decimals: Int = 0): String {
         return number?.let {
-            numberFormat.maximumFractionDigits = maxDecimals
+            numberFormat.minimumFractionDigits = decimals
+            numberFormat.maximumFractionDigits = decimals
             numberFormat.format(it)
         } ?: EMPTY_VALUE
     }
@@ -57,10 +58,6 @@ object NumberUtils : KoinComponent {
 
     fun roundToDecimals(value: Number, decimals: Int = 1): Float {
         return value.toFloat().toBigDecimal().setScale(decimals, RoundingMode.HALF_UP).toFloat()
-    }
-
-    fun roundToInt(value: Number): Int {
-        return value.toFloat().toBigDecimal().setScale(0, RoundingMode.HALF_UP).toInt()
     }
 }
 

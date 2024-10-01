@@ -2,10 +2,10 @@ package com.weatherxm.util
 
 import android.icu.text.CompactDecimalFormat
 import android.icu.text.NumberFormat
+import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import com.weatherxm.ui.common.empty
 import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.NumberUtils.weiToETH
-import com.weatherxm.util.Weather.EMPTY_VALUE
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -54,12 +54,6 @@ class NumberUtilsTest : BehaviorSpec({
                     NumberUtils.roundToDecimals(100.123456) shouldBe 100.1F
                     NumberUtils.roundToDecimals(100.15) shouldBe 100.2F
                     NumberUtils.roundToDecimals(100.02) shouldBe 100.0F
-                }
-                then("roundToInt should return a valid number") {
-                    NumberUtils.roundToInt(1.0) shouldBe 1
-                    NumberUtils.roundToInt(1.49) shouldBe 1
-                    NumberUtils.roundToInt(1.5) shouldBe 2
-                    NumberUtils.roundToInt(1.51) shouldBe 2
                 }
             }
         }
