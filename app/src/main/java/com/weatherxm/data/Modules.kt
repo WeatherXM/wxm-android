@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.SharedPreferences
 import android.icu.text.CompactDecimalFormat
+import android.icu.text.DecimalFormatSymbols
 import android.icu.text.NumberFormat
 import android.location.Geocoder
 import android.os.Build.VERSION.SDK_INT
@@ -836,6 +837,10 @@ private val utilities = module {
             Locale.US,
             CompactDecimalFormat.CompactStyle.SHORT
         ).apply {
+            val localizedSymbols = DecimalFormatSymbols(Locale.getDefault())
+            decimalFormatSymbols = DecimalFormatSymbols(Locale.US).apply {
+                decimalSeparator = localizedSymbols.decimalSeparator
+            }
             minimumFractionDigits = 0
             maximumFractionDigits = 1
         }
