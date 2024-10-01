@@ -11,7 +11,7 @@ import com.weatherxm.R
 import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.databinding.ListItemRewardSplitStakeholderBinding
 import com.weatherxm.util.Mask
-import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.NumberUtils.formatTokens
 
 class RewardSplitStakeholderAdapter(
     private val walletAddress: String,

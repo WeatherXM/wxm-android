@@ -2,15 +2,11 @@ package com.weatherxm.util
 
 import com.weatherxm.R
 import com.weatherxm.ui.common.AnnotationGroupCode
-import com.weatherxm.ui.common.empty
-import com.weatherxm.util.Rewards.formatTokens
 import com.weatherxm.util.Rewards.getRewardIcon
 import com.weatherxm.util.Rewards.getRewardScoreColor
 import com.weatherxm.util.Rewards.isPoL
-import com.weatherxm.util.Rewards.weiToETH
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import java.math.BigDecimal
 
 class RewardsTest : BehaviorSpec({
     context("Get reward score color and icon") {
@@ -61,58 +57,7 @@ class RewardsTest : BehaviorSpec({
             }
         }
     }
-    context("Formatting tokens as a text with min 2 and max 3 decimals") {
-        given("a token amount") {
-            When("it is null") {
-                then("the formatter should return an empty string") {
-                    formatTokens(null) shouldBe String.empty()
-                }
-            }
-            When("it is zero") {
-                then("the formatter should return 0.00") {
-                    formatTokens(0F) shouldBe "0.00"
-                }
-            }
-            When("it is an integer") {
-                and("it is == 1000") {
-                    then("return the integer with thousands separator and 2 decimals") {
-                        formatTokens(1000F) shouldBe "1,000.00"
-                    }
-                }
-                and("it is < 1000") {
-                    then("the formatter should return the integer with 2 decimals e.g. 10.00") {
-                        formatTokens(10F) shouldBe "10.00"
-                    }
-                }
-            }
-            When("it has up to 2 decimals") {
-                then("the formatter should return the amount with 2 decimals") {
-                    formatTokens(10.1F) shouldBe "10.10"
-                    formatTokens(10.01F) shouldBe "10.01"
-                }
-            }
-            When("it has >=3 decimals") {
-                then("the formatter should return the amount with 2 decimals") {
-                    formatTokens(10.001F) shouldBe "10.00"
-                    formatTokens(10.005F) shouldBe "10.01"
-                }
-            }
-        }
-    }
-    context("Convert WEI -> ETH correctly and show the correct amount") {
-        given("a WEI amount") {
-            When("it is zero") {
-                then("the convertor should return zero") {
-                    weiToETH(BigDecimal.ZERO) shouldBe BigDecimal.ZERO
-                }
-            }
-            When("it is bigger than zero") {
-                then("the validator should return make the conversion and format the tokens") {
-                    formatTokens(weiToETH(BigDecimal.valueOf(10000000000000000))) shouldBe "0.01"
-                }
-            }
-        }
-    }
+
     context("Get if an AnnotationGroupCode is Proof-of-Location related") {
         given("an AnnotationGroupCode") {
             When("it is PoL-related") {

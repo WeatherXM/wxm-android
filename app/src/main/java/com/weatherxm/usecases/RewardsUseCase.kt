@@ -26,7 +26,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedMonthDate
 import com.weatherxm.util.NumberUtils.formatNumber
-import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.getName
 import com.weatherxm.util.getShortName
 import timber.log.Timber
@@ -235,7 +235,7 @@ class RewardsUseCaseImpl(
                 if (!betaFound) {
                     betaEntries.add(Entry(counter.toFloat(), Float.NaN))
                 } else {
-                    if(betaSum == 0F) {
+                    if (betaSum == 0F) {
                         betaEntries.add(Entry(counter.toFloat(), 0F))
                     } else {
                         betaEntries.add(Entry(counter.toFloat(), betaSum + baseSum))
@@ -244,7 +244,7 @@ class RewardsUseCaseImpl(
                 if (!othersFound) {
                     otherEntries.add(Entry(counter.toFloat(), Float.NaN))
                 } else {
-                    if(othersSum == 0F) {
+                    if (othersSum == 0F) {
                         otherEntries.add(Entry(counter.toFloat(), 0F))
                     } else {
                         otherEntries.add(Entry(counter.toFloat(), othersSum + betaSum + baseSum))

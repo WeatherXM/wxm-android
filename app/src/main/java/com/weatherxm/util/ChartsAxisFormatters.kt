@@ -2,9 +2,9 @@ package com.weatherxm.util
 
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import com.weatherxm.util.NumberUtils.roundToDecimals
 import com.weatherxm.util.NumberUtils.roundToInt
-import com.weatherxm.util.Weather.EMPTY_VALUE
 
 private const val Y_AXIS_LABEL_LENGTH = 4
 

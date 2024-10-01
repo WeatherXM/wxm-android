@@ -12,6 +12,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
+import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import com.weatherxm.ui.common.empty
 import com.weatherxm.util.NumberUtils.roundToDecimals
 import com.weatherxm.util.NumberUtils.roundToInt
@@ -22,7 +23,6 @@ import timber.log.Timber
 @Suppress("TooManyFunctions")
 object Weather : KoinComponent {
 
-    const val EMPTY_VALUE = "?"
     private val resources: Resources by inject()
     private val sharedPref: SharedPreferences by inject()
 

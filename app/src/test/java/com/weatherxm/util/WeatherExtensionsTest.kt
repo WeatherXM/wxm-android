@@ -1,7 +1,7 @@
 package com.weatherxm.util
 
 import android.content.SharedPreferences
-import com.weatherxm.util.Weather.EMPTY_VALUE
+import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import com.weatherxm.util.Weather.getDecimalsPrecipitation
 import com.weatherxm.util.Weather.getDecimalsPressure
 import com.weatherxm.util.Weather.getFormattedPrecipitation

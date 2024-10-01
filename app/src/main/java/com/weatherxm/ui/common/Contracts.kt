@@ -1,6 +1,7 @@
 package com.weatherxm.ui.common
 
 object Contracts {
+    const val EMPTY_VALUE = "?"
     const val ARG_DEVICE = "device"
     const val ARG_DEVICE_TYPE = "device_type"
     const val ARG_BLE_DEVICE_CONNECTED = "ble_device_connected"

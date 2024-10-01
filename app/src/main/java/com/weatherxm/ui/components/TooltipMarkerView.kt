@@ -9,7 +9,7 @@ import com.weatherxm.R
 import com.weatherxm.ui.common.LineChartData
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.visible
-import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.NumberUtils.formatTokens
 
 @SuppressLint("ViewConstructor")
 class TooltipMarkerView(
@@ -49,7 +49,7 @@ class TooltipMarkerView(
         baseData.getEntryValueForTooltip(e.x).also {
             baseTitleView.visible(it != null)
             baseView.visible(it != null)
-            if(it != null) {
+            if (it != null) {
                 baseValue = it
                 baseView.text = formatTokens(it)
             }
