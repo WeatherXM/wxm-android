@@ -25,8 +25,6 @@ object NumberUtils : KoinComponent {
 
     fun formatNumber(number: Number?, decimals: Int = 0): String {
         return number?.let {
-            // STOPSHIP: the below should be checked
-            numberFormat.roundingMode = RoundingMode.HALF_UP
             numberFormat.minimumFractionDigits = decimals
             numberFormat.maximumFractionDigits = decimals
             numberFormat.format(it)

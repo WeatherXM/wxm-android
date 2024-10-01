@@ -107,11 +107,9 @@ object Weather : KoinComponent {
         }
 
         val formattedValue = if (ignoreConversion) {
-            roundToDecimals(value, decimals)
+            formatNumber(value, decimals)
         } else {
-            convertTemp(value, decimals)
-        }.let {
-            formatNumber(it, decimals)
+            formatNumber(convertTemp(value, decimals), decimals)
         }
 
         return "$formattedValue$unit"
@@ -134,11 +132,9 @@ object Weather : KoinComponent {
         }
 
         val formattedValue = if (ignoreConversion) {
-            roundToDecimals(value, getDecimalsPrecipitation())
+            formatNumber(value, getDecimalsPrecipitation())
         } else {
-            convertPrecipitation(value)
-        }.let {
-            formatNumber(it, getDecimalsPrecipitation())
+            formatNumber(convertPrecipitation(value), getDecimalsPrecipitation())
         }
 
         return "$formattedValue$unit"
@@ -215,11 +211,9 @@ object Weather : KoinComponent {
         }
 
         val formattedValue = if (ignoreConversion) {
-            roundToDecimals(value, getDecimalsPressure())
+            formatNumber(value, getDecimalsPressure())
         } else {
-            convertPressure(value)
-        }.let {
-            formatNumber(it, getDecimalsPressure())
+            formatNumber(convertPressure(value), getDecimalsPressure())
         }
 
         return "$formattedValue$unit"
@@ -236,7 +230,7 @@ object Weather : KoinComponent {
             return "$EMPTY_VALUE$unit"
         }
 
-        return "${formatNumber(roundToDecimals(value), 1)}$unit"
+        return "${formatNumber(value, 1)}$unit"
     }
 
     private fun getFormattedWindSpeed(
@@ -264,11 +258,9 @@ object Weather : KoinComponent {
         }
 
         val formattedValue = if (ignoreConversion) {
-            roundToDecimals(value, decimals)
+            formatNumber(value, decimals)
         } else {
-            convertWindSpeed(value)
-        }.let {
-            formatNumber(it, decimals)
+            formatNumber(convertWindSpeed(value), decimals)
         }
 
         return "$formattedValue$unit"

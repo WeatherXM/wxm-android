@@ -263,6 +263,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
+import java.math.RoundingMode
 import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -846,7 +847,9 @@ private val utilities = module {
         }
     }
     single<NumberFormat> {
-        NumberFormat.getInstance(Locale.getDefault())
+        NumberFormat.getInstance(Locale.getDefault()).apply {
+            roundingMode = RoundingMode.HALF_UP
+        }
     }
     single<SearchEngine> {
         SearchEngine.createSearchEngine(SearchEngineSettings())
