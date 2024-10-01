@@ -1,9 +1,11 @@
 package com.weatherxm.util
 
 import android.icu.text.CompactDecimalFormat
+import com.weatherxm.data.DECIMAL_FORMAT_TOKENS
 import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.koin.core.qualifier.named
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -12,10 +14,10 @@ import java.text.NumberFormat
 object NumberUtils : KoinComponent {
     private val compactDecimalFormat: CompactDecimalFormat by inject()
     private val numberFormat: NumberFormat by inject()
+    private val decimalFormat: DecimalFormat by inject(named(DECIMAL_FORMAT_TOKENS))
 
     private const val DIVISOR_WEI_TO_ETH = "1000000000000000000"
     private const val ETH_DECIMALS = 18
-    private const val GROUPING_SIZE = 3
 
     fun compactNumber(number: Number?): String {
         return number?.let {
@@ -38,10 +40,6 @@ object NumberUtils : KoinComponent {
     }
 
     fun formatTokens(amount: BigDecimal): String {
-        val decimalFormat = DecimalFormat("0.00")
-        decimalFormat.roundingMode = RoundingMode.HALF_UP
-        decimalFormat.groupingSize = GROUPING_SIZE
-        decimalFormat.isGroupingUsed = true
         return decimalFormat.format(amount)
     }
 

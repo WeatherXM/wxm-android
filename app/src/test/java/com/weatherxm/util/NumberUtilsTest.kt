@@ -1,6 +1,8 @@
 package com.weatherxm.util
 
 import android.icu.text.CompactDecimalFormat
+import com.weatherxm.data.DECIMAL_FORMAT_TOKENS
+import com.weatherxm.data.THOUSANDS_GROUPING_SIZE
 import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.NumberUtils.weiToETH
@@ -10,8 +12,11 @@ import io.mockk.every
 import io.mockk.mockk
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import java.math.BigDecimal
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -25,6 +30,13 @@ class NumberUtilsTest : BehaviorSpec({
                     }
                     single<NumberFormat> {
                         NumberFormat.getInstance(Locale.US)
+                    }
+                    single<DecimalFormat>(named(DECIMAL_FORMAT_TOKENS)) {
+                        DecimalFormat(DECIMAL_FORMAT_TOKENS).apply {
+                            roundingMode = RoundingMode.HALF_UP
+                            groupingSize = THOUSANDS_GROUPING_SIZE
+                            isGroupingUsed = true
+                        }
                     }
                 }
             )
