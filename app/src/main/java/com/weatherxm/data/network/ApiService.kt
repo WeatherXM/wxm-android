@@ -57,7 +57,7 @@ interface ApiService {
     @MockResponse(code = 204, body = "mock_files/empty_response.json")
     @POST("/api/v1/me/devices/disclaim")
     suspend fun removeDevice(
-        @Body address: DeleteDeviceBody,
+        @Body deleteDeviceBody: DeleteDeviceBody,
     ): NetworkResponse<Unit, ErrorResponse>
 
     @Mock
@@ -115,7 +115,7 @@ interface ApiService {
     @MockBehavior(durationDeviation = 500, durationMillis = 2000)
     @POST("/api/v1/me/devices/claim")
     suspend fun claimDevice(
-        @Body address: ClaimDeviceBody,
+        @Body claimDeviceBody: ClaimDeviceBody,
     ): NetworkResponse<Device, ErrorResponse>
 
     @Mock
@@ -208,7 +208,7 @@ interface ApiService {
     @MockResponse(body = "mock_files/get_device_reward_boost.json")
     @GET("/api/v1/devices/{deviceId}/rewards/boosts/{boostCode}")
     @Headers(NO_AUTH_HEADER)
-    suspend fun getRewardBoost(
+    suspend fun getBoostReward(
         @Path("deviceId") deviceId: String,
         @Path("boostCode") boostCode: String
     ): NetworkResponse<BoostRewardResponse, ErrorResponse>

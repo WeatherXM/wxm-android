@@ -2,12 +2,12 @@ package com.weatherxm.data.datasource
 
 import arrow.core.Either
 import arrow.core.handleErrorWith
+import com.weatherxm.data.mapResponse
 import com.weatherxm.data.models.ApiError.UserError.ClaimError.DeviceClaiming
 import com.weatherxm.data.models.Device
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
-import com.weatherxm.data.mapResponse
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.network.ClaimDeviceBody
 import com.weatherxm.data.network.DeleteDeviceBody
