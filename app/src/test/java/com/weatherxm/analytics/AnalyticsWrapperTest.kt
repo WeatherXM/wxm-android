@@ -30,6 +30,7 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
         justRun { trackScreen(any() as AnalyticsService.Screen, any(), any()) }
         justRun { trackEventUserAction(any(), any()) }
         justRun { trackEventViewContent(any(), any()) }
+        justRun { trackEventViewContent(any(), any(), any()) }
         justRun { trackEventPrompt(any(), any(), any()) }
         justRun { trackEventSelectContent(any()) }
     }
@@ -51,27 +52,34 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
 
     context("Set user params and track events") {
         given("some predefined users params") {
-            analyticsWrapper.setUserId(testUserID)
-            analyticsWrapper.setDevicesOwn(testDevicesOwn)
-            analyticsWrapper.setHasWallet(testHasWallet)
-            analyticsWrapper.setDisplayMode(testDisplayMode)
-            analyticsWrapper.setDevicesSortFilterOptions(listOf("DATE_ADDED", "ALL", "NO_GROUPING"))
-            with(analyticsWrapper.setUserProperties()) {
-                size shouldBe 11
-                this[0] shouldBe ("theme" to testDisplayMode)
-                this[1] shouldBe ("UNIT_TEMPERATURE" to "c")
-                this[2] shouldBe ("UNIT_WIND" to "mps")
-                this[3] shouldBe ("UNIT_WIND_DIRECTION" to "card")
-                this[4] shouldBe ("UNIT_PRECIPITATION" to "mm")
-                this[5] shouldBe ("UNIT_PRESSURE" to "hpa")
-                this[6] shouldBe ("SORT_BY" to "date_added")
-                this[7] shouldBe ("FILTER" to "all")
-                this[8] shouldBe ("GROUP_BY" to "no_grouping")
-                this[9] shouldBe ("STATIONS_OWN" to "$testDevicesOwn")
-                this[10] shouldBe ("HAS_WALLET" to "$testHasWallet")
+            then("the analytics wrapper should set them properly") {
+                analyticsWrapper.setUserId("")
+                verifier.verifyEmptyUserIdSet("")
+
+                analyticsWrapper.setUserId(testUserID)
+                analyticsWrapper.setDevicesOwn(testDevicesOwn)
+                analyticsWrapper.setHasWallet(testHasWallet)
+                analyticsWrapper.setDisplayMode(testDisplayMode)
+                analyticsWrapper.setDevicesSortFilterOptions(
+                    listOf("DATE_ADDED", "ALL", "NO_GROUPING")
+                )
+                with(analyticsWrapper.setUserProperties()) {
+                    size shouldBe 11
+                    this[0] shouldBe ("theme" to testDisplayMode)
+                    this[1] shouldBe ("UNIT_TEMPERATURE" to "c")
+                    this[2] shouldBe ("UNIT_WIND" to "mps")
+                    this[3] shouldBe ("UNIT_WIND_DIRECTION" to "card")
+                    this[4] shouldBe ("UNIT_PRECIPITATION" to "mm")
+                    this[5] shouldBe ("UNIT_PRESSURE" to "hpa")
+                    this[6] shouldBe ("SORT_BY" to "date_added")
+                    this[7] shouldBe ("FILTER" to "all")
+                    this[8] shouldBe ("GROUP_BY" to "no_grouping")
+                    this[9] shouldBe ("STATIONS_OWN" to "$testDevicesOwn")
+                    this[10] shouldBe ("HAS_WALLET" to "$testHasWallet")
+                }
+                verifier.verifyUserIdSet(testUserID)
+                verifier.verifyUserPropertiesSet()
             }
-            verifier.verifyUserIdSet(testUserID)
-            verifier.verifyUserPropertiesSet()
         }
         given("a boolean flag indicating if analytics are enabled or not") {
             When("enabled") {
@@ -80,24 +88,28 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                     analyticsWrapper.setAnalyticsEnabled(true)
                     verifier.verifyAnalyticsEnabled(true)
                 }
-                and("tracking Screens should work") {
+                then("tracking Screens should work") {
                     val screen = AnalyticsService.Screen.ANALYTICS
                     analyticsWrapper.trackScreen(screen, testArg, testArg)
                     verifier.verifyTrackScreen(screen, testArg, testArg, 1)
                 }
-                and("tracking User Action events should work") {
+                then("tracking User Action events should work") {
                     analyticsWrapper.trackEventUserAction(testArg, testArg)
                     verifier.verifyTrackEventUserAction(testArg, testArg, 1)
                 }
-                and("tracking View Content events should work") {
+                then("tracking View Content events should work") {
                     analyticsWrapper.trackEventViewContent(testArg, testArg)
                     verifier.verifyTrackEventViewContent(testArg, testArg, 1)
                 }
-                and("tracking Prompt events should work") {
+                then("tracking failure events should work") {
+                    analyticsWrapper.trackEventFailure(testArg)
+                    verifier.verifyTrackEventFailure(testArg, 1)
+                }
+                then("tracking Prompt events should work") {
                     analyticsWrapper.trackEventPrompt(testArg, testArg, testArg)
                     verifier.verifyTrackEventPrompt(testArg, testArg, testArg, 1)
                 }
-                and("tracking Select Content events should work") {
+                then("tracking Select Content events should work") {
                     analyticsWrapper.trackEventSelectContent(testArg)
                     verifier.verifyTrackEventSelectContent(testArg, 1)
                 }
@@ -108,24 +120,28 @@ class AnalyticsWrapperTest : KoinTest, BehaviorSpec({
                     analyticsWrapper.setAnalyticsEnabled(false)
                     verifier.verifyAnalyticsEnabled(false)
                 }
-                and("tracking screens should NOT work") {
+                then("tracking screens should NOT work") {
                     val screen = AnalyticsService.Screen.ANALYTICS
-                    analyticsWrapper.trackScreen(screen, testArg, testArg)
-                    verifier.verifyTrackScreen(screen, testArg, testArg, 0)
+                    analyticsWrapper.trackScreen(screen, testArg)
+                    verifier.verifyTrackScreen(screen, testArg, null, 0)
                 }
-                and("tracking user action should NOT work") {
-                    analyticsWrapper.trackEventUserAction(testArg, testArg)
-                    verifier.verifyTrackEventUserAction(testArg, testArg, 0)
+                then("tracking user action should NOT work") {
+                    analyticsWrapper.trackEventUserAction(testArg)
+                    verifier.verifyTrackEventUserAction(testArg, null, times = 0)
                 }
-                and("tracking view content should NOT work") {
+                then("tracking failure events should NOT work") {
+                    analyticsWrapper.trackEventFailure(testArg)
+                    verifier.verifyTrackEventFailure(testArg, 0)
+                }
+                then("tracking view content should NOT work") {
                     analyticsWrapper.trackEventViewContent(testArg, testArg)
                     verifier.verifyTrackEventViewContent(testArg, testArg, 0)
                 }
-                and("tracking prompts should NOT work") {
+                then("tracking prompts should NOT work") {
                     analyticsWrapper.trackEventPrompt(testArg, testArg, testArg)
                     verifier.verifyTrackEventPrompt(testArg, testArg, testArg, 0)
                 }
-                and("tracking Select Content events should NOT work") {
+                then("tracking Select Content events should NOT work") {
                     analyticsWrapper.trackEventSelectContent(testArg)
                     verifier.verifyTrackEventSelectContent(testArg, 0)
                 }

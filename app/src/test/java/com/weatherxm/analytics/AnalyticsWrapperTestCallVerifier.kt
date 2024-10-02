@@ -1,5 +1,6 @@
 package com.weatherxm.analytics
 
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.util.Weather
 import io.kotest.matchers.shouldBe
 import io.mockk.verify
@@ -9,6 +10,11 @@ class AnalyticsWrapperTestCallVerifier(
     private val service2: AnalyticsService,
     private val analyticsWrapper: AnalyticsWrapper
 ) {
+    fun verifyEmptyUserIdSet(userId: String) {
+        verify(exactly = 0) { service1.setUserId(userId) }
+        verify(exactly = 0) { service2.setUserId(userId) }
+    }
+
     fun verifyUserIdSet(userId: String) {
         verify(exactly = 1) { service1.setUserId(userId) }
         verify(exactly = 1) { service2.setUserId(userId) }
@@ -36,12 +42,17 @@ class AnalyticsWrapperTestCallVerifier(
         verify(exactly = 1) { service2.onLogout() }
     }
 
-    fun verifyTrackScreen(screen: AnalyticsService.Screen, arg1: String, arg2: String, times: Int) {
+    fun verifyTrackScreen(
+        screen: AnalyticsService.Screen,
+        arg1: String,
+        arg2: String?,
+        times: Int
+    ) {
         verify(exactly = times) { service1.trackScreen(screen, arg1, arg2) }
         verify(exactly = times) { service2.trackScreen(screen, arg1, arg2) }
     }
 
-    fun verifyTrackEventUserAction(arg1: String, arg2: String, times: Int) {
+    fun verifyTrackEventUserAction(arg1: String, arg2: String?, times: Int) {
         verify(exactly = times) { service1.trackEventUserAction(arg1, arg2) }
         verify(exactly = times) { service2.trackEventUserAction(arg1, arg2) }
     }
@@ -49,6 +60,23 @@ class AnalyticsWrapperTestCallVerifier(
     fun verifyTrackEventViewContent(arg1: String, arg2: String, times: Int) {
         verify(exactly = times) { service1.trackEventViewContent(arg1, arg2) }
         verify(exactly = times) { service2.trackEventViewContent(arg1, arg2) }
+    }
+
+    fun verifyTrackEventFailure(failureId: String, times: Int) {
+        verify(exactly = times) {
+            service1.trackEventViewContent(
+                AnalyticsService.ParamValue.FAILURE.paramValue,
+                AnalyticsService.ParamValue.FAILURE_ID.paramValue,
+                Pair(FirebaseAnalytics.Param.ITEM_ID, failureId)
+            )
+        }
+        verify(exactly = times) {
+            service2.trackEventViewContent(
+                AnalyticsService.ParamValue.FAILURE.paramValue,
+                AnalyticsService.ParamValue.FAILURE_ID.paramValue,
+                Pair(FirebaseAnalytics.Param.ITEM_ID, failureId)
+            )
+        }
     }
 
     fun verifyTrackEventPrompt(arg1: String, arg2: String, arg3: String, times: Int) {

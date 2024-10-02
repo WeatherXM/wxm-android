@@ -128,7 +128,7 @@ class MixpanelAnalyticsService(private val mixpanelAPI: MixpanelAPI) : Analytics
         )
     }
 
-    private fun paramsToJSON(params: List<Pair<String, Any>>): JSONObject {
+    fun paramsToJSON(params: List<Pair<String, Any>>): JSONObject {
         val entries = JSONObject()
 
         // We want on every event to have the APP ID to identify the source of the event
