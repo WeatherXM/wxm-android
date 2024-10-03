@@ -277,7 +277,7 @@ class CacheService(
     }
 
     fun getWidgetIds(): Either<Failure, List<String>> {
-        val ids = preferences.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, setOf())
+        val ids = preferences.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, null)
         return if (ids.isNullOrEmpty()) {
             Either.Left(DataError.CacheMissError)
         } else {
