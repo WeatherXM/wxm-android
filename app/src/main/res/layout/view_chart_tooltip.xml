@@ -17,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/dark_text"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="August" />
 
@@ -26,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_extra_small"
-            app:dividerColor="@color/light_layer1"
+            app:dividerColor="@color/layer2Inverse"
             app:layout_constraintTop_toBottomOf="@id/date" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -36,7 +35,6 @@
             android:layout_marginTop="@dimen/margin_extra_small"
             android:text="@string/total_with_colon"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/dark_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider" />
 
@@ -47,7 +45,6 @@
             android:layout_marginStart="@dimen/margin_small_to_normal"
             android:layout_marginTop="@dimen/margin_extra_small"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/dark_text"
             app:layout_constraintStart_toEndOf="@id/totalTitle"
             app:layout_constraintTop_toBottomOf="@id/divider"
             tools:text="73.24" />
@@ -59,7 +56,6 @@
             android:layout_marginTop="@dimen/margin_extra_small"
             android:text="@string/base"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/dark_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/totalValue" />
 
@@ -70,7 +66,6 @@
             android:layout_marginStart="@dimen/margin_small_to_normal"
             android:layout_marginTop="@dimen/margin_extra_small"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/dark_text"
             app:layout_constraintStart_toEndOf="@id/baseTitle"
             app:layout_constraintTop_toBottomOf="@id/totalValue"
             tools:text="73.24" />
@@ -82,7 +77,6 @@
             android:layout_marginTop="@dimen/margin_extra_small"
             android:text="@string/beta"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/dark_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/baseValue" />
 
@@ -93,7 +87,6 @@
             android:layout_marginStart="@dimen/margin_small_to_normal"
             android:layout_marginTop="@dimen/margin_extra_small"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/dark_text"
             app:layout_constraintStart_toEndOf="@id/betaTitle"
             app:layout_constraintTop_toBottomOf="@id/baseValue"
             tools:text="73.24" />
@@ -105,7 +98,6 @@
             android:layout_marginTop="@dimen/margin_extra_small"
             android:text="@string/other"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/dark_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/betaValue" />
 
@@ -116,7 +108,6 @@
             android:layout_marginStart="@dimen/margin_small_to_normal"
             android:layout_marginTop="@dimen/margin_extra_small"
             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-            android:textColor="@color/dark_text"
             app:layout_constraintStart_toEndOf="@id/othersTitle"
             app:layout_constraintTop_toBottomOf="@id/betaValue"
             tools:text="73.24" />

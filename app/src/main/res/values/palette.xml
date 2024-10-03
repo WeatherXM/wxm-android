@@ -25,6 +25,7 @@
     <color name="light_translucent">#80FEFBFF</color>
     <color name="light_chart_primary">#00164D</color>
     <color name="light_chart_secondary">#6297FD</color>
+    <color name="light_tooltip">#E6EAEBF9</color>
 
     <color name="dark_text">#FEFBFF</color>
     <color name="dark_mid_grey_disabled">#275D5E67</color>
@@ -42,6 +43,7 @@
     <color name="dark_translucent">#26FEFBFF</color>
     <color name="dark_chart_primary">#DDF1F9</color>
     <color name="dark_chart_secondary">#2E8ADC</color>
+    <color name="dark_tooltip">#E645464F</color>
 
     <color name="success">#00E676</color>
     <color name="light_success_tint">#D8F8EA</color>
@@ -52,9 +54,6 @@
     <color name="warning">#FFAB49</color>
     <color name="light_warning_tint">#FBDEBC</color>
     <color name="dark_warning_tint">#46381B</color>
-
-    <!-- Tooltip -->
-    <color name="tooltip">#E645464F</color>
 
     <!-- Translucent -->
     <color name="translucent_light_layer1">#33EAEBF9</color>
