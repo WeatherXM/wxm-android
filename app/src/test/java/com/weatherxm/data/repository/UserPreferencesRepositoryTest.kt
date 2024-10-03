@@ -42,13 +42,13 @@ class UserPreferencesRepositoryTest : BehaviorSpec({
 
     context("Get if we should show analytics opt-in prompt") {
         When("we should show it") {
-            every { dataSource.getAnalyticsOptInTimestamp() } returns 0
+            every { dataSource.getAnalyticsDecisionTimestamp() } returns 0
             then("return true") {
                 repo.shouldShowAnalyticsOptIn() shouldBe true
             }
         }
         When("we should NOT show it") {
-            every { dataSource.getAnalyticsOptInTimestamp() } returns 1
+            every { dataSource.getAnalyticsDecisionTimestamp() } returns 1
             then("return false") {
                 repo.shouldShowAnalyticsOptIn() shouldBe false
             }

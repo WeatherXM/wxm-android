@@ -24,18 +24,18 @@ class UserPreferenceDataSourceTest : BehaviorSpec({
 
     beforeSpec {
         every { cacheService.getWalletWarningDismissTimestamp() } returns timestamp
-        every { cacheService.getAnalyticsOptInTimestamp() } returns timestamp
+        every { cacheService.getAnalyticsDecisionTimestamp() } returns timestamp
         every { cacheService.getDevicesSortFilterOptions() } returns filters
         coJustRun { cacheService.setAnalyticsEnabled(enabled) }
-        coJustRun { cacheService.setAnalyticsEnabledTimestamp() }
-        coJustRun { cacheService.setWalletWarningDismissTimestamp() }
+        coJustRun { cacheService.setAnalyticsDecisionTimestamp(any()) }
+        coJustRun { cacheService.setWalletWarningDismissTimestamp(any()) }
         coJustRun { cacheService.setDevicesSortFilterOptions(sortOrder, filter, groupBy) }
     }
 
     context("Get analytics opt-in or opt-out timestamp") {
         When("Using the Cache Source") {
             then("return the timestamp") {
-                datasource.getAnalyticsOptInTimestamp() shouldBe timestamp
+                datasource.getAnalyticsDecisionTimestamp() shouldBe timestamp
             }
         }
     }
@@ -47,7 +47,7 @@ class UserPreferenceDataSourceTest : BehaviorSpec({
                 verify(exactly = 1) { cacheService.setAnalyticsEnabled(true) }
             }
             then("Set analytics timestamp in cache") {
-                verify(exactly = 1) { cacheService.setAnalyticsEnabledTimestamp() }
+                verify(exactly = 1) { cacheService.setAnalyticsDecisionTimestamp(any()) }
             }
         }
     }
@@ -83,7 +83,7 @@ class UserPreferenceDataSourceTest : BehaviorSpec({
         When("Using the Cache Source") {
             then("set the timestamp in cache") {
                 datasource.setWalletWarningDismissTimestamp()
-                verify(exactly = 1) { cacheService.setWalletWarningDismissTimestamp() }
+                verify(exactly = 1) { cacheService.setWalletWarningDismissTimestamp(any()) }
             }
         }
     }
