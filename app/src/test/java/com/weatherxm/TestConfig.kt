@@ -13,6 +13,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_ANALYTICS
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRECIP
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
+import com.weatherxm.data.services.CacheService.Companion.KEY_THEME
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
 import com.weatherxm.util.Resources
@@ -107,6 +108,9 @@ object TestConfig : AbstractProjectConfig() {
                 )
             } returns "Boost details description"
             every { resources.getString(KEY_ANALYTICS) } returns "google_analytics"
+            every { resources.getString(R.string.system_value) } returns "system_value"
+            every { resources.getString(KEY_THEME) } returns "theme"
+            every { sharedPref.getString("theme", "system_value") } returns "system_value"
         }
 
         override suspend fun afterProject() {

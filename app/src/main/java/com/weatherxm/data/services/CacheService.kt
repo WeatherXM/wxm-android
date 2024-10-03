@@ -348,6 +348,12 @@ class CacheService(
         clearUserPreferences()
     }
 
+    fun isCacheEmpty(): Boolean {
+        return walletAddress == null && user == null && forecasts.isEmpty()
+            && suggestions.isEmpty() && locations.isEmpty() && followedStationsIds.isEmpty()
+            && userStationsIds.isEmpty()
+    }
+
     /**
      * Some settings should not be cleared when `clearAll` is being used (like on logging out).
      * They are not private information and they have a serious impact in UX if we reset them.
