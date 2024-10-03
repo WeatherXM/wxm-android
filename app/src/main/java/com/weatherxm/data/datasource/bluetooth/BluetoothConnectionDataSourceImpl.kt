@@ -3,15 +3,14 @@ package com.weatherxm.data.datasource.bluetooth
 import android.bluetooth.BluetoothDevice
 import arrow.core.Either
 import arrow.core.handleErrorWith
-import com.weatherxm.data.models.BluetoothError
-import com.weatherxm.data.models.Failure
-import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_CLAIMING_KEY_COMMAND
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_DEV_EUI_COMMAND
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_SET_FREQUENCY_COMMAND
 import com.weatherxm.data.frequencyToHeliumBleBandValue
-import kotlinx.coroutines.CancellableContinuation
+import com.weatherxm.data.models.BluetoothError
+import com.weatherxm.data.models.Failure
+import com.weatherxm.data.models.Frequency
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -88,7 +87,11 @@ class BluetoothConnectionDataSourceImpl(
                  */
                 val command =
                     "$AT_SET_FREQUENCY_COMMAND${frequencyToHeliumBleBandValue(frequency)}\r\n"
-                setATCommandAndResume(command, continuation)
+                connectionManager.setATCommand(command) {
+                    if (continuation.isActive) {
+                        continuation.resumeWith(Result.success(it))
+                    }
+                }
             }
         }
     }
@@ -104,17 +107,6 @@ class BluetoothConnectionDataSourceImpl(
                 connectionManager.reboot {
                     continuation.resumeWith(Result.success(it))
                 }
-            }
-        }
-    }
-
-    private suspend fun setATCommandAndResume(
-        command: String,
-        continuation: CancellableContinuation<Either<Failure, Unit>>
-    ) {
-        connectionManager.setATCommand(command) {
-            if (continuation.isActive) {
-                continuation.resumeWith(Result.success(it))
             }
         }
     }

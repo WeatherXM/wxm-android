@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.databinding.ListItemForecastBinding
@@ -76,7 +77,11 @@ class DailyForecastAdapter(private val onClickListener: (UIForecastDay) -> Unit)
         fun bind(item: UIForecastDay) {
             binding.root.setOnClickListener {
                 analytics.trackEventSelectContent(
-                    AnalyticsService.ParamValue.FORECAST_DAY.paramValue,
+                    AnalyticsService.ParamValue.DAILY_CARD.paramValue,
+                    Pair(
+                        FirebaseAnalytics.Param.ITEM_ID,
+                        AnalyticsService.ParamValue.DAILY_FORECAST.paramValue
+                    ),
                     index = absoluteAdapterPosition.toLong()
                 )
                 onClickListener(item)

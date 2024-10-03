@@ -254,7 +254,6 @@ interface AnalyticsService {
         NO_REWARD_SPLITTING("no_reward_splitting"),
         STAKEHOLDER_LOWERCASE("stakeholder"),
         NON_STAKEHOLDER("non_stakeholder"),
-        FORECAST_DAY("Forecast Day"),
         FORECAST_NEXT_7_DAYS("forecast_next_7_days"),
         TOKENS_EARNED_PRESSED("Tokens Earned pressed"),
         DEVICE_REWARD_ANALYTICS_CARD("Device Reward Analytics Card"),

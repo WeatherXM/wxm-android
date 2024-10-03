@@ -1,18 +1,26 @@
 package com.weatherxm
 
 import arrow.core.Either
+import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.data.models.Failure
-import com.weatherxm.ui.common.Resource
+import com.weatherxm.data.models.NetworkError
+import com.weatherxm.data.network.ErrorResponse
 import com.weatherxm.ui.common.Charts
 import com.weatherxm.ui.common.LineChartData
+import com.weatherxm.ui.common.Resource
+import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.every
 import net.bytebuddy.utility.RandomString
+import retrofit2.Response
 import java.lang.reflect.Field
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
+import java.net.SocketTimeoutException
 
 object TestUtils {
     fun <T : Any> Either<Failure, T?>.isSuccess(successData: T?) {
@@ -45,6 +53,61 @@ object TestUtils {
 
     fun coMockEitherRight(function: suspend () -> Either<Failure, Any?>, data: Any?) {
         coEvery { function() } returns Either.Right(data)
+    }
+
+    fun retrofitResponse(data: Any): Response<Any> {
+        return Response.success(data)
+    }
+
+    suspend fun <T : Any> BehaviorSpecWhenContainerScope.testNetworkCall(
+        dataTitle: String,
+        data: Any? = null,
+        successResponse: NetworkResponse<T, ErrorResponse>,
+        mockFunction: suspend () -> NetworkResponse<T, ErrorResponse>,
+        runFunction: suspend () -> Either<Failure, Any?>
+    ) {
+        and("the response is a success") {
+            coEvery { mockFunction() } returns successResponse
+            then("return $dataTitle") {
+                runFunction().isSuccess(data)
+            }
+        }
+        and("the response is a failure") {
+            coEvery {
+                mockFunction()
+            } returns NetworkResponse.NetworkError(SocketTimeoutException())
+            then("return the failure") {
+                runFunction().leftOrNull().shouldBeInstanceOf<NetworkError>()
+            }
+        }
+    }
+
+    suspend fun BehaviorSpecWhenContainerScope.testGetFromCache(
+        dataTitle: String,
+        data: Any? = null,
+        mockFunction: suspend () -> Either<Failure, Any?>,
+        runFunction: suspend () -> Either<Failure, Any?>
+    ) {
+        and("the response is a success") {
+            coMockEitherRight({ mockFunction() }, data)
+            then("return the $dataTitle") {
+                runFunction().isSuccess(data)
+            }
+        }
+        and("the response is a failure") {
+            coMockEitherLeft({ mockFunction() }, failure)
+            then("return the failure") {
+                runFunction().isError()
+            }
+        }
+    }
+
+    suspend fun BehaviorSpecWhenContainerScope.testThrowNotImplemented(
+        function: suspend () -> Any?
+    ) {
+        then("Should throw a NotImplementedError") {
+            shouldThrow<NotImplementedError> { function() }
+        }
     }
 
     fun createRandomString(length: Int): String {

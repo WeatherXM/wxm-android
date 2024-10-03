@@ -31,10 +31,10 @@ class NetworkAddressSearchDataSource(
         /**
          * Limit of search results
          */
-        private const val SEARCH_LIMIT = 10
-        private val SEARCH_LANGUAGES = mutableListOf(IsoLanguageCode.ENGLISH)
-        private const val SEARCH_DEBOUNCE_MILLIS = 500
-        private val SEARCH_TYPES = mutableListOf(
+        const val SEARCH_LIMIT = 10
+        val SEARCH_LANGUAGES = mutableListOf(IsoLanguageCode.ENGLISH)
+        const val SEARCH_DEBOUNCE_MILLIS = 500
+        val SEARCH_TYPES = mutableListOf(
             QueryType.ADDRESS,
             QueryType.NEIGHBORHOOD,
             QueryType.DISTRICT,

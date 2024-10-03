@@ -33,6 +33,7 @@ dfu = "2.6.0"
 firebase-bom = "33.3.0"
 input-mask-android = "7.2.6"
 insetter = "0.6.1"
+json = "20240303"
 jwtdecode = "2.0.2"
 kable = "0.34.0"
 koin-android = "4.0.0"
@@ -115,6 +116,7 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-installations = { module = "com.google.firebase:firebase-installations" }
 input-mask-android = { module = "com.redmadrobot:input-mask-android", version.ref = "input-mask-android" }
 insetter = { module = "dev.chrisbanes.insetter:insetter", version.ref = "insetter" }
+json = { module = "org.json:json", version.ref = "json" }
 jwtdecode = { module = "com.auth0.android:jwtdecode", version.ref = "jwtdecode" }
 kable = { module = "com.juul.kable:kable-core", version.ref = "kable" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin-android" }

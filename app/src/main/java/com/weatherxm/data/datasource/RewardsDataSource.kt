@@ -72,7 +72,7 @@ class RewardsDataSourceImpl(private val apiService: ApiService) : RewardsDataSou
         deviceId: String,
         boostCode: String
     ): Either<Failure, BoostRewardResponse> {
-        return apiService.getRewardBoost(deviceId, boostCode).mapResponse()
+        return apiService.getBoostReward(deviceId, boostCode).mapResponse()
     }
 
     override suspend fun getWalletRewards(walletAddress: String): Either<Failure, WalletRewards> {
