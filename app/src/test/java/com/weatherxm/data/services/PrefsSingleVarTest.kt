@@ -22,6 +22,7 @@ class PrefsSingleVarTest(
     private val infoBannerId = "infoBannerId"
     private val lastRemindedVersion = 0
 
+    @Suppress("LongParameterList")
     private fun BehaviorSpec.testGetSetSingleVar(
         dataTitle: String,
         data: Any,

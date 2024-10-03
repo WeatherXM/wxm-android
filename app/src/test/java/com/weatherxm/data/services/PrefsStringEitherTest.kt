@@ -26,6 +26,7 @@ class PrefsStringEitherTest(
     private val widgetKey = "1.0.0"
     private val deviceId = "deviceId"
 
+    @Suppress("LongParameterList")
     private fun BehaviorSpec.testStringEither(
         dataTitle: String,
         data: Any,
