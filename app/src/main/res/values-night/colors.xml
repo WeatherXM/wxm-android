@@ -19,6 +19,7 @@
     <color name="darkGrey">@color/dark_dark_grey</color>
     <color name="layer1">@color/dark_layer1</color>
     <color name="layer2">@color/dark_layer2</color>
+    <color name="layer2Inverse">@color/light_layer2</color>
     <color name="blueTint">@color/dark_blue_tint</color>
     <color name="lightestBlue">@color/dark_lightest_blue</color>
     <color name="darkestBlue">@color/dark_darkest_blue</color>
@@ -32,6 +33,7 @@
     <color name="alternativeBackground">@color/dark_background</color>
     <color name="progressBarTrackColor">@color/dark_top</color>
     <color name="alternativeTextColor">@color/dark_text</color>
+    <color name="tooltip">@color/dark_tooltip</color>
 
     <!-- System and Launcher -->
     <color name="ic_launcher_background">#1B75BA</color>

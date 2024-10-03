@@ -3,7 +3,6 @@ package com.weatherxm.analytics
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ParametersBuilder
 import com.google.firebase.analytics.logEvent
-import com.weatherxm.BuildConfig
 import timber.log.Timber
 
 class FirebaseAnalyticsService(
@@ -35,13 +34,8 @@ class FirebaseAnalyticsService(
     }
 
     override fun setAnalyticsEnabled(enabled: Boolean) {
-        if (BuildConfig.DEBUG) {
-            Timber.d("Skipping analytics tracking in DEBUG mode [enabled=$enabled].")
-            firebaseAnalytics.setAnalyticsCollectionEnabled(enabled)
-        } else {
-            Timber.d("Resetting analytics tracking [enabled=$enabled]")
-            firebaseAnalytics.setAnalyticsCollectionEnabled(enabled)
-        }
+        Timber.d("Resetting analytics tracking [enabled=$enabled]")
+        firebaseAnalytics.setAnalyticsCollectionEnabled(enabled)
     }
 
     override fun onLogout() {

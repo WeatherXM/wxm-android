@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsForecastBinding
 import com.weatherxm.ui.common.DeviceRelation.UNFOLLOWED
 import com.weatherxm.ui.common.HourlyForecastAdapter
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.blockParentViewPagerOnScroll
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.invisible
@@ -51,18 +51,7 @@ class ForecastFragment : BaseFragment() {
 
         // Initialize the adapters with empty data
         val dailyForecastAdapter = DailyForecastAdapter {
-            analytics.trackEventSelectContent(
-                AnalyticsService.ParamValue.DAILY_CARD.paramValue,
-                Pair(
-                    FirebaseAnalytics.Param.ITEM_ID,
-                    AnalyticsService.ParamValue.DAILY_FORECAST.paramValue
-                )
-            )
-            navigator.showForecastDetails(
-                context,
-                model.device,
-                forecastSelectedISODate = it.date.toString()
-            )
+            navigator.showForecastDetails(context, model.device, it.date.toString())
         }
         val hourlyForecastAdapter = HourlyForecastAdapter {
             analytics.trackEventSelectContent(

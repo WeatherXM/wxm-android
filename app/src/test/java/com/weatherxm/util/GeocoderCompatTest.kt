@@ -4,6 +4,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.os.Build
 import arrow.core.Either
+import com.weatherxm.TestConfig.geocoder
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.setStaticFieldViaReflection
 import com.weatherxm.data.models.Failure
@@ -12,13 +13,11 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
 class GeocoderCompatTest : BehaviorSpec({
-    val geocoder = mockk<Geocoder>()
     val address = mockk<Address>()
 
     beforeSpec {
@@ -32,7 +31,6 @@ class GeocoderCompatTest : BehaviorSpec({
             )
         }
 
-        mockkStatic(Geocoder::class)
     }
 
     @Suppress("DEPRECATION")

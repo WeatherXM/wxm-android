@@ -58,10 +58,10 @@ class RemoteBannersDataSourceImpl(
 
     override fun getInfoBanner(): InfoBanner? {
         val id = firebaseRemoteConfig.getString(INFO_BANNER_ID)
-        val showSurvey = firebaseRemoteConfig.getBoolean(INFO_BANNER_SHOW)
+        val showBanner = firebaseRemoteConfig.getBoolean(INFO_BANNER_SHOW)
         val lastDismissedId = cacheService.getLastDismissedInfoBannerId()
 
-        return if (!showSurvey || id.isEmpty() || lastDismissedId == id) {
+        return if (!showBanner || id.isEmpty() || lastDismissedId == id) {
             null
         } else {
             InfoBanner(

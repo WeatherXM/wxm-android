@@ -34,10 +34,10 @@ class HistoryUseCaseTest : BehaviorSpec({
             }
             When("it's a failure") {
                 coMockEitherLeft({
-                    repo.getHourlyWeatherHistory(device.id, localDate, forceUpdate)
+                    repo.getHourlyWeatherHistory(device.id, localDate)
                 }, failure)
                 then("return that failure") {
-                    usecase.getWeatherHistory(device, localDate, forceUpdate).isError()
+                    usecase.getWeatherHistory(device, localDate).isError()
                 }
             }
         }
