@@ -268,7 +268,7 @@ class CacheService(
     }
 
     fun getWidgetDevice(key: String): Either<Failure, String> {
-        val deviceId = preferences.getString(key, String.empty())
+        val deviceId = preferences.getString(key, null)
         return if (deviceId.isNullOrEmpty()) {
             Either.Left(DataError.CacheMissError)
         } else {

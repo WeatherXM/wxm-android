@@ -7,6 +7,7 @@ import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestConfig.sharedPref
 import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.data.models.CountryInfo
 import com.weatherxm.data.models.DataError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
@@ -14,6 +15,9 @@ import com.weatherxm.data.models.User
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.services.CacheService.Companion.KEY_ACCESS
 import com.weatherxm.data.services.CacheService.Companion.KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP
+import com.weatherxm.data.services.CacheService.Companion.KEY_DEVICES_OWN
+import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_INFO_BANNER_ID
+import com.weatherxm.data.services.CacheService.Companion.KEY_DISMISSED_SURVEY_ID
 import com.weatherxm.data.services.CacheService.Companion.KEY_HAS_WALLET
 import com.weatherxm.data.services.CacheService.Companion.KEY_INSTALLATION_ID
 import com.weatherxm.data.services.CacheService.Companion.KEY_LAST_REMINDED_VERSION
@@ -54,6 +58,12 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
     val query = "query"
     val otaKey = "otaKey"
     val otaVersion = "1.0.0"
+    val widgetKey = "1.0.0"
+    val deviceId = "deviceId"
+    val deviceIds = listOf(deviceId)
+    val surveyId = "surveyId"
+    val infoBannerId = "infoBannerId"
+    val countriesInfo = listOf<CountryInfo>(mockk())
 
     beforeSpec {
         every { encryptedPref.edit() } returns prefEditor
@@ -62,6 +72,7 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
         every { prefEditor.putBoolean(any(), any()) } returns prefEditor
         every { prefEditor.putInt(any(), any()) } returns prefEditor
         every { prefEditor.putLong(any(), any()) } returns prefEditor
+        every { prefEditor.remove(any()) } returns prefEditor
         every { prefEditor.clear() } returns prefEditor
         justRun { prefEditor.apply() }
     }
@@ -107,9 +118,9 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
     fun BehaviorSpec.testGetSetSingleVar(
         dataTitle: String,
         data: Any,
-        mockFunction: () -> Any,
+        mockFunction: () -> Any?,
         verifyFunction: () -> Any,
-        getFunction: () -> Any,
+        getFunction: () -> Any?,
         setFunction: () -> Any
     ) {
         context("GET / SET $dataTitle") {
@@ -146,6 +157,22 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
                     then("return the $dataTitle") {
                         getFunction().isSuccess(data)
                     }
+                }
+            }
+        }
+    }
+
+    fun BehaviorSpec.testInMemorySingleVar(
+        dataTitle: String,
+        data: Any,
+        getFunction: () -> Any,
+        setFunction: () -> Any
+    ) {
+        context("GET / SET $dataTitle") {
+            setFunction()
+            When("GET the $dataTitle") {
+                then("return the $dataTitle") {
+                    getFunction() shouldBe data
                 }
             }
         }
@@ -331,4 +358,67 @@ class CacheServiceTest : KoinTest, BehaviorSpec({
         { cacheService.getDeviceLastOtaTimestamp(otaKey) },
         { cacheService.setDeviceLastOtaTimestamp(otaKey, timestamp) }
     )
+
+    testStringEither(
+        "associated Device ID of the widget",
+        deviceId,
+        { sharedPref.getString(widgetKey, null) },
+        { prefEditor.putString(widgetKey, deviceId) },
+        { cacheService.getWidgetDevice(widgetKey) },
+        { cacheService.setWidgetDevice(widgetKey, deviceId) }
+    ).apply {
+        given("a request to remove the associated device of the widget") {
+            then("remove the respective entry in the Shared Preferences") {
+                cacheService.removeDeviceOfWidget(widgetKey)
+                verify(exactly = 1) { prefEditor.remove(widgetKey) }
+            }
+        }
+    }
+
+    testInMemorySingleVar(
+        "IDs of the followed devices",
+        deviceIds,
+        { cacheService.getFollowedDevicesIds() },
+        { cacheService.setFollowedDevicesIds(deviceIds) }
+    )
+
+    testInMemorySingleVar(
+        "IDs of the user devices",
+        deviceIds,
+        { cacheService.getUserDevicesIds() },
+        { cacheService.setUserDevicesIds(deviceIds) }
+    ).apply {
+        given("that the user has some owned devices") {
+            every { sharedPref.getInt(KEY_DEVICES_OWN, 0) } returns deviceIds.size
+            then("return the number of owned devices") {
+                cacheService.getDevicesOwn() shouldBe deviceIds.size
+            }
+        }
+    }
+
+    testGetSetSingleVar(
+        "ID of the last dismissed survey",
+        surveyId,
+        { sharedPref.getString(KEY_DISMISSED_SURVEY_ID, null) },
+        { prefEditor.putString(KEY_DISMISSED_SURVEY_ID, surveyId) },
+        { cacheService.getLastDismissedSurveyId() },
+        { cacheService.setLastDismissedSurveyId(surveyId) }
+    )
+
+    testGetSetSingleVar(
+        "ID of the last dismissed info banner",
+        infoBannerId,
+        { sharedPref.getString(KEY_DISMISSED_INFO_BANNER_ID, null) },
+        { prefEditor.putString(KEY_DISMISSED_INFO_BANNER_ID, infoBannerId) },
+        { cacheService.getLastDismissedInfoBannerId() },
+        { cacheService.setLastDismissedInfoBannerId(infoBannerId) }
+    )
+
+    testInMemorySingleVar(
+        "countries information",
+        countriesInfo,
+        { cacheService.getCountriesInfo() },
+        { cacheService.setCountriesInfo(countriesInfo) }
+    )
+
 })
