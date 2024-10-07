@@ -1,8 +1,8 @@
 package com.weatherxm.data.datasource
 
 import arrow.core.Either
-import com.weatherxm.data.models.Failure
 import com.weatherxm.data.mapResponse
+import com.weatherxm.data.models.Failure
 import com.weatherxm.data.network.ApiService
 import com.weatherxm.data.services.CacheService
 
@@ -45,7 +45,7 @@ class DeviceOTADataSourceImpl(
 
     override fun setDeviceLastOtaTimestamp(deviceId: String) {
         val key = getDeviceFormattedKey(LAST_OTA_TIMESTAMP, deviceId)
-        cacheService.setDeviceLastOtaTimestamp(key)
+        cacheService.setDeviceLastOtaTimestamp(key, System.currentTimeMillis())
     }
 
     override fun getDeviceLastOtaTimestamp(deviceId: String): Long {

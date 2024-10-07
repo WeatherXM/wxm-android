@@ -111,13 +111,11 @@ class CacheService(
         preferences.edit().putInt(KEY_LAST_REMINDED_VERSION, lastVersion).apply()
     }
 
-    fun setAnalyticsEnabledTimestamp() {
-        preferences.edit()
-            .putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, System.currentTimeMillis())
-            .apply()
+    fun setAnalyticsDecisionTimestamp(timestamp: Long) {
+        preferences.edit().putLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, timestamp).apply()
     }
 
-    fun getAnalyticsOptInTimestamp(): Long {
+    fun getAnalyticsDecisionTimestamp(): Long {
         return preferences.getLong(KEY_ANALYTICS_OPT_IN_OR_OUT_TIMESTAMP, 0L)
     }
 
@@ -130,7 +128,12 @@ class CacheService(
     }
 
     fun getLocationAddress(hexIndex: String): Either<Failure, String> {
-        return preferences.getString(hexIndex, null)?.right() ?: DataError.CacheMissError.left()
+        val address = preferences.getString(hexIndex, null)
+        return if (address.isNullOrEmpty()) {
+            Either.Left(DataError.CacheMissError)
+        } else {
+            Either.Right(address)
+        }
     }
 
     fun setLocationAddress(hexIndex: String, address: String) {
@@ -175,7 +178,7 @@ class CacheService(
     }
 
     fun getUserId(): String {
-        return preferences.getString(KEY_USER_ID, String.empty()) ?: String.empty()
+        return preferences.getString(KEY_USER_ID, null) ?: String.empty()
     }
 
     fun getForecast(deviceId: String): Either<Failure, List<WeatherData>> {
@@ -190,6 +193,10 @@ class CacheService(
 
     fun setForecast(deviceId: String, forecast: List<WeatherData>) {
         this.forecasts[deviceId] = TimedForecastData(forecast)
+    }
+
+    fun clearForecast() {
+        this.forecasts.clear()
     }
 
     fun getSearchSuggestions(query: String): Either<Failure, List<SearchSuggestion>> {
@@ -208,18 +215,12 @@ class CacheService(
         locations[suggestion.id] = location
     }
 
-    fun setWalletWarningDismissTimestamp() {
-        preferences.edit()
-            .putLong(KEY_WALLET_WARNING_DISMISSED_TIMESTAMP, System.currentTimeMillis())
-            .apply()
+    fun setWalletWarningDismissTimestamp(timestamp: Long) {
+        preferences.edit().putLong(KEY_WALLET_WARNING_DISMISSED_TIMESTAMP, timestamp).apply()
     }
 
     fun getWalletWarningDismissTimestamp(): Long {
         return preferences.getLong(KEY_WALLET_WARNING_DISMISSED_TIMESTAMP, 0L)
-    }
-
-    fun clearForecast() {
-        this.forecasts.clear()
     }
 
     fun setDeviceLastOtaVersion(key: String, lastOtaVersion: String) {
@@ -227,7 +228,7 @@ class CacheService(
     }
 
     fun getDeviceLastOtaVersion(key: String): Either<Failure, String> {
-        val lastOtaVersion = preferences.getString(key, String.empty())
+        val lastOtaVersion = preferences.getString(key, null)
         return if (lastOtaVersion.isNullOrEmpty()) {
             Either.Left(DataError.CacheMissError)
         } else {
@@ -235,8 +236,12 @@ class CacheService(
         }
     }
 
-    fun setDeviceLastOtaTimestamp(key: String) {
-        preferences.edit().putLong(key, System.currentTimeMillis()).apply()
+    fun setDeviceLastOtaTimestamp(key: String, timestamp: Long) {
+        preferences.edit().putLong(key, timestamp).apply()
+    }
+
+    fun getDeviceLastOtaTimestamp(key: String): Long {
+        return preferences.getLong(key, 0L)
     }
 
     fun getDevicesSortFilterOptions(): List<String> {
@@ -254,10 +259,6 @@ class CacheService(
         }.apply()
     }
 
-    fun getDeviceLastOtaTimestamp(key: String): Long {
-        return preferences.getLong(key, 0L)
-    }
-
     fun removeDeviceOfWidget(key: String) {
         preferences.edit().remove(key).apply()
     }
@@ -267,7 +268,7 @@ class CacheService(
     }
 
     fun getWidgetDevice(key: String): Either<Failure, String> {
-        val deviceId = preferences.getString(key, String.empty())
+        val deviceId = preferences.getString(key, null)
         return if (deviceId.isNullOrEmpty()) {
             Either.Left(DataError.CacheMissError)
         } else {
@@ -276,7 +277,7 @@ class CacheService(
     }
 
     fun getWidgetIds(): Either<Failure, List<String>> {
-        val ids = preferences.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, setOf())
+        val ids = preferences.getStringSet(KEY_CURRENT_WEATHER_WIDGET_IDS, null)
         return if (ids.isNullOrEmpty()) {
             Either.Left(DataError.CacheMissError)
         } else {
@@ -345,6 +346,12 @@ class CacheService(
         okHttpCache.evictAll()
         encryptedPreferences.edit().clear().apply()
         clearUserPreferences()
+    }
+
+    fun isCacheEmpty(): Boolean {
+        return walletAddress == null && user == null && forecasts.isEmpty()
+            && suggestions.isEmpty() && locations.isEmpty() && followedStationsIds.isEmpty()
+            && userStationsIds.isEmpty()
     }
 
     /**
