@@ -56,12 +56,16 @@ class RemoteBannersDataSourceTest : BehaviorSpec({
         every {
             remoteConfig.getString(RemoteBannersDataSourceImpl.INFO_BANNER_MESSAGE)
         } returns message
-        every { remoteConfig.getString(RemoteBannersDataSourceImpl.INFO_BANNER_URL) } returns url
+        every {
+            remoteConfig.getString(RemoteBannersDataSourceImpl.INFO_BANNER_ACTION_URL)
+        } returns url
         every {
             remoteConfig.getString(RemoteBannersDataSourceImpl.INFO_BANNER_ACTION_LABEL)
         } returns actionLabel
         every { remoteConfig.getBoolean(RemoteBannersDataSourceImpl.INFO_BANNER_SHOW) } returns true
-        every { remoteConfig.getBoolean(RemoteBannersDataSourceImpl.INFO_BUTTON_SHOW) } returns true
+        every {
+            remoteConfig.getBoolean(RemoteBannersDataSourceImpl.INFO_BANNER_ACTION_SHOW)
+        } returns true
         every {
             remoteConfig.getBoolean(RemoteBannersDataSourceImpl.INFO_BANNER_DISMISSABLE)
         } returns true

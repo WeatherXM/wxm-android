@@ -27,11 +27,11 @@ class RemoteBannersDataSourceImpl(
         const val INFO_BANNER_ID = "info_banner_id"
         const val INFO_BANNER_TITLE = "info_banner_title"
         const val INFO_BANNER_MESSAGE = "info_banner_message"
-        const val INFO_BANNER_URL = "info_banner_url"
+        const val INFO_BANNER_ACTION_URL = "info_banner_action_url"
         const val INFO_BANNER_ACTION_LABEL = "info_banner_action_label"
         const val INFO_BANNER_SHOW = "info_banner_show"
         const val INFO_BANNER_DISMISSABLE = "info_banner_dismissable"
-        const val INFO_BUTTON_SHOW = "info_button_show"
+        const val INFO_BANNER_ACTION_SHOW = "info_banner_action_show"
     }
 
     override fun getSurvey(): Survey? {
@@ -68,9 +68,9 @@ class RemoteBannersDataSourceImpl(
                 id = id,
                 title = firebaseRemoteConfig.getString(INFO_BANNER_TITLE),
                 message = firebaseRemoteConfig.getString(INFO_BANNER_MESSAGE),
-                url = firebaseRemoteConfig.getString(INFO_BANNER_URL),
+                url = firebaseRemoteConfig.getString(INFO_BANNER_ACTION_URL),
                 actionLabel = firebaseRemoteConfig.getString(INFO_BANNER_ACTION_LABEL),
-                showActionButton = firebaseRemoteConfig.getBoolean(INFO_BUTTON_SHOW),
+                showActionButton = firebaseRemoteConfig.getBoolean(INFO_BANNER_ACTION_SHOW),
                 showCloseButton = firebaseRemoteConfig.getBoolean(INFO_BANNER_DISMISSABLE)
             )
         }
