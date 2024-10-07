@@ -12,7 +12,7 @@ import com.weatherxm.databinding.ListItemDeviceRewardsBoostBinding
 import com.weatherxm.ui.common.DeviceTotalRewardsBoost
 import com.weatherxm.ui.common.visible
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
-import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.NumberUtils.formatTokens
 import timber.log.Timber
 
 class DeviceRewardsBoostAdapter :

@@ -1,7 +1,7 @@
 package com.weatherxm.util
 
 import android.content.SharedPreferences
-import com.weatherxm.util.Weather.EMPTY_VALUE
+import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import com.weatherxm.util.Weather.getDecimalsPrecipitation
 import com.weatherxm.util.Weather.getDecimalsPressure
 import com.weatherxm.util.Weather.getFormattedPrecipitation
@@ -160,14 +160,14 @@ suspend fun BehaviorSpecWhenContainerScope.testSolarRadiation(expectedValue: Flo
 
 suspend fun BehaviorSpecWhenContainerScope.testPressure(
     expectedUnit: String,
-    expectedValue: Float
+    expectedValue: String
 ) {
     then("it should return the value with the $expectedUnit unit") {
         getFormattedPressure(1000.35f) shouldBe "$expectedValue$expectedUnit"
     }
     and("unit is NOT included") {
         then("it should return the value without the unit") {
-            getFormattedPressure(1000.35f, false) shouldBe "$expectedValue"
+            getFormattedPressure(1000.35f, false) shouldBe expectedValue
         }
     }
     and("we should ignore converting the value") {

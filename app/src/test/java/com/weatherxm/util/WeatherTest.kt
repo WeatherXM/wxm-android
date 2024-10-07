@@ -17,6 +17,8 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
+import java.text.NumberFormat
+import java.util.Locale
 
 class WeatherTest : KoinTest, BehaviorSpec({
 
@@ -26,6 +28,9 @@ class WeatherTest : KoinTest, BehaviorSpec({
                 module {
                     single { resources }
                     single { sharedPref }
+                    single<NumberFormat> {
+                        NumberFormat.getInstance(Locale.US)
+                    }
                 }
             )
         }
@@ -149,11 +154,11 @@ class WeatherTest : KoinTest, BehaviorSpec({
             }
             When("value is not null") {
                 and("is in hPa") {
-                    testPressure("hPa", 1000.4F)
+                    testPressure("hPa", "1,000.4")
                 }
                 and("unit is in inHg") {
                     every { sharedPref.getString("key_pressure_preference", "hPa") } returns "inHg"
-                    testPressure("inHg", 29.54F)
+                    testPressure("inHg", "29.54")
                 }
             }
         }

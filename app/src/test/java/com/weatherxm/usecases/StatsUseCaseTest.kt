@@ -1,7 +1,6 @@
 package com.weatherxm.usecases
 
 import android.icu.text.CompactDecimalFormat
-import android.icu.text.NumberFormat
 import android.text.format.DateFormat
 import com.github.mikephil.charting.data.Entry
 import com.weatherxm.TestConfig.context
@@ -9,8 +8,8 @@ import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
-import com.weatherxm.data.models.Connectivity
 import com.weatherxm.data.HOUR_FORMAT_24H
+import com.weatherxm.data.models.Connectivity
 import com.weatherxm.data.models.NetworkStatsContracts
 import com.weatherxm.data.models.NetworkStatsCustomers
 import com.weatherxm.data.models.NetworkStatsResponse
@@ -32,9 +31,11 @@ import org.koin.core.context.stopKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.KoinTest
+import java.text.NumberFormat
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class StatsUseCaseTest : KoinTest, BehaviorSpec({
     val repo = mockk<StatsRepository>()
@@ -98,15 +99,13 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
                     mockk<CompactDecimalFormat>()
                 }
                 single<NumberFormat> {
-                    mockk<NumberFormat>()
+                    NumberFormat.getInstance(Locale.US)
                 }
             })
         }
 
         every { DateFormat.is24HourFormat(context) } returns true
-
         every { NumberUtils.compactNumber(any()) } returns "1"
-        every { NumberUtils.formatNumber(any()) } returns "1"
     }
 
     context("Get Network Stats") {
@@ -138,26 +137,26 @@ class StatsUseCaseTest : KoinTest, BehaviorSpec({
                         it.rewardsEntries[1].equalTo(Entry(1F, 100000F)) shouldBe true
                         it.rewardsStartDate shouldBe "Jun 26"
                         it.rewardsEndDate shouldBe "Jun 27"
-                        it.rewardsAvgMonthly shouldBe "1"
+                        it.rewardsAvgMonthly shouldBe "500,135"
                         it.totalSupply shouldBe 100000000
                         it.circulatingSupply shouldBe 5000000
                         it.lastTxHashUrl shouldBe "testTxHash"
                         it.tokenUrl shouldBe "testTokenUrl"
                         it.rewardsUrl shouldBe "testRewardsUrl"
-                        it.totalStations shouldBe "1"
+                        it.totalStations shouldBe "100"
                         it.totalStationStats shouldBe listOf(
-                            NetworkStationStats("test", "test", 50.0, "1"),
-                            NetworkStationStats("test", "test", 50.0, "1")
+                            NetworkStationStats("test", "test", 50.0, "50"),
+                            NetworkStationStats("test", "test", 50.0, "50")
                         )
-                        it.claimedStations shouldBe "1"
+                        it.claimedStations shouldBe "100"
                         it.claimedStationStats shouldBe listOf(
-                            NetworkStationStats("test", "test", 60.0, "1"),
-                            NetworkStationStats("test", "test", 40.0, "1")
+                            NetworkStationStats("test", "test", 60.0, "60"),
+                            NetworkStationStats("test", "test", 40.0, "40")
                         )
-                        it.activeStations shouldBe "1"
+                        it.activeStations shouldBe "100"
                         it.activeStationStats shouldBe listOf(
-                            NetworkStationStats("test", "test", 40.0, "1"),
-                            NetworkStationStats("test", "test", 60.0, "1")
+                            NetworkStationStats("test", "test", 40.0, "40"),
+                            NetworkStationStats("test", "test", 60.0, "60")
                         )
                         it.lastUpdated shouldBe
                             lastDate?.withZoneSameInstant(ZoneId.systemDefault())

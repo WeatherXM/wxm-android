@@ -18,7 +18,7 @@ import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.show
 import com.weatherxm.ui.common.visible
-import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.initRewardsBreakdownChart
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

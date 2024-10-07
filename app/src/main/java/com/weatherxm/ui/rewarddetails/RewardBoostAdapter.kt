@@ -12,7 +12,7 @@ import com.weatherxm.databinding.ListItemRewardBoostBinding
 import com.weatherxm.ui.common.loadImage
 import com.weatherxm.ui.common.setBoostFallbackBackground
 import com.weatherxm.ui.common.visible
-import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.NumberUtils.formatTokens
 
 class RewardBoostAdapter(
     private val imageLoader: ImageLoader,
