@@ -1,6 +1,7 @@
 package com.weatherxm.service
 
 import android.Manifest.permission.POST_NOTIFICATIONS
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -21,12 +22,17 @@ import com.weatherxm.ui.common.Contracts.ARG_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_URL
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.deeplinkrouteractivity.DeepLinkRouterActivity
+import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.hasPermission
 import timber.log.Timber
 import kotlin.random.Random
 
 class MessagingService : FirebaseMessagingService() {
 
+    /**
+     * Suppress InlinedApi as we check for API level before using it through AndroidBuildInfo.sdkInt
+     */
+    @SuppressLint("InlinedApi")
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Timber.d("From: ${remoteMessage.from}")
 
@@ -35,7 +41,7 @@ class MessagingService : FirebaseMessagingService() {
             Timber.d("Message Data payload: ${remoteMessage.data}")
             Timber.d("Message Notification Body: ${it.body}")
 
-            val showNotification = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val showNotification = if (AndroidBuildInfo.sdkInt >= Build.VERSION_CODES.TIRAMISU) {
                 hasPermission(POST_NOTIFICATIONS)
             } else {
                 NotificationManagerCompat.from(this).areNotificationsEnabled()
@@ -60,12 +66,16 @@ class MessagingService : FirebaseMessagingService() {
         RefreshFcmApiWorker.initAndRefreshToken(applicationContext, token)
     }
 
+    /**
+     * Suppress NewApi as we check for API level before using it through AndroidBuildInfo.sdkInt
+     */
+    @SuppressLint("NewApi")
     private fun handleNotification(remoteMessage: RemoteMessage, context: Context) {
         val type =
             RemoteMessageType.parse(remoteMessage.data.getOrDefault(ARG_TYPE, String.empty()))
 
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (AndroidBuildInfo.sdkInt >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 type.id, type.publicName, NotificationManager.IMPORTANCE_DEFAULT
             )

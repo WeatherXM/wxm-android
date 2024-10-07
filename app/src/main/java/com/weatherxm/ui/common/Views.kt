@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Rect
 import android.graphics.Typeface
-import android.os.Build
 import android.os.Build.VERSION_CODES.TIRAMISU
 import android.os.Bundle
 import android.os.Parcelable
@@ -55,6 +54,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.tabs.TabLayout
 import com.weatherxm.R
+import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Weather.getWeatherAnimation
 import dev.chrisbanes.insetter.applyInsetter
@@ -98,7 +98,7 @@ fun Fragment.classSimpleName(): String {
 // https://stackoverflow.com/questions/76614322/boolean-java-lang-class-isinterface-on-a-null-object-reference
 inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? {
     return this.extras?.let {
-        if (Build.VERSION.SDK_INT >= TIRAMISU) {
+        if (AndroidBuildInfo.sdkInt >= TIRAMISU) {
             BundleCompat.getParcelable(it, key, T::class.java)
         } else {
             @Suppress("DEPRECATION") getParcelableExtra(key) as? T
@@ -108,7 +108,7 @@ inline fun <reified T : Parcelable> Intent.parcelable(key: String): T? {
 
 // https://stackoverflow.com/questions/76614322/boolean-java-lang-class-isinterface-on-a-null-object-reference
 inline fun <reified T : Parcelable> Bundle.parcelable(key: String): T? =
-    if (Build.VERSION.SDK_INT >= TIRAMISU) {
+    if (AndroidBuildInfo.sdkInt >= TIRAMISU) {
         BundleCompat.getParcelable(this, key, T::class.java)
     } else {
         @Suppress("DEPRECATION") getParcelable(key) as? T

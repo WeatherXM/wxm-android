@@ -5,14 +5,15 @@ import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.Manifest.permission.BLUETOOTH_CONNECT
 import android.Manifest.permission.BLUETOOTH_SCAN
 import android.Manifest.permission.POST_NOTIFICATIONS
-import android.os.Build
+import android.annotation.SuppressLint
 import android.os.Build.VERSION_CODES.S
 import android.os.Build.VERSION_CODES.TIRAMISU
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.weatherxm.R
-import com.weatherxm.ui.Navigator
 import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.ui.Navigator
+import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.checkPermissionsAndThen
 import com.weatherxm.util.hasPermission
 import com.weatherxm.util.permissionsBuilder
@@ -23,8 +24,12 @@ open class BaseActivity : AppCompatActivity(), BaseInterface {
     override val navigator: Navigator by inject()
     override var snackbar: Snackbar? = null
 
+    /**
+     * Suppress InlinedApi as we check for API level before using it through AndroidBuildInfo.sdkInt
+     */
+    @SuppressLint("InlinedApi")
     protected fun requestToEnableBluetooth(onGranted: () -> Unit, onDenied: () -> Unit) {
-        if (Build.VERSION.SDK_INT >= S) {
+        if (AndroidBuildInfo.sdkInt >= S) {
             checkPermissionsAndThen(
                 permissions = arrayOf(BLUETOOTH_CONNECT),
                 rationaleTitle = getString(R.string.permission_bluetooth_title),
@@ -37,8 +42,12 @@ open class BaseActivity : AppCompatActivity(), BaseInterface {
         }
     }
 
+    /**
+     * Suppress InlinedApi as we check for API level before using it through AndroidBuildInfo.sdkInt
+     */
+    @SuppressLint("InlinedApi")
     protected fun requestBluetoothPermissions(onGranted: () -> Unit, onDenied: () -> Unit) {
-        if (Build.VERSION.SDK_INT >= S) {
+        if (AndroidBuildInfo.sdkInt >= S) {
             checkPermissionsAndThen(
                 permissions = arrayOf(BLUETOOTH_SCAN, BLUETOOTH_CONNECT),
                 rationaleTitle = getString(R.string.permission_bluetooth_title),
@@ -57,8 +66,12 @@ open class BaseActivity : AppCompatActivity(), BaseInterface {
         }
     }
 
+    /**
+     * Suppress InlinedApi as we check for API level before using it through AndroidBuildInfo.sdkInt
+     */
+    @SuppressLint("InlinedApi")
     protected fun requestNotificationsPermissions() {
-        if (!hasPermission(POST_NOTIFICATIONS) && Build.VERSION.SDK_INT >= TIRAMISU) {
+        if (!hasPermission(POST_NOTIFICATIONS) && AndroidBuildInfo.sdkInt >= TIRAMISU) {
             permissionsBuilder(permissions = arrayOf(POST_NOTIFICATIONS)).build().send()
         }
     }

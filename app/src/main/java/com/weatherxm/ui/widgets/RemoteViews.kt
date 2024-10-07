@@ -19,6 +19,7 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.devicedetails.DeviceDetailsActivity
 import com.weatherxm.ui.login.LoginActivity
 import com.weatherxm.ui.widgets.selectstation.SelectStationActivity
+import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedTime
 import com.weatherxm.util.Weather
@@ -106,7 +107,7 @@ fun RemoteViews.onDevice(
 
     val pendingIntent: PendingIntent = TaskStackBuilder.create(context).run {
         addNextIntentWithParentStack(deviceDetailsActivity)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (AndroidBuildInfo.sdkInt >= Build.VERSION_CODES.S) {
             getPendingIntent(
                 appWidgetId,
                 PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE
