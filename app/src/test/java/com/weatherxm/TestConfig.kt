@@ -4,14 +4,16 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.location.Geocoder
 import android.text.format.DateFormat
-import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.TestUtils.retrofitResponse
+import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.network.ErrorResponse
+import com.weatherxm.data.services.CacheService.Companion.KEY_ANALYTICS
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRECIP
 import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
+import com.weatherxm.data.services.CacheService.Companion.KEY_THEME
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
 import com.weatherxm.util.Resources
@@ -105,6 +107,10 @@ object TestConfig : AbstractProjectConfig() {
                     any() as String
                 )
             } returns "Boost details description"
+            every { resources.getString(KEY_ANALYTICS) } returns "google_analytics"
+            every { resources.getString(R.string.system_value) } returns "system_value"
+            every { resources.getString(KEY_THEME) } returns "theme"
+            every { sharedPref.getString("theme", "system_value") } returns "system_value"
         }
 
         override suspend fun afterProject() {

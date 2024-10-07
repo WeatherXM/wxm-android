@@ -3,7 +3,7 @@ package com.weatherxm.data.datasource
 import com.weatherxm.data.services.CacheService
 
 interface UserPreferenceDataSource {
-    fun getAnalyticsOptInTimestamp(): Long
+    fun getAnalyticsDecisionTimestamp(): Long
     fun setAnalyticsEnabled(enabled: Boolean)
     fun getDevicesSortFilterOptions(): List<String>
     fun setDevicesSortFilterOptions(sortOrder: String, filter: String, groupBy: String)
@@ -14,13 +14,13 @@ interface UserPreferenceDataSource {
 class UserPreferenceDataSourceImpl(
     private val cacheService: CacheService
 ) : UserPreferenceDataSource {
-    override fun getAnalyticsOptInTimestamp(): Long {
-        return cacheService.getAnalyticsOptInTimestamp()
+    override fun getAnalyticsDecisionTimestamp(): Long {
+        return cacheService.getAnalyticsDecisionTimestamp()
     }
 
     override fun setAnalyticsEnabled(enabled: Boolean) {
         cacheService.setAnalyticsEnabled(enabled)
-        cacheService.setAnalyticsEnabledTimestamp()
+        cacheService.setAnalyticsDecisionTimestamp(System.currentTimeMillis())
     }
 
     override fun getDevicesSortFilterOptions(): List<String> {
@@ -32,7 +32,7 @@ class UserPreferenceDataSourceImpl(
     }
 
     override fun setWalletWarningDismissTimestamp() {
-        cacheService.setWalletWarningDismissTimestamp()
+        cacheService.setWalletWarningDismissTimestamp(System.currentTimeMillis())
     }
 
     override fun getWalletWarningDismissTimestamp(): Long {

@@ -36,7 +36,7 @@ class DeviceOTADataSourceTest : BehaviorSpec({
     beforeSpec {
         every { firmware.bytes() } returns bytes
         coJustRun { cacheService.setDeviceLastOtaVersion(otaVersionCacheKey, otaVersion) }
-        coJustRun { cacheService.setDeviceLastOtaTimestamp(otaTimestampCacheKey) }
+        coJustRun { cacheService.setDeviceLastOtaTimestamp(otaTimestampCacheKey, any()) }
         every { cacheService.getDeviceLastOtaTimestamp(otaTimestampCacheKey) } returns timestamp
     }
 
@@ -82,7 +82,7 @@ class DeviceOTADataSourceTest : BehaviorSpec({
                 then("ensure that the SET takes place in the cache") {
                     datasource.setDeviceLastOtaTimestamp(deviceId)
                     verify(exactly = 1) {
-                        cacheService.setDeviceLastOtaTimestamp(otaTimestampCacheKey)
+                        cacheService.setDeviceLastOtaTimestamp(otaTimestampCacheKey, any())
                     }
                 }
             }
