@@ -29,9 +29,9 @@ import androidx.compose.ui.unit.sp
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.RewardsTimestampScore
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsRewardsBinding
 import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.invisible
@@ -39,7 +39,7 @@ import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
-import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.Rewards.getRewardScoreColor
 import com.weatherxm.util.getFirstLetter
 import org.koin.androidx.viewmodel.ext.android.activityViewModel

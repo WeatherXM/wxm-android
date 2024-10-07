@@ -2,12 +2,29 @@ package com.weatherxm.util
 
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
+import java.text.NumberFormat
+import java.util.Locale
 
 class ChartsAxisFormattersTest : BehaviorSpec({
     val times = mutableListOf("12:00", "13:00", "14:00", "15:00")
     val xAxisFormatter = CustomXAxisFormatter(times)
     val yAxisFormatter = CustomYAxisFormatter()
     val yAxisFormatterWithDecimals = CustomYAxisFormatter(1)
+
+    beforeSpec {
+        startKoin {
+            modules(
+                module {
+                    single<NumberFormat> {
+                        NumberFormat.getInstance(Locale.US)
+                    }
+                }
+            )
+        }
+    }
 
     context("Use custom X axis formatter") {
         given("A list of times") {
@@ -24,12 +41,12 @@ class ChartsAxisFormattersTest : BehaviorSpec({
             When("it is less than 10000") {
                 and("The formatter does not support decimals") {
                     then("it should return the correct value") {
-                        yAxisFormatter.getAxisLabel(1000.65F, null) shouldBe "1001"
+                        yAxisFormatter.getAxisLabel(1000.65F, null) shouldBe "1,001"
                     }
                 }
                 and("The formatter supports decimals") {
                     then("it should return the correct value") {
-                        yAxisFormatterWithDecimals.getAxisLabel(1000.65F, null) shouldBe "1000.7"
+                        yAxisFormatterWithDecimals.getAxisLabel(1000.65F, null) shouldBe "1,000.7"
                     }
                 }
             }
@@ -39,5 +56,9 @@ class ChartsAxisFormattersTest : BehaviorSpec({
                 }
             }
         }
+    }
+
+    afterSpec {
+        stopKoin()
     }
 })

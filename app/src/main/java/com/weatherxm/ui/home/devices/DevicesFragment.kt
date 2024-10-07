@@ -14,12 +14,12 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.InfoBanner
-import com.weatherxm.ui.common.Resource
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.FragmentDevicesBinding
 import com.weatherxm.ui.common.BundleName
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.DevicesRewards
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
@@ -30,7 +30,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.home.HomeViewModel
-import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.NumberUtils.formatTokens
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class DevicesFragment : BaseFragment(), DeviceListener {

@@ -10,10 +10,10 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.appcompat.content.res.AppCompatResources
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Status
 import com.weatherxm.data.models.User
 import com.weatherxm.databinding.FragmentProfileBinding
 import com.weatherxm.ui.common.Contracts.ARG_TOKEN_CLAIMED_AMOUNT
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
@@ -25,8 +25,8 @@ import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.home.HomeActivity
 import com.weatherxm.ui.home.HomeViewModel
 import com.weatherxm.util.Mask
-import com.weatherxm.util.Rewards.formatTokens
-import com.weatherxm.util.Rewards.weiToETH
+import com.weatherxm.util.NumberUtils.formatTokens
+import com.weatherxm.util.NumberUtils.weiToETH
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
