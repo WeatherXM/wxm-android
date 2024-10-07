@@ -20,6 +20,7 @@ class AnalyticsOptInActivity : BaseActivity() {
 
         binding.message.setHtml(R.string.google_analytics_explanation_message)
 
+        
         binding.deny.setOnClickListener {
             model.setAnalyticsEnabled(false)
             navigator.showHome(this)
