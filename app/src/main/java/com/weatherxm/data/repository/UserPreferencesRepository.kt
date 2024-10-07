@@ -16,7 +16,7 @@ class UserPreferencesRepositoryImpl(
 ) : UserPreferencesRepository {
 
     override fun shouldShowAnalyticsOptIn(): Boolean {
-        return datasource.getAnalyticsOptInTimestamp() == 0L
+        return datasource.getAnalyticsDecisionTimestamp() == 0L
     }
 
     override fun setAnalyticsEnabled(enabled: Boolean) {

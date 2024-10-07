@@ -13,12 +13,14 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.slot
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
 class GeocoderCompatTest : BehaviorSpec({
     val address = mockk<Address>()
+    val listenerSlot = slot<Geocoder.GeocodeListener>()
 
     beforeSpec {
         startKoin {
@@ -72,10 +74,25 @@ class GeocoderCompatTest : BehaviorSpec({
                     33
                 )
                 When("Geocoder does NOT return an address") {
-                    // TODO: Handle API 33 in Geocoding
+                    every {
+                        geocoder.getFromLocation(0.0, 0.0, 1, capture(listenerSlot))
+                    } answers {
+                        listenerSlot.captured.onGeocode(listOf())
+                    }
+                    then("return a NoGeocodedAddressError") {
+                        getFromLocation(0.0, 0.0) shouldBe
+                            Either.Left(Failure.GeocoderError.NoGeocodedAddressError)
+                    }
                 }
                 When("Geocoder returns an address") {
-                    // TODO: Handle API 33 in Geocoding
+                    every {
+                        geocoder.getFromLocation(0.0, 0.0, 1, capture(listenerSlot))
+                    } answers {
+                        listenerSlot.captured.onGeocode(listOf(address))
+                    }
+                    then("return that address") {
+                        getFromLocation(0.0, 0.0).isSuccess(address)
+                    }
                 }
             }
         }
