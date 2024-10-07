@@ -21,7 +21,6 @@ import org.koin.dsl.module
 class GeocoderCompatTest : BehaviorSpec({
     val address = mockk<Address>()
     val listenerSlot = slot<Geocoder.GeocodeListener>()
-    val errorMessage = "errorMessage"
 
     beforeSpec {
         startKoin {
