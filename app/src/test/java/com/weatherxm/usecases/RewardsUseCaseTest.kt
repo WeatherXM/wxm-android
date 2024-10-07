@@ -1,7 +1,6 @@
 package com.weatherxm.usecases
 
 import android.icu.text.CompactDecimalFormat
-import android.icu.text.NumberFormat
 import android.text.format.DateFormat
 import com.github.mikephil.charting.data.Entry
 import com.weatherxm.R
@@ -13,6 +12,8 @@ import com.weatherxm.TestUtils.isEqual
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
+import com.weatherxm.data.DECIMAL_FORMAT_TOKENS
+import com.weatherxm.data.THOUSANDS_GROUPING_SIZE
 import com.weatherxm.data.models.BoostReward
 import com.weatherxm.data.models.BoostRewardDetails
 import com.weatherxm.data.models.BoostRewardMetadata
@@ -50,6 +51,9 @@ import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import java.math.RoundingMode
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -188,7 +192,7 @@ class RewardsUseCaseTest : BehaviorSpec({
                         mockk<CompactDecimalFormat>()
                     }
                     single<NumberFormat> {
-                        mockk<NumberFormat>()
+                        NumberFormat.getInstance(Locale.getDefault())
                     }
                     single<DateTimeFormatter>(named(DATE_FORMAT_MONTH_DAY)) {
                         val usersLocaleDateFormat =
@@ -198,11 +202,17 @@ class RewardsUseCaseTest : BehaviorSpec({
                             )
                         DateTimeFormatter.ofPattern(usersLocaleDateFormat)
                     }
+                    single<DecimalFormat>(named(DECIMAL_FORMAT_TOKENS)) {
+                        DecimalFormat(DECIMAL_FORMAT_TOKENS).apply {
+                            roundingMode = RoundingMode.HALF_UP
+                            groupingSize = THOUSANDS_GROUPING_SIZE
+                            isGroupingUsed = true
+                        }
+                    }
                 }
             )
         }
         every { NumberUtils.compactNumber(any()) } returns "10"
-        every { NumberUtils.formatNumber(any()) } returns "10"
         every { context.getString(R.string.monday) } returns "Monday"
         every { context.getString(R.string.mon) } returns "Mon"
     }

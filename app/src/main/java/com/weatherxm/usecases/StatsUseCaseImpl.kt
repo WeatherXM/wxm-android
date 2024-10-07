@@ -7,6 +7,7 @@ import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.NetworkStatsStationDetails
 import com.weatherxm.data.models.NetworkStatsTimeseries
 import com.weatherxm.data.repository.StatsRepository
+import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.networkstats.NetworkStationStats
 import com.weatherxm.ui.networkstats.NetworkStats
@@ -14,7 +15,6 @@ import com.weatherxm.util.DateTimeHelper.getFormattedDate
 import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
 import com.weatherxm.util.NumberUtils.compactNumber
 import com.weatherxm.util.NumberUtils.formatNumber
-import com.weatherxm.util.Weather.EMPTY_VALUE
 import java.time.ZoneId
 
 class StatsUseCaseImpl(

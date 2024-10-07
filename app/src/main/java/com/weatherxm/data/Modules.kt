@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
 import android.content.SharedPreferences
 import android.icu.text.CompactDecimalFormat
-import android.icu.text.NumberFormat
+import android.icu.text.DecimalFormatSymbols
 import android.location.Geocoder
 import android.os.Build.VERSION.SDK_INT
 import android.text.format.DateFormat
@@ -263,6 +263,9 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
+import java.math.RoundingMode
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
@@ -274,12 +277,14 @@ const val RETROFIT_API = "RETROFIT_API"
 const val RETROFIT_AUTH = "RETROFIT_AUTH"
 const val APP_DATABASE_NAME = "WEATHERXM"
 
+const val DECIMAL_FORMAT_TOKENS = "0.00"
 const val HOUR_FORMAT_24H = "HH:mm"
 const val HOUR_FORMAT_12H_FULL = "h:mm a"
 const val HOUR_FORMAT_12H_HOUR_ONLY = "h a"
 const val DATE_FORMAT_MONTH_DAY = "d/M"
 const val DATE_FORMAT_MONTH_SHORT = "MMM d"
 const val DATE_FORMAT_FULL = "EEE d, MMM yy"
+const val THOUSANDS_GROUPING_SIZE = 3
 private const val ENCRYPTED_PREFERENCES_KEY = "ENCRYPTED_PREFERENCES_KEY"
 private const val PREFERENCES_AUTH_TOKEN = "PREFERENCES_AUTH_TOKEN"
 private const val PREFERENCES_AUTH_TOKEN_FILE = "auth_token"
@@ -836,12 +841,25 @@ private val utilities = module {
             Locale.US,
             CompactDecimalFormat.CompactStyle.SHORT
         ).apply {
+            val localizedSymbols = DecimalFormatSymbols(Locale.getDefault())
+            decimalFormatSymbols = DecimalFormatSymbols(Locale.US).apply {
+                decimalSeparator = localizedSymbols.decimalSeparator
+            }
             minimumFractionDigits = 0
             maximumFractionDigits = 1
         }
     }
     single<NumberFormat> {
-        NumberFormat.getInstance()
+        NumberFormat.getInstance(Locale.getDefault()).apply {
+            roundingMode = RoundingMode.HALF_UP
+        }
+    }
+    single<DecimalFormat>(named(DECIMAL_FORMAT_TOKENS)) {
+        DecimalFormat(DECIMAL_FORMAT_TOKENS).apply {
+            roundingMode = RoundingMode.HALF_UP
+            groupingSize = THOUSANDS_GROUPING_SIZE
+            isGroupingUsed = true
+        }
     }
     single<SearchEngine> {
         SearchEngine.createSearchEngine(SearchEngineSettings())

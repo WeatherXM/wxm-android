@@ -11,14 +11,14 @@ import com.weatherxm.data.models.Reward
 import com.weatherxm.data.models.RewardsAnnotationGroup
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.databinding.ViewDailyRewardsCardBinding
+import com.weatherxm.ui.common.Contracts.EMPTY_VALUE
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.visible
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
-import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.Rewards.getRewardIcon
 import com.weatherxm.util.Rewards.getRewardScoreColor
-import com.weatherxm.util.Weather.EMPTY_VALUE
 import org.koin.core.component.KoinComponent
 
 open class DailyRewardsCardView : LinearLayout, KoinComponent {
@@ -65,9 +65,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             context.getString(R.string.earnings_for, formattedTimestamp ?: EMPTY_VALUE)
         binding.dailyRewardTimestamp.visible(formattedTimestamp != null)
 
-        binding.reward.text = data.totalReward?.let {
-            context.getString(R.string.reward, formatTokens(it.toBigDecimal()))
-        } ?: EMPTY_VALUE
+        binding.reward.text = context.getString(R.string.reward, formatTokens(data.totalReward))
 
         binding.baseRewardIcon.setImageDrawable(
             AppCompatResources.getDrawable(context, getRewardIcon(data.baseRewardScore))
@@ -76,10 +74,8 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
         binding.baseRewardIcon.setColorFilter(
             context.getColor(getRewardScoreColor(data.baseRewardScore))
         )
-
-        binding.baseRewardScore.text = data.baseReward?.let {
-            context.getString(R.string.wxm_amount, formatTokens(it.toBigDecimal()))
-        } ?: EMPTY_VALUE
+        binding.baseRewardScore.text =
+            context.getString(R.string.wxm_amount, formatTokens(data.baseReward))
 
         if (data.totalBoostReward == null) {
             binding.boostsIcon.setImageDrawable(
@@ -94,7 +90,7 @@ open class DailyRewardsCardView : LinearLayout, KoinComponent {
             )
             binding.boostsIcon.setColor(R.color.blue)
             binding.boosts.text = context.getString(
-                R.string.wxm_amount, formatTokens(data.totalBoostReward.toBigDecimal())
+                R.string.wxm_amount, formatTokens(data.totalBoostReward)
             )
             binding.noActiveBoosts.visible(false)
             binding.boosts.visible(true)

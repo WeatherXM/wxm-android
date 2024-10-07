@@ -12,7 +12,6 @@ import com.weatherxm.data.models.Reward
 import com.weatherxm.data.models.RewardDetails
 import com.weatherxm.data.models.RewardsAnnotationGroup
 import com.weatherxm.data.models.SeverityLevel
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityRewardDetailsBinding
 import com.weatherxm.ui.common.AnnotationGroupCode
 import com.weatherxm.ui.common.AnnotationGroupCode.LOCATION_NOT_VERIFIED
@@ -20,6 +19,7 @@ import com.weatherxm.ui.common.AnnotationGroupCode.NO_LOCATION_DATA
 import com.weatherxm.ui.common.AnnotationGroupCode.USER_RELOCATION_PENALTY
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.Contracts.ARG_REWARD
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
@@ -29,7 +29,7 @@ import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.util.DateTimeHelper.getFormattedDate
-import com.weatherxm.util.Rewards.formatTokens
+import com.weatherxm.util.NumberUtils.formatTokens
 import com.weatherxm.util.Rewards.isPoL
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
