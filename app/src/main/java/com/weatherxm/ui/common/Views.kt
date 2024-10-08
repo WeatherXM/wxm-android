@@ -260,7 +260,36 @@ fun Chip.setIcon(@DrawableRes drawable: Int) {
     this.chipIcon = AppCompatResources.getDrawable(context, drawable)
 }
 
-fun Chip.setErrorChip() {
+fun Chip.errorChip() {
+    setChipBackgroundColorResource(R.color.errorTint)
+    setIcon(R.drawable.ic_warning_hex_filled)
+    setChipIconTintResource(R.color.error)
+}
+
+fun Chip.warningChip() {
+    setChipBackgroundColorResource(R.color.warningTint)
+    setIcon(R.drawable.ic_warning_hex_filled)
+    setChipIconTintResource(R.color.warning)
+}
+
+fun Chip.updateRequiredChip() {
+    text = context.getString(R.string.update_required)
+    setChipBackgroundColorResource(R.color.warningTint)
+    setIcon(R.drawable.ic_update_alt)
+    chipIconSize = 0F
+    setChipIconTintResource(R.color.warning)
+}
+
+fun Chip.lowBatteryChip() {
+    text = context.getString(R.string.low_battery)
+    setChipBackgroundColorResource(R.color.warningTint)
+    chipIconSize = 0F
+    setIcon(R.drawable.ic_low_battery)
+    setChipIconTintResource(R.color.warning)
+}
+
+fun Chip.offlineChip() {
+    text = context.getString(R.string.station_offline)
     setChipBackgroundColorResource(R.color.errorTint)
     setIcon(R.drawable.ic_error_hex_filled)
     setChipIconTintResource(R.color.error)
