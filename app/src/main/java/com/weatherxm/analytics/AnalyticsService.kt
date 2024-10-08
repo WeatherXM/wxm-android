@@ -226,8 +226,6 @@ interface AnalyticsService {
         INFO_CELL_POSITION("info_cell_position"),
         INFO_CELL_CAPACITY("info_cell_capacity"),
         STATION_OFFLINE("station_offline"),
-        VIEW_ALL("View all"),
-        MULTIPLE_ISSUES("multiple_issue"),
         STATION_DETAILS_CHIP("Station Details Chip"),
         OTA_UPDATE_ID("ota_update"),
         LOW_BATTERY_ID("low_battery"),
