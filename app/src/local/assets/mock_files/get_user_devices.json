@@ -116,6 +116,7 @@
         "name": "Weatherwise Wintergreen Cloud",
         "timezone": "America/New_York",
         "relation": "owned",
+        "bat_state": "low",
         "bundle": {
             "name": "h1",
             "title": "H1",
@@ -226,6 +227,7 @@
         "timezone": "America/Chicago",
         "relation": "owned",
         "label": null,
+        "bat_state": "ok",
         "bundle": {
             "name": "d1",
             "title": "D1",
@@ -239,7 +241,7 @@
             "lon": 23.730503
         },
         "attributes": {
-            "isActive": true,
+            "isActive": false,
             "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f72fffffffff",
@@ -336,6 +338,7 @@
         "timezone": "Etc/GMT",
         "label": null,
         "relation": "owned",
+        "bat_state": "ok",
         "bundle": {
             "name": "h2",
             "title": "H2",
@@ -415,6 +418,10 @@
                     "lat": 37.981262,
                     "lon": 23.730503
                 }
+            },
+            "firmware": {
+                "current": "1.0.0",
+                "assigned": "1.0.1"
             }
         },
         "current_weather": {

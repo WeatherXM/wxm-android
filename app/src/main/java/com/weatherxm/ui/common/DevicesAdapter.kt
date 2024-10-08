@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
@@ -94,7 +95,8 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             binding.status.setStatusChip(item)
             binding.bundle.setBundleChip(item)
 
-            onStationHealth(item)
+            setAlerts(item)
+            setStationHealth(item)
         }
 
         private fun setWeatherData(item: UIDevice) {
@@ -135,7 +137,53 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             )
         }
 
-        private fun onStationHealth(item: UIDevice) {
+        private fun setAlerts(item: UIDevice) {
+            if (item.alerts.isEmpty()) {
+                binding.root.strokeWidth = 0
+                binding.issueChip.visible(false)
+                return
+            }
+
+            val hasErrorSeverity = item.hasErrors()
+
+            if (hasErrorSeverity) {
+                binding.root.setCardStroke(R.color.error, 2)
+            } else {
+                binding.root.setCardStroke(R.color.warning, 2)
+            }
+
+            if (item.alerts.size > 1) {
+                if (hasErrorSeverity) {
+                    binding.issueChip.errorChip()
+                } else {
+                    binding.issueChip.warningChip()
+                }
+                binding.issueChip.text =
+                    itemView.context.getString(R.string.issues, item.alerts.size)
+            } else {
+                when (item.alerts[0]) {
+                    DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY) -> {
+                        binding.issueChip.lowBatteryChip()
+                    }
+                    DeviceAlert.createError(DeviceAlertType.OFFLINE) -> {
+                        binding.issueChip.offlineChip()
+                    }
+                    DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE) -> {
+                        binding.issueChip.updateRequiredChip()
+                        analytics.trackEventPrompt(
+                            AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+                            AnalyticsService.ParamValue.WARN.paramValue,
+                            AnalyticsService.ParamValue.VIEW.paramValue
+                        )
+                    }
+                    else -> {
+                        // Do nothing
+                    }
+                }
+            }
+        }
+
+        private fun setStationHealth(item: UIDevice) {
             // TODO: Handle it properly based on the actual UIDevice parameters
             binding.dataQuality.text = itemView.context.getString(R.string.data_quality_value, 100)
             binding.dataQualityIcon.setColor(getRewardScoreColor(100))

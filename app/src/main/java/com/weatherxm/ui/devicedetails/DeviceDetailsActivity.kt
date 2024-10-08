@@ -33,7 +33,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
-import com.weatherxm.ui.common.setErrorChip
+import com.weatherxm.ui.common.errorChip
 import com.weatherxm.ui.common.setStatusChip
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
@@ -291,7 +291,7 @@ class DeviceDetailsActivity : BaseActivity() {
 
         if (alerts.size > 1) {
             if (hasErrorSeverity) {
-                binding.alertChip.setErrorChip()
+                binding.alertChip.errorChip()
             }
             binding.alertChip.text = getString(R.string.issues, alerts.size)
             setupAlertChipClickListener(null)
