@@ -46,6 +46,7 @@ class DeviceAlertsAdapter(
             when (item.alert) {
                 DeviceAlertType.NEEDS_UPDATE -> {
                     binding.alert
+                        .icon(R.drawable.ic_update_alt)
                         .title(R.string.updated_needed_title)
                         .message(R.string.updated_needed_desc)
                         .action(itemView.context.getString(R.string.update_station_now)) {
@@ -67,6 +68,7 @@ class DeviceAlertsAdapter(
                 }
                 DeviceAlertType.LOW_BATTERY -> {
                     binding.alert
+                        .icon(R.drawable.ic_low_battery)
                         .title(R.string.low_battery)
                         .message(R.string.low_battery_desc)
                         .action(itemView.context.getString(R.string.read_more)) {
