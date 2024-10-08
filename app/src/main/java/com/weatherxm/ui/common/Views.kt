@@ -283,7 +283,7 @@ fun Chip.setStatusChip(device: UIDevice) {
     )
     when (device.isActive) {
         true -> {
-            setChipBackgroundColorResource(R.color.successTint)
+            setChipBackgroundColorResource(R.color.blueTint)
             setChipIconTintResource(R.color.success)
         }
         false -> {

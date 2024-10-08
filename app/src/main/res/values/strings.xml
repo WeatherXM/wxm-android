@@ -616,4 +616,6 @@
     <string name="base_rewards">Base Rewards</string>
     <string name="beta_rewards">Beta Rewards</string>
 
+    <!-- Station Health -->
+    <string name="data_quality_value">Data Quality %d%%</string>
 </resources>
