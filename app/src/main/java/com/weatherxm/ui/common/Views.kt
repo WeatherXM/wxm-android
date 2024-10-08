@@ -309,7 +309,7 @@ fun Chip.setBundleChip(device: UIDevice) {
 fun Chip.setStatusChip(device: UIDevice) {
     text = device.lastWeatherStationActivity?.getRelativeFormattedTime(
         fallbackIfTooSoon = context.getString(R.string.just_now)
-    )
+    ) ?: "N/A"
     when (device.isActive) {
         true -> {
             setChipBackgroundColorResource(R.color.blueTint)
