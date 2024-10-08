@@ -222,7 +222,8 @@ enum class DeviceRelation : Parcelable {
 enum class DeviceAlertType : Parcelable {
     OFFLINE,
     LOW_BATTERY,
-    NEEDS_UPDATE
+    NEEDS_UPDATE,
+    LOW_STATION_RSSI
 }
 
 @Keep

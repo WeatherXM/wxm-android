@@ -3,6 +3,7 @@ package com.weatherxm.ui.devicesettings
 import androidx.annotation.Keep
 import com.squareup.moshi.JsonClass
 import com.weatherxm.data.models.Failure
+import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.RewardSplitsData
 
 @Keep
@@ -19,15 +20,7 @@ data class UIDeviceInfo(
 data class UIDeviceInfoItem(
     val title: String,
     val value: String,
-    val action: UIDeviceAction? = null,
-    val warning: String? = null
-)
-
-@Keep
-@JsonClass(generateAdapter = true)
-data class UIDeviceAction(
-    val actionText: String,
-    val actionType: ActionType
+    val deviceAlert: DeviceAlert? = null,
 )
 
 @JsonClass(generateAdapter = true)
@@ -54,8 +47,4 @@ enum class FrequencyStatus {
     PAIR_STATION,
     CONNECT_TO_STATION,
     CHANGING_FREQUENCY
-}
-
-enum class ActionType {
-    UPDATE_FIRMWARE
 }

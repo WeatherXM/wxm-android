@@ -31,6 +31,7 @@ import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.ColorRes
@@ -375,6 +376,15 @@ fun TextView.setDisplayTimezone(timezone: String?) {
         text = context.getString(R.string.displayed_times, it)
         visible(true)
     } ?: visible(false)
+}
+
+fun TextView.clearMargins() {
+    val params: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams.WRAP_CONTENT,
+        LinearLayout.LayoutParams.WRAP_CONTENT
+    )
+    params.setMargins(0, 0, 0, 0)
+    setLayoutParams(params)
 }
 
 fun LottieAnimationView.setWeatherAnimation(animation: String?) {

@@ -11,6 +11,8 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.BatteryState
 import com.weatherxm.data.models.DeviceInfo
+import com.weatherxm.ui.common.DeviceAlert
+import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
@@ -158,7 +160,7 @@ abstract class BaseDeviceSettingsViewModel(
                 UIDeviceInfoItem(
                     resources.getString(R.string.battery_level),
                     resources.getString(R.string.battery_level_low),
-                    warning = resources.getString(R.string.battery_level_low_message)
+                    deviceAlert = DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY)
                 )
             )
         } else {
