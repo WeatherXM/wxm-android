@@ -8,13 +8,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemWidgetSelectStationBinding
+import com.weatherxm.ui.common.DeviceAlert
+import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.errorChip
+import com.weatherxm.ui.common.lowBatteryChip
+import com.weatherxm.ui.common.offlineChip
 import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
+import com.weatherxm.ui.common.updateRequiredChip
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.common.warningChip
 import com.weatherxm.util.Resources
+import com.weatherxm.util.Rewards.getRewardScoreColor
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getFormattedWindDirection
 import com.weatherxm.util.Weather.getWindDirectionDrawable
@@ -103,23 +111,21 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
 
             binding.status.setStatusChip(item)
             binding.bundle.setBundleChip(item)
+
+            setAlerts(item)
+            setStationHealth(item)
         }
 
         private fun setWeatherData(device: UIDevice) {
             binding.icon.setAnimation(Weather.getWeatherAnimation(device.currentWeather?.icon))
-            binding.temperature.text = Weather.getFormattedTemperature(
-                device.currentWeather?.temperature, 1, includeUnit = false
-            )
-            binding.temperatureUnit.text = Weather.getPreferredUnit(
-                resources.getString(CacheService.KEY_TEMPERATURE),
-                resources.getString(R.string.temperature_celsius)
-            )
-            binding.feelsLike.text = Weather.getFormattedTemperature(
-                device.currentWeather?.feelsLike, 1, includeUnit = false
-            )
-            binding.feelsLikeUnit.text = Weather.getPreferredUnit(
-                resources.getString(CacheService.KEY_TEMPERATURE),
-                resources.getString(R.string.temperature_celsius)
+            binding.temperature.setData(
+                Weather.getFormattedTemperature(
+                    device.currentWeather?.temperature, 1, includeUnit = false
+                ),
+                Weather.getPreferredUnit(
+                    itemView.context.getString(CacheService.KEY_TEMPERATURE),
+                    itemView.context.getString(R.string.temperature_celsius)
+                )
             )
             binding.humidity.setData(
                 Weather.getFormattedHumidity(
@@ -146,6 +152,51 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
                     device.currentWeather?.precipitation, includeUnit = false
                 ), Weather.getPrecipitationPreferredUnit()
             )
+        }
+
+        private fun setAlerts(item: UIDevice) {
+            if (item.alerts.isEmpty()) {
+                binding.issueChip.visible(false)
+                return
+            }
+
+            val hasErrorSeverity = item.hasErrors()
+
+            if (item.alerts.size > 1) {
+                if (hasErrorSeverity) {
+                    binding.issueChip.errorChip()
+                } else {
+                    binding.issueChip.warningChip()
+                }
+                binding.issueChip.text =
+                    itemView.context.getString(R.string.issues, item.alerts.size)
+            } else {
+                when (item.alerts[0]) {
+                    DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY) -> {
+                        binding.issueChip.lowBatteryChip()
+                    }
+                    DeviceAlert.createError(DeviceAlertType.OFFLINE) -> {
+                        binding.issueChip.offlineChip()
+                    }
+                    DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE) -> {
+                        binding.issueChip.updateRequiredChip()
+                    }
+                    else -> {
+                        // Do nothing
+                    }
+                }
+            }
+            binding.issueChip.visible(true)
+        }
+
+        private fun setStationHealth(item: UIDevice) {
+            /**
+             * STOPSHIP:
+             * TODO: Handle it properly based on the actual UIDevice parameters
+             */
+            binding.dataQuality.text = itemView.context.getString(R.string.data_quality_value, 100)
+            binding.dataQualityIcon.setColor(getRewardScoreColor(100))
+            binding.addressIcon.setColor(R.color.success)
         }
     }
 

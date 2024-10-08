@@ -150,7 +150,8 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
 
             /**
              * STOPSHIP:
-             * TODO: Include here if Data Quality is error/warning or location has error for stroke purposes
+             * TODO: Include here if Data Quality is error/warning
+             * or location has error for stroke purposes
              */
             val hasErrorSeverity = item.hasErrors()
 
