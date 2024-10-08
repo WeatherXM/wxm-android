@@ -289,7 +289,7 @@ fun Chip.lowBatteryChip() {
 }
 
 fun Chip.offlineChip() {
-    text = context.getString(R.string.station_offline)
+    text = context.getString(R.string.station_inactive)
     setChipBackgroundColorResource(R.color.errorTint)
     setIcon(R.drawable.ic_error_hex_filled)
     setChipIconTintResource(R.color.error)

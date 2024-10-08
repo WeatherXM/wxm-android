@@ -141,7 +141,7 @@
     <string name="empty_weather_stations">No stations yet?</string>
     <string name="view_explorer_map">View Explorer Map</string>
     <string name="displayed_times">All displayed times are in the Station’s timezone (%s).</string>
-    <string name="station_offline">Station Offline</string>
+    <string name="station_inactive">Station Inactive</string>
     <string name="unknown_address">Unknown Address</string>
     <string name="no_data">No Data</string>
     <string name="no_data_message">We\’re unable to show updated station data. Please make sure your station is operational and connected to the internet.</string>
@@ -551,7 +551,7 @@
     <string name="issues">%d issues</string>
     <string name="issues_detected">%d issues detected</string>
     <string name="alerts_detected">%d alerts detected</string>
-    <string name="station_offline_alert_message">The station is offline. Check that it has batteries and internet connection. If the problem persists, contact our support team.</string>
+    <string name="station_inactive_alert_message">The station is not sending weather data. Check that it has batteries and internet connection. If the problem persists, contact our support team.</string>
     <string name="update_required">Update Required</string>
     <string name="low_battery">Low Battery</string>
     <string name="low_battery_desc">Your station is reporting low battery. This may lead to data gaps at night, or in low-sunlight conditions and, eventually, lose rewards. Read more on how to replace your station batteries.</string>
