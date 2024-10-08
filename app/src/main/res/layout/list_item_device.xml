@@ -70,11 +70,13 @@
                         style="@style/Widget.WeatherXM.Chip.Status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         app:chipCornerRadius="@dimen/radius_small"
                         tools:chipBackgroundColor="@color/warningTint"
                         tools:chipIcon="@drawable/ic_update_alt"
                         tools:chipIconTint="@color/warning"
-                        tools:text="@string/update_required" />
+                        tools:text="@string/update_required"
+                        tools:visibility="visible" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/status"

@@ -86,6 +86,10 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 setWeatherData(item)
             }
 
+            /**
+             * STOPSHIP:
+             * TODO: Is this OK? Confirm it.
+             */
             binding.address.text = if (item.address.isNullOrEmpty()) {
                 itemView.context.getString(R.string.unknown_address)
             } else {
@@ -144,6 +148,10 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 return
             }
 
+            /**
+             * STOPSHIP:
+             * TODO: Include here if Data Quality is error/warning or location has error for stroke purposes
+             */
             val hasErrorSeverity = item.hasErrors()
 
             if (hasErrorSeverity) {
@@ -181,10 +189,14 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                     }
                 }
             }
+            binding.issueChip.visible(true)
         }
 
         private fun setStationHealth(item: UIDevice) {
-            // TODO: Handle it properly based on the actual UIDevice parameters
+            /**
+             * STOPSHIP:
+             * TODO: Handle it properly based on the actual UIDevice parameters
+             */
             binding.dataQuality.text = itemView.context.getString(R.string.data_quality_value, 100)
             binding.dataQualityIcon.setColor(getRewardScoreColor(100))
             binding.addressIcon.setColor(R.color.success)
