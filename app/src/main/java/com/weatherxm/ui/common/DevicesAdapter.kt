@@ -86,10 +86,6 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 setWeatherData(item)
             }
 
-            /**
-             * STOPSHIP:
-             * TODO: Is this OK? Confirm it.
-             */
             binding.address.text = if (item.address.isNullOrEmpty()) {
                 itemView.context.getString(R.string.unknown_address)
             } else {
@@ -197,6 +193,9 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             /**
              * STOPSHIP:
              * TODO: Handle it properly based on the actual UIDevice parameters
+             * 1. No Location
+             * 2. Location not verified
+             * 3. No Data
              */
             binding.dataQuality.text = itemView.context.getString(R.string.data_quality_value, 100)
             binding.dataQualityIcon.setColor(getRewardScoreColor(100))
