@@ -18,11 +18,11 @@ import com.weatherxm.ui.common.offlineChip
 import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
+import com.weatherxm.ui.common.stationHealthViews
 import com.weatherxm.ui.common.updateRequiredChip
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.warningChip
 import com.weatherxm.util.Resources
-import com.weatherxm.util.Rewards.getRewardScoreColor
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getFormattedWindDirection
 import com.weatherxm.util.Weather.getWindDirectionDrawable
@@ -113,7 +113,12 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
             binding.bundle.setBundleChip(item)
 
             setAlerts(item)
-            setStationHealth(item)
+            device.stationHealthViews(
+                itemView.context,
+                binding.dataQuality,
+                binding.dataQualityIcon,
+                binding.addressIcon
+            )
         }
 
         private fun setWeatherData(device: UIDevice) {
@@ -187,19 +192,6 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
                 }
             }
             binding.issueChip.visible(true)
-        }
-
-        private fun setStationHealth(item: UIDevice) {
-            /**
-             * STOPSHIP:
-             * TODO: Handle it properly based on the actual UIDevice parameters
-             * 1. No Location
-             * 2. Location not verified
-             * 3. No Data
-             */
-            binding.dataQuality.text = itemView.context.getString(R.string.data_quality_value, 100)
-            binding.dataQualityIcon.setColor(getRewardScoreColor(100))
-            binding.addressIcon.setColor(R.color.success)
         }
     }
 
