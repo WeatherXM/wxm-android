@@ -48,6 +48,7 @@
     <string name="other">Other:</string>
     <string name="tap_to_retry">Tap to Retry</string>
     <string name="troubleshoot_instructions_here">Troubleshoot instructions here</string>
+    <string name="you_are_owner_of_station">You are the owner of this station!</string>
 
     <!-- Permissions -->
     <string name="permission_location_title">Access to your location</string>
@@ -133,6 +134,7 @@
     <string name="no_rewards_yet">No rewards yet!</string>
 
     <!-- Weather Station(s) -->
+    <string name="latest_weather">Latest Weather</string>
     <string name="my_stations">My Stations</string>
     <string name="weather_stations">Weather Stations</string>
     <string name="add_weather_station"><![CDATA[Claim your WXM device by clicking the <b>+ button.</b>]]></string>
@@ -617,4 +619,5 @@
 
     <!-- Station Health -->
     <string name="data_quality_value">Data Quality %d%%</string>
+    <string name="station_health">Station Health</string>
 </resources>
