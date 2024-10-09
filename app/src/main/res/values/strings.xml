@@ -621,4 +621,6 @@
     <string name="data_quality_value">Data Quality %d%%</string>
     <string name="no_location">No location</string>
     <string name="station_health">Station Health</string>
+    <string name="station_health_data_quality_explanation"><![CDATA[The network’s effectiveness relies on meaningful, usable data, measured by the Quality-of-Data (QoD) score, which <b>updates daily</b>. This score motivates weather station owners to follow guidelines for optimal data quality. A station’s daily reward is tied to its QoD, calculated using an open-source algorithm that assesses data quality and provides a confidence level in the data received.]]></string>
+    <string name="station_health_location_quality_explanation"><![CDATA[It is crucial for the Network that a station stays in the same location throughout its lifetime.<br>The Proof-of-Location algorithm, which also <b>updates daily</b>, assesses the accuracy and consistency of the station’s location data, generating a confidence score for its position.]]></string>
 </resources>
