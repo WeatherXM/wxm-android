@@ -124,10 +124,6 @@ class DeviceDetailsActivity : BaseActivity() {
             updateDeviceInfo(it)
         }
 
-        model.address().observe(this) {
-            binding.address.text = it ?: getString(R.string.unknown_address)
-        }
-
         val adapter = ViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
         binding.viewPager.offscreenPageLimit = adapter.itemCount - 1
@@ -250,12 +246,6 @@ class DeviceDetailsActivity : BaseActivity() {
         } else {
             binding.status.setOnClickListener(null)
             binding.status.isClickable = false
-        }
-
-        if (device.address.isNullOrEmpty()) {
-            model.fetchAddressFromCell()
-        } else {
-            binding.address.text = device.address
         }
 
         setAlerts(device)

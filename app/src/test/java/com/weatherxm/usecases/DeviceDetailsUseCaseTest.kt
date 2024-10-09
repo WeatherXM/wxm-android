@@ -123,17 +123,6 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
         }
     }
 
-    context("Get address of a cell") {
-        given("The repository providing the address") {
-            then("return the address") {
-                coEvery {
-                    addressRepo.getAddressFromLocation(cell.index, cell.center)
-                } returns address
-                usecase.getAddressOfCell(cell) shouldBe address
-            }
-        }
-    }
-
     context("Get device rewards") {
         given("The repository providing the rewards") {
             When("it's a failure") {

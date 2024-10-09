@@ -60,7 +60,7 @@
                 app:tint="@color/darkestBlue" />
 
             <LinearLayout
-                android:id="@+id/stationHealthChips"
+                android:id="@+id/stationHealthContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
@@ -162,7 +162,7 @@
                 android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
                 android:textColor="@color/darkestBlue"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/stationHealthChips" />
+                app:layout_constraintTop_toBottomOf="@id/stationHealthContainer" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/latestWeatherContainer"
