@@ -10,7 +10,6 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemDeviceBinding
-import com.weatherxm.util.Rewards.getRewardScoreColor
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getFormattedWindDirection
 import com.weatherxm.util.Weather.getWindDirectionDrawable
@@ -96,7 +95,12 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             binding.bundle.setBundleChip(item)
 
             setAlerts(item)
-            setStationHealth(item)
+            device.stationHealthViews(
+                itemView.context,
+                binding.dataQuality,
+                binding.dataQualityIcon,
+                binding.addressIcon
+            )
         }
 
         private fun setWeatherData(item: UIDevice) {
@@ -187,19 +191,6 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 }
             }
             binding.issueChip.visible(true)
-        }
-
-        private fun setStationHealth(item: UIDevice) {
-            /**
-             * STOPSHIP:
-             * TODO: Handle it properly based on the actual UIDevice parameters
-             * 1. No Location
-             * 2. Location not verified
-             * 3. No Data
-             */
-            binding.dataQuality.text = itemView.context.getString(R.string.data_quality_value, 100)
-            binding.dataQualityIcon.setColor(getRewardScoreColor(100))
-            binding.addressIcon.setColor(R.color.success)
         }
     }
 
