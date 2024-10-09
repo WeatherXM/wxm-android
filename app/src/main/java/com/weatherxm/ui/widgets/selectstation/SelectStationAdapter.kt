@@ -193,6 +193,9 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
             /**
              * STOPSHIP:
              * TODO: Handle it properly based on the actual UIDevice parameters
+             * 1. No Location
+             * 2. Location not verified
+             * 3. No Data
              */
             binding.dataQuality.text = itemView.context.getString(R.string.data_quality_value, 100)
             binding.dataQualityIcon.setColor(getRewardScoreColor(100))
