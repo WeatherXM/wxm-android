@@ -315,12 +315,6 @@ android {
     android.testOptions {
         unitTests.all {
             it.useJUnitPlatform()
-            it.jvmArgs = listOf(
-                "--add-opens",
-                "java.base/java.lang=ALL-UNNAMED",
-                "--add-opens",
-                "java.base/java.lang.reflect=ALL-UNNAMED"
-            )
         }
     }
 

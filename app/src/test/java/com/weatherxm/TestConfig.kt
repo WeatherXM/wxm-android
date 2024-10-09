@@ -16,6 +16,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_THEME
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
+import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.Resources
 import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.listeners.AfterProjectListener
@@ -24,6 +25,7 @@ import io.kotest.core.names.DuplicateTestNameMode
 import io.kotest.core.spec.AutoScan
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import java.util.Locale
 
@@ -42,6 +44,7 @@ object TestConfig : AbstractProjectConfig() {
         override suspend fun beforeProject() {
             mockkStatic(Geocoder::class)
             mockkStatic(DateFormat::class)
+            mockkObject(AndroidBuildInfo)
             every {
                 DateFormat.getBestDateTimePattern(
                     Locale.getDefault(),

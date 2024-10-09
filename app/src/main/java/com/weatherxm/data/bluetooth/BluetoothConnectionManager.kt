@@ -27,6 +27,7 @@ import com.weatherxm.data.models.BluetoothError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.util.AndroidBuildInfo
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -172,7 +173,7 @@ class BluetoothConnectionManager(
              */
             Timber.d("[BLE Communication]: Connecting to peripheral...")
             bondStateChangedFilter.priority = SYSTEM_HIGH_PRIORITY
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (AndroidBuildInfo.sdkInt >= Build.VERSION_CODES.TIRAMISU) {
                 context.registerReceiver(
                     bondStateChangedReceiver, bondStateChangedFilter, Context.RECEIVER_EXPORTED
                 )

@@ -1,5 +1,6 @@
 package com.weatherxm.util
 
+import android.annotation.SuppressLint
 import android.location.Address
 import android.location.Geocoder
 import android.os.Build
@@ -17,6 +18,7 @@ import java.io.IOException
 object GeocoderCompat : KoinComponent {
     private val geocoder: Geocoder by inject()
 
+
     /** Max results to return */
     private const val MAX_RESULTS = 1
 
@@ -25,6 +27,7 @@ object GeocoderCompat : KoinComponent {
      * and defaults to the old Geocoder in older API versions.
      * Returns a non-null Address, or GeocoderError.
      */
+    @SuppressLint("NewApi")
     suspend fun getFromLocation(
         latitude: Double,
         longitude: Double
@@ -35,7 +38,7 @@ object GeocoderCompat : KoinComponent {
                 return GeocoderError.NoGeocoderError.left()
             }
 
-            val address = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val address = if (AndroidBuildInfo.sdkInt >= Build.VERSION_CODES.TIRAMISU) {
                 geocoder.getFromLocationApi33(latitude, longitude)
             } else {
                 geocoder.getFromLocationApi1(latitude, longitude)

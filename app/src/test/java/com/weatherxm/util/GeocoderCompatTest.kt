@@ -6,7 +6,6 @@ import android.os.Build
 import arrow.core.Either
 import com.weatherxm.TestConfig.geocoder
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.TestUtils.setStaticFieldViaReflection
 import com.weatherxm.data.models.Failure
 import com.weatherxm.util.GeocoderCompat.getFromLocation
 import io.kotest.core.spec.style.BehaviorSpec
@@ -32,7 +31,6 @@ class GeocoderCompatTest : BehaviorSpec({
                 }
             )
         }
-
     }
 
     @Suppress("DEPRECATION")
@@ -46,10 +44,8 @@ class GeocoderCompatTest : BehaviorSpec({
         }
         When("Geocoder is available") {
             every { Geocoder.isPresent() } returns true
+            every { AndroidBuildInfo.sdkInt } returns Build.VERSION_CODES.TIRAMISU - 1
             When("Build.VERSION.SDK_INT < TIRAMISU") {
-                setStaticFieldViaReflection(
-                    Build.VERSION::class.java.getDeclaredField("SDK_INT"), 30
-                )
                 When("Geocoder does NOT return an address") {
                     every {
                         geocoder.getFromLocation(any<Double>(), any<Double>(), 1)
@@ -69,10 +65,7 @@ class GeocoderCompatTest : BehaviorSpec({
                 }
             }
             When("Build.VERSION.SDK_INT >= TIRAMISU") {
-                setStaticFieldViaReflection(
-                    Build.VERSION::class.java.getDeclaredField("SDK_INT"),
-                    33
-                )
+                every { AndroidBuildInfo.sdkInt } returns Build.VERSION_CODES.TIRAMISU
                 When("Geocoder does NOT return an address") {
                     every {
                         geocoder.getFromLocation(0.0, 0.0, 1, capture(listenerSlot))

@@ -17,19 +17,20 @@ import androidx.annotation.StringRes
 import androidx.core.view.forEach
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Resource
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.FragmentClaimHeliumPairBinding
 import com.weatherxm.ui.claimdevice.helium.ClaimHeliumViewModel
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.setBluetoothDrawable
 import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.setNoDevicesFoundDrawable
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.setWarningDrawable
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.ActionDialogFragment
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.checkPermissionsAndThen
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
@@ -233,12 +234,16 @@ class ClaimHeliumPairFragment : BaseFragment() {
         binding.accessBluetoothPrompt.visible(true)
     }
 
+    /**
+     * Suppress InlinedApi as we check for API level before using it through AndroidBuildInfo.sdkInt
+     */
+    @SuppressLint("InlinedApi")
     private fun enableBluetoothAndScan() {
         bluetoothAdapter?.let {
             if (it.isEnabled) {
                 checkAndScanBleDevices()
             } else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (AndroidBuildInfo.sdkInt >= Build.VERSION_CODES.S) {
                     activity?.checkPermissionsAndThen(
                         permissions = arrayOf(BLUETOOTH_CONNECT),
                         rationaleTitle = getString(R.string.permission_bluetooth_title),
@@ -257,8 +262,12 @@ class ClaimHeliumPairFragment : BaseFragment() {
         }
     }
 
+    /**
+     * Suppress InlinedApi as we check for API level before using it through AndroidBuildInfo.sdkInt
+     */
+    @SuppressLint("InlinedApi")
     private fun checkAndScanBleDevices() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (AndroidBuildInfo.sdkInt >= Build.VERSION_CODES.S) {
             activity?.checkPermissionsAndThen(
                 permissions = arrayOf(BLUETOOTH_SCAN, BLUETOOTH_CONNECT),
                 rationaleTitle = getString(R.string.permission_bluetooth_title),

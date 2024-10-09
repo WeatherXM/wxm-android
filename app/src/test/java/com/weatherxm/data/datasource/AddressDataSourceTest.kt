@@ -14,7 +14,6 @@ import com.squareup.moshi.Moshi
 import com.weatherxm.TestConfig.context
 import com.weatherxm.TestConfig.geocoder
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.TestUtils.setStaticFieldViaReflection
 import com.weatherxm.TestUtils.testGetFromCache
 import com.weatherxm.TestUtils.testThrowNotImplemented
 import com.weatherxm.data.datasource.NetworkAddressDataSource.Companion.SEARCH_LIMIT
@@ -26,6 +25,7 @@ import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.MapBoxError
 import com.weatherxm.data.services.CacheService
+import com.weatherxm.util.AndroidBuildInfo
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.types.shouldBeTypeOf
 import io.mockk.coEvery
@@ -115,9 +115,7 @@ class AddressDataSourceTest : KoinTest, BehaviorSpec({
     beforeSpec {
         mockkStatic(Geocoder::class)
         networkSource = NetworkAddressDataSource(context, searchEngine, moshi)
-        setStaticFieldViaReflection(
-            Build.VERSION::class.java.getDeclaredField("SDK_INT"), 30
-        )
+        every { AndroidBuildInfo.sdkInt } returns Build.VERSION_CODES.TIRAMISU - 1
         every {
             geocoder.getFromLocation(any<Double>(), any<Double>(), 1)
         } returns listOf(mockedAddress)
