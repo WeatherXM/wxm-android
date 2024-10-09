@@ -14,6 +14,7 @@ import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.stationHealthViews
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.components.StationHealthExplanationDialogFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -77,6 +78,10 @@ class CurrentFragment : BaseFragment() {
 
         binding.historicalCharts.setOnClickListener {
             navigator.showHistoryActivity(requireContext(), model.device)
+        }
+
+        binding.stationHealthInfoBtn.setOnClickListener {
+            StationHealthExplanationDialogFragment().show(this)
         }
 
         binding.followCard.visible(model.device.isUnfollowed())
