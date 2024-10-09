@@ -249,12 +249,6 @@ class DeviceDetailsActivity : BaseActivity() {
             binding.status.isClickable = false
         }
 
-        if (device.address.isNullOrEmpty()) {
-            // TODO: Show what?
-        } else {
-            binding.address.text = device.address
-        }
-
         setAlerts(device)
     }
 
