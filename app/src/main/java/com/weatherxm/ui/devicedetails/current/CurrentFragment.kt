@@ -11,6 +11,7 @@ import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.invisible
+import com.weatherxm.ui.common.stationHealthViews
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -111,10 +112,22 @@ class CurrentFragment : BaseFragment() {
 
     private fun onDeviceUpdated(device: UIDevice) {
         binding.progress.invisible()
+
+        binding.address.text = if (device.address.isNullOrEmpty()) {
+            getString(R.string.unknown_address)
+        } else {
+            device.address
+        }
+        device.stationHealthViews(
+            requireContext(),
+            binding.dataQuality,
+            binding.dataQualityIcon,
+            binding.addressIcon
+        )
         if (device.currentWeather == null || device.currentWeather.isEmpty()) {
             binding.historicalCharts.visible(false)
         }
-        binding.currentWeatherCard.setData(device.currentWeather)
+        binding.latestWeatherCard.setData(device.currentWeather)
         binding.followCard.visible(device.isUnfollowed())
         binding.historicalCharts.isEnabled = !device.isUnfollowed()
     }
