@@ -6,14 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
-import com.weatherxm.ui.common.BundleName
-import com.weatherxm.ui.common.DeviceAlertType
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.invisible
-import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -114,46 +111,11 @@ class CurrentFragment : BaseFragment() {
 
     private fun onDeviceUpdated(device: UIDevice) {
         binding.progress.invisible()
-        setAlerts(device)
         if (device.currentWeather == null || device.currentWeather.isEmpty()) {
             binding.historicalCharts.visible(false)
         }
         binding.currentWeatherCard.setData(device.currentWeather)
         binding.followCard.visible(device.isUnfollowed())
         binding.historicalCharts.isEnabled = !device.isUnfollowed()
-    }
-
-    private fun setAlerts(device: UIDevice) {
-        if (device.alerts.firstOrNull { it.alert == DeviceAlertType.OFFLINE } != null) {
-            onDeviceOfflineAlert(device)
-        } else {
-            binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.transparent, 0)
-        }
-    }
-
-    private fun onDeviceOfflineAlert(device: UIDevice) {
-        if (!device.isOwned()) {
-            binding.alert.message(getString(R.string.no_data_message_public_device))
-        } else {
-            when (device.bundleName) {
-                BundleName.m5 -> showOfflineAlert(getString(R.string.troubleshooting_m5_url))
-                BundleName.d1 -> showOfflineAlert(getString(R.string.troubleshooting_d1_url))
-                BundleName.h1, BundleName.h2 -> {
-                    showOfflineAlert(getString(R.string.troubleshooting_helium_url))
-                }
-                BundleName.pulse -> showOfflineAlert(getString(R.string.troubleshooting_pulse_url))
-                null -> {
-                    // Do nothing
-                }
-            }
-        }
-        binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
-        binding.alert.visible(true)
-    }
-
-    private fun showOfflineAlert(url: String) {
-        binding.alert.htmlMessage(getString(R.string.error_user_device_offline, url)) {
-            navigator.openWebsite(context, url)
-        }
     }
 }
