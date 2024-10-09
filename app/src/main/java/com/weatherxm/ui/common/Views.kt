@@ -54,9 +54,11 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.textview.MaterialTextView
 import com.weatherxm.R
 import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
+import com.weatherxm.util.Rewards.getRewardScoreColor
 import com.weatherxm.util.Weather.getWeatherAnimation
 import dev.chrisbanes.insetter.applyInsetter
 import java.util.Locale
@@ -477,6 +479,24 @@ fun MaterialCardView.setCardStroke(@ColorRes colorResId: Int, width: Int) {
  */
 fun MaterialCardView.setBoostFallbackBackground() {
     setCardBackgroundColor(context.getColor(R.color.blue))
+}
+
+fun UIDevice.stationHealthViews(
+    context: Context,
+    dataQualityText: MaterialTextView,
+    dataQualityIcon: ImageView,
+    addressIcon: ImageView
+) {
+    /**
+     * STOPSHIP:
+     * TODO: Handle it properly based on the actual UIDevice parameters
+     * 1. No Location
+     * 2. Location not verified
+     * 3. No Data
+     */
+    dataQualityText.text = context.getString(R.string.data_quality_value, 100)
+    dataQualityIcon.setColor(getRewardScoreColor(100))
+    addressIcon.setColor(R.color.success)
 }
 
 private fun Context.hideKeyboard(view: View) {
