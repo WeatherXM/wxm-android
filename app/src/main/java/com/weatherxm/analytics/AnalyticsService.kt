@@ -229,8 +229,6 @@ interface AnalyticsService {
         STATION_DETAILS_CHIP("Station Details Chip"),
         OTA_UPDATE_ID("ota_update"),
         LOW_BATTERY_ID("low_battery"),
-        STATION_REGION_ID("station_region"),
-        REGION("Region"),
         WARNINGS("Warnings"),
         HOURLY_DETAILS_CARD("Hourly Details Card"),
         HOURLY_FORECAST("hourly_forecast"),
