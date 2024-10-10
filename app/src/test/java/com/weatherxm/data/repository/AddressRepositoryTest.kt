@@ -10,15 +10,14 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.data.datasource.AddressDataSourceImpl
+import com.weatherxm.data.datasource.CacheAddressSearchDataSource
+import com.weatherxm.data.datasource.LocationDataSource
+import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
 import com.weatherxm.data.models.CountryAndFrequencies
 import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.MapBoxError.ReverseGeocodingError
-import com.weatherxm.data.datasource.CacheAddressDataSource
-import com.weatherxm.data.datasource.CacheAddressSearchDataSource
-import com.weatherxm.data.datasource.LocationDataSource
-import com.weatherxm.data.datasource.NetworkAddressDataSource
-import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
 import com.weatherxm.data.repository.AddressRepositoryImpl.Companion.MAX_GEOCODING_DISTANCE_METERS
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
@@ -30,34 +29,29 @@ import io.mockk.every
 import io.mockk.mockk
 
 class AddressRepositoryTest : BehaviorSpec({
-    val networkSource = mockk<NetworkAddressDataSource>()
-    val cacheSource = mockk<CacheAddressDataSource>()
+    val networkSource = mockk<AddressDataSourceImpl>()
     val networkAddressSearchSource = mockk<NetworkAddressSearchDataSource>()
     val cacheSearchSource = mockk<CacheAddressSearchDataSource>()
     val locationSource = mockk<LocationDataSource>()
     val repo = AddressRepositoryImpl(
         networkSource,
-        cacheSource,
         networkAddressSearchSource,
         cacheSearchSource,
         locationSource
     )
 
     val query = "query"
-    val address = "address"
     val searchSuggestion = mockk<SearchSuggestion>()
     val searchSuggestions = listOf(searchSuggestion)
     val searchSuggestionsGlobal = listOf(searchSuggestion, searchSuggestion)
     val point = mockk<Point>()
     val searchResult = mockk<SearchResult>()
     val searchAddress = mockk<SearchAddress>()
-    val hexIndex = "hexIndex"
     val country = "Greece"
     val location = Location.empty()
     val countryAndFrequencies = CountryAndFrequencies(country, Frequency.EU868, listOf(mockk()))
 
     beforeSpec {
-        coJustRun { cacheSource.setLocationAddress(hexIndex, address) }
         coJustRun { cacheSearchSource.setSuggestionLocation(searchSuggestion, location) }
         coJustRun { cacheSearchSource.setSearchSuggestions(query, searchSuggestions) }
         coJustRun { cacheSearchSource.setSearchSuggestions(query, searchSuggestionsGlobal) }
@@ -217,52 +211,6 @@ class AddressRepositoryTest : BehaviorSpec({
                     then("save this location in cache") {
                         coVerify(exactly = 1) {
                             cacheSearchSource.setSuggestionLocation(searchSuggestion, location)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    context("Get address from Location") {
-        given("a hex index and a location") {
-            When("we have in cache the address of this hex index") {
-                coMockEitherRight(
-                    { cacheSource.getLocationAddress(hexIndex, location) },
-                    address
-                )
-                then("return that address") {
-                    repo.getAddressFromLocation(hexIndex, location) shouldBe address
-                }
-            }
-            When("we don't have in cache that address so we fetch it from network") {
-                coMockEitherLeft(
-                    { cacheSource.getLocationAddress(hexIndex, location) },
-                    failure
-                )
-                When("the response is a failure") {
-                    coMockEitherLeft(
-                        { networkSource.getLocationAddress(hexIndex, location) },
-                        failure
-                    )
-                    then("return that failure") {
-                        repo.getAddressFromLocation(hexIndex, location) shouldBe null
-                    }
-                }
-                When("the response is a success") {
-                    coMockEitherRight(
-                        { networkSource.getLocationAddress(hexIndex, location) },
-                        address
-                    )
-                    then("return that success") {
-                        repo.getAddressFromLocation(hexIndex, location) shouldBe address
-                    }
-                    then("save this address in cache") {
-                        coVerify(exactly = 1) {
-                            cacheSource.setLocationAddress(
-                                hexIndex,
-                                address
-                            )
                         }
                     }
                 }

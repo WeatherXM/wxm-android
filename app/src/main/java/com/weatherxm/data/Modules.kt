@@ -62,9 +62,10 @@ import com.weatherxm.data.database.AppDatabase
 import com.weatherxm.data.database.DatabaseConverters
 import com.weatherxm.data.database.dao.DeviceHistoryDao
 import com.weatherxm.data.database.dao.NetworkSearchRecentDao
+import com.weatherxm.data.datasource.AddressDataSource
+import com.weatherxm.data.datasource.AddressDataSourceImpl
 import com.weatherxm.data.datasource.AppConfigDataSource
 import com.weatherxm.data.datasource.AppConfigDataSourceImpl
-import com.weatherxm.data.datasource.CacheAddressDataSource
 import com.weatherxm.data.datasource.CacheAddressSearchDataSource
 import com.weatherxm.data.datasource.CacheAuthDataSource
 import com.weatherxm.data.datasource.CacheDeviceDataSource
@@ -78,7 +79,6 @@ import com.weatherxm.data.datasource.DeviceOTADataSource
 import com.weatherxm.data.datasource.DeviceOTADataSourceImpl
 import com.weatherxm.data.datasource.LocationDataSource
 import com.weatherxm.data.datasource.LocationDataSourceImpl
-import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
 import com.weatherxm.data.datasource.NetworkAuthDataSource
 import com.weatherxm.data.datasource.NetworkDeviceDataSource
@@ -383,11 +383,8 @@ private val datasources = module {
     single<DatabaseExplorerDataSource> {
         DatabaseExplorerDataSource(get())
     }
-    single<NetworkAddressDataSource> {
-        NetworkAddressDataSource(androidContext(), get(), get())
-    }
-    single<CacheAddressDataSource> {
-        CacheAddressDataSource(get())
+    single<AddressDataSource> {
+        AddressDataSourceImpl(androidContext(), get(), get())
     }
     single<NetworkWeatherForecastDataSource> {
         NetworkWeatherForecastDataSource(get())
@@ -444,7 +441,7 @@ private val repositories = module {
         WalletRepositoryImpl(get(), get())
     }
     single<DeviceRepository> {
-        DeviceRepositoryImpl(get(), get(), get(), get(), get())
+        DeviceRepositoryImpl(get(), get(), get())
     }
     single<ExplorerRepository> {
         ExplorerRepositoryImpl(get(), get())
@@ -462,7 +459,7 @@ private val repositories = module {
         AppConfigRepositoryImpl(get())
     }
     single<AddressRepository> {
-        AddressRepositoryImpl(get(), get(), get(), get(), get())
+        AddressRepositoryImpl(get(), get(), get(), get())
     }
     single<BluetoothScannerRepository> {
         BluetoothScannerRepositoryImpl(get())
@@ -504,10 +501,10 @@ private val usecases = module {
         StartupUseCaseImpl(androidContext(), get(), get(), get())
     }
     single<ExplorerUseCase> {
-        ExplorerUseCaseImpl(get(), get(), get(), get(), get())
+        ExplorerUseCaseImpl(get(), get(), get(), get())
     }
     single<DeviceDetailsUseCase> {
-        DeviceDetailsUseCaseImpl(get(), get(), get(), get(), get())
+        DeviceDetailsUseCaseImpl(get(), get(), get(), get())
     }
     single<ForecastUseCase> {
         ForecastUseCaseImpl(get())

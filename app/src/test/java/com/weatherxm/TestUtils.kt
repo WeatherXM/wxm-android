@@ -17,9 +17,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import net.bytebuddy.utility.RandomString
 import retrofit2.Response
-import java.lang.reflect.Field
-import java.lang.reflect.Method
-import java.lang.reflect.Modifier
 import java.net.SocketTimeoutException
 
 object TestUtils {
@@ -138,44 +135,5 @@ object TestUtils {
             item.x shouldBe other.entries[i].x
             item.y shouldBe other.entries[i].y
         }
-    }
-
-    /**
-     * https://stackoverflow.com/a/76813421/5403137
-     *
-     * Reflection methods to access private fields
-     */
-    @Suppress("NestedBlockDepth")
-    private fun getModifiersField(): Field {
-        return try {
-            Field::class.java.getDeclaredField("modifiers")
-        } catch (e: NoSuchFieldException) {
-            try {
-                val getDeclaredFields0: Method =
-                    Class::class.java.getDeclaredMethod(
-                        "getDeclaredFields0",
-                        Boolean::class.javaPrimitiveType
-                    )
-                getDeclaredFields0.isAccessible = true
-                val fields = getDeclaredFields0.invoke(Field::class.java, false) as Array<Field>
-                for (field in fields) {
-                    if ("modifiers" == field.name) {
-                        return field
-                    }
-                }
-            } catch (ex: ReflectiveOperationException) {
-                e.addSuppressed(ex)
-            }
-            throw e
-        }
-    }
-
-    fun setStaticFieldViaReflection(field: Field, value: Any) {
-        field.isAccessible = true
-        getModifiersField().also {
-            it.isAccessible = true
-            it.set(field, field.modifiers and Modifier.FINAL.inv())
-        }
-        field.set(null, value)
     }
 }

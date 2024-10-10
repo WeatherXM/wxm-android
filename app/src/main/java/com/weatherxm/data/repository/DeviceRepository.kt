@@ -1,18 +1,14 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
-import arrow.core.recover
+import com.weatherxm.data.datasource.CacheDeviceDataSource
+import com.weatherxm.data.datasource.CacheFollowDataSource
+import com.weatherxm.data.datasource.NetworkDeviceDataSource
 import com.weatherxm.data.models.Device
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.Relation
-import com.weatherxm.data.datasource.CacheAddressDataSource
-import com.weatherxm.data.datasource.CacheDeviceDataSource
-import com.weatherxm.data.datasource.CacheFollowDataSource
-import com.weatherxm.data.datasource.NetworkAddressDataSource
-import com.weatherxm.data.datasource.NetworkDeviceDataSource
-import timber.log.Timber
 
 interface DeviceRepository {
     suspend fun getUserDevices(): Either<Failure, List<Device>>
@@ -21,7 +17,6 @@ interface DeviceRepository {
         serialNumber: String, location: Location, secret: String? = null
     ): Either<Failure, Device>
 
-    suspend fun getDeviceAddress(device: Device): String?
     suspend fun setFriendlyName(deviceId: String, friendlyName: String): Either<Failure, Unit>
     suspend fun clearFriendlyName(deviceId: String): Either<Failure, Unit>
     suspend fun removeDevice(serialNumber: String, id: String): Either<Failure, Unit>
@@ -33,16 +28,12 @@ interface DeviceRepository {
 class DeviceRepositoryImpl(
     private val networkDeviceDataSource: NetworkDeviceDataSource,
     private val cacheDeviceDataSource: CacheDeviceDataSource,
-    private val networkAddressDataSource: NetworkAddressDataSource,
-    private val cacheAddressDataSource: CacheAddressDataSource,
     private val cacheFollowDataSource: CacheFollowDataSource
 ) : DeviceRepository {
 
     override suspend fun getUserDevices(): Either<Failure, List<Device>> {
         return networkDeviceDataSource.getUserDevices().map { devices ->
-            devices.onEach {
-                it.address = getDeviceAddress(it)
-            }.apply {
+            devices.apply {
                 cacheDeviceDataSource.setUserDevicesIds(this.filter {
                     it.relation == Relation.owned
                 }.map {
@@ -58,11 +49,7 @@ class DeviceRepositoryImpl(
     }
 
     override suspend fun getUserDevice(deviceId: String): Either<Failure, Device> {
-        return networkDeviceDataSource.getUserDevice(deviceId).map { device ->
-            device.apply {
-                this.address = getDeviceAddress(this)
-            }
-        }
+        return networkDeviceDataSource.getUserDevice(deviceId)
     }
 
     override suspend fun claimDevice(
@@ -73,24 +60,6 @@ class DeviceRepositoryImpl(
             userDevicesIds.add(it.id)
             cacheDeviceDataSource.setUserDevicesIds(userDevicesIds)
         }
-    }
-
-    override suspend fun getDeviceAddress(device: Device): String? {
-        return device.attributes?.hex7?.let { hex ->
-            cacheAddressDataSource.getLocationAddress(hex.index, hex.center)
-                .onRight { address ->
-                    Timber.d("Got location address from cache [$address].")
-                }
-                .recover { _ ->
-                    networkAddressDataSource.getLocationAddress(hex.index, hex.center)
-                        .onRight { address ->
-                            Timber.d("Got location address from network [$address].")
-                            Timber.d("Saving location address to cache [$address].")
-                            cacheAddressDataSource.setLocationAddress(hex.index, address)
-                        }
-                        .bind()
-                }
-        }?.getOrNull()
     }
 
     override suspend fun setFriendlyName(

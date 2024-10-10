@@ -77,6 +77,7 @@ data class PublicDevice(
     val lastWeatherStationActivity: ZonedDateTime?,
     val cellIndex: String,
     val cellCenter: Location?,
+    val address: String?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
 ) : Parcelable {
@@ -101,6 +102,7 @@ data class PublicDevice(
             lastWeatherStationActivity = lastWeatherStationActivity,
             timezone = timezone,
             currentWeather = currentWeather,
+            address = address,
             relation = null,
             label = null,
             friendlyName = null,
@@ -108,7 +110,6 @@ data class PublicDevice(
             currentFirmware = null,
             assignedFirmware = null,
             claimedAt = null,
-            address = null,
             hex7 = null,
             totalRewards = null,
             actualReward = null,

@@ -4,22 +4,20 @@ import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.handleErrorWith
 import arrow.core.left
-import arrow.core.recover
 import arrow.core.right
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.ResultAccuracy
 import com.mapbox.search.result.SearchAddress
 import com.mapbox.search.result.SearchResult
 import com.mapbox.search.result.SearchSuggestion
+import com.weatherxm.data.datasource.AddressDataSource
+import com.weatherxm.data.datasource.CacheAddressSearchDataSource
+import com.weatherxm.data.datasource.LocationDataSource
+import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
 import com.weatherxm.data.models.CountryAndFrequencies
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.MapBoxError.ReverseGeocodingError
-import com.weatherxm.data.datasource.CacheAddressDataSource
-import com.weatherxm.data.datasource.CacheAddressSearchDataSource
-import com.weatherxm.data.datasource.LocationDataSource
-import com.weatherxm.data.datasource.NetworkAddressDataSource
-import com.weatherxm.data.datasource.NetworkAddressSearchDataSource
 import timber.log.Timber
 
 interface AddressRepository {
@@ -27,12 +25,10 @@ interface AddressRepository {
     suspend fun getSuggestionLocation(suggestion: SearchSuggestion): Either<Failure, Location>
     suspend fun getAddressFromPoint(point: Point): Either<Failure, SearchAddress>
     suspend fun getCountryAndFrequencies(location: Location): CountryAndFrequencies
-    suspend fun getAddressFromLocation(hexIndex: String, location: Location): String?
 }
 
 class AddressRepositoryImpl(
-    private val networkAddress: NetworkAddressDataSource,
-    private val cacheAddressDataSource: CacheAddressDataSource,
+    private val addressDataSource: AddressDataSource,
     private val networkSearch: NetworkAddressSearchDataSource,
     private val cacheSearch: CacheAddressSearchDataSource,
     private val locationDataSource: LocationDataSource
@@ -90,7 +86,7 @@ class AddressRepositoryImpl(
     }
 
     override suspend fun getAddressFromPoint(point: Point): Either<Failure, SearchAddress> {
-        return networkAddress.getAddressFromPoint(point)
+        return addressDataSource.getAddressFromPoint(point)
             .flatMap {
                 if (!it.isAccurate()) {
                     Either.Left(ReverseGeocodingError.SearchResultNotAccurateError())
@@ -103,7 +99,7 @@ class AddressRepositoryImpl(
     }
 
     override suspend fun getCountryAndFrequencies(location: Location): CountryAndFrequencies {
-        return networkAddress.getCountryAndFrequencies(location)
+        return addressDataSource.getCountryAndFrequencies(location)
             .fold({ CountryAndFrequencies.default() }, { it })
     }
 
@@ -123,25 +119,5 @@ class AddressRepositoryImpl(
      */
     private fun SearchResult.isNearby(): Boolean {
         return distanceMeters?.let { it <= MAX_GEOCODING_DISTANCE_METERS } ?: false
-    }
-
-    override suspend fun getAddressFromLocation(
-        hexIndex: String,
-        location: Location
-    ): String? {
-        return cacheAddressDataSource.getLocationAddress(hexIndex, location)
-            .onRight { address ->
-                Timber.d("Got location address from cache [$address].")
-            }
-            .recover {
-                networkAddress.getLocationAddress(hexIndex, location)
-                    .onRight { address ->
-                        Timber.d("Got location address from network [$address].")
-                        Timber.d("Saving location address to cache [$address].")
-                        cacheAddressDataSource.setLocationAddress(hexIndex, address)
-                    }
-                    .bind()
-            }
-            .getOrNull()
     }
 }
