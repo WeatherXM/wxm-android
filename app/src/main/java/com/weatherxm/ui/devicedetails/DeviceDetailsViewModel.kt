@@ -10,11 +10,10 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
-import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.usecases.FollowUseCase
@@ -44,7 +43,6 @@ class DeviceDetailsViewModel(
         refreshIntervalMillis = TimeUnit.SECONDS.toMillis(REFRESH_INTERVAL_SECONDS)
     )
 
-    private val address = MutableLiveData<String?>()
     private val onFollowStatus = MutableLiveData<Resource<Unit>>()
     private var isLoggedIn: Boolean? = null
     private val onDevicePolling = MutableLiveData<UIDevice>()
@@ -55,7 +53,6 @@ class DeviceDetailsViewModel(
     fun onDevicePolling(): LiveData<UIDevice> = onDevicePolling
     fun onUpdatedDevice(): LiveData<UIDevice> = onUpdatedDevice
     fun onFollowStatus(): LiveData<Resource<Unit>> = onFollowStatus
-    fun address(): LiveData<String?> = address
 
     fun isLoggedIn() = isLoggedIn
 
@@ -79,20 +76,6 @@ class DeviceDetailsViewModel(
     fun updateDevice(device: UIDevice) {
         this.device = device
         onUpdatedDevice.postValue(device)
-    }
-
-    fun fetchAddressFromCell() {
-        if (!device.address.isNullOrEmpty()) {
-            address.postValue(device.address)
-            return
-        }
-        viewModelScope.launch {
-            device.cellCenter?.let {
-                address.postValue(
-                    deviceDetailsUseCase.getAddressOfCell(UICell(device.cellIndex, it))
-                )
-            }
-        }
     }
 
     fun createNormalizedName(): String {

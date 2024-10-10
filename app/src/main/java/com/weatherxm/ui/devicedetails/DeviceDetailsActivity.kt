@@ -18,15 +18,15 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Resource
 import com.weatherxm.data.models.SeverityLevel
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityDeviceDetailsBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
@@ -139,10 +139,6 @@ class DeviceDetailsActivity : BaseActivity() {
 
         model.onUpdatedDevice().observe(this) {
             updateDeviceInfo(it)
-        }
-
-        model.address().observe(this) {
-            binding.address.text = it ?: getString(R.string.unknown_address)
         }
 
         val adapter = ViewPagerAdapter(this)
@@ -273,7 +269,7 @@ class DeviceDetailsActivity : BaseActivity() {
         }
 
         if (device.address.isNullOrEmpty()) {
-            model.fetchAddressFromCell()
+            // TODO: Show what?
         } else {
             binding.address.text = device.address
         }
