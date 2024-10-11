@@ -29,62 +29,22 @@
             app:expandedTitleTextColor="@color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleCollapseMode="fade"
-            app:titleEnabled="true">
+            app:titleEnabled="false">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipChildren="false"
                 android:clipToPadding="false"
-                android:paddingHorizontal="@dimen/padding_normal"
+                android:paddingHorizontal="@dimen/padding_normal_to_large"
                 android:paddingTop="?actionBarSize"
                 app:layout_scrollFlags="scroll">
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_small"
-                    android:gravity="center_vertical"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toStartOf="@id/follow"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="My Weather Station" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/public_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_extra_small"
-                    android:gravity="center_vertical"
-                    android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                    app:layout_constraintStart_toStartOf="@id/name"
-                    app:layout_constraintTop_toBottomOf="@id/name"
-                    tools:text="Exotic Magnolia Beaufort" />
-
-                <ImageButton
-                    android:id="@+id/follow"
-                    style="@style/Widget.WeatherXM.ImageButton"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:importantForAccessibility="no"
-                    app:layout_constraintBottom_toBottomOf="@id/name"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/name"
-                    tools:src="@drawable/ic_favorite"
-                    tools:tint="@color/follow_heart_color" />
-
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
+                    android:layout_height="32dp"
                     android:scrollbars="none"
-                    app:layout_constraintTop_toBottomOf="@id/public_name">
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.chip.ChipGroup
                         android:layout_width="wrap_content"
@@ -137,7 +97,23 @@
                 android:background="@color/colorSurface"
                 app:layout_collapseMode="pin"
                 app:menu="@menu/device_details_menu"
-                app:navigationIcon="@drawable/ic_back" />
+                app:navigationIcon="@drawable/ic_back"
+                tools:subtitle="Exotic Magnolia Beaufort"
+                tools:title="My Weather Station">
+
+                <ImageButton
+                    android:id="@+id/relationBtn"
+                    style="@style/Widget.WeatherXM.ImageButton"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="end"
+                    android:layout_marginStart="@dimen/margin_small"
+                    android:importantForAccessibility="no"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ic_favorite"
+                    tools:tint="@color/follow_heart_color" />
+            </com.google.android.material.appbar.MaterialToolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
