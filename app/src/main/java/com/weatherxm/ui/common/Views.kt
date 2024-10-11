@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Rect
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.os.Build.VERSION_CODES.TIRAMISU
 import android.os.Bundle
 import android.os.Parcelable
@@ -39,6 +40,7 @@ import androidx.annotation.IntDef
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.os.BundleCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.text.parseAsHtml
@@ -50,6 +52,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.request.ImageRequest
 import com.airbnb.lottie.LottieAnimationView
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.CornerFamily
@@ -593,6 +596,15 @@ fun RecyclerView.blockParentViewPagerOnScroll() {
 
         override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
     })
+}
+
+fun MaterialToolbar.setMenuTint(@ColorRes color: Int = R.color.colorPrimary) {
+    var drawable: Drawable? = getOverflowIcon()
+    if (drawable != null) {
+        drawable = DrawableCompat.wrap(drawable)
+        DrawableCompat.setTint(drawable.mutate(), context.getColor(color))
+        setOverflowIcon(drawable)
+    }
 }
 
 // https://stackoverflow.com/a/46165723/5403137

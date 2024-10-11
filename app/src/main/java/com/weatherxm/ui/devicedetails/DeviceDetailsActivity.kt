@@ -3,8 +3,6 @@ package com.weatherxm.ui.devicedetails
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -36,6 +34,7 @@ import com.weatherxm.ui.common.offlineChip
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
+import com.weatherxm.ui.common.setMenuTint
 import com.weatherxm.ui.common.setStatusChip
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.updateRequiredChip
@@ -112,7 +111,7 @@ class DeviceDetailsActivity : BaseActivity() {
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
+        binding.toolbar.setMenuTint()
         binding.toolbar.setOnMenuItemClickListener {
             onMenuItem(it)
         }
@@ -138,10 +137,6 @@ class DeviceDetailsActivity : BaseActivity() {
                 else -> throw IllegalStateException("Oops! You forgot to add a tab here.")
             }
         }.attach()
-
-        binding.follow.setOnClickListener {
-            handleFollowClick()
-        }
 
         updateDeviceInfo()
     }
@@ -192,20 +187,20 @@ class DeviceDetailsActivity : BaseActivity() {
 
     private fun updateDeviceInfo(device: UIDevice = model.device) {
         with(device.getDefaultOrFriendlyName()) {
-            binding.collapsingToolbar.title = this
-            binding.name.text = this
-            binding.publicName.text = device.name
-            binding.publicName.visibility = if (this != device.name) VISIBLE else INVISIBLE
+            binding.toolbar.title = this
+            if (this != device.name) {
+                binding.toolbar.subtitle = device.name
+            }
         }
 
-        with(binding.follow) {
+        with(binding.relationBtn) {
             when (device.relation) {
                 DeviceRelation.OWNED -> {
                     setOnClickListener {
                         toast(R.string.you_are_owner_of_station)
                     }
                     setImageResource(R.drawable.ic_home)
-                    setColor(R.color.colorOnSurface)
+                    setColor(R.color.colorPrimary)
                 }
 
                 DeviceRelation.FOLLOWED -> {
@@ -225,7 +220,6 @@ class DeviceDetailsActivity : BaseActivity() {
                 }
                 null -> visible(false)
             }
-            isEnabled = true
         }
 
         with(binding.toolbar) {
