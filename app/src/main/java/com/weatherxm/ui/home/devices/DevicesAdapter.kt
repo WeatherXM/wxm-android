@@ -173,6 +173,9 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                         AnalyticsService.ParamValue.VIEW.paramValue
                     )
                 }
+                DeviceAlertType.LOW_STATION_RSSI -> {
+                    // TODO: Currently do nothing. Maybe we'll handle it in the future.
+                }
             }
             binding.alert.visible(true)
         }

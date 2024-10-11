@@ -47,6 +47,7 @@
     <string name="beta">Beta:</string>
     <string name="other">Other:</string>
     <string name="tap_to_retry">Tap to Retry</string>
+    <string name="troubleshoot_instructions_here">Troubleshoot instructions here</string>
 
     <!-- Permissions -->
     <string name="permission_location_title">Access to your location</string>
@@ -541,6 +542,9 @@
     <string name="station_location_favorite_desc"><![CDATA[The deployment location that the station owner has set is <b>%s.</b>]]></string>
     <string name="edit_location">Edit Location</string>
     <string name="serial_number">Serial Number</string>
+    <string name="station_gateway_rssi">Signal between Station &amp; Gateway (RSSI)</string>
+    <string name="station_signal_low">Station signal reception is low. This may result in Data Gaps and reduced Rewards.</string>
+    <string name="station_signal_no_signal"><![CDATA[<b>No Weather Station signal.</b> Check that your station is working well. This will cause Data Gaps and may lead to reduced Rewards.]]></string>
 
     <!-- Alerts -->
     <string name="alerts">Alerts</string>

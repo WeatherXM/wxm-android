@@ -13,6 +13,7 @@ import com.google.android.material.button.MaterialButton.ICON_GRAVITY_END
 import com.google.android.material.button.MaterialButton.ICON_GRAVITY_START
 import com.weatherxm.R
 import com.weatherxm.databinding.ViewMessageCardBinding
+import com.weatherxm.ui.common.clearMargins
 import com.weatherxm.ui.common.hide
 import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
@@ -133,6 +134,14 @@ class MessageCardView : LinearLayout {
         return this
     }
 
+    fun troubleshootMessage(onTroubleshootClicked: (() -> Unit)): MessageCardView {
+        binding.troubleshootActionMessage.apply {
+            setOnClickListener { onTroubleshootClicked.invoke() }
+            visible(true)
+        }
+        return this
+    }
+
     fun setBackground(@ColorRes colorResId: Int): MessageCardView {
         binding.card.setCardBackgroundColor(context.getColor(colorResId))
         return this
@@ -220,4 +229,6 @@ class MessageCardView : LinearLayout {
         binding.closeButton.setOnClickListener(listener)
         return this
     }
+
+    fun clearMessageMargin() = binding.message.clearMargins()
 }

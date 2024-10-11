@@ -73,6 +73,9 @@ class DeviceAlertsAdapter(
                             deviceAlertListener.onLowBatteryReadMoreClicked()
                         }
                 }
+                DeviceAlertType.LOW_STATION_RSSI -> {
+                    // TODO: Currently do nothing. Maybe we'll handle it in the future. 
+                }
             }
         }
     }

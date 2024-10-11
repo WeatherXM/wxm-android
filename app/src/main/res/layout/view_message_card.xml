@@ -60,6 +60,19 @@
                         android:layout_marginTop="@dimen/margin_small"
                         android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
                         tools:text="Message message here." />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/troubleshootActionMessage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_extra_small"
+                        android:drawableEnd="@drawable/ic_open_new"
+                        android:drawablePadding="@dimen/padding_extra_small"
+                        android:text="@string/troubleshoot_instructions_here"
+                        android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
                 </LinearLayout>
 
             </LinearLayout>

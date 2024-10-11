@@ -9,13 +9,13 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.RewardSplit
+import com.weatherxm.ui.common.DeviceAlert
+import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.capitalizeWords
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.devicesettings.ActionType
 import com.weatherxm.ui.devicesettings.BaseDeviceSettingsViewModel
-import com.weatherxm.ui.devicesettings.UIDeviceAction
 import com.weatherxm.ui.devicesettings.UIDeviceInfo
 import com.weatherxm.ui.devicesettings.UIDeviceInfoItem
 import com.weatherxm.usecases.AuthUseCase
@@ -150,10 +150,7 @@ class DeviceSettingsHeliumViewModel(
                     UIDeviceInfoItem(
                         title = resources.getString(R.string.firmware_version),
                         value = "$current ➞ ${device.assignedFirmware}",
-                        action = UIDeviceAction(
-                            resources.getString(R.string.action_update_firmware),
-                            ActionType.UPDATE_FIRMWARE
-                        )
+                        deviceAlert = DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE)
                     )
                 )
             } else {

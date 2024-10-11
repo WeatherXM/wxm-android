@@ -9,6 +9,7 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.databinding.ActivityDeviceSettingsHeliumBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
+import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.RewardSplitStakeholderAdapter
 import com.weatherxm.ui.common.RewardSplitsData
@@ -23,7 +24,6 @@ import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
-import com.weatherxm.ui.devicesettings.ActionType
 import com.weatherxm.ui.devicesettings.DeviceInfoItemAdapter
 import com.weatherxm.ui.devicesettings.FriendlyNameDialogFragment
 import com.weatherxm.util.MapboxUtils.getMinimap
@@ -121,7 +121,7 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
 
     private fun setupRecyclers() {
         adapter = DeviceInfoItemAdapter {
-            if (it == ActionType.UPDATE_FIRMWARE) {
+            if (it.alert == DeviceAlertType.NEEDS_UPDATE) {
                 analytics.trackEventPrompt(
                     AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
                     AnalyticsService.ParamValue.WARN.paramValue,
@@ -238,7 +238,7 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
         }
 
         model.onDeviceInfo().observe(this) { deviceInfo ->
-            if (deviceInfo.default.any { it.warning != null }) {
+            if (deviceInfo.default.any { it.deviceAlert?.alert == DeviceAlertType.LOW_BATTERY }) {
                 analytics.trackEventPrompt(
                     AnalyticsService.ParamValue.LOW_BATTERY.paramValue,
                     AnalyticsService.ParamValue.WARN.paramValue,
@@ -246,7 +246,7 @@ class DeviceSettingsHeliumActivity : BaseActivity() {
                     Pair(FirebaseAnalytics.Param.ITEM_ID, model.device.id)
                 )
             }
-            if (deviceInfo.default.any { it.action?.actionType == ActionType.UPDATE_FIRMWARE }) {
+            if (deviceInfo.default.any { it.deviceAlert?.alert == DeviceAlertType.NEEDS_UPDATE }) {
                 analytics.trackEventPrompt(
                     AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
                     AnalyticsService.ParamValue.WARN.paramValue,
