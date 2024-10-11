@@ -84,6 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small_to_normal"
                 android:backgroundTint="@color/translucent"
+                android:paddingHorizontal="@dimen/padding_normal_to_large"
                 android:visibility="gone"
                 app:cornerRadius="@dimen/radius_medium"
                 app:layout_constraintTop_toBottomOf="@id/infoContainer"
@@ -104,8 +105,8 @@
             <ImageButton
                 android:id="@+id/closeButton"
                 style="@style/Widget.WeatherXM.ImageButton"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:contentDescription="@string/action_close"
                 android:padding="2dp"
                 android:src="@drawable/ic_close"

@@ -213,11 +213,12 @@
     <string name="add_wallet_now">Add Wallet Now</string>
     <string name="wallet_address_missing">Wallet Address is Missing!</string>
     <string name="wallet_address_missing_desc">You haven\’t added a wallet yet. Thus, we will not be able to send you any $WXM rewards.</string>
+    <string name="wallet_cex_warning">Never use a third party wallet you don’t own, or an exchange’s deposit address.</string>
     <string name="suggested_wallets">It is highly recommended to use MetaMask, as it is the most compatible wallet.</string>
     <string name="my_wallet">My Wallet</string>
     <string name="check_wallet_compatibility">Check compatibility here</string>
     <string name="wallet_compatibility">Wallet Compatibility</string>
-    <string name="wallet_compatibility_desc"><![CDATA[Not sure if you own a $WXM compatible wallet? <b>If your wallet is not compatible you may not be able to redeem or use $WXM rewards!</b>]]></string>
+    <string name="wallet_compatibility_desc">Always make sure you use a wallet you own. If your wallet is not compatible you may not be able to redeem or use WXM rewards!\n\nNot sure if you own a WXM compatible wallet? Check our compatibility guide.</string>
     <string name="enter_your_wallet_address">Enter your wallet address</string>
     <string name="edit_your_wallet_address">Edit Wallet Address</string>
     <string name="hint_wxm_address">E.g., 0xDe1f*****B7F5 </string>

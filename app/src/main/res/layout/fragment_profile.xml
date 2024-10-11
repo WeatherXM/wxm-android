@@ -242,7 +242,7 @@
                             android:paddingStart="-10dp"
                             android:paddingTop="16dp"
                             android:visibility="gone"
-                            app:message_icon="@drawable/ic_error"
+                            app:message_icon="@drawable/ic_error_hex_filled"
                             app:message_icon_color="@color/error"
                             app:message_includes_close_button="false"
                             app:message_message="@string/losing_rewards_desc"

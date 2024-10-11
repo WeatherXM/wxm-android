@@ -486,21 +486,21 @@
         android:gravity="center"
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/padding_large"
-        android:paddingVertical="@dimen/padding_large"
-        android:visibility="gone">
+        android:paddingVertical="@dimen/padding_large">
 
         <ImageView
             android:id="@+id/errorIcon"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/ic_error"
+            android:src="@drawable/ic_error_hex_filled"
             android:tint="@color/error"
             tools:ignore="ContentDescription,UseAppTint" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
             android:gravity="center"
             android:text="@string/error_user_device_data_failed"
             android:textAppearance="@style/TextAppearance.WeatherXM.Title" />

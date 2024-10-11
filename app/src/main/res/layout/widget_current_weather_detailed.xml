@@ -298,9 +298,9 @@
                                 android:id="@+id/windIconDirection"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                tools:src="@drawable/ic_wind_direction"
                                 android:tint="@color/colorPrimaryVariant"
-                                tools:ignore="UseAppTint,contentDescription" />
+                                tools:ignore="UseAppTint,contentDescription"
+                                tools:src="@drawable/ic_wind_direction" />
                         </LinearLayout>
 
                         <TextView
@@ -421,9 +421,9 @@
                                 android:id="@+id/windGustIconDirection"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                tools:src="@drawable/ic_wind_direction"
                                 android:tint="@color/colorPrimaryVariant"
-                                tools:ignore="UseAppTint,contentDescription" />
+                                tools:ignore="UseAppTint,contentDescription"
+                                tools:src="@drawable/ic_wind_direction" />
 
                         </LinearLayout>
 
@@ -823,16 +823,17 @@
 
         <ImageView
             android:id="@+id/errorIcon"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:adjustViewBounds="true"
-            android:src="@drawable/ic_error"
+            android:src="@drawable/ic_error_hex_filled"
             android:tint="@color/error"
             tools:ignore="ContentDescription,UseAppTint" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
             android:gravity="center"
             android:text="@string/error_user_device_data_failed"
             android:textAppearance="@style/TextAppearance.WeatherXM.Title" />
