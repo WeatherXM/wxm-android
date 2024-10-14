@@ -70,6 +70,13 @@
     </style>
 
     <!--
+        Device Details -
+    -->
+    <style name="TextAppearance.WeatherXM.Device.Details.Title" parent="TextAppearance.WeatherXM.Default.HeadlineSmall.SansSerifMedium">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <!--
         Weather Card
     -->
     <style name="TextAppearance.WeatherXM.WeatherCard.Data" parent="TextAppearance.WeatherXM.Default.BodyLarge">
