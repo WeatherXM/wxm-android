@@ -130,6 +130,7 @@ class CurrentFragment : BaseFragment() {
             binding.address,
             binding.addressIcon
         )
+        binding.emptyStationHealthInfo.visible(device.qodScore == null)
         if (device.currentWeather == null || device.currentWeather.isEmpty()) {
             binding.historicalCharts.visible(false)
         }
