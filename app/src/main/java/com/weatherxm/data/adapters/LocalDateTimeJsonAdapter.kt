@@ -9,7 +9,8 @@ import java.time.format.DateTimeFormatter
 class LocalDateTimeJsonAdapter : JsonAdapter<LocalDateTime>() {
 
     override fun fromJson(reader: JsonReader): LocalDateTime? {
-        if (reader.peek() == null) {
+        val nextToken = reader.peek()
+        if (nextToken == null || nextToken == JsonReader.Token.NULL) {
             return reader.nextNull()
         }
         val string = reader.nextString()
