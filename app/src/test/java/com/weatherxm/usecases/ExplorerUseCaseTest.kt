@@ -57,12 +57,13 @@ class ExplorerUseCaseTest : BehaviorSpec({
         ZonedDateTime.now(),
         index,
         null,
+        null,
         null
     )
     val followedDevice =
-        PublicDevice("followedDevice", "followed", null, null, null, null, index, null, null)
+        PublicDevice("followedDevice", "followed", null, null, null, null, index, null, null, null)
     val publicDevice =
-        PublicDevice("publicDevice", "public", null, null, null, null, index, null, null)
+        PublicDevice("publicDevice", "public", null, null, null, null, index, null, null, null)
 
     val ownedUiDevice = ownedDevice.toUIDevice().apply {
         this.cellCenter = location

@@ -5,17 +5,17 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.data.datasource.CacheAddressDataSource
+import com.weatherxm.data.datasource.CacheDeviceDataSource
+import com.weatherxm.data.datasource.CacheFollowDataSource
+import com.weatherxm.data.datasource.NetworkAddressDataSource
+import com.weatherxm.data.datasource.NetworkDeviceDataSource
 import com.weatherxm.data.models.Attributes
 import com.weatherxm.data.models.Device
 import com.weatherxm.data.models.DeviceInfo
 import com.weatherxm.data.models.Hex
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.Relation
-import com.weatherxm.data.datasource.CacheAddressDataSource
-import com.weatherxm.data.datasource.CacheDeviceDataSource
-import com.weatherxm.data.datasource.CacheFollowDataSource
-import com.weatherxm.data.datasource.NetworkAddressDataSource
-import com.weatherxm.data.datasource.NetworkDeviceDataSource
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
@@ -45,6 +45,7 @@ class DeviceRepositoryTest : BehaviorSpec({
         null,
         null,
         Relation.owned,
+        null,
         null
     )
     val followedDevice = Device(
@@ -59,6 +60,7 @@ class DeviceRepositoryTest : BehaviorSpec({
         null,
         null,
         Relation.followed,
+        null,
         null
     )
     val devices = mutableListOf(ownedDevice, followedDevice)
@@ -80,6 +82,7 @@ class DeviceRepositoryTest : BehaviorSpec({
         null,
         null,
         Relation.owned,
+        null,
         null
     )
 

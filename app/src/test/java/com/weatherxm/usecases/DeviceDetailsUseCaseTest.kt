@@ -52,6 +52,7 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
         null,
         "cellIndex",
         null,
+        null,
         null
     )
     val ownedDevice = Device(
@@ -66,6 +67,7 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
         null,
         null,
         Relation.owned,
+        null,
         BatteryState.low
     )
     val uiPublicDevice = publicDevice.toUIDevice().apply {
