@@ -103,6 +103,8 @@ data class PublicDevice(
             timezone = timezone,
             currentWeather = currentWeather,
             qodScore = metrics?.qodScore,
+            polReason = metrics?.polToAnnotationGroupCode(),
+            metricsTimestamp = metrics?.ts,
             relation = null,
             label = null,
             friendlyName = null,
@@ -195,6 +197,8 @@ data class Device(
             totalRewards = rewards?.totalRewards,
             actualReward = rewards?.actualReward,
             qodScore = metrics?.qodScore,
+            polReason = metrics?.polToAnnotationGroupCode(),
+            metricsTimestamp = metrics?.ts,
             hasLowBattery = batteryState == BatteryState.low
         )
     }
@@ -208,9 +212,23 @@ data class Device(
 data class Metrics(
     @Json(name = "qod_score")
     val qodScore: Int?,
-    @Json(name = "pol_score")
-    val polScore: Int?
-) : Parcelable
+    @Json(name = "pol_reason")
+    val polReason: String?,
+    val ts: ZonedDateTime?
+) : Parcelable {
+    fun polToAnnotationGroupCode(): AnnotationGroupCode? {
+        return if (polReason.isNullOrEmpty()) {
+            null
+        } else {
+            try {
+                AnnotationGroupCode.valueOf(polReason)
+            } catch (e: IllegalArgumentException) {
+                Timber.w(e)
+                AnnotationGroupCode.UNKNOWN
+            }
+        }
+    }
+}
 
 @Keep
 @JsonClass(generateAdapter = true)

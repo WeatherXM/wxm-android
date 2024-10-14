@@ -618,4 +618,5 @@
 
     <!-- Station Health -->
     <string name="data_quality_value">Data Quality %d%%</string>
+    <string name="no_location">No location</string>
 </resources>

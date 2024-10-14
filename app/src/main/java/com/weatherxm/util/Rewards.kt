@@ -7,6 +7,16 @@ import com.weatherxm.ui.common.AnnotationGroupCode
 object Rewards {
 
     @Suppress("MagicNumber")
+    fun isQodError(score: Int?): Boolean {
+        return score != null && score < 20
+    }
+
+    @Suppress("MagicNumber")
+    fun isQodWarning(score: Int?): Boolean {
+        return score != null && score in 20..79
+    }
+
+    @Suppress("MagicNumber")
     @ColorRes
     fun getRewardScoreColor(score: Int?): Int {
         return score?.let {

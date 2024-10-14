@@ -17,6 +17,11 @@
         "lat": 37.981262,
         "lon": 23.730503
     },
+    "metrics": {
+        "qod_score": 0,
+        "pol_reason": null,
+        "ts": "2022-01-13T22:00:00+02:00"
+    },
     "attributes": {
         "isActive": false,
         "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",

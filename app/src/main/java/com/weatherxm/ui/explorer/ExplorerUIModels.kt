@@ -92,6 +92,8 @@ data class SearchResult(
             totalRewards = null,
             actualReward = null,
             qodScore = null,
+            polReason = null,
+            metricsTimestamp = null,
             hasLowBattery = null
         )
     }

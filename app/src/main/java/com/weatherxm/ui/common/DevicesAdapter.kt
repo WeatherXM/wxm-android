@@ -105,6 +105,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 itemView.context,
                 binding.dataQuality,
                 binding.dataQualityIcon,
+                binding.address,
                 binding.addressIcon
             )
         }
@@ -152,11 +153,6 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
              * If the UIDevice has an error alert or an error metric then the stroke should be error
              * or if there are warning alerts or warning metrics then the stroke should be warning
              * otherwise clear the stroke
-             */
-            /**
-             * STOPSHIP:
-             * TODO: Include here if Data Quality is error/warning
-             * or location has error for stroke purposes
              */
             if (item.hasErrors() || item.hasErrorMetrics()) {
                 binding.root.setCardStroke(R.color.error, 2)

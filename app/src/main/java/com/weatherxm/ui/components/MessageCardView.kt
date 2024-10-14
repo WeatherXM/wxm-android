@@ -22,6 +22,7 @@ import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
+@Suppress("TooManyFunctions")
 class MessageCardView : LinearLayout {
 
     private lateinit var binding: ViewMessageCardBinding

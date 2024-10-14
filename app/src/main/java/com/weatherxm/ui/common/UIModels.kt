@@ -14,6 +14,8 @@ import com.weatherxm.data.models.Reward
 import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.data.repository.RewardsRepositoryImpl
+import com.weatherxm.util.Rewards.isQodError
+import com.weatherxm.util.Rewards.isQodWarning
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -41,6 +43,7 @@ data class TimelineReward(
     val data: Reward?
 ) : Parcelable
 
+@Suppress("TooManyFunctions")
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
@@ -73,6 +76,8 @@ data class UIDevice(
     val totalRewards: Float?,
     val actualReward: Float?,
     val qodScore: Int?,
+    val polReason: AnnotationGroupCode?,
+    val metricsTimestamp: ZonedDateTime?,
     var alerts: List<DeviceAlert> = listOf(),
     val isDeviceFromSearchResult: Boolean = false
 ) : Parcelable {
@@ -81,6 +86,8 @@ data class UIDevice(
             String.empty(),
             String.empty(),
             String.empty(),
+            null,
+            null,
             null,
             null,
             null,
@@ -145,11 +152,11 @@ data class UIDevice(
     }
 
     fun hasErrorMetrics(): Boolean {
-        return qodScore != null && qodScore < 20
+        return isQodError(qodScore) || polReason == AnnotationGroupCode.NO_LOCATION_DATA
     }
 
     fun hasWarningMetrics(): Boolean {
-        return qodScore != null && qodScore in 20..79
+        return isQodWarning(qodScore) || polReason == AnnotationGroupCode.LOCATION_NOT_VERIFIED
     }
 
     fun createDeviceAlerts(shouldNotifyOTA: Boolean): List<DeviceAlert> {

@@ -485,14 +485,9 @@ fun UIDevice.stationHealthViews(
     context: Context,
     dataQualityText: MaterialTextView,
     dataQualityIcon: ImageView,
+    addressText: MaterialTextView,
     addressIcon: ImageView
 ) {
-    /**
-     * STOPSHIP:
-     * TODO: Handle it properly based on the actual UIDevice parameters
-     * 1. No Location
-     * 2. Location not verified
-     */
     qodScore?.let {
         dataQualityText.text = context.getString(R.string.data_quality_value, it)
         dataQualityIcon.setColor(getRewardScoreColor(it))
@@ -500,7 +495,18 @@ fun UIDevice.stationHealthViews(
         dataQualityText.text = context.getString(R.string.no_data)
         dataQualityIcon.setColor(R.color.success)
     }
-    addressIcon.setColor(R.color.success)
+    when (polReason) {
+        AnnotationGroupCode.NO_LOCATION_DATA -> {
+            addressText.text = context.getString(R.string.no_location)
+            addressIcon.setColor(R.color.error)
+        }
+        AnnotationGroupCode.LOCATION_NOT_VERIFIED -> {
+            addressIcon.setColor(R.color.warning)
+        }
+        else -> {
+            addressIcon.setColor(R.color.success)
+        }
+    }
 }
 
 private fun Context.hideKeyboard(view: View) {

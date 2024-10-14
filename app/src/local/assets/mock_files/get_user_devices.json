@@ -125,7 +125,9 @@
             "hw_class": "CONSUMER"
         },
         "metrics": {
-            "qod_score": 80
+            "qod_score": 80,
+            "pol_reason": null,
+            "ts": "2022-01-13T22:00:00+02:00"
         },
         "label": null,
         "location": {
@@ -240,7 +242,9 @@
             "hw_class": "CONSUMER"
         },
         "metrics": {
-            "qod_score": 79
+            "qod_score": 79,
+            "pol_reason": "NO_LOCATION_DATA",
+            "ts": "2022-01-13T22:00:00+02:00"
         },
         "location": {
             "lat": 37.981262,
@@ -353,7 +357,9 @@
             "hw_class": "CONSUMER"
         },
         "metrics": {
-            "qod_score": 20
+            "qod_score": 20,
+            "pol_reason": "LOCATION_NOT_VERIFIED",
+            "ts": "2022-01-13T22:00:00+02:00"
         },
         "location": {
             "lat": 37.981262,
@@ -468,7 +474,9 @@
             "hw_class": "CONSUMER"
         },
         "metrics": {
-            "qod_score": 0
+            "qod_score": 0,
+            "pol_reason": null,
+            "ts": "2022-01-13T22:00:00+02:00"
         },
         "label": null,
         "relation": "owned",
