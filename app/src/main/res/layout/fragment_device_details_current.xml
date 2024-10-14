@@ -57,7 +57,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/stationHealthTitle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/stationHealthTitle"
-                app:tint="@color/darkestBlue" />
+                app:tint="@color/colorPrimary" />
 
             <LinearLayout
                 android:id="@+id/stationHealthContainer"
@@ -178,7 +178,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/darkestBlue"
+                        app:tint="@color/colorPrimary"
                         tools:ignore="ContentDescription" />
 
                     <com.google.android.material.textview.MaterialTextView
