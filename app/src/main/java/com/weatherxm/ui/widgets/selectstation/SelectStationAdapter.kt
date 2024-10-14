@@ -16,6 +16,7 @@ import com.weatherxm.ui.common.errorChip
 import com.weatherxm.ui.common.lowBatteryChip
 import com.weatherxm.ui.common.offlineChip
 import com.weatherxm.ui.common.setBundleChip
+import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
 import com.weatherxm.ui.common.stationHealthViews
@@ -112,7 +113,12 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
             binding.status.setStatusChip(item)
             binding.bundle.setBundleChip(item)
 
-            setAlerts(item)
+            if (item.alerts.isNotEmpty()) {
+                setAlerts(item)
+            } else {
+                binding.issueChip.visible(false)
+            }
+            setCardStroke(item)
             device.stationHealthViews(
                 itemView.context,
                 binding.dataQuality,
@@ -159,16 +165,29 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
             )
         }
 
-        private fun setAlerts(item: UIDevice) {
-            if (item.alerts.isEmpty()) {
-                binding.issueChip.visible(false)
-                return
+        private fun setCardStroke(item: UIDevice) {
+            /**
+             * If the UIDevice has an error alert or an error metric then the stroke should be error
+             * or if there are warning alerts or warning metrics then the stroke should be warning
+             * otherwise clear the stroke
+             */
+            /**
+             * STOPSHIP:
+             * TODO: Include here if Data Quality is error/warning
+             * or location has error for stroke purposes
+             */
+            if (item.hasErrors() || item.hasErrorMetrics()) {
+                binding.root.setCardStroke(R.color.error, 2)
+            } else if (item.alerts.isNotEmpty() || item.hasWarningMetrics()) {
+                binding.root.setCardStroke(R.color.warning, 2)
+            } else {
+                binding.root.strokeWidth = 0
             }
+        }
 
-            val hasErrorSeverity = item.hasErrors()
-
+        private fun setAlerts(item: UIDevice) {
             if (item.alerts.size > 1) {
-                if (hasErrorSeverity) {
+                if (item.hasErrors()) {
                     binding.issueChip.errorChip()
                 } else {
                     binding.issueChip.warningChip()

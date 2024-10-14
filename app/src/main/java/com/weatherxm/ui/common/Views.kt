@@ -492,10 +492,14 @@ fun UIDevice.stationHealthViews(
      * TODO: Handle it properly based on the actual UIDevice parameters
      * 1. No Location
      * 2. Location not verified
-     * 3. No Data
      */
-    dataQualityText.text = context.getString(R.string.data_quality_value, 100)
-    dataQualityIcon.setColor(getRewardScoreColor(100))
+    qodScore?.let {
+        dataQualityText.text = context.getString(R.string.data_quality_value, it)
+        dataQualityIcon.setColor(getRewardScoreColor(it))
+    } ?: run {
+        dataQualityText.text = context.getString(R.string.no_data)
+        dataQualityIcon.setColor(R.color.success)
+    }
     addressIcon.setColor(R.color.success)
 }
 

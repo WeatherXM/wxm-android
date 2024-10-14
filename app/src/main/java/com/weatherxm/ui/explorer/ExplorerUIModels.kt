@@ -91,6 +91,7 @@ data class SearchResult(
             hex7 = null,
             totalRewards = null,
             actualReward = null,
+            qodScore = null,
             hasLowBattery = null
         )
     }

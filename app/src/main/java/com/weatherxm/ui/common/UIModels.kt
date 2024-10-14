@@ -72,6 +72,7 @@ data class UIDevice(
     val hasLowBattery: Boolean?,
     val totalRewards: Float?,
     val actualReward: Float?,
+    val qodScore: Int?,
     var alerts: List<DeviceAlert> = listOf(),
     val isDeviceFromSearchResult: Boolean = false
 ) : Parcelable {
@@ -80,6 +81,7 @@ data class UIDevice(
             String.empty(),
             String.empty(),
             String.empty(),
+            null,
             null,
             null,
             null,
@@ -140,6 +142,14 @@ data class UIDevice(
         return alerts.firstOrNull {
             it.severity == SeverityLevel.ERROR
         } != null
+    }
+
+    fun hasErrorMetrics(): Boolean {
+        return qodScore != null && qodScore < 20
+    }
+
+    fun hasWarningMetrics(): Boolean {
+        return qodScore != null && qodScore in 20..79
     }
 
     fun createDeviceAlerts(shouldNotifyOTA: Boolean): List<DeviceAlert> {

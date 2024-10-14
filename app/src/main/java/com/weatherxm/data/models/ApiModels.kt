@@ -77,6 +77,7 @@ data class PublicDevice(
     val lastWeatherStationActivity: ZonedDateTime?,
     val cellIndex: String,
     val cellCenter: Location?,
+    val metrics: Metrics?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
 ) : Parcelable {
@@ -101,6 +102,7 @@ data class PublicDevice(
             lastWeatherStationActivity = lastWeatherStationActivity,
             timezone = timezone,
             currentWeather = currentWeather,
+            qodScore = metrics?.qodScore,
             relation = null,
             label = null,
             friendlyName = null,
@@ -133,6 +135,7 @@ data class Device(
     var address: String?,
     val rewards: Rewards?,
     val relation: Relation?,
+    val metrics: Metrics?,
     @Json(name = "bat_state")
     val batteryState: BatteryState?
 ) : Parcelable {
@@ -140,6 +143,7 @@ data class Device(
         fun empty() = Device(
             String.empty(),
             String.empty(),
+            null,
             null,
             null,
             null,
@@ -190,12 +194,23 @@ data class Device(
             currentWeather = currentWeather,
             totalRewards = rewards?.totalRewards,
             actualReward = rewards?.actualReward,
+            qodScore = metrics?.qodScore,
             hasLowBattery = batteryState == BatteryState.low
         )
     }
 
     fun isEmpty() = id == String.empty() && name == String.empty()
 }
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class Metrics(
+    @Json(name = "qod_score")
+    val qodScore: Int?,
+    @Json(name = "pol_score")
+    val polScore: Int?
+) : Parcelable
 
 @Keep
 @JsonClass(generateAdapter = true)

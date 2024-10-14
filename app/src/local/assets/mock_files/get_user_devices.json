@@ -124,6 +124,9 @@
             "ws_model": "WS2000",
             "hw_class": "CONSUMER"
         },
+        "metrics": {
+            "qod_score": 80
+        },
         "label": null,
         "location": {
             "lat": 37.981262,
@@ -236,6 +239,9 @@
             "gw_model": "WS1200",
             "hw_class": "CONSUMER"
         },
+        "metrics": {
+            "qod_score": 79
+        },
         "location": {
             "lat": 37.981262,
             "lon": 23.730503
@@ -345,6 +351,9 @@
             "connectivity": "helium",
             "ws_model": "WS2000",
             "hw_class": "CONSUMER"
+        },
+        "metrics": {
+            "qod_score": 20
         },
         "location": {
             "lat": 37.981262,
@@ -457,6 +466,9 @@
             "ws_model": "WS1001",
             "gw_model": "WS1200",
             "hw_class": "CONSUMER"
+        },
+        "metrics": {
+            "qod_score": 0
         },
         "label": null,
         "relation": "owned",
