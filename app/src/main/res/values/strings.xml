@@ -134,6 +134,7 @@
     <string name="no_rewards_yet">No rewards yet!</string>
 
     <!-- Weather Station(s) -->
+    <string name="latest_weather">Latest Weather</string>
     <string name="my_stations">My Stations</string>
     <string name="weather_stations">Weather Stations</string>
     <string name="add_weather_station"><![CDATA[Claim your WXM device by clicking the <b>+ button.</b>]]></string>

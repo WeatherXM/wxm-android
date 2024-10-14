@@ -120,8 +120,8 @@
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:src="@drawable/ic_hex"
-                            tools:ignore="ContentDescription"
-                            tools:tint="@color/success" />
+                            app:tint="@color/success"
+                            tools:ignore="ContentDescription" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/address"

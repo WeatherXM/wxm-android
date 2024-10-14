@@ -127,6 +127,7 @@ class CurrentFragment : BaseFragment() {
             requireContext(),
             binding.dataQuality,
             binding.dataQualityIcon,
+            binding.address,
             binding.addressIcon
         )
         if (device.currentWeather == null || device.currentWeather.isEmpty()) {
