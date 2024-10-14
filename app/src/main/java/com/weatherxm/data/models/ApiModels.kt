@@ -572,7 +572,11 @@ data class Reward(
     val baseRewardScore: Int?,
     @Json(name = "annotation_summary")
     val annotationSummary: List<RewardsAnnotationGroup>?,
-) : Parcelable
+) : Parcelable {
+    companion object {
+        fun initWithTimestamp(ts: ZonedDateTime?) = Reward(ts, null, null, null, null, null)
+    }
+}
 
 @Keep
 @JsonClass(generateAdapter = true)
