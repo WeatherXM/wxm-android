@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.data.models.Reward
 import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
@@ -130,7 +131,17 @@ class CurrentFragment : BaseFragment() {
             binding.address,
             binding.addressIcon
         )
+        if (device.qodScore != null && device.metricsTimestamp != null) {
+            val reward = Reward.initWithTimestamp(device.metricsTimestamp)
+            binding.dataQualityCard.setOnClickListener {
+                navigator.showRewardDetails(requireContext(), parentModel.device, reward)
+            }
+            binding.addressCard.setOnClickListener {
+                navigator.showRewardDetails(requireContext(), parentModel.device, reward)
+            }
+        }
         binding.emptyStationHealthInfo.visible(device.qodScore == null)
+
         if (device.currentWeather == null || device.currentWeather.isEmpty()) {
             binding.historicalCharts.visible(false)
         }
