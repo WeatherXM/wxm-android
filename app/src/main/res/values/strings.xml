@@ -142,7 +142,7 @@
     <string name="empty_weather_stations">No stations yet?</string>
     <string name="view_explorer_map">View Explorer Map</string>
     <string name="displayed_times">All displayed times are in the Station’s timezone (%s).</string>
-    <string name="station_inactive">Station Inactive</string>
+    <string name="station_inactive">Station inactive</string>
     <string name="unknown_address">Unknown Address</string>
     <string name="no_data">No Data</string>
     <string name="no_data_message">We\’re unable to show updated station data. Please make sure your station is operational and connected to the internet.</string>

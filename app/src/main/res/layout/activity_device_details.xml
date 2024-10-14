@@ -98,6 +98,7 @@
                 app:layout_collapseMode="pin"
                 app:menu="@menu/device_details_menu"
                 app:navigationIcon="@drawable/ic_back"
+                app:titleTextAppearance="@style/TextAppearance.WeatherXM.Device.Details.Title"
                 tools:subtitle="Exotic Magnolia Beaufort"
                 tools:title="My Weather Station">
 
