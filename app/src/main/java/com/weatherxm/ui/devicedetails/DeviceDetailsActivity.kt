@@ -16,7 +16,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.databinding.ActivityDeviceDetailsBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
@@ -202,7 +201,6 @@ class DeviceDetailsActivity : BaseActivity() {
                     setImageResource(R.drawable.ic_home)
                     setColor(R.color.colorPrimary)
                 }
-
                 DeviceRelation.FOLLOWED -> {
                     setOnClickListener {
                         handleFollowClick()
@@ -210,7 +208,6 @@ class DeviceDetailsActivity : BaseActivity() {
                     setImageResource(R.drawable.ic_favorite)
                     setColor(R.color.follow_heart_color)
                 }
-
                 DeviceRelation.UNFOLLOWED -> {
                     setOnClickListener {
                         handleFollowClick()
