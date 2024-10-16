@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.Reward
@@ -17,6 +18,7 @@ import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.StationHealthExplanationDialogFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
+import com.weatherxm.ui.explorer.UICell
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -122,6 +124,24 @@ class CurrentFragment : BaseFragment() {
         binding.address.text = if (device.address.isNullOrEmpty()) {
             getString(R.string.unknown_address)
         } else {
+            binding.addressCard.setOnClickListener {
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.REGION.paramValue,
+                    customParams = arrayOf(
+                        Pair(
+                            AnalyticsService.CustomParam.CONTENT_NAME.paramName,
+                            AnalyticsService.ParamValue.STATION_DETAILS_CHIP.paramValue
+                        ),
+                        Pair(
+                            FirebaseAnalytics.Param.ITEM_ID,
+                            AnalyticsService.ParamValue.STATION_REGION_ID.paramValue
+                        )
+                    )
+                )
+                model.device.cellCenter?.let { location ->
+                    navigator.showCellInfo(context, UICell(model.device.cellIndex, location))
+                }
+            }
             device.address
         }
         device.stationHealthViews(
@@ -134,9 +154,6 @@ class CurrentFragment : BaseFragment() {
         if (device.qodScore != null && device.metricsTimestamp != null) {
             val reward = Reward.initWithTimestamp(device.metricsTimestamp)
             binding.dataQualityCard.setOnClickListener {
-                navigator.showRewardDetails(requireContext(), parentModel.device, reward)
-            }
-            binding.addressCard.setOnClickListener {
                 navigator.showRewardDetails(requireContext(), parentModel.device, reward)
             }
         }
