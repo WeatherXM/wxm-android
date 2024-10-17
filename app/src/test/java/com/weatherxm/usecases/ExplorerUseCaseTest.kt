@@ -56,6 +56,7 @@ class ExplorerUseCaseTest : BehaviorSpec({
         index,
         null,
         address,
+        null,
         null
     )
     val followedDevice =
@@ -69,10 +70,23 @@ class ExplorerUseCaseTest : BehaviorSpec({
             index,
             null,
             address,
+            null,
             null
         )
     val publicDevice =
-        PublicDevice("publicDevice", "public", null, null, null, null, index, null, address, null)
+        PublicDevice(
+            "publicDevice",
+            "public",
+            null,
+            null,
+            null,
+            null,
+            index,
+            null,
+            address,
+            null,
+            null
+        )
 
     val ownedUiDevice = ownedDevice.toUIDevice().apply {
         this.cellCenter = location

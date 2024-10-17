@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.button.MaterialButton.ICON_GRAVITY_END
@@ -21,6 +22,7 @@ import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
+@Suppress("TooManyFunctions")
 class MessageCardView : LinearLayout {
 
     private lateinit var binding: ViewMessageCardBinding
@@ -139,6 +141,11 @@ class MessageCardView : LinearLayout {
             setOnClickListener { onTroubleshootClicked.invoke() }
             visible(true)
         }
+        return this
+    }
+
+    fun icon(@DrawableRes resId: Int): MessageCardView {
+        binding.icon.setImageDrawable(AppCompatResources.getDrawable(context, resId))
         return this
     }
 

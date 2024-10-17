@@ -99,7 +99,7 @@ object DateTimeHelper : KoinComponent {
             toInstant().toEpochMilli(),
             now.toInstant().toEpochMilli(),
             DateUtils.MINUTE_IN_MILLIS,
-            DateUtils.FORMAT_ABBREV_RELATIVE
+            DateUtils.FORMAT_ABBREV_ALL
         ).toString()
     }
 
