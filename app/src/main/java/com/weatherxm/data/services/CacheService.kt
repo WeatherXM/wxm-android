@@ -127,19 +127,6 @@ class CacheService(
         preferences.edit().putBoolean(resources.getString(KEY_ANALYTICS), enabled).apply()
     }
 
-    fun getLocationAddress(hexIndex: String): Either<Failure, String> {
-        val address = preferences.getString(hexIndex, null)
-        return if (address.isNullOrEmpty()) {
-            Either.Left(DataError.CacheMissError)
-        } else {
-            Either.Right(address)
-        }
-    }
-
-    fun setLocationAddress(hexIndex: String, address: String) {
-        preferences.edit().putString(hexIndex, address).apply()
-    }
-
     fun getUserUsername(): Either<Failure, String> {
         val username = preferences.getString(KEY_USERNAME, null)
         return if (username.isNullOrEmpty()) {

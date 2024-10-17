@@ -67,7 +67,7 @@ data class UIDevice(
     val claimedAt: ZonedDateTime?,
     val lastWeatherStationActivity: ZonedDateTime?,
     var timezone: String?,
-    var address: String?,
+    val address: String?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
     val hasLowBattery: Boolean?,

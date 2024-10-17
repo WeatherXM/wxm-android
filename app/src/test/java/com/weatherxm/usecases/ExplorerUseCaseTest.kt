@@ -12,7 +12,6 @@ import com.weatherxm.data.models.NetworkSearchDeviceResult
 import com.weatherxm.data.models.NetworkSearchResults
 import com.weatherxm.data.models.PublicDevice
 import com.weatherxm.data.models.PublicHex
-import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.ExplorerRepositoryImpl.Companion.EXCLUDE_PLACES
@@ -33,12 +32,11 @@ import java.time.ZonedDateTime
 
 class ExplorerUseCaseTest : BehaviorSpec({
     val explorerRepo = mockk<ExplorerRepository>()
-    val addressRepo = mockk<AddressRepository>()
     val followRepo = mockk<FollowRepository>()
     val deviceRepo = mockk<DeviceRepository>()
     val locationRepo = mockk<LocationRepository>()
     val usecase = ExplorerUseCaseImpl(
-        explorerRepo, addressRepo, followRepo, deviceRepo, locationRepo
+        explorerRepo, followRepo, deviceRepo, locationRepo
     )
 
     val searchResult = SearchResult(null, null)
@@ -57,27 +55,49 @@ class ExplorerUseCaseTest : BehaviorSpec({
         ZonedDateTime.now(),
         index,
         null,
+        address,
         null,
         null
     )
     val followedDevice =
-        PublicDevice("followedDevice", "followed", null, null, null, null, index, null, null, null)
+        PublicDevice(
+            "followedDevice",
+            "followed",
+            null,
+            null,
+            null,
+            null,
+            index,
+            null,
+            address,
+            null,
+            null
+        )
     val publicDevice =
-        PublicDevice("publicDevice", "public", null, null, null, null, index, null, null, null)
+        PublicDevice(
+            "publicDevice",
+            "public",
+            null,
+            null,
+            null,
+            null,
+            index,
+            null,
+            address,
+            null,
+            null
+        )
 
     val ownedUiDevice = ownedDevice.toUIDevice().apply {
         this.cellCenter = location
-        this.address = address
         this.relation = DeviceRelation.OWNED
     }
     val followedUiDevice = followedDevice.toUIDevice().apply {
         this.cellCenter = location
-        this.address = address
         this.relation = DeviceRelation.FOLLOWED
     }
     val publicUiDevice = publicDevice.toUIDevice().apply {
         this.cellCenter = location
-        this.address = address
         this.relation = DeviceRelation.UNFOLLOWED
     }
 
@@ -91,7 +111,6 @@ class ExplorerUseCaseTest : BehaviorSpec({
         NetworkSearchResults(listOf(networkSearchDeviceResult), listOf(networkSearchAddressResult))
 
     beforeSpec {
-        coEvery { addressRepo.getAddressFromLocation(cell.index, cell.center) } returns address
         coJustRun { explorerRepo.setRecentSearch(searchResult) }
         coEvery { deviceRepo.getUserDevicesIds() } returns listOf("ownedDevice")
         coEvery { followRepo.getFollowedDevicesIds() } returns listOf("followedDevice")
@@ -173,7 +192,6 @@ class ExplorerUseCaseTest : BehaviorSpec({
                     ownedDevice
                 )
                 then("return the UIDevice") {
-                    ownedUiDevice.address = null
                     ownedUiDevice.cellCenter = null
                     usecase.getCellDevice(index, ownedUiDevice.id).isSuccess(ownedUiDevice)
                 }

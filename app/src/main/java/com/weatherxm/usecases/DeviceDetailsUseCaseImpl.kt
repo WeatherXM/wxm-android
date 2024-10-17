@@ -3,7 +3,6 @@ package com.weatherxm.usecases
 import arrow.core.Either
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Rewards
-import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
@@ -12,13 +11,11 @@ import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.explorer.UICell
 
 @Suppress("LongParameterList")
 class DeviceDetailsUseCaseImpl(
     private val deviceRepository: DeviceRepository,
     private val rewardsRepository: RewardsRepository,
-    private val addressRepository: AddressRepository,
     private val explorerRepository: ExplorerRepository,
     private val deviceOTARepo: DeviceOTARepository
 ) : DeviceDetailsUseCase {
@@ -44,10 +41,6 @@ class DeviceDetailsUseCaseImpl(
                 createDeviceAlerts(deviceOTARepo.shouldNotifyOTA(id, assignedFirmware))
             }
         }
-    }
-
-    override suspend fun getAddressOfCell(cell: UICell): String? {
-        return addressRepository.getAddressFromLocation(cell.index, cell.center)
     }
 
     override suspend fun getRewards(deviceId: String): Either<Failure, Rewards> {

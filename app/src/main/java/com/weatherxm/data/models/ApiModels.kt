@@ -77,6 +77,7 @@ data class PublicDevice(
     val lastWeatherStationActivity: ZonedDateTime?,
     val cellIndex: String,
     val cellCenter: Location?,
+    val address: String?,
     val metrics: Metrics?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
@@ -102,6 +103,7 @@ data class PublicDevice(
             lastWeatherStationActivity = lastWeatherStationActivity,
             timezone = timezone,
             currentWeather = currentWeather,
+            address = address,
             qodScore = metrics?.qodScore,
             polReason = metrics?.polToAnnotationGroupCode(),
             metricsTimestamp = metrics?.ts,
@@ -112,7 +114,6 @@ data class PublicDevice(
             currentFirmware = null,
             assignedFirmware = null,
             claimedAt = null,
-            address = null,
             hex7 = null,
             totalRewards = null,
             actualReward = null,

@@ -18,8 +18,6 @@ class PrefsStringEitherTest(
     private val prefEditor: SharedPreferences.Editor
 ) {
     private val installationId = "installationId"
-    private val hexIndex = "hexIndex"
-    private val address = "address"
     private val username = "username"
     private val otaKey = "otaKey"
     private val otaVersion = "1.0.0"
@@ -75,15 +73,6 @@ class PrefsStringEitherTest(
             { prefEditor.putString(KEY_INSTALLATION_ID, installationId) },
             { cacheService.getInstallationId() },
             { cacheService.setInstallationId(installationId) }
-        )
-
-        behaviorSpec.testStringEither(
-            "Address of the Location",
-            address,
-            { sharedPref.getString(hexIndex, null) },
-            { prefEditor.putString(hexIndex, address) },
-            { cacheService.getLocationAddress(hexIndex) },
-            { cacheService.setLocationAddress(hexIndex, address) }
         )
 
         behaviorSpec.testStringEither(

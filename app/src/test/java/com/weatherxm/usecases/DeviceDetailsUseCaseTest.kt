@@ -8,12 +8,10 @@ import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.models.Attributes
 import com.weatherxm.data.models.BatteryState
 import com.weatherxm.data.models.Device
-import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.PublicDevice
 import com.weatherxm.data.models.Relation
 import com.weatherxm.data.models.Rewards
 import com.weatherxm.data.models.SeverityLevel
-import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceOTARepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
@@ -22,10 +20,7 @@ import com.weatherxm.ui.common.DeviceAlert
 import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.explorer.UICell
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.shouldBe
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 
@@ -33,12 +28,10 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
     val deviceRepo = mockk<DeviceRepository>()
     val deviceOTARepo = mockk<DeviceOTARepository>()
     val rewardsRepo = mockk<RewardsRepository>()
-    val addressRepo = mockk<AddressRepository>()
     val explorerRepo = mockk<ExplorerRepository>()
     val usecase = DeviceDetailsUseCaseImpl(
         deviceRepo,
         rewardsRepo,
-        addressRepo,
         explorerRepo,
         deviceOTARepo
     )
@@ -51,6 +44,7 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
         false,
         null,
         "cellIndex",
+        null,
         null,
         null,
         null
@@ -80,8 +74,6 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
             DeviceAlert(DeviceAlertType.LOW_BATTERY, SeverityLevel.WARNING)
         )
     }
-    val cell = UICell("cellIndex", Location(0.0, 0.0))
-    val address = "address"
     val rewards = mockk<Rewards>()
 
     beforeSpec {
@@ -121,17 +113,6 @@ class DeviceDetailsUseCaseTest : BehaviorSpec({
                         usecase.getDevice(uiOwnedDevice).isSuccess(uiOwnedDevice)
                     }
                 }
-            }
-        }
-    }
-
-    context("Get address of a cell") {
-        given("The repository providing the address") {
-            then("return the address") {
-                coEvery {
-                    addressRepo.getAddressFromLocation(cell.index, cell.center)
-                } returns address
-                usecase.getAddressOfCell(cell) shouldBe address
             }
         }
     }

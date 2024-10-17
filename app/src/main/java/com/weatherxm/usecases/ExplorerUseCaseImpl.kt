@@ -11,7 +11,6 @@ import com.mapbox.maps.extension.style.sources.generated.geoJsonSource
 import com.weatherxm.data.models.DataError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
-import com.weatherxm.data.repository.AddressRepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.ExplorerRepository
 import com.weatherxm.data.repository.FollowRepository
@@ -26,7 +25,6 @@ import com.weatherxm.ui.explorer.UICell
 @Suppress("LongParameterList")
 class ExplorerUseCaseImpl(
     private val explorerRepository: ExplorerRepository,
-    private val addressRepository: AddressRepository,
     private val followRepository: FollowRepository,
     private val deviceRepository: DeviceRepository,
     private val locationRepository: LocationRepository
@@ -63,11 +61,9 @@ class ExplorerUseCaseImpl(
 
     override suspend fun getCellDevices(cell: UICell): Either<Failure, List<UIDevice>> {
         return explorerRepository.getCellDevices(cell.index).map { devices ->
-            val address = addressRepository.getAddressFromLocation(cell.index, cell.center)
             devices.map { publicDevice ->
                 publicDevice.toUIDevice().apply {
                     this.cellCenter = cell.center
-                    this.address = address
                     this.relation = getRelation(this.id)
                 }
             }.sortedWith(
