@@ -8,21 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.weatherxm.R
 import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemWidgetSelectStationBinding
-import com.weatherxm.ui.common.DeviceAlert
-import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
-import com.weatherxm.ui.common.errorChip
-import com.weatherxm.ui.common.lowBatteryChip
-import com.weatherxm.ui.common.offlineChip
+import com.weatherxm.ui.common.handleAlerts
+import com.weatherxm.ui.common.handleStroke
 import com.weatherxm.ui.common.setBundleChip
-import com.weatherxm.ui.common.setCardStroke
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
 import com.weatherxm.ui.common.stationHealthViews
-import com.weatherxm.ui.common.updateRequiredChip
 import com.weatherxm.ui.common.visible
-import com.weatherxm.ui.common.warningChip
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getFormattedWindDirection
@@ -112,14 +106,9 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
 
             binding.status.setStatusChip(item)
             binding.bundle.setBundleChip(item)
-
-            if (item.alerts.isNotEmpty()) {
-                setAlerts(item)
-            } else {
-                binding.issueChip.visible(false)
-            }
-            setCardStroke(item)
-            device.stationHealthViews(
+            item.handleAlerts(itemView.context, binding.issueChip, null)
+            item.handleStroke(binding.root)
+            item.stationHealthViews(
                 itemView.context,
                 binding.dataQuality,
                 binding.dataQualityIcon,
@@ -164,49 +153,6 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
                     device.currentWeather?.precipitation, includeUnit = false
                 ), Weather.getPrecipitationPreferredUnit()
             )
-        }
-
-        private fun setCardStroke(item: UIDevice) {
-            /**
-             * If the UIDevice has an error alert or an error metric then the stroke should be error
-             * or if there are warning alerts or warning metrics then the stroke should be warning
-             * otherwise clear the stroke
-             */
-            if (item.hasErrors() || item.hasErrorMetrics()) {
-                binding.root.setCardStroke(R.color.error, 2)
-            } else if (item.alerts.isNotEmpty() || item.hasWarningMetrics()) {
-                binding.root.setCardStroke(R.color.warning, 2)
-            } else {
-                binding.root.strokeWidth = 0
-            }
-        }
-
-        private fun setAlerts(item: UIDevice) {
-            if (item.alerts.size > 1) {
-                if (item.hasErrors()) {
-                    binding.issueChip.errorChip()
-                } else {
-                    binding.issueChip.warningChip()
-                }
-                binding.issueChip.text =
-                    itemView.context.getString(R.string.issues, item.alerts.size)
-            } else {
-                when (item.alerts[0]) {
-                    DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY) -> {
-                        binding.issueChip.lowBatteryChip()
-                    }
-                    DeviceAlert.createError(DeviceAlertType.OFFLINE) -> {
-                        binding.issueChip.offlineChip()
-                    }
-                    DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE) -> {
-                        binding.issueChip.updateRequiredChip()
-                    }
-                    else -> {
-                        // Do nothing
-                    }
-                }
-            }
-            binding.issueChip.visible(true)
         }
     }
 

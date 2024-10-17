@@ -56,9 +56,12 @@ import com.google.android.material.shape.CornerFamily
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textview.MaterialTextView
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
 import com.weatherxm.util.Rewards.getRewardScoreColor
+import com.weatherxm.util.Rewards.metricsErrorType
 import com.weatherxm.util.Weather.getWeatherAnimation
 import dev.chrisbanes.insetter.applyInsetter
 import java.util.Locale
@@ -507,6 +510,59 @@ fun UIDevice.stationHealthViews(
             addressIcon.setColor(R.color.success)
         }
     }
+}
+
+fun UIDevice.handleStroke(rootCard: MaterialCardView) {
+    /**
+     * If the UIDevice has an error alert or an error metric then the stroke should be error
+     * or if there are warning alerts or warning metrics then the stroke should be warning
+     * otherwise clear the stroke
+     */
+    val metricsErrorType = metricsErrorType(qodScore, polReason)
+    if (hasErrors() || metricsErrorType == ErrorType.ERROR) {
+        rootCard.setCardStroke(R.color.error, 2)
+    } else if (alerts.isNotEmpty() || metricsErrorType == ErrorType.WARNING) {
+        rootCard.setCardStroke(R.color.warning, 2)
+    } else {
+        rootCard.strokeWidth = 0
+    }
+}
+
+fun UIDevice.handleAlerts(context: Context, issueChip: Chip, analytics: AnalyticsWrapper?) {
+    if (alerts.isEmpty()) {
+        issueChip.visible(false)
+        return
+    }
+
+    if (alerts.size > 1) {
+        if (hasErrors()) {
+            issueChip.errorChip()
+        } else {
+            issueChip.warningChip()
+        }
+        issueChip.text = context.getString(R.string.issues, alerts.size)
+    } else {
+        when (alerts[0]) {
+            DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY) -> {
+                issueChip.lowBatteryChip()
+            }
+            DeviceAlert.createError(DeviceAlertType.OFFLINE) -> {
+                issueChip.offlineChip()
+            }
+            DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE) -> {
+                issueChip.updateRequiredChip()
+                analytics?.trackEventPrompt(
+                    AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+                    AnalyticsService.ParamValue.WARN.paramValue,
+                    AnalyticsService.ParamValue.VIEW.paramValue
+                )
+            }
+            else -> {
+                // Do nothing
+            }
+        }
+    }
+    issueChip.visible(true)
 }
 
 private fun Context.hideKeyboard(view: View) {

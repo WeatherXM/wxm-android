@@ -14,8 +14,6 @@ import com.weatherxm.data.models.Reward
 import com.weatherxm.data.models.RewardSplit
 import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.data.repository.RewardsRepositoryImpl
-import com.weatherxm.util.Rewards.isQodError
-import com.weatherxm.util.Rewards.isQodWarning
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 import java.time.ZonedDateTime
@@ -149,14 +147,6 @@ data class UIDevice(
         return alerts.firstOrNull {
             it.severity == SeverityLevel.ERROR
         } != null
-    }
-
-    fun hasErrorMetrics(): Boolean {
-        return isQodError(qodScore) || polReason == AnnotationGroupCode.NO_LOCATION_DATA
-    }
-
-    fun hasWarningMetrics(): Boolean {
-        return isQodWarning(qodScore) || polReason == AnnotationGroupCode.LOCATION_NOT_VERIFIED
     }
 
     fun createDeviceAlerts(shouldNotifyOTA: Boolean): List<DeviceAlert> {
@@ -658,4 +648,10 @@ enum class BundleName : Parcelable {
     h2,
     d1,
     pulse
+}
+
+@Parcelize
+enum class ErrorType : Parcelable {
+    WARNING,
+    ERROR
 }

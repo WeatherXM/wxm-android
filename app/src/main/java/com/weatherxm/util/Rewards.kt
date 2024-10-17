@@ -3,17 +3,22 @@ package com.weatherxm.util
 import androidx.annotation.ColorRes
 import com.weatherxm.R
 import com.weatherxm.ui.common.AnnotationGroupCode
+import com.weatherxm.ui.common.ErrorType
 
 object Rewards {
 
     @Suppress("MagicNumber")
-    fun isQodError(score: Int?): Boolean {
-        return score != null && score < 20
-    }
+    fun metricsErrorType(score: Int?, polReason: AnnotationGroupCode?): ErrorType? {
+        val qodInErrorRange = score != null && score < 20
+        val qodInWarningRange = score != null && score in 20..79
 
-    @Suppress("MagicNumber")
-    fun isQodWarning(score: Int?): Boolean {
-        return score != null && score in 20..79
+        return if (qodInErrorRange || polReason == AnnotationGroupCode.NO_LOCATION_DATA) {
+            ErrorType.ERROR
+        } else if (qodInWarningRange || polReason == AnnotationGroupCode.LOCATION_NOT_VERIFIED) {
+            ErrorType.WARNING
+        } else {
+            null
+        }
     }
 
     @Suppress("MagicNumber")
