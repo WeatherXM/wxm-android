@@ -14,27 +14,22 @@ import com.squareup.moshi.Moshi
 import com.weatherxm.TestConfig.context
 import com.weatherxm.TestConfig.geocoder
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.TestUtils.testGetFromCache
-import com.weatherxm.TestUtils.testThrowNotImplemented
-import com.weatherxm.data.datasource.NetworkAddressDataSource.Companion.SEARCH_LIMIT
-import com.weatherxm.data.datasource.NetworkAddressDataSource.Companion.SEARCH_TYPES
+import com.weatherxm.data.datasource.AddressDataSourceImpl.Companion.SEARCH_LIMIT
+import com.weatherxm.data.datasource.AddressDataSourceImpl.Companion.SEARCH_TYPES
 import com.weatherxm.data.models.CancellationError
 import com.weatherxm.data.models.CountryAndFrequencies
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Frequency
 import com.weatherxm.data.models.Location
 import com.weatherxm.data.models.MapBoxError
-import com.weatherxm.data.services.CacheService
 import com.weatherxm.util.AndroidBuildInfo
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.types.shouldBeTypeOf
 import io.mockk.coEvery
-import io.mockk.coJustRun
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.slot
-import io.mockk.verify
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
@@ -45,18 +40,11 @@ import java.io.InputStream
 class AddressDataSourceTest : KoinTest, BehaviorSpec({
     val searchEngine = mockk<SearchEngine>()
     val moshi: Moshi by inject(Moshi::class.java)
-    val cache = mockk<CacheService>()
-    val cacheSource = CacheAddressDataSource(cache)
-    lateinit var networkSource: NetworkAddressDataSource
+    lateinit var dataSource: AddressDataSourceImpl
 
-    val hexIndex = "hexIndex"
     val location = Location(0.0, 0.0)
-    val address = "address"
     val countryName = "Greece"
     val countryCode = "GR"
-    val locality = "locality"
-    val adminArea = "adminArea"
-    val subAdminArea = "subAdminArea"
     val mockedAddress = mockk<Address>().apply {
         every { this@apply.locality } returns ""
         every { this@apply.adminArea } returns ""
@@ -114,79 +102,14 @@ class AddressDataSourceTest : KoinTest, BehaviorSpec({
     @Suppress("DEPRECATION")
     beforeSpec {
         mockkStatic(Geocoder::class)
-        networkSource = NetworkAddressDataSource(context, searchEngine, moshi)
         every { AndroidBuildInfo.sdkInt } returns Build.VERSION_CODES.TIRAMISU - 1
+        dataSource = AddressDataSourceImpl(context, searchEngine, moshi)
         every {
             geocoder.getFromLocation(any<Double>(), any<Double>(), 1)
         } returns listOf(mockedAddress)
-        coJustRun { cacheSource.setLocationAddress(hexIndex, address) }
-    }
-
-    context("Get the address of a location") {
-        When("Using the Cache Source") {
-            testGetFromCache(
-                "location",
-                address,
-                mockFunction = { cache.getLocationAddress(hexIndex) },
-                runFunction = { cacheSource.getLocationAddress(hexIndex, location) }
-            )
-        }
-        When("Using the Network Source") {
-            and("the response is a failure") {
-                every { Geocoder.isPresent() } returns false
-                then("return the failure") {
-                    networkSource.getLocationAddress(hexIndex, location).leftOrNull()
-                        .shouldBeTypeOf<Failure.GeocoderError.NoGeocoderError>()
-                }
-            }
-            and("the response is a success") {
-                every { Geocoder.isPresent() } returns true
-                and("locality, subAdminArea and adminArea are null") {
-                    then("return the country name") {
-                        networkSource.getLocationAddress(hexIndex, location).isSuccess(countryName)
-                    }
-                }
-                and("adminArea is NOT null") {
-                    every { mockedAddress.adminArea } returns adminArea
-                    then("return the adminArea with the country code") {
-                        networkSource.getLocationAddress(hexIndex, location)
-                            .isSuccess("$adminArea, $countryCode")
-                    }
-                }
-                and("subAdminArea is NOT null") {
-                    every { mockedAddress.subAdminArea } returns subAdminArea
-                    then("return the subAdminArea with the country code") {
-                        networkSource.getLocationAddress(hexIndex, location)
-                            .isSuccess("$subAdminArea, $countryCode")
-                    }
-                }
-                and("locality is NOT null") {
-                    every { mockedAddress.locality } returns locality
-                    then("return the locality with the country code") {
-                        networkSource.getLocationAddress(hexIndex, location)
-                            .isSuccess("$locality, $countryCode")
-                    }
-                }
-            }
-        }
-    }
-
-    context("Set the address of a location") {
-        When("Using the Cache Source") {
-            then("save the address in the cache") {
-                cacheSource.setLocationAddress(hexIndex, address)
-                verify(exactly = 1) { cache.setLocationAddress(hexIndex, address) }
-            }
-        }
-        When("Using the Network Source") {
-            testThrowNotImplemented { networkSource.setLocationAddress(hexIndex, address) }
-        }
     }
 
     context("Get the address of a Point") {
-        When("Using the Cache Source") {
-            testThrowNotImplemented { cacheSource.getAddressFromPoint(point) }
-        }
         When("Using the Network Source") {
             and("the response is a success") {
                 and("the results returned are empty") {
@@ -197,7 +120,7 @@ class AddressDataSourceTest : KoinTest, BehaviorSpec({
                         AsyncOperationTask.COMPLETED
                     }
                     then("return the first search result") {
-                        networkSource.getAddressFromPoint(point).isSuccess(searchResult)
+                        dataSource.getAddressFromPoint(point).isSuccess(searchResult)
                     }
                 }
                 and("the results returned are NOT empty") {
@@ -208,7 +131,7 @@ class AddressDataSourceTest : KoinTest, BehaviorSpec({
                         AsyncOperationTask.COMPLETED
                     }
                     then("return GeocodingError") {
-                        networkSource.getAddressFromPoint(point).leftOrNull()
+                        dataSource.getAddressFromPoint(point).leftOrNull()
                             .shouldBeTypeOf<MapBoxError.GeocodingError>()
                     }
                 }
@@ -222,7 +145,7 @@ class AddressDataSourceTest : KoinTest, BehaviorSpec({
                         AsyncOperationTask.COMPLETED
                     }
                     then("return CancellationError") {
-                        networkSource.getAddressFromPoint(point).leftOrNull()
+                        dataSource.getAddressFromPoint(point).leftOrNull()
                             .shouldBeTypeOf<CancellationError>()
                     }
                 }
@@ -234,7 +157,7 @@ class AddressDataSourceTest : KoinTest, BehaviorSpec({
                         AsyncOperationTask.COMPLETED
                     }
                     then("return GeocodingError") {
-                        networkSource.getAddressFromPoint(point).leftOrNull()
+                        dataSource.getAddressFromPoint(point).leftOrNull()
                             .shouldBeTypeOf<MapBoxError.GeocodingError>()
                     }
                 }
@@ -244,14 +167,11 @@ class AddressDataSourceTest : KoinTest, BehaviorSpec({
     }
 
     context("Get countries and frequencies using a location") {
-        When("Using the Cache Source") {
-            testThrowNotImplemented { cacheSource.getCountryAndFrequencies(location) }
-        }
         When("Using the Network Source") {
             and("get the country from the location is a failure") {
                 every { Geocoder.isPresent() } returns false
                 then("return CountryNotFound failure") {
-                    networkSource.getCountryAndFrequencies(location).leftOrNull()
+                    dataSource.getCountryAndFrequencies(location).leftOrNull()
                         .shouldBeTypeOf<Failure.CountryNotFound>()
                 }
             }
@@ -262,7 +182,7 @@ class AddressDataSourceTest : KoinTest, BehaviorSpec({
                 } returns countriesInformationFirstStream as InputStream
                 and("getting the frequency of the country is a success") {
                     then("return the respective CountriesAndFrequencies") {
-                        networkSource.getCountryAndFrequencies(location)
+                        dataSource.getCountryAndFrequencies(location)
                             .isSuccess(countriesAndFrequencies)
                     }
                 }
@@ -272,7 +192,7 @@ class AddressDataSourceTest : KoinTest, BehaviorSpec({
                         context.assets.open("countries_information.json")
                     } returns countriesInformationSecondStream as InputStream
                     then("return CountryNotFound failure") {
-                        networkSource.getCountryAndFrequencies(location).leftOrNull()
+                        dataSource.getCountryAndFrequencies(location).leftOrNull()
                             .shouldBeTypeOf<Failure.CountryNotFound>()
                     }
                 }

@@ -5,17 +5,13 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.models.Attributes
-import com.weatherxm.data.models.Device
-import com.weatherxm.data.models.DeviceInfo
-import com.weatherxm.data.models.Hex
-import com.weatherxm.data.models.Location
-import com.weatherxm.data.models.Relation
-import com.weatherxm.data.datasource.CacheAddressDataSource
 import com.weatherxm.data.datasource.CacheDeviceDataSource
 import com.weatherxm.data.datasource.CacheFollowDataSource
-import com.weatherxm.data.datasource.NetworkAddressDataSource
 import com.weatherxm.data.datasource.NetworkDeviceDataSource
+import com.weatherxm.data.models.Device
+import com.weatherxm.data.models.DeviceInfo
+import com.weatherxm.data.models.Location
+import com.weatherxm.data.models.Relation
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
@@ -26,8 +22,6 @@ import io.mockk.mockk
 class DeviceRepositoryTest : BehaviorSpec({
     lateinit var networkDeviceSource: NetworkDeviceDataSource
     lateinit var cacheDeviceSource: CacheDeviceDataSource
-    lateinit var networkAddressSource: NetworkAddressDataSource
-    lateinit var cacheAddressSource: CacheAddressDataSource
     lateinit var cacheFollowSource: CacheFollowDataSource
     lateinit var repo: DeviceRepository
 
@@ -66,44 +60,19 @@ class DeviceRepositoryTest : BehaviorSpec({
     val location = Location.empty()
     val deviceInfo = mockk<DeviceInfo>()
     val friendlyName = "My Weather Station"
-    val hexIndex = "hexIndex"
-    val address = "Device Address"
-    val deviceWithHexInfo = Device(
-        ownedId,
-        "",
-        null,
-        null,
-        null,
-        null,
-        Attributes(null, null, null, null, null, mockk(), Hex(hexIndex, emptyArray(), location)),
-        null,
-        null,
-        null,
-        Relation.owned,
-        null
-    )
 
     beforeContainer {
         networkDeviceSource = mockk()
         cacheDeviceSource = mockk()
-        networkAddressSource = mockk()
-        cacheAddressSource = mockk()
         cacheFollowSource = mockk()
         repo = DeviceRepositoryImpl(
             networkDeviceSource,
             cacheDeviceSource,
-            networkAddressSource,
-            cacheAddressSource,
             cacheFollowSource
         )
         coJustRun { cacheDeviceSource.setUserDevicesIds(any()) }
         coJustRun { cacheFollowSource.setFollowedDevicesIds(any()) }
-        coJustRun { cacheAddressSource.setLocationAddress(hexIndex, address) }
         coEvery { cacheDeviceSource.getUserDevicesIds() } returns emptyList()
-        coMockEitherLeft(
-            { cacheAddressSource.getLocationAddress(hexIndex, location) },
-            failure
-        )
     }
 
     context("Get user devices") {
@@ -299,44 +268,4 @@ class DeviceRepositoryTest : BehaviorSpec({
 
         }
     }
-
-    context("Get device address from Hex7 info") {
-        given("a device with Hex7 info") {
-            When("we have in cache the address of this hex") {
-                coMockEitherRight(
-                    { cacheAddressSource.getLocationAddress(hexIndex, location) },
-                    address
-                )
-                then("return that address") {
-                    repo.getDeviceAddress(deviceWithHexInfo) shouldBe address
-                }
-            }
-            When("we don't have in cache the address of this hex so we fetch it from network") {
-                When("the response is a failure") {
-                    coMockEitherLeft(
-                        { networkAddressSource.getLocationAddress(hexIndex, location) },
-                        failure
-                    )
-                    then("return that failure") {
-                        repo.getDeviceAddress(deviceWithHexInfo) shouldBe null
-                    }
-                }
-                When("the response is a success") {
-                    coMockEitherRight(
-                        { networkAddressSource.getLocationAddress(hexIndex, location) },
-                        address
-                    )
-                    then("return that success") {
-                        repo.getDeviceAddress(deviceWithHexInfo) shouldBe address
-                    }
-                    then("save this address in cache") {
-                        coVerify(exactly = 1) {
-                            cacheAddressSource.setLocationAddress(hexIndex, address)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 })
