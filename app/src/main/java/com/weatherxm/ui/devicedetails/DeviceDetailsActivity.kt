@@ -269,6 +269,7 @@ class DeviceDetailsActivity : BaseActivity() {
                 }
                 DeviceAlert.createError(DeviceAlertType.OFFLINE) -> {
                     binding.alertChip.offlineChip()
+                    setupAlertChipClickListener(null)
                 }
                 DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE) -> {
                     binding.alertChip.updateRequiredChip()
