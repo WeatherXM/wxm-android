@@ -487,7 +487,7 @@ dependencies {
     implementation(platform(libs.arrow.stack.bom))
     implementation(libs.arrow.core)
 
-    // Mapbox
+    // Mapbox (SDK Services used for the Minimap in Station Settings)
     implementation(libs.mapbox)
     implementation(libs.mapbox.search.android)
     implementation(libs.mapbox.sdk.services)
