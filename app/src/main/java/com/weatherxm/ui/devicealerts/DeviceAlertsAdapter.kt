@@ -46,6 +46,7 @@ class DeviceAlertsAdapter(
             when (item.alert) {
                 DeviceAlertType.NEEDS_UPDATE -> {
                     binding.alert
+                        .icon(R.drawable.ic_update_alt)
                         .title(R.string.updated_needed_title)
                         .message(R.string.updated_needed_desc)
                         .action(itemView.context.getString(R.string.update_station_now)) {
@@ -54,12 +55,12 @@ class DeviceAlertsAdapter(
                 }
                 DeviceAlertType.OFFLINE -> {
                     val messageResId = if (device?.isOwned() == true) {
-                        R.string.station_offline_alert_message
+                        R.string.station_inactive_alert_message
                     } else {
                         R.string.no_data_message_public_device
                     }
                     binding.alert
-                        .title(R.string.station_offline)
+                        .title(R.string.station_inactive)
                         .message(messageResId)
                         .action(itemView.context.getString(R.string.contact_support_title)) {
                             deviceAlertListener.onContactSupportClicked()
@@ -67,6 +68,7 @@ class DeviceAlertsAdapter(
                 }
                 DeviceAlertType.LOW_BATTERY -> {
                     binding.alert
+                        .icon(R.drawable.ic_low_battery)
                         .title(R.string.low_battery)
                         .message(R.string.low_battery_desc)
                         .action(itemView.context.getString(R.string.read_more)) {

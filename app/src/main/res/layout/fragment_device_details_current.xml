@@ -97,7 +97,7 @@
                         app:message_background_tint="@color/errorTint"
                         app:message_icon="@drawable/ic_error_hex_filled"
                         app:message_includes_close_button="false"
-                        app:message_title="@string/station_offline"
+                        app:message_title="@string/station_inactive"
                         tools:visibility="visible" />
                 </LinearLayout>
 

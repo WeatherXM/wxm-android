@@ -38,7 +38,7 @@ class DeviceAlertsActivity : BaseActivity(), DeviceAlertListener {
             setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
         }
         device?.getDefaultOrFriendlyName()?.let {
-            binding.header.subtitle(it)
+            binding.toolbar.subtitle = it
         }
 
         val adapter = DeviceAlertsAdapter(this, device)

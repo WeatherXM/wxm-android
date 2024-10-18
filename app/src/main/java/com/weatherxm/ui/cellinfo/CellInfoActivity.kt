@@ -6,28 +6,30 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Resource
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityCellInfoBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_OPEN_EXPLORER_ON_BACK
+import com.weatherxm.ui.common.DeviceAdapter
+import com.weatherxm.ui.common.DeviceListener
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.explorer.UICell
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
 
-class CellInfoActivity : BaseActivity(), CellDeviceListener {
+class CellInfoActivity : BaseActivity(), DeviceListener {
     private lateinit var binding: ActivityCellInfoBinding
     private val model: CellInfoViewModel by viewModel {
         parametersOf(intent.parcelable<UICell>(Contracts.ARG_EXPLORER_CELL))
     }
-    private lateinit var adapter: CellDeviceListAdapter
+    private lateinit var adapter: DeviceAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +85,7 @@ class CellInfoActivity : BaseActivity(), CellDeviceListener {
 
         val dialogOverlay = MaterialAlertDialogBuilder(this).create()
 
-        adapter = CellDeviceListAdapter(this)
+        adapter = DeviceAdapter(this)
 
         binding.recycler.adapter = adapter
 
