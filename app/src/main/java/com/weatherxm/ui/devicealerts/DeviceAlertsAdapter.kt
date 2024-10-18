@@ -54,17 +54,15 @@ class DeviceAlertsAdapter(
                         }
                 }
                 DeviceAlertType.OFFLINE -> {
-                    val messageResId = if (device?.isOwned() == true) {
-                        R.string.station_inactive_alert_message
+                    binding.alert.title(R.string.station_inactive)
+                    if (device?.isOwned() == true) {
+                        binding.alert.message(R.string.station_inactive_alert_message)
+                            .action(itemView.context.getString(R.string.contact_support_title)) {
+                                deviceAlertListener.onContactSupportClicked()
+                            }
                     } else {
-                        R.string.no_data_message_public_device
+                        binding.alert.message(R.string.no_data_message_public_device)
                     }
-                    binding.alert
-                        .title(R.string.station_inactive)
-                        .message(messageResId)
-                        .action(itemView.context.getString(R.string.contact_support_title)) {
-                            deviceAlertListener.onContactSupportClicked()
-                        }
                 }
                 DeviceAlertType.LOW_BATTERY -> {
                     binding.alert
