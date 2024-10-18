@@ -155,12 +155,12 @@ data class UIDevice(
             alerts.add(DeviceAlert.createError(DeviceAlertType.OFFLINE))
         }
 
-        if (hasLowBattery == true && isOwned()) {
-            alerts.add(DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY))
-        }
-
         if (shouldNotifyOTA && shouldPromptUpdate()) {
             alerts.add(DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE))
+        }
+
+        if (hasLowBattery == true && isOwned()) {
+            alerts.add(DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY))
         }
         this.alerts = alerts.sortedByDescending { alert ->
             alert.severity
