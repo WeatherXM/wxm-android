@@ -497,20 +497,20 @@ fun UIDevice.stationHealthViews(
         dataQualityText.text = context.getString(R.string.no_data)
         dataQualityIcon.setColor(R.color.darkGrey)
     }
-    polReason?.let {
-        when (it) {
-            AnnotationGroupCode.NO_LOCATION_DATA -> {
-                addressIcon.setColor(R.color.error)
-            }
-            AnnotationGroupCode.LOCATION_NOT_VERIFIED -> {
-                addressIcon.setColor(R.color.warning)
-            }
-            else -> {
+    when (polReason) {
+        AnnotationGroupCode.NO_LOCATION_DATA -> addressIcon.setColor(R.color.error)
+        AnnotationGroupCode.LOCATION_NOT_VERIFIED -> addressIcon.setColor(R.color.warning)
+        else -> {
+            /**
+             * Check whether everything is null which means that we are at a "pending" state or
+             * just the PoL Reason is null which means that we have no error
+             */
+            if (qodScore == null && metricsTimestamp == null) {
+                addressIcon.setColor(R.color.darkGrey)
+            } else {
                 addressIcon.setColor(R.color.success)
             }
         }
-    } ?: run {
-        addressIcon.setColor(R.color.darkGrey)
     }
 }
 
