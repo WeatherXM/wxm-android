@@ -487,7 +487,7 @@ fun MaterialCardView.setBoostFallbackBackground() {
     setCardBackgroundColor(context.getColor(R.color.blue))
 }
 
-fun UIDevice.stationHealthViews(
+fun UIDevice.stationHealthViewsOnList(
     context: Context,
     dataQualityText: MaterialTextView,
     dataQualityIcon: ImageView,

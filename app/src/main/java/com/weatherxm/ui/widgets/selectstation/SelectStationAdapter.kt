@@ -15,7 +15,7 @@ import com.weatherxm.ui.common.handleStroke
 import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
-import com.weatherxm.ui.common.stationHealthViews
+import com.weatherxm.ui.common.stationHealthViewsOnList
 import com.weatherxm.ui.common.visible
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
@@ -108,7 +108,7 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
             binding.bundle.setBundleChip(item)
             item.handleAlerts(itemView.context, binding.issueChip, null)
             item.handleStroke(binding.root)
-            item.stationHealthViews(
+            item.stationHealthViewsOnList(
                 itemView.context,
                 binding.dataQuality,
                 binding.dataQualityIcon,

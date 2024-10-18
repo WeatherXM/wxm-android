@@ -596,7 +596,7 @@
     <!-- Cell Info -->
     <string name="cell_stations_present">%d/10 stations present</string>
     <string name="cell_capacity">Cell Capacity</string>
-    <string name="cell_capacity_explanation">Cell capacity is a parameter that is used to define the maximum number of stations that are eligible for rewards in a specific cell. Every cell has a predefined capacity that depends on its geospatial characteristics*\n\nEvery station is ranked in its cell daily, based on its reward score and its seniority. As long as the station’s ranking is above the capacity threshold, it will be rewarded, whereas getting below it will lead to zero rewards. For example, in a cell with a max capacity of 5 stations, if a station is ranked 3rd it will get rewarded, but if it is ranked 7th, it won’t receive any rewards.\n\nRead more about how our Cell Capacity algorithm works.\n\n* The cell capacity is currently set to the fixed value of 10 rewardable stations, for every cell.</string>
+    <string name="cell_capacity_explanation">Cell capacity is a parameter that is used to define the maximum number of stations that are eligible for rewards in a specific cell. Every cell has a predefined capacity that depends on its geospatial characteristics*.\n\nEvery station is ranked in its cell daily, based on its reward score and its seniority. As long as the station’s ranking is above the capacity threshold, it will be rewarded, whereas getting below it will lead to zero rewards. For example, in a cell with a max capacity of 5 stations, if a station is ranked 3rd it will get rewarded, but if it is ranked 7th, it won’t receive any rewards.\n\nRead more about how our Cell Capacity algorithm works.\n\n* The cell capacity is currently set to the fixed value of 10 rewardable stations, for every cell.</string>
 
     <!-- Temperature Bars Explanation -->
     <string name="understanding_temperature_bars">Understanding the Temperature Bars</string>
@@ -620,8 +620,12 @@
 
     <!-- Station Health -->
     <string name="data_quality_value">Data Quality %d%%</string>
-    <string name="no_location">No location</string>
+    <string name="no_location_data">No location data</string>
     <string name="station_health">Station Health</string>
+    <string name="data_quality_score">Data Quality Score</string>
+    <string name="verified">Verified</string>
+    <string name="not_verified">Not Verified</string>
+    <string name="pending_verification">Pending Verification</string>
     <string name="station_health_data_quality_explanation"><![CDATA[The network’s effectiveness relies on meaningful, usable data, measured by the Quality-of-Data (QoD) score, which <b>updates daily</b>. This score motivates weather station owners to follow guidelines for optimal data quality. A station’s daily reward is tied to its QoD, calculated using an open-source algorithm that assesses data quality and provides a confidence level in the data received.]]></string>
     <string name="station_health_location_quality_explanation"><![CDATA[It is crucial for the Network that a station stays in the same location throughout its lifetime.<br>The Proof-of-Location algorithm, which also <b>updates daily</b>, assesses the accuracy and consistency of the station’s location data, generating a confidence score for its position.]]></string>
     <string name="station_has_started_transmitting_data">Your station has started transmitting its initial data. Sit back and relax, your rewards are on the way!</string>
