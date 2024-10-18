@@ -112,7 +112,6 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
                 itemView.context,
                 binding.dataQuality,
                 binding.dataQualityIcon,
-                binding.address,
                 binding.addressIcon
             )
         }

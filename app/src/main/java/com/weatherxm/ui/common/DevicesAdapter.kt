@@ -98,7 +98,6 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
                 itemView.context,
                 binding.dataQuality,
                 binding.dataQualityIcon,
-                binding.address,
                 binding.addressIcon
             )
         }

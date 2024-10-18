@@ -488,7 +488,6 @@ fun UIDevice.stationHealthViews(
     context: Context,
     dataQualityText: MaterialTextView,
     dataQualityIcon: ImageView,
-    addressText: MaterialTextView,
     addressIcon: ImageView
 ) {
     qodScore?.let {
@@ -496,19 +495,22 @@ fun UIDevice.stationHealthViews(
         dataQualityIcon.setColor(getRewardScoreColor(it))
     } ?: run {
         dataQualityText.text = context.getString(R.string.no_data)
-        dataQualityIcon.setColor(R.color.success)
+        dataQualityIcon.setColor(R.color.darkGrey)
     }
-    when (polReason) {
-        AnnotationGroupCode.NO_LOCATION_DATA -> {
-            addressText.text = context.getString(R.string.no_location)
-            addressIcon.setColor(R.color.error)
+    polReason?.let {
+        when (it) {
+            AnnotationGroupCode.NO_LOCATION_DATA -> {
+                addressIcon.setColor(R.color.error)
+            }
+            AnnotationGroupCode.LOCATION_NOT_VERIFIED -> {
+                addressIcon.setColor(R.color.warning)
+            }
+            else -> {
+                addressIcon.setColor(R.color.success)
+            }
         }
-        AnnotationGroupCode.LOCATION_NOT_VERIFIED -> {
-            addressIcon.setColor(R.color.warning)
-        }
-        else -> {
-            addressIcon.setColor(R.color.success)
-        }
+    } ?: run {
+        addressIcon.setColor(R.color.darkGrey)
     }
 }
 
