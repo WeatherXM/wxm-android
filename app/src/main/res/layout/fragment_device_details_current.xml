@@ -64,6 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_normal"
+                android:orientation="horizontal"
                 android:weightSum="2"
                 app:layout_constraintTop_toBottomOf="@id/stationHealthTitle">
 
@@ -75,18 +76,33 @@
                     android:layout_weight="1"
                     app:cardBackgroundColor="@color/blueTint"
                     app:cardElevation="@dimen/elevation_normal"
-                    app:contentPadding="@dimen/padding_small_to_normal">
+                    app:contentPadding="@dimen/padding_normal">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center">
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/dataQualityTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@string/data_quality_score"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
+                            android:textColor="@color/darkestBlue"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
                             android:id="@+id/dataQualityIcon"
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
                             android:src="@drawable/ic_data_quality"
+                            app:layout_constraintBottom_toBottomOf="@id/dataQuality"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/dataQuality"
                             tools:ignore="ContentDescription"
                             tools:tint="@color/success" />
 
@@ -95,62 +111,80 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/margin_small"
+                            android:layout_marginTop="@dimen/margin_extra_small"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyLarge"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toEndOf="@id/dataQualityIcon"
+                            app:layout_constraintTop_toBottomOf="@id/dataQualityTitle"
+                            tools:text="72" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/dataQualityPercentage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="%"
                             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                            tools:text="Data Quality 72%" />
-                    </LinearLayout>
+                            android:textColor="@color/darkGrey"
+                            android:visibility="gone"
+                            app:layout_constraintBaseline_toBaselineOf="@id/dataQuality"
+                            app:layout_constraintStart_toEndOf="@id/dataQuality"
+                            tools:ignore="HardcodedText"
+                            tools:visibility="visible" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/addressCard"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_small"
                     android:layout_weight="1"
                     app:cardBackgroundColor="@color/blueTint"
                     app:cardElevation="@dimen/elevation_normal"
-                    app:contentPadding="@dimen/padding_small_to_normal">
+                    app:contentPadding="@dimen/padding_normal"
+                    app:contentPaddingBottom="@dimen/padding_normal_to_large">
 
-                    <LinearLayout
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/addressIcon"
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@drawable/ic_hex"
-                            app:tint="@color/success"
-                            tools:ignore="ContentDescription" />
+                        android:layout_height="wrap_content">
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/address"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_small"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodySmall"
-                            tools:text="Municipal Unit of Nikaia, Greece" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                            android:textColor="@color/darkestBlue"
+                            android:textStyle="bold"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="Athens, GR" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/addressHealth"
-                    style="@style/Widget.WeatherXM.Chip.Status"
-                    android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:layout_weight="1"
-                    android:elevation="@dimen/elevation_normal"
-                    android:ellipsize="end"
-                    app:chipBackgroundColor="@color/blueTint"
-                    app:chipCornerRadius="@dimen/radius_large"
-                    app:chipEndPadding="@dimen/padding_small_to_normal"
-                    app:chipIcon="@drawable/ic_hex"
-                    app:chipStartPadding="@dimen/padding_small_to_normal"
-                    tools:chipIconTint="@color/success"
-                    tools:text="Municipal Unit of Nikaia, GR" />
+                        <ImageView
+                            android:id="@+id/addressIcon"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@drawable/ic_hex"
+                            app:layout_constraintBottom_toBottomOf="@id/addressPoL"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/addressPoL"
+                            tools:ignore="ContentDescription"
+                            tools:tint="@color/success" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/addressPoL"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_small"
+                            android:layout_marginTop="@dimen/margin_extra_small"
+                            android:textAppearance="@style/TextAppearance.WeatherXM.Default.BodyMedium"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/addressIcon"
+                            app:layout_constraintTop_toBottomOf="@id/address"
+                            tools:text="Verified" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
             <com.google.android.material.card.MaterialCardView

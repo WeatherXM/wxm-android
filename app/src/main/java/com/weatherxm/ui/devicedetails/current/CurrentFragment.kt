@@ -9,16 +9,18 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.Reward
 import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
+import com.weatherxm.ui.common.AnnotationGroupCode
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.invisible
-import com.weatherxm.ui.common.stationHealthViews
+import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
 import com.weatherxm.ui.components.StationHealthExplanationDialogFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
 import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.util.Rewards.getRewardScoreColor
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -144,20 +146,8 @@ class CurrentFragment : BaseFragment() {
             }
             device.address
         }
-        device.stationHealthViews(
-            requireContext(),
-            binding.dataQuality,
-            binding.dataQualityIcon,
-            binding.address,
-            binding.addressIcon
-        )
-        if (device.qodScore != null && device.metricsTimestamp != null) {
-            val reward = Reward.initWithTimestamp(device.metricsTimestamp)
-            binding.dataQualityCard.setOnClickListener {
-                navigator.showRewardDetails(requireContext(), parentModel.device, reward)
-            }
-        }
-        binding.emptyStationHealthInfo.visible(device.qodScore == null)
+
+        onStationHealth(device)
 
         if (device.currentWeather == null || device.currentWeather.isEmpty()) {
             binding.historicalCharts.visible(false)
@@ -165,5 +155,52 @@ class CurrentFragment : BaseFragment() {
         binding.latestWeatherCard.setData(device.currentWeather)
         binding.followCard.visible(device.isUnfollowed())
         binding.historicalCharts.isEnabled = !device.isUnfollowed()
+    }
+
+    private fun onStationHealth(device: UIDevice) {
+        device.qodScore?.let {
+            binding.dataQuality.text = "$it"
+            binding.dataQualityIcon.setColor(getRewardScoreColor(it))
+        } ?: run {
+            binding.dataQuality.text = context?.getString(R.string.no_data)
+            binding.dataQualityIcon.setColor(R.color.darkGrey)
+
+        }
+        binding.dataQualityPercentage.visible(device.qodScore != null)
+
+        when (device.polReason) {
+            AnnotationGroupCode.NO_LOCATION_DATA -> {
+                binding.addressPoL.text = context?.getString(R.string.no_location_data)
+                binding.addressIcon.setColor(R.color.error)
+            }
+            AnnotationGroupCode.LOCATION_NOT_VERIFIED -> {
+                binding.addressPoL.text = context?.getString(R.string.not_verified)
+                binding.addressIcon.setColor(R.color.warning)
+            }
+            else -> {
+                /**
+                 * Check whether everything is null which means that we are at a "pending" state or
+                 * just the PoL Reason is null which means that we have no error
+                 */
+                if (device.qodScore == null && device.metricsTimestamp == null) {
+                    binding.addressPoL.text = context?.getString(R.string.pending_verification)
+                    binding.addressIcon.setColor(R.color.darkGrey)
+                } else {
+                    binding.addressPoL.text = context?.getString(R.string.verified)
+                    binding.addressIcon.setColor(R.color.success)
+                }
+            }
+        }
+
+        device.metricsTimestamp?.let {
+            val reward = Reward.initWithTimestamp(it)
+            binding.dataQualityCard.setOnClickListener {
+                navigator.showRewardDetails(requireContext(), parentModel.device, reward)
+            }
+        }
+
+        binding.emptyStationHealthInfo.visible(
+            device.qodScore == null && device.metricsTimestamp == null
+        )
     }
 }

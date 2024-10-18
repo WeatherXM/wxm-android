@@ -94,7 +94,7 @@ class DeviceAdapter(private val deviceListener: DeviceListener) :
             binding.bundle.setBundleChip(item)
             item.handleAlerts(itemView.context, binding.issueChip, analytics)
             item.handleStroke(binding.root)
-            item.stationHealthViews(
+            item.stationHealthViewsOnList(
                 itemView.context,
                 binding.dataQuality,
                 binding.dataQualityIcon,
