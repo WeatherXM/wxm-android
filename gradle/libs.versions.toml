@@ -58,7 +58,7 @@ retromock = "1.1.1"
 timber = "5.0.1"
 
 # Plugins
-android-gradle-plugin = "8.7.0"
+android-gradle-plugin = "8.7.1"
 detekt-plugin = "1.23.7"
 firebase-appdistribution-plugin = "5.0.0"
 firebase-crashlytics-plugin = "3.0.2"
