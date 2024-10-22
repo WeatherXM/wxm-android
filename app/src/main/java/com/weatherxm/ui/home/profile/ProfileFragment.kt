@@ -13,6 +13,7 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.User
 import com.weatherxm.databinding.FragmentProfileBinding
 import com.weatherxm.ui.common.Contracts.ARG_TOKEN_CLAIMED_AMOUNT
+import com.weatherxm.ui.common.Contracts.NOT_AVAILABLE_VALUE
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.ui.common.applyInsets
@@ -119,6 +120,7 @@ class ProfileFragment : BaseFragment() {
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
                     resource.message?.let { context.toast(it) }
+                    onNotAvailableRewards()
                     toggleLoading(false)
                 }
                 Status.LOADING -> {
@@ -138,6 +140,7 @@ class ProfileFragment : BaseFragment() {
                 }
                 Status.ERROR -> {
                     Timber.d("Got error: $resource.message")
+                    onNotAvailableRewards()
                     resource.message?.let { context.toast(it) }
                     toggleLoading(false)
                 }
@@ -177,6 +180,20 @@ class ProfileFragment : BaseFragment() {
             binding.swiperefresh.isRefreshing = false
             binding.progress.invisible()
         }
+    }
+
+    private fun onNotAvailableRewards() {
+        binding.totalEarnedValue.text = NOT_AVAILABLE_VALUE
+        binding.totalClaimedValue.text = NOT_AVAILABLE_VALUE
+        binding.rewards
+            .subtitle(NOT_AVAILABLE_VALUE)
+            .action(getString(R.string.action_claim)) {
+                navigator.showRewardsClaiming(
+                    rewardsClaimLauncher,
+                    requireContext(),
+                    UIWalletRewards.empty()
+                )
+            }
     }
 
     private fun updateRewardsUI(data: UIWalletRewards) {
