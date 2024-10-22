@@ -1,5 +1,6 @@
 package com.weatherxm
 
+import androidx.lifecycle.LiveData
 import arrow.core.Either
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.TestConfig.failure
@@ -28,12 +29,12 @@ object TestUtils {
         this shouldBe Either.Left(failure)
     }
 
-    fun <T : Any> Resource<T>?.isSuccess(data: T?) {
-        this shouldBe Resource.success(data)
+    fun <T : Any> LiveData<Resource<T>>?.isSuccess(data: T?) {
+        this?.value shouldBe Resource.success(data)
     }
 
-    fun <T : Any> Resource<T>?.isError(errorMsg: String) {
-        this shouldBe Resource.error(errorMsg)
+    fun <T : Any> LiveData<Resource<T>>?.isError(errorMsg: String) {
+        this?.value shouldBe Resource.error(errorMsg)
     }
 
     fun mockEitherLeft(function: () -> Either<Failure, Any?>, failure: Failure) {

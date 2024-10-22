@@ -16,6 +16,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_THEME
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
+import com.weatherxm.ui.common.empty
 import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.Resources
 import io.kotest.core.config.AbstractProjectConfig
@@ -38,6 +39,8 @@ object TestConfig : AbstractProjectConfig() {
     val successUnitResponse =
         NetworkResponse.Success<Unit, ErrorResponse>(Unit, retrofitResponse(Unit))
     val geocoder = mockk<Geocoder>()
+    const val REACH_OUT_MSG = "Reach Out to WeatherXM"
+    const val DEVICE_NOT_FOUND_MSG = "Device Not Found"
 
     @AutoScan
     object MyProjectListener : BeforeProjectListener, AfterProjectListener {
@@ -51,6 +54,12 @@ object TestConfig : AbstractProjectConfig() {
                     DATE_FORMAT_MONTH_DAY
                 )
             } returns "d/M"
+            every { failure.code } returns String.empty()
+            every { resources.getString(R.string.error_reach_out) } returns REACH_OUT_MSG
+            every { resources.getString(R.string.error_reach_out_short) } returns REACH_OUT_MSG
+            every {
+                resources.getString(R.string.error_device_not_found)
+            } returns DEVICE_NOT_FOUND_MSG
             every { resources.getString(R.string.uv_low) } returns "Low"
             every { resources.getString(R.string.uv_moderate) } returns "Moderate"
             every { resources.getString(R.string.uv_high) } returns "High"
