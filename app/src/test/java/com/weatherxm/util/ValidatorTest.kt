@@ -173,7 +173,7 @@ class ValidatorTest : BehaviorSpec({
         given("a claiming key") {
             When("it is valid") {
                 then("the validator should return true") {
-                    val randomFriendlyName = createRandomString(Random.nextInt(1..24))
+                    val randomFriendlyName = createRandomString(Random.nextInt(1..64))
                     val success = if (validateFriendlyName(randomFriendlyName)) {
                         true
                     } else {
@@ -187,9 +187,7 @@ class ValidatorTest : BehaviorSpec({
                 then("the validator should return false") {
                     validateFriendlyName(null) shouldBe false
                     validateFriendlyName("") shouldBe false
-                    validateFriendlyName(
-                        "This is a really big friendly name with more than 64 chars ......"
-                    ) shouldBe false
+                    validateFriendlyName(createRandomString(Random.nextInt(65..100))) shouldBe false
                 }
             }
         }
