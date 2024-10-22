@@ -4,19 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Status
+import com.weatherxm.data.models.Reward
 import com.weatherxm.databinding.FragmentDeviceDetailsCurrentBinding
-import com.weatherxm.ui.common.BundleName
-import com.weatherxm.ui.common.DeviceAlertType
+import com.weatherxm.ui.common.AnnotationGroupCode
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.invisible
-import com.weatherxm.ui.common.setCardStroke
+import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseFragment
+import com.weatherxm.ui.components.StationHealthExplanationDialogFragment
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
+import com.weatherxm.ui.explorer.UICell
+import com.weatherxm.util.Rewards.getRewardScoreColor
 import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -81,6 +85,10 @@ class CurrentFragment : BaseFragment() {
             navigator.showHistoryActivity(requireContext(), model.device)
         }
 
+        binding.stationHealthInfoBtn.setOnClickListener {
+            StationHealthExplanationDialogFragment().show(this)
+        }
+
         binding.followCard.visible(model.device.isUnfollowed())
         binding.historicalCharts.isEnabled = !model.device.isUnfollowed()
         binding.followPromptBtn.setOnClickListener {
@@ -114,46 +122,85 @@ class CurrentFragment : BaseFragment() {
 
     private fun onDeviceUpdated(device: UIDevice) {
         binding.progress.invisible()
-        setAlerts(device)
+
+        binding.address.text = if (device.address.isNullOrEmpty()) {
+            getString(R.string.unknown_address)
+        } else {
+            binding.addressCard.setOnClickListener {
+                analytics.trackEventSelectContent(
+                    AnalyticsService.ParamValue.REGION.paramValue,
+                    customParams = arrayOf(
+                        Pair(
+                            AnalyticsService.CustomParam.CONTENT_NAME.paramName,
+                            AnalyticsService.ParamValue.STATION_DETAILS_CHIP.paramValue
+                        ),
+                        Pair(
+                            FirebaseAnalytics.Param.ITEM_ID,
+                            AnalyticsService.ParamValue.STATION_REGION_ID.paramValue
+                        )
+                    )
+                )
+                model.device.cellCenter?.let { location ->
+                    navigator.showCellInfo(context, UICell(model.device.cellIndex, location))
+                }
+            }
+            device.address
+        }
+
+        onStationHealth(device)
+
         if (device.currentWeather == null || device.currentWeather.isEmpty()) {
             binding.historicalCharts.visible(false)
         }
-        binding.currentWeatherCard.setData(device.currentWeather)
+        binding.latestWeatherCard.setData(device.currentWeather)
         binding.followCard.visible(device.isUnfollowed())
         binding.historicalCharts.isEnabled = !device.isUnfollowed()
     }
 
-    private fun setAlerts(device: UIDevice) {
-        if (device.alerts.firstOrNull { it.alert == DeviceAlertType.OFFLINE } != null) {
-            onDeviceOfflineAlert(device)
-        } else {
-            binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.transparent, 0)
-        }
-    }
+    private fun onStationHealth(device: UIDevice) {
+        device.qodScore?.let {
+            binding.dataQuality.text = "$it"
+            binding.dataQualityIcon.setColor(getRewardScoreColor(it))
+        } ?: run {
+            binding.dataQuality.text = context?.getString(R.string.no_data)
+            binding.dataQualityIcon.setColor(R.color.darkGrey)
 
-    private fun onDeviceOfflineAlert(device: UIDevice) {
-        if (!device.isOwned()) {
-            binding.alert.message(getString(R.string.no_data_message_public_device))
-        } else {
-            when (device.bundleName) {
-                BundleName.m5 -> showOfflineAlert(getString(R.string.troubleshooting_m5_url))
-                BundleName.d1 -> showOfflineAlert(getString(R.string.troubleshooting_d1_url))
-                BundleName.h1, BundleName.h2 -> {
-                    showOfflineAlert(getString(R.string.troubleshooting_helium_url))
-                }
-                BundleName.pulse -> showOfflineAlert(getString(R.string.troubleshooting_pulse_url))
-                null -> {
-                    // Do nothing
+        }
+        binding.dataQualityPercentage.visible(device.qodScore != null)
+
+        when (device.polReason) {
+            AnnotationGroupCode.NO_LOCATION_DATA -> {
+                binding.addressPoL.text = context?.getString(R.string.no_location_data)
+                binding.addressIcon.setColor(R.color.error)
+            }
+            AnnotationGroupCode.LOCATION_NOT_VERIFIED -> {
+                binding.addressPoL.text = context?.getString(R.string.not_verified)
+                binding.addressIcon.setColor(R.color.warning)
+            }
+            else -> {
+                /**
+                 * Check whether everything is null which means that we are at a "pending" state or
+                 * just the PoL Reason is null which means that we have no error
+                 */
+                if (device.qodScore == null && device.metricsTimestamp == null) {
+                    binding.addressPoL.text = context?.getString(R.string.pending_verification)
+                    binding.addressIcon.setColor(R.color.darkGrey)
+                } else {
+                    binding.addressPoL.text = context?.getString(R.string.verified)
+                    binding.addressIcon.setColor(R.color.success)
                 }
             }
         }
-        binding.currentWeatherCardWithErrorContainer.setCardStroke(R.color.error, 2)
-        binding.alert.visible(true)
-    }
 
-    private fun showOfflineAlert(url: String) {
-        binding.alert.htmlMessage(getString(R.string.error_user_device_offline, url)) {
-            navigator.openWebsite(context, url)
+        device.metricsTimestamp?.let {
+            val reward = Reward.initWithTimestamp(it)
+            binding.dataQualityCard.setOnClickListener {
+                navigator.showRewardDetails(requireContext(), parentModel.device, reward)
+            }
         }
+
+        binding.emptyStationHealthInfo.visible(
+            device.qodScore == null && device.metricsTimestamp == null
+        )
     }
 }
