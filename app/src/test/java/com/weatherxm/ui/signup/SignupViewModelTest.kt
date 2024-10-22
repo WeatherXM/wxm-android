@@ -6,8 +6,8 @@ import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
-import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.TestUtils.testHandleFailureViewModel
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.ui.InstantExecutorListener
@@ -17,7 +17,6 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -80,36 +79,36 @@ class SignupViewModelTest : BehaviorSpec({
                         { usecase.signup(username, null, null) },
                         invalidUsernameFailure
                     )
-                    runTest { viewModel.signup(username, null, null) }
-                    then("Log that error as a failure event") {
-                        verify(exactly = 1) { analytics.trackEventFailure(any()) }
-                    }
-                    then("LiveData posts an error with a specific InvalidUsername message") {
-                        viewModel.isSignedUp().isError(invalidUsername)
-                    }
+                    testHandleFailureViewModel(
+                        { viewModel.signup(username, null, null) },
+                        analytics,
+                        viewModel.isSignedUp(),
+                        1,
+                        invalidUsername
+                    )
                 }
                 and("It's a UserAlreadyExists failure") {
                     coMockEitherLeft(
                         { usecase.signup(username, null, null) },
                         userAlreadyExistsFailure
                     )
-                    runTest { viewModel.signup(username, null, null) }
-                    then("Log that error as a failure event") {
-                        verify(exactly = 2) { analytics.trackEventFailure(any()) }
-                    }
-                    then("LiveData posts an error with a specific UserAlreadyExists message") {
-                        viewModel.isSignedUp().isError(userAlreadyExists)
-                    }
+                    testHandleFailureViewModel(
+                        { viewModel.signup(username, null, null) },
+                        analytics,
+                        viewModel.isSignedUp(),
+                        2,
+                        userAlreadyExists
+                    )
                 }
                 and("it's any other failure") {
                     coMockEitherLeft({ usecase.signup(username, null, null) }, failure)
-                    runTest { viewModel.signup(username, null, null) }
-                    then("Log that error as a failure event") {
-                        verify(exactly = 3) { analytics.trackEventFailure(any()) }
-                    }
-                    then("LiveData posts an error") {
-                        viewModel.isSignedUp().isError(REACH_OUT_MSG)
-                    }
+                    testHandleFailureViewModel(
+                        { viewModel.signup(username, null, null) },
+                        analytics,
+                        viewModel.isSignedUp(),
+                        3,
+                        REACH_OUT_MSG
+                    )
                 }
             }
         }

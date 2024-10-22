@@ -6,8 +6,8 @@ import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
-import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.TestUtils.testHandleFailureViewModel
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.BoostReward
@@ -19,7 +19,6 @@ import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.justRun
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -71,23 +70,23 @@ class RewardBoostViewModelTest : BehaviorSpec({
                         { usecase.getBoostReward(deviceId, boostReward) },
                         deviceNotFoundFailure
                     )
-                    runTest { viewModel.fetchRewardBoost(boostReward) }
-                    then("Log that error as a failure event") {
-                        verify(exactly = 1) { analytics.trackEventFailure(any()) }
-                    }
-                    then("LiveData posts an error with a specific DeviceNotFound message") {
-                        viewModel.onBoostReward().isError(DEVICE_NOT_FOUND_MSG)
-                    }
+                    testHandleFailureViewModel(
+                        { viewModel.fetchRewardBoost(boostReward) },
+                        analytics,
+                        viewModel.onBoostReward(),
+                        1,
+                        DEVICE_NOT_FOUND_MSG
+                    )
                 }
                 and("it's any other failure") {
                     coMockEitherLeft({ usecase.getBoostReward(deviceId, boostReward) }, failure)
-                    runTest { viewModel.fetchRewardBoost(boostReward) }
-                    then("Log that error as a failure event") {
-                        verify(exactly = 2) { analytics.trackEventFailure(any()) }
-                    }
-                    then("LiveData posts an error") {
-                        viewModel.onBoostReward().isError(REACH_OUT_MSG)
-                    }
+                    testHandleFailureViewModel(
+                        { viewModel.fetchRewardBoost(boostReward) },
+                        analytics,
+                        viewModel.onBoostReward(),
+                        2,
+                        REACH_OUT_MSG
+                    )
                 }
             }
         }

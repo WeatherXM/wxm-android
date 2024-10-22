@@ -29,7 +29,7 @@ class LoginViewModel(
 ) : ViewModel() {
 
     private val onLogin = MutableLiveData<Resource<Unit>>()
-    fun onLogin() = onLogin
+    fun onLogin(): LiveData<Resource<Unit>> = onLogin
 
     private val user = MutableLiveData<Resource<User>>()
     fun user(): LiveData<Resource<User>> = user
@@ -49,7 +49,7 @@ class LoginViewModel(
 
     fun login(username: String, password: String) {
         onLogin.postValue(Resource.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             authUseCase.login(username, password)
                 .mapLeft {
                     analytics.trackEventFailure(it.code)

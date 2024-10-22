@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import arrow.core.Either
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.TestConfig.failure
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.NetworkError
 import com.weatherxm.data.network.ErrorResponse
@@ -16,6 +17,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import net.bytebuddy.utility.RandomString
 import retrofit2.Response
 import java.net.SocketTimeoutException
@@ -105,6 +108,22 @@ object TestUtils {
     ) {
         then("Should throw a NotImplementedError") {
             shouldThrow<NotImplementedError> { function() }
+        }
+    }
+
+    suspend fun <T : Any> BehaviorSpecWhenContainerScope.testHandleFailureViewModel(
+        functionToRun: suspend () -> Any?,
+        analytics: AnalyticsWrapper,
+        liveDataToCheck: LiveData<Resource<T>>,
+        verifyNumberOfFailureEvents: Int,
+        error: String
+    ) {
+        runTest { functionToRun() }
+        then("Log that error as a failure event") {
+            verify(exactly = verifyNumberOfFailureEvents) { analytics.trackEventFailure(any()) }
+        }
+        then("LiveData posts an error with a specific $error message") {
+            liveDataToCheck.isError(error)
         }
     }
 

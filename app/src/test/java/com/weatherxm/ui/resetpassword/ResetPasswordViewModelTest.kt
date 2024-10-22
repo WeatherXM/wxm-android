@@ -8,6 +8,7 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.TestUtils.testHandleFailureViewModel
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.ui.InstantExecutorListener
@@ -71,23 +72,23 @@ class ResetPasswordViewModelTest : BehaviorSpec({
                         { usecase.resetPassword(email) },
                         invalidUsernameFailure
                     )
-                    runTest { viewModel.resetPassword(email) }
-                    then("Log that error as a failure event") {
-                        verify(exactly = 1) { analytics.trackEventFailure(any()) }
-                    }
-                    then("LiveData posts an error with a specific InvalidUsername message") {
-                        viewModel.isEmailSent().isError(invalidUsername)
-                    }
+                    testHandleFailureViewModel(
+                        { viewModel.resetPassword(email) },
+                        analytics,
+                        viewModel.isEmailSent(),
+                        1,
+                        invalidUsername
+                    )
                 }
                 and("it's any other failure") {
                     coMockEitherLeft({ usecase.resetPassword(email) }, failure)
-                    runTest { viewModel.resetPassword(email) }
-                    then("Log that error as a failure event") {
-                        verify(exactly = 2) { analytics.trackEventFailure(any()) }
-                    }
-                    then("LiveData posts an error") {
-                        viewModel.isEmailSent().isError(REACH_OUT_MSG)
-                    }
+                    testHandleFailureViewModel(
+                        { viewModel.resetPassword(email) },
+                        analytics,
+                        viewModel.isEmailSent(),
+                        2,
+                        REACH_OUT_MSG
+                    )
                 }
             }
         }

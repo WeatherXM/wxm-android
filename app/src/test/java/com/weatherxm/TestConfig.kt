@@ -39,7 +39,7 @@ object TestConfig : AbstractProjectConfig() {
     val successUnitResponse =
         NetworkResponse.Success<Unit, ErrorResponse>(Unit, retrofitResponse(Unit))
     val geocoder = mockk<Geocoder>()
-    const val REACH_OUT_MSG = "Reach Out to WeatherXM"
+    const val REACH_OUT_MSG = "Reach Out"
     const val DEVICE_NOT_FOUND_MSG = "Device Not Found"
 
     @AutoScan
