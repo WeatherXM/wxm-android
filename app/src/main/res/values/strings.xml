@@ -553,7 +553,7 @@
     <string name="issues">%d issues</string>
     <string name="issues_detected">%d issues detected</string>
     <string name="alerts_detected">%d alerts detected</string>
-    <string name="station_inactive_alert_message">The station is inactive. Check that it has batteries and internet connection. If the problem persists, contact our support team.</string>
+    <string name="station_inactive_alert_message">The station is not sending weather data. Check the outdoor unit’s batteries and the internet connection. If the problem persists, contact our support team.</string>
     <string name="update_required">Update Required</string>
     <string name="low_battery">Low Battery</string>
     <string name="low_battery_desc">Your station is reporting low battery. This may lead to data gaps at night, or in low-sunlight conditions and, eventually, lose rewards. Read more on how to replace your station batteries.</string>
