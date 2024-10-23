@@ -24,7 +24,6 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setCardRadius
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.common.visible
@@ -169,7 +168,6 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             }
             Status.ERROR -> {
                 binding.swiperefresh.isRefreshing = false
-                binding.loadingRewards.invisible()
                 binding.totalEarned.text = getString(R.string.wxm_amount, "?")
                 binding.empty.animation(R.raw.anim_error, false)
                     .title(getString(R.string.error_generic_message))
@@ -188,14 +186,12 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                 } else {
                     binding.recycler.visible(false)
                     binding.empty.clear().animation(R.raw.anim_loading).visible(true)
-                    binding.loadingRewards.visible(true)
                 }
             }
         }
     }
 
     private fun onDevicesRewards(rewards: DevicesRewards) {
-        binding.loadingRewards.invisible()
         binding.totalEarnedCard.setOnClickListener {
             analytics.trackEventUserAction(
                 AnalyticsService.ParamValue.TOKENS_EARNED_PRESSED.paramValue
