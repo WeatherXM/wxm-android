@@ -29,8 +29,7 @@ data class UIError(
 @JsonClass(generateAdapter = true)
 data class UIRewardsTimeline(
     var rewards: List<TimelineReward>,
-    var hasNextPage: Boolean = false,
-    var reachedTotal: Boolean = false
+    var hasNextPage: Boolean = false
 )
 
 @Keep

@@ -9,8 +9,8 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
-import com.weatherxm.ui.common.Resource
 import com.weatherxm.data.models.RewardDetails
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
@@ -19,6 +19,7 @@ import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -51,7 +52,7 @@ class RewardDetailsViewModel(
         }
     }
 
-    fun getWalletAddress(listener: (RewardSplitsData) -> Unit) {
+    fun getRewardSplitsData(listener: (RewardSplitsData) -> Unit) {
         viewModelScope.launch {
             if (walletAddressJob?.isActive == true) {
                 walletAddressJob?.join()
@@ -67,7 +68,7 @@ class RewardDetailsViewModel(
     }
 
     fun fetchRewardDetails(timestamp: ZonedDateTime) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             onRewardDetails.postValue(Resource.loading())
 
             usecase.getRewardDetails(device.id, timestamp)
@@ -103,7 +104,7 @@ class RewardDetailsViewModel(
     }
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             isLoggedIn = authUseCase.isLoggedIn().getOrElse { false }
         }
     }

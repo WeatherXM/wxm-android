@@ -6,6 +6,7 @@ import android.location.Geocoder
 import android.text.format.DateFormat
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.TestUtils.retrofitResponse
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.DATE_FORMAT_MONTH_DAY
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.network.ErrorResponse
@@ -25,6 +26,7 @@ import io.kotest.core.listeners.BeforeProjectListener
 import io.kotest.core.names.DuplicateTestNameMode
 import io.kotest.core.spec.AutoScan
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
@@ -39,6 +41,8 @@ object TestConfig : AbstractProjectConfig() {
     val successUnitResponse =
         NetworkResponse.Success<Unit, ErrorResponse>(Unit, retrofitResponse(Unit))
     val geocoder = mockk<Geocoder>()
+
+    val mockedAnalytics = mockk<AnalyticsWrapper>()
     const val REACH_OUT_MSG = "Reach Out"
     const val DEVICE_NOT_FOUND_MSG = "Device Not Found"
 
@@ -54,6 +58,7 @@ object TestConfig : AbstractProjectConfig() {
                     DATE_FORMAT_MONTH_DAY
                 )
             } returns "d/M"
+            justRun { mockedAnalytics.trackEventFailure(any()) }
             every { failure.code } returns String.empty()
             every { resources.getString(R.string.error_reach_out) } returns REACH_OUT_MSG
             every { resources.getString(R.string.error_reach_out_short) } returns REACH_OUT_MSG

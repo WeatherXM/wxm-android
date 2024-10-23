@@ -32,9 +32,10 @@ import org.koin.dsl.module
 @OptIn(ExperimentalCoroutinesApi::class)
 class RewardBoostViewModelTest : BehaviorSpec({
     val usecase = mockk<RewardsUseCase>()
-    val analytics = mockk<AnalyticsWrapper>()
     val deviceId = "deviceId"
-    val viewModel = RewardBoostViewModel(deviceId, analytics, resources, usecase)
+    lateinit var analytics: AnalyticsWrapper
+    lateinit var viewModel: RewardBoostViewModel
+
     val boostReward = mockk<BoostReward>()
     val uiBoost = mockk<UIBoost>()
     val deviceNotFoundFailure = ApiError.DeviceNotFound("")
@@ -52,6 +53,8 @@ class RewardBoostViewModelTest : BehaviorSpec({
                 }
             )
         }
+        analytics = mockk<AnalyticsWrapper>()
+        viewModel = RewardBoostViewModel(deviceId, analytics, resources, usecase)
         justRun { analytics.trackEventFailure(any()) }
     }
 

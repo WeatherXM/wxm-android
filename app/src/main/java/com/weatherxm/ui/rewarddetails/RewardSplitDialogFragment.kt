@@ -32,7 +32,7 @@ class RewardSplitDialogFragment : BaseBottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        model.getWalletAddress {
+        model.getRewardSplitsData {
             val adapter = RewardSplitStakeholderAdapter(it.wallet, false)
             binding.stakeholderRecycler.adapter = adapter
             binding.message.text = getString(R.string.reward_split_desc, it.splits.size)

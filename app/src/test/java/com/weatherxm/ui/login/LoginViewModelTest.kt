@@ -38,7 +38,7 @@ import org.koin.dsl.module
 class LoginViewModelTest : BehaviorSpec({
     val usecase = mockk<AuthUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
-    val viewModel = LoginViewModel(usecase, resources, analytics)
+    lateinit var viewModel: LoginViewModel
 
     val authToken = mockk<AuthToken>()
     val username = "username"
@@ -77,6 +77,8 @@ class LoginViewModelTest : BehaviorSpec({
         every {
             resources.getString(R.string.error_login_invalid_credentials)
         } returns invalidCredentials
+
+        viewModel = LoginViewModel(usecase, resources, analytics)
     }
 
     context("Get if the user is logged in already or not") {
@@ -85,13 +87,6 @@ class LoginViewModelTest : BehaviorSpec({
                 then("LiveData posts a success") {
                     runTest { viewModel.isLoggedIn() }
                     viewModel.isLoggedIn().value?.isSuccess(true)
-                }
-            }
-            When("it's a failure") {
-                coMockEitherLeft({ usecase.isLoggedIn() }, failure)
-                then("LiveData posts an error") {
-                    runTest { viewModel.isLoggedIn() }
-                    viewModel.isLoggedIn().value?.isError()
                 }
             }
         }

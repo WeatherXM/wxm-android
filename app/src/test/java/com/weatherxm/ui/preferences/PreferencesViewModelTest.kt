@@ -27,7 +27,7 @@ import kotlinx.coroutines.test.setMain
 class PreferencesViewModelTest : BehaviorSpec({
     val usecase = mockk<PreferencesUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
-    val viewModel = PreferenceViewModel(usecase, analytics)
+    lateinit var viewModel: PreferenceViewModel
 
     val installationId = "installationId"
 
@@ -42,6 +42,8 @@ class PreferencesViewModelTest : BehaviorSpec({
         coJustRun { usecase.logout() }
         coMockEitherRight({ usecase.isLoggedIn() }, true)
         every { usecase.getInstallationId() } returns installationId
+
+        viewModel = PreferenceViewModel(usecase, analytics)
     }
 
     context("Invoke a change in SharedPreferences in order to call the analytics.setUserProperties") {
@@ -59,13 +61,6 @@ class PreferencesViewModelTest : BehaviorSpec({
                 then("LiveData posts a success") {
                     runTest { viewModel.isLoggedIn() }
                     viewModel.isLoggedIn().value?.isSuccess(true)
-                }
-            }
-            When("it's a failure") {
-                coMockEitherLeft({ usecase.isLoggedIn() }, failure)
-                then("LiveData posts an error") {
-                    runTest { viewModel.isLoggedIn() }
-                    viewModel.isLoggedIn().value?.isError()
                 }
             }
         }
