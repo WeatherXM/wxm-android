@@ -12,13 +12,14 @@ import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
 import com.weatherxm.ui.common.Contracts.ARG_URL
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.StartupUseCase
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class StartupViewModel(private val startupUseCase: StartupUseCase) : ViewModel() {
 
     private val onStartupState = MutableLiveData<StartupState>()
 
-    fun startup(): LiveData<StartupState> = onStartupState
+    fun onStartupState(): LiveData<StartupState> = onStartupState
 
     fun handleStartup(intent: Intent) {
         val type = if (intent.hasExtra(Contracts.ARG_TYPE)) {
@@ -49,9 +50,7 @@ class StartupViewModel(private val startupUseCase: StartupUseCase) : ViewModel()
 
     private fun defaultStartup() {
         viewModelScope.launch {
-            startupUseCase.getStartupState().collect {
-                onStartupState.postValue(it)
-            }
+            onStartupState.postValue(startupUseCase.getStartupState().first())
         }
     }
 }
