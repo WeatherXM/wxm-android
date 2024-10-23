@@ -1,5 +1,6 @@
 package com.weatherxm.ui.connectwallet
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,6 +13,7 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ConnectWalletViewModel(
@@ -26,30 +28,24 @@ class ConnectWalletViewModel(
     }
 
     private var currentAddress = MutableLiveData(String.empty())
-    fun currentAddress() = currentAddress
+    fun currentAddress(): LiveData<String> = currentAddress
 
     private val isAddressSaved = MutableLiveData<Resource<String>>()
-    fun isAddressSaved() = isAddressSaved
+    fun isAddressSaved(): LiveData<Resource<String>> = isAddressSaved
 
-    fun saveAddress(address: String) {
+    fun setWalletAddress(address: String) {
         isAddressSaved.postValue(Resource.loading())
-        viewModelScope.launch {
-            useCase.setWalletAddress(address)
-                .mapLeft {
-                    analytics.trackEventFailure(it.code)
-                    handleFailure(it)
-                }
-                .map {
-                    isAddressSaved.postValue(
-                        Resource.success(resources.getString(R.string.address_saved))
-                    )
-                    currentAddress.postValue(address)
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            useCase.setWalletAddress(address).onRight {
+                isAddressSaved.postValue(
+                    Resource.success(resources.getString(R.string.address_saved))
+                )
+                currentAddress.postValue(address)
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                handleFailure(it)
+            }
         }
-    }
-
-    fun getLastPartOfAddress(address: String): String {
-        return address.substring(address.length - LAST_CHARS_TO_SHOW_AS_CONFIRM)
     }
 
     private fun handleFailure(failure: Failure) {
@@ -65,6 +61,8 @@ class ConnectWalletViewModel(
             )
         )
     }
+
+    fun getLastPartOfAddress(address: String) = address.takeLast(LAST_CHARS_TO_SHOW_AS_CONFIRM)
 
     /*
     * Custom fix because scanning the address in Metamask adds the "ethereum:" prefix
@@ -85,7 +83,7 @@ class ConnectWalletViewModel(
 
     init {
         // Get initial value from repository
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             useCase.getWalletAddress().map { currentAddress.postValue(it) }
         }
     }
