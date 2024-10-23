@@ -185,15 +185,7 @@ class ProfileFragment : BaseFragment() {
     private fun onNotAvailableRewards() {
         binding.totalEarnedValue.text = NOT_AVAILABLE_VALUE
         binding.totalClaimedValue.text = NOT_AVAILABLE_VALUE
-        binding.rewards
-            .subtitle(NOT_AVAILABLE_VALUE)
-            .action(getString(R.string.action_claim)) {
-                navigator.showRewardsClaiming(
-                    rewardsClaimLauncher,
-                    requireContext(),
-                    UIWalletRewards.empty()
-                )
-            }
+        binding.rewards.subtitle(NOT_AVAILABLE_VALUE)
     }
 
     private fun updateRewardsUI(data: UIWalletRewards) {
