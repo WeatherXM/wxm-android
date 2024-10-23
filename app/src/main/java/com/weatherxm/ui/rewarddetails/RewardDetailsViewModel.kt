@@ -41,7 +41,7 @@ class RewardDetailsViewModel(
     private var walletAddressJob: Job? = null
     private var isLoggedIn: Boolean? = null
 
-    private suspend fun fetchWalletAddress() {
+    private fun fetchWalletAddress() {
         if (isLoggedIn == true) {
             walletAddressJob = viewModelScope.launch {
                 userUseCase.getWalletAddress().onRight {
