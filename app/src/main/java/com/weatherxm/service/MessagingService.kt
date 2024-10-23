@@ -21,7 +21,7 @@ import com.weatherxm.ui.common.Contracts.ARG_REMOTE_MESSAGE
 import com.weatherxm.ui.common.Contracts.ARG_TYPE
 import com.weatherxm.ui.common.Contracts.ARG_URL
 import com.weatherxm.ui.common.empty
-import com.weatherxm.ui.deeplinkrouteractivity.DeepLinkRouterActivity
+import com.weatherxm.ui.deeplinkrouter.DeepLinkRouterActivity
 import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.hasPermission
 import timber.log.Timber

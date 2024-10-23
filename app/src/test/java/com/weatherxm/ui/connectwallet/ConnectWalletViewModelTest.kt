@@ -34,7 +34,7 @@ import org.koin.dsl.module
 class ConnectWalletViewModelTest : BehaviorSpec({
     val usecase = mockk<UserUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
-    val viewModel = ConnectWalletViewModel(usecase, resources, analytics)
+    lateinit var viewModel: ConnectWalletViewModel
 
     val addressSavedMsg = "Address Saved"
     val invalidAddressMsg = "Invalid Address"
@@ -62,6 +62,8 @@ class ConnectWalletViewModelTest : BehaviorSpec({
         every {
             resources.getString(R.string.error_connect_wallet_invalid_address)
         } returns invalidAddressMsg
+
+        viewModel = ConnectWalletViewModel(usecase, resources, analytics)
     }
 
     context("Set a new wallet address") {

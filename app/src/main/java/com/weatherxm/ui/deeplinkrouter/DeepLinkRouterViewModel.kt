@@ -1,4 +1,4 @@
-package com.weatherxm.ui.deeplinkrouteractivity
+package com.weatherxm.ui.deeplinkrouter
 
 import android.content.Intent
 import android.net.Uri
@@ -24,6 +24,7 @@ import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -73,7 +74,7 @@ class DeepLinkRouterViewModel(
     }
 
     private fun handleDeviceNotification(remoteMessage: WXMRemoteMessage) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             devicesUseCase.getUserDevices().getOrElse { mutableListOf() }.firstOrNull {
                 it.id == remoteMessage.deviceId
             }?.let {
@@ -98,33 +99,29 @@ class DeepLinkRouterViewModel(
 
     private fun searchForCell(cellIndex: String) {
         viewModelScope.launch {
-            usecase.getCellInfo(cellIndex)
-                .onRight {
-                    onCell.postValue(it)
-                }
-                .onLeft {
-                    Timber.w("Error fetching cell info: $it")
-                    handleError(it)
-                }
+            usecase.getCellInfo(cellIndex).onRight {
+                onCell.postValue(it)
+            }.onLeft {
+                Timber.w("Error fetching cell info: $it")
+                handleError(it)
+            }
         }
     }
 
     private fun searchForDevice(normalizedDeviceName: String) {
         val deviceName = normalizedDeviceName.replace("-", " ")
         viewModelScope.launch {
-            usecase.networkSearch(deviceName, exact = true, exclude = EXCLUDE_PLACES)
-                .onRight {
-                    if (it.size == 1) {
-                        getDeviceFromSearchResult(it[0])
-                    } else if (it.size > 1) {
-                        onError.postValue(resources.getString(R.string.more_than_one_results))
-                    } else {
-                        onError.postValue(resources.getString(R.string.share_url_no_results))
-                    }
+            usecase.networkSearch(deviceName, exact = true, exclude = EXCLUDE_PLACES).onRight {
+                if (it.size == 1) {
+                    getDeviceFromSearchResult(it[0])
+                } else if (it.size > 1) {
+                    onError.postValue(resources.getString(R.string.more_than_one_results))
+                } else {
+                    onError.postValue(resources.getString(R.string.share_url_no_results))
                 }
-                .onLeft {
-                    handleError(it)
-                }
+            }.onLeft {
+                handleError(it)
+            }
         }
     }
 
