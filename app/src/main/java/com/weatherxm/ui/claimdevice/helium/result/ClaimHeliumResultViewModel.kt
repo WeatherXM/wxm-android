@@ -19,8 +19,8 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 class ClaimHeliumResultViewModel(
-    private val resources: Resources,
     connectionUseCase: BluetoothConnectionUseCase,
+    private val resources: Resources,
     analytics: AnalyticsWrapper
 ) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics) {
     companion object {

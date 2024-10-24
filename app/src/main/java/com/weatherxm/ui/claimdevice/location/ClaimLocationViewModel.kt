@@ -8,11 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.SearchSuggestion
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.Location
 import com.weatherxm.ui.common.DeviceType
 import com.weatherxm.ui.components.BaseMapFragment.Companion.REVERSE_GEOCODING_DELAY
 import com.weatherxm.usecases.EditLocationUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.Validator
 import kotlinx.coroutines.CancellationException
@@ -73,27 +73,23 @@ class ClaimLocationViewModel(
         }
     }
 
-    fun geocoding(query: String) {
+    fun getSearchSuggestions(query: String) {
         viewModelScope.launch {
-            editLocationUseCase.getSearchSuggestions(query)
-                .onRight { suggestions ->
-                    onSearchResults.postValue(suggestions)
-                }
-                .onLeft {
-                    onSearchResults.postValue(null)
-                }
+            editLocationUseCase.getSearchSuggestions(query).onRight {
+                onSearchResults.postValue(it)
+            }.onLeft {
+                onSearchResults.postValue(null)
+            }
         }
     }
 
     fun getLocationFromSearchSuggestion(suggestion: SearchSuggestion) {
         viewModelScope.launch {
-            editLocationUseCase.getSuggestionLocation(suggestion)
-                .onRight { location ->
-                    onMoveToLocation.postValue(location)
-                }
-                .onLeft {
-                    analytics.trackEventFailure(it.code)
-                }
+            editLocationUseCase.getSuggestionLocation(suggestion).onRight {
+                onMoveToLocation.postValue(it)
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+            }
         }
     }
 
@@ -109,14 +105,12 @@ class ClaimLocationViewModel(
 
         reverseGeocodingJob = viewModelScope.launch {
             delay(REVERSE_GEOCODING_DELAY)
-            editLocationUseCase.getAddressFromPoint(point)
-                .onRight {
-                    onReverseGeocodedAddress.postValue(it)
-                }
-                .onLeft {
-                    analytics.trackEventFailure(it.code)
-                    onReverseGeocodedAddress.postValue(null)
-                }
+            editLocationUseCase.getAddressFromPoint(point).onRight {
+                onReverseGeocodedAddress.postValue(it)
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                onReverseGeocodedAddress.postValue(null)
+            }
         }
 
         reverseGeocodingJob?.invokeOnCompletion {

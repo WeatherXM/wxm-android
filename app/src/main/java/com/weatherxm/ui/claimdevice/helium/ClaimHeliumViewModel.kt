@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError.DeviceNotFound
 import com.weatherxm.data.models.ApiError.UserError.ClaimError.DeviceAlreadyClaimed
 import com.weatherxm.data.models.ApiError.UserError.ClaimError.DeviceClaiming
@@ -15,7 +16,6 @@ import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.ClaimDeviceUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
@@ -30,9 +30,7 @@ class ClaimHeliumViewModel(
 ) : ViewModel() {
     private val onCancel = MutableLiveData(false)
     private val onNext = MutableLiveData(false)
-    private val onClaimResult = MutableLiveData<Resource<UIDevice>>().apply {
-        value = Resource.loading()
-    }
+    private val onClaimResult = MutableLiveData<Resource<UIDevice>>()
 
     fun onCancel() = onCancel
     fun onNext() = onNext
@@ -77,29 +75,27 @@ class ClaimHeliumViewModel(
     fun claimDevice(location: Location) {
         onClaimResult.postValue(Resource.loading())
         viewModelScope.launch {
-            claimDeviceUseCase.claimDevice(devEUI, location.lat, location.lon, deviceKey)
-                .map {
-                    Timber.d("Claimed device: $it")
-                    onClaimResult.postValue(Resource.success(it))
-                }
-                .mapLeft {
-                    analytics.trackEventFailure(it.code)
-                    onClaimResult.postValue(
-                        Resource.error(
-                            msg = resources.getString(
-                                when (it) {
-                                    is InvalidClaimId -> R.string.error_claim_invalid_dev_eui
-                                    is InvalidClaimLocation -> R.string.error_claim_invalid_location
-                                    is DeviceAlreadyClaimed -> R.string.error_claim_already_claimed
-                                    is DeviceNotFound -> R.string.error_claim_not_found_helium
-                                    is DeviceClaiming -> R.string.error_claim_device_claiming_error
-                                    else -> it.getDefaultMessageResId()
-                                }
-                            ),
-                            error = it
-                        )
+            claimDeviceUseCase.claimDevice(devEUI, location.lat, location.lon, deviceKey).onRight {
+                Timber.d("Claimed device: $it")
+                onClaimResult.postValue(Resource.success(it))
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                onClaimResult.postValue(
+                    Resource.error(
+                        msg = resources.getString(
+                            when (it) {
+                                is InvalidClaimId -> R.string.error_claim_invalid_dev_eui
+                                is InvalidClaimLocation -> R.string.error_claim_invalid_location
+                                is DeviceAlreadyClaimed -> R.string.error_claim_already_claimed
+                                is DeviceNotFound -> R.string.error_claim_not_found_helium
+                                is DeviceClaiming -> R.string.error_claim_device_claiming_error
+                                else -> it.getDefaultMessageResId()
+                            }
+                        ),
+                        error = it
                     )
-                }
+                )
+            }
         }
     }
 

@@ -73,6 +73,8 @@ open class BluetoothHeliumViewModel(
         // To be overridden
     }
 
+    fun scannedDevice() = scannedDevice
+
     protected fun scanAndConnect() {
         timer.start()
         scanningJob = viewModelScope.launch {

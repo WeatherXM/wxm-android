@@ -12,8 +12,8 @@ import com.weatherxm.data.models.ApiError.UserError.ClaimError.InvalidClaimId
 import com.weatherxm.data.models.ApiError.UserError.ClaimError.InvalidClaimLocation
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Location
-import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
@@ -33,9 +33,7 @@ class ClaimWifiViewModel(
 
     private val onNext = MutableLiveData<Int>()
     private val onCancel = MutableLiveData(false)
-    private val onClaimResult = MutableLiveData<Resource<UIDevice>>().apply {
-        value = Resource.loading()
-    }
+    private val onClaimResult = MutableLiveData<Resource<UIDevice>>()
     private var currentSerialNumber: String = String.empty()
     private var currentClaimingKey: String? = null
 
@@ -86,22 +84,20 @@ class ClaimWifiViewModel(
                 location.lat,
                 location.lon,
                 currentClaimingKey
-            )
-                .map {
-                    Timber.d("Claimed device: $it")
-                    onClaimResult.postValue(Resource.success(it))
-                }
-                .mapLeft {
-                    analytics.trackEventFailure(it.code)
-                    handleFailure(it)
-                }
+            ).onRight {
+                Timber.d("Claimed device: $it")
+                onClaimResult.postValue(Resource.success(it))
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                handleFailure(it)
+            }
         }
     }
 
     private fun handleFailure(failure: Failure) {
         onClaimResult.postValue(
             Resource.error(
-                msg = resources.getString(
+                resources.getString(
                     when (failure) {
                         is InvalidClaimId -> R.string.error_claim_invalid_serial
                         is InvalidClaimLocation -> R.string.error_claim_invalid_location
@@ -110,8 +106,7 @@ class ClaimWifiViewModel(
                         is DeviceClaiming -> R.string.error_claim_device_claiming_error
                         else -> failure.getDefaultMessageResId()
                     }
-                ),
-                error = failure
+                )
             )
         )
     }

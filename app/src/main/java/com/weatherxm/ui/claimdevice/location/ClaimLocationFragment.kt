@@ -105,7 +105,7 @@ class ClaimLocationFragment : BaseFragment(), EditLocationListener {
         }
 
         binding.addressSearchView.setAdapter(adapter,
-            onTextChanged = { model.geocoding(it) },
+            onTextChanged = { model.getSearchSuggestions(it) },
             onMyLocationClicked = {
                 requestLocationPermissions(activity) {
                     model.getLocation()
