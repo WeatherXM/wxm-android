@@ -15,7 +15,8 @@ import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.data.models.InfoBanner
 import com.weatherxm.databinding.FragmentDevicesBinding
-import com.weatherxm.ui.common.BundleName
+import com.weatherxm.ui.common.DeviceAdapter
+import com.weatherxm.ui.common.DeviceListener
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.Resource
@@ -23,7 +24,6 @@ import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.applyInsets
 import com.weatherxm.ui.common.classSimpleName
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.invisible
 import com.weatherxm.ui.common.setCardRadius
 import com.weatherxm.ui.common.toast
@@ -247,41 +247,6 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             contentType = AnalyticsService.ParamValue.USER_DEVICE_LIST.paramValue,
             Pair(FirebaseAnalytics.Param.ITEM_LIST_ID, device.id)
         )
-    }
-
-    override fun onUpdateStationClicked(device: UIDevice) {
-        analytics.trackEventPrompt(
-            AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
-            AnalyticsService.ParamValue.WARN.paramValue,
-            AnalyticsService.ParamValue.ACTION.paramValue
-        )
-        navigator.showDeviceHeliumOTA(this, device, false)
-    }
-
-    override fun onLowBatteryReadMoreClicked(device: UIDevice) {
-        val url = when (device.bundleName) {
-            BundleName.m5 -> getString(R.string.docs_url_low_battery_m5)
-            BundleName.d1 -> getString(R.string.docs_url_low_battery_d1)
-            BundleName.h1, BundleName.h2 -> getString(R.string.docs_url_low_battery_helium)
-            BundleName.pulse -> getString(R.string.docs_url_low_battery_pulse)
-            else -> String.empty()
-        }
-        navigator.openWebsite(context, url)
-        analytics.trackEventSelectContent(
-            AnalyticsService.ParamValue.WEB_DOCUMENTATION.paramValue,
-            Pair(FirebaseAnalytics.Param.ITEM_ID, url)
-        )
-    }
-
-    override fun onAlertsClicked(device: UIDevice) {
-        analytics.trackEventSelectContent(
-            AnalyticsService.ParamValue.VIEW_ALL.paramValue,
-            Pair(
-                FirebaseAnalytics.Param.ITEM_ID,
-                AnalyticsService.ParamValue.MULTIPLE_ISSUES.paramValue
-            )
-        )
-        navigator.showDeviceAlerts(context, device)
     }
 
     override fun onFollowBtnClicked(device: UIDevice) {

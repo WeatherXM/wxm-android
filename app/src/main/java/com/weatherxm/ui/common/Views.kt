@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Rect
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.os.Build.VERSION_CODES.TIRAMISU
 import android.os.Bundle
 import android.os.Parcelable
@@ -39,6 +40,7 @@ import androidx.annotation.IntDef
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.os.BundleCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.text.parseAsHtml
@@ -50,13 +52,19 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.request.ImageRequest
 import com.airbnb.lottie.LottieAnimationView
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.textview.MaterialTextView
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.AndroidBuildInfo
 import com.weatherxm.util.DateTimeHelper.getRelativeFormattedTime
+import com.weatherxm.util.Rewards.getRewardScoreColor
+import com.weatherxm.util.Rewards.metricsErrorType
 import com.weatherxm.util.Weather.getWeatherAnimation
 import dev.chrisbanes.insetter.applyInsetter
 import java.util.Locale
@@ -260,7 +268,36 @@ fun Chip.setIcon(@DrawableRes drawable: Int) {
     this.chipIcon = AppCompatResources.getDrawable(context, drawable)
 }
 
-fun Chip.setErrorChip() {
+fun Chip.errorChip() {
+    setChipBackgroundColorResource(R.color.errorTint)
+    setIcon(R.drawable.ic_warning_hex_filled)
+    setChipIconTintResource(R.color.error)
+}
+
+fun Chip.warningChip() {
+    setChipBackgroundColorResource(R.color.warningTint)
+    setIcon(R.drawable.ic_warning_hex_filled)
+    setChipIconTintResource(R.color.warning)
+}
+
+fun Chip.updateRequiredChip() {
+    text = context.getString(R.string.update_required)
+    setChipBackgroundColorResource(R.color.warningTint)
+    setIcon(R.drawable.ic_update_alt)
+    chipIconSize = 0F
+    setChipIconTintResource(R.color.warning)
+}
+
+fun Chip.lowBatteryChip() {
+    text = context.getString(R.string.low_battery)
+    setChipBackgroundColorResource(R.color.warningTint)
+    chipIconSize = 0F
+    setIcon(R.drawable.ic_low_battery)
+    setChipIconTintResource(R.color.warning)
+}
+
+fun Chip.offlineChip() {
+    text = context.getString(R.string.station_inactive)
     setChipBackgroundColorResource(R.color.errorTint)
     setIcon(R.drawable.ic_error_hex_filled)
     setChipIconTintResource(R.color.error)
@@ -280,10 +317,10 @@ fun Chip.setBundleChip(device: UIDevice) {
 fun Chip.setStatusChip(device: UIDevice) {
     text = device.lastWeatherStationActivity?.getRelativeFormattedTime(
         fallbackIfTooSoon = context.getString(R.string.just_now)
-    )
+    ) ?: "N/A"
     when (device.isActive) {
         true -> {
-            setChipBackgroundColorResource(R.color.successTint)
+            setChipBackgroundColorResource(R.color.blueTint)
             setChipIconTintResource(R.color.success)
         }
         false -> {
@@ -450,6 +487,89 @@ fun MaterialCardView.setBoostFallbackBackground() {
     setCardBackgroundColor(context.getColor(R.color.blue))
 }
 
+fun UIDevice.stationHealthViewsOnList(
+    context: Context,
+    dataQualityText: MaterialTextView,
+    dataQualityIcon: ImageView,
+    addressIcon: ImageView
+) {
+    qodScore?.let {
+        dataQualityText.text = context.getString(R.string.data_quality_value, it)
+        dataQualityIcon.setColor(getRewardScoreColor(it))
+    } ?: run {
+        dataQualityText.text = context.getString(R.string.no_data)
+        dataQualityIcon.setColor(R.color.darkGrey)
+    }
+    when (polReason) {
+        AnnotationGroupCode.NO_LOCATION_DATA -> addressIcon.setColor(R.color.error)
+        AnnotationGroupCode.LOCATION_NOT_VERIFIED -> addressIcon.setColor(R.color.warning)
+        else -> {
+            /**
+             * Check whether everything is null which means that we are at a "pending" state or
+             * just the PoL Reason is null which means that we have no error
+             */
+            if (qodScore == null && metricsTimestamp == null) {
+                addressIcon.setColor(R.color.darkGrey)
+            } else {
+                addressIcon.setColor(R.color.success)
+            }
+        }
+    }
+}
+
+fun UIDevice.handleStroke(rootCard: MaterialCardView) {
+    /**
+     * If the UIDevice has an error alert or an error metric then the stroke should be error
+     * or if there are warning alerts or warning metrics then the stroke should be warning
+     * otherwise clear the stroke
+     */
+    val metricsErrorType = metricsErrorType(qodScore, polReason)
+    if (hasErrors() || metricsErrorType == ErrorType.ERROR) {
+        rootCard.setCardStroke(R.color.error, 2)
+    } else if (alerts.isNotEmpty() || metricsErrorType == ErrorType.WARNING) {
+        rootCard.setCardStroke(R.color.warning, 2)
+    } else {
+        rootCard.strokeWidth = 0
+    }
+}
+
+fun UIDevice.handleAlerts(context: Context, issueChip: Chip, analytics: AnalyticsWrapper?) {
+    if (alerts.isEmpty()) {
+        issueChip.visible(false)
+        return
+    }
+
+    if (alerts.size > 1) {
+        if (hasErrors()) {
+            issueChip.errorChip()
+        } else {
+            issueChip.warningChip()
+        }
+        issueChip.text = context.getString(R.string.issues, alerts.size)
+    } else {
+        when (alerts[0]) {
+            DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY) -> {
+                issueChip.lowBatteryChip()
+            }
+            DeviceAlert.createError(DeviceAlertType.OFFLINE) -> {
+                issueChip.offlineChip()
+            }
+            DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE) -> {
+                issueChip.updateRequiredChip()
+                analytics?.trackEventPrompt(
+                    AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+                    AnalyticsService.ParamValue.WARN.paramValue,
+                    AnalyticsService.ParamValue.VIEW.paramValue
+                )
+            }
+            else -> {
+                // Do nothing
+            }
+        }
+    }
+    issueChip.visible(true)
+}
+
 private fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
@@ -476,6 +596,15 @@ fun RecyclerView.blockParentViewPagerOnScroll() {
 
         override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
     })
+}
+
+fun MaterialToolbar.setMenuTint(@ColorRes color: Int = R.color.colorPrimary) {
+    var drawable: Drawable? = getOverflowIcon()
+    if (drawable != null) {
+        drawable = DrawableCompat.wrap(drawable)
+        DrawableCompat.setTint(drawable.mutate(), context.getColor(color))
+        setOverflowIcon(drawable)
+    }
 }
 
 // https://stackoverflow.com/a/46165723/5403137

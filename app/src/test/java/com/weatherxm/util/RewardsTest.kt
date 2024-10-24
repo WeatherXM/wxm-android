@@ -25,32 +25,36 @@ class RewardsTest : BehaviorSpec({
                 then("the color should be `error`") {
                     getRewardScoreColor(0) shouldBe R.color.error
                     getRewardScoreColor(5) shouldBe R.color.error
+                    getRewardScoreColor(19) shouldBe R.color.error
                 }
                 and("the icon should be an `error`") {
                     getRewardIcon(0) shouldBe R.drawable.ic_error_hex_filled
                     getRewardIcon(5) shouldBe R.drawable.ic_error_hex_filled
+                    getRewardIcon(15) shouldBe R.drawable.ic_error_hex_filled
                 }
             }
             When("it is between error and good so that a warning should be visible") {
                 then("the color should be `warning`") {
-                    getRewardScoreColor(15) shouldBe R.color.warning
+                    getRewardScoreColor(20) shouldBe R.color.warning
                     getRewardScoreColor(35) shouldBe R.color.warning
                     getRewardScoreColor(55) shouldBe R.color.warning
-                    getRewardScoreColor(75) shouldBe R.color.warning
+                    getRewardScoreColor(79) shouldBe R.color.warning
                 }
                 and("the icon should be a `warning`") {
-                    getRewardIcon(15) shouldBe R.drawable.ic_warning_hex_filled
+                    getRewardIcon(20) shouldBe R.drawable.ic_warning_hex_filled
                     getRewardIcon(35) shouldBe R.drawable.ic_warning_hex_filled
                     getRewardIcon(55) shouldBe R.drawable.ic_warning_hex_filled
-                    getRewardIcon(75) shouldBe R.drawable.ic_warning_hex_filled
+                    getRewardIcon(79) shouldBe R.drawable.ic_warning_hex_filled
                 }
             }
             When("it is good so that everything is OK") {
-                then("the color should be `green`") {
-                    getRewardScoreColor(95) shouldBe R.color.green
-                    getRewardScoreColor(100) shouldBe R.color.green
+                then("the color should be `success`") {
+                    getRewardScoreColor(80) shouldBe R.color.success
+                    getRewardScoreColor(95) shouldBe R.color.success
+                    getRewardScoreColor(100) shouldBe R.color.success
                 }
                 and("the icon should be a `checkmark`") {
+                    getRewardIcon(80) shouldBe R.drawable.ic_checkmark_hex_filled
                     getRewardIcon(95) shouldBe R.drawable.ic_checkmark_hex_filled
                     getRewardIcon(100) shouldBe R.drawable.ic_checkmark_hex_filled
                 }

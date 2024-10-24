@@ -41,6 +41,7 @@ data class TimelineReward(
     val data: Reward?
 ) : Parcelable
 
+@Suppress("TooManyFunctions")
 @Keep
 @JsonClass(generateAdapter = true)
 @Parcelize
@@ -72,6 +73,9 @@ data class UIDevice(
     val hasLowBattery: Boolean?,
     val totalRewards: Float?,
     val actualReward: Float?,
+    val qodScore: Int?,
+    val polReason: AnnotationGroupCode?,
+    val metricsTimestamp: ZonedDateTime?,
     var alerts: List<DeviceAlert> = listOf(),
     val isDeviceFromSearchResult: Boolean = false
 ) : Parcelable {
@@ -80,6 +84,9 @@ data class UIDevice(
             String.empty(),
             String.empty(),
             String.empty(),
+            null,
+            null,
+            null,
             null,
             null,
             null,
@@ -148,12 +155,12 @@ data class UIDevice(
             alerts.add(DeviceAlert.createError(DeviceAlertType.OFFLINE))
         }
 
-        if (hasLowBattery == true && isOwned()) {
-            alerts.add(DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY))
-        }
-
         if (shouldNotifyOTA && shouldPromptUpdate()) {
             alerts.add(DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE))
+        }
+
+        if (hasLowBattery == true && isOwned()) {
+            alerts.add(DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY))
         }
         this.alerts = alerts.sortedByDescending { alert ->
             alert.severity
@@ -641,4 +648,10 @@ enum class BundleName : Parcelable {
     h2,
     d1,
     pulse
+}
+
+@Parcelize
+enum class ErrorType : Parcelable {
+    WARNING,
+    ERROR
 }
