@@ -6,18 +6,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import com.weatherxm.R
-import com.weatherxm.ui.common.Resource
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityDeviceEditLocationBinding
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE
 import com.weatherxm.ui.common.DeviceRelation
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.SearchResultsAdapter
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.hideKeyboard
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setHtml
-import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.visible
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.components.EditLocationListener
 import com.weatherxm.ui.components.EditLocationMapFragment
@@ -63,7 +63,7 @@ class DeviceEditLocationActivity : BaseActivity(), EditLocationListener {
                 toast(R.string.invalid_location)
                 return@setOnClickListener
             }
-            model.confirmLocation(device.id, markerLocation.lat, markerLocation.lon)
+            model.setLocation(device.id, markerLocation.lat, markerLocation.lon)
         }
 
         with(binding.relocationFeeNotice) {
@@ -88,7 +88,7 @@ class DeviceEditLocationActivity : BaseActivity(), EditLocationListener {
 
         binding.addressSearchView.setAdapter(
             adapter,
-            onTextChanged = { model.geocoding(it) },
+            onTextChanged = { model.getSearchSuggestions(it) },
             onMyLocationClicked = {
                 requestLocationPermissions(this) {
                     model.getLocation()

@@ -1,15 +1,21 @@
-package com.weatherxm.ui.claimdevice.location
+package com.weatherxm.ui.deviceeditlocation
 
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.SearchSuggestion
+import com.weatherxm.R
+import com.weatherxm.TestConfig.DEVICE_NOT_FOUND_MSG
+import com.weatherxm.TestConfig.REACH_OUT_MSG
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
+import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.TestUtils.testHandleFailureViewModel
 import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Location
 import com.weatherxm.ui.InstantExecutorListener
-import com.weatherxm.ui.common.DeviceType
+import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.EditLocationUseCase
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.Resources
@@ -31,13 +37,13 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ClaimLocationViewModelTest : BehaviorSpec({
+class DeviceEditLocationViewModelTest : BehaviorSpec({
     val usecase = mockk<EditLocationUseCase>()
     val locationHelper = mockk<LocationHelper>()
     val analytics = mockk<AnalyticsWrapper>()
-    lateinit var viewModel: ClaimLocationViewModel
+    lateinit var viewModel: DeviceEditLocationViewModel
 
-    val deviceType = DeviceType.D1_WIFI
+    val deviceId = "deviceId"
     val query = "query"
     val address = "address"
     val lat = 10.0
@@ -45,6 +51,11 @@ class ClaimLocationViewModelTest : BehaviorSpec({
     val locationSlot = slot<(location: Location?) -> Unit>()
     val searchSuggestion = mockk<SearchSuggestion>()
     val point = mockk<Point>()
+    val device = UIDevice.empty()
+
+    val invalidLocation = "invalidLocation"
+    val invalidLocationFailure = ApiError.UserError.ClaimError.InvalidClaimLocation("")
+    val deviceNotFoundFailure = ApiError.DeviceNotFound("")
 
     listener(InstantExecutorListener())
     Dispatchers.setMain(StandardTestDispatcher())
@@ -59,49 +70,22 @@ class ClaimLocationViewModelTest : BehaviorSpec({
                 }
             )
         }
+        every { resources.getString(R.string.error_invalid_location) } returns invalidLocation
         justRun { analytics.trackEventFailure(any()) }
 
-        viewModel = ClaimLocationViewModel(usecase, analytics, locationHelper)
+        viewModel = DeviceEditLocationViewModel(usecase, analytics, locationHelper, resources)
     }
 
-    context("SET a Device Type and then GET it") {
-        given("a device type") {
-            then("ensure that the current one is the default one") {
-                viewModel.getDeviceType() shouldBe DeviceType.M5_WIFI
-            }
-            and("SET it") {
-                viewModel.setDeviceType(deviceType)
-                then("GET it and ensure it's set correctly") {
-                    viewModel.getDeviceType() shouldBe deviceType
-                }
-            }
-        }
-    }
-
-    context("SET an installation location and then GET it") {
-        given("a claiming key") {
-            then("ensure that the current one is the default one") {
-                viewModel.getInstallationLocation() shouldBe Location(0.0, 0.0)
-            }
-            then("VALIDATE the new location to ensure it's correct") {
+    context("Validate a location") {
+        given("a location") {
+            then("validate it") {
                 viewModel.validateLocation(lat, lon) shouldBe true
-            }
-            and("SET it") {
-                viewModel.setInstallationLocation(lat, lon)
-                then("GET it and ensure it's set correctly") {
-                    viewModel.getInstallationLocation() shouldBe Location(lat, lon)
-                }
             }
         }
     }
 
     context("Get user's location") {
-        given("a request to the user to provide it") {
-            then("LiveData onRequestUserLocation should post the value true") {
-                viewModel.onRequestUserLocation().value shouldBe false
-                viewModel.requestUserLocation()
-                viewModel.onRequestUserLocation().value shouldBe true
-            }
+        given("a helper class that returns the user location") {
             and("use location helper to get the user's location") {
                 every {
                     locationHelper.getLocationAndThen(capture(locationSlot))
@@ -176,9 +160,62 @@ class ClaimLocationViewModelTest : BehaviorSpec({
                 and("the usecase returns a failure") {
                     coMockEitherLeft({ usecase.getAddressFromPoint(point) }, failure)
                     runTest { viewModel.getAddressFromPoint(point) }
+                    then("track event's failure in analytics") {
+                        verify(exactly = 2) { analytics.trackEventFailure(any()) }
+                    }
                     then("LiveData onReverseGeocodedAddress should post its value null") {
                         viewModel.onReverseGeocodedAddress().value shouldBe null
                     }
+                }
+            }
+        }
+    }
+
+    context("set the new location") {
+        given("a usecase returning the response regarding the setting of the new location") {
+            When("it's a failure") {
+                and("It's an InvalidClaimLocation failure") {
+                    coMockEitherLeft(
+                        { usecase.setLocation(deviceId, lat, lon) },
+                        invalidLocationFailure
+                    )
+                    testHandleFailureViewModel(
+                        { viewModel.setLocation(deviceId, lat, lon) },
+                        analytics,
+                        viewModel.onUpdatedDevice(),
+                        3,
+                        invalidLocation
+                    )
+                }
+                and("It's an DeviceNotFound failure") {
+                    coMockEitherLeft(
+                        { usecase.setLocation(deviceId, lat, lon) },
+                        deviceNotFoundFailure
+                    )
+                    testHandleFailureViewModel(
+                        { viewModel.setLocation(deviceId, lat, lon) },
+                        analytics,
+                        viewModel.onUpdatedDevice(),
+                        4,
+                        DEVICE_NOT_FOUND_MSG
+                    )
+                }
+                and("it's any other failure") {
+                    coMockEitherLeft({ usecase.setLocation(deviceId, lat, lon) }, failure)
+                    testHandleFailureViewModel(
+                        { viewModel.setLocation(deviceId, lat, lon) },
+                        analytics,
+                        viewModel.onUpdatedDevice(),
+                        5,
+                        REACH_OUT_MSG
+                    )
+                }
+            }
+            When("it's a success") {
+                coMockEitherRight({ usecase.setLocation(deviceId, lat, lon) }, device)
+                runTest { viewModel.setLocation(deviceId, lat, lon) }
+                then("LiveData onUpdatedDevice should post the updated device") {
+                    viewModel.onUpdatedDevice().isSuccess(device)
                 }
             }
         }

@@ -10,13 +10,13 @@ import androidx.lifecycle.viewModelScope
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Location
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.components.BaseMapFragment.Companion.REVERSE_GEOCODING_DELAY
 import com.weatherxm.usecases.EditLocationUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.LocationHelper
 import com.weatherxm.util.Resources
@@ -36,7 +36,6 @@ class DeviceEditLocationViewModel(
     private val resources: Resources
 ) : ViewModel() {
     private var reverseGeocodingJob: Job? = null
-    private var installationLocation = Location(0.0, 0.0)
 
     private val onMoveToLocation = MutableLiveData<Location?>()
     private val onSearchResults = MutableLiveData<List<SearchSuggestion>?>(mutableListOf())
@@ -59,7 +58,7 @@ class DeviceEditLocationViewModel(
         }
     }
 
-    fun geocoding(query: String) {
+    fun getSearchSuggestions(query: String) {
         viewModelScope.launch {
             usecase.getSearchSuggestions(query).onRight { suggestions ->
                 onSearchResults.postValue(suggestions)
@@ -106,10 +105,7 @@ class DeviceEditLocationViewModel(
         }
     }
 
-    fun confirmLocation(deviceId: String, lat: Double, lon: Double) {
-        installationLocation.lat = lat
-        installationLocation.lon = lon
-
+    fun setLocation(deviceId: String, lat: Double, lon: Double) {
         viewModelScope.launch {
             onUpdatedDevice.postValue(Resource.loading())
             usecase.setLocation(deviceId, lat, lon).onRight {
