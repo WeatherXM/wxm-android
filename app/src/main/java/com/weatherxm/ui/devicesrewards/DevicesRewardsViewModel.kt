@@ -22,7 +22,7 @@ class DevicesRewardsViewModel(
     val usecase: RewardsUseCase,
     private val analytics: AnalyticsWrapper
 ) : ViewModel() {
-    val devicesJobs = mutableMapOf<Int, Job>()
+    private val devicesJobs = mutableMapOf<Int, Job>()
 
     /**
      * The Int here represents the position in the list/adapter

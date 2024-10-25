@@ -175,7 +175,7 @@ import com.weatherxm.ui.devicedetails.rewards.RewardsViewModel
 import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationViewModel
 import com.weatherxm.ui.deviceforecast.ForecastDetailsViewModel
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
-import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
+import com.weatherxm.ui.devicehistory.HistoryViewModel
 import com.weatherxm.ui.devicesettings.helium.DeviceSettingsHeliumViewModel
 import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyViewModel
 import com.weatherxm.ui.devicesettings.helium.reboot.RebootViewModel
@@ -941,7 +941,7 @@ private val viewmodels = module {
     viewModel { params -> ForecastViewModel(device = params.get(), get(), get(), get()) }
     viewModel { params -> RewardsViewModel(device = params.get(), get(), get(), get()) }
     viewModel { params ->
-        HistoryChartsViewModel(
+        HistoryViewModel(
             device = params.get(),
             get(),
             get(),

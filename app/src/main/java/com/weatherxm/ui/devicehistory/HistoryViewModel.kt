@@ -10,8 +10,8 @@ import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError.UserError.InvalidFromDate
 import com.weatherxm.data.models.ApiError.UserError.InvalidToDate
-import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Charts
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.ChartsUseCase
 import com.weatherxm.usecases.HistoryUseCase
@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.time.LocalDate
 
-class HistoryChartsViewModel(
+class HistoryViewModel(
     val device: UIDevice,
     private val historyUseCase: HistoryUseCase,
     private val chartsUseCase: ChartsUseCase,
@@ -82,28 +82,25 @@ class HistoryChartsViewModel(
             )
 
             // Fetch fresh data
-            historyUseCase.getWeatherHistory(device, currentDateShown, shouldForceUpdate)
-                .onRight {
-                    val historyCharts = chartsUseCase.createHourlyCharts(currentDateShown, it)
-                    Timber.d("Returning history charts for [${historyCharts.date}]")
-                    charts.postValue(Resource.success(historyCharts))
-                }
-                .onLeft {
-                    analytics.trackEventFailure(it.code)
-                    charts.postValue(
-                        Resource.error(
-                            resources.getString(
-                                when (it) {
-                                    is InvalidFromDate, is InvalidToDate -> {
-                                        R.string.error_history_generic_message
-                                    }
-
-                                    else -> it.getDefaultMessageResId()
+            historyUseCase.getWeatherHistory(device, currentDateShown, shouldForceUpdate).onRight {
+                val historyCharts = chartsUseCase.createHourlyCharts(currentDateShown, it)
+                Timber.d("Returning history charts for [${historyCharts.date}]")
+                charts.postValue(Resource.success(historyCharts))
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                charts.postValue(
+                    Resource.error(
+                        resources.getString(
+                            when (it) {
+                                is InvalidFromDate, is InvalidToDate -> {
+                                    R.string.error_history_generic_message
                                 }
-                            )
+                                else -> it.getDefaultMessageResId()
+                            }
                         )
                     )
-                }
+                )
+            }
         }
 
         updateWeatherHistoryJob?.invokeOnCompletion {
