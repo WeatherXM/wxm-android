@@ -35,14 +35,13 @@ class CurrentViewModel(
     fun fetchDevice() {
         onLoading.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
-            deviceDetailsUseCase.getDevice(device)
-                .map {
-                    Timber.d("Got Device: ${it.name}")
-                    device = it
-                    onDevice.postValue(device)
-                }
-                .mapLeft {
-                    analytics.trackEventFailure(it.code)
+            deviceDetailsUseCase.getDevice(device).onRight {
+                Timber.d("Got Device: ${it.name}")
+                device = it
+                onDevice.postValue(device)
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                onError.postValue(
                     when (it) {
                         is ApiError.DeviceNotFound -> {
                             UIError(resources.getString(R.string.error_device_not_found))
@@ -58,10 +57,8 @@ class CurrentViewModel(
                             UIError(resources.getString(R.string.error_reach_out_short))
                         }
                     }
-                }
-                .onLeft {
-                    onError.postValue(it)
-                }
+                )
+            }
             onLoading.postValue(false)
         }
     }
