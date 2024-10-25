@@ -14,10 +14,10 @@ import timber.log.Timber
 
 class SelectStationViewModel(private val usecase: WidgetSelectStationUseCase) : ViewModel() {
 
-    private val devices = MutableLiveData<Resource<List<UIDevice>>>()
+    private val onDevices = MutableLiveData<Resource<List<UIDevice>>>()
     private val isNotLoggedIn = MutableLiveData<Unit>()
 
-    fun devices(): LiveData<Resource<List<UIDevice>>> = devices
+    fun onDevices(): LiveData<Resource<List<UIDevice>>> = onDevices
     fun isNotLoggedIn(): LiveData<Unit> = isNotLoggedIn
 
     private var currentStationSelected = UIDevice.empty()
@@ -44,18 +44,14 @@ class SelectStationViewModel(private val usecase: WidgetSelectStationUseCase) : 
     }
 
     fun fetch() {
-        this@SelectStationViewModel.devices.postValue(Resource.loading())
-        viewModelScope.launch(Dispatchers.IO) {
-            usecase.getUserDevices()
-                .map { devices ->
-                    Timber.d("Got ${devices.size} devices")
-                    this@SelectStationViewModel.devices.postValue(Resource.success(devices))
-                }
-                .mapLeft {
-                    this@SelectStationViewModel.devices.postValue(
-                        Resource.error(it.getDefaultMessage())
-                    )
-                }
+        onDevices.postValue(Resource.loading())
+        viewModelScope.launch {
+            usecase.getUserDevices().onRight { devices ->
+                Timber.d("Got ${devices.size} devices")
+                onDevices.postValue(Resource.success(devices))
+            }.onLeft {
+                onDevices.postValue(Resource.error(it.getDefaultMessage()))
+            }
         }
     }
 

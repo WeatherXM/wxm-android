@@ -79,8 +79,8 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             onDevices(it)
         }
 
-        model.onFollowStatus().observe(viewLifecycleOwner) {
-            onFollowStatus(it)
+        model.onUnFollowStatus().observe(viewLifecycleOwner) {
+            onUnFollowStatus(it)
         }
 
         model.onDevicesRewards().observe(viewLifecycleOwner) {
@@ -125,7 +125,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         dialogOverlay = MaterialAlertDialogBuilder(requireContext()).create()
     }
 
-    private fun onFollowStatus(status: Resource<Unit>) {
+    private fun onUnFollowStatus(status: Resource<Unit>) {
         when (status.status) {
             Status.SUCCESS -> {
                 binding.empty.visible(false)
@@ -147,7 +147,8 @@ class DevicesFragment : BaseFragment(), DeviceListener {
         when (devices.status) {
             Status.SUCCESS -> {
                 binding.swiperefresh.isRefreshing = false
-                parentModel.getWalletWarnings(devices.data)
+                parentModel.setHasDevices(devices.data)
+                parentModel.getWalletWarnings()
                 if (!devices.data.isNullOrEmpty()) {
                     adapter.submitList(devices.data)
                     adapter.notifyDataSetChanged()

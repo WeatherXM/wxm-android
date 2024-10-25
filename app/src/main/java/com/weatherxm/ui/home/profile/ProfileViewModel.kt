@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
-import com.weatherxm.ui.common.Resource
 import com.weatherxm.data.models.User
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIWalletRewards
 import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
@@ -22,9 +22,7 @@ class ProfileViewModel(
     private var currentWalletRewards: UIWalletRewards? = null
 
     private val onUser = MutableLiveData<Resource<User>>()
-    private val onWalletRewards = MutableLiveData<Resource<UIWalletRewards>>().apply {
-        value = Resource.loading()
-    }
+    private val onWalletRewards = MutableLiveData<Resource<UIWalletRewards>>()
 
     fun onUser(): LiveData<Resource<User>> = onUser
     fun onWalletRewards(): LiveData<Resource<UIWalletRewards>> = onWalletRewards
@@ -32,17 +30,15 @@ class ProfileViewModel(
     fun fetchUser(forceRefresh: Boolean = false) {
         onUser.postValue(Resource.loading())
         viewModelScope.launch {
-            useCase.getUser(forceRefresh)
-                .onRight {
-                    onUser.postValue(Resource.success(it))
-                    fetchWalletRewards(it.wallet?.address)
-                }
-                .onLeft {
-                    analytics.trackEventFailure(it.code)
-                    onUser.postValue(
-                        Resource.error(it.getDefaultMessage(R.string.error_reach_out_short))
-                    )
-                }
+            useCase.getUser(forceRefresh).onRight {
+                onUser.postValue(Resource.success(it))
+                fetchWalletRewards(it.wallet?.address)
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                onUser.postValue(
+                    Resource.error(it.getDefaultMessage(R.string.error_reach_out_short))
+                )
+            }
         }
     }
 

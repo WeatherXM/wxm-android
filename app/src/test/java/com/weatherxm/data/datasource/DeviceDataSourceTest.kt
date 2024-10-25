@@ -201,19 +201,19 @@ class DeviceDataSourceTest : BehaviorSpec({
 
     context("Claim a device") {
         When("Using the Network Source") {
-//            and("it's a DeviceClaiming failure") {
-//                coEvery {
-//                    apiService.claimDevice(ClaimDeviceBody(invalidSerialNumber, location, secret))
-//                } returns deviceClaimingErrorResponse
-//                then("retry until [CLAIM_MAX_RETRIES = $CLAIM_MAX_RETRIES] is hit") {
-//                    networkSource.claimDevice(invalidSerialNumber, location, secret)
-//                    coVerify(exactly = CLAIM_MAX_RETRIES + 1) {
-//                        apiService.claimDevice(
-//                            ClaimDeviceBody(invalidSerialNumber, location, secret)
-//                        )
-//                    }
-//                }
-//            }
+            and("it's a DeviceClaiming failure") {
+                coEvery {
+                    apiService.claimDevice(ClaimDeviceBody(invalidSerialNumber, location, secret))
+                } returns deviceClaimingErrorResponse
+                then("retry until [CLAIM_MAX_RETRIES = $CLAIM_MAX_RETRIES] is hit") {
+                    networkSource.claimDevice(invalidSerialNumber, location, secret)
+                    coVerify(exactly = CLAIM_MAX_RETRIES + 1) {
+                        apiService.claimDevice(
+                            ClaimDeviceBody(invalidSerialNumber, location, secret)
+                        )
+                    }
+                }
+            }
             and("it's either a success or a failure other than DeviceClaiming") {
                 testNetworkCall(
                     "device",

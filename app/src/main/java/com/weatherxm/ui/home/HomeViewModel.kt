@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.InfoBanner
-import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.data.models.Survey
+import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.WalletWarnings
 import com.weatherxm.usecases.RemoteBannersUseCase
@@ -39,8 +39,11 @@ class HomeViewModel(
 
     fun hasDevices() = hasDevices
 
-    fun getWalletWarnings(devices: List<UIDevice>?) {
+    fun setHasDevices(devices: List<UIDevice>?) {
         hasDevices = devices?.firstOrNull { it.isOwned() } != null
+    }
+
+    fun getWalletWarnings() {
         viewModelScope.launch {
             userUseCase.getWalletAddress().onRight {
                 onWalletWarnings.postValue(
