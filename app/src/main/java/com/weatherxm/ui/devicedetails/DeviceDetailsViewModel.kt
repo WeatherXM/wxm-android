@@ -31,8 +31,8 @@ class DeviceDetailsViewModel(
     var openExplorerOnBack: Boolean,
     private val deviceDetailsUseCase: DeviceDetailsUseCase,
     private val authUseCase: AuthUseCase,
-    private val resources: Resources,
     private val followUseCase: FollowUseCase,
+    private val resources: Resources,
     private val analytics: AnalyticsWrapper
 ) : ViewModel() {
     companion object {
@@ -66,6 +66,10 @@ class DeviceDetailsViewModel(
 
     private fun onDeviceAutoRefresh(device: UIDevice) {
         Timber.d("Got Device using polling: ${device.name}")
+        /**
+         * If current device is empty and we got a new one, we need to trigger onDeviceFirstFetch to
+         * let other components use it to fetch their data
+         */
         if (this.device.isEmpty()) {
             onDeviceFirstFetch.postValue(device)
         }
