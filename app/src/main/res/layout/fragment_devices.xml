@@ -80,15 +80,6 @@
                                     android:textStyle="bold"
                                     tools:text="100,99 $WXM" />
 
-                                <com.google.android.material.progressindicator.CircularProgressIndicator
-                                    android:id="@+id/loadingRewards"
-                                    style="@style/Widget.WeatherXM.ProgressBar.Circular"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:visibility="invisible"
-                                    app:indicatorInset="0dp"
-                                    app:indicatorSize="18dp" />
-
                             </FrameLayout>
                         </LinearLayout>
 

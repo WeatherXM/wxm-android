@@ -170,7 +170,7 @@ class DevicesFragment : BaseFragment(), DeviceListener {
             }
             Status.ERROR -> {
                 binding.swiperefresh.isRefreshing = false
-                binding.loadingRewards.invisible()
+                binding.totalEarnedCard.visible(true)
                 binding.totalEarned.text = getString(R.string.wxm_amount, "?")
                 binding.empty.animation(R.raw.anim_error, false)
                     .title(getString(R.string.error_generic_message))
@@ -189,14 +189,14 @@ class DevicesFragment : BaseFragment(), DeviceListener {
                 } else {
                     binding.recycler.visible(false)
                     binding.empty.clear().animation(R.raw.anim_loading).visible(true)
-                    binding.loadingRewards.visible(true)
+                    binding.totalEarnedCard.invisible()
                 }
             }
         }
     }
 
     private fun onDevicesRewards(rewards: DevicesRewards) {
-        binding.loadingRewards.invisible()
+        binding.totalEarnedCard.visible(true)
         binding.totalEarnedCard.setOnClickListener {
             analytics.trackEventUserAction(
                 AnalyticsService.ParamValue.TOKENS_EARNED_PRESSED.paramValue
