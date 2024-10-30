@@ -31,19 +31,20 @@ import timber.log.Timber
 class DeviceSettingsWifiViewModel(
     device: UIDevice,
     private val usecase: StationSettingsUseCase,
-    private val resources: Resources,
     private val userUseCase: UserUseCase,
     private val authUseCase: AuthUseCase,
+    private val resources: Resources,
     private val analytics: AnalyticsWrapper
 ) : BaseDeviceSettingsViewModel(device, usecase, resources, analytics) {
     private val onDeviceInfo = MutableLiveData<UIDeviceInfo>()
 
-    private val data =
-        UIDeviceInfo(mutableListOf(), mutableListOf(), mutableListOf(), null)
+    private lateinit var data: UIDeviceInfo
 
     fun onDeviceInfo(): LiveData<UIDeviceInfo> = onDeviceInfo
 
     override fun getDeviceInformation(context: Context) {
+        data = UIDeviceInfo.empty()
+
         data.default.add(
             UIDeviceInfoItem(resources.getString(R.string.station_default_name), device.name)
         )
