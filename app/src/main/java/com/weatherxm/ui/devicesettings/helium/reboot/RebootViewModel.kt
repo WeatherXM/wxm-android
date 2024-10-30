@@ -21,9 +21,9 @@ import kotlinx.coroutines.launch
 @Suppress("TooManyFunctions")
 class RebootViewModel(
     val device: UIDevice,
-    private val resources: Resources,
     connectionUseCase: BluetoothConnectionUseCase,
     scanUseCase: BluetoothScannerUseCase,
+    private val resources: Resources,
     analytics: AnalyticsWrapper
 ) : BluetoothHeliumViewModel(
     device.getLastCharsOfLabel(),
@@ -74,7 +74,9 @@ class RebootViewModel(
                 onStatus.postValue(Resource.success(RebootState(RebootStatus.REBOOTING)))
             }.onLeft {
                 analytics.trackEventFailure(it.code)
-                Resource.error(it.getCode(), RebootState(RebootStatus.REBOOTING))
+                onStatus.postValue(
+                    Resource.error(it.getCode(), RebootState(RebootStatus.REBOOTING))
+                )
             }
         }
     }

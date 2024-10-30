@@ -7,8 +7,8 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.BluetoothError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Frequency
-import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.FrequencyState
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.components.BluetoothHeliumViewModel
@@ -24,10 +24,10 @@ import kotlinx.coroutines.launch
 @Suppress("TooManyFunctions")
 class ChangeFrequencyViewModel(
     val device: UIDevice,
-    private val resources: Resources,
     private val usecase: StationSettingsUseCase,
     connectionUseCase: BluetoothConnectionUseCase,
     scanUseCase: BluetoothScannerUseCase,
+    private val resources: Resources,
     analytics: AnalyticsWrapper
 ) : BluetoothHeliumViewModel(
     device.getLastCharsOfLabel(),
@@ -124,9 +124,10 @@ class ChangeFrequencyViewModel(
                 connectionUseCase.reboot()
             }.onLeft {
                 analytics.trackEventFailure(it.code)
-                Resource.error(
-                    it.getCode(),
-                    ChangeFrequencyState(FrequencyStatus.CHANGING_FREQUENCY)
+                onStatus.postValue(
+                    Resource.error(
+                        it.getCode(), ChangeFrequencyState(FrequencyStatus.CHANGING_FREQUENCY)
+                    )
                 )
             }
         }
