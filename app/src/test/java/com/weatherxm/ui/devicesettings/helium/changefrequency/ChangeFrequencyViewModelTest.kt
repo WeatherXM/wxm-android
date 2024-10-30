@@ -140,7 +140,7 @@ class ChangeFrequencyViewModelTest : BehaviorSpec({
             }
             When("it's any other failure") {
                 viewModel.onScanFailure(failure)
-                then("LiveData onStatus posts a generic error with the respective ChangeFrequencyState") {
+                then("LiveData onStatus posts an error with the respective ChangeFrequencyState") {
                     viewModel.onStatus().value?.status shouldBe Status.ERROR
                     viewModel.onStatus().value?.data shouldBe ChangeFrequencyState(
                         FrequencyStatus.SCAN_FOR_STATION

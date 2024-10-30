@@ -113,7 +113,7 @@ class RewardsListViewModelTest : BehaviorSpec({
                 }
                 and("Try to get another page (hasNextPage == false, there is no next page)") {
                     runTest { viewModel.fetchNewPageRewards(deviceId) }
-                    then("Add an END_OF_LIST element at the rewards and post it through onEndOfData") {
+                    then("Add an END_OF_LIST element at the rewards and post it with onEndOfData") {
                         viewModel.onEndOfData().value shouldBe allRewardsWithEndOfList
                     }
                 }

@@ -88,7 +88,7 @@ class ForecastDetailsViewModel(
              * Temporary code so we can figure out why some crashes occur, in which cases/dates
              */
             val allDates = forecast.forecastDays.joinToString(" : ") { it.date.toString() }
-            Timber.e("Could not find ($selectedISODate - $selectedLocalDate) in forecast: $allDates")
+            Timber.e("Could not find ($selectedISODate - $selectedLocalDate) in: $allDates")
             0
         } else {
             position

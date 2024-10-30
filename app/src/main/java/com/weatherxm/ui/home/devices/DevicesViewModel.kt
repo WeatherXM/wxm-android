@@ -46,7 +46,7 @@ class DevicesViewModel(
 
     fun fetch() {
         this@DevicesViewModel.devices.postValue(Resource.loading())
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             deviceListUseCase.getUserDevices().onRight { devices ->
                 Timber.d("Got ${devices.size} devices")
                 this@DevicesViewModel.devices.postValue(Resource.success(devices))

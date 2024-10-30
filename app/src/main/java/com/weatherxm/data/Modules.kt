@@ -939,7 +939,7 @@ private val viewmodels = module {
     }
     viewModel { params -> CurrentViewModel(device = params.get(), get(), get(), get()) }
     viewModel { params -> ForecastViewModel(device = params.get(), get(), get(), get()) }
-    viewModel { params -> RewardsViewModel(device = params.get(), get(), get(), get()) }
+    viewModel { params -> RewardsViewModel(device = params.get(), get(), get()) }
     viewModel { params ->
         HistoryViewModel(
             device = params.get(),

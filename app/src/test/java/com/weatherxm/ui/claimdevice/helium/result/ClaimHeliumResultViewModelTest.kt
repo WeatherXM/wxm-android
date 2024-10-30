@@ -61,10 +61,14 @@ class ClaimHeliumResultViewModelTest : BehaviorSpec({
 
         every { resources.getString(R.string.helium_bluetooth_disabled) } returns bluetoothDisabled
         every { resources.getString(R.string.ble_connection_lost_desc) } returns connectionLost
-        every { resources.getString(R.string.helium_connection_rejected) } returns connectionRejected
+        every {
+            resources.getString(R.string.helium_connection_rejected)
+        } returns connectionRejected
         every { resources.getString(R.string.set_frequency_failed_desc) } returns setFrequencyFailed
         every { resources.getString(R.string.helium_reboot_failed) } returns rebootFailed
-        every { resources.getString(R.string.helium_fetching_info_failed) } returns fetchingInfoFailed
+        every {
+            resources.getString(R.string.helium_fetching_info_failed)
+        } returns fetchingInfoFailed
         every { usecase.registerOnBondStatus() } returns bondFlow
 
         viewModel = ClaimHeliumResultViewModel(usecase, resources, analytics)

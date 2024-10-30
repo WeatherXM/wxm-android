@@ -117,7 +117,7 @@ class ProfileViewModelTest : BehaviorSpec({
     context("Flow when a claim was successful and we need to update the saved rewards") {
         given("the amount that has been claimed") {
             viewModel.onClaimedResult(amountClaimed)
-            then("Some maths should take place and onWalletRewards should post the latest rewards ") {
+            then("Some math should take place and onWalletRewards should post the new rewards") {
                 viewModel.onWalletRewards().isSuccess(walletRewardsAfterClaim)
             }
         }

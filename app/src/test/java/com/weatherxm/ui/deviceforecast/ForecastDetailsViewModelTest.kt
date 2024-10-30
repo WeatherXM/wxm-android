@@ -227,7 +227,7 @@ class ForecastDetailsViewModelTest : BehaviorSpec({
                         emptyForecast
                     )
                     runTest { viewModel.fetchForecast() }
-                    then("LiveData onForecastLoaded should post the error regarding the empty forecast") {
+                    then("LiveData onForecastLoaded should post the error for the empty forecast") {
                         viewModel.onForecastLoaded().isError(emptyForecastMsg)
                     }
                     then("forecast should be set to empty") {

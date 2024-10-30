@@ -160,7 +160,7 @@ class ClaimLocationViewModelTest : BehaviorSpec({
     context("Get the address of a Point") {
         given("a Point") {
             When("it's null") {
-                then("return, LiveData onReverseGeocodedAddress should keep its initial null value") {
+                then("return, LiveData onReverseGeocodedAddress keeps the default null value") {
                     viewModel.getAddressFromPoint(null)
                     viewModel.onReverseGeocodedAddress().value shouldBe null
                 }

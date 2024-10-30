@@ -226,7 +226,7 @@ class ClaimHeliumViewModelTest : BehaviorSpec({
     context("Set a claimed device") {
         given("a device") {
             When("it's null") {
-                then("Do nothing. LiveData onClaimResult shouldn't be updated (error from before)") {
+                then("Do nothing. LiveData onClaimResult shouldn't be updated") {
                     viewModel.setClaimedDevice(null)
                     viewModel.onClaimResult().value?.status shouldBe Status.ERROR
                 }

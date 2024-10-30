@@ -10,7 +10,6 @@ import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.BluetoothError
 import com.weatherxm.data.models.BluetoothOTAState
-import com.weatherxm.data.models.Failure.Companion.CODE_BL_OTA_FAILED
 import com.weatherxm.data.models.OTAState
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.Resource

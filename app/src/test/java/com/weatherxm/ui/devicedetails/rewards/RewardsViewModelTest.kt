@@ -61,12 +61,7 @@ class RewardsViewModelTest : BehaviorSpec({
         justRun { analytics.trackEventFailure(any()) }
         every { device.id } returns deviceId
 
-        viewModel = RewardsViewModel(
-            device,
-            resources,
-            usecase,
-            analytics
-        )
+        viewModel = RewardsViewModel(device, usecase, analytics)
     }
 
     context("Get the rewards") {

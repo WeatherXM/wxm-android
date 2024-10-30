@@ -213,7 +213,7 @@ class ExplorerViewModelTest : BehaviorSpec({
             }
             When("it's not a user location but a custom one") {
                 viewModel.navigateToLocation(location)
-                then("LiveData onNavigateToLocation should be called with the ZOOMED_IN_ZOOM_LEVEL") {
+                then("LiveData onNavigateToLocation posts the correct NavigationLocation") {
                     viewModel.onNavigateToLocation().value shouldBe navigationLocation
                 }
             }
@@ -280,7 +280,7 @@ class ExplorerViewModelTest : BehaviorSpec({
                     and("there some new data fetched") {
                         coMockEitherRight({ usecase.getCells() }, fullExplorerData)
                         runTest { viewModel.fetch() }
-                        then("LiveData onNewPolygons should post only the new Polygons to be drawn") {
+                        then("LiveData onNewPolygons should post only the new Polygons") {
                             viewModel.onNewPolygons().value shouldBe newPolygonAnnotationOptions
                         }
                         then("LiveData onStatus should post the success value Unit") {

@@ -324,6 +324,7 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
         }
     }
 
+    @Suppress("SwallowedException")
     context("Use the automated device fetch") {
         given("a usecase returning the response of the fetch request") {
             When("it's failure") {
@@ -334,14 +335,17 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                         verify(exactly = 9) { analytics.trackEventFailure(any()) }
                     }
                 } catch (e: TimeoutCancellationException) {
-                    // Do nothing. We use timeout to terminate the flow collection (and the test)
+                    /**
+                     * Do nothing.
+                     * We use timeout to terminate the flow collection (and the test)
+                     */
                 }
             }
             When("it's a success") {
                 and("the current device is NOT empty") {
                     viewModel.updateDevice(device)
                     coMockEitherRight({ deviceDetailsUseCase.getDevice(device) }, device)
-                    then("The device should be updated and the LiveData(s) should post the correct values") {
+                    then("The device should be updated and LiveData(s) should post the values") {
                         try {
                             viewModel.deviceAutoRefresh().timeout(parse("1s")).collectLatest {
                                 viewModel.onDeviceFirstFetch().value shouldBe null
@@ -349,14 +353,17 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                                 viewModel.onDevicePolling().value shouldBe device
                             }
                         } catch (e: TimeoutCancellationException) {
-                            // Do nothing. We use timeout to terminate the flow collection (and the test)
+                            /**
+                             * Do nothing.
+                             * We use timeout to terminate the flow collection (and the test)
+                             */
                         }
                     }
                 }
                 and("the current device is empty") {
                     viewModel.updateDevice(emptyDevice)
                     coMockEitherRight({ deviceDetailsUseCase.getDevice(emptyDevice) }, device)
-                    then("The device should be updated and the LiveData(s) should post the correct values") {
+                    then("The device should be updated and LiveData(s) should post the values") {
                         try {
                             viewModel.deviceAutoRefresh().timeout(parse("1s")).collectLatest {
                                 viewModel.onDeviceFirstFetch().value shouldBe device
@@ -364,7 +371,10 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                                 viewModel.onDevicePolling().value shouldBe device
                             }
                         } catch (e: TimeoutCancellationException) {
-                            // Do nothing. We use timeout to terminate the flow collection (and the test)
+                            /**
+                             * Do nothing.
+                             * We use timeout to terminate the flow collection (and the test)
+                             */
                         }
                     }
                 }

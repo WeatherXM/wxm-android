@@ -84,8 +84,8 @@ class NetworkSearchViewModelTest : BehaviorSpec({
                     coMockEitherRight({ usecase.networkSearch(query) }, searchResults)
                     runTest { viewModel.networkSearch() }
                     /**
-                     * Due to using delay in the network search we need to delay here as well in order
-                     * for the test to work properly
+                     * Due to using delay in the network search
+                     * we need to delay here as well in order for the test to work properly
                      */
                     delay(NETWORK_SEARCH_REQUEST_THRESHOLD + NETWORK_SEARCH_REQUEST_THRESHOLD)
                     then("LiveData onSearchResults should post the respective results we fetched") {

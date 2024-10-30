@@ -195,7 +195,7 @@ class DeviceSettingsHeliumViewModelTest : BehaviorSpec({
             When("it's a failure") {
                 coMockEitherLeft({ settingsUseCase.getDeviceInfo(device.id) }, failure)
                 runTest { viewModel.getDeviceInformation(context) }
-                then("LiveData onDeviceInfo returns the UIDeviceInfo created by the Device object") {
+                then("LiveData onDeviceInfo posts the UIDeviceInfo created by the Device object") {
                     viewModel.onDeviceInfo().value shouldBe UIDeviceInfo(
                         deviceInfoFromDevice,
                         mutableListOf(),

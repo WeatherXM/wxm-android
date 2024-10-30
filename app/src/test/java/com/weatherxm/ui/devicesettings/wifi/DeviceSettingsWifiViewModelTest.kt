@@ -383,7 +383,7 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
                         viewModel.onError().value shouldBe UIError(REACH_OUT_MSG)
                     }
                 }
-                then("analytics should track the event's failure (two failures so two more events)") {
+                then("analytics should track the event's failure (2 failures so 2 more events)") {
                     verify(exactly = 4) { analytics.trackEventFailure(any()) }
                 }
             }
@@ -425,7 +425,7 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
             When("it's a failure") {
                 coMockEitherLeft({ settingsUseCase.getDeviceInfo(device.id) }, failure)
                 runTest { viewModel.getDeviceInformation(context) }
-                then("LiveData onDeviceInfo returns the UIDeviceInfo created by the Device object") {
+                then("LiveData onDeviceInfo posts the UIDeviceInfo created by the Device object") {
                     viewModel.onDeviceInfo().value shouldBe UIDeviceInfo(
                         deviceInfoFromDevice,
                         mutableListOf(),

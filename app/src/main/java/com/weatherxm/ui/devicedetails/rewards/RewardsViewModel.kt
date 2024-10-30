@@ -14,14 +14,12 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
-import com.weatherxm.util.Resources
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class RewardsViewModel(
     var device: UIDevice = UIDevice.empty(),
-    private val resources: Resources,
     private val deviceDetailsUseCase: DeviceDetailsUseCase,
     private val analytics: AnalyticsWrapper
 ) : ViewModel() {

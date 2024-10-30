@@ -47,6 +47,7 @@ object TestConfig : AbstractProjectConfig() {
 
     @AutoScan
     object MyProjectListener : BeforeProjectListener, AfterProjectListener {
+        @Suppress("LongMethod")
         override suspend fun beforeProject() {
             mockkStatic(Geocoder::class)
             mockkStatic(DateFormat::class)

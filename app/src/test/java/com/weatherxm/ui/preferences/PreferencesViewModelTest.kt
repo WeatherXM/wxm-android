@@ -1,9 +1,6 @@
 package com.weatherxm.ui.preferences
 
-import com.weatherxm.TestConfig.failure
-import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
-import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.InstantExecutorListener
@@ -46,7 +43,7 @@ class PreferencesViewModelTest : BehaviorSpec({
         viewModel = PreferenceViewModel(usecase, analytics)
     }
 
-    context("Invoke a change in SharedPreferences in order to call the analytics.setUserProperties") {
+    context("Invoke a change in SharedPreferences and update user's properties in analytics") {
         given("A change in the SharedPreferences") {
             viewModel.onPreferencesChanged.onSharedPreferenceChanged(mockk(), "")
             then("call the analytics.setUserProperties") {

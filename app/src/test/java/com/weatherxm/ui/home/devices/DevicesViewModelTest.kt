@@ -27,14 +27,9 @@ import com.weatherxm.usecases.FollowUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.clearAllMocks
-import io.mockk.clearStaticMockk
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkAll
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -244,7 +239,7 @@ class DevicesViewModelTest : BehaviorSpec({
         given("a sortOrderId, a filterId and a groupById") {
             When("Sort Order = R.id.dateAdded, Filter = R.id.showAll, Group = R.id.noGrouping") {
                 viewModel.setDevicesSortFilterOptions(R.id.dateAdded, R.id.showAll, R.id.noGrouping)
-                then("The usecase should call the respective set function with the respective options") {
+                then("The usecase should call the set function with the respective options") {
                     verify(exactly = 1) {
                         deviceListUseCase.setDevicesSortFilterOptions(DevicesSortFilterOptions())
                     }
@@ -252,7 +247,7 @@ class DevicesViewModelTest : BehaviorSpec({
             }
             When("Sort Order = R.id.name, Filter = R.id.ownedOnly, Group = R.id.relationship") {
                 viewModel.setDevicesSortFilterOptions(R.id.name, R.id.ownedOnly, R.id.relationship)
-                then("The usecase should call the respective set function with the respective options") {
+                then("The usecase should call the set function with the respective options") {
                     verify(exactly = 1) {
                         deviceListUseCase.setDevicesSortFilterOptions(
                             DevicesSortFilterOptions(
@@ -270,7 +265,7 @@ class DevicesViewModelTest : BehaviorSpec({
                     R.id.favoritesOnly,
                     R.id.status
                 )
-                then("The usecase should call the respective set function with the respective options") {
+                then("The usecase should call the set function with the respective options") {
                     verify(exactly = 1) {
                         deviceListUseCase.setDevicesSortFilterOptions(
                             DevicesSortFilterOptions(

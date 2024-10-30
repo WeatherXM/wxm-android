@@ -74,7 +74,9 @@ class HistoryViewModelTest : BehaviorSpec({
             )
         }
         every { charts.date } returns date
-        every { resources.getString(R.string.error_history_generic_message) } returns fetchingHistoryFailed
+        every {
+            resources.getString(R.string.error_history_generic_message)
+        } returns fetchingHistoryFailed
         every { chartsUseCase.createHourlyCharts(date, any()) } returns charts
 
         viewModel = HistoryViewModel(
