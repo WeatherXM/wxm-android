@@ -16,7 +16,6 @@ import com.weatherxm.ui.common.DeviceAlertType
 import com.weatherxm.ui.common.RewardSplitsData
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
-import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.unmask
 import com.weatherxm.usecases.StationSettingsUseCase
 import com.weatherxm.util.Resources
@@ -132,17 +131,13 @@ abstract class BaseDeviceSettingsViewModel(
     }
 
     fun parseDeviceInfoToShare(deviceInfo: UIDeviceInfo): String {
-        var sharingText = String.empty()
-        deviceInfo.default.forEach {
-            sharingText += "${it}\n"
-        }
-        deviceInfo.gateway.forEach {
-            sharingText += "${it}\n"
-        }
-        deviceInfo.station.forEach {
-            sharingText += "${it}\n"
-        }
-        return sharingText
+        return deviceInfo.default.joinToString(separator = "\n") {
+            it.toFormattedString()
+        }.plus(deviceInfo.gateway.joinToString(separator = "\n", prefix = "\n") {
+            it.toFormattedString()
+        }).plus(deviceInfo.station.joinToString(separator = "\n", prefix = "\n") {
+            it.toFormattedString()
+        })
     }
 
     fun isStakeholder(rewardSplitsData: RewardSplitsData): Boolean {
