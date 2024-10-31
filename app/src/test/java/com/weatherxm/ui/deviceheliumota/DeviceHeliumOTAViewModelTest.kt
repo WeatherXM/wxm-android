@@ -69,6 +69,9 @@ class DeviceHeliumOTAViewModelTest : BehaviorSpec({
         null,
         null,
         null,
+        null,
+        null,
+        null,
         null
     )
     val uri = mockk<Uri>()

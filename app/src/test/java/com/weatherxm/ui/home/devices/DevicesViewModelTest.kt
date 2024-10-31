@@ -77,7 +77,10 @@ class DevicesViewModelTest : BehaviorSpec({
             null,
             null,
             100F,
-            100F
+            100F,
+            null,
+            null,
+            null
         )
     )
     val devicesWithRewards = listOf(

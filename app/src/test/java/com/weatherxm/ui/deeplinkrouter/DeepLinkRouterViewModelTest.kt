@@ -91,6 +91,9 @@ class DeepLinkRouterViewModelTest : BehaviorSpec({
             null,
             null,
             null,
+            null,
+            null,
+            null,
             null
         )
     )

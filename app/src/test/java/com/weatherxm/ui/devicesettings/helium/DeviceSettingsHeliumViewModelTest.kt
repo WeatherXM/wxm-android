@@ -81,6 +81,9 @@ class DeviceSettingsHeliumViewModelTest : BehaviorSpec({
         null,
         true,
         null,
+        null,
+        null,
+        null,
         null
     )
     val stakeholderSplits = RewardSplitsData(

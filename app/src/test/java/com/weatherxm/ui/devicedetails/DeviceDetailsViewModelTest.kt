@@ -78,7 +78,10 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
         null,
         null,
         100F,
-        100F
+        100F,
+        null,
+        null,
+        null
     )
     val deviceNotFoundFailure = ApiError.DeviceNotFound("")
     val maxFollowedFailure = ApiError.MaxFollowed("")

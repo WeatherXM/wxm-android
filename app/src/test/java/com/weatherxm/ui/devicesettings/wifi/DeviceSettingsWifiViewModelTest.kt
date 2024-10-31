@@ -88,6 +88,9 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         null,
         true,
         null,
+        null,
+        null,
+        null,
         null
     )
     val newFriendlyName = "newFriendlyName"
@@ -118,17 +121,7 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
         null
     )
     val sharingText =
-        "UIDeviceInfoItem(title=titleDefault, value=valueDefault, deviceAlert=null)\n" +
-            "UIDeviceInfoItem(" +
-            "title=titleGateway, " +
-            "value=valueGateway, " +
-            "deviceAlert=DeviceAlert(alert=OFFLINE, severity=ERROR)" +
-            ")\n" +
-            "UIDeviceInfoItem(" +
-            "title=titleStation, " +
-            "value=valueStation, " +
-            "deviceAlert=DeviceAlert(alert=LOW_BATTERY, severity=WARNING)" +
-            ")\n"
+        "titleDefault: valueDefault\ntitleGateway: valueGateway\ntitleStation: valueStation"
 
     val deviceInfo = DeviceInfo(
         "",

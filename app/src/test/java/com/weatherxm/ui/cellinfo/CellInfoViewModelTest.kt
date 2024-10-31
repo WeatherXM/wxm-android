@@ -79,6 +79,9 @@ class CellInfoViewModelTest : BehaviorSpec({
             null,
             null,
             null,
+            null,
+            null,
+            null
         )
     )
     val deviceNotFoundFailure = ApiError.DeviceNotFound("")
