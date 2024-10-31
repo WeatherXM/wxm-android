@@ -39,6 +39,7 @@ class DeviceRepositoryTest : BehaviorSpec({
         null,
         null,
         Relation.owned,
+        null,
         null
     )
     val followedDevice = Device(
@@ -53,6 +54,7 @@ class DeviceRepositoryTest : BehaviorSpec({
         null,
         null,
         Relation.followed,
+        null,
         null
     )
     val devices = mutableListOf(ownedDevice, followedDevice)

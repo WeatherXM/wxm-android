@@ -25,7 +25,9 @@ data class UIDeviceInfoItem(
     val title: String,
     val value: String,
     val deviceAlert: DeviceAlert? = null,
-)
+) {
+    fun toFormattedString(): String = "$title: $value"
+}
 
 @JsonClass(generateAdapter = true)
 data class RebootState(

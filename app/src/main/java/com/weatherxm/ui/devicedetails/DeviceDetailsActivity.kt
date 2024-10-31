@@ -3,8 +3,6 @@ package com.weatherxm.ui.devicedetails
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -18,7 +16,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.data.models.SeverityLevel
 import com.weatherxm.databinding.ActivityDeviceDetailsBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_DEVICE_ID
@@ -30,18 +27,22 @@ import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
+import com.weatherxm.ui.common.errorChip
+import com.weatherxm.ui.common.lowBatteryChip
+import com.weatherxm.ui.common.offlineChip
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
-import com.weatherxm.ui.common.setErrorChip
+import com.weatherxm.ui.common.setMenuTint
 import com.weatherxm.ui.common.setStatusChip
 import com.weatherxm.ui.common.toast
+import com.weatherxm.ui.common.updateRequiredChip
 import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.common.warningChip
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicedetails.current.CurrentFragment
 import com.weatherxm.ui.devicedetails.forecast.ForecastFragment
 import com.weatherxm.ui.devicedetails.rewards.RewardsFragment
-import com.weatherxm.ui.explorer.UICell
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -109,28 +110,9 @@ class DeviceDetailsActivity : BaseActivity() {
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
+        binding.toolbar.setMenuTint()
         binding.toolbar.setOnMenuItemClickListener {
             onMenuItem(it)
-        }
-
-        binding.address.setOnClickListener {
-            analytics.trackEventSelectContent(
-                AnalyticsService.ParamValue.REGION.paramValue,
-                customParams = arrayOf(
-                    Pair(
-                        AnalyticsService.CustomParam.CONTENT_NAME.paramName,
-                        AnalyticsService.ParamValue.STATION_DETAILS_CHIP.paramValue
-                    ),
-                    Pair(
-                        FirebaseAnalytics.Param.ITEM_ID,
-                        AnalyticsService.ParamValue.STATION_REGION_ID.paramValue
-                    )
-                )
-            )
-            model.device.cellCenter?.let { location ->
-                navigator.showCellInfo(this, UICell(model.device.cellIndex, location))
-            }
         }
 
         model.onFollowStatus().observe(this) {
@@ -154,10 +136,6 @@ class DeviceDetailsActivity : BaseActivity() {
                 else -> throw IllegalStateException("Oops! You forgot to add a tab here.")
             }
         }.attach()
-
-        binding.follow.setOnClickListener {
-            handleFollowClick()
-        }
 
         updateDeviceInfo()
     }
@@ -208,41 +186,35 @@ class DeviceDetailsActivity : BaseActivity() {
 
     private fun updateDeviceInfo(device: UIDevice = model.device) {
         with(device.getDefaultOrFriendlyName()) {
-            binding.collapsingToolbar.title = this
-            binding.name.text = this
-            binding.publicName.text = device.name
-            binding.publicName.visibility = if (this != device.name) VISIBLE else INVISIBLE
+            binding.toolbar.title = this
+            if (this != device.name) {
+                binding.toolbar.subtitle = device.name
+            }
         }
 
-        with(binding.follow) {
+        with(binding.relationBtn) {
             when (device.relation) {
                 DeviceRelation.OWNED -> {
                     setOnClickListener {
-                        // NO-OP
+                        toast(R.string.you_are_owner_of_station)
                     }
                     setImageResource(R.drawable.ic_home)
-                    setColor(R.color.colorOnSurface)
-                    isEnabled = false
+                    setColor(R.color.colorPrimary)
                 }
-
                 DeviceRelation.FOLLOWED -> {
                     setOnClickListener {
                         handleFollowClick()
                     }
                     setImageResource(R.drawable.ic_favorite)
                     setColor(R.color.follow_heart_color)
-                    isEnabled = true
                 }
-
                 DeviceRelation.UNFOLLOWED -> {
                     setOnClickListener {
                         handleFollowClick()
                     }
                     setImageResource(R.drawable.ic_favorite_outline)
                     setColor(R.color.follow_heart_color)
-                    isEnabled = true
                 }
-
                 null -> visible(false)
             }
         }
@@ -268,44 +240,54 @@ class DeviceDetailsActivity : BaseActivity() {
             binding.status.isClickable = false
         }
 
-        if (device.address.isNullOrEmpty()) {
-            // TODO: Show what?
-        } else {
-            binding.address.text = device.address
-        }
-
-        setAlerts(device.alerts)
+        setAlerts(device)
     }
 
-    private fun setAlerts(alerts: List<DeviceAlert>) {
-        val alertsWithoutOffline = alerts.dropWhile {
-            it.alert == DeviceAlertType.OFFLINE
+    private fun setAlerts(device: UIDevice) {
+        if (device.alerts.isEmpty()) {
+            binding.alertChip.visible(false)
+            return
         }
-        val hasErrorSeverity = alerts.firstOrNull {
-            it.severity == SeverityLevel.ERROR
-        } != null
 
-        if (alerts.size > 1) {
+        val hasErrorSeverity = device.hasErrors()
+
+        if (device.alerts.size > 1) {
             if (hasErrorSeverity) {
-                binding.alertChip.setErrorChip()
+                binding.alertChip.errorChip()
+            } else {
+                binding.alertChip.warningChip()
             }
-            binding.alertChip.text = getString(R.string.issues, alerts.size)
+            binding.alertChip.text = getString(R.string.issues, device.alerts.size)
             setupAlertChipClickListener(null)
-        } else if (alertsWithoutOffline.size == 1) {
-            if (alertsWithoutOffline[0].alert == DeviceAlertType.NEEDS_UPDATE) {
-                binding.alertChip.text = getString(R.string.update_required)
-                analytics.trackEventPrompt(
-                    AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
-                    AnalyticsService.ParamValue.WARN.paramValue,
-                    AnalyticsService.ParamValue.VIEW.paramValue
-                )
-                setupAlertChipClickListener(AnalyticsService.ParamValue.OTA_UPDATE_ID.paramValue)
-            } else if (alertsWithoutOffline[0].alert == DeviceAlertType.LOW_BATTERY) {
-                binding.alertChip.text = getString(R.string.low_battery)
-                setupAlertChipClickListener(AnalyticsService.ParamValue.LOW_BATTERY_ID.paramValue)
+        } else {
+            when (device.alerts[0]) {
+                DeviceAlert.createWarning(DeviceAlertType.LOW_BATTERY) -> {
+                    binding.alertChip.lowBatteryChip()
+                    setupAlertChipClickListener(
+                        AnalyticsService.ParamValue.LOW_BATTERY_ID.paramValue
+                    )
+                }
+                DeviceAlert.createError(DeviceAlertType.OFFLINE) -> {
+                    binding.alertChip.offlineChip()
+                    setupAlertChipClickListener(null)
+                }
+                DeviceAlert.createWarning(DeviceAlertType.NEEDS_UPDATE) -> {
+                    binding.alertChip.updateRequiredChip()
+                    analytics.trackEventPrompt(
+                        AnalyticsService.ParamValue.OTA_AVAILABLE.paramValue,
+                        AnalyticsService.ParamValue.WARN.paramValue,
+                        AnalyticsService.ParamValue.VIEW.paramValue
+                    )
+                    setupAlertChipClickListener(
+                        AnalyticsService.ParamValue.OTA_UPDATE_ID.paramValue
+                    )
+                }
+                else -> {
+                    // Do nothing
+                }
             }
         }
-        binding.alertChip.visible(alertsWithoutOffline.isNotEmpty())
+        binding.alertChip.visible(true)
     }
 
     private fun setupAlertChipClickListener(analyticsItemId: String?) {

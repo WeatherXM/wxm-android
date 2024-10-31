@@ -10,9 +10,12 @@ import com.weatherxm.data.services.CacheService
 import com.weatherxm.databinding.ListItemWidgetSelectStationBinding
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.handleAlerts
+import com.weatherxm.ui.common.handleStroke
 import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
 import com.weatherxm.ui.common.setStatusChip
+import com.weatherxm.ui.common.stationHealthViewsOnList
 import com.weatherxm.ui.common.visible
 import com.weatherxm.util.Resources
 import com.weatherxm.util.Weather
@@ -103,23 +106,26 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
 
             binding.status.setStatusChip(item)
             binding.bundle.setBundleChip(item)
+            item.handleAlerts(itemView.context, binding.issueChip, null)
+            item.handleStroke(binding.root)
+            item.stationHealthViewsOnList(
+                itemView.context,
+                binding.dataQuality,
+                binding.dataQualityIcon,
+                binding.addressIcon
+            )
         }
 
         private fun setWeatherData(device: UIDevice) {
             binding.icon.setAnimation(Weather.getWeatherAnimation(device.currentWeather?.icon))
-            binding.temperature.text = Weather.getFormattedTemperature(
-                device.currentWeather?.temperature, 1, includeUnit = false
-            )
-            binding.temperatureUnit.text = Weather.getPreferredUnit(
-                resources.getString(CacheService.KEY_TEMPERATURE),
-                resources.getString(R.string.temperature_celsius)
-            )
-            binding.feelsLike.text = Weather.getFormattedTemperature(
-                device.currentWeather?.feelsLike, 1, includeUnit = false
-            )
-            binding.feelsLikeUnit.text = Weather.getPreferredUnit(
-                resources.getString(CacheService.KEY_TEMPERATURE),
-                resources.getString(R.string.temperature_celsius)
+            binding.temperature.setData(
+                Weather.getFormattedTemperature(
+                    device.currentWeather?.temperature, 1, includeUnit = false
+                ),
+                Weather.getPreferredUnit(
+                    itemView.context.getString(CacheService.KEY_TEMPERATURE),
+                    itemView.context.getString(R.string.temperature_celsius)
+                )
             )
             binding.humidity.setData(
                 Weather.getFormattedHumidity(
