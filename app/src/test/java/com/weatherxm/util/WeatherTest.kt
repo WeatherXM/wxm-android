@@ -53,6 +53,26 @@ class WeatherTest : KoinTest, BehaviorSpec({
             R.drawable.ic_weather_partly_cloudy_night
         )
         testWeatherIcon(
+            "partly-cloudy-day-drizzle",
+            R.raw.anim_weather_partly_cloudy_day_drizzle,
+            R.drawable.ic_weather_partly_cloudy_day_drizzle
+        )
+        testWeatherIcon(
+            "partly-cloudy-night-drizzle",
+            R.raw.anim_weather_partly_cloudy_night_drizzle,
+            R.drawable.ic_weather_partly_cloudy_night_drizzle
+        )
+        testWeatherIcon(
+            "partly-cloudy-day-snow",
+            R.raw.anim_weather_partly_cloudy_day_snow,
+            R.drawable.ic_weather_partly_cloudy_day_snow
+        )
+        testWeatherIcon(
+            "partly-cloudy-night-snow",
+            R.raw.anim_weather_partly_cloudy_night_snow,
+            R.drawable.ic_weather_partly_cloudy_night_snow
+        )
+        testWeatherIcon(
             "overcast-day", R.raw.anim_weather_overcast_day, R.drawable.ic_weather_overcast_day
         )
         testWeatherIcon(
@@ -60,6 +80,130 @@ class WeatherTest : KoinTest, BehaviorSpec({
             R.raw.anim_weather_overcast_night,
             R.drawable.ic_weather_overcast_night
         )
+        testWeatherIcon("overcast", R.raw.anim_weather_overcast, R.drawable.ic_weather_overcast)
+        testWeatherIcon(
+            "overcast-rain",
+            R.raw.anim_weather_overcast_rain,
+            R.drawable.ic_weather_overcast_rain
+        )
+        testWeatherIcon(
+            "overcast-snow",
+            R.raw.anim_weather_overcast_snow,
+            R.drawable.ic_weather_overcast_snow
+        )
+        testWeatherIcon(
+            "overcast-drizzle",
+            R.raw.anim_weather_overcast_drizzle,
+            R.drawable.ic_weather_overcast_drizzle
+        )
+        testWeatherIcon(
+            "overcast-light-snow",
+            R.raw.anim_weather_overcast_light_snow,
+            R.drawable.ic_weather_overcast_light_snow
+        )
+        testWeatherIcon(
+            "overcast-sleet",
+            R.raw.anim_weather_overcast_sleet,
+            R.drawable.ic_weather_overcast_sleet
+        )
+        testWeatherIcon(
+            "thunderstorms-overcast-rain",
+            R.raw.anim_weather_thunderstorms_overcast_rain,
+            R.drawable.ic_weather_thunderstorms_overcast_rain
+        )
+        testWeatherIcon(
+            "thunderstorms-light-rain",
+            R.raw.anim_weather_thunderstorms_light_rain,
+            R.drawable.ic_weather_thunderstorms_rain
+        )
+        testWeatherIcon(
+            "thunderstorms-extreme-rain",
+            R.raw.anim_weather_thunderstorms_extreme_rain,
+            R.drawable.ic_weather_thunderstorms_extreme_rain
+        )
+        testWeatherIcon("haze-day", R.raw.anim_weather_haze_day, R.drawable.ic_weather_haze_day)
+        testWeatherIcon(
+            "haze-night",
+            R.raw.anim_weather_haze_night,
+            R.drawable.ic_weather_haze_night
+        )
+        testWeatherIcon(
+            "extreme-day",
+            R.raw.anim_weather_extreme_day,
+            R.drawable.ic_weather_extreme_day
+        )
+        testWeatherIcon(
+            "extreme-night",
+            R.raw.anim_weather_extreme_night,
+            R.drawable.ic_weather_extreme_night
+        )
+        testWeatherIcon(
+            "extreme-rain",
+            R.raw.anim_weather_extreme_rain,
+            R.drawable.ic_weather_extreme_rain
+        )
+        testWeatherIcon(
+            "extreme-snow",
+            R.raw.anim_weather_extreme_snow,
+            R.drawable.ic_weather_extreme_snow
+        )
+        testWeatherIcon(
+            "extreme-day-rain",
+            R.raw.anim_weather_extreme_day_rain,
+            R.drawable.ic_weather_extreme_day_rain
+        )
+        testWeatherIcon(
+            "extreme-night-rain",
+            R.raw.anim_weather_extreme_night_rain,
+            R.drawable.ic_weather_extreme_night_rain
+        )
+        testWeatherIcon(
+            "extreme-day-sleet",
+            R.raw.anim_weather_extreme_day_sleet,
+            R.drawable.ic_weather_extreme_day_sleet
+        )
+        testWeatherIcon(
+            "extreme-night-sleet",
+            R.raw.anim_weather_extreme_night_sleet,
+            R.drawable.ic_weather_extreme_night_sleet
+        )
+        testWeatherIcon(
+            "extreme-day-snow",
+            R.raw.anim_weather_extreme_day_snow,
+            R.drawable.ic_weather_extreme_day_snow
+        )
+        testWeatherIcon(
+            "extreme-night-snow",
+            R.raw.anim_weather_extreme_night_snow,
+            R.drawable.ic_weather_extreme_night_snow
+        )
+        testWeatherIcon(
+            "extreme-day-drizzle",
+            R.raw.anim_weather_extreme_day_drizzle,
+            R.drawable.ic_weather_extreme_day_drizzle
+        )
+        testWeatherIcon(
+            "extreme-night-drizzle",
+            R.raw.anim_weather_extreme_night_drizzle,
+            R.drawable.ic_weather_extreme_night_drizzle
+        )
+        testWeatherIcon(
+            "extreme-day-light-snow",
+            R.raw.anim_weather_extreme_day_light_snow,
+            R.drawable.ic_weather_extreme_day_light_snow
+        )
+        testWeatherIcon(
+            "extreme-night-light-snow",
+            R.raw.anim_weather_extreme_night_light_snow,
+            R.drawable.ic_weather_extreme_night_light_snow
+        )
+        testWeatherIcon("dust-day", R.raw.anim_weather_dust_day, R.drawable.ic_weather_dust_day)
+        testWeatherIcon(
+            "dust-night",
+            R.raw.anim_weather_dust_night,
+            R.drawable.ic_weather_dust_night
+        )
+        testWeatherIcon("dust-wind", R.raw.anim_weather_dust_wind, R.drawable.ic_weather_dust_wind)
         testWeatherIcon("drizzle", R.raw.anim_weather_drizzle, R.drawable.ic_weather_drizzle)
         testWeatherIcon("rain", R.raw.anim_weather_rain, R.drawable.ic_weather_rain)
         testWeatherIcon(
