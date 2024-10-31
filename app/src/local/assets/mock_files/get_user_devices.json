@@ -20,7 +20,7 @@
         },
         "attributes": {
             "isActive": false,
-            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
+            "lastWeatherStationActivity": "2024-10-08T17:30:00+03:00",
             "hex3": {
                 "index": "833f72fffffffff",
                 "polygon": [
@@ -116,12 +116,18 @@
         "name": "Weatherwise Wintergreen Cloud",
         "timezone": "America/New_York",
         "relation": "owned",
+        "bat_state": "low",
         "bundle": {
             "name": "h1",
             "title": "H1",
             "connectivity": "helium",
             "ws_model": "WS2000",
             "hw_class": "CONSUMER"
+        },
+        "metrics": {
+            "qod_score": 80,
+            "pol_reason": null,
+            "ts": "2022-01-13T22:00:00+02:00"
         },
         "label": null,
         "location": {
@@ -226,6 +232,7 @@
         "timezone": "America/Chicago",
         "relation": "owned",
         "label": null,
+        "bat_state": "ok",
         "bundle": {
             "name": "d1",
             "title": "D1",
@@ -234,12 +241,17 @@
             "gw_model": "WS1200",
             "hw_class": "CONSUMER"
         },
+        "metrics": {
+            "qod_score": 79,
+            "pol_reason": "NO_LOCATION_DATA",
+            "ts": "2022-01-13T22:00:00+02:00"
+        },
         "location": {
             "lat": 37.981262,
             "lon": 23.730503
         },
         "attributes": {
-            "isActive": true,
+            "isActive": false,
             "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
             "hex3": {
                 "index": "833f72fffffffff",
@@ -336,6 +348,7 @@
         "timezone": "Etc/GMT",
         "label": null,
         "relation": "owned",
+        "bat_state": "ok",
         "bundle": {
             "name": "h2",
             "title": "H2",
@@ -343,13 +356,18 @@
             "ws_model": "WS2000",
             "hw_class": "CONSUMER"
         },
+        "metrics": {
+            "qod_score": 20,
+            "pol_reason": "LOCATION_NOT_VERIFIED",
+            "ts": "2022-01-13T22:00:00+02:00"
+        },
         "location": {
             "lat": 37.981262,
             "lon": 23.730503
         },
         "attributes": {
             "isActive": true,
-            "lastWeatherStationActivity": "2022-01-13T22:00:00+02:00",
+            "lastWeatherStationActivity": "2024-10-08T17:14:00+02:00",
             "hex3": {
                 "index": "833f72fffffffff",
                 "polygon": [
@@ -415,6 +433,10 @@
                     "lat": 37.981262,
                     "lon": 23.730503
                 }
+            },
+            "firmware": {
+                "current": "1.0.0",
+                "assigned": "1.0.1"
             }
         },
         "current_weather": {
@@ -450,6 +472,11 @@
             "ws_model": "WS1001",
             "gw_model": "WS1200",
             "hw_class": "CONSUMER"
+        },
+        "metrics": {
+            "qod_score": 0,
+            "pol_reason": null,
+            "ts": "2022-01-13T22:00:00+02:00"
         },
         "label": null,
         "relation": "owned",

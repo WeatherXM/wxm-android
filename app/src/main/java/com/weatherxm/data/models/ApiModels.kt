@@ -78,6 +78,7 @@ data class PublicDevice(
     val cellIndex: String,
     val cellCenter: Location?,
     val address: String?,
+    val metrics: Metrics?,
     @Json(name = "current_weather")
     val currentWeather: HourlyWeather?,
 ) : Parcelable {
@@ -103,6 +104,9 @@ data class PublicDevice(
             timezone = timezone,
             currentWeather = currentWeather,
             address = address,
+            qodScore = metrics?.qodScore,
+            polReason = metrics?.polToAnnotationGroupCode(),
+            metricsTimestamp = metrics?.ts,
             relation = null,
             label = null,
             friendlyName = null,
@@ -134,6 +138,7 @@ data class Device(
     var address: String?,
     val rewards: Rewards?,
     val relation: Relation?,
+    val metrics: Metrics?,
     @Json(name = "bat_state")
     val batteryState: BatteryState?
 ) : Parcelable {
@@ -141,6 +146,7 @@ data class Device(
         fun empty() = Device(
             String.empty(),
             String.empty(),
+            null,
             null,
             null,
             null,
@@ -191,11 +197,38 @@ data class Device(
             currentWeather = currentWeather,
             totalRewards = rewards?.totalRewards,
             actualReward = rewards?.actualReward,
+            qodScore = metrics?.qodScore,
+            polReason = metrics?.polToAnnotationGroupCode(),
+            metricsTimestamp = metrics?.ts,
             hasLowBattery = batteryState == BatteryState.low
         )
     }
 
     fun isEmpty() = id == String.empty() && name == String.empty()
+}
+
+@Keep
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class Metrics(
+    @Json(name = "qod_score")
+    val qodScore: Int?,
+    @Json(name = "pol_reason")
+    val polReason: String?,
+    val ts: ZonedDateTime?
+) : Parcelable {
+    fun polToAnnotationGroupCode(): AnnotationGroupCode? {
+        return if (polReason.isNullOrEmpty()) {
+            null
+        } else {
+            try {
+                AnnotationGroupCode.valueOf(polReason)
+            } catch (e: IllegalArgumentException) {
+                Timber.w(e)
+                AnnotationGroupCode.UNKNOWN
+            }
+        }
+    }
 }
 
 @Keep
@@ -539,7 +572,11 @@ data class Reward(
     val baseRewardScore: Int?,
     @Json(name = "annotation_summary")
     val annotationSummary: List<RewardsAnnotationGroup>?,
-) : Parcelable
+) : Parcelable {
+    companion object {
+        fun initWithTimestamp(ts: ZonedDateTime?) = Reward(ts, null, null, null, null, null)
+    }
+}
 
 @Keep
 @JsonClass(generateAdapter = true)
