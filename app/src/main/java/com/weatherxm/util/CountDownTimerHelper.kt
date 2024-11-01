@@ -11,6 +11,7 @@ class CountDownTimerHelper {
 
     private var timer: CountDownTimer? = null
 
+    @Suppress("MagicNumber")
     fun start(onProgress: (Int) -> Unit, onFinished: () -> Unit) {
         timer = object : CountDownTimer(COUNTDOWN_DURATION, COUNTDOWN_INTERVAL) {
             override fun onTick(msUntilDone: Long) {
