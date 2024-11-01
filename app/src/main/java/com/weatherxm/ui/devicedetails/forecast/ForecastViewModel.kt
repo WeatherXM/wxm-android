@@ -50,18 +50,16 @@ class ForecastViewModel(
         }
         onLoading.postValue(true)
         viewModelScope.launch {
-            forecastUseCase.getForecast(device, forceRefresh)
-                .map {
-                    Timber.d("Got forecast")
-                    if (it.next24Hours.isNullOrEmpty() && it.forecastDays.isEmpty()) {
-                        onError.postValue(UIError(resources.getString(R.string.forecast_empty)))
-                    }
-                    onForecast.postValue(it)
+            forecastUseCase.getForecast(device, forceRefresh).onRight {
+                Timber.d("Got forecast")
+                if (it.isEmpty()) {
+                    onError.postValue(UIError(resources.getString(R.string.forecast_empty)))
                 }
-                .mapLeft {
-                    analytics.trackEventFailure(it.code)
-                    handleForecastFailure(it)
-                }
+                onForecast.postValue(it)
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                handleForecastFailure(it)
+            }
             onLoading.postValue(false)
         }
     }

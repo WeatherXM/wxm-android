@@ -9,9 +9,8 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.HourlyWeather
-import com.weatherxm.data.models.NetworkError
-import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Charts
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIForecast
 import com.weatherxm.ui.common.UIForecastDay
@@ -40,23 +39,21 @@ class ForecastDetailsViewModel(
     fun fetchForecast() {
         onForecastLoaded.postValue(Resource.loading())
         viewModelScope.launch {
-            forecastUseCase.getForecast(device)
-                .map {
-                    Timber.d("Got forecast")
-                    forecast = it
-                    if (it.next24Hours.isNullOrEmpty() && it.forecastDays.isEmpty()) {
-                        onForecastLoaded.postValue(
-                            Resource.error(resources.getString(R.string.forecast_empty))
-                        )
-                    } else {
-                        onForecastLoaded.postValue(Resource.success(Unit))
-                    }
+            forecastUseCase.getForecast(device).onRight {
+                Timber.d("Got forecast")
+                forecast = it
+                if (it.isEmpty()) {
+                    onForecastLoaded.postValue(
+                        Resource.error(resources.getString(R.string.forecast_empty))
+                    )
+                } else {
+                    onForecastLoaded.postValue(Resource.success(Unit))
                 }
-                .mapLeft {
-                    forecast = UIForecast.empty()
-                    analytics.trackEventFailure(it.code)
-                    handleForecastFailure(it)
-                }
+            }.onLeft {
+                forecast = UIForecast.empty()
+                analytics.trackEventFailure(it.code)
+                handleForecastFailure(it)
+            }
         }
     }
 
@@ -70,10 +67,7 @@ class ForecastDetailsViewModel(
                     is ApiError.UserError.InvalidTimezone -> {
                         resources.getString(R.string.error_forecast_invalid_timezone)
                     }
-                    is NetworkError.NoConnectionError, is NetworkError.ConnectionTimeoutError -> {
-                        failure.getDefaultMessage(R.string.error_reach_out_short)
-                    }
-                    else -> resources.getString(R.string.error_reach_out_short)
+                    else -> failure.getDefaultMessage(R.string.error_reach_out_short)
                 }
             )
         )
@@ -94,8 +88,7 @@ class ForecastDetailsViewModel(
              * Temporary code so we can figure out why some crashes occur, in which cases/dates
              */
             val allDates = forecast.forecastDays.joinToString(" : ") { it.date.toString() }
-            Timber.e("Could not find selected day " +
-                "($selectedISODate - $selectedLocalDate) in forecast: $allDates")
+            Timber.e("Could not find ($selectedISODate - $selectedLocalDate) in: $allDates")
             0
         } else {
             position

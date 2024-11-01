@@ -126,7 +126,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.weatherxm.ui.deeplinkrouteractivity.DeepLinkRouterActivity"
+            android:name="com.weatherxm.ui.deeplinkrouter.DeepLinkRouterActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WeatherXM">

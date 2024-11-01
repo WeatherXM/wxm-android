@@ -50,27 +50,25 @@ abstract class BaseDeviceSettingsViewModel(
         if (friendlyName.isNotEmpty() && friendlyName != device.friendlyName) {
             onLoading.postValue(true)
             viewModelScope.launch {
-                usecase.setFriendlyName(device.id, friendlyName)
-                    .map {
-                        analytics.trackEventViewContent(
-                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
-                            success = 1L
-                        )
-                        device.friendlyName = friendlyName
-                        onEditNameChange.postValue(friendlyName)
-                    }
-                    .mapLeft {
-                        analytics.trackEventFailure(it.code)
-                        analytics.trackEventViewContent(
-                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
-                            success = 0L
-                        )
-                        onError.postValue(
-                            UIError(resources.getString(R.string.error_reach_out_short))
-                        )
-                    }
+                usecase.setFriendlyName(device.id, friendlyName).onRight {
+                    analytics.trackEventViewContent(
+                        AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                        AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
+                        success = 1L
+                    )
+                    device.friendlyName = friendlyName
+                    onEditNameChange.postValue(friendlyName)
+                }.onLeft {
+                    analytics.trackEventFailure(it.code)
+                    analytics.trackEventViewContent(
+                        AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                        AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
+                        success = 0L
+                    )
+                    onError.postValue(
+                        UIError(resources.getString(R.string.error_reach_out_short))
+                    )
+                }
                 onLoading.postValue(false)
             }
         }
@@ -80,27 +78,25 @@ abstract class BaseDeviceSettingsViewModel(
         if (device.friendlyName?.isNotEmpty() == true) {
             onLoading.postValue(true)
             viewModelScope.launch {
-                usecase.clearFriendlyName(device.id)
-                    .map {
-                        analytics.trackEventViewContent(
-                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
-                            success = 1L
-                        )
-                        device.friendlyName = null
-                        onEditNameChange.postValue(device.name)
-                    }
-                    .mapLeft {
-                        analytics.trackEventFailure(it.code)
-                        analytics.trackEventViewContent(
-                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
-                            AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
-                            success = 0L
-                        )
-                        onError.postValue(
-                            UIError(resources.getString(R.string.error_reach_out_short))
-                        )
-                    }
+                usecase.clearFriendlyName(device.id).onRight {
+                    analytics.trackEventViewContent(
+                        AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                        AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
+                        success = 1L
+                    )
+                    device.friendlyName = null
+                    onEditNameChange.postValue(device.name)
+                }.onLeft {
+                    analytics.trackEventFailure(it.code)
+                    analytics.trackEventViewContent(
+                        AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT.paramValue,
+                        AnalyticsService.ParamValue.CHANGE_STATION_NAME_RESULT_ID.paramValue,
+                        success = 0L
+                    )
+                    onError.postValue(
+                        UIError(resources.getString(R.string.error_reach_out_short))
+                    )
+                }
                 onLoading.postValue(false)
             }
         }
@@ -110,21 +106,19 @@ abstract class BaseDeviceSettingsViewModel(
         onLoading.postValue(true)
         viewModelScope.launch {
             device.label?.let { serialNumber ->
-                usecase.removeDevice(serialNumber.unmask(), device.id)
-                    .map {
-                        Timber.d("Device ${device.name} removed.")
-                        onDeviceRemoved.postValue(true)
+                usecase.removeDevice(serialNumber.unmask(), device.id).onRight {
+                    Timber.d("Device ${device.name} removed.")
+                    onDeviceRemoved.postValue(true)
+                }.onLeft {
+                    analytics.trackEventFailure(it.code)
+                    Timber.e("Error when trying to remove device: $it")
+                    val error = if (it is ApiError.UserError.ClaimError.InvalidClaimId) {
+                        resources.getString(R.string.error_invalid_device_identifier)
+                    } else {
+                        resources.getString(R.string.error_reach_out_short)
                     }
-                    .mapLeft {
-                        analytics.trackEventFailure(it.code)
-                        Timber.e("Error when trying to remove device: $it")
-                        val error = if (it is ApiError.UserError.ClaimError.InvalidClaimId) {
-                            resources.getString(R.string.error_invalid_device_identifier)
-                        } else {
-                            resources.getString(R.string.error_reach_out_short)
-                        }
-                        onError.postValue(UIError(error))
-                    }
+                    onError.postValue(UIError(error))
+                }
             } ?: onError.postValue(UIError(resources.getString(R.string.error_reach_out_short)))
             onLoading.postValue(false)
         }

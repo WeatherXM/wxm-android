@@ -13,7 +13,11 @@ data class UIDeviceInfo(
     val gateway: MutableList<UIDeviceInfoItem>,
     val station: MutableList<UIDeviceInfoItem>,
     var rewardSplit: RewardSplitsData?
-)
+) {
+    companion object {
+        fun empty() = UIDeviceInfo(mutableListOf(), mutableListOf(), mutableListOf(), null)
+    }
+}
 
 @Keep
 @JsonClass(generateAdapter = true)

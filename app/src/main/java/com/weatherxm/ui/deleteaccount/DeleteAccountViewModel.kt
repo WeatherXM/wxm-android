@@ -4,12 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError.AuthError.LoginError.InvalidCredentials
 import com.weatherxm.data.models.ApiError.AuthError.LoginError.InvalidPassword
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.DeleteAccountUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getCode
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
@@ -19,10 +19,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class DeleteAccountViewModel(
+    private val usecase: DeleteAccountUseCase,
     private val resources: Resources,
-    private val deleteAccountUseCase: DeleteAccountUseCase,
     private val analytics: AnalyticsWrapper
 ) : ViewModel() {
+    companion object {
+        const val DELETE_ACCOUNT_DELAY = 1000L
+    }
 
     private val onStatus = MutableLiveData<Resource<State>>()
     fun onStatus() = onStatus
@@ -51,8 +54,8 @@ class DeleteAccountViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             onStatus.postValue(Resource.loading(State(Status.PASSWORD_VERIFICATION)))
             // Intentional delay for UX purposes
-            delay(1000L)
-            deleteAccountUseCase.isPasswordCorrect(password).onRight {
+            delay(DELETE_ACCOUNT_DELAY)
+            usecase.isPasswordCorrect(password).onRight {
                 deleteAccount()
             }.onLeft {
                 analytics.trackEventFailure(it.code)
@@ -65,9 +68,7 @@ class DeleteAccountViewModel(
                     )
                 } else {
                     onStatus.postValue(
-                        Resource.error(
-                            it.getDefaultMessage(), State(Status.PASSWORD_VERIFICATION)
-                        )
+                        Resource.error(it.getDefaultMessage(), State(Status.PASSWORD_VERIFICATION))
                     )
                 }
             }
@@ -76,14 +77,12 @@ class DeleteAccountViewModel(
 
     private suspend fun deleteAccount() {
         onStatus.postValue(Resource.loading(State(Status.ACCOUNT_DELETION)))
-        deleteAccountUseCase.deleteAccount()
-            .onRight {
-                analytics.onLogout()
-                onStatus.postValue(Resource.success(State(Status.ACCOUNT_DELETION)))
-            }
-            .onLeft {
-                analytics.trackEventFailure(it.code)
-                onStatus.postValue(Resource.error(it.getCode(), State(Status.ACCOUNT_DELETION)))
-            }
+        usecase.deleteAccount().onRight {
+            analytics.onLogout()
+            onStatus.postValue(Resource.success(State(Status.ACCOUNT_DELETION)))
+        }.onLeft {
+            analytics.trackEventFailure(it.code)
+            onStatus.postValue(Resource.error(it.getCode(), State(Status.ACCOUNT_DELETION)))
+        }
     }
 }

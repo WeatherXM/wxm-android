@@ -1,4 +1,4 @@
-package com.weatherxm.ui.deeplinkrouteractivity
+package com.weatherxm.ui.deeplinkrouter
 
 import android.os.Bundle
 import com.weatherxm.R

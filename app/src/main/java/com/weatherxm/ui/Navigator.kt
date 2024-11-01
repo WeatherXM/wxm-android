@@ -56,7 +56,7 @@ import com.weatherxm.ui.components.DatePicker
 import com.weatherxm.ui.components.LoginPromptDialogFragment
 import com.weatherxm.ui.components.MessageDialogFragment
 import com.weatherxm.ui.connectwallet.ConnectWalletActivity
-import com.weatherxm.ui.deeplinkrouteractivity.DeepLinkRouterActivity
+import com.weatherxm.ui.deeplinkrouter.DeepLinkRouterActivity
 import com.weatherxm.ui.deleteaccount.DeleteAccountActivity
 import com.weatherxm.ui.deleteaccountsurvey.DeleteAccountSurveyActivity
 import com.weatherxm.ui.devicealerts.DeviceAlertsActivity

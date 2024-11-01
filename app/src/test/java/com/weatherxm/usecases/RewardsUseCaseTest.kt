@@ -71,7 +71,7 @@ class RewardsUseCaseTest : BehaviorSpec({
     val validReward = Reward(timestamp, 10F, 0F, 10F, 100, null)
 
     val emptyTimeline = RewardsTimeline(emptyList(), 1, false)
-    val emptyUITimeline = UIRewardsTimeline(emptyList(), reachedTotal = true)
+    val emptyUITimeline = UIRewardsTimeline(emptyList())
 
     val timeline = RewardsTimeline(listOf(emptyReward, validReward), 1, false)
     val uiTimeline =

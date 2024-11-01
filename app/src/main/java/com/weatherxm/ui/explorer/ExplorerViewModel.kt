@@ -17,7 +17,7 @@ import com.weatherxm.data.models.PublicHex
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.SingleLiveEvent
 import com.weatherxm.ui.components.BaseMapFragment.Companion.DEFAULT_ZOOM_LEVEL
-import com.weatherxm.ui.components.BaseMapFragment.Companion.USER_LOCATION_ZOOM_LEVEL
+import com.weatherxm.ui.components.BaseMapFragment.Companion.ZOOMED_IN_ZOOM_LEVEL
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.LocationHelper
@@ -74,7 +74,7 @@ class ExplorerViewModel(
     private var explorerAfterLoggedIn = false
 
     @Suppress("MagicNumber")
-    private val heatmapLayer: HeatmapLayer by lazy {
+    val heatmapLayer: HeatmapLayer by lazy {
         heatmapLayer(
             HEATMAP_LAYER_ID,
             HEATMAP_SOURCE_ID
@@ -194,7 +194,7 @@ class ExplorerViewModel(
             onNavigateToLocation.postValue(NavigationLocation(DEFAULT_ZOOM_LEVEL, location))
         } else if (!isUserLocation) {
             useUserLocation = false
-            onNavigateToLocation.postValue(NavigationLocation(USER_LOCATION_ZOOM_LEVEL, location))
+            onNavigateToLocation.postValue(NavigationLocation(ZOOMED_IN_ZOOM_LEVEL, location))
         }
     }
 
@@ -214,57 +214,55 @@ class ExplorerViewModel(
         onStatus.postValue(Resource.loading())
 
         viewModelScope.launch(Dispatchers.IO) {
-            explorerUseCase.getCells()
-                .map { response ->
-                    if (hexesIndexes.isEmpty()) {
-                        hexesIndexes = response.publicHexes.map {
-                            it.index
-                        }
-                        /**
-                         * The explorer map is empty so send all the hexes to be drawn
-                         */
-                        response.polygonsToDraw = response.publicHexes.toPolygonAnnotationOptions()
-                        onExplorerData.postValue(response)
-                    } else {
-                        val newHexes = mutableListOf<PublicHex>()
-
-                        val responseHexesIndexes = response.publicHexes.map {
-                            /**
-                             * Add only the hexes in the response that are new
-                             */
-                            if (!hexesIndexes.contains(it.index)) {
-                                newHexes.add(it)
-                            }
-                            it.index
-                        }
-
-                        /**
-                         * Save the updated hexes indexes to compare with the next response
-                         */
-                        hexesIndexes = responseHexesIndexes
-
-                        /**
-                         * Save all the polygons in ExplorerData as it's used to pre-draw the map
-                         * (before loading of new data takes place) when a user visits another
-                         * screen and comes back in the explorer
-                         */
-                        onExplorerData.value?.polygonsToDraw =
-                            response.publicHexes.toPolygonAnnotationOptions()
-
-                        /**
-                         * Send only the new polygons in the response
-                         * in order not to re-draw the whole explorer map but only the new hexes
-                         */
-                        onNewPolygons.postValue(newHexes.toPolygonAnnotationOptions())
+            explorerUseCase.getCells().onRight { response ->
+                if (hexesIndexes.isEmpty()) {
+                    hexesIndexes = response.publicHexes.map {
+                        it.index
                     }
-                    onStatus.postValue(Resource.success(Unit))
+                    /**
+                     * The explorer map is empty so send all the hexes to be drawn
+                     */
+                    response.polygonsToDraw = response.publicHexes.toPolygonAnnotationOptions()
+                    onExplorerData.postValue(response)
+                } else {
+                    val newHexes = mutableListOf<PublicHex>()
+
+                    val responseHexesIndexes = response.publicHexes.map {
+                        /**
+                         * Add only the hexes in the response that are new
+                         */
+                        if (!hexesIndexes.contains(it.index)) {
+                            newHexes.add(it)
+                        }
+                        it.index
+                    }
+
+                    /**
+                     * Save the updated hexes indexes to compare with the next response
+                     */
+                    hexesIndexes = responseHexesIndexes
+
+                    /**
+                     * Save all the polygons in ExplorerData as it's used to pre-draw the map
+                     * (before loading of new data takes place) when a user visits another
+                     * screen and comes back in the explorer
+                     */
+                    onExplorerData.value?.polygonsToDraw =
+                        response.publicHexes.toPolygonAnnotationOptions()
+
+                    /**
+                     * Send only the new polygons in the response
+                     * in order not to re-draw the whole explorer map but only the new hexes
+                     */
+                    onNewPolygons.postValue(newHexes.toPolygonAnnotationOptions())
                 }
-                .mapLeft {
-                    analytics.trackEventFailure(it.code)
-                    onStatus.postValue(
-                        Resource.error(it.getDefaultMessage(R.string.error_reach_out_short))
-                    )
-                }
+                onStatus.postValue(Resource.success(Unit))
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                onStatus.postValue(
+                    Resource.error(it.getDefaultMessage(R.string.error_reach_out_short))
+                )
+            }
         }
     }
 
@@ -284,9 +282,6 @@ class ExplorerViewModel(
     fun getCurrentCamera(): ExplorerCamera? {
         return currentCamera
     }
-
-    @JvmName("getHeatMapLayer")
-    fun getHeatMapLayer(): HeatmapLayer = heatmapLayer
 
     @SuppressLint("MissingPermission")
     fun getLocation(onLocation: (location: Location?) -> Unit) {

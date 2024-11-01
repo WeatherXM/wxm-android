@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
-import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.DeviceTotalRewards
 import com.weatherxm.ui.common.DeviceTotalRewardsDetails
 import com.weatherxm.ui.common.DevicesFilterType
@@ -15,6 +14,7 @@ import com.weatherxm.ui.common.DevicesGroupBy
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.DevicesSortFilterOptions
 import com.weatherxm.ui.common.DevicesSortOrder
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.usecases.DeviceListUseCase
 import com.weatherxm.usecases.FollowUseCase
@@ -33,7 +33,7 @@ class DevicesViewModel(
     private val devices = MutableLiveData<Resource<List<UIDevice>>>().apply {
         value = Resource.loading()
     }
-    private val onFollowStatus = MutableLiveData<Resource<Unit>>()
+    private val onUnFollowStatus = MutableLiveData<Resource<Unit>>()
     private val onDevicesRewards = MutableLiveData<DevicesRewards>()
 
     // Needed for passing info to the activity to show/hide elements when scrolling on the list
@@ -41,22 +41,20 @@ class DevicesViewModel(
 
     fun devices(): LiveData<Resource<List<UIDevice>>> = devices
     fun onDevicesRewards(): LiveData<DevicesRewards> = onDevicesRewards
-    fun onFollowStatus(): LiveData<Resource<Unit>> = onFollowStatus
+    fun onUnFollowStatus(): LiveData<Resource<Unit>> = onUnFollowStatus
     fun showOverlayViews() = showOverlayViews
 
     fun fetch() {
         this@DevicesViewModel.devices.postValue(Resource.loading())
-        viewModelScope.launch(Dispatchers.IO) {
-            deviceListUseCase.getUserDevices()
-                .map { devices ->
-                    Timber.d("Got ${devices.size} devices")
-                    this@DevicesViewModel.devices.postValue(Resource.success(devices))
-                    calculateRewards(devices)
-                }
-                .mapLeft {
-                    analytics.trackEventFailure(it.code)
-                    this@DevicesViewModel.devices.postValue(Resource.error(it.getDefaultMessage()))
-                }
+        viewModelScope.launch {
+            deviceListUseCase.getUserDevices().onRight { devices ->
+                Timber.d("Got ${devices.size} devices")
+                this@DevicesViewModel.devices.postValue(Resource.success(devices))
+                calculateRewards(devices)
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                this@DevicesViewModel.devices.postValue(Resource.error(it.getDefaultMessage()))
+            }
         }
     }
 
@@ -86,11 +84,11 @@ class DevicesViewModel(
     }
 
     fun unFollowStation(deviceId: String) {
-        onFollowStatus.postValue(Resource.loading())
-        viewModelScope.launch {
+        onUnFollowStatus.postValue(Resource.loading())
+        viewModelScope.launch(Dispatchers.IO) {
             followUseCase.unfollowStation(deviceId).onRight {
                 Timber.d("[Unfollow Device] Success")
-                onFollowStatus.postValue(Resource.success(Unit))
+                onUnFollowStatus.postValue(Resource.success(Unit))
                 fetch()
             }.onLeft {
                 Timber.e("[Unfollow Device] Error $it")
@@ -105,7 +103,7 @@ class DevicesViewModel(
                     is ApiError.GenericError.JWTError.UnauthorizedError -> it.message
                     else -> it.getDefaultMessage(R.string.error_reach_out_short)
                 } ?: resources.getString(R.string.error_reach_out_short)
-                onFollowStatus.postValue(Resource.error(errorMessage))
+                onUnFollowStatus.postValue(Resource.error(errorMessage))
             }
         }
     }

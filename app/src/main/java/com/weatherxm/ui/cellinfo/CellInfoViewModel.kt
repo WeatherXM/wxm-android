@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.ui.common.Resource
@@ -15,7 +16,6 @@ import com.weatherxm.ui.explorer.UICell
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.usecases.FollowUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Resources
 import kotlinx.coroutines.Dispatchers
@@ -52,21 +52,19 @@ class CellInfoViewModel(
                 return@launch
             }
 
-            explorerUseCase.getCellDevices(cell)
-                .onRight {
-                    onCellDevices.postValue(Resource.success(it))
-                    it.firstOrNull { device ->
-                        !device.address.isNullOrEmpty()
-                    }?.address?.let { address ->
-                        this@CellInfoViewModel.address.postValue(address)
-                    }
+            explorerUseCase.getCellDevices(cell).onRight {
+                onCellDevices.postValue(Resource.success(it))
+                it.firstOrNull { device ->
+                    !device.address.isNullOrEmpty()
+                }?.address?.let { address ->
+                    this@CellInfoViewModel.address.postValue(address)
                 }
-                .onLeft {
-                    analytics.trackEventFailure(it.code)
-                    onCellDevices.postValue(
-                        Resource.error(resources.getString(R.string.error_cell_devices_no_data))
-                    )
-                }
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                onCellDevices.postValue(
+                    Resource.error(resources.getString(R.string.error_cell_devices_no_data))
+                )
+            }
         }
     }
 
@@ -118,7 +116,7 @@ class CellInfoViewModel(
     }
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             isLoggedIn = authUseCase.isLoggedIn().getOrElse { false }
         }
     }

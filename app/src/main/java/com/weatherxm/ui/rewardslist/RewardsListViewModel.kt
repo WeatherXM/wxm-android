@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.Failure
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.RewardTimelineType
 import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.usecases.RewardsUseCase
-import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -23,9 +23,7 @@ class RewardsListViewModel(
     private var blockNewPageRequest = false
     private val currentShownRewards = mutableListOf<TimelineReward>()
 
-    private val onFirstPageRewards = MutableLiveData<Resource<List<TimelineReward>>>().apply {
-        value = Resource.loading()
-    }
+    private val onFirstPageRewards = MutableLiveData<Resource<List<TimelineReward>>>()
     private val onNewRewardsPage = MutableLiveData<Resource<List<TimelineReward>>>()
     private val onEndOfData = MutableLiveData<List<TimelineReward>>()
 
@@ -36,17 +34,15 @@ class RewardsListViewModel(
     fun fetchFirstPageRewards(deviceId: String) {
         onFirstPageRewards.postValue(Resource.loading())
         viewModelScope.launch {
-            usecase.getRewardsTimeline(deviceId, currentPage)
-                .map {
-                    Timber.d("Got Rewards: ${it.rewards}")
-                    hasNextPage = it.hasNextPage
-                    currentShownRewards.addAll(it.rewards)
-                    onFirstPageRewards.postValue(Resource.success(currentShownRewards))
-                }
-                .mapLeft {
-                    analytics.trackEventFailure(it.code)
-                    handleFailure(it)
-                }
+            usecase.getRewardsTimeline(deviceId, currentPage).onRight {
+                Timber.d("Got Rewards: ${it.rewards}")
+                hasNextPage = it.hasNextPage
+                currentShownRewards.addAll(it.rewards)
+                onFirstPageRewards.postValue(Resource.success(currentShownRewards))
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                handleFailure(it)
+            }
         }
     }
 
@@ -57,12 +53,16 @@ class RewardsListViewModel(
                 currentPage++
                 blockNewPageRequest = true
 
-                usecase.getRewardsTimeline(deviceId, currentPage).map {
+                usecase.getRewardsTimeline(deviceId, currentPage).onRight {
                     Timber.d("Got Rewards: ${it.rewards}")
                     hasNextPage = it.hasNextPage
                     currentShownRewards.addAll(it.rewards)
                     onNewRewardsPage.postValue(Resource.success(currentShownRewards))
                 }.onLeft {
+                    /**
+                     * We came across an error so we should try again for this page
+                     */
+                    currentPage--
                     analytics.trackEventFailure(it.code)
                 }
 

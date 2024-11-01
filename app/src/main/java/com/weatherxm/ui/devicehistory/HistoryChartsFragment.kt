@@ -23,7 +23,7 @@ class HistoryChartsFragment : BaseFragment() {
         fun onSwipeRefresh()
     }
 
-    private val model: HistoryChartsViewModel by activityViewModel()
+    private val model: HistoryViewModel by activityViewModel()
     private var callback: SwipeRefreshCallback? = null
     private lateinit var binding: FragmentHistoryChartsBinding
 

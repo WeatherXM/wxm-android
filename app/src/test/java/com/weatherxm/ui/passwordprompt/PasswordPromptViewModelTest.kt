@@ -6,6 +6,7 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
+import com.weatherxm.TestUtils.testHandleFailureViewModel
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.ApiError
 import com.weatherxm.ui.InstantExecutorListener
@@ -63,21 +64,24 @@ class PasswordPromptViewModelTest : BehaviorSpec({
             When("it's an invalid password (too small)") {
                 then("Return an Invalid Password Error") {
                     viewModel.checkPassword(tooSmallPassword)
-                    viewModel.onValidPassword().value?.isError(invalidPassMsg)
+                    viewModel.onValidPassword().isError(invalidPassMsg)
                 }
             }
             When("it's a valid password") {
                 When("password is correct") {
                     then("return success") {
                         runTest { viewModel.checkPassword(validPassword) }
-                        viewModel.onValidPassword().value?.isSuccess(Unit)
+                        viewModel.onValidPassword().isSuccess(Unit)
                     }
                 }
                 When("password is incorrect") {
-                    then("return a failure") {
-                        runTest { viewModel.checkPassword(invalidPassword) }
-                        viewModel.onValidPassword().value?.isError(invalidPassMsg)
-                    }
+                    testHandleFailureViewModel(
+                        { viewModel.checkPassword(invalidPassword) },
+                        analytics,
+                        viewModel.onValidPassword(),
+                        1,
+                        invalidPassMsg
+                    )
                 }
             }
         }

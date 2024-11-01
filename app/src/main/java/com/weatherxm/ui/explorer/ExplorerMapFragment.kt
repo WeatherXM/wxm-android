@@ -177,7 +177,7 @@ class ExplorerMapFragment : BaseMapFragment() {
         }
     }
 
-    private fun cameraFly(center: Point, zoomLevel: Double = USER_LOCATION_ZOOM_LEVEL) {
+    private fun cameraFly(center: Point, zoomLevel: Double = ZOOMED_IN_ZOOM_LEVEL) {
         getMap().flyTo(
             CameraOptions.Builder().zoom(zoomLevel).center(center).build(),
             MapAnimationOptions.Builder().duration(CAMERA_ANIMATION_DURATION).build()
@@ -329,7 +329,7 @@ class ExplorerMapFragment : BaseMapFragment() {
             }
         } else {
             mapStyle?.addSource(data.geoJsonSource)
-            mapStyle?.addLayerAbove(model.getHeatMapLayer(), "waterway-label")
+            mapStyle?.addLayerAbove(model.heatmapLayer, "waterway-label")
         }
         onPolygonPointsUpdated(data.polygonsToDraw)
     }

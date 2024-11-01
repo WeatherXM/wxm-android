@@ -155,7 +155,7 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 stakeHolderValue
             )
         } else {
-            model.getWalletAddress {
+            model.getRewardSplitsData {
                 val stakeHolderValue = if (model.isStakeHolder()) {
                     AnalyticsService.ParamValue.STAKEHOLDER_LOWERCASE.paramValue
                 } else {
@@ -167,17 +167,15 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
                 )
             }
             binding.showSplitBtn.setOnClickListener {
-                model.getWalletAddress {
-                    analytics.trackEventUserAction(
-                        AnalyticsService.ParamValue.REWARD_SPLIT_PRESSED.paramValue,
-                        AnalyticsService.ParamValue.STAKEHOLDER.paramValue,
-                        Pair(
-                            AnalyticsService.CustomParam.STATE.paramName,
-                            model.isStakeHolder().toString().lowercase()
-                        )
+                analytics.trackEventUserAction(
+                    AnalyticsService.ParamValue.REWARD_SPLIT_PRESSED.paramValue,
+                    AnalyticsService.ParamValue.STAKEHOLDER.paramValue,
+                    Pair(
+                        AnalyticsService.CustomParam.STATE.paramName,
+                        model.isStakeHolder().toString().lowercase()
                     )
-                    RewardSplitDialogFragment().show(this)
-                }
+                )
+                RewardSplitDialogFragment().show(this)
             }
             binding.showSplitBtn.visible(true)
         }

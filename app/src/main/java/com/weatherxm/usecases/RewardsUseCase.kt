@@ -73,7 +73,7 @@ class RewardsUseCaseImpl(
             page = page
         ).map {
             if (it.data.isEmpty()) {
-                UIRewardsTimeline(listOf(), reachedTotal = true)
+                UIRewardsTimeline(listOf())
             } else {
                 UIRewardsTimeline(
                     it.data.filter { tx ->

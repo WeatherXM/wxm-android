@@ -27,15 +27,13 @@ class SignupViewModel(
     fun signup(username: String, firstName: String?, lastName: String?) {
         isSignedUp.postValue(Resource.loading())
         viewModelScope.launch {
-            val first = if (firstName.isNullOrEmpty()) null else firstName
-            val last = if (lastName.isNullOrEmpty()) null else lastName
-            authUseCase.signup(username, first, last)
-                .mapLeft {
+            authUseCase.signup(username, firstName, lastName)
+                .onLeft {
                     analytics.trackEventFailure(it.code)
                     Timber.d("Signup Error: $it")
                     handleFailure(it, username)
                 }
-                .map {
+                .onRight {
                     isSignedUp.postValue(
                         Resource.success(resources.getString(R.string.success_signup_text, it))
                     )

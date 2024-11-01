@@ -11,7 +11,7 @@ import com.weatherxm.ui.common.parcelable
 import com.weatherxm.ui.common.toast
 import com.weatherxm.ui.components.BaseActivity
 import com.weatherxm.ui.devicehistory.HistoryChartsFragment.SwipeRefreshCallback
-import com.weatherxm.ui.devicehistory.HistoryChartsViewModel.Companion.DATES_BACKOFF
+import com.weatherxm.ui.devicehistory.HistoryViewModel.Companion.DATES_BACKOFF
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import timber.log.Timber
@@ -20,7 +20,7 @@ import java.time.LocalDate
 class HistoryActivity : BaseActivity(), SwipeRefreshCallback {
     private lateinit var binding: ActivityHistoryBinding
 
-    private val model: HistoryChartsViewModel by viewModel {
+    private val model: HistoryViewModel by viewModel {
         parametersOf(intent.parcelable<UIDevice>(Contracts.ARG_DEVICE))
     }
 

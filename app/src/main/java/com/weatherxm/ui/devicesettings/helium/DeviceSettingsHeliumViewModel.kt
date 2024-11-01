@@ -30,18 +30,20 @@ import timber.log.Timber
 class DeviceSettingsHeliumViewModel(
     device: UIDevice,
     private val usecase: StationSettingsUseCase,
-    private val resources: Resources,
     private val userUseCase: UserUseCase,
     private val authUseCase: AuthUseCase,
+    private val resources: Resources,
     private val analytics: AnalyticsWrapper
 ) : BaseDeviceSettingsViewModel(device, usecase, resources, analytics) {
     private val onDeviceInfo = MutableLiveData<UIDeviceInfo>()
 
-    private val data = UIDeviceInfo(mutableListOf(), mutableListOf(), mutableListOf(), null)
+    private lateinit var data: UIDeviceInfo
 
     fun onDeviceInfo(): LiveData<UIDeviceInfo> = onDeviceInfo
 
     override fun getDeviceInformation(context: Context) {
+        data = UIDeviceInfo.empty()
+
         data.default.add(
             UIDeviceInfoItem(resources.getString(R.string.station_default_name), device.name)
         )
@@ -154,12 +156,11 @@ class DeviceSettingsHeliumViewModel(
                     )
                 )
             } else {
-                val currentFirmware =
-                    if (device.currentFirmware.equals(device.assignedFirmware)) {
-                        "$current ${resources.getString(R.string.latest_hint)}"
-                    } else {
-                        current
-                    }
+                val currentFirmware = if (device.currentFirmware.equals(device.assignedFirmware)) {
+                    "$current ${resources.getString(R.string.latest_hint)}"
+                } else {
+                    current
+                }
                 data.default.add(
                     UIDeviceInfoItem(
                         resources.getString(R.string.firmware_version), currentFirmware

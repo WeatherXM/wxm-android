@@ -8,9 +8,9 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
+import com.weatherxm.databinding.ActivityConnectWalletBinding
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
-import com.weatherxm.databinding.ActivityConnectWalletBinding
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.getRichText
@@ -193,7 +193,7 @@ class ConnectWalletActivity : BaseActivity() {
                 negative = getString(R.string.action_cancel)
             )
             .onPositiveClick(getString(R.string.action_confirm)) {
-                model.saveAddress(address)
+                model.setWalletAddress(address)
             }
             .build()
             .show(this)

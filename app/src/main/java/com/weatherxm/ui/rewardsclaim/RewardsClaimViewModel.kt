@@ -20,9 +20,8 @@ class RewardsClaimViewModel(
         const val ARG_EMBED = "embed"
     }
 
-    fun isRedirectUrl(url: Uri?): Boolean {
-        return url.toString()
-            .startsWith(resources.getString(R.string.weatherxm_claim_redirect_url))
+    fun isRedirectUrl(url: String?): Boolean {
+        return url?.startsWith(resources.getString(R.string.weatherxm_claim_redirect_url)) ?: false
     }
 
     fun getQueryParams(data: UIWalletRewards): String {

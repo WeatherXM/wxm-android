@@ -54,7 +54,7 @@ class RewardsClaimActivity : BaseActivity() {
                 request: WebResourceRequest?
             ): Boolean {
                 val isHttpsUrl = request?.url.toString().startsWith("https", false)
-                val isRedirectUrl = model.isRedirectUrl(request?.url)
+                val isRedirectUrl = model.isRedirectUrl(request?.url.toString())
                 return if (!isHttpsUrl && !isRedirectUrl) {
                     try {
                         startActivity(Intent(Intent.ACTION_VIEW, request?.url))

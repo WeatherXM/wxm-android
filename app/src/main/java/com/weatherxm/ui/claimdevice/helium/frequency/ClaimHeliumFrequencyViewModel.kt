@@ -12,8 +12,8 @@ import com.weatherxm.util.Resources
 import kotlinx.coroutines.launch
 
 class ClaimHeliumFrequencyViewModel(
-    private val resources: Resources,
-    private val usecase: ClaimDeviceUseCase
+    private val usecase: ClaimDeviceUseCase,
+    private val resources: Resources
 ) : ViewModel() {
     private val frequenciesInOrder = mutableListOf<Frequency>()
 

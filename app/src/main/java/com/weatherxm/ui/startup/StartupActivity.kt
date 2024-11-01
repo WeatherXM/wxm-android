@@ -20,7 +20,7 @@ class StartupActivity : BaseActivity() {
         // Set access token for Mapbox on startup
         MapboxOptions.accessToken = getString(R.string.mapbox_access_token)
 
-        model.startup().observe(this) { state ->
+        model.onStartupState().observe(this) { state ->
             when (state) {
                 StartupState.ShowExplorer -> navigator.showExplorer(this)
                 StartupState.ShowHome -> navigator.showHome(this)

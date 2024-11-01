@@ -1,8 +1,10 @@
 package com.weatherxm
 
+import androidx.lifecycle.LiveData
 import arrow.core.Either
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.weatherxm.TestConfig.failure
+import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.NetworkError
 import com.weatherxm.data.network.ErrorResponse
@@ -15,6 +17,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import net.bytebuddy.utility.RandomString
 import retrofit2.Response
 import java.net.SocketTimeoutException
@@ -28,12 +32,12 @@ object TestUtils {
         this shouldBe Either.Left(failure)
     }
 
-    fun <T : Any> Resource<T>?.isSuccess(data: T?) {
-        this shouldBe Resource.success(data)
+    fun <T : Any> LiveData<Resource<T>>?.isSuccess(data: T?) {
+        this?.value shouldBe Resource.success(data)
     }
 
-    fun <T : Any> Resource<T>?.isError(errorMsg: String) {
-        this shouldBe Resource.error(errorMsg)
+    fun <T : Any> LiveData<Resource<T>>?.isError(errorMsg: String) {
+        this?.value shouldBe Resource.error(errorMsg)
     }
 
     fun mockEitherLeft(function: () -> Either<Failure, Any?>, failure: Failure) {
@@ -104,6 +108,22 @@ object TestUtils {
     ) {
         then("Should throw a NotImplementedError") {
             shouldThrow<NotImplementedError> { function() }
+        }
+    }
+
+    suspend fun <T : Any> BehaviorSpecWhenContainerScope.testHandleFailureViewModel(
+        functionToRun: suspend () -> Any?,
+        analytics: AnalyticsWrapper,
+        liveDataToCheck: LiveData<Resource<T>>,
+        verifyNumberOfFailureEvents: Int,
+        error: String
+    ) {
+        runTest { functionToRun() }
+        then("Log that error as a failure event") {
+            verify(exactly = verifyNumberOfFailureEvents) { analytics.trackEventFailure(any()) }
+        }
+        then("LiveData posts an error with a specific $error message") {
+            liveDataToCheck.isError(error)
         }
     }
 

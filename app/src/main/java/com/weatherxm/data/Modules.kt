@@ -165,7 +165,7 @@ import com.weatherxm.ui.claimdevice.location.ClaimLocationViewModel
 import com.weatherxm.ui.claimdevice.pulse.ClaimPulseViewModel
 import com.weatherxm.ui.claimdevice.wifi.ClaimWifiViewModel
 import com.weatherxm.ui.connectwallet.ConnectWalletViewModel
-import com.weatherxm.ui.deeplinkrouteractivity.DeepLinkRouterViewModel
+import com.weatherxm.ui.deeplinkrouter.DeepLinkRouterViewModel
 import com.weatherxm.ui.deleteaccount.DeleteAccountViewModel
 import com.weatherxm.ui.deleteaccountsurvey.DeleteAccountSurveyViewModel
 import com.weatherxm.ui.devicedetails.DeviceDetailsViewModel
@@ -175,7 +175,7 @@ import com.weatherxm.ui.devicedetails.rewards.RewardsViewModel
 import com.weatherxm.ui.deviceeditlocation.DeviceEditLocationViewModel
 import com.weatherxm.ui.deviceforecast.ForecastDetailsViewModel
 import com.weatherxm.ui.deviceheliumota.DeviceHeliumOTAViewModel
-import com.weatherxm.ui.devicehistory.HistoryChartsViewModel
+import com.weatherxm.ui.devicehistory.HistoryViewModel
 import com.weatherxm.ui.devicesettings.helium.DeviceSettingsHeliumViewModel
 import com.weatherxm.ui.devicesettings.helium.changefrequency.ChangeFrequencyViewModel
 import com.weatherxm.ui.devicesettings.helium.reboot.RebootViewModel
@@ -939,9 +939,9 @@ private val viewmodels = module {
     }
     viewModel { params -> CurrentViewModel(device = params.get(), get(), get(), get()) }
     viewModel { params -> ForecastViewModel(device = params.get(), get(), get(), get()) }
-    viewModel { params -> RewardsViewModel(device = params.get(), get(), get(), get()) }
+    viewModel { params -> RewardsViewModel(device = params.get(), get(), get()) }
     viewModel { params ->
-        HistoryChartsViewModel(
+        HistoryViewModel(
             device = params.get(),
             get(),
             get(),

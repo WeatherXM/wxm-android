@@ -7,11 +7,11 @@ import android.os.Bundle
 import android.os.Parcelable
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
-import com.weatherxm.ui.common.Resource
-import com.weatherxm.ui.common.Status
 import com.weatherxm.databinding.ActivityWidgetSelectStationBinding
 import com.weatherxm.ui.common.Contracts
 import com.weatherxm.ui.common.Contracts.ARG_WIDGET_TYPE
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.visible
@@ -47,7 +47,7 @@ class SelectStationActivity : BaseActivity() {
         }
         binding.recycler.adapter = adapter
 
-        model.devices().observe(this) {
+        model.onDevices().observe(this) {
             binding.signInBtn.visible(false)
             binding.confirmBtn.visible(true)
             onDevices(it)

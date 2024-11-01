@@ -6,24 +6,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.data.models.ApiError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.NetworkError.ConnectionTimeoutError
 import com.weatherxm.data.models.NetworkError.NoConnectionError
 import com.weatherxm.data.models.Rewards
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.UIError
-import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.DeviceDetailsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
-import com.weatherxm.util.Resources
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class RewardsViewModel(
     var device: UIDevice = UIDevice.empty(),
-    private val resources: Resources,
     private val deviceDetailsUseCase: DeviceDetailsUseCase,
     private val analytics: AnalyticsWrapper
 ) : ViewModel() {
@@ -55,32 +51,20 @@ class RewardsViewModel(
 
         fetchRewardsJob = viewModelScope.launch {
             onLoading.postValue(true)
-            deviceDetailsUseCase.getRewards(device.id)
-                .onRight {
-                    onRewards.postValue(it)
-                }
-                .onLeft {
-                    analytics.trackEventFailure(it.code)
-                    handleRewardsFailure(it)
-                }
+            deviceDetailsUseCase.getRewards(device.id).onRight {
+                onRewards.postValue(it)
+            }.onLeft {
+                analytics.trackEventFailure(it.code)
+                handleRewardsFailure(it)
+            }
             onLoading.postValue(false)
         }
     }
 
     private fun handleRewardsFailure(failure: Failure) {
-        val uiError = UIError(String.empty(), null)
-        when (failure) {
-            is ApiError.GenericError -> {
-                uiError.errorMessage =
-                    failure.message ?: resources.getString(R.string.error_reach_out_short)
-            }
-            is NoConnectionError, is ConnectionTimeoutError -> {
-                uiError.errorMessage = failure.getDefaultMessage(R.string.error_reach_out_short)
-                uiError.retryFunction = { fetchRewardsFromNetwork() }
-            }
-            else -> {
-                uiError.errorMessage = resources.getString(R.string.error_reach_out_short)
-            }
+        val uiError = UIError(failure.getDefaultMessage(R.string.error_reach_out_short))
+        if (failure is NoConnectionError || failure is ConnectionTimeoutError) {
+            uiError.retryFunction = { fetchRewardsFromNetwork() }
         }
         onError.postValue(uiError)
     }

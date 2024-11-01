@@ -29,8 +29,7 @@ data class UIError(
 @JsonClass(generateAdapter = true)
 data class UIRewardsTimeline(
     var rewards: List<TimelineReward>,
-    var hasNextPage: Boolean = false,
-    var reachedTotal: Boolean = false
+    var hasNextPage: Boolean = false
 )
 
 @Keep
@@ -243,6 +242,8 @@ data class UIForecast(
     companion object {
         fun empty() = UIForecast(mutableListOf(), mutableListOf())
     }
+
+    fun isEmpty(): Boolean = next24Hours.isNullOrEmpty() && forecastDays.isEmpty()
 }
 
 @Keep
