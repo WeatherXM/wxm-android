@@ -1,6 +1,5 @@
 package com.weatherxm.ui.claimdevice.helium.pair
 
-import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -20,10 +19,10 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class ClaimHeliumPairViewModel(
+    private val scanUseCase: BluetoothScannerUseCase,
+    connectionUseCase: BluetoothConnectionUseCase,
     private val resources: Resources,
     analytics: AnalyticsWrapper,
-    private val scanUseCase: BluetoothScannerUseCase,
-    connectionUseCase: BluetoothConnectionUseCase
 ) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics) {
     private var scannedDevices: MutableList<ScannedDevice> = mutableListOf()
 
@@ -46,26 +45,20 @@ class ClaimHeliumPairViewModel(
     fun getSelectedDevice(): ScannedDevice = super.scannedDevice
 
     @Suppress("MagicNumber")
-    override var timer = object : CountDownTimer(SCAN_DURATION, SCAN_COUNTDOWN_INTERVAL) {
-        override fun onTick(msUntilDone: Long) {
-            val progress = ((SCAN_DURATION - msUntilDone) * 100L / SCAN_DURATION).toInt()
-            Timber.d("Scanning progress: $progress")
-            onScanProgress.postValue(progress)
-        }
-
-        override fun onFinish() {
-            onScanProgress.postValue(100)
-            onScanStatus.postValue(Resource.success(Unit))
-            super@ClaimHeliumPairViewModel.stopScanning()
-        }
-    }
-
-    @Suppress("MagicNumber")
     fun scanBleDevices() {
         onScanStatus.postValue(Resource.loading())
         scannedDevices.clear()
         scanningJob = viewModelScope.launch {
-            timer.start()
+            timer.start(
+                onProgress = {
+                    onScanProgress.postValue(it)
+                },
+                onFinished = {
+                    onScanProgress.postValue(100)
+                    onScanStatus.postValue(Resource.success(Unit))
+                    super@ClaimHeliumPairViewModel.stopScanning()
+                }
+            )
             scanUseCase.scan().collect {
                 if (!scannedDevices.contains(it)) {
                     Timber.d("New scanned device collected: $it")
@@ -77,7 +70,6 @@ class ClaimHeliumPairViewModel(
     }
 
     override fun onNotPaired() {
-        analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
         onBLEError.postValue(
             UIError(resources.getString(R.string.helium_pairing_failed_desc)) {
                 setupBluetoothClaiming(super.scannedDevice)
