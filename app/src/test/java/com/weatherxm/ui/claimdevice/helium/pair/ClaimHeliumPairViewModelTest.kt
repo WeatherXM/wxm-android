@@ -4,9 +4,9 @@ import com.weatherxm.R
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
+import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.BluetoothError
-import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.Failure.Companion.CODE_BL_DEVICE_NOT_PAIRED
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.ScannedDevice
@@ -16,6 +16,8 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.mockk.coEvery
+import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
@@ -26,6 +28,7 @@ import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -35,7 +38,7 @@ class ClaimHeliumPairViewModelTest : BehaviorSpec({
     val analytics = mockk<AnalyticsWrapper>()
     lateinit var viewModel: ClaimHeliumPairViewModel
 
-    val scannedDevice = mockk<ScannedDevice>()
+    val scannedDevice = ScannedDevice("address", "name")
 
     val bluetoothDisabledFailure = BluetoothError.BluetoothDisabledException()
     val connectionLostFailure = BluetoothError.ConnectionLostException()
@@ -56,41 +59,22 @@ class ClaimHeliumPairViewModelTest : BehaviorSpec({
     beforeSpec {
         every { resources.getString(R.string.helium_bluetooth_disabled) } returns bluetoothDisabled
         every { resources.getString(R.string.helium_pairing_failed_desc) } returns pairingFailed
-        justRun { analytics.trackEventFailure(CODE_BL_DEVICE_NOT_PAIRED) }
-        coMockEitherLeft({ usecase.setPeripheral(scannedDevice.address) }, failure)
+        justRun { analytics.trackEventFailure(any()) }
         coEvery { scannerUseCase.scan() } returns scanFlow
+        every { usecase.getPairedDevices() } returns emptyList()
         every { usecase.registerOnBondStatus() } returns bondFlow
+        coJustRun { usecase.disconnectFromPeripheral() }
 
-        viewModel = ClaimHeliumPairViewModel(resources, analytics, scannerUseCase, usecase)
+        viewModel = ClaimHeliumPairViewModel(scannerUseCase, usecase, resources, analytics)
     }
 
-    /**
-     * TODO: scanBleDevices is missing due to the issue on CountDownTimer, we need to move this
-     * functionality in an util class or sth so we can mock it in the tests.
-     */
-
-//    context("Scan devices") {
-//        given("a usecase providing us with the scanned devices") {
-//            scanFlow.tryEmit(scannedDevice)
-//            runTest { viewModel.scanBleDevices() }
-//            then("LiveData onNewScannedDevice should post the newly scanned device") {
-//                viewModel.onNewScannedDevice().value?.size shouldBe 1
-//                viewModel.onNewScannedDevice().value?.get(0) shouldBe scannedDevice
-//            }
-//        }
-//    }
-
-    context("Flow when onNotPaired gets triggered") {
-        given("the trigger") {
-            viewModel.onNotPaired()
-            then("we should log the event's failure in analytics") {
-                verify(exactly = 1) {
-                    analytics.trackEventFailure(Failure.CODE_BL_DEVICE_NOT_PAIRED)
-                }
-            }
-            then("onBLEError should post the respective error") {
-                viewModel.onBLEError().value?.errorMessage shouldBe pairingFailed
-                viewModel.onBLEError().value?.retryFunction shouldNotBe null
+    context("Scan devices") {
+        given("a usecase providing us with the scanned devices") {
+            scanFlow.tryEmit(scannedDevice)
+            runTest { viewModel.scanBleDevices() }
+            then("LiveData onNewScannedDevice should post the newly scanned device") {
+                viewModel.onNewScannedDevice().value?.size shouldBe 1
+                viewModel.onNewScannedDevice().value?.get(0) shouldBe scannedDevice
             }
         }
     }
@@ -115,22 +99,61 @@ class ClaimHeliumPairViewModelTest : BehaviorSpec({
             }
             When("it's ConnectionLostException") {
                 viewModel.onConnectionFailure(connectionLostFailure)
-                then("LiveData onBLEConnectionLost should post the value true")
-                viewModel.onBLEConnectionLost().value shouldBe true
+                then("LiveData onBLEConnectionLost should post the value true") {
+                    viewModel.onBLEConnectionLost().value shouldBe true
+                }
             }
             When("it's any other Failure") {
                 viewModel.onConnectionFailure(connectionRejectedFailure)
-                viewModel.onBLEError().value?.errorMessage shouldBe pairingFailed
-                viewModel.onBLEError().value?.retryFunction shouldNotBe null
+                then("onBLEError should post the respective error") {
+                    viewModel.onBLEError().value?.errorMessage shouldBe pairingFailed
+                    viewModel.onBLEError().value?.retryFunction shouldNotBe null
+                }
             }
         }
     }
 
     context("Setup bluetooth claiming flow") {
         given("a scanned device") {
-            viewModel.setupBluetoothClaiming(scannedDevice)
-            then("perform the required actions and set the new scanned device") {
-                viewModel.scannedDevice() shouldBe scannedDevice
+            and("setting the peripheral is a success") {
+                coMockEitherRight({ usecase.setPeripheral(scannedDevice.address) }, Unit)
+                and("connect to peripheral is a failure") {
+                    coMockEitherLeft({ usecase.connectToPeripheral() }, failure)
+                    viewModel.setupBluetoothClaiming(scannedDevice)
+                    then("onConnectionFailure --> onBLEError should post the respective error") {
+                        viewModel.onBLEError().value?.errorMessage shouldBe pairingFailed
+                        viewModel.onBLEError().value?.retryFunction shouldNotBe null
+                    }
+                    then("the new scanned device should be set") {
+                        viewModel.scannedDevice() shouldBe scannedDevice
+                    }
+                }
+            }
+        }
+    }
+
+    context("Try to connect with ignorePairing = false") {
+        given("that the device is not paired and we ignore the pairing status") {
+            viewModel.connect(false)
+            and("onNotPaired is triggered") {
+                then("we should log the event's failure in analytics") {
+                    verify(exactly = 1) {
+                        analytics.trackEventFailure(CODE_BL_DEVICE_NOT_PAIRED)
+                    }
+                }
+                then("onBLEError should post the respective error") {
+                    viewModel.onBLEError().value?.errorMessage shouldBe pairingFailed
+                    viewModel.onBLEError().value?.retryFunction shouldNotBe null
+                }
+            }
+        }
+    }
+
+    context("Disconnect from peripheral") {
+        given("the trigger to disconnect") {
+            runTest { viewModel.disconnectFromPeripheral() }
+            then("call the respective function in the usecase to disconnect") {
+                coVerify(exactly = 1) { usecase.disconnectFromPeripheral() }
             }
         }
     }
