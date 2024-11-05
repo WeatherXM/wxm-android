@@ -1,20 +1,13 @@
 package com.weatherxm.ui.common
 
-import com.weatherxm.data.models.RewardSplit
-import com.weatherxm.data.repository.RewardsRepositoryImpl
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.core.spec.style.scopes.BehaviorSpecWhenContainerScope
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
-import kotlin.random.Random
-import kotlin.random.nextInt
 
-class UIModelsTest : BehaviorSpec({
+class UIDeviceTest : BehaviorSpec({
     val device = mockk<UIDevice>()
-    val sortFilterGroupOptions = mockk<DevicesSortFilterOptions>()
-    val rewardSplitsData = mockk<RewardSplitsData>()
-    val deviceTotalRewardDetails = mockk<DeviceTotalRewardsDetails>()
 
     beforeSpec {
         every { device.isOwned() } answers { callOriginal() }
@@ -30,14 +23,6 @@ class UIModelsTest : BehaviorSpec({
         every { device.createDeviceAlerts(any()) } answers { callOriginal() }
         every { device.hasErrors() } answers { callOriginal() }
         every { device.getLastCharsOfLabel() } answers { callOriginal() }
-
-        every { sortFilterGroupOptions.getSortAnalyticsValue() } answers { callOriginal() }
-        every { sortFilterGroupOptions.getFilterAnalyticsValue() } answers { callOriginal() }
-        every { sortFilterGroupOptions.getGroupByAnalyticsValue() } answers { callOriginal() }
-
-        every { rewardSplitsData.hasSplitRewards() } answers { callOriginal() }
-
-        every { deviceTotalRewardDetails.isEmpty() } answers { callOriginal() }
     }
 
     suspend fun BehaviorSpecWhenContainerScope.testDeviceRelation(
@@ -269,145 +254,6 @@ class UIModelsTest : BehaviorSpec({
             every { device.label } returns "00:00:00"
             then("return an the last 6 chars") {
                 device.getLastCharsOfLabel() shouldBe "000000"
-            }
-        }
-    }
-
-    context("Get device's sort analytics value") {
-        When("it's DATE_ADDED") {
-            every { sortFilterGroupOptions.sortOrder } returns DevicesSortOrder.DATE_ADDED
-            then("return DATE_ADDED analytics proper value") {
-                sortFilterGroupOptions.getSortAnalyticsValue() shouldBe "date_added"
-            }
-        }
-        When("it's NAME") {
-            every { sortFilterGroupOptions.sortOrder } returns DevicesSortOrder.NAME
-            then("return NAME analytics proper value") {
-                sortFilterGroupOptions.getSortAnalyticsValue() shouldBe "name"
-            }
-        }
-        When("it's LAST_ACTIVE") {
-            every { sortFilterGroupOptions.sortOrder } returns DevicesSortOrder.LAST_ACTIVE
-            then("return LAST_ACTIVE analytics proper value") {
-                sortFilterGroupOptions.getSortAnalyticsValue() shouldBe "last_active"
-            }
-        }
-    }
-
-    context("Get device's filter analytics value") {
-        When("it's ALL") {
-            every { sortFilterGroupOptions.filterType } returns DevicesFilterType.ALL
-            then("return ALL analytics proper value") {
-                sortFilterGroupOptions.getFilterAnalyticsValue() shouldBe "all"
-            }
-        }
-        When("it's OWNED") {
-            every { sortFilterGroupOptions.filterType } returns DevicesFilterType.OWNED
-            then("return OWNED analytics proper value") {
-                sortFilterGroupOptions.getFilterAnalyticsValue() shouldBe "owned"
-            }
-        }
-        When("it's FAVORITES ") {
-            every { sortFilterGroupOptions.filterType } returns DevicesFilterType.FAVORITES
-            then("return FAVORITES analytics proper value") {
-                sortFilterGroupOptions.getFilterAnalyticsValue() shouldBe "favorites"
-            }
-        }
-    }
-
-    context("Get device's grouping analytics value") {
-        When("it's NO_GROUPING ") {
-            every { sortFilterGroupOptions.groupBy } returns DevicesGroupBy.NO_GROUPING
-            then("return NO_GROUPING analytics proper value") {
-                sortFilterGroupOptions.getGroupByAnalyticsValue() shouldBe "no_grouping"
-            }
-        }
-        When("it's RELATIONSHIP") {
-            every { sortFilterGroupOptions.groupBy } returns DevicesGroupBy.RELATIONSHIP
-            then("return RELATIONSHIP analytics proper value") {
-                sortFilterGroupOptions.getGroupByAnalyticsValue() shouldBe "relationship"
-            }
-        }
-        When("it's STATUS ") {
-            every { sortFilterGroupOptions.groupBy } returns DevicesGroupBy.STATUS
-            then("return STATUS analytics proper value") {
-                sortFilterGroupOptions.getGroupByAnalyticsValue() shouldBe "status"
-            }
-        }
-    }
-
-    context("Get if a RewardSplitsData has split rewards") {
-        When("the list size is smaller than two") {
-            val splits = mutableListOf<RewardSplit>()
-            repeat(Random.nextInt(0..1)) {
-                splits.add(mockk())
-            }
-            every { rewardSplitsData.splits } returns splits
-            then("return false") {
-                rewardSplitsData.hasSplitRewards() shouldBe false
-            }
-        }
-        When("the list size is equal or higher than two") {
-            val splits = mutableListOf<RewardSplit>()
-            repeat(Random.nextInt(2..10)) {
-                splits.add(mockk())
-            }
-            every { rewardSplitsData.splits } returns splits
-            then("return true") {
-                rewardSplitsData.hasSplitRewards() shouldBe true
-            }
-        }
-    }
-
-    context("Get if the deviceTotalRewardsDetails is empty or not") {
-        When("the total is not null") {
-            every { deviceTotalRewardDetails.total } returns 10F
-            then("return false") {
-                deviceTotalRewardDetails.isEmpty() shouldBe false
-            }
-        }
-        When("the total is null") {
-            every { deviceTotalRewardDetails.total } returns null
-            and("the mode is not null") {
-                every {
-                    deviceTotalRewardDetails.mode
-                } returns RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR
-                then("return false") {
-                    deviceTotalRewardDetails.isEmpty() shouldBe false
-                }
-            }
-            and("the mode is null") {
-                every { deviceTotalRewardDetails.mode } returns null
-                and("the totals are not empty") {
-                    every { deviceTotalRewardDetails.totals } returns listOf(mockk())
-                    then("return false") {
-                        deviceTotalRewardDetails.isEmpty() shouldBe false
-                    }
-                }
-                and("the totals are empty") {
-                    every { deviceTotalRewardDetails.totals } returns emptyList()
-                    and("the boosts are not empty") {
-                        every { deviceTotalRewardDetails.boosts } returns listOf(mockk())
-                        then("return false") {
-                            deviceTotalRewardDetails.isEmpty() shouldBe false
-                        }
-                    }
-                    and("the boosts are empty") {
-                        every { deviceTotalRewardDetails.boosts } returns emptyList()
-                        and("the status is not LOADING") {
-                            every { deviceTotalRewardDetails.status } returns Status.SUCCESS
-                            then("return false") {
-                                deviceTotalRewardDetails.isEmpty() shouldBe false
-                            }
-                        }
-                        and("the status is LOADING") {
-                            every { deviceTotalRewardDetails.status } returns Status.LOADING
-                            then("return true") {
-                                deviceTotalRewardDetails.isEmpty() shouldBe true
-                            }
-                        }
-                    }
-                }
             }
         }
     }
