@@ -53,7 +53,7 @@
                 app:layout_constraintEnd_toStartOf="@id/lastRunTitle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Total earned for 4 Stations" />
+                tools:text="Total earned for 4 owned Stations" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/lastRunTitle"

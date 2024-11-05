@@ -132,12 +132,6 @@ class RewardsUseCaseTest : BehaviorSpec({
         listOf("Jan 1"),
         LineChartData(mutableListOf("1/1"), mutableListOf(Entry(0F, 100F)))
     )
-    val devicesRewardsByRangeYear = DevicesRewardsByRange(
-        100F,
-        RewardsSummaryMode.YEAR,
-        listOf("January"),
-        LineChartData(mutableListOf("Jan"), mutableListOf(Entry(0F, 100F)))
-    )
 
     val deviceRewardsSummary = DeviceRewardsSummary(
         100F,
@@ -331,21 +325,6 @@ class RewardsUseCaseTest : BehaviorSpec({
                                     devicesRewardsByRangeMonth.datesChartTooltip
                                 it?.lineChartData?.isEqual(devicesRewardsByRangeMonth.lineChartData)
                             }
-                    }
-                }
-                and("mode is YEAR") {
-                    coMockEitherRight(
-                        { repository.getDevicesRewardsByRange(RewardsSummaryMode.YEAR) },
-                        devicesRewards
-                    )
-                    then("return the DevicesRewardsByRange for YEAR mode") {
-                        usecase.getDevicesRewardsByRange(RewardsSummaryMode.YEAR).getOrNull().also {
-                            it?.total shouldBe devicesRewardsByRangeYear.total
-                            it?.mode shouldBe devicesRewardsByRangeYear.mode
-                            it?.datesChartTooltip shouldBe
-                                devicesRewardsByRangeYear.datesChartTooltip
-                            it?.lineChartData?.isEqual(devicesRewardsByRangeYear.lineChartData)
-                        }
                     }
                 }
             }

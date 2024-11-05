@@ -14,6 +14,7 @@ import com.weatherxm.databinding.FragmentMessageDialogBinding
 import com.weatherxm.ui.Navigator
 import com.weatherxm.ui.common.classSimpleName
 import com.weatherxm.ui.common.parcelable
+import com.weatherxm.ui.common.setHtml
 import com.weatherxm.ui.common.visible
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -24,6 +25,7 @@ class MessageDialogFragment : BaseBottomSheetDialogFragment() {
 
     private var title: String? = null
     private var message: String? = null
+    private var htmlMessage: String? = null
     private var readMoreUrl: String? = null
     private var analyticsScreen: AnalyticsService.Screen? = null
 
@@ -31,12 +33,14 @@ class MessageDialogFragment : BaseBottomSheetDialogFragment() {
         const val TAG = "MessageDialogFragment"
         const val ARG_TITLE = "title"
         const val ARG_MESSAGE = "message"
+        const val ARG_HTML_MESSAGE = "html_message"
         const val ARG_READ_MORE_URL = "read_more_url"
         const val ARG_ANALYTICS_SCREEN = "analytics_screen"
 
         fun newInstance(
             title: String?,
             message: String?,
+            htmlMessage: String?,
             readMoreUrl: String?,
             analyticsScreen: AnalyticsService.Screen?
         ) =
@@ -44,6 +48,7 @@ class MessageDialogFragment : BaseBottomSheetDialogFragment() {
                 arguments = Bundle().apply {
                     putString(ARG_TITLE, title)
                     putString(ARG_MESSAGE, message)
+                    putString(ARG_HTML_MESSAGE, htmlMessage)
                     putString(ARG_READ_MORE_URL, readMoreUrl)
                     putParcelable(ARG_ANALYTICS_SCREEN, analyticsScreen)
                 }
@@ -56,6 +61,7 @@ class MessageDialogFragment : BaseBottomSheetDialogFragment() {
                 val args = requireArguments()
                 title = args.getString(ARG_TITLE, null)
                 message = args.getString(ARG_MESSAGE, null)
+                htmlMessage = args.getString(ARG_HTML_MESSAGE, null)
                 readMoreUrl = args.getString(ARG_READ_MORE_URL, null)
                 analyticsScreen = args.parcelable<AnalyticsService.Screen>(ARG_ANALYTICS_SCREEN)
             }
@@ -86,6 +92,10 @@ class MessageDialogFragment : BaseBottomSheetDialogFragment() {
 
         message?.let {
             binding.message.text = it
+        }
+
+        htmlMessage?.let {
+            binding.message.setHtml(it)
         }
 
         readMoreUrl?.let { url ->

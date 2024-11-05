@@ -97,7 +97,7 @@ class ProfileFragment : BaseFragment() {
             navigator.showMessageDialog(
                 childFragmentManager,
                 title = getString(R.string.total_earned),
-                message = getString(R.string.total_earned_desc)
+                htmlMessage = getString(R.string.total_earned_desc)
             )
         }
 

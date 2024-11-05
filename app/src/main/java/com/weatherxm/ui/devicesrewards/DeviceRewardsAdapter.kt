@@ -101,7 +101,6 @@ class DeviceRewardsAdapter(
             when (mode) {
                 RewardsSummaryMode.WEEK -> binding.chartRangeSelector.checkWeek()
                 RewardsSummaryMode.MONTH -> binding.chartRangeSelector.checkMonth()
-                RewardsSummaryMode.YEAR -> binding.chartRangeSelector.checkYear()
                 else -> throw NotImplementedError("Unknown rewards mode $mode")
             }.also {
                 ignoreRangeChipListener = false

@@ -75,11 +75,11 @@ class DevicesRewardsViewModelTest : BehaviorSpec({
         given("a usecase providing the total rewards by range for the owned devices") {
             When("it's a failure") {
                 coMockEitherLeft(
-                    { usecase.getDevicesRewardsByRange(RewardsSummaryMode.YEAR) },
+                    { usecase.getDevicesRewardsByRange(RewardsSummaryMode.WEEK) },
                     failure
                 )
                 testHandleFailureViewModel(
-                    { viewModel.getDevicesRewardsByRangeTotals(R.id.year) },
+                    { viewModel.getDevicesRewardsByRangeTotals(R.id.week) },
                     analytics,
                     viewModel.onRewardsByRange(),
                     1,

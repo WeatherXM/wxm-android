@@ -495,11 +495,12 @@ class Navigator(private val analytics: AnalyticsWrapper) {
     fun showMessageDialog(
         fragmentManager: FragmentManager,
         title: String?,
-        message: String?,
+        message: String? = null,
+        htmlMessage: String? = null,
         readMoreUrl: String? = null,
         analyticsScreen: AnalyticsService.Screen? = null
     ) {
-        MessageDialogFragment.newInstance(title, message, readMoreUrl, analyticsScreen)
+        MessageDialogFragment.newInstance(title, message, htmlMessage, readMoreUrl, analyticsScreen)
             .show(fragmentManager, MessageDialogFragment.TAG)
     }
 

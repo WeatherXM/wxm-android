@@ -31,8 +31,6 @@ import com.weatherxm.util.getName
 import com.weatherxm.util.getShortName
 import timber.log.Timber
 import java.time.ZonedDateTime
-import java.time.format.TextStyle
-import java.util.Locale
 
 interface RewardsUseCase {
     suspend fun getRewardsTimeline(
@@ -273,7 +271,6 @@ class RewardsUseCaseImpl(
         /**
          * 7D = Show full days - e.g. Monday, Tuesday, Wednesday,
          * 1M = Show short month name with the month day - e.g. Jan 1, Feb 21, Mar 30,
-         * 1Y = Show months - e.g. September, October, November
          */
         return when (mode) {
             RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK -> {
@@ -281,9 +278,6 @@ class RewardsUseCaseImpl(
             }
             RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH -> {
                 timestamp.getFormattedDate()
-            }
-            RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR -> {
-                timestamp.month.getDisplayName(TextStyle.FULL, Locale.US)
             }
         }
     }
@@ -295,7 +289,6 @@ class RewardsUseCaseImpl(
         /**
          * 7D = Show 3-letter days - e.g. Mon, Tue, Wed,
          * 1M = DD/MM or MM/DD based on Locale - e.g. 25/01 or 01/25
-         * 1Y = Show 3-letter months as the design - e.g. Sep, Oct, Nov
          */
         return when (mode) {
             RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK -> {
@@ -303,9 +296,6 @@ class RewardsUseCaseImpl(
             }
             RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH -> {
                 timestamp.getFormattedMonthDate()
-            }
-            RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR -> {
-                timestamp.month.getDisplayName(TextStyle.SHORT, Locale.US)
             }
         }
     }

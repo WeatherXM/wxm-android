@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
-import com.weatherxm.ui.common.Resource
-import com.weatherxm.ui.common.Status
 import com.weatherxm.data.repository.RewardsRepositoryImpl
 import com.weatherxm.ui.common.DeviceTotalRewardsDetails
 import com.weatherxm.ui.common.DevicesRewards
 import com.weatherxm.ui.common.DevicesRewardsByRange
+import com.weatherxm.ui.common.Resource
+import com.weatherxm.ui.common.Status
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import kotlinx.coroutines.Job
@@ -84,7 +84,6 @@ class DevicesRewardsViewModel(
         return when (chipId) {
             R.id.week -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK
             R.id.month -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.MONTH
-            R.id.year -> RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR
             else -> throw NotImplementedError("Unknown chip ID $chipId")
         }
     }
