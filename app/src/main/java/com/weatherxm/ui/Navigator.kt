@@ -492,6 +492,7 @@ class Navigator(private val analytics: AnalyticsWrapper) {
         }
     }
 
+    @Suppress("LongParameterList")
     fun showMessageDialog(
         fragmentManager: FragmentManager,
         title: String?,
