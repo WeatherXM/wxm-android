@@ -99,6 +99,7 @@ class ForecastFragment : BaseFragment() {
             dailyForecastAdapter.submitList(it.forecastDays)
             binding.dailyForecastRecycler.visible(true)
             binding.dailyForecastTitle.visible(true)
+            binding.temperatureBarsInfoButton.visible(true)
             binding.hourlyForecastRecycler.visible(true)
             binding.hourlyForecastTitle.visible(true)
         }
@@ -124,6 +125,7 @@ class ForecastFragment : BaseFragment() {
             binding.progress.invisible()
         } else if (isLoading) {
             binding.dailyForecastTitle.visible(false)
+            binding.temperatureBarsInfoButton.visible(false)
             binding.hourlyForecastTitle.visible(false)
             binding.progress.visible(true)
         } else {
@@ -137,10 +139,11 @@ class ForecastFragment : BaseFragment() {
             binding.hiddenContentContainer.visible(false)
             model.fetchForecast()
         } else if (model.device.relation == UNFOLLOWED) {
-            binding.dailyForecastRecycler.visible(false)
-            binding.dailyForecastTitle.visible(false)
             binding.hourlyForecastTitle.visible(false)
             binding.hourlyForecastRecycler.visible(false)
+            binding.dailyForecastRecycler.visible(false)
+            binding.dailyForecastTitle.visible(false)
+            binding.temperatureBarsInfoButton.visible(false)
             binding.hiddenContentContainer.visible(true)
         }
     }
