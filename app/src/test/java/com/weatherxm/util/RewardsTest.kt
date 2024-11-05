@@ -2,13 +2,78 @@ package com.weatherxm.util
 
 import com.weatherxm.R
 import com.weatherxm.ui.common.AnnotationGroupCode
+import com.weatherxm.ui.common.ErrorType
 import com.weatherxm.util.Rewards.getRewardIcon
 import com.weatherxm.util.Rewards.getRewardScoreColor
 import com.weatherxm.util.Rewards.isPoL
+import com.weatherxm.util.Rewards.metricsErrorType
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 class RewardsTest : BehaviorSpec({
+    context("Get the ErrorType of metrics") {
+        When("QoD score is null") {
+            and("PoL reason is null") {
+                then("return null") {
+                    metricsErrorType(null, null) shouldBe null
+                }
+            }
+            and("PoL reason is NO_LOCATION_DATA") {
+                then("return an ErrorType.ERROR") {
+                    metricsErrorType(
+                        null,
+                        AnnotationGroupCode.NO_LOCATION_DATA
+                    ) shouldBe ErrorType.ERROR
+                }
+            }
+            and("PoL reason is LOCATION_NOT_VERIFIED") {
+                then("return an ErrorType.WARNING") {
+                    metricsErrorType(
+                        null,
+                        AnnotationGroupCode.LOCATION_NOT_VERIFIED
+                    ) shouldBe ErrorType.WARNING
+                }
+            }
+        }
+        When("QoD score is not null") {
+            and("QoD score is [0,20)") {
+                then("return an ErrorType.ERROR") {
+                    metricsErrorType(Random.nextInt(0..19), null) shouldBe ErrorType.ERROR
+                }
+            }
+            and("QoD score is between [20, 79]") {
+                then("return an ErrorType.WARNING") {
+                    metricsErrorType(Random.nextInt(20..79), null) shouldBe ErrorType.WARNING
+                }
+            }
+            and("QoD score is between [80, 100]") {
+                and("PoL reason is null") {
+                    then("return null") {
+                        metricsErrorType(Random.nextInt(80..100), null) shouldBe null
+                    }
+                }
+                and("PoL reason is LOCATION_NOT_VERIFIED") {
+                    then("return an ErrorType.WARNING") {
+                        metricsErrorType(
+                            Random.nextInt(80..100),
+                            AnnotationGroupCode.LOCATION_NOT_VERIFIED
+                        ) shouldBe ErrorType.WARNING
+                    }
+                }
+                and("PoL reason is NO_LOCATION_DATA") {
+                    then("return an ErrorType.ERROR") {
+                        metricsErrorType(
+                            Random.nextInt(80..100),
+                            AnnotationGroupCode.NO_LOCATION_DATA
+                        ) shouldBe ErrorType.ERROR
+                    }
+                }
+            }
+        }
+    }
+
     context("Get reward score color and icon") {
         given("a reward score") {
             When("it is null or non-supported") {
