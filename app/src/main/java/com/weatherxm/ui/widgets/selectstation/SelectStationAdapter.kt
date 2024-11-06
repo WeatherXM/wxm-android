@@ -14,6 +14,7 @@ import com.weatherxm.ui.common.handleAlerts
 import com.weatherxm.ui.common.handleStroke
 import com.weatherxm.ui.common.setBundleChip
 import com.weatherxm.ui.common.setColor
+import com.weatherxm.ui.common.setNoDataMessage
 import com.weatherxm.ui.common.setStatusChip
 import com.weatherxm.ui.common.stationHealthViewsOnList
 import com.weatherxm.ui.common.visible
@@ -100,6 +101,7 @@ class SelectStationAdapter(private val stationListener: (UIDevice) -> Unit) :
             if (item.currentWeather == null || item.currentWeather.isEmpty()) {
                 binding.weatherDataLayout.visible(false)
                 binding.noDataLayout.visible(true)
+                item.setNoDataMessage(itemView.context, binding.noDataMessage)
             } else {
                 setWeatherData(item)
             }

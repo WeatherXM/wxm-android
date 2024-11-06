@@ -144,11 +144,7 @@ fun RemoteViews.onDevice(
     this.setStatus(context, device)
 
     if (device.currentWeather == null || device.currentWeather.isEmpty()) {
-        setViewVisibility(R.id.weatherDataLayout, View.GONE)
-        setViewVisibility(R.id.noDataLayout, View.VISIBLE)
-        setViewPadding(R.id.root, 2, 2, 2, 2)
-        val backgroundResId = R.drawable.background_rounded_surface_error_stroke
-        setInt(R.id.root, "setBackgroundResource", backgroundResId)
+        setNoData(context, device)
     } else {
         setViewVisibility(R.id.noDataLayout, View.GONE)
         setInt(R.id.root, "setBackgroundResource", R.drawable.background_rounded_surface)
@@ -158,6 +154,24 @@ fun RemoteViews.onDevice(
 
     // Instruct the widget manager to update the widget
     appWidgetManager.updateAppWidget(appWidgetId, this)
+}
+
+fun RemoteViews.setNoData(context: Context, device: UIDevice) {
+    setViewVisibility(R.id.weatherDataLayout, View.GONE)
+    setViewVisibility(R.id.noDataLayout, View.VISIBLE)
+
+    if (!device.isOwned()) {
+        setTextViewText(
+            R.id.noDataMessage,
+            context.getString(R.string.no_data_message_public_device)
+        )
+    } else {
+        setTextViewText(R.id.noDataMessage, context.getString(R.string.no_data_message))
+    }
+
+    setViewPadding(R.id.root, 2, 2, 2, 2)
+    val backgroundResId = R.drawable.background_rounded_surface_error_stroke
+    setInt(R.id.root, "setBackgroundResource", backgroundResId)
 }
 
 fun RemoteViews.setStatus(context: Context, device: UIDevice) {

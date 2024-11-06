@@ -570,6 +570,14 @@ fun UIDevice.handleAlerts(context: Context, issueChip: Chip, analytics: Analytic
     issueChip.visible(true)
 }
 
+fun UIDevice.setNoDataMessage(context: Context, textView: MaterialTextView) {
+    textView.text = if (!isOwned()) {
+        context.getString(R.string.no_data_message_public_device)
+    } else {
+        context.getString(R.string.no_data_message)
+    }
+}
+
 private fun Context.hideKeyboard(view: View) {
     val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
