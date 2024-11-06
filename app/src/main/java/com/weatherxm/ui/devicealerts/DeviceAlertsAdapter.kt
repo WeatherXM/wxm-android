@@ -61,7 +61,7 @@ class DeviceAlertsAdapter(
                                 deviceAlertListener.onContactSupportClicked()
                             }
                     } else {
-                        binding.alert.message(R.string.no_data_message_public_device)
+                        binding.alert.message(R.string.station_inactive_alert_message_public)
                     }
                 }
                 DeviceAlertType.LOW_BATTERY -> {
