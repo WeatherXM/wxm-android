@@ -11,113 +11,90 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_rounded_bottom"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        app:liftOnScroll="true">
+        android:background="@drawable/background_rounded_bottom">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:background="@color/colorSurface"
+            app:menu="@menu/device_details_menu"
+            app:navigationIcon="@drawable/ic_back"
+            app:titleTextAppearance="@style/TextAppearance.WeatherXM.Device.Details.Title"
+            tools:subtitle="Exotic Magnolia Beaufort"
+            tools:title="My Weather Station">
+
+            <ImageButton
+                android:id="@+id/relationBtn"
+                style="@style/Widget.WeatherXM.ImageButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="end"
+                android:layout_marginStart="@dimen/margin_small"
+                android:importantForAccessibility="no"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_favorite"
+                tools:tint="@color/follow_heart_color" />
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipChildren="false"
             android:clipToPadding="false"
-            app:collapsedTitleGravity="start|center_vertical"
-            app:collapsedTitleTextAppearance="@style/TextAppearance.WeatherXM.CollapsedToolbar.Title"
-            app:collapsedTitleTextColor="@color/colorOnSurface"
-            app:expandedTitleTextColor="@color/transparent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            app:titleCollapseMode="fade"
-            app:titleEnabled="false">
+            android:paddingHorizontal="@dimen/padding_normal_to_large">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:paddingHorizontal="@dimen/padding_normal_to_large"
-                android:paddingTop="?actionBarSize"
-                app:layout_scrollFlags="scroll">
+                android:layout_height="32dp"
+                android:scrollbars="none"
+                app:layout_constraintTop_toTopOf="parent">
 
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:scrollbars="none"
-                    app:layout_constraintTop_toTopOf="parent">
+                <com.google.android.material.chip.ChipGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
 
-                    <com.google.android.material.chip.ChipGroup
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/alertChip"
+                        style="@style/Widget.WeatherXM.Chip.Status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scrollbars="none">
+                        app:chipBackgroundColor="@color/warningTint"
+                        app:chipCornerRadius="@dimen/radius_small"
+                        app:chipIcon="@drawable/ic_warning_hex_filled"
+                        app:chipIconTint="@color/warning"
+                        tools:text="@string/update_required" />
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/alertChip"
-                            style="@style/Widget.WeatherXM.Chip.Status"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:chipBackgroundColor="@color/warningTint"
-                            app:chipCornerRadius="@dimen/radius_small"
-                            app:chipIcon="@drawable/ic_warning_hex_filled"
-                            app:chipIconTint="@color/warning"
-                            tools:text="@string/update_required" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/status"
+                        style="@style/Widget.WeatherXM.Chip.Status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        app:chipCornerRadius="@dimen/radius_small"
+                        app:chipIcon="@drawable/dot"
+                        app:chipIconSize="10dp"
+                        tools:chipBackgroundColor="@color/successTint"
+                        tools:chipIconTint="@color/success"
+                        tools:text="5 mins ago" />
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/status"
-                            style="@style/Widget.WeatherXM.Chip.Status"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="false"
-                            app:chipCornerRadius="@dimen/radius_small"
-                            app:chipIcon="@drawable/dot"
-                            app:chipIconSize="10dp"
-                            tools:chipBackgroundColor="@color/successTint"
-                            tools:chipIconTint="@color/success"
-                            tools:text="5 mins ago" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/bundle"
+                        style="@style/Widget.WeatherXM.Chip.Status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:chipBackgroundColor="@color/blueTint"
+                        app:chipCornerRadius="@dimen/radius_small"
+                        app:chipIconTint="@color/colorOnSurface"
+                        tools:chipIcon="@drawable/ic_wifi"
+                        tools:text="M5" />
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/bundle"
-                            style="@style/Widget.WeatherXM.Chip.Status"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:chipBackgroundColor="@color/blueTint"
-                            app:chipCornerRadius="@dimen/radius_small"
-                            app:chipIconTint="@color/colorOnSurface"
-                            tools:chipIcon="@drawable/ic_wifi"
-                            tools:text="M5" />
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
 
-                    </com.google.android.material.chip.ChipGroup>
-                </HorizontalScrollView>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                android:background="@color/colorSurface"
-                app:layout_collapseMode="pin"
-                app:menu="@menu/device_details_menu"
-                app:navigationIcon="@drawable/ic_back"
-                app:titleTextAppearance="@style/TextAppearance.WeatherXM.Device.Details.Title"
-                tools:subtitle="Exotic Magnolia Beaufort"
-                tools:title="My Weather Station">
-
-                <ImageButton
-                    android:id="@+id/relationBtn"
-                    style="@style/Widget.WeatherXM.ImageButton"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_gravity="end"
-                    android:layout_marginStart="@dimen/margin_small"
-                    android:importantForAccessibility="no"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@drawable/ic_favorite"
-                    tools:tint="@color/follow_heart_color" />
-            </com.google.android.material.appbar.MaterialToolbar>
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/navigatorGroup"

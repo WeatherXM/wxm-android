@@ -11,6 +11,7 @@ import com.weatherxm.data.models.CountryAndFrequencies
 import com.weatherxm.data.models.Frequency
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.FrequencyState
+import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.ui.common.Status
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.devicesettings.ChangeFrequencyState
@@ -59,6 +60,9 @@ class ChangeFrequencyViewModelTest : BehaviorSpec({
     val bondFlow = MutableSharedFlow<Int>(
         replay = 1, onBufferOverflow = BufferOverflow.DROP_LATEST
     )
+    val scanFlow = MutableSharedFlow<ScannedDevice>(
+        replay = 1, onBufferOverflow = BufferOverflow.DROP_LATEST
+    )
     val deviceNotFoundFailure = BluetoothError.DeviceNotFound
     val stationNotInRange = "Station not in range"
 
@@ -68,6 +72,7 @@ class ChangeFrequencyViewModelTest : BehaviorSpec({
     beforeSpec {
         justRun { analytics.trackEventFailure(any()) }
         every { connectionUseCase.registerOnBondStatus() } returns bondFlow
+        coEvery { scanUseCase.scan() } returns scanFlow
         coJustRun { connectionUseCase.reboot() }
         coEvery { usecase.getCountryAndFrequencies(lat, lon) } returns countryAndFrequencies
         every { device.getLastCharsOfLabel() } returns "00:00:00"
@@ -193,15 +198,17 @@ class ChangeFrequencyViewModelTest : BehaviorSpec({
         }
     }
 
-    /**
-     * TODO: startConnectionProcess is missing due to the issue on CountDownTimer,
-     * we need to move this functionality in an util class or sth so we can mock it in the tests.
-     */
-//    context("Flow when we want to start the connection process") {
-//        given("the trigger") {
-//            viewModel.startConnectionProcess()
-//        }
-//    }
+    context("Flow when we want to start the connection process") {
+        given("the trigger") {
+            runTest { viewModel.startConnectionProcess() }
+            then("onStatus should post a success with the respective ChangeFrequencyState") {
+                viewModel.onStatus().value?.status shouldBe Status.LOADING
+                viewModel.onStatus().value?.data shouldBe ChangeFrequencyState(
+                    FrequencyStatus.CONNECT_TO_STATION
+                )
+            }
+        }
+    }
 
     afterSpec {
         Dispatchers.resetMain()

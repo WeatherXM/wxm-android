@@ -15,7 +15,7 @@
         android:clipToOutline="false"
         android:clipToPadding="false"
         android:fillViewport="true"
-        android:paddingBottom="@dimen/margin_large"
+        android:paddingBottom="@dimen/padding_small"
         tools:targetApi="s">
 
         <androidx.constraintlayout.widget.ConstraintLayout
