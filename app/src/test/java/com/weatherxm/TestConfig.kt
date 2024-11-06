@@ -18,6 +18,7 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND_DIR
 import com.weatherxm.ui.common.empty
 import com.weatherxm.util.AndroidBuildInfo
+import com.weatherxm.util.CountDownTimerHelper
 import com.weatherxm.util.Resources
 import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.listeners.AfterProjectListener
@@ -25,7 +26,9 @@ import io.kotest.core.listeners.BeforeProjectListener
 import io.kotest.core.names.DuplicateTestNameMode
 import io.kotest.core.spec.AutoScan
 import io.mockk.every
+import io.mockk.justRun
 import io.mockk.mockk
+import io.mockk.mockkConstructor
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
 import java.util.Locale
@@ -49,6 +52,9 @@ object TestConfig : AbstractProjectConfig() {
     object MyProjectListener : BeforeProjectListener, AfterProjectListener {
         @Suppress("LongMethod")
         override suspend fun beforeProject() {
+            mockkConstructor(CountDownTimerHelper::class)
+            justRun { anyConstructed<CountDownTimerHelper>().start(any(), any()) }
+            justRun { anyConstructed<CountDownTimerHelper>().stop() }
             mockkStatic(Geocoder::class)
             mockkStatic(DateFormat::class)
             mockkObject(AndroidBuildInfo)

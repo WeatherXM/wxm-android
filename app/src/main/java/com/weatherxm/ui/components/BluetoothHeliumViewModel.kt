@@ -1,7 +1,6 @@
 package com.weatherxm.ui.components
 
 import android.bluetooth.BluetoothDevice
-import android.os.CountDownTimer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.analytics.AnalyticsWrapper
@@ -10,9 +9,9 @@ import com.weatherxm.data.models.Failure
 import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
+import com.weatherxm.util.CountDownTimerHelper
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 open class BluetoothHeliumViewModel(
     private val deviceBleAddress: String,
@@ -20,26 +19,10 @@ open class BluetoothHeliumViewModel(
     protected val connectionUseCase: BluetoothConnectionUseCase,
     protected val analytics: AnalyticsWrapper
 ) : ViewModel() {
-    companion object {
-        const val SCAN_DURATION = 5000L
-        const val SCAN_COUNTDOWN_INTERVAL = 50L
-    }
 
     protected var scannedDevice = ScannedDevice.empty()
     protected var scanningJob: Job? = null
-
-    @Suppress("MagicNumber")
-    protected open var timer = object : CountDownTimer(SCAN_DURATION, SCAN_COUNTDOWN_INTERVAL) {
-        override fun onTick(msUntilDone: Long) {
-            val progress = ((SCAN_DURATION - msUntilDone) * 100L / SCAN_DURATION).toInt()
-            Timber.d("Scanning progress: $progress")
-        }
-
-        override fun onFinish() {
-            setPeripheralAndConnect()
-            stopScanning()
-        }
-    }
+    protected val timer = CountDownTimerHelper()
 
     init {
         viewModelScope.launch {
@@ -76,7 +59,15 @@ open class BluetoothHeliumViewModel(
     fun scannedDevice() = scannedDevice
 
     protected fun scanAndConnect() {
-        timer.start()
+        timer.start(
+            onProgress = {
+                // Do nothing
+            },
+            onFinished = {
+                setPeripheralAndConnect()
+                stopScanning()
+            }
+        )
         scanningJob = viewModelScope.launch {
             scanUseCase?.scan()?.collect {
                 if (it.name?.contains(deviceBleAddress) == true) {
@@ -138,7 +129,7 @@ open class BluetoothHeliumViewModel(
     fun stopScanning() {
         if (scanningJob?.isActive == true) {
             // Cancel doesn't fire onFinish() in the timer
-            timer.cancel()
+            timer.stop()
             scanningJob?.cancel()
         }
     }
