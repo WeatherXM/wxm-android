@@ -107,6 +107,7 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/margin_normal_to_large"
             android:layout_marginTop="@dimen/margin_large"
+            android:paddingBottom="@dimen/padding_large"
             android:visibility="gone">
 
             <ImageView

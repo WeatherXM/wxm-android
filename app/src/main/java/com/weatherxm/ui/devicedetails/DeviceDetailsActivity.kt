@@ -231,14 +231,6 @@ class DeviceDetailsActivity : BaseActivity() {
 
         binding.status.setStatusChip(device)
         binding.bundle.setBundleChip(device)
-        if (!model.device.isOnline()) {
-            binding.status.setOnClickListener {
-                navigator.showDeviceAlerts(this, model.device)
-            }
-        } else {
-            binding.status.setOnClickListener(null)
-            binding.status.isClickable = false
-        }
 
         setAlerts(device)
     }

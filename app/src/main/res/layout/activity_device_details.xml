@@ -72,6 +72,7 @@
                         style="@style/Widget.WeatherXM.Chip.Status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:clickable="false"
                         app:chipCornerRadius="@dimen/radius_small"
                         app:chipIcon="@drawable/dot"
                         app:chipIconSize="10dp"
