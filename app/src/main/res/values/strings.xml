@@ -148,7 +148,7 @@
     <string name="no_data_message">We\’re unable to show updated station data. Please make sure your station is operational and connected to the internet.</string>
     <string name="observations">Observations</string>
     <string name="forecast">Forecast</string>
-    <string name="no_data_message_public_device">We\’re unable to show live station data. Please check back later for further updates.</string>
+    <string name="no_data_message_public_device">No weather data received from this station yet, likely due to connectivity or operational issues.</string>
 
     <!-- Update (Bluetooth OTA) Station -->
     <string name="updated_needed_title">Station must be updated</string>
@@ -553,6 +553,7 @@
     <string name="issues_detected">%d issues detected</string>
     <string name="alerts_detected">%d alerts detected</string>
     <string name="station_inactive_alert_message">The station is not sending weather data. Check your network connection and the outdoor unit’s batteries. If the problem persists, contact our support team.</string>
+    <string name="station_inactive_alert_message_public">We\’re unable to show live station data. Please check back later for further updates.</string>
     <string name="update_required">Update Required</string>
     <string name="low_battery">Low Battery</string>
     <string name="low_battery_desc">Your station is reporting low battery. This may lead to data gaps at night, or in low-sunlight conditions and, eventually, lose rewards. Read more on how to replace your station batteries.</string>

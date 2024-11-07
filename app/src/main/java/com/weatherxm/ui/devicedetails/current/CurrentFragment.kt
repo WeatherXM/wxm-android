@@ -152,7 +152,7 @@ class CurrentFragment : BaseFragment() {
         if (device.currentWeather == null || device.currentWeather.isEmpty()) {
             binding.historicalCharts.visible(false)
         }
-        binding.latestWeatherCard.setData(device.currentWeather)
+        binding.latestWeatherCard.setData(device)
         binding.followCard.visible(device.isUnfollowed())
         binding.historicalCharts.isEnabled = !device.isUnfollowed()
     }

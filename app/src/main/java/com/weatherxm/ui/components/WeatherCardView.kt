@@ -11,8 +11,10 @@ import com.weatherxm.data.services.CacheService.Companion.KEY_PRESSURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_TEMPERATURE
 import com.weatherxm.data.services.CacheService.Companion.KEY_WIND
 import com.weatherxm.databinding.ViewWeatherCardBinding
-import com.weatherxm.ui.common.visible
+import com.weatherxm.ui.common.UIDevice
+import com.weatherxm.ui.common.setNoDataMessage
 import com.weatherxm.ui.common.setWeatherAnimation
+import com.weatherxm.ui.common.visible
 import com.weatherxm.util.DateTimeHelper.getFormattedDateAndTime
 import com.weatherxm.util.Weather
 import com.weatherxm.util.Weather.getFormattedHumidity
@@ -113,11 +115,13 @@ class WeatherCardView : LinearLayout {
         }
     }
 
-    fun setData(data: HourlyWeather?) {
+    fun setData(device: UIDevice) {
+        val data = device.currentWeather
         if (data == null || data.isEmpty()) {
             binding.weatherDataLayout.visible(false)
             binding.secondaryCard.visible(false)
             binding.noDataLayout.visible(true)
+            device.setNoDataMessage(context, binding.noDataMessage)
         } else {
             weatherData = data
             updateCurrentWeatherUI()
