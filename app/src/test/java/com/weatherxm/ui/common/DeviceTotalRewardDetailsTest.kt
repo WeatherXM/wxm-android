@@ -25,7 +25,7 @@ class DeviceTotalRewardDetailsTest : BehaviorSpec({
             and("the mode is not null") {
                 every {
                     deviceTotalRewardDetails.mode
-                } returns RewardsRepositoryImpl.Companion.RewardsSummaryMode.YEAR
+                } returns RewardsRepositoryImpl.Companion.RewardsSummaryMode.WEEK
                 then("return false") {
                     deviceTotalRewardDetails.isEmpty() shouldBe false
                 }
