@@ -1,7 +1,11 @@
 package com.weatherxm.data.datasource
 
+import arrow.core.Either
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.successUnitResponse
+import com.weatherxm.TestUtils.isError
+import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.retrofitResponse
 import com.weatherxm.TestUtils.testGetFromCache
 import com.weatherxm.TestUtils.testNetworkCall
@@ -77,12 +81,28 @@ class UserDataSourceTest : BehaviorSpec({
                 )
             }
             When("Using the Cache Source") {
-                testGetFromCache(
-                    "username",
-                    username,
-                    mockFunction = { cache.getUser() },
-                    runFunction = { cacheSource.getUser() }
-                )
+                /**
+                 * Avoid using testGetFromCache because we get an invalid warning, more info:
+                 * https://github.com/mockk/mockk/issues/1291
+                 *
+                 * So we use property-backing fields: https://mockk.io/#property-backing-fields
+                 */
+                and("the response is a success") {
+                    every {
+                        cache.getUser()
+                    } propertyType Either::class answers { Either.Right(user) }
+                    then("return the user") {
+                        cacheSource.getUser().isSuccess(user)
+                    }
+                }
+                and("the response is a failure") {
+                    every {
+                        cache.getUser()
+                    } propertyType Either::class answers { Either.Left(failure) }
+                    then("return the failure") {
+                        cacheSource.getUser().isError()
+                    }
+                }
             }
         }
     }

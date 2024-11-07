@@ -1,10 +1,12 @@
 package com.weatherxm.data.datasource
 
+import arrow.core.Either
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.successUnitResponse
+import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.TestUtils.retrofitResponse
-import com.weatherxm.TestUtils.testGetFromCache
 import com.weatherxm.TestUtils.testNetworkCall
 import com.weatherxm.data.models.Wallet
 import com.weatherxm.data.network.AddressBody
@@ -13,6 +15,7 @@ import com.weatherxm.data.network.ErrorResponse
 import com.weatherxm.data.services.CacheService
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.coJustRun
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 
@@ -44,12 +47,28 @@ class WalletDataSourceTest : BehaviorSpec({
                 )
             }
             When("Using the Cache Source") {
-                testGetFromCache(
-                    "address",
-                    wallet.address,
-                    mockFunction = { cacheService.getWalletAddress() },
-                    runFunction = { cacheSource.getWalletAddress() }
-                )
+                /**
+                 * Avoid using testGetFromCache because we get an invalid warning, more info:
+                 * https://github.com/mockk/mockk/issues/1291
+                 *
+                 * So we use property-backing fields: https://mockk.io/#property-backing-fields
+                 */
+                and("the response is a success") {
+                    every {
+                        cacheService.getWalletAddress()
+                    } propertyType Either::class answers { Either.Right(wallet.address) }
+                    then("return the address") {
+                        cacheSource.getWalletAddress().isSuccess(wallet.address)
+                    }
+                }
+                and("the response is a failure") {
+                    every {
+                        cacheService.getWalletAddress()
+                    } propertyType Either::class answers { Either.Left(failure) }
+                    then("return the failure") {
+                        cacheSource.getWalletAddress().isError()
+                    }
+                }
             }
         }
         given("A Network and a Cache Source providing the SET mechanism") {
