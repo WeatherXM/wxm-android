@@ -31,7 +31,6 @@ class RangeSelectorView : ConstraintLayout {
 
     fun checkWeek() = binding.chartRangeSelector.check(R.id.week)
     fun checkMonth() = binding.chartRangeSelector.check(R.id.month)
-    fun checkYear() = binding.chartRangeSelector.check(R.id.year)
 
     fun checkedChipId() = binding.chartRangeSelector.checkedChipId
 
@@ -46,12 +45,10 @@ class RangeSelectorView : ConstraintLayout {
     fun enable() {
         binding.week.isEnabled = true
         binding.month.isEnabled = true
-        binding.year.isEnabled = true
     }
 
     fun disable() {
         binding.week.isEnabled = false
         binding.month.isEnabled = false
-        binding.year.isEnabled = false
     }
 }

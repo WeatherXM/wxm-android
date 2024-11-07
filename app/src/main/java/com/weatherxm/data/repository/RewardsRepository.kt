@@ -1,6 +1,7 @@
 package com.weatherxm.data.repository
 
 import arrow.core.Either
+import com.weatherxm.data.datasource.RewardsDataSource
 import com.weatherxm.data.models.BoostRewardResponse
 import com.weatherxm.data.models.DeviceRewardsSummary
 import com.weatherxm.data.models.DevicesRewards
@@ -9,7 +10,6 @@ import com.weatherxm.data.models.RewardDetails
 import com.weatherxm.data.models.Rewards
 import com.weatherxm.data.models.RewardsTimeline
 import com.weatherxm.data.models.WalletRewards
-import com.weatherxm.data.datasource.RewardsDataSource
 import com.weatherxm.util.toISODate
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -48,8 +48,7 @@ class RewardsRepositoryImpl(private val dataSource: RewardsDataSource) : Rewards
 
         enum class RewardsSummaryMode {
             WEEK,
-            MONTH,
-            YEAR
+            MONTH
         }
     }
 

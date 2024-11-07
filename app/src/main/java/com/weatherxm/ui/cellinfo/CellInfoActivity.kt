@@ -76,8 +76,8 @@ class CellInfoActivity : BaseActivity(), DeviceListener {
             )
             navigator.showMessageDialog(
                 supportFragmentManager,
-                getString(R.string.cell_capacity),
-                getString(R.string.cell_capacity_explanation),
+                title = getString(R.string.cell_capacity),
+                message = getString(R.string.cell_capacity_explanation),
                 readMoreUrl = getString(R.string.docs_url_cell_capacity),
                 analyticsScreen = AnalyticsService.Screen.CELL_CAPACITY_INFO
             )

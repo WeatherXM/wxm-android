@@ -413,8 +413,8 @@ class RewardDetailsActivity : BaseActivity(), RewardBoostListener {
         )
         navigator.showMessageDialog(
             supportFragmentManager,
-            title,
-            message,
+            title = title,
+            message = message,
             readMoreUrl = readMoreUrl,
             analyticsScreen = analyticsScreen
         )
