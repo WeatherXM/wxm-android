@@ -89,6 +89,10 @@ class ForecastFragment : BaseFragment() {
             }
         }
 
+        parentModel.onDevicePolling().observe(viewLifecycleOwner) {
+            model.device = it
+        }
+
         parentModel.onDeviceFirstFetch().observe(viewLifecycleOwner) {
             model.device = it
             model.fetchForecast(true)
