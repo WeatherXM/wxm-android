@@ -5,6 +5,7 @@ import com.mapbox.search.result.SearchSuggestion
 import com.weatherxm.R
 import com.weatherxm.TestConfig.DEVICE_NOT_FOUND_MSG
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -26,17 +27,11 @@ import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class DeviceEditLocationViewModelTest : BehaviorSpec({
     val usecase = mockk<EditLocationUseCase>()
     val locationHelper = mockk<LocationHelper>()
@@ -58,7 +53,6 @@ class DeviceEditLocationViewModelTest : BehaviorSpec({
     val deviceNotFoundFailure = ApiError.DeviceNotFound("")
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -73,7 +67,8 @@ class DeviceEditLocationViewModelTest : BehaviorSpec({
         every { resources.getString(R.string.error_invalid_location) } returns invalidLocation
         justRun { analytics.trackEventFailure(any()) }
 
-        viewModel = DeviceEditLocationViewModel(usecase, analytics, locationHelper, resources)
+        viewModel =
+            DeviceEditLocationViewModel(usecase, analytics, locationHelper, resources, dispatcher)
     }
 
     context("Validate a location") {
@@ -222,7 +217,6 @@ class DeviceEditLocationViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

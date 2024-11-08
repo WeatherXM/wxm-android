@@ -1,6 +1,7 @@
 package com.weatherxm.ui.devicesettings.helium.changefrequency
 
 import com.weatherxm.R
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -28,16 +29,10 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ChangeFrequencyViewModelTest : BehaviorSpec({
     val usecase = mockk<StationSettingsUseCase>()
     val connectionUseCase = mockk<BluetoothConnectionUseCase>()
@@ -67,7 +62,6 @@ class ChangeFrequencyViewModelTest : BehaviorSpec({
     val stationNotInRange = "Station not in range"
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         justRun { analytics.trackEventFailure(any()) }
@@ -92,7 +86,8 @@ class ChangeFrequencyViewModelTest : BehaviorSpec({
             connectionUseCase,
             scanUseCase,
             resources,
-            analytics
+            analytics,
+            dispatcher
         )
     }
 
@@ -208,9 +203,5 @@ class ChangeFrequencyViewModelTest : BehaviorSpec({
                 )
             }
         }
-    }
-
-    afterSpec {
-        Dispatchers.resetMain()
     }
 })

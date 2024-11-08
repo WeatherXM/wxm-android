@@ -2,6 +2,7 @@ package com.weatherxm.ui.login
 
 import com.weatherxm.R
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -24,17 +25,11 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class LoginViewModelTest : BehaviorSpec({
     val usecase = mockk<AuthUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
@@ -52,7 +47,6 @@ class LoginViewModelTest : BehaviorSpec({
     val user = User("id", username, null, null, null, null)
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -78,7 +72,7 @@ class LoginViewModelTest : BehaviorSpec({
             resources.getString(R.string.error_login_invalid_credentials)
         } returns invalidCredentials
 
-        viewModel = LoginViewModel(usecase, resources, analytics)
+        viewModel = LoginViewModel(usecase, resources, analytics, dispatcher)
     }
 
     context("Get if the user is logged in already or not") {
@@ -179,7 +173,6 @@ class LoginViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

@@ -2,6 +2,7 @@ package com.weatherxm.ui.rewarddetails
 
 import com.weatherxm.TestConfig.DEVICE_NOT_FOUND_MSG
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -23,18 +24,12 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.justRun
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import java.time.ZonedDateTime
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class RewardDetailsViewModelTest : BehaviorSpec({
     val rewardsUseCase = mockk<RewardsUseCase>()
     val userUseCase = mockk<UserUseCase>()
@@ -45,23 +40,22 @@ class RewardDetailsViewModelTest : BehaviorSpec({
 
     val walletAddress = "walletAddress"
     val timestamp = ZonedDateTime.now()
+    val rewardSplits = listOf(
+        RewardSplit(walletAddress, 50, 50F),
+        RewardSplit("", 50, 50F)
+    )
     val rewardDetails = RewardDetails(
         timestamp,
         null,
         null,
         null,
         null,
-        listOf(
-            RewardSplit(walletAddress, 50, 50F),
-            RewardSplit("", 50, 50F)
-        )
+        rewardSplits
     )
-    val rewardSplitData =
-        RewardSplitsData(listOf(RewardSplit(walletAddress, 50, 50F)), walletAddress)
+    val rewardSplitData = RewardSplitsData(rewardSplits, walletAddress)
     val deviceNotFoundFailure = ApiError.DeviceNotFound("")
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -84,7 +78,8 @@ class RewardDetailsViewModelTest : BehaviorSpec({
             resources,
             rewardsUseCase,
             userUseCase,
-            authUseCase
+            authUseCase,
+            dispatcher
         )
     }
 
@@ -140,7 +135,6 @@ class RewardDetailsViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

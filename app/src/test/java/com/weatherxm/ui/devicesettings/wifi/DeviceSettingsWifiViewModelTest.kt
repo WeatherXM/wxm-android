@@ -5,6 +5,7 @@ import com.weatherxm.R
 import com.weatherxm.TestConfig
 import com.weatherxm.TestConfig.REACH_OUT_MSG
 import com.weatherxm.TestConfig.context
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -41,12 +42,7 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.core.qualifier.named
@@ -54,7 +50,6 @@ import org.koin.dsl.module
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class DeviceSettingsWifiViewModelTest : BehaviorSpec({
     val settingsUseCase = mockk<StationSettingsUseCase>()
     val userUseCase = mockk<UserUseCase>()
@@ -189,7 +184,6 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
     val invalidClaimIdFailure = ApiError.UserError.ClaimError.InvalidClaimId("")
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -247,7 +241,8 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
             userUseCase,
             authUseCase,
             resources,
-            analytics
+            analytics,
+            dispatcher
         )
     }
 
@@ -447,7 +442,6 @@ class DeviceSettingsWifiViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

@@ -1,6 +1,7 @@
 package com.weatherxm.ui.claimdevice.helium.result
 
 import com.weatherxm.R
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
@@ -18,16 +19,10 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ClaimHeliumResultViewModelTest : BehaviorSpec({
     val usecase = mockk<BluetoothConnectionUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
@@ -54,7 +49,6 @@ class ClaimHeliumResultViewModelTest : BehaviorSpec({
     val fetchingInfoFailed = "Fetching Info Failed"
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         justRun { analytics.trackEventFailure(any()) }
@@ -71,7 +65,7 @@ class ClaimHeliumResultViewModelTest : BehaviorSpec({
         } returns fetchingInfoFailed
         every { usecase.registerOnBondStatus() } returns bondFlow
 
-        viewModel = ClaimHeliumResultViewModel(usecase, resources, analytics)
+        viewModel = ClaimHeliumResultViewModel(usecase, resources, analytics, dispatcher)
     }
 
     fun UIError?.testBLEError(code: String?, message: String) {
@@ -212,9 +206,5 @@ class ClaimHeliumResultViewModelTest : BehaviorSpec({
                 }
             }
         }
-    }
-
-    afterSpec {
-        Dispatchers.resetMain()
     }
 })

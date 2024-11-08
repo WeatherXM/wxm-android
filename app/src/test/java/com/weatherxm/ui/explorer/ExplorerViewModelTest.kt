@@ -7,6 +7,7 @@ import com.mapbox.maps.extension.style.layers.generated.heatmapLayer
 import com.mapbox.maps.extension.style.sources.generated.GeoJsonSource
 import com.mapbox.maps.plugin.annotation.generated.PolygonAnnotationOptions
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -36,17 +37,11 @@ import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.slot
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ExplorerViewModelTest : BehaviorSpec({
     val usecase = mockk<ExplorerUseCase>()
     val locationHelper = mockk<LocationHelper>()
@@ -61,7 +56,15 @@ class ExplorerViewModelTest : BehaviorSpec({
     val cameraCenter = mockk<Point>()
     val explorerCamera = ExplorerCamera(cameraZoom, cameraCenter)
     val locationSlot = slot<(location: Location?) -> Unit>()
+
+    /**
+     * The below line produces the following error in logs:
+     * java.lang.RuntimeException: Method run in android.os.HandlerThread not mocked.
+     *
+     * Will need to investigate further what this is.
+     */
     val geoJsonSource = mockk<GeoJsonSource>()
+
     val publicHex = PublicHex("cellIndex", 1, location, listOf())
     val publicHex2 = PublicHex("cellIndex2", 1, location, listOf())
     val newPolygonAnnotationOptions = listOf(mockk<PolygonAnnotationOptions>())
@@ -171,7 +174,6 @@ class ExplorerViewModelTest : BehaviorSpec({
     }
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -193,7 +195,7 @@ class ExplorerViewModelTest : BehaviorSpec({
             newExplorerData.publicHexes.toPolygonAnnotationOptions()
         } returns newPolygonAnnotationOptions
 
-        viewModel = ExplorerViewModel(usecase, analytics, locationHelper)
+        viewModel = ExplorerViewModel(usecase, analytics, locationHelper, dispatcher)
     }
 
     context("Ensure that the heatmap is defined correctly") {
@@ -355,9 +357,7 @@ class ExplorerViewModelTest : BehaviorSpec({
         }
     }
 
-
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

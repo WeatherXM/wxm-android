@@ -1,6 +1,7 @@
 package com.weatherxm.ui.widgets.selectstation
 
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -18,17 +19,11 @@ import io.kotest.matchers.shouldBe
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class SelectStationViewModelTest : BehaviorSpec({
     val usecase = mockk<WidgetSelectStationUseCase>()
     lateinit var viewModel: SelectStationViewModel
@@ -70,7 +65,6 @@ class SelectStationViewModelTest : BehaviorSpec({
     val widgetId = 0
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -84,7 +78,7 @@ class SelectStationViewModelTest : BehaviorSpec({
         }
         justRun { usecase.saveWidgetData(widgetId, deviceId) }
 
-        viewModel = SelectStationViewModel(usecase)
+        viewModel = SelectStationViewModel(usecase, dispatcher)
     }
 
     context("GET / SET the selected station") {
@@ -160,7 +154,6 @@ class SelectStationViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

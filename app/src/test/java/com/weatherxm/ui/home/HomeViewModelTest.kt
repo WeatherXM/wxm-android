@@ -1,5 +1,6 @@
 package com.weatherxm.ui.home
 
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
@@ -17,14 +18,8 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModelTest : BehaviorSpec({
     val userUseCase = mockk<UserUseCase>()
     val remoteBannersUseCase = mockk<RemoteBannersUseCase>()
@@ -41,7 +36,6 @@ class HomeViewModelTest : BehaviorSpec({
     val devices = listOf(UIDevice.empty())
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         justRun { analytics.trackEventFailure(any()) }
@@ -52,7 +46,7 @@ class HomeViewModelTest : BehaviorSpec({
         every { remoteBannersUseCase.getInfoBanner() } returns infoBanner
         justRun { remoteBannersUseCase.dismissInfoBanner(infoBannerId) }
 
-        viewModel = HomeViewModel(userUseCase, remoteBannersUseCase, analytics)
+        viewModel = HomeViewModel(userUseCase, remoteBannersUseCase, analytics, dispatcher)
     }
 
     context("Flow when openExplorer is called") {
@@ -152,9 +146,5 @@ class HomeViewModelTest : BehaviorSpec({
                 }
             }
         }
-    }
-
-    afterSpec {
-        Dispatchers.resetMain()
     }
 })

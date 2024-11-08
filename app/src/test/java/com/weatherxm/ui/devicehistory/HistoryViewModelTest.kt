@@ -3,6 +3,7 @@ package com.weatherxm.ui.devicehistory
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.weatherxm.R
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -24,18 +25,12 @@ import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import java.time.LocalDate
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class HistoryViewModelTest : BehaviorSpec({
     val historyUseCase = mockk<HistoryUseCase>()
     val chartsUseCase = mockk<ChartsUseCase>()
@@ -53,7 +48,6 @@ class HistoryViewModelTest : BehaviorSpec({
     val fetchingHistoryFailed = "Fetching history failed"
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -84,7 +78,8 @@ class HistoryViewModelTest : BehaviorSpec({
             historyUseCase,
             chartsUseCase,
             resources,
-            analytics
+            analytics,
+            dispatcher
         )
     }
 
@@ -154,7 +149,6 @@ class HistoryViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

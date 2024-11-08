@@ -3,6 +3,7 @@ package com.weatherxm.ui.claimdevice.wifi
 import com.weatherxm.R
 import com.weatherxm.TestConfig.DEVICE_NOT_FOUND_MSG
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -25,17 +26,11 @@ import io.kotest.matchers.shouldNotBe
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ClaimWifiViewModelTest : BehaviorSpec({
     val usecase = mockk<ClaimDeviceUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
@@ -56,7 +51,6 @@ class ClaimWifiViewModelTest : BehaviorSpec({
     val device = UIDevice.empty()
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -78,7 +72,8 @@ class ClaimWifiViewModelTest : BehaviorSpec({
             resources.getString(R.string.error_claim_device_claiming_error)
         } returns deviceClaimingError
 
-        viewModel = ClaimWifiViewModel(DeviceType.D1_WIFI, usecase, resources, analytics)
+        viewModel =
+            ClaimWifiViewModel(DeviceType.D1_WIFI, usecase, resources, analytics, dispatcher)
     }
 
 
@@ -244,7 +239,6 @@ class ClaimWifiViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

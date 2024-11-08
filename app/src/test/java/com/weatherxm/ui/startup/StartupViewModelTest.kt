@@ -1,6 +1,7 @@
 package com.weatherxm.ui.startup
 
 import android.content.Intent
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.data.models.RemoteMessageType
 import com.weatherxm.data.models.WXMRemoteMessage
 import com.weatherxm.ui.InstantExecutorListener
@@ -12,19 +13,13 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class StartupViewModelTest : BehaviorSpec({
     val usecase = mockk<StartupUseCase>()
-    val viewModel = StartupViewModel(usecase)
+    val viewModel = StartupViewModel(usecase, dispatcher)
 
     val intent = mockk<Intent>()
     val startupState = StartupState.ShowHome
@@ -41,7 +36,6 @@ class StartupViewModelTest : BehaviorSpec({
     )
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         every { usecase.getStartupState() } returns startupFlow
@@ -85,9 +79,5 @@ class StartupViewModelTest : BehaviorSpec({
                 }
             }
         }
-    }
-
-    afterSpec {
-        Dispatchers.resetMain()
     }
 })

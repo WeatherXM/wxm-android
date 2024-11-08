@@ -1,6 +1,7 @@
 package com.weatherxm.ui.explorer.search
 
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -11,7 +12,6 @@ import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.explorer.SearchResult
-import com.weatherxm.ui.explorer.search.NetworkSearchViewModel.Companion.NETWORK_SEARCH_REQUEST_THRESHOLD
 import com.weatherxm.usecases.ExplorerUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
@@ -21,18 +21,11 @@ import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.justRun
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class NetworkSearchViewModelTest : BehaviorSpec({
     val usecase = mockk<ExplorerUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
@@ -43,7 +36,6 @@ class NetworkSearchViewModelTest : BehaviorSpec({
     val searchResults = listOf(searchResult)
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -59,7 +51,7 @@ class NetworkSearchViewModelTest : BehaviorSpec({
         coJustRun { usecase.setRecentSearch(searchResult) }
         coEvery { usecase.getRecentSearches() } returns searchResults
 
-        viewModel = NetworkSearchViewModel(usecase, analytics)
+        viewModel = NetworkSearchViewModel(usecase, analytics, dispatcher)
     }
 
     context("GET / SET the query") {
@@ -83,11 +75,6 @@ class NetworkSearchViewModelTest : BehaviorSpec({
                 and("it's a success") {
                     coMockEitherRight({ usecase.networkSearch(query) }, searchResults)
                     runTest { viewModel.networkSearch() }
-                    /**
-                     * Due to using delay in the network search
-                     * we need to delay here as well in order for the test to work properly
-                     */
-                    delay(NETWORK_SEARCH_REQUEST_THRESHOLD + NETWORK_SEARCH_REQUEST_THRESHOLD)
                     then("LiveData onSearchResults should post the respective results we fetched") {
                         viewModel.onSearchResults().isSuccess(searchResults)
                     }
@@ -147,7 +134,6 @@ class NetworkSearchViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

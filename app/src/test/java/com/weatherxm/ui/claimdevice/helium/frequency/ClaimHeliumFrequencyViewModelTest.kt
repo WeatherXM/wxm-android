@@ -1,6 +1,7 @@
 package com.weatherxm.ui.claimdevice.helium.frequency
 
 import com.weatherxm.R
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.data.models.CountryAndFrequencies
 import com.weatherxm.data.models.Frequency
@@ -13,14 +14,8 @@ import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ClaimHeliumFrequencyViewModelTest : BehaviorSpec({
     val usecase = mockk<ClaimDeviceUseCase>()
     lateinit var viewModel: ClaimHeliumFrequencyViewModel
@@ -35,7 +30,6 @@ class ClaimHeliumFrequencyViewModelTest : BehaviorSpec({
     val frequencyState = FrequencyState("GR", listOf("EU868 ($recommendedLabel)", "US915", "AU915"))
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         coEvery { usecase.getCountryAndFrequencies(location) } returns countryAndFrequencies
@@ -43,7 +37,7 @@ class ClaimHeliumFrequencyViewModelTest : BehaviorSpec({
             resources.getString(R.string.recommended_frequency_for, "GR")
         } returns recommendedLabel
 
-        viewModel = ClaimHeliumFrequencyViewModel(usecase, resources)
+        viewModel = ClaimHeliumFrequencyViewModel(usecase, resources, dispatcher)
     }
 
     context("Get Country and Frequencies") {
@@ -61,6 +55,5 @@ class ClaimHeliumFrequencyViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
     }
 })

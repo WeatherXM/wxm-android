@@ -2,6 +2,7 @@ package com.weatherxm.ui.claimdevice.location
 
 import com.mapbox.geojson.Point
 import com.mapbox.search.result.SearchSuggestion
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -20,17 +21,11 @@ import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ClaimLocationViewModelTest : BehaviorSpec({
     val usecase = mockk<EditLocationUseCase>()
     val locationHelper = mockk<LocationHelper>()
@@ -47,7 +42,6 @@ class ClaimLocationViewModelTest : BehaviorSpec({
     val point = mockk<Point>()
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -61,7 +55,7 @@ class ClaimLocationViewModelTest : BehaviorSpec({
         }
         justRun { analytics.trackEventFailure(any()) }
 
-        viewModel = ClaimLocationViewModel(usecase, analytics, locationHelper)
+        viewModel = ClaimLocationViewModel(usecase, analytics, locationHelper, dispatcher)
     }
 
     context("SET a Device Type and then GET it") {
@@ -185,7 +179,6 @@ class ClaimLocationViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

@@ -2,6 +2,7 @@ package com.weatherxm.ui.resetpassword
 
 import com.weatherxm.R
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -17,27 +18,20 @@ import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ResetPasswordViewModelTest : BehaviorSpec({
     val usecase = mockk<AuthUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
-    val viewModel = ResetPasswordViewModel(usecase, resources, analytics)
+    val viewModel = ResetPasswordViewModel(usecase, resources, analytics, dispatcher)
     val email = "email"
     val invalidUsername = "Invalid Username"
     val invalidUsernameFailure = ApiError.AuthError.InvalidUsername("")
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -93,7 +87,6 @@ class ResetPasswordViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })

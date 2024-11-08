@@ -1,5 +1,6 @@
 package com.weatherxm.ui.preferences
 
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.analytics.AnalyticsWrapper
@@ -13,14 +14,8 @@ import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class PreferencesViewModelTest : BehaviorSpec({
     val usecase = mockk<PreferencesUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
@@ -29,7 +24,6 @@ class PreferencesViewModelTest : BehaviorSpec({
     val installationId = "installationId"
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         every { analytics.setUserProperties() } returns mutableListOf()
@@ -40,7 +34,7 @@ class PreferencesViewModelTest : BehaviorSpec({
         coMockEitherRight({ usecase.isLoggedIn() }, true)
         every { usecase.getInstallationId() } returns installationId
 
-        viewModel = PreferenceViewModel(usecase, analytics)
+        viewModel = PreferenceViewModel(usecase, analytics, dispatcher)
     }
 
     context("Invoke a change in SharedPreferences and update user's properties in analytics") {
@@ -103,9 +97,5 @@ class PreferencesViewModelTest : BehaviorSpec({
                 viewModel.getInstallationId() shouldBe installationId
             }
         }
-    }
-
-    afterSpec {
-        Dispatchers.resetMain()
     }
 })

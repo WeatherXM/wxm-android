@@ -1,6 +1,7 @@
 package com.weatherxm.ui.home.profile
 
 import com.weatherxm.TestConfig.REACH_OUT_MSG
+import com.weatherxm.TestConfig.dispatcher
 import com.weatherxm.TestConfig.failure
 import com.weatherxm.TestConfig.resources
 import com.weatherxm.TestUtils.coMockEitherLeft
@@ -18,17 +19,11 @@ import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.mockk.justRun
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class ProfileViewModelTest : BehaviorSpec({
     val userUseCase = mockk<UserUseCase>()
     val analytics = mockk<AnalyticsWrapper>()
@@ -42,7 +37,6 @@ class ProfileViewModelTest : BehaviorSpec({
     val walletAddressNotFoundFailure = ApiError.UserError.WalletError.WalletAddressNotFound("")
 
     listener(InstantExecutorListener())
-    Dispatchers.setMain(StandardTestDispatcher())
 
     beforeSpec {
         startKoin {
@@ -55,7 +49,7 @@ class ProfileViewModelTest : BehaviorSpec({
             )
         }
         justRun { analytics.trackEventFailure(any()) }
-        viewModel = ProfileViewModel(userUseCase, analytics)
+        viewModel = ProfileViewModel(userUseCase, analytics, dispatcher)
     }
 
     context("Get the User") {
@@ -124,7 +118,6 @@ class ProfileViewModelTest : BehaviorSpec({
     }
 
     afterSpec {
-        Dispatchers.resetMain()
         stopKoin()
     }
 })
