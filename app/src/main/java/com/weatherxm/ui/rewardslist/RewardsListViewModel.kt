@@ -11,12 +11,15 @@ import com.weatherxm.ui.common.RewardTimelineType
 import com.weatherxm.ui.common.TimelineReward
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class RewardsListViewModel(
     private val usecase: RewardsUseCase,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     private var currentPage = 0
     private var hasNextPage = false
@@ -33,7 +36,7 @@ class RewardsListViewModel(
 
     fun fetchFirstPageRewards(deviceId: String) {
         onFirstPageRewards.postValue(Resource.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             usecase.getRewardsTimeline(deviceId, currentPage).onRight {
                 Timber.d("Got Rewards: ${it.rewards}")
                 hasNextPage = it.hasNextPage
@@ -49,7 +52,7 @@ class RewardsListViewModel(
     fun fetchNewPageRewards(deviceId: String) {
         if (hasNextPage && !blockNewPageRequest) {
             onNewRewardsPage.postValue(Resource.loading())
-            viewModelScope.launch {
+            viewModelScope.launch(dispatcher) {
                 currentPage++
                 blockNewPageRequest = true
 

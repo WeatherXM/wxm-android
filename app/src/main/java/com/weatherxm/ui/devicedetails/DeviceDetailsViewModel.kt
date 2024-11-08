@@ -20,6 +20,8 @@ import com.weatherxm.usecases.FollowUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.RefreshHandler
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -33,7 +35,8 @@ class DeviceDetailsViewModel(
     private val authUseCase: AuthUseCase,
     private val followUseCase: FollowUseCase,
     private val resources: Resources,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
     companion object {
         private const val REFRESH_INTERVAL_SECONDS = 30L
@@ -96,7 +99,7 @@ class DeviceDetailsViewModel(
             AnalyticsService.ParamValue.FOLLOW.paramValue
         )
         onFollowStatus.postValue(Resource.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             followUseCase.followStation(device.id).onRight {
                 Timber.d("[Follow Device] Success")
                 device.relation = DeviceRelation.FOLLOWED
@@ -114,7 +117,7 @@ class DeviceDetailsViewModel(
             AnalyticsService.ParamValue.UNFOLLOW.paramValue
         )
         onFollowStatus.postValue(Resource.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             followUseCase.unfollowStation(device.id).onRight {
                 Timber.d("[Unfollow Device] Success")
                 device.relation = DeviceRelation.UNFOLLOWED
@@ -138,7 +141,7 @@ class DeviceDetailsViewModel(
     }
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             isLoggedIn = authUseCase.isLoggedIn().getOrElse { false }
         }
     }

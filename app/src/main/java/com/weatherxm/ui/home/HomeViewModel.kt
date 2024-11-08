@@ -12,12 +12,15 @@ import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.WalletWarnings
 import com.weatherxm.usecases.RemoteBannersUseCase
 import com.weatherxm.usecases.UserUseCase
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val userUseCase: UserUseCase,
     private val remoteBannersUseCase: RemoteBannersUseCase,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private var hasDevices: Boolean? = null
@@ -44,7 +47,7 @@ class HomeViewModel(
     }
 
     fun getWalletWarnings() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             userUseCase.getWalletAddress().onRight {
                 onWalletWarnings.postValue(
                     WalletWarnings(

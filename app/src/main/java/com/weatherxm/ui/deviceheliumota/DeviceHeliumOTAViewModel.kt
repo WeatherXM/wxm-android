@@ -17,6 +17,8 @@ import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.usecases.BluetoothUpdaterUseCase
 import com.weatherxm.util.Failure.getCode
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Suppress("LongParameterList")
@@ -27,12 +29,14 @@ class DeviceHeliumOTAViewModel(
     private val updaterUseCase: BluetoothUpdaterUseCase,
     connectionUseCase: BluetoothConnectionUseCase,
     scanUseCase: BluetoothScannerUseCase,
-    analytics: AnalyticsWrapper
+    analytics: AnalyticsWrapper,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : BluetoothHeliumViewModel(
     device.getLastCharsOfLabel(),
     scanUseCase,
     connectionUseCase,
-    analytics
+    analytics,
+    dispatcher
 ) {
     private val onStatus = MutableLiveData<Resource<State>>()
     fun onStatus() = onStatus
@@ -82,7 +86,7 @@ class DeviceHeliumOTAViewModel(
 
     private fun downloadFirmwareAndGetFileURI() {
         onStatus.postValue(Resource.loading(State(OTAStatus.DOWNLOADING)))
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             updaterUseCase.downloadFirmwareAndGetFileURI(device.id).onRight {
                 update(it)
             }.onLeft {
@@ -98,7 +102,7 @@ class DeviceHeliumOTAViewModel(
     }
 
     fun update(uri: Uri) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             onStatus.postValue(Resource.loading(State(OTAStatus.INSTALLING)))
             updaterUseCase.update(uri).collect {
                 when (it.state) {

@@ -15,6 +15,8 @@ import com.weatherxm.ui.components.BluetoothHeliumViewModel
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -23,7 +25,8 @@ class ClaimHeliumPairViewModel(
     connectionUseCase: BluetoothConnectionUseCase,
     private val resources: Resources,
     analytics: AnalyticsWrapper,
-) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics) {
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : BluetoothHeliumViewModel(String.empty(), null, connectionUseCase, analytics, dispatcher) {
     private var scannedDevices: MutableList<ScannedDevice> = mutableListOf()
 
     private val onBLEError = MutableLiveData<UIError>()
@@ -48,17 +51,17 @@ class ClaimHeliumPairViewModel(
     fun scanBleDevices() {
         onScanStatus.postValue(Resource.loading())
         scannedDevices.clear()
-        scanningJob = viewModelScope.launch {
-            timer.start(
-                onProgress = {
-                    onScanProgress.postValue(it)
-                },
-                onFinished = {
-                    onScanProgress.postValue(100)
-                    onScanStatus.postValue(Resource.success(Unit))
-                    super@ClaimHeliumPairViewModel.stopScanning()
-                }
-            )
+        timer.start(
+            onProgress = {
+                onScanProgress.postValue(it)
+            },
+            onFinished = {
+                onScanProgress.postValue(100)
+                onScanStatus.postValue(Resource.success(Unit))
+                super@ClaimHeliumPairViewModel.stopScanning()
+            }
+        )
+        scanningJob = viewModelScope.launch(dispatcher) {
             scanUseCase.scan().collect {
                 if (!scannedDevices.contains(it)) {
                     Timber.d("New scanned device collected: $it")

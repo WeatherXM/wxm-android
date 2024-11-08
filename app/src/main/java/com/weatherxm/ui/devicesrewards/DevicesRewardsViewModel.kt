@@ -14,13 +14,16 @@ import com.weatherxm.ui.common.Resource
 import com.weatherxm.ui.common.Status
 import com.weatherxm.usecases.RewardsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class DevicesRewardsViewModel(
     val rewards: DevicesRewards,
     val usecase: RewardsUseCase,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     private val devicesJobs = mutableMapOf<Int, Job>()
 
@@ -36,7 +39,7 @@ class DevicesRewardsViewModel(
     fun onRewardsByRange(): LiveData<Resource<DevicesRewardsByRange>> = onRewardsByRange
 
     fun getDevicesRewardsByRangeTotals(checkedRangeChipId: Int = R.id.week) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             onRewardsByRange.postValue(Resource.loading())
 
             val mode = chipToMode(checkedRangeChipId)
@@ -54,7 +57,7 @@ class DevicesRewardsViewModel(
         position: Int,
         checkedRangeChipId: Int = R.id.week
     ) {
-        val job = viewModelScope.launch {
+        val job = viewModelScope.launch(dispatcher) {
             val selectedMode = chipToMode(checkedRangeChipId)
             rewards.devices[position].details.status = Status.LOADING
             rewards.devices[position].details.mode = selectedMode

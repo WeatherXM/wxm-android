@@ -18,6 +18,8 @@ import com.weatherxm.ui.common.empty
 import com.weatherxm.usecases.ClaimDeviceUseCase
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -26,7 +28,8 @@ import timber.log.Timber
 class ClaimHeliumViewModel(
     private val claimDeviceUseCase: ClaimDeviceUseCase,
     private val resources: Resources,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
     private val onCancel = MutableLiveData(false)
     private val onNext = MutableLiveData(false)
@@ -74,7 +77,7 @@ class ClaimHeliumViewModel(
 
     fun claimDevice(location: Location) {
         onClaimResult.postValue(Resource.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             claimDeviceUseCase.claimDevice(devEUI, location.lat, location.lon, deviceKey).onRight {
                 Timber.d("Claimed device: $it")
                 onClaimResult.postValue(Resource.success(it))

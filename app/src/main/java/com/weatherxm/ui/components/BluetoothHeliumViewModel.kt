@@ -10,6 +10,7 @@ import com.weatherxm.ui.common.ScannedDevice
 import com.weatherxm.usecases.BluetoothConnectionUseCase
 import com.weatherxm.usecases.BluetoothScannerUseCase
 import com.weatherxm.util.CountDownTimerHelper
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
@@ -17,7 +18,8 @@ open class BluetoothHeliumViewModel(
     private val deviceBleAddress: String,
     private val scanUseCase: BluetoothScannerUseCase?,
     protected val connectionUseCase: BluetoothConnectionUseCase,
-    protected val analytics: AnalyticsWrapper
+    protected val analytics: AnalyticsWrapper,
+    protected val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     protected var scannedDevice = ScannedDevice.empty()
@@ -25,7 +27,7 @@ open class BluetoothHeliumViewModel(
     protected val timer = CountDownTimerHelper()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             connectionUseCase.registerOnBondStatus().collect {
                 when (it) {
                     BluetoothDevice.BOND_BONDED -> {
@@ -68,7 +70,7 @@ open class BluetoothHeliumViewModel(
                 stopScanning()
             }
         )
-        scanningJob = viewModelScope.launch {
+        scanningJob = viewModelScope.launch(dispatcher) {
             scanUseCase?.scan()?.collect {
                 if (it.name?.contains(deviceBleAddress) == true) {
                     scannedDevice = it
@@ -83,7 +85,7 @@ open class BluetoothHeliumViewModel(
         if (deviceNotScanned()) {
             return
         }
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             connectionUseCase.setPeripheral(scannedDevice.address).onRight {
                 connect(ignorePairing)
             }.onLeft {
@@ -121,7 +123,7 @@ open class BluetoothHeliumViewModel(
     }
 
     fun disconnectFromPeripheral() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             connectionUseCase.disconnectFromPeripheral()
         }
     }

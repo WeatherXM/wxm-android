@@ -12,12 +12,13 @@ import com.weatherxm.data.models.ApiError.AuthError.InvalidUsername
 import com.weatherxm.data.models.ApiError.AuthError.LoginError.InvalidCredentials
 import com.weatherxm.data.models.ApiError.AuthError.LoginError.InvalidPassword
 import com.weatherxm.data.models.Failure
-import com.weatherxm.ui.common.Resource
 import com.weatherxm.data.models.User
+import com.weatherxm.ui.common.Resource
 import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -25,7 +26,8 @@ import timber.log.Timber
 class LoginViewModel(
     private val authUseCase: AuthUseCase,
     private val resources: Resources,
-    private val analytics: AnalyticsWrapper
+    private val analytics: AnalyticsWrapper,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     private val onLogin = MutableLiveData<Resource<Unit>>()
@@ -40,7 +42,7 @@ class LoginViewModel(
      */
     private val isLoggedIn = MutableLiveData<Either<Failure, Boolean>>().apply {
         Timber.d("Checking if user is logged in in the background")
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             postValue(authUseCase.isLoggedIn())
         }
     }
@@ -49,7 +51,7 @@ class LoginViewModel(
 
     fun login(username: String, password: String) {
         onLogin.postValue(Resource.loading())
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcher) {
             authUseCase.login(username, password)
                 .mapLeft {
                     analytics.trackEventFailure(it.code)

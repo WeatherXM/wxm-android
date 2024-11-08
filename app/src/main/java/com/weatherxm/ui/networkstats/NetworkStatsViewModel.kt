@@ -6,10 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.usecases.StatsUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class NetworkStatsViewModel(private val usecase: StatsUseCase) : ViewModel() {
+class NetworkStatsViewModel(
+    private val usecase: StatsUseCase,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : ViewModel() {
 
     private val onNetworkStats = MutableLiveData<Resource<NetworkStats>>()
 
@@ -17,7 +22,7 @@ class NetworkStatsViewModel(private val usecase: StatsUseCase) : ViewModel() {
 
     fun getNetworkStats() {
         onNetworkStats.postValue(Resource.loading())
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             usecase.getNetworkStats()
                 .onRight {
                     onNetworkStats.postValue(Resource.success(it))
