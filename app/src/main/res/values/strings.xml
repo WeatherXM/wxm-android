@@ -556,7 +556,7 @@
     <string name="station_inactive_alert_message_public">We\’re unable to show live station data. Please check back later for further updates.</string>
     <string name="update_required">Update Required</string>
     <string name="low_battery">Low Battery</string>
-    <string name="low_battery_desc">Your station is reporting low battery. This may lead to data gaps at night, or in low-sunlight conditions and, eventually, lose rewards. Read more on how to replace your station batteries.</string>
+    <string name="low_battery_desc">Your station is reporting low battery. This will lead to data gaps and eventually loss of rewards. Read more on how to replace your station batteries.</string>
 
     <!-- Widgets -->
     <string name="select_station">Select Station for Widget</string>
