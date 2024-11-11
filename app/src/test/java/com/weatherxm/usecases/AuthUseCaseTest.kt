@@ -28,6 +28,7 @@ class AuthUseCaseTest : BehaviorSpec({
 
     beforeSpec {
         coJustRun { notificationsRepository.setFcmToken() }
+        coJustRun { authRepository.logout() }
     }
 
     context("Get if a user is logged in or not") {
