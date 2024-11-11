@@ -6,12 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherxm.analytics.AnalyticsWrapper
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.PreferencesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class PreferenceViewModel(
     private val preferencesUseCase: PreferencesUseCase,
+    private val authUseCase: AuthUseCase,
     private val analytics: AnalyticsWrapper
 ) : ViewModel() {
     val onPreferencesChanged = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
@@ -22,12 +24,12 @@ class PreferenceViewModel(
     private val onLogout = MutableLiveData(false)
 
     fun onLogout(): LiveData<Boolean> = onLogout
-    fun isLoggedIn(): Boolean = preferencesUseCase.isLoggedIn()
+    fun isLoggedIn(): Boolean = authUseCase.isLoggedIn()
 
     fun logout() {
         viewModelScope.launch(Dispatchers.IO) {
             analytics.onLogout()
-            preferencesUseCase.logout()
+            authUseCase.logout()
             onLogout.postValue(true)
         }
     }

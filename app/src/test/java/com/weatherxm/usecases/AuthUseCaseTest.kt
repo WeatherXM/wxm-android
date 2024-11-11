@@ -157,4 +157,14 @@ class AuthUseCaseTest : BehaviorSpec({
             }
         }
     }
+
+    context("Logout a user") {
+        given("A repository providing LOGOUT mechanism") {
+            then("logout the user") {
+                usecase.logout()
+                coVerify(exactly = 1) { authRepository.logout() }
+            }
+
+        }
+    }
 })

@@ -8,14 +8,9 @@ import com.weatherxm.data.repository.WidgetRepository
 import com.weatherxm.ui.common.UIDevice
 
 class WidgetSelectStationUseCaseImpl(
-    private val authRepository: AuthRepository,
     private val deviceRepository: DeviceRepository,
     private val widgetRepository: WidgetRepository
 ) : WidgetSelectStationUseCase {
-
-    override fun isLoggedIn(): Boolean {
-        return authRepository.isLoggedIn()
-    }
 
     override suspend fun getUserDevices(): Either<Failure, List<UIDevice>> {
         return deviceRepository.getUserDevices().map {

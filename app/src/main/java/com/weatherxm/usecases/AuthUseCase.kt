@@ -22,6 +22,7 @@ interface AuthUseCase {
     fun isLoggedIn(): Boolean
     fun shouldShowAnalyticsOptIn(): Boolean
     suspend fun isPasswordCorrect(password: String): Either<Failure, Boolean>
+    suspend fun logout()
 }
 
 class AuthUseCaseImpl(
@@ -65,5 +66,9 @@ class AuthUseCaseImpl(
 
     override suspend fun isPasswordCorrect(password: String): Either<Failure, Boolean> {
         return authRepository.isPasswordCorrect(password)
+    }
+
+    override suspend fun logout() {
+        authRepository.logout()
     }
 }

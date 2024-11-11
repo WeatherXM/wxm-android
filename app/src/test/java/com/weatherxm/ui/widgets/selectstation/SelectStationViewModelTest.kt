@@ -11,6 +11,7 @@ import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.ui.common.DeviceRelation
 import com.weatherxm.ui.common.UIDevice
 import com.weatherxm.ui.common.empty
+import com.weatherxm.usecases.AuthUseCase
 import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
@@ -32,6 +33,7 @@ import org.koin.dsl.module
 @OptIn(ExperimentalCoroutinesApi::class)
 class SelectStationViewModelTest : BehaviorSpec({
     val usecase = mockk<WidgetSelectStationUseCase>()
+    val authUseCase = mockk<AuthUseCase>()
     lateinit var viewModel: SelectStationViewModel
 
     val deviceId = "deviceId"
@@ -85,7 +87,7 @@ class SelectStationViewModelTest : BehaviorSpec({
         }
         justRun { usecase.saveWidgetData(widgetId, deviceId) }
 
-        viewModel = SelectStationViewModel(usecase)
+        viewModel = SelectStationViewModel(usecase, authUseCase)
     }
 
     context("GET / SET the selected station") {
@@ -124,7 +126,7 @@ class SelectStationViewModelTest : BehaviorSpec({
     context("Check if the user is logged in and proceed accordingly") {
         given("a usecase returning if the user is logged in or not") {
             When("the user is logged in") {
-                every { usecase.isLoggedIn() } returns true
+                every { authUseCase.isLoggedIn() } returns true
                 coMockEitherRight({ usecase.getUserDevices() }, emptyList<UIDevice>())
 
                 runTest { viewModel.checkIfLoggedInAndProceed() }
@@ -133,7 +135,7 @@ class SelectStationViewModelTest : BehaviorSpec({
                 }
             }
             When("the user is NOT logged in") {
-                every { usecase.isLoggedIn() } returns false
+                every { authUseCase.isLoggedIn() } returns false
                 runTest { viewModel.checkIfLoggedInAndProceed() }
                 then("LiveData isNotLoggedIn should be called with value Unit") {
                     viewModel.isNotLoggedIn().value shouldBe Unit

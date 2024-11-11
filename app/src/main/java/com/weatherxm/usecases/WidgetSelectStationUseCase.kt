@@ -6,6 +6,5 @@ import com.weatherxm.ui.common.UIDevice
 
 interface WidgetSelectStationUseCase {
     suspend fun getUserDevices(): Either<Failure, List<UIDevice>>
-    fun isLoggedIn(): Boolean
     fun saveWidgetData(widgetId: Int, deviceId: String)
 }
