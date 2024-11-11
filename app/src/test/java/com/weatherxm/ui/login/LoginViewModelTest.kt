@@ -66,7 +66,7 @@ class LoginViewModelTest : BehaviorSpec({
         }
         justRun { analytics.trackEventFailure(any()) }
         justRun { analytics.setUserId(user.id) }
-        coMockEitherRight({ usecase.isLoggedIn() }, true)
+        every { usecase.isLoggedIn() } returns true
         every { usecase.shouldShowAnalyticsOptIn() } returns true
         every {
             resources.getString(R.string.error_login_invalid_username)
@@ -86,7 +86,7 @@ class LoginViewModelTest : BehaviorSpec({
             When("it's a success") {
                 then("LiveData posts a success") {
                     runTest { viewModel.isLoggedIn() }
-                    viewModel.isLoggedIn().value?.isSuccess(true)
+                    viewModel.isLoggedIn() shouldBe true
                 }
             }
         }

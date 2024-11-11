@@ -10,8 +10,10 @@ import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.DeviceRepository
 import com.weatherxm.data.repository.WidgetRepository
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 
 class WidgetSelectStationUseCaseTest : BehaviorSpec({
@@ -32,16 +34,16 @@ class WidgetSelectStationUseCaseTest : BehaviorSpec({
 
     context("Get if the user is logged in") {
         given("A repository providing the answer") {
-            When("it's a success") {
-                coMockEitherRight({ authRepository.isLoggedIn() }, true)
-                then("return that answer") {
-                    usecase.isLoggedIn().isSuccess(true)
+            When("the user is logged in") {
+                every { authRepository.isLoggedIn() } returns true
+                then("return true") {
+                    usecase.isLoggedIn() shouldBe true
                 }
             }
-            When("it's a failure") {
-                coMockEitherLeft({ authRepository.isLoggedIn() }, failure)
-                then("return that failure") {
-                    usecase.isLoggedIn().isError()
+            When("the user is NOT logged in") {
+                every { authRepository.isLoggedIn() } returns false
+                then("return false") {
+                    usecase.isLoggedIn() shouldBe false
                 }
             }
         }

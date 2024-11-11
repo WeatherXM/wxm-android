@@ -21,6 +21,7 @@ import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -75,7 +76,7 @@ class RewardDetailsViewModelTest : BehaviorSpec({
         }
         analytics = mockk<AnalyticsWrapper>()
         justRun { analytics.trackEventFailure(any()) }
-        coMockEitherRight({ authUseCase.isLoggedIn() }, true)
+        every { authUseCase.isLoggedIn() } returns true
         coMockEitherRight({ userUseCase.getWalletAddress() }, walletAddress)
 
         viewModel = RewardDetailsViewModel(

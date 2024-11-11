@@ -1,10 +1,5 @@
 package com.weatherxm.usecases
 
-import com.weatherxm.TestConfig.failure
-import com.weatherxm.TestUtils.coMockEitherLeft
-import com.weatherxm.TestUtils.coMockEitherRight
-import com.weatherxm.TestUtils.isError
-import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.UserPreferencesRepository
@@ -32,16 +27,16 @@ class PreferencesUseCaseTest : BehaviorSpec({
 
     context("Get if the user is logged in") {
         given("A repository providing the answer") {
-            When("it's a success") {
-                coMockEitherRight({ authRepository.isLoggedIn() }, true)
-                then("return that answer") {
-                    usecase.isLoggedIn().isSuccess(true)
+            When("the user is logged in") {
+                every { authRepository.isLoggedIn() } returns true
+                then("return true") {
+                    usecase.isLoggedIn() shouldBe true
                 }
             }
-            When("it's a failure") {
-                coMockEitherLeft({ authRepository.isLoggedIn() }, failure)
-                then("return that failure") {
-                    usecase.isLoggedIn().isError()
+            When("the user is NOT logged in") {
+                every { authRepository.isLoggedIn() } returns false
+                then("return false") {
+                    usecase.isLoggedIn() shouldBe false
                 }
             }
         }

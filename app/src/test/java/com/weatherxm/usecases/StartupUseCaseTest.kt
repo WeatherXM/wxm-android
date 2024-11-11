@@ -1,9 +1,6 @@
 package com.weatherxm.usecases
 
 import com.weatherxm.TestConfig.context
-import com.weatherxm.TestConfig.failure
-import com.weatherxm.TestUtils.coMockEitherLeft
-import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.data.repository.AppConfigRepository
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.UserPreferencesRepository
@@ -47,7 +44,7 @@ class StartupUseCaseTest : BehaviorSpec({
             When("app should not be updated") {
                 every { appConfigRepo.shouldUpdate() } returns false
                 and("user is logged in") {
-                    coMockEitherRight({ authRepo.isLoggedIn() }, true)
+                    every { authRepo.isLoggedIn() } returns true
                     and("we should show the opt-in analytics screen") {
                         every { userPreferencesRepo.shouldShowAnalyticsOptIn() } returns true
                         then("return ShowAnalyticsOptIn") {
@@ -67,7 +64,7 @@ class StartupUseCaseTest : BehaviorSpec({
                     }
                 }
                 and("User is logged out") {
-                    coMockEitherLeft({ authRepo.isLoggedIn() }, failure)
+                    every { authRepo.isLoggedIn() } returns false
                     then("return ShowExplorer") {
                         getStartupType().shouldBeTypeOf<StartupState.ShowExplorer>()
                     }

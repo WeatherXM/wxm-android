@@ -162,7 +162,7 @@ class DeviceSettingsHeliumViewModelTest : BehaviorSpec({
         }
         justRun { analytics.trackEventFailure(any()) }
         every { DateFormat.is24HourFormat(context) } returns true
-        coMockEitherRight({ authUseCase.isLoggedIn() }, true)
+        every { authUseCase.isLoggedIn() } returns true
         coMockEitherRight({ userUseCase.getWalletAddress() }, "walletAddress")
         every { settingsUseCase.shouldNotifyOTA(device) } returns true
 

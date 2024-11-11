@@ -1,7 +1,5 @@
 package com.weatherxm.ui.preferences
 
-import com.weatherxm.TestUtils.coMockEitherRight
-import com.weatherxm.TestUtils.isSuccess
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.ui.InstantExecutorListener
 import com.weatherxm.usecases.PreferencesUseCase
@@ -37,7 +35,7 @@ class PreferencesViewModelTest : BehaviorSpec({
         justRun { analytics.onLogout() }
         justRun { usecase.setAnalyticsEnabled(any()) }
         coJustRun { usecase.logout() }
-        coMockEitherRight({ usecase.isLoggedIn() }, true)
+        every { usecase.isLoggedIn() } returns true
         every { usecase.getInstallationId() } returns installationId
 
         viewModel = PreferenceViewModel(usecase, analytics)
@@ -57,7 +55,7 @@ class PreferencesViewModelTest : BehaviorSpec({
             When("it's a success") {
                 then("LiveData posts a success") {
                     runTest { viewModel.isLoggedIn() }
-                    viewModel.isLoggedIn().value?.isSuccess(true)
+                    viewModel.isLoggedIn() shouldBe true
                 }
             }
         }

@@ -114,7 +114,7 @@ class DeviceDetailsViewModelTest : BehaviorSpec({
                 AnalyticsService.ParamValue.FOLLOW.paramValue
             )
         }
-        coMockEitherRight({ authUseCase.isLoggedIn() }, true)
+        every { authUseCase.isLoggedIn() } returns true
         every { resources.getString(R.string.error_max_followed) } returns maxFollowedMsg
 
         viewModel = DeviceDetailsViewModel(

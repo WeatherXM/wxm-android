@@ -15,6 +15,7 @@ import com.weatherxm.usecases.WidgetSelectStationUseCase
 import com.weatherxm.util.Resources
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
+import io.mockk.every
 import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.verify
@@ -122,29 +123,20 @@ class SelectStationViewModelTest : BehaviorSpec({
 
     context("Check if the user is logged in and proceed accordingly") {
         given("a usecase returning if the user is logged in or not") {
-            When("it's a failure") {
-                coMockEitherLeft({ usecase.isLoggedIn() }, failure)
+            When("the user is logged in") {
+                every { usecase.isLoggedIn() } returns true
+                coMockEitherRight({ usecase.getUserDevices() }, emptyList<UIDevice>())
+
+                runTest { viewModel.checkIfLoggedInAndProceed() }
+                then("fetching of the devices should take place (mocked as empty list)") {
+                    viewModel.onDevices().isSuccess(emptyList())
+                }
+            }
+            When("the user is NOT logged in") {
+                every { usecase.isLoggedIn() } returns false
                 runTest { viewModel.checkIfLoggedInAndProceed() }
                 then("LiveData isNotLoggedIn should be called with value Unit") {
                     viewModel.isNotLoggedIn().value shouldBe Unit
-                }
-            }
-            When("it's a success") {
-                and("the user is logged in") {
-                    coMockEitherRight({ usecase.isLoggedIn() }, true)
-                    coMockEitherRight({ usecase.getUserDevices() }, emptyList<UIDevice>())
-
-                    runTest { viewModel.checkIfLoggedInAndProceed() }
-                    then("fetching of the devices should take place (mocked as empty list)") {
-                        viewModel.onDevices().isSuccess(emptyList())
-                    }
-                }
-                and("the user is not logged in") {
-                    coMockEitherRight({ usecase.isLoggedIn() }, false)
-                    runTest { viewModel.checkIfLoggedInAndProceed() }
-                    then("LiveData isNotLoggedIn should be called with value Unit") {
-                        viewModel.isNotLoggedIn().value shouldBe Unit
-                    }
                 }
             }
         }

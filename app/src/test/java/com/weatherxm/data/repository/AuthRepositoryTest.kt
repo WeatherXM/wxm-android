@@ -13,6 +13,7 @@ import com.weatherxm.data.datasource.NetworkAuthDataSource
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.services.CacheService
 import io.kotest.core.spec.style.BehaviorSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
@@ -114,7 +115,7 @@ class AuthRepositoryTest : BehaviorSpec({
                     every { mockedAuthToken.isAccessTokenValid() } returns true
                     every { mockedAuthToken.isRefreshTokenValid() } returns false
                     then("return true") {
-                        authRepository.isLoggedIn().isSuccess(true)
+                        authRepository.isLoggedIn() shouldBe true
                     }
                 }
                 and("refresh token is valid") {
@@ -122,21 +123,21 @@ class AuthRepositoryTest : BehaviorSpec({
                     every { mockedAuthToken.isAccessTokenValid() } returns false
                     every { mockedAuthToken.isRefreshTokenValid() } returns true
                     then("return true") {
-                        authRepository.isLoggedIn().isSuccess(true)
+                        authRepository.isLoggedIn() shouldBe true
                     }
                 }
                 and("nor access or refresh token are valid") {
                     coMockEitherRight({ cacheAuthDataSource.getAuthToken() }, mockedAuthToken)
                     every { mockedAuthToken.isRefreshTokenValid() } returns false
                     then("return false") {
-                        authRepository.isLoggedIn().isSuccess(false)
+                        authRepository.isLoggedIn() shouldBe false
                     }
                 }
             }
             When("auth token is not in cache") {
                 coMockEitherLeft({ cacheAuthDataSource.getAuthToken() }, failure)
                 then("return false") {
-                    authRepository.isLoggedIn().isError()
+                    authRepository.isLoggedIn() shouldBe false
                 }
             }
         }

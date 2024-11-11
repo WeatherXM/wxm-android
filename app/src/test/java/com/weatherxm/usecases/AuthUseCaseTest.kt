@@ -44,16 +44,16 @@ class AuthUseCaseTest : BehaviorSpec({
 
     context("Get if a user is logged in or not") {
         given("The repository providing that information") {
-            When("the response is a failure") {
-                coMockEitherLeft({ authRepository.isLoggedIn() }, failure)
-                then("return that failure") {
-                    usecase.isLoggedIn().isError()
+            When("the user is NOT logged in") {
+                every { authRepository.isLoggedIn() } returns false
+                then("return false") {
+                    usecase.isLoggedIn() shouldBe false
                 }
             }
-            When("the response is a success") {
-                coMockEitherRight({ authRepository.isLoggedIn() }, true)
-                then("return that success") {
-                    usecase.isLoggedIn().isSuccess(true)
+            When("the user is logged in") {
+                every { authRepository.isLoggedIn() } returns true
+                then("return true") {
+                    usecase.isLoggedIn() shouldBe true
                 }
             }
         }
