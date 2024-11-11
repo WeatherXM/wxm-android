@@ -5,12 +5,9 @@ import com.weatherxm.TestUtils.coMockEitherLeft
 import com.weatherxm.TestUtils.coMockEitherRight
 import com.weatherxm.TestUtils.isError
 import com.weatherxm.TestUtils.isSuccess
-import com.weatherxm.data.models.User
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.NotificationsRepository
-import com.weatherxm.data.repository.UserPreferencesRepository
-import com.weatherxm.data.repository.UserRepository
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
@@ -27,7 +24,6 @@ class AuthUseCaseTest : BehaviorSpec({
     val password = "password"
     val firstName = "firstName"
     val lastName = "lastName"
-    val user = mockk<User>()
     val authToken = AuthToken("access", "refresh")
 
     beforeSpec {

@@ -2,12 +2,9 @@ package com.weatherxm.usecases
 
 import arrow.core.Either
 import com.weatherxm.data.models.Failure
-import com.weatherxm.data.models.User
 import com.weatherxm.data.network.AuthToken
 import com.weatherxm.data.repository.AuthRepository
 import com.weatherxm.data.repository.NotificationsRepository
-import com.weatherxm.data.repository.UserPreferencesRepository
-import com.weatherxm.data.repository.UserRepository
 
 interface AuthUseCase {
     suspend fun login(username: String, password: String): Either<Failure, AuthToken>
