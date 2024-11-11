@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsService
 import com.weatherxm.analytics.AnalyticsWrapper
@@ -139,7 +138,7 @@ class DeviceDetailsViewModel(
 
     init {
         viewModelScope.launch {
-            isLoggedIn = authUseCase.isLoggedIn().getOrElse { false }
+            isLoggedIn = authUseCase.isLoggedIn()
         }
     }
 }

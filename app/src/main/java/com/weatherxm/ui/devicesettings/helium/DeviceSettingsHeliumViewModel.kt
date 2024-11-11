@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import arrow.core.getOrElse
 import com.weatherxm.R
 import com.weatherxm.analytics.AnalyticsWrapper
 import com.weatherxm.data.models.DeviceInfo
@@ -133,8 +132,7 @@ class DeviceSettingsHeliumViewModel(
         var walletAddress = String.empty()
         coroutineScope {
             val getWalletAddressJob = launch {
-                val isLoggedIn = authUseCase.isLoggedIn().getOrElse { false }
-                if (isLoggedIn) {
+                if (authUseCase.isLoggedIn()) {
                     userUseCase.getWalletAddress().onRight {
                         walletAddress = it
                     }

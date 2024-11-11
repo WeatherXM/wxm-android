@@ -19,7 +19,7 @@ interface AuthUseCase {
     ): Either<Failure, String>
 
     suspend fun resetPassword(email: String): Either<Failure, Unit>
-    suspend fun isLoggedIn(): Either<Failure, Boolean>
+    fun isLoggedIn(): Boolean
     fun shouldShowAnalyticsOptIn(): Boolean
     suspend fun isPasswordCorrect(password: String): Either<Failure, Boolean>
 }
@@ -31,7 +31,7 @@ class AuthUseCaseImpl(
     private val userPreferencesRepository: UserPreferencesRepository
 ) : AuthUseCase {
 
-    override suspend fun isLoggedIn(): Either<Failure, Boolean> {
+    override fun isLoggedIn(): Boolean {
         return authRepository.isLoggedIn()
     }
 

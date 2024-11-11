@@ -13,7 +13,7 @@ class WidgetSelectStationUseCaseImpl(
     private val widgetRepository: WidgetRepository
 ) : WidgetSelectStationUseCase {
 
-    override suspend fun isLoggedIn(): Either<Failure, Boolean> {
+    override fun isLoggedIn(): Boolean {
         return authRepository.isLoggedIn()
     }
 
