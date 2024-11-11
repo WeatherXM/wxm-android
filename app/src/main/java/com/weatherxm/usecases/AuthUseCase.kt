@@ -11,7 +11,6 @@ import com.weatherxm.data.repository.UserRepository
 
 interface AuthUseCase {
     suspend fun login(username: String, password: String): Either<Failure, AuthToken>
-    suspend fun getUser(): Either<Failure, User>
     suspend fun signup(
         username: String,
         firstName: String?,
@@ -20,16 +19,13 @@ interface AuthUseCase {
 
     suspend fun resetPassword(email: String): Either<Failure, Unit>
     fun isLoggedIn(): Boolean
-    fun shouldShowAnalyticsOptIn(): Boolean
     suspend fun isPasswordCorrect(password: String): Either<Failure, Boolean>
     suspend fun logout()
 }
 
 class AuthUseCaseImpl(
     private val authRepository: AuthRepository,
-    private val userRepository: UserRepository,
-    private val notificationsRepository: NotificationsRepository,
-    private val userPreferencesRepository: UserPreferencesRepository
+    private val notificationsRepository: NotificationsRepository
 ) : AuthUseCase {
 
     override fun isLoggedIn(): Boolean {
@@ -52,16 +48,8 @@ class AuthUseCaseImpl(
         }
     }
 
-    override suspend fun getUser(): Either<Failure, User> {
-        return userRepository.getUser()
-    }
-
     override suspend fun resetPassword(email: String): Either<Failure, Unit> {
         return authRepository.resetPassword(email)
-    }
-
-    override fun shouldShowAnalyticsOptIn(): Boolean {
-        return userPreferencesRepository.shouldShowAnalyticsOptIn()
     }
 
     override suspend fun isPasswordCorrect(password: String): Either<Failure, Boolean> {

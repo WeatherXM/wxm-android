@@ -522,7 +522,7 @@ private val usecases = module {
         RewardsUseCaseImpl(get(), androidContext())
     }
     single<AuthUseCase> {
-        AuthUseCaseImpl(get(), get(), get(), get())
+        AuthUseCaseImpl(get(), get())
     }
     single<UserUseCase> {
         UserUseCaseImpl(get(), get(), get(), get())
@@ -972,7 +972,7 @@ private val viewmodels = module {
     viewModel { ExplorerViewModel(get(), get(), get()) }
     viewModel { HomeViewModel(get(), get(), get()) }
     viewModel { ProfileViewModel(get(), get()) }
-    viewModel { LoginViewModel(get(), get(), get()) }
+    viewModel { LoginViewModel(get(), get(), get(), get()) }
     viewModel { NetworkStatsViewModel(get()) }
     viewModel { PasswordPromptViewModel(get(), get(), get()) }
     viewModel { PreferenceViewModel(get(), get(), get()) }

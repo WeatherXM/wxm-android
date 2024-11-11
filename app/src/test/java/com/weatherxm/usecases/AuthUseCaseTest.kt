@@ -20,15 +20,8 @@ import io.mockk.mockk
 
 class AuthUseCaseTest : BehaviorSpec({
     val authRepository = mockk<AuthRepository>()
-    val userRepository = mockk<UserRepository>()
-    val userPreferencesRepository = mockk<UserPreferencesRepository>()
     val notificationsRepository = mockk<NotificationsRepository>()
-    val usecase = AuthUseCaseImpl(
-        authRepository,
-        userRepository,
-        notificationsRepository,
-        userPreferencesRepository
-    )
+    val usecase = AuthUseCaseImpl(authRepository, notificationsRepository)
 
     val username = "username"
     val password = "password"
@@ -39,7 +32,6 @@ class AuthUseCaseTest : BehaviorSpec({
 
     beforeSpec {
         coJustRun { notificationsRepository.setFcmToken() }
-        every { userPreferencesRepository.shouldShowAnalyticsOptIn() } returns true
     }
 
     context("Get if a user is logged in or not") {
@@ -99,23 +91,6 @@ class AuthUseCaseTest : BehaviorSpec({
         }
     }
 
-    context("Get User") {
-        given("The repository which returns the user") {
-            When("the response is a failure") {
-                coMockEitherLeft({ userRepository.getUser() }, failure)
-                then("return that failure") {
-                    usecase.getUser().isError()
-                }
-            }
-            When("the response is a success") {
-                coMockEitherRight({ userRepository.getUser() }, user)
-                then("return the user") {
-                    usecase.getUser().isSuccess(user)
-                }
-            }
-        }
-    }
-
     context("Reset Password") {
         given("The repository which accepts the reset password request") {
             When("the response is a failure") {
@@ -129,14 +104,6 @@ class AuthUseCaseTest : BehaviorSpec({
                 then("return the user") {
                     usecase.resetPassword(username).isSuccess(Unit)
                 }
-            }
-        }
-    }
-
-    context("Get if we should show the analytics opt in or not") {
-        given("The repository which returns the answer") {
-            then("return the answer") {
-                usecase.shouldShowAnalyticsOptIn() shouldBe true
             }
         }
     }

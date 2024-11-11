@@ -14,6 +14,7 @@ import com.weatherxm.data.models.Failure
 import com.weatherxm.data.models.User
 import com.weatherxm.ui.common.Resource
 import com.weatherxm.usecases.AuthUseCase
+import com.weatherxm.usecases.UserUseCase
 import com.weatherxm.util.Failure.getDefaultMessage
 import com.weatherxm.util.Failure.getDefaultMessageResId
 import com.weatherxm.util.Resources
@@ -23,6 +24,7 @@ import timber.log.Timber
 
 class LoginViewModel(
     private val authUseCase: AuthUseCase,
+    private val userUseCase: UserUseCase,
     private val resources: Resources,
     private val analytics: AnalyticsWrapper
 ) : ViewModel() {
@@ -50,7 +52,7 @@ class LoginViewModel(
                 }
                 .flatMap {
                     onLogin.postValue(Resource.success(Unit))
-                    authUseCase.getUser()
+                    userUseCase.getUser()
                 }
                 .mapLeft {
                     analytics.trackEventFailure(it.code)
@@ -84,6 +86,6 @@ class LoginViewModel(
     }
 
     fun shouldShowAnalyticsOptIn(): Boolean {
-        return authUseCase.shouldShowAnalyticsOptIn()
+        return userUseCase.shouldShowAnalyticsOptIn()
     }
 }
