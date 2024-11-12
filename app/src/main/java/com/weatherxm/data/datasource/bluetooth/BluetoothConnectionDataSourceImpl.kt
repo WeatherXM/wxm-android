@@ -3,6 +3,7 @@ package com.weatherxm.data.datasource.bluetooth
 import android.bluetooth.BluetoothDevice
 import arrow.core.Either
 import arrow.core.handleErrorWith
+import com.juul.kable.Advertisement
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_CLAIMING_KEY_COMMAND
 import com.weatherxm.data.bluetooth.BluetoothConnectionManager.Companion.AT_DEV_EUI_COMMAND
@@ -32,12 +33,16 @@ class BluetoothConnectionDataSourceImpl(
         return connectionManager.getPairedDevices()
     }
 
-    override suspend fun setPeripheral(address: String): Either<Failure, Unit> {
-        return connectionManager.setPeripheral(address)
+    override suspend fun setPeripheral(
+        advertisement: Advertisement,
+        address: String
+    ): Either<Failure, Unit> {
+        return connectionManager.setPeripheral(advertisement, address)
     }
 
     override suspend fun connectToPeripheral(numOfRetries: Int): Either<Failure, Unit> {
         return connectionManager.connectToPeripheral().handleErrorWith {
+            // STOPSHIP: Handle this. Is ConnectionLost still a case while claiming? Test it. 
             if (it is BluetoothError.ConnectionLostException && numOfRetries < CLAIM_MAX_RETRIES) {
                 Timber.d("Connection lost with BLE. Retrying after 3 seconds...")
                 delay(CLAIM_RETRY_DELAY_MS)
