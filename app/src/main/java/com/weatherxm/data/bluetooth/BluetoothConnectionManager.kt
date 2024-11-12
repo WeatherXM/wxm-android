@@ -11,26 +11,23 @@ import android.content.IntentFilter
 import android.content.IntentFilter.SYSTEM_HIGH_PRIORITY
 import android.os.Build
 import arrow.core.Either
-import com.juul.kable.BluetoothDisabledException
+import com.juul.kable.Advertisement
 import com.juul.kable.Characteristic
-import com.juul.kable.ConnectionLostException
-import com.juul.kable.ConnectionRejectedException
 import com.juul.kable.Descriptor
 import com.juul.kable.GattRequestRejectedException
 import com.juul.kable.GattStatusException
 import com.juul.kable.GattWriteException
 import com.juul.kable.NotConnectedException
-import com.juul.kable.NotReadyException
 import com.juul.kable.Peripheral
-import com.juul.kable.peripheral
+import com.juul.kable.UnmetRequirementException
 import com.weatherxm.data.models.BluetoothError
 import com.weatherxm.data.models.Failure
 import com.weatherxm.ui.common.empty
 import com.weatherxm.ui.common.parcelable
 import com.weatherxm.util.AndroidBuildInfo
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -45,7 +42,23 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
-import kotlin.coroutines.coroutineContext
+
+/**
+ * STOPSHIP: LAUNCH JOBS FROM PERIPHERAL.connect scope
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 
 @Suppress("TooManyFunctions")
 class BluetoothConnectionManager(
@@ -91,11 +104,11 @@ class BluetoothConnectionManager(
         } ?: mutableListOf()
     }
 
-    /*
-    * This broadcast receiver is a necessity in order to know when our device is BONDED and we can
-    * start communicating with it and working on its data
+    /**
+     * This broadcast receiver is a necessity in order to know when our device is BONDED and we can
+     * start communicating with it and working on its data
      */
-    private fun initBondStateChangeReceiver(scope: CoroutineScope) {
+    private fun initBondStateChangeReceiver() {
         bondStateChangedReceiver = object : BroadcastReceiver() {
             @SuppressLint("MissingPermission")
             override fun onReceive(context: Context?, intent: Intent) {
@@ -106,7 +119,7 @@ class BluetoothConnectionManager(
                     when (bluetoothDevice?.bondState) {
                         BluetoothDevice.BOND_BONDED -> {
                             Timber.d("[BLE Communication]: Bonded.")
-                            tryToSetCharacteristics(scope)
+                            tryToSetCharacteristics()
                             bondStatus.tryEmit(BluetoothDevice.BOND_BONDED)
                         }
                         BluetoothDevice.BOND_BONDING -> {
@@ -123,11 +136,16 @@ class BluetoothConnectionManager(
         }
     }
 
-    suspend fun setPeripheral(address: String): Either<Failure, Unit> {
+    fun setPeripheral(
+        advertisement: Advertisement,
+        address: String
+    ): Either<Failure, Unit> {
         return try {
             macAddress = address
-            initBondStateChangeReceiver(CoroutineScope(coroutineContext))
-            peripheral = CoroutineScope(coroutineContext).peripheral(address)
+            initBondStateChangeReceiver()
+            peripheral = Peripheral(advertisement) {
+
+            }
             Either.Right(Unit)
         } catch (e: IllegalArgumentException) {
             Timber.w(e, "Creation of peripheral failed: $address")
@@ -135,8 +153,8 @@ class BluetoothConnectionManager(
         }
     }
 
-    private fun tryToSetCharacteristics(scope: CoroutineScope) {
-        scope.launch {
+    private fun tryToSetCharacteristics() {
+        peripheral.launch {
             isSettingCharacteristics = true
             delay(DELAY_BEFORE_CHARACTERISTICS_SETUP)
             setReadWriteCharacteristic()
@@ -153,11 +171,14 @@ class BluetoothConnectionManager(
             readCharacteristic = null
             writeCharacteristic = null
             peripheral.disconnect()
+            peripheral.cancel()
         } catch (e: UninitializedPropertyAccessException) {
             Timber.d(e, "Could not disconnect peripheral.")
         } catch (e: NotConnectedException) {
             Timber.d(e, "Could not disconnect peripheral.")
-        } catch (e: ConnectionLostException) {
+        } catch (e: CancellationException) {
+            Timber.d(e, "Could not disconnect peripheral.")
+        } catch (e: IllegalStateException) {
             Timber.d(e, "Could not disconnect peripheral.")
         }
     }
@@ -165,7 +186,7 @@ class BluetoothConnectionManager(
     /**
      * Suppress MissingPermission as we will call this function only after we have it granted
      */
-    @SuppressLint("MissingPermission")
+    @SuppressLint("InlinedApi")
     suspend fun connectToPeripheral(): Either<Failure, Unit> {
         return try {
             /*
@@ -183,12 +204,12 @@ class BluetoothConnectionManager(
             peripheral.connect()
 
             if (getPairedDevices().any { it.address == macAddress }) {
-                tryToSetCharacteristics(CoroutineScope(coroutineContext))
+                tryToSetCharacteristics()
             }
             Either.Right(Unit)
-        } catch (e: ConnectionRejectedException) {
-            Timber.w(e, "Connection to peripheral failed with ConnectionRejectedException")
-            Either.Left(BluetoothError.ConnectionRejectedError())
+        } catch (e: IllegalStateException) {
+            Timber.e(e, "Connection to peripheral failed with IllegalStateException")
+            Either.Left(BluetoothError.IllegalStateError())
         } catch (e: CancellationException) {
             /**
              * Timber.d because that we do not need to log in our Crashlytics that the device
@@ -196,10 +217,10 @@ class BluetoothConnectionManager(
              */
             Timber.d(e, "Connection to peripheral failed with CancellationException")
             Either.Left(BluetoothError.CancellationError())
-        } catch (e: BluetoothDisabledException) {
-            Timber.w(e, "Connection to peripheral failed with BluetoothDisabledException")
+        } catch (e: UnmetRequirementException) {
+            Timber.e(e, "Connection to peripheral failed with BluetoothDisabledException")
             Either.Left(BluetoothError.BluetoothDisabledException())
-        } catch (e: ConnectionLostException) {
+        } catch (e: NotConnectedException) {
             /**
              * Timber.d because that we do not need to log in our Crashlytics that the device
              * has been disconnected probably because it's too far away
@@ -207,10 +228,10 @@ class BluetoothConnectionManager(
             Timber.d(e, "Connection to peripheral failed with ConnectionLostException")
             Either.Left(BluetoothError.ConnectionLostException())
         } catch (e: GattRequestRejectedException) {
-            Timber.w(e, "Connection to peripheral failed with GattRequestRejectedException")
+            Timber.e(e, "Connection to peripheral failed with GattRequestRejectedException")
             Either.Left(BluetoothError.GattRequestRejectedException())
         } catch (e: GattStatusException) {
-            Timber.w(e, "[enable descriptor notification] failed: GattStatusException")
+            Timber.e(e, "[enable descriptor notification] failed: GattStatusException")
             Either.Left(BluetoothError.GattRequestRejectedException())
         }
     }
@@ -221,7 +242,7 @@ class BluetoothConnectionManager(
             return
         }
         Timber.d("[BLE Communication]: Setting read & write characteristics...")
-        peripheral.services?.forEach { service ->
+        peripheral.services.value?.forEach { service ->
             service.characteristics.forEach {
                 if (it.characteristicUuid.toString().contains(WRITE_CHARACTERISTIC_UUID)) {
                     writeCharacteristic = it
@@ -249,10 +270,8 @@ class BluetoothConnectionManager(
             )
         } catch (e: GattRequestRejectedException) {
             Timber.w(e, "[enable descriptor notification]: GattRequestRejectedException")
-        } catch (e: ConnectionLostException) {
+        } catch (e: NotConnectedException) {
             Timber.w(e, "[enable descriptor notification]: ConnectionLostException")
-        } catch (e: NotReadyException) {
-            Timber.w(e, "[enable descriptor notification]: NotReadyException")
         } catch (e: GattStatusException) {
             Timber.w(e, "[enable descriptor notification]: GattStatusException")
         }
@@ -268,7 +287,7 @@ class BluetoothConnectionManager(
         }
     }
 
-    suspend fun write(command: String): Boolean {
+    private suspend fun write(command: String): Boolean {
         if (isSettingCharacteristics) {
             /**
              * If we are still in the process of setting characteristics, delay a bit
@@ -290,14 +309,11 @@ class BluetoothConnectionManager(
             } catch (e: GattRequestRejectedException) {
                 Timber.w(e, "[$command] failed: GattRequestRejectedException")
                 false
-            } catch (e: ConnectionLostException) {
+            } catch (e: NotConnectedException) {
                 Timber.w(e, "[$command] failed: ConnectionLostException")
                 false
             } catch (e: GattStatusException) {
                 Timber.w(e, "[$command] failed: GattStatusException")
-                false
-            } catch (e: NotReadyException) {
-                Timber.w(e, "[$command] failed: NotReadyException")
                 false
             }
         } ?: false
@@ -305,7 +321,7 @@ class BluetoothConnectionManager(
 
     suspend fun fetchATCommand(command: String, listener: (Either<Failure, String>) -> Unit) {
         if (!write(command)) {
-            listener.invoke(Either.Left(BluetoothError.ConnectionRejectedError()))
+            listener.invoke(Either.Left(BluetoothError.ATCommandError()))
             return
         }
 
@@ -337,7 +353,7 @@ class BluetoothConnectionManager(
 
     suspend fun setATCommand(command: String, listener: (Either<Failure, Unit>) -> Unit) {
         if (!write(command)) {
-            listener.invoke(Either.Left(BluetoothError.ConnectionRejectedError()))
+            listener.invoke(Either.Left(BluetoothError.ATCommandError()))
             return
         }
 
@@ -376,7 +392,7 @@ class BluetoothConnectionManager(
      */
     suspend fun reboot(listener: (Either<Failure, Unit>) -> Unit) {
         if (!write(AT_REBOOT_COMMAND)) {
-            listener.invoke(Either.Left(BluetoothError.ConnectionRejectedError()))
+            listener.invoke(Either.Left(BluetoothError.ATCommandError()))
             return
         }
 

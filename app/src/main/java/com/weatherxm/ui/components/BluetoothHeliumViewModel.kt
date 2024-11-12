@@ -84,12 +84,14 @@ open class BluetoothHeliumViewModel(
             return
         }
         viewModelScope.launch {
-            connectionUseCase.setPeripheral(scannedDevice.address).onRight {
-                connect(ignorePairing)
-            }.onLeft {
-                analytics.trackEventFailure(it.code)
-                onConnectionFailure(it)
-            }
+            scannedDevice.advertisement?.let { advertisement ->
+                connectionUseCase.setPeripheral(advertisement, scannedDevice.address).onRight {
+                    connect(ignorePairing)
+                }.onLeft {
+                    analytics.trackEventFailure(it.code)
+                    onConnectionFailure(it)
+                }
+            } ?: onScanFailure(BluetoothError.DeviceNotFound)
         }
     }
 

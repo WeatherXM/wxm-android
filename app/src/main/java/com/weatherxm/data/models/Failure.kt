@@ -12,7 +12,7 @@ sealed class Failure(val code: String? = null) {
         const val CODE_NO_CONNECTION = "NO_CONNECTION"
         const val CODE_UNKNOWN = "UNKNOWN"
         const val CODE_JSON = "PARSE_JSON"
-        const val CODE_BL_REJECTED = "BLUETOOTH_REJECTED"
+        const val CODE_BL_ILLEGAL_STATE = "BLUETOOTH_ILLEGAL_STATE"
         const val CODE_BL_CONNECTION_LOST = "BLUETOOTH_CONNECTION_LOST"
         const val CODE_BL_GATT_REQUEST_REJECTED = "GATT_REQUEST_REJECTED"
         const val CODE_BL_DISABLED = "BLUETOOTH_DISABLED"
@@ -53,8 +53,8 @@ sealed class BluetoothError(code: String? = null, val message: String? = null) :
     object DeviceNotFound : BluetoothError()
 
     class ATCommandError(code: String? = CODE_AT_COMMAND_ERROR) : BluetoothError(code)
+    class IllegalStateError(code: String? = CODE_BL_ILLEGAL_STATE) : BluetoothError(code)
     class PeripheralCreationError(code: String? = CODE_PERIPHERAL_ERROR) : BluetoothError(code)
-    class ConnectionRejectedError(code: String? = CODE_BL_REJECTED) : BluetoothError(code)
     class CancellationError(code: String? = CODE_BL_CANCELLATION) : BluetoothError(code)
     class ConnectionLostException(code: String? = CODE_BL_CONNECTION_LOST) : BluetoothError(code)
     class GattRequestRejectedException(

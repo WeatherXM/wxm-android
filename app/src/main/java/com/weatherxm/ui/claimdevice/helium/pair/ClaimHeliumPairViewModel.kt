@@ -60,6 +60,7 @@ class ClaimHeliumPairViewModel(
                 }
             )
             scanUseCase.scan().collect {
+                // STOPSHIP: This is always true because of different advertisements inside the ScannedDevice
                 if (!scannedDevices.contains(it)) {
                     Timber.d("New scanned device collected: $it")
                     scannedDevices.add(it)

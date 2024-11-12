@@ -11,7 +11,7 @@ class BluetoothScannerUseCaseImpl(
 
     override suspend fun scan(): Flow<ScannedDevice> {
         return repository.scan().map {
-            ScannedDevice(address = it.identifier, name = it.name)
+            ScannedDevice(advertisement = it, address = it.identifier, name = it.name)
         }
     }
 }
